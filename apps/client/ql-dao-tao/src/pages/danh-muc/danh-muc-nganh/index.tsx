@@ -13,16 +13,16 @@ import {
     useFindManyTrainingField,
     useUpdateTrainingField,
 } from '@workspace/db/hooks'
+import { whereOrganization } from '@workspace/libs/constants'
 import { getMinioUrl } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
+import { useFindManyTrainingObjectTypePermission } from '@workspace/ui'
 import { Button, Col, Flex, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { useFindManyTrainingObjectTypePermission } from '@workspace/ui'
-import { whereOrganization } from '@workspace/libs/constants'
 
 export default function TrainingFieldPage() {
     const { can, canSome } = useAbility()

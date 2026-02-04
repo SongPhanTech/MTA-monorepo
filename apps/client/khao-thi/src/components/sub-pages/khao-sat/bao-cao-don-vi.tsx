@@ -1,12 +1,14 @@
+import { DownOutlined, FileExcelOutlined, PrinterOutlined } from '@ant-design/icons'
+import Table from '@components/commons/table'
 import { useGetOrganizationSurveyStatistics } from '@workspace/libs/api/exam'
-import { Button, Col, Empty, Flex, message, Row, Typography } from 'antd'
+import { Button, Col, Dropdown, Empty, Flex, message, Row, Typography } from 'antd'
+import ReactECharts from 'echarts-for-react'
 import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
 import { useRouter } from 'next/router'
-import { useMemo, useState } from 'react'
-import ReactECharts from 'echarts-for-react'
-import Table from '@components/commons/table'
-import { cn } from '@lib/utils'
+import { useMemo } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
+
 const { Title } = Typography
 
 type AnswerItem = {
@@ -28,25 +30,26 @@ type AnswerWithPercent = AnswerItem & { percent: number; total: number }
 function OrganizationSurveyReport({
     selectedId,
     surveyName,
-    organizationSelected,
-    setOrganizationSelected,
+    organizationId,
+    trainingObjectTypeName,
+    // organizationSelected,
+    // setOrganizationSelected,
 }: {
     selectedId: string
     surveyName: string
-    organizationSelected: string
-    setOrganizationSelected: (value: string) => void
+    organizationId: string
+    trainingObjectTypeName?: string
+    // organizationSelected: string
+    // setOrganizationSelected: (value: string) => void
 }) {
     const router = useRouter()
-    const [organization, setOrganization] = useState<string[]>([])
+    const { onOpen } = useDisclosure({
+        tag: 'ModalPrintBaoCaoDonVi',
+    })
 
-    const { data: dataLevel } = useGetOrganizationSurveyStatistics(
-        selectedId as string,
-        organization?.length > 0
-            ? {
-                  organizations: organization.join(','),
-              }
-            : {}
-    )
+    const { data: dataLevel } = useGetOrganizationSurveyStatistics(selectedId as string, {
+        organizationId,
+    })
     // const { data: organizations = [] } = useFindManyDM_DonVi()
     // const treeData = buildOrgTree(organizations)
 
@@ -166,6 +169,24 @@ function OrganizationSurveyReport({
                 },
             }
 
+            const addBorderToRange = (
+                sheet: ExcelJS.Worksheet,
+                fromRow: number,
+                toRow: number,
+                toCol: number
+            ) => {
+                for (let row = fromRow; row <= toRow; row++) {
+                    for (let col = 1; col <= toCol; col++) {
+                        sheet.getCell(row, col).border = {
+                            top: { style: 'thin' },
+                            left: { style: 'thin' },
+                            right: { style: 'thin' },
+                            bottom: { style: 'thin' },
+                        }
+                    }
+                }
+            }
+
             worksheet.mergeCells('A1:C2')
             worksheet.getCell('A1').value = 'BỘ QUỐC PHÒNG\nHỌC VIỆN KỸ THUẬT QUÂN SỰ'
             worksheet.getCell('A1').style = headerTitleStyle
@@ -186,8 +207,15 @@ function OrganizationSurveyReport({
             // Thêm tiêu đề bảng
             const headerRow = worksheet.getRow(7)
             headerRow.values = ['STT', 'Đợn vị quản lý', ...choices.map((i: any) => i?.description)]
-            headerRow.eachCell((cell: any) => {
-                cell.style = tableHeaderStyle
+            headerRow.eachCell((cell: any, colNumber: number) => {
+                cell.style = {
+                    ...tableHeaderStyle,
+                    alignment: {
+                        horizontal: colNumber === 2 ? 'left' : 'center',
+                        vertical: 'middle',
+                        wrapText: true,
+                    },
+                }
             })
 
             // Điều chỉnh độ rộng cột
@@ -195,7 +223,6 @@ function OrganizationSurveyReport({
                 { width: 10 },
                 { width: 40 },
                 { width: 40 },
-                { width: 20 },
                 { width: 20 },
                 { width: 20 },
                 { width: 20 },
@@ -212,8 +239,16 @@ function OrganizationSurveyReport({
                                 `${a.percent || 0}% (${a?.totalCount || 0}/${a?.total || 0})`
                         ),
                     ]
+                    headerRowValue.eachCell((cell: any, colNumber: number) => {
+                        cell.alignment = {
+                            horizontal: colNumber === 2 ? 'left' : 'center',
+                            vertical: 'middle',
+                            wrapText: true,
+                        }
+                    })
                 })
             }
+            addBorderToRange(worksheet, 7, 7 + dataExport.length, worksheet.columns.length)
 
             // Xuất file
             const buffer = await workbook.xlsx.writeBuffer()
@@ -242,18 +277,18 @@ function OrganizationSurveyReport({
     const renderTable = (dataTable: any, choices: any) => {
         return (
             <Table
-                onRow={(record) => {
-                    return {
-                        onClick: () => {
-                            setOrganizationSelected(record?.organization?.Id as string)
-                        },
-                        className: cn(
-                            organizationSelected === record?.organization.Id ? 'bg-orange-200' : ''
-                        ),
-                    }
-                }}
+                // onRow={(record) => {
+                //     return {
+                //         onClick: () => {
+                //             setOrganizationSelected(record?.organization?.Id as string)
+                //         },
+                //         className: cn(
+                //             organizationSelected === record?.organization.Id ? 'bg-orange-200' : ''
+                //         ),
+                //     }
+                // }}
                 columns={
-                    choices?.length > 0
+                    choices?.length
                         ? [
                               {
                                   title: 'STT',
@@ -269,8 +304,7 @@ function OrganizationSurveyReport({
                                       return `${record?.organization?.sMa || ''} - ${record?.organization?.sTen || ''}`
                                   },
                               },
-                              // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
-                              ...choices?.map((i: any, index: number) => ({
+                              ...choices.map((i: any, index: number) => ({
                                   title: i?.description,
                                   id: i?.id,
                                   dataIndex: i?.id,
@@ -342,18 +376,40 @@ function OrganizationSurveyReport({
                                             setOrganization(value)
                                         }}
                                     /> */}
-                                    <Button
-                                        size="small"
-                                        type="primary"
-                                        onClick={() =>
-                                            exportReport(
-                                                dataLevel?.data?.data,
-                                                dataLevel?.data?.choices
-                                            )
-                                        }
+                                    <Dropdown
+                                        trigger={['click']}
+                                        menu={{
+                                            items: [
+                                                {
+                                                    key: 'export',
+                                                    icon: <FileExcelOutlined />,
+                                                    label: 'Xuất báo cáo',
+                                                    onClick: () =>
+                                                        exportReport(
+                                                            dataLevel?.data?.data,
+                                                            dataLevel?.data?.choices
+                                                        ),
+                                                },
+                                                {
+                                                    key: 'print',
+                                                    icon: <PrinterOutlined />,
+                                                    label: 'In báo cáo',
+                                                    onClick: () =>
+                                                        onOpen({
+                                                            surveyName,
+                                                            data: dataLevel?.data?.data,
+                                                            choices: dataLevel?.data?.choices,
+                                                            chartOption: dataBarchart,
+                                                            trainingObjectTypeName,
+                                                        }),
+                                                },
+                                            ],
+                                        }}
                                     >
-                                        Xuất báo cáo
-                                    </Button>
+                                        <Button size="small" type="primary">
+                                            Xuất báo cáo <DownOutlined />
+                                        </Button>
+                                    </Dropdown>
                                 </Flex>
                             </div>
                             <div className="flex-1">
@@ -362,7 +418,13 @@ function OrganizationSurveyReport({
                                         <ReactECharts
                                             onEvents={onEvents}
                                             option={dataBarchart}
-                                            className="w-full min-h-[400px] mb-6"
+                                            style={{
+                                                width: '100%',
+                                                height: Math.max(
+                                                    300,
+                                                    (dataLevel?.data?.data?.length || 0) * 35 + 120
+                                                ),
+                                            }}
                                         />
 
                                         {dataLevel?.data?.data?.length > 0 &&

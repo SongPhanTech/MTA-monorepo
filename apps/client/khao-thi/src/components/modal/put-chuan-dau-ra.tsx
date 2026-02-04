@@ -1,19 +1,19 @@
-import { useDisclosure } from 'react-hook-disclosure-modal'
-import { Col, Form, Input, Row, InputNumber, message } from 'antd'
-import { useEffect } from 'react'
+import { queryClient } from '@api/index'
+import FormItem from '@components/commons/form-item'
+import PutFormModal from '@components/commons/put-modal'
+import Select from '@components/commons/select'
+import { LEVEL_COLUMNS, QUESTION_TYPE_OPTIONS } from '@constants/constants'
+import type { ConfigExam } from '@workspace/db/client'
 import {
     useCreateKnowledgeBlock,
     useFindManyKnowledgeBlock,
     useFindUniqueKnowledgeBlock,
     useUpdateKnowledgeBlock,
 } from '@workspace/db/hooks'
-import { LEVEL_COLUMNS, QUESTION_TYPE_OPTIONS } from '@constants/constants'
-import { queryClient } from '@api/index'
-import PutFormModal from '@components/commons/put-modal'
-import FormItem from '@components/commons/form-item'
-import Select from '@components/commons/select'
-import type { ConfigExam } from '@workspace/db/client'
-
+import { sqlTransaction } from '@workspace/libs/api/model'
+import { Col, Form, Input, InputNumber, message, Row } from 'antd'
+import { useEffect } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 export interface KnowledgeBlockFormData extends Record<string, unknown> {
     name: string
     code: string
@@ -97,20 +97,44 @@ const PutChuongMucModal = () => {
             if (!values) return
 
             if (input?.id) {
-                await updateKnowledgeBlock({
-                    where: {
-                        id: input.id,
-                    },
-                    data: {
-                        name: values.name,
-                        code: values.code,
-                        description: values.description,
-                        configExams: {
-                            deleteMany: {},
-                            create: configExams,
+                const res = await sqlTransaction([
+                    {
+                        model: 'KnowledgeBlock',
+                        operation: 'update',
+                        data: {
+                            where: {
+                                id: input.id,
+                            },
+                            data: {
+                                name: values.name,
+                                code: values.code,
+                                description: values.description,
+                            },
                         },
                     },
-                })
+                    {
+                        model: 'ConfigExam',
+                        operation: 'deleteMany',
+                        data: {
+                            where: {
+                                knowledgeBlockId: input.id,
+                            },
+                        },
+                    },
+                    {
+                        model: 'ConfigExam',
+                        operation: 'createMany',
+                        data: {
+                            data: configExams.map((config) => ({
+                                ...config,
+                                knowledgeBlockId: input.id,
+                            })),
+                        },
+                    },
+                ])
+                if (res?.status === 200) {
+                    message.success('Cập nhật chuẩn đầu ra thành công')
+                }
             } else {
                 const createData: any = {
                     code: values.code,
@@ -128,12 +152,8 @@ const PutChuongMucModal = () => {
                 await createKnowledgeBlock({
                     data: createData,
                 })
+                message.success('Thêm mới chuẩn đầu ra thành công')
             }
-
-            message.success(
-                input?.id ? 'Cập nhật chuẩn đầu ra thành công' : 'Thêm mới chuẩn đầu ra thành công'
-            )
-
             queryClient.invalidateQueries({
                 queryKey: ['KnowledgeBlock'],
             })

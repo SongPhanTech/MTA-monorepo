@@ -1,4 +1,5 @@
 import { Faker, vi } from '@faker-js/faker'
+
 const faker = new Faker({
     locale: [vi],
 })
@@ -2110,13 +2111,13 @@ app.openapi(
             })
         }
         const result = await prisma.$queryRaw<
-            Array<{ activeCurricula: bigint; activeCurriculumVersions: bigint }>
+            [{ activeCurricula: bigint; activeCurriculumVersions: bigint }]
         >`
             SELECT
                 (SELECT COUNT(*) FROM "ql-dao-tao"."Curriculum" WHERE "active" = true) AS "activeCurricula",
                 (SELECT COUNT(*) FROM "ql-dao-tao"."CurriculumVersion" WHERE "active" = true) AS "activeCurriculumVersions"
         `
-        const { activeCurricula, activeCurriculumVersions } = result[0]!
+        const { activeCurricula, activeCurriculumVersions } = result[0]
 
         return c.json({
             data: [{ activeCurricula, activeCurriculumVersions }],
@@ -4853,7 +4854,6 @@ RetestStudent AS (
         AND SSS."examPostponed" = false
         AND (
             SSS."finalScore" < TC."scoreToPass"
-            OR SSS."manualFinalScore" < TC."scoreToPass"
         )
 ),
 
@@ -5136,49 +5136,32 @@ RelearnStudent AS (
         ON CV.id = S."curriculumVersionId"
     JOIN "ql-dao-tao"."Curriculum" C 
         ON C.id = CV."curriculumId"
-    JOIN "ql-dao-tao"."TrainingBlockOnCurriculumVersion" TBOCV 
-        ON CV.id = TBOCV."curriculumVersionId"
-    JOIN "ql-dao-tao"."TrainingBlockSubject" TBS 
-        ON TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
-        AND TBS."subjectId" = SV.id
+    LEFT JOIN (
+        SELECT 
+            TBS."subjectId", 
+            TBS."graduation", 
+            TBS."useForFinalScore",
+            TBOCV."curriculumVersionId"
+        FROM "ql-dao-tao"."TrainingBlockSubject" TBS
+        JOIN "ql-dao-tao"."TrainingBlockOnCurriculumVersion" TBOCV 
+            ON TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
+    ) AS TBS 
+        ON TBS."subjectId" = SV.id 
+        AND TBS."curriculumVersionId" = CV.id
     WHERE
         SC.cancelled = false
         AND (
-            SSS."finalScore" IS NULL
-            OR (TBS.graduation = true AND SSS."finalScore" < TC."scoreToPassGraduation")
-            OR (TBS."useForFinalScore" = true AND SSS."finalScore" < TC."scoreToPass")
-            OR (TBS."useForFinalScore" = false AND SSS."finalScore" < TC."scoreToPassConditional")
+            (SSS."finalScore" IS NOT NULL AND (
+                (TBS."graduation" = true AND SSS."finalScore" < TC."scoreToPassGraduation")
+                OR (TBS."useForFinalScore" = true AND SSS."finalScore" < TC."scoreToPass")
+                OR (TBS."useForFinalScore" = false AND SSS."finalScore" < TC."scoreToPassConditional")
+            ))
             OR SSS."examBanned" = true
             OR SSS.suspended = true
+            OR SSS.withdrew = true
         )
-        AND SSS.withdrew = false
         AND SSS.exempted = false
         AND SSS."examPostponed" = false
-        AND NOT EXISTS (
-            SELECT 1
-            FROM "ql-dao-tao"."StudentSubjectScore" SSS_pass
-            WHERE
-                SSS_pass."studentId" = SSS."studentId"
-                AND SSS_pass."subjectVersionId" = SV.id
-                AND SSS_pass.withdrew = false
-                AND SSS_pass.exempted = false
-                AND SSS_pass."examPostponed" = false
-                AND SSS_pass."examBanned" = false
-                AND SSS_pass.suspended = false
-                AND (
-                    (TBS.graduation = true AND
-                        (SSS_pass."finalScore" >= TC."scoreToPassGraduation"
-                         OR SSS_pass."manualFinalScore" >= TC."scoreToPassGraduation"))
-                    OR
-                    (TBS."useForFinalScore" = true AND
-                        (SSS_pass."finalScore" >= TC."scoreToPass"
-                         OR SSS_pass."manualFinalScore" >= TC."scoreToPass"))
-                    OR
-                    (TBS."useForFinalScore" = false AND
-                        (SSS_pass."finalScore" >= TC."scoreToPassConditional"
-                         OR SSS_pass."manualFinalScore" >= TC."scoreToPassConditional"))
-                )
-        )
 ),
 
 TotalStudent AS (

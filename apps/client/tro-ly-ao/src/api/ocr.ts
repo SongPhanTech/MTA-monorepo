@@ -1,5 +1,5 @@
-import axios from 'axios'
 import { getRuntimeEnv } from '@workspace/libs/utils'
+import axios from 'axios'
 
 export const fetchOCR = async (file: File) => {
     try {

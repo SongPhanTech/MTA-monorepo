@@ -341,7 +341,7 @@ export default function ClassSubject() {
                 semesterId,
             })
             if (status === 200) {
-                message.success('Cập nhật thời gian nhập điểm TX/CC thành công')
+                message.success('Cập nhật thời gian nhập điểm ĐK/CC thành công')
                 debouncedRefetch()
                 form.resetFields()
                 setOpen(false)
@@ -556,7 +556,7 @@ export default function ClassSubject() {
                                             open={open}
                                             onOpenChange={setOpen}
                                         >
-                                            <Button type="primary">Đặt hạn nhập điểm TX/CC</Button>
+                                            <Button type="primary">Đặt hạn nhập điểm ĐK/CC</Button>
                                         </Popover>
                                         <Popover
                                             content={
@@ -726,7 +726,7 @@ export default function ClassSubject() {
                                     return record?.enteredExamScore ? (
                                         'Đã nhập điểm thi'
                                     ) : record?.enteredScore ? (
-                                        'Đã nhập điểm TX,CC'
+                                        'Đã nhập điểm TX,ĐK'
                                     ) : (
                                         <div className="text-red-500">Chưa nhập điểm</div>
                                     )

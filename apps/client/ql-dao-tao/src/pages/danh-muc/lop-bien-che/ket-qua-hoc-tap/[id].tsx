@@ -5,11 +5,12 @@ import TableCollapse from '@components/commons/tableCollapse'
 import type { FilterProps } from '@constants/type'
 import { useScoreConverter } from '@hooks/scoreConverter'
 import DefaultLayout from '@layouts/default-layout'
-import type {
-    ArchivedAward,
-    ArchivedCertificate,
-    Prisma,
-    StudentSubjectScore,
+import {
+    $Enums,
+    type ArchivedAward,
+    type ArchivedCertificate,
+    type Prisma,
+    type StudentSubjectScore,
 } from '@workspace/db/client'
 import {
     useFindManySemester,
@@ -533,14 +534,13 @@ export default function StudentScoreClassPage() {
                         include: {
                             subjectVersion: true,
                             certificates: {
-                                include: {
-                                    archivedCertificate: true,
-                                },
+                                include: { archivedCertificate: true },
                             },
                             awards: {
-                                include: {
-                                    archivedAward: true,
+                                where: {
+                                    status: $Enums.ArchivedCertificateStatus.APPROVED,
                                 },
+                                include: { archivedAward: true },
                             },
                         },
                     },
@@ -700,7 +700,7 @@ export default function StudentScoreClassPage() {
                                     record?.subjectClassStudent?.[0]?.subjectVersion.name,
                             },
                             {
-                                title: 'Điểm CC',
+                                title: 'Điểm TX',
                                 align: 'center',
                                 dataIndex: 'attendanceScoreCmp',
                                 type: 'cmp',
@@ -709,7 +709,7 @@ export default function StudentScoreClassPage() {
                                     record?.subjectClassStudent?.[0]?.attendanceScore,
                             },
                             {
-                                title: 'Điểm TX',
+                                title: 'Điểm ĐK',
                                 align: 'center',
                                 dataIndex: 'midtermScoreCmp',
                                 type: 'cmp',

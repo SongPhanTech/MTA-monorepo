@@ -86,7 +86,7 @@ const PutDeadlineScoreModal = () => {
             className="w-[30vw]"
         >
             <Col span={24}>
-                <FormItem form={form} name={'time'} label="Thời gian nhập điểm TX,CC">
+                <FormItem form={form} name={'time'} label="Thời gian nhập điểm TX,ĐK">
                     <AntdDatePicker.RangePicker
                         locale={locale}
                         format={'DD/MM/YYYY'}

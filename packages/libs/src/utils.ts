@@ -63,6 +63,10 @@ export const getRuntimeEnv = (name: ConfigKeys): string => {
     return config
 }
 
+export function isNullish<T>(value: T) {
+    return value === null || value === undefined
+}
+
 export function normalizeVietnamese(str: string): string {
     return str
         .normalize('NFD')

@@ -1,3 +1,10 @@
+import MemberSidebar, {
+    createTreeData,
+    type GroupKey,
+} from '@components/features/thanh-lap-hoi-dong/member-sidebar'
+import MemberTable, {
+    type CouncilMemberType,
+} from '@components/features/thanh-lap-hoi-dong/member-table'
 import useSpinner from '@hooks/spinner'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
@@ -6,17 +13,10 @@ import {
     useFindFirstEvaluationCouncil,
     useUpdateEvaluationCouncilMember,
 } from '@workspace/db/hooks'
-import { BookPlus } from 'lucide-react'
-import { useMemo, useState, useCallback } from 'react'
-import { useDisclosure } from 'react-hook-disclosure-modal'
 import { Button, Empty, Flex, message, Typography } from 'antd'
-import MemberSidebar, {
-    createTreeData,
-    type GroupKey,
-} from '@components/features/thanh-lap-hoi-dong/member-sidebar'
-import MemberTable, {
-    type CouncilMemberType,
-} from '@components/features/thanh-lap-hoi-dong/member-table'
+import { BookPlus } from 'lucide-react'
+import { useCallback, useMemo, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function EvaluationCouncilTab() {
     const [selectedGroup, setSelectedGroup] = useState<GroupKey>('all')
@@ -154,7 +154,6 @@ export default function EvaluationCouncilTab() {
             case 'specialized':
                 return allSpecialized
             default:
-                // Handle specialized sub-groups: specialized-{groupName}
                 if (selectedGroup.startsWith('specialized-')) {
                     const groupName = selectedGroup.replace('specialized-', '')
                     return specialized[groupName] || []

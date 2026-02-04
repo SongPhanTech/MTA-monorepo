@@ -249,7 +249,7 @@ const PutArchivedAwardModal = () => {
         if (initialData) {
             form.setFieldsValue({
                 ...initialData,
-                date: dayjs(initialData.date),
+                date: initialData.date ? dayjs(initialData.date) : undefined,
                 documentFiles: initialData.documentFiles,
                 trainingCoursesId: initialData?.student?.fixedClass?.trainingCourseId || '',
                 fixedClassesId: initialData?.student?.fixedClassId || '',

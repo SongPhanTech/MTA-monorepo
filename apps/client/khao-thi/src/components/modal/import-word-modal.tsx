@@ -1,5 +1,7 @@
 import { UploadOutlined } from '@ant-design/icons'
 import FormItem from '@components/commons/form-item'
+import HtmlTruncate from '@components/commons/html-truncate'
+import { renderWithMath } from '@components/commons/rich-text-editor/renderWithMath'
 import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilter'
 import { DIFFICULT_LABELS, QUESTION_TYPE_LABELS } from '@constants/constants'
@@ -8,7 +10,7 @@ import { type Difficult, QuestionType } from '@workspace/db'
 import { useCreateQuestion, useFindManyKnowledgeBlock } from '@workspace/db/hooks'
 import { generatePresignedUrl } from '@workspace/libs/api/model'
 import { env } from '@workspace/libs/utils'
-import { Button, Modal, message, Col, Select, Radio, Form, Row } from 'antd'
+import { Button, Col, Form, Modal, message, Radio, Row, Select } from 'antd'
 import { XMLParser } from 'fast-xml-parser'
 import PizZip from 'pizzip'
 import type React from 'react'
@@ -470,11 +472,14 @@ const WordImportModal: React.FC = () => {
                 html = renderContentWithImagePlaceholders(html, record.contentImagesRaw || [])
 
                 return (
-                    <div
-                        dangerouslySetInnerHTML={{
-                            __html: html,
-                        }}
-                    />
+                    <HtmlTruncate>
+                        <div
+                            style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}
+                            dangerouslySetInnerHTML={{
+                                __html: renderWithMath(html),
+                            }}
+                        />
+                    </HtmlTruncate>
                 )
             },
         },

@@ -14,6 +14,7 @@ export const selectTrainingMajor = (id: string) => {
         localStorage.setItem('selectedTrainingMajorId', id)
     } else {
         localStorage.removeItem('selectedTrainingMajorId')
+        localStorage.removeItem('selectedTrainingMajorName')
     }
     trainingMajorStore.setState((prev) => ({
         ...prev,
@@ -29,5 +30,8 @@ export const useTrainingMajorStore = () => {
             selectTrainingMajor(idLocalStorage)
         }
     }, [])
-    return { id: selectedTrainingMajorId, onSelect: selectTrainingMajor }
+    return {
+        id: selectedTrainingMajorId,
+        onSelect: selectTrainingMajor,
+    }
 }

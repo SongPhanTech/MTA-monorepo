@@ -12,6 +12,8 @@ import type { ExportStudentDecreaseAcademicWarningJson200ItemStudentsItemStudent
  */
 export type ExportStudentDecreaseAcademicWarningJson200ItemStudentsItemStudentSemesterResult = {
     id: string
+    /** @nullable */
+    code?: string | null
     active?: boolean
     /** @nullable */
     description?: string | null
@@ -23,7 +25,6 @@ export type ExportStudentDecreaseAcademicWarningJson200ItemStudentsItemStudentSe
     updatedAt?: string | null
     /** @nullable */
     createdBy?: string | null
-    code: string
     studyYear: number
     semesterIndexInCourse: number
     isLastSemester: boolean

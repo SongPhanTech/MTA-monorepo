@@ -8490,6 +8490,12 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'studentSubjectScore',
+                }, scoreCorrectionItem: {
+                    name: "scoreCorrectionItem",
+                    type: "ScoreCorrectionItem",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'studentSubjectScore',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -8899,12 +8905,15 @@ const metadata = {
                 }, score: {
                     name: "score",
                     type: "Float",
+                    isOptional: true,
                 }, issuedBy: {
                     name: "issuedBy",
                     type: "String",
+                    isOptional: true,
                 }, issuedDate: {
                     name: "issuedDate",
                     type: "DateTime",
+                    isOptional: true,
                 }, expiredDate: {
                     name: "expiredDate",
                     type: "DateTime",
@@ -9350,6 +9359,12 @@ const metadata = {
                 }, exam: {
                     name: "exam",
                     type: "Exam",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'semester',
+                }, scoreLinkSheets: {
+                    name: "scoreLinkSheets",
+                    type: "ScoreLinkSheet",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'semester',
@@ -10060,6 +10075,12 @@ const metadata = {
                     isArray: true,
                     backLink: 'fixedClasses',
                     isRelationOwner: true,
+                }, scoreLinkSheets: {
+                    name: "scoreLinkSheets",
+                    type: "ScoreLinkSheet",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'fixedClass',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -10927,6 +10948,12 @@ const metadata = {
                 }, examFramework: {
                     name: "examFramework",
                     type: "ExamFramework",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'subjectVersion',
+                }, scoreLinkSubjectVersion: {
+                    name: "scoreLinkSubjectVersion",
+                    type: "ScoreLinkSubjectVersion",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'subjectVersion',
@@ -11808,6 +11835,22 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'enterGradeLecturer',
+                }, scoreLinkSubjectVersion: {
+                    name: "scoreLinkSubjectVersion",
+                    type: "ScoreLinkSubjectVersion",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'subjectClass',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "scoreLinkSubjectVersionId" },
+                }, scoreLinkSubjectVersionId: {
+                    name: "scoreLinkSubjectVersionId",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'scoreLinkSubjectVersion',
                 }, subjectClassStudent: {
                     name: "subjectClassStudent",
                     type: "StudentSubjectScore",
@@ -11889,6 +11932,9 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
+                }, scoreLinkSubjectVersionId: {
+                    name: "scoreLinkSubjectVersionId",
+                    fields: ["scoreLinkSubjectVersionId"]
                 },
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
@@ -12256,6 +12302,204 @@ const metadata = {
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
+        scoreCorrectionTicket: {
+            name: 'ScoreCorrectionTicket', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ScoreCorrectionTicket$createdBy,
+                }, trainingObjectType: {
+                    name: "trainingObjectType",
+                    type: "TrainingObjectType",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'scoreCorrectionTicket',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
+                }, trainingObjectTypeId: {
+                    name: "trainingObjectTypeId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'trainingObjectType',
+                }, number: {
+                    name: "number",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                }, proposal: {
+                    name: "proposal",
+                    type: "String",
+                    isOptional: true,
+                }, decision: {
+                    name: "decision",
+                    type: "String",
+                    isOptional: true,
+                }, date: {
+                    name: "date",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, deadline: {
+                    name: "deadline",
+                    type: "DateTime",
+                    isOptional: true,
+                }, status: {
+                    name: "status",
+                    type: "ScoreCorrectionStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, items: {
+                    name: "items",
+                    type: "ScoreCorrectionItem",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'ticket',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        scoreCorrectionItem: {
+            name: 'ScoreCorrectionItem', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ScoreCorrectionItem$createdBy,
+                }, ticket: {
+                    name: "ticket",
+                    type: "ScoreCorrectionTicket",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'items',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "ticketId" },
+                }, ticketId: {
+                    name: "ticketId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'ticket',
+                }, studentSubjectScore: {
+                    name: "studentSubjectScore",
+                    type: "StudentSubjectScore",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'scoreCorrectionItem',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentSubjectScoreId" },
+                }, studentSubjectScoreId: {
+                    name: "studentSubjectScoreId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'studentSubjectScore',
+                }, newAttendanceScore: {
+                    name: "newAttendanceScore",
+                    type: "Float",
+                    isOptional: true,
+                }, newMidtermScore: {
+                    name: "newMidtermScore",
+                    type: "Float",
+                    isOptional: true,
+                }, newExamScore: {
+                    name: "newExamScore",
+                    type: "Float",
+                    isOptional: true,
+                }, oldAttendanceScore: {
+                    name: "oldAttendanceScore",
+                    type: "Float",
+                    isOptional: true,
+                }, oldMidtermScore: {
+                    name: "oldMidtermScore",
+                    type: "Float",
+                    isOptional: true,
+                }, oldExamScore: {
+                    name: "oldExamScore",
+                    type: "Float",
+                    isOptional: true,
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, ticketId_studentSubjectScoreId: {
+                    name: "ticketId_studentSubjectScoreId",
+                    fields: ["ticketId", "studentSubjectScoreId"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
         trainingObjectType: {
             name: 'TrainingObjectType', fields: {
                 id: {
@@ -12417,6 +12661,18 @@ const metadata = {
                 }, survey: {
                     name: "survey",
                     type: "Survey",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingObjectType',
+                }, scoreCorrectionTicket: {
+                    name: "scoreCorrectionTicket",
+                    type: "ScoreCorrectionTicket",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingObjectType',
+                }, scoreLinkSheet: {
+                    name: "scoreLinkSheet",
+                    type: "ScoreLinkSheet",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingObjectType',
@@ -14716,6 +14972,12 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'student',
+                }, scoreLinkStudent: {
+                    name: "scoreLinkStudent",
+                    type: "ScoreLinkStudent",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'student',
                 }, classRegisterLogs: {
                     name: "classRegisterLogs",
                     type: "ClassRegisterLogs",
@@ -14753,6 +15015,11 @@ const metadata = {
                     type: "String",
                     isId: true,
                     attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
                 }, active: {
                     name: "active",
                     type: "Boolean",
@@ -14780,9 +15047,6 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$StudentSemesterResult$createdBy,
-                }, code: {
-                    name: "code",
-                    type: "String",
                 }, student: {
                     name: "student",
                     type: "Student",
@@ -14936,6 +15200,9 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
                 }, studentId_semesterId: {
                     name: "studentId_semesterId",
                     fields: ["studentId", "semesterId"]
@@ -14950,6 +15217,11 @@ const metadata = {
                     type: "String",
                     isId: true,
                     attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
                 }, active: {
                     name: "active",
                     type: "Boolean",
@@ -14977,9 +15249,6 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$StudentYearResult$createdBy,
-                }, code: {
-                    name: "code",
-                    type: "String",
                 }, student: {
                     name: "student",
                     type: "Student",
@@ -15102,6 +15371,9 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
                 }, studentId_schoolYearId: {
                     name: "studentId_schoolYearId",
                     fields: ["studentId", "schoolYearId"]
@@ -15540,6 +15812,36 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'studentScoreConvert',
+                }, scoreLinkSheet: {
+                    name: "scoreLinkSheet",
+                    type: "ScoreLinkSheet",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'documents',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "scoreLinkSheetId" },
+                }, scoreLinkSheetId: {
+                    name: "scoreLinkSheetId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'scoreLinkSheet',
+                }, examFramework: {
+                    name: "examFramework",
+                    type: "ExamFramework",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'documentFiles',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "examFrameworkId" },
+                }, examFrameworkId: {
+                    name: "examFrameworkId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'examFramework',
                 }, note: {
                     name: "note",
                     type: "Note",
@@ -17242,6 +17544,10 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'thesisSession',
+                }, supervisorName: {
+                    name: "supervisorName",
+                    type: "String",
+                    isOptional: true,
                 }, supervisor: {
                     name: "supervisor",
                     type: "ExpertProfile",
@@ -17272,6 +17578,10 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'supervisorPayment',
+                }, coSupervisorName: {
+                    name: "coSupervisorName",
+                    type: "String",
+                    isOptional: true,
                 }, coSupervisor: {
                     name: "coSupervisor",
                     type: "ExpertProfile",
@@ -17302,6 +17612,26 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'coSupervisorPayment',
+                }, CHUTICH: {
+                    name: "CHUTICH",
+                    type: "String",
+                    isOptional: true,
+                }, THUKY: {
+                    name: "THUKY",
+                    type: "String",
+                    isOptional: true,
+                }, PHANBIEN1: {
+                    name: "PHANBIEN1",
+                    type: "String",
+                    isOptional: true,
+                }, PHANBIEN2: {
+                    name: "PHANBIEN2",
+                    type: "String",
+                    isOptional: true,
+                }, UYVIEN3: {
+                    name: "UYVIEN3",
+                    type: "String",
+                    isOptional: true,
                 }, organization: {
                     name: "organization",
                     type: "DM_DonVi",
@@ -18773,6 +19103,9 @@ const metadata = {
                     name: "name",
                     type: "String",
                     attributes: [{ "name": "@unique", "args": [] }],
+                }, objectType: {
+                    name: "objectType",
+                    type: "StandardCatalogType",
                 }, standards: {
                     name: "standards",
                     type: "StandardCatalog",
@@ -22064,6 +22397,11 @@ const metadata = {
                     type: "Boolean",
                     isOptional: true,
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, isNote: {
+                    name: "isNote",
+                    type: "Boolean",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 },
             }, uniqueConstraints: {
                 id: {
@@ -22318,6 +22656,12 @@ const metadata = {
                 }, examMatrixs: {
                     name: "examMatrixs",
                     type: "ExamMatrix",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'examFramework',
+                }, documentFiles: {
+                    name: "documentFiles",
+                    type: "DocumentFile",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'examFramework',
@@ -24443,6 +24787,296 @@ const metadata = {
                 },
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        scoreLinkSheet: {
+            name: 'ScoreLinkSheet', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ScoreLinkSheet$createdBy,
+                }, trainingObjectType: {
+                    name: "trainingObjectType",
+                    type: "TrainingObjectType",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'scoreLinkSheet',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
+                }, trainingObjectTypeId: {
+                    name: "trainingObjectTypeId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'trainingObjectType',
+                }, note: {
+                    name: "note",
+                    type: "String",
+                    isOptional: true,
+                }, decision: {
+                    name: "decision",
+                    type: "String",
+                    isOptional: true,
+                }, status: {
+                    name: "status",
+                    type: "ScoreLinkStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, fixedClass: {
+                    name: "fixedClass",
+                    type: "FixedClass",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'scoreLinkSheets',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "fixedClassId" },
+                }, fixedClassId: {
+                    name: "fixedClassId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'fixedClass',
+                }, semester: {
+                    name: "semester",
+                    type: "Semester",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'scoreLinkSheets',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "semesterId" },
+                }, semesterId: {
+                    name: "semesterId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'semester',
+                }, scoreLinkSubjectVersions: {
+                    name: "scoreLinkSubjectVersions",
+                    type: "ScoreLinkSubjectVersion",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'scoreLinkSheet',
+                }, documents: {
+                    name: "documents",
+                    type: "DocumentFile",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'scoreLinkSheet',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        scoreLinkSubjectVersion: {
+            name: 'ScoreLinkSubjectVersion', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ScoreLinkSubjectVersion$createdBy,
+                }, scoreLinkSheet: {
+                    name: "scoreLinkSheet",
+                    type: "ScoreLinkSheet",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'scoreLinkSubjectVersions',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "scoreLinkSheetId" },
+                }, scoreLinkSheetId: {
+                    name: "scoreLinkSheetId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'scoreLinkSheet',
+                }, subjectVersion: {
+                    name: "subjectVersion",
+                    type: "SubjectVersion",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'scoreLinkSubjectVersion',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "subjectVersionId" },
+                }, subjectVersionId: {
+                    name: "subjectVersionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'subjectVersion',
+                }, scoreLinkStudents: {
+                    name: "scoreLinkStudents",
+                    type: "ScoreLinkStudent",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'scoreLinkSubjectVersion',
+                }, subjectClass: {
+                    name: "subjectClass",
+                    type: "SubjectClass",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'scoreLinkSubjectVersion',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, scoreLinkSheetId_subjectVersionId: {
+                    name: "scoreLinkSheetId_subjectVersionId",
+                    fields: ["scoreLinkSheetId", "subjectVersionId"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        scoreLinkStudent: {
+            name: 'ScoreLinkStudent', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ScoreLinkStudent$createdBy,
+                }, scoreLinkSubjectVersion: {
+                    name: "scoreLinkSubjectVersion",
+                    type: "ScoreLinkSubjectVersion",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'scoreLinkStudents',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "scoreLinkSubjectVersionId" },
+                }, scoreLinkSubjectVersionId: {
+                    name: "scoreLinkSubjectVersionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'scoreLinkSubjectVersion',
+                }, student: {
+                    name: "student",
+                    type: "Student",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'scoreLinkStudent',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentId" },
+                }, studentId: {
+                    name: "studentId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'student',
+                }, score: {
+                    name: "score",
+                    type: "Float",
+                    attributes: [{ "name": "@gte", "args": [{ "name": "value", "value": 0 }, { "name": "message", "value": "Điểm tối thiểu là 0" }] }, { "name": "@lte", "args": [{ "name": "value", "value": 10 }, { "name": "message", "value": "Điểm tối đa là 10" }] }],
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, scoreLinkSubjectVersionId_studentId: {
+                    name: "scoreLinkSubjectVersionId_studentId",
+                    fields: ["scoreLinkSubjectVersionId", "studentId"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         note: {
             name: 'Note', fields: {
@@ -27558,6 +28192,12 @@ function $default$SubjectClassTime$createdBy(user) {
 function $default$ClassSchedule$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
+function $default$ScoreCorrectionTicket$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
+function $default$ScoreCorrectionItem$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
 function $default$TrainingObjectType$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
@@ -27895,6 +28535,15 @@ function $default$RankingCondition$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
 function $default$DiplomaVerificationApplication$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
+function $default$ScoreLinkSheet$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
+function $default$ScoreLinkSubjectVersion$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
+function $default$ScoreLinkStudent$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
 function $default$Note$createdBy(user) {

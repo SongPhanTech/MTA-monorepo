@@ -236,6 +236,12 @@ const NAVIGATION: NavigationType = {
                         description: 'Điểm lớp môn học (P13)',
                     },
                     {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_LIEN_KET,
+                        label: 'Điểm liên kết',
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_LIEN_KET,
+                        description: 'Điểm liên kết',
+                    },
+                    {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DANH_PHACH,
                         label: 'Đánh phách',
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_DANH_PHACH,
@@ -282,6 +288,12 @@ const NAVIGATION: NavigationType = {
                         label: 'Điểm chứng chỉ',
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_DIEM_CHUNG_CHI,
                         description: 'Điểm chứng chỉ',
+                    },
+                    {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_SUA_DIEM,
+                        label: 'Sửa điểm',
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_SUA_DIEM,
+                        description: 'Sửa điểm',
                     },
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_SV_HV_CHUYEN_TRUONG,
@@ -502,30 +514,30 @@ const NAVIGATION: NavigationType = {
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_SACH_CHUYEN_GIA,
                         description: 'Danh sách chuyên gia',
                     },
-                    {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_SACH_THANH_TOAN,
-                        label: 'Danh sách thanh toán',
-                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_SACH_THANH_TOAN,
-                        description: 'Danh sách thanh toán',
-                    },
-                    {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_SACH_THANH_TOAN_GVHD,
-                        label: 'Danh sách thanh toán GVHD',
-                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_SACH_THANH_TOAN_GVHD,
-                        description: 'Danh sách thanh toán GVHD',
-                    },
-                    {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_THONG_KE,
-                        label: 'Thống kê kết quả bảo vệ',
-                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_THONG_KE,
-                        description: 'Thống kê kết quả bảo vệ',
-                    },
-                    {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_CAU_HINH_THANH_TOAN_DO_AN,
-                        label: 'Cấu hình thanh toán',
-                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_CAU_HINH_THANH_TOAN_DO_AN,
-                        description: 'Cấu hình thanh toán',
-                    },
+                    // {
+                    //     id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_SACH_THANH_TOAN,
+                    //     label: 'Danh sách thanh toán',
+                    //     path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_SACH_THANH_TOAN,
+                    //     description: 'Danh sách thanh toán',
+                    // },
+                    // {
+                    //     id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_SACH_THANH_TOAN_GVHD,
+                    //     label: 'Danh sách thanh toán GVHD',
+                    //     path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_SACH_THANH_TOAN_GVHD,
+                    //     description: 'Danh sách thanh toán GVHD',
+                    // },
+                    // {
+                    //     id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_THONG_KE,
+                    //     label: 'Thống kê kết quả bảo vệ',
+                    //     path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_THONG_KE,
+                    //     description: 'Thống kê kết quả bảo vệ',
+                    // },
+                    // {
+                    //     id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_CAU_HINH_THANH_TOAN_DO_AN,
+                    //     label: 'Cấu hình thanh toán',
+                    //     path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_CAU_HINH_THANH_TOAN_DO_AN,
+                    //     description: 'Cấu hình thanh toán',
+                    // },
                 ],
             },
             {
@@ -766,17 +778,17 @@ const NAVIGATION: NavigationType = {
                 icon: Landmark,
                 children: [
                     {
-                        id: KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG,
+                        id: KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_DE_THI_NGAN_HANG_CAU_HOI,
                         label: 'Ngân hàng câu hỏi',
                         path: ROUTER_PATH.KHAO_THI.THIET_LAP_DE_THI_NGAN_HANG_CAU_HOI,
                     },
                     {
-                        id: KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG,
+                        id: KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_DE_THI_NGAN_HANG_CAU_HOI,
                         label: 'Khung đề',
                         path: ROUTER_PATH.KHAO_THI.THIET_LAP_DE_THI_KHUNG_DE,
                     },
                     {
-                        id: KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG,
+                        id: KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_DE_THI_NGAN_HANG_CAU_HOI,
                         label: 'Danh sách đề thi',
                         path: ROUTER_PATH.KHAO_THI.THIET_LAP_DE_THI_DANH_SACH_DE,
                     },

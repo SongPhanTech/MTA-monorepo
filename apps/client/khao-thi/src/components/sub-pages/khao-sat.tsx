@@ -7,7 +7,7 @@ import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { cn } from '@lib/utils'
-import { SchoolYear, Semester, Survey } from '@workspace/db'
+import type { SchoolYear, Semester, Survey } from '@workspace/db'
 import {
     useCountSurvey,
     useFindManySchoolYear,
@@ -21,10 +21,10 @@ import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Checkbox, Col, Flex, message, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
+import { Link } from 'lucide-react'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { Link } from 'lucide-react'
 
 function TabDotKhaoSat({
     selectedId,
@@ -107,7 +107,7 @@ function TabDotKhaoSat({
                   }
                 : {}),
         }),
-        [filters, semesterId]
+        [filters, semesterId, trainingObjectTypeId]
     )
 
     const { data = [], refetch } = useFindManySurvey({

@@ -1,15 +1,18 @@
+import { DownOutlined, FileExcelOutlined, PrinterOutlined } from '@ant-design/icons'
+import HtmlTruncate from '@components/commons/html-truncate'
+import Table from '@components/commons/table'
 import useSpinner from '@hooks/spinner'
 import { useGetClusterSurveyStatisticsForLecturer } from '@workspace/libs/api/exam'
-import { Button, Col, Empty, Row, Typography } from 'antd'
-import { useRouter } from 'next/router'
-import { useMemo } from 'react'
+import type { GetSurveyStatistics200QuestionsItemAnswersItem } from '@workspace/libs/api/schemas'
+import { Button, Col, Dropdown, Empty, Row, Typography } from 'antd'
 // @ts-nocheck
 import ReactECharts from 'echarts-for-react'
-import { GetSurveyStatistics200QuestionsItemAnswersItem } from '@workspace/libs/api/schemas'
-import Table from '@components/commons/table'
 import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
-import HtmlTruncate from '@components/commons/html-truncate'
+import { useRouter } from 'next/router'
+import { useMemo } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
+
 const { Title } = Typography
 
 export interface CriteriaItem {
@@ -28,14 +31,31 @@ type AnswerWithPercent = AnswerItem & { percent: number; total: number }
 function SurveylecturerReport({
     selectedId,
     lectureId,
+    surveyName,
+    trainingObjectTypeName,
+    organizationCode,
+    organizationName,
+    lecturerName,
+    lecturerCode,
+    departmentName,
+    departmentCode,
 }: {
     selectedId: string
     lectureId: string
+    surveyName: string
+    trainingObjectTypeName?: string
+    organizationCode?: string
+    organizationName?: string
+    lecturerName?: string
+    lecturerCode?: string
+    departmentName?: string
+    departmentCode?: string
 }) {
-    console.log(selectedId, lectureId)
-
     const router = useRouter()
     const { showSpinner, hideSpinner } = useSpinner()
+    const { onOpen } = useDisclosure({
+        tag: 'ModalPrintSurveylecturer',
+    })
 
     const { data: dataLevel } = useGetClusterSurveyStatisticsForLecturer(selectedId as string, {
         lectureId,
@@ -79,8 +99,8 @@ function SurveylecturerReport({
 
         return { categories, series }
     }
-    console.log(dataLevel)
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <skip function>
     const dataBarchart = useMemo(() => {
         let label: string[] = []
         if (dataLevel?.status === 200 && dataLevel?.data?.data?.questions?.length) {
@@ -189,6 +209,24 @@ function SurveylecturerReport({
             },
         }
 
+        const addBorderToRange = (
+            sheet: ExcelJS.Worksheet,
+            fromRow: number,
+            toRow: number,
+            toCol: number
+        ) => {
+            for (let row = fromRow; row <= toRow; row++) {
+                for (let col = 1; col <= toCol; col++) {
+                    sheet.getCell(row, col).border = {
+                        top: { style: 'thin' },
+                        left: { style: 'thin' },
+                        right: { style: 'thin' },
+                        bottom: { style: 'thin' },
+                    }
+                }
+            }
+        }
+
         worksheet.mergeCells('A1:C2')
         worksheet.getCell('A1').value = 'BỘ QUỐC PHÒNG\nHỌC VIỆN KỸ THUẬT QUÂN SỰ'
         worksheet.getCell('A1').style = headerTitleStyle
@@ -202,7 +240,7 @@ function SurveylecturerReport({
         worksheet.getCell('E1').style = headerTitleStyle
 
         worksheet.mergeCells('A4:H4')
-        worksheet.getCell('A4').value = `Báo cáo khảo sát: ${name}`
+        worksheet.getCell('A4').value = `Báo cáo ${surveyName}`
         worksheet.getCell('A4').style = headerSubtitleStyle
         worksheet.getRow(4).height = 20
 
@@ -240,8 +278,7 @@ function SurveylecturerReport({
                   'STT',
                   'Câu hỏi',
                   'Tên Câu hỏi',
-                  // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
-                  ...dataTable[0]?.answers?.map((i: any) => i?.description),
+                  ...dataTable[0].answers.map((i: any) => i?.description),
               ]
             : ['STT', 'Câu hỏi', 'Tên Câu hỏi']
         headerRow.eachCell((cell: any) => {
@@ -270,9 +307,21 @@ function SurveylecturerReport({
                         (a: any) => `${a.percent || 0}% (${a?.count || 0}/${a?.total || 0})`
                     ),
                 ]
+                headerRowValue.eachCell((cell: any, colNumber: number) => {
+                    cell.alignment = {
+                        horizontal: colNumber === 3 ? 'left' : 'center',
+                        vertical: 'middle',
+                        wrapText: true,
+                    }
+                })
             })
         }
-
+        addBorderToRange(
+            worksheet,
+            rowIndex + 2,
+            rowIndex + 2 + dataTable.length,
+            worksheet.columns.length
+        )
         // Xuất file
         const buffer = await workbook.xlsx.writeBuffer()
         saveAs(new Blob([buffer]), `Bao_cao_khao_sat_${name || ''}.xlsx`)
@@ -288,29 +337,32 @@ function SurveylecturerReport({
     }
 
     const renderTable = (dataTable: any) => {
-         if (!dataTable?.length) return
-        let average =dataTable[0]?.answers.map((i:any)=>{
-            return {...i,total:0,count:0}
-        });
-        dataTable.forEach((e:any) => {
+        if (!dataTable?.length) return
+        let average = dataTable[0]?.answers.map((i: any) => {
+            return { ...i, total: 0, count: 0 }
+        })
+        dataTable.forEach((e: any) => {
             average = average.map((i: any) => {
                 return {
                     ...i,
                     total: i.total + e.answers.find((a: any) => a.id === i.id)?.total,
                     count: i.count + e.answers.find((a: any) => a.id === i.id)?.count,
                 }
-            });
-        });
-        const datarender=[...dataTable,{
-            name:'Trung bình',
-            answers:average,
-            id:'average'
-        }]
+            })
+        })
+        const datarender = [
+            ...dataTable,
+            {
+                name: 'Trung bình',
+                answers: average,
+                id: 'average',
+            },
+        ]
         return (
             <Table
-                rowKey={"id"}
+                rowKey={'id'}
                 columns={
-                    dataTable?.length > 0
+                    dataTable?.length
                         ? [
                               {
                                   title: 'STT',
@@ -324,18 +376,23 @@ function SurveylecturerReport({
                                   align: 'center',
                                   width: 100,
                                   render: (_, record, index) => {
-                                      return index===datarender.length-1?'ĐGTB': `Câu hỏi ${index + 1}`
+                                      return index === datarender.length - 1
+                                          ? 'ĐGTB'
+                                          : `Câu hỏi ${index + 1}`
                                   },
                               },
                               {
                                   title: 'Nội dung câu hỏi',
                                   align: 'left',
                                   render: (_, record, index) => {
-                                      return index===datarender.length-1?'':<HtmlTruncate>{record?.name}</HtmlTruncate>
+                                      return index === datarender.length - 1 ? (
+                                          ''
+                                      ) : (
+                                          <HtmlTruncate>{record?.name}</HtmlTruncate>
+                                      )
                                   },
                               },
-                              // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
-                              ...dataTable[0]?.answers?.map((i: any) => ({
+                              ...dataTable[0].answers.map((i: any) => ({
                                   title: i?.description,
                                   id: i?.id,
                                   dataIndex: i?.id,
@@ -384,20 +441,52 @@ function SurveylecturerReport({
                         <div className="p-4 flex justify-between">
                             <Title level={4}>Thống kê theo từng Câu hỏi</Title>
                             {dataLevel?.status === 200 && (
-                                <Button
-                                    type="primary"
-                                    onClick={
-                                        () => {}
-                                        // exportTemplate(
-                                        //     dataLevel?.data?.surveyName,
-                                        //     dataLevel?.data?.questions,
-                                        //     data?.data
-                                        // )
-                                    }
-                                    size="small"
+                                <Dropdown
+                                    trigger={['click']}
+                                    menu={{
+                                        items: [
+                                            {
+                                                key: 'export',
+                                                icon: <FileExcelOutlined />,
+                                                label: 'Xuất báo cáo',
+                                                onClick: () => {
+                                                    exportTemplate(
+                                                        surveyName,
+                                                        dataLevel?.data?.data?.questions,
+                                                        dataLevel?.data?.data
+                                                    )
+                                                },
+                                            },
+                                            {
+                                                key: 'print',
+                                                icon: <PrinterOutlined />,
+                                                label: 'In báo cáo',
+                                                onClick: () => {
+                                                    onOpen({
+                                                        surveyName,
+                                                        trainingObjectTypeName,
+
+                                                        lecturerName,
+                                                        lecturerCode,
+
+                                                        departmentName,
+                                                        departmentCode,
+
+                                                        organizationName,
+                                                        organizationCode,
+
+                                                        questions: dataLevel?.data?.data?.questions,
+                                                        chartOption: dataBarchart,
+                                                    })
+                                                },
+                                            },
+                                        ],
+                                    }}
                                 >
-                                    Xuất báo cáo
-                                </Button>
+                                    <Button type="primary" size="small">
+                                        Xuất báo cáo <DownOutlined />
+                                    </Button>
+                                </Dropdown>
                             )}
                         </div>
                         <div className="flex-1 mb-6">
@@ -406,7 +495,15 @@ function SurveylecturerReport({
                                 <div style={{ width: '100%', height: '100%' }}>
                                     <ReactECharts
                                         option={dataBarchart}
-                                        className="w-full min-h-[400px]"
+                                        style={{
+                                            width: '100%',
+                                            height: Math.max(
+                                                300,
+                                                (dataLevel?.data?.data?.questions?.length || 0) *
+                                                    35 +
+                                                    120
+                                            ),
+                                        }}
                                     />
                                     {dataLevel?.data?.data?.questions?.length > 0 &&
                                         renderTable(dataLevel?.data?.data?.questions)}

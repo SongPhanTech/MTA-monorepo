@@ -794,13 +794,13 @@ export default function DanhSachSinhVien() {
                                     `${record?.studentSubjectScore?.student?.fixedClass?.code || ''}`,
                             },
                             {
-                                title: 'Điểm CC',
+                                title: 'Điểm TX',
                                 width: 70,
                                 align: 'center',
                                 render: (_, record) => record?.studentSubjectScore?.attendanceScore,
                             },
                             {
-                                title: 'Điểm TX',
+                                title: 'Điểm ĐK',
                                 align: 'center',
                                 width: 70,
                                 render: (_, record) => record?.studentSubjectScore?.midtermScore,

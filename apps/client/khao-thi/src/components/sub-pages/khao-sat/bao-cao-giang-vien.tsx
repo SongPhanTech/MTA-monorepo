@@ -1,14 +1,15 @@
+import Table from '@components/commons/table'
+import { cn } from '@lib/utils'
 import {
     exportClusterSurveyStatistics,
     useGetClusterSurveyStatistics,
 } from '@workspace/libs/api/exam'
 import { Button, Col, Empty, message, Row, Typography } from 'antd'
+import ReactECharts from 'echarts-for-react'
 import { saveAs } from 'file-saver'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
-import ReactECharts from 'echarts-for-react'
-import Table from '@components/commons/table'
-import { cn } from '@lib/utils'
+
 const { Title } = Typography
 function LecturerSurveyReport({
     selectedId,
@@ -117,7 +118,7 @@ function LecturerSurveyReport({
                     }
                 }}
                 columns={
-                    choices?.length > 0
+                    choices?.length
                         ? [
                               {
                                   title: 'STT',
@@ -133,8 +134,7 @@ function LecturerSurveyReport({
                                       return record?.subjectClassName
                                   },
                               },
-                              // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
-                              ...choices?.map((i: any, index: number) => ({
+                              ...choices.map((i: any, index: number) => ({
                                   title: i?.description,
                                   id: i?.id,
                                   dataIndex: i?.id,

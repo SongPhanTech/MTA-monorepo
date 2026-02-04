@@ -72,7 +72,7 @@ type TableProps<T = AnyObject> = {
     rowSelection?: TableRowSelection<T>
 } & Omit<TableAntdProps, 'pagination'>
 
-const Table = <T extends AnyObject>({
+export const Table = <T extends AnyObject>({
     columns = [],
     data,
     pagination,

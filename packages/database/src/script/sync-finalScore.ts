@@ -21,6 +21,9 @@ const subjectScores = await prisma.studentSubjectScore.findMany({
             },
         },
         awards: {
+            where: {
+                status: 'APPROVED',
+            },
             select: {
                 status: true,
                 archivedAward: {

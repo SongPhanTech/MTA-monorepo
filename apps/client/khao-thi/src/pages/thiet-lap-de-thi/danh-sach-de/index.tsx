@@ -1,9 +1,9 @@
+import DefaultLayout from '@layouts/default-layout'
+import { Store, useStore } from '@tanstack/react-store'
 import { Col, Row, Tabs } from 'antd'
 import { useMemo, useState } from 'react'
-import { Store, useStore } from '@tanstack/react-store'
-import DefaultLayout from '@layouts/default-layout'
-import DanhSachKeHoachThi from './_component/danh-sach-ke-hoach-thi'
 import ExamListPage from './_component/danh-sach-de'
+import DanhSachKeHoachThi from './_component/danh-sach-ke-hoach-thi'
 
 export const store = new Store({
     selectedExamId: undefined,

@@ -2,7 +2,7 @@ import { queryClient } from '@api/index'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import { $Enums } from '@workspace/db/client'
+import type { $Enums } from '@workspace/db/client'
 import {
     useDeleteManyPlanTrainingSubject,
     useFindFirstPlanTraining,

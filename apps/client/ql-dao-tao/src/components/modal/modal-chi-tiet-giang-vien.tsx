@@ -1,12 +1,12 @@
 import useSpinner from '@hooks/spinner'
+import { useStudentThesisRegistrationStatusOptions } from '@hooks/studentThesisRegistrationStatus'
+import { useScheduleOptions } from '@hooks/subjectClassSchedule'
+import { useSubjectClassTypeOptions } from '@hooks/subjectClassType'
+import { useThesisProjectStatusOptions } from '@hooks/thesisProjectStatus'
 import { useFindUniqueLecturer } from '@workspace/db/hooks'
 import { Descriptions, Modal, Table, Tabs, Tag } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { useThesisProjectStatusOptions } from '@hooks/thesisProjectStatus'
-import { useStudentThesisRegistrationStatusOptions } from '@hooks/studentThesisRegistrationStatus'
-import { useScheduleOptions } from '@hooks/subjectClassSchedule'
-import { useSubjectClassTypeOptions } from '@hooks/subjectClassType'
 import 'dayjs/locale/vi'
 
 dayjs.locale('vi')

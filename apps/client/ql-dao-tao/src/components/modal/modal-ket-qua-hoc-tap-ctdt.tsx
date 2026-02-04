@@ -171,13 +171,13 @@ const ModalLearningResult = () => {
                             render: (_, record) => record?.credit,
                         },
                         {
-                            title: 'Điểm chuyên cần',
+                            title: 'Điểm thường xuyên',
                             width: 80,
                             align: 'center',
                             render: (_, record) => record?.attendanceScore,
                         },
                         {
-                            title: 'Điểm thường xuyên',
+                            title: 'Điểm định kỳ',
                             width: 80,
                             align: 'center',
                             render: (_, record) => record?.midtermScore,
@@ -238,13 +238,13 @@ const ModalLearningResult = () => {
                             align: 'center',
                         },
                         {
-                            title: 'Điểm chuyên cần',
+                            title: 'Điểm thường xuyên',
                             dataIndex: 'attendanceScore',
                             width: 80,
                             align: 'center',
                         },
                         {
-                            title: 'Điểm thường xuyên',
+                            title: 'Điểm định kỳ',
                             dataIndex: 'midtermScore',
                             width: 80,
                             align: 'center',
@@ -306,13 +306,13 @@ const ModalLearningResult = () => {
                             align: 'center',
                         },
                         {
-                            title: 'Điểm chuyên cần',
+                            title: 'Điểm thường xuyên',
                             dataIndex: 'attendanceScore',
                             width: 80,
                             align: 'center',
                         },
                         {
-                            title: 'Điểm thường xuyên',
+                            title: 'Điểm định kỳ',
                             dataIndex: 'midtermScore',
                             width: 80,
                             align: 'center',

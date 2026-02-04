@@ -172,13 +172,13 @@ const ModalLearningResult = () => {
                             align: 'center',
                         },
                         {
-                            title: 'Điểm chuyên cần',
+                            title: 'Điểm thường xuyên',
                             dataIndex: 'attendanceScore',
                             width: 80,
                             align: 'center',
                         },
                         {
-                            title: 'Điểm thường xuyên',
+                            title: 'Điểm định kỳ',
                             dataIndex: 'midtermScore',
                             width: 80,
                             align: 'center',
@@ -240,13 +240,13 @@ const ModalLearningResult = () => {
                             align: 'center',
                         },
                         {
-                            title: 'Điểm chuyên cần',
+                            title: 'Điểm thường xuyên',
                             dataIndex: 'attendanceScore',
                             width: 80,
                             align: 'center',
                         },
                         {
-                            title: 'Điểm thường xuyên',
+                            title: 'Điểm định kỳ',
                             dataIndex: 'midtermScore',
                             width: 80,
                             align: 'center',
@@ -308,13 +308,13 @@ const ModalLearningResult = () => {
                             align: 'center',
                         },
                         {
-                            title: 'Điểm chuyên cần',
+                            title: 'Điểm thường xuyên',
                             dataIndex: 'attendanceScore',
                             width: 80,
                             align: 'center',
                         },
                         {
-                            title: 'Điểm thường xuyên',
+                            title: 'Điểm định kỳ',
                             dataIndex: 'midtermScore',
                             width: 80,
                             align: 'center',

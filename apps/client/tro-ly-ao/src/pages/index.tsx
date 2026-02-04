@@ -4,9 +4,9 @@
 // Ai config con chatbot này, env không ăn ạ =]]]] Chúc may mắn người đọc đoạn code này lần sau
 import Loading from '@components/commons/loading'
 import { ROUTER_PATH } from '@workspace/router'
+import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
-import { NextPage } from 'next'
 
 /**
  * Index page - chỉ xử lý redirect dựa vào query param 'mode'

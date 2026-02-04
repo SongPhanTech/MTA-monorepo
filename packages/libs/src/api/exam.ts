@@ -43,6 +43,9 @@ import type {
     GenExamBankResult,
     GetClusterSurveyStatistics200,
     GetClusterSurveyStatistics404,
+    GetClusterSurveyStatisticsForAll200,
+    GetClusterSurveyStatisticsForAll404,
+    GetClusterSurveyStatisticsForAllParams,
     GetClusterSurveyStatisticsForLecturer200,
     GetClusterSurveyStatisticsForLecturer404,
     GetClusterSurveyStatisticsForLecturerParams,
@@ -2566,7 +2569,7 @@ export type getOrganizationSurveyStatisticsResponse =
 
 export const getGetOrganizationSurveyStatisticsUrl = (
     id: string,
-    params?: GetOrganizationSurveyStatisticsParams
+    params: GetOrganizationSurveyStatisticsParams
 ) => {
     const normalizedParams = new URLSearchParams()
 
@@ -2585,7 +2588,7 @@ export const getGetOrganizationSurveyStatisticsUrl = (
 
 export const getOrganizationSurveyStatistics = async (
     id: string,
-    params?: GetOrganizationSurveyStatisticsParams,
+    params: GetOrganizationSurveyStatisticsParams,
     options?: RequestInit
 ): Promise<getOrganizationSurveyStatisticsResponse> => {
     return customExamFetch<getOrganizationSurveyStatisticsResponse>(
@@ -2612,7 +2615,7 @@ export const getGetOrganizationSurveyStatisticsQueryOptions = <
     TError = GetOrganizationSurveyStatistics400 | GetOrganizationSurveyStatistics404,
 >(
     id: string,
-    params?: GetOrganizationSurveyStatisticsParams,
+    params: GetOrganizationSurveyStatisticsParams,
     options?: {
         query?: Partial<
             UseQueryOptions<
@@ -2652,7 +2655,7 @@ export function useGetOrganizationSurveyStatistics<
     TError = GetOrganizationSurveyStatistics400 | GetOrganizationSurveyStatistics404,
 >(
     id: string,
-    params: undefined | GetOrganizationSurveyStatisticsParams,
+    params: GetOrganizationSurveyStatisticsParams,
     options: {
         query: Partial<
             UseQueryOptions<
@@ -2678,7 +2681,7 @@ export function useGetOrganizationSurveyStatistics<
     TError = GetOrganizationSurveyStatistics400 | GetOrganizationSurveyStatistics404,
 >(
     id: string,
-    params?: GetOrganizationSurveyStatisticsParams,
+    params: GetOrganizationSurveyStatisticsParams,
     options?: {
         query?: Partial<
             UseQueryOptions<
@@ -2704,7 +2707,7 @@ export function useGetOrganizationSurveyStatistics<
     TError = GetOrganizationSurveyStatistics400 | GetOrganizationSurveyStatistics404,
 >(
     id: string,
-    params?: GetOrganizationSurveyStatisticsParams,
+    params: GetOrganizationSurveyStatisticsParams,
     options?: {
         query?: Partial<
             UseQueryOptions<
@@ -2726,7 +2729,7 @@ export function useGetOrganizationSurveyStatistics<
     TError = GetOrganizationSurveyStatistics400 | GetOrganizationSurveyStatistics404,
 >(
     id: string,
-    params?: GetOrganizationSurveyStatisticsParams,
+    params: GetOrganizationSurveyStatisticsParams,
     options?: {
         query?: Partial<
             UseQueryOptions<
@@ -3392,6 +3395,213 @@ export function useGetClusterSurveyStatisticsForOrganization<
         params,
         options
     )
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+/**
+ * @summary Thống kê câu trả lời cho từng câu hỏi trong một cụm khảo sát của từng đơn vị
+ */
+export type getClusterSurveyStatisticsForAllResponse200 = {
+    data: GetClusterSurveyStatisticsForAll200
+    status: 200
+}
+
+export type getClusterSurveyStatisticsForAllResponse404 = {
+    data: GetClusterSurveyStatisticsForAll404
+    status: 404
+}
+
+export type getClusterSurveyStatisticsForAllResponseSuccess =
+    getClusterSurveyStatisticsForAllResponse200 & {
+        headers: Headers
+    }
+export type getClusterSurveyStatisticsForAllResponseError =
+    getClusterSurveyStatisticsForAllResponse404 & {
+        headers: Headers
+    }
+
+export type getClusterSurveyStatisticsForAllResponse =
+    | getClusterSurveyStatisticsForAllResponseSuccess
+    | getClusterSurveyStatisticsForAllResponseError
+
+export const getGetClusterSurveyStatisticsForAllUrl = (
+    id: string,
+    params: GetClusterSurveyStatisticsForAllParams
+) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/cluster-survey/${id}/statistics-for-all?${stringifiedParams}`
+        : `/api/cluster-survey/${id}/statistics-for-all`
+}
+
+export const getClusterSurveyStatisticsForAll = async (
+    id: string,
+    params: GetClusterSurveyStatisticsForAllParams,
+    options?: RequestInit
+): Promise<getClusterSurveyStatisticsForAllResponse> => {
+    return customExamFetch<getClusterSurveyStatisticsForAllResponse>(
+        getGetClusterSurveyStatisticsForAllUrl(id, params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getGetClusterSurveyStatisticsForAllQueryKey = (
+    id?: string,
+    params?: GetClusterSurveyStatisticsForAllParams
+) => {
+    return [`/api/cluster-survey/${id}/statistics-for-all`, ...(params ? [params] : [])] as const
+}
+
+export const getGetClusterSurveyStatisticsForAllQueryOptions = <
+    TData = Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>,
+    TError = GetClusterSurveyStatisticsForAll404,
+>(
+    id: string,
+    params: GetClusterSurveyStatisticsForAllParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customExamFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey =
+        queryOptions?.queryKey ?? getGetClusterSurveyStatisticsForAllQueryKey(id, params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>> = ({
+        signal,
+    }) => getClusterSurveyStatisticsForAll(id, params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetClusterSurveyStatisticsForAllQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>
+>
+export type GetClusterSurveyStatisticsForAllQueryError = GetClusterSurveyStatisticsForAll404
+
+export function useGetClusterSurveyStatisticsForAll<
+    TData = Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>,
+    TError = GetClusterSurveyStatisticsForAll404,
+>(
+    id: string,
+    params: GetClusterSurveyStatisticsForAllParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>,
+                    TError,
+                    Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customExamFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetClusterSurveyStatisticsForAll<
+    TData = Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>,
+    TError = GetClusterSurveyStatisticsForAll404,
+>(
+    id: string,
+    params: GetClusterSurveyStatisticsForAllParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>,
+                    TError,
+                    Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customExamFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetClusterSurveyStatisticsForAll<
+    TData = Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>,
+    TError = GetClusterSurveyStatisticsForAll404,
+>(
+    id: string,
+    params: GetClusterSurveyStatisticsForAllParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customExamFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Thống kê câu trả lời cho từng câu hỏi trong một cụm khảo sát của từng đơn vị
+ */
+
+export function useGetClusterSurveyStatisticsForAll<
+    TData = Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>,
+    TError = GetClusterSurveyStatisticsForAll404,
+>(
+    id: string,
+    params: GetClusterSurveyStatisticsForAllParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customExamFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetClusterSurveyStatisticsForAllQueryOptions(id, params, options)
 
     const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
         queryKey: DataTag<QueryKey, TData, TError>

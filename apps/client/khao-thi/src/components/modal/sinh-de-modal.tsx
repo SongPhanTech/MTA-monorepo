@@ -1,21 +1,21 @@
-import { useDisclosure } from 'react-hook-disclosure-modal'
-import { Col, Form, Input, InputNumber, message, Row } from 'antd'
-
-import dayjs from 'dayjs'
-import { useMemo } from 'react'
-import { useStore } from '@tanstack/react-store'
+import { queryClient } from '@api/index'
+import DatePicker from '@components/commons/date-picker'
+import FormItem from '@components/commons/form-item'
+import PutFormModal from '@components/commons/put-modal'
+import Select from '@components/commons/select'
 import { store } from '@pages/thiet-lap-de-thi/danh-sach-de'
+import { useStore } from '@tanstack/react-store'
+import type { ExamBank } from '@workspace/db/client'
 import {
     useFindManyExamFramework,
     useFindManyExamMatrix,
     useFindUniqueExam,
 } from '@workspace/db/hooks'
-import PutFormModal from '@components/commons/put-modal'
-import FormItem from '@components/commons/form-item'
-import Select from '@components/commons/select'
-import DatePicker from '@components/commons/date-picker'
-import type { ExamBank } from '@workspace/db/client'
 import { automaticTopicGeneration } from '@workspace/libs/api/exam'
+import { Checkbox, Col, Form, Input, InputNumber, message, Row } from 'antd'
+import dayjs from 'dayjs'
+import { useMemo, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 type PutMaTranDeInputType = ExamBank & {
     quantity: number
@@ -27,6 +27,7 @@ type PutMaTranDeInputType = ExamBank & {
 
 const SinhDeModal = () => {
     const [form] = Form.useForm<PutMaTranDeInputType>()
+    const [showExplain, setShowExplain] = useState(false)
 
     const { isOpen, onClose, input } = useDisclosure<{
         id?: string
@@ -51,7 +52,7 @@ const SinhDeModal = () => {
     console.log('dataExam: ', dataExam)
 
     const dataOption = useMemo(() => {
-        return !!dataExam?.subjectClass
+        return dataExam?.subjectClass
             ? dataExam?.subjectClass.map((item) => {
                   return {
                       value: item?.id,
@@ -113,7 +114,10 @@ const SinhDeModal = () => {
                 examDay: values?.examDay ? new Date(values?.examDay).toISOString() : null,
             })
             if (res?.status === 200) {
-                message.success('Tạo đề thành cong!')
+                message.success('Tạo đề thành công!')
+                queryClient.invalidateQueries({
+                    queryKey: ['ExamBank'],
+                })
                 onClose()
             } else {
                 message.error('Lỗi tạo đề')
@@ -223,15 +227,36 @@ const SinhDeModal = () => {
                         </FormItem>
                     </Col>
                     <Col span={12}>
-                        <FormItem form={form} name="subjectClassId" label="Dùng cho lớp">
+                        <FormItem form={form} name="subjectClassId" label="Dùng cho lớp" required>
                             <Select options={dataOption} placeholder="Chọn lớp môn học" />
                         </FormItem>
                     </Col>
-                    <Col span={24}>
-                        <FormItem form={form} name="explain" label="Chú thích">
-                            <Input.TextArea placeholder="Nhập chú thích" />
+
+                    <Col span={5}>
+                        <FormItem
+                            form={form}
+                            name="isNote"
+                            valuePropName="checked"
+                            initialValue={false}
+                        >
+                            <Checkbox>Được sử dụng tài liệu</Checkbox>
                         </FormItem>
                     </Col>
+                    <Col span={4}>
+                        <Form.Item>
+                            <Checkbox onChange={(e) => setShowExplain(e.target.checked)}>
+                                Khác
+                            </Checkbox>
+                        </Form.Item>
+                    </Col>
+
+                    {showExplain && (
+                        <Col span={24} className="mt-3">
+                            <FormItem form={form} name="explain" label="Chú thích">
+                                <Input.TextArea placeholder="Nhập chú thích" />
+                            </FormItem>
+                        </Col>
+                    )}
                 </Row>
             </Col>
         </PutFormModal>

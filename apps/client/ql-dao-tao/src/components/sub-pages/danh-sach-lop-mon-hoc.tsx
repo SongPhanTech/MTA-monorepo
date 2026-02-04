@@ -447,7 +447,7 @@ export default function DanhSachLopMonHoc({ role = 'GV', setActiveKey }: DiemLop
                                     return record?.enteredExamScore ? (
                                         'Đã nhập điểm thi'
                                     ) : record?.enteredScore ? (
-                                        'Đã nhập điểm TX,CC'
+                                        'Đã nhập điểm TX,ĐK'
                                     ) : (
                                         <div className="text-red-500">Chưa nhập điểm</div>
                                     )

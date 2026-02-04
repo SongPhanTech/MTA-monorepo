@@ -125,7 +125,7 @@ deploy-all-be:
 	@zip -r docker-images.zip docker-images
 	sshpass -p "Bancntt@2025" scp -O docker-images.zip app@192.168.3.9:~/Documents/docker-compose/
 	sshpass -p "Bancntt@2025" ssh app@192.168.3.9 "cd Documents/docker-compose/ && \
-	unzip -o docker-images.zip && \ 
+	unzip -o docker-images.zip && \
 	cd docker-images && ls *.tar.gz | xargs -I {} docker load -i {} && \
 	cd .. && \
 	docker rm -f mta-be-exchange mta-be-khao-thi mta-be-model mta-be-portal mta-be-ql-dao-tao mta-be-ql-dao-tao-shared && \

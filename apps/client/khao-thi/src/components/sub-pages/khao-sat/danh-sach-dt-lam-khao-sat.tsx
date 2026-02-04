@@ -1,19 +1,22 @@
+import { DownloadOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilter'
 import ExportObjectInSurvey from '@components/modal/export-list-object-in-survey'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useSession } from '@workspace/auth/react'
-import { Survey } from '@workspace/db'
+import type { Survey } from '@workspace/db'
 import { useFindManyFixedClass, useFindManyTrainingCourse } from '@workspace/db/hooks'
 import { useGetSurveyObjects } from '@workspace/libs/api/exam'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
-import { Button, Col, Flex, Row, Tag, Tooltip } from 'antd'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
+import { Button, Col, Dropdown, Flex, Row, Tag, Tooltip } from 'antd'
+import { Document, Table as DocxTable, Packer, Paragraph, TableCell, TableRow, TextRun } from 'docx'
+import { saveAs } from 'file-saver'
 import { Eye } from 'lucide-react'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
 
 function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
     const { can, canSome } = useAbility()
@@ -77,30 +80,146 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
         tag: 'ReviewSurveyModal',
     })
 
+    const exportWord = async () => {
+        if (!data?.data?.length) return
+
+        const centerCell = (text = '') =>
+            new TableCell({
+                children: [
+                    new Paragraph({
+                        alignment: 'center',
+                        text,
+                    }),
+                ],
+            })
+
+        const rows = [
+            // ===== HEADER =====
+            new TableRow({
+                children: [
+                    centerCell('STT'),
+                    centerCell('Mã HV/GV'),
+                    centerCell('Họ tên'),
+                    centerCell('CCCD'),
+                    centerCell('SĐT'),
+                    centerCell('ĐVQL'),
+                    centerCell('Lớp QL'),
+                    centerCell('Khoá'),
+                    centerCell('Trạng thái KS'),
+                ],
+            }),
+
+            // ===== DATA =====
+            ...data.data.map(
+                (record, index) =>
+                    new TableRow({
+                        children: [
+                            centerCell(String(index + 1)),
+                            centerCell(
+                                record?.educationAndTraining?.[0]?.code ||
+                                    record?.lecturer?.code ||
+                                    ''
+                            ),
+                            centerCell(`${record?.lastName || ''} ${record?.firstName || ''}`),
+                            centerCell(record?.idCardNumber || ''),
+                            centerCell(record?.phoneNumber || ''),
+                            centerCell(record?.lecturer?.organization?.sMa || ''),
+                            centerCell(record?.educationAndTraining?.[0]?.fixedClass?.code || ''),
+                            centerCell(
+                                (record?.educationAndTraining?.[0]?.fixedClass as any)
+                                    ?.trainingCourse?.name || ''
+                            ),
+                            centerCell(record?.surveySession ? 'Đã làm' : 'Chưa làm'),
+                        ],
+                    })
+            ),
+        ]
+
+        const doc = new Document({
+            sections: [
+                {
+                    properties: {
+                        page: {
+                            size: { orientation: 'landscape' },
+                            margin: {
+                                top: 720,
+                                bottom: 720,
+                                left: 720,
+                                right: 720,
+                            },
+                        },
+                    },
+                    children: [
+                        new Paragraph({
+                            alignment: 'center',
+                            spacing: { after: 300 },
+                            children: [
+                                new TextRun({
+                                    text: `Danh sách đối tượng khảo sát: ${selectedId?.name || ''}`,
+                                    bold: true,
+                                }),
+                            ],
+                        }),
+                        new DocxTable({
+                            width: { size: 100, type: 'pct' },
+                            rows,
+                        }),
+                    ],
+                },
+            ],
+        })
+
+        const blob = await Packer.toBlob(doc)
+        saveAs(blob, 'danh-sach-doi-tuong-khao-sat.docx')
+    }
+
     return (
         <div>
             <Row gutter={[16, 4]}>
                 <Col span={24}>
                     <Flex justify="end" gap={8} align="center">
-                        <ExportObjectInSurvey
-                            query={{
-                                limit: data?.count || 10,
-                                page: 1,
-                                id: selectedId?.id,
-                                fullname: filters.fullname,
-                                lecturerCode: filters.lecturerCode,
-                                studentCode: filters.studentCode,
-                                fixedClassIds: filters.fixedClassIds,
-                                trainingCourseIds: filters.trainingCourseIds,
-                                organizationId: filters.organization,
-                                taken:
-                                    filters?.taken && filters?.taken?.length === 1
-                                        ? filters.taken[0]
-                                        : undefined,
-                                isStudent: filters?.isStudent,
+                        <Dropdown
+                            menu={{
+                                items: [
+                                    {
+                                        key: 'word',
+                                        label: 'Xuất Word',
+                                        icon: <DownloadOutlined />,
+                                        onClick: exportWord,
+                                    },
+                                    {
+                                        key: 'excel',
+                                        label: (
+                                            <ExportObjectInSurvey
+                                                query={{
+                                                    limit: data?.count || 10,
+                                                    page: 1,
+                                                    id: selectedId?.id,
+                                                    fullname: filters.fullname,
+                                                    lecturerCode: filters.lecturerCode,
+                                                    studentCode: filters.studentCode,
+                                                    fixedClassIds: filters.fixedClassIds,
+                                                    trainingCourseIds: filters.trainingCourseIds,
+                                                    organizationId: filters.organization,
+                                                    taken:
+                                                        filters?.taken &&
+                                                        filters?.taken?.length === 1
+                                                            ? filters.taken[0]
+                                                            : undefined,
+                                                    isStudent: filters?.isStudent,
+                                                }}
+                                                surveyName={selectedId?.name || ''}
+                                            />
+                                        ),
+                                    },
+                                ],
                             }}
-                            surveyName={selectedId?.name || ''}
-                        />
+                        >
+                            <Button type="primary" size="small">
+                                Xuất dữ liệu
+                            </Button>
+                        </Dropdown>
+
                         <Button
                             color="blue"
                             onClick={() => {

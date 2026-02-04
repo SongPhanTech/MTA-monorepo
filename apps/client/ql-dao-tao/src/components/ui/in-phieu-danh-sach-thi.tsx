@@ -321,7 +321,7 @@ const ExportTemplateExam = ({ dataTable, dataClass, disabled }: ExportTemplateEx
         worksheet.getCell('C8').style = headerSubtitleStyleLeft
 
         worksheet.mergeCells('A9:B9')
-        // worksheet.getCell('A9').value = 'Hệ số điểm chuyên cần: '
+        // worksheet.getCell('A9').value = 'Hệ số điểm thường xuyên: '
         worksheet.getCell('A9').style = headerSubtitleStyleLeft
 
         // worksheet.getCell('C9').value = `${firstTrainingCourse?.coef_1 || ''}`
@@ -364,7 +364,7 @@ const ExportTemplateExam = ({ dataTable, dataClass, disabled }: ExportTemplateEx
         worksheet.getCell('J8').style = headerSubtitleStyleLeft
 
         worksheet.mergeCells('E9:F9')
-        // worksheet.getCell('E9').value = 'Hệ số điểm thường xuyên: '
+        // worksheet.getCell('E9').value = 'Hệ số điểm định kỳ: '
         worksheet.getCell('E9').style = headerSubtitleStyleLeft
 
         // worksheet.getCell('G9').value = `${firstTrainingCourse?.coef_2 || ''}`

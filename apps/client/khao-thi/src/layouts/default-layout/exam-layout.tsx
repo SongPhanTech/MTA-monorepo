@@ -3,9 +3,11 @@ import logo_mta from '@assets/images/khaothi.svg'
 import SiderDefaultLayout from '@components/layouts/sider'
 import { useMenuList } from '@hooks/menu-list'
 import { cn } from '@lib/utils'
+import { useSession } from '@workspace/auth/react'
 import { CONFIG_KEY } from '@workspace/constant'
 import { useFindUniqueConfig } from '@workspace/db/hooks'
 import { getDynamicBreadcrumb } from '@workspace/permissions/hooks'
+import { SelectTrainingObjectType, TreeSelectSemester } from '@workspace/ui'
 import { Divider, Layout, theme } from 'antd'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -13,8 +15,6 @@ import { useRouter } from 'next/router'
 import { type ReactNode, useEffect, useMemo, useState } from 'react'
 import { IdleTimerProvider } from 'react-idle-timer'
 import HeaderApp from '@/components/header'
-import { SelectTrainingObjectType, TreeSelectSemester } from '@workspace/ui'
-import { useSession } from '@workspace/auth/react'
 
 const { Header, Content } = Layout
 interface breadcrumListProps {
@@ -155,7 +155,7 @@ const ExamLayout = ({
 
                         <div className="flex items-center">
                             {/* <Breadcrumb items={listBreadcrumb} /> */}
-                            <SelectTrainingObjectType />
+                            <SelectTrainingObjectType subsystem={'ems'} />
                             <Divider type="vertical" className="bg-primary h-[30px]" />
                             <div className="flex items-center space-x-2">
                                 <p>Học kỳ</p>

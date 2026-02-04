@@ -6,7 +6,7 @@ import type { $Enums } from '@workspace/db/client'
 import { useFindManyFixedClass, useFindManyTrainingMajor } from '@workspace/db/hooks'
 import {
     Select,
-    SelectTrainingCourse,
+    SelectTrainingCourseStore,
     useFixedClassStore,
     useTrainingCourseStore,
     useTrainingMajorStore,
@@ -198,7 +198,7 @@ export default function KeHoachDaoTao({ type = 'NORMAL', role }: KeHoachDaoTaoPa
                     label="Khóa đào tạo"
                     labelAlign="left"
                 >
-                    <SelectTrainingCourse />
+                    <SelectTrainingCourseStore />
                 </Form.Item>
                 <Form.Item
                     className="m-0"

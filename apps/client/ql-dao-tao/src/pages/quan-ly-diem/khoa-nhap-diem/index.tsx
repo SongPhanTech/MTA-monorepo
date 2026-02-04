@@ -4,7 +4,7 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import DefaultLayout from '@layouts/default-layout'
 import { useSession } from '@workspace/auth/react'
-import { Prisma } from '@workspace/db/client'
+import type { Prisma } from '@workspace/db/client'
 import { useCountSubjectClass, useFindManySubjectClass } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
@@ -223,7 +223,7 @@ export default function SubjectClassScore() {
                                 marginBottom: 16,
                             }}
                         >
-                            Hạn nhập điểm CC, TX tự động đặt là trước ngày thi 1 tuần, hạn nhập điểm
+                            Hạn nhập điểm TX, ĐK tự động đặt là trước ngày thi 1 tuần, hạn nhập điểm
                             thi tự động đặt là trước ngày thi lớp 1 tuần
                         </p>
                         <Table

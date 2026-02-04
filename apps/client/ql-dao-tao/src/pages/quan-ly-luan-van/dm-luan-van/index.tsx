@@ -26,7 +26,7 @@ import {
     useFindManyThesisSession,
     useUpdateThesisProject,
 } from '@workspace/db/hooks'
-
+import { whereOrganization } from '@workspace/libs/constants'
 import { dayjs, useTrainingObjectTypeStore } from '@workspace/ui'
 import {
     Button,
@@ -64,7 +64,6 @@ import {
     exportThongKeCbHdlv,
     exportThongKeCbThamGiaHd,
 } from '@/utils/thesis-excel'
-import { whereOrganization } from '@workspace/libs/constants'
 
 interface ThesisProjectForm {
     thesisSessionId: string

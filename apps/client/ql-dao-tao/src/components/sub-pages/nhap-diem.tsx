@@ -24,7 +24,7 @@ import { getUrl } from '@workspace/libs/api/custom-instance'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import type { SqlTransactionBodyItem } from '@workspace/libs/api/schemas/sqlTransactionBodyItem'
 import { getExportSubjectClassScoreUrl } from '@workspace/libs/api/training'
-import { calcFinalScore, fastIsEqual, getRuntimeEnv } from '@workspace/libs/utils'
+import { calcFinalScore, fastIsEqual, getRuntimeEnv, isNullish } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { cn } from '@workspace/ui/lib/utils'
@@ -73,6 +73,8 @@ type SubjectClassScoreForm = {
             suspended?: boolean | null
             suspendedReason?: string | null
             finalScore?: Decimal | null
+            finalScoreBase4?: number | string | null
+            letter?: string | null
             isChanged?: boolean
         }
     >
@@ -202,6 +204,9 @@ export default function NhapDiem({
                     },
                 },
                 awards: {
+                    where: {
+                        status: $Enums.ArchivedCertificateStatus.APPROVED,
+                    },
                     include: {
                         archivedAward: true,
                     },
@@ -664,6 +669,13 @@ export default function NhapDiem({
                         if (!acc) {
                             return {}
                         }
+                        const scoreConvertResult =
+                            cur.finalScore !== null && cur.finalScore !== undefined
+                                ? scoreConvert(
+                                      Number(cur.finalScore),
+                                      cur.student?.fixedClass?.trainingCourse?.scoreConverts || []
+                                  )
+                                : null
                         acc[cur.id] = {
                             attendanceScore: cur.attendanceScore,
                             midtermScore: cur.midtermScore,
@@ -676,6 +688,8 @@ export default function NhapDiem({
                             scoreToTakeExam:
                                 cur.student?.fixedClass?.trainingCourse?.scoreToTakeExam,
                             finalScore: cur.finalScore,
+                            finalScoreBase4: scoreConvertResult?.base4,
+                            letter: scoreConvertResult?.letter,
                             suspended: cur.suspended,
                             suspendedReason: cur.suspendedReason,
                             isChanged: false,
@@ -864,33 +878,33 @@ export default function NhapDiem({
                     onValuesChange={(changedValues) => {
                         const changedId = Object.keys(changedValues.list || {})?.[0]
                         if (changedId) {
-                            const examScore =
+                            const examScore: number | null =
                                 changedValues.list[changedId]?.examScore ??
                                 listForm[changedId].examScore ??
-                                0
-                            const attendanceScore = dataDetailSubjectClass?.subject.onePoint
+                                null
+                            const attendanceScore: number | null = dataDetailSubjectClass?.subject
+                                .onePoint
                                 ? examScore
-                                : changedValues.list[changedId]?.attendanceScore !== undefined
+                                : !isNullish(changedValues.list[changedId]?.attendanceScore)
                                   ? changedValues.list[changedId]?.attendanceScore
-                                  : listForm[changedId].attendanceScore
-                            const midtermScore = dataDetailSubjectClass?.subject.onePoint
+                                  : (listForm[changedId].attendanceScore ?? null)
+                            const midtermScore: number | null = dataDetailSubjectClass?.subject
+                                .onePoint
                                 ? examScore
-                                : changedValues.list[changedId]?.midtermScore !== undefined
+                                : !isNullish(changedValues.list[changedId]?.midtermScore)
                                   ? changedValues.list[changedId]?.midtermScore
-                                  : listForm[changedId].midtermScore
+                                  : (listForm[changedId].midtermScore ?? null)
 
-                            const scoreToTakeExam = listForm[changedId]?.scoreToTakeExam
+                            const scoreToTakeExam = listForm[changedId]?.scoreToTakeExam ?? null
                             // TODO: fix not work if directly uncheck exam banned
                             const isExamBanned =
                                 !!changedValues.list[changedId]?.examBannedReason ||
                                 !!listForm[changedId]?.examBannedReason ||
                                 (attendanceScore !== null &&
                                     scoreToTakeExam !== null &&
-                                    scoreToTakeExam !== undefined &&
                                     attendanceScore < scoreToTakeExam) ||
                                 (midtermScore !== null &&
                                     scoreToTakeExam !== null &&
-                                    scoreToTakeExam !== undefined &&
                                     midtermScore < scoreToTakeExam)
 
                             const dataForCalc = dataTable.find((i) => i.id === changedId)
@@ -928,6 +942,18 @@ export default function NhapDiem({
                                 dataForCalc.subjectClass?.type || 'NORMAL'
                             )?.toNumber()
 
+                            const scoreConvertResult =
+                                finalScore !== null && finalScore !== undefined
+                                    ? scoreConvert(
+                                          finalScore,
+                                          dataForCalc?.student?.fixedClass?.trainingCourse
+                                              ?.scoreConverts || []
+                                      )
+                                    : null
+
+                            const finalScoreBase4 = scoreConvertResult?.base4
+                            const letter = scoreConvertResult?.letter
+
                             form.setFieldsValue({
                                 list: {
                                     ...listForm,
@@ -940,9 +966,13 @@ export default function NhapDiem({
                                             ...listForm[changedId],
                                             ...changedValues.list[changedId],
                                         }),
+                                        attendanceScore,
+                                        midtermScore,
                                         finalScore: changedValues.list[changedId]?.examBanned
                                             ? 0
                                             : finalScore,
+                                        finalScoreBase4,
+                                        letter,
                                     },
                                 },
                             })
@@ -1023,17 +1053,19 @@ export default function NhapDiem({
                                 type: 'input',
                                 render: (_, record) => record.student?.fixedClass?.code || '',
                             },
-                            // #region Điểm CC
+                            // #region Điểm TX
                             {
-                                title: 'Điểm CC',
+                                title: 'Điểm TX',
                                 dataIndex: 'attendanceScore',
                                 width: 65,
                                 align: 'center',
                                 // type: 'order',
                                 render: (_, record) => {
-                                    if (role !== 'GV' || score === 'THI') {
-                                        return record.attendanceScore ?? ''
-                                    }
+                                    // if (role !== 'GV' || score === 'THI') {
+                                    //     return record.attendanceScore ?? ''
+                                    // }
+                                    const readOnly =
+                                        role !== 'GV' || score === 'THI' || disabledForm
                                     return (
                                         <Form.Item
                                             className="w-full m-0"
@@ -1046,8 +1078,8 @@ export default function NhapDiem({
                                             ]}
                                         >
                                             <InputNumber
-                                                readOnly={disabledForm}
-                                                variant={disabledForm ? 'underlined' : 'outlined'}
+                                                readOnly={readOnly}
+                                                variant={readOnly ? 'underlined' : 'outlined'}
                                                 id={`score-cc-${record.id}`}
                                                 style={{ width: '100%' }}
                                                 step={0.5}
@@ -1065,17 +1097,19 @@ export default function NhapDiem({
                                     )
                                 },
                             },
-                            // #region Điểm TX
+                            // #region Điểm ĐK
                             {
-                                title: 'Điểm TX',
+                                title: 'Điểm ĐK',
                                 dataIndex: 'midtermScore',
                                 width: 65,
                                 align: 'center',
                                 // type: 'order',
                                 render: (_, record) => {
-                                    if (role !== 'GV' || score === 'THI') {
-                                        return record.midtermScore ?? ''
-                                    }
+                                    // if (role !== 'GV' || score === 'THI') {
+                                    //     return record.midtermScore ?? ''
+                                    // }
+                                    const readOnly =
+                                        role !== 'GV' || score === 'THI' || disabledForm
                                     return (
                                         <Form.Item
                                             className="w-full mb-0"
@@ -1088,8 +1122,8 @@ export default function NhapDiem({
                                             ]}
                                         >
                                             <InputNumber
-                                                readOnly={disabledForm}
-                                                variant={disabledForm ? 'underlined' : 'outlined'}
+                                                readOnly={readOnly}
+                                                variant={readOnly ? 'underlined' : 'outlined'}
                                                 id={`score-tx-${record.id}`}
                                                 style={{
                                                     width: '100%',
@@ -1171,76 +1205,41 @@ export default function NhapDiem({
                                 title: 'Điểm HP',
                                 width: 65,
                                 align: 'center',
-                                render: (_, record) => {
-                                    const recordForm = listForm?.[record.id]
-                                    const examBanned = recordForm?.examBanned ?? record?.examBanned
-                                    const finalScore = examBanned
-                                        ? 0
-                                        : calcFinalScore(
-                                              record?.student?.fixedClass?.trainingCourse,
-                                              {
-                                                  attendanceScore:
-                                                      score === 'CC/TX'
-                                                          ? recordForm?.attendanceScore
-                                                          : record?.attendanceScore,
-                                                  midtermScore:
-                                                      score === 'CC/TX'
-                                                          ? recordForm?.midtermScore
-                                                          : record?.midtermScore,
-                                                  examScore:
-                                                      score === 'THI'
-                                                          ? recordForm?.examScore
-                                                          : record?.examScore,
-                                                  awards: [],
-                                                  certificates: [],
-                                              },
-                                              record.subjectClass?.type || 'NORMAL'
-                                          )?.toNumber()
-                                    return <div className="text-red-500">{finalScore}</div>
+                                render: (_, { id }) => {
+                                    return (
+                                        <Form.Item
+                                            className="w-full m-0"
+                                            name={['list', id, 'finalScore']}
+                                        >
+                                            <Input
+                                                className="text-center"
+                                                readOnly
+                                                variant="borderless"
+                                                id={`score-hp-${id}`}
+                                                style={{ width: '100%' }}
+                                            />
+                                        </Form.Item>
+                                    )
                                 },
                             },
                             {
                                 title: 'Điểm hệ 4',
                                 align: 'center',
                                 width: 70,
-                                render: (_, record) => {
-                                    const recordForm = listForm?.[record.id]
-                                    const examBanned = recordForm?.examBanned ?? record?.examBanned
-                                    const finalScore = examBanned
-                                        ? 0
-                                        : calcFinalScore(
-                                              record?.student?.fixedClass?.trainingCourse,
-                                              {
-                                                  attendanceScore:
-                                                      score === 'CC/TX'
-                                                          ? recordForm?.attendanceScore
-                                                          : record?.attendanceScore,
-                                                  midtermScore:
-                                                      score === 'CC/TX'
-                                                          ? recordForm?.midtermScore
-                                                          : record?.midtermScore,
-                                                  examScore:
-                                                      score === 'THI'
-                                                          ? recordForm?.examScore
-                                                          : record?.examScore,
-                                                  awards: [],
-                                                  certificates: [],
-                                              },
-                                              record.subjectClass?.type || 'NORMAL'
-                                          )?.toNumber()
-                                    if (finalScore === undefined || finalScore === null) return null
-                                    return finalScore !== undefined ? (
-                                        <div className="text-blue-500">
-                                            {
-                                                scoreConvert(
-                                                    finalScore,
-                                                    record?.student?.fixedClass?.trainingCourse
-                                                        ?.scoreConverts || []
-                                                ).base4
-                                            }
-                                        </div>
-                                    ) : (
-                                        ''
+                                render: (_, { id }) => {
+                                    return (
+                                        <Form.Item
+                                            className="w-full m-0"
+                                            name={['list', id, 'finalScoreBase4']}
+                                        >
+                                            <Input
+                                                className="text-center text-blue-500"
+                                                readOnly
+                                                variant="borderless"
+                                                id={`score-hp4-${id}`}
+                                                style={{ width: '100%' }}
+                                            />
+                                        </Form.Item>
                                     )
                                 },
                             },
@@ -1248,44 +1247,20 @@ export default function NhapDiem({
                                 title: 'Điểm chữ',
                                 align: 'center',
                                 width: 70,
-                                render: (_, record) => {
-                                    const recordForm = listForm?.[record.id]
-                                    const examBanned = recordForm?.examBanned ?? record?.examBanned
-                                    const finalScore = examBanned
-                                        ? 0
-                                        : calcFinalScore(
-                                              record?.student?.fixedClass?.trainingCourse,
-                                              {
-                                                  attendanceScore:
-                                                      score === 'CC/TX'
-                                                          ? recordForm?.attendanceScore
-                                                          : record?.attendanceScore,
-                                                  midtermScore:
-                                                      score === 'CC/TX'
-                                                          ? recordForm?.midtermScore
-                                                          : record?.midtermScore,
-                                                  examScore:
-                                                      score === 'THI'
-                                                          ? recordForm?.examScore
-                                                          : record?.examScore,
-                                                  awards: [],
-                                                  certificates: [],
-                                              },
-                                              record.subjectClass?.type || 'NORMAL'
-                                          )?.toNumber()
-                                    if (finalScore === undefined || finalScore === null) return null
-                                    return finalScore !== undefined ? (
-                                        <div className="text-yellow-600">
-                                            {
-                                                scoreConvert(
-                                                    finalScore,
-                                                    record?.student?.fixedClass?.trainingCourse
-                                                        ?.scoreConverts || []
-                                                ).letter
-                                            }
-                                        </div>
-                                    ) : (
-                                        ''
+                                render: (_, { id }) => {
+                                    return (
+                                        <Form.Item
+                                            className="w-full m-0"
+                                            name={['list', id, 'letter']}
+                                        >
+                                            <Input
+                                                className="text-center text-yellow-600"
+                                                readOnly
+                                                variant="borderless"
+                                                id={`letter-${id}`}
+                                                style={{ width: '100%' }}
+                                            />
+                                        </Form.Item>
                                     )
                                 },
                             },

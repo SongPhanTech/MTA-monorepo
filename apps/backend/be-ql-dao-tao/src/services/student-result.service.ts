@@ -7,14 +7,12 @@ import {
     type AcademicWarningRule,
     CriteriaField,
     CriteriaOperator,
-    createId,
     DecisionStatus,
     type Prisma,
     RankingContext,
     type Scholarship,
     type ScholarshipCriteria,
     SemesterType,
-    type StudentSemesterResult,
     StudentStatus,
     StudentTrainingType,
     SubjectRequirementType,
@@ -38,26 +36,6 @@ import {
     StudentScholarshipResult,
 } from '../dto/student-info.dto'
 import type { StudentCondition, StudentDataContext } from '../types/student-context'
-
-const checkStudentSemesterResult = async (
-    semesterId: string,
-    studentId: string
-): Promise<StudentSemesterResult | null> => {
-    try {
-        const result = await prisma.studentSemesterResult.findFirst({
-            where: {
-                semesterId,
-                studentId,
-                deletedAt: null,
-                active: true,
-            },
-        })
-        return result
-    } catch (error) {
-        console.error('Error checking student semester result:', error)
-        return null
-    }
-}
 
 const checkScorePassed = ({
     subjectId,
@@ -508,7 +486,7 @@ const ThongTinDiemHocKy = async (
                             lte: semester.endDate,
                         },
                     },
-                    { subjectClass: { semesterId } },
+                    { subjectClass: { semesterId, cancelled: false } },
                 ],
                 studentId,
                 subjectVersionId: {
@@ -526,6 +504,7 @@ const ThongTinDiemHocKy = async (
                 manualFinalScore: true, // Lấy điểm thủ công nếu có
                 studentId: true,
                 subjectVersionId: true,
+                subjectClass: { select: { type: true } },
                 subjectVersion: {
                     select: {
                         credit: true, // lấy số tín chỉ của môn học
@@ -570,23 +549,32 @@ const ThongTinDiemHocKy = async (
         const DsDiemHe4: number[] = []
         const DSDiemHe10: number[] = []
         let TongTinChiDangKy = 0
-        let diemHe10ThapNhat = 0
+        let diemThapNhat = 0
         let soTinChiDat = 0
         let soTinChiKhongDat = 0
+        let retakingCredits = 0
+        let reExamCredits = 0
 
         DsDiem.forEach((item) => {
             for (const s of curriculumSubjects) {
                 if (s.subjectId === item.subjectVersionId) {
-                    if (!s.useForFinalScore || !item.finalScore) {
+                    if (!s.useForFinalScore || item.examPostponed) {
                         return
                     }
 
-                    // Kiểm tra xem có hủy môn không, không thi được do lý do khách quan
-                    if (item.examPostponed) {
-                        return // Bỏ qua nếu có lý do không tính điểm
+                    if (item.subjectClass?.type === 'RETAKE') {
+                        retakingCredits += item.subjectVersion.credit
                     }
+
+                    if (item.subjectClass?.type === 'REEXAM') {
+                        reExamCredits += item.subjectVersion.credit
+                    }
+
+                    if (!item.finalScore && !item.manualFinalScore) {
+                        return
+                    }
+
                     let diemHe10 = item.manualFinalScore ?? item.finalScore?.toNumber() // Lấy điểm thủ công nếu có, nếu không thì lấy điểm cuối
-                    console.log({ diemHe10 })
 
                     // Kiểm tra xem có lý do cấm thi không
                     if (item.examBanned || item.suspended) {
@@ -595,17 +583,16 @@ const ThongTinDiemHocKy = async (
                     if (diemHe10 === null || diemHe10 === undefined) {
                         return // Bỏ qua nếu chưa có điểm hoặc điểm không hợp lệ
                     }
-                    if (diemHe10 < diemHe10ThapNhat || diemHe10ThapNhat === 0) {
-                        diemHe10ThapNhat = diemHe10 // Cập nhật điểm thấp nhất
+                    if (diemHe10 < diemThapNhat || diemThapNhat === 0) {
+                        diemThapNhat = diemHe10 // Cập nhật điểm thấp nhất
                     }
 
                     const soTinChi = item.subjectVersion.credit // Số tín chỉ của môn học
-                    console.log('soTinChi', soTinChi)
 
                     if (
                         !checkScorePassed({
                             subjectId: item.subjectVersionId,
-                            finalScore: item.finalScore.toNumber(),
+                            finalScore: diemHe10,
                             curriculumSubjects,
                             scoreToPass,
                             scoreToPassConditional,
@@ -625,36 +612,17 @@ const ThongTinDiemHocKy = async (
             }
         })
 
-        const reExamScores = await prisma.studentSubjectScore.findMany({
-            select: {
-                subjectVersion: {
-                    select: {
-                        credit: true,
-                    },
-                },
-            },
-            where: {
-                studentId,
-                deletedAt: null,
-                active: true,
-                subjectClass: { type: 'REEXAM' },
-            },
-        })
-
-        const reExamCredits = reExamScores.reduce(
-            (sum, score) => sum + score.subjectVersion.credit,
-            0
-        )
-
         if (TongTinChiDangKy === 0) {
             return {
                 diemTrungBinh4TrongKy: 0,
                 diemTrungBinh10TrongKy: 0,
                 xepLoaiHocTap: 'Không',
                 tongTinChiDangKy: 0,
-                diemThapNhat: 0,
-                soTinChiDat: 0,
-                soTinChiKhongDat: 0,
+                diemThapNhat,
+                soTinChiDat,
+                soTinChiKhongDat,
+                retakingCredits,
+                reExamCredits,
             }
         }
 
@@ -671,10 +639,6 @@ const ThongTinDiemHocKy = async (
         console.log('Điểm trung bình hệ 4:', diemTrungBinh4)
         console.log('Điểm trung bình hệ 10:', diemTrungBinh10)
         // Điểm thấp nhất
-        let diemThapNhat = Math.min(...DsDiemHe4) || 0
-        if (baseType === AcademicRankingBaseType.Base10) {
-            diemThapNhat = diemHe10ThapNhat // Nếu là hệ 10, lấy điểm thấp nhất hệ 10
-        }
         return {
             diemTrungBinh4TrongKy: diemTrungBinh4,
             diemTrungBinh10TrongKy: diemTrungBinh10,
@@ -786,7 +750,6 @@ export const calculateStudentSemesterResult = async (
         pMap(
             studentsIDs,
             async (student) => {
-                const existingResult = await checkStudentSemesterResult(semesterId, student.id)
                 // lấy khoá học
                 const trainingCourseId = student.fixedClass?.trainingCourseId
                 if (!trainingCourseId) {
@@ -838,144 +801,57 @@ export const calculateStudentSemesterResult = async (
                     orderBy: { createdAt: 'desc' },
                 })
 
-                if (!existingResult) {
-                    console.log(
-                        `Không tìm thấy kết quả học kỳ cho sinh viên ${student.id}, tạo mới...`
-                    )
-                    // Nếu không có kết quả, tạo mới
-                    const newResult: Prisma.StudentSemesterResultUncheckedCreateInput = {
-                        id: createId(), // Tạo ID ngẫu nhiên
-                        conductScore: conductScore?.score || 10,
-                        studentId: student.id,
-                        semesterId,
-                        createdAt: new Date(),
-                        updatedAt: new Date(),
-                        studyYear: Math.floor(thongTinTichLuy.kyDangHoc / 2), // năm học thứ mấy
-                        semesterIndexInCourse: thongTinTichLuy.kyDangHoc, // Kỳ đang học
-                        isLastSemester: thongTinTichLuy.kyCuoi, // Kỳ cuối hay không
+                const result: Prisma.StudentSemesterResultUncheckedCreateInput = {
+                    studentId: student.id,
+                    conductScore: conductScore?.score || 10,
+                    semesterId,
+                    studyYear: Math.floor(thongTinTichLuy.kyDangHoc / 2) || 1, // năm học thứ mấy
+                    semesterIndexInCourse: thongTinTichLuy.kyDangHoc, // Kỳ đang học
+                    isLastSemester: thongTinTichLuy.kyCuoi, // Kỳ cuối hay không
 
-                        baseScore:
-                            student.fixedClass?.trainingCourse?.baseScore ||
-                            AcademicRankingBaseType.Base10, // Lấy baseScore từ đối tượng đào tạo, nếu không có thì mặc định là Base10
-                        gpaBase4: new Decimal(thongTinDiemHocKy.diemTrungBinh4TrongKy),
-                        gpaBase10: new Decimal(thongTinDiemHocKy.diemTrungBinh10TrongKy),
-                        cumulativeGpaBase4: new Decimal(thongTinTichLuy.diemTrungBinh4TichLuy),
-                        cumulativeGpaBase10: new Decimal(thongTinTichLuy.diemTrungBinh10TichLuy),
+                    baseScore:
+                        student.fixedClass?.trainingCourse?.baseScore ||
+                        AcademicRankingBaseType.Base10, // Lấy baseScore từ đối tượng đào tạo, nếu không có thì mặc định là Base10
+                    gpaBase4: new Decimal(thongTinDiemHocKy.diemTrungBinh4TrongKy),
+                    gpaBase10: new Decimal(thongTinDiemHocKy.diemTrungBinh10TrongKy),
+                    cumulativeGpaBase4: new Decimal(thongTinTichLuy.diemTrungBinh4TichLuy),
+                    cumulativeGpaBase10: new Decimal(thongTinTichLuy.diemTrungBinh10TichLuy),
 
-                        lowestFinalScore: thongTinDiemHocKy.diemThapNhat,
-                        lowestGraduationScore: thongTinDiemHocKy.diemThapNhat,
-                        totalCredits: thongTinTichLuy.tongTinChiMoTrongKy, // Tổng số tín chỉ mở trong kỳ
-                        registeredCredits: thongTinDiemHocKy.tongTinChiDangKy, // Số tín chỉ đăng ký trong học kỳ
-                        passedCredits: thongTinDiemHocKy.soTinChiDat,
-                        failedCredits: thongTinDiemHocKy.soTinChiKhongDat,
-                        accumulatedCredits: thongTinTichLuy.tongTinChiDaTichLuy, // Số tín chỉ đã tích lũy
-                        totalCreditsByCurriculum:
-                            thongTinTichLuy.tongTinChiYeuCauDenThoiDiemHienTai, // Số tín chỉ yêu cầu theo CTDT
-                        totalFailedCredits: thongTinTichLuy.tongTinChiNoTichLuy, // Số tín chỉ nợ tích lũy
-                        studentTrainingType:
-                            conductScore?.studentTrainingType ?? StudentTrainingType.GOOD,
-                        rankId: thongTinTichLuy.rank?.id ?? null,
-                        foreignLangPass: student.foreignLangPass, // Đạt trình độ ngoại nsgữ theo quy định
-                        isClassMonitor: student.id === student.fixedClass?.classMonitorId, // là lớp trưởng nếu id trùng classMonitorId)
-                        isUnionLeader: student.id === student.fixedClass?.unionLeaderId, // là bí thư nếu id trùng unionLeaderId)
-                        entryScore: student.entryScore, // Điểm đầu vào
-                        academicWarningLevel: student.academicWarningLevel, // mức cảnh cáo học tập
-                        disciplinaryWarningLevel: student.disciplinaryWarningLevel, // mức cảnh cáo học đường
-                        suspended: student.suspended, // đình chỉ học
-                        expelled: student.expelled, // đuổi học
-                        //TODO: Chưa có thông tin này
-                        retakingCredits: 0, // Số tín chỉ phải thi lại (hiện tại chưa có thông tin này)
-                        reExamCredits: thongTinDiemHocKy.reExamCredits,
-                        isImproving: false, // Đang cải thiện (hiện tại chưa có thông tin này)
-                        postponeWithReason: false, // tạm ngưng có lý do
-                        code: student.code || '', // Mã sinh viên
-                        active: true,
-                        description: null,
-                        deletedAt: null,
-                        // createdBy: '',
-                    }
-                    // Lưu kết quả học kỳ mới
-                    // results.push(newResult)
-                    console.log(`Tạo mới kết quả học kỳ cho sinh viên ${student.id}`)
-                    await prisma.studentSemesterResult.create({
-                        data: newResult,
-                    })
-                } else {
-                    // Cập nhật kết quả học kỳ nếu đã tồn tại
-
-                    if (!existingResult) {
-                        console.error(
-                            `Không tìm thấy kết quả học kỳ để cập nhật cho sinh viên ${student.id}`
-                        )
-                        return
-                    }
-                    const updatedResult: StudentSemesterResult = {
-                        id: existingResult.id, // Giữ nguyên ID để cập nhật
-                        studentId: student.id,
-                        conductScore: conductScore?.score || 10,
-                        semesterId,
-                        createdAt: new Date(),
-                        updatedAt: new Date(),
-                        studyYear: Math.floor((thongTinTichLuy.kyDangHoc + 1) / 2), // năm học thứ mấy: kỳ 1,2 -> năm 1; kỳ 3,4 -> năm 2
-                        semesterIndexInCourse: thongTinTichLuy.kyDangHoc, // Kỳ đang học
-                        isLastSemester: thongTinTichLuy.kyCuoi, // Kỳ cuối hay không
-
-                        baseScore:
-                            student.fixedClass?.trainingCourse?.baseScore ||
-                            AcademicRankingBaseType.Base10,
-                        gpaBase4: new Decimal(thongTinDiemHocKy.diemTrungBinh4TrongKy),
-                        gpaBase10: new Decimal(thongTinDiemHocKy.diemTrungBinh10TrongKy),
-                        cumulativeGpaBase4: new Decimal(thongTinTichLuy.diemTrungBinh4TichLuy),
-                        cumulativeGpaBase10: new Decimal(thongTinTichLuy.diemTrungBinh10TichLuy),
-
-                        lowestFinalScore: thongTinDiemHocKy.diemThapNhat,
-                        lowestGraduationScore: thongTinDiemHocKy.diemThapNhat,
-                        totalCredits: thongTinTichLuy.tongTinChiMoTrongKy, // Tổng số tín chỉ mở trong kỳ
-
-                        registeredCredits: thongTinDiemHocKy.tongTinChiDangKy, // Số tín chỉ đăng ký trong học kỳ
-
-                        //TODO: Chưa biết xác định thi lại ntn
-                        retakingCredits: 0, // Số tín chỉ phải thi lại (hiện tại chưa có thông tin này)
-                        reExamCredits: thongTinDiemHocKy.reExamCredits || 0,
-                        passedCredits: thongTinDiemHocKy.soTinChiDat,
-                        failedCredits: thongTinDiemHocKy.soTinChiKhongDat,
-
-                        accumulatedCredits: thongTinTichLuy.tongTinChiDaTichLuy, // Số tín chỉ đã tích lũy
-                        totalCreditsByCurriculum:
-                            thongTinTichLuy.tongTinChiYeuCauDenThoiDiemHienTai, // Số tín chỉ yêu cầu theo CTDT
-                        totalFailedCredits: thongTinTichLuy.tongTinChiNoTichLuy, // Số tín chỉ
-                        studentTrainingType:
-                            conductScore?.studentTrainingType ?? StudentTrainingType.GOOD,
-                        rankId: thongTinTichLuy.rank?.id ?? null,
-                        //NOTE: Chưa có thông tin này nên lấy thông tin cũ gán lại
-                        foreignLangPass: existingResult?.foreignLangPass || true, // Đạt trình độ ngoại ngữ theo quy định
-                        isClassMonitor: existingResult?.isClassMonitor || false, // Chức vụ học viên (hiện tại chưa có thông tin này)
-                        isUnionLeader: existingResult?.isUnionLeader || false, // Chức vụ đoàn viên (hiện tại chưa có thông tin này)
-                        entryScore: existingResult?.entryScore || null, // Điểm đầu vào (hiện tại chưa có thông tin này)
-                        isImproving: existingResult?.isImproving || false, // Đang cải thiện (hiện tại chưa có thông tin này)
-                        postponeWithReason: existingResult?.postponeWithReason || false, // tạm ngưng có lý do
-                        academicWarningLevel: existingResult?.academicWarningLevel || 0, // mức cảnh cáo học tập
-                        disciplinaryWarningLevel: existingResult?.disciplinaryWarningLevel || 0, // mức cảnh cáo học đường
-                        suspended: existingResult?.suspended || false, // đình chỉ học
-                        expelled: existingResult?.expelled || false, // đuổi học.
-                        code: existingResult?.code || '',
-                        active: existingResult?.active || true, // Trạng thái hoạt động
-                        description: existingResult?.description || null,
-                        deletedAt: existingResult?.deletedAt || null,
-                        createdBy: existingResult?.createdBy,
-                    }
-                    // Cập nhật kết quả học kỳ
-                    // results.push(updatedResult)
-                    console.log(`Cập nhật kết quả học kỳ cho sinh viên ${student.id}`)
-                    await prisma.studentSemesterResult.update({
-                        where: {
-                            id: existingResult.id,
-                            deletedAt: null,
-                            active: true,
-                        },
-                        data: updatedResult,
-                    })
+                    lowestFinalScore: thongTinDiemHocKy.diemThapNhat,
+                    lowestGraduationScore: thongTinDiemHocKy.diemThapNhat,
+                    totalCredits: thongTinTichLuy.tongTinChiMoTrongKy, // Tổng số tín chỉ mở trong kỳ
+                    registeredCredits: thongTinDiemHocKy.tongTinChiDangKy, // Số tín chỉ đăng ký trong học kỳ
+                    passedCredits: thongTinDiemHocKy.soTinChiDat,
+                    failedCredits: thongTinDiemHocKy.soTinChiKhongDat,
+                    accumulatedCredits: thongTinTichLuy.tongTinChiDaTichLuy, // Số tín chỉ đã tích lũy
+                    totalCreditsByCurriculum: thongTinTichLuy.tongTinChiYeuCauDenThoiDiemHienTai, // Số tín chỉ yêu cầu theo CTDT
+                    totalFailedCredits: thongTinTichLuy.tongTinChiNoTichLuy, // Số tín chỉ nợ tích lũy
+                    studentTrainingType:
+                        conductScore?.studentTrainingType ?? StudentTrainingType.GOOD,
+                    rankId: thongTinTichLuy.rank?.id ?? null,
+                    foreignLangPass: student.foreignLangPass, // Đạt trình độ ngoại nsgữ theo quy định
+                    isClassMonitor: student.id === student.fixedClass?.classMonitorId, // là lớp trưởng nếu id trùng classMonitorId)
+                    isUnionLeader: student.id === student.fixedClass?.unionLeaderId, // là bí thư nếu id trùng unionLeaderId)
+                    entryScore: student.entryScore, // Điểm đầu vào
+                    academicWarningLevel: student.academicWarningLevel, // mức cảnh cáo học tập
+                    disciplinaryWarningLevel: student.disciplinaryWarningLevel, // mức cảnh cáo học đường
+                    suspended: student.suspended, // đình chỉ học
+                    expelled: student.expelled, // đuổi học
+                    retakingCredits: thongTinDiemHocKy.retakingCredits, // Số tín chỉ phải thi lại (hiện tại chưa có thông tin này)
+                    reExamCredits: thongTinDiemHocKy.reExamCredits,
+                    isImproving: !!thongTinDiemHocKy.reExamCredits, // TODO: update this
+                    postponeWithReason: false, // tạm ngưng có lý do
+                    active: true,
+                    description: null,
+                    deletedAt: null,
+                    // createdBy: '',
                 }
+
+                await prisma.studentSemesterResult.upsert({
+                    where: { studentId_semesterId: { studentId: student.id, semesterId } },
+                    update: result,
+                    create: result,
+                })
             },
             {
                 concurrency: 10,
@@ -1206,6 +1082,8 @@ export async function calculateStudentYearResult({
     const student = await prisma.student.findUnique({
         where: { id: studentId },
         include: {
+            classMonitor: { select: { id: true } },
+            unionLeaderOf: { select: { id: true } },
             fixedClass: {
                 include: {
                     trainingCourse: {
@@ -1234,24 +1112,46 @@ export async function calculateStudentYearResult({
             studentId: studentId,
             finalScore: { not: null },
             subjectClass: {
+                cancelled: false,
                 // Lọc để đảm bảo chỉ lấy điểm của các kỳ học kết thúc trước hoặc trong năm học này
                 semester: {
                     endDate: { lte: schoolYear.endDate || new Date() },
                 },
             },
             // Chỉ lấy các môn được dùng để tính điểm tổng kết (loại bỏ GDQP, GDTC nếu cần)
-            subjectVersion: {
-                trainingBlocks: {
-                    some: {
-                        useForFinalScore: true,
-                    },
-                },
-            },
         },
         include: {
             subjectClass: { include: { semester: true } },
-            subjectVersion: { include: { subject: true } },
+            subjectVersion: true,
         },
+    })
+
+    // 3.1 Lấy thông tin môn học trong CTĐT của sinh viên
+    const curriculumVersionId =
+        student.curriculumVersionId || student.fixedClass?.curriculumVersionId
+    if (!curriculumVersionId) throw new Error('Sinh viên chưa được gán CTĐT')
+
+    const trainingBlockSubjects = await prisma.trainingBlockSubject.findMany({
+        where: {
+            trainingBlockOnCurriculumVersion: {
+                curriculumVersionId: curriculumVersionId,
+            },
+            active: true,
+            deletedAt: null,
+        },
+        select: {
+            subjectId: true,
+            useForFinalScore: true,
+            graduation: true,
+        },
+    })
+
+    const subjectConfigMap = new Map<string, { useForFinalScore: boolean; graduation: boolean }>()
+    trainingBlockSubjects.forEach((tbs) => {
+        subjectConfigMap.set(tbs.subjectId, {
+            useForFinalScore: tbs.useForFinalScore,
+            graduation: tbs.graduation,
+        })
     })
 
     // --- TÍNH TOÁN ---
@@ -1269,16 +1169,25 @@ export async function calculateStudentYearResult({
         (s) => s.subjectClass && semesterIds.includes(s.subjectClass.semesterId)
     )
 
+    const scoreToPassConditional = student.fixedClass.trainingCourse.scoreToPassConditional || 0
+
     // B. Tính YEARLY (Trung bình năm)
     let yearTotalScore10 = 0
     let yearTotalScore4 = 0
     let yearTotalCredits = 0
     let yearFailedCredits = 0
+    let retakingCredits = 0
+    let reExamCredits = 0
 
     // Biến tìm điểm thấp nhất trong năm (COURSE_GRADE_LOWEST)
-    let courseGradeLowest = 10
+    let courseGradeLowest: number | null = null
+    let lowestGraduationScore: number | null = null
 
     for (const record of scoresInYear) {
+        // Check if subject is in curriculum and useForFinalScore
+        const config = subjectConfigMap.get(record.subjectVersionId)
+        if (!config || !config.useForFinalScore) continue
+
         const credit = record.subjectVersion.credit
         const score10 = Number(record.finalScore)
         // Chuyển đổi sang hệ 4 (Giả sử có hàm convert hoặc dùng bảng ScoreConvert)
@@ -1293,8 +1202,23 @@ export async function calculateStudentYearResult({
             yearFailedCredits += credit
         }
 
-        if (score10 < courseGradeLowest) {
+        if (record.subjectClass?.type === 'RETAKE') {
+            retakingCredits += credit
+        }
+
+        if (record.subjectClass?.type === 'REEXAM') {
+            reExamCredits += credit
+        }
+
+        if (courseGradeLowest === null || score10 < courseGradeLowest) {
             courseGradeLowest = score10
+        }
+
+        // Kiểm tra môn tốt nghiệp
+        if (config.graduation) {
+            if (lowestGraduationScore === null || score10 < lowestGraduationScore) {
+                lowestGraduationScore = score10
+            }
         }
     }
 
@@ -1315,20 +1239,23 @@ export async function calculateStudentYearResult({
     >()
 
     for (const record of allScores) {
-        const subjectCode = record.subjectVersion.subject.code || record.subjectVersion.id
+        const config = subjectConfigMap.get(record.subjectVersionId)
+        if (!config || !config.useForFinalScore) continue
+
+        const subjectVersionId = record.subjectVersion.id
         const score10 = Number(record.finalScore)
         const score4 = convertScore10to4(score10)
         const credit = record.subjectVersion.credit
         const passed = score10 >= scoreToPass
 
-        const existing = uniqueSubjectsMap.get(subjectCode)
+        const existing = uniqueSubjectsMap.get(subjectVersionId)
         if (existing) {
             // Nếu đã có, kiểm tra xem điểm mới có cao hơn không
             if (score10 > existing.score10) {
-                uniqueSubjectsMap.set(subjectCode, { score10, score4, credit, passed })
+                uniqueSubjectsMap.set(subjectVersionId, { score10, score4, credit, passed })
             }
         } else {
-            uniqueSubjectsMap.set(subjectCode, { score10, score4, credit, passed })
+            uniqueSubjectsMap.set(subjectVersionId, { score10, score4, credit, passed })
         }
     }
 
@@ -1409,55 +1336,39 @@ export async function calculateStudentYearResult({
         orderBy: { rankOrder: 'asc' },
     })
 
+    const data: Prisma.StudentYearResultUncheckedCreateInput = {
+        isClassMonitor: !!student.classMonitor?.id,
+        isUnionLeader: !!student.unionLeaderOf?.id,
+        studentId: studentId,
+        schoolYearId: schoolYearId,
+        studyYear: new Date().getFullYear(),
+        gpaBase10: yearlyGpa10,
+        gpaBase4: yearlyGpa4,
+        cumulativeGpaBase10: cumulativeGpa10,
+        cumulativeGpaBase4: cumulativeGpa4,
+        totalCredits: cumulativePassedCredits,
+        failedCredits: yearFailedCredits,
+        conductScore: trainingScore?.score,
+        rankId: rank?.id,
+        academicWarningLevel: academicWarning?.level || 0,
+        disciplinaryWarningLevel: disciplinaryWarning?.level || 0,
+        isLastStudyYear: false,
+        baseScore: student.fixedClass.trainingCourse.baseScore,
+        studentTrainingType: trainingScore?.studentTrainingType || 'GOOD',
+        lowestFinalScore: courseGradeLowest,
+        lowestGraduationScore,
+        retakingCredits,
+        reExamCredits,
+    }
+
     // 4. Lưu kết quả vào bảng StudentYearResult
     // Sử dụng upsert để tạo mới hoặc cập nhật
     const result = await prisma.studentYearResult.upsert({
         where: {
-            studentId_schoolYearId: {
-                studentId: studentId,
-                schoolYearId: schoolYearId,
-            },
+            studentId_schoolYearId: { studentId: studentId, schoolYearId: schoolYearId },
         },
-        update: {
-            studyYear:
-                schoolYear.startDate.getFullYear() -
-                student.fixedClass.trainingCourse.semesterStart.startDate.getFullYear() +
-                1,
-            gpaBase10: yearlyGpa10,
-            gpaBase4: yearlyGpa4,
-            cumulativeGpaBase10: cumulativeGpa10,
-            cumulativeGpaBase4: cumulativeGpa4,
-            totalCredits: cumulativePassedCredits, // Tín chỉ tích lũy
-            failedCredits: yearFailedCredits,
-            conductScore: trainingScore?.score,
-            rankId: rank?.id,
-            academicWarningLevel: academicWarning?.level || 0,
-            disciplinaryWarningLevel: disciplinaryWarning?.level || 0,
-            isLastStudyYear: false, // Cần logic check
-            baseScore: student.fixedClass.trainingCourse.baseScore,
-            studentTrainingType: trainingScore?.studentTrainingType || 'GOOD', // Hàm helper
-        },
-        create: {
-            isClassMonitor: false,
-            isUnionLeader: false,
-            code: `${student.code}_${schoolYear.code}`,
-            studentId: studentId,
-            schoolYearId: schoolYearId,
-            studyYear: new Date().getFullYear(),
-            gpaBase10: yearlyGpa10,
-            gpaBase4: yearlyGpa4,
-            cumulativeGpaBase10: cumulativeGpa10,
-            cumulativeGpaBase4: cumulativeGpa4,
-            totalCredits: cumulativePassedCredits,
-            failedCredits: yearFailedCredits,
-            conductScore: trainingScore?.score,
-            rankId: rank?.id,
-            academicWarningLevel: academicWarning?.level || 0,
-            disciplinaryWarningLevel: disciplinaryWarning?.level || 0,
-            isLastStudyYear: false,
-            baseScore: student.fixedClass.trainingCourse.baseScore,
-            studentTrainingType: trainingScore?.studentTrainingType || 'GOOD',
-        },
+        update: data,
+        create: data,
     })
 
     return result

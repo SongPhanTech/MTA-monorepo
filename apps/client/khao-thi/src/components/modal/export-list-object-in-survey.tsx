@@ -1,6 +1,6 @@
 import { DownloadOutlined } from '@ant-design/icons'
 import { getSurveyObjects } from '@workspace/libs/api/exam'
-import { Button, Flex, message } from 'antd'
+import { Flex, message } from 'antd'
 import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
 
@@ -195,14 +195,18 @@ const ExportObjectInSurvey = ({ query, surveyName }: { query: any; surveyName: s
 
     return (
         <Flex>
-            <Button
-                size="small"
-                type="primary"
+            <span
                 onClick={exportTemplate}
-                icon={<DownloadOutlined />}
+                style={{
+                    cursor: 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 6,
+                }}
             >
-                Xuất file excel
-            </Button>
+                <DownloadOutlined />
+                <span style={{ color: '#000' }}>Xuất file Excel</span>
+            </span>
         </Flex>
     )
 }

@@ -3,8 +3,8 @@ import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import { FIXED_CLASS_STUDENT_STATUS, SCORE_CONVERT_STATUS } from '@constants/constants'
-import { useStudentTrainingTypeOptions } from '@hooks/studentTrainingType'
 import { useAcademicRankingBaseTypeOptions } from '@hooks/academicRankingBaseType'
+import { useStudentTrainingTypeOptions } from '@hooks/studentTrainingType'
 import { useFindUniqueStudent } from '@workspace/db/hooks'
 
 dayjs.locale('vi')
@@ -445,14 +445,14 @@ const ModalChiTietSinhVien = () => {
                             align: 'center',
                         },
                         {
-                            title: 'Điểm CC',
+                            title: 'Điểm TX',
                             dataIndex: 'attendanceScore',
                             width: 90,
                             align: 'center',
                             render: (score) => (score ? Number(score).toFixedSmart(2) : ''),
                         },
                         {
-                            title: 'Điểm TX',
+                            title: 'Điểm ĐK',
                             dataIndex: 'midtermScore',
                             width: 90,
                             align: 'center',

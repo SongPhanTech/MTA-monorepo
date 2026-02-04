@@ -1,6 +1,8 @@
+import { DownloadOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
+import { ExportStatsArchivedAwardModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useArchivedCertificateStatusOptions } from '@hooks/paymentStatus'
@@ -48,8 +50,16 @@ export default function ArchivedAward() {
         tag: 'PutArchivedAwardModal',
     })
 
+    const { onOpen: onOpenExport } = useDisclosure<string>({
+        tag: 'ExportStatsArchivedAwardModal',
+    })
+
     const handleModal = () => {
         onOpen()
+    }
+
+    const handleExportModal = () => {
+        onOpenExport()
     }
 
     const { mutateAsync: updateArchivedAward } = useUpdateArchivedAward()
@@ -125,7 +135,7 @@ export default function ArchivedAward() {
     }, [filters, trainingObjectTypeId])
 
     const { data: dataTable = [], refetch } = useFindManyArchivedAward({
-        where: {},
+        where,
         include: {
             studentSubjectScore: {
                 include: {
@@ -255,7 +265,7 @@ export default function ArchivedAward() {
                     <Col span={24} className="mt-3">
                         <Flex justify="end">
                             {can(
-                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
+                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_OLYMPIC,
                                 'DUYET'
                             ) && (
                                 <>
@@ -277,11 +287,20 @@ export default function ArchivedAward() {
                                 </>
                             )}
                             {can(
-                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
+                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_OLYMPIC,
                                 'THEM'
                             ) && (
                                 <Button onClick={handleModal} type="primary" className="ml-3">
                                     Thêm mới
+                                </Button>
+                            )}
+                            {can(
+                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_OLYMPIC,
+                                'XEM'
+                            ) && (
+                                <Button onClick={handleExportModal} type="primary" className="ml-3">
+                                    <DownloadOutlined />
+                                    Xuất thống kê
                                 </Button>
                             )}
                         </Flex>
@@ -300,9 +319,9 @@ export default function ArchivedAward() {
                     rowSelection={{
                         selectedRowKeys,
                         getCheckboxProps: (record) => ({
-                            disabled: record.studentSubjectScore.some(
+                            disabled: !record.studentSubjectScore.some(
                                 (item: ArchivedAwardOnStudentSubjectScore) =>
-                                    item.status !== 'PENDING'
+                                    item.status === 'PENDING'
                             ),
                         }),
                         onChange: (newSelectedRowKeys: React.Key[]) => {
@@ -321,7 +340,8 @@ export default function ArchivedAward() {
                         {
                             title: 'Họ và tên',
                             width: 200,
-                            dataIndex: 'studentName',
+                            dataIndex: 'name',
+                            type: 'input',
                             align: 'left',
                             fixed: 'left',
                             render: (__, record) => {
@@ -364,7 +384,6 @@ export default function ArchivedAward() {
                         },
                         {
                             title: 'Ngày nhận',
-                            dataIndex: 'name',
                             align: 'center',
                             width: 100,
                             render: (__, record) => {
@@ -472,7 +491,7 @@ export default function ArchivedAward() {
                             align: 'center',
                             fixed: 'right',
                             hidden: !canSome(
-                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
+                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_OLYMPIC,
                                 'SUA',
                                 'XOA'
                             ),
@@ -480,7 +499,7 @@ export default function ArchivedAward() {
                                 return (
                                     <Row className="justify-center gap-2">
                                         {can(
-                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_OLYMPIC,
                                             'SUA'
                                         ) &&
                                             status === 'PENDING' && (
@@ -490,7 +509,7 @@ export default function ArchivedAward() {
                                                 />
                                             )}
                                         {can(
-                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_OLYMPIC,
                                             'XOA'
                                         ) &&
                                             status === 'PENDING' && (
@@ -524,6 +543,7 @@ export default function ArchivedAward() {
                     }}
                 />
             </Col>
+            <ExportStatsArchivedAwardModal />
         </Row>
     )
 }

@@ -1,3 +1,5 @@
+import PutChucVuChinhQuyenModal from '@components/modal/quan-ly-ho-so/modals/put-chuc-vu-chinh-quyen'
+import PutChucVuDangModal from '@components/modal/quan-ly-ho-so/modals/put-chuc-vu-dang'
 import BacLuongModal from './danh-muc-chung/put-bac-luong'
 import CacNuocCuDiHocTapModal from './danh-muc-chung/put-cac-nuoc-cu-di-hoc-tap'
 import CacTruongDaoTaoBacDHModal from './danh-muc-chung/put-cac-truong-dao-tao'
@@ -12,9 +14,11 @@ import HinhThucKhenThuongCuaDangModal from './danh-muc-chung/put-hinh-thuc-khen-
 import LoaiHinhCongTacModal from './danh-muc-chung/put-loai-hinh-cong-tac'
 import LoaiHinhDiHocTapModal from './danh-muc-chung/put-loai-hinh-di-hoc-tap'
 import LoaiThuongTatModal from './danh-muc-chung/put-loai-thuong-tat'
+import LoaiTinhTrangCongTacModal from './danh-muc-chung/put-loai-tinh-trang-cong-tac'
 import NgachModal from './danh-muc-chung/put-ngach'
 import NganhHocModal from './danh-muc-chung/put-nganh-hoc'
 import NhomMauModal from './danh-muc-chung/put-nhom-mau'
+import QuanHeThanNhanModal from './danh-muc-chung/put-quan-he-than-nhan'
 import SucKhoeModal from './danh-muc-chung/put-suc-khoe'
 import TinhTrangCongTacModal from './danh-muc-chung/put-tinh-trang-cong-viec'
 import TinhTrangDiHocTapModal from './danh-muc-chung/put-tinh-trang-di-hoc-tap'
@@ -58,10 +62,6 @@ import PutToChucXaHoiModal from './quan-ly-ho-so/modals/put-to-chuc-xa-hoi'
 import PutTrinhDoLyLuanChinhTriModal from './quan-ly-ho-so/modals/put-trinh-do-ly-luan-chinh-tri'
 import PutTrinhDoQuanLyHanhChinhModal from './quan-ly-ho-so/modals/put-trinh-do-quan-ly-hanh-chinh'
 import PutTrinhDoQuanLyNhaNuocModal from './quan-ly-ho-so/modals/put-trinh-do-quan-ly-nha-nuoc'
-import QuanHeThanNhanModal from './danh-muc-chung/put-quan-he-than-nhan'
-import LoaiTinhTrangCongTacModal from './danh-muc-chung/put-loai-tinh-trang-cong-tac'
-import PutChucVuChinhQuyenModal from '@components/modal/quan-ly-ho-so/modals/put-chuc-vu-chinh-quyen'
-import PutChucVuDangModal from '@components/modal/quan-ly-ho-so/modals/put-chuc-vu-dang'
 export {
     PutUpdateProfileModal,
     PutUploadProfileModal,

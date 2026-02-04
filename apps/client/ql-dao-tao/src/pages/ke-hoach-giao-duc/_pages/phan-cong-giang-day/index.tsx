@@ -25,6 +25,7 @@ import {
     useUpdateManySubjectClass,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
+import { whereOrganization } from '@workspace/libs/constants'
 import { exportFromTemplate } from '@workspace/libs/template-excel'
 import { getMinioUrl } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
@@ -57,7 +58,6 @@ import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { whereOrganization } from '@workspace/libs/constants'
 
 type TeachingAssignmentForm = {
     subjectClass: Record<
@@ -1630,27 +1630,29 @@ export default function PhanCongGiangDay({
                         onValuesChange={(changedValue) => {
                             if (changedValue.subjectClass) {
                                 const subjectClassId = Object.keys(changedValue.subjectClass)[0]
+                                const changedField = changedValue.subjectClass[subjectClassId]
                                 if (
                                     subjectClassId &&
-                                    !Object.keys(
-                                        changedValue.subjectClass[subjectClassId] || {}
-                                    ).includes('submitLecturerAssignmentAt')
-                                )
+                                    !Object.keys(changedField || {}).includes(
+                                        'submitLecturerAssignmentAt'
+                                    )
+                                ) {
+                                    const newSubjectClassData = {
+                                        ...subjectClassForm?.[subjectClassId],
+                                        ...changedField,
+                                        isEdit: true,
+                                    }
+
+                                    if ('trainingLocationId' in changedField) {
+                                        newSubjectClassData.roomId = null
+                                    }
+
                                     form.setFieldValue('subjectClass', {
                                         ...subjectClassForm,
                                         ...changedValue.subjectClass,
-                                        [subjectClassId]: {
-                                            ...subjectClassForm?.[subjectClassId],
-                                            ...changedValue.subjectClass[subjectClassId],
-                                            // enterGradeLecturerId:
-                                            //     subjectClassForm?.[subjectClassId]
-                                            //         ?.enterGradeLecturerId ??
-                                            //     changedValue.subjectClass[subjectClassId]
-                                            //         ?.lecturerId ??
-                                            //     null,
-                                            isEdit: true,
-                                        },
+                                        [subjectClassId]: newSubjectClassData,
                                     })
+                                }
                             }
                         }}
                     >
@@ -2030,15 +2032,13 @@ export default function PhanCongGiangDay({
                                         >
                                             <TreeSelect
                                                 treeData={buildingData
-                                                    .filter((e) =>
-                                                        subjectClassForm?.[record?.id]
-                                                            ?.trainingLocationId ||
-                                                        record?.trainingLocationId
-                                                            ? e.trainingLocationId ===
-                                                              (subjectClassForm?.[record.id]
-                                                                  ?.trainingLocationId ||
-                                                                  record?.trainingLocationId)
-                                                            : true
+                                                    .filter(
+                                                        (e) =>
+                                                            subjectClassForm?.[record.id]
+                                                                ?.trainingLocationId &&
+                                                            e.trainingLocationId ===
+                                                                subjectClassForm[record.id]
+                                                                    ?.trainingLocationId
                                                     )
                                                     .map((e) => ({
                                                         label: e.name,
@@ -2093,7 +2093,7 @@ export default function PhanCongGiangDay({
                                 // },
 
                                 // {
-                                //     title: 'Hạn nhập điểm CC/TX',
+                                //     title: 'Hạn nhập điểm TX/ĐK',
                                 //     width: 200,
                                 //     align: 'center',
                                 //     render: (value) => (value ? formatDate(value) : ''),

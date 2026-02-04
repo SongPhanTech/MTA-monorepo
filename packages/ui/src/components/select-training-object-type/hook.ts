@@ -1,13 +1,12 @@
+import type { DefaultError, UseQueryOptions } from '@tanstack/react-query'
 import { Store, useStore } from '@tanstack/react-store'
 import { $Enums } from '@workspace/db'
+import type { Prisma } from '@workspace/db/client'
 import { useFindManyTrainingObjectType } from '@workspace/db/hooks'
 import { useGetUserPermissionsPermissionAppCodeUserId } from '@workspace/libs/api/system'
 import { isDevEnvironment } from '@workspace/libs/utils'
-import { useEffect, useMemo } from 'react'
-import type { Prisma } from '@workspace/db/client'
-import type { UseQueryOptions } from '@tanstack/react-query'
 import type { ExtraQueryOptions } from '@zenstackhq/tanstack-query/runtime-v5'
-import type { DefaultError } from '@tanstack/react-query'
+import { useEffect, useMemo } from 'react'
 
 export type TrainingObjectTypeState = {
     selectedTrainingObjectTypeId?: string
@@ -57,7 +56,10 @@ export function useFindManyTrainingObjectTypePermission<
     TError = DefaultError,
 >(
     args?: Prisma.SelectSubset<TArgs, Prisma.TrainingObjectTypeFindManyArgs>,
-    options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions
+    options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> &
+        ExtraQueryOptions & {
+            subsystem?: string
+        }
 ) {
     const { data: permission } = useGetUserPermissionsPermissionAppCodeUserId(
         'lms',
@@ -73,7 +75,7 @@ export function useFindManyTrainingObjectTypePermission<
         {
             where: {
                 active: true,
-                ...(isDevEnvironment()
+                ...(isDevEnvironment() || options?.subsystem === 'ems'
                     ? {}
                     : {
                           vaiTro: {

@@ -1,7 +1,7 @@
 import FormItem from '@components/commons/form-item'
 import { cn } from '@lib/utils'
 import { useCreateTopic, useFindFirstTopic, useUpdateTopic } from '@workspace/db/hooks'
-import { Col, Form, Input, Modal, message, Checkbox, Tooltip } from 'antd'
+import { Checkbox, Col, Form, Input, Modal, message, Tooltip } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useTopics } from '@/hooks/useTopics'

@@ -425,11 +425,16 @@ app.openapi(approveAwardScore, async (c) => {
 
     const studentSubjectScores = archivedAwards.flatMap((archivedAward) => {
         const bonusScore = archivedAward.bonusScore
-        return archivedAward.studentSubjectScore.map((studentSubjectScore) => {
-            const finalScore = studentSubjectScore.studentSubjectScore.finalScore?.add(bonusScore)
+        return archivedAward.studentSubjectScore.map((awardOnStudentSubjectScore) => {
+            const finalScore =
+                awardOnStudentSubjectScore.studentSubjectScore.finalScore?.add(bonusScore)
+            const manualFinalScore = awardOnStudentSubjectScore.studentSubjectScore.manualFinalScore
+                ? awardOnStudentSubjectScore.studentSubjectScore.manualFinalScore + bonusScore
+                : null
             return {
-                id: studentSubjectScore.id,
+                id: awardOnStudentSubjectScore.studentSubjectScoreId,
                 finalScore,
+                manualFinalScore,
             }
         })
     })
@@ -494,7 +499,7 @@ const statsArchivedAward = createRoute({
 app.openapi(statsArchivedAward, async (c) => {
     const { fromSemesterId, toSemesterId } = c.req.valid('json')
     const result = await getStatsArchivedAward({ fromSemesterId, toSemesterId })
-    return c.json({ data: result }, 200)
+    return c.json(result, 200)
 })
 
 const exportStatsArchivedAwardRoute = createRoute({

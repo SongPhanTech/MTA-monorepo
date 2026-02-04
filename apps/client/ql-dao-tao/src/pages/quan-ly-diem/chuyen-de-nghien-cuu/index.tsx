@@ -1,10 +1,12 @@
 import { FileOutlined } from '@ant-design/icons'
+import DatePicker from '@components/commons/date-picker'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import TreeSelect from '@components/commons/tree-select'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgFlat, buildOrgTree } from '@lib/utils'
 import { SubjectVersionType } from '@workspace/db'
+import { $Enums, type Prisma } from '@workspace/db/client'
 import {
     useCountStudentResearchTopic,
     useCreateManyStudentResearchTopic,
@@ -13,19 +15,17 @@ import {
     useFindManySubjectClass,
     useFindManyTrainingCourse,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Form, message, Modal, Row, Tooltip } from 'antd'
 import { excelTemplate, sqlTransaction } from '@workspace/libs/api/model'
-import dayjs from 'dayjs'
-import { SquarePen } from 'lucide-react'
-import ExcelJS from 'exceljs'
-import { useMemo, useState } from 'react'
-import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import DatePicker from '@components/commons/date-picker'
-
-import { useDisclosure } from 'react-hook-disclosure-modal'
-import { $Enums, type Prisma } from '@workspace/db/client'
-import { saveAs } from 'file-saver'
 import { whereOrganization } from '@workspace/libs/constants'
+import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
+import { cn } from '@workspace/ui/lib/utils'
+import { Button, Col, Flex, Form, Modal, message, Row, Tooltip } from 'antd'
+import dayjs from 'dayjs'
+import ExcelJS from 'exceljs'
+import { saveAs } from 'file-saver'
+import { SquarePen } from 'lucide-react'
+import { useMemo, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface ChuyenDeNghienCuuForm {
     trainingCourseId: string
@@ -46,6 +46,7 @@ export default function ChuyenDeNghienCuu({ role = 'P7' }: { role: 'P7' | 'KHOA_
 
     const { onOpen: openPutResearchTopicModal } = useDisclosure<{
         studentResearchTopicId: string
+        role: 'P7' | 'KHOA_BO_MON'
     }>({
         tag: 'PutResearchTopicModal',
     })
@@ -1147,82 +1148,6 @@ export default function ChuyenDeNghienCuu({ role = 'P7' }: { role: 'P7' | 'KHOA_
                                                 { name: string },
                                             ]
 
-                                            // useFindManyStudent({
-                                            //     where: {
-                                            //         subjectClassStudent: {
-                                            //             some: {
-                                            //                 subjectClass: {
-                                            //                     semesterId,
-                                            //                     trainingObjectTypeId,
-                                            //                     fixedClasses: {
-                                            //                         some: {
-                                            //                             trainingCourseId,
-                                            //                         },
-                                            //                     },
-                                            //                     subject: {
-                                            //                         type: $Enums.SubjectVersionType
-                                            //                             .Research,
-                                            //                     },
-                                            //                 },
-                                            //             },
-                                            //         },
-                                            //     },
-                                            //     include: {
-                                            //         subjectClassStudent: {
-                                            //             select: {
-                                            //                 subjectClass: {
-                                            //                     select: {
-                                            //                         subject: {
-                                            //                             select: {
-                                            //                                 credit: true,
-                                            //                             },
-                                            //                         },
-                                            //                     },
-                                            //                 },
-                                            //             },
-                                            //             where: {
-                                            //                 subjectClass: {
-                                            //                     semesterId,
-                                            //                     trainingObjectTypeId,
-                                            //                     fixedClasses: {
-                                            //                         some: {
-                                            //                             trainingCourseId,
-                                            //                         },
-                                            //                     },
-                                            //                     subject: {
-                                            //                         type: $Enums.SubjectVersionType
-                                            //                             .Research,
-                                            //                     },
-                                            //                 },
-                                            //             },
-                                            //         },
-                                            //         curriculumVersion: {
-                                            //             select: {
-                                            //                 curriculum: {
-                                            //                     select: {
-                                            //                         trainingMajor: {
-                                            //                             select: {
-                                            //                                 name: true,
-                                            //                                 trainingField: {
-                                            //                                     select: {
-                                            //                                         name: true,
-                                            //                                     },
-                                            //                                 },
-                                            //                             },
-                                            //                         },
-                                            //                     },
-                                            //                 },
-                                            //             },
-                                            //         },
-                                            //         userProfile: {
-                                            //             select: {
-                                            //                 dateOfBirth: true,
-                                            //                 fullname: true,
-                                            //             },
-                                            //         },
-                                            //     },
-                                            // })
-
                                             const students = await sqlTransaction([
                                                 {
                                                     model: 'Student',
@@ -1433,29 +1358,41 @@ export default function ChuyenDeNghienCuu({ role = 'P7' }: { role: 'P7' | 'KHOA_
                             render: (_, record) => {
                                 return (
                                     <div className="flex justify-center items-center">
-                                        <SquarePen
-                                            className="text-sm cursor-pointer"
-                                            onClick={() =>
-                                                openPutResearchTopicModal({
-                                                    studentResearchTopicId: record.id,
-                                                })
-                                            }
-                                        />
+                                        {((record?.deadline &&
+                                            dayjs().isBefore(dayjs(record.deadline))) ||
+                                            role === 'P7') && (
+                                            <SquarePen
+                                                className="text-sm cursor-pointer m-1"
+                                                onClick={() =>
+                                                    openPutResearchTopicModal({
+                                                        studentResearchTopicId: record.id,
+                                                        role,
+                                                    })
+                                                }
+                                            />
+                                        )}
                                     </div>
                                 )
                             },
                         },
                         {
-                            title: 'Hạn nhập chuyên đề',
-                            width: 140,
+                            title: 'Hạn nhập',
+                            width: 80,
                             align: 'center',
                             render: (_, record) => {
                                 return (
-                                    <div>
+                                    <p
+                                        className={cn(
+                                            record?.deadline &&
+                                                dayjs().isAfter(dayjs(record.deadline))
+                                                ? 'text-red-600'
+                                                : ''
+                                        )}
+                                    >
                                         {record?.deadline
                                             ? dayjs(record.deadline).format('DD/MM/YYYY')
                                             : ''}
-                                    </div>
+                                    </p>
                                 )
                             },
                         },

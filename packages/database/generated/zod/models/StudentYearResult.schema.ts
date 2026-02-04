@@ -11,13 +11,13 @@ import { DecimalSchema } from '../common';
 import { Decimal } from 'decimal.js';
 const baseSchema = z.object({
     id: z.string(),
+    code: z.string().nullish(),
     active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
     createdBy: z.string().uuid().nullish(),
-    code: z.string(),
     studyYear: z.number(),
     isLastStudyYear: z.boolean(),
     baseScore: AcademicRankingBaseTypeSchema,
@@ -43,13 +43,13 @@ const baseSchema = z.object({
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
     id: z.string(),
+    code: z.string().nullish(),
     active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
-    code: z.string(),
     studyYear: z.number(),
     isLastStudyYear: z.boolean(),
     baseScore: AcademicRankingBaseTypeSchema,
@@ -111,13 +111,13 @@ export const StudentYearResultPrismaCreateSchema = baseSchemaWithoutDefaults.par
  */
 export const StudentYearResultPrismaUpdateSchema = z.object({
     id: z.string(),
+    code: z.string().nullish(),
     active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
-    code: z.string(),
     studyYear: z.union([z.number(), z.record(z.string(), z.unknown())]),
     isLastStudyYear: z.boolean(),
     baseScore: AcademicRankingBaseTypeSchema,

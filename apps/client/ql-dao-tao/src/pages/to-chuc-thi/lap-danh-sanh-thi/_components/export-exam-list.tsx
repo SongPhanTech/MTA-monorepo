@@ -79,7 +79,7 @@ interface ExportExamListProps {
 // Helper function to sanitize Excel sheet name
 const sanitizeSheetName = (name: string): string => {
     return name
-        .replace(/[*?:\\/\[\]]/g, '') // Remove invalid characters
+        .replace(/[*?:\\/[\]]/g, '') // Remove invalid characters
         .replace(/\s+/g, ' ') // Normalize whitespace
         .trim()
         .slice(0, 31) // Excel limits sheet name to 31 chars
@@ -277,8 +277,8 @@ function createExamSheet(worksheet: ExcelJS.Worksheet, params: CreateExamSheetPa
         'Họ và tên',
         'Ngày sinh',
         'Lớp',
-        'Điểm CC',
         'Điểm TX',
+        'Điểm ĐK',
         'Điểm thi',
         'Cấm thi',
         'Lý do cấm thi',
@@ -299,8 +299,8 @@ function createExamSheet(worksheet: ExcelJS.Worksheet, params: CreateExamSheetPa
         { width: 30 }, // Họ và tên
         { width: 12 }, // Ngày sinh
         { width: 15 }, // Lớp
-        { width: 10 }, // Điểm CC
         { width: 10 }, // Điểm TX
+        { width: 10 }, // Điểm ĐK
         { width: 10 }, // Điểm thi
         { width: 10 }, // Cấm thi
         { width: 25 }, // Lý do cấm thi
@@ -338,8 +338,8 @@ function createExamSheet(worksheet: ExcelJS.Worksheet, params: CreateExamSheetPa
         row.getCell(3).style = cellStyleLeft // Họ tên
         row.getCell(4).style = cellStyle // Ngày sinh
         row.getCell(5).style = cellStyle // Lớp
-        row.getCell(6).style = cellStyle // Điểm CC
-        row.getCell(7).style = cellStyle // Điểm TX
+        row.getCell(6).style = cellStyle // Điểm TX
+        row.getCell(7).style = cellStyle // Điểm ĐK
         row.getCell(8).style = cellStyle // Điểm thi
         row.getCell(9).style = cellStyle // Cấm thi
         row.getCell(10).style = cellStyleLeft // Lý do cấm thi

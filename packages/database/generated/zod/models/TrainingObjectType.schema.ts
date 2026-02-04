@@ -51,6 +51,8 @@ const relationSchema = z.object({
     trainingBlocks: z.array(z.unknown()).optional(),
     surveyObjectType: z.array(z.unknown()).optional(),
     survey: z.array(z.unknown()).optional(),
+    scoreCorrectionTicket: z.array(z.unknown()).optional(),
+    scoreLinkSheet: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

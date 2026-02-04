@@ -1,4 +1,3 @@
-// @ts-nocheck
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
@@ -17,10 +16,10 @@ import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Flex, message, Row } from 'antd'
 import dayjs from 'dayjs'
 import { BookPlus } from 'lucide-react'
+import { useRouter } from 'next/router'
 import type React from 'react'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { useRouter } from 'next/router'
 
 export default function ThesisSession() {
     const { can, canSome } = useAbility()
@@ -131,7 +130,7 @@ export default function ThesisSession() {
                         <Col span={24}>
                             <Flex justify="end">
                                 {can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_XET_TOT_NGHIEP_QL_DOT_XET_TOT_LUAN_VAN,
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_LUAN_VAN_QL_DOT_XET_LUAN_VAN,
                                     'THEM'
                                 ) && (
                                     <Button onClick={handleModal} type="primary">
@@ -146,7 +145,7 @@ export default function ThesisSession() {
 
                 <Col span={24}>
                     <Table
-                        rowKey="key"
+                        rowKey="id"
                         id="thesis-session"
                         filters={filters}
                         setFilters={(value) => {
@@ -220,7 +219,7 @@ export default function ThesisSession() {
                                 align: 'center',
                                 fixed: 'right',
                                 hidden: !canSome(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_XET_TOT_NGHIEP_QL_DOT_XET_TOT_LUAN_VAN,
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_LUAN_VAN_QL_DOT_XET_LUAN_VAN,
                                     'XEM_CHI_TIET',
                                     'SUA',
                                     'XOA'
@@ -230,7 +229,7 @@ export default function ThesisSession() {
                                         return (
                                             <Row className="justify-center gap-2">
                                                 {can(
-                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_XET_TOT_NGHIEP_QL_DOT_XET_TOT_LUAN_VAN,
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_LUAN_VAN_QL_DOT_XET_LUAN_VAN,
                                                     'SUA'
                                                 ) && (
                                                     <EditIcon
@@ -242,7 +241,7 @@ export default function ThesisSession() {
                                                     />
                                                 )}
                                                 {can(
-                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_XET_TOT_NGHIEP_QL_DOT_XET_TOT_LUAN_VAN,
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_LUAN_VAN_QL_DOT_XET_LUAN_VAN,
                                                     'XOA'
                                                 ) && (
                                                     <DeleteIcon

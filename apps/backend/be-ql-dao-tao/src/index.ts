@@ -17,12 +17,15 @@ import CurriculumSubjectApp from './api/curriculum-subject'
 import DiplomaVerificationApp from './api/diploma-verification'
 import ExamApp from './api/exam'
 import ExamScoreApp from './api/exam-score'
+import ExportStudentSemesterResultApp from './api/export-student-result'
+import ExportStudentYearResultApp from './api/export-student-year-result'
 import FixedClassApp from './api/fixed-class'
 import GraduationApp from './api/graduation'
 import ImportApp from './api/import'
 import LecturerApp from './api/lecturer'
 import PlanTraining from './api/plan-training'
 import RoomApp from './api/room'
+import ScoreCorrectionApp from './api/score-correction'
 import Stats from './api/stats'
 import StudentApp from './api/student'
 import SubjectClassApp from './api/subject-class'
@@ -96,9 +99,12 @@ app.route('/api/graduation', GraduationApp)
 app.route('/api/plan-training', PlanTraining)
 app.route('/api/stats', Stats)
 app.route('/api/import', ImportApp)
+app.route('/api/score-correction', ScoreCorrectionApp)
 app.route('/api/archived-score', ArchivedScoreApp)
 app.route('/api/exam', ExamApp)
 app.route('/api/exam-score', ExamScoreApp)
+app.route('/api/student-result', ExportStudentSemesterResultApp)
+app.route('/api/student-result', ExportStudentYearResultApp)
 
 const nv = await prisma.userProfile.findFirstOrThrow()
 

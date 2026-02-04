@@ -1,15 +1,18 @@
+import { DownloadOutlined, FileExcelOutlined, FileWordOutlined } from '@ant-design/icons'
+import HtmlTruncate from '@components/commons/html-truncate'
+import Table from '@components/commons/table'
 import useSpinner from '@hooks/spinner'
 import { useGetSurveyObjectCount, useGetSurveyStatistics } from '@workspace/libs/api/exam'
-import { Button, Col, Empty, Row, Typography } from 'antd'
-import { useRouter } from 'next/router'
-import { useMemo } from 'react'
+import type { GetSurveyStatistics200QuestionsItemAnswersItem } from '@workspace/libs/api/schemas'
+import { Button, Col, Dropdown, Empty, Row, Typography } from 'antd'
+import { Document, Table as DocxTable, Packer, Paragraph, TableCell, TableRow, TextRun } from 'docx'
 // @ts-nocheck
 import ReactECharts from 'echarts-for-react'
-import { GetSurveyStatistics200QuestionsItemAnswersItem } from '@workspace/libs/api/schemas'
-import Table from '@components/commons/table'
 import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
-import HtmlTruncate from '@components/commons/html-truncate'
+import { useRouter } from 'next/router'
+import { useMemo } from 'react'
+
 const { Title } = Typography
 
 export interface CriteriaItem {
@@ -144,7 +147,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
             }
         }
         return {}
-    }, [dataLevel])
+    }, [dataLevel, convertToStackChartData])
 
     const exportTemplate = async (name: string, dataTable: any, dataTableInfo: any) => {
         // Tạo workbook mới
@@ -268,8 +271,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                   'STT',
                   'Câu hỏi',
                   'Tên Câu hỏi',
-                  // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
-                  ...dataTable[0]?.answers?.map((i: any) => i?.description),
+                  ...dataTable[0].answers.map((i: any) => i?.description),
               ]
             : ['STT', 'Câu hỏi', 'Tên Câu hỏi']
         headerRow.eachCell((cell: any) => {
@@ -316,6 +318,27 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
     }
 
     const renderTable = (dataTable: any) => {
+        if (!dataTable?.length) return
+        let average = dataTable[0]?.answers.map((i: any) => {
+            return { ...i, total: 0, count: 0 }
+        })
+        dataTable.forEach((e: any) => {
+            average = average.map((i: any) => {
+                return {
+                    ...i,
+                    total: i.total + e.answers.find((a: any) => a.id === i.id)?.total,
+                    count: i.count + e.answers.find((a: any) => a.id === i.id)?.count,
+                }
+            })
+        })
+        const datarender = [
+            ...dataTable,
+            {
+                name: 'Trung bình',
+                answers: average,
+                id: 'average',
+            },
+        ]
         return (
             <Table
                 columns={
@@ -333,18 +356,23 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                                   align: 'center',
                                   width: 100,
                                   render: (_, record, index) => {
-                                      return `Câu hỏi ${index + 1}`
+                                      return index === datarender.length - 1
+                                          ? 'ĐGTB'
+                                          : `Câu hỏi ${index + 1}`
                                   },
                               },
                               {
                                   title: 'Nội dung câu hỏi',
                                   align: 'left',
                                   render: (_, record, index) => {
-                                      return <HtmlTruncate>{record?.name}</HtmlTruncate>
+                                      return index === datarender.length - 1 ? (
+                                          ''
+                                      ) : (
+                                          <HtmlTruncate>{record?.name}</HtmlTruncate>
+                                      )
                                   },
                               },
-                              // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
-                              ...dataTable[0]?.answers?.map((i: any) => ({
+                              ...dataTable[0].answers.map((i: any) => ({
                                   title: i?.description,
                                   id: i?.id,
                                   dataIndex: i?.id,
@@ -383,6 +411,122 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                 pagination={false}
             />
         )
+    }
+    const exportWordReport = async (name: string, dataTable: any, dataTableInfo: any) => {
+        const centerCell = (text = '') =>
+            new TableCell({
+                children: [
+                    new Paragraph({
+                        alignment: 'center',
+                        children: [new TextRun(text)],
+                    }),
+                ],
+            })
+
+        // ===== BẢNG THỐNG KÊ CHUNG =====
+        const summaryRows = [
+            new TableRow({
+                children: [centerCell('STT'), centerCell('Đối tượng'), centerCell('Trạng thái')],
+            }),
+            ...(dataTableInfo || []).map(
+                (i: any, idx: number) =>
+                    new TableRow({
+                        children: [
+                            centerCell(String(idx + 1)),
+                            new TableCell({
+                                children: [new Paragraph(i?.name || '')],
+                            }),
+                            centerCell(`${i?.taken || 0}/${i?.total || 0}`),
+                        ],
+                    })
+            ),
+        ]
+
+        // ===== BẢNG THEO CÂU HỎI =====
+        const answerHeaders = dataTable?.[0]?.answers?.map((a: any) => a.description) || []
+
+        const questionRows = [
+            new TableRow({
+                children: [
+                    centerCell('STT'),
+                    centerCell('Câu hỏi'),
+                    new TableCell({ children: [new Paragraph('Nội dung câu hỏi')] }),
+                    ...answerHeaders.map(centerCell),
+                ],
+            }),
+            ...dataTable.map((q: any, idx: number) => {
+                const percentData = calculatePercent(q.answers)
+                return new TableRow({
+                    children: [
+                        centerCell(String(idx + 1)),
+                        centerCell(`Câu hỏi ${idx + 1}`),
+                        new TableCell({ children: [new Paragraph(q.name || '')] }),
+                        ...percentData.map((p) =>
+                            centerCell(`${p.percent}% (${p.count}/${p.total})`)
+                        ),
+                    ],
+                })
+            }),
+        ]
+
+        const doc = new Document({
+            sections: [
+                {
+                    properties: {
+                        page: {
+                            size: { orientation: 'landscape' },
+                            margin: { top: 720, bottom: 720, left: 720, right: 720 },
+                        },
+                    },
+                    children: [
+                        new Paragraph({
+                            alignment: 'center',
+                            spacing: { after: 300 },
+                            children: [
+                                new TextRun({
+                                    text: `BÁO CÁO KHẢO SÁT: ${name || ''}`,
+                                    bold: true,
+                                    size: 28,
+                                }),
+                            ],
+                        }),
+
+                        new Paragraph({
+                            children: [
+                                new TextRun({
+                                    text: 'Thống kê chung',
+                                    bold: true,
+                                }),
+                            ],
+                            spacing: { after: 200 },
+                        }),
+                        new DocxTable({
+                            width: { size: 100, type: 'pct' },
+                            rows: summaryRows,
+                        }),
+
+                        new Paragraph({ spacing: { after: 300 } }),
+
+                        new Paragraph({
+                            children: [
+                                new TextRun({
+                                    text: 'Thống kê theo từng Câu hỏi',
+                                    bold: true,
+                                }),
+                            ],
+                            spacing: { after: 200 },
+                        }),
+                        new DocxTable({
+                            width: { size: 100, type: 'pct' },
+                            rows: questionRows,
+                        }),
+                    ],
+                },
+            ],
+        })
+
+        const blob = await Packer.toBlob(doc)
+        saveAs(blob, `Bao_cao_khao_sat_${name || ''}.docx`)
     }
 
     return (
@@ -433,19 +577,38 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                         <div className="p-4 flex justify-between">
                             <Title level={4}>Thống kê theo từng Câu hỏi</Title>
                             {dataLevel?.status === 200 && (
-                                <Button
-                                    type="primary"
-                                    onClick={() =>
-                                        exportTemplate(
-                                            dataLevel?.data?.surveyName,
-                                            dataLevel?.data?.questions,
-                                            data?.data
-                                        )
-                                    }
-                                    size="small"
+                                <Dropdown
+                                    menu={{
+                                        items: [
+                                            {
+                                                key: 'word',
+                                                label: 'Xuất Word',
+                                                icon: <FileWordOutlined />,
+                                                onClick: () =>
+                                                    exportWordReport(
+                                                        dataLevel?.data?.surveyName,
+                                                        dataLevel?.data?.questions,
+                                                        data?.data
+                                                    ),
+                                            },
+                                            {
+                                                key: 'excel',
+                                                label: 'Xuất Excel',
+                                                icon: <FileExcelOutlined />,
+                                                onClick: () =>
+                                                    exportTemplate(
+                                                        dataLevel?.data?.surveyName,
+                                                        dataLevel?.data?.questions,
+                                                        data?.data
+                                                    ),
+                                            },
+                                        ],
+                                    }}
                                 >
-                                    Xuất báo cáo
-                                </Button>
+                                    <Button size="small" type="primary" icon={<DownloadOutlined />}>
+                                        Xuất dữ liệu
+                                    </Button>
+                                </Dropdown>
                             )}
                         </div>
                         <div className="flex-1 mb-6">
