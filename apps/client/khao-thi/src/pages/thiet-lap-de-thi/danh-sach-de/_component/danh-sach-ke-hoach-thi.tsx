@@ -300,7 +300,7 @@ export default function DanhSachKeHoachThi() {
 
                                 return (
                                     <div className="text-left">
-                                        <span className="text-blue-600 font-semibold mr-1">
+                                        <span className="font-semibold mr-1">
                                             <HighlightText
                                                 text={code}
                                                 searchText={filters.searchText}
@@ -415,7 +415,7 @@ export default function DanhSachKeHoachThi() {
                             render: (_, record) => {
                                 return record?.subjectClass.length > 0
                                     ? record?.subjectClass
-                                          .map((i: SubjectClass) => i.name)
+                                          .map((i: SubjectClass) => `${i?.code||''}-${i?.name||''}`)
                                           .join(', ')
                                     : ''
                             },
