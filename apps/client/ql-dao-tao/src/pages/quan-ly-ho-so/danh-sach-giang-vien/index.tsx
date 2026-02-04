@@ -189,7 +189,7 @@ export default function UserProfilePageLecture() {
         [filters, canXemTatCa, orgIds]
     )
 
-    const { data = [], refetch } = useFindManyLecturer({
+    const { data: lecturerData = [], refetch } = useFindManyLecturer({
         where,
         include: {
             userProfile: {
@@ -213,6 +213,8 @@ export default function UserProfilePageLecture() {
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
+
+    const data = lecturerData
 
     const { data: count, refetch: refetchCount } = useCountLecturer({
         where: {
@@ -298,6 +300,7 @@ export default function UserProfilePageLecture() {
                     <Table
                         rowSelection={{
                             selectedRowKeys,
+                            preserveSelectedRowKeys: true,
                             onChange: (keys) => {
                                 setSelectedRowKeys(keys)
                             },
