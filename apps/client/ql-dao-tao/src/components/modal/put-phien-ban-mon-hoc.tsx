@@ -2,6 +2,7 @@ import { queryClient } from '@api/index'
 import DocumentPaths from '@components/commons/documentPaths'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
+import { RichTextEditor } from '@components/commons/rich-text-editor'
 import Select from '@components/commons/select'
 import Tabs from '@components/commons/tabar'
 import { useExamTypeOptions } from '@hooks/examType'
@@ -720,11 +721,7 @@ const PutVersionSubjectModal = () => {
                                 label: 'Mục tiêu',
                                 children: (
                                     <FormItem form={form} name="objectives">
-                                        <Input.TextArea
-                                            rows={6}
-                                            placeholder="Nhập mục tiêu"
-                                            readOnly={input?.isLocked}
-                                        />
+                                        <RichTextEditor editable={!input?.isLocked} />
                                     </FormItem>
                                 ),
                             },
@@ -733,11 +730,7 @@ const PutVersionSubjectModal = () => {
                                 label: 'Chuẩn đầu ra',
                                 children: (
                                     <FormItem form={form} name="learningOutcome">
-                                        <Input.TextArea
-                                            rows={6}
-                                            placeholder="Nhập chuẩn đầu ra"
-                                            readOnly={input?.isLocked}
-                                        />
+                                        <RichTextEditor editable={!input?.isLocked} />
                                     </FormItem>
                                 ),
                             },
@@ -746,11 +739,7 @@ const PutVersionSubjectModal = () => {
                                 label: 'Cấu trúc chương trình đào',
                                 children: (
                                     <FormItem form={form} name="structure">
-                                        <Input.TextArea
-                                            rows={6}
-                                            placeholder="Nhập cấu trúc chương trình đào tạo"
-                                            readOnly={input?.isLocked}
-                                        />
+                                        <RichTextEditor editable={!input?.isLocked} />
                                     </FormItem>
                                 ),
                             },
@@ -759,11 +748,7 @@ const PutVersionSubjectModal = () => {
                                 label: 'Kế hoạch và phương pháp dạy học',
                                 children: (
                                     <FormItem form={form} name="guild">
-                                        <Input.TextArea
-                                            rows={6}
-                                            placeholder="Nhập kế hoạch và phương pháp dạy học"
-                                            readOnly={input?.isLocked}
-                                        />
+                                        <RichTextEditor editable={!input?.isLocked} />
                                     </FormItem>
                                 ),
                             },
@@ -772,11 +757,7 @@ const PutVersionSubjectModal = () => {
                                 label: 'Đánh giá kết quả học tập',
                                 children: (
                                     <FormItem form={form} name="academicResults">
-                                        <Input.TextArea
-                                            rows={6}
-                                            placeholder="Nhập đánh giá kết quả học tập"
-                                            readOnly={input?.isLocked}
-                                        />
+                                        <RichTextEditor editable={!input?.isLocked} />
                                     </FormItem>
                                 ),
                             },
@@ -785,11 +766,7 @@ const PutVersionSubjectModal = () => {
                                 label: 'Cơ sở vật chất, học liệu',
                                 children: (
                                     <FormItem form={form} name="materials">
-                                        <Input.TextArea
-                                            rows={6}
-                                            placeholder="Nhập cơ sở vật chất, học liệu"
-                                            readOnly={input?.isLocked}
-                                        />
+                                        <RichTextEditor editable={!input?.isLocked} />
                                     </FormItem>
                                 ),
                             },
@@ -798,11 +775,7 @@ const PutVersionSubjectModal = () => {
                                 label: 'Quy định của học phần',
                                 children: (
                                     <FormItem form={form} name="rules">
-                                        <Input.TextArea
-                                            rows={6}
-                                            placeholder="Nhập quy định của học phần"
-                                            readOnly={input?.isLocked}
-                                        />
+                                        <RichTextEditor editable={!input?.isLocked} />
                                     </FormItem>
                                 ),
                             },
