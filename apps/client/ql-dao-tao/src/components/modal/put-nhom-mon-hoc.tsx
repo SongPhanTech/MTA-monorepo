@@ -15,8 +15,8 @@ import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import { buildOrgTree } from '@lib/utils'
-import TreeSelect from '@/components/commons/tree-select'
 import { whereOrganization } from '@workspace/libs/constants'
+import TreeSelect from '@/components/commons/tree-select'
 export type PutSubjectFormType = Subject
 dayjs.locale('vi')
 const PutSubjectModal = () => {

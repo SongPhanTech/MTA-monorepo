@@ -1,5 +1,5 @@
 import { useFindFirstSurveySession } from '@workspace/db/hooks'
-import { GetSurveyResult } from '@workspace/libs/api/schemas'
+import type { GetSurveyResult } from '@workspace/libs/api/schemas'
 import { Modal as AntdModal, Button, Col, Form, Input, Radio, Row, Skeleton, Table } from 'antd'
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'

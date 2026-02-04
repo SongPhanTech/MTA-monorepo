@@ -9,10 +9,9 @@ import {
     useFindManyTrainingCourse,
 } from '@workspace/db/hooks'
 import { updateStudentStatus } from '@workspace/libs/api/training'
-import { Select } from '@workspace/ui'
+import { Select, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Form, message, Switch } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
 
 const ModalChuyenLopLuuBan = () => {
     const [form] = Form.useForm()

@@ -7,13 +7,12 @@ import {
     EyeOutlined,
     ReloadOutlined,
 } from '@ant-design/icons'
+import DocumentSidebar from '@components/commons/document-sidebar'
 import Table from '@components/commons/table'
 import { FileUploadIcon } from '@components/commons/upload'
-import DocumentSidebar from '@components/commons/document-sidebar'
 import DeleteIcon from '@components/icons/delete'
 import DefaultLayout from '@layouts/default-layout'
 import { formatDateReadable, formatNiceBytes } from '@lib/utils'
-import { fetchPresignedGetObject } from '@/lib/api/common/commonComponents'
 import { $Enums } from '@workspace/db'
 import {
     useCountDocument,
@@ -27,6 +26,7 @@ import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { deleteVectorRecordHoiDap, reloadBM25 } from '@/api/chunking_and_vectorize'
 import { useTopics } from '@/hooks/useTopics'
+import { fetchPresignedGetObject } from '@/lib/api/common/commonComponents'
 
 function Page() {
     const [filters, setFilters] = useState<{

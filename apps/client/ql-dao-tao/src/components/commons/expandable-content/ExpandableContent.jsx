@@ -1,4 +1,4 @@
-import { useState, useRef, useLayoutEffect } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
 import './ExpandableContent.css'
 
 const ExpandableContent = ({ htmlContent }) => {

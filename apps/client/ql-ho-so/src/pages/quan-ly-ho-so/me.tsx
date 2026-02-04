@@ -54,9 +54,9 @@ import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import './tao-moi/index.css'
-import { getRuntimeEnv } from '@workspace/libs/utils'
 import ChucVuChinhQuyenForm from '@components/modal/quan-ly-ho-so/form/chuc-vu-chinh-quyen'
 import ChucVuDangForm from '@components/modal/quan-ly-ho-so/form/chuc-vu-dang'
+import { getRuntimeEnv } from '@workspace/libs/utils'
 
 interface itemType {
     id: string

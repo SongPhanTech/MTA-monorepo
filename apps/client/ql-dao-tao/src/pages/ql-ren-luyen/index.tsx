@@ -212,19 +212,19 @@ export default function QuanLyDiemRenLuyen() {
     useEffect(() => {
         if (isOpen) {
             const handleScroll = (e: Event) => {
-                const target = e.target as HTMLElement;
+                const target = e.target as HTMLElement
                 if (target?.classList?.contains('rc-virtual-list-holder')) {
-                    return;
+                    return
                 }
-                setIsOpen(false);
-            };
-            window.addEventListener('scroll', handleScroll, true);
-            
+                setIsOpen(false)
+            }
+            window.addEventListener('scroll', handleScroll, true)
+
             return () => {
-                window.removeEventListener('scroll', handleScroll, true);
-            };
+                window.removeEventListener('scroll', handleScroll, true)
+            }
         }
-    }, [isOpen]);
+    }, [isOpen])
 
     return (
         <div className="p-4">

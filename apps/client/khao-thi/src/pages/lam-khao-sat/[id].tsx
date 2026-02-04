@@ -7,11 +7,12 @@ import { cn, toRoman } from '@lib/utils'
 import type { SurveySession } from '@workspace/db'
 import { getPublicSurvey, useSavePublicSurvey, validateUserSurvey } from '@workspace/libs/api/exam'
 import type { GetSurveyResult } from '@workspace/libs/api/schemas/getSurveyResult'
-import { Button, Col, Flex, Form, Input, message, Modal, Radio, Row } from 'antd'
+import { Button, Col, Flex, Form, Input, Modal, message, Radio, Row } from 'antd'
 
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
 import Confetti from 'react-confetti'
+
 type PutSurveySession = SurveySession & {
     responses: {
         surveyQuestionId: string
@@ -86,7 +87,7 @@ function TakeTestPage() {
             return { ...i, index: toRoman(index + 1) }
         })
         // const general=grouped.filter((i)=>i?.)
-        const flatData = grouped.map((i) => [i, ...(i.question || [])]).flat()
+        const flatData = grouped.flatMap((i) => [i, ...(i.question || [])])
         return flatData || []
         // return classGroups
     }, [survey?.surveyQuestion])

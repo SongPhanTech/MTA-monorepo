@@ -529,8 +529,7 @@ export default function ArchivedCertificate() {
                             width: 50,
                             align: 'center',
                             fixed: 'left',
-                            render: (_, __, index) =>
-                                index + 1 + (currentPage - 1) * numberOfPages,
+                            render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,
                         },
                         {
                             title: 'Mã học viên',

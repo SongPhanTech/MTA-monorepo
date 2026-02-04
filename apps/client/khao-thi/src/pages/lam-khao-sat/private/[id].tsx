@@ -98,7 +98,7 @@ function TakeTestPage() {
             return { ...i, index: toRoman(index + 1) }
         })
         // const general=grouped.filter((i)=>i?.)
-        const flatData = grouped.map((i) => [i, ...(i.question || [])]).flat()
+        const flatData = grouped.flatMap((i) => [i, ...(i.question || [])])
         return flatData || []
         // return classGroups
     }, [survey?.surveyQuestion])

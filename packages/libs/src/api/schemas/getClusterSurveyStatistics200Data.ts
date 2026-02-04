@@ -4,8 +4,9 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetClusterSurveyStatistics200DataQuestionsItem } from './getClusterSurveyStatistics200DataQuestionsItem'
+
 import type { GetClusterSurveyStatistics200DataAverageItem } from './getClusterSurveyStatistics200DataAverageItem'
+import type { GetClusterSurveyStatistics200DataQuestionsItem } from './getClusterSurveyStatistics200DataQuestionsItem'
 
 export type GetClusterSurveyStatistics200Data = {
     questions: GetClusterSurveyStatistics200DataQuestionsItem[]

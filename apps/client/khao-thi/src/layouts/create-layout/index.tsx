@@ -3,6 +3,7 @@ import logo_mta from '@assets/images/khaothi.svg'
 import SiderCreateLayout from '@components/layouts/sider'
 import { useMenuList } from '@hooks/menu-list'
 import { cn } from '@lib/utils'
+import { useSession } from '@workspace/auth/react'
 import { CONFIG_KEY } from '@workspace/constant'
 import { useFindUniqueConfig } from '@workspace/db/hooks'
 import { getDynamicBreadcrumb } from '@workspace/permissions/hooks'
@@ -13,7 +14,6 @@ import { useRouter } from 'next/router'
 import { type ReactNode, useEffect, useMemo, useState } from 'react'
 import { IdleTimerProvider } from 'react-idle-timer'
 import HeaderApp from '@/components/header'
-import { useSession } from '@workspace/auth/react'
 
 const { Header, Content } = Layout
 interface breadcrumListProps {

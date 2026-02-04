@@ -1,4 +1,3 @@
-import { getDeadlineStatus } from '@/utils/getDeadlineStatus'
 import CommentList from '@components/commons/comment-list'
 import { RichTextEditor } from '@components/commons/rich-text-editor'
 import { getStatusConfig } from '@constants/constants'
@@ -10,6 +9,7 @@ import { sqlTransaction } from '@workspace/libs/api/model'
 import { Badge, Button, Card, Collapse, Form, message, Tag } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
+import { getDeadlineStatus } from '@/utils/getDeadlineStatus'
 
 export type PutRequirementCriterion = {
     criteria: Record<string, any>

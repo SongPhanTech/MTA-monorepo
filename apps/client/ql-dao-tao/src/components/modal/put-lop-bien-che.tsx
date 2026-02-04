@@ -29,9 +29,9 @@ import { queryClient } from '@api/index'
 import TreeSelectDepartment from '@components/commons/department-select/TreeSelectDepartment'
 import LectureTreeSelect from '@components/commons/lecture-select-multi/TreeSelectLecture'
 import { buildOrgTree } from '@lib/utils'
+import { whereOrganization } from '@workspace/libs/constants'
 import { useFindManyTrainingObjectTypePermission, useTrainingObjectTypeStore } from '@workspace/ui'
 import TreeSelect from '@/components/commons/tree-select'
-import { whereOrganization } from '@workspace/libs/constants'
 export type PutFixedClass = FixedClass & {
     trainingObjectTypeId: string | null
     trainingMajorId: string | null

@@ -1,4 +1,7 @@
+import { FolderOpenOutlined, UserOutlined } from '@ant-design/icons'
 import Select from '@components/commons/select'
+import SurveylecturerReport from '@components/sub-pages/khao-sat/survey-lecturer-report'
+import SurveyOrganizationReport from '@components/sub-pages/khao-sat/survey-oragation-report'
 import DefaultLayout from '@layouts/default-layout'
 import {
     useFindManyClusterSurvey,
@@ -6,19 +9,17 @@ import {
     useFindManyLecturer,
     useFindUniqueTrainingObjectType,
 } from '@workspace/db/hooks'
-import { Col, Flex, Input, Row, Skeleton, Tree } from 'antd'
-import { useMemo, useState } from 'react'
 // import OrganizationSurveyReport from '@/components/sub-pages/khao-sat/bao-cao-don-vi'
 // import ClusterSurveyReport from '@components/sub-pages/khao-sat/bao-cao-cum'
 // import LecturerSurveyReport from '@components/sub-pages/khao-sat/bao-cao-giang-vien'
 // import SurveyReport from '@components/sub-pages/khao-sat/bao-cao'
 import { useSemesterStore, useTrainingMajorStore } from '@workspace/ui'
-import { FolderOpenOutlined, UserOutlined } from '@ant-design/icons'
-import SurveylecturerReport from '@components/sub-pages/khao-sat/survey-lecturer-report'
-import SurveyOrganizationReport from '@components/sub-pages/khao-sat/survey-oragation-report'
+import { Col, Flex, Input, Row, Skeleton, Tree } from 'antd'
+import { debounce } from 'lodash'
+import { useMemo, useState } from 'react'
 // import ClusterSurveyReport from '@components/sub-pages/khao-sat/bao-cao-cum';
 import OrganizationSurveyReport from '@/components/sub-pages/khao-sat/bao-cao-don-vi'
-import { debounce } from 'lodash'
+
 interface MyTreeNode {
     title: string
     key: string
@@ -415,7 +416,7 @@ export default function BaoCaoGiangVien() {
                 )}
             </Col>
 
-            <Col span={18}>{isFetching ?<Skeleton />:items}</Col>
+            <Col span={18}>{isFetching ? <Skeleton /> : items}</Col>
         </Row>
     )
 }
