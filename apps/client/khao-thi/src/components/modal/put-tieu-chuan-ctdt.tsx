@@ -20,6 +20,7 @@ const PutStandardCatalog = () => {
         id: string
         count: number
         objectType?: $Enums.StandardCatalogType
+        standardSetId?: string
     }>({
         tag: 'PutStandardCatalog',
         onClose: form.resetFields,
@@ -29,13 +30,14 @@ const PutStandardCatalog = () => {
     const { mutateAsync: createStandardCatalog } = useCreateStandardCatalog()
     const { mutateAsync: updateStandardCatalog } = useUpdateStandardCatalog()
     async function onOk(output?: PutStandardCatalogType) {
-        if (!output) return
+        if (!output || !input?.standardSetId) return
         try {
             showSpinner()
             const data = {
                 order: output.order,
                 name: output.name.trim(),
                 objectType: output.objectType,
+                standardSetId: input.standardSetId,
             }
             if (input?.id) {
                 await updateStandardCatalog({
@@ -95,7 +97,7 @@ const PutStandardCatalog = () => {
             onCancel={onClose}
             maskClosable={true}
             title={input?.id ? 'Chỉnh sửa tiêu chuẩn' : 'Thêm mới tiêu chuẩn'}
-            className="w-[30vw]"
+            className="w-[50vw]"
         >
             <Col span={24}>
                 <FormItem form={form} name="order" label="Thứ tự" required>
@@ -118,6 +120,7 @@ const PutStandardCatalog = () => {
             <Col span={24}>
                 <FormItem form={form} name="objectType" label="Loại kho" required>
                     <Select
+                        disabled
                         placeholder="Chọn loại kho"
                         options={STANDARD_CATALOG_TYPE_OPTIONS.map(({ value, label }) => ({
                             value,

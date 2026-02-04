@@ -11,10 +11,12 @@ import { Button, message, Typography } from 'antd'
 import clsx from 'clsx'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
+export const STORAGE_KEY = 'selected-standard-id'
+
 export const store = new Store<{
     selectedStandardSetId: string | undefined
 }>({
-    selectedStandardSetId: undefined,
+    selectedStandardSetId: typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEY) || undefined : undefined,
 })
 
 interface SidebarProps {
@@ -83,9 +85,10 @@ const SidebarStandardSet = ({ objectType }: SidebarProps) => {
                 {evaluationStandardSets?.map((standardSet) => (
                     <div
                         key={standardSet.id}
-                        onClick={() =>
+                        onClick={() => {
+                            localStorage.setItem(STORAGE_KEY, standardSet.id)
                             store.setState((s) => ({ ...s, selectedStandardSetId: standardSet.id }))
-                        }
+                        }}
                         className={clsx(
                             'p-2 rounded hover:shadow-sm transition-shadow cursor-pointer',
                             selectedStandardSetId === standardSet.id
