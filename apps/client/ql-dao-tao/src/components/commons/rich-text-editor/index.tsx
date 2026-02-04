@@ -280,7 +280,7 @@ export function RichTextEditor({
             },
         },
         immediatelyRender: false,
-    })
+    });
 
     async function uploadImageFile(file: File, editor: Editor | null) {
         if (!editor || editor.isDestroyed) {
