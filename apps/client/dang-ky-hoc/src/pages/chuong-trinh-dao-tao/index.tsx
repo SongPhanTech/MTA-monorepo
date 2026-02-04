@@ -13,13 +13,13 @@ import {
     useFindUniqueCurriculumVersion,
     useFindUniqueUserProfile,
 } from '@workspace/db/hooks'
-import { whereOrganization } from '@workspace/libs/constants'
 import { useAbility } from '@workspace/permissions/hooks'
 import { cn } from '@workspace/ui/lib/utils'
 import { Col, Divider, Row, Tooltip } from 'antd'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { whereOrganization } from '@workspace/libs/constants'
 export default function TrainingProgramSubjects() {
     const { can, canSome } = useAbility()
     const [filters, setFilters] = useState<FilterProps>({

@@ -1,19 +1,19 @@
-import { queryClient } from '@api/index'
-import FormItem from '@components/commons/form-item'
-import PutFormModal from '@components/commons/put-modal'
-import Select from '@components/commons/select'
-import { LEVEL_COLUMNS, QUESTION_TYPE_OPTIONS } from '@constants/constants'
-import type { ConfigExam } from '@workspace/db/client'
+import { useDisclosure } from 'react-hook-disclosure-modal'
+import { Col, Form, Input, Row, InputNumber, message } from 'antd'
+import { useEffect } from 'react'
 import {
     useCreateKnowledgeBlock,
     useFindManyKnowledgeBlock,
     useFindUniqueKnowledgeBlock,
     useUpdateKnowledgeBlock,
 } from '@workspace/db/hooks'
+import { LEVEL_COLUMNS, QUESTION_TYPE_OPTIONS } from '@constants/constants'
+import { queryClient } from '@api/index'
+import PutFormModal from '@components/commons/put-modal'
+import FormItem from '@components/commons/form-item'
+import Select from '@components/commons/select'
+import type { ConfigExam } from '@workspace/db/client'
 import { sqlTransaction } from '@workspace/libs/api/model'
-import { Col, Form, Input, InputNumber, message, Row } from 'antd'
-import { useEffect } from 'react'
-import { useDisclosure } from 'react-hook-disclosure-modal'
 export interface KnowledgeBlockFormData extends Record<string, unknown> {
     name: string
     code: string

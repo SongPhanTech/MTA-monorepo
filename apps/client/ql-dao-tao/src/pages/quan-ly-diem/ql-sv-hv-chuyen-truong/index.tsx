@@ -15,11 +15,11 @@ import {
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import { Select } from '@workspace/ui'
 import { Button, Col, Flex, message, Row, Tag } from 'antd'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { Select } from '@workspace/ui'
 
 const ScoreConvertStatus = $Enums.ScoreConvertStatus
 type LeafStatus = $Enums.ScoreConvertStatus

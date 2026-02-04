@@ -53,7 +53,7 @@
 }
 
 .ant-menu-inline-collapsed .ant-menu-title-content {
-    display: none;
+    display: none !important;
 }
 
 .ant-menu-inline-collapsed .ant-menu-item-selected {

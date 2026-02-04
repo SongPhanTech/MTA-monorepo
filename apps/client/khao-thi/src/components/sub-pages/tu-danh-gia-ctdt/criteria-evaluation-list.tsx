@@ -1,13 +1,13 @@
-import CommentList from '@components/commons/comment-list'
 import { RichTextEditor } from '@components/commons/rich-text-editor'
-import ExportAllCriteriaEvaluation from '@components/modal/export-all-criteria-evaluation'
-import { getStatusConfig } from '@constants/constants'
-import type { DataTabEvaluationCriterionType } from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/standar-reports'
-import { $Enums } from '@workspace/db/client'
-import { Badge, Button, Collapse, Form, Tag } from 'antd'
-import dayjs from 'dayjs'
+import { Collapse, Form, Tag, Button, Badge } from 'antd'
 import { useEffect, useState } from 'react'
+import { $Enums } from '@workspace/db/client'
+import dayjs from 'dayjs'
+import { getStatusConfig } from '@constants/constants'
 import { getDeadlineStatus } from '@/utils/getDeadlineStatus'
+import CommentList from '@components/commons/comment-list'
+import type { DataTabEvaluationCriterionType } from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/standar-reports'
+import ExportAllCriteriaEvaluation from '@components/modal/export-all-criteria-evaluation'
 
 export type PutRequirementCriterion = {
     criteria: Record<string, any>

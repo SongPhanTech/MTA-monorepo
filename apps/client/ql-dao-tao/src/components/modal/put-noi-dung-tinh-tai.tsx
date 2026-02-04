@@ -8,7 +8,7 @@ import {
     useFindUniqueLoadCategory,
     useUpdateLoadCategory,
 } from '@workspace/db/hooks'
-import { Checkbox, Col, Form, Input, InputNumber, message, Radio } from 'antd'
+import { Col, Form, Input, message, Radio, Checkbox, InputNumber } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'

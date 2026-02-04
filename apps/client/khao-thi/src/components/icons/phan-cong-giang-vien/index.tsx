@@ -1,6 +1,6 @@
 import { Tooltip } from 'antd'
 import clsx from 'clsx'
-import { type LucideProps, UserPlus } from 'lucide-react'
+import { UserPlus, type LucideProps } from 'lucide-react'
 
 type UserPlusIconProps = LucideProps & {
     title?: string

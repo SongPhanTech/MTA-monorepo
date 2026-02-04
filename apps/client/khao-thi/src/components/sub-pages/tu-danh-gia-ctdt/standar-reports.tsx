@@ -1,14 +1,14 @@
 import { RichTextEditor } from '@components/commons/rich-text-editor'
-import { getStatusConfig } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import type { DataTabEvaluationCriterionType } from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/standar-reports'
+import { Button, Collapse, Form, message, Tag } from 'antd'
+import { useEffect } from 'react'
+import { sqlTransaction } from '@workspace/libs/api/model'
 import { $Enums, type CriterionPeriod, type EvaluationCriterion } from '@workspace/db/client'
 import { useUpdateStandardPeriod } from '@workspace/db/hooks'
-import { sqlTransaction } from '@workspace/libs/api/model'
-import { Button, Collapse, Form, message, Tag } from 'antd'
 import dayjs from 'dayjs'
-import { useEffect } from 'react'
+import { getStatusConfig } from '@constants/constants'
 import { getDeadlineStatus } from '@/utils/getDeadlineStatus'
+import type { DataTabEvaluationCriterionType } from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/standar-reports'
 
 export type PutRequirementCriterion = {
     criteria: Record<string, any>

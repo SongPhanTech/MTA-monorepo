@@ -15,8 +15,8 @@ import 'dayjs/locale/vi'
 import DatePicker from '@components/commons/date-picker'
 import Select from '@components/commons/select'
 import { useGraduationSessionStatusOptions } from '@hooks/graduationSessionStatus'
-import { useFindManyTrainingObjectTypePermission } from '@workspace/ui'
 import { useEffect } from 'react'
+import { useFindManyTrainingObjectTypePermission } from '@workspace/ui'
 export type PutGraduationSession = GraduationSession
 dayjs.locale('vi')
 

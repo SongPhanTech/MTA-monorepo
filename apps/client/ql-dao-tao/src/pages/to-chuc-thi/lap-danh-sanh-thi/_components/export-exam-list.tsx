@@ -79,7 +79,7 @@ interface ExportExamListProps {
 // Helper function to sanitize Excel sheet name
 const sanitizeSheetName = (name: string): string => {
     return name
-        .replace(/[*?:\\/[\]]/g, '') // Remove invalid characters
+        .replace(/[*?:\\/\[\]]/g, '') // Remove invalid characters
         .replace(/\s+/g, ' ') // Normalize whitespace
         .trim()
         .slice(0, 31) // Excel limits sheet name to 31 chars

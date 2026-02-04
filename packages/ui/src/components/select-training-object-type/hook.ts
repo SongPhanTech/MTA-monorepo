@@ -1,12 +1,13 @@
-import type { DefaultError, UseQueryOptions } from '@tanstack/react-query'
 import { Store, useStore } from '@tanstack/react-store'
 import { $Enums } from '@workspace/db'
-import type { Prisma } from '@workspace/db/client'
 import { useFindManyTrainingObjectType } from '@workspace/db/hooks'
 import { useGetUserPermissionsPermissionAppCodeUserId } from '@workspace/libs/api/system'
 import { isDevEnvironment } from '@workspace/libs/utils'
-import type { ExtraQueryOptions } from '@zenstackhq/tanstack-query/runtime-v5'
 import { useEffect, useMemo } from 'react'
+import type { Prisma } from '@workspace/db/client'
+import type { UseQueryOptions } from '@tanstack/react-query'
+import type { ExtraQueryOptions } from '@zenstackhq/tanstack-query/runtime-v5'
+import type { DefaultError } from '@tanstack/react-query'
 
 export type TrainingObjectTypeState = {
     selectedTrainingObjectTypeId?: string

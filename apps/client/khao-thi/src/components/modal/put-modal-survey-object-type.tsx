@@ -31,7 +31,7 @@ import { Col, Form, Input, message, Row, Tabs, TreeSelect as TreeSelectAnt } fro
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import TreeSelect from '@/components/commons/tree-select'
-import type { TreeNodeType } from './put-modal-survey'
+import { TreeNodeType } from './put-modal-survey'
 export type PutSurveyObjectType = SurveyObjectType & {
     Organizations: string[]
     TrainingFields: string[]

@@ -18,9 +18,9 @@ import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import DocumentPaths from '@components/commons/documentPaths'
-import { whereOrganization } from '@workspace/libs/constants'
-import { useFindManyTrainingObjectTypePermission } from '@workspace/ui'
 import TreeSelect from '@/components/commons/tree-select'
+import { useFindManyTrainingObjectTypePermission } from '@workspace/ui'
+import { whereOrganization } from '@workspace/libs/constants'
 export type PutTrainingField = TrainingField & {
     trainingObjectTypeIds: string[]
     documentFiles?: DocumentFile[]

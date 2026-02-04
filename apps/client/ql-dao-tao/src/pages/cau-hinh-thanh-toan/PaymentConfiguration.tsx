@@ -9,7 +9,7 @@ import {
     useUpdateDefaultSupervisorPayAmount,
 } from '@workspace/db/hooks'
 import { Button, Col, Flex, Input, message, Row, Space } from 'antd'
-import { useEffect, useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const RoleType: Map<SupervisorRole | CouncilRole, string> = new Map([
     [CouncilRole.CHAIRMAN, 'Chủ tịch'],

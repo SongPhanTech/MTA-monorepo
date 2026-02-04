@@ -14,9 +14,9 @@ import DangKyHocChoLopQuanLy from './_components/dang-ky-hoc-cho-lop-quan-ly/dan
 import LopQuanLyDaGhep from './_components/dang-ky-hoc-cho-lop-quan-ly/lop-quan-ly-da-ghep'
 import CaNhanHocLai from './_components/dang-ky-hoc-lai/ca-nhan-hoc-lai'
 import DangKyHocLai from './_components/dang-ky-hoc-lai/dang-ky-hoc-lai'
-import CaNhanThiLai from './_components/dang-ky-thi-lai/ca-nhan-thi-lai'
-import DangKyThiLai from './_components/dang-ky-thi-lai/dang-ky-thi-lai'
 import KeQuaDangKyHocLopQuanLy from './_components/ket-qua-dang-ky-hoc-lop-quan-ly'
+import DangKyThiLai from './_components/dang-ky-thi-lai/dang-ky-thi-lai'
+import CaNhanThiLai from './_components/dang-ky-thi-lai/ca-nhan-thi-lai'
 
 interface TabItem {
     key: string

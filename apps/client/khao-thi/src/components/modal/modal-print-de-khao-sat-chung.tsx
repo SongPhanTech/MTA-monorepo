@@ -74,7 +74,7 @@ const ModalPrintExamSurvey = () => {
             return { ...i, index: toRoman(index + 1) }
         })
         // const general=grouped.filter((i)=>i?.)
-        const flatData = grouped.flatMap((i) => [i, ...(i.question || [])])
+        const flatData = grouped.map((i) => [i, ...(i.question || [])]).flat()
         return flatData || []
         // return classGroups
     }, [survey])

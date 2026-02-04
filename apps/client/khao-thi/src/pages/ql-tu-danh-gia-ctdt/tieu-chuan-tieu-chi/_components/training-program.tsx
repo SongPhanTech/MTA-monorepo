@@ -1,6 +1,6 @@
 import ContentTrainingProgram from '@components/features/tieu-chuan-tieu-chi/content-training-program'
 import SidebarStandardSet from '@components/features/tieu-chuan-tieu-chi/sidebar'
-import { Col, Row } from 'antd'
+import { Row, Col } from 'antd'
 
 export default function TrainingProgram() {
     return (

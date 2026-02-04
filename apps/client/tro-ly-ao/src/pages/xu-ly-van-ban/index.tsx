@@ -1,11 +1,11 @@
+import { fetchXuLyVanBan } from '@/api/xu-ly-van-ban'
+import { readStreamToText } from '@/utils'
 import { CloseOutlined, CopyOutlined, FileSyncOutlined, StopOutlined } from '@ant-design/icons'
 import AutoResizeTextArea from '@components/commons/text-area-auto-resize'
 import ChatLayout from '@layouts/chat-layout'
 import { Button, message, Select } from 'antd'
 import type { ReactElement } from 'react'
 import { useCallback, useEffect, useState } from 'react'
-import { fetchXuLyVanBan } from '@/api/xu-ly-van-ban'
-import { readStreamToText } from '@/utils'
 
 const { Option } = Select
 

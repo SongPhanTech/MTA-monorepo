@@ -2,7 +2,7 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { ThesisSession } from '@workspace/db/client'
+import { type ThesisSession } from '@workspace/db/client'
 import {
     useCreateThesisSession,
     useFindManyTrainingCourse,
@@ -15,8 +15,8 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import DatePicker from '@components/commons/date-picker'
 import Select from '@components/commons/select'
-import { useFindManyTrainingObjectTypePermission } from '@workspace/ui'
 import { useEffect, useState } from 'react'
+import { useFindManyTrainingObjectTypePermission } from '@workspace/ui'
 export type PutThesisSession = ThesisSession
 dayjs.locale('vi')
 

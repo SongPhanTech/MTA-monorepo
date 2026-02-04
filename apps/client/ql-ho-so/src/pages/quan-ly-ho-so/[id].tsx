@@ -25,8 +25,6 @@ import ForbiddenPage from '@components/commons/403'
 import FormItem from '@components/commons/form-item'
 import BoiDuongQuocPhongAnNinhForm from '@components/modal/quan-ly-ho-so/form/boi-duong-quoc-phong-an-ninh'
 import CapBacForm from '@components/modal/quan-ly-ho-so/form/cap-bac'
-import ChucVuChinhQuyenForm from '@components/modal/quan-ly-ho-so/form/chuc-vu-chinh-quyen'
-import ChucVuDangForm from '@components/modal/quan-ly-ho-so/form/chuc-vu-dang'
 import DanhHieuForm from '@components/modal/quan-ly-ho-so/form/danh-hieu'
 import NuocNgoaiForm from '@components/modal/quan-ly-ho-so/form/di-nuoc-ngoai'
 import DoanDang from '@components/modal/quan-ly-ho-so/form/doan-dang'
@@ -58,6 +56,8 @@ import { useAbility } from '@workspace/permissions/hooks'
 import ImgCrop from 'antd-img-crop'
 import axios from 'axios'
 import dayjs from 'dayjs'
+import ChucVuChinhQuyenForm from '@components/modal/quan-ly-ho-so/form/chuc-vu-chinh-quyen'
+import ChucVuDangForm from '@components/modal/quan-ly-ho-so/form/chuc-vu-dang'
 
 dayjs.locale('vi')
 interface itemType {

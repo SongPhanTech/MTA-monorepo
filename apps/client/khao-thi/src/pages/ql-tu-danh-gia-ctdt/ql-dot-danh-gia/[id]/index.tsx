@@ -1,3 +1,5 @@
+// @ts-nocheck
+// import EvaluatedPage from '@components/sub-pages/tu-danh-gia'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import type {
@@ -88,7 +90,7 @@ export default function EvaluationPeriodPage() {
         { refetchOnWindowFocus: false, enabled: !!id }
     )
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <skip function>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     const dataTab = useMemo(() => {
         if (data) {
             return data.standards.map((i: DataIndex, index: number) => {
@@ -101,7 +103,7 @@ export default function EvaluationPeriodPage() {
                 }
             })
         }
-    }, [data])
+    }, [data, refetch])
 
     const { onOpen: onOpenModalPrintDotDanhGia } = useDisclosure<{ data: DataPrintDotDanhGia }>({
         tag: 'ModalPrintDotDanhGia',

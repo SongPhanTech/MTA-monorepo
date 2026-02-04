@@ -16,7 +16,7 @@ import {
     type AcademicActionType,
     DecisionStatus,
     type Prisma,
-    type StudentSemesterResult,
+    StudentSemesterResult,
 } from '@workspace/db/client'
 import {
     useCountStudentAcademicDecision,

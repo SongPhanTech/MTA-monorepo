@@ -167,11 +167,11 @@ export default function GraduationDecisionDiploma() {
             filters.name,
             filters.code,
             filters.fixedClassId,
+            filters.trainingObjectId,
             filters.trainingCourseId,
             filters.originalDiplomaNumber,
             filters.idCardNumber,
             filters.diplomaTypeId,
-            trainingObjectTypeId,
         ]
     )
 

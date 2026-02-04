@@ -1,14 +1,14 @@
-import { queryClient } from '@api/index'
-import { renderWithMath } from '@components/commons/rich-text-editor/renderWithMath'
-import type { Prisma } from '@workspace/db/client'
-import { useFindManyExamBank, useUpdateExamBank } from '@workspace/db/hooks'
-import { getMinioUrl } from '@workspace/libs/utils'
-import { Button, Divider, Flex, Input, Modal } from 'antd'
-import { TemplateHandler } from 'easy-template-x'
-import { useEffect, useRef, useState } from 'react'
+import { Modal, Button, Flex, Divider, Input } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { useState, useRef, useEffect } from 'react'
 import { useReactToPrint } from 'react-to-print'
+import { useFindManyExamBank, useUpdateExamBank } from '@workspace/db/hooks'
+import { renderWithMath } from '@components/commons/rich-text-editor/renderWithMath'
+import { queryClient } from '@api/index'
+import { getMinioUrl } from '@workspace/libs/utils'
+import { TemplateHandler } from 'easy-template-x'
 import { convertHtmlBreaks, saveFile } from '@/utils/saveFile'
+import type { Prisma } from '@workspace/db/client'
 
 export type ExamBankType = Prisma.ExamBankGetPayload<{
     include: {

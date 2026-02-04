@@ -1,3 +1,4 @@
+import { getDeadlineStatus } from '@/utils/getDeadlineStatus'
 import CommentList from '@components/commons/comment-list'
 import DatePicker from '@components/commons/date-picker'
 import { RichTextEditor } from '@components/commons/rich-text-editor'
@@ -22,7 +23,6 @@ import { Button, Empty, Form, message, Popconfirm, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { FileEdit } from 'lucide-react'
 import { useState } from 'react'
-import { getDeadlineStatus } from '@/utils/getDeadlineStatus'
 
 type CommentType = {
     comment: Record<

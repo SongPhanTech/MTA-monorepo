@@ -2,7 +2,7 @@ import { queryClient } from '@api/index'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useStore } from '@tanstack/react-store'
-import { $Enums, type Prisma } from '@workspace/db/client'
+import { $Enums, Prisma } from '@workspace/db/client'
 import {
     useFindManyFixedClass,
     useFindManyTrainingCourse,

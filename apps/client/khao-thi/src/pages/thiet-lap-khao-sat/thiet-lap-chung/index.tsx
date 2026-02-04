@@ -4,7 +4,7 @@ import {
     TabNhomCauHoi,
 } from '@components/features/thiet-lap-khao-sat'
 import DefaultLayout from '@layouts/default-layout'
-import type { SurveyTopic } from '@workspace/db'
+import { SurveyTopic } from '@workspace/db'
 import { Tabs, type TabsProps } from 'antd'
 import { useMemo, useState } from 'react'
 

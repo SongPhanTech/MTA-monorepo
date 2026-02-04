@@ -3,7 +3,7 @@ import type { FilterProps } from '@components/commons/typeFilter'
 import ExportStudentInSurvey from '@components/modal/export-list-student-in-survey'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import type { LectuerType } from '@pages/thiet-lap-khao-sat/khao-sat-cum'
+import { LectuerType } from '@pages/thiet-lap-khao-sat/khao-sat-cum'
 import { useSession } from '@workspace/auth/react'
 import {
     useFindManyFixedClass,
@@ -106,7 +106,7 @@ function DanhSachHocVien({
             //     },
             // }),
         }
-    }, [lecturer])
+    }, [lecturer, filters])
     const { data, isLoading } = useFindManySubjectClass(
         {
             where,
@@ -408,7 +408,7 @@ function DanhSachHocVien({
                                                                     className={`m-0 ${!result ? 'opacity-[0.5] pointer-events-none !cursor-not-allowed' : ''}`}
                                                                     size={14}
                                                                     onClick={() => {
-                                                                        if (result) {
+                                                                        if (!!result) {
                                                                             onOpen({
                                                                                 userId:
                                                                                     record?.student

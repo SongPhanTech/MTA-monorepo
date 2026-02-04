@@ -1,18 +1,17 @@
-import { DownOutlined, FileExcelOutlined, PrinterOutlined } from '@ant-design/icons'
-import HtmlTruncate from '@components/commons/html-truncate'
-import Table from '@components/commons/table'
 import useSpinner from '@hooks/spinner'
 import { useGetClusterSurveyStatisticsForOrganization } from '@workspace/libs/api/exam'
-import type { GetSurveyStatistics200QuestionsItemAnswersItem } from '@workspace/libs/api/schemas'
 import { Button, Col, Dropdown, Empty, Row, Typography } from 'antd'
-// @ts-nocheck
-import ReactECharts from 'echarts-for-react'
-import ExcelJS from 'exceljs'
-import { saveAs } from 'file-saver'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
+// @ts-nocheck
+import ReactECharts from 'echarts-for-react'
+import type { GetSurveyStatistics200QuestionsItemAnswersItem } from '@workspace/libs/api/schemas'
+import Table from '@components/commons/table'
+import ExcelJS from 'exceljs'
+import { saveAs } from 'file-saver'
+import HtmlTruncate from '@components/commons/html-truncate'
+import { DownOutlined, FileExcelOutlined, PrinterOutlined } from '@ant-design/icons'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-
 const { Title } = Typography
 
 export interface CriteriaItem {
@@ -131,7 +130,7 @@ function SurveyOrganizationReport({
             }
         }
         return {}
-    }, [dataLevel, convertToStackChartData])
+    }, [dataLevel])
 
     const exportTemplate = async (name: string, dataTable: any, dataTableInfo: any) => {
         // Tạo workbook mới

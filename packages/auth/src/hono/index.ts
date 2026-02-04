@@ -1,6 +1,5 @@
 import type { MiddlewareHandler } from 'hono'
 import { getCookie } from 'hono/cookie'
-
 declare module 'hono' {
     interface ContextVariableMap {
         user: {

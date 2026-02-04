@@ -1,12 +1,12 @@
 import { cn } from '@lib/utils'
-import { useSession } from '@workspace/auth/react'
 import { CONFIG_KEY } from '@workspace/constant'
 import { useFindUniqueConfig } from '@workspace/db/hooks'
 import { Layout, theme } from 'antd'
 import { useRouter } from 'next/router'
-import type { ReactNode } from 'react'
+import { type ReactNode } from 'react'
 import { IdleTimerProvider } from 'react-idle-timer'
 import HeaderApp from '@/components/header'
+import { useSession } from '@workspace/auth/react'
 
 const { Header, Content } = Layout
 interface breadcrumListProps {

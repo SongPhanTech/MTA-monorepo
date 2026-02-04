@@ -1,11 +1,16 @@
-import { queryClient } from '@api/index'
+import { useDisclosure } from 'react-hook-disclosure-modal'
+import { Button, Col, DatePicker, Form, Input, message, Row, Steps } from 'antd'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import dayjs from 'dayjs'
+import { DndProvider, useDrag, useDrop } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+import { GripVertical } from 'lucide-react'
+import { useStore } from '@tanstack/react-store'
+import { store } from '@/pages/thiet-lap-de-thi/danh-sach-de'
 import FormItem from '@components/commons/form-item'
-import PutFormModal from '@components/commons/put-modal'
-import { renderWithMath } from '@components/commons/rich-text-editor/renderWithMath'
 import Select from '@components/commons/select'
 import TreeSelect from '@components/commons/tree-select'
-import { useStore } from '@tanstack/react-store'
-import type { ExamBank } from '@workspace/db/client'
+import PutFormModal from '@components/commons/put-modal'
 import {
     useCreateExamBank,
     useFindManyKnowledgeBlock,
@@ -14,14 +19,9 @@ import {
     useFindUniqueExamBank,
     useUpdateExamBank,
 } from '@workspace/db/hooks'
-import { Button, Col, DatePicker, Form, Input, message, Row, Steps } from 'antd'
-import dayjs from 'dayjs'
-import { GripVertical } from 'lucide-react'
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { DndProvider, useDrag, useDrop } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
-import { useDisclosure } from 'react-hook-disclosure-modal'
-import { store } from '@/pages/thiet-lap-de-thi/danh-sach-de'
+import { renderWithMath } from '@components/commons/rich-text-editor/renderWithMath'
+import { queryClient } from '@api/index'
+import type { ExamBank } from '@workspace/db/client'
 
 type PutMaTranDeInputType = ExamBank & {
     questions: string[]
@@ -326,7 +326,7 @@ const SinhDeThuCongModal = () => {
         }
     }, [input?.subjectVersionId, form.setFieldValue])
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <skip drop>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     const steps: StepItem[] = useMemo(() => {
         return [
             {

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useRef, useEffect } from 'react'
 
 interface AutoResizeTextAreaProps {
     value: string
@@ -59,7 +59,7 @@ const AutoResizeTextArea = ({
     useEffect(() => {
         const timer = setTimeout(adjustHeight, 10)
         return () => clearTimeout(timer)
-    }, [adjustHeight])
+    }, [value, adjustHeight])
 
     return (
         <textarea

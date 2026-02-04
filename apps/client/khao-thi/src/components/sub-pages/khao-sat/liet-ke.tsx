@@ -1,14 +1,14 @@
-import { DownloadOutlined } from '@ant-design/icons'
-import HtmlTruncate from '@components/commons/html-truncate'
-import Select from '@components/commons/select'
-import Table from '@components/commons/table'
-import { useFindManySurveyQuestion, useFindManySurveyResponse } from '@workspace/db/hooks'
+import { Button, Col, Flex, Row, Typography } from 'antd'
 // @ts-nocheck
 import type { GetSurveyStatistics200QuestionsItemAnswersItem } from '@workspace/libs/api/schemas'
-import { Button, Col, Flex, Row, Typography } from 'antd'
-import { Document, Table as DocxTable, Packer, Paragraph, TableCell, TableRow, TextRun } from 'docx'
-import { saveAs } from 'file-saver'
+import Table from '@components/commons/table'
+import HtmlTruncate from '@components/commons/html-truncate'
+import { useFindManySurveyQuestion, useFindManySurveyResponse } from '@workspace/db/hooks'
+import Select from '@components/commons/select'
 import { useState } from 'react'
+import { Document, Packer, Paragraph, Table as DocxTable, TableRow, TableCell, TextRun } from 'docx'
+import { saveAs } from 'file-saver'
+import { DownloadOutlined } from '@ant-design/icons'
 
 const { Title } = Typography
 
@@ -112,6 +112,7 @@ function SurveyEssay({ selectedId }: { selectedId: string }) {
                                     alignment: 'center',
                                     children: [
                                         new TextRun({
+                                            
                                             text: 'Nội dung câu trả lời',
                                             bold: true,
                                         }),

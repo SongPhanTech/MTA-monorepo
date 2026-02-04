@@ -2,11 +2,11 @@ import { Descriptions, Table, Tabs, Tag } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import { FIXED_CLASS_STUDENT_STATUS, SCORE_CONVERT_STATUS } from '@constants/constants'
-import { useAcademicRankingBaseTypeOptions } from '@hooks/academicRankingBaseType'
 import { useStudentTrainingTypeOptions } from '@hooks/studentTrainingType'
+import { useAcademicRankingBaseTypeOptions } from '@hooks/academicRankingBaseType'
+import { useFindUniqueStudent, useFindUniqueUserProfile } from '@workspace/db/hooks'
 import DefaultLayout from '@layouts/default-layout'
 import { useSession } from '@workspace/auth/react'
-import { useFindUniqueStudent, useFindUniqueUserProfile } from '@workspace/db/hooks'
 
 dayjs.locale('vi')
 

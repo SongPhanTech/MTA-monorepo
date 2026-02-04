@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useState, useRef, useLayoutEffect } from 'react'
 import './ExpandableContent.css'
 
 const ExpandableContent = ({ htmlContent }) => {
@@ -14,7 +14,7 @@ const ExpandableContent = ({ htmlContent }) => {
                 setIsClamped(hasOverflow)
             }
         }
-    }, [isClamped])
+    }, [htmlContent, isClamped])
 
     const toggleExpand = (e) => {
         e.stopPropagation()

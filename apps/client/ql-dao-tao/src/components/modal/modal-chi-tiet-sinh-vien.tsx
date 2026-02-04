@@ -3,8 +3,8 @@ import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import { FIXED_CLASS_STUDENT_STATUS, SCORE_CONVERT_STATUS } from '@constants/constants'
-import { useAcademicRankingBaseTypeOptions } from '@hooks/academicRankingBaseType'
 import { useStudentTrainingTypeOptions } from '@hooks/studentTrainingType'
+import { useAcademicRankingBaseTypeOptions } from '@hooks/academicRankingBaseType'
 import { useFindUniqueStudent } from '@workspace/db/hooks'
 
 dayjs.locale('vi')

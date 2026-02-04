@@ -6,7 +6,6 @@ import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { cn } from '@lib/utils'
-import type { SurveyTopic } from '@workspace/db'
 import {
     useCountSurveyQuestionGroup,
     useFindManySurveyQuestionGroup,
@@ -20,6 +19,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import CauHoiKhaoSat from './cau-hoi-khao-sat'
+import { SurveyTopic } from '@workspace/db'
 
 function TabNhomCauHoi({ topicSlected }: { topicSlected: SurveyTopic | null }) {
     const [selectedID, setSelectedID] = useState('')
@@ -118,7 +118,7 @@ function TabNhomCauHoi({ topicSlected }: { topicSlected: SurveyTopic | null }) {
 
     useEffect(() => {
         setSelectedID('')
-    }, [])
+    }, [topicSlected])
 
     return (
         <div>

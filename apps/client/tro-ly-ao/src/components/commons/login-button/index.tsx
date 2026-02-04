@@ -1,6 +1,6 @@
 import { LoginOutlined } from '@ant-design/icons'
-import { signIn, useSession } from '@workspace/auth/react'
 import { Button } from 'antd'
+import { signIn, useSession } from '@workspace/auth/react'
 import type React from 'react'
 
 interface LoginButtonProps {

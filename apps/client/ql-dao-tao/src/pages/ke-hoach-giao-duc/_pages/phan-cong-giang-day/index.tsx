@@ -25,7 +25,6 @@ import {
     useUpdateManySubjectClass,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
-import { whereOrganization } from '@workspace/libs/constants'
 import { exportFromTemplate } from '@workspace/libs/template-excel'
 import { getMinioUrl } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
@@ -58,6 +57,7 @@ import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { whereOrganization } from '@workspace/libs/constants'
 
 type TeachingAssignmentForm = {
     subjectClass: Record<

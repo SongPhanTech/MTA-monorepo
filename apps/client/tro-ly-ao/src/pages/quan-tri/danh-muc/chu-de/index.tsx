@@ -10,7 +10,7 @@ import {
     useDeleteTopic,
     useFindManyTopic,
 } from '@workspace/db/hooks'
-import { Button, Input, message, Select, Tooltip } from 'antd'
+import { Button, Input, message, Tooltip, Select } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useTopics } from '@/hooks/useTopics'
@@ -83,7 +83,7 @@ function Page() {
             },
         }))
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [totalCountTopic])
+    }, [filters.search, filters.isPinned, totalCountTopic])
 
     const { mutateAsync: deleteTopic } = useDeleteTopic()
     const { mutateAsync: deletePrompts } = useDeleteManyPrompt()

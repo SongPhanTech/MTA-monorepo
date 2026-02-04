@@ -1,10 +1,4 @@
 import { ArrowDownOutlined, CopyOutlined, FileTextOutlined } from '@ant-design/icons'
-import CitationTooltip from '@components/commons/citation-tooltip'
-import DocumentSidebar from '@components/commons/document-sidebar'
-import FAQCitationTooltip from '@components/commons/faq-citation-tooltip'
-import FAQSidebar from '@components/commons/faq-sidebar'
-import ChatInput from '@components/commons/input-chat-bot'
-import ChatLayout from '@layouts/chat-layout'
 import { MessageSender } from '@workspace/db'
 import {
     useFindManyMessage,
@@ -17,6 +11,12 @@ import type React from 'react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { fetchHoiDap, fetchHoiDapFaq } from '@/api/hoi-dap'
+import ChatInput from '@components/commons/input-chat-bot'
+import CitationTooltip from '@components/commons/citation-tooltip'
+import FAQCitationTooltip from '@components/commons/faq-citation-tooltip'
+import DocumentSidebar from '@components/commons/document-sidebar'
+import FAQSidebar from '@components/commons/faq-sidebar'
+import ChatLayout from '@layouts/chat-layout'
 
 interface Citation {
     index: number

@@ -1,14 +1,7 @@
-import { queryClient } from '@api/index'
-import FormItem from '@components/commons/form-item'
-import HtmlTruncate from '@components/commons/html-truncate'
-import PutFormModal from '@components/commons/put-modal'
-import { renderWithMath } from '@components/commons/rich-text-editor/renderWithMath'
-import Select from '@components/commons/select'
+import { useEffect, useMemo, useState } from 'react'
+import { Col, Form, Row, Button, message, Switch } from 'antd'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 import Table from '@components/commons/table'
-import type { FilterProps } from '@components/commons/typeFilter'
-import { LEVEL_COLUMNS, QUESTION_TYPE_LABELS } from '@constants/constants'
-import { store } from '@pages/thiet-lap-de-thi/danh-sach-de'
-import { QuestionType } from '@workspace/db/client'
 import {
     useCountQuestion,
     useCreateQuestion,
@@ -19,9 +12,16 @@ import {
     useFindManyQuestionBank,
     useUpdateQuestion,
 } from '@workspace/db/hooks'
-import { Button, Col, Form, message, Row, Switch } from 'antd'
-import { useEffect, useMemo, useState } from 'react'
-import { useDisclosure } from 'react-hook-disclosure-modal'
+import { queryClient } from '@api/index'
+import PutFormModal from '@components/commons/put-modal'
+import FormItem from '@components/commons/form-item'
+import Select from '@components/commons/select'
+import HtmlTruncate from '@components/commons/html-truncate'
+import { renderWithMath } from '@components/commons/rich-text-editor/renderWithMath'
+import { QuestionType } from '@workspace/db/client'
+import { LEVEL_COLUMNS, QUESTION_TYPE_LABELS } from '@constants/constants'
+import type { FilterProps } from '@components/commons/typeFilter'
+import { store } from '@pages/thiet-lap-de-thi/danh-sach-de'
 
 const PickQuestionFromBankModal = () => {
     const [form] = Form.useForm()

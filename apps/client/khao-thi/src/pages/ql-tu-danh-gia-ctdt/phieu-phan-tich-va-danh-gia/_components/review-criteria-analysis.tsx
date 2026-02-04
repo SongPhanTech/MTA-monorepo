@@ -1,21 +1,21 @@
-import ReviewCriteriaAnalysisSubPage from '@components/sub-pages/tu-danh-gia-ctdt/review-criteria-analysis'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
-import type {
-    AnalysisCriterion,
-    AnalysisFormEvidence,
-    CriterionPeriod,
-    EvaluationCriterionComment,
-    Evidence,
-    Lecturer,
-    RequirementCriterion,
-    StandardPeriod,
-    UserProfile,
-} from '@workspace/db'
 import { $Enums } from '@workspace/db/client'
 import { useFindUniqueEvaluationPeriod } from '@workspace/db/hooks'
-import { Col, Row, Tabs } from 'antd'
 import { useMemo } from 'react'
+import type {
+    AnalysisFormEvidence,
+    AnalysisCriterion,
+    CriterionPeriod,
+    Evidence,
+    EvaluationCriterionComment,
+    RequirementCriterion,
+    StandardPeriod,
+    Lecturer,
+    UserProfile,
+} from '@workspace/db'
+import { Col, Row, Tabs } from 'antd'
+import ReviewCriteriaAnalysisSubPage from '@components/sub-pages/tu-danh-gia-ctdt/review-criteria-analysis'
 
 export type ReviewDataTabType = StandardPeriod & {
     criteria: (CriterionPeriod & {

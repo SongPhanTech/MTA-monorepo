@@ -48,7 +48,7 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-
+import { useMutation, useQuery } from '@tanstack/react-query'
 import type {
     DataTag,
     DefinedInitialDataOptions,
@@ -63,8 +63,7 @@ import type {
     UseQueryOptions,
     UseQueryResult,
 } from '@tanstack/react-query'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { customStorageFetch } from './custom-instance'
+
 import type {
     DeleteFilesDeleteSingleFileStorageFileFileNameParams,
     GetFilesAvatarInitialsParams,
@@ -79,6 +78,7 @@ import type {
     PostFilesSingleStorageTypeParams,
 } from './schemas'
 
+import { customStorageFetch } from './custom-instance'
 type AwaitedInput<T> = PromiseLike<T> | T
 
 type Awaited<O> = O extends AwaitedInput<infer T> ? T : never
@@ -86,7 +86,7 @@ type Awaited<O> = O extends AwaitedInput<infer T> ? T : never
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 
 export type getFilesCreateDownloadLinkAppCodeStorageTypeFileNameResponse200 = {
-    data: undefined
+    data: void
     status: 200
 }
 
@@ -296,7 +296,7 @@ export function useGetFilesCreateDownloadLinkAppCodeStorageTypeFileName<
 }
 
 export type getFilesDownloadAppCodeFileNameResponse200 = {
-    data: undefined
+    data: void
     status: 200
 }
 
@@ -509,7 +509,7 @@ export function useGetFilesDownloadAppCodeFileName<
  * @summary Tải file
  */
 export type getFilesStorageTypeFileNameResponse200 = {
-    data: undefined
+    data: void
     status: 200
 }
 
@@ -702,7 +702,7 @@ export function useGetFilesStorageTypeFileName<
  * @summary Tải file
  */
 export type getFilesStorageTypeFileNameFileDownloadNameResponse200 = {
-    data: undefined
+    data: void
     status: 200
 }
 
@@ -948,7 +948,7 @@ export function useGetFilesStorageTypeFileNameFileDownloadName<
  * @summary Upload single file
  */
 export type postFilesSingleStorageTypeResponse200 = {
-    data: undefined
+    data: void
     status: 200
 }
 
@@ -985,7 +985,7 @@ export const postFilesSingleStorageType = async (
 ): Promise<postFilesSingleStorageTypeResponse> => {
     const formData = new FormData()
     if (postFilesSingleStorageTypeBody.file !== undefined) {
-        formData.append('file', postFilesSingleStorageTypeBody.file)
+        formData.append(`file`, postFilesSingleStorageTypeBody.file)
     }
 
     return customStorageFetch<postFilesSingleStorageTypeResponse>(
@@ -1090,7 +1090,7 @@ export const usePostFilesSingleStorageType = <TError = unknown, TContext = unkno
  * @summary Upload multi file
  */
 export type postFilesMultiStorageTypeResponse200 = {
-    data: undefined
+    data: void
     status: 200
 }
 
@@ -1127,7 +1127,7 @@ export const postFilesMultiStorageType = async (
 ): Promise<postFilesMultiStorageTypeResponse> => {
     const formData = new FormData()
     if (postFilesMultiStorageTypeBody.files !== undefined) {
-        postFilesMultiStorageTypeBody.files.forEach((value) => formData.append('files', value))
+        postFilesMultiStorageTypeBody.files.forEach((value) => formData.append(`files`, value))
     }
 
     return customStorageFetch<postFilesMultiStorageTypeResponse>(
@@ -1232,7 +1232,7 @@ export const usePostFilesMultiStorageType = <TError = unknown, TContext = unknow
  * @summary Lấy ảnh mẫu của báo cáo
  */
 export type getFilesImageStorageTypeFileNameResponse200 = {
-    data: undefined
+    data: void
     status: 200
 }
 
@@ -1453,7 +1453,7 @@ export function useGetFilesImageStorageTypeFileName<
  * @summary Lấy ảnh nhân viên
  */
 export type getFilesEmployeeUserIdImageResponse200 = {
-    data: undefined
+    data: void
     status: 200
 }
 
@@ -1629,7 +1629,7 @@ export function useGetFilesEmployeeUserIdImage<
  * @summary Lấy avatar khởi tạo
  */
 export type getFilesAvatarInitialsResponse200 = {
-    data: undefined
+    data: void
     status: 200
 }
 
@@ -1652,7 +1652,7 @@ export const getGetFilesAvatarInitialsUrl = (params?: GetFilesAvatarInitialsPara
 
     return stringifiedParams.length > 0
         ? `/Files/avatar-initials?${stringifiedParams}`
-        : '/Files/avatar-initials'
+        : `/Files/avatar-initials`
 }
 
 export const getFilesAvatarInitials = async (
@@ -1669,7 +1669,7 @@ export const getFilesAvatarInitials = async (
 }
 
 export const getGetFilesAvatarInitialsQueryKey = (params?: GetFilesAvatarInitialsParams) => {
-    return ['/Files/avatar-initials', ...(params ? [params] : [])] as const
+    return [`/Files/avatar-initials`, ...(params ? [params] : [])] as const
 }
 
 export const getGetFilesAvatarInitialsQueryOptions = <
@@ -1792,7 +1792,7 @@ export function useGetFilesAvatarInitials<
  * @summary Xóa single file
  */
 export type deleteFilesDeleteSingleFileStorageFileFileNameResponse200 = {
-    data: undefined
+    data: void
     status: 200
 }
 
@@ -1940,7 +1940,7 @@ export const useDeleteFilesDeleteSingleFileStorageFileFileName = <
  * @summary Kiểm tra tình trạng API
  */
 export type getFilesHealthzResponse200 = {
-    data: undefined
+    data: void
     status: 200
 }
 
@@ -1951,7 +1951,7 @@ export type getFilesHealthzResponseSuccess = getFilesHealthzResponse200 & {
 export type getFilesHealthzResponse = getFilesHealthzResponseSuccess
 
 export const getGetFilesHealthzUrl = () => {
-    return '/Files/healthz'
+    return `/Files/healthz`
 }
 
 export const getFilesHealthz = async (options?: RequestInit): Promise<getFilesHealthzResponse> => {
@@ -1962,7 +1962,7 @@ export const getFilesHealthz = async (options?: RequestInit): Promise<getFilesHe
 }
 
 export const getGetFilesHealthzQueryKey = () => {
-    return ['/Files/healthz'] as const
+    return [`/Files/healthz`] as const
 }
 
 export const getGetFilesHealthzQueryOptions = <

@@ -1,26 +1,26 @@
 import { DownloadOutlined } from '@ant-design/icons'
-import type { DataTabEvaluationCriterionType } from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/standar-reports'
-import { sqlTransaction } from '@workspace/libs/api/model'
 import { Button } from 'antd'
 import {
     AlignmentType,
-    BorderStyle,
     Document,
     HeadingLevel,
-    type IImageOptions,
-    ImageRun,
     Packer,
     Paragraph,
     Table,
     TableCell,
-    TableLayoutType,
-    TableOfContents,
     TableRow,
     TextRun,
-    VerticalAlign,
     WidthType,
+    BorderStyle,
+    VerticalAlign,
+    ImageRun,
+    type IImageOptions,
+    TableOfContents,
+    TableLayoutType,
 } from 'docx'
 import { saveAs } from 'file-saver'
+import { sqlTransaction } from '@workspace/libs/api/model'
+import type { DataTabEvaluationCriterionType } from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/standar-reports'
 
 interface ExportAllCriteriaEvaluationProps {
     standards: DataTabEvaluationCriterionType[]

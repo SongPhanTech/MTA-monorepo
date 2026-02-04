@@ -7,11 +7,11 @@ import { lightThemeCustom } from '@workspace/ui/assets/styles/theme/global-theme
 import { Checkbox, Col, ConfigProvider, Modal, Row, Segmented } from 'antd'
 import viVN from 'antd/locale/vi_VN'
 import { useMemo, useState } from 'react'
-import { useDisclosure } from 'react-hook-disclosure-modal'
 import { dayjs } from '..'
 import ReactBigCalendarCustom, { type CustomCalendarEvent } from '../react-big-calendar'
 import TableWeekCalendar from '../table-week-calendar'
 import { CalendarFilter } from './calendar-filter'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export const TYPE_WORK_SCHEDULE_COLOR_OPTIONS = [
     { label: 'Lịch học lý thuyết', value: '#7bb3e6', type: PeriodType.THEORY },

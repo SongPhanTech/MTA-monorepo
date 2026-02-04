@@ -2,11 +2,7 @@ import TableCollapse from '@components/commons/tableCollapse'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import DefaultLayout from '@layouts/default-layout'
-import {
-    type Prisma,
-    StudentThesisRegistrationStatus,
-    SubjectVersionType,
-} from '@workspace/db/client'
+import { Prisma, StudentThesisRegistrationStatus, SubjectVersionType } from '@workspace/db/client'
 import { useCountSubjectClass, useFindManySubjectClass } from '@workspace/db/hooks'
 import { useSemesterStore } from '@workspace/ui'
 import { Col, Flex, Input, Row, Segmented, Tabs } from 'antd'

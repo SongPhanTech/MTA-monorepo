@@ -3,11 +3,11 @@ import { buildOrgFlat } from '@lib/utils'
 import PhanCongGiangDay from '@pages/ke-hoach-giao-duc/_pages/phan-cong-giang-day'
 import { $Enums, type Prisma } from '@workspace/db/client'
 import { useFindManyDM_DonVi } from '@workspace/db/hooks'
-import { whereOrganization } from '@workspace/libs/constants'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Tabs } from 'antd'
 import type React from 'react'
 import { useMemo } from 'react'
+import { whereOrganization } from '@workspace/libs/constants'
 
 export default function KhaoBoMonPhanCongGiangDay() {
     const { id: semesterId } = useSemesterStore()

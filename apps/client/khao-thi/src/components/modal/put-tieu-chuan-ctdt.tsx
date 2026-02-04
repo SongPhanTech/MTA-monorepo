@@ -4,7 +4,7 @@ import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import { STANDARD_CATALOG_TYPE_OPTIONS } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import type { $Enums, StandardCatalog } from '@workspace/db/client'
+import type { StandardCatalog, $Enums } from '@workspace/db/client'
 import {
     useCreateStandardCatalog,
     useFindUniqueStandardCatalog,

@@ -26,7 +26,6 @@ import {
     useFindManyThesisProject,
     useUpdateThesisProject,
 } from '@workspace/db/hooks'
-import { whereOrganization } from '@workspace/libs/constants'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { useSemesterStore } from '@workspace/ui'
@@ -37,6 +36,7 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { whereOrganization } from '@workspace/libs/constants'
 
 export default function ThesisProject() {
     const { can, canSome } = useAbility()

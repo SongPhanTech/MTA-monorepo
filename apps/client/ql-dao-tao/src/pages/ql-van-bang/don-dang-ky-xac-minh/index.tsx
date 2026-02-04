@@ -7,7 +7,7 @@ import type { DiplomaVerificationApplication, DocumentFile } from '@workspace/db
 import { useCreateDiplomaVerificationApplication } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import { Button, Col, Flex, Form, Input, InputNumber, message, Row } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Row, InputNumber } from 'antd'
 import { useEffect, useState } from 'react'
 
 export type PutDiplomaVerificationApplication = DiplomaVerificationApplication & {

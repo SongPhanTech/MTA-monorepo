@@ -1,9 +1,9 @@
 'use client'
 
-import type { FilterProps } from '@constants/type'
-import { Table } from 'antd'
-import type { ColumnType, TableProps } from 'antd/es/table'
 import type React from 'react'
+import { Table } from 'antd'
+import type { TableProps, ColumnType } from 'antd/es/table'
+import type { FilterProps } from '@constants/type'
 
 export interface NestedColumn<T = any> extends Omit<ColumnType<T>, 'render'> {
     type?: 'input' | 'select' | 'order'

@@ -21,7 +21,6 @@ import {
     useFindUniqueCurriculumVersion,
     useUpdateTrainingBlockSubject,
 } from '@workspace/db/hooks'
-import { whereOrganization } from '@workspace/libs/constants'
 import { getMinioUrl } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
@@ -33,6 +32,7 @@ import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import CreateIcon from '../../../../components/icons/create'
+import { whereOrganization } from '@workspace/libs/constants'
 export default function TrainingProgramSubjects() {
     const { can, canSome } = useAbility()
     const router = useRouter()

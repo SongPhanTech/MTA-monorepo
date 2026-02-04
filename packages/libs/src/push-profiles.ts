@@ -1,6 +1,6 @@
 import { PrismaClient } from '@workspace/db'
-import NV from '../DM_NhanVien.json'
 import { postDMNhanViens } from './api/system'
+import NV from '../DM_NhanVien.json'
 
 const prisma = new PrismaClient()
 
@@ -49,7 +49,7 @@ for (const profileData of profiles) {
         break
     }
 
-    console.log(`${JSON.stringify({ Id: res.data, sTenDayDu: profileData.fullname })},`)
+    console.log(JSON.stringify({ Id: res.data, sTenDayDu: profileData.fullname }) + ',')
 
     await prisma.userProfile.update({
         where: { id: profileData.id },

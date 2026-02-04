@@ -1,18 +1,18 @@
 import { PlusOutlined, UploadOutlined } from '@ant-design/icons'
-import { queryClient } from '@api/index'
-import Table from '@components/commons/table'
-import DeleteIcon from '@components/icons/delete'
-import EditIcon from '@components/icons/edit'
-import type { ConfigExam, DocumentFile } from '@workspace/db/client'
+import { useDisclosure } from 'react-hook-disclosure-modal'
+import { useState } from 'react'
 import {
     useCreateDocumentFile,
     useDeleteDocumentFile,
     useFindManyKnowledgeBlock,
     useUpdateKnowledgeBlock,
 } from '@workspace/db/hooks'
+import { queryClient } from '@api/index'
 import { Button, Flex, message, Upload } from 'antd'
-import { useState } from 'react'
-import { useDisclosure } from 'react-hook-disclosure-modal'
+import type { ConfigExam, DocumentFile } from '@workspace/db/client'
+import DeleteIcon from '@components/icons/delete'
+import Table from '@components/commons/table'
+import EditIcon from '@components/icons/edit'
 
 interface TableChuongMucProps {
     matrixId?: string

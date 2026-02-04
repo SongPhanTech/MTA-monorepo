@@ -1,3 +1,4 @@
+import TreeSelect from '@/components/commons/tree-select'
 import { queryClient } from '@api/index'
 import TreeSelectDepartment from '@components/commons/department-select/TreeSelectDepartment'
 import FormItem from '@components/commons/form-item'
@@ -15,11 +16,10 @@ import { useSemesterStore, useTrainingCourseStore, useTrainingObjectTypeStore } 
 import { Col, Form, message } from 'antd'
 import type { DataNode } from 'antd/es/tree'
 import dayjs from 'dayjs'
-import TreeSelect from '@/components/commons/tree-select'
 import 'dayjs/locale/vi'
-import type { $Enums, PlanTraining } from '@workspace/db/client'
 import { Trash2Icon } from 'lucide-react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import type { $Enums, PlanTraining } from '@workspace/db/client'
 
 export type KhoiTaoMonFormType = {
     managementOrganizationIds: string[]
