@@ -280,7 +280,6 @@ const PutTieuChiMinhChungModal = () => {
                 queryKey: ['AnalysisCriterion'],
             })
 
-            // Call refetch callback if provided
             if (input?.refetch) {
                 input.refetch()
             }
@@ -424,7 +423,7 @@ const PutTieuChiMinhChungModal = () => {
         >
             <Col span={24}>
                 <FormItem form={form} label="Yêu cầu tiêu chí" name="name" required>
-                    <TextArea placeholder="Yêu cầu tiêu chí" />
+                    <TextArea placeholder="Yêu cầu tiêu chí" spellCheck={false} />
                 </FormItem>
             </Col>
             <Col span={24}>
@@ -442,6 +441,7 @@ const PutTieuChiMinhChungModal = () => {
                                         >
                                             <Input
                                                 placeholder="Nhập mô tả"
+                                                spellCheck={false}
                                                 className="w-full"
                                                 ref={
                                                     index === fields.length - 1
@@ -579,7 +579,10 @@ const PutTieuChiMinhChungModal = () => {
                                                 label="Số ngày/tháng ban hành"
                                                 required
                                             >
-                                                <TextArea placeholder="Nhập số ngày/tháng ban hành" />
+                                                <TextArea
+                                                    placeholder="Nhập số ngày/tháng ban hành"
+                                                    spellCheck={false}
+                                                />
                                             </FormItem>
                                         </Col>
                                         <Col span={12}>
@@ -589,7 +592,10 @@ const PutTieuChiMinhChungModal = () => {
                                                 label="Nơi ban hành"
                                                 required
                                             >
-                                                <Input placeholder="Nhập nơi ban hành" />
+                                                <Input
+                                                    placeholder="Nhập nơi ban hành"
+                                                    spellCheck={false}
+                                                />
                                             </FormItem>
                                         </Col>
                                     </Row>
@@ -633,12 +639,12 @@ const PutTieuChiMinhChungModal = () => {
                     label="Nơi thu thập minh chứng"
                     required
                 >
-                    <TextArea placeholder="Nơi thu thập" />
+                    <TextArea placeholder="Nơi thu thập" spellCheck={false} />
                 </FormItem>
             </Col>
             <Col span={24}>
                 <FormItem form={form} name="collectionMethod" label="Phương pháp thu thập" required>
-                    <TextArea placeholder="Phương pháp thu thập" />
+                    <TextArea placeholder="Phương pháp thu thập" spellCheck={false} />
                 </FormItem>
             </Col>
         </PutFormModal>

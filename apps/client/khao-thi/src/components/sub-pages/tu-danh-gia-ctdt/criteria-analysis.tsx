@@ -102,7 +102,6 @@ const CriteriaAnalysisSubPage = ({
     const handleSubmitAllCriteria = async () => {
         try {
             showSpinner()
-            // Lọc các tiêu chí có thể nộp (chưa nộp, chưa duyệt, chưa hoàn thành)
             const criteriaToSubmit = filteredCriteria?.filter((item) => {
                 const status = item.analysisCriterions?.status
                 return (
