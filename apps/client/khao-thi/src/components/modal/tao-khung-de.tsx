@@ -1,11 +1,10 @@
 import { queryClient } from '@api/index'
+import DocumentPaths from '@components/commons/documentPaths'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
-import { buildOrgTree } from '@lib/utils'
-import type { ExamFramework, Subject, SubjectVersion } from '@workspace/db/client'
+import type { DocumentFile, Prisma, Subject, SubjectVersion } from '@workspace/db/client'
 import {
     useCreateExamFramework,
-    useFindManyDM_DonVi,
     useFindManySubjectVersion,
     useFindUniqueExamFramework,
     useUpdateExamFramework,
@@ -15,12 +14,17 @@ import { Col, Form, Input, InputNumber, message } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-export type CreateExamFrameworkPayload = ExamFramework
+export type CreateExamFrameworkPayloadType = Prisma.ExamFrameworkGetPayload<{
+    include: {
+        documentFiles: true
+    }
+}>
 export type SubjectVersionItem = SubjectVersion
 export type SubjectItem = Subject
 
 export default function ModalTaoKhungDe() {
-    const [form] = Form.useForm<CreateExamFrameworkPayload>()
+    const [document, setDocument] = useState<DocumentFile[]>([])
+    const [form] = Form.useForm<CreateExamFrameworkPayloadType>()
     const [donViFilter, setDonViFilter] = useState<string | null>(null)
 
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
@@ -57,14 +61,13 @@ export default function ModalTaoKhungDe() {
         onError: () => message.error('Không cập nhật được khung đề'),
     })
 
-    const { data: organizations = [] } = useFindManyDM_DonVi()
-
-    const treeData = buildOrgTree(organizations)
-
     const { data: examFrameworkData } = useFindUniqueExamFramework(
         {
             where: {
                 id,
+            },
+            include: {
+                documentFiles: true,
             },
         },
         {
@@ -72,14 +75,13 @@ export default function ModalTaoKhungDe() {
         }
     )
 
-    async function onOk(output?: CreateExamFrameworkPayload) {
+    async function onOk(output?: CreateExamFrameworkPayloadType) {
         if (!output) return
         try {
             const data = {
                 code: output.code?.trim(),
                 name: output.name.trim(),
                 time: Number(output.time),
-                description: output.description?.trim() || null,
                 subjectVersionId: output.subjectVersionId,
             }
             if (id) {
@@ -87,12 +89,64 @@ export default function ModalTaoKhungDe() {
                     where: {
                         id,
                     },
-                    data,
+                    data: {
+                        ...data,
+                        documentFiles: {
+                            upsert: (output.documentFiles || [])
+                                .filter((file) => !!file.id)
+                                .map((file) => ({
+                                    where: {
+                                        id: file.id,
+                                    },
+                                    create: {
+                                        name: file.name,
+                                        path: file.path,
+                                        mimeType: file.mimeType,
+                                        size: file.size,
+                                        examFramework: {
+                                            connect: {
+                                                id,
+                                            },
+                                        },
+                                    },
+                                    update: {
+                                        name: file.name,
+                                        path: file.path,
+                                        mimeType: file.mimeType,
+                                        size: file.size,
+                                    },
+                                })),
+                            create: (output.documentFiles || [])
+                                .filter((file) => !file.id)
+                                .map((file) => ({
+                                    name: file.name,
+                                    path: file.path,
+                                    mimeType: file.mimeType,
+                                    size: file.size,
+                                })),
+                            disconnect: document
+                                .filter(
+                                    (existing) =>
+                                        !output.documentFiles?.some((f) => f.id === existing.id)
+                                )
+                                .map((file) => ({ id: file.id })),
+                        },
+                    },
                 })
                 message.success('Cập nhật thành công')
             } else {
                 await createExamFramework({
-                    data,
+                    data: {
+                        ...data,
+                        documentFiles: {
+                            create: (output.documentFiles || []).map((file) => ({
+                                name: file.name,
+                                path: file.path,
+                                mimeType: file.mimeType,
+                                size: file.size,
+                            })),
+                        },
+                    },
                 })
                 message.success('Thêm mới thành công')
             }
@@ -114,9 +168,9 @@ export default function ModalTaoKhungDe() {
             form.setFieldsValue({
                 name: examFrameworkData.name,
                 time: examFrameworkData.time,
-                description: examFrameworkData.description,
                 subjectVersionId: examFrameworkData.subjectVersionId,
             })
+            setDocument(examFrameworkData.documentFiles)
         }
     }, [examFrameworkData, id, form])
 
@@ -153,22 +207,6 @@ export default function ModalTaoKhungDe() {
                     />
                 </Form.Item>
 
-                {/* <Form.Item label="Đơn vị">
-                    <Select
-                        allowClear
-                        placeholder="Chọn đơn vị"
-                        size="large"
-                        options={organizations.map((dv) => ({
-                            label: `${dv.sTen || 'Không tên'}${dv.sMa ? ` – ${dv.sMa}` : ''}`,
-                            value: dv.Id,
-                        }))}
-                        onChange={(value) => {
-                            setDonViFilter(value || null)
-                            form.setFieldValue('subjectVersionId', undefined)
-                        }}
-                    />
-                </Form.Item> */}
-
                 <Form.Item
                     label="Môn học"
                     name="subjectVersionId"
@@ -184,8 +222,14 @@ export default function ModalTaoKhungDe() {
                     />
                 </Form.Item>
 
-                <Form.Item label="Mô tả" name="description">
-                    <Input.TextArea rows={3} placeholder="Mô tả cho khung đề" />
+                <Form.Item label="Tài liệu đính kèm" name="documentFiles">
+                    <DocumentPaths
+                        form={form}
+                        data={document}
+                        relationId={id || ''}
+                        relationType="examFrameworkId"
+                        titleForm="documentFiles"
+                    />
                 </Form.Item>
             </Col>
         </PutFormModal>
