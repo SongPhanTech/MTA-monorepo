@@ -106,6 +106,8 @@ const SinhDeModal = () => {
 
             const res = await automaticTopicGeneration({
                 ...values,
+                isNote: values.isNote || false,
+                description: values.explain || undefined,
                 id: '',
                 examId: selectedExamId,
                 deletedAt: null,
