@@ -64,6 +64,26 @@ const messages = {
     },
 }
 
+function buildUpdatePayload(oldData: PutScoreLinkSheet, newData: PutScoreLinkSheet) {
+    const oldMap = new Map(oldData.scoreLinkSubjectVersions.map((sv) => [sv.subjectVersionId, sv]))
+
+    const newMap = new Map(newData.scoreLinkSubjectVersions.map((sv) => [sv.subjectVersionId, sv]))
+
+    const toCreate = newData.scoreLinkSubjectVersions.filter(
+        (sv) => !oldMap.has(sv.subjectVersionId)
+    )
+
+    const toDelete = oldData.scoreLinkSubjectVersions.filter(
+        (sv) => !newMap.has(sv.subjectVersionId)
+    )
+
+    const toUpdate = newData.scoreLinkSubjectVersions.filter((sv) =>
+        oldMap.has(sv.subjectVersionId)
+    )
+
+    return { toCreate, toDelete, toUpdate }
+}
+
 const PutScoreLinkSheetModal = () => {
     const [form] = Form.useForm()
     const { showSpinner, hideSpinner } = useSpinner()
@@ -185,7 +205,12 @@ const PutScoreLinkSheetModal = () => {
     const onFinish = async (values: PutScoreLinkSheet) => {
         if (mode === 'view') return
         showSpinner()
-        if (mode === 'edit' && input?.id) {
+        if (mode === 'edit' && input?.id && scoreLinkSheetDetail) {
+            const { toCreate, toDelete, toUpdate } = buildUpdatePayload(
+                scoreLinkSheetDetail,
+                values
+            )
+
             await updateScoreLinkSheet({
                 where: { id: input.id },
                 data: {
@@ -194,33 +219,73 @@ const PutScoreLinkSheetModal = () => {
                     fixedClassId: values.fixedClassId,
                     semesterId: values.semesterId,
                     description: values.description,
-                    updatedAt: new Date(),
-                    scoreLinkSubjectVersions: {
-                        deleteMany: {
-                            scoreLinkSheetId: input.id,
-                        },
-                        create: values.scoreLinkSubjectVersions.map((sv) => ({
-                            subjectVersionId: sv.subjectVersionId,
-                            scoreLinkStudents: {
-                                create: sv.scoreLinkStudents.map((ss) => ({
-                                    studentId: ss.studentId,
-                                    score: ss.score,
-                                })),
-                            },
-                        })),
-                    },
-
-                    documents: {
-                        set: [],
-                        create: (values.documents ?? []).map((file) => ({
-                            name: file.name,
-                            path: file.path,
-                            mimeType: file.mimeType,
-                            size: file.size,
-                        })),
-                    },
+                    status: values.status,
                 },
             })
+            if (toDelete.length > 0) {
+                await updateScoreLinkSheet({
+                    where: { id: input.id },
+                    data: {
+                        scoreLinkSubjectVersions: {
+                            deleteMany: {
+                                subjectVersionId: {
+                                    in: toDelete.map((sv) => sv.subjectVersionId),
+                                },
+                            },
+                        },
+                    },
+                })
+            }
+            if (toCreate.length > 0) {
+                await updateScoreLinkSheet({
+                    where: { id: input.id },
+                    data: {
+                        scoreLinkSubjectVersions: {
+                            create: toCreate.map((sv) => ({
+                                subjectVersionId: sv.subjectVersionId,
+                                scoreLinkStudents: {
+                                    createMany: {
+                                        data: sv.scoreLinkStudents.map((ss) => ({
+                                            studentId: ss.studentId,
+                                            score: ss.score,
+                                        })),
+                                    },
+                                },
+                            })),
+                        },
+                    },
+                })
+            }
+
+            for (const sv of toUpdate) {
+                for (const ss of sv.scoreLinkStudents) {
+                    await updateScoreLinkSheet({
+                        where: { id: input.id },
+                        data: {
+                            scoreLinkSubjectVersions: {
+                                updateMany: {
+                                    where: {
+                                        subjectVersionId: sv.subjectVersionId,
+                                    },
+                                    data: {
+                                        scoreLinkStudents: {
+                                            updateMany: {
+                                                where: {
+                                                    studentId: ss.studentId,
+                                                },
+                                                data: {
+                                                    score: ss.score,
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    })
+                }
+            }
+
             return
         }
 
