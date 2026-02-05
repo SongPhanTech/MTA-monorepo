@@ -127,6 +127,7 @@ export default function ScoreLinkPage() {
             {
                 title: 'Trạng thái',
                 dataIndex: 'status',
+                align: "center",
                 width: 100,
             },
             {
