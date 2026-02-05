@@ -12,6 +12,8 @@ import {
     useFindManyScoreLinkSheet,
     useUpdateScoreLinkSheet,
 } from '@workspace/db/hooks'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, message, Row } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import dayjs from 'dayjs'
@@ -24,6 +26,7 @@ export default function ScoreLinkPage() {
     const { onOpen } = useDisclosure<{ id: string; mode: 'view' | 'edit' }>({
         tag: 'PutScoreLinkSheetModal',
     })
+    const { can } = useAbility()
     const { showSpinner, hideSpinner } = useSpinner()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -137,6 +140,7 @@ export default function ScoreLinkPage() {
                             className="text-sm text-gray-700 cursor-pointer"
                         />
                         <EditIcon
+                            style={{display: can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_LIEN_KET, 'SUA') ? "block" : "none"}}
                             onClick={() => onOpen({ mode: 'edit', id: record?.id })}
                             className="text-sm text-blue-700 cursor-pointer"
                         />
@@ -181,7 +185,7 @@ export default function ScoreLinkPage() {
                     </Col>
                     <Col span={6}>
                         <Flex justify="end">
-                            <Button onClick={() => onOpen()} type="primary">
+                            <Button  onClick={() => onOpen()} type="primary">
                                 Thêm mới
                             </Button>
                         </Flex>

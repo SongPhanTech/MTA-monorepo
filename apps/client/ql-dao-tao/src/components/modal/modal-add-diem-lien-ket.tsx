@@ -469,6 +469,7 @@ const PutScoreLinkSheetModal = () => {
                                                         !trainingObjectTypeId ||
                                                         !fixedClassId ||
                                                         !selectedSubjectId
+
                                                     }
                                                     icon={<PlusOutlined />}
                                                     className="mb-2"
