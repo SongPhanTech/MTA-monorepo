@@ -108,9 +108,9 @@ const PutScoreLinkSheetModal = () => {
     const isView = mode === 'view'
     const isEdit = mode === 'edit'
     const isCreate = !mode
-    const canApprove = can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_LIEN_KET, 'DUYET');
-    const statusSheet = Form.useWatch("status", form);
-    const { data: scoreLinkSheetDetail} = useFindUniqueScoreLinkSheet(
+    const canApprove = can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_LIEN_KET, 'DUYET')
+    const statusSheet = Form.useWatch('status', form)
+    const { data: scoreLinkSheetDetail } = useFindUniqueScoreLinkSheet(
         {
             where: { id: input?.id },
             include: {
@@ -157,17 +157,12 @@ const PutScoreLinkSheetModal = () => {
         where: { active: true, trainingObjectTypeId },
     })
     const selectedTrainingCourseId = Form.useWatch('trainingCourseId', form)
-    const { data: fixedClasses = [] } = useFindManyFixedClass(
-        {
-            where: {
-                active: true,
-                trainingCourseId: selectedTrainingCourseId,
-            },
+    const { data: fixedClasses = [], isLoading: isLoadingFixedClasses } = useFindManyFixedClass({
+        where: {
+            active: true,
+            trainingCourseId: selectedTrainingCourseId,
         },
-        {
-            enabled: !!selectedTrainingCourseId,
-        }
-    )
+    })
     const { data: trainingObjectTypeList = [] } = useFindManyTrainingObjectType(
         {
             orderBy: {
@@ -191,7 +186,6 @@ const PutScoreLinkSheetModal = () => {
                 where: {
                     deletedAt: null,
                     ...(trainingObjectTypeId ? { trainingObjectTypeId } : {}),
-                    
                 },
                 orderBy: { createdAt: 'desc' },
             },
@@ -392,7 +386,7 @@ const PutScoreLinkSheetModal = () => {
             })),
         })
 
-        setDocument(scoreLinkSheetDetail.documents);
+        setDocument(scoreLinkSheetDetail.documents)
     }, [isOpen, scoreLinkSheetDetail, form])
 
     return (
@@ -408,22 +402,12 @@ const PutScoreLinkSheetModal = () => {
             }
             className="w-[60vw] justify-between"
             okButtonProps={{
-                className:
-                    isView &&
-                    !canApprove
-                        ? 'hidden'
-                        : '',
-                disabled: statusSheet === ScoreLinkStatus.APPROVED
+                className: isView && !canApprove ? 'hidden' : '',
+                disabled: statusSheet === ScoreLinkStatus.APPROVED,
             }}
             cancelText={isView ? 'Đóng' : 'Hủy'}
             okText={
-                isView
-                    ? canApprove
-                        ? 'Phê duyệt'
-                        : undefined
-                    : isEdit
-                      ? 'Cập nhật'
-                      : 'Thêm mới'
+                isView ? (canApprove ? 'Phê duyệt' : undefined) : isEdit ? 'Cập nhật' : 'Thêm mới'
             }
             onCancel={onClose}
             onFinish={onFinish}
@@ -484,6 +468,7 @@ const PutScoreLinkSheetModal = () => {
                             disabled={isView || !selectedTrainingCourseId}
                             onChange={() => form.setFieldValue('scoreLinkSubjectVersions', [])}
                             placeholder="Chọn lớp quản lí"
+                            loading={isLoadingFixedClasses}
                         />
                     </FormItem>
                 </Col>
@@ -541,7 +526,11 @@ const PutScoreLinkSheetModal = () => {
                                                     }
                                                     placeholder="Chọn môn"
                                                     className="max-w-48 w-full"
-                                                    disabled={!trainingObjectTypeId || !fixedClassId || isView}
+                                                    disabled={
+                                                        !trainingObjectTypeId ||
+                                                        !fixedClassId ||
+                                                        isView
+                                                    }
                                                 />
                                             </Col>
                                             <Col span={12}>
@@ -592,12 +581,12 @@ const PutScoreLinkSheetModal = () => {
                                         key: String(f.key),
                                         style: {
                                             paddingLeft: 0,
-                                            paddingRight: "8px", 
+                                            paddingRight: '8px',
                                         },
                                         label: (
                                             <Tooltip
                                                 trigger="hover"
-                                                className='flex flex-row items-center'
+                                                className="flex flex-row items-center"
                                                 title={`${subject?.name}${subject?.code ? ` - (${subject?.code})` : ''}`}
                                             >
                                                 <div className="w-28 overflow-hidden text-ellipsis whitespace-nowrap">{`${subject?.name}${subject?.code ? ` - (${subject?.code})` : ''}`}</div>
@@ -615,7 +604,7 @@ const PutScoreLinkSheetModal = () => {
                                             <>
                                                 <Table
                                                     pagination={false}
-                                                    className='h-full pl-2.5'
+                                                    className="h-full pl-2.5"
                                                     dataSource={getValue([
                                                         'scoreLinkSubjectVersions',
                                                         f.name,
@@ -638,8 +627,10 @@ const PutScoreLinkSheetModal = () => {
                                                                 )
 
                                                                 return (
-                                                                    `${student?.userProfile
-                                                                        ?.fullname} - ${student?.code}` || '—'
+                                                                    `${
+                                                                        student?.userProfile
+                                                                            ?.fullname
+                                                                    } - ${student?.code}` || '—'
                                                                 )
                                                             },
                                                         },
@@ -669,7 +660,6 @@ const PutScoreLinkSheetModal = () => {
                                                         },
                                                     ]}
                                                 />
-
                                             </>
                                         ),
                                     }
@@ -685,9 +675,9 @@ const PutScoreLinkSheetModal = () => {
                     <DocumentPaths
                         form={form}
                         data={document}
-                        relationId={input?.id ?? ""}
+                        relationId={input?.id ?? ''}
                         relationType="scoreLinkSheetId"
-                        titleForm='documents'
+                        titleForm="documents"
                     />
                 </FormItem>
             </Col>
