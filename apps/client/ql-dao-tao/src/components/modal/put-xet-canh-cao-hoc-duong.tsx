@@ -5,19 +5,25 @@ import useSpinner from '@hooks/spinner'
 import type { DisciplinaryWarning } from '@workspace/db/client'
 import {
     useCreateDisciplinaryWarning,
+    useFindManyCurriculumVersion,
     useFindManyDisciplinaryWarningReason,
+    useFindManyFixedClass,
     useFindManyStudent,
+    useFindManyTrainingCourse,
     useFindUniqueDisciplinaryWarning,
     useUpdateDisciplinaryWarning,
     useUpdateStudent,
 } from '@workspace/db/hooks'
-import { Col, Form, InputNumber, message } from 'antd'
+import { Col, Form, InputNumber, message, Row } from 'antd'
 import dayjs from 'dayjs'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
+import { SelectTrainingCourse } from '@workspace/ui/components/select-training-course/index'
 export type PutDisciplinaryWarningFromType = DisciplinaryWarning & {
     reasonIds: string[]
+    trainingCourseId: string
+    fixedClassId: string
 }
 
 type DisciplinaryWarningInput = {
@@ -32,7 +38,16 @@ const PutDisciplinaryWarning = () => {
         tag: 'PutDisciplinaryWarning',
         onClose: form.resetFields,
     })
+
+    const [selectedCourseId, setSelectedCourseId] = useState<string | undefined>(undefined)
+    const [selectedClassId, setSelectedClassId] = useState<string | undefined>(undefined)
+
     const { showSpinner, hideSpinner } = useSpinner()
+
+    const { data: fixedClasses } = useFindManyFixedClass({
+        where: { trainingCourseId: selectedCourseId },
+        orderBy: { name: 'asc' },
+    })
 
     const { data: studentData = [] } = useFindManyStudent({
         where: {
@@ -40,6 +55,10 @@ const PutDisciplinaryWarning = () => {
                 some: {
                     semesterId: input?.semesterId,
                 },
+            },
+            fixedClass: {
+                trainingCourseId: selectedCourseId,
+                id: selectedClassId,
             },
         },
         include: {
@@ -90,7 +109,7 @@ const PutDisciplinaryWarning = () => {
     const { mutateAsync: createDisciplinaryWarning } = useCreateDisciplinaryWarning()
     const { mutateAsync: updateDisciplinaryWarning } = useUpdateDisciplinaryWarning()
     const { mutateAsync: updateStudent } = useUpdateStudent()
-    async function onOk({ reasonIds, ...rest }: PutDisciplinaryWarningFromType) {
+    async function onOk({ reasonIds, trainingCourseId, fixedClassId, ...rest }: PutDisciplinaryWarningFromType) {
         try {
             showSpinner()
             const data = {
@@ -164,6 +183,30 @@ const PutDisciplinaryWarning = () => {
                 input?.id ? 'Chỉnh sửa xét cảnh cáo học đường' : 'Thêm mới xét cảnh cáo học đường'
             }
         >
+            <Col span={12}>
+                <FormItem form={form} name="trainingCourseId" label="Khoá học">
+                    <SelectTrainingCourse
+                        placeholder="Chọn khoá"
+                        allowClear
+                        onChange={(val) => {
+                            setSelectedCourseId(val)
+                            setSelectedClassId(undefined)
+                        }}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="fixedClassId" label="Lớp quản lý">
+                    <Select
+                        placeholder="Chọn lớp"
+                        allowClear
+                        disabled={!selectedCourseId}
+                        value={selectedClassId}
+                        onChange={setSelectedClassId}
+                        options={fixedClasses?.map((c) => ({ label: c.name, value: c.id }))}
+                    />
+                </FormItem>
+            </Col>
             <Col span={12}>
                 <FormItem form={form} name="studentId" label="Sinh viên" required>
                     <Select
