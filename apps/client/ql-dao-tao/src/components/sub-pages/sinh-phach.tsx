@@ -144,6 +144,32 @@ export default function SinhPhach() {
         })
         if (res?.status === 200) {
             message.success('Sinh phách thành công')
+            await updateManyExamList({
+                where: {
+                    examRoom: {
+                        examId,
+                    },
+                },
+                data: { lockExamCode: true },
+            })
+            await updateManySubjectClass({
+                where: {
+                    exam: {
+                        examRooms: {
+                            some: {
+                                examList: {
+                                    some: {
+                                        id: examId ?? '',
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                data: {
+                    isLockExamScore: true,
+                },
+            })
         }
         refetch()
         refreshExamPaper()
@@ -214,39 +240,10 @@ export default function SinhPhach() {
             <Col span={24}>
                 <Flex justify="space-between" align="center">
                     <Checkbox
-                        onChange={async (e) => {
-                            try {
-                                await updateManyExamList({
-                                    where: {
-                                        examRoom: {
-                                            examId,
-                                        },
-                                    },
-                                    data: { lockExamCode: e.target.checked },
-                                })
-                                await updateManySubjectClass({
-                                    where: {
-                                        exam: {
-                                            examRooms: {
-                                                some: {
-                                                    examList: {
-                                                        some: {
-                                                            id: examId ?? '',
-                                                        },
-                                                    },
-                                                },
-                                            },
-                                        },
-                                    },
-                                    data: {
-                                        isLockExamScore: e.target.checked,
-                                    },
-                                })
-                            } catch (error) {}
-                        }}
+                        disabled
                         checked={lockExamCode}
                     >
-                        Khoá sinh phách
+                        Khóa sinh phách
                     </Checkbox>
                     <Flex justify="end" align="center" gap={8}>
                         <Button
