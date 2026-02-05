@@ -510,7 +510,13 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx }: Props) => {
                                             return (
                                                 <div className="space-y-4">
                                                     {previousComments.length > 0 && (
-                                                        <CommentList comments={previousComments} />
+                                                        <CommentList
+                                                            comments={previousComments}
+                                                            lecturerUserProfileId={
+                                                                item.analysisCriterions?.lecturer
+                                                                    ?.userProfileId
+                                                            }
+                                                        />
                                                     )}
 
                                                     <Form form={form} layout="vertical">

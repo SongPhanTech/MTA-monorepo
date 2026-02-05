@@ -31,7 +31,10 @@ export type DataTabType = StandardPeriod & {
     criteria: (CriterionPeriod & {
         analysisCriterions?:
             | (AnalysisCriterion & {
-                  lecturer?: { userProfile?: { fullname?: string | null } } | null
+                  lecturer?: {
+                      userProfile?: { id?: string; fullname?: string | null } | null
+                      userProfileId?: string
+                  } | null
                   requirementCriterions: (RequirementCriterion & {
                       evidences: (AnalysisFormEvidence & {
                           evidence: Evidence
@@ -490,6 +493,12 @@ const CriteriaAnalysisSubPage = ({
                                                     <CommentList
                                                         comments={
                                                             record.evaluationCriterionComment || []
+                                                        }
+                                                        lecturerUserProfileId={
+                                                            item.analysisCriterions?.lecturer
+                                                                ?.userProfileId ||
+                                                            item.analysisCriterions?.lecturer
+                                                                ?.userProfile?.id
                                                         }
                                                     />
                                                 </div>
