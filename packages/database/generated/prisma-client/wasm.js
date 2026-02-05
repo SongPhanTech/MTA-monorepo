@@ -4165,7 +4165,6 @@ exports.Prisma.ScoreLinkSheetScalarFieldEnum = {
   trainingObjectTypeId: 'trainingObjectTypeId',
   note: 'note',
   decision: 'decision',
-  status: 'status',
   fixedClassId: 'fixedClassId',
   semesterId: 'semesterId'
 };
@@ -4180,7 +4179,8 @@ exports.Prisma.ScoreLinkSubjectVersionScalarFieldEnum = {
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
   scoreLinkSheetId: 'scoreLinkSheetId',
-  subjectVersionId: 'subjectVersionId'
+  subjectVersionId: 'subjectVersionId',
+  status: 'status'
 };
 
 exports.Prisma.ScoreLinkStudentScalarFieldEnum = {

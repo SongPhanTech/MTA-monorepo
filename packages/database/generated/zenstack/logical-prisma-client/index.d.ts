@@ -10106,7 +10106,6 @@ export namespace Prisma {
         trainingObjectTypeId: 'trainingObjectTypeId',
         note: 'note',
         decision: 'decision',
-        status: 'status',
         fixedClassId: 'fixedClassId',
         semesterId: 'semesterId'
     };
@@ -10120,7 +10119,8 @@ export namespace Prisma {
         updatedAt: 'updatedAt',
         createdBy: 'createdBy',
         scoreLinkSheetId: 'scoreLinkSheetId',
-        subjectVersionId: 'subjectVersionId'
+        subjectVersionId: 'subjectVersionId',
+        status: 'status'
     };
     export const ScoreLinkStudentScalarFieldEnum: {
         id: 'id',
@@ -99565,7 +99565,6 @@ export namespace Prisma {
         readonly trainingObjectTypeId: FieldRef<"ScoreLinkSheet", 'String'>;
         readonly note: FieldRef<"ScoreLinkSheet", 'String'>;
         readonly decision: FieldRef<"ScoreLinkSheet", 'String'>;
-        readonly status: FieldRef<"ScoreLinkSheet", 'ScoreLinkStatus'>;
         readonly fixedClassId: FieldRef<"ScoreLinkSheet", 'String'>;
         readonly semesterId: FieldRef<"ScoreLinkSheet", 'String'>;
     }
@@ -99953,6 +99952,7 @@ export namespace Prisma {
         readonly createdBy: FieldRef<"ScoreLinkSubjectVersion", 'String'>;
         readonly scoreLinkSheetId: FieldRef<"ScoreLinkSubjectVersion", 'String'>;
         readonly subjectVersionId: FieldRef<"ScoreLinkSubjectVersion", 'String'>;
+        readonly status: FieldRef<"ScoreLinkSubjectVersion", 'ScoreLinkStatus'>;
     }
 
     export interface ScoreLinkStudentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -320421,7 +320421,6 @@ export namespace Prisma {
         trainingObjectTypeId: string | null
         note: string | null
         decision: string | null
-        status: $Enums.ScoreLinkStatus | null
         fixedClassId: string | null
         semesterId: string | null
     };
@@ -320437,7 +320436,6 @@ export namespace Prisma {
         trainingObjectTypeId: string | null
         note: string | null
         decision: string | null
-        status: $Enums.ScoreLinkStatus | null
         fixedClassId: string | null
         semesterId: string | null
     };
@@ -320453,7 +320451,6 @@ export namespace Prisma {
         trainingObjectTypeId: number
         note: number
         decision: number
-        status: number
         fixedClassId: number
         semesterId: number
         _all: number
@@ -320470,7 +320467,6 @@ export namespace Prisma {
         trainingObjectTypeId?: true
         note?: true
         decision?: true
-        status?: true
         fixedClassId?: true
         semesterId?: true
     };
@@ -320486,7 +320482,6 @@ export namespace Prisma {
         trainingObjectTypeId?: true
         note?: true
         decision?: true
-        status?: true
         fixedClassId?: true
         semesterId?: true
     };
@@ -320502,7 +320497,6 @@ export namespace Prisma {
         trainingObjectTypeId?: true
         note?: true
         decision?: true
-        status?: true
         fixedClassId?: true
         semesterId?: true
         _all?: true
@@ -320585,7 +320579,6 @@ export namespace Prisma {
         trainingObjectTypeId: string
         note: string | null
         decision: string | null
-        status: $Enums.ScoreLinkStatus
         fixedClassId: string
         semesterId: string
         _count: ScoreLinkSheetCountAggregateOutputType | null
@@ -320616,7 +320609,6 @@ export namespace Prisma {
         trainingObjectTypeId?: boolean
         note?: boolean
         decision?: boolean
-        status?: boolean
         fixedClassId?: boolean
         semesterId?: boolean
         trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
@@ -320638,7 +320630,6 @@ export namespace Prisma {
         trainingObjectTypeId?: boolean
         note?: boolean
         decision?: boolean
-        status?: boolean
         fixedClassId?: boolean
         semesterId?: boolean
         trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
@@ -320657,7 +320648,6 @@ export namespace Prisma {
         trainingObjectTypeId?: boolean
         note?: boolean
         decision?: boolean
-        status?: boolean
         fixedClassId?: boolean
         semesterId?: boolean
         trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
@@ -320676,11 +320666,10 @@ export namespace Prisma {
         trainingObjectTypeId?: boolean
         note?: boolean
         decision?: boolean
-        status?: boolean
         fixedClassId?: boolean
         semesterId?: boolean
     };
-    export type ScoreLinkSheetOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "trainingObjectTypeId" | "note" | "decision" | "status" | "fixedClassId" | "semesterId", ExtArgs["result"]["scoreLinkSheet"]>;
+    export type ScoreLinkSheetOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "trainingObjectTypeId" | "note" | "decision" | "fixedClassId" | "semesterId", ExtArgs["result"]["scoreLinkSheet"]>;
     export type ScoreLinkSheetInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
         fixedClass?: boolean | FixedClassDefaultArgs<ExtArgs>
@@ -320720,7 +320709,6 @@ export namespace Prisma {
             trainingObjectTypeId: string
             note: string | null
             decision: string | null
-            status: $Enums.ScoreLinkStatus
             fixedClassId: string
             semesterId: string
         }, ExtArgs["result"]["scoreLinkSheet"]>
@@ -321189,6 +321177,7 @@ export namespace Prisma {
         createdBy: string | null
         scoreLinkSheetId: string | null
         subjectVersionId: string | null
+        status: $Enums.ScoreLinkStatus | null
     };
     export type ScoreLinkSubjectVersionMaxAggregateOutputType = {
         id: string | null
@@ -321201,6 +321190,7 @@ export namespace Prisma {
         createdBy: string | null
         scoreLinkSheetId: string | null
         subjectVersionId: string | null
+        status: $Enums.ScoreLinkStatus | null
     };
     export type ScoreLinkSubjectVersionCountAggregateOutputType = {
         id: number
@@ -321213,6 +321203,7 @@ export namespace Prisma {
         createdBy: number
         scoreLinkSheetId: number
         subjectVersionId: number
+        status: number
         _all: number
     };
     export type ScoreLinkSubjectVersionMinAggregateInputType = {
@@ -321226,6 +321217,7 @@ export namespace Prisma {
         createdBy?: true
         scoreLinkSheetId?: true
         subjectVersionId?: true
+        status?: true
     };
     export type ScoreLinkSubjectVersionMaxAggregateInputType = {
         id?: true
@@ -321238,6 +321230,7 @@ export namespace Prisma {
         createdBy?: true
         scoreLinkSheetId?: true
         subjectVersionId?: true
+        status?: true
     };
     export type ScoreLinkSubjectVersionCountAggregateInputType = {
         id?: true
@@ -321250,6 +321243,7 @@ export namespace Prisma {
         createdBy?: true
         scoreLinkSheetId?: true
         subjectVersionId?: true
+        status?: true
         _all?: true
     };
     export type ScoreLinkSubjectVersionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -321329,6 +321323,7 @@ export namespace Prisma {
         createdBy: string | null
         scoreLinkSheetId: string
         subjectVersionId: string
+        status: $Enums.ScoreLinkStatus
         _count: ScoreLinkSubjectVersionCountAggregateOutputType | null
         _min: ScoreLinkSubjectVersionMinAggregateOutputType | null
         _max: ScoreLinkSubjectVersionMaxAggregateOutputType | null
@@ -321356,6 +321351,7 @@ export namespace Prisma {
         createdBy?: boolean
         scoreLinkSheetId?: boolean
         subjectVersionId?: boolean
+        status?: boolean
         scoreLinkSheet?: boolean | ScoreLinkSheetDefaultArgs<ExtArgs>
         subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
         scoreLinkStudents?: boolean | ScoreLinkSubjectVersion$scoreLinkStudentsArgs<ExtArgs>
@@ -321373,6 +321369,7 @@ export namespace Prisma {
         createdBy?: boolean
         scoreLinkSheetId?: boolean
         subjectVersionId?: boolean
+        status?: boolean
         scoreLinkSheet?: boolean | ScoreLinkSheetDefaultArgs<ExtArgs>
         subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["scoreLinkSubjectVersion"]>;
@@ -321387,6 +321384,7 @@ export namespace Prisma {
         createdBy?: boolean
         scoreLinkSheetId?: boolean
         subjectVersionId?: boolean
+        status?: boolean
         scoreLinkSheet?: boolean | ScoreLinkSheetDefaultArgs<ExtArgs>
         subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["scoreLinkSubjectVersion"]>;
@@ -321401,8 +321399,9 @@ export namespace Prisma {
         createdBy?: boolean
         scoreLinkSheetId?: boolean
         subjectVersionId?: boolean
+        status?: boolean
     };
-    export type ScoreLinkSubjectVersionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "scoreLinkSheetId" | "subjectVersionId", ExtArgs["result"]["scoreLinkSubjectVersion"]>;
+    export type ScoreLinkSubjectVersionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "scoreLinkSheetId" | "subjectVersionId" | "status", ExtArgs["result"]["scoreLinkSubjectVersion"]>;
     export type ScoreLinkSubjectVersionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         scoreLinkSheet?: boolean | ScoreLinkSheetDefaultArgs<ExtArgs>
         subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
@@ -321437,6 +321436,7 @@ export namespace Prisma {
             createdBy: string | null
             scoreLinkSheetId: string
             subjectVersionId: string
+            status: $Enums.ScoreLinkStatus
         }, ExtArgs["result"]["scoreLinkSubjectVersion"]>
         composites: {}
     };
@@ -375950,7 +375950,6 @@ export namespace Prisma {
         trainingObjectTypeId?: StringFilter<"ScoreLinkSheet"> | string
         note?: StringNullableFilter<"ScoreLinkSheet"> | string | null
         decision?: StringNullableFilter<"ScoreLinkSheet"> | string | null
-        status?: EnumScoreLinkStatusFilter<"ScoreLinkSheet"> | $Enums.ScoreLinkStatus
         fixedClassId?: StringFilter<"ScoreLinkSheet"> | string
         semesterId?: StringFilter<"ScoreLinkSheet"> | string
         trainingObjectType?: XOR<TrainingObjectTypeScalarRelationFilter, TrainingObjectTypeWhereInput>
@@ -375971,7 +375970,6 @@ export namespace Prisma {
         trainingObjectTypeId?: SortOrder
         note?: SortOrderInput | SortOrder
         decision?: SortOrderInput | SortOrder
-        status?: SortOrder
         fixedClassId?: SortOrder
         semesterId?: SortOrder
         trainingObjectType?: TrainingObjectTypeOrderByWithRelationInput
@@ -375996,7 +375994,6 @@ export namespace Prisma {
         trainingObjectTypeId?: StringFilter<"ScoreLinkSheet"> | string
         note?: StringNullableFilter<"ScoreLinkSheet"> | string | null
         decision?: StringNullableFilter<"ScoreLinkSheet"> | string | null
-        status?: EnumScoreLinkStatusFilter<"ScoreLinkSheet"> | $Enums.ScoreLinkStatus
         fixedClassId?: StringFilter<"ScoreLinkSheet"> | string
         semesterId?: StringFilter<"ScoreLinkSheet"> | string
         trainingObjectType?: XOR<TrainingObjectTypeScalarRelationFilter, TrainingObjectTypeWhereInput>
@@ -376017,7 +376014,6 @@ export namespace Prisma {
         trainingObjectTypeId?: SortOrder
         note?: SortOrderInput | SortOrder
         decision?: SortOrderInput | SortOrder
-        status?: SortOrder
         fixedClassId?: SortOrder
         semesterId?: SortOrder
         _count?: ScoreLinkSheetCountOrderByAggregateInput
@@ -376039,7 +376035,6 @@ export namespace Prisma {
         trainingObjectTypeId?: StringWithAggregatesFilter<"ScoreLinkSheet"> | string
         note?: StringNullableWithAggregatesFilter<"ScoreLinkSheet"> | string | null
         decision?: StringNullableWithAggregatesFilter<"ScoreLinkSheet"> | string | null
-        status?: EnumScoreLinkStatusWithAggregatesFilter<"ScoreLinkSheet"> | $Enums.ScoreLinkStatus
         fixedClassId?: StringWithAggregatesFilter<"ScoreLinkSheet"> | string
         semesterId?: StringWithAggregatesFilter<"ScoreLinkSheet"> | string
     };
@@ -376057,6 +376052,7 @@ export namespace Prisma {
         createdBy?: UuidNullableFilter<"ScoreLinkSubjectVersion"> | string | null
         scoreLinkSheetId?: StringFilter<"ScoreLinkSubjectVersion"> | string
         subjectVersionId?: StringFilter<"ScoreLinkSubjectVersion"> | string
+        status?: EnumScoreLinkStatusFilter<"ScoreLinkSubjectVersion"> | $Enums.ScoreLinkStatus
         scoreLinkSheet?: XOR<ScoreLinkSheetScalarRelationFilter, ScoreLinkSheetWhereInput>
         subjectVersion?: XOR<SubjectVersionScalarRelationFilter, SubjectVersionWhereInput>
         scoreLinkStudents?: ScoreLinkStudentListRelationFilter
@@ -376073,6 +376069,7 @@ export namespace Prisma {
         createdBy?: SortOrderInput | SortOrder
         scoreLinkSheetId?: SortOrder
         subjectVersionId?: SortOrder
+        status?: SortOrder
         scoreLinkSheet?: ScoreLinkSheetOrderByWithRelationInput
         subjectVersion?: SubjectVersionOrderByWithRelationInput
         scoreLinkStudents?: ScoreLinkStudentOrderByRelationAggregateInput
@@ -376094,6 +376091,7 @@ export namespace Prisma {
         createdBy?: UuidNullableFilter<"ScoreLinkSubjectVersion"> | string | null
         scoreLinkSheetId?: StringFilter<"ScoreLinkSubjectVersion"> | string
         subjectVersionId?: StringFilter<"ScoreLinkSubjectVersion"> | string
+        status?: EnumScoreLinkStatusFilter<"ScoreLinkSubjectVersion"> | $Enums.ScoreLinkStatus
         scoreLinkSheet?: XOR<ScoreLinkSheetScalarRelationFilter, ScoreLinkSheetWhereInput>
         subjectVersion?: XOR<SubjectVersionScalarRelationFilter, SubjectVersionWhereInput>
         scoreLinkStudents?: ScoreLinkStudentListRelationFilter
@@ -376110,6 +376108,7 @@ export namespace Prisma {
         createdBy?: SortOrderInput | SortOrder
         scoreLinkSheetId?: SortOrder
         subjectVersionId?: SortOrder
+        status?: SortOrder
         _count?: ScoreLinkSubjectVersionCountOrderByAggregateInput
         _max?: ScoreLinkSubjectVersionMaxOrderByAggregateInput
         _min?: ScoreLinkSubjectVersionMinOrderByAggregateInput
@@ -376128,6 +376127,7 @@ export namespace Prisma {
         createdBy?: UuidNullableWithAggregatesFilter<"ScoreLinkSubjectVersion"> | string | null
         scoreLinkSheetId?: StringWithAggregatesFilter<"ScoreLinkSubjectVersion"> | string
         subjectVersionId?: StringWithAggregatesFilter<"ScoreLinkSubjectVersion"> | string
+        status?: EnumScoreLinkStatusWithAggregatesFilter<"ScoreLinkSubjectVersion"> | $Enums.ScoreLinkStatus
     };
     export type ScoreLinkStudentWhereInput = {
         AND?: ScoreLinkStudentWhereInput | ScoreLinkStudentWhereInput[]
@@ -407479,7 +407479,6 @@ export namespace Prisma {
         createdBy?: string | null
         note?: string | null
         decision?: string | null
-        status?: $Enums.ScoreLinkStatus
         trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutScoreLinkSheetInput
         fixedClass: FixedClassCreateNestedOneWithoutScoreLinkSheetsInput
         semester: SemesterCreateNestedOneWithoutScoreLinkSheetsInput
@@ -407498,7 +407497,6 @@ export namespace Prisma {
         trainingObjectTypeId: string
         note?: string | null
         decision?: string | null
-        status?: $Enums.ScoreLinkStatus
         fixedClassId: string
         semesterId: string
         scoreLinkSubjectVersions?: ScoreLinkSubjectVersionUncheckedCreateNestedManyWithoutScoreLinkSheetInput
@@ -407515,7 +407513,6 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         note?: NullableStringFieldUpdateOperationsInput | string | null
         decision?: NullableStringFieldUpdateOperationsInput | string | null
-        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
         trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutScoreLinkSheetNestedInput
         fixedClass?: FixedClassUpdateOneRequiredWithoutScoreLinkSheetsNestedInput
         semester?: SemesterUpdateOneRequiredWithoutScoreLinkSheetsNestedInput
@@ -407534,7 +407531,6 @@ export namespace Prisma {
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         note?: NullableStringFieldUpdateOperationsInput | string | null
         decision?: NullableStringFieldUpdateOperationsInput | string | null
-        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
         fixedClassId?: StringFieldUpdateOperationsInput | string
         semesterId?: StringFieldUpdateOperationsInput | string
         scoreLinkSubjectVersions?: ScoreLinkSubjectVersionUncheckedUpdateManyWithoutScoreLinkSheetNestedInput
@@ -407552,7 +407548,6 @@ export namespace Prisma {
         trainingObjectTypeId: string
         note?: string | null
         decision?: string | null
-        status?: $Enums.ScoreLinkStatus
         fixedClassId: string
         semesterId: string
     };
@@ -407567,7 +407562,6 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         note?: NullableStringFieldUpdateOperationsInput | string | null
         decision?: NullableStringFieldUpdateOperationsInput | string | null
-        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
     };
     export type ScoreLinkSheetUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -407581,7 +407575,6 @@ export namespace Prisma {
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         note?: NullableStringFieldUpdateOperationsInput | string | null
         decision?: NullableStringFieldUpdateOperationsInput | string | null
-        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
         fixedClassId?: StringFieldUpdateOperationsInput | string
         semesterId?: StringFieldUpdateOperationsInput | string
     };
@@ -407594,6 +407587,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        status?: $Enums.ScoreLinkStatus
         scoreLinkSheet: ScoreLinkSheetCreateNestedOneWithoutScoreLinkSubjectVersionsInput
         subjectVersion: SubjectVersionCreateNestedOneWithoutScoreLinkSubjectVersionInput
         scoreLinkStudents?: ScoreLinkStudentCreateNestedManyWithoutScoreLinkSubjectVersionInput
@@ -407610,6 +407604,7 @@ export namespace Prisma {
         createdBy?: string | null
         scoreLinkSheetId: string
         subjectVersionId: string
+        status?: $Enums.ScoreLinkStatus
         scoreLinkStudents?: ScoreLinkStudentUncheckedCreateNestedManyWithoutScoreLinkSubjectVersionInput
         subjectClass?: SubjectClassUncheckedCreateNestedOneWithoutScoreLinkSubjectVersionInput
     };
@@ -407622,6 +407617,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
         scoreLinkSheet?: ScoreLinkSheetUpdateOneRequiredWithoutScoreLinkSubjectVersionsNestedInput
         subjectVersion?: SubjectVersionUpdateOneRequiredWithoutScoreLinkSubjectVersionNestedInput
         scoreLinkStudents?: ScoreLinkStudentUpdateManyWithoutScoreLinkSubjectVersionNestedInput
@@ -407638,6 +407634,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         scoreLinkSheetId?: StringFieldUpdateOperationsInput | string
         subjectVersionId?: StringFieldUpdateOperationsInput | string
+        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
         scoreLinkStudents?: ScoreLinkStudentUncheckedUpdateManyWithoutScoreLinkSubjectVersionNestedInput
         subjectClass?: SubjectClassUncheckedUpdateOneWithoutScoreLinkSubjectVersionNestedInput
     };
@@ -407652,6 +407649,7 @@ export namespace Prisma {
         createdBy?: string | null
         scoreLinkSheetId: string
         subjectVersionId: string
+        status?: $Enums.ScoreLinkStatus
     };
     export type ScoreLinkSubjectVersionUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -407662,6 +407660,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
     };
     export type ScoreLinkSubjectVersionUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -407674,6 +407673,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         scoreLinkSheetId?: StringFieldUpdateOperationsInput | string
         subjectVersionId?: StringFieldUpdateOperationsInput | string
+        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
     };
     export type ScoreLinkStudentCreateInput = {
         id?: string
@@ -428466,12 +428466,6 @@ export namespace Prisma {
         _min?: NestedEnumDiplomaVerificationStatusFilter<$PrismaModel>
         _max?: NestedEnumDiplomaVerificationStatusFilter<$PrismaModel>
     };
-    export type EnumScoreLinkStatusFilter<$PrismaModel = never> = {
-        equals?: $Enums.ScoreLinkStatus | EnumScoreLinkStatusFieldRefInput<$PrismaModel>
-        in?: $Enums.ScoreLinkStatus[] | ListEnumScoreLinkStatusFieldRefInput<$PrismaModel>
-        notIn?: $Enums.ScoreLinkStatus[] | ListEnumScoreLinkStatusFieldRefInput<$PrismaModel>
-        not?: NestedEnumScoreLinkStatusFilter<$PrismaModel> | $Enums.ScoreLinkStatus
-    };
     export type FixedClassScalarRelationFilter = {
         is?: FixedClassWhereInput
         isNot?: FixedClassWhereInput
@@ -428493,7 +428487,6 @@ export namespace Prisma {
         trainingObjectTypeId?: SortOrder
         note?: SortOrder
         decision?: SortOrder
-        status?: SortOrder
         fixedClassId?: SortOrder
         semesterId?: SortOrder
     };
@@ -428509,7 +428502,6 @@ export namespace Prisma {
         trainingObjectTypeId?: SortOrder
         note?: SortOrder
         decision?: SortOrder
-        status?: SortOrder
         fixedClassId?: SortOrder
         semesterId?: SortOrder
     };
@@ -428525,18 +428517,14 @@ export namespace Prisma {
         trainingObjectTypeId?: SortOrder
         note?: SortOrder
         decision?: SortOrder
-        status?: SortOrder
         fixedClassId?: SortOrder
         semesterId?: SortOrder
     };
-    export type EnumScoreLinkStatusWithAggregatesFilter<$PrismaModel = never> = {
+    export type EnumScoreLinkStatusFilter<$PrismaModel = never> = {
         equals?: $Enums.ScoreLinkStatus | EnumScoreLinkStatusFieldRefInput<$PrismaModel>
         in?: $Enums.ScoreLinkStatus[] | ListEnumScoreLinkStatusFieldRefInput<$PrismaModel>
         notIn?: $Enums.ScoreLinkStatus[] | ListEnumScoreLinkStatusFieldRefInput<$PrismaModel>
-        not?: NestedEnumScoreLinkStatusWithAggregatesFilter<$PrismaModel> | $Enums.ScoreLinkStatus
-        _count?: NestedIntFilter<$PrismaModel>
-        _min?: NestedEnumScoreLinkStatusFilter<$PrismaModel>
-        _max?: NestedEnumScoreLinkStatusFilter<$PrismaModel>
+        not?: NestedEnumScoreLinkStatusFilter<$PrismaModel> | $Enums.ScoreLinkStatus
     };
     export type ScoreLinkSheetScalarRelationFilter = {
         is?: ScoreLinkSheetWhereInput
@@ -428562,6 +428550,7 @@ export namespace Prisma {
         createdBy?: SortOrder
         scoreLinkSheetId?: SortOrder
         subjectVersionId?: SortOrder
+        status?: SortOrder
     };
     export type ScoreLinkSubjectVersionMaxOrderByAggregateInput = {
         id?: SortOrder
@@ -428574,6 +428563,7 @@ export namespace Prisma {
         createdBy?: SortOrder
         scoreLinkSheetId?: SortOrder
         subjectVersionId?: SortOrder
+        status?: SortOrder
     };
     export type ScoreLinkSubjectVersionMinOrderByAggregateInput = {
         id?: SortOrder
@@ -428586,6 +428576,16 @@ export namespace Prisma {
         createdBy?: SortOrder
         scoreLinkSheetId?: SortOrder
         subjectVersionId?: SortOrder
+        status?: SortOrder
+    };
+    export type EnumScoreLinkStatusWithAggregatesFilter<$PrismaModel = never> = {
+        equals?: $Enums.ScoreLinkStatus | EnumScoreLinkStatusFieldRefInput<$PrismaModel>
+        in?: $Enums.ScoreLinkStatus[] | ListEnumScoreLinkStatusFieldRefInput<$PrismaModel>
+        notIn?: $Enums.ScoreLinkStatus[] | ListEnumScoreLinkStatusFieldRefInput<$PrismaModel>
+        not?: NestedEnumScoreLinkStatusWithAggregatesFilter<$PrismaModel> | $Enums.ScoreLinkStatus
+        _count?: NestedIntFilter<$PrismaModel>
+        _min?: NestedEnumScoreLinkStatusFilter<$PrismaModel>
+        _max?: NestedEnumScoreLinkStatusFilter<$PrismaModel>
     };
     export type ScoreLinkSubjectVersionScalarRelationFilter = {
         is?: ScoreLinkSubjectVersionWhereInput
@@ -452920,9 +452920,6 @@ export namespace Prisma {
         createMany?: DocumentFileCreateManyScoreLinkSheetInputEnvelope
         connect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
     };
-    export type EnumScoreLinkStatusFieldUpdateOperationsInput = {
-        set?: $Enums.ScoreLinkStatus
-    };
     export type TrainingObjectTypeUpdateOneRequiredWithoutScoreLinkSheetNestedInput = {
         create?: XOR<TrainingObjectTypeCreateWithoutScoreLinkSheetInput, TrainingObjectTypeUncheckedCreateWithoutScoreLinkSheetInput>
         connectOrCreate?: TrainingObjectTypeCreateOrConnectWithoutScoreLinkSheetInput
@@ -453027,6 +453024,9 @@ export namespace Prisma {
         create?: XOR<SubjectClassCreateWithoutScoreLinkSubjectVersionInput, SubjectClassUncheckedCreateWithoutScoreLinkSubjectVersionInput>
         connectOrCreate?: SubjectClassCreateOrConnectWithoutScoreLinkSubjectVersionInput
         connect?: SubjectClassWhereUniqueInput
+    };
+    export type EnumScoreLinkStatusFieldUpdateOperationsInput = {
+        set?: $Enums.ScoreLinkStatus
     };
     export type ScoreLinkSheetUpdateOneRequiredWithoutScoreLinkSubjectVersionsNestedInput = {
         create?: XOR<ScoreLinkSheetCreateWithoutScoreLinkSubjectVersionsInput, ScoreLinkSheetUncheckedCreateWithoutScoreLinkSubjectVersionsInput>
@@ -510271,7 +510271,6 @@ export namespace Prisma {
         createdBy?: string | null
         note?: string | null
         decision?: string | null
-        status?: $Enums.ScoreLinkStatus
         trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutScoreLinkSheetInput
         fixedClass: FixedClassCreateNestedOneWithoutScoreLinkSheetsInput
         scoreLinkSubjectVersions?: ScoreLinkSubjectVersionCreateNestedManyWithoutScoreLinkSheetInput
@@ -510289,7 +510288,6 @@ export namespace Prisma {
         trainingObjectTypeId: string
         note?: string | null
         decision?: string | null
-        status?: $Enums.ScoreLinkStatus
         fixedClassId: string
         scoreLinkSubjectVersions?: ScoreLinkSubjectVersionUncheckedCreateNestedManyWithoutScoreLinkSheetInput
         documents?: DocumentFileUncheckedCreateNestedManyWithoutScoreLinkSheetInput
@@ -510813,7 +510811,6 @@ export namespace Prisma {
         trainingObjectTypeId?: StringFilter<"ScoreLinkSheet"> | string
         note?: StringNullableFilter<"ScoreLinkSheet"> | string | null
         decision?: StringNullableFilter<"ScoreLinkSheet"> | string | null
-        status?: EnumScoreLinkStatusFilter<"ScoreLinkSheet"> | $Enums.ScoreLinkStatus
         fixedClassId?: StringFilter<"ScoreLinkSheet"> | string
         semesterId?: StringFilter<"ScoreLinkSheet"> | string
     };
@@ -513959,7 +513956,6 @@ export namespace Prisma {
         createdBy?: string | null
         note?: string | null
         decision?: string | null
-        status?: $Enums.ScoreLinkStatus
         trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutScoreLinkSheetInput
         semester: SemesterCreateNestedOneWithoutScoreLinkSheetsInput
         scoreLinkSubjectVersions?: ScoreLinkSubjectVersionCreateNestedManyWithoutScoreLinkSheetInput
@@ -513977,7 +513973,6 @@ export namespace Prisma {
         trainingObjectTypeId: string
         note?: string | null
         decision?: string | null
-        status?: $Enums.ScoreLinkStatus
         semesterId: string
         scoreLinkSubjectVersions?: ScoreLinkSubjectVersionUncheckedCreateNestedManyWithoutScoreLinkSheetInput
         documents?: DocumentFileUncheckedCreateNestedManyWithoutScoreLinkSheetInput
@@ -518587,6 +518582,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        status?: $Enums.ScoreLinkStatus
         scoreLinkSheet: ScoreLinkSheetCreateNestedOneWithoutScoreLinkSubjectVersionsInput
         scoreLinkStudents?: ScoreLinkStudentCreateNestedManyWithoutScoreLinkSubjectVersionInput
         subjectClass?: SubjectClassCreateNestedOneWithoutScoreLinkSubjectVersionInput
@@ -518601,6 +518597,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         scoreLinkSheetId: string
+        status?: $Enums.ScoreLinkStatus
         scoreLinkStudents?: ScoreLinkStudentUncheckedCreateNestedManyWithoutScoreLinkSubjectVersionInput
         subjectClass?: SubjectClassUncheckedCreateNestedOneWithoutScoreLinkSubjectVersionInput
     };
@@ -519178,6 +519175,7 @@ export namespace Prisma {
         createdBy?: UuidNullableFilter<"ScoreLinkSubjectVersion"> | string | null
         scoreLinkSheetId?: StringFilter<"ScoreLinkSubjectVersion"> | string
         subjectVersionId?: StringFilter<"ScoreLinkSubjectVersion"> | string
+        status?: EnumScoreLinkStatusFilter<"ScoreLinkSubjectVersion"> | $Enums.ScoreLinkStatus
     };
     export type SubjectVersionCreateWithoutSubjectVersionHistoryInput = {
         id?: string
@@ -522423,6 +522421,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        status?: $Enums.ScoreLinkStatus
         scoreLinkSheet: ScoreLinkSheetCreateNestedOneWithoutScoreLinkSubjectVersionsInput
         subjectVersion: SubjectVersionCreateNestedOneWithoutScoreLinkSubjectVersionInput
         scoreLinkStudents?: ScoreLinkStudentCreateNestedManyWithoutScoreLinkSubjectVersionInput
@@ -522438,6 +522437,7 @@ export namespace Prisma {
         createdBy?: string | null
         scoreLinkSheetId: string
         subjectVersionId: string
+        status?: $Enums.ScoreLinkStatus
         scoreLinkStudents?: ScoreLinkStudentUncheckedCreateNestedManyWithoutScoreLinkSubjectVersionInput
     };
     export type ScoreLinkSubjectVersionCreateOrConnectWithoutSubjectClassInput = {
@@ -523757,6 +523757,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
         scoreLinkSheet?: ScoreLinkSheetUpdateOneRequiredWithoutScoreLinkSubjectVersionsNestedInput
         subjectVersion?: SubjectVersionUpdateOneRequiredWithoutScoreLinkSubjectVersionNestedInput
         scoreLinkStudents?: ScoreLinkStudentUpdateManyWithoutScoreLinkSubjectVersionNestedInput
@@ -523772,6 +523773,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         scoreLinkSheetId?: StringFieldUpdateOperationsInput | string
         subjectVersionId?: StringFieldUpdateOperationsInput | string
+        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
         scoreLinkStudents?: ScoreLinkStudentUncheckedUpdateManyWithoutScoreLinkSubjectVersionNestedInput
     };
     export type StudentSubjectScoreUpsertWithWhereUniqueWithoutSubjectClassInput = {
@@ -527834,7 +527836,6 @@ export namespace Prisma {
         createdBy?: string | null
         note?: string | null
         decision?: string | null
-        status?: $Enums.ScoreLinkStatus
         fixedClass: FixedClassCreateNestedOneWithoutScoreLinkSheetsInput
         semester: SemesterCreateNestedOneWithoutScoreLinkSheetsInput
         scoreLinkSubjectVersions?: ScoreLinkSubjectVersionCreateNestedManyWithoutScoreLinkSheetInput
@@ -527851,7 +527852,6 @@ export namespace Prisma {
         createdBy?: string | null
         note?: string | null
         decision?: string | null
-        status?: $Enums.ScoreLinkStatus
         fixedClassId: string
         semesterId: string
         scoreLinkSubjectVersions?: ScoreLinkSubjectVersionUncheckedCreateNestedManyWithoutScoreLinkSheetInput
@@ -539812,7 +539812,6 @@ export namespace Prisma {
         createdBy?: string | null
         note?: string | null
         decision?: string | null
-        status?: $Enums.ScoreLinkStatus
         trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutScoreLinkSheetInput
         fixedClass: FixedClassCreateNestedOneWithoutScoreLinkSheetsInput
         semester: SemesterCreateNestedOneWithoutScoreLinkSheetsInput
@@ -539830,7 +539829,6 @@ export namespace Prisma {
         trainingObjectTypeId: string
         note?: string | null
         decision?: string | null
-        status?: $Enums.ScoreLinkStatus
         fixedClassId: string
         semesterId: string
         scoreLinkSubjectVersions?: ScoreLinkSubjectVersionUncheckedCreateNestedManyWithoutScoreLinkSheetInput
@@ -541071,7 +541069,6 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         note?: NullableStringFieldUpdateOperationsInput | string | null
         decision?: NullableStringFieldUpdateOperationsInput | string | null
-        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
         trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutScoreLinkSheetNestedInput
         fixedClass?: FixedClassUpdateOneRequiredWithoutScoreLinkSheetsNestedInput
         semester?: SemesterUpdateOneRequiredWithoutScoreLinkSheetsNestedInput
@@ -541089,7 +541086,6 @@ export namespace Prisma {
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         note?: NullableStringFieldUpdateOperationsInput | string | null
         decision?: NullableStringFieldUpdateOperationsInput | string | null
-        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
         fixedClassId?: StringFieldUpdateOperationsInput | string
         semesterId?: StringFieldUpdateOperationsInput | string
         scoreLinkSubjectVersions?: ScoreLinkSubjectVersionUncheckedUpdateManyWithoutScoreLinkSheetNestedInput
@@ -575400,6 +575396,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        status?: $Enums.ScoreLinkStatus
         subjectVersion: SubjectVersionCreateNestedOneWithoutScoreLinkSubjectVersionInput
         scoreLinkStudents?: ScoreLinkStudentCreateNestedManyWithoutScoreLinkSubjectVersionInput
         subjectClass?: SubjectClassCreateNestedOneWithoutScoreLinkSubjectVersionInput
@@ -575414,6 +575411,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         subjectVersionId: string
+        status?: $Enums.ScoreLinkStatus
         scoreLinkStudents?: ScoreLinkStudentUncheckedCreateNestedManyWithoutScoreLinkSubjectVersionInput
         subjectClass?: SubjectClassUncheckedCreateNestedOneWithoutScoreLinkSubjectVersionInput
     };
@@ -575735,7 +575733,6 @@ export namespace Prisma {
         createdBy?: string | null
         note?: string | null
         decision?: string | null
-        status?: $Enums.ScoreLinkStatus
         trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutScoreLinkSheetInput
         fixedClass: FixedClassCreateNestedOneWithoutScoreLinkSheetsInput
         semester: SemesterCreateNestedOneWithoutScoreLinkSheetsInput
@@ -575753,7 +575750,6 @@ export namespace Prisma {
         trainingObjectTypeId: string
         note?: string | null
         decision?: string | null
-        status?: $Enums.ScoreLinkStatus
         fixedClassId: string
         semesterId: string
         documents?: DocumentFileUncheckedCreateNestedManyWithoutScoreLinkSheetInput
@@ -576038,7 +576034,6 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         note?: NullableStringFieldUpdateOperationsInput | string | null
         decision?: NullableStringFieldUpdateOperationsInput | string | null
-        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
         trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutScoreLinkSheetNestedInput
         fixedClass?: FixedClassUpdateOneRequiredWithoutScoreLinkSheetsNestedInput
         semester?: SemesterUpdateOneRequiredWithoutScoreLinkSheetsNestedInput
@@ -576056,7 +576051,6 @@ export namespace Prisma {
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         note?: NullableStringFieldUpdateOperationsInput | string | null
         decision?: NullableStringFieldUpdateOperationsInput | string | null
-        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
         fixedClassId?: StringFieldUpdateOperationsInput | string
         semesterId?: StringFieldUpdateOperationsInput | string
         documents?: DocumentFileUncheckedUpdateManyWithoutScoreLinkSheetNestedInput
@@ -576317,6 +576311,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        status?: $Enums.ScoreLinkStatus
         scoreLinkSheet: ScoreLinkSheetCreateNestedOneWithoutScoreLinkSubjectVersionsInput
         subjectVersion: SubjectVersionCreateNestedOneWithoutScoreLinkSubjectVersionInput
         subjectClass?: SubjectClassCreateNestedOneWithoutScoreLinkSubjectVersionInput
@@ -576332,6 +576327,7 @@ export namespace Prisma {
         createdBy?: string | null
         scoreLinkSheetId: string
         subjectVersionId: string
+        status?: $Enums.ScoreLinkStatus
         subjectClass?: SubjectClassUncheckedCreateNestedOneWithoutScoreLinkSubjectVersionInput
     };
     export type ScoreLinkSubjectVersionCreateOrConnectWithoutScoreLinkStudentsInput = {
@@ -576500,6 +576496,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
         scoreLinkSheet?: ScoreLinkSheetUpdateOneRequiredWithoutScoreLinkSubjectVersionsNestedInput
         subjectVersion?: SubjectVersionUpdateOneRequiredWithoutScoreLinkSubjectVersionNestedInput
         subjectClass?: SubjectClassUpdateOneWithoutScoreLinkSubjectVersionNestedInput
@@ -576515,6 +576512,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         scoreLinkSheetId?: StringFieldUpdateOperationsInput | string
         subjectVersionId?: StringFieldUpdateOperationsInput | string
+        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
         subjectClass?: SubjectClassUncheckedUpdateOneWithoutScoreLinkSubjectVersionNestedInput
     };
     export type StudentUpsertWithoutScoreLinkStudentInput = {
@@ -611637,7 +611635,6 @@ export namespace Prisma {
         trainingObjectTypeId: string
         note?: string | null
         decision?: string | null
-        status?: $Enums.ScoreLinkStatus
         fixedClassId: string
     };
     export type SubjectClassUpdateWithoutSemesterInput = {
@@ -612512,7 +612509,6 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         note?: NullableStringFieldUpdateOperationsInput | string | null
         decision?: NullableStringFieldUpdateOperationsInput | string | null
-        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
         trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutScoreLinkSheetNestedInput
         fixedClass?: FixedClassUpdateOneRequiredWithoutScoreLinkSheetsNestedInput
         scoreLinkSubjectVersions?: ScoreLinkSubjectVersionUpdateManyWithoutScoreLinkSheetNestedInput
@@ -612530,7 +612526,6 @@ export namespace Prisma {
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         note?: NullableStringFieldUpdateOperationsInput | string | null
         decision?: NullableStringFieldUpdateOperationsInput | string | null
-        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
         fixedClassId?: StringFieldUpdateOperationsInput | string
         scoreLinkSubjectVersions?: ScoreLinkSubjectVersionUncheckedUpdateManyWithoutScoreLinkSheetNestedInput
         documents?: DocumentFileUncheckedUpdateManyWithoutScoreLinkSheetNestedInput
@@ -612547,7 +612542,6 @@ export namespace Prisma {
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         note?: NullableStringFieldUpdateOperationsInput | string | null
         decision?: NullableStringFieldUpdateOperationsInput | string | null
-        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
         fixedClassId?: StringFieldUpdateOperationsInput | string
     };
     export type TrainingCourseCreateManyTrainingLanguageInput = {
@@ -614192,7 +614186,6 @@ export namespace Prisma {
         trainingObjectTypeId: string
         note?: string | null
         decision?: string | null
-        status?: $Enums.ScoreLinkStatus
         semesterId: string
     };
     export type StudentUpdateWithoutFixedClassInput = {
@@ -614657,7 +614650,6 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         note?: NullableStringFieldUpdateOperationsInput | string | null
         decision?: NullableStringFieldUpdateOperationsInput | string | null
-        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
         trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutScoreLinkSheetNestedInput
         semester?: SemesterUpdateOneRequiredWithoutScoreLinkSheetsNestedInput
         scoreLinkSubjectVersions?: ScoreLinkSubjectVersionUpdateManyWithoutScoreLinkSheetNestedInput
@@ -614675,7 +614667,6 @@ export namespace Prisma {
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         note?: NullableStringFieldUpdateOperationsInput | string | null
         decision?: NullableStringFieldUpdateOperationsInput | string | null
-        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
         semesterId?: StringFieldUpdateOperationsInput | string
         scoreLinkSubjectVersions?: ScoreLinkSubjectVersionUncheckedUpdateManyWithoutScoreLinkSheetNestedInput
         documents?: DocumentFileUncheckedUpdateManyWithoutScoreLinkSheetNestedInput
@@ -614692,7 +614683,6 @@ export namespace Prisma {
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         note?: NullableStringFieldUpdateOperationsInput | string | null
         decision?: NullableStringFieldUpdateOperationsInput | string | null
-        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
         semesterId?: StringFieldUpdateOperationsInput | string
     };
     export type DocumentFileCreateManyCurriculumInput = {
@@ -616381,6 +616371,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         scoreLinkSheetId: string
+        status?: $Enums.ScoreLinkStatus
     };
     export type TrainingBlockSubjectUpdateWithoutSubjectInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -617656,6 +617647,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
         scoreLinkSheet?: ScoreLinkSheetUpdateOneRequiredWithoutScoreLinkSubjectVersionsNestedInput
         scoreLinkStudents?: ScoreLinkStudentUpdateManyWithoutScoreLinkSubjectVersionNestedInput
         subjectClass?: SubjectClassUpdateOneWithoutScoreLinkSubjectVersionNestedInput
@@ -617670,6 +617662,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         scoreLinkSheetId?: StringFieldUpdateOperationsInput | string
+        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
         scoreLinkStudents?: ScoreLinkStudentUncheckedUpdateManyWithoutScoreLinkSubjectVersionNestedInput
         subjectClass?: SubjectClassUncheckedUpdateOneWithoutScoreLinkSubjectVersionNestedInput
     };
@@ -617683,6 +617676,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         scoreLinkSheetId?: StringFieldUpdateOperationsInput | string
+        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
     };
     export type SubjectInGroupCreateManyEquivalencyGroupInput = {
         id?: string
@@ -619992,7 +619986,6 @@ export namespace Prisma {
         createdBy?: string | null
         note?: string | null
         decision?: string | null
-        status?: $Enums.ScoreLinkStatus
         fixedClassId: string
         semesterId: string
     };
@@ -621156,7 +621149,6 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         note?: NullableStringFieldUpdateOperationsInput | string | null
         decision?: NullableStringFieldUpdateOperationsInput | string | null
-        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
         fixedClass?: FixedClassUpdateOneRequiredWithoutScoreLinkSheetsNestedInput
         semester?: SemesterUpdateOneRequiredWithoutScoreLinkSheetsNestedInput
         scoreLinkSubjectVersions?: ScoreLinkSubjectVersionUpdateManyWithoutScoreLinkSheetNestedInput
@@ -621173,7 +621165,6 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         note?: NullableStringFieldUpdateOperationsInput | string | null
         decision?: NullableStringFieldUpdateOperationsInput | string | null
-        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
         fixedClassId?: StringFieldUpdateOperationsInput | string
         semesterId?: StringFieldUpdateOperationsInput | string
         scoreLinkSubjectVersions?: ScoreLinkSubjectVersionUncheckedUpdateManyWithoutScoreLinkSheetNestedInput
@@ -621190,7 +621181,6 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         note?: NullableStringFieldUpdateOperationsInput | string | null
         decision?: NullableStringFieldUpdateOperationsInput | string | null
-        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
         fixedClassId?: StringFieldUpdateOperationsInput | string
         semesterId?: StringFieldUpdateOperationsInput | string
     };
@@ -638676,6 +638666,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         subjectVersionId: string
+        status?: $Enums.ScoreLinkStatus
     };
     export type DocumentFileCreateManyScoreLinkSheetInput = {
         id?: string
@@ -638722,6 +638713,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
         subjectVersion?: SubjectVersionUpdateOneRequiredWithoutScoreLinkSubjectVersionNestedInput
         scoreLinkStudents?: ScoreLinkStudentUpdateManyWithoutScoreLinkSubjectVersionNestedInput
         subjectClass?: SubjectClassUpdateOneWithoutScoreLinkSubjectVersionNestedInput
@@ -638736,6 +638728,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         subjectVersionId?: StringFieldUpdateOperationsInput | string
+        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
         scoreLinkStudents?: ScoreLinkStudentUncheckedUpdateManyWithoutScoreLinkSubjectVersionNestedInput
         subjectClass?: SubjectClassUncheckedUpdateOneWithoutScoreLinkSubjectVersionNestedInput
     };
@@ -638749,6 +638742,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         subjectVersionId?: StringFieldUpdateOperationsInput | string
+        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
     };
     export type DocumentFileUpdateWithoutScoreLinkSheetInput = {
         id?: StringFieldUpdateOperationsInput | string

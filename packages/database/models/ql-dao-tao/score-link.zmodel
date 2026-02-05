@@ -12,7 +12,6 @@ enum ScoreLinkStatus {
   PENDING
   APPROVED
   REJECTED
-
   @@schema("ql-dao-tao")
 }
 
@@ -22,7 +21,6 @@ model ScoreLinkSheet extends Base {
 
   note                     String?
   decision                 String?  // Số quyết định
-  status                   ScoreLinkStatus           @default(PENDING)
 
   // hiện danh sách SV từ lớp quản lý
   fixedClass               FixedClass                @relation(fields: [fixedClassId], references: [id])
@@ -46,6 +44,8 @@ model ScoreLinkSubjectVersion extends Base {
 
   subjectVersion    SubjectVersion     @relation(fields: [subjectVersionId], references: [id])
   subjectVersionId  String
+
+  status            ScoreLinkStatus           @default(PENDING)
 
   scoreLinkStudents ScoreLinkStudent[]
   subjectClass      SubjectClass?

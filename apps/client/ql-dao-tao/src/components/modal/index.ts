@@ -93,6 +93,7 @@ import PutStudentThesisRegistration from './put-sinh-vien-dang-ky-da'
 import PutStatusQLTraCuuVanBang from './put-status-ql-tra-cuu-van-bang'
 import PutAcademicWarning from './put-sv-canh-cao-hoc-tap'
 import PutStudentScoreConvertModal from './put-sv-hv-chuyen-truong'
+import PutScoreLinkSheetModal from './modal-add-diem-lien-ket'
 import PutPaymentRecord from './put-thanh-toan'
 import PutPaymentRecordDetail from './put-thanh-toan-detail'
 import PutSupervisorPaymentRecord from './put-thanh-toan-gvhd'
@@ -211,6 +212,7 @@ export {
     PutTrainingLanguage,
     ModalChuyenLop,
     PutStudentScoreConvertModal,
+    PutScoreLinkSheetModal,
     ModalPreviewUpload,
     ModalChuyenLopLuuBan,
     PutArchivedAwardModal,

@@ -4137,7 +4137,6 @@ exports.Prisma.ScoreLinkSheetScalarFieldEnum = {
   trainingObjectTypeId: 'trainingObjectTypeId',
   note: 'note',
   decision: 'decision',
-  status: 'status',
   fixedClassId: 'fixedClassId',
   semesterId: 'semesterId'
 };
@@ -4152,7 +4151,8 @@ exports.Prisma.ScoreLinkSubjectVersionScalarFieldEnum = {
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
   scoreLinkSheetId: 'scoreLinkSheetId',
-  subjectVersionId: 'subjectVersionId'
+  subjectVersionId: 'subjectVersionId',
+  status: 'status'
 };
 
 exports.Prisma.ScoreLinkStudentScalarFieldEnum = {
@@ -8356,7 +8356,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/luanbt/swantech/MTA-monorepo/packages/database/generated/prisma-client",
+      "value": "/Users/nguyenquanghuong/Desktop/Workspace/MTA-monorepo/packages/database/generated/prisma-client",
       "fromEnvVar": null
     },
     "config": {
@@ -8394,12 +8394,11 @@ const config = {
       "multiSchema",
       "typedSql"
     ],
-    "sourceFilePath": "/Users/luanbt/swantech/MTA-monorepo/packages/database/prisma/schema.prisma",
+    "sourceFilePath": "/Users/nguyenquanghuong/Desktop/Workspace/MTA-monorepo/packages/database/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null,
-    "schemaEnvPath": "../../.env"
+    "rootEnvPath": null
   },
   "relativePath": "../../prisma",
   "clientVersion": "6.10.1",
