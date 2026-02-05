@@ -433,7 +433,6 @@ export default function ExamListPage() {
 
                 <Select
                     allowClear
-                    disabled
                     placeholder="Phòng thi"
                     style={{ width: 200 }}
                     options={examRoomOptions}
