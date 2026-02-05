@@ -24894,6 +24894,10 @@ const metadata: ModelMeta = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'semester',
+                }, status: {
+                    name: "status",
+                    type: "ScoreLinkStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, scoreLinkSubjectVersions: {
                     name: "scoreLinkSubjectVersions",
                     type: "ScoreLinkSubjectVersion",
@@ -24983,10 +24987,6 @@ const metadata: ModelMeta = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'subjectVersion',
-                }, status: {
-                    name: "status",
-                    type: "ScoreLinkStatus",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, scoreLinkStudents: {
                     name: "scoreLinkStudents",
                     type: "ScoreLinkStudent",
@@ -25057,9 +25057,10 @@ const metadata: ModelMeta = {
                     name: "scoreLinkSubjectVersion",
                     type: "ScoreLinkSubjectVersion",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }, { "name": "onDelete" }] }],
                     backLink: 'scoreLinkStudents',
                     isRelationOwner: true,
+                    onDeleteAction: 'Cascade',
                     foreignKeyMapping: { "id": "scoreLinkSubjectVersionId" },
                 }, scoreLinkSubjectVersionId: {
                     name: "scoreLinkSubjectVersionId",
@@ -27972,6 +27973,7 @@ const metadata: ModelMeta = {
         evaluationCouncilMember: ['EvaluationCriterion'],
         question: ['MultipleChoiceOption', 'FillInBlankSlot', 'OrderingItem'],
         examBank: ['ExamBankQuestion'],
+        scoreLinkSubjectVersion: ['ScoreLinkStudent'],
         note: ['NoteReminder'],
 
     },
