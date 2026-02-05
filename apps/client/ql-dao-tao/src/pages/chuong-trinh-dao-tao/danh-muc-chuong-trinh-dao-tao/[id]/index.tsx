@@ -535,6 +535,9 @@ export default function TrainingProgramSubjects() {
                         <p className="flex gap-2 items-center">
                             <p className="w-4 h-4 bg-orange-300" /> Môn điều kiện
                         </p>
+                        <p className="flex gap-2 items-center">
+                            <p className="w-4 h-4 bg-red-300" /> Môn tốt nghiệp
+                        </p>
                     </div>
                     <TableCollapse
                         scrollable
@@ -555,7 +558,8 @@ export default function TrainingProgramSubjects() {
                                         'bg-white',
                                     subject.type === $Enums.SubjectRequirementType.Optional &&
                                         'bg-yellow-100',
-                                    !subject.useForFinalScore && 'bg-orange-300'
+                                    !subject.useForFinalScore && 'bg-orange-300',
+                                    subject.graduation && 'bg-red-300'
                                 ),
                             }
                         }}
@@ -571,13 +575,13 @@ export default function TrainingProgramSubjects() {
                             },
                             {
                                 render: (_, record) => (
-                                    <p className="text-center font-bold">
-                                        {record?.electiveCreditsRequired}
+                                    <p className="font-bold text-center">
+                                        {record.subjects.reduce(
+                                            (sum, s) => sum + (s.subject?.period ?? 0),
+                                            0
+                                        )}
                                     </p>
                                 ),
-                                colSpan: 1,
-                            },
-                            {
                                 colSpan: 1,
                             },
                             {
@@ -592,20 +596,20 @@ export default function TrainingProgramSubjects() {
                                 colSpan: 1,
                             },
                             {
-                                colSpan: 1,
-                            },
-                            {
-                                colSpan: 1,
-                            },
-                            {
                                 render: (_, record) => (
-                                    <p className="font-bold">
-                                        {record.subjects.reduce(
-                                            (sum, s) => sum + (s.subject?.period ?? 0),
-                                            0
-                                        )}
+                                    <p className="text-center font-bold">
+                                        {record?.electiveCreditsRequired}
                                     </p>
                                 ),
+                                colSpan: 1,
+                            },
+                            {
+                                colSpan: 1,
+                            },
+                            {
+                                colSpan: 1,
+                            },
+                            {
                                 colSpan: 1,
                             },
                             {
@@ -753,26 +757,27 @@ export default function TrainingProgramSubjects() {
                             },
                             {
                                 title: (
-                                    <Tooltip title="Số tín chỉ tự chọn">
-                                        <span>TCTC</span>
+                                    <Tooltip title="Số tiết thời khóa biểu">
+                                        <span>Số tiết TKB</span>
                                     </Tooltip>
                                 ),
-                                width: 80,
+                                dataIndex: 'periodCmp',
+                                width: 120,
                                 align: 'center',
-                            },
-                            {
-                                title: (
-                                    <Tooltip title="Đơn vị phụ trách">
-                                        <span>ĐVPT</span>
-                                    </Tooltip>
-                                ),
-                                dataIndex: 'organization',
-                                width: 100,
-                                align: 'center',
-                                type: 'tree_select',
-                                options: treeData,
-                                render: (_, record) => {
-                                    return record?.subject?.managementOrganization?.sMa
+                                type: 'cmp',
+                                distinctFilters: [
+                                    'credit',
+                                    'semester',
+                                    'numberOfTheory',
+                                    'numberOfPractical',
+                                    'numberOfSelfStudy',
+                                    'numberOfPractice',
+                                    'numberOfReview',
+                                    'numberOfExam',
+                                    'numberOfOther',
+                                ],
+                                render: (__, record: { subject?: SubjectVersion }) => {
+                                    return record?.subject?.period
                                 },
                             },
                             {
@@ -798,6 +803,30 @@ export default function TrainingProgramSubjects() {
                             },
                             {
                                 title: (
+                                    <Tooltip title="Số tín chỉ tự chọn">
+                                        <span>TCTC</span>
+                                    </Tooltip>
+                                ),
+                                width: 80,
+                                align: 'center',
+                            },
+                            {
+                                title: (
+                                    <Tooltip title="Đơn vị phụ trách">
+                                        <span>ĐVPT</span>
+                                    </Tooltip>
+                                ),
+                                dataIndex: 'organization',
+                                width: 100,
+                                align: 'center',
+                                type: 'tree_select',
+                                options: treeData,
+                                render: (_, record) => {
+                                    return record?.subject?.managementOrganization?.sMa
+                                },
+                            },
+                            {
+                                title: (
                                     <Tooltip title="Học kỳ dự kiến">
                                         <span>HKDK</span>
                                     </Tooltip>
@@ -817,31 +846,6 @@ export default function TrainingProgramSubjects() {
                                 width: 80,
                                 type: 'cmp',
                                 align: 'center',
-                            },
-                            {
-                                title: (
-                                    <Tooltip title="Số tiết thời khóa biểu">
-                                        <span>Số tiết TKB</span>
-                                    </Tooltip>
-                                ),
-                                dataIndex: 'periodCmp',
-                                width: 120,
-                                align: 'center',
-                                type: 'cmp',
-                                distinctFilters: [
-                                    'credit',
-                                    'semester',
-                                    'numberOfTheory',
-                                    'numberOfPractical',
-                                    'numberOfSelfStudy',
-                                    'numberOfPractice',
-                                    'numberOfReview',
-                                    'numberOfExam',
-                                    'numberOfOther',
-                                ],
-                                render: (__, record: { subject?: SubjectVersion }) => {
-                                    return record?.subject?.period
-                                },
                             },
                             {
                                 title: <Tooltip title="Số tiết lý thuyết">LT</Tooltip>,
