@@ -146,6 +146,7 @@ export default function DanhSachKeHoachThi() {
                     select: {
                         name: true,
                         id: true,
+                        code: true,
                     },
                 },
             },
@@ -238,16 +239,12 @@ export default function DanhSachKeHoachThi() {
                     }}
                     filters={filters}
                     setFilters={(value: any) => {
-                        const processedValue = { ...value }
-                        if (processedValue.examDay) {
-                            processedValue.examDay = dayjs(processedValue.examDay).toDate()
-                        }
                         // Reset to initial state if all filters are cleared
                         const isCleared =
-                            !processedValue.searchText &&
-                            !processedValue.examType &&
-                            !processedValue.examRoom &&
-                            !processedValue.examDay
+                            !value.searchText &&
+                            !value.examType &&
+                            !value.examRoom &&
+                            !value.examDay
                         setFilters(
                             isCleared
                                 ? {
@@ -256,7 +253,7 @@ export default function DanhSachKeHoachThi() {
                                       examRoom: undefined,
                                       examDay: undefined,
                                   }
-                                : processedValue
+                                : value
                         )
                         setCurrentPage(1)
                     }}
@@ -298,12 +295,12 @@ export default function DanhSachKeHoachThi() {
                             dataIndex: 'searchText',
                             type: 'input',
                             render: (_, record) => {
-                                const code = record.subjectVersion?.subject?.code || ''
-                                const name = record.subjectVersion?.subject?.name || ''
+                                const code = record.subjectVersion?.code || ''
+                                const name = record.subjectVersion?.name || ''
 
                                 return (
                                     <div className="text-left">
-                                        <span className="text-blue-600 font-semibold mr-1">
+                                        <span className="text-black-600 font-semibold mr-1">
                                             <HighlightText
                                                 text={code}
                                                 searchText={filters.searchText}
@@ -375,9 +372,7 @@ export default function DanhSachKeHoachThi() {
                                 return (
                                     <div className="text-center">
                                         {displayRooms.map((examRoom: any) => (
-                                            <div key={examRoom.id}>
-                                                {examRoom.room?.name}
-                                            </div>
+                                            <div key={examRoom.id}>{examRoom.room?.name}</div>
                                         ))}
                                         {remainingCount > 0 && (
                                             <Popover content={fullContent} title="Tất cả phòng thi">
@@ -413,7 +408,10 @@ export default function DanhSachKeHoachThi() {
                             render: (_, record) => {
                                 return record?.subjectClass.length > 0
                                     ? record?.subjectClass
-                                          .map((i: SubjectClass) => i.name)
+                                          .map(
+                                              (i: SubjectClass) =>
+                                                  `${i?.code || ''}-${i?.name || ''}`
+                                          )
                                           .join(', ')
                                     : ''
                             },
