@@ -2963,6 +2963,9 @@ exports.Prisma.ThesisProjectScalarFieldEnum = {
   status: 'status',
   language: 'language',
   type: 'type',
+  firstCheckProgress: 'firstCheckProgress',
+  secondCheckProgress: 'secondCheckProgress',
+  isEligibleForDefense: 'isEligibleForDefense',
   subjectClassId: 'subjectClassId',
   thesisSessionId: 'thesisSessionId',
   supervisorName: 'supervisorName',
@@ -3753,7 +3756,8 @@ exports.Prisma.ExamBankScalarFieldEnum = {
   examType: 'examType',
   examMatrixId: 'examMatrixId',
   isLock: 'isLock',
-  isNote: 'isNote'
+  isNote: 'isNote',
+  isGroup: 'isGroup'
 };
 
 exports.Prisma.ExamBankQuestionScalarFieldEnum = {
@@ -4162,9 +4166,9 @@ exports.Prisma.ScoreLinkSheetScalarFieldEnum = {
   trainingObjectTypeId: 'trainingObjectTypeId',
   note: 'note',
   decision: 'decision',
-  status: 'status',
   fixedClassId: 'fixedClassId',
-  semesterId: 'semesterId'
+  semesterId: 'semesterId',
+  status: 'status'
 };
 
 exports.Prisma.ScoreLinkSubjectVersionScalarFieldEnum = {

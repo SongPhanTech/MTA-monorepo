@@ -3576,35 +3576,35 @@ model ClassRegisterLogs {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model SubjectClass {
-  id                          String                  @id() @default(cuid())
-  active                      Boolean                 @default(true)
-  description                 String?                 @db.Text()
+  id                          String                   @id() @default(cuid())
+  active                      Boolean                  @default(true)
+  description                 String?                  @db.Text()
   deletedAt                   DateTime?
-  createdAt                   DateTime                @default(now())
-  updatedAt                   DateTime                @default(now()) @updatedAt()
-  createdBy                   String?                 @default("") @db.Uuid()
+  createdAt                   DateTime                 @default(now())
+  updatedAt                   DateTime                 @default(now()) @updatedAt()
+  createdBy                   String?                  @default("") @db.Uuid()
   code                        String
   name                        String
   startDate                   DateTime?
   endDate                     DateTime?
-  subject                     SubjectVersion          @relation(fields: [subjectId], references: [id])
+  subject                     SubjectVersion           @relation(fields: [subjectId], references: [id])
   subjectId                   String
   schedule                    SubjectClassSchedule?
   maxStudent                  Int
-  type                        SubjectClassType        @default(NORMAL)
-  status                      SubjectClassStatus      @default(DRAFT)
-  trainingObjectType          TrainingObjectType      @relation(fields: [trainingObjectTypeId], references: [id])
+  type                        SubjectClassType         @default(NORMAL)
+  status                      SubjectClassStatus       @default(DRAFT)
+  trainingObjectType          TrainingObjectType       @relation(fields: [trainingObjectTypeId], references: [id])
   trainingObjectTypeId        String
-  semester                    Semester                @relation(fields: [semesterId], references: [id])
+  semester                    Semester                 @relation(fields: [semesterId], references: [id])
   semesterId                  String
-  cancelled                   Boolean                 @default(false)
+  cancelled                   Boolean                  @default(false)
   lecturerAssignmentDeadline  DateTime?
   sendLecturerAssignmentAt    DateTime?
   submitLecturerAssignmentAt  DateTime?
   approveLecturerAssignmentAt DateTime?
   examDate                    DateTime?
   examType                    ExamType?
-  exam                        Exam?                   @relation(fields: [examId], references: [id])
+  exam                        Exam?                    @relation(fields: [examId], references: [id])
   examId                      String?
   /// ngày bắt đầu nhập điểm CC/TX
   scoreDeadLineStart          DateTime?
@@ -3612,33 +3612,33 @@ model SubjectClass {
   scoreDeadline               DateTime?
   /// hạn nhập điểm thi
   examScoreDeadline           DateTime?
-  enteredScore                Boolean                 @default(false)
-  enteredExamScore            Boolean                 @default(false)
+  enteredScore                Boolean                  @default(false)
+  enteredExamScore            Boolean                  @default(false)
   issuedScoreAt               DateTime?
   /// khoá điểm CC/TX
-  isLockScore                 Boolean                 @default(false)
+  isLockScore                 Boolean                  @default(false)
   /// khoá điểm thi
-  isLockExamScore             Boolean                 @default(false)
-  scoreSubmitted              Boolean                 @default(false)
-  scoreChecked                Boolean                 @default(false)
-  room                        Room?                   @relation(name: "ClassRoom", fields: [roomId], references: [id])
+  isLockExamScore             Boolean                  @default(false)
+  scoreSubmitted              Boolean                  @default(false)
+  scoreChecked                Boolean                  @default(false)
+  room                        Room?                    @relation(name: "ClassRoom", fields: [roomId], references: [id])
   roomId                      String?
-  trainingLocation            TrainingLocation?       @relation(name: "ClassTrainingLocation", fields: [trainingLocationId], references: [id])
+  trainingLocation            TrainingLocation?        @relation(name: "ClassTrainingLocation", fields: [trainingLocationId], references: [id])
   trainingLocationId          String?
-  mainLecturer                Lecturer?               @relation(name: "MainLecturer", fields: [lecturerId], references: [id])
+  mainLecturer                Lecturer?                @relation(name: "MainLecturer", fields: [lecturerId], references: [id])
   lecturerId                  String?
-  extraLecturer               Lecturer?               @relation(name: "ExtraLecturer", fields: [extraLecturerId], references: [id])
+  extraLecturer               Lecturer?                @relation(name: "ExtraLecturer", fields: [extraLecturerId], references: [id])
   extraLecturerId             String?
-  enterGradeLecturer          Lecturer?               @relation(name: "EnterGradeLecturer", fields: [enterGradeLecturerId], references: [id])
+  enterGradeLecturer          Lecturer?                @relation(name: "EnterGradeLecturer", fields: [enterGradeLecturerId], references: [id])
   enterGradeLecturerId        String?
-  scoreLinkSubjectVersion     ScoreLinkSubjectVersion @relation(fields: [scoreLinkSubjectVersionId], references: [id])
-  scoreLinkSubjectVersionId   String                  @unique()
+  scoreLinkSubjectVersion     ScoreLinkSubjectVersion? @relation(fields: [scoreLinkSubjectVersionId], references: [id])
+  scoreLinkSubjectVersionId   String?                  @unique()
   subjectClassStudent         StudentSubjectScore[]
   fixedClasses                FixedClass[]
   classSchedules              ClassSchedule[]
   thesisProjects              ThesisProject[]
   expertProfile               ExpertProfile[]
-  defenseRooms                Room[]                  @relation("DefenseRooms")
+  defenseRooms                Room[]                   @relation("DefenseRooms")
   surveyObjectTypes           SurveyObjectType[]
   classRegisterLogs           ClassRegisterLogs[]
   subjectClassTimes           SubjectClassTime[]
@@ -5057,6 +5057,9 @@ model ThesisProject {
   status                ThesisProjectStatus         @default(PROPOSED)
   language              String?                     @db.Text()
   type                  String?                     @db.Text()
+  firstCheckProgress    Int?
+  secondCheckProgress   Int?
+  isEligibleForDefense  Boolean                     @default(true)
   subjectClass          SubjectClass?               @relation(fields: [subjectClassId], references: [id])
   subjectClassId        String?
   thesisSession         ThesisSession?              @relation(fields: [thesisSessionId], references: [id])
@@ -6325,6 +6328,7 @@ model ExamBank {
   isLock         Boolean?           @default(false)
   /// được sử dụng tài liệu hay không
   isNote         Boolean?           @default(false)
+  isGroup        Boolean?           @default(true)
 
   @@unique([examId, examCode])
   @@schema("khao-thi")
@@ -6951,11 +6955,11 @@ model ScoreLinkSheet {
   trainingObjectTypeId     String
   note                     String?
   decision                 String?
-  status                   ScoreLinkStatus           @default(PENDING)
   fixedClass               FixedClass                @relation(fields: [fixedClassId], references: [id])
   fixedClassId             String
   semester                 Semester                  @relation(fields: [semesterId], references: [id])
   semesterId               String
+  status                   ScoreLinkStatus           @default(PENDING)
   scoreLinkSubjectVersions ScoreLinkSubjectVersion[]
   documents                DocumentFile[]
 
@@ -6999,7 +7003,7 @@ model ScoreLinkStudent {
   createdAt                 DateTime                @default(now())
   updatedAt                 DateTime                @default(now()) @updatedAt()
   createdBy                 String?                 @default("") @db.Uuid()
-  scoreLinkSubjectVersion   ScoreLinkSubjectVersion @relation(fields: [scoreLinkSubjectVersionId], references: [id])
+  scoreLinkSubjectVersion   ScoreLinkSubjectVersion @relation(fields: [scoreLinkSubjectVersionId], references: [id], onDelete: Cascade)
   scoreLinkSubjectVersionId String
   student                   Student                 @relation(fields: [studentId], references: [id])
   studentId                 String

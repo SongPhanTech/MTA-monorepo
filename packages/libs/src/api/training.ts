@@ -70,6 +70,10 @@ import type {
     ExportStudentScholarshipJson200Item,
     ExportStudentScholarshipJson404,
     ExportStudentScholarshipJsonParams,
+    ExportStudentSemesterResult404,
+    ExportStudentSemesterResultBody,
+    ExportStudentYearResult404,
+    ExportStudentYearResultBody,
     ExportSubjectClassScore404,
     ExportSubjectClassScoreParams,
     FixedClassStudentCount400,
@@ -12190,6 +12194,228 @@ export const useSaveExamScore = <TError = SaveExamScore400, TContext = unknown>(
     TContext
 > => {
     const mutationOptions = getSaveExamScoreMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * Export student semester result to Excel
+ * @summary Export Student Semester Result
+ */
+export type exportStudentSemesterResultResponse200 = {
+    data: Blob
+    status: 200
+}
+
+export type exportStudentSemesterResultResponse404 = {
+    data: ExportStudentSemesterResult404
+    status: 404
+}
+
+export type exportStudentSemesterResultResponseSuccess = exportStudentSemesterResultResponse200 & {
+    headers: Headers
+}
+export type exportStudentSemesterResultResponseError = exportStudentSemesterResultResponse404 & {
+    headers: Headers
+}
+
+export type exportStudentSemesterResultResponse =
+    | exportStudentSemesterResultResponseSuccess
+    | exportStudentSemesterResultResponseError
+
+export const getExportStudentSemesterResultUrl = () => {
+    return `/api/student-result/export-student-semester-result`
+}
+
+export const exportStudentSemesterResult = async (
+    exportStudentSemesterResultBody: ExportStudentSemesterResultBody,
+    options?: RequestInit
+): Promise<exportStudentSemesterResultResponse> => {
+    return customTrainingFetch<exportStudentSemesterResultResponse>(
+        getExportStudentSemesterResultUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(exportStudentSemesterResultBody),
+        }
+    )
+}
+
+export const getExportStudentSemesterResultMutationOptions = <
+    TError = ExportStudentSemesterResult404,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof exportStudentSemesterResult>>,
+        TError,
+        { data: ExportStudentSemesterResultBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof exportStudentSemesterResult>>,
+    TError,
+    { data: ExportStudentSemesterResultBody },
+    TContext
+> => {
+    const mutationKey = ['exportStudentSemesterResult']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof exportStudentSemesterResult>>,
+        { data: ExportStudentSemesterResultBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return exportStudentSemesterResult(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type ExportStudentSemesterResultMutationResult = NonNullable<
+    Awaited<ReturnType<typeof exportStudentSemesterResult>>
+>
+export type ExportStudentSemesterResultMutationBody = ExportStudentSemesterResultBody
+export type ExportStudentSemesterResultMutationError = ExportStudentSemesterResult404
+
+/**
+ * @summary Export Student Semester Result
+ */
+export const useExportStudentSemesterResult = <
+    TError = ExportStudentSemesterResult404,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof exportStudentSemesterResult>>,
+            TError,
+            { data: ExportStudentSemesterResultBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof exportStudentSemesterResult>>,
+    TError,
+    { data: ExportStudentSemesterResultBody },
+    TContext
+> => {
+    const mutationOptions = getExportStudentSemesterResultMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * Export student year result to Excel
+ * @summary Export Student Year Result
+ */
+export type exportStudentYearResultResponse200 = {
+    data: Blob
+    status: 200
+}
+
+export type exportStudentYearResultResponse404 = {
+    data: ExportStudentYearResult404
+    status: 404
+}
+
+export type exportStudentYearResultResponseSuccess = exportStudentYearResultResponse200 & {
+    headers: Headers
+}
+export type exportStudentYearResultResponseError = exportStudentYearResultResponse404 & {
+    headers: Headers
+}
+
+export type exportStudentYearResultResponse =
+    | exportStudentYearResultResponseSuccess
+    | exportStudentYearResultResponseError
+
+export const getExportStudentYearResultUrl = () => {
+    return `/api/student-result/export-student-year-result`
+}
+
+export const exportStudentYearResult = async (
+    exportStudentYearResultBody: ExportStudentYearResultBody,
+    options?: RequestInit
+): Promise<exportStudentYearResultResponse> => {
+    return customTrainingFetch<exportStudentYearResultResponse>(getExportStudentYearResultUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(exportStudentYearResultBody),
+    })
+}
+
+export const getExportStudentYearResultMutationOptions = <
+    TError = ExportStudentYearResult404,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof exportStudentYearResult>>,
+        TError,
+        { data: ExportStudentYearResultBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof exportStudentYearResult>>,
+    TError,
+    { data: ExportStudentYearResultBody },
+    TContext
+> => {
+    const mutationKey = ['exportStudentYearResult']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof exportStudentYearResult>>,
+        { data: ExportStudentYearResultBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return exportStudentYearResult(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type ExportStudentYearResultMutationResult = NonNullable<
+    Awaited<ReturnType<typeof exportStudentYearResult>>
+>
+export type ExportStudentYearResultMutationBody = ExportStudentYearResultBody
+export type ExportStudentYearResultMutationError = ExportStudentYearResult404
+
+/**
+ * @summary Export Student Year Result
+ */
+export const useExportStudentYearResult = <TError = ExportStudentYearResult404, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof exportStudentYearResult>>,
+            TError,
+            { data: ExportStudentYearResultBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof exportStudentYearResult>>,
+    TError,
+    { data: ExportStudentYearResultBody },
+    TContext
+> => {
+    const mutationOptions = getExportStudentYearResultMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }

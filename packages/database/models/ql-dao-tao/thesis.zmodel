@@ -77,6 +77,11 @@ model ThesisProject extends Base {
   language              String?                     @db.Text() // Ngôn ngữ
   type                  String?                     @db.Text() // Loại luận văn (Luận văn/Đề án)
 
+  // Tiến độ kiểm tra
+  firstCheckProgress    Int?                        // Tiến độ kiểm tra lần 1 % (0-100)
+  secondCheckProgress   Int?                        // Tiến độ kiểm tra lần 2 % (0-100)
+  isEligibleForDefense  Boolean                     @default(true) // Đủ điều kiện bảo vệ
+
   subjectClass          SubjectClass?               @relation(fields: [subjectClassId], references: [id])
   subjectClassId        String?
 

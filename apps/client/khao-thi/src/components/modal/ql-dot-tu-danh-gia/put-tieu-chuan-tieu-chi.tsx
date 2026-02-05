@@ -1,20 +1,21 @@
+import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
+import Select from '@components/commons/select'
+import { STANDARD_CATALOG_TYPE_OPTIONS } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
-import { createId, type EvaluationPeriod } from '@workspace/db'
+import { createId } from '@workspace/db'
 import { $Enums } from '@workspace/db/client'
-import { useFindManyStandardCatalog, useFindManyStandardPeriod } from '@workspace/db/hooks'
+import {
+    useFindManyEvaluationStandardSet,
+    useFindManyStandardCatalog,
+    useFindManyStandardPeriod,
+} from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { Button, Col, Form, message, Tree } from 'antd'
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { STANDARD_CATALOG_TYPE_OPTIONS } from '@constants/constants'
-import Select from '@components/commons/select'
-
-export type PutEvaluationPeriod = EvaluationPeriod & {
-    councilIds: string[]
-}
 
 type TreeNode = {
     key: string
@@ -49,21 +50,24 @@ const PutTieuChuanTieuChi = () => {
 
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
 
-    const [form] = Form.useForm<PutEvaluationPeriod>()
+    const [form] = Form.useForm<{
+        standardSetId: string
+        objectType: $Enums.StandardCatalogType
+    }>()
+
+    const standardSetWatch = Form.useWatch('standardSetId', form)
+    const objectTypeWatch = Form.useWatch('objectType', form)
 
     type TreeData = typeof treeData
     const [checkedKeys, setCheckedKeys] = useState<string[]>([])
     const [catalogSelected, setCatalogSelected] = useState<TreeData>([])
-    const [selectedCatalogType, setSelectedCatalogType] = useState<
-        $Enums.StandardCatalogType | undefined
-    >(undefined)
 
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { data: dataCatalog } = useFindManyStandardCatalog(
         {
             where: {
-                objectType: selectedCatalogType,
+                standardSetId: standardSetWatch || '',
             },
             select: {
                 id: true,
@@ -90,7 +94,7 @@ const PutTieuChuanTieuChi = () => {
             },
         },
         {
-            enabled: !!selectedCatalogType,
+            enabled: !!standardSetWatch,
         }
     )
 
@@ -119,6 +123,17 @@ const PutTieuChuanTieuChi = () => {
         },
         {
             enabled: !!id && !!selectedEvaluationPeriodId,
+        }
+    )
+
+    const { data: evaluationStandardSets = [] } = useFindManyEvaluationStandardSet(
+        {
+            where: {
+                objectType: objectTypeWatch,
+            },
+        },
+        {
+            enabled: !!objectTypeWatch,
         }
     )
 
@@ -204,7 +219,7 @@ const PutTieuChuanTieuChi = () => {
 
     const onOk = async () => {
         // Validate: Bắt buộc phải chọn kho tiêu chuẩn
-        if (!selectedCatalogType) {
+        if (!objectTypeWatch) {
             message.error('Vui lòng chọn kho tiêu chuẩn')
             return
         }
@@ -250,7 +265,6 @@ const PutTieuChuanTieuChi = () => {
 
         try {
             showSpinner()
-            // Tạo array operations chung cho createMany
             const createOperations = [
                 {
                     model: 'StandardPeriod' as const,
@@ -328,7 +342,6 @@ const PutTieuChuanTieuChi = () => {
                     },
                 },
             ]
-            // Nếu là update: thêm deleteMany operations vào đầu
             const operations = id
                 ? [
                       {
@@ -423,22 +436,42 @@ const PutTieuChuanTieuChi = () => {
             title={id ? 'Chỉnh sửa tiêu chuẩn tiêu chí' : 'Thêm tiêu chuẩn tiêu chí'}
             open={isOpen}
             onCancel={onClose}
-            className="w-[500px]"
+            className="w-[50vw] top-2"
             onFinish={onOk}
         >
             <Col span={24}>
-                <Form.Item label="Chọn kho tiêu chuẩn" required>
+                <FormItem form={form} name="objectType" label="Chọn kho tiêu chuẩn" required>
                     <Select
                         placeholder="Chọn loại kho"
-                        value={selectedCatalogType}
-                        onChange={setSelectedCatalogType}
-                        options={STANDARD_CATALOG_TYPE_OPTIONS}
+                        options={STANDARD_CATALOG_TYPE_OPTIONS.map((option) => ({
+                            label: option.label,
+                            value: option.value,
+                        }))}
                         allowClear
                     />
-                </Form.Item>
+                </FormItem>
             </Col>
 
-            {selectedCatalogType && (
+            <Col span={24}>
+                <FormItem
+                    form={form}
+                    name="standardSetId"
+                    label="Chọn bộ tiêu chuẩn, tiêu chí"
+                    required
+                >
+                    <Select
+                        placeholder="Chọn bộ tiêu chuẩn, tiêu chí"
+                        options={evaluationStandardSets.map((set) => ({
+                            label: set.name,
+                            value: set.id,
+                        }))}
+                        disabled={!objectTypeWatch}
+                        allowClear
+                    />
+                </FormItem>
+            </Col>
+
+            {standardSetWatch && (
                 <Col span={24}>
                     <Form.Item label="Tiêu chuẩn đánh giá của đợt" required>
                         <div className="mb-2 flex gap-2">

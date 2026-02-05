@@ -1,21 +1,21 @@
-import { useDisclosure } from 'react-hook-disclosure-modal'
-import { Checkbox, Col, Form, Input, InputNumber, message, Row } from 'antd'
-import dayjs from 'dayjs'
-import { useMemo, useState } from 'react'
-import { useStore } from '@tanstack/react-store'
+import { queryClient } from '@api/index'
+import DatePicker from '@components/commons/date-picker'
+import FormItem from '@components/commons/form-item'
+import PutFormModal from '@components/commons/put-modal'
+import Select from '@components/commons/select'
 import { store } from '@pages/thiet-lap-de-thi/danh-sach-de'
+import { useStore } from '@tanstack/react-store'
+import type { ExamBank } from '@workspace/db/client'
 import {
     useFindManyExamFramework,
     useFindManyExamMatrix,
     useFindUniqueExam,
 } from '@workspace/db/hooks'
-import PutFormModal from '@components/commons/put-modal'
-import FormItem from '@components/commons/form-item'
-import Select from '@components/commons/select'
-import DatePicker from '@components/commons/date-picker'
-import type { ExamBank } from '@workspace/db/client'
 import { automaticTopicGeneration } from '@workspace/libs/api/exam'
-import { queryClient } from '@api/index'
+import { Checkbox, Col, Form, Input, InputNumber, message, Row } from 'antd'
+import dayjs from 'dayjs'
+import { useMemo, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 type PutMaTranDeInputType = ExamBank & {
     quantity: number
@@ -52,7 +52,7 @@ const SinhDeModal = () => {
     console.log('dataExam: ', dataExam)
 
     const dataOption = useMemo(() => {
-        return !!dataExam?.subjectClass
+        return dataExam?.subjectClass
             ? dataExam?.subjectClass.map((item) => {
                   return {
                       value: item?.id,
@@ -106,12 +106,15 @@ const SinhDeModal = () => {
 
             const res = await automaticTopicGeneration({
                 ...values,
+                isNote: values.isNote || false,
+                description: values.explain || undefined,
                 id: '',
                 examId: selectedExamId,
                 deletedAt: null,
                 createdAt: new Date().toISOString(),
                 updatedAt: null,
                 examDay: values?.examDay ? new Date(values?.examDay).toISOString() : null,
+                isGroup: values?.isGroup || true,
             })
             if (res?.status === 200) {
                 message.success('Tạo đề thành công!')
@@ -229,6 +232,16 @@ const SinhDeModal = () => {
                     <Col span={12}>
                         <FormItem form={form} name="subjectClassId" label="Dùng cho lớp" required>
                             <Select options={dataOption} placeholder="Chọn lớp môn học" />
+                        </FormItem>
+                    </Col>
+                    <Col span={4}>
+                        <FormItem
+                            form={form}
+                            name="isGroup"
+                            valuePropName="checked"
+                            initialValue={true}
+                        >
+                            <Checkbox>Hiển thị tiêu đề</Checkbox>
                         </FormItem>
                     </Col>
 

@@ -4,6 +4,7 @@ import MonHocTuongDuong from '@components/sub-pages/mon-hoc-tuong-duong'
 import DefaultLayout from '@layouts/default-layout'
 import type { Subject as SubjectDB, SubjectVersion } from '@workspace/db'
 import { useInfiniteFindManySubject } from '@workspace/db/hooks'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Divider, Input, Segmented, Spin, Tabs, Tree, Typography } from 'antd'
 import type { DataNode, EventDataNode } from 'antd/es/tree'
 import { Search } from 'lucide-react'
@@ -24,6 +25,7 @@ export enum SubjectType {
 
 export default function Subject() {
     const numberOfPages = 30
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const treeContainerRef = useRef<HTMLDivElement>(null)
     const [search, setSearch] = useState<string>('')
     const [selectedVersionId, setSelectedVersionId] = useState<string | null>(null)
@@ -62,6 +64,7 @@ export default function Subject() {
         where: {
             subjectVersion: {
                 some: {
+                    ...(trainingObjectTypeId ? { trainingObjectTypeId } : {}),
                     ...(search && { name: { contains: search, mode: 'insensitive' as const } }),
                 },
             },

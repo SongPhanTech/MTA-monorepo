@@ -34,7 +34,6 @@ const PutCriterionCatalog = () => {
                 order: output.order,
                 name: output.name.trim(),
                 standardId: input?.standardId || '',
-                description: output.description,
             }
             if (input?.id) {
                 await updateCriterionCatalog({
@@ -101,7 +100,7 @@ const PutCriterionCatalog = () => {
             onCancel={onClose}
             maskClosable={true}
             title={input?.id ? 'Chỉnh sửa tiêu chí' : 'Thêm mới tiêu chí'}
-            className="w-[30vw]"
+            className="w-[50vw]"
         >
             <Col span={24}>
                 <FormItem form={form} name="order" label="Thứ tự" required>
@@ -118,12 +117,7 @@ const PutCriterionCatalog = () => {
             </Col>
             <Col span={24}>
                 <FormItem form={form} name="name" label="Tên tiêu chí" required>
-                    <Input placeholder="Nhập tên tiêu chí" />
-                </FormItem>
-            </Col>
-            <Col span={24}>
-                <FormItem form={form} name="description" label="Mô tả">
-                    <Input.TextArea placeholder="Nhập mô tả" />
+                    <Input.TextArea rows={2} placeholder="Nhập tên tiêu chí" spellCheck={false} />
                 </FormItem>
             </Col>
         </PutFormModal>

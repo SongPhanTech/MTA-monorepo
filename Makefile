@@ -23,7 +23,8 @@ PKG_DANG_KY_HOC := dang-ky-hoc
 
 # Maps for build types (backend/frontend)
 BE_PKGS := $(PKG_BE_MODEL) $(PKG_BE_DAO_TAO) $(PKG_BE_KHAO_THI) $(PKG_BE_PORTAL) $(PKG_BE_DAO_TAO_SHARED) $(PKG_BE_EXCHANGE)
-FE_PKGS := $(PKG_DAO_TAO) $(PKG_AI) $(PKG_KHAO_THI) $(PKG_HO_SO) $(PKG_DANG_KY_HOC)
+FE_PKGS := $(PKG_DAO_TAO) $(PKG_KHAO_THI) $(PKG_HO_SO) $(PKG_DANG_KY_HOC)
+# FE_PKGS := $(PKG_DAO_TAO) $(PKG_AI) $(PKG_KHAO_THI) $(PKG_HO_SO) $(PKG_DANG_KY_HOC)
 
 # Client App Mappings
 CDN_NAME_ql-dao-tao = lms-cdn
@@ -131,7 +132,17 @@ deploy-all-be:
 	docker rm -f mta-be-exchange mta-be-khao-thi mta-be-model mta-be-portal mta-be-ql-dao-tao mta-be-ql-dao-tao-shared && \
 	docker compose up -d"
 
+# deploy-be-%: build-%
+# 	@mkdir -p docker-images
+# 	$(DOCKER) save $(REGISTRY)/$(IMG_PREFIX)$*:$(DEV_TAG) | gzip > docker-images/$(IMG_PREFIX)$*.tar.gz
+# 	sshpass -p "Bancntt@2025" scp -O docker-images/$(IMG_PREFIX)$*.tar.gz app@192.168.3.9:~/Documents/docker-compose/
+# 	sshpass -p "Bancntt@2025" ssh app@192.168.3.9 "cd Documents/docker-compose/ && \
+# 	docker load -i $(IMG_PREFIX)$*.tar.gz && \
+# 	docker rm -f $(IMG_PREFIX)$* && \
+# 	docker compose up $(IMG_PREFIX)$* -d"
+
 deploy-%:
+	$(DOCKER) save $(REGISTRY)/$(IMG_PREFIX)$*:$(DEV_TAG) | gzip > docker-images/$(IMG_PREFIX)$*.tar.gz
 	sshpass -p "Bancntt@2025" scp -O docker-images/$(IMG_PREFIX)$*.tar.gz app@192.168.3.9:~/Documents/docker-compose/
 	sshpass -p "Bancntt@2025" ssh app@192.168.3.9 "cd Documents/docker-compose/ && \
 	docker load -i $(IMG_PREFIX)$*.tar.gz && \

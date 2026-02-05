@@ -8,21 +8,21 @@ import Table from '@components/commons/table'
 import useSpinner from '@hooks/spinner'
 import type { DocumentFile } from '@workspace/db'
 import {
+    useCountStudent,
     useCreateArchivedCertificate,
     useFindManyCertificate,
     useFindManyFixedClass,
     useFindManyStudent,
     useFindManyTrainingCourse,
     useUpdateArchivedCertificate,
-    useCountStudent,
 } from '@workspace/db/hooks'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Form, Input, InputNumber, message, Typography } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
-import { useEffect, useState, useMemo } from 'react'
-import { useDisclosure } from 'react-hook-disclosure-modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { useEffect, useMemo, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export type PutArchivedCertificate = {
     documentFiles?: DocumentFile[]
@@ -504,6 +504,7 @@ const PutCertificateArchivedModal = () => {
                                         <FormItem
                                             form={form}
                                             name={['student', record.id, 'issuedDate']}
+                                            dependencies={[['student', record.id, 'expiredDate']]}
                                             rules={[
                                                 {
                                                     required:
@@ -511,6 +512,26 @@ const PutCertificateArchivedModal = () => {
                                                             ?.certificateId,
                                                     message: 'Vui lòng nhập ngày cấp',
                                                 },
+                                                ({ getFieldValue }) => ({
+                                                    validator(_, value) {
+                                                        const expiredDate = getFieldValue([
+                                                            'student',
+                                                            record.id,
+                                                            'expiredDate',
+                                                        ])
+                                                        if (
+                                                            !value ||
+                                                            !expiredDate ||
+                                                            value.isBefore(expiredDate) ||
+                                                            value.isSame(expiredDate, 'day')
+                                                        ) {
+                                                            return Promise.resolve()
+                                                        }
+                                                        return Promise.reject(
+                                                            new Error('Ngày cấp không hợp lệ')
+                                                        )
+                                                    },
+                                                }),
                                             ]}
                                         >
                                             <DatePicker
@@ -529,6 +550,7 @@ const PutCertificateArchivedModal = () => {
                                         <FormItem
                                             form={form}
                                             name={['student', record.id, 'expiredDate']}
+                                            dependencies={[['student', record.id, 'issuedDate']]}
                                             rules={[
                                                 {
                                                     required:
@@ -536,6 +558,26 @@ const PutCertificateArchivedModal = () => {
                                                             ?.certificateId,
                                                     message: 'Vui lòng nhập ngày hết hạn',
                                                 },
+                                                ({ getFieldValue }) => ({
+                                                    validator(_, value) {
+                                                        const issuedDate = getFieldValue([
+                                                            'student',
+                                                            record.id,
+                                                            'issuedDate',
+                                                        ])
+                                                        if (
+                                                            !value ||
+                                                            !issuedDate ||
+                                                            value.isAfter(issuedDate) ||
+                                                            value.isSame(issuedDate, 'day')
+                                                        ) {
+                                                            return Promise.resolve()
+                                                        }
+                                                        return Promise.reject(
+                                                            new Error('Ngày hết hạn không hợp lệ')
+                                                        )
+                                                    },
+                                                }),
                                             ]}
                                         >
                                             <DatePicker

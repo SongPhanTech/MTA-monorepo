@@ -1,12 +1,16 @@
+import { DownloadOutlined, PaperClipOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilter'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
+import { useSchoolYearStore } from '@components/selecter-school-year'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import { cn } from '@lib/utils'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
+import type { Prisma } from '@workspace/db/client'
 import {
     useCountEvaluationPeriod,
     useFindManyEvaluationPeriod,
@@ -20,9 +24,6 @@ import { BookPlus, ChevronDown, ChevronUp } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import ExportReport from './export-report'
-import { useSchoolYearStore } from '@components/selecter-school-year'
-import type { Prisma } from '@workspace/db/client'
-import { cn } from '@lib/utils'
 import type { UploadedFileItem } from '@components/commons/documentPaths'
 import { getMinioUrl } from '@workspace/libs/utils'
 
@@ -40,14 +41,7 @@ export type EvaluationPeriodType = Prisma.EvaluationPeriodGetPayload<{
                 name: true
             }
         }
-        documentFiles: {
-            select: {
-                id: true
-                name: true
-                path: true
-                size: true
-            }
-        }
+        documentFiles: true
         _count: {
             select: {
                 documentFiles: true
@@ -68,6 +62,14 @@ export default function EvaluationPeriod() {
     const { id: schoolYearId } = useSchoolYearStore()
 
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
+
+    const { onOpen: onOpenPreview } = useDisclosure<{
+        uri: string
+        name?: string
+        mimeType?: string
+    }>({
+        tag: 'XemTaiLieu',
+    })
 
     const where = useMemo(
         () => ({
@@ -116,14 +118,7 @@ export default function EvaluationPeriod() {
                     name: true,
                 },
             },
-            documentFiles: {
-                select: {
-                    id: true,
-                    name: true,
-                    path: true,
-                    size: true,
-                },
-            },
+            documentFiles: true,
             _count: {
                 select: {
                     documentFiles: true,
@@ -149,27 +144,6 @@ export default function EvaluationPeriod() {
         },
     })
 
-    const { onOpen: onOpenPreview } = useDisclosure<{
-        uri: string
-        name?: string
-        mimeType?: string
-    }>({
-        tag: 'XemTaiLieu',
-    })
-
-    const handlePreviewFile = async (file: UploadedFileItem) => {
-        try {
-            return onOpenPreview({
-                uri: getMinioUrl(file.path),
-                name: file.name,
-                mimeType: file.name.split('.').pop() || file.mimeType,
-            })
-        } catch (error) {
-            console.error('Error opening file:', error)
-            message.error('Không thể mở file')
-        }
-    }
-
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { mutateAsync: updateEvaluationPeriod } = useUpdateEvaluationPeriod()
@@ -188,6 +162,18 @@ export default function EvaluationPeriod() {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()
+        }
+    }
+
+    const handlePreviewFile = async (file: UploadedFileItem) => {
+        try {
+            return onOpenPreview({
+                uri: getMinioUrl(file.path),
+                name: file.name,
+                mimeType: file.name.split('.').pop() || file.mimeType,
+            })
+        } catch (error) {
+            message.error('Không thể mở file')
         }
     }
 
@@ -379,89 +365,70 @@ export default function EvaluationPeriod() {
                         }}
                         expandable={{
                             expandedRowRender: (record) => (
-                                <div className="p-4 bg-gray-50">
-                                    <p className="mb-4 font-semibold">Tài liệu hội đồng:</p>
+                                <div className="bg-gray-50">
+                                    <p className="mb-3 font-semibold">Tài liệu hội đồng:</p>
                                     {record.documentFiles && record.documentFiles.length > 0 ? (
                                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                            {record.documentFiles.map(
-                                                (file: {
-                                                    id: string
-                                                    name: string
-                                                    path: string
-                                                }) => (
-                                                    <div
-                                                        key={file.id}
-                                                        className="border rounded-lg p-2 bg-white shadow-sm"
-                                                    >
-                                                        <div className="flex flex-col items-center justify-center gap-2">
-                                                            <div className="text-4xl">
-                                                                {file.name.endsWith('.pdf') ? (
-                                                                    <span className="text-red-500">
-                                                                        📄
-                                                                    </span>
-                                                                ) : file.name.endsWith('.xlsx') ||
-                                                                  file.name.endsWith('.xls') ? (
-                                                                    <span className="text-green-500">
-                                                                        📊
-                                                                    </span>
-                                                                ) : (
-                                                                    <span>📁</span>
-                                                                )}
-                                                            </div>
-                                                            <div className="text-center">
-                                                                <p className="text-sm font-medium truncate max-w-[200px]">
-                                                                    {file.name}
-                                                                </p>
-                                                            </div>
-                                                            <div className="flex gap-2 mt-2">
-                                                                <Button
-                                                                    size="small"
-                                                                    icon={<span>👁️</span>}
-                                                                    onClick={() => {
-                                                                        window.open(
-                                                                            file.path,
-                                                                            '_blank'
-                                                                        )
-                                                                    }}
-                                                                />
-                                                                <Button
-                                                                    size="small"
-                                                                    icon={<span>⬇️</span>}
-                                                                    onClick={() => {
-                                                                        const link =
-                                                                            document.createElement(
-                                                                                'a'
-                                                                            )
-                                                                        link.href = file.path
-                                                                        link.download = file.name
-                                                                        link.click()
-                                                                    }}
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                )
-                                            )}
+                                            {record.documentFiles.map((file: UploadedFileItem) => (
+                                                <div
+                                                    key={file.id}
+                                                    className="flex items-center border border-solid border-[#D1D5DB] rounded p-2 hover:bg-gray-50 cursor-pointer"
+                                                    onClick={() => handlePreviewFile(file)}
+                                                >
+                                                    <PaperClipOutlined
+                                                        style={{
+                                                            marginRight: 8,
+                                                            color: '#595959',
+                                                            fontSize: 16,
+                                                        }}
+                                                    />
+                                                    <Tooltip title={file.name}>
+                                                        <span
+                                                            style={{
+                                                                whiteSpace: 'nowrap',
+                                                                overflow: 'hidden',
+                                                                textOverflow: 'ellipsis',
+                                                                width: 400,
+                                                            }}
+                                                        >
+                                                            {file.name}
+                                                        </span>
+                                                    </Tooltip>
+                                                    <Tooltip title="Tải xuống">
+                                                        <DownloadOutlined
+                                                            style={{
+                                                                marginLeft: 12,
+                                                                cursor: 'pointer',
+                                                                color: '#595959',
+                                                                fontSize: 14,
+                                                            }}
+                                                            onClick={(e) => {
+                                                                e.stopPropagation()
+                                                                e.preventDefault()
+                                                                const link =
+                                                                    document.createElement('a')
+                                                                link.href = file.path
+                                                                link.download = file.name
+                                                                link.click()
+                                                            }}
+                                                        />
+                                                    </Tooltip>
+                                                </div>
+                                            ))}
                                         </div>
                                     ) : (
-                                        <p className="text-gray-500">Không có mô tả</p>
+                                        <p className="text-gray-500">Không có tài liệu</p>
                                     )}
                                 </div>
                             ),
-                            expandIcon: ({ expanded, onExpand, record }) =>
-                                expanded ? (
-                                    <span
-                                        onClick={(e) => onExpand(record as EvaluationPeriodType, e)}
-                                    >
-                                        <ChevronDown />
-                                    </span>
-                                ) : (
-                                    <span
-                                        onClick={(e) => onExpand(record as EvaluationPeriodType, e)}
-                                    >
-                                        <ChevronUp />
-                                    </span>
-                                ),
+                            expandIcon: ({ expanded, onExpand, record }) => (
+                                <span
+                                    className="flex justify-center"
+                                    onClick={(e) => onExpand(record as EvaluationPeriodType, e)}
+                                >
+                                    {expanded ? <ChevronDown /> : <ChevronUp />}
+                                </span>
+                            ),
                         }}
                     />
                 </Col>

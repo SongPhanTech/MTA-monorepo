@@ -17,6 +17,7 @@ import {
     useFindManyLecturerType,
 } from '@workspace/db/hooks'
 import { exportLecturerProfile } from '@workspace/libs/api/training'
+import { whereOrganization } from '@workspace/libs/constants'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Row, Tooltip } from 'antd'
@@ -27,7 +28,6 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { whereOrganization } from '@workspace/libs/constants'
 
 dayjs.locale('vi')
 
@@ -189,7 +189,7 @@ export default function UserProfilePageLecture() {
         [filters, canXemTatCa, orgIds]
     )
 
-    const { data = [], refetch } = useFindManyLecturer({
+    const { data: lecturerData = [], refetch } = useFindManyLecturer({
         where,
         include: {
             userProfile: {
@@ -298,6 +298,7 @@ export default function UserProfilePageLecture() {
                     <Table
                         rowSelection={{
                             selectedRowKeys,
+                            preserveSelectedRowKeys: true,
                             onChange: (keys) => {
                                 setSelectedRowKeys(keys)
                             },
@@ -492,12 +493,13 @@ export default function UserProfilePageLecture() {
                                                     'SUA'
                                                 ) && (
                                                     <Tooltip title="Sửa" placement="top">
-                                                        <ExportOutlined
-                                                            size={18}
+                                                        <Button
                                                             target="_blank"
                                                             href={`/hrm/${ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO}/${userProfileId}`}
-                                                            className="text-green-600 cursor-pointer"
-                                                        />
+                                                            className="text-green-600 border-none"
+                                                        >
+                                                            <ExportOutlined />
+                                                        </Button>
                                                     </Tooltip>
                                                 )}
                                             </Row>
@@ -507,7 +509,7 @@ export default function UserProfilePageLecture() {
                                 },
                             },
                         ]}
-                        data={data}
+                        data={lecturerData}
                         rowKey="id"
                         pagination={{
                             current: currentPage,

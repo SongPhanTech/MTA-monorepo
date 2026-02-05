@@ -1,5 +1,3 @@
-import { cancelOCRTask, fetchOCR, pollOCRResult, stopOCRPolling } from '@/api/ocr'
-import { useTopics } from '@/hooks/useTopics'
 import { CloseCircleOutlined, InboxOutlined, QuestionCircleOutlined } from '@ant-design/icons'
 import { fetchReadDocumentContentDocumentDocumentReaderPost } from '@api/qa/qaComponents'
 import DocumentSidebar from '@components/commons/document-sidebar'
@@ -14,10 +12,12 @@ import {
     useFindManyDocumentClassification,
 } from '@workspace/db/hooks'
 import { generatePresignedUrl } from '@workspace/libs/api/model'
-import { Col, Form, Input, message, Modal, Progress, Tag, Tooltip } from 'antd'
+import { Col, Form, Input, Modal, message, Progress, Tag, Tooltip } from 'antd'
 import axios from 'axios'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { cancelOCRTask, fetchOCR, pollOCRResult, stopOCRPolling } from '@/api/ocr'
+import { useTopics } from '@/hooks/useTopics'
 
 let pdfjsLibPromise: Promise<typeof import('pdfjs-dist/legacy/build/pdf')> | null = null
 let pdfWorkerSrc: string | null = null

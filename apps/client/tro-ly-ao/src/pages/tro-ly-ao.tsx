@@ -1,6 +1,3 @@
-import { fetchRecommendByTopicId } from '@/api/hoi-dap'
-import { useUserSession } from '@/hooks/useUserSession'
-import { useSSOSession } from '@/hooks/useSSOSession'
 import ChatInput from '@components/commons/input-chat-bot'
 import ChatLayout from '@layouts/chat-layout'
 import { MessageSender } from '@workspace/db'
@@ -9,6 +6,9 @@ import { Button, Card, message } from 'antd'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useRef, useState } from 'react'
+import { fetchRecommendByTopicId } from '@/api/hoi-dap'
+import { useSSOSession } from '@/hooks/useSSOSession'
+import { useUserSession } from '@/hooks/useUserSession'
 
 export default function TroLyAo() {
     const router = useRouter()

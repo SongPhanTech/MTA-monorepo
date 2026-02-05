@@ -1,14 +1,15 @@
+import Table from '@components/commons/table'
+import { cn } from '@lib/utils'
 import {
     exportClusterSurveyStatistics,
     useGetClusterSurveyStatistics,
 } from '@workspace/libs/api/exam'
 import { Button, Col, Empty, message, Row, Typography } from 'antd'
+import ReactECharts from 'echarts-for-react'
 import { saveAs } from 'file-saver'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
-import ReactECharts from 'echarts-for-react'
-import Table from '@components/commons/table'
-import { cn } from '@lib/utils'
+
 const { Title } = Typography
 function LecturerSurveyReport({
     selectedId,
@@ -109,7 +110,7 @@ function LecturerSurveyReport({
                 onRow={(record) => {
                     return {
                         onClick: () => {
-                            setSublectClass(record?.surveyId as any)
+                            setSublectClass(record as any)
                         },
                         className: cn(
                             sublectClass?.surveyId === record.surveyId ? 'bg-orange-200' : ''

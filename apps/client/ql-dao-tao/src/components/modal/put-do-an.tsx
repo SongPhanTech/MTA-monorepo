@@ -17,10 +17,10 @@ import DatePicker from '@components/commons/date-picker'
 import Tabs from '@components/commons/tabar'
 import { useThesisProjectStatusOptions } from '@hooks/thesisProjectStatus'
 import { buildOrgTree } from '@lib/utils'
+import { whereOrganization } from '@workspace/libs/constants'
 import { debounce } from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
 import TreeSelect from '@/components/commons/tree-select'
-import { whereOrganization } from '@workspace/libs/constants'
 export type PutThesisProject = ThesisProject
 dayjs.locale('vi')
 
@@ -158,6 +158,9 @@ const PutThesisProject = () => {
             projectStart: output.projectStart,
             projectEnd: output.projectEnd,
             subjectClassId: input?.subjectClassId || '',
+            firstCheckProgress: output.firstCheckProgress,
+            secondCheckProgress: output.secondCheckProgress,
+            isEligibleForDefense: output.isEligibleForDefense,
         }
 
         try {
@@ -352,6 +355,33 @@ const PutThesisProject = () => {
                             label: item.label,
                             value: item.value,
                         }))}
+                        allowClear
+                    />
+                </FormItem>
+            </Col>
+            <Col span={8}>
+                <FormItem form={form} name="firstCheckProgress" label="Tiến độ kiểm tra lần 1(%)">
+                    <InputNumber min={0} max={100} placeholder="Nhập tiến độ" className="w-full" />
+                </FormItem>
+            </Col>
+            <Col span={8}>
+                <FormItem form={form} name="secondCheckProgress" label="Tiến độ kiểm tra lần 2(%)">
+                    <InputNumber min={0} max={100} placeholder="Nhập tiến độ" className="w-full" />
+                </FormItem>
+            </Col>
+            <Col span={8}>
+                <FormItem
+                    form={form}
+                    name="isEligibleForDefense"
+                    label="Đủ điều kiện bảo vệ"
+                    layout="horizontal"
+                >
+                    <Select
+                        placeholder="Chọn trạng thái"
+                        options={[
+                            { label: 'Đủ điều kiện', value: true },
+                            { label: 'Không đủ điều kiện', value: false },
+                        ]}
                         allowClear
                     />
                 </FormItem>

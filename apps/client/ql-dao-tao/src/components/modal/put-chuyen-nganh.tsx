@@ -17,9 +17,9 @@ import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
-import TreeSelect from '@/components/commons/tree-select'
-import { useFindManyTrainingObjectTypePermission } from '@workspace/ui'
 import { whereOrganization } from '@workspace/libs/constants'
+import { useFindManyTrainingObjectTypePermission } from '@workspace/ui'
+import TreeSelect from '@/components/commons/tree-select'
 export type PutTrainingMajor = TrainingMajor & {
     trainingObjectTypeIds: string[]
 }

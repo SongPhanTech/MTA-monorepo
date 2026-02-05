@@ -79,7 +79,6 @@ export default function CrossReviewAssignment() {
                 evaluationCouncil: {
                     periodId: selectedEvaluationPeriodId,
                 },
-                role: $Enums.EvaluationMemberRole.HEAD_SPECIALIZED,
             },
             include: {
                 lecturer: {
@@ -107,6 +106,7 @@ export default function CrossReviewAssignment() {
         },
         {
             enabled: !!selectedEvaluationPeriodId,
+            refetchOnWindowFocus: false,
         }
     )
 
@@ -342,11 +342,15 @@ export default function CrossReviewAssignment() {
                         headerTitleKey="displayName"
                         childrenFieldName="criteria"
                         isTitle={true}
-                        rowSelection={{
-                            type: 'checkbox',
-                            selectedRowKeys,
-                            onChange: onSelectChange,
-                        }}
+                        rowSelection={
+                            canApprove
+                                ? {
+                                      type: 'checkbox',
+                                      selectedRowKeys,
+                                      onChange: onSelectChange,
+                                  }
+                                : undefined
+                        }
                         expandable={{
                             expandRowByClick: false,
                         }}

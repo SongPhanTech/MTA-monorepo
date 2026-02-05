@@ -1,4 +1,5 @@
 import { Faker, vi } from '@faker-js/faker'
+
 const faker = new Faker({
     locale: [vi],
 })

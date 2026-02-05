@@ -5,7 +5,7 @@ import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { cn } from '@lib/utils'
-import { SurveyTopic } from '@workspace/db'
+import type { SurveyTopic } from '@workspace/db'
 import {
     useCountSurveyTopic,
     useFindManySurveyTopic,

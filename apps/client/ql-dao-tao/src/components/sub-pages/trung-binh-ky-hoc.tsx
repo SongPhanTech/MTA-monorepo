@@ -7,7 +7,10 @@ import useSpinner from '@hooks/spinner'
 import { useStudentTrainingTypeOptions } from '@hooks/studentTrainingType'
 import type { AcademicRankingConvert, FixedClass } from '@workspace/db/client'
 import { useCountStudent, useFindManyFixedClass, useFindManyStudent } from '@workspace/db/hooks'
-import { useCalculateStudentSemesterResultJson } from '@workspace/libs/api/training'
+import {
+    useCalculateStudentSemesterResultJson,
+    useExportStudentSemesterResult,
+} from '@workspace/libs/api/training'
 import {
     Select,
     SelectTrainingCourseStore,
@@ -15,8 +18,9 @@ import {
     useTrainingCourseStore,
     useTrainingObjectTypeStore,
 } from '@workspace/ui'
-import { Button, Checkbox, Col, Flex, Form, message, Row, Tag } from 'antd'
+import { Button, Checkbox, Col, Flex, Form, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
+import { saveAs } from 'file-saver'
 import 'dayjs/locale/vi'
 import _ from 'lodash'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -45,23 +49,27 @@ const DiemTrungBinhKyHoc = () => {
     const where = useMemo(() => {
         return {
             deletedAt: null,
-            subjectClassStudent: {
-                some: {
-                    subjectClass: {
-                        semesterId,
+            OR: [
+                {
+                    subjectClassStudent: {
+                        some: {
+                            subjectClass: {
+                                semesterId,
+                            },
+                        },
                     },
                 },
-            },
-            // studentSemesterResult: {
-            //     some: { semesterId },
-            // },
+                {
+                    studentSemesterResult: {
+                        some: { semesterId },
+                    },
+                },
+            ],
             ...(filters.code
                 ? {
-                      userProfile: {
-                          code: {
-                              contains: filters.code,
-                              mode: 'insensitive' as const,
-                          },
+                      code: {
+                          contains: filters.code,
+                          mode: 'insensitive' as const,
                       },
                   }
                 : {}),
@@ -101,15 +109,24 @@ const DiemTrungBinhKyHoc = () => {
                     where: { semesterId },
                     include: { rank: true },
                 },
-                userProfile: true,
+                userProfile: {
+                    select: {
+                        fullname: true,
+                        dateOfBirth: true,
+                    },
+                },
                 fixedClass: {
-                    include: {
-                        trainingCourse: true,
-                        managementOrganization: true,
+                    select: {
+                        code: true,
+                        name: true,
                     },
                 },
             },
-            orderBy: [{ userProfile: { firstName: 'asc' } }, { userProfile: { lastName: 'asc' } }],
+            orderBy: [
+                { fixedClass: { code: 'desc' } },
+                { userProfile: { firstName: 'asc' } },
+                { userProfile: { lastName: 'asc' } },
+            ],
             take: numberOfPages,
             skip: (currentPage - 1) * numberOfPages,
         },
@@ -147,6 +164,7 @@ const DiemTrungBinhKyHoc = () => {
     )
 
     const { mutateAsync: calculateSemesterResults } = useCalculateStudentSemesterResultJson()
+    const { mutateAsync: exportExcel } = useExportStudentSemesterResult()
 
     const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
@@ -161,6 +179,11 @@ const DiemTrungBinhKyHoc = () => {
     const handleSummaryClick = async () => {
         if (!semesterId) {
             message.warning('Vui lòng chọn học kỳ')
+            return
+        }
+
+        if (!trainingCourseId) {
+            message.warning('Vui lòng chọn khoá')
             return
         }
 
@@ -189,6 +212,29 @@ const DiemTrungBinhKyHoc = () => {
             message.error('Có lỗi xảy ra khi tổng kết kết quả học kỳ')
         } finally {
             hideSpinner()
+        }
+    }
+
+    const handleExportExcel = async () => {
+        if (!semesterId) {
+            message.warning('Vui lòng chọn học kỳ')
+            return
+        }
+
+        if (!trainingObjectTypeId) {
+            message.warning('Vui lòng chọn đối tượng đào tạo')
+            return
+        }
+
+        const res = await exportExcel({
+            data: { semesterId, trainingObjectTypeId },
+        })
+
+        if (res.status === 200) {
+            message.success('Xuất file thành công')
+            saveAs(res.data, 'KET_QUA_HOC_TAP_HK.xlsx')
+        } else {
+            message.error(res.data?.message || 'Xuất file thất bại')
         }
     }
 
@@ -225,13 +271,12 @@ const DiemTrungBinhKyHoc = () => {
                             </Flex>
                         </Col>
                         <Col span={6}>
-                            <Flex justify="end">
-                                <Button
-                                    type="primary"
-                                    disabled={!trainingCourseId}
-                                    onClick={handleSummaryClick}
-                                >
+                            <Flex justify="end gap-2">
+                                <Button type="primary" onClick={handleSummaryClick}>
                                     Tổng kết kết quả học kỳ
+                                </Button>
+                                <Button type="primary" onClick={handleExportExcel}>
+                                    Xuất Excel
                                 </Button>
                             </Flex>
                         </Col>
@@ -265,6 +310,26 @@ const DiemTrungBinhKyHoc = () => {
                                 fixed: 'left',
                                 type: 'input',
                                 render: (__, record) => record?.userProfile?.fullname,
+                            },
+                            {
+                                title: 'Ngày sinh',
+                                width: 150,
+                                align: 'center',
+                                render: (__, record) =>
+                                    record?.userProfile?.birthday
+                                        ? dayjs(record?.userProfile?.birthday).format('DD/MM/YYYY')
+                                        : '',
+                            },
+
+                            {
+                                title: 'Lớp',
+                                width: 150,
+                                align: 'center',
+                                render: (__, record) => (
+                                    <Tooltip title={record?.fixedClass?.name}>
+                                        {record?.fixedClass?.code}
+                                    </Tooltip>
+                                ),
                             },
                             {
                                 title: 'Năm học thứ...',

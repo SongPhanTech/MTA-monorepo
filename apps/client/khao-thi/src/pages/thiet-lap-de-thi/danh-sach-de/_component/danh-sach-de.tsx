@@ -1,17 +1,17 @@
-import { Button, Input, Space, Flex, Row, message } from 'antd'
-import { PlusOutlined, SearchOutlined, DatabaseOutlined } from '@ant-design/icons'
-import { useDisclosure } from 'react-hook-disclosure-modal'
-import { useStore } from '@tanstack/react-store'
-import { useMemo, useState } from 'react'
-import { store } from '../index'
-import dayjs from 'dayjs'
-import { useCountExamBank, useFindManyExamBank, useUpdateExamBank } from '@workspace/db/hooks'
-import EditIcon from '@components/icons/edit'
-import DeleteIcon from '@components/icons/delete'
+import { DatabaseOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
-import { formatDate } from '@lib/utils'
-import PrintIcon from '@components/icons/print'
+import DeleteIcon from '@components/icons/delete'
 import DownloadIcon from '@components/icons/download'
+import EditIcon from '@components/icons/edit'
+import PrintIcon from '@components/icons/print'
+import { formatDate } from '@lib/utils'
+import { useStore } from '@tanstack/react-store'
+import { useCountExamBank, useFindManyExamBank, useUpdateExamBank } from '@workspace/db/hooks'
+import { Button, Flex, Input, message, Row, Select, Space } from 'antd'
+import dayjs from 'dayjs'
+import { useMemo, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
+import { store } from '../index'
 
 export default function ExamListPage() {
     const { onOpen: onOpenExamList } = useDisclosure<{
@@ -31,9 +31,11 @@ export default function ExamListPage() {
     })
 
     const [filters, setFilters] = useState<any>({
+        exam: '',
         examCode: '',
         name: '',
-        exam: '',
+        examRoom: undefined,
+        subjectVersionId: undefined,
         examType: undefined,
         questions: undefined,
         examDay: undefined,
@@ -46,8 +48,38 @@ export default function ExamListPage() {
     const selectedExamId = useStore(store, (state) => state.selectedExamId)
     const subjectVersionId = useStore(store, (state) => state.subjectVersionId)
     const where = useMemo(() => {
+        const examFilter: any = {}
+        if (filters.examRoom) {
+            examFilter.examRooms = {
+                some: {
+                    room: {
+                        name: { contains: filters.examRoom },
+                    },
+                },
+            }
+        }
+
+        if (filters.name) {
+            examFilter.semester = {
+                name: { contains: filters.name },
+            }
+        }
+        if (filters.studentCount) {
+            examFilter.examRooms = {
+                some: {
+                    ...(examFilter.examRooms?.some ?? {}),
+                    examList: {
+                        _count: {
+                            equals: filters.studentCount,
+                        },
+                    },
+                },
+            }
+        }
+
         return {
             examId: selectedExamId,
+
             ...(filters.exam &&
                 filters.exam !== '' && {
                     OR: [
@@ -58,12 +90,23 @@ export default function ExamListPage() {
                         },
                     ],
                 }),
+
             ...(filters.examCode &&
                 filters.examCode !== '' && {
                     examCode: {
                         contains: filters?.examCode || '',
                     },
                 }),
+
+            ...(Object.keys(examFilter).length && {
+                exam: examFilter,
+            }),
+
+            ...(filters.subjectClass && {
+                subjectClass: {
+                    name: { contains: filters.subjectClass },
+                },
+            }),
             ...(filters.name &&
                 filters.name !== '' && {
                     exam: {
@@ -139,6 +182,24 @@ export default function ExamListPage() {
                 exam: {
                     include: {
                         semester: true,
+                        subjectVersion: {
+                            select: {
+                                id: true,
+                                name: true,
+                                code: true,
+                            },
+                        },
+                        examRooms: {
+                            include: {
+                                room: {
+                                    select: {
+                                        id: true,
+                                        name: true,
+                                    },
+                                },
+                                examList: true,
+                            },
+                        },
                     },
                 },
                 questions: {
@@ -193,6 +254,70 @@ export default function ExamListPage() {
         },
     })
 
+    const { subjectVersionOptions, examRoomOptions, studentCountOptions } = useMemo(() => {
+        const subjectMap = new Map<string, string>() // subjectVersionId -> label
+        const roomSet = new Set<string>() // room.name
+        const roomStudentMap = new Map<string, number>() // roomId -> total students
+
+        exams.forEach((examItem) => {
+            const exam = examItem?.exam
+
+            const sv = exam?.subjectVersion
+            if (sv?.id) {
+                subjectMap.set(sv.id, `${sv.code ?? ''} - ${sv.name}`)
+            }
+
+            exam?.examRooms?.forEach((er) => {
+                if (er?.room?.name) {
+                    roomSet.add(er.room.name)
+                }
+
+                if (er?.roomId) {
+                    roomStudentMap.set(
+                        er.roomId,
+                        (roomStudentMap.get(er.roomId) ?? 0) + (er.examList?.length ?? 0)
+                    )
+                }
+            })
+        })
+
+        // build options
+        const subjectVersionOptions = Array.from(subjectMap, ([value, label]) => ({
+            value,
+            label,
+        }))
+
+        const examRoomOptions = Array.from(roomSet, (name) => ({
+            value: name,
+            label: name,
+        }))
+
+        const studentCountOptions = Array.from(new Set(roomStudentMap.values()))
+            .sort((a, b) => a - b)
+            .map((n) => ({
+                value: n,
+                label: `${n} thí sinh`,
+            }))
+
+        return {
+            subjectVersionOptions,
+            examRoomOptions,
+            studentCountOptions,
+        }
+    }, [exams])
+
+    const totalStudents = useMemo(() => {
+        let total = 0
+
+        exams.forEach((item) => {
+            item?.exam?.examRooms?.forEach((er) => {
+                total += er?.examList?.length ?? 0
+            })
+        })
+
+        return total
+    }, [exams])
+
     async function handleDelete(id: string) {
         try {
             await update({
@@ -233,6 +358,7 @@ export default function ExamListPage() {
             </>
         )
     }
+    console.log(exams)
 
     return (
         <div>
@@ -293,6 +419,46 @@ export default function ExamListPage() {
                         Sinh đề
                     </Button>
                 </Space>
+            </Flex>
+            <Flex gap={8} style={{ marginBottom: 16 }}>
+                <Select
+                    allowClear
+                    disabled
+                    placeholder="Môn thi"
+                    style={{ width: 280 }}
+                    options={subjectVersionOptions}
+                    value={filters.subjectVersionId ?? exams[0]?.exam?.subjectVersion?.id}
+                    onChange={(value) => setFilters({ ...filters, subjectVersionId: value })}
+                />
+
+                <Select
+                    allowClear
+                    placeholder="Phòng thi"
+                    style={{ width: 200 }}
+                    options={examRoomOptions}
+                    value={filters.examRoom ?? examRoomOptions[0]?.value}
+                    onChange={(examRoom) =>
+                        setFilters((prev: typeof filters) => ({ ...prev, examRoom }))
+                    }
+                />
+
+                <div
+                    style={{
+                        width: 160,
+                        height: 32,
+                        border: '1px solid #d9d9d9',
+                        borderRadius: 6,
+                        display: 'flex',
+                        alignItems: 'center',
+                        padding: '0 12px',
+                        background: '#fafafa',
+                        fontWeight: 500,
+                        opacity: 1,
+                        pointerEvents: 'none',
+                    }}
+                >
+                    {totalStudents} thí sinh
+                </div>
             </Flex>
 
             {/* Table */}
@@ -417,9 +583,7 @@ export default function ExamListPage() {
                         width: 150,
                         type: 'order',
                         align: 'center' as const,
-                        render: (_, record) => {
-                            return record?.questions?.length || 0
-                        },
+                        render: (_, record) => record?._count?.questions || 0,
                     },
                     {
                         title: 'Lớp môn học',

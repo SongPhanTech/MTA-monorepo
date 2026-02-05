@@ -19,11 +19,11 @@ import {
     useUpdateDisciplinaryWarning,
     useUpdateStudent,
 } from '@workspace/db/hooks'
+import { whereOrganization } from '@workspace/libs/constants'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { BookPlus } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { whereOrganization } from '@workspace/libs/constants'
 
 dayjs.locale('vi')
 
@@ -262,6 +262,15 @@ const XetCanhCaoHocDuong = ({ semesterId }: XetCanhCaoHocDuongProps) => {
                                 fixed: 'left',
                                 type: 'input',
                                 render: (__, record) => record?.student?.userProfile?.fullname,
+                            },
+                            {
+                                title: 'Ngày sinh',
+                                width: 120,
+                                align: 'center',
+                                render: (__, record) => {
+                                    const date = record?.student?.userProfile?.dateOfBirth
+                                    return date ? dayjs(date).format('DD/MM/YYYY') : ''
+                                },
                             },
                             {
                                 title: 'Lớp niên chế',

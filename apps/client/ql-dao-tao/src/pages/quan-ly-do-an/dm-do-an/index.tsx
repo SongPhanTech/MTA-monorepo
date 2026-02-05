@@ -1,7 +1,8 @@
-// biome-ignore assist/source/organizeImports: <ignore>
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import useSpinner from '@hooks/spinner'
+import { useThesisProjectStatusOptions } from '@hooks/thesisProjectStatus'
 import DefaultLayout from '@layouts/default-layout'
 import {
     CouncilRole,
@@ -13,31 +14,30 @@ import {
 import {
     useCountThesisProject,
     useFindManyDefenseSession,
+    useFindManyExpertProfile,
+    useFindManyRoom,
     useFindManySubjectClass,
     useFindManyThesisProject,
-    useFindManyRoom,
-    useFindManyExpertProfile,
 } from '@workspace/db/hooks'
+import { sqlTransaction } from '@workspace/libs/api/model'
+import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import {
     Button,
     Col,
     DatePicker,
     Form,
-    message,
-    Modal,
-    Row,
-    Tag,
     Input,
     InputNumber,
+    Modal,
+    message,
+    Row,
     Tabs,
+    Tag,
 } from 'antd'
-import { sqlTransaction } from '@workspace/libs/api/model'
 import dayjs from 'dayjs'
 import { CircleMinus, SquarePen } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
-import { useThesisProjectStatusOptions } from '@hooks/thesisProjectStatus'
-import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import useSpinner from '@hooks/spinner'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface DoAnForm {
     subjectClassId: string
@@ -271,6 +271,14 @@ export default function DanhMucDoAn() {
         }
     }
 
+    const { onOpen: openUpdateProgress } = useDisclosure<{
+        selectedRowKeys: string[]
+        type: 'FIRST' | 'SECOND'
+        onSuccess?: () => void
+    }>({
+        tag: 'UpdateProgressModal',
+    })
+
     const handleActivateEdit = () => {
         if (!thesisProjectData || thesisProjectData.length === 0) {
             message.info('Không có dữ liệu đồ án để chỉnh sửa.')
@@ -501,6 +509,32 @@ export default function DanhMucDoAn() {
                                             Chỉnh sửa
                                         </Button>
                                     )}
+                                    <Button
+                                        onClick={() =>
+                                            openUpdateProgress({
+                                                selectedRowKeys: selectedRowKeys as string[],
+                                                type: 'FIRST',
+                                                onSuccess: () => refetchThesisProjectData(),
+                                            })
+                                        }
+                                        type="primary"
+                                        disabled={selectedRowKeys.length === 0}
+                                    >
+                                        Cập nhật tiến độ 1
+                                    </Button>
+                                    <Button
+                                        onClick={() =>
+                                            openUpdateProgress({
+                                                selectedRowKeys: selectedRowKeys as string[],
+                                                type: 'SECOND',
+                                                onSuccess: () => refetchThesisProjectData(),
+                                            })
+                                        }
+                                        type="primary"
+                                        disabled={selectedRowKeys.length === 0}
+                                    >
+                                        Cập nhật tiến độ 2
+                                    </Button>
                                 </div>
                             </Form.Item>
                         </Form>
@@ -650,6 +684,32 @@ export default function DanhMucDoAn() {
                                     : data?.name || ''
                                 return name
                             },
+                        },
+                        {
+                            title: 'Tiến độ KT 1',
+                            dataIndex: 'firstCheckProgress',
+                            align: 'center',
+                            width: 100,
+                            render: (value) => (value ? `${value}%` : ''),
+                        },
+                        {
+                            title: 'Tiến độ KT 2',
+                            dataIndex: 'secondCheckProgress',
+                            align: 'center',
+                            width: 100,
+                            render: (value) => (value ? `${value}%` : ''),
+                        },
+                        {
+                            title: 'Được bảo vệ',
+                            dataIndex: 'isEligibleForDefense',
+                            align: 'center',
+                            width: 120,
+                            render: (value) =>
+                                value ? (
+                                    <Tag color="success">Đủ ĐK</Tag>
+                                ) : (
+                                    <Tag color="error">Không đủ ĐK</Tag>
+                                ),
                         },
                         {
                             title: 'Chủ tịch',

@@ -1,6 +1,6 @@
 import { PrismaClient } from '@workspace/db'
-import { postDMNhanViens } from './api/system'
 import NV from '../DM_NhanVien.json'
+import { postDMNhanViens } from './api/system'
 
 const prisma = new PrismaClient()
 

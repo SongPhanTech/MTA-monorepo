@@ -31,10 +31,10 @@ import {
     useUpsertAcademicWarning,
 } from '@workspace/db/hooks'
 import { useExportStudentAcademicWarningJson } from '@workspace/libs/api/training'
+import { whereOrganization } from '@workspace/libs/constants'
 import { BookPlus } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { whereOrganization } from '@workspace/libs/constants'
 
 dayjs.locale('vi')
 
@@ -341,6 +341,15 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
                                     render: (__, record) => record?.student?.userProfile?.fullname,
                                 },
                                 {
+                                    title: 'Ngày sinh',
+                                    width: 120,
+                                    align: 'center',
+                                    render: (__, record) => {
+                                        const date = record?.student?.userProfile?.dateOfBirth
+                                        return date ? dayjs(date).format('DD/MM/YYYY') : ''
+                                    },
+                                },
+                                {
                                     title: 'Lớp niên chế',
                                     dataIndex: 'fixedClass',
                                     width: 160,
@@ -485,7 +494,15 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
                                     dataIndex: ['userProfile', 'fullname'],
                                     width: 200,
                                 },
-
+                                {
+                                    title: 'Ngày sinh',
+                                    width: 120,
+                                    align: 'center',
+                                    render: (__, record) => {
+                                        const date = record?.userProfile?.dateOfBirth
+                                        return date ? dayjs(date).format('DD/MM/YYYY') : ''
+                                    },
+                                },
                                 {
                                     title: 'Lớp',
                                     width: 60,

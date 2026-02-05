@@ -48,7 +48,7 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import { useMutation, useQuery } from '@tanstack/react-query'
+
 import type {
     DataTag,
     DefinedInitialDataOptions,
@@ -63,7 +63,8 @@ import type {
     UseQueryOptions,
     UseQueryResult,
 } from '@tanstack/react-query'
-
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { customStorageFetch } from './custom-instance'
 import type {
     DeleteFilesDeleteSingleFileStorageFileFileNameParams,
     GetFilesAvatarInitialsParams,
@@ -78,7 +79,6 @@ import type {
     PostFilesSingleStorageTypeParams,
 } from './schemas'
 
-import { customStorageFetch } from './custom-instance'
 type AwaitedInput<T> = PromiseLike<T> | T
 
 type Awaited<O> = O extends AwaitedInput<infer T> ? T : never
@@ -985,7 +985,7 @@ export const postFilesSingleStorageType = async (
 ): Promise<postFilesSingleStorageTypeResponse> => {
     const formData = new FormData()
     if (postFilesSingleStorageTypeBody.file !== undefined) {
-        formData.append(`file`, postFilesSingleStorageTypeBody.file)
+        formData.append('file', postFilesSingleStorageTypeBody.file)
     }
 
     return customStorageFetch<postFilesSingleStorageTypeResponse>(
@@ -1127,7 +1127,7 @@ export const postFilesMultiStorageType = async (
 ): Promise<postFilesMultiStorageTypeResponse> => {
     const formData = new FormData()
     if (postFilesMultiStorageTypeBody.files !== undefined) {
-        postFilesMultiStorageTypeBody.files.forEach((value) => formData.append(`files`, value))
+        postFilesMultiStorageTypeBody.files.forEach((value) => formData.append('files', value))
     }
 
     return customStorageFetch<postFilesMultiStorageTypeResponse>(
@@ -1652,7 +1652,7 @@ export const getGetFilesAvatarInitialsUrl = (params?: GetFilesAvatarInitialsPara
 
     return stringifiedParams.length > 0
         ? `/Files/avatar-initials?${stringifiedParams}`
-        : `/Files/avatar-initials`
+        : '/Files/avatar-initials'
 }
 
 export const getFilesAvatarInitials = async (
@@ -1669,7 +1669,7 @@ export const getFilesAvatarInitials = async (
 }
 
 export const getGetFilesAvatarInitialsQueryKey = (params?: GetFilesAvatarInitialsParams) => {
-    return [`/Files/avatar-initials`, ...(params ? [params] : [])] as const
+    return ['/Files/avatar-initials', ...(params ? [params] : [])] as const
 }
 
 export const getGetFilesAvatarInitialsQueryOptions = <
@@ -1951,7 +1951,7 @@ export type getFilesHealthzResponseSuccess = getFilesHealthzResponse200 & {
 export type getFilesHealthzResponse = getFilesHealthzResponseSuccess
 
 export const getGetFilesHealthzUrl = () => {
-    return `/Files/healthz`
+    return '/Files/healthz'
 }
 
 export const getFilesHealthz = async (options?: RequestInit): Promise<getFilesHealthzResponse> => {
@@ -1962,7 +1962,7 @@ export const getFilesHealthz = async (options?: RequestInit): Promise<getFilesHe
 }
 
 export const getGetFilesHealthzQueryKey = () => {
-    return [`/Files/healthz`] as const
+    return ['/Files/healthz'] as const
 }
 
 export const getGetFilesHealthzQueryOptions = <

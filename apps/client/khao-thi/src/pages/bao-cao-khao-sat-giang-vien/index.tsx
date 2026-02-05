@@ -1,4 +1,7 @@
+import { FolderOpenOutlined, UserOutlined } from '@ant-design/icons'
 import Select from '@components/commons/select'
+import SurveylecturerReport from '@components/sub-pages/khao-sat/survey-lecturer-report'
+import SurveyOrganizationReport from '@components/sub-pages/khao-sat/survey-oragation-report'
 import DefaultLayout from '@layouts/default-layout'
 import {
     useFindManyClusterSurvey,
@@ -6,19 +9,16 @@ import {
     useFindManyLecturer,
     useFindUniqueTrainingObjectType,
 } from '@workspace/db/hooks'
-import { Col, Flex, Input, Row, Skeleton, Tree } from 'antd'
-import { useMemo, useState } from 'react'
 // import OrganizationSurveyReport from '@/components/sub-pages/khao-sat/bao-cao-don-vi'
 // import ClusterSurveyReport from '@components/sub-pages/khao-sat/bao-cao-cum'
 // import LecturerSurveyReport from '@components/sub-pages/khao-sat/bao-cao-giang-vien'
 // import SurveyReport from '@components/sub-pages/khao-sat/bao-cao'
 import { useSemesterStore, useTrainingMajorStore } from '@workspace/ui'
-import { FolderOpenOutlined, UserOutlined } from '@ant-design/icons'
-import SurveylecturerReport from '@components/sub-pages/khao-sat/survey-lecturer-report'
-import SurveyOrganizationReport from '@components/sub-pages/khao-sat/survey-oragation-report'
+import { Col, Flex, Input, Row, Skeleton, Tree } from 'antd'
+import { useMemo, useState } from 'react'
 // import ClusterSurveyReport from '@components/sub-pages/khao-sat/bao-cao-cum';
 import OrganizationSurveyReport from '@/components/sub-pages/khao-sat/bao-cao-don-vi'
-import { debounce } from 'lodash'
+
 interface MyTreeNode {
     title: string
     key: string
@@ -128,8 +128,14 @@ export default function BaoCaoGiangVien() {
     } = useFindManyDM_DonVi(
         {
             where: {
-                iLoaiDonVi: {
-                    in: [0, 5, 6, 7],
+                // ...(searchText && {
+                //     OR: [
+                //         { sTen: { contains: searchText, mode: 'insensitive' } },
+                //         { sMa: { contains: searchText, mode: 'insensitive' } },
+                //     ],
+                // }),
+                iCapDonVi: {
+                    in: [0, 2, 3],
                 },
             },
             select: {
@@ -152,6 +158,14 @@ export default function BaoCaoGiangVien() {
 
     const { data: lecturerData = [] } = useFindManyLecturer({
         where: {
+            // ...(searchText && {
+            //     userProfile: {
+            //         OR: [
+            //             { fullName: { contains: searchText, mode: 'insensitive' } },
+            //             { code: { contains: searchText, mode: 'insensitive' } },
+            //         ],
+            //     },
+            // }),
             mainSubjectClasses: {
                 some: {
                     ...(!!trainingObjectTypeId && { trainingObjectTypeId }),
@@ -174,34 +188,6 @@ export default function BaoCaoGiangVien() {
             organization: true,
         },
     })
-
-    function buildDonViTree(list: any[]): DonVi[] {
-        const map = new Map<string, DonVi>()
-        const roots: DonVi[] = []
-
-        // clone + init children
-        list.forEach((item) => {
-            map.set(item.key, { ...item, children: [] })
-        })
-
-        list.forEach((item) => {
-            const node = map.get(item.Id)!
-
-            // iCapDonVi = 2 → node gốc
-            if (item.iCapDonVi === 2) {
-                node.sParentId = null
-                roots.push(node)
-                return
-            }
-
-            // node con
-            if (item.sParentId && map.has(item.sParentId)) {
-                map.get(item.sParentId)!.children!.push(node)
-            }
-        })
-
-        return roots
-    }
 
     // Tạo treeData từ organizations và lecturers
     const treeData: any[] = useMemo(() => {
@@ -256,6 +242,8 @@ export default function BaoCaoGiangVien() {
             return <div className="my-10 text-center text-primary text-base">Chọn đợt khảo sát</div>
         }
         if (filters?.clusterId) {
+            console.log(selectedItem, '123')
+
             if (selectedItem?.id && selectedItem?.iCapDonVi === 0) {
                 return (
                     <OrganizationSurveyReport
@@ -384,9 +372,9 @@ export default function BaoCaoGiangVien() {
                             placeholder="Tìm kiếm"
                             className="mr-4 w-[250px]"
                             value={searchText}
-                            onChange={debounce((e) => {
+                            onChange={(e) => {
                                 setSearchText(e.target.value)
-                            }, 500)}
+                            }}
                         />
                     </Flex>
                     {/* <Button onClick={hanleSearchReport} type="primary">
@@ -402,7 +390,7 @@ export default function BaoCaoGiangVien() {
                         showIcon
                         selectedKeys={selectedKeys}
                         treeData={treeData}
-                        className="w-full mb-3"
+                        className="w-full mb-3 min-w-[250px]"
                         onSelect={(key, info) => {
                             setSelectedKeys(key)
                             setSelectedItem(info.node)
@@ -415,7 +403,9 @@ export default function BaoCaoGiangVien() {
                 )}
             </Col>
 
-            <Col span={18}>{isFetching ?<Skeleton />:items}</Col>
+            <Col span={18} className="w-[calc(100%-250px)]">
+                {isFetching ? <Skeleton /> : items}
+            </Col>
         </Row>
     )
 }

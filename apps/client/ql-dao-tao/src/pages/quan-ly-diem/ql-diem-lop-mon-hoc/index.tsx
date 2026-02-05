@@ -373,8 +373,12 @@ export default function QuanLyDiemLopMonHoc({
                                     size="small"
                                     className="pointer-events-none"
                                     value={[
-                                        form.getFieldValue('isLockExamScore') ? subjectClassHistoryIsLockExamScore : null,
-                                        form.getFieldValue('scoreSubmitted') ? subjectClassHistoryScoreSubmitted : null,
+                                        form.getFieldValue('isLockExamScore')
+                                            ? subjectClassHistoryIsLockExamScore
+                                            : null,
+                                        form.getFieldValue('scoreSubmitted')
+                                            ? subjectClassHistoryScoreSubmitted
+                                            : null,
                                     ]
                                         .filter(Boolean)
                                         .map((item) =>

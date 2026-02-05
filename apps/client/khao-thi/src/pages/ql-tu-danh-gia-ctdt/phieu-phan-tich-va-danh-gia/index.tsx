@@ -1,10 +1,13 @@
+import EvaluateLayout from '@layouts/evaluate-layout'
 import CriteriaAnalysisWrite from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/criteria-analysis'
-import EvaluationPeriod from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/evaluation-period'
+import CriteriaEvaluationWrite from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/criteria-evaluation'
 import CrossReview from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/cross-review'
 import CrossReviewAssignment from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/cross-review-assignment'
-import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
+import EvaluationPeriod from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/evaluation-period'
+import ReviewCriteriaEvaluationAdvisory from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/review-criteria-evaluation-advisory'
+import ReviewSecretary from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/review-secretary'
 import StandardReports from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/standar-reports'
-import CriteriaEvaluationWrite from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/criteria-evaluation'
+import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
 import { useSession } from '@workspace/auth/react'
 import { $Enums } from '@workspace/db/client'
@@ -13,14 +16,11 @@ import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Col, Row, Tabs, type TabsProps } from 'antd'
 import { useMemo, useState } from 'react'
-import EvaluateLayout from '@layouts/evaluate-layout'
-import ReviewSecretary from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/review-secretary'
-import ReviewCriteriaEvaluationAdvisory from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/review-criteria-evaluation-advisory'
 
 export default function CriteriaAnalysisAndEvaluationPage() {
     const [activeKey, setActiveKey] = useState('1')
     const { data: me } = useSession()
-    const idProfile = me?.sDM_NhanVienId || '7247c121-ab5a-4a72-a018-4a4090c7948a'
+    const idProfile = me?.sDM_NhanVienId || '8bca0fb4-e233-4010-bb23-ed4cbe414726'
 
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
     const { can } = useAbility()

@@ -1,12 +1,11 @@
-import { getDeadlineStatus } from '@/utils/getDeadlineStatus'
 import CommentList from '@components/commons/comment-list'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import EditIcon from '@components/icons/edit'
 import {
-    getStatusEvaluation,
-    EVALUATION_CRITERION_STATUS_OPTIONS,
     DEADLINE_OPTIONS,
+    EVALUATION_CRITERION_STATUS_OPTIONS,
+    getStatusEvaluation,
 } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { formatDate } from '@lib/utils'
@@ -26,6 +25,7 @@ import dayjs from 'dayjs'
 import { MessageCircle } from 'lucide-react'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { getDeadlineStatus } from '@/utils/getDeadlineStatus'
 
 export type DataTabType = StandardPeriod & {
     criteria: (CriterionPeriod & {
@@ -102,7 +102,6 @@ const CriteriaAnalysisSubPage = ({
     const handleSubmitAllCriteria = async () => {
         try {
             showSpinner()
-            // Lọc các tiêu chí có thể nộp (chưa nộp, chưa duyệt, chưa hoàn thành)
             const criteriaToSubmit = filteredCriteria?.filter((item) => {
                 const status = item.analysisCriterions?.status
                 return (

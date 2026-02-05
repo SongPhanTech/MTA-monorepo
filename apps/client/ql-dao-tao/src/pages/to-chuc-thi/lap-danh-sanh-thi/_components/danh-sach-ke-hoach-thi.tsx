@@ -8,6 +8,7 @@ import type { FilterProps } from '@constants/type'
 import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import { formatDate } from '@lib/utils'
+import { useStore } from '@tanstack/react-store'
 import type { ExamList, SubjectClass } from '@workspace/db/client'
 import { useCountExam, useFindManyExam, useFindManyRoom } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
@@ -32,7 +33,6 @@ import type { TableRowSelection } from 'antd/lib/table/interface'
 import _ from 'lodash'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { keHoachThiStore } from '..'
-import { useStore } from '@tanstack/react-store'
 
 interface Props {
     setActiveKey: (key: string) => void
@@ -204,6 +204,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
         }
     }
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <skip function>
     useEffect(() => {
         resetField()
     }, [exams])

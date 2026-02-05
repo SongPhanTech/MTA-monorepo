@@ -1,16 +1,11 @@
-import { useDisclosure } from 'react-hook-disclosure-modal'
-import { Button, Col, DatePicker, Form, Input, message, Row, Steps } from 'antd'
-import { useEffect, useMemo, useRef, useState } from 'react'
-import dayjs from 'dayjs'
-import { DndProvider, useDrag, useDrop } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
-import { GripVertical } from 'lucide-react'
-import { useStore } from '@tanstack/react-store'
-import { store } from '@/pages/thiet-lap-de-thi/danh-sach-de'
+import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
+import PutFormModal from '@components/commons/put-modal'
+import { renderWithMath } from '@components/commons/rich-text-editor/renderWithMath'
 import Select from '@components/commons/select'
 import TreeSelect from '@components/commons/tree-select'
-import PutFormModal from '@components/commons/put-modal'
+import { useStore } from '@tanstack/react-store'
+import type { ExamBank } from '@workspace/db/client'
 import {
     useCreateExamBank,
     useFindManyKnowledgeBlock,
@@ -19,9 +14,14 @@ import {
     useFindUniqueExamBank,
     useUpdateExamBank,
 } from '@workspace/db/hooks'
-import { renderWithMath } from '@components/commons/rich-text-editor/renderWithMath'
-import { queryClient } from '@api/index'
-import type { ExamBank } from '@workspace/db/client'
+import { Button, Checkbox, Col, DatePicker, Form, Input, message, Row, Steps } from 'antd'
+import dayjs from 'dayjs'
+import { GripVertical } from 'lucide-react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { DndProvider, useDrag, useDrop } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+import { useDisclosure } from 'react-hook-disclosure-modal'
+import { store } from '@/pages/thiet-lap-de-thi/danh-sach-de'
 
 type PutMaTranDeInputType = ExamBank & {
     questions: string[]
@@ -47,6 +47,7 @@ const SinhDeThuCongModal = () => {
     const [form] = Form.useForm<PutMaTranDeInputType>()
     const selectedExamId = useStore(store, (state) => state.selectedExamId)
     const [current, setCurrent] = useState(0)
+    const [showExplain, setShowExplain] = useState(false)
     const [items, setItems] = useState<any[] | []>([])
     const { isOpen, onClose, input } = useDisclosure<{
         id?: string
@@ -182,6 +183,7 @@ const SinhDeThuCongModal = () => {
                         examId: selectedExamId,
                         examType: values.examType,
                         subjectClassId: values.subjectClassId ?? undefined,
+                        isGroup: values.isGroup ||true,
                         questions: {
                             deleteMany: {},
                             createMany: {
@@ -202,6 +204,7 @@ const SinhDeThuCongModal = () => {
                         examId: selectedExamId,
                         examType: values.examType,
                         subjectClassId: values.subjectClassId ?? undefined,
+                        isGroup: values.isGroup || true,
                         questions: {
                             createMany: {
                                 data: orderedQuestionIds.map((questionId, index) => ({
@@ -375,11 +378,41 @@ const SinhDeThuCongModal = () => {
                                 <Select options={dataOption} placeholder="Chọn lớp môn học" />
                             </FormItem>
                         </Col>
-                        <Col span={24}>
+                            <Col span={44}>
+                        <FormItem
+                            form={form}
+                            name="isGroup"
+                            valuePropName="checked"
+                            initialValue={true}
+                        >
+                            <Checkbox>Hiển thị tiêu đề</Checkbox>
+                        </FormItem>
+                    </Col>
+                         <Col span={5}>
+                        <FormItem
+                            form={form}
+                            name="isNote"
+                            valuePropName="checked"
+                            initialValue={false}
+                        >
+                            <Checkbox>Được sử dụng tài liệu</Checkbox>
+                        </FormItem>
+                    </Col>
+                    <Col span={4}>
+                        <Form.Item>
+                            <Checkbox onChange={(e) => setShowExplain(e.target.checked)}>
+                                Khác
+                            </Checkbox>
+                        </Form.Item>
+                    </Col>
+
+                    {showExplain && (
+                        <Col span={24} className="mt-3">
                             <FormItem form={form} name="explain" label="Chú thích">
                                 <Input.TextArea placeholder="Nhập chú thích" />
                             </FormItem>
                         </Col>
+                    )}
                     </Row>
                 ),
                 fields: ['examCode', 'examType', 'examDay'],
@@ -440,7 +473,7 @@ const SinhDeThuCongModal = () => {
                 fields: ['subjectVersionId', 'questions'],
             },
         ]
-    }, [input, subjectVersions, treeData, items, current, form])
+    }, [input, subjectVersions, treeData, items, current, form,showExplain])
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
@@ -457,6 +490,8 @@ const SinhDeThuCongModal = () => {
                 questions: initialItems.map((i) => i?.value),
                 subjectVersionId: input?.subjectVersionId,
                 subjectClassId: data?.subjectClassId || null,
+                isGroup: data?.isGroup || true,
+                isNote: data?.isNote || false,
             })
         }
     }, [data])

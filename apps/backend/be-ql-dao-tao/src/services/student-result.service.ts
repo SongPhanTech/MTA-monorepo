@@ -13,7 +13,6 @@ import {
     type Scholarship,
     type ScholarshipCriteria,
     SemesterType,
-    type StudentSemesterResult,
     StudentStatus,
     StudentTrainingType,
     SubjectRequirementType,
@@ -37,26 +36,6 @@ import {
     StudentScholarshipResult,
 } from '../dto/student-info.dto'
 import type { StudentCondition, StudentDataContext } from '../types/student-context'
-
-const checkStudentSemesterResult = async (
-    semesterId: string,
-    studentId: string
-): Promise<StudentSemesterResult | null> => {
-    try {
-        const result = await prisma.studentSemesterResult.findFirst({
-            where: {
-                semesterId,
-                studentId,
-                deletedAt: null,
-                active: true,
-            },
-        })
-        return result
-    } catch (error) {
-        console.error('Error checking student semester result:', error)
-        return null
-    }
-}
 
 const checkScorePassed = ({
     subjectId,
@@ -1484,7 +1463,7 @@ export const listStudentResultInfo = async (semesterId: string, trainingObjectTy
                 return {
                     stt: 0,
                     id: item.student.id ?? '',
-                    hoTen: `${userProfile?.lastName ?? ''} ${userProfile?.firstName ?? ''}`.trim(),
+                    hoTen: userProfile.fullname || 'Không rõ',
                     maSinhVien: userProfile?.code || '',
                     doiTuong:
                         item.student.fixedClass?.trainingCourse?.trainingObjectType.name || '',

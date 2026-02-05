@@ -1,14 +1,14 @@
-import { Modal, Button, Flex, Divider, Input } from 'antd'
-import { useDisclosure } from 'react-hook-disclosure-modal'
-import { useState, useRef, useEffect } from 'react'
-import { useReactToPrint } from 'react-to-print'
-import { useFindManyExamBank, useUpdateExamBank } from '@workspace/db/hooks'
-import { renderWithMath } from '@components/commons/rich-text-editor/renderWithMath'
 import { queryClient } from '@api/index'
-import { getMinioUrl } from '@workspace/libs/utils'
-import { TemplateHandler } from 'easy-template-x'
-import { convertHtmlBreaks, saveFile } from '@/utils/saveFile'
+import { renderWithMath } from '@components/commons/rich-text-editor/renderWithMath'
 import type { Prisma } from '@workspace/db/client'
+import { useFindManyExamBank, useUpdateExamBank } from '@workspace/db/hooks'
+import { getMinioUrl } from '@workspace/libs/utils'
+import { Button, Divider, Flex, Input, Modal } from 'antd'
+import { TemplateHandler } from 'easy-template-x'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
+import { useReactToPrint } from 'react-to-print'
+import { convertHtmlBreaks, saveFile } from '@/utils/saveFile'
 
 type ExamBankQuestionType = Prisma.ExamBankGetPayload<{
     include: {
@@ -110,6 +110,28 @@ const PrintBatchExplanation = () => {
         }
     )
 
+
+     const dataRender = useMemo(() => {
+        if (exams?.length <= 0) return []
+        const result = exams.map((i) => {
+            const listQuestionChoice = i?.questions.filter((q) => q?.question?.type !== 'ESSAY')
+            const listQuestionEssay = i?.questions.filter((q) => q?.question?.type === 'ESSAY')
+            if (i?.isGroup) {
+                return {
+                    ...i,
+                    questions: [...listQuestionChoice, ...listQuestionEssay],
+                    listQuestionChoice: listQuestionChoice,
+                    listQuestionEssay: listQuestionEssay,
+                }
+            }
+            return {
+                ...i,
+                listQuestionChoice: listQuestionChoice,
+                listQuestionEssay: listQuestionEssay,
+            }
+        })
+        return result
+    }, [exams])
     // Tự động fill thời gian từ examFramework của exam đầu tiên
     useEffect(() => {
         if (exams.length > 0 && exams[0]?.examMatrix?.examFramework?.time) {
@@ -540,8 +562,8 @@ const PrintBatchExplanation = () => {
                 }}
             >
                 <div ref={printRef}>
-                    {exams.length > 0 ? (
-                        exams.map((exam, index) => renderAnswerPreview(exam, index))
+                    {dataRender.length > 0 ? (
+                        dataRender.map((exam, index) => renderAnswerPreview(exam, index))
                     ) : (
                         <div style={{ textAlign: 'center', padding: '40px' }}>
                             Không có đáp án nào được chọn

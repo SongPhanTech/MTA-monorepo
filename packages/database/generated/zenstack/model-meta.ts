@@ -11842,6 +11842,7 @@ const metadata: ModelMeta = {
                     name: "scoreLinkSubjectVersion",
                     type: "ScoreLinkSubjectVersion",
                     isDataModel: true,
+                    isOptional: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'subjectClass',
                     isRelationOwner: true,
@@ -11849,6 +11850,7 @@ const metadata: ModelMeta = {
                 }, scoreLinkSubjectVersionId: {
                     name: "scoreLinkSubjectVersionId",
                     type: "String",
+                    isOptional: true,
                     attributes: [{ "name": "@unique", "args": [] }],
                     isForeignKey: true,
                     relationField: 'scoreLinkSubjectVersion',
@@ -17515,6 +17517,18 @@ const metadata: ModelMeta = {
                     type: "String",
                     isOptional: true,
                     attributes: [{ "name": "@db.Text", "args": [] }],
+                }, firstCheckProgress: {
+                    name: "firstCheckProgress",
+                    type: "Int",
+                    isOptional: true,
+                }, secondCheckProgress: {
+                    name: "secondCheckProgress",
+                    type: "Int",
+                    isOptional: true,
+                }, isEligibleForDefense: {
+                    name: "isEligibleForDefense",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, subjectClass: {
                     name: "subjectClass",
                     type: "SubjectClass",
@@ -22403,6 +22417,11 @@ const metadata: ModelMeta = {
                     type: "Boolean",
                     isOptional: true,
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, isGroup: {
+                    name: "isGroup",
+                    type: "Boolean",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 },
             }, uniqueConstraints: {
                 id: {
@@ -24849,10 +24868,6 @@ const metadata: ModelMeta = {
                     name: "decision",
                     type: "String",
                     isOptional: true,
-                }, status: {
-                    name: "status",
-                    type: "ScoreLinkStatus",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, fixedClass: {
                     name: "fixedClass",
                     type: "FixedClass",
@@ -24879,6 +24894,10 @@ const metadata: ModelMeta = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'semester',
+                }, status: {
+                    name: "status",
+                    type: "ScoreLinkStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, scoreLinkSubjectVersions: {
                     name: "scoreLinkSubjectVersions",
                     type: "ScoreLinkSubjectVersion",
@@ -25038,9 +25057,10 @@ const metadata: ModelMeta = {
                     name: "scoreLinkSubjectVersion",
                     type: "ScoreLinkSubjectVersion",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }, { "name": "onDelete" }] }],
                     backLink: 'scoreLinkStudents',
                     isRelationOwner: true,
+                    onDeleteAction: 'Cascade',
                     foreignKeyMapping: { "id": "scoreLinkSubjectVersionId" },
                 }, scoreLinkSubjectVersionId: {
                     name: "scoreLinkSubjectVersionId",
@@ -27953,6 +27973,7 @@ const metadata: ModelMeta = {
         evaluationCouncilMember: ['EvaluationCriterion'],
         question: ['MultipleChoiceOption', 'FillInBlankSlot', 'OrderingItem'],
         examBank: ['ExamBankQuestion'],
+        scoreLinkSubjectVersion: ['ScoreLinkStudent'],
         note: ['NoteReminder'],
 
     },

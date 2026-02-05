@@ -9,16 +9,17 @@ import {
     useUpdateManyExamList,
     useUpdateManySubjectClass,
 } from '@workspace/db/hooks'
+import { getUrl } from '@workspace/libs/api/custom-instance'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import type { SqlTransactionBodyItem } from '@workspace/libs/api/schemas'
 import { getExportSubjectClassScoreUrl, useGenExamListCode } from '@workspace/libs/api/training'
-import { AutoComplete, Button, Checkbox, Col, Flex, Form, Input, Modal, message } from 'antd'
-import { useEffect } from 'react'
-import { useDisclosure } from 'react-hook-disclosure-modal'
-import { Printer } from 'lucide-react'
-import { getUrl } from '@workspace/libs/api/custom-instance'
 import { getRuntimeEnv } from '@workspace/libs/utils'
 import { cn } from '@workspace/ui/lib/utils'
+import { AutoComplete, Button, Checkbox, Col, Flex, Form, Input, Modal, message } from 'antd'
+import { Printer } from 'lucide-react'
+import { useEffect } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
+
 interface StudentExamFormType {
     list: Record<
         string,
@@ -144,6 +145,8 @@ export default function SinhPhach() {
         })
         if (res?.status === 200) {
             message.success('Sinh phách thành công')
+        } else {
+            message.error(res.data.message)
         }
         refetch()
         refreshExamPaper()
@@ -215,34 +218,32 @@ export default function SinhPhach() {
                 <Flex justify="space-between" align="center">
                     <Checkbox
                         onChange={async (e) => {
-                            try {
-                                await updateManyExamList({
-                                    where: {
-                                        examRoom: {
-                                            examId,
-                                        },
+                            await updateManyExamList({
+                                where: {
+                                    examRoom: {
+                                        examId,
                                     },
-                                    data: { lockExamCode: e.target.checked },
-                                })
-                                await updateManySubjectClass({
-                                    where: {
-                                        exam: {
-                                            examRooms: {
-                                                some: {
-                                                    examList: {
-                                                        some: {
-                                                            id: examId ?? '',
-                                                        },
+                                },
+                                data: { lockExamCode: e.target.checked },
+                            })
+                            await updateManySubjectClass({
+                                where: {
+                                    exam: {
+                                        examRooms: {
+                                            some: {
+                                                examList: {
+                                                    some: {
+                                                        id: examId ?? '',
                                                     },
                                                 },
                                             },
                                         },
                                     },
-                                    data: {
-                                        isLockExamScore: e.target.checked,
-                                    },
-                                })
-                            } catch (error) {}
+                                },
+                                data: {
+                                    isLockExamScore: e.target.checked,
+                                },
+                            })
                         }}
                         checked={lockExamCode}
                     >
@@ -320,17 +321,19 @@ export default function SinhPhach() {
                                 render: (_, __, index) => index + 1,
                             },
                             {
-                                title: 'Mã SV',
+                                title: 'Mã sinh viên',
                                 dataIndex: 'name',
+                                align: 'center',
                                 width: 150,
                                 render: (_, record) =>
-                                    record?.studentSubjectScore?.student?.userProfile?.code || '',
+                                    record?.studentSubjectScore?.student?.code || '',
                             },
                             {
                                 title: 'Tên thí sinh',
                                 dataIndex: 'fullname',
                                 render: (_, record) =>
-                                    `${record?.studentSubjectScore?.student?.userProfile?.fullname}`,
+                                    record?.studentSubjectScore?.student?.userProfile?.fullname ||
+                                    'không rõ',
                             },
                             {
                                 title: 'Điểm TX',
