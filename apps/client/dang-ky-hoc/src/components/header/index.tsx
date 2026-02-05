@@ -7,7 +7,7 @@ import { useEffect } from 'react'
 const HeaderApp: React.FC = () => {
     useEffect(() => {
         try {
-            window.MTAMenuComponents.default?.createPlugin('pluginContainer', {
+            window.MTAMenuComponents.default.createPlugin('pluginContainer', {
                 menuAppId: 'menuContainer',
                 notificationAppId: 'notificationContainer',
                 userAppId: 'userContainer',
