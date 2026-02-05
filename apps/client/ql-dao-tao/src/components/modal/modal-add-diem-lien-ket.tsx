@@ -512,7 +512,7 @@ const PutScoreLinkSheetModal = () => {
                             <Row gutter={[16, 16]}>
                                 <Col span={12}>
                                     <Row gutter={8}>
-                                        <Row gutter={8}>
+                                        <Row gutter={8} className="w-full">
                                             <Col span={12}>
                                                 <Select
                                                     loading={isFetchingSubjectVersions}
@@ -525,7 +525,7 @@ const PutScoreLinkSheetModal = () => {
                                                         setSelectedSubjectId(value)
                                                     }
                                                     placeholder="Chọn môn"
-                                                    className="max-w-48 w-full"
+                                                    className="w-full"
                                                     disabled={
                                                         !trainingObjectTypeId ||
                                                         !fixedClassId ||
