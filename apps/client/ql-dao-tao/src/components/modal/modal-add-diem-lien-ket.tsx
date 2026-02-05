@@ -19,6 +19,7 @@ import {
     useFindManySubjectVersion,
     useFindManyTrainingObjectType,
     useFindUniqueScoreLinkSheet,
+    useUpdateManyScoreLinkStudent,
     useUpdateScoreLinkSheet,
 } from '@workspace/db/hooks'
 import { PutFormModal, TreeNodeType, useTrainingObjectTypeStore } from '@workspace/ui'
@@ -129,6 +130,7 @@ const PutScoreLinkSheetModal = () => {
             hideSpinner()
         },
     })
+    const { mutateAsync: updateManyScoreLinkStudent } = useUpdateManyScoreLinkStudent()
     const { mutateAsync: updateScoreLinkSheet } = useUpdateScoreLinkSheet({
         onSuccess: () => {
             message.success(messages.success.edit)
@@ -259,28 +261,16 @@ const PutScoreLinkSheetModal = () => {
 
             for (const sv of toUpdate) {
                 for (const ss of sv.scoreLinkStudents) {
-                    await updateScoreLinkSheet({
-                        where: { id: input.id },
-                        data: {
-                            scoreLinkSubjectVersions: {
-                                updateMany: {
-                                    where: {
-                                        subjectVersionId: sv.subjectVersionId,
-                                    },
-                                    data: {
-                                        scoreLinkStudents: {
-                                            updateMany: {
-                                                where: {
-                                                    studentId: ss.studentId,
-                                                },
-                                                data: {
-                                                    score: ss.score,
-                                                },
-                                            },
-                                        },
-                                    },
-                                },
+                    await updateManyScoreLinkStudent({
+                        where: {
+                            studentId: ss.studentId,
+                            scoreLinkSubjectVersion: {
+                                subjectVersionId: sv.subjectVersionId,
+                                scoreLinkSheetId: input.id,
                             },
+                        },
+                        data: {
+                            score: ss.score,
                         },
                     })
                 }
