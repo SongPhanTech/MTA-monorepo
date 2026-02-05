@@ -175,7 +175,7 @@ export default function DanhSachSinhVien() {
         { enabled: !!selectedExamId }
     )
 
-    const { data: examData } = useFindUniqueExam({
+    const { data: examData, refetch: refetchExamData } = useFindUniqueExam({
         where: { id: selectedExamId },
         select: {
             subjectClass: {
@@ -421,6 +421,12 @@ export default function DanhSachSinhVien() {
                     !score.examPostponed &&
                     (!score.onePoint ? score.attendanceScore && score.midtermScore : true)
             )
+            
+            if (filteredStudentSubjectScores.length === 0) {
+                hideSpinner()
+                return;
+            }
+            
             const skippedStudentSubjectScores = allStudentSubjectScores.filter(
                 (score) =>
                     score.examBanned ||
