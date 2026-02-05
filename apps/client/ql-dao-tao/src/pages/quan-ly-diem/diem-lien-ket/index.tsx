@@ -3,36 +3,98 @@ import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import ViewIcon from '@components/icons/view'
-import { SCORE_LINK_STATUS } from '@constants/constants'
+import { DEFAULT_PAGINATE_SIZE, SCORE_LINK_STATUS } from '@constants/constants'
+import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { formatDate } from '@lib/utils'
-import { Button, Col, Flex, Row } from 'antd'
+import {
+    useCountScoreLinkSheet,
+    useFindManyScoreLinkSheet,
+    useUpdateScoreLinkSheet,
+} from '@workspace/db/hooks'
+import { Button, Col, Flex, message, Row } from 'antd'
 import { ColumnsType } from 'antd/es/table'
+import dayjs from 'dayjs'
 import type React from 'react'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
+dayjs.locale('vi')
 export default function ScoreLinkPage() {
     const { onOpen } = useDisclosure<{ id: string; mode: 'view' | 'edit' }>({
-            tag: 'PutScoreLinkSheetModal',
-        })
+        tag: 'PutScoreLinkSheetModal',
+    })
+    const { showSpinner, hideSpinner } = useSpinner()
+    const [currentPage, setCurrentPage] = useState(1)
+    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const { mutateAsync: updateScoreLinkSheet } = useUpdateScoreLinkSheet({
+        onSuccess: () => {
+            message.success('Xóa phiếu thành công')
+            refetch()
+        },
+        onError: (_error: any) => {
+            message.error(_error?.info?.message || 'Đã xảy ra lỗi')
+        },
+        onSettled: () => {
+            hideSpinner()
+        },
+    })
+    const { data: count = 0 } = useCountScoreLinkSheet()
+    const { data: scoreLinks, refetch } = useFindManyScoreLinkSheet({
+        orderBy: { createdAt: 'desc' },
+        include: {
+            _count: {
+                select: {
+                    scoreLinkSubjectVersions: true,
+                },
+            },
+
+            scoreLinkSubjectVersions: {
+                include: {
+                    subjectVersion: true,
+                    _count: {
+                        select: {
+                            scoreLinkStudents: true,
+                        },
+                    },
+
+                    scoreLinkStudents: {
+                        include: {
+                            student: true,
+                        },
+                    },
+                },
+            },
+
+            documents: true,
+            fixedClass: true,
+            semester: true,
+            trainingObjectType: true,
+        },
+        take: numberOfPages,
+        skip: (currentPage - 1) * numberOfPages,
+    })
+
     const columns = useMemo<ColumnsType<any>>(
         () => [
             {
                 title: 'STT',
                 width: 60,
                 align: 'center',
+                render: (_, __, index) => index + 1,
             },
             {
-                title: 'Mã sinh viên',
-                dataIndex: 'code',
+                title: 'Lớp quản lí',
+                dataIndex: 'fixedClass',
                 width: 150,
                 align: 'center',
+                render: (_, record) => record.fixedClass?.name || '',
             },
             {
-                title: 'Sinh viên',
+                title: 'Số quyết định',
                 align: 'center',
-                render: (_, record) => record.student?.userProfile?.fullname || '',
+                width: 150,
+                render: (_, record) => record.decision || '',
             },
             {
                 title: 'Ngày tạo',
@@ -45,7 +107,14 @@ export default function ScoreLinkPage() {
                 title: 'Số môn',
                 width: 100,
                 align: 'center',
-                render: (_, record) => record._count?.subjectScoreConvert ?? 0,
+                render: (_, record) => record?._count?.scoreLinkSubjectVersions ?? 0,
+            },
+            {
+                title: 'Số sinh viên',
+                width: 100,
+                align: 'center',
+                render: (_, record) =>
+                    record?.scoreLinkSubjectVersions?.[0]?._count?.scoreLinkStudents ?? 0,
             },
             {
                 title: 'Mô tả',
@@ -53,20 +122,47 @@ export default function ScoreLinkPage() {
                 width: 250,
             },
             {
+                title: 'Trạng thái',
+                dataIndex: 'status',
+                width: 100,
+            },
+            {
                 title: 'Thao tác',
                 width: 100,
                 align: 'center',
-                render: () => (
+                render: (_, record) => (
                     <Row className="justify-center gap-2">
-                        <ViewIcon className="text-sm text-gray-700 cursor-pointer" />
-                        <EditIcon className="text-sm text-blue-700 cursor-pointer" />
-                        <DeleteIcon />
+                        <ViewIcon
+                            onClick={() => onOpen({ mode: 'view', id: record?.id })}
+                            className="text-sm text-gray-700 cursor-pointer"
+                        />
+                        <EditIcon
+                            onClick={() => onOpen({ mode: 'edit', id: record?.id })}
+                            className="text-sm text-blue-700 cursor-pointer"
+                        />
+                        <DeleteIcon
+                            popConfirm={{
+                                onConfirm: () => handleDeleteScoreLink(record?.id),
+                            }}
+                        />
                     </Row>
                 ),
             },
         ],
         []
     )
+
+    const handleDeleteScoreLink = async (id: string) => {
+        showSpinner()
+        await updateScoreLinkSheet({
+            where: {
+                id,
+            },
+            data: {
+                deletedAt: new Date(),
+            },
+        })
+    }
 
     return (
         <Row gutter={[16, 0]}>
@@ -85,13 +181,31 @@ export default function ScoreLinkPage() {
                     </Col>
                     <Col span={6}>
                         <Flex justify="end">
-                            <Button onClick={() => onOpen()} type="primary">Thêm mới</Button>
+                            <Button onClick={() => onOpen()} type="primary">
+                                Thêm mới
+                            </Button>
                         </Flex>
                     </Col>
                 </Row>
             </Col>
             <Col span={24}>
-                <Table columns={columns} data={[]} />
+                <Table
+                    columns={columns}
+                    data={scoreLinks || []}
+                    pagination={{
+                        current: currentPage,
+                        pageSize: numberOfPages,
+                        total: count,
+                        onChange: (page, pageSize) => {
+                            if (numberOfPages === pageSize) {
+                                setCurrentPage(page)
+                            } else {
+                                setCurrentPage(1)
+                                setNumberOfPages(pageSize)
+                            }
+                        },
+                    }}
+                />
             </Col>
         </Row>
     )

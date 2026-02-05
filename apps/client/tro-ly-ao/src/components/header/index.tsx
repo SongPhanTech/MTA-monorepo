@@ -28,7 +28,7 @@ const HeaderApp: React.FC = () => {
                     typeof window !== 'undefined' &&
                     window.MTAMenuComponents?.default?.createPlugin
                 ) {
-                    window.MTAMenuComponents.default.createPlugin('pluginContainer', {
+                    window.MTAMenuComponents.default?.createPlugin('pluginContainer', {
                         menuAppId: 'menuContainer',
                         notificationAppId: 'notificationContainer',
                         userAppId: 'userContainer',

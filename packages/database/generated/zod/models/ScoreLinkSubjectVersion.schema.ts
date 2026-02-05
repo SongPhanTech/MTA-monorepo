@@ -5,8 +5,6 @@
 /* eslint-disable */
 
 import { z } from 'zod/v3';
-import { ScoreLinkStatus } from '../../zenstack/models';
-import { ScoreLinkStatusSchema } from '../enums/ScoreLinkStatus.schema';
 const baseSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
@@ -16,7 +14,6 @@ const baseSchema = z.object({
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
     createdBy: z.string().uuid().nullish(),
-    status: ScoreLinkStatusSchema,
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -28,7 +25,6 @@ const baseSchemaWithoutDefaults = z.object({
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
-    status: ScoreLinkStatusSchema,
 }
 ).strict();
 const relationSchema = z.object({
@@ -75,8 +71,7 @@ export const ScoreLinkSubjectVersionPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
-    createdBy: z.string().uuid().nullish(),
-    status: ScoreLinkStatusSchema
+    createdBy: z.string().uuid().nullish()
 }).partial().passthrough();
 
 
@@ -84,7 +79,7 @@ export const ScoreLinkSubjectVersionPrismaUpdateSchema = z.object({
  * `ScoreLinkSubjectVersion` schema for create operations excluding foreign keys and relations.
  */
 export const ScoreLinkSubjectVersionCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, status: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
 });
 
 
