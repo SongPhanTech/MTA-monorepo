@@ -8,7 +8,7 @@ import { DEFAULT_PAGINATE_SIZE, SCORE_LINK_STATUS } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { formatDate } from '@lib/utils'
-import {  ScoreLinkStatus } from '@workspace/db'
+import { ScoreLinkStatus } from '@workspace/db'
 import {
     useCountScoreLinkSheet,
     useFindManyScoreLinkSheet,
@@ -46,6 +46,7 @@ export default function ScoreLinkPage() {
     const { showSpinner, hideSpinner } = useSpinner()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const [status, setStatus] = useState()
     const { mutateAsync: updateScoreLinkSheet } = useUpdateScoreLinkSheet({
         onSuccess: () => {
             message.success('Xóa phiếu thành công')
@@ -59,7 +60,13 @@ export default function ScoreLinkPage() {
         },
     })
     const { data: count = 0 } = useCountScoreLinkSheet()
-    const { data: scoreLinks, refetch } = useFindManyScoreLinkSheet({
+    const {
+        data: scoreLinks,
+        isLoading,
+        isFetching,
+        refetch,
+    } = useFindManyScoreLinkSheet({
+        where: { active: true, status: status },
         orderBy: { createdAt: 'desc' },
         include: {
             _count: {
@@ -164,9 +171,10 @@ export default function ScoreLinkPage() {
                         />
                         <EditIcon
                             style={{
-                                display: record?.status !== ScoreLinkStatus.APPROVED && canEdit
-                                    ? 'block'
-                                    : 'none',
+                                display:
+                                    record?.status !== ScoreLinkStatus.APPROVED && canEdit
+                                        ? 'block'
+                                        : 'none',
                             }}
                             onClick={() => onOpen({ mode: 'edit', id: record?.id })}
                             className="text-sm text-blue-700 cursor-pointer"
@@ -211,6 +219,7 @@ export default function ScoreLinkPage() {
                                 label,
                                 value,
                             }))}
+                            onChange={(value) => setStatus(value)}
                         />
                     </Col>
                     <Col span={6}>
@@ -226,6 +235,7 @@ export default function ScoreLinkPage() {
                 <Table
                     columns={columns}
                     data={scoreLinks || []}
+                    loading={isLoading || isFetching}
                     pagination={{
                         current: currentPage,
                         pageSize: numberOfPages,
