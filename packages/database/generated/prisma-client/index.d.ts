@@ -289435,6 +289435,7 @@ export namespace Prisma {
     examMatrixId: string | null
     isLock: boolean | null
     isNote: boolean | null
+    isGroup: boolean | null
   }
 
   export type ExamBankMaxAggregateOutputType = {
@@ -289455,6 +289456,7 @@ export namespace Prisma {
     examMatrixId: string | null
     isLock: boolean | null
     isNote: boolean | null
+    isGroup: boolean | null
   }
 
   export type ExamBankCountAggregateOutputType = {
@@ -289475,6 +289477,7 @@ export namespace Prisma {
     examMatrixId: number
     isLock: number
     isNote: number
+    isGroup: number
     _all: number
   }
 
@@ -289497,6 +289500,7 @@ export namespace Prisma {
     examMatrixId?: true
     isLock?: true
     isNote?: true
+    isGroup?: true
   }
 
   export type ExamBankMaxAggregateInputType = {
@@ -289517,6 +289521,7 @@ export namespace Prisma {
     examMatrixId?: true
     isLock?: true
     isNote?: true
+    isGroup?: true
   }
 
   export type ExamBankCountAggregateInputType = {
@@ -289537,6 +289542,7 @@ export namespace Prisma {
     examMatrixId?: true
     isLock?: true
     isNote?: true
+    isGroup?: true
     _all?: true
   }
 
@@ -289630,6 +289636,7 @@ export namespace Prisma {
     examMatrixId: string | null
     isLock: boolean | null
     isNote: boolean | null
+    isGroup: boolean | null
     _count: ExamBankCountAggregateOutputType | null
     _min: ExamBankMinAggregateOutputType | null
     _max: ExamBankMaxAggregateOutputType | null
@@ -289667,6 +289674,7 @@ export namespace Prisma {
     examMatrixId?: boolean
     isLock?: boolean
     isNote?: boolean
+    isGroup?: boolean
     exam?: boolean | ExamDefaultArgs<ExtArgs>
     subjectClass?: boolean | ExamBank$subjectClassArgs<ExtArgs>
     questions?: boolean | ExamBank$questionsArgs<ExtArgs>
@@ -289692,6 +289700,7 @@ export namespace Prisma {
     examMatrixId?: boolean
     isLock?: boolean
     isNote?: boolean
+    isGroup?: boolean
     exam?: boolean | ExamDefaultArgs<ExtArgs>
     subjectClass?: boolean | ExamBank$subjectClassArgs<ExtArgs>
     examMatrix?: boolean | ExamBank$examMatrixArgs<ExtArgs>
@@ -289715,6 +289724,7 @@ export namespace Prisma {
     examMatrixId?: boolean
     isLock?: boolean
     isNote?: boolean
+    isGroup?: boolean
     exam?: boolean | ExamDefaultArgs<ExtArgs>
     subjectClass?: boolean | ExamBank$subjectClassArgs<ExtArgs>
     examMatrix?: boolean | ExamBank$examMatrixArgs<ExtArgs>
@@ -289738,9 +289748,10 @@ export namespace Prisma {
     examMatrixId?: boolean
     isLock?: boolean
     isNote?: boolean
+    isGroup?: boolean
   }
 
-  export type ExamBankOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "examId" | "examCode" | "subjectClassId" | "explain" | "examDay" | "examType" | "examMatrixId" | "isLock" | "isNote", ExtArgs["result"]["examBank"]>
+  export type ExamBankOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "examId" | "examCode" | "subjectClassId" | "explain" | "examDay" | "examType" | "examMatrixId" | "isLock" | "isNote" | "isGroup", ExtArgs["result"]["examBank"]>
   export type ExamBankInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     exam?: boolean | ExamDefaultArgs<ExtArgs>
     subjectClass?: boolean | ExamBank$subjectClassArgs<ExtArgs>
@@ -289788,6 +289799,7 @@ export namespace Prisma {
        * được sử dụng tài liệu hay không
        */
       isNote: boolean | null
+      isGroup: boolean | null
     }, ExtArgs["result"]["examBank"]>
     composites: {}
   }
@@ -290232,6 +290244,7 @@ export namespace Prisma {
     readonly examMatrixId: FieldRef<"ExamBank", 'String'>
     readonly isLock: FieldRef<"ExamBank", 'Boolean'>
     readonly isNote: FieldRef<"ExamBank", 'Boolean'>
+    readonly isGroup: FieldRef<"ExamBank", 'Boolean'>
   }
     
 
@@ -372423,7 +372436,8 @@ export namespace Prisma {
     examType: 'examType',
     examMatrixId: 'examMatrixId',
     isLock: 'isLock',
-    isNote: 'isNote'
+    isNote: 'isNote',
+    isGroup: 'isGroup'
   };
 
   export type ExamBankScalarFieldEnum = (typeof ExamBankScalarFieldEnum)[keyof typeof ExamBankScalarFieldEnum]
@@ -401500,6 +401514,7 @@ export namespace Prisma {
     examMatrixId?: StringNullableFilter<"ExamBank"> | string | null
     isLock?: BoolNullableFilter<"ExamBank"> | boolean | null
     isNote?: BoolNullableFilter<"ExamBank"> | boolean | null
+    isGroup?: BoolNullableFilter<"ExamBank"> | boolean | null
     exam?: XOR<ExamScalarRelationFilter, ExamWhereInput>
     subjectClass?: XOR<SubjectClassNullableScalarRelationFilter, SubjectClassWhereInput> | null
     questions?: ExamBankQuestionListRelationFilter
@@ -401524,6 +401539,7 @@ export namespace Prisma {
     examMatrixId?: SortOrderInput | SortOrder
     isLock?: SortOrderInput | SortOrder
     isNote?: SortOrderInput | SortOrder
+    isGroup?: SortOrderInput | SortOrder
     exam?: ExamOrderByWithRelationInput
     subjectClass?: SubjectClassOrderByWithRelationInput
     questions?: ExamBankQuestionOrderByRelationAggregateInput
@@ -401553,6 +401569,7 @@ export namespace Prisma {
     examMatrixId?: StringNullableFilter<"ExamBank"> | string | null
     isLock?: BoolNullableFilter<"ExamBank"> | boolean | null
     isNote?: BoolNullableFilter<"ExamBank"> | boolean | null
+    isGroup?: BoolNullableFilter<"ExamBank"> | boolean | null
     exam?: XOR<ExamScalarRelationFilter, ExamWhereInput>
     subjectClass?: XOR<SubjectClassNullableScalarRelationFilter, SubjectClassWhereInput> | null
     questions?: ExamBankQuestionListRelationFilter
@@ -401577,6 +401594,7 @@ export namespace Prisma {
     examMatrixId?: SortOrderInput | SortOrder
     isLock?: SortOrderInput | SortOrder
     isNote?: SortOrderInput | SortOrder
+    isGroup?: SortOrderInput | SortOrder
     _count?: ExamBankCountOrderByAggregateInput
     _max?: ExamBankMaxOrderByAggregateInput
     _min?: ExamBankMinOrderByAggregateInput
@@ -401603,6 +401621,7 @@ export namespace Prisma {
     examMatrixId?: StringNullableWithAggregatesFilter<"ExamBank"> | string | null
     isLock?: BoolNullableWithAggregatesFilter<"ExamBank"> | boolean | null
     isNote?: BoolNullableWithAggregatesFilter<"ExamBank"> | boolean | null
+    isGroup?: BoolNullableWithAggregatesFilter<"ExamBank"> | boolean | null
   }
 
   export type ExamBankQuestionWhereInput = {
@@ -434432,6 +434451,7 @@ export namespace Prisma {
     examType?: $Enums.ExamType | null
     isLock?: boolean | null
     isNote?: boolean | null
+    isGroup?: boolean | null
     exam: ExamCreateNestedOneWithoutExamBankInput
     subjectClass?: SubjectClassCreateNestedOneWithoutExamBankInput
     questions?: ExamBankQuestionCreateNestedManyWithoutExamBankInput
@@ -434456,6 +434476,7 @@ export namespace Prisma {
     examMatrixId?: string | null
     isLock?: boolean | null
     isNote?: boolean | null
+    isGroup?: boolean | null
     questions?: ExamBankQuestionUncheckedCreateNestedManyWithoutExamBankInput
   }
 
@@ -434474,6 +434495,7 @@ export namespace Prisma {
     examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
     isLock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isNote?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isGroup?: NullableBoolFieldUpdateOperationsInput | boolean | null
     exam?: ExamUpdateOneRequiredWithoutExamBankNestedInput
     subjectClass?: SubjectClassUpdateOneWithoutExamBankNestedInput
     questions?: ExamBankQuestionUpdateManyWithoutExamBankNestedInput
@@ -434498,6 +434520,7 @@ export namespace Prisma {
     examMatrixId?: NullableStringFieldUpdateOperationsInput | string | null
     isLock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isNote?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isGroup?: NullableBoolFieldUpdateOperationsInput | boolean | null
     questions?: ExamBankQuestionUncheckedUpdateManyWithoutExamBankNestedInput
   }
 
@@ -434519,6 +434542,7 @@ export namespace Prisma {
     examMatrixId?: string | null
     isLock?: boolean | null
     isNote?: boolean | null
+    isGroup?: boolean | null
   }
 
   export type ExamBankUpdateManyMutationInput = {
@@ -434536,6 +434560,7 @@ export namespace Prisma {
     examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
     isLock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isNote?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isGroup?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
 
   export type ExamBankUncheckedUpdateManyInput = {
@@ -434556,6 +434581,7 @@ export namespace Prisma {
     examMatrixId?: NullableStringFieldUpdateOperationsInput | string | null
     isLock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isNote?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isGroup?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
 
   export type ExamBankQuestionCreateInput = {
@@ -458738,6 +458764,7 @@ export namespace Prisma {
     examMatrixId?: SortOrder
     isLock?: SortOrder
     isNote?: SortOrder
+    isGroup?: SortOrder
   }
 
   export type ExamBankMaxOrderByAggregateInput = {
@@ -458758,6 +458785,7 @@ export namespace Prisma {
     examMatrixId?: SortOrder
     isLock?: SortOrder
     isNote?: SortOrder
+    isGroup?: SortOrder
   }
 
   export type ExamBankMinOrderByAggregateInput = {
@@ -458778,6 +458806,7 @@ export namespace Prisma {
     examMatrixId?: SortOrder
     isLock?: SortOrder
     isNote?: SortOrder
+    isGroup?: SortOrder
   }
 
   export type ExamBankScalarRelationFilter = {
@@ -561385,6 +561414,7 @@ export namespace Prisma {
     examType?: $Enums.ExamType | null
     isLock?: boolean | null
     isNote?: boolean | null
+    isGroup?: boolean | null
     exam: ExamCreateNestedOneWithoutExamBankInput
     questions?: ExamBankQuestionCreateNestedManyWithoutExamBankInput
     examMatrix?: ExamMatrixCreateNestedOneWithoutExamBankInput
@@ -561407,6 +561437,7 @@ export namespace Prisma {
     examMatrixId?: string | null
     isLock?: boolean | null
     isNote?: boolean | null
+    isGroup?: boolean | null
     questions?: ExamBankQuestionUncheckedCreateNestedManyWithoutExamBankInput
   }
 
@@ -562389,6 +562420,7 @@ export namespace Prisma {
     examMatrixId?: StringNullableFilter<"ExamBank"> | string | null
     isLock?: BoolNullableFilter<"ExamBank"> | boolean | null
     isNote?: BoolNullableFilter<"ExamBank"> | boolean | null
+    isGroup?: BoolNullableFilter<"ExamBank"> | boolean | null
   }
 
   export type SubjectClassCreateWithoutSubjectClassHistoryInput = {
@@ -604808,6 +604840,7 @@ export namespace Prisma {
     examType?: $Enums.ExamType | null
     isLock?: boolean | null
     isNote?: boolean | null
+    isGroup?: boolean | null
     subjectClass?: SubjectClassCreateNestedOneWithoutExamBankInput
     questions?: ExamBankQuestionCreateNestedManyWithoutExamBankInput
     examMatrix?: ExamMatrixCreateNestedOneWithoutExamBankInput
@@ -604830,6 +604863,7 @@ export namespace Prisma {
     examMatrixId?: string | null
     isLock?: boolean | null
     isNote?: boolean | null
+    isGroup?: boolean | null
     questions?: ExamBankQuestionUncheckedCreateNestedManyWithoutExamBankInput
   }
 
@@ -606291,6 +606325,7 @@ export namespace Prisma {
     examType?: $Enums.ExamType | null
     isLock?: boolean | null
     isNote?: boolean | null
+    isGroup?: boolean | null
     exam: ExamCreateNestedOneWithoutExamBankInput
     subjectClass?: SubjectClassCreateNestedOneWithoutExamBankInput
     examMatrix?: ExamMatrixCreateNestedOneWithoutExamBankInput
@@ -606314,6 +606349,7 @@ export namespace Prisma {
     examMatrixId?: string | null
     isLock?: boolean | null
     isNote?: boolean | null
+    isGroup?: boolean | null
   }
 
   export type ExamBankCreateOrConnectWithoutQuestionsInput = {
@@ -606396,6 +606432,7 @@ export namespace Prisma {
     examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
     isLock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isNote?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isGroup?: NullableBoolFieldUpdateOperationsInput | boolean | null
     exam?: ExamUpdateOneRequiredWithoutExamBankNestedInput
     subjectClass?: SubjectClassUpdateOneWithoutExamBankNestedInput
     examMatrix?: ExamMatrixUpdateOneWithoutExamBankNestedInput
@@ -606419,6 +606456,7 @@ export namespace Prisma {
     examMatrixId?: NullableStringFieldUpdateOperationsInput | string | null
     isLock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isNote?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isGroup?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
 
   export type QuestionUpsertWithoutSessionQuestionsInput = {
@@ -607229,6 +607267,7 @@ export namespace Prisma {
     examType?: $Enums.ExamType | null
     isLock?: boolean | null
     isNote?: boolean | null
+    isGroup?: boolean | null
     exam: ExamCreateNestedOneWithoutExamBankInput
     subjectClass?: SubjectClassCreateNestedOneWithoutExamBankInput
     questions?: ExamBankQuestionCreateNestedManyWithoutExamBankInput
@@ -607251,6 +607290,7 @@ export namespace Prisma {
     examType?: $Enums.ExamType | null
     isLock?: boolean | null
     isNote?: boolean | null
+    isGroup?: boolean | null
     questions?: ExamBankQuestionUncheckedCreateNestedManyWithoutExamBankInput
   }
 
@@ -661027,6 +661067,7 @@ export namespace Prisma {
     examMatrixId?: string | null
     isLock?: boolean | null
     isNote?: boolean | null
+    isGroup?: boolean | null
   }
 
   export type StudentSubjectScoreUpdateWithoutSubjectClassInput = {
@@ -661888,6 +661929,7 @@ export namespace Prisma {
     examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
     isLock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isNote?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isGroup?: NullableBoolFieldUpdateOperationsInput | boolean | null
     exam?: ExamUpdateOneRequiredWithoutExamBankNestedInput
     questions?: ExamBankQuestionUpdateManyWithoutExamBankNestedInput
     examMatrix?: ExamMatrixUpdateOneWithoutExamBankNestedInput
@@ -661910,6 +661952,7 @@ export namespace Prisma {
     examMatrixId?: NullableStringFieldUpdateOperationsInput | string | null
     isLock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isNote?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isGroup?: NullableBoolFieldUpdateOperationsInput | boolean | null
     questions?: ExamBankQuestionUncheckedUpdateManyWithoutExamBankNestedInput
   }
 
@@ -661930,6 +661973,7 @@ export namespace Prisma {
     examMatrixId?: NullableStringFieldUpdateOperationsInput | string | null
     isLock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isNote?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isGroup?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
 
   export type UserProfileUpdateWithoutClassSchedulesInput = {
@@ -679442,6 +679486,7 @@ export namespace Prisma {
     examMatrixId?: string | null
     isLock?: boolean | null
     isNote?: boolean | null
+    isGroup?: boolean | null
   }
 
   export type ExamRoomCreateManyExamInput = {
@@ -679628,6 +679673,7 @@ export namespace Prisma {
     examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
     isLock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isNote?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isGroup?: NullableBoolFieldUpdateOperationsInput | boolean | null
     subjectClass?: SubjectClassUpdateOneWithoutExamBankNestedInput
     questions?: ExamBankQuestionUpdateManyWithoutExamBankNestedInput
     examMatrix?: ExamMatrixUpdateOneWithoutExamBankNestedInput
@@ -679650,6 +679696,7 @@ export namespace Prisma {
     examMatrixId?: NullableStringFieldUpdateOperationsInput | string | null
     isLock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isNote?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isGroup?: NullableBoolFieldUpdateOperationsInput | boolean | null
     questions?: ExamBankQuestionUncheckedUpdateManyWithoutExamBankNestedInput
   }
 
@@ -679670,6 +679717,7 @@ export namespace Prisma {
     examMatrixId?: NullableStringFieldUpdateOperationsInput | string | null
     isLock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isNote?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isGroup?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
 
   export type ExamRoomUpdateWithoutExamInput = {
@@ -680121,6 +680169,7 @@ export namespace Prisma {
     examType?: $Enums.ExamType | null
     isLock?: boolean | null
     isNote?: boolean | null
+    isGroup?: boolean | null
   }
 
   export type KnowledgeBlockUpdateWithoutExamMatrixInput = {
@@ -680183,6 +680232,7 @@ export namespace Prisma {
     examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
     isLock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isNote?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isGroup?: NullableBoolFieldUpdateOperationsInput | boolean | null
     exam?: ExamUpdateOneRequiredWithoutExamBankNestedInput
     subjectClass?: SubjectClassUpdateOneWithoutExamBankNestedInput
     questions?: ExamBankQuestionUpdateManyWithoutExamBankNestedInput
@@ -680205,6 +680255,7 @@ export namespace Prisma {
     examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
     isLock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isNote?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isGroup?: NullableBoolFieldUpdateOperationsInput | boolean | null
     questions?: ExamBankQuestionUncheckedUpdateManyWithoutExamBankNestedInput
   }
 
@@ -680225,6 +680276,7 @@ export namespace Prisma {
     examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
     isLock?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isNote?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isGroup?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
 
   export type QuestionCreateManyKnowledgeBlockInput = {

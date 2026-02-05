@@ -291,6 +291,8 @@ model ExamBank extends Base {
   isLock         Boolean?           @default(false)
   /// được sử dụng tài liệu hay không
   isNote         Boolean?           @default(false)
+  isGroup        Boolean?           @default(true)
+
   @@unique([examId, examCode])
   @@schema("khao-thi")
 }
