@@ -7,7 +7,6 @@ import type { PutPhanCongHangLoatCrossModalInput } from '@pages/ql-tu-danh-gia-c
 
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
-import { $Enums } from '@workspace/db/client'
 import {
     useFindManyEvaluationCouncilMember,
     useUpsertEvaluationCriterion,
@@ -39,7 +38,6 @@ export default function PutPhanCongHangLoatCrossModal() {
                 evaluationCouncil: {
                     periodId: selectedEvaluationPeriodId || '',
                 },
-                role: $Enums.EvaluationMemberRole.HEAD_SPECIALIZED,
             },
             include: {
                 lecturer: {
