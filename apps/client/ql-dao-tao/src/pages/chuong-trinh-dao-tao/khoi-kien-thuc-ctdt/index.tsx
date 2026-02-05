@@ -156,7 +156,7 @@ export default function TrainingBlock() {
             render: (_: any, record: TrainingBlockType) => {
                 if (record?.id) {
                     const hasChildren = record?.children && record.children.length > 0
-                    
+
                     return (
                         <Row className="justify-center gap-2">
                             {can(
@@ -172,8 +172,12 @@ export default function TrainingBlock() {
                                 QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_KHOI_KIEN_THUC_CTDT,
                                 'XOA'
                             ) && (
-                                <Tooltip 
-                                    title={hasChildren ? "Không thể xóa vì có khối kiến thức con" : "Xóa"}
+                                <Tooltip
+                                    title={
+                                        hasChildren
+                                            ? 'Không thể xóa vì có khối kiến thức con'
+                                            : 'Xóa'
+                                    }
                                     placement="top"
                                 >
                                     <DeleteIcon

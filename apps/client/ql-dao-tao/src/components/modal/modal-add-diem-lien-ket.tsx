@@ -44,7 +44,7 @@ const PutScoreLinkSheetModal = () => {
     const { isOpen, onClose } = useDisclosure({
         tag: 'PutScoreLinkSheetModal',
     })
-    const {mutateAsync: createScoreLinkSheet} = useCreateScoreLinkSheet();
+    const { mutateAsync: createScoreLinkSheet } = useCreateScoreLinkSheet()
     const [studentKeyword, setStudentKeyword] = useState<string>('')
     const { data: fixedClasses = [] } = useFindManyFixedClass()
     const { data: trainingObjectTypeList = [] } = useFindManyTrainingObjectType(
@@ -116,9 +116,7 @@ const PutScoreLinkSheetModal = () => {
         )
     }, [schoolYears])
 
-    const handelCreateScoreLinkSheet = async (values: PutScoreLinkSheet) => {
-        
-    }
+    const handelCreateScoreLinkSheet = async (values: PutScoreLinkSheet) => {}
 
     return (
         <PutFormModal

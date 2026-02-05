@@ -456,8 +456,7 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx }: Props) => {
                                                 (item.analysisCriterions?.status !==
                                                     $Enums.EvaluationCriterionStatus.SUBMITTED &&
                                                     item.analysisCriterions?.status !==
-                                                        $Enums.EvaluationCriterionStatus
-                                                            .REVISION &&
+                                                        $Enums.EvaluationCriterionStatus.REVISION &&
                                                     item.analysisCriterions?.status !==
                                                         $Enums.EvaluationCriterionStatus
                                                             .COMPLETED) ||
@@ -474,7 +473,11 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx }: Props) => {
                                                         ) && (
                                                             <Tooltip title="Yêu cầu chỉnh sửa">
                                                                 <Badge
-                                                                    count={record?.evaluationCriterionComment?.length || 0}
+                                                                    count={
+                                                                        record
+                                                                            ?.evaluationCriterionComment
+                                                                            ?.length || 0
+                                                                    }
                                                                     size="small"
                                                                 >
                                                                     <FileEdit
@@ -484,7 +487,9 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx }: Props) => {
                                                                             'text-blue-600 cursor-pointer'
                                                                         }
                                                                         onClick={() => {
-                                                                            toggleCommentRow(record.id)
+                                                                            toggleCommentRow(
+                                                                                record.id
+                                                                            )
                                                                         }}
                                                                     />
                                                                 </Badge>

@@ -14,8 +14,8 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function ScoreLinkPage() {
     const { onOpen } = useDisclosure<{ id: string; mode: 'view' | 'edit' }>({
-            tag: 'PutScoreLinkSheetModal',
-        })
+        tag: 'PutScoreLinkSheetModal',
+    })
     const columns = useMemo<ColumnsType<any>>(
         () => [
             {
@@ -85,7 +85,9 @@ export default function ScoreLinkPage() {
                     </Col>
                     <Col span={6}>
                         <Flex justify="end">
-                            <Button onClick={() => onOpen()} type="primary">Thêm mới</Button>
+                            <Button onClick={() => onOpen()} type="primary">
+                                Thêm mới
+                            </Button>
                         </Flex>
                     </Col>
                 </Row>

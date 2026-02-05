@@ -8,7 +8,7 @@ import { Checkbox, Col, DatePicker, Flex, Input, Popover, Row } from 'antd'
 import dayjs from 'dayjs'
 import { useCallback, useMemo, useState } from 'react'
 import { store } from '../index'
-import { SubjectClass } from '@workspace/db/client';
+import { SubjectClass } from '@workspace/db/client'
 
 const EXAM_TYPE_LABEL: Record<string, string> = {
     OfflineWritten: 'Thi viết (offline)',
@@ -415,7 +415,10 @@ export default function DanhSachKeHoachThi() {
                             render: (_, record) => {
                                 return record?.subjectClass.length > 0
                                     ? record?.subjectClass
-                                          .map((i: SubjectClass) => `${i?.code||''}-${i?.name||''}`)
+                                          .map(
+                                              (i: SubjectClass) =>
+                                                  `${i?.code || ''}-${i?.name || ''}`
+                                          )
                                           .join(', ')
                                     : ''
                             },

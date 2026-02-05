@@ -30,6 +30,7 @@ export type AutomaticTopicGenerationBody = {
     /** @nullable */
     isLock?: boolean | null
     isNote: boolean
+    isGroup: boolean
     quantity: number
     /** @minLength 1 */
     examFrameworkId: string

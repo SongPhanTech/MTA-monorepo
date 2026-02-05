@@ -114,6 +114,7 @@ const SinhDeModal = () => {
                 createdAt: new Date().toISOString(),
                 updatedAt: null,
                 examDay: values?.examDay ? new Date(values?.examDay).toISOString() : null,
+                isGroup: values?.isGroup || true,
             })
             if (res?.status === 200) {
                 message.success('Tạo đề thành công!')
@@ -231,6 +232,16 @@ const SinhDeModal = () => {
                     <Col span={12}>
                         <FormItem form={form} name="subjectClassId" label="Dùng cho lớp" required>
                             <Select options={dataOption} placeholder="Chọn lớp môn học" />
+                        </FormItem>
+                    </Col>
+                    <Col span={4}>
+                        <FormItem
+                            form={form}
+                            name="isGroup"
+                            valuePropName="checked"
+                            initialValue={true}
+                        >
+                            <Checkbox>Hiển thị tiêu đề</Checkbox>
                         </FormItem>
                     </Col>
 

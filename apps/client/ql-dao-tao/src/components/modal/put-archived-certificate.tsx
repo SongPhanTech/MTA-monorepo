@@ -514,11 +514,22 @@ const PutCertificateArchivedModal = () => {
                                                 },
                                                 ({ getFieldValue }) => ({
                                                     validator(_, value) {
-                                                        const expiredDate = getFieldValue(['student', record.id, 'expiredDate'])
-                                                        if (!value || !expiredDate || value.isBefore(expiredDate) || value.isSame(expiredDate, 'day')) {
+                                                        const expiredDate = getFieldValue([
+                                                            'student',
+                                                            record.id,
+                                                            'expiredDate',
+                                                        ])
+                                                        if (
+                                                            !value ||
+                                                            !expiredDate ||
+                                                            value.isBefore(expiredDate) ||
+                                                            value.isSame(expiredDate, 'day')
+                                                        ) {
                                                             return Promise.resolve()
                                                         }
-                                                        return Promise.reject(new Error('Ngày cấp không hợp lệ'))
+                                                        return Promise.reject(
+                                                            new Error('Ngày cấp không hợp lệ')
+                                                        )
                                                     },
                                                 }),
                                             ]}
@@ -549,11 +560,22 @@ const PutCertificateArchivedModal = () => {
                                                 },
                                                 ({ getFieldValue }) => ({
                                                     validator(_, value) {
-                                                        const issuedDate = getFieldValue(['student', record.id, 'issuedDate'])
-                                                        if (!value || !issuedDate || value.isAfter(issuedDate) || value.isSame(issuedDate, 'day')) {
+                                                        const issuedDate = getFieldValue([
+                                                            'student',
+                                                            record.id,
+                                                            'issuedDate',
+                                                        ])
+                                                        if (
+                                                            !value ||
+                                                            !issuedDate ||
+                                                            value.isAfter(issuedDate) ||
+                                                            value.isSame(issuedDate, 'day')
+                                                        ) {
                                                             return Promise.resolve()
                                                         }
-                                                        return Promise.reject(new Error('Ngày hết hạn không hợp lệ'))
+                                                        return Promise.reject(
+                                                            new Error('Ngày hết hạn không hợp lệ')
+                                                        )
                                                     },
                                                 }),
                                             ]}
