@@ -18,7 +18,7 @@ import {
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Col, Flex, message, Row, Tag } from 'antd'
+import { Button, Col, Flex, message, Row, Tag, Tooltip } from 'antd'
 import _ from 'lodash'
 import { BookPlus } from 'lucide-react'
 import type React from 'react'
@@ -37,7 +37,9 @@ interface TreeNode {
     createdAt?: string
     updatedAt?: string
 }
-type TrainingBlockType = Prisma.TrainingBlockGetPayload<{}>
+type TrainingBlockType = Prisma.TrainingBlockGetPayload<{}> & {
+    children?: TrainingBlockType[]
+}
 
 export default function TrainingBlock() {
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
@@ -153,6 +155,8 @@ export default function TrainingBlock() {
             ),
             render: (_: any, record: TrainingBlockType) => {
                 if (record?.id) {
+                    const hasChildren = record?.children && record.children.length > 0
+
                     return (
                         <Row className="justify-center gap-2">
                             {can(
@@ -168,11 +172,21 @@ export default function TrainingBlock() {
                                 QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_KHOI_KIEN_THUC_CTDT,
                                 'XOA'
                             ) && (
-                                <DeleteIcon
-                                    popConfirm={{
-                                        onConfirm: () => handleDelete(record?.id),
-                                    }}
-                                />
+                                <Tooltip
+                                    title={
+                                        hasChildren
+                                            ? 'Không thể xóa vì có khối kiến thức con'
+                                            : 'Xóa'
+                                    }
+                                    placement="top"
+                                >
+                                    <DeleteIcon
+                                        popConfirm={{
+                                            onConfirm: () => handleDelete(record?.id),
+                                        }}
+                                        disabled={hasChildren}
+                                    />
+                                </Tooltip>
                             )}
                         </Row>
                     )

@@ -83,7 +83,7 @@ function Page() {
             },
         }))
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [totalCountTopic])
+    }, [filters.search, filters.isPinned, totalCountTopic])
 
     const { mutateAsync: deleteTopic } = useDeleteTopic()
     const { mutateAsync: deletePrompts } = useDeleteManyPrompt()

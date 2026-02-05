@@ -49,7 +49,7 @@ for (const profileData of profiles) {
         break
     }
 
-    console.log(`${JSON.stringify({ Id: res.data, sTenDayDu: profileData.fullname })},`)
+    console.log(JSON.stringify({ Id: res.data, sTenDayDu: profileData.fullname }) + ',')
 
     await prisma.userProfile.update({
         where: { id: profileData.id },

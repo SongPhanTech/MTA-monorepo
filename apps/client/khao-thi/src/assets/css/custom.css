@@ -20,10 +20,6 @@
 .ant-table-body:hover::-webkit-scrollbar-thumb {
     visibility: visible;
 }
-.ant-table-expanded-row:hover {
-    background-color: aliceblue;
-}
-
 .ant-menu-light.ant-menu-inline .ant-menu-sub.ant-menu-inline {
     background-color: #ffffff;
 }
@@ -52,7 +48,7 @@
 }
 
 .ant-menu-inline-collapsed .ant-menu-title-content {
-    display: none;
+    display: none !important;
 }
 
 .ant-menu-inline-collapsed .ant-menu-item-selected {
@@ -83,23 +79,23 @@
 
 .ant-table-content {
     outline: 1px solid #f0f0f0;
-    overflow: auto;
+    overflow: auto !important;
 }
 .ant-table-container {
     outline: 1px solid #f0f0f0;
 }
 
 .ant-table .ant-table-thead > tr > th:first-child {
-    border-top-left-radius: 0px;
+    border-top-left-radius: 0px !important;
 }
 
 .ant-table .ant-table-thead > tr > th:last-child {
-    border-top-right-radius: 0px;
+    border-top-right-radius: 0px !important;
 }
 
 .ant-pagination-options .ant-select-dropdown {
-    bottom: 100%;
-    top: auto;
+    bottom: 100% !important;
+    top: auto !important;
     min-height: 100px;
 }
 .ant-table-empty .ant-table-wrapper .ant-table-tbody > tr > td {
@@ -111,7 +107,7 @@
 
 .ant-radio-button-wrapper {
     border: 1px solid #ff4d4f;
-    border-radius: 6px;
+    border-radius: 6px !important;
     min-width: 32px;
     height: 24px;
     line-height: 24px;
@@ -138,7 +134,7 @@
 }
 
 .ant-radio-button-wrapper:first-child {
-    border: 1px solid #ff4d4f;
+    border: 1px solid #ff4d4f !important;
 }
 .answer-box {
     display: grid;

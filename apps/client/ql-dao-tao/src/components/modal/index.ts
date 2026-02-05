@@ -228,3 +228,4 @@ export {
 }
 export * from './ke-hoach-dao-tao'
 export * from './thong-bao'
+export * from './update-progress-modal'

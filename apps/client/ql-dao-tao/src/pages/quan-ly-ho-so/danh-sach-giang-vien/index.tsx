@@ -189,7 +189,7 @@ export default function UserProfilePageLecture() {
         [filters, canXemTatCa, orgIds]
     )
 
-    const { data = [], refetch } = useFindManyLecturer({
+    const { data: lecturerData = [], refetch } = useFindManyLecturer({
         where,
         include: {
             userProfile: {
@@ -298,6 +298,7 @@ export default function UserProfilePageLecture() {
                     <Table
                         rowSelection={{
                             selectedRowKeys,
+                            preserveSelectedRowKeys: true,
                             onChange: (keys) => {
                                 setSelectedRowKeys(keys)
                             },
@@ -508,7 +509,7 @@ export default function UserProfilePageLecture() {
                                 },
                             },
                         ]}
-                        data={data}
+                        data={lecturerData}
                         rowKey="id"
                         pagination={{
                             current: currentPage,

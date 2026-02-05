@@ -108,7 +108,7 @@ const PutStudentScoreConvertModal = () => {
     )
 
     const { mutateAsync: createManyStudentSubjectScore } = useCreateManyStudentSubjectScore()
-    console.log('selectedStudent', selectedStudent);
+    console.log('selectedStudent', selectedStudent)
 
     const allSubjectOptions = useMemo(() => {
         const cv =

@@ -86,7 +86,7 @@ type Awaited<O> = O extends AwaitedInput<infer T> ? T : never
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 
 export type getFilesCreateDownloadLinkAppCodeStorageTypeFileNameResponse200 = {
-    data: undefined
+    data: void
     status: 200
 }
 
@@ -296,7 +296,7 @@ export function useGetFilesCreateDownloadLinkAppCodeStorageTypeFileName<
 }
 
 export type getFilesDownloadAppCodeFileNameResponse200 = {
-    data: undefined
+    data: void
     status: 200
 }
 
@@ -509,7 +509,7 @@ export function useGetFilesDownloadAppCodeFileName<
  * @summary Tải file
  */
 export type getFilesStorageTypeFileNameResponse200 = {
-    data: undefined
+    data: void
     status: 200
 }
 
@@ -702,7 +702,7 @@ export function useGetFilesStorageTypeFileName<
  * @summary Tải file
  */
 export type getFilesStorageTypeFileNameFileDownloadNameResponse200 = {
-    data: undefined
+    data: void
     status: 200
 }
 
@@ -948,7 +948,7 @@ export function useGetFilesStorageTypeFileNameFileDownloadName<
  * @summary Upload single file
  */
 export type postFilesSingleStorageTypeResponse200 = {
-    data: undefined
+    data: void
     status: 200
 }
 
@@ -1090,7 +1090,7 @@ export const usePostFilesSingleStorageType = <TError = unknown, TContext = unkno
  * @summary Upload multi file
  */
 export type postFilesMultiStorageTypeResponse200 = {
-    data: undefined
+    data: void
     status: 200
 }
 
@@ -1232,7 +1232,7 @@ export const usePostFilesMultiStorageType = <TError = unknown, TContext = unknow
  * @summary Lấy ảnh mẫu của báo cáo
  */
 export type getFilesImageStorageTypeFileNameResponse200 = {
-    data: undefined
+    data: void
     status: 200
 }
 
@@ -1453,7 +1453,7 @@ export function useGetFilesImageStorageTypeFileName<
  * @summary Lấy ảnh nhân viên
  */
 export type getFilesEmployeeUserIdImageResponse200 = {
-    data: undefined
+    data: void
     status: 200
 }
 
@@ -1629,7 +1629,7 @@ export function useGetFilesEmployeeUserIdImage<
  * @summary Lấy avatar khởi tạo
  */
 export type getFilesAvatarInitialsResponse200 = {
-    data: undefined
+    data: void
     status: 200
 }
 
@@ -1792,7 +1792,7 @@ export function useGetFilesAvatarInitials<
  * @summary Xóa single file
  */
 export type deleteFilesDeleteSingleFileStorageFileFileNameResponse200 = {
-    data: undefined
+    data: void
     status: 200
 }
 
@@ -1940,7 +1940,7 @@ export const useDeleteFilesDeleteSingleFileStorageFileFileName = <
  * @summary Kiểm tra tình trạng API
  */
 export type getFilesHealthzResponse200 = {
-    data: undefined
+    data: void
     status: 200
 }
 

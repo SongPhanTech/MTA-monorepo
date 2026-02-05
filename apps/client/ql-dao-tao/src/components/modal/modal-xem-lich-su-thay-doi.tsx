@@ -1,3 +1,5 @@
+// biome-ignore assist/source/organizeImports: <code fix>
+
 import { Modal } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -62,10 +64,9 @@ const ModalViewHistoryChange = () => {
             hideSpinner()
         }
     }
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <skip function>
     useEffect(() => {
         fetchData()
-    }, [])
+    }, [currentPage, numberOfPages])
     // useEffect(() => {
     //     async function fetchData() {}
     //     fetchData()

@@ -13,7 +13,7 @@
     "db:push": "turbo run db:push",
     "db:sync": "turbo run db:sync",
     "format": "biome format --write --verbose",
-    "check": "biome check --write --unsafe --files-ignore-unknown=true --no-errors-on-unmatched --colors=off",
+    "check": "biome check --write --files-ignore-unknown=true --no-errors-on-unmatched --colors=off",
     "lint-staged": "lint-staged"
   },
   "lint-staged": {

@@ -97,7 +97,6 @@ export default function SupervisorPaymentRecordPage() {
             filters.paymentStatus,
             filters.paymentDate,
             semesterId,
-            thesisCondition,
         ]
     )
 

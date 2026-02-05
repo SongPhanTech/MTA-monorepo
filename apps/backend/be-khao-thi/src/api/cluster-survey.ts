@@ -508,7 +508,7 @@ app.openapi(getOrganizationSurveyStatistics, async (c) => {
         where: {
             sParentId: organizationId,
             iCapDonVi: {
-                in: [2, 3],
+                in: [0, 2, 3],
             },
             // lecturers: {
             //     some: {

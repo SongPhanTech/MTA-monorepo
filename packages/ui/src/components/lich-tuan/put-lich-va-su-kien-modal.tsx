@@ -913,11 +913,15 @@ const PutLichVaSuKienModal = () => {
                                                       // Same day - show date once with time range
                                                       if (allDay) {
                                                           return startTime.format('DD/MM/YYYY')
+                                                          // biome-ignore lint/style/noUselessElse: <explanation>
+                                                      } else {
+                                                          return `${startTime.format('DD/MM/YYYY')} ${startTime.format('HH:mm')} - ${endTime.format('HH:mm')}`
                                                       }
-                                                      return `${startTime.format('DD/MM/YYYY')} ${startTime.format('HH:mm')} - ${endTime.format('HH:mm')}`
+                                                      // biome-ignore lint/style/noUselessElse: <explanation>
+                                                  } else {
+                                                      // Different days - show full range
+                                                      return `${formatTime(startTime)} - ${formatTime(endTime)}`
                                                   }
-                                                  // Different days - show full range
-                                                  return `${formatTime(startTime)} - ${formatTime(endTime)}`
                                               })()
                                             : startTime
                                               ? formatTime(startTime)

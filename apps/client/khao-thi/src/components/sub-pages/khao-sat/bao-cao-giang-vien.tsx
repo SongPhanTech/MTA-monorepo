@@ -110,7 +110,7 @@ function LecturerSurveyReport({
                 onRow={(record) => {
                     return {
                         onClick: () => {
-                            setSublectClass(record?.surveyId as any)
+                            setSublectClass(record as any)
                         },
                         className: cn(
                             sublectClass?.surveyId === record.surveyId ? 'bg-orange-200' : ''
@@ -118,7 +118,7 @@ function LecturerSurveyReport({
                     }
                 }}
                 columns={
-                    choices?.length
+                    choices?.length > 0
                         ? [
                               {
                                   title: 'STT',
@@ -134,7 +134,8 @@ function LecturerSurveyReport({
                                       return record?.subjectClassName
                                   },
                               },
-                              ...choices.map((i: any, index: number) => ({
+                              // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
+                              ...choices?.map((i: any, index: number) => ({
                                   title: i?.description,
                                   id: i?.id,
                                   dataIndex: i?.id,

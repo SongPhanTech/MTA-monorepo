@@ -118,7 +118,7 @@ function TabNhomCauHoi({ topicSlected }: { topicSlected: SurveyTopic | null }) {
 
     useEffect(() => {
         setSelectedID('')
-    }, [])
+    }, [topicSlected])
 
     return (
         <div>

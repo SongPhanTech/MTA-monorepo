@@ -232,7 +232,7 @@ const PutSurveyQuestionModal = () => {
             )
             form.setFieldsValue({
                 ...surveyQuestion,
-                specific: !!surveyQuestion?.specificChoice?.length,
+                specific: surveyQuestion?.specificChoice?.length ? true : false,
                 specificChoice: surveyQuestion?.specificChoice?.length
                     ? [...surveyQuestion.specificChoice]
                     : [...choices],

@@ -108,7 +108,7 @@ const ThemTaiLieu = () => {
         return () => {
             window.removeEventListener('beforeunload', handleBeforeUnload)
         }
-    }, [hasActiveWork])
+    }, [files, pendingAPICallsRef])
 
     // Lấy danh sách ID tài liệu tương đồng từ files
     const similarDocumentIds = useMemo(() => {

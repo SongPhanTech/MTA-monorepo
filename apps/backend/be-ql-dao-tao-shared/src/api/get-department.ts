@@ -13,7 +13,7 @@ function buildDeptCodeTree(code: string): string {
 
     if (trimmed.startsWith('001/')) {
         const rest = trimmed.slice(4)
-        return `0.1.${rest.replace(/\//g, '.')}`
+        return '0.1.' + rest.replace(/\//g, '.')
     }
 
     return trimmed.replace(/\//g, '.')

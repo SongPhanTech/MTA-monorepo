@@ -2936,6 +2936,9 @@ exports.Prisma.ThesisProjectScalarFieldEnum = {
   status: 'status',
   language: 'language',
   type: 'type',
+  firstCheckProgress: 'firstCheckProgress',
+  secondCheckProgress: 'secondCheckProgress',
+  isEligibleForDefense: 'isEligibleForDefense',
   subjectClassId: 'subjectClassId',
   thesisSessionId: 'thesisSessionId',
   supervisorName: 'supervisorName',
@@ -3726,7 +3729,8 @@ exports.Prisma.ExamBankScalarFieldEnum = {
   examType: 'examType',
   examMatrixId: 'examMatrixId',
   isLock: 'isLock',
-  isNote: 'isNote'
+  isNote: 'isNote',
+  isGroup: 'isGroup'
 };
 
 exports.Prisma.ExamBankQuestionScalarFieldEnum = {
@@ -8354,7 +8358,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/nguyenquanghuong/Desktop/Workspace/MTA-monorepo/packages/database/generated/prisma-client",
+      "value": "/Users/swantech.01/Desktop/MTA-monorepo/packages/database/generated/prisma-client",
       "fromEnvVar": null
     },
     "config": {
@@ -8392,11 +8396,12 @@ const config = {
       "multiSchema",
       "typedSql"
     ],
-    "sourceFilePath": "/Users/nguyenquanghuong/Desktop/Workspace/MTA-monorepo/packages/database/prisma/schema.prisma",
+    "sourceFilePath": "/Users/swantech.01/Desktop/MTA-monorepo/packages/database/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null
+    "rootEnvPath": null,
+    "schemaEnvPath": "../../.env"
   },
   "relativePath": "../../prisma",
   "clientVersion": "6.10.1",
@@ -8405,7 +8410,6 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
-  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {

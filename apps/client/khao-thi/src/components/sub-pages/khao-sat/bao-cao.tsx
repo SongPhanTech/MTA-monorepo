@@ -147,7 +147,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
             }
         }
         return {}
-    }, [dataLevel, convertToStackChartData])
+    }, [dataLevel])
 
     const exportTemplate = async (name: string, dataTable: any, dataTableInfo: any) => {
         // Tạo workbook mới
@@ -271,7 +271,8 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                   'STT',
                   'Câu hỏi',
                   'Tên Câu hỏi',
-                  ...dataTable[0].answers.map((i: any) => i?.description),
+                  // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
+                  ...dataTable[0]?.answers?.map((i: any) => i?.description),
               ]
             : ['STT', 'Câu hỏi', 'Tên Câu hỏi']
         headerRow.eachCell((cell: any) => {
@@ -372,7 +373,8 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                                       )
                                   },
                               },
-                              ...dataTable[0].answers.map((i: any) => ({
+                              // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
+                              ...dataTable[0]?.answers?.map((i: any) => ({
                                   title: i?.description,
                                   id: i?.id,
                                   dataIndex: i?.id,

@@ -125,7 +125,7 @@ function Page() {
             },
         }))
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [filters.status, filters.title, filters.topicId, filters.classificationId])
 
     const { mutateAsync: deleteDocument } = useDeleteDocument()
     const { mutateAsync: deleteManyDocumentTopic } = useDeleteManyDocumentTopic()

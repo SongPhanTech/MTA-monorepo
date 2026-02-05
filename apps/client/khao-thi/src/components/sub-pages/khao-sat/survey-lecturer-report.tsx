@@ -99,8 +99,8 @@ function SurveylecturerReport({
 
         return { categories, series }
     }
+    console.log(dataLevel)
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <skip function>
     const dataBarchart = useMemo(() => {
         let label: string[] = []
         if (dataLevel?.status === 200 && dataLevel?.data?.data?.questions?.length) {
@@ -278,7 +278,8 @@ function SurveylecturerReport({
                   'STT',
                   'Câu hỏi',
                   'Tên Câu hỏi',
-                  ...dataTable[0].answers.map((i: any) => i?.description),
+                  // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
+                  ...dataTable[0]?.answers?.map((i: any) => i?.description),
               ]
             : ['STT', 'Câu hỏi', 'Tên Câu hỏi']
         headerRow.eachCell((cell: any) => {
@@ -362,7 +363,7 @@ function SurveylecturerReport({
             <Table
                 rowKey={'id'}
                 columns={
-                    dataTable?.length
+                    dataTable?.length > 0
                         ? [
                               {
                                   title: 'STT',
@@ -392,7 +393,8 @@ function SurveylecturerReport({
                                       )
                                   },
                               },
-                              ...dataTable[0].answers.map((i: any) => ({
+                              // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
+                              ...dataTable[0]?.answers?.map((i: any) => ({
                                   title: i?.description,
                                   id: i?.id,
                                   dataIndex: i?.id,

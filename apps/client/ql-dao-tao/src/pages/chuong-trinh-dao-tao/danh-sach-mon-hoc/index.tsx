@@ -100,7 +100,14 @@ export default function SubjectList() {
 
     const where = useMemo(() => {
         return {
-            ...(trainingObjectTypeId ? { subjectVersion: { some: { trainingObjectTypeId } } } : {}),
+            ...(trainingObjectTypeId
+                ? {
+                      OR: [
+                          { subjectVersion: { some: { trainingObjectTypeId } } },
+                          { subjectVersion: { none: {} } },
+                      ],
+                  }
+                : {}),
             ...(filters.searchText
                 ? {
                       name: {

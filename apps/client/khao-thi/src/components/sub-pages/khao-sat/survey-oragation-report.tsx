@@ -131,7 +131,7 @@ function SurveyOrganizationReport({
             }
         }
         return {}
-    }, [dataLevel, convertToStackChartData])
+    }, [dataLevel])
 
     const exportTemplate = async (name: string, dataTable: any, dataTableInfo: any) => {
         // Tạo workbook mới

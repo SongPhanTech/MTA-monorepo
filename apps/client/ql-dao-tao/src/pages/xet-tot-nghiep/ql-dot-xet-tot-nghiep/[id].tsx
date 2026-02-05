@@ -527,7 +527,8 @@ export default function StudentGraduationApplication() {
             const hasEllipsis = (cert?.name?.length || 0) > 10
 
             return {
-                title: shortName + (hasEllipsis ? '...' : ''),
+                // title: shortName + (hasEllipsis ? '...' : ''),
+                title: cert?.name || 'Chứng chỉ',
                 key: `cert_${certId}`,
                 width: 80,
                 align: 'center' as const,

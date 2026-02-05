@@ -14,7 +14,7 @@ const ExpandableContent = ({ htmlContent }) => {
                 setIsClamped(hasOverflow)
             }
         }
-    }, [isClamped])
+    }, [htmlContent, isClamped])
 
     const toggleExpand = (e) => {
         e.stopPropagation()

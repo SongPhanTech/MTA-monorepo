@@ -16,7 +16,8 @@ export const STORAGE_KEY = 'selected-standard-id'
 export const store = new Store<{
     selectedStandardSetId: string | undefined
 }>({
-    selectedStandardSetId: typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEY) || undefined : undefined,
+    selectedStandardSetId:
+        typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEY) || undefined : undefined,
 })
 
 interface SidebarProps {

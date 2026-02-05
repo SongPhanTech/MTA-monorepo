@@ -288,7 +288,7 @@ function OrganizationSurveyReport({
                 //     }
                 // }}
                 columns={
-                    choices?.length
+                    choices?.length > 0
                         ? [
                               {
                                   title: 'STT',
@@ -304,7 +304,8 @@ function OrganizationSurveyReport({
                                       return `${record?.organization?.sMa || ''} - ${record?.organization?.sTen || ''}`
                                   },
                               },
-                              ...choices.map((i: any, index: number) => ({
+                              // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
+                              ...choices?.map((i: any, index: number) => ({
                                   title: i?.description,
                                   id: i?.id,
                                   dataIndex: i?.id,

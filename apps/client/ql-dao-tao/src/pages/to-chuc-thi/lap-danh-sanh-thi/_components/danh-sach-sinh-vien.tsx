@@ -154,15 +154,26 @@ export default function DanhSachSinhVien() {
                             },
                         },
                     },
-                    orderBy: {
-                        studentSubjectScore: {
-                            student: {
-                                userProfile: {
-                                    firstName: 'asc',
+                    orderBy: [
+                        {
+                            studentSubjectScore: {
+                                student: {
+                                    userProfile: {
+                                        firstName: 'asc',
+                                    },
                                 },
                             },
                         },
-                    },
+                        {
+                            studentSubjectScore: {
+                                student: {
+                                    userProfile: {
+                                        lastName: 'asc',
+                                    },
+                                },
+                            },
+                        },
+                    ],
                 },
             },
             orderBy: {
@@ -770,7 +781,7 @@ export default function DanhSachSinhVien() {
                                     return (
                                         <div className="text-left">
                                             {record?.studentSubjectScore?.student?.userProfile
-                                                ?.fullname || ''}
+                                                ?.fullname || 'Không rõ'}
                                         </div>
                                     )
                                 },

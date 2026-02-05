@@ -145,6 +145,8 @@ export default function SinhPhach() {
         })
         if (res?.status === 200) {
             message.success('Sinh phách thành công')
+        } else {
+            message.error(res.data.message)
         }
         refetch()
         refreshExamPaper()
@@ -216,34 +218,32 @@ export default function SinhPhach() {
                 <Flex justify="space-between" align="center">
                     <Checkbox
                         onChange={async (e) => {
-                            try {
-                                await updateManyExamList({
-                                    where: {
-                                        examRoom: {
-                                            examId,
-                                        },
+                            await updateManyExamList({
+                                where: {
+                                    examRoom: {
+                                        examId,
                                     },
-                                    data: { lockExamCode: e.target.checked },
-                                })
-                                await updateManySubjectClass({
-                                    where: {
-                                        exam: {
-                                            examRooms: {
-                                                some: {
-                                                    examList: {
-                                                        some: {
-                                                            id: examId ?? '',
-                                                        },
+                                },
+                                data: { lockExamCode: e.target.checked },
+                            })
+                            await updateManySubjectClass({
+                                where: {
+                                    exam: {
+                                        examRooms: {
+                                            some: {
+                                                examList: {
+                                                    some: {
+                                                        id: examId ?? '',
                                                     },
                                                 },
                                             },
                                         },
                                     },
-                                    data: {
-                                        isLockExamScore: e.target.checked,
-                                    },
-                                })
-                            } catch (error) {}
+                                },
+                                data: {
+                                    isLockExamScore: e.target.checked,
+                                },
+                            })
                         }}
                         checked={lockExamCode}
                     >
@@ -321,17 +321,19 @@ export default function SinhPhach() {
                                 render: (_, __, index) => index + 1,
                             },
                             {
-                                title: 'Mã SV',
+                                title: 'Mã sinh viên',
                                 dataIndex: 'name',
+                                align: 'center',
                                 width: 150,
                                 render: (_, record) =>
-                                    record?.studentSubjectScore?.student?.userProfile?.code || '',
+                                    record?.studentSubjectScore?.student?.code || '',
                             },
                             {
                                 title: 'Tên thí sinh',
                                 dataIndex: 'fullname',
                                 render: (_, record) =>
-                                    `${record?.studentSubjectScore?.student?.userProfile?.fullname}`,
+                                    record?.studentSubjectScore?.student?.userProfile?.fullname ||
+                                    'không rõ',
                             },
                             {
                                 title: 'Điểm TX',

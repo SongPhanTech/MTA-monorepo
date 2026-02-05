@@ -17514,6 +17514,18 @@ const metadata = {
                     type: "String",
                     isOptional: true,
                     attributes: [{ "name": "@db.Text", "args": [] }],
+                }, firstCheckProgress: {
+                    name: "firstCheckProgress",
+                    type: "Int",
+                    isOptional: true,
+                }, secondCheckProgress: {
+                    name: "secondCheckProgress",
+                    type: "Int",
+                    isOptional: true,
+                }, isEligibleForDefense: {
+                    name: "isEligibleForDefense",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, subjectClass: {
                     name: "subjectClass",
                     type: "SubjectClass",
@@ -22402,6 +22414,11 @@ const metadata = {
                     type: "Boolean",
                     isOptional: true,
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, isGroup: {
+                    name: "isGroup",
+                    type: "Boolean",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 },
             }, uniqueConstraints: {
                 id: {

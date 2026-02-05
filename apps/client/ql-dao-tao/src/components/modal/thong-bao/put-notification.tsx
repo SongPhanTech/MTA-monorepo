@@ -139,6 +139,7 @@ const PutNotificationModal = () => {
         } else {
             form.setFieldsValue({
                 active: true,
+                publishedAt: dayjs().startOf('day'),
             })
         }
     }, [data])

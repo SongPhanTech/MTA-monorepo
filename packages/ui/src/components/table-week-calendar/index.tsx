@@ -211,7 +211,13 @@ export function TableWeekCalendar({
         if (stringArray?.length > 0) {
             stringArray.forEach((customText, index) => {
                 allItems.push(
-                    <span key={`custom-${index}`} style={{ color: '#333333', fontWeight: 500 }}>
+                    <span
+                        key={`custom-${
+                            // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                            index
+                        }`}
+                        style={{ color: '#333333', fontWeight: 500 }}
+                    >
                         - {customText}
                     </span>
                 )
@@ -1184,50 +1190,56 @@ export function TableWeekCalendar({
                                                         </div>
                                                     </div>
                                                 )
+                                                // biome-ignore lint/style/noUselessElse: <explanation>
+                                            } else {
+                                                return (
+                                                    <div
+                                                        style={{
+                                                            whiteSpace: 'nowrap',
+                                                            fontSize: '12px',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                fontWeight: 'bold',
+                                                                color: '#fa8c16',
+                                                            }}
+                                                        >
+                                                            {formatDate(originalStartTime)} -{' '}
+                                                            {formatDate(originalEndTime)}
+                                                        </div>
+                                                        <div
+                                                            style={{
+                                                                fontWeight: 'bold',
+                                                                color: '#fa8c16',
+                                                                marginTop: '2px',
+                                                            }}
+                                                        >
+                                                            {formatTime(originalStartTime)} -{' '}
+                                                            {formatTime(originalEndTime)}
+                                                        </div>
+                                                    </div>
+                                                )
                                             }
-                                            return (
-                                                <div
-                                                    style={{
-                                                        whiteSpace: 'nowrap',
-                                                        fontSize: '12px',
-                                                    }}
-                                                >
-                                                    <div
-                                                        style={{
-                                                            fontWeight: 'bold',
-                                                            color: '#fa8c16',
-                                                        }}
-                                                    >
-                                                        {formatDate(originalStartTime)} -{' '}
-                                                        {formatDate(originalEndTime)}
-                                                    </div>
-                                                    <div
-                                                        style={{
-                                                            fontWeight: 'bold',
-                                                            color: '#fa8c16',
-                                                            marginTop: '2px',
-                                                        }}
-                                                    >
-                                                        {formatTime(originalStartTime)} -{' '}
-                                                        {formatTime(originalEndTime)}
-                                                    </div>
-                                                </div>
-                                            )
-                                        }
-                                        // Multi-day event thường trong 1 tuần
-                                        const isFullDay =
-                                            currentStartTime.getHours() === 0 &&
-                                            currentStartTime.getMinutes() === 0 &&
-                                            currentStartTime.getSeconds() === 0 &&
-                                            currentEndTime.getHours() === 23 &&
-                                            currentEndTime.getMinutes() === 59 &&
-                                            (currentEndTime.getSeconds() === 59 ||
-                                                currentEndTime.getSeconds() === 0)
+                                            // biome-ignore lint/style/noUselessElse: <explanation>
+                                        } else {
+                                            // Multi-day event thường trong 1 tuần
+                                            const isFullDay =
+                                                currentStartTime.getHours() === 0 &&
+                                                currentStartTime.getMinutes() === 0 &&
+                                                currentStartTime.getSeconds() === 0 &&
+                                                currentEndTime.getHours() === 23 &&
+                                                currentEndTime.getMinutes() === 59 &&
+                                                (currentEndTime.getSeconds() === 59 ||
+                                                    currentEndTime.getSeconds() === 0)
 
-                                        if (isFullDay) {
-                                            return `${formatDate(currentStartTime)} - ${formatDate(currentEndTime)}`
+                                            if (isFullDay) {
+                                                return `${formatDate(currentStartTime)} - ${formatDate(currentEndTime)}`
+                                                // biome-ignore lint/style/noUselessElse: <explanation>
+                                            } else {
+                                                return `${formatTime(currentStartTime)} - ${formatTime(currentEndTime)}`
+                                            }
                                         }
-                                        return `${formatTime(currentStartTime)} - ${formatTime(currentEndTime)}`
                                     }
 
                                     // Các hàng thông thường

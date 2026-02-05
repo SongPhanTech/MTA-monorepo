@@ -2963,6 +2963,9 @@ exports.Prisma.ThesisProjectScalarFieldEnum = {
   status: 'status',
   language: 'language',
   type: 'type',
+  firstCheckProgress: 'firstCheckProgress',
+  secondCheckProgress: 'secondCheckProgress',
+  isEligibleForDefense: 'isEligibleForDefense',
   subjectClassId: 'subjectClassId',
   thesisSessionId: 'thesisSessionId',
   supervisorName: 'supervisorName',
@@ -3753,7 +3756,8 @@ exports.Prisma.ExamBankScalarFieldEnum = {
   examType: 'examType',
   examMatrixId: 'examMatrixId',
   isLock: 'isLock',
-  isNote: 'isNote'
+  isNote: 'isNote',
+  isGroup: 'isGroup'
 };
 
 exports.Prisma.ExamBankQuestionScalarFieldEnum = {

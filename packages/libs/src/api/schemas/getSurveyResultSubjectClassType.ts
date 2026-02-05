@@ -11,6 +11,9 @@ export type GetSurveyResultSubjectClassType =
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetSurveyResultSubjectClassType = {
     NORMAL: 'NORMAL',
-    RETAKE: 'RETAKE',
+    LINKED: 'LINKED',
     REEXAM: 'REEXAM',
+    RETAKE: 'RETAKE',
+    STAYBACK: 'STAYBACK',
+    TRANSFER: 'TRANSFER',
 } as const

@@ -204,9 +204,10 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
         }
     }
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <skip function>
     useEffect(() => {
         resetField()
-    }, [resetField])
+    }, [exams])
 
     const { mutateAsync: createExam } = useCreateExams()
     const { mutateAsync: mergeExam } = useMergeExam()

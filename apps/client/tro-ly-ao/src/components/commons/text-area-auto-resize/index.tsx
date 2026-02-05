@@ -59,7 +59,7 @@ const AutoResizeTextArea = ({
     useEffect(() => {
         const timer = setTimeout(adjustHeight, 10)
         return () => clearTimeout(timer)
-    }, [adjustHeight])
+    }, [value, adjustHeight])
 
     return (
         <textarea

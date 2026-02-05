@@ -106,7 +106,7 @@ function DanhSachHocVien({
             //     },
             // }),
         }
-    }, [lecturer])
+    }, [lecturer, filters])
     const { data, isLoading } = useFindManySubjectClass(
         {
             where,

@@ -245,7 +245,7 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
                                         whiteSpace: 'nowrap',
                                         overflow: 'hidden',
                                         textOverflow: 'ellipsis',
-                                        flexGrow: 1,
+                                        maxWidth: 400,
                                     }}
                                 >
                                     {displayName}

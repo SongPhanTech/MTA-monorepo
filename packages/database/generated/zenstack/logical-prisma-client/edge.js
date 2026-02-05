@@ -2935,6 +2935,9 @@ exports.Prisma.ThesisProjectScalarFieldEnum = {
   status: 'status',
   language: 'language',
   type: 'type',
+  firstCheckProgress: 'firstCheckProgress',
+  secondCheckProgress: 'secondCheckProgress',
+  isEligibleForDefense: 'isEligibleForDefense',
   subjectClassId: 'subjectClassId',
   thesisSessionId: 'thesisSessionId',
   supervisorName: 'supervisorName',
@@ -3725,7 +3728,8 @@ exports.Prisma.ExamBankScalarFieldEnum = {
   examType: 'examType',
   examMatrixId: 'examMatrixId',
   isLock: 'isLock',
-  isNote: 'isNote'
+  isNote: 'isNote',
+  isGroup: 'isGroup'
 };
 
 exports.Prisma.ExamBankQuestionScalarFieldEnum = {
@@ -8353,7 +8357,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/nguyenquanghuong/Desktop/Workspace/MTA-monorepo/packages/database/generated/zenstack/logical-prisma-client",
+      "value": "/Users/swantech.01/Desktop/MTA-monorepo/packages/database/generated/zenstack/logical-prisma-client",
       "fromEnvVar": null
     },
     "config": {
@@ -8395,7 +8399,8 @@ const config = {
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null
+    "rootEnvPath": null,
+    "schemaEnvPath": "../../../.env"
   },
   "relativePath": "../../..",
   "clientVersion": "6.10.1",
