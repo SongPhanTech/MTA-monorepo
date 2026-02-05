@@ -17,7 +17,7 @@ import {
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
-import { Button, Empty, Form, message, Popconfirm, Tag, Tooltip } from 'antd'
+import { Badge, Button, Empty, Form, message, Popconfirm, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { FileEdit } from 'lucide-react'
 import { useState } from 'react'
@@ -328,28 +328,27 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx }: Props) => {
                                             KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_VA_DANH_GIA,
                                             'DUYET'
                                         ) && (
-                                            <Tooltip title={'Phê duyệt'} placement="top">
-                                                <Popconfirm
-                                                    placement="topLeft"
-                                                    title="Xác nhận phê duyệt?"
-                                                    okText="Đồng ý"
-                                                    cancelText="Hủy"
-                                                    onConfirm={(e) => {
-                                                        e?.stopPropagation()
-                                                        handleApproveCriterionAnalysisFinal(
-                                                            item.analysisCriterions?.id as string,
-                                                            item.id
-                                                        )
-                                                    }}
-                                                    onCancel={(e) => {
-                                                        e?.stopPropagation()
-                                                    }}
-                                                >
-                                                    <Button type="primary" size="small">
-                                                        Nộp tiêu chí
-                                                    </Button>
-                                                </Popconfirm>
-                                            </Tooltip>
+                                            <Popconfirm
+                                                className="ml-auto"
+                                                placement="topLeft"
+                                                title="Xác nhận phê duyệt?"
+                                                okText="Đồng ý"
+                                                cancelText="Hủy"
+                                                onConfirm={(e) => {
+                                                    e?.stopPropagation()
+                                                    handleApproveCriterionAnalysisFinal(
+                                                        item.analysisCriterions?.id as string,
+                                                        item.id
+                                                    )
+                                                }}
+                                                onCancel={(e) => {
+                                                    e?.stopPropagation()
+                                                }}
+                                            >
+                                                <Button type="primary" size="small">
+                                                    Nộp tiêu chí
+                                                </Button>
+                                            </Popconfirm>
                                         )}
                                 </div>
                             </div>
@@ -454,13 +453,13 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx }: Props) => {
                                             width: 100,
                                             align: 'center',
                                             hidden:
-                                                item.analysisCriterions?.status ===
-                                                    $Enums.EvaluationCriterionStatus.COMPLETED ||
                                                 (item.analysisCriterions?.status !==
                                                     $Enums.EvaluationCriterionStatus.SUBMITTED &&
                                                     item.analysisCriterions?.status !==
+                                                        $Enums.EvaluationCriterionStatus.REVISION &&
+                                                    item.analysisCriterions?.status !==
                                                         $Enums.EvaluationCriterionStatus
-                                                            .REVISION) ||
+                                                            .COMPLETED) ||
                                                 !can(
                                                     KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_VA_DANH_GIA,
                                                     'DUYET'
@@ -473,16 +472,27 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx }: Props) => {
                                                             'DUYET'
                                                         ) && (
                                                             <Tooltip title="Yêu cầu chỉnh sửa">
-                                                                <FileEdit
-                                                                    size={16}
-                                                                    strokeWidth={1.5}
-                                                                    className={
-                                                                        'text-blue-600 cursor-pointer'
+                                                                <Badge
+                                                                    count={
+                                                                        record
+                                                                            ?.evaluationCriterionComment
+                                                                            ?.length || 0
                                                                     }
-                                                                    onClick={() => {
-                                                                        toggleCommentRow(record.id)
-                                                                    }}
-                                                                />
+                                                                    size="small"
+                                                                >
+                                                                    <FileEdit
+                                                                        size={16}
+                                                                        strokeWidth={1.5}
+                                                                        className={
+                                                                            'text-blue-600 cursor-pointer'
+                                                                        }
+                                                                        onClick={() => {
+                                                                            toggleCommentRow(
+                                                                                record.id
+                                                                            )
+                                                                        }}
+                                                                    />
+                                                                </Badge>
                                                             </Tooltip>
                                                         )}
                                                     </div>

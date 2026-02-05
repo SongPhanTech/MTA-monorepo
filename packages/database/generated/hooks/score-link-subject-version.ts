@@ -326,8 +326,9 @@ export function useSuspenseCountScoreLinkSubjectVersion<TArgs extends Prisma.Sco
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('ScoreLinkSubjectVersion', `${endpoint}/scoreLinkSubjectVersion/count`, args, options, fetch);
 }
+import type { ScoreLinkStatus } from '../zenstack/models';
 
-export function useCheckScoreLinkSubjectVersion<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; scoreLinkSheetId?: string; subjectVersionId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckScoreLinkSubjectVersion<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; scoreLinkSheetId?: string; subjectVersionId?: string; status?: ScoreLinkStatus }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('ScoreLinkSubjectVersion', `${endpoint}/scoreLinkSubjectVersion/check`, args, options, fetch);
 }

@@ -382,7 +382,7 @@ export default function BaoCaoGiangVien() {
                     </Button> */}
                 </Flex>
             </Col>
-            <Col span={6} >
+            <Col span={6}>
                 {isFetching ? (
                     <Skeleton />
                 ) : (
@@ -403,7 +403,9 @@ export default function BaoCaoGiangVien() {
                 )}
             </Col>
 
-            <Col span={18} className="w-[calc(100%-250px)]">{isFetching ? <Skeleton /> : items}</Col>
+            <Col span={18} className="w-[calc(100%-250px)]">
+                {isFetching ? <Skeleton /> : items}
+            </Col>
         </Row>
     )
 }

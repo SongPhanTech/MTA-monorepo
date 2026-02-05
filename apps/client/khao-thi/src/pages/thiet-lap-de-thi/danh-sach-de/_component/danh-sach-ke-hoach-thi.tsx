@@ -9,6 +9,7 @@ import HtmlTruncate from '@components/commons/html-truncate'
 import dayjs from 'dayjs'
 import { cn } from '@workspace/ui/lib/utils'
 import { store } from '../index'
+import { SubjectClass } from '@workspace/db/client'
 
 const EXAM_TYPE_LABEL: Record<string, string> = {
     OfflineWritten: 'Thi viết (offline)',

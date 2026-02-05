@@ -1,5 +1,4 @@
 // @ts-nocheck
-
 import { cn } from '@lib/utils'
 import Highlight from '@tiptap/extension-highlight'
 import Mention from '@tiptap/extension-mention'
@@ -29,12 +28,6 @@ import TableCell from '@tiptap/extension-table-cell'
 import TableHeader from '@tiptap/extension-table-header'
 import TableRow from '@tiptap/extension-table-row'
 import { CustomTextStyle } from './CustomTextStyle'
-
-// import Mention from '@tiptap/extension-mention'
-// import Link from '@tiptap/extension-link'
-// import TextStyle from '@tiptap/extension-text-style'
-// import ExportDocx from '@tiptap/extension-export-docx'
-// import FontFamily from '@tiptap/font-family'
 
 type TextEditorProps = {
     value?: string
@@ -164,9 +157,10 @@ export function RichTextEditor({
         editorProps: {
             attributes: {
                 class: cn(
-                    'min-h-[150px] cursor-text rounded-b-md p-2 ring-offset-background focus-within:outline-none focus-within:ring-1 focus-within:ring-primary focus-within:ring-offset-0.2 ',
+                    'min-h-[150px] cursor-text rounded-b-md p-2 ring-offset-background focus-within:outline-none focus-within:ring-1 focus-within:ring-primary',
                     className
                 ),
+                spellcheck: false,
             },
             handlePaste: (view, event, slice) => {
                 const items = event.clipboardData?.items
@@ -288,13 +282,10 @@ export function RichTextEditor({
             message.error('Editor is not available or destroyed')
             return
         }
-        const placeholderId = `image-${Date.now()}`
-        const placeholder = document.createElement('div')
-        placeholder.textContent = 'Uploading image...'
-        placeholder.id = placeholderId
-        editor.view.dom.parentNode?.appendChild(placeholder)
 
         try {
+            message.loading({ content: 'Đang tải ảnh...', duration: 0 })
+
             // Generate presigned URL
             const extension = file.name.split('.').pop() || 'png'
             const resPresignedUrl = await generatePresignedUrl({
@@ -319,9 +310,11 @@ export function RichTextEditor({
                     title: file.name,
                 })
                 .run()
-        } finally {
-            // Remove placeholder
-            document.getElementById(placeholderId)?.remove()
+
+            message.destroy()
+        } catch (error) {
+            message.destroy()
+            throw error
         }
     }
     useEffect(() => {
@@ -333,9 +326,7 @@ export function RichTextEditor({
     return (
         <div className="border rounded-md">
             <div
-                className={
-                    stickyToolbar ? 'sticky top-0 z-auto bg-white border-b rounded-t-md' : ''
-                }
+                className={stickyToolbar ? 'sticky top-0 z-10 bg-white border-b rounded-t-md' : ''}
             >
                 <TextEditorMenuBar editor={editor} id={id} editable={editable} />
             </div>
@@ -343,29 +334,3 @@ export function RichTextEditor({
         </div>
     )
 }
-// function handleExportDocx(){
-//     editor
-//     ?.chain()
-//     .exportDocx()
-//     .run()
-
-// }
-// function handleExportDocxBuffer() {
-// Call your editor's exportDocx method
-//     Editor
-//     //   .chain()
-//       // Method call with some overrides
-//       .exportDocx({
-//         // Override the onCompleteExport callback to handle the override exported type
-//         onCompleteExport: (result: Buffer) => {
-//           // Handle the exported file in a buffer format
-//         },
-//         // Override the export type
-//         exportType: 'Buffer',
-//       })
-//       .run()
-//   }
-
-//   // Call those functions at any point in your application
-// //   handleExportDocx()
-//   handleExportDocxBuffer()

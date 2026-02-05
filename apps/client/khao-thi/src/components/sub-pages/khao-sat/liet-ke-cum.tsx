@@ -18,7 +18,13 @@ export interface CriteriaItem {
     answers: GetSurveyStatistics200QuestionsItemAnswersItem[]
 }
 
-function ClusterSurveyEssay({ selectedId ,lecturerId}: { selectedId?: string,lecturerId?:string }) {
+function ClusterSurveyEssay({
+    selectedId,
+    lecturerId,
+}: {
+    selectedId?: string
+    lecturerId?: string
+}) {
     const [surveyQuestionId, setSurveyQuestionId] = useState(null)
     const { data: dataQuestion = [] } = useFindManySurveyQuestion(
         {
@@ -50,8 +56,8 @@ function ClusterSurveyEssay({ selectedId ,lecturerId}: { selectedId?: string,lec
                 surveyQuestionId: surveyQuestionId || '',
                 surveySession: {
                     survey: {
-                            clusterSurveyId: selectedId,
-                            lectureId: lecturerId,
+                        clusterSurveyId: selectedId,
+                        lectureId: lecturerId,
                     },
                 },
             },

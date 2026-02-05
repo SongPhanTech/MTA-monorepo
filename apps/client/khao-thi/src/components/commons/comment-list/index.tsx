@@ -1,6 +1,6 @@
 import { formatDate } from '@lib/utils'
 import type { EvaluationCriterionComment } from '@workspace/db'
-import { Clock, MessageSquare } from 'lucide-react'
+import { Clock } from 'lucide-react'
 
 interface CommentListProps {
     comments: (EvaluationCriterionComment & {
@@ -26,22 +26,6 @@ const CommentList = ({ comments }: CommentListProps) => {
 
     return (
         <div className="relative">
-            <div className="bg-white border-b border-gray-200 px-4 py-3">
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
-                            <MessageSquare className="w-4 h-4 text-white" />
-                        </div>
-                        <h3 className="font-semibold text-gray-900 text-sm">Phản hồi</h3>
-                    </div>
-                    <div className="bg-blue-50 border border-blue-200 px-3 py-1 rounded">
-                        <span className="text-blue-600 font-semibold text-xs">
-                            {comments.length} phản hồi
-                        </span>
-                    </div>
-                </div>
-            </div>
-
             <div className="p-2 space-y-3 max-h-[300px] overflow-y-auto">
                 {comments.map((comment) => (
                     <div key={comment.id} className="bg-white rounded-lg border border-gray-200">

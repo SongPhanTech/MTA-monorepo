@@ -171,6 +171,12 @@ const SCORE_CONVERT_STATUS = {
     PARTIAL: 'Duyệt một phần',
 }
 
+const SCORE_LINK_STATUS = {
+    PENDING: 'Chờ duyệt',
+    APPROVED: 'Đã duyệt',
+    REJECTED: 'Không được duyệt',
+}
+
 export {
     DEFAULT_PAGINATE_SIZE,
     MAX_INPUT_LENGTH,
@@ -188,6 +194,7 @@ export {
     CUSTOM_VI_LOCALE,
     TRAINING_OBJECT_TYPE,
     SCORE_CONVERT_STATUS,
+    SCORE_LINK_STATUS,
 }
 
 export const examBanReason = [

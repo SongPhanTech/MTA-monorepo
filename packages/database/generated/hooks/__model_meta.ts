@@ -21251,6 +21251,11 @@ const metadata: ModelMeta = {
                     type: "Boolean",
                     isOptional: true,
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, isGroup: {
+                    name: "isGroup",
+                    type: "Boolean",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 },
             }, uniqueConstraints: {
                 id: {
@@ -23563,10 +23568,6 @@ const metadata: ModelMeta = {
                     name: "decision",
                     type: "String",
                     isOptional: true,
-                }, status: {
-                    name: "status",
-                    type: "ScoreLinkStatus",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, fixedClass: {
                     name: "fixedClass",
                     type: "FixedClass",
@@ -23675,6 +23676,10 @@ const metadata: ModelMeta = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'subjectVersion',
+                }, status: {
+                    name: "status",
+                    type: "ScoreLinkStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, scoreLinkStudents: {
                     name: "scoreLinkStudents",
                     type: "ScoreLinkStudent",
