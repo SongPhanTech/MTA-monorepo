@@ -232,13 +232,16 @@ const ReviewCriteriaEvaluationSubpage = ({
                                                                             .PENDING &&
                                                                     status !==
                                                                         $Enums.EvaluationStatus
-                                                                            .COMPLETED &&
-                                                                    status !==
-                                                                        $Enums.EvaluationStatus
                                                                             .APPROVED && (
                                                                         <div className="flex gap-2">
                                                                             <Badge
-                                                                                count={item.evaluationCriterion?.evaluationCriterionComments?.length || 0}
+                                                                                count={
+                                                                                    item
+                                                                                        .evaluationCriterion
+                                                                                        ?.evaluationCriterionComments
+                                                                                        ?.length ||
+                                                                                    0
+                                                                                }
                                                                                 size="small"
                                                                             >
                                                                                 <Button
@@ -246,11 +249,31 @@ const ReviewCriteriaEvaluationSubpage = ({
                                                                                     size="small"
                                                                                     className="bg-yellow-400"
                                                                                     onClick={() => {
-                                                                                        const id = item.evaluationCriterion?.id
-                                                                                        const isOpen = showCommentsCriterionId === id
-                                                                                        setShowCommentsCriterionId(isOpen ? null : id || null)
-                                                                                        if (!isOpen && id) {
-                                                                                            setOpenCollapseKeys((prev) => ({ ...prev, [item.id]: true }))
+                                                                                        const id =
+                                                                                            item
+                                                                                                .evaluationCriterion
+                                                                                                ?.id
+                                                                                        const isOpen =
+                                                                                            showCommentsCriterionId ===
+                                                                                            id
+                                                                                        setShowCommentsCriterionId(
+                                                                                            isOpen
+                                                                                                ? null
+                                                                                                : id ||
+                                                                                                      null
+                                                                                        )
+                                                                                        if (
+                                                                                            !isOpen &&
+                                                                                            id
+                                                                                        ) {
+                                                                                            setOpenCollapseKeys(
+                                                                                                (
+                                                                                                    prev
+                                                                                                ) => ({
+                                                                                                    ...prev,
+                                                                                                    [item.id]: true,
+                                                                                                })
+                                                                                            )
                                                                                         }
                                                                                     }}
                                                                                 >
@@ -414,7 +437,9 @@ const ReviewCriteriaEvaluationSubpage = ({
                                                 bordered={true}
                                                 expandIconPosition="end"
                                                 className="bg-transparent mb-6"
-                                                activeKey={openCollapseKeys[item.id] ? [item.id] : []}
+                                                activeKey={
+                                                    openCollapseKeys[item.id] ? [item.id] : []
+                                                }
                                                 onChange={(keys) =>
                                                     setOpenCollapseKeys((prev) => ({
                                                         ...prev,
