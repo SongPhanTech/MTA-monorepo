@@ -10,12 +10,14 @@ import { useCreateNotification, useFindUniqueNotification } from '@workspace/db/
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { Col, Form, Input, message, Radio } from 'antd'
 import dayjs from 'dayjs'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import type { DocumentFile } from '@workspace/db/client'
 export type PutNotification = Notification & {
     attachments?: UploadedFileItem[]
 }
 const PutNotificationModal = () => {
+    const [document, setDocument] = useState<DocumentFile[]>([])
     const [form] = Form.useForm<PutNotification>()
     const {
         isOpen,
@@ -136,6 +138,7 @@ const PutNotificationModal = () => {
                     notificationId: id || '',
                 })),
             })
+            setDocument(data.attachments)
         } else {
             form.setFieldsValue({
                 active: true,
@@ -182,7 +185,7 @@ const PutNotificationModal = () => {
                 <FormItem form={form} name="attachments" label="Tài liệu đính kèm">
                     <DocumentPaths
                         form={form}
-                        data={data?.attachments || []}
+                        data={document}
                         titleForm="attachments"
                         relationId={id || ''}
                         relationType="notificationId"
