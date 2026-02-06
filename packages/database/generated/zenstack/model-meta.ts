@@ -9679,6 +9679,10 @@ const metadata: ModelMeta = {
                     name: "scoreToTakeExam",
                     type: "Float",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 5 }] }],
+                }, examScoreToPass: {
+                    name: "examScoreToPass",
+                    type: "Float",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 5 }] }],
                 }, scoreToPass: {
                     name: "scoreToPass",
                     type: "Float",

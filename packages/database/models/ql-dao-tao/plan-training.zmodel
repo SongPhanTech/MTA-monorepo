@@ -424,6 +424,7 @@ model TrainingCourse extends Base {
   coef_3                     Float                      @default(0.6) // Hệ số 3
 
   scoreToTakeExam            Float                      @default(5) // Điểm tối thiểu để được thi (điểm liệt)
+  examScoreToPass            Float                      @default(5) // Điểm thi tối thiểu
   scoreToPass                Float                      @default(5) // Điểm tối thiểu để qua môn
   scoreToPassConditional     Float                      @default(5) // Điểm tối thiểu để qua môn điều kiện (5 đối với QS, =scoreToPass đối với DS)
 

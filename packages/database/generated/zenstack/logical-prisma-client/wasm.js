@@ -1764,6 +1764,7 @@ exports.Prisma.TrainingCourseScalarFieldEnum = {
   coef_2: 'coef_2',
   coef_3: 'coef_3',
   scoreToTakeExam: 'scoreToTakeExam',
+  examScoreToPass: 'examScoreToPass',
   scoreToPass: 'scoreToPass',
   scoreToPassConditional: 'scoreToPassConditional',
   scoreToTakeGraduation: 'scoreToTakeGraduation',

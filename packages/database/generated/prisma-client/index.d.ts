@@ -143946,6 +143946,7 @@ export namespace Prisma {
     coef_2: number | null
     coef_3: number | null
     scoreToTakeExam: number | null
+    examScoreToPass: number | null
     scoreToPass: number | null
     scoreToPassConditional: number | null
     scoreToTakeGraduation: number | null
@@ -143966,6 +143967,7 @@ export namespace Prisma {
     coef_2: number | null
     coef_3: number | null
     scoreToTakeExam: number | null
+    examScoreToPass: number | null
     scoreToPass: number | null
     scoreToPassConditional: number | null
     scoreToTakeGraduation: number | null
@@ -144007,6 +144009,7 @@ export namespace Prisma {
     coef_2: number | null
     coef_3: number | null
     scoreToTakeExam: number | null
+    examScoreToPass: number | null
     scoreToPass: number | null
     scoreToPassConditional: number | null
     scoreToTakeGraduation: number | null
@@ -144049,6 +144052,7 @@ export namespace Prisma {
     coef_2: number | null
     coef_3: number | null
     scoreToTakeExam: number | null
+    examScoreToPass: number | null
     scoreToPass: number | null
     scoreToPassConditional: number | null
     scoreToTakeGraduation: number | null
@@ -144091,6 +144095,7 @@ export namespace Prisma {
     coef_2: number
     coef_3: number
     scoreToTakeExam: number
+    examScoreToPass: number
     scoreToPass: number
     scoreToPassConditional: number
     scoreToTakeGraduation: number
@@ -144114,6 +144119,7 @@ export namespace Prisma {
     coef_2?: true
     coef_3?: true
     scoreToTakeExam?: true
+    examScoreToPass?: true
     scoreToPass?: true
     scoreToPassConditional?: true
     scoreToTakeGraduation?: true
@@ -144134,6 +144140,7 @@ export namespace Prisma {
     coef_2?: true
     coef_3?: true
     scoreToTakeExam?: true
+    examScoreToPass?: true
     scoreToPass?: true
     scoreToPassConditional?: true
     scoreToTakeGraduation?: true
@@ -144175,6 +144182,7 @@ export namespace Prisma {
     coef_2?: true
     coef_3?: true
     scoreToTakeExam?: true
+    examScoreToPass?: true
     scoreToPass?: true
     scoreToPassConditional?: true
     scoreToTakeGraduation?: true
@@ -144217,6 +144225,7 @@ export namespace Prisma {
     coef_2?: true
     coef_3?: true
     scoreToTakeExam?: true
+    examScoreToPass?: true
     scoreToPass?: true
     scoreToPassConditional?: true
     scoreToTakeGraduation?: true
@@ -144259,6 +144268,7 @@ export namespace Prisma {
     coef_2?: true
     coef_3?: true
     scoreToTakeExam?: true
+    examScoreToPass?: true
     scoreToPass?: true
     scoreToPassConditional?: true
     scoreToTakeGraduation?: true
@@ -144388,6 +144398,7 @@ export namespace Prisma {
     coef_2: number
     coef_3: number
     scoreToTakeExam: number
+    examScoreToPass: number
     scoreToPass: number
     scoreToPassConditional: number
     scoreToTakeGraduation: number
@@ -144449,6 +144460,7 @@ export namespace Prisma {
     coef_2?: boolean
     coef_3?: boolean
     scoreToTakeExam?: boolean
+    examScoreToPass?: boolean
     scoreToPass?: boolean
     scoreToPassConditional?: boolean
     scoreToTakeGraduation?: boolean
@@ -144510,6 +144522,7 @@ export namespace Prisma {
     coef_2?: boolean
     coef_3?: boolean
     scoreToTakeExam?: boolean
+    examScoreToPass?: boolean
     scoreToPass?: boolean
     scoreToPassConditional?: boolean
     scoreToTakeGraduation?: boolean
@@ -144555,6 +144568,7 @@ export namespace Prisma {
     coef_2?: boolean
     coef_3?: boolean
     scoreToTakeExam?: boolean
+    examScoreToPass?: boolean
     scoreToPass?: boolean
     scoreToPassConditional?: boolean
     scoreToTakeGraduation?: boolean
@@ -144600,6 +144614,7 @@ export namespace Prisma {
     coef_2?: boolean
     coef_3?: boolean
     scoreToTakeExam?: boolean
+    examScoreToPass?: boolean
     scoreToPass?: boolean
     scoreToPassConditional?: boolean
     scoreToTakeGraduation?: boolean
@@ -144610,7 +144625,7 @@ export namespace Prisma {
     trainingObjectTypeId?: boolean
   }
 
-  export type TrainingCourseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "semesterStartId" | "startYear" | "endYear" | "academicYear" | "maxTrainingTime" | "admissionQuota" | "admittedStudent" | "enrolledStudent" | "admissionStartDate" | "admissionEndDate" | "admissionDecision" | "studentRecognitionDecision" | "regulation" | "trainingLanguageId" | "isGeneralInfoLocked" | "isRegulationLocked" | "isScoreConfigLocked" | "baseScore" | "coef_1" | "coef_2" | "coef_3" | "scoreToTakeExam" | "scoreToPass" | "scoreToPassConditional" | "scoreToTakeGraduation" | "scoreToPassGraduation" | "maxReExamScore" | "reduceReExamScore" | "scoreToRetain" | "trainingObjectTypeId", ExtArgs["result"]["trainingCourse"]>
+  export type TrainingCourseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "semesterStartId" | "startYear" | "endYear" | "academicYear" | "maxTrainingTime" | "admissionQuota" | "admittedStudent" | "enrolledStudent" | "admissionStartDate" | "admissionEndDate" | "admissionDecision" | "studentRecognitionDecision" | "regulation" | "trainingLanguageId" | "isGeneralInfoLocked" | "isRegulationLocked" | "isScoreConfigLocked" | "baseScore" | "coef_1" | "coef_2" | "coef_3" | "scoreToTakeExam" | "examScoreToPass" | "scoreToPass" | "scoreToPassConditional" | "scoreToTakeGraduation" | "scoreToPassGraduation" | "maxReExamScore" | "reduceReExamScore" | "scoreToRetain" | "trainingObjectTypeId", ExtArgs["result"]["trainingCourse"]>
   export type TrainingCourseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     semesterStart?: boolean | SemesterDefaultArgs<ExtArgs>
     trainingLanguage?: boolean | TrainingCourse$trainingLanguageArgs<ExtArgs>
@@ -144730,6 +144745,7 @@ export namespace Prisma {
       coef_2: number
       coef_3: number
       scoreToTakeExam: number
+      examScoreToPass: number
       scoreToPass: number
       scoreToPassConditional: number
       scoreToTakeGraduation: number
@@ -145219,6 +145235,7 @@ export namespace Prisma {
     readonly coef_2: FieldRef<"TrainingCourse", 'Float'>
     readonly coef_3: FieldRef<"TrainingCourse", 'Float'>
     readonly scoreToTakeExam: FieldRef<"TrainingCourse", 'Float'>
+    readonly examScoreToPass: FieldRef<"TrainingCourse", 'Float'>
     readonly scoreToPass: FieldRef<"TrainingCourse", 'Float'>
     readonly scoreToPassConditional: FieldRef<"TrainingCourse", 'Float'>
     readonly scoreToTakeGraduation: FieldRef<"TrainingCourse", 'Float'>
@@ -370108,6 +370125,7 @@ export namespace Prisma {
     coef_2: 'coef_2',
     coef_3: 'coef_3',
     scoreToTakeExam: 'scoreToTakeExam',
+    examScoreToPass: 'examScoreToPass',
     scoreToPass: 'scoreToPass',
     scoreToPassConditional: 'scoreToPassConditional',
     scoreToTakeGraduation: 'scoreToTakeGraduation',
@@ -388454,6 +388472,7 @@ export namespace Prisma {
     coef_2?: FloatFilter<"TrainingCourse"> | number
     coef_3?: FloatFilter<"TrainingCourse"> | number
     scoreToTakeExam?: FloatFilter<"TrainingCourse"> | number
+    examScoreToPass?: FloatFilter<"TrainingCourse"> | number
     scoreToPass?: FloatFilter<"TrainingCourse"> | number
     scoreToPassConditional?: FloatFilter<"TrainingCourse"> | number
     scoreToTakeGraduation?: FloatFilter<"TrainingCourse"> | number
@@ -388514,6 +388533,7 @@ export namespace Prisma {
     coef_2?: SortOrder
     coef_3?: SortOrder
     scoreToTakeExam?: SortOrder
+    examScoreToPass?: SortOrder
     scoreToPass?: SortOrder
     scoreToPassConditional?: SortOrder
     scoreToTakeGraduation?: SortOrder
@@ -388578,6 +388598,7 @@ export namespace Prisma {
     coef_2?: FloatFilter<"TrainingCourse"> | number
     coef_3?: FloatFilter<"TrainingCourse"> | number
     scoreToTakeExam?: FloatFilter<"TrainingCourse"> | number
+    examScoreToPass?: FloatFilter<"TrainingCourse"> | number
     scoreToPass?: FloatFilter<"TrainingCourse"> | number
     scoreToPassConditional?: FloatFilter<"TrainingCourse"> | number
     scoreToTakeGraduation?: FloatFilter<"TrainingCourse"> | number
@@ -388638,6 +388659,7 @@ export namespace Prisma {
     coef_2?: SortOrder
     coef_3?: SortOrder
     scoreToTakeExam?: SortOrder
+    examScoreToPass?: SortOrder
     scoreToPass?: SortOrder
     scoreToPassConditional?: SortOrder
     scoreToTakeGraduation?: SortOrder
@@ -388688,6 +388710,7 @@ export namespace Prisma {
     coef_2?: FloatWithAggregatesFilter<"TrainingCourse"> | number
     coef_3?: FloatWithAggregatesFilter<"TrainingCourse"> | number
     scoreToTakeExam?: FloatWithAggregatesFilter<"TrainingCourse"> | number
+    examScoreToPass?: FloatWithAggregatesFilter<"TrainingCourse"> | number
     scoreToPass?: FloatWithAggregatesFilter<"TrainingCourse"> | number
     scoreToPassConditional?: FloatWithAggregatesFilter<"TrainingCourse"> | number
     scoreToTakeGraduation?: FloatWithAggregatesFilter<"TrainingCourse"> | number
@@ -419582,6 +419605,7 @@ export namespace Prisma {
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
@@ -419641,6 +419665,7 @@ export namespace Prisma {
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
@@ -419696,6 +419721,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -419755,6 +419781,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -419812,6 +419839,7 @@ export namespace Prisma {
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
@@ -419852,6 +419880,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -419893,6 +419922,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -449375,6 +449405,7 @@ export namespace Prisma {
     coef_2?: SortOrder
     coef_3?: SortOrder
     scoreToTakeExam?: SortOrder
+    examScoreToPass?: SortOrder
     scoreToPass?: SortOrder
     scoreToPassConditional?: SortOrder
     scoreToTakeGraduation?: SortOrder
@@ -449396,6 +449427,7 @@ export namespace Prisma {
     coef_2?: SortOrder
     coef_3?: SortOrder
     scoreToTakeExam?: SortOrder
+    examScoreToPass?: SortOrder
     scoreToPass?: SortOrder
     scoreToPassConditional?: SortOrder
     scoreToTakeGraduation?: SortOrder
@@ -449437,6 +449469,7 @@ export namespace Prisma {
     coef_2?: SortOrder
     coef_3?: SortOrder
     scoreToTakeExam?: SortOrder
+    examScoreToPass?: SortOrder
     scoreToPass?: SortOrder
     scoreToPassConditional?: SortOrder
     scoreToTakeGraduation?: SortOrder
@@ -449479,6 +449512,7 @@ export namespace Prisma {
     coef_2?: SortOrder
     coef_3?: SortOrder
     scoreToTakeExam?: SortOrder
+    examScoreToPass?: SortOrder
     scoreToPass?: SortOrder
     scoreToPassConditional?: SortOrder
     scoreToTakeGraduation?: SortOrder
@@ -449500,6 +449534,7 @@ export namespace Prisma {
     coef_2?: SortOrder
     coef_3?: SortOrder
     scoreToTakeExam?: SortOrder
+    examScoreToPass?: SortOrder
     scoreToPass?: SortOrder
     scoreToPassConditional?: SortOrder
     scoreToTakeGraduation?: SortOrder
@@ -540624,6 +540659,7 @@ export namespace Prisma {
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
@@ -540682,6 +540718,7 @@ export namespace Prisma {
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
@@ -540930,6 +540967,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -540988,6 +541026,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -547183,6 +547222,7 @@ export namespace Prisma {
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
@@ -547240,6 +547280,7 @@ export namespace Prisma {
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
@@ -547985,6 +548026,7 @@ export namespace Prisma {
     coef_2?: FloatFilter<"TrainingCourse"> | number
     coef_3?: FloatFilter<"TrainingCourse"> | number
     scoreToTakeExam?: FloatFilter<"TrainingCourse"> | number
+    examScoreToPass?: FloatFilter<"TrainingCourse"> | number
     scoreToPass?: FloatFilter<"TrainingCourse"> | number
     scoreToPassConditional?: FloatFilter<"TrainingCourse"> | number
     scoreToTakeGraduation?: FloatFilter<"TrainingCourse"> | number
@@ -548511,6 +548553,7 @@ export namespace Prisma {
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
@@ -548568,6 +548611,7 @@ export namespace Prisma {
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
@@ -550441,6 +550485,7 @@ export namespace Prisma {
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
@@ -550499,6 +550544,7 @@ export namespace Prisma {
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
@@ -550569,6 +550615,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -550627,6 +550674,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -550975,6 +551023,7 @@ export namespace Prisma {
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
@@ -551033,6 +551082,7 @@ export namespace Prisma {
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
@@ -552112,6 +552162,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -552170,6 +552221,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -553417,6 +553469,7 @@ export namespace Prisma {
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
@@ -553475,6 +553528,7 @@ export namespace Prisma {
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
@@ -554353,6 +554407,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -554411,6 +554466,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -559182,6 +559238,7 @@ export namespace Prisma {
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
@@ -559240,6 +559297,7 @@ export namespace Prisma {
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
@@ -565424,6 +565482,7 @@ export namespace Prisma {
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
@@ -565482,6 +565541,7 @@ export namespace Prisma {
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
@@ -572513,6 +572573,7 @@ export namespace Prisma {
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
@@ -572571,6 +572632,7 @@ export namespace Prisma {
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
@@ -572641,6 +572703,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -572699,6 +572762,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -577734,6 +577798,7 @@ export namespace Prisma {
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
@@ -577792,6 +577857,7 @@ export namespace Prisma {
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
@@ -578248,6 +578314,7 @@ export namespace Prisma {
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
@@ -578306,6 +578373,7 @@ export namespace Prisma {
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
@@ -579494,6 +579562,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -579552,6 +579621,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -580799,6 +580869,7 @@ export namespace Prisma {
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
@@ -580857,6 +580928,7 @@ export namespace Prisma {
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
@@ -581013,6 +581085,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -581071,6 +581144,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -587705,6 +587779,7 @@ export namespace Prisma {
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
@@ -587763,6 +587838,7 @@ export namespace Prisma {
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
@@ -588022,6 +588098,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -588080,6 +588157,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -598750,6 +598828,7 @@ export namespace Prisma {
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
@@ -598808,6 +598887,7 @@ export namespace Prisma {
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
@@ -610170,6 +610250,7 @@ export namespace Prisma {
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
@@ -610228,6 +610309,7 @@ export namespace Prisma {
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
@@ -610384,6 +610466,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -610442,6 +610525,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -611363,6 +611447,7 @@ export namespace Prisma {
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
@@ -611421,6 +611506,7 @@ export namespace Prisma {
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
@@ -611611,6 +611697,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -611669,6 +611756,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -614776,6 +614864,7 @@ export namespace Prisma {
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
@@ -614834,6 +614923,7 @@ export namespace Prisma {
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
@@ -615350,6 +615440,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -615408,6 +615499,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -619635,6 +619727,7 @@ export namespace Prisma {
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
@@ -619693,6 +619786,7 @@ export namespace Prisma {
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
@@ -619800,6 +619894,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -619858,6 +619953,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -654014,6 +654110,7 @@ export namespace Prisma {
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
@@ -654412,6 +654509,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -654469,6 +654567,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -654525,6 +654624,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -655206,6 +655306,7 @@ export namespace Prisma {
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
@@ -655285,6 +655386,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -655342,6 +655444,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -655398,6 +655501,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -660715,6 +660819,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -660773,6 +660878,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -660829,6 +660935,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -662562,6 +662669,7 @@ export namespace Prisma {
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
@@ -662926,6 +663034,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -662984,6 +663093,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -663040,6 +663150,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -670126,6 +670237,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -670184,6 +670296,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -670240,6 +670353,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -677367,6 +677481,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -677425,6 +677540,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -677481,6 +677597,7 @@ export namespace Prisma {
     coef_2?: FloatFieldUpdateOperationsInput | number
     coef_3?: FloatFieldUpdateOperationsInput | number
     scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPass?: FloatFieldUpdateOperationsInput | number
     scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
