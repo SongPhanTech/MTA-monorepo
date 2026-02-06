@@ -1,5 +1,5 @@
-import React from 'react'
-import { Tag, TagProps } from 'antd'
+import { Tag, type TagProps } from 'antd'
+import type React from 'react'
 
 type TagVariant = 'solid' | 'filled' | 'outlined'
 type TagType = 'success' | 'error' | 'warning'

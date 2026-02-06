@@ -107,7 +107,12 @@ const PutDisciplinaryWarning = () => {
     const { mutateAsync: createDisciplinaryWarning } = useCreateDisciplinaryWarning()
     const { mutateAsync: updateDisciplinaryWarning } = useUpdateDisciplinaryWarning()
     const { mutateAsync: updateStudent } = useUpdateStudent()
-    async function onOk({ reasonIds, trainingCourseId, fixedClassId, ...rest }: PutDisciplinaryWarningFromType) {
+    async function onOk({
+        reasonIds,
+        trainingCourseId,
+        fixedClassId,
+        ...rest
+    }: PutDisciplinaryWarningFromType) {
         try {
             showSpinner()
             const data = {

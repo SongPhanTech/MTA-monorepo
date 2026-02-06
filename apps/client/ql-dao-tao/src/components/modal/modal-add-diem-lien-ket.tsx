@@ -6,10 +6,10 @@ import Table from '@components/commons/table'
 import useSpinner from '@hooks/spinner'
 import {
     $Enums,
-    DocumentFile,
-    ScoreLinkSheet,
-    ScoreLinkStudent,
-    ScoreLinkSubjectVersion,
+    type DocumentFile,
+    type ScoreLinkSheet,
+    type ScoreLinkStudent,
+    type ScoreLinkSubjectVersion,
 } from '@workspace/db'
 import {
     useCreateScoreLinkSheet,
@@ -25,7 +25,7 @@ import {
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import { PutFormModal, TreeNodeType, useTrainingObjectTypeStore } from '@workspace/ui'
+import { PutFormModal, type TreeNodeType, useTrainingObjectTypeStore } from '@workspace/ui'
 import {
     Button,
     Col,

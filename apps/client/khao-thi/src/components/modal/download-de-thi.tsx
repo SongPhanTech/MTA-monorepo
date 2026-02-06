@@ -61,22 +61,23 @@ const PrintExamBank = () => {
         }
     )
 
-     const dataRender = useMemo(() => {
-          const listQuestionChoice = data?.questions.filter((q) => q?.question?.type !== 'ESSAY')||[]
-            const listQuestionEssay = data?.questions.filter((q) => q?.question?.type === 'ESSAY')||[]
-          if (data?.isGroup) {
-                return {
-                    ...data,
-                    questions: [...listQuestionChoice, ...listQuestionEssay],
-                    listQuestionChoice: listQuestionChoice,
-                    listQuestionEssay: listQuestionEssay,
-                }
-            }
+    const dataRender = useMemo(() => {
+        const listQuestionChoice =
+            data?.questions.filter((q) => q?.question?.type !== 'ESSAY') || []
+        const listQuestionEssay = data?.questions.filter((q) => q?.question?.type === 'ESSAY') || []
+        if (data?.isGroup) {
             return {
                 ...data,
+                questions: [...listQuestionChoice, ...listQuestionEssay],
                 listQuestionChoice: listQuestionChoice,
                 listQuestionEssay: listQuestionEssay,
             }
+        }
+        return {
+            ...data,
+            listQuestionChoice: listQuestionChoice,
+            listQuestionEssay: listQuestionEssay,
+        }
     }, [data])
 
     const subjectClassName = data?.subjectClass?.name || ''
@@ -320,7 +321,7 @@ const PrintExamBank = () => {
 
                     {/* Questions */}
                     <div style={{ marginBottom: '30px' }}>
-                        {dataRender.isGroup ?  (
+                        {dataRender.isGroup ? (
                             <div>
                                 <div className="font-semibold mb-2">I. Phần trắc nghiệm</div>
                                 {dataRender?.listQuestionChoice?.map((q: any, qIndex: number) => (
@@ -341,7 +342,7 @@ const PrintExamBank = () => {
                                     </div>
                                 ))}
                                 <div className="font-semibold mb-2">II. Phần tự luận</div>
-                                 {dataRender?.listQuestionEssay?.map((q: any, qIndex: number) => (
+                                {dataRender?.listQuestionEssay?.map((q: any, qIndex: number) => (
                                     <div key={q?.id} style={{ marginBottom: '15px' }}>
                                         <div>
                                             <strong>
@@ -359,24 +360,27 @@ const PrintExamBank = () => {
                                     </div>
                                 ))}
                             </div>
-                        ) :<div>
-                              {data?.questions?.map((q, index: number) => (
-                            <div key={q?.id} style={{ marginBottom: '15px' }}>
-                                <div>
-                                    <strong>
-                                        Câu {q?.order || index + 1}(
-                                        {Number(q?.question?.point || 0).toFixed(1)} điểm):
-                                    </strong>{' '}
-                                    <span
-                                        dangerouslySetInnerHTML={{
-                                            __html: renderWithMath(q?.question?.content || ''),
-                                        }}
-                                    />
-                                </div>
+                        ) : (
+                            <div>
+                                {data?.questions?.map((q, index: number) => (
+                                    <div key={q?.id} style={{ marginBottom: '15px' }}>
+                                        <div>
+                                            <strong>
+                                                Câu {q?.order || index + 1}(
+                                                {Number(q?.question?.point || 0).toFixed(1)} điểm):
+                                            </strong>{' '}
+                                            <span
+                                                dangerouslySetInnerHTML={{
+                                                    __html: renderWithMath(
+                                                        q?.question?.content || ''
+                                                    ),
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
-                        ))}
-                        </div>}
-                      
+                        )}
                     </div>
 
                     {/* Footer */}

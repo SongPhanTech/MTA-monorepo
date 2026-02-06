@@ -364,7 +364,7 @@ const PrintBatchExamBank = () => {
                                     </div>
                                 ))}
                                 <div className="font-semibold mb-2">II. Phần tự luận</div>
-                                 {exam?.listQuestionEssay?.map((q: any, qIndex: number) => (
+                                {exam?.listQuestionEssay?.map((q: any, qIndex: number) => (
                                     <div key={q?.id} style={{ marginBottom: '15px' }}>
                                         <div>
                                             <strong>

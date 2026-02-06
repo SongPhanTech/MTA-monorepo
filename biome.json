@@ -17,9 +17,15 @@
             "!**/packages/libs/src/api/**/*",
             "!**/.env",
             "!**/.env.*",
-            "!**/public"
+            "!**/public",
+            "packages/libs/src/api/**/*"
         ],
-        "experimentalScannerIgnores": ["lodash", "dist", ".next", "out"]
+        "experimentalScannerIgnores": [
+            "lodash",
+            "dist",
+            ".next",
+            "out"
+        ]
     },
     "vcs": {
         "enabled": true,

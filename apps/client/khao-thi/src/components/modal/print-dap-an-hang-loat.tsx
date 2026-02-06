@@ -110,8 +110,7 @@ const PrintBatchExplanation = () => {
         }
     )
 
-
-     const dataRender = useMemo(() => {
+    const dataRender = useMemo(() => {
         if (exams?.length <= 0) return []
         const result = exams.map((i) => {
             const listQuestionChoice = i?.questions.filter((q) => q?.question?.type !== 'ESSAY')

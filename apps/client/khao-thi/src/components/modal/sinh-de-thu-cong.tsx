@@ -14,6 +14,7 @@ import {
     useFindUniqueExamBank,
     useUpdateExamBank,
 } from '@workspace/db/hooks'
+import { sqlTransaction } from '@workspace/libs/api/model'
 import { Button, Checkbox, Col, DatePicker, Form, Input, message, Row, Steps } from 'antd'
 import dayjs from 'dayjs'
 import { GripVertical } from 'lucide-react'
@@ -22,7 +23,7 @@ import { DndProvider, useDrag, useDrop } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { store } from '@/pages/thiet-lap-de-thi/danh-sach-de'
-import { sqlTransaction } from '@workspace/libs/api/model'
+
 type PutMaTranDeInputType = ExamBank & {
     questions: string[]
     subjectVersionId: string
@@ -212,13 +213,12 @@ const SinhDeThuCongModal = () => {
                         },
                     },
                 ])
-                if(res?.status===200){
+                if (res?.status === 200) {
                     message.success('Cập nhật đề thành công!')
-                }else {
+                } else {
                     message.error('Cập nhật đề thất bại!')
                     return
                 }
-             
             } else {
                 await create({
                     data: {
@@ -239,7 +239,7 @@ const SinhDeThuCongModal = () => {
                         },
                     },
                 })
-                 message.success('Tạo đề thành công!')
+                message.success('Tạo đề thành công!')
             }
 
             queryClient.invalidateQueries({
