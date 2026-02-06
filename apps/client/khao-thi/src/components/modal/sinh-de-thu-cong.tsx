@@ -22,7 +22,7 @@ import { DndProvider, useDrag, useDrop } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { store } from '@/pages/thiet-lap-de-thi/danh-sach-de'
-
+import { sqlTransaction } from '@workspace/libs/api/model'
 type PutMaTranDeInputType = ExamBank & {
     questions: string[]
     subjectVersionId: string
@@ -172,29 +172,53 @@ const SinhDeThuCongModal = () => {
         try {
             if (!values || !selectedExamId) return
             if (input?.id) {
-                await update({
-                    where: {
-                        id: input.id,
-                    },
-                    data: {
-                        examCode: values.examCode,
-                        explain: values.explain,
-                        examDay: values.examDay ? dayjs(values.examDay).toDate() : null,
-                        examId: selectedExamId,
-                        examType: values.examType,
-                        subjectClassId: values.subjectClassId ?? undefined,
-                        isGroup: values.isGroup ||true,
-                        questions: {
-                            deleteMany: {},
-                            createMany: {
-                                data: orderedQuestionIds.map((questionId, index) => ({
-                                    questionId,
-                                    order: index + 1,
-                                })),
+                const res = await sqlTransaction([
+                    {
+                        model: 'ExamBank',
+                        operation: 'update',
+                        data: {
+                            where: {
+                                id: input.id,
+                            },
+                            data: {
+                                examCode: values.examCode,
+                                explain: values.explain,
+                                examDay: values.examDay ? dayjs(values.examDay).toDate() : null,
+                                examId: selectedExamId,
+                                examType: values.examType,
+                                subjectClassId: values.subjectClassId ?? undefined,
+                                isGroup: values.isGroup || true,
                             },
                         },
                     },
-                })
+                    {
+                        model: 'ExamBankQuestion',
+                        operation: 'deleteMany',
+                        data: {
+                            where: {
+                                examBankId: input.id,
+                            },
+                        },
+                    },
+                    {
+                        model: 'ExamBankQuestion',
+                        operation: 'createMany',
+                        data: {
+                            data: orderedQuestionIds.map((questionId, index) => ({
+                                questionId,
+                                order: index + 1,
+                                examBankId: input.id,
+                            })),
+                        },
+                    },
+                ])
+                if(res?.status===200){
+                    message.success('Cập nhật đề thành công!')
+                }else {
+                    message.error('Cập nhật đề thất bại!')
+                    return
+                }
+             
             } else {
                 await create({
                     data: {
@@ -215,9 +239,8 @@ const SinhDeThuCongModal = () => {
                         },
                     },
                 })
+                 message.success('Tạo đề thành công!')
             }
-
-            message.success(`${input?.id ? 'Cập nhật' : 'Tạo'} đề thành công!`)
 
             queryClient.invalidateQueries({
                 queryKey: ['ExamBank'],
@@ -378,41 +401,41 @@ const SinhDeThuCongModal = () => {
                                 <Select options={dataOption} placeholder="Chọn lớp môn học" />
                             </FormItem>
                         </Col>
-                            <Col span={44}>
-                        <FormItem
-                            form={form}
-                            name="isGroup"
-                            valuePropName="checked"
-                            initialValue={true}
-                        >
-                            <Checkbox>Hiển thị tiêu đề</Checkbox>
-                        </FormItem>
-                    </Col>
-                         <Col span={5}>
-                        <FormItem
-                            form={form}
-                            name="isNote"
-                            valuePropName="checked"
-                            initialValue={false}
-                        >
-                            <Checkbox>Được sử dụng tài liệu</Checkbox>
-                        </FormItem>
-                    </Col>
-                    <Col span={4}>
-                        <Form.Item>
-                            <Checkbox onChange={(e) => setShowExplain(e.target.checked)}>
-                                Khác
-                            </Checkbox>
-                        </Form.Item>
-                    </Col>
-
-                    {showExplain && (
-                        <Col span={24} className="mt-3">
-                            <FormItem form={form} name="explain" label="Chú thích">
-                                <Input.TextArea placeholder="Nhập chú thích" />
+                        <Col span={44}>
+                            <FormItem
+                                form={form}
+                                name="isGroup"
+                                valuePropName="checked"
+                                initialValue={true}
+                            >
+                                <Checkbox>Hiển thị tiêu đề</Checkbox>
                             </FormItem>
                         </Col>
-                    )}
+                        <Col span={5}>
+                            <FormItem
+                                form={form}
+                                name="isNote"
+                                valuePropName="checked"
+                                initialValue={false}
+                            >
+                                <Checkbox>Được sử dụng tài liệu</Checkbox>
+                            </FormItem>
+                        </Col>
+                        <Col span={4}>
+                            <Form.Item>
+                                <Checkbox onChange={(e) => setShowExplain(e.target.checked)}>
+                                    Khác
+                                </Checkbox>
+                            </Form.Item>
+                        </Col>
+
+                        {showExplain && (
+                            <Col span={24} className="mt-3">
+                                <FormItem form={form} name="explain" label="Chú thích">
+                                    <Input.TextArea placeholder="Nhập chú thích" />
+                                </FormItem>
+                            </Col>
+                        )}
                     </Row>
                 ),
                 fields: ['examCode', 'examType', 'examDay'],
@@ -473,7 +496,7 @@ const SinhDeThuCongModal = () => {
                 fields: ['subjectVersionId', 'questions'],
             },
         ]
-    }, [input, subjectVersions, treeData, items, current, form,showExplain])
+    }, [input, subjectVersions, treeData, items, current, form, showExplain])
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
