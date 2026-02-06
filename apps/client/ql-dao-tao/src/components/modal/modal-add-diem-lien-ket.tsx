@@ -17,11 +17,14 @@ import {
     useFindManySchoolYear,
     useFindManyStudent,
     useFindManySubjectVersion,
+    useFindManyTrainingCourse,
     useFindManyTrainingObjectType,
     useFindUniqueScoreLinkSheet,
     useUpdateManyScoreLinkStudent,
     useUpdateScoreLinkSheet,
 } from '@workspace/db/hooks'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { PutFormModal, TreeNodeType, useTrainingObjectTypeStore } from '@workspace/ui'
 import {
     Button,
@@ -41,11 +44,6 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const ScoreLinkStatus = $Enums.ScoreLinkStatus
 type ScoreLinkStatus = $Enums.ScoreLinkStatus
-const statusOptions = [
-    { label: 'Chờ duyệt', value: ScoreLinkStatus.PENDING },
-    { label: 'Đã duyệt', value: ScoreLinkStatus.APPROVED },
-    { label: 'Không được duyệt', value: ScoreLinkStatus.REJECTED },
-]
 type ScoreLinkSubjectVersionCustom = ScoreLinkSubjectVersion & {
     scoreLinkStudents: ScoreLinkStudent[]
 }
@@ -64,6 +62,12 @@ const messages = {
         create: 'Tạo phiếu thất bại',
     },
 }
+
+const statusOptions = [
+    { label: 'Chờ duyệt', value: ScoreLinkStatus.PENDING },
+    { label: 'Đã duyệt', value: ScoreLinkStatus.APPROVED },
+    { label: 'Không được duyệt', value: ScoreLinkStatus.REJECTED },
+]
 
 function buildUpdatePayload(oldData: PutScoreLinkSheet, newData: PutScoreLinkSheet) {
     const oldMap = new Map(oldData.scoreLinkSubjectVersions.map((sv) => [sv.subjectVersionId, sv]))
@@ -87,12 +91,16 @@ function buildUpdatePayload(oldData: PutScoreLinkSheet, newData: PutScoreLinkShe
 
 const PutScoreLinkSheetModal = () => {
     const [form] = Form.useForm()
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { showSpinner, hideSpinner } = useSpinner()
+    const { can } = useAbility()
     const [selectedSubjectId, setSelectedSubjectId] = useState<string>()
+    const [document, setDocument] = useState<DocumentFile[]>([])
     const { isOpen, onClose, input } = useDisclosure<{ id: string; mode: 'view' | 'edit' }>({
         tag: 'PutScoreLinkSheetModal',
         onClose: () => {
             form.resetFields()
+            setDocument([])
             setSelectedSubjectId(undefined)
         },
     })
@@ -100,7 +108,9 @@ const PutScoreLinkSheetModal = () => {
     const isView = mode === 'view'
     const isEdit = mode === 'edit'
     const isCreate = !mode
-    const { data: scoreLinkSheetDetail, isFetching: loadingDetail } = useFindUniqueScoreLinkSheet(
+    const canApprove = can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_LIEN_KET, 'DUYET')
+    const statusSheet = Form.useWatch('status', form)
+    const { data: scoreLinkSheetDetail } = useFindUniqueScoreLinkSheet(
         {
             where: { id: input?.id },
             include: {
@@ -143,8 +153,16 @@ const PutScoreLinkSheetModal = () => {
             hideSpinner()
         },
     })
-    const { data: fixedClasses = [] } = useFindManyFixedClass()
-    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+    const { data: trainingCourses } = useFindManyTrainingCourse({
+        where: { active: true, trainingObjectTypeId },
+    })
+    const selectedTrainingCourseId = Form.useWatch('trainingCourseId', form)
+    const { data: fixedClasses = [], isLoading: isLoadingFixedClasses } = useFindManyFixedClass({
+        where: {
+            active: true,
+            trainingCourseId: selectedTrainingCourseId,
+        },
+    })
     const { data: trainingObjectTypeList = [] } = useFindManyTrainingObjectType(
         {
             orderBy: {
@@ -176,7 +194,7 @@ const PutScoreLinkSheetModal = () => {
             }
         )
 
-    const { data: studentList = [], isFetching: loadingStudents } = useFindManyStudent(
+    const { data: studentList = [] } = useFindManyStudent(
         {
             where: {
                 active: true,
@@ -205,109 +223,134 @@ const PutScoreLinkSheetModal = () => {
         )
     }, [schoolYears])
     const onFinish = async (values: PutScoreLinkSheet) => {
-        if (mode === 'view') return
         showSpinner()
-        if (mode === 'edit' && input?.id && scoreLinkSheetDetail) {
-            const { toCreate, toDelete, toUpdate } = buildUpdatePayload(
-                scoreLinkSheetDetail,
-                values
-            )
 
-            await updateScoreLinkSheet({
-                where: { id: input.id },
-                data: {
-                    trainingObjectTypeId: values.trainingObjectTypeId,
-                    decision: values.decision,
-                    fixedClassId: values.fixedClassId,
-                    semesterId: values.semesterId,
-                    description: values.description,
-                    status: values.status,
-                },
-            })
-            if (toDelete.length > 0) {
+        switch (mode) {
+            case 'view': {
+                if (!canApprove) {
+                    return
+                }
+
                 await updateScoreLinkSheet({
-                    where: { id: input.id },
+                    where: { id: input?.id },
                     data: {
-                        scoreLinkSubjectVersions: {
-                            deleteMany: {
-                                subjectVersionId: {
-                                    in: toDelete.map((sv) => sv.subjectVersionId),
-                                },
-                            },
-                        },
+                        status: ScoreLinkStatus.APPROVED,
                     },
                 })
+
+                return
             }
-            if (toCreate.length > 0) {
+
+            case 'edit': {
+                if (!input?.id || !scoreLinkSheetDetail) return
+
+                const { toCreate, toDelete, toUpdate } = buildUpdatePayload(
+                    scoreLinkSheetDetail,
+                    values
+                )
+
                 await updateScoreLinkSheet({
                     where: { id: input.id },
                     data: {
-                        scoreLinkSubjectVersions: {
-                            create: toCreate.map((sv) => ({
-                                subjectVersionId: sv.subjectVersionId,
-                                scoreLinkStudents: {
-                                    createMany: {
-                                        data: sv.scoreLinkStudents.map((ss) => ({
-                                            studentId: ss.studentId,
-                                            score: ss.score,
-                                        })),
+                        trainingObjectTypeId: values.trainingObjectTypeId,
+                        decision: values.decision,
+                        fixedClassId: values.fixedClassId,
+                        semesterId: values.semesterId,
+                        description: values.description,
+                        status: values.status,
+                    },
+                })
+
+                if (toDelete.length > 0) {
+                    await updateScoreLinkSheet({
+                        where: { id: input.id },
+                        data: {
+                            scoreLinkSubjectVersions: {
+                                deleteMany: {
+                                    subjectVersionId: {
+                                        in: toDelete.map((sv) => sv.subjectVersionId),
                                     },
                                 },
-                            })),
-                        },
-                    },
-                })
-            }
-
-            for (const sv of toUpdate) {
-                for (const ss of sv.scoreLinkStudents) {
-                    await updateManyScoreLinkStudent({
-                        where: {
-                            studentId: ss.studentId,
-                            scoreLinkSubjectVersion: {
-                                subjectVersionId: sv.subjectVersionId,
-                                scoreLinkSheetId: input.id,
                             },
-                        },
-                        data: {
-                            score: ss.score,
                         },
                     })
                 }
+
+                if (toCreate.length > 0) {
+                    await updateScoreLinkSheet({
+                        where: { id: input.id },
+                        data: {
+                            scoreLinkSubjectVersions: {
+                                create: toCreate.map((sv) => ({
+                                    subjectVersionId: sv.subjectVersionId,
+                                    scoreLinkStudents: {
+                                        createMany: {
+                                            data: sv.scoreLinkStudents.map((ss) => ({
+                                                studentId: ss.studentId,
+                                                score: ss.score,
+                                            })),
+                                        },
+                                    },
+                                })),
+                            },
+                        },
+                    })
+                }
+
+                for (const sv of toUpdate) {
+                    for (const ss of sv.scoreLinkStudents) {
+                        await updateManyScoreLinkStudent({
+                            where: {
+                                studentId: ss.studentId,
+                                scoreLinkSubjectVersion: {
+                                    subjectVersionId: sv.subjectVersionId,
+                                    scoreLinkSheetId: input.id,
+                                },
+                            },
+                            data: {
+                                score: ss.score,
+                            },
+                        })
+                    }
+                }
+
+                return
             }
 
-            return
-        }
-
-        await createScoreLinkSheet({
-            data: {
-                trainingObjectTypeId: values.trainingObjectTypeId,
-                decision: values.decision,
-                fixedClassId: values.fixedClassId,
-                semesterId: values.semesterId,
-                description: values.description,
-                scoreLinkSubjectVersions: {
-                    create: values.scoreLinkSubjectVersions.map((sv) => ({
-                        subjectVersionId: sv.subjectVersionId,
-                        scoreLinkStudents: {
-                            create: sv.scoreLinkStudents.map((ss) => ({
-                                studentId: ss.studentId,
-                                score: ss.score,
+            default: {
+                await createScoreLinkSheet({
+                    data: {
+                        trainingObjectTypeId: values.trainingObjectTypeId,
+                        decision: values.decision,
+                        fixedClassId: values.fixedClassId,
+                        semesterId: values.semesterId,
+                        description: values.description,
+                        status: ScoreLinkStatus.PENDING,
+                        scoreLinkSubjectVersions: {
+                            create: values.scoreLinkSubjectVersions.map((sv) => ({
+                                subjectVersionId: sv.subjectVersionId,
+                                scoreLinkStudents: {
+                                    create: sv.scoreLinkStudents.map((ss) => ({
+                                        studentId: ss.studentId,
+                                        score: ss.score,
+                                    })),
+                                },
                             })),
                         },
-                    })),
-                },
+                        documents: {
+                            create: (values.documents ?? []).map((file) => ({
+                                name: file.name,
+                                path: file.path,
+                                mimeType: file.mimeType,
+                                size: file.size,
+                            })),
+                        },
+                    },
+                })
 
-                documents: {
-                    create: (values.documents ?? []).map((file) => ({
-                        name: file.name,
-                        path: file.path,
-                        mimeType: file.mimeType,
-                        size: file.size,
-                    })),
-                },
-            },
-        })
+                return
+            }
+        }
     }
 
     useEffect(() => {
@@ -342,6 +385,8 @@ const PutScoreLinkSheetModal = () => {
                 size: d.size,
             })),
         })
+
+        setDocument(scoreLinkSheetDetail.documents)
     }, [isOpen, scoreLinkSheetDetail, form])
 
     return (
@@ -357,15 +402,18 @@ const PutScoreLinkSheetModal = () => {
             }
             className="w-[60vw] justify-between"
             okButtonProps={{
-                className: isView ? 'hidden' : '',
+                className: isView && !canApprove ? 'hidden' : '',
+                disabled: statusSheet === ScoreLinkStatus.APPROVED,
             }}
             cancelText={isView ? 'Đóng' : 'Hủy'}
-            okText={isView ? undefined : isEdit ? 'Cập nhật' : 'Thêm mới'}
+            okText={
+                isView ? (canApprove ? 'Phê duyệt' : undefined) : isEdit ? 'Cập nhật' : 'Thêm mới'
+            }
             onCancel={onClose}
             onFinish={onFinish}
         >
             <Row gutter={[8, 16]} className="w-full" justify="space-between">
-                <Col span={12}>
+                <Col span={isView ? 12 : 8}>
                     <FormItem
                         name="trainingObjectTypeId"
                         form={form}
@@ -384,7 +432,25 @@ const PutScoreLinkSheetModal = () => {
                     </FormItem>
                 </Col>
 
-                <Col span={12}>
+                <Col span={8} hidden={isView}>
+                    <FormItem
+                        form={form}
+                        className="w-full"
+                        name="trainingCourseId"
+                        label="Khoá học"
+                    >
+                        <Select
+                            options={trainingCourses?.map(({ id, name }) => ({
+                                value: id,
+                                label: name,
+                            }))}
+                            placeholder="Chọn khoá học"
+                            className="w-full"
+                        />
+                    </FormItem>
+                </Col>
+
+                <Col span={isView ? 12 : 8}>
                     <FormItem name="decision" form={form} label="Số quyết định" required>
                         <Input disabled={isView} placeholder="Nhập số quyết định" />
                     </FormItem>
@@ -399,9 +465,10 @@ const PutScoreLinkSheetModal = () => {
                                 label: e.name,
                                 value: e.id,
                             }))}
-                            disabled={isView}
+                            disabled={isView || !selectedTrainingCourseId}
                             onChange={() => form.setFieldValue('scoreLinkSubjectVersions', [])}
                             placeholder="Chọn lớp quản lí"
+                            loading={isLoadingFixedClasses}
                         />
                     </FormItem>
                 </Col>
@@ -445,7 +512,7 @@ const PutScoreLinkSheetModal = () => {
                             <Row gutter={[16, 16]}>
                                 <Col span={12}>
                                     <Row gutter={8}>
-                                        <Row gutter={8}>
+                                        <Row gutter={8} className="w-full">
                                             <Col span={12}>
                                                 <Select
                                                     loading={isFetchingSubjectVersions}
@@ -458,8 +525,12 @@ const PutScoreLinkSheetModal = () => {
                                                         setSelectedSubjectId(value)
                                                     }
                                                     placeholder="Chọn môn"
-                                                    className="max-w-48 w-full"
-                                                    disabled={!trainingObjectTypeId}
+                                                    className="w-full"
+                                                    disabled={
+                                                        !trainingObjectTypeId ||
+                                                        !fixedClassId ||
+                                                        isView
+                                                    }
                                                 />
                                             </Col>
                                             <Col span={12}>
@@ -469,7 +540,6 @@ const PutScoreLinkSheetModal = () => {
                                                         !trainingObjectTypeId ||
                                                         !fixedClassId ||
                                                         !selectedSubjectId
-
                                                     }
                                                     icon={<PlusOutlined />}
                                                     className="mb-2"
@@ -509,18 +579,32 @@ const PutScoreLinkSheetModal = () => {
 
                                     return {
                                         key: String(f.key),
+                                        style: {
+                                            paddingLeft: 0,
+                                            paddingRight: '8px',
+                                        },
                                         label: (
                                             <Tooltip
                                                 trigger="hover"
+                                                className="flex flex-row items-center"
                                                 title={`${subject?.name}${subject?.code ? ` - (${subject?.code})` : ''}`}
                                             >
-                                                <div className="w-24 overflow-hidden text-ellipsis whitespace-nowrap">{`${subject?.name}${subject?.code ? ` - (${subject?.code})` : ''}`}</div>
+                                                <div className="w-28 overflow-hidden text-ellipsis whitespace-nowrap">{`${subject?.name}${subject?.code ? ` - (${subject?.code})` : ''}`}</div>
+                                                <div className="text-right mt-1">
+                                                    <Button
+                                                        danger
+                                                        type="text"
+                                                        icon={<Trash2 size={16} />}
+                                                        onClick={() => remove(f.name)}
+                                                    />
+                                                </div>
                                             </Tooltip>
                                         ),
                                         children: (
                                             <>
                                                 <Table
                                                     pagination={false}
+                                                    className="h-full pl-2.5"
                                                     dataSource={getValue([
                                                         'scoreLinkSubjectVersions',
                                                         f.name,
@@ -543,8 +627,10 @@ const PutScoreLinkSheetModal = () => {
                                                                 )
 
                                                                 return (
-                                                                    student?.userProfile
-                                                                        ?.fullname || '—'
+                                                                    `${
+                                                                        student?.userProfile
+                                                                            ?.fullname
+                                                                    } - ${student?.code}` || '—'
                                                                 )
                                                             },
                                                         },
@@ -574,17 +660,6 @@ const PutScoreLinkSheetModal = () => {
                                                         },
                                                     ]}
                                                 />
-
-                                                <div className="text-right mt-2">
-                                                    <Button
-                                                        danger
-                                                        type="text"
-                                                        icon={<Trash2 size={16} />}
-                                                        onClick={() => remove(f.name)}
-                                                    >
-                                                        Xóa môn
-                                                    </Button>
-                                                </div>
                                             </>
                                         ),
                                     }
@@ -599,9 +674,10 @@ const PutScoreLinkSheetModal = () => {
                 <FormItem name="documents" label="Tài liệu minh chứng" form={form}>
                     <DocumentPaths
                         form={form}
-                        data={[]}
-                        relationId=""
+                        data={document}
+                        relationId={input?.id ?? ''}
                         relationType="scoreLinkSheetId"
+                        titleForm="documents"
                     />
                 </FormItem>
             </Col>

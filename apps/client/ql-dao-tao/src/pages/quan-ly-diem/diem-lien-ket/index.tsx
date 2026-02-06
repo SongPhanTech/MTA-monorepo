@@ -1,3 +1,4 @@
+import BaseTag from '@components/commons/base-tag'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
@@ -7,6 +8,7 @@ import { DEFAULT_PAGINATE_SIZE, SCORE_LINK_STATUS } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { formatDate } from '@lib/utils'
+import { ScoreLinkStatus } from '@workspace/db'
 import {
     useCountScoreLinkSheet,
     useFindManyScoreLinkSheet,
@@ -21,15 +23,30 @@ import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
+const mapStatusToTagProps = (status: ScoreLinkStatus) => {
+    switch (status) {
+        case 'APPROVED':
+            return <BaseTag type="success" content="Đã phê duyệt" />
+        case 'REJECTED':
+            return <BaseTag type="error" content="Từ chối" />
+        default:
+            return <BaseTag type="warning" content="Chờ phê duyệt" />
+    }
+}
+
 dayjs.locale('vi')
 export default function ScoreLinkPage() {
     const { onOpen } = useDisclosure<{ id: string; mode: 'view' | 'edit' }>({
         tag: 'PutScoreLinkSheetModal',
     })
     const { can } = useAbility()
+    const canEdit = can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_LIEN_KET, 'SUA')
+    const canDelete = can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_LIEN_KET, 'XOA')
+    const canView = can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_LIEN_KET, 'XEM')
     const { showSpinner, hideSpinner } = useSpinner()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const [status, setStatus] = useState()
     const { mutateAsync: updateScoreLinkSheet } = useUpdateScoreLinkSheet({
         onSuccess: () => {
             message.success('Xóa phiếu thành công')
@@ -43,7 +60,13 @@ export default function ScoreLinkPage() {
         },
     })
     const { data: count = 0 } = useCountScoreLinkSheet()
-    const { data: scoreLinks, refetch } = useFindManyScoreLinkSheet({
+    const {
+        data: scoreLinks,
+        isLoading,
+        isFetching,
+        refetch,
+    } = useFindManyScoreLinkSheet({
+        where: { active: true, status: status },
         orderBy: { createdAt: 'desc' },
         include: {
             _count: {
@@ -104,7 +127,7 @@ export default function ScoreLinkPage() {
                 align: 'center',
                 width: 150,
                 render: (_, record) =>
-                    record.createdAt ? formatDate(record.createdAt) : undefined,
+                    record?.createdAt ? formatDate(record?.createdAt) : undefined,
             },
             {
                 title: 'Số môn',
@@ -127,8 +150,11 @@ export default function ScoreLinkPage() {
             {
                 title: 'Trạng thái',
                 dataIndex: 'status',
-                align: "center",
+                align: 'center',
                 width: 100,
+                render: (_, record) => {
+                    return mapStatusToTagProps(record?.status)
+                },
             },
             {
                 title: 'Thao tác',
@@ -139,13 +165,24 @@ export default function ScoreLinkPage() {
                         <ViewIcon
                             onClick={() => onOpen({ mode: 'view', id: record?.id })}
                             className="text-sm text-gray-700 cursor-pointer"
+                            style={{
+                                display: !canView ? 'none' : 'block',
+                            }}
                         />
                         <EditIcon
-                            style={{display: can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_LIEN_KET, 'SUA') ? "block" : "none"}}
+                            style={{
+                                display:
+                                    record?.status !== ScoreLinkStatus.APPROVED && canEdit
+                                        ? 'block'
+                                        : 'none',
+                            }}
                             onClick={() => onOpen({ mode: 'edit', id: record?.id })}
                             className="text-sm text-blue-700 cursor-pointer"
                         />
                         <DeleteIcon
+                            style={{
+                                display: canDelete ? 'block' : 'none',
+                            }}
                             popConfirm={{
                                 onConfirm: () => handleDeleteScoreLink(record?.id),
                             }}
@@ -182,11 +219,12 @@ export default function ScoreLinkPage() {
                                 label,
                                 value,
                             }))}
+                            onChange={(value) => setStatus(value)}
                         />
                     </Col>
                     <Col span={6}>
                         <Flex justify="end">
-                            <Button  onClick={() => onOpen()} type="primary">
+                            <Button onClick={() => onOpen()} type="primary">
                                 Thêm mới
                             </Button>
                         </Flex>
@@ -197,6 +235,7 @@ export default function ScoreLinkPage() {
                 <Table
                     columns={columns}
                     data={scoreLinks || []}
+                    loading={isLoading || isFetching}
                     pagination={{
                         current: currentPage,
                         pageSize: numberOfPages,
