@@ -110,7 +110,7 @@ function LecturerSurveyReport({
                 onRow={(record) => {
                     return {
                         onClick: () => {
-                            setSublectClass(record?.surveyId as any)
+                            setSublectClass(record as any)
                         },
                         className: cn(
                             sublectClass?.surveyId === record.surveyId ? 'bg-orange-200' : ''

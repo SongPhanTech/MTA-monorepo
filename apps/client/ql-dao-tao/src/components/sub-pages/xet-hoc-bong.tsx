@@ -477,6 +477,18 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
                                                     record?.student?.userProfile?.fullname,
                                             },
                                             {
+                                                title: 'Ngày sinh',
+                                                width: 120,
+                                                align: 'center',
+                                                render: (__, record) => {
+                                                    const date =
+                                                        record?.student?.userProfile?.dateOfBirth
+                                                    return date
+                                                        ? dayjs(date).format('DD/MM/YYYY')
+                                                        : ''
+                                                },
+                                            },
+                                            {
                                                 title: 'GPA',
                                                 dataIndex: ['gpaAtAward'],
                                                 width: 120,
@@ -608,6 +620,17 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
                                                 title: 'Tên sinh viên',
                                                 dataIndex: ['userProfile', 'fullname'],
                                                 width: 150,
+                                            },
+                                            {
+                                                title: 'Ngày sinh',
+                                                width: 120,
+                                                align: 'center',
+                                                render: (__, record) => {
+                                                    const date = record?.userProfile?.dateOfBirth
+                                                    return date
+                                                        ? dayjs(date).format('DD/MM/YYYY')
+                                                        : ''
+                                                },
                                             },
                                             {
                                                 title: 'Lớp',

@@ -100,7 +100,14 @@ export default function SubjectList() {
 
     const where = useMemo(() => {
         return {
-            ...(trainingObjectTypeId ? { subjectVersion: { some: { trainingObjectTypeId } } } : {}),
+            ...(trainingObjectTypeId
+                ? {
+                      OR: [
+                          { subjectVersion: { some: { trainingObjectTypeId } } },
+                          { subjectVersion: { none: {} } },
+                      ],
+                  }
+                : {}),
             ...(filters.searchText
                 ? {
                       name: {
@@ -182,6 +189,7 @@ export default function SubjectList() {
                         select: { id: true },
                         take: 1,
                     },
+                    trainingObjectType: true,
                 },
             },
             managementOrganization: true,
@@ -688,6 +696,7 @@ export default function SubjectList() {
                                         subjectClass,
                                         trainingBlocks,
                                     } = record
+                                    const isUsed = subjectClass?.length > 0
                                     if (isLocked) {
                                         return (
                                             <Row className="justify-center gap-2">
@@ -716,13 +725,14 @@ export default function SubjectList() {
                                             ) && (
                                                 <EditIcon
                                                     onClick={() => {
+                                                        if (isUsed) return
                                                         onOpenSubjectVersion({
                                                             subjectId,
                                                             subjectVersionId,
                                                             isLocked,
                                                         })
                                                     }}
-                                                    className="text-sm text-blue-700 cursor-pointer"
+                                                    className={`text-sm ${isUsed ? 'text-gray-400 cursor-not-allowed' : 'text-blue-700 cursor-pointer'}`}
                                                 />
                                             )}
                                             {can(

@@ -564,403 +564,6 @@ export default function StudentScoreClassPage() {
     const { convertScore } = useScoreConverter(student?.fixedClass?.trainingCourse.scoreConverts)
 
     return (
-        <div>
-            <Divider orientation="left" orientationMargin={0}>
-                {[
-                    student?.code,
-                    student?.userProfile?.fullname,
-                    student?.fixedClass?.trainingCourse.trainingObjectType.name,
-                    student?.fixedClass?.trainingCourse?.name,
-                    student?.curriculumVersion?.name,
-                    student?.curriculumVersion?.curriculum.trainingMajor.name,
-                    student?.curriculumVersion?.curriculum.trainingMajor.trainingField.name,
-                ]
-                    .filter(Boolean)
-                    .join(' - ')}
-            </Divider>
-            <Row gutter={[16, 16]}>
-                <Col span={24}>
-                    {/* Row nút thêm */}
-                    <Row gutter={[8, 8]} align="top" justify="space-between">
-                        {/* Hàng chứa các button */}
-                        <Col xs={24}>
-                            <Flex justify="end" wrap="wrap" gap="8px" className="mt-1">
-                                {can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_SV_HV_CHUYEN_TRUONG,
-                                    'THEM'
-                                ) && (
-                                    <Button
-                                        type="primary"
-                                        onClick={() => onOpenModalNhapDiem(studentId)}
-                                    >
-                                        Nhập điểm trực tiếp
-                                    </Button>
-                                )}
-                                <Button
-                                    type="primary"
-                                    onClick={() =>
-                                        onOpen({
-                                            dataTable: data,
-                                            dataStudent: student,
-                                        })
-                                    }
-                                >
-                                    In kết quả học tập
-                                </Button>
-
-                                <Button
-                                    type="primary"
-                                    onClick={() => {
-                                        exportTemplate()
-                                    }}
-                                >
-                                    Xuất bảng điểm cá nhân (Mẫu P2)
-                                </Button>
-                            </Flex>
-                        </Col>
-                    </Row>
-                </Col>
-
-                <Col span={24}>
-                    <h3 className="text-lg font-bold">Kết quả học tập theo kỳ</h3>
-                    <Flex justify="space-between">
-                        <Select
-                            value={semesterId}
-                            onChange={(v) => {
-                                setSemesterId(v)
-                            }}
-                            className="w-64"
-                            options={data.map((s) => ({
-                                label: `${s.code} - ${s.name} - ${s.schoolYear.name}`,
-                                value: s.id,
-                            }))}
-                        />
-                        <Button onClick={() => setExpandAll(!expandAll)}>
-                            {expandAll ? 'Thu gọn' : 'Mở rộng'}
-                        </Button>
-                    </Flex>
-                    <TableCollapse
-                        rowKey="key"
-                        currentPage={1}
-                        headerTitleKey={({ code, name, schoolYear }) => (
-                            <p className="font-bold text-base">
-                                {[code, name, schoolYear?.name].filter(Boolean).join(' - ')}
-                            </p>
-                        )}
-                        headerColumn={[
-                            {
-                                colSpan: 1,
-                            },
-                            {
-                                render: (_, { code, name, schoolYear }) => (
-                                    <p className="font-medium text-base">
-                                        {[code, name, schoolYear?.name].filter(Boolean).join(' - ')}
-                                    </p>
-                                ),
-                                colSpan: 15,
-                            },
-                            // {
-                            //     render: (_, { code, name, schoolYear }) => (
-                            //         // TODO: kết quả học kỳ của SV: điểm TBC, học bổng, cảnh cáo,...
-                            //         <Button>Chi tiết</Button>
-                            //     ),
-                            //     colSpan: 1,
-                            // },
-                        ]}
-                        filters={filters}
-                        setFilters={(value) => {
-                            setFilters(value)
-                        }}
-                        childrenFieldName="subjectClasses"
-                        defaultExpandAll={expandAll}
-                        columns={[
-                            {
-                                title: 'Mã môn học',
-                                align: 'center',
-
-                                dataIndex: 'code',
-                                type: 'input',
-                                fixed: 'left',
-                                width: 120,
-                                render: (_, record) =>
-                                    record?.subjectClassStudent?.[0]?.subjectVersion.code,
-                            },
-                            {
-                                title: 'Tên môn học',
-                                align: 'center',
-                                dataIndex: 'name',
-                                fixed: 'left',
-                                type: 'input_search',
-                                options: trainingSubjectVersions.map((item) => ({
-                                    label: item.name,
-                                    value: item.name,
-                                })),
-                                width: 200,
-                                render: (_, record) =>
-                                    record?.subjectClassStudent?.[0]?.subjectVersion.name,
-                            },
-                            {
-                                title: 'Điểm TX',
-                                align: 'center',
-                                dataIndex: 'attendanceScoreCmp',
-                                type: 'cmp',
-                                width: 100,
-                                render: (_, record) =>
-                                    record?.subjectClassStudent?.[0]?.attendanceScore,
-                            },
-                            {
-                                title: 'Điểm ĐK',
-                                align: 'center',
-                                dataIndex: 'midtermScoreCmp',
-                                type: 'cmp',
-                                width: 100,
-                                render: (_, record) =>
-                                    record?.subjectClassStudent?.[0]?.midtermScore,
-                            },
-                            {
-                                title: 'Điểm thi',
-                                align: 'center',
-                                dataIndex: 'examScoreCmp',
-                                type: 'cmp',
-                                width: 100,
-                                render: (_, record) => record?.subjectClassStudent?.[0]?.examScore,
-                            },
-                            {
-                                title: 'Điểm cộng',
-                                align: 'center',
-                                width: 100,
-                                render: (_, { id, subjectClassStudent }) =>
-                                    subjectClassStudent?.[0]?.awards.reduce(
-                                        (
-                                            acc: number,
-                                            curr: {
-                                                archivedAward: ArchivedAward
-                                            }
-                                        ) => acc + (curr?.archivedAward?.bonusScore ?? 0),
-                                        0
-                                    ),
-                            },
-                            {
-                                title: 'Chứng chỉ',
-                                align: 'center',
-                                width: 150,
-                                render: (_, { id, subjectClassStudent }) =>
-                                    subjectClassStudent?.[0]?.certificates
-                                        .map(
-                                            (i: { archivedCertificate: ArchivedCertificate }) =>
-                                                i?.archivedCertificate?.code
-                                        )
-                                        .join(', '),
-                            },
-                            {
-                                title: <Tooltip title="Điểm tương đương">Điểm TĐ</Tooltip>,
-                                align: 'center',
-                                width: 80,
-                                render: (__, { id, subjectClassStudent }) => {
-                                    const arr: { finalScore: number }[] =
-                                        subjectClassStudent?.[0]?.certificates.map(
-                                            (i: { archivedCertificate: ArchivedCertificate }) => {
-                                                return {
-                                                    ...i,
-                                                    finalScore:
-                                                        Number(
-                                                            i?.archivedCertificate?.finalScore
-                                                        ) || 0,
-                                                }
-                                            }
-                                        )
-                                    return arr?.length > 0
-                                        ? _.maxBy(arr, 'finalScore')?.finalScore
-                                        : ''
-                                },
-                            },
-                            {
-                                title: <Tooltip title="Số tín chỉ">STC</Tooltip>,
-                                align: 'center',
-                                dataIndex: 'creditCmp',
-                                type: 'cmp',
-                                width: 100,
-                                render: (_, record) =>
-                                    record?.subjectClassStudent?.[0]?.subjectVersion.credit,
-                            },
-                            {
-                                title: 'Điểm hệ 10',
-                                align: 'center',
-                                dataIndex: 'finalScoreCmp',
-                                type: 'cmp',
-                                width: 100,
-                                render: (_, record) => {
-                                    const subjectClassStudent = record?.subjectClassStudent?.[0]
-                                    return (
-                                        subjectClassStudent?.manualFinalScore ??
-                                        subjectClassStudent?.finalScore?.toNumber() ??
-                                        ''
-                                    )
-                                },
-                            },
-                            {
-                                title: 'Điểm hệ 4',
-                                align: 'center',
-                                dataIndex: 'finalScore4',
-                                width: 100,
-                                render: (_, record) => {
-                                    const subjectClassStudent = record?.subjectClassStudent?.[0]
-                                    const score =
-                                        subjectClassStudent?.manualFinalScore ||
-                                        subjectClassStudent?.finalScore?.toNumber()
-                                    if (score === undefined || score === null) return null
-                                    return score !== undefined ? convertScore(score).base4 : ''
-                                },
-                            },
-                            {
-                                title: 'Điểm hệ chữ',
-                                align: 'center',
-                                width: 120,
-                                render: (_, record) => {
-                                    const subjectClassStudent = record?.subjectClassStudent?.[0]
-
-                                    const score =
-                                        subjectClassStudent?.manualFinalScore ??
-                                        subjectClassStudent?.finalScore?.toNumber()
-
-                                    if (score === null || score === undefined) return null
-
-                                    return convertScore(score).letter
-                                },
-                            },
-                            {
-                                title: 'Kết quả',
-                                align: 'center',
-                                width: 100,
-                                render: (_: any, record: any) => {
-                                    const subjectClassStudent = record.subjectClassStudent?.[0]
-                                    const score =
-                                        subjectClassStudent?.manualFinalScore ??
-                                        subjectClassStudent?.finalScore
-
-                                    if (score === undefined || score === null) return null
-                                    const result = convertScore(score.toNumber())
-
-                                    return (
-                                        <div className="flex items-center justify-center">
-                                            {result.pass ? (
-                                                <Check size={18} color="green" />
-                                            ) : (
-                                                <X size={18} color="red" />
-                                            )}
-                                        </div>
-                                    )
-                                },
-                            },
-                            {
-                                title: 'Ghi chú',
-                                align: 'center',
-                                dataIndex: ['subjectClassStudent', '0', 'description'],
-                                width: 200,
-                                render: (value: string) => {
-                                    return <span className="line-clamp-1">{value}</span>
-                                },
-                            },
-                            {
-                                title: 'Thao tác',
-                                width: 150,
-                                align: 'center',
-                                fixed: 'right',
-                                render: (_, { id, subjectClassStudent }) => (
-                                    <Row className="justify-center gap-2">
-                                        <Tooltip title="Cộng điểm">
-                                            <BookCheckIcon
-                                                onClick={onOpenModalAddScore.bind(null, {
-                                                    id: subjectClassStudent?.[0]?.id,
-                                                    studentId: studentId,
-                                                    list:
-                                                        subjectClassStudent?.length > 0
-                                                            ? subjectClassStudent[0]?.awards.map(
-                                                                  (i: {
-                                                                      archivedAwardId: string
-                                                                  }) => i.archivedAwardId
-                                                              )
-                                                            : [],
-                                                    subjectClassStudent: subjectClassStudent?.[0],
-                                                })}
-                                                size={16}
-                                            />
-                                        </Tooltip>
-                                        <Tooltip title="Thêm chứng chỉ">
-                                            <SafetyCertificateOutlined
-                                                onClick={onOpenModalAddCertificate.bind(null, {
-                                                    id: subjectClassStudent?.[0]?.id,
-                                                    studentId: studentId,
-                                                    list:
-                                                        subjectClassStudent?.length > 0
-                                                            ? subjectClassStudent[0]?.certificates.map(
-                                                                  (i: {
-                                                                      archivedCertificateId: string
-                                                                  }) => i.archivedCertificateId
-                                                              )
-                                                            : [],
-                                                    subjectClassStudent: subjectClassStudent?.[0],
-                                                })}
-                                                size={16}
-                                            />
-                                        </Tooltip>
-                                    </Row>
-                                ),
-                            },
-                        ]}
-                        data={data.filter((s) => !semesterId || semesterId === s.id)}
-                        pagination={{
-                            hideOnSinglePage: true,
-                        }}
-                    />
-                </Col>
-                <Col span={24}>
-                    <h3 className="text-lg font-bold">Danh sách điểm phiên</h3>
-                    <Table
-                        // filters={filters}
-                        // setFilters={setFilters}
-                        columns={[
-                            {
-                                title: 'STT',
-                                width: 50,
-                                align: 'center',
-                                render: (_, __, index) => index + 1,
-                            },
-                            {
-                                title: 'Mã môn học',
-                                width: 150,
-                                align: 'center',
-                                render: (_, record) => record?.subjectVersion?.code,
-                            },
-                            {
-                                title: 'Tên môn học',
-                                align: 'center',
-                                render: (_, record) => record?.subjectVersion?.name,
-                            },
-                            {
-                                title: 'Điểm',
-                                dataIndex: 'manualFinalScore',
-                                align: 'center',
-                                width: 150,
-                            },
-                            {
-                                title: 'Ghi chú',
-                                dataIndex: 'description',
-                                align: 'center',
-                                width: 250,
-                            },
-                        ]}
-                        data={manualScoreData}
-                        pagination={false}
-                    />
-                </Col>
-            </Row>
-        </div>
-    )
-}
-
-StudentScoreClassPage.getLayout = function getLayout(page: React.ReactElement) {
-    return (
         <DefaultLayout
             breadcrumbList={[
                 { title: 'Quản lý hồ sơ' },
@@ -968,11 +571,417 @@ StudentScoreClassPage.getLayout = function getLayout(page: React.ReactElement) {
                     title: 'Lớp quản lý',
                     href: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_LOP_BIEN_CHE,
                 },
-                { title: 'Chi tiết lớp quản lý' },
+                {
+                    title: 'Chi tiết lớp quản lý',
+                    href: student?.fixedClassId
+                        ? ROUTER_PATH.QL_DAO_TAO.DANH_MUC_LOP_BIEN_CHE_ID.replace(
+                              '[id]',
+                              student?.fixedClassId
+                          )
+                        : undefined,
+                },
                 { title: 'Kết quả học tập' },
             ]}
         >
-            {page}
+            <div>
+                <Divider orientation="left" orientationMargin={0}>
+                    {[
+                        student?.code,
+                        student?.userProfile?.fullname,
+                        student?.fixedClass?.trainingCourse.trainingObjectType.name,
+                        student?.fixedClass?.trainingCourse?.name,
+                        student?.curriculumVersion?.name,
+                        student?.curriculumVersion?.curriculum.trainingMajor.name,
+                        student?.curriculumVersion?.curriculum.trainingMajor.trainingField.name,
+                    ]
+                        .filter(Boolean)
+                        .join(' - ')}
+                </Divider>
+                <Row gutter={[16, 16]}>
+                    <Col span={24}>
+                        {/* Row nút thêm */}
+                        <Row gutter={[8, 8]} align="top" justify="space-between">
+                            {/* Hàng chứa các button */}
+                            <Col xs={24}>
+                                <Flex justify="end" wrap="wrap" gap="8px" className="mt-1">
+                                    {can(
+                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_SV_HV_CHUYEN_TRUONG,
+                                        'THEM'
+                                    ) && (
+                                        <Button
+                                            type="primary"
+                                            onClick={() => onOpenModalNhapDiem(studentId)}
+                                        >
+                                            Nhập điểm trực tiếp
+                                        </Button>
+                                    )}
+                                    <Button
+                                        type="primary"
+                                        onClick={() =>
+                                            onOpen({
+                                                dataTable: data,
+                                                dataStudent: student,
+                                            })
+                                        }
+                                    >
+                                        In kết quả học tập
+                                    </Button>
+
+                                    <Button
+                                        type="primary"
+                                        onClick={() => {
+                                            exportTemplate()
+                                        }}
+                                    >
+                                        Xuất bảng điểm cá nhân (Mẫu P2)
+                                    </Button>
+                                </Flex>
+                            </Col>
+                        </Row>
+                    </Col>
+
+                    <Col span={24}>
+                        <h3 className="text-lg font-bold">Kết quả học tập theo kỳ</h3>
+                        <Flex justify="space-between">
+                            <Select
+                                value={semesterId}
+                                onChange={(v) => {
+                                    setSemesterId(v)
+                                }}
+                                className="w-64"
+                                options={data.map((s) => ({
+                                    label: `${s.code} - ${s.name} - ${s.schoolYear.name}`,
+                                    value: s.id,
+                                }))}
+                            />
+                            <Button onClick={() => setExpandAll(!expandAll)}>
+                                {expandAll ? 'Thu gọn' : 'Mở rộng'}
+                            </Button>
+                        </Flex>
+                        <TableCollapse
+                            rowKey="key"
+                            currentPage={1}
+                            headerTitleKey={({ code, name, schoolYear }) => (
+                                <p className="font-bold text-base">
+                                    {[code, name, schoolYear?.name].filter(Boolean).join(' - ')}
+                                </p>
+                            )}
+                            headerColumn={[
+                                {
+                                    colSpan: 1,
+                                },
+                                {
+                                    render: (_, { code, name, schoolYear }) => (
+                                        <p className="font-medium text-base">
+                                            {[code, name, schoolYear?.name]
+                                                .filter(Boolean)
+                                                .join(' - ')}
+                                        </p>
+                                    ),
+                                    colSpan: 15,
+                                },
+                                // {
+                                //     render: (_, { code, name, schoolYear }) => (
+                                //         // TODO: kết quả học kỳ của SV: điểm TBC, học bổng, cảnh cáo,...
+                                //         <Button>Chi tiết</Button>
+                                //     ),
+                                //     colSpan: 1,
+                                // },
+                            ]}
+                            filters={filters}
+                            setFilters={(value) => {
+                                setFilters(value)
+                            }}
+                            childrenFieldName="subjectClasses"
+                            defaultExpandAll={expandAll}
+                            columns={[
+                                {
+                                    title: 'Mã môn học',
+                                    align: 'center',
+
+                                    dataIndex: 'code',
+                                    type: 'input',
+                                    fixed: 'left',
+                                    width: 120,
+                                    render: (_, record) =>
+                                        record?.subjectClassStudent?.[0]?.subjectVersion.code,
+                                },
+                                {
+                                    title: 'Tên môn học',
+                                    align: 'center',
+                                    dataIndex: 'name',
+                                    fixed: 'left',
+                                    type: 'input_search',
+                                    options: trainingSubjectVersions.map((item) => ({
+                                        label: item.name,
+                                        value: item.name,
+                                    })),
+                                    width: 200,
+                                    render: (_, record) =>
+                                        record?.subjectClassStudent?.[0]?.subjectVersion.name,
+                                },
+                                {
+                                    title: 'Điểm TX',
+                                    align: 'center',
+                                    dataIndex: 'attendanceScoreCmp',
+                                    type: 'cmp',
+                                    width: 100,
+                                    render: (_, record) =>
+                                        record?.subjectClassStudent?.[0]?.attendanceScore,
+                                },
+                                {
+                                    title: 'Điểm ĐK',
+                                    align: 'center',
+                                    dataIndex: 'midtermScoreCmp',
+                                    type: 'cmp',
+                                    width: 100,
+                                    render: (_, record) =>
+                                        record?.subjectClassStudent?.[0]?.midtermScore,
+                                },
+                                {
+                                    title: 'Điểm thi',
+                                    align: 'center',
+                                    dataIndex: 'examScoreCmp',
+                                    type: 'cmp',
+                                    width: 100,
+                                    render: (_, record) =>
+                                        record?.subjectClassStudent?.[0]?.examScore,
+                                },
+                                {
+                                    title: 'Điểm cộng',
+                                    align: 'center',
+                                    width: 100,
+                                    render: (_, { id, subjectClassStudent }) =>
+                                        subjectClassStudent?.[0]?.awards.reduce(
+                                            (
+                                                acc: number,
+                                                curr: {
+                                                    archivedAward: ArchivedAward
+                                                }
+                                            ) => acc + (curr?.archivedAward?.bonusScore ?? 0),
+                                            0
+                                        ),
+                                },
+                                {
+                                    title: 'Chứng chỉ',
+                                    align: 'center',
+                                    width: 150,
+                                    render: (_, { id, subjectClassStudent }) =>
+                                        subjectClassStudent?.[0]?.certificates
+                                            .map(
+                                                (i: { archivedCertificate: ArchivedCertificate }) =>
+                                                    i?.archivedCertificate?.code
+                                            )
+                                            .join(', '),
+                                },
+                                {
+                                    title: <Tooltip title="Điểm tương đương">Điểm TĐ</Tooltip>,
+                                    align: 'center',
+                                    width: 80,
+                                    render: (__, { id, subjectClassStudent }) => {
+                                        const arr: { finalScore: number }[] =
+                                            subjectClassStudent?.[0]?.certificates.map(
+                                                (i: {
+                                                    archivedCertificate: ArchivedCertificate
+                                                }) => {
+                                                    return {
+                                                        ...i,
+                                                        finalScore:
+                                                            Number(
+                                                                i?.archivedCertificate?.finalScore
+                                                            ) || 0,
+                                                    }
+                                                }
+                                            )
+                                        return arr?.length > 0
+                                            ? _.maxBy(arr, 'finalScore')?.finalScore
+                                            : ''
+                                    },
+                                },
+                                {
+                                    title: <Tooltip title="Số tín chỉ">STC</Tooltip>,
+                                    align: 'center',
+                                    dataIndex: 'creditCmp',
+                                    type: 'cmp',
+                                    width: 100,
+                                    render: (_, record) =>
+                                        record?.subjectClassStudent?.[0]?.subjectVersion.credit,
+                                },
+                                {
+                                    title: 'Điểm hệ 10',
+                                    align: 'center',
+                                    dataIndex: 'finalScoreCmp',
+                                    type: 'cmp',
+                                    width: 100,
+                                    render: (_, record) => {
+                                        const subjectClassStudent = record?.subjectClassStudent?.[0]
+                                        return (
+                                            subjectClassStudent?.manualFinalScore ??
+                                            subjectClassStudent?.finalScore?.toNumber() ??
+                                            ''
+                                        )
+                                    },
+                                },
+                                {
+                                    title: 'Điểm hệ 4',
+                                    align: 'center',
+                                    dataIndex: 'finalScore4',
+                                    width: 100,
+                                    render: (_, record) => {
+                                        const subjectClassStudent = record?.subjectClassStudent?.[0]
+                                        const score =
+                                            subjectClassStudent?.manualFinalScore ||
+                                            subjectClassStudent?.finalScore?.toNumber()
+                                        if (score === undefined || score === null) return null
+                                        return score !== undefined ? convertScore(score).base4 : ''
+                                    },
+                                },
+                                {
+                                    title: 'Điểm hệ chữ',
+                                    align: 'center',
+                                    width: 120,
+                                    render: (_, record) => {
+                                        const subjectClassStudent = record?.subjectClassStudent?.[0]
+
+                                        const score =
+                                            subjectClassStudent?.manualFinalScore ??
+                                            subjectClassStudent?.finalScore?.toNumber()
+
+                                        if (score === null || score === undefined) return null
+
+                                        return convertScore(score).letter
+                                    },
+                                },
+                                {
+                                    title: 'Kết quả',
+                                    align: 'center',
+                                    width: 100,
+                                    render: (_: any, record: any) => {
+                                        const subjectClassStudent = record.subjectClassStudent?.[0]
+                                        const score =
+                                            subjectClassStudent?.manualFinalScore ??
+                                            subjectClassStudent?.finalScore
+
+                                        if (score === undefined || score === null) return null
+                                        const result = convertScore(score.toNumber())
+
+                                        return (
+                                            <div className="flex items-center justify-center">
+                                                {result.pass ? (
+                                                    <Check size={18} color="green" />
+                                                ) : (
+                                                    <X size={18} color="red" />
+                                                )}
+                                            </div>
+                                        )
+                                    },
+                                },
+                                {
+                                    title: 'Ghi chú',
+                                    align: 'center',
+                                    dataIndex: ['subjectClassStudent', '0', 'description'],
+                                    width: 200,
+                                    render: (value: string) => {
+                                        return <span className="line-clamp-1">{value}</span>
+                                    },
+                                },
+                                {
+                                    title: 'Thao tác',
+                                    width: 150,
+                                    align: 'center',
+                                    fixed: 'right',
+                                    render: (_, { id, subjectClassStudent }) => (
+                                        <Row className="justify-center gap-2">
+                                            <Tooltip title="Cộng điểm">
+                                                <BookCheckIcon
+                                                    onClick={onOpenModalAddScore.bind(null, {
+                                                        id: subjectClassStudent?.[0]?.id,
+                                                        studentId: studentId,
+                                                        list:
+                                                            subjectClassStudent?.length > 0
+                                                                ? subjectClassStudent[0]?.awards.map(
+                                                                      (i: {
+                                                                          archivedAwardId: string
+                                                                      }) => i.archivedAwardId
+                                                                  )
+                                                                : [],
+                                                        subjectClassStudent:
+                                                            subjectClassStudent?.[0],
+                                                    })}
+                                                    size={16}
+                                                />
+                                            </Tooltip>
+                                            <Tooltip title="Thêm chứng chỉ">
+                                                <SafetyCertificateOutlined
+                                                    onClick={onOpenModalAddCertificate.bind(null, {
+                                                        id: subjectClassStudent?.[0]?.id,
+                                                        studentId: studentId,
+                                                        list:
+                                                            subjectClassStudent?.length > 0
+                                                                ? subjectClassStudent[0]?.certificates.map(
+                                                                      (i: {
+                                                                          archivedCertificateId: string
+                                                                      }) => i.archivedCertificateId
+                                                                  )
+                                                                : [],
+                                                        subjectClassStudent:
+                                                            subjectClassStudent?.[0],
+                                                    })}
+                                                    size={16}
+                                                />
+                                            </Tooltip>
+                                        </Row>
+                                    ),
+                                },
+                            ]}
+                            data={data.filter((s) => !semesterId || semesterId === s.id)}
+                            pagination={{
+                                hideOnSinglePage: true,
+                            }}
+                        />
+                    </Col>
+                    <Col span={24}>
+                        <h3 className="text-lg font-bold">Danh sách điểm phiên</h3>
+                        <Table
+                            // filters={filters}
+                            // setFilters={setFilters}
+                            columns={[
+                                {
+                                    title: 'STT',
+                                    width: 50,
+                                    align: 'center',
+                                    render: (_, __, index) => index + 1,
+                                },
+                                {
+                                    title: 'Mã môn học',
+                                    width: 150,
+                                    align: 'center',
+                                    render: (_, record) => record?.subjectVersion?.code,
+                                },
+                                {
+                                    title: 'Tên môn học',
+                                    align: 'center',
+                                    render: (_, record) => record?.subjectVersion?.name,
+                                },
+                                {
+                                    title: 'Điểm',
+                                    dataIndex: 'manualFinalScore',
+                                    align: 'center',
+                                    width: 150,
+                                },
+                                {
+                                    title: 'Ghi chú',
+                                    dataIndex: 'description',
+                                    align: 'center',
+                                    width: 250,
+                                },
+                            ]}
+                            data={manualScoreData}
+                            pagination={false}
+                        />
+                    </Col>
+                </Row>
+            </div>
         </DefaultLayout>
     )
 }

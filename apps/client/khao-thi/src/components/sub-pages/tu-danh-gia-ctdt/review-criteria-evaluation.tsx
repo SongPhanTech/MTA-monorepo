@@ -6,7 +6,7 @@ import type { DataReviewCriteriaEvaluationType } from '@pages/ql-tu-danh-gia-ctd
 import { useSession } from '@workspace/auth/react'
 import { $Enums, type CriterionPeriod, type EvaluationCriterion } from '@workspace/db/client'
 import { sqlTransaction } from '@workspace/libs/api/model'
-import { Button, Card, Collapse, Form, message, Tag } from 'antd'
+import { Badge, Button, Card, Collapse, Form, message, Tag } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { getDeadlineStatus } from '@/utils/getDeadlineStatus'
@@ -24,6 +24,7 @@ const ReviewCriteriaEvaluationSubpage = ({
 }) => {
     const { hideSpinner, showSpinner } = useSpinner()
     const [showCommentsCriterionId, setShowCommentsCriterionId] = useState<string | null>(null)
+    const [openCollapseKeys, setOpenCollapseKeys] = useState<Record<string, boolean>>({})
 
     const [form] = Form.useForm<PutRequirementCriterion>()
     const [commentForm] = Form.useForm<{ crossReview: string }>()
@@ -77,44 +78,6 @@ const ReviewCriteriaEvaluationSubpage = ({
             message.success('Gửi ý kiến phản biện thành công')
             commentForm.resetFields()
             setShowCommentsCriterionId(null)
-            onRefetch()
-        } catch (error) {
-            message.error('Có lỗi xảy ra, vui lòng thử lại')
-        } finally {
-            hideSpinner()
-        }
-    }
-
-    const handleApproveSingleCriterion = async (
-        evaluationCriterionId: string,
-        criterionPeriodId: string
-    ) => {
-        try {
-            showSpinner()
-
-            const listSqlTransaction: any[] = [
-                {
-                    model: 'EvaluationCriterion',
-                    operation: 'update',
-                    data: {
-                        where: {
-                            id: evaluationCriterionId,
-                        },
-                        data: {
-                            status: $Enums.EvaluationStatus.APPROVED,
-                        },
-                    },
-                },
-            ]
-
-            const res = await sqlTransaction(listSqlTransaction)
-
-            if (res.status !== 200) {
-                message.error('Có lỗi xảy ra, vui lòng thử lại')
-                return
-            }
-
-            message.success('Phê duyệt tiêu chí thành công')
             onRefetch()
         } catch (error) {
             message.error('Có lỗi xảy ra, vui lòng thử lại')
@@ -269,61 +232,59 @@ const ReviewCriteriaEvaluationSubpage = ({
                                                                             .PENDING &&
                                                                     status !==
                                                                         $Enums.EvaluationStatus
-                                                                            .COMPLETED &&
-                                                                    status !==
-                                                                        $Enums.EvaluationStatus
                                                                             .APPROVED && (
                                                                         <div className="flex gap-2">
-                                                                            <Button
-                                                                                type="primary"
+                                                                            <Badge
+                                                                                count={
+                                                                                    item
+                                                                                        .evaluationCriterion
+                                                                                        ?.evaluationCriterionComments
+                                                                                        ?.length ||
+                                                                                    0
+                                                                                }
                                                                                 size="small"
-                                                                                onClick={() => {
-                                                                                    if (
-                                                                                        item
-                                                                                            .evaluationCriterion
-                                                                                            ?.id &&
-                                                                                        item
-                                                                                            .evaluationCriterion
-                                                                                            ?.criterionPeriodId
-                                                                                    ) {
-                                                                                        handleApproveSingleCriterion(
-                                                                                            item
-                                                                                                .evaluationCriterion
-                                                                                                .id,
-                                                                                            item
-                                                                                                .evaluationCriterion
-                                                                                                .criterionPeriodId
-                                                                                        )
-                                                                                    }
-                                                                                }}
                                                                             >
-                                                                                Phê duyệt
-                                                                            </Button>
-                                                                            <Button
-                                                                                type="primary"
-                                                                                size="small"
-                                                                                className="bg-yellow-400"
-                                                                                onClick={() =>
-                                                                                    setShowCommentsCriterionId(
-                                                                                        showCommentsCriterionId ===
+                                                                                <Button
+                                                                                    type="primary"
+                                                                                    size="small"
+                                                                                    className="bg-yellow-400"
+                                                                                    onClick={() => {
+                                                                                        const id =
                                                                                             item
                                                                                                 .evaluationCriterion
                                                                                                 ?.id
-                                                                                            ? null
-                                                                                            : item
-                                                                                                  .evaluationCriterion
-                                                                                                  ?.id ||
-                                                                                                  null
-                                                                                    )
-                                                                                }
-                                                                            >
-                                                                                {showCommentsCriterionId ===
-                                                                                item
-                                                                                    .evaluationCriterion
-                                                                                    ?.id
-                                                                                    ? 'Đóng'
-                                                                                    : 'Gửi ý kiến phản biện'}
-                                                                            </Button>
+                                                                                        const isOpen =
+                                                                                            showCommentsCriterionId ===
+                                                                                            id
+                                                                                        setShowCommentsCriterionId(
+                                                                                            isOpen
+                                                                                                ? null
+                                                                                                : id ||
+                                                                                                      null
+                                                                                        )
+                                                                                        if (
+                                                                                            !isOpen &&
+                                                                                            id
+                                                                                        ) {
+                                                                                            setOpenCollapseKeys(
+                                                                                                (
+                                                                                                    prev
+                                                                                                ) => ({
+                                                                                                    ...prev,
+                                                                                                    [item.id]: true,
+                                                                                                })
+                                                                                            )
+                                                                                        }
+                                                                                    }}
+                                                                                >
+                                                                                    {showCommentsCriterionId ===
+                                                                                    item
+                                                                                        .evaluationCriterion
+                                                                                        ?.id
+                                                                                        ? 'Đóng'
+                                                                                        : 'Gửi ý kiến phản biện'}
+                                                                                </Button>
+                                                                            </Badge>
                                                                         </div>
                                                                     )}
                                                             </div>
@@ -476,6 +437,15 @@ const ReviewCriteriaEvaluationSubpage = ({
                                                 bordered={true}
                                                 expandIconPosition="end"
                                                 className="bg-transparent mb-6"
+                                                activeKey={
+                                                    openCollapseKeys[item.id] ? [item.id] : []
+                                                }
+                                                onChange={(keys) =>
+                                                    setOpenCollapseKeys((prev) => ({
+                                                        ...prev,
+                                                        [item.id]: keys.includes(item.id),
+                                                    }))
+                                                }
                                             />
                                         </div>
                                     )

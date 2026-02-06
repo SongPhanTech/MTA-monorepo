@@ -504,6 +504,7 @@ const PutCertificateArchivedModal = () => {
                                         <FormItem
                                             form={form}
                                             name={['student', record.id, 'issuedDate']}
+                                            dependencies={[['student', record.id, 'expiredDate']]}
                                             rules={[
                                                 {
                                                     required:
@@ -511,6 +512,26 @@ const PutCertificateArchivedModal = () => {
                                                             ?.certificateId,
                                                     message: 'Vui lòng nhập ngày cấp',
                                                 },
+                                                ({ getFieldValue }) => ({
+                                                    validator(_, value) {
+                                                        const expiredDate = getFieldValue([
+                                                            'student',
+                                                            record.id,
+                                                            'expiredDate',
+                                                        ])
+                                                        if (
+                                                            !value ||
+                                                            !expiredDate ||
+                                                            value.isBefore(expiredDate) ||
+                                                            value.isSame(expiredDate, 'day')
+                                                        ) {
+                                                            return Promise.resolve()
+                                                        }
+                                                        return Promise.reject(
+                                                            new Error('Ngày cấp không hợp lệ')
+                                                        )
+                                                    },
+                                                }),
                                             ]}
                                         >
                                             <DatePicker
@@ -529,6 +550,7 @@ const PutCertificateArchivedModal = () => {
                                         <FormItem
                                             form={form}
                                             name={['student', record.id, 'expiredDate']}
+                                            dependencies={[['student', record.id, 'issuedDate']]}
                                             rules={[
                                                 {
                                                     required:
@@ -536,6 +558,26 @@ const PutCertificateArchivedModal = () => {
                                                             ?.certificateId,
                                                     message: 'Vui lòng nhập ngày hết hạn',
                                                 },
+                                                ({ getFieldValue }) => ({
+                                                    validator(_, value) {
+                                                        const issuedDate = getFieldValue([
+                                                            'student',
+                                                            record.id,
+                                                            'issuedDate',
+                                                        ])
+                                                        if (
+                                                            !value ||
+                                                            !issuedDate ||
+                                                            value.isAfter(issuedDate) ||
+                                                            value.isSame(issuedDate, 'day')
+                                                        ) {
+                                                            return Promise.resolve()
+                                                        }
+                                                        return Promise.reject(
+                                                            new Error('Ngày hết hạn không hợp lệ')
+                                                        )
+                                                    },
+                                                }),
                                             ]}
                                         >
                                             <DatePicker

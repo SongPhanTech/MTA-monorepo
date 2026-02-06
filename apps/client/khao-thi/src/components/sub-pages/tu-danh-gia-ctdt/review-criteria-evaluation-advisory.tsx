@@ -24,12 +24,13 @@ const ReviewCriteriaEvaluationAdvisorySubpage = ({
 }) => {
     const { hideSpinner, showSpinner } = useSpinner()
     const [showCommentsCriterionId, setShowCommentsCriterionId] = useState<string | null>(null)
+    const [openCollapseKeys, setOpenCollapseKeys] = useState<Record<string, boolean>>({})
 
     const [form] = Form.useForm<PutRequirementCriterion>()
     const [commentForm] = Form.useForm<{ crossReview: string }>()
 
     const { data: me } = useSession()
-    const idProfile = me?.sDM_NhanVienId || 'f1218263-341e-40c4-b269-a711a0186c74'
+    const idProfile = me?.sDM_NhanVienId || '8bca0fb4-e233-4010-bb23-ed4cbe414726'
 
     const handleSendCrossReview = async (evaluationCriterionId: string) => {
         try {
@@ -218,29 +219,148 @@ const ReviewCriteriaEvaluationAdvisorySubpage = ({
                                                                     {item.order}:{' '}
                                                                 </span>
                                                                 <span>{item?.name}</span>
-                                                                {item.evaluationCriterion
-                                                                    ?.evaluationCriterionComments &&
-                                                                    item.evaluationCriterion
-                                                                        .evaluationCriterionComments
-                                                                        .length > 0 && (
-                                                                        <Badge
-                                                                            count={
-                                                                                item
-                                                                                    .evaluationCriterion
-                                                                                    .evaluationCriterionComments
-                                                                                    .length
-                                                                            }
-                                                                            style={{
-                                                                                backgroundColor:
-                                                                                    '#faad14',
-                                                                            }}
-                                                                        />
+                                                            </div>
+                                                        ),
+                                                        extra: (
+                                                            <div
+                                                                onClick={(e) => e.stopPropagation()}
+                                                            >
+                                                                {item.evaluationCriterion &&
+                                                                    status !==
+                                                                        $Enums.EvaluationStatus
+                                                                            .PENDING &&
+                                                                    status !==
+                                                                        $Enums.EvaluationStatus
+                                                                            .COMPLETED && (
+                                                                        <div className="flex gap-2">
+                                                                            <Badge
+                                                                                count={
+                                                                                    item
+                                                                                        .evaluationCriterion
+                                                                                        ?.evaluationCriterionComments
+                                                                                        ?.length ||
+                                                                                    0
+                                                                                }
+                                                                                size="small"
+                                                                            >
+                                                                                <Button
+                                                                                    type="primary"
+                                                                                    size="small"
+                                                                                    className="bg-yellow-400"
+                                                                                    onClick={() => {
+                                                                                        const id =
+                                                                                            item
+                                                                                                .evaluationCriterion
+                                                                                                ?.id
+                                                                                        const isOpen =
+                                                                                            showCommentsCriterionId ===
+                                                                                            id
+                                                                                        setShowCommentsCriterionId(
+                                                                                            isOpen
+                                                                                                ? null
+                                                                                                : id ||
+                                                                                                      null
+                                                                                        )
+                                                                                        if (
+                                                                                            !isOpen &&
+                                                                                            id
+                                                                                        ) {
+                                                                                            setOpenCollapseKeys(
+                                                                                                (
+                                                                                                    prev
+                                                                                                ) => ({
+                                                                                                    ...prev,
+                                                                                                    [item.id]: true,
+                                                                                                })
+                                                                                            )
+                                                                                        }
+                                                                                    }}
+                                                                                >
+                                                                                    {showCommentsCriterionId ===
+                                                                                    item
+                                                                                        .evaluationCriterion
+                                                                                        ?.id
+                                                                                        ? 'Đóng'
+                                                                                        : 'Gửi ý kiến phản biện'}
+                                                                                </Button>
+                                                                            </Badge>
+                                                                        </div>
                                                                     )}
                                                             </div>
                                                         ),
                                                         key: item.id,
                                                         children: (
                                                             <>
+                                                                {item.evaluationCriterion &&
+                                                                    showCommentsCriterionId ===
+                                                                        item.evaluationCriterion
+                                                                            ?.id && (
+                                                                        <div className="mb-3 border border-gray-200 rounded-lg overflow-hidden">
+                                                                            <Card>
+                                                                                <div className="flex justify-end gap-2 mb-4">
+                                                                                    <Button
+                                                                                        type="primary"
+                                                                                        onClick={() => {
+                                                                                            if (
+                                                                                                item
+                                                                                                    .evaluationCriterion
+                                                                                                    ?.id
+                                                                                            ) {
+                                                                                                handleSendCrossReview(
+                                                                                                    item
+                                                                                                        .evaluationCriterion
+                                                                                                        .id
+                                                                                                )
+                                                                                            }
+                                                                                        }}
+                                                                                    >
+                                                                                        Gửi ý kiến
+                                                                                    </Button>
+                                                                                </div>
+
+                                                                                {item
+                                                                                    .evaluationCriterion
+                                                                                    ?.evaluationCriterionComments &&
+                                                                                    item
+                                                                                        .evaluationCriterion
+                                                                                        .evaluationCriterionComments
+                                                                                        .length >
+                                                                                        0 && (
+                                                                                        <div className="mb-4 border border-gray-200 rounded-lg overflow-hidden">
+                                                                                            <CommentList
+                                                                                                comments={
+                                                                                                    item
+                                                                                                        .evaluationCriterion
+                                                                                                        .evaluationCriterionComments
+                                                                                                }
+                                                                                            />
+                                                                                        </div>
+                                                                                    )}
+
+                                                                                <Form
+                                                                                    form={
+                                                                                        commentForm
+                                                                                    }
+                                                                                    layout="vertical"
+                                                                                >
+                                                                                    <Form.Item
+                                                                                        label="Gửi ý kiến phản biện"
+                                                                                        name="crossReview"
+                                                                                        rules={[
+                                                                                            {
+                                                                                                required: true,
+                                                                                                message:
+                                                                                                    'Vui lòng nhập ý kiến phản biện',
+                                                                                            },
+                                                                                        ]}
+                                                                                    >
+                                                                                        <RichTextEditor />
+                                                                                    </Form.Item>
+                                                                                </Form>
+                                                                            </Card>
+                                                                        </div>
+                                                                    )}
+
                                                                 <Form.Item
                                                                     label="1. Mô tả hiện trạng"
                                                                     name={[
@@ -309,126 +429,6 @@ const ReviewCriteriaEvaluationAdvisorySubpage = ({
                                                                         editable={false}
                                                                     />
                                                                 </Form.Item>
-
-                                                                {item.evaluationCriterion && (
-                                                                    <>
-                                                                        {status !==
-                                                                            $Enums.EvaluationStatus
-                                                                                .PENDING &&
-                                                                            status !==
-                                                                                $Enums
-                                                                                    .EvaluationStatus
-                                                                                    .COMPLETED && (
-                                                                                <div className="flex justify-end mb-4">
-                                                                                    <Button
-                                                                                        type="primary"
-                                                                                        size="small"
-                                                                                        className="bg-yellow-400"
-                                                                                        onClick={() =>
-                                                                                            setShowCommentsCriterionId(
-                                                                                                showCommentsCriterionId ===
-                                                                                                    item
-                                                                                                        .evaluationCriterion
-                                                                                                        ?.id
-                                                                                                    ? null
-                                                                                                    : item
-                                                                                                          .evaluationCriterion
-                                                                                                          ?.id ||
-                                                                                                          null
-                                                                                            )
-                                                                                        }
-                                                                                    >
-                                                                                        {showCommentsCriterionId ===
-                                                                                        item
-                                                                                            .evaluationCriterion
-                                                                                            ?.id
-                                                                                            ? 'Đóng'
-                                                                                            : 'Gửi ý kiến phản biện'}
-                                                                                    </Button>
-                                                                                </div>
-                                                                            )}
-
-                                                                        {showCommentsCriterionId ===
-                                                                            item.evaluationCriterion
-                                                                                ?.id && (
-                                                                            <div className="mb-3 border border-gray-200 rounded-lg overflow-hidden">
-                                                                                <Card>
-                                                                                    {item
-                                                                                        .evaluationCriterion
-                                                                                        ?.evaluationCriterionComments &&
-                                                                                        item
-                                                                                            .evaluationCriterion
-                                                                                            .evaluationCriterionComments
-                                                                                            .length >
-                                                                                            0 && (
-                                                                                            <div className="mb-4 border border-gray-200 rounded-lg overflow-hidden">
-                                                                                                <CommentList
-                                                                                                    comments={
-                                                                                                        item
-                                                                                                            .evaluationCriterion
-                                                                                                            .evaluationCriterionComments
-                                                                                                    }
-                                                                                                />
-                                                                                            </div>
-                                                                                        )}
-
-                                                                                    <Form
-                                                                                        form={
-                                                                                            commentForm
-                                                                                        }
-                                                                                        layout="vertical"
-                                                                                    >
-                                                                                        <Form.Item
-                                                                                            label="Gửi ý kiến phản biện"
-                                                                                            name="crossReview"
-                                                                                            rules={[
-                                                                                                {
-                                                                                                    required: true,
-                                                                                                    message:
-                                                                                                        'Vui lòng nhập ý kiến phản biện',
-                                                                                                },
-                                                                                            ]}
-                                                                                        >
-                                                                                            <RichTextEditor />
-                                                                                        </Form.Item>
-                                                                                        <div className="flex justify-end gap-2">
-                                                                                            <Button
-                                                                                                onClick={() => {
-                                                                                                    commentForm.resetFields()
-                                                                                                    setShowCommentsCriterionId(
-                                                                                                        null
-                                                                                                    )
-                                                                                                }}
-                                                                                            >
-                                                                                                Hủy
-                                                                                            </Button>
-                                                                                            <Button
-                                                                                                type="primary"
-                                                                                                onClick={() => {
-                                                                                                    if (
-                                                                                                        item
-                                                                                                            .evaluationCriterion
-                                                                                                            ?.id
-                                                                                                    ) {
-                                                                                                        handleSendCrossReview(
-                                                                                                            item
-                                                                                                                .evaluationCriterion
-                                                                                                                .id
-                                                                                                        )
-                                                                                                    }
-                                                                                                }}
-                                                                                            >
-                                                                                                Gửi
-                                                                                                ý
-                                                                                                kiến
-                                                                                            </Button>
-                                                                                        </div>
-                                                                                    </Form>
-                                                                                </Card>
-                                                                            </div>
-                                                                        )}
-                                                                    </>
-                                                                )}
                                                             </>
                                                         ),
                                                     },
@@ -436,6 +436,15 @@ const ReviewCriteriaEvaluationAdvisorySubpage = ({
                                                 bordered={true}
                                                 expandIconPosition="end"
                                                 className="bg-transparent mb-6"
+                                                activeKey={
+                                                    openCollapseKeys[item.id] ? [item.id] : []
+                                                }
+                                                onChange={(keys) =>
+                                                    setOpenCollapseKeys((prev) => ({
+                                                        ...prev,
+                                                        [item.id]: keys.includes(item.id),
+                                                    }))
+                                                }
                                             />
                                         </div>
                                     )

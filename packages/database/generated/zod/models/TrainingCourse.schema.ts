@@ -36,6 +36,7 @@ const baseSchema = z.object({
     coef_2: z.number().default(0.3),
     coef_3: z.number().default(0.6),
     scoreToTakeExam: z.number().default(5),
+    examScoreToPass: z.number().default(5),
     scoreToPass: z.number().default(5),
     scoreToPassConditional: z.number().default(5),
     scoreToTakeGraduation: z.number().default(5),
@@ -75,6 +76,7 @@ const baseSchemaWithoutDefaults = z.object({
     coef_2: z.number(),
     coef_3: z.number(),
     scoreToTakeExam: z.number(),
+    examScoreToPass: z.number(),
     scoreToPass: z.number(),
     scoreToPassConditional: z.number(),
     scoreToTakeGraduation: z.number(),
@@ -165,6 +167,7 @@ export const TrainingCoursePrismaUpdateSchema = z.object({
     coef_2: z.union([z.number(), z.record(z.string(), z.unknown())]),
     coef_3: z.union([z.number(), z.record(z.string(), z.unknown())]),
     scoreToTakeExam: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    examScoreToPass: z.union([z.number(), z.record(z.string(), z.unknown())]),
     scoreToPass: z.union([z.number(), z.record(z.string(), z.unknown())]),
     scoreToPassConditional: z.union([z.number(), z.record(z.string(), z.unknown())]),
     scoreToTakeGraduation: z.union([z.number(), z.record(z.string(), z.unknown())]),
@@ -179,7 +182,7 @@ export const TrainingCoursePrismaUpdateSchema = z.object({
  * `TrainingCourse` schema for create operations excluding foreign keys and relations.
  */
 export const TrainingCourseCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, isGeneralInfoLocked: true, isRegulationLocked: true, isScoreConfigLocked: true, coef_1: true, coef_2: true, coef_3: true, scoreToTakeExam: true, scoreToPass: true, scoreToPassConditional: true, scoreToTakeGraduation: true, scoreToPassGraduation: true, maxReExamScore: true, reduceReExamScore: true, scoreToRetain: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, isGeneralInfoLocked: true, isRegulationLocked: true, isScoreConfigLocked: true, coef_1: true, coef_2: true, coef_3: true, scoreToTakeExam: true, examScoreToPass: true, scoreToPass: true, scoreToPassConditional: true, scoreToTakeGraduation: true, scoreToPassGraduation: true, maxReExamScore: true, reduceReExamScore: true, scoreToRetain: true
 });
 
 

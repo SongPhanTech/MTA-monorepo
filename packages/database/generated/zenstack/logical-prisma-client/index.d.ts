@@ -7839,6 +7839,7 @@ export namespace Prisma {
         coef_2: 'coef_2',
         coef_3: 'coef_3',
         scoreToTakeExam: 'scoreToTakeExam',
+        examScoreToPass: 'examScoreToPass',
         scoreToPass: 'scoreToPass',
         scoreToPassConditional: 'scoreToPassConditional',
         scoreToTakeGraduation: 'scoreToTakeGraduation',
@@ -9719,7 +9720,8 @@ export namespace Prisma {
         examType: 'examType',
         examMatrixId: 'examMatrixId',
         isLock: 'isLock',
-        isNote: 'isNote'
+        isNote: 'isNote',
+        isGroup: 'isGroup'
     };
     export const ExamBankQuestionScalarFieldEnum: {
         id: 'id',
@@ -10106,9 +10108,9 @@ export namespace Prisma {
         trainingObjectTypeId: 'trainingObjectTypeId',
         note: 'note',
         decision: 'decision',
-        status: 'status',
         fixedClassId: 'fixedClassId',
-        semesterId: 'semesterId'
+        semesterId: 'semesterId',
+        status: 'status'
     };
     export const ScoreLinkSubjectVersionScalarFieldEnum: {
         id: 'id',
@@ -47300,6 +47302,7 @@ export namespace Prisma {
         readonly coef_2: FieldRef<"TrainingCourse", 'Float'>;
         readonly coef_3: FieldRef<"TrainingCourse", 'Float'>;
         readonly scoreToTakeExam: FieldRef<"TrainingCourse", 'Float'>;
+        readonly examScoreToPass: FieldRef<"TrainingCourse", 'Float'>;
         readonly scoreToPass: FieldRef<"TrainingCourse", 'Float'>;
         readonly scoreToPassConditional: FieldRef<"TrainingCourse", 'Float'>;
         readonly scoreToTakeGraduation: FieldRef<"TrainingCourse", 'Float'>;
@@ -90980,6 +90983,7 @@ export namespace Prisma {
         readonly examMatrixId: FieldRef<"ExamBank", 'String'>;
         readonly isLock: FieldRef<"ExamBank", 'Boolean'>;
         readonly isNote: FieldRef<"ExamBank", 'Boolean'>;
+        readonly isGroup: FieldRef<"ExamBank", 'Boolean'>;
     }
 
     export interface ExamBankQuestionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -99565,9 +99569,9 @@ export namespace Prisma {
         readonly trainingObjectTypeId: FieldRef<"ScoreLinkSheet", 'String'>;
         readonly note: FieldRef<"ScoreLinkSheet", 'String'>;
         readonly decision: FieldRef<"ScoreLinkSheet", 'String'>;
-        readonly status: FieldRef<"ScoreLinkSheet", 'ScoreLinkStatus'>;
         readonly fixedClassId: FieldRef<"ScoreLinkSheet", 'String'>;
         readonly semesterId: FieldRef<"ScoreLinkSheet", 'String'>;
+        readonly status: FieldRef<"ScoreLinkSheet", 'ScoreLinkStatus'>;
     }
 
     export interface ScoreLinkSubjectVersionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -211400,6 +211404,7 @@ export namespace Prisma {
         coef_2: number | null
         coef_3: number | null
         scoreToTakeExam: number | null
+        examScoreToPass: number | null
         scoreToPass: number | null
         scoreToPassConditional: number | null
         scoreToTakeGraduation: number | null
@@ -211419,6 +211424,7 @@ export namespace Prisma {
         coef_2: number | null
         coef_3: number | null
         scoreToTakeExam: number | null
+        examScoreToPass: number | null
         scoreToPass: number | null
         scoreToPassConditional: number | null
         scoreToTakeGraduation: number | null
@@ -211459,6 +211465,7 @@ export namespace Prisma {
         coef_2: number | null
         coef_3: number | null
         scoreToTakeExam: number | null
+        examScoreToPass: number | null
         scoreToPass: number | null
         scoreToPassConditional: number | null
         scoreToTakeGraduation: number | null
@@ -211500,6 +211507,7 @@ export namespace Prisma {
         coef_2: number | null
         coef_3: number | null
         scoreToTakeExam: number | null
+        examScoreToPass: number | null
         scoreToPass: number | null
         scoreToPassConditional: number | null
         scoreToTakeGraduation: number | null
@@ -211541,6 +211549,7 @@ export namespace Prisma {
         coef_2: number
         coef_3: number
         scoreToTakeExam: number
+        examScoreToPass: number
         scoreToPass: number
         scoreToPassConditional: number
         scoreToTakeGraduation: number
@@ -211562,6 +211571,7 @@ export namespace Prisma {
         coef_2?: true
         coef_3?: true
         scoreToTakeExam?: true
+        examScoreToPass?: true
         scoreToPass?: true
         scoreToPassConditional?: true
         scoreToTakeGraduation?: true
@@ -211581,6 +211591,7 @@ export namespace Prisma {
         coef_2?: true
         coef_3?: true
         scoreToTakeExam?: true
+        examScoreToPass?: true
         scoreToPass?: true
         scoreToPassConditional?: true
         scoreToTakeGraduation?: true
@@ -211621,6 +211632,7 @@ export namespace Prisma {
         coef_2?: true
         coef_3?: true
         scoreToTakeExam?: true
+        examScoreToPass?: true
         scoreToPass?: true
         scoreToPassConditional?: true
         scoreToTakeGraduation?: true
@@ -211662,6 +211674,7 @@ export namespace Prisma {
         coef_2?: true
         coef_3?: true
         scoreToTakeExam?: true
+        examScoreToPass?: true
         scoreToPass?: true
         scoreToPassConditional?: true
         scoreToTakeGraduation?: true
@@ -211703,6 +211716,7 @@ export namespace Prisma {
         coef_2?: true
         coef_3?: true
         scoreToTakeExam?: true
+        examScoreToPass?: true
         scoreToPass?: true
         scoreToPassConditional?: true
         scoreToTakeGraduation?: true
@@ -211825,6 +211839,7 @@ export namespace Prisma {
         coef_2: number
         coef_3: number
         scoreToTakeExam: number
+        examScoreToPass: number
         scoreToPass: number
         scoreToPassConditional: number
         scoreToTakeGraduation: number
@@ -211883,6 +211898,7 @@ export namespace Prisma {
         coef_2?: boolean
         coef_3?: boolean
         scoreToTakeExam?: boolean
+        examScoreToPass?: boolean
         scoreToPass?: boolean
         scoreToPassConditional?: boolean
         scoreToTakeGraduation?: boolean
@@ -211943,6 +211959,7 @@ export namespace Prisma {
         coef_2?: boolean
         coef_3?: boolean
         scoreToTakeExam?: boolean
+        examScoreToPass?: boolean
         scoreToPass?: boolean
         scoreToPassConditional?: boolean
         scoreToTakeGraduation?: boolean
@@ -211987,6 +212004,7 @@ export namespace Prisma {
         coef_2?: boolean
         coef_3?: boolean
         scoreToTakeExam?: boolean
+        examScoreToPass?: boolean
         scoreToPass?: boolean
         scoreToPassConditional?: boolean
         scoreToTakeGraduation?: boolean
@@ -212031,6 +212049,7 @@ export namespace Prisma {
         coef_2?: boolean
         coef_3?: boolean
         scoreToTakeExam?: boolean
+        examScoreToPass?: boolean
         scoreToPass?: boolean
         scoreToPassConditional?: boolean
         scoreToTakeGraduation?: boolean
@@ -212040,7 +212059,7 @@ export namespace Prisma {
         scoreToRetain?: boolean
         trainingObjectTypeId?: boolean
     };
-    export type TrainingCourseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "semesterStartId" | "startYear" | "endYear" | "academicYear" | "maxTrainingTime" | "admissionQuota" | "admittedStudent" | "enrolledStudent" | "admissionStartDate" | "admissionEndDate" | "admissionDecision" | "studentRecognitionDecision" | "regulation" | "trainingLanguageId" | "isGeneralInfoLocked" | "isRegulationLocked" | "isScoreConfigLocked" | "baseScore" | "coef_1" | "coef_2" | "coef_3" | "scoreToTakeExam" | "scoreToPass" | "scoreToPassConditional" | "scoreToTakeGraduation" | "scoreToPassGraduation" | "maxReExamScore" | "reduceReExamScore" | "scoreToRetain" | "trainingObjectTypeId", ExtArgs["result"]["trainingCourse"]>;
+    export type TrainingCourseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "semesterStartId" | "startYear" | "endYear" | "academicYear" | "maxTrainingTime" | "admissionQuota" | "admittedStudent" | "enrolledStudent" | "admissionStartDate" | "admissionEndDate" | "admissionDecision" | "studentRecognitionDecision" | "regulation" | "trainingLanguageId" | "isGeneralInfoLocked" | "isRegulationLocked" | "isScoreConfigLocked" | "baseScore" | "coef_1" | "coef_2" | "coef_3" | "scoreToTakeExam" | "examScoreToPass" | "scoreToPass" | "scoreToPassConditional" | "scoreToTakeGraduation" | "scoreToPassGraduation" | "maxReExamScore" | "reduceReExamScore" | "scoreToRetain" | "trainingObjectTypeId", ExtArgs["result"]["trainingCourse"]>;
     export type TrainingCourseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         semesterStart?: boolean | SemesterDefaultArgs<ExtArgs>
         trainingLanguage?: boolean | TrainingCourse$trainingLanguageArgs<ExtArgs>
@@ -212159,6 +212178,7 @@ export namespace Prisma {
             coef_2: number
             coef_3: number
             scoreToTakeExam: number
+            examScoreToPass: number
             scoreToPass: number
             scoreToPassConditional: number
             scoreToTakeGraduation: number
@@ -302746,6 +302766,7 @@ export namespace Prisma {
         examMatrixId: string | null
         isLock: boolean | null
         isNote: boolean | null
+        isGroup: boolean | null
     };
     export type ExamBankMaxAggregateOutputType = {
         id: string | null
@@ -302765,6 +302786,7 @@ export namespace Prisma {
         examMatrixId: string | null
         isLock: boolean | null
         isNote: boolean | null
+        isGroup: boolean | null
     };
     export type ExamBankCountAggregateOutputType = {
         id: number
@@ -302784,6 +302806,7 @@ export namespace Prisma {
         examMatrixId: number
         isLock: number
         isNote: number
+        isGroup: number
         _all: number
     };
     export type ExamBankMinAggregateInputType = {
@@ -302804,6 +302827,7 @@ export namespace Prisma {
         examMatrixId?: true
         isLock?: true
         isNote?: true
+        isGroup?: true
     };
     export type ExamBankMaxAggregateInputType = {
         id?: true
@@ -302823,6 +302847,7 @@ export namespace Prisma {
         examMatrixId?: true
         isLock?: true
         isNote?: true
+        isGroup?: true
     };
     export type ExamBankCountAggregateInputType = {
         id?: true
@@ -302842,6 +302867,7 @@ export namespace Prisma {
         examMatrixId?: true
         isLock?: true
         isNote?: true
+        isGroup?: true
         _all?: true
     };
     export type ExamBankAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -302928,6 +302954,7 @@ export namespace Prisma {
         examMatrixId: string | null
         isLock: boolean | null
         isNote: boolean | null
+        isGroup: boolean | null
         _count: ExamBankCountAggregateOutputType | null
         _min: ExamBankMinAggregateOutputType | null
         _max: ExamBankMaxAggregateOutputType | null
@@ -302962,6 +302989,7 @@ export namespace Prisma {
         examMatrixId?: boolean
         isLock?: boolean
         isNote?: boolean
+        isGroup?: boolean
         exam?: boolean | ExamDefaultArgs<ExtArgs>
         subjectClass?: boolean | ExamBank$subjectClassArgs<ExtArgs>
         questions?: boolean | ExamBank$questionsArgs<ExtArgs>
@@ -302986,6 +303014,7 @@ export namespace Prisma {
         examMatrixId?: boolean
         isLock?: boolean
         isNote?: boolean
+        isGroup?: boolean
         exam?: boolean | ExamDefaultArgs<ExtArgs>
         subjectClass?: boolean | ExamBank$subjectClassArgs<ExtArgs>
         examMatrix?: boolean | ExamBank$examMatrixArgs<ExtArgs>
@@ -303008,6 +303037,7 @@ export namespace Prisma {
         examMatrixId?: boolean
         isLock?: boolean
         isNote?: boolean
+        isGroup?: boolean
         exam?: boolean | ExamDefaultArgs<ExtArgs>
         subjectClass?: boolean | ExamBank$subjectClassArgs<ExtArgs>
         examMatrix?: boolean | ExamBank$examMatrixArgs<ExtArgs>
@@ -303030,8 +303060,9 @@ export namespace Prisma {
         examMatrixId?: boolean
         isLock?: boolean
         isNote?: boolean
+        isGroup?: boolean
     };
-    export type ExamBankOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "examId" | "examCode" | "subjectClassId" | "explain" | "examDay" | "examType" | "examMatrixId" | "isLock" | "isNote", ExtArgs["result"]["examBank"]>;
+    export type ExamBankOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "examId" | "examCode" | "subjectClassId" | "explain" | "examDay" | "examType" | "examMatrixId" | "isLock" | "isNote" | "isGroup", ExtArgs["result"]["examBank"]>;
     export type ExamBankInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         exam?: boolean | ExamDefaultArgs<ExtArgs>
         subjectClass?: boolean | ExamBank$subjectClassArgs<ExtArgs>
@@ -303078,6 +303109,7 @@ export namespace Prisma {
              * được sử dụng tài liệu hay không
              */
             isNote: boolean | null
+            isGroup: boolean | null
         }, ExtArgs["result"]["examBank"]>
         composites: {}
     };
@@ -320421,9 +320453,9 @@ export namespace Prisma {
         trainingObjectTypeId: string | null
         note: string | null
         decision: string | null
-        status: $Enums.ScoreLinkStatus | null
         fixedClassId: string | null
         semesterId: string | null
+        status: $Enums.ScoreLinkStatus | null
     };
     export type ScoreLinkSheetMaxAggregateOutputType = {
         id: string | null
@@ -320437,9 +320469,9 @@ export namespace Prisma {
         trainingObjectTypeId: string | null
         note: string | null
         decision: string | null
-        status: $Enums.ScoreLinkStatus | null
         fixedClassId: string | null
         semesterId: string | null
+        status: $Enums.ScoreLinkStatus | null
     };
     export type ScoreLinkSheetCountAggregateOutputType = {
         id: number
@@ -320453,9 +320485,9 @@ export namespace Prisma {
         trainingObjectTypeId: number
         note: number
         decision: number
-        status: number
         fixedClassId: number
         semesterId: number
+        status: number
         _all: number
     };
     export type ScoreLinkSheetMinAggregateInputType = {
@@ -320470,9 +320502,9 @@ export namespace Prisma {
         trainingObjectTypeId?: true
         note?: true
         decision?: true
-        status?: true
         fixedClassId?: true
         semesterId?: true
+        status?: true
     };
     export type ScoreLinkSheetMaxAggregateInputType = {
         id?: true
@@ -320486,9 +320518,9 @@ export namespace Prisma {
         trainingObjectTypeId?: true
         note?: true
         decision?: true
-        status?: true
         fixedClassId?: true
         semesterId?: true
+        status?: true
     };
     export type ScoreLinkSheetCountAggregateInputType = {
         id?: true
@@ -320502,9 +320534,9 @@ export namespace Prisma {
         trainingObjectTypeId?: true
         note?: true
         decision?: true
-        status?: true
         fixedClassId?: true
         semesterId?: true
+        status?: true
         _all?: true
     };
     export type ScoreLinkSheetAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -320585,9 +320617,9 @@ export namespace Prisma {
         trainingObjectTypeId: string
         note: string | null
         decision: string | null
-        status: $Enums.ScoreLinkStatus
         fixedClassId: string
         semesterId: string
+        status: $Enums.ScoreLinkStatus
         _count: ScoreLinkSheetCountAggregateOutputType | null
         _min: ScoreLinkSheetMinAggregateOutputType | null
         _max: ScoreLinkSheetMaxAggregateOutputType | null
@@ -320616,9 +320648,9 @@ export namespace Prisma {
         trainingObjectTypeId?: boolean
         note?: boolean
         decision?: boolean
-        status?: boolean
         fixedClassId?: boolean
         semesterId?: boolean
+        status?: boolean
         trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
         fixedClass?: boolean | FixedClassDefaultArgs<ExtArgs>
         semester?: boolean | SemesterDefaultArgs<ExtArgs>
@@ -320638,9 +320670,9 @@ export namespace Prisma {
         trainingObjectTypeId?: boolean
         note?: boolean
         decision?: boolean
-        status?: boolean
         fixedClassId?: boolean
         semesterId?: boolean
+        status?: boolean
         trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
         fixedClass?: boolean | FixedClassDefaultArgs<ExtArgs>
         semester?: boolean | SemesterDefaultArgs<ExtArgs>
@@ -320657,9 +320689,9 @@ export namespace Prisma {
         trainingObjectTypeId?: boolean
         note?: boolean
         decision?: boolean
-        status?: boolean
         fixedClassId?: boolean
         semesterId?: boolean
+        status?: boolean
         trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
         fixedClass?: boolean | FixedClassDefaultArgs<ExtArgs>
         semester?: boolean | SemesterDefaultArgs<ExtArgs>
@@ -320676,11 +320708,11 @@ export namespace Prisma {
         trainingObjectTypeId?: boolean
         note?: boolean
         decision?: boolean
-        status?: boolean
         fixedClassId?: boolean
         semesterId?: boolean
+        status?: boolean
     };
-    export type ScoreLinkSheetOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "trainingObjectTypeId" | "note" | "decision" | "status" | "fixedClassId" | "semesterId", ExtArgs["result"]["scoreLinkSheet"]>;
+    export type ScoreLinkSheetOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "trainingObjectTypeId" | "note" | "decision" | "fixedClassId" | "semesterId" | "status", ExtArgs["result"]["scoreLinkSheet"]>;
     export type ScoreLinkSheetInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
         fixedClass?: boolean | FixedClassDefaultArgs<ExtArgs>
@@ -320720,9 +320752,9 @@ export namespace Prisma {
             trainingObjectTypeId: string
             note: string | null
             decision: string | null
-            status: $Enums.ScoreLinkStatus
             fixedClassId: string
             semesterId: string
+            status: $Enums.ScoreLinkStatus
         }, ExtArgs["result"]["scoreLinkSheet"]>
         composites: {}
     };
@@ -360933,6 +360965,7 @@ export namespace Prisma {
         coef_2?: FloatFilter<"TrainingCourse"> | number
         coef_3?: FloatFilter<"TrainingCourse"> | number
         scoreToTakeExam?: FloatFilter<"TrainingCourse"> | number
+        examScoreToPass?: FloatFilter<"TrainingCourse"> | number
         scoreToPass?: FloatFilter<"TrainingCourse"> | number
         scoreToPassConditional?: FloatFilter<"TrainingCourse"> | number
         scoreToTakeGraduation?: FloatFilter<"TrainingCourse"> | number
@@ -360992,6 +361025,7 @@ export namespace Prisma {
         coef_2?: SortOrder
         coef_3?: SortOrder
         scoreToTakeExam?: SortOrder
+        examScoreToPass?: SortOrder
         scoreToPass?: SortOrder
         scoreToPassConditional?: SortOrder
         scoreToTakeGraduation?: SortOrder
@@ -361055,6 +361089,7 @@ export namespace Prisma {
         coef_2?: FloatFilter<"TrainingCourse"> | number
         coef_3?: FloatFilter<"TrainingCourse"> | number
         scoreToTakeExam?: FloatFilter<"TrainingCourse"> | number
+        examScoreToPass?: FloatFilter<"TrainingCourse"> | number
         scoreToPass?: FloatFilter<"TrainingCourse"> | number
         scoreToPassConditional?: FloatFilter<"TrainingCourse"> | number
         scoreToTakeGraduation?: FloatFilter<"TrainingCourse"> | number
@@ -361114,6 +361149,7 @@ export namespace Prisma {
         coef_2?: SortOrder
         coef_3?: SortOrder
         scoreToTakeExam?: SortOrder
+        examScoreToPass?: SortOrder
         scoreToPass?: SortOrder
         scoreToPassConditional?: SortOrder
         scoreToTakeGraduation?: SortOrder
@@ -361163,6 +361199,7 @@ export namespace Prisma {
         coef_2?: FloatWithAggregatesFilter<"TrainingCourse"> | number
         coef_3?: FloatWithAggregatesFilter<"TrainingCourse"> | number
         scoreToTakeExam?: FloatWithAggregatesFilter<"TrainingCourse"> | number
+        examScoreToPass?: FloatWithAggregatesFilter<"TrainingCourse"> | number
         scoreToPass?: FloatWithAggregatesFilter<"TrainingCourse"> | number
         scoreToPassConditional?: FloatWithAggregatesFilter<"TrainingCourse"> | number
         scoreToTakeGraduation?: FloatWithAggregatesFilter<"TrainingCourse"> | number
@@ -373433,6 +373470,7 @@ export namespace Prisma {
         examMatrixId?: StringNullableFilter<"ExamBank"> | string | null
         isLock?: BoolNullableFilter<"ExamBank"> | boolean | null
         isNote?: BoolNullableFilter<"ExamBank"> | boolean | null
+        isGroup?: BoolNullableFilter<"ExamBank"> | boolean | null
         exam?: XOR<ExamScalarRelationFilter, ExamWhereInput>
         subjectClass?: XOR<SubjectClassNullableScalarRelationFilter, SubjectClassWhereInput> | null
         questions?: ExamBankQuestionListRelationFilter
@@ -373456,6 +373494,7 @@ export namespace Prisma {
         examMatrixId?: SortOrderInput | SortOrder
         isLock?: SortOrderInput | SortOrder
         isNote?: SortOrderInput | SortOrder
+        isGroup?: SortOrderInput | SortOrder
         exam?: ExamOrderByWithRelationInput
         subjectClass?: SubjectClassOrderByWithRelationInput
         questions?: ExamBankQuestionOrderByRelationAggregateInput
@@ -373484,6 +373523,7 @@ export namespace Prisma {
         examMatrixId?: StringNullableFilter<"ExamBank"> | string | null
         isLock?: BoolNullableFilter<"ExamBank"> | boolean | null
         isNote?: BoolNullableFilter<"ExamBank"> | boolean | null
+        isGroup?: BoolNullableFilter<"ExamBank"> | boolean | null
         exam?: XOR<ExamScalarRelationFilter, ExamWhereInput>
         subjectClass?: XOR<SubjectClassNullableScalarRelationFilter, SubjectClassWhereInput> | null
         questions?: ExamBankQuestionListRelationFilter
@@ -373507,6 +373547,7 @@ export namespace Prisma {
         examMatrixId?: SortOrderInput | SortOrder
         isLock?: SortOrderInput | SortOrder
         isNote?: SortOrderInput | SortOrder
+        isGroup?: SortOrderInput | SortOrder
         _count?: ExamBankCountOrderByAggregateInput
         _max?: ExamBankMaxOrderByAggregateInput
         _min?: ExamBankMinOrderByAggregateInput
@@ -373532,6 +373573,7 @@ export namespace Prisma {
         examMatrixId?: StringNullableWithAggregatesFilter<"ExamBank"> | string | null
         isLock?: BoolNullableWithAggregatesFilter<"ExamBank"> | boolean | null
         isNote?: BoolNullableWithAggregatesFilter<"ExamBank"> | boolean | null
+        isGroup?: BoolNullableWithAggregatesFilter<"ExamBank"> | boolean | null
     };
     export type ExamBankQuestionWhereInput = {
         AND?: ExamBankQuestionWhereInput | ExamBankQuestionWhereInput[]
@@ -375950,9 +375992,9 @@ export namespace Prisma {
         trainingObjectTypeId?: StringFilter<"ScoreLinkSheet"> | string
         note?: StringNullableFilter<"ScoreLinkSheet"> | string | null
         decision?: StringNullableFilter<"ScoreLinkSheet"> | string | null
-        status?: EnumScoreLinkStatusFilter<"ScoreLinkSheet"> | $Enums.ScoreLinkStatus
         fixedClassId?: StringFilter<"ScoreLinkSheet"> | string
         semesterId?: StringFilter<"ScoreLinkSheet"> | string
+        status?: EnumScoreLinkStatusFilter<"ScoreLinkSheet"> | $Enums.ScoreLinkStatus
         trainingObjectType?: XOR<TrainingObjectTypeScalarRelationFilter, TrainingObjectTypeWhereInput>
         fixedClass?: XOR<FixedClassScalarRelationFilter, FixedClassWhereInput>
         semester?: XOR<SemesterScalarRelationFilter, SemesterWhereInput>
@@ -375971,9 +376013,9 @@ export namespace Prisma {
         trainingObjectTypeId?: SortOrder
         note?: SortOrderInput | SortOrder
         decision?: SortOrderInput | SortOrder
-        status?: SortOrder
         fixedClassId?: SortOrder
         semesterId?: SortOrder
+        status?: SortOrder
         trainingObjectType?: TrainingObjectTypeOrderByWithRelationInput
         fixedClass?: FixedClassOrderByWithRelationInput
         semester?: SemesterOrderByWithRelationInput
@@ -375996,9 +376038,9 @@ export namespace Prisma {
         trainingObjectTypeId?: StringFilter<"ScoreLinkSheet"> | string
         note?: StringNullableFilter<"ScoreLinkSheet"> | string | null
         decision?: StringNullableFilter<"ScoreLinkSheet"> | string | null
-        status?: EnumScoreLinkStatusFilter<"ScoreLinkSheet"> | $Enums.ScoreLinkStatus
         fixedClassId?: StringFilter<"ScoreLinkSheet"> | string
         semesterId?: StringFilter<"ScoreLinkSheet"> | string
+        status?: EnumScoreLinkStatusFilter<"ScoreLinkSheet"> | $Enums.ScoreLinkStatus
         trainingObjectType?: XOR<TrainingObjectTypeScalarRelationFilter, TrainingObjectTypeWhereInput>
         fixedClass?: XOR<FixedClassScalarRelationFilter, FixedClassWhereInput>
         semester?: XOR<SemesterScalarRelationFilter, SemesterWhereInput>
@@ -376017,9 +376059,9 @@ export namespace Prisma {
         trainingObjectTypeId?: SortOrder
         note?: SortOrderInput | SortOrder
         decision?: SortOrderInput | SortOrder
-        status?: SortOrder
         fixedClassId?: SortOrder
         semesterId?: SortOrder
+        status?: SortOrder
         _count?: ScoreLinkSheetCountOrderByAggregateInput
         _max?: ScoreLinkSheetMaxOrderByAggregateInput
         _min?: ScoreLinkSheetMinOrderByAggregateInput
@@ -376039,9 +376081,9 @@ export namespace Prisma {
         trainingObjectTypeId?: StringWithAggregatesFilter<"ScoreLinkSheet"> | string
         note?: StringNullableWithAggregatesFilter<"ScoreLinkSheet"> | string | null
         decision?: StringNullableWithAggregatesFilter<"ScoreLinkSheet"> | string | null
-        status?: EnumScoreLinkStatusWithAggregatesFilter<"ScoreLinkSheet"> | $Enums.ScoreLinkStatus
         fixedClassId?: StringWithAggregatesFilter<"ScoreLinkSheet"> | string
         semesterId?: StringWithAggregatesFilter<"ScoreLinkSheet"> | string
+        status?: EnumScoreLinkStatusWithAggregatesFilter<"ScoreLinkSheet"> | $Enums.ScoreLinkStatus
     };
     export type ScoreLinkSubjectVersionWhereInput = {
         AND?: ScoreLinkSubjectVersionWhereInput | ScoreLinkSubjectVersionWhereInput[]
@@ -390564,6 +390606,7 @@ export namespace Prisma {
         coef_2?: number
         coef_3?: number
         scoreToTakeExam?: number
+        examScoreToPass?: number
         scoreToPass?: number
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
@@ -390622,6 +390665,7 @@ export namespace Prisma {
         coef_2?: number
         coef_3?: number
         scoreToTakeExam?: number
+        examScoreToPass?: number
         scoreToPass?: number
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
@@ -390676,6 +390720,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -390734,6 +390779,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -390790,6 +390836,7 @@ export namespace Prisma {
         coef_2?: number
         coef_3?: number
         scoreToTakeExam?: number
+        examScoreToPass?: number
         scoreToPass?: number
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
@@ -390829,6 +390876,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -390869,6 +390917,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -404649,6 +404698,7 @@ export namespace Prisma {
         examType?: $Enums.ExamType | null
         isLock?: boolean | null
         isNote?: boolean | null
+        isGroup?: boolean | null
         exam: ExamCreateNestedOneWithoutExamBankInput
         subjectClass?: SubjectClassCreateNestedOneWithoutExamBankInput
         questions?: ExamBankQuestionCreateNestedManyWithoutExamBankInput
@@ -404672,6 +404722,7 @@ export namespace Prisma {
         examMatrixId?: string | null
         isLock?: boolean | null
         isNote?: boolean | null
+        isGroup?: boolean | null
         questions?: ExamBankQuestionUncheckedCreateNestedManyWithoutExamBankInput
     };
     export type ExamBankUpdateInput = {
@@ -404689,6 +404740,7 @@ export namespace Prisma {
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         isLock?: NullableBoolFieldUpdateOperationsInput | boolean | null
         isNote?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        isGroup?: NullableBoolFieldUpdateOperationsInput | boolean | null
         exam?: ExamUpdateOneRequiredWithoutExamBankNestedInput
         subjectClass?: SubjectClassUpdateOneWithoutExamBankNestedInput
         questions?: ExamBankQuestionUpdateManyWithoutExamBankNestedInput
@@ -404712,6 +404764,7 @@ export namespace Prisma {
         examMatrixId?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: NullableBoolFieldUpdateOperationsInput | boolean | null
         isNote?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        isGroup?: NullableBoolFieldUpdateOperationsInput | boolean | null
         questions?: ExamBankQuestionUncheckedUpdateManyWithoutExamBankNestedInput
     };
     export type ExamBankCreateManyInput = {
@@ -404732,6 +404785,7 @@ export namespace Prisma {
         examMatrixId?: string | null
         isLock?: boolean | null
         isNote?: boolean | null
+        isGroup?: boolean | null
     };
     export type ExamBankUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -404748,6 +404802,7 @@ export namespace Prisma {
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         isLock?: NullableBoolFieldUpdateOperationsInput | boolean | null
         isNote?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        isGroup?: NullableBoolFieldUpdateOperationsInput | boolean | null
     };
     export type ExamBankUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -404767,6 +404822,7 @@ export namespace Prisma {
         examMatrixId?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: NullableBoolFieldUpdateOperationsInput | boolean | null
         isNote?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        isGroup?: NullableBoolFieldUpdateOperationsInput | boolean | null
     };
     export type ExamBankQuestionCreateInput = {
         id?: string
@@ -407498,9 +407554,9 @@ export namespace Prisma {
         trainingObjectTypeId: string
         note?: string | null
         decision?: string | null
-        status?: $Enums.ScoreLinkStatus
         fixedClassId: string
         semesterId: string
+        status?: $Enums.ScoreLinkStatus
         scoreLinkSubjectVersions?: ScoreLinkSubjectVersionUncheckedCreateNestedManyWithoutScoreLinkSheetInput
         documents?: DocumentFileUncheckedCreateNestedManyWithoutScoreLinkSheetInput
     };
@@ -407534,9 +407590,9 @@ export namespace Prisma {
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         note?: NullableStringFieldUpdateOperationsInput | string | null
         decision?: NullableStringFieldUpdateOperationsInput | string | null
-        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
         fixedClassId?: StringFieldUpdateOperationsInput | string
         semesterId?: StringFieldUpdateOperationsInput | string
+        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
         scoreLinkSubjectVersions?: ScoreLinkSubjectVersionUncheckedUpdateManyWithoutScoreLinkSheetNestedInput
         documents?: DocumentFileUncheckedUpdateManyWithoutScoreLinkSheetNestedInput
     };
@@ -407552,9 +407608,9 @@ export namespace Prisma {
         trainingObjectTypeId: string
         note?: string | null
         decision?: string | null
-        status?: $Enums.ScoreLinkStatus
         fixedClassId: string
         semesterId: string
+        status?: $Enums.ScoreLinkStatus
     };
     export type ScoreLinkSheetUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -407581,9 +407637,9 @@ export namespace Prisma {
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         note?: NullableStringFieldUpdateOperationsInput | string | null
         decision?: NullableStringFieldUpdateOperationsInput | string | null
-        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
         fixedClassId?: StringFieldUpdateOperationsInput | string
         semesterId?: StringFieldUpdateOperationsInput | string
+        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
     };
     export type ScoreLinkSubjectVersionCreateInput = {
         id?: string
@@ -418349,6 +418405,7 @@ export namespace Prisma {
         coef_2?: SortOrder
         coef_3?: SortOrder
         scoreToTakeExam?: SortOrder
+        examScoreToPass?: SortOrder
         scoreToPass?: SortOrder
         scoreToPassConditional?: SortOrder
         scoreToTakeGraduation?: SortOrder
@@ -418369,6 +418426,7 @@ export namespace Prisma {
         coef_2?: SortOrder
         coef_3?: SortOrder
         scoreToTakeExam?: SortOrder
+        examScoreToPass?: SortOrder
         scoreToPass?: SortOrder
         scoreToPassConditional?: SortOrder
         scoreToTakeGraduation?: SortOrder
@@ -418409,6 +418467,7 @@ export namespace Prisma {
         coef_2?: SortOrder
         coef_3?: SortOrder
         scoreToTakeExam?: SortOrder
+        examScoreToPass?: SortOrder
         scoreToPass?: SortOrder
         scoreToPassConditional?: SortOrder
         scoreToTakeGraduation?: SortOrder
@@ -418450,6 +418509,7 @@ export namespace Prisma {
         coef_2?: SortOrder
         coef_3?: SortOrder
         scoreToTakeExam?: SortOrder
+        examScoreToPass?: SortOrder
         scoreToPass?: SortOrder
         scoreToPassConditional?: SortOrder
         scoreToTakeGraduation?: SortOrder
@@ -418470,6 +418530,7 @@ export namespace Prisma {
         coef_2?: SortOrder
         coef_3?: SortOrder
         scoreToTakeExam?: SortOrder
+        examScoreToPass?: SortOrder
         scoreToPass?: SortOrder
         scoreToPassConditional?: SortOrder
         scoreToTakeGraduation?: SortOrder
@@ -426832,6 +426893,7 @@ export namespace Prisma {
         examMatrixId?: SortOrder
         isLock?: SortOrder
         isNote?: SortOrder
+        isGroup?: SortOrder
     };
     export type ExamBankMaxOrderByAggregateInput = {
         id?: SortOrder
@@ -426851,6 +426913,7 @@ export namespace Prisma {
         examMatrixId?: SortOrder
         isLock?: SortOrder
         isNote?: SortOrder
+        isGroup?: SortOrder
     };
     export type ExamBankMinOrderByAggregateInput = {
         id?: SortOrder
@@ -426870,6 +426933,7 @@ export namespace Prisma {
         examMatrixId?: SortOrder
         isLock?: SortOrder
         isNote?: SortOrder
+        isGroup?: SortOrder
     };
     export type ExamBankScalarRelationFilter = {
         is?: ExamBankWhereInput
@@ -428493,9 +428557,9 @@ export namespace Prisma {
         trainingObjectTypeId?: SortOrder
         note?: SortOrder
         decision?: SortOrder
-        status?: SortOrder
         fixedClassId?: SortOrder
         semesterId?: SortOrder
+        status?: SortOrder
     };
     export type ScoreLinkSheetMaxOrderByAggregateInput = {
         id?: SortOrder
@@ -428509,9 +428573,9 @@ export namespace Prisma {
         trainingObjectTypeId?: SortOrder
         note?: SortOrder
         decision?: SortOrder
-        status?: SortOrder
         fixedClassId?: SortOrder
         semesterId?: SortOrder
+        status?: SortOrder
     };
     export type ScoreLinkSheetMinOrderByAggregateInput = {
         id?: SortOrder
@@ -428525,9 +428589,9 @@ export namespace Prisma {
         trainingObjectTypeId?: SortOrder
         note?: SortOrder
         decision?: SortOrder
-        status?: SortOrder
         fixedClassId?: SortOrder
         semesterId?: SortOrder
+        status?: SortOrder
     };
     export type EnumScoreLinkStatusWithAggregatesFilter<$PrismaModel = never> = {
         equals?: $Enums.ScoreLinkStatus | EnumScoreLinkStatusFieldRefInput<$PrismaModel>
@@ -503478,6 +503542,7 @@ export namespace Prisma {
         coef_2?: number
         coef_3?: number
         scoreToTakeExam?: number
+        examScoreToPass?: number
         scoreToPass?: number
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
@@ -503535,6 +503600,7 @@ export namespace Prisma {
         coef_2?: number
         coef_3?: number
         scoreToTakeExam?: number
+        examScoreToPass?: number
         scoreToPass?: number
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
@@ -503767,6 +503833,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -503824,6 +503891,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -509710,6 +509778,7 @@ export namespace Prisma {
         coef_2?: number
         coef_3?: number
         scoreToTakeExam?: number
+        examScoreToPass?: number
         scoreToPass?: number
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
@@ -509766,6 +509835,7 @@ export namespace Prisma {
         coef_2?: number
         coef_3?: number
         scoreToTakeExam?: number
+        examScoreToPass?: number
         scoreToPass?: number
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
@@ -510289,8 +510359,8 @@ export namespace Prisma {
         trainingObjectTypeId: string
         note?: string | null
         decision?: string | null
-        status?: $Enums.ScoreLinkStatus
         fixedClassId: string
+        status?: $Enums.ScoreLinkStatus
         scoreLinkSubjectVersions?: ScoreLinkSubjectVersionUncheckedCreateNestedManyWithoutScoreLinkSheetInput
         documents?: DocumentFileUncheckedCreateNestedManyWithoutScoreLinkSheetInput
     };
@@ -510453,6 +510523,7 @@ export namespace Prisma {
         coef_2?: FloatFilter<"TrainingCourse"> | number
         coef_3?: FloatFilter<"TrainingCourse"> | number
         scoreToTakeExam?: FloatFilter<"TrainingCourse"> | number
+        examScoreToPass?: FloatFilter<"TrainingCourse"> | number
         scoreToPass?: FloatFilter<"TrainingCourse"> | number
         scoreToPassConditional?: FloatFilter<"TrainingCourse"> | number
         scoreToTakeGraduation?: FloatFilter<"TrainingCourse"> | number
@@ -510813,9 +510884,9 @@ export namespace Prisma {
         trainingObjectTypeId?: StringFilter<"ScoreLinkSheet"> | string
         note?: StringNullableFilter<"ScoreLinkSheet"> | string | null
         decision?: StringNullableFilter<"ScoreLinkSheet"> | string | null
-        status?: EnumScoreLinkStatusFilter<"ScoreLinkSheet"> | $Enums.ScoreLinkStatus
         fixedClassId?: StringFilter<"ScoreLinkSheet"> | string
         semesterId?: StringFilter<"ScoreLinkSheet"> | string
+        status?: EnumScoreLinkStatusFilter<"ScoreLinkSheet"> | $Enums.ScoreLinkStatus
     };
     export type SchoolYearCreateWithoutMilestoneInput = {
         id?: string
@@ -510928,6 +510999,7 @@ export namespace Prisma {
         coef_2?: number
         coef_3?: number
         scoreToTakeExam?: number
+        examScoreToPass?: number
         scoreToPass?: number
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
@@ -510984,6 +511056,7 @@ export namespace Prisma {
         coef_2?: number
         coef_3?: number
         scoreToTakeExam?: number
+        examScoreToPass?: number
         scoreToPass?: number
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
@@ -512711,6 +512784,7 @@ export namespace Prisma {
         coef_2?: number
         coef_3?: number
         scoreToTakeExam?: number
+        examScoreToPass?: number
         scoreToPass?: number
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
@@ -512768,6 +512842,7 @@ export namespace Prisma {
         coef_2?: number
         coef_3?: number
         scoreToTakeExam?: number
+        examScoreToPass?: number
         scoreToPass?: number
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
@@ -512834,6 +512909,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -512891,6 +512967,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -513232,6 +513309,7 @@ export namespace Prisma {
         coef_2?: number
         coef_3?: number
         scoreToTakeExam?: number
+        examScoreToPass?: number
         scoreToPass?: number
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
@@ -513289,6 +513367,7 @@ export namespace Prisma {
         coef_2?: number
         coef_3?: number
         scoreToTakeExam?: number
+        examScoreToPass?: number
         scoreToPass?: number
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
@@ -513977,8 +514056,8 @@ export namespace Prisma {
         trainingObjectTypeId: string
         note?: string | null
         decision?: string | null
-        status?: $Enums.ScoreLinkStatus
         semesterId: string
+        status?: $Enums.ScoreLinkStatus
         scoreLinkSubjectVersions?: ScoreLinkSubjectVersionUncheckedCreateNestedManyWithoutScoreLinkSheetInput
         documents?: DocumentFileUncheckedCreateNestedManyWithoutScoreLinkSheetInput
     };
@@ -514327,6 +514406,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -514384,6 +514464,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -515555,6 +515636,7 @@ export namespace Prisma {
         coef_2?: number
         coef_3?: number
         scoreToTakeExam?: number
+        examScoreToPass?: number
         scoreToPass?: number
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
@@ -515612,6 +515694,7 @@ export namespace Prisma {
         coef_2?: number
         coef_3?: number
         scoreToTakeExam?: number
+        examScoreToPass?: number
         scoreToPass?: number
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
@@ -516439,6 +516522,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -516496,6 +516580,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -520980,6 +521065,7 @@ export namespace Prisma {
         coef_2?: number
         coef_3?: number
         scoreToTakeExam?: number
+        examScoreToPass?: number
         scoreToPass?: number
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
@@ -521037,6 +521123,7 @@ export namespace Prisma {
         coef_2?: number
         coef_3?: number
         scoreToTakeExam?: number
+        examScoreToPass?: number
         scoreToPass?: number
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
@@ -523099,6 +523186,7 @@ export namespace Prisma {
         examType?: $Enums.ExamType | null
         isLock?: boolean | null
         isNote?: boolean | null
+        isGroup?: boolean | null
         exam: ExamCreateNestedOneWithoutExamBankInput
         questions?: ExamBankQuestionCreateNestedManyWithoutExamBankInput
         examMatrix?: ExamMatrixCreateNestedOneWithoutExamBankInput
@@ -523120,6 +523208,7 @@ export namespace Prisma {
         examMatrixId?: string | null
         isLock?: boolean | null
         isNote?: boolean | null
+        isGroup?: boolean | null
         questions?: ExamBankQuestionUncheckedCreateNestedManyWithoutExamBankInput
     };
     export type ExamBankCreateOrConnectWithoutSubjectClassInput = {
@@ -524018,6 +524107,7 @@ export namespace Prisma {
         examMatrixId?: StringNullableFilter<"ExamBank"> | string | null
         isLock?: BoolNullableFilter<"ExamBank"> | boolean | null
         isNote?: BoolNullableFilter<"ExamBank"> | boolean | null
+        isGroup?: BoolNullableFilter<"ExamBank"> | boolean | null
     };
     export type SubjectClassCreateWithoutSubjectClassHistoryInput = {
         id?: string
@@ -526919,6 +527009,7 @@ export namespace Prisma {
         coef_2?: number
         coef_3?: number
         scoreToTakeExam?: number
+        examScoreToPass?: number
         scoreToPass?: number
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
@@ -526976,6 +527067,7 @@ export namespace Prisma {
         coef_2?: number
         coef_3?: number
         scoreToTakeExam?: number
+        examScoreToPass?: number
         scoreToPass?: number
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
@@ -527851,9 +527943,9 @@ export namespace Prisma {
         createdBy?: string | null
         note?: string | null
         decision?: string | null
-        status?: $Enums.ScoreLinkStatus
         fixedClassId: string
         semesterId: string
+        status?: $Enums.ScoreLinkStatus
         scoreLinkSubjectVersions?: ScoreLinkSubjectVersionUncheckedCreateNestedManyWithoutScoreLinkSheetInput
         documents?: DocumentFileUncheckedCreateNestedManyWithoutScoreLinkSheetInput
     };
@@ -533499,6 +533591,7 @@ export namespace Prisma {
         coef_2?: number
         coef_3?: number
         scoreToTakeExam?: number
+        examScoreToPass?: number
         scoreToPass?: number
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
@@ -533556,6 +533649,7 @@ export namespace Prisma {
         coef_2?: number
         coef_3?: number
         scoreToTakeExam?: number
+        examScoreToPass?: number
         scoreToPass?: number
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
@@ -533622,6 +533716,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -533679,6 +533774,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -538413,6 +538509,7 @@ export namespace Prisma {
         coef_2?: number
         coef_3?: number
         scoreToTakeExam?: number
+        examScoreToPass?: number
         scoreToPass?: number
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
@@ -538470,6 +538567,7 @@ export namespace Prisma {
         coef_2?: number
         coef_3?: number
         scoreToTakeExam?: number
+        examScoreToPass?: number
         scoreToPass?: number
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
@@ -538899,6 +538997,7 @@ export namespace Prisma {
         coef_2?: number
         coef_3?: number
         scoreToTakeExam?: number
+        examScoreToPass?: number
         scoreToPass?: number
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
@@ -538956,6 +539055,7 @@ export namespace Prisma {
         coef_2?: number
         coef_3?: number
         scoreToTakeExam?: number
+        examScoreToPass?: number
         scoreToPass?: number
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
@@ -539830,9 +539930,9 @@ export namespace Prisma {
         trainingObjectTypeId: string
         note?: string | null
         decision?: string | null
-        status?: $Enums.ScoreLinkStatus
         fixedClassId: string
         semesterId: string
+        status?: $Enums.ScoreLinkStatus
         scoreLinkSubjectVersions?: ScoreLinkSubjectVersionUncheckedCreateNestedManyWithoutScoreLinkSheetInput
     };
     export type ScoreLinkSheetCreateOrConnectWithoutDocumentsInput = {
@@ -540073,6 +540173,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -540130,6 +540231,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -541089,9 +541191,9 @@ export namespace Prisma {
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         note?: NullableStringFieldUpdateOperationsInput | string | null
         decision?: NullableStringFieldUpdateOperationsInput | string | null
-        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
         fixedClassId?: StringFieldUpdateOperationsInput | string
         semesterId?: StringFieldUpdateOperationsInput | string
+        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
         scoreLinkSubjectVersions?: ScoreLinkSubjectVersionUncheckedUpdateManyWithoutScoreLinkSheetNestedInput
     };
     export type ExamFrameworkUpsertWithoutDocumentFilesInput = {
@@ -541292,6 +541394,7 @@ export namespace Prisma {
         coef_2?: number
         coef_3?: number
         scoreToTakeExam?: number
+        examScoreToPass?: number
         scoreToPass?: number
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
@@ -541349,6 +541452,7 @@ export namespace Prisma {
         coef_2?: number
         coef_3?: number
         scoreToTakeExam?: number
+        examScoreToPass?: number
         scoreToPass?: number
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
@@ -541493,6 +541597,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -541550,6 +541655,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -547826,6 +547932,7 @@ export namespace Prisma {
         coef_2?: number
         coef_3?: number
         scoreToTakeExam?: number
+        examScoreToPass?: number
         scoreToPass?: number
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
@@ -547883,6 +547990,7 @@ export namespace Prisma {
         coef_2?: number
         coef_3?: number
         scoreToTakeExam?: number
+        examScoreToPass?: number
         scoreToPass?: number
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
@@ -548130,6 +548238,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -548187,6 +548296,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -558210,6 +558320,7 @@ export namespace Prisma {
         coef_2?: number
         coef_3?: number
         scoreToTakeExam?: number
+        examScoreToPass?: number
         scoreToPass?: number
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
@@ -558267,6 +558378,7 @@ export namespace Prisma {
         coef_2?: number
         coef_3?: number
         scoreToTakeExam?: number
+        examScoreToPass?: number
         scoreToPass?: number
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
@@ -563900,6 +564012,7 @@ export namespace Prisma {
         examType?: $Enums.ExamType | null
         isLock?: boolean | null
         isNote?: boolean | null
+        isGroup?: boolean | null
         subjectClass?: SubjectClassCreateNestedOneWithoutExamBankInput
         questions?: ExamBankQuestionCreateNestedManyWithoutExamBankInput
         examMatrix?: ExamMatrixCreateNestedOneWithoutExamBankInput
@@ -563921,6 +564034,7 @@ export namespace Prisma {
         examMatrixId?: string | null
         isLock?: boolean | null
         isNote?: boolean | null
+        isGroup?: boolean | null
         questions?: ExamBankQuestionUncheckedCreateNestedManyWithoutExamBankInput
     };
     export type ExamBankCreateOrConnectWithoutExamInput = {
@@ -565280,6 +565394,7 @@ export namespace Prisma {
         examType?: $Enums.ExamType | null
         isLock?: boolean | null
         isNote?: boolean | null
+        isGroup?: boolean | null
         exam: ExamCreateNestedOneWithoutExamBankInput
         subjectClass?: SubjectClassCreateNestedOneWithoutExamBankInput
         examMatrix?: ExamMatrixCreateNestedOneWithoutExamBankInput
@@ -565302,6 +565417,7 @@ export namespace Prisma {
         examMatrixId?: string | null
         isLock?: boolean | null
         isNote?: boolean | null
+        isGroup?: boolean | null
     };
     export type ExamBankCreateOrConnectWithoutQuestionsInput = {
         where: ExamBankWhereUniqueInput
@@ -565377,6 +565493,7 @@ export namespace Prisma {
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         isLock?: NullableBoolFieldUpdateOperationsInput | boolean | null
         isNote?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        isGroup?: NullableBoolFieldUpdateOperationsInput | boolean | null
         exam?: ExamUpdateOneRequiredWithoutExamBankNestedInput
         subjectClass?: SubjectClassUpdateOneWithoutExamBankNestedInput
         examMatrix?: ExamMatrixUpdateOneWithoutExamBankNestedInput
@@ -565399,6 +565516,7 @@ export namespace Prisma {
         examMatrixId?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: NullableBoolFieldUpdateOperationsInput | boolean | null
         isNote?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        isGroup?: NullableBoolFieldUpdateOperationsInput | boolean | null
     };
     export type QuestionUpsertWithoutSessionQuestionsInput = {
         update: XOR<QuestionUpdateWithoutSessionQuestionsInput, QuestionUncheckedUpdateWithoutSessionQuestionsInput>
@@ -566161,6 +566279,7 @@ export namespace Prisma {
         examType?: $Enums.ExamType | null
         isLock?: boolean | null
         isNote?: boolean | null
+        isGroup?: boolean | null
         exam: ExamCreateNestedOneWithoutExamBankInput
         subjectClass?: SubjectClassCreateNestedOneWithoutExamBankInput
         questions?: ExamBankQuestionCreateNestedManyWithoutExamBankInput
@@ -566182,6 +566301,7 @@ export namespace Prisma {
         examType?: $Enums.ExamType | null
         isLock?: boolean | null
         isNote?: boolean | null
+        isGroup?: boolean | null
         questions?: ExamBankQuestionUncheckedCreateNestedManyWithoutExamBankInput
     };
     export type ExamBankCreateOrConnectWithoutExamMatrixInput = {
@@ -568938,6 +569058,7 @@ export namespace Prisma {
         coef_2?: number
         coef_3?: number
         scoreToTakeExam?: number
+        examScoreToPass?: number
         scoreToPass?: number
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
@@ -568995,6 +569116,7 @@ export namespace Prisma {
         coef_2?: number
         coef_3?: number
         scoreToTakeExam?: number
+        examScoreToPass?: number
         scoreToPass?: number
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
@@ -569139,6 +569261,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -569196,6 +569319,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -570071,6 +570195,7 @@ export namespace Prisma {
         coef_2?: number
         coef_3?: number
         scoreToTakeExam?: number
+        examScoreToPass?: number
         scoreToPass?: number
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
@@ -570128,6 +570253,7 @@ export namespace Prisma {
         coef_2?: number
         coef_3?: number
         scoreToTakeExam?: number
+        examScoreToPass?: number
         scoreToPass?: number
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
@@ -570303,6 +570429,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -570360,6 +570487,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -573313,6 +573441,7 @@ export namespace Prisma {
         coef_2?: number
         coef_3?: number
         scoreToTakeExam?: number
+        examScoreToPass?: number
         scoreToPass?: number
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
@@ -573370,6 +573499,7 @@ export namespace Prisma {
         coef_2?: number
         coef_3?: number
         scoreToTakeExam?: number
+        examScoreToPass?: number
         scoreToPass?: number
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
@@ -573854,6 +573984,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -573911,6 +574042,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -575753,9 +575885,9 @@ export namespace Prisma {
         trainingObjectTypeId: string
         note?: string | null
         decision?: string | null
-        status?: $Enums.ScoreLinkStatus
         fixedClassId: string
         semesterId: string
+        status?: $Enums.ScoreLinkStatus
         documents?: DocumentFileUncheckedCreateNestedManyWithoutScoreLinkSheetInput
     };
     export type ScoreLinkSheetCreateOrConnectWithoutScoreLinkSubjectVersionsInput = {
@@ -576056,9 +576188,9 @@ export namespace Prisma {
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         note?: NullableStringFieldUpdateOperationsInput | string | null
         decision?: NullableStringFieldUpdateOperationsInput | string | null
-        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
         fixedClassId?: StringFieldUpdateOperationsInput | string
         semesterId?: StringFieldUpdateOperationsInput | string
+        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
         documents?: DocumentFileUncheckedUpdateManyWithoutScoreLinkSheetNestedInput
     };
     export type SubjectVersionUpsertWithoutScoreLinkSubjectVersionInput = {
@@ -577890,6 +578022,7 @@ export namespace Prisma {
         coef_2?: number
         coef_3?: number
         scoreToTakeExam?: number
+        examScoreToPass?: number
         scoreToPass?: number
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
@@ -577947,6 +578080,7 @@ export namespace Prisma {
         coef_2?: number
         coef_3?: number
         scoreToTakeExam?: number
+        examScoreToPass?: number
         scoreToPass?: number
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
@@ -578047,6 +578181,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -578104,6 +578239,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -611440,6 +611576,7 @@ export namespace Prisma {
         coef_2?: number
         coef_3?: number
         scoreToTakeExam?: number
+        examScoreToPass?: number
         scoreToPass?: number
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
@@ -611637,8 +611774,8 @@ export namespace Prisma {
         trainingObjectTypeId: string
         note?: string | null
         decision?: string | null
-        status?: $Enums.ScoreLinkStatus
         fixedClassId: string
+        status?: $Enums.ScoreLinkStatus
     };
     export type SubjectClassUpdateWithoutSemesterInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -611823,6 +611960,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -611879,6 +612017,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -611934,6 +612073,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -612530,8 +612670,8 @@ export namespace Prisma {
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         note?: NullableStringFieldUpdateOperationsInput | string | null
         decision?: NullableStringFieldUpdateOperationsInput | string | null
-        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
         fixedClassId?: StringFieldUpdateOperationsInput | string
+        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
         scoreLinkSubjectVersions?: ScoreLinkSubjectVersionUncheckedUpdateManyWithoutScoreLinkSheetNestedInput
         documents?: DocumentFileUncheckedUpdateManyWithoutScoreLinkSheetNestedInput
     };
@@ -612547,8 +612687,8 @@ export namespace Prisma {
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         note?: NullableStringFieldUpdateOperationsInput | string | null
         decision?: NullableStringFieldUpdateOperationsInput | string | null
-        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
         fixedClassId?: StringFieldUpdateOperationsInput | string
+        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
     };
     export type TrainingCourseCreateManyTrainingLanguageInput = {
         id?: string
@@ -612581,6 +612721,7 @@ export namespace Prisma {
         coef_2?: number
         coef_3?: number
         scoreToTakeExam?: number
+        examScoreToPass?: number
         scoreToPass?: number
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
@@ -612658,6 +612799,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -612714,6 +612856,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -612769,6 +612912,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -614192,8 +614336,8 @@ export namespace Prisma {
         trainingObjectTypeId: string
         note?: string | null
         decision?: string | null
-        status?: $Enums.ScoreLinkStatus
         semesterId: string
+        status?: $Enums.ScoreLinkStatus
     };
     export type StudentUpdateWithoutFixedClassInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -614675,8 +614819,8 @@ export namespace Prisma {
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         note?: NullableStringFieldUpdateOperationsInput | string | null
         decision?: NullableStringFieldUpdateOperationsInput | string | null
-        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
         semesterId?: StringFieldUpdateOperationsInput | string
+        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
         scoreLinkSubjectVersions?: ScoreLinkSubjectVersionUncheckedUpdateManyWithoutScoreLinkSheetNestedInput
         documents?: DocumentFileUncheckedUpdateManyWithoutScoreLinkSheetNestedInput
     };
@@ -614692,8 +614836,8 @@ export namespace Prisma {
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         note?: NullableStringFieldUpdateOperationsInput | string | null
         decision?: NullableStringFieldUpdateOperationsInput | string | null
-        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
         semesterId?: StringFieldUpdateOperationsInput | string
+        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
     };
     export type DocumentFileCreateManyCurriculumInput = {
         id?: string
@@ -617892,6 +618036,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -617949,6 +618094,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -618004,6 +618150,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -618237,6 +618384,7 @@ export namespace Prisma {
         examMatrixId?: string | null
         isLock?: boolean | null
         isNote?: boolean | null
+        isGroup?: boolean | null
     };
     export type StudentSubjectScoreUpdateWithoutSubjectClassInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -619064,6 +619212,7 @@ export namespace Prisma {
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         isLock?: NullableBoolFieldUpdateOperationsInput | boolean | null
         isNote?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        isGroup?: NullableBoolFieldUpdateOperationsInput | boolean | null
         exam?: ExamUpdateOneRequiredWithoutExamBankNestedInput
         questions?: ExamBankQuestionUpdateManyWithoutExamBankNestedInput
         examMatrix?: ExamMatrixUpdateOneWithoutExamBankNestedInput
@@ -619085,6 +619234,7 @@ export namespace Prisma {
         examMatrixId?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: NullableBoolFieldUpdateOperationsInput | boolean | null
         isNote?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        isGroup?: NullableBoolFieldUpdateOperationsInput | boolean | null
         questions?: ExamBankQuestionUncheckedUpdateManyWithoutExamBankNestedInput
     };
     export type ExamBankUncheckedUpdateManyWithoutSubjectClassInput = {
@@ -619104,6 +619254,7 @@ export namespace Prisma {
         examMatrixId?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: NullableBoolFieldUpdateOperationsInput | boolean | null
         isNote?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        isGroup?: NullableBoolFieldUpdateOperationsInput | boolean | null
     };
     export type UserProfileUpdateWithoutClassSchedulesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -619678,6 +619829,7 @@ export namespace Prisma {
         coef_2?: number
         coef_3?: number
         scoreToTakeExam?: number
+        examScoreToPass?: number
         scoreToPass?: number
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
@@ -619992,9 +620144,9 @@ export namespace Prisma {
         createdBy?: string | null
         note?: string | null
         decision?: string | null
-        status?: $Enums.ScoreLinkStatus
         fixedClassId: string
         semesterId: string
+        status?: $Enums.ScoreLinkStatus
     };
     export type TrainingCourseUpdateWithoutTrainingObjectTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -620026,6 +620178,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -620083,6 +620236,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -620138,6 +620292,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -621173,9 +621328,9 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         note?: NullableStringFieldUpdateOperationsInput | string | null
         decision?: NullableStringFieldUpdateOperationsInput | string | null
-        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
         fixedClassId?: StringFieldUpdateOperationsInput | string
         semesterId?: StringFieldUpdateOperationsInput | string
+        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
         scoreLinkSubjectVersions?: ScoreLinkSubjectVersionUncheckedUpdateManyWithoutScoreLinkSheetNestedInput
         documents?: DocumentFileUncheckedUpdateManyWithoutScoreLinkSheetNestedInput
     };
@@ -621190,9 +621345,9 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         note?: NullableStringFieldUpdateOperationsInput | string | null
         decision?: NullableStringFieldUpdateOperationsInput | string | null
-        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
         fixedClassId?: StringFieldUpdateOperationsInput | string
         semesterId?: StringFieldUpdateOperationsInput | string
+        status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
     };
     export type StudentUpdateWithoutPriorityObjectInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -626946,6 +627101,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -627003,6 +627159,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -627058,6 +627215,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -633907,6 +634065,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -633964,6 +634123,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -634019,6 +634179,7 @@ export namespace Prisma {
         coef_2?: FloatFieldUpdateOperationsInput | number
         coef_3?: FloatFieldUpdateOperationsInput | number
         scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        examScoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPass?: FloatFieldUpdateOperationsInput | number
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
@@ -635927,6 +636088,7 @@ export namespace Prisma {
         examMatrixId?: string | null
         isLock?: boolean | null
         isNote?: boolean | null
+        isGroup?: boolean | null
     };
     export type ExamRoomCreateManyExamInput = {
         id?: string
@@ -636108,6 +636270,7 @@ export namespace Prisma {
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         isLock?: NullableBoolFieldUpdateOperationsInput | boolean | null
         isNote?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        isGroup?: NullableBoolFieldUpdateOperationsInput | boolean | null
         subjectClass?: SubjectClassUpdateOneWithoutExamBankNestedInput
         questions?: ExamBankQuestionUpdateManyWithoutExamBankNestedInput
         examMatrix?: ExamMatrixUpdateOneWithoutExamBankNestedInput
@@ -636129,6 +636292,7 @@ export namespace Prisma {
         examMatrixId?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: NullableBoolFieldUpdateOperationsInput | boolean | null
         isNote?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        isGroup?: NullableBoolFieldUpdateOperationsInput | boolean | null
         questions?: ExamBankQuestionUncheckedUpdateManyWithoutExamBankNestedInput
     };
     export type ExamBankUncheckedUpdateManyWithoutExamInput = {
@@ -636148,6 +636312,7 @@ export namespace Prisma {
         examMatrixId?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: NullableBoolFieldUpdateOperationsInput | boolean | null
         isNote?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        isGroup?: NullableBoolFieldUpdateOperationsInput | boolean | null
     };
     export type ExamRoomUpdateWithoutExamInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -636574,6 +636739,7 @@ export namespace Prisma {
         examType?: $Enums.ExamType | null
         isLock?: boolean | null
         isNote?: boolean | null
+        isGroup?: boolean | null
     };
     export type KnowledgeBlockUpdateWithoutExamMatrixInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -636632,6 +636798,7 @@ export namespace Prisma {
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         isLock?: NullableBoolFieldUpdateOperationsInput | boolean | null
         isNote?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        isGroup?: NullableBoolFieldUpdateOperationsInput | boolean | null
         exam?: ExamUpdateOneRequiredWithoutExamBankNestedInput
         subjectClass?: SubjectClassUpdateOneWithoutExamBankNestedInput
         questions?: ExamBankQuestionUpdateManyWithoutExamBankNestedInput
@@ -636653,6 +636820,7 @@ export namespace Prisma {
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         isLock?: NullableBoolFieldUpdateOperationsInput | boolean | null
         isNote?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        isGroup?: NullableBoolFieldUpdateOperationsInput | boolean | null
         questions?: ExamBankQuestionUncheckedUpdateManyWithoutExamBankNestedInput
     };
     export type ExamBankUncheckedUpdateManyWithoutExamMatrixInput = {
@@ -636672,6 +636840,7 @@ export namespace Prisma {
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         isLock?: NullableBoolFieldUpdateOperationsInput | boolean | null
         isNote?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        isGroup?: NullableBoolFieldUpdateOperationsInput | boolean | null
     };
     export type QuestionCreateManyKnowledgeBlockInput = {
         id?: string
