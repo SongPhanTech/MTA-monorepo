@@ -1643,13 +1643,17 @@ export default function PhanCongGiangDay({
                                         isEdit: true,
                                     }
 
+                                    if ('lecturerId' in changedField) {
+                                        newSubjectClassData.enterGradeLecturerId =
+                                            changedField.lecturerId
+                                    }
+
                                     if ('trainingLocationId' in changedField) {
                                         newSubjectClassData.roomId = null
                                     }
 
                                     form.setFieldValue('subjectClass', {
                                         ...subjectClassForm,
-                                        ...changedValue.subjectClass,
                                         [subjectClassId]: newSubjectClassData,
                                     })
                                 }
@@ -1764,6 +1768,7 @@ export default function PhanCongGiangDay({
                                 {
                                     title: 'Tên môn',
                                     align: 'center',
+                                    width: 250,
                                     dataIndex: ['subject', 'name'],
                                     type: 'input',
                                     onCell: (record) => ({
@@ -1827,6 +1832,7 @@ export default function PhanCongGiangDay({
                                     title: 'Giảng viên 1',
                                     align: 'center',
                                     type: 'input',
+                                    width: 200,
                                     dataIndex: 'mainLecturer',
                                     render: (__, record) =>
                                         // khoaBoMon &&
@@ -1866,6 +1872,7 @@ export default function PhanCongGiangDay({
                                     align: 'center',
                                     dataIndex: 'extraLecturer',
                                     type: 'input',
+                                    width: 200,
                                     render: (__, record) =>
                                         // khoaBoMon &&
                                         !subjectClassForm?.[record.id]?.cancelled &&
@@ -1908,6 +1915,7 @@ export default function PhanCongGiangDay({
                                     dataIndex: 'enterGradeLecturer',
                                     align: 'center',
                                     type: 'input',
+                                    width: 200,
                                     render: (__, record) =>
                                         // khoaBoMon &&
                                         !subjectClassForm?.[record.id]?.cancelled &&
