@@ -9,6 +9,7 @@ import {
 } from '@workspace/db/client'
 import {
     useCreateStudentAcademicDecision,
+    useFindManyFixedClass,
     useFindManyStudent,
     useFindUniqueStudentAcademicDecision,
     useUpdateStudent,
@@ -25,8 +26,11 @@ import DatePicker from '@components/commons/date-picker'
 import DocumentPaths from '@components/commons/documentPaths'
 import Select from '@components/commons/select'
 import { useDecisionStatusOptions } from '@hooks/decisionStatus'
+import { SelectTrainingCourse } from '@workspace/ui'
 export type PutStudentAcademicDecision = StudentAcademicDecision & {
     documentEvidence?: DocumentFile[]
+    trainingCourseId: string
+    fixedClassId: string
 }
 dayjs.locale('vi')
 
@@ -44,6 +48,14 @@ const PutStudentAcademicDecision = () => {
     const { isOpen, onClose, input } = useDisclosure<StudentAcademicDecisionInput>({
         tag: 'PutStudentAcademicDecision',
         onClose: form.resetFields,
+    })
+
+    const [selectedCourseId, setSelectedCourseId] = useState<string | undefined>(undefined)
+    const [selectedClassId, setSelectedClassId] = useState<string | undefined>(undefined)
+
+    const { data: fixedClasses } = useFindManyFixedClass({
+        where: { trainingCourseId: selectedCourseId },
+        orderBy: { name: 'asc' },
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -197,6 +209,10 @@ const PutStudentAcademicDecision = () => {
                     semesterId: input?.semesterId,
                 },
             },
+            fixedClass: {
+                trainingCourseId: selectedCourseId,
+                id: selectedClassId,
+            },
         },
         include: {
             userProfile: true,
@@ -217,6 +233,30 @@ const PutStudentAcademicDecision = () => {
             maskClosable={true}
             title={input?.id ? 'Sửa quyết định' : 'Thêm quyết định'}
         >
+            <Col span={12}>
+                <FormItem form={form} name="trainingCourseId" label="Khoá học">
+                    <SelectTrainingCourse
+                        placeholder="Chọn khoá"
+                        allowClear
+                        onChange={(val) => {
+                            setSelectedCourseId(val)
+                            setSelectedClassId(undefined)
+                        }}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="fixedClassId" label="Lớp quản lý">
+                    <Select
+                        placeholder="Chọn lớp"
+                        allowClear
+                        disabled={!selectedCourseId}
+                        value={selectedClassId}
+                        onChange={setSelectedClassId}
+                        options={fixedClasses?.map((c) => ({ label: c.name, value: c.id }))}
+                    />
+                </FormItem>
+            </Col>
             <Col span={12}>
                 <FormItem form={form} name="studentId" label="Sinh viên" required>
                     <Select

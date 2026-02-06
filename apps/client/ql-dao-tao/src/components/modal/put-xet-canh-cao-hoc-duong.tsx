@@ -5,16 +5,14 @@ import useSpinner from '@hooks/spinner'
 import type { DisciplinaryWarning } from '@workspace/db/client'
 import {
     useCreateDisciplinaryWarning,
-    useFindManyCurriculumVersion,
     useFindManyDisciplinaryWarningReason,
     useFindManyFixedClass,
     useFindManyStudent,
-    useFindManyTrainingCourse,
     useFindUniqueDisciplinaryWarning,
     useUpdateDisciplinaryWarning,
     useUpdateStudent,
 } from '@workspace/db/hooks'
-import { Col, Form, InputNumber, message, Row } from 'antd'
+import { Col, Form, InputNumber, message } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
