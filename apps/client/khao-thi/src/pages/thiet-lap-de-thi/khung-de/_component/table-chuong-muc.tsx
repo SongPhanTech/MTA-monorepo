@@ -21,12 +21,19 @@ interface TableChuongMucProps {
 const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
     const [expandedRowKeys, setExpandedRowKeys] = useState<string[]>([])
 
-    const { onOpen } = useDisclosure<{
-        id?: string
-        matrixId?: string
-    }>({
-        tag: 'PutChuongMucModal',
-    })
+    const { onOpen: onOpenPutCDR } = useDisclosure<{
+    id?: string
+    matrixId?: string
+}>({
+    tag: 'PutChuongMucModal',
+})
+
+const { onOpen: onOpenImportCDR } = useDisclosure<{
+    matrixId?: string
+}>({
+    tag: 'ModalImportCDR',
+})
+
 
     const { data: knowledgeBlocks = [] } = useFindManyKnowledgeBlock(
         {
@@ -325,7 +332,7 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
                                     <EditIcon
                                         className="text-blue-700"
                                         onClick={() =>
-                                            onOpen({
+                                            onOpenPutCDR({
                                                 id: record.id,
                                             })
                                         }
@@ -397,14 +404,28 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
                 <Button
                     type="primary"
                     icon={<PlusOutlined />}
+                    className="mr-2"
                     iconPosition="end"
                     onClick={() =>
-                        onOpen({
+                        onOpenPutCDR({
                             matrixId,
                         })
                     }
                 >
                     Thêm mới chuẩn đầu ra
+                </Button>
+                <Button
+                    type="primary"
+                    icon={<PlusOutlined />}
+                    iconPosition="end"
+                    className="mr-2"
+                    onClick={() =>
+                        onOpenImportCDR({
+                            matrixId,
+                        })
+                    }
+                >
+                    Import chuẩn đầu ra
                 </Button>
             </div>
         </div>
