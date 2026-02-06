@@ -10,8 +10,9 @@ import type { Key } from 'react'
 import type { UploadProps } from 'antd/lib'
 import { LEVEL_COLUMNS, QUESTION_TYPE_OPTIONS } from '@constants/constants'
 import type { KnowledgeBlockFormData } from './put-chuan-dau-ra'
-import { useCreateKnowledgeBlock } from '@workspace/db/hooks'
+import { useFindManyKnowledgeBlock } from '@workspace/db/hooks'
 import type { Difficult, QuestionType } from '@workspace/db'
+import { sqlTransaction } from '@workspace/libs/api/model'
 
 type ImportedKnowledgeBlock = {
     key: number
@@ -108,7 +109,9 @@ const ModalImportCDR = () => {
         onClose: form.resetFields,
     })
 
-    const { mutateAsync: createKnowledgeBlock } = useCreateKnowledgeBlock()
+    const { data: knowledgeBlocks = [] } = useFindManyKnowledgeBlock({
+        select: { id: true, code: true },
+    })
 
     const handleImportExcel: UploadProps['beforeUpload'] = async (file) => {
         const buffer = await file.arrayBuffer()
@@ -158,6 +161,7 @@ const ModalImportCDR = () => {
 
     const onOk = async () => {
         const selected = selectedRowKeys.map((k) => data[Number(k)]).filter(Boolean)
+
         if (!input?.matrixId) {
             message.error('Thiếu examMatrixId, không thể import')
             return
@@ -168,32 +172,68 @@ const ModalImportCDR = () => {
             return
         }
 
+        const existing = new Set(knowledgeBlocks.map((k: any) => k.code).filter(Boolean))
+
+        const count: Record<string, number> = {}
+        selected.forEach((i) => {
+            count[i.code] = (count[i.code] ?? 0) + 1
+        })
+
+        const duplicatedCodes = Object.keys(count).filter(
+            (code) => count[code] > 1 || existing.has(code)
+        )
+
+        if (duplicatedCodes.length) {
+            message.error(
+                `Các mã chuẩn đầu ra bị trùng: ${duplicatedCodes.join(', ')}`
+            )
+            return
+        }
+
         try {
             showSpinner()
 
             for (const item of selected) {
-                await createKnowledgeBlock({
-                    data: {
-                        code: item.code,
-                        name: item.name,
-                        description: item.description ?? undefined,
-                        examMatrixId: input.matrixId,
-                        configExams: {
-                            create: item.exams.map((e) => ({
-                                difficult: e.difficult,
-                                quantity: e.quantity,
-                                type: e.type ?? null,
-                                point: e.point,
-                            })),
+                const res = await sqlTransaction([
+                    {
+                        model: 'KnowledgeBlock',
+                        operation: 'create',
+                        data: {
+                            data: {
+                                code: item.code,
+                                name: item.name,
+                                description: item.description ?? undefined,
+                                examMatrixId: input.matrixId,
+                                configExams: {
+                                    create: item.exams.map((e) => ({
+                                        difficult: e.difficult,
+                                        quantity: e.quantity,
+                                        type: e.type ?? null,
+                                        point: e.point,
+                                    })),
+                                },
+                            },
                         },
                     },
-                })
+                ])
+
+                if (res?.status !== 200) {
+                    if (res?.status === 409) {
+                        message.error(`Mã chuẩn đầu ra bị trùng: ${item.code} (${item.name})`)
+                    } else {
+                        message.error(
+                            `Import thất bại tại chuẩn đầu ra: ${item.code} (${item.name})`
+                        )
+                    }
+                    return
+                }
             }
 
             message.success(`Đã import ${selected.length} chuẩn đầu ra`)
             queryClient.invalidateQueries({ queryKey: ['KnowledgeBlock'] })
             onClose()
         } catch (err) {
+            console.error(err)
             message.error('Import thất bại')
         } finally {
             hideSpinner()
