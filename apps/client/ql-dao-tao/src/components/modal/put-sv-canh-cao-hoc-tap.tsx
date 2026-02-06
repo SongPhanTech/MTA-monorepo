@@ -4,18 +4,23 @@ import useSpinner from '@hooks/spinner'
 import type { AcademicWarning } from '@workspace/db/client'
 import {
     useCreateAcademicWarning,
+    useFindManyFixedClass,
     useFindManyStudent,
     useFindUniqueAcademicWarning,
     useUpdateAcademicWarning,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, InputNumber, message } from 'antd'
 import dayjs from 'dayjs'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import './index.css'
 import Select from '@components/commons/select'
-export type PutAcademicWarning = AcademicWarning
+import { SelectTrainingCourse } from '@workspace/ui/components/select-training-course/index'
+export type PutAcademicWarning = AcademicWarning & {
+    trainingCourseId: string
+    fixedClassId: string
+}
 dayjs.locale('vi')
 
 type AcademicWarningInput = {
@@ -31,6 +36,14 @@ const PutAcademicWarning = () => {
         onClose: form.resetFields,
     })
 
+    const [selectedCourseId, setSelectedCourseId] = useState<string | undefined>(undefined)
+    const [selectedClassId, setSelectedClassId] = useState<string | undefined>(undefined)
+
+    const { data: fixedClasses } = useFindManyFixedClass({
+        where: { trainingCourseId: selectedCourseId },
+        orderBy: { name: 'asc' },
+    })
+
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { mutateAsync: createAcademicWarning } = useCreateAcademicWarning()
@@ -41,6 +54,10 @@ const PutAcademicWarning = () => {
                 some: {
                     semesterId: input?.semesterId,
                 },
+            },
+            fixedClass: {
+                trainingCourseId: selectedCourseId,
+                id: selectedClassId,
             },
         },
         include: {
@@ -125,6 +142,30 @@ const PutAcademicWarning = () => {
             maskClosable={true}
             title={input?.id ? 'Sửa cảnh cáo học tập' : 'Thêm cảnh cáo học tập'}
         >
+            <Col span={12}>
+                <FormItem form={form} name="trainingCourseId" label="Khoá học">
+                    <SelectTrainingCourse
+                        placeholder="Chọn khoá"
+                        allowClear
+                        onChange={(val) => {
+                            setSelectedCourseId(val)
+                            setSelectedClassId(undefined)
+                        }}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="fixedClassId" label="Lớp quản lý">
+                    <Select
+                        placeholder="Chọn lớp"
+                        allowClear
+                        disabled={!selectedCourseId}
+                        value={selectedClassId}
+                        onChange={setSelectedClassId}
+                        options={fixedClasses?.map((c) => ({ label: c.name, value: c.id }))}
+                    />
+                </FormItem>
+            </Col>
             <Col span={12}>
                 <FormItem form={form} name="studentId" label="Sinh viên" required>
                     <Select
