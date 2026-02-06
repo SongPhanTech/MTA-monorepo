@@ -48,6 +48,16 @@ const PutAddOlympicScoreModal = () => {
                 },
             },
         },
+        select: {
+            coef_1: true,
+            coef_2: true,
+            coef_3: true,
+            scoreToTakeExam: true,
+            scoreToPass: true,
+            maxReExamScore: true,
+            reduceReExamScore: true,
+            examScoreToPass: true,
+        },
     })
 
     const { showSpinner, hideSpinner } = useSpinner()

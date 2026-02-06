@@ -380,6 +380,7 @@ export const calcFinalScore = (
             scoreToPass: true
             maxReExamScore: true
             reduceReExamScore: true
+            examScoreToPass: true
         }
     }>,
     subjectScore: Prisma.StudentSubjectScoreGetPayload<{
@@ -448,15 +449,19 @@ export const calcFinalScore = (
             : subjectScore.examScore
 
     // 4. Calculate final score
-    const finalScore =
-        examScore < coef.scoreToPass
-            ? examScore
-            : Math.min(
-                  subjectScore.attendanceScore * coef.coef_1 +
-                      subjectScore.midtermScore * coef.coef_2 +
-                      examScore * coef.coef_3,
-                  10
-              )
+    let finalScore: number
+    if (examScore < coef.examScoreToPass) {
+        finalScore = examScore
+    } else if (examScore < coef.scoreToPass) {
+        finalScore = examScore
+    } else {
+        finalScore = Math.min(
+            subjectScore.attendanceScore * coef.coef_1 +
+                subjectScore.midtermScore * coef.coef_2 +
+                examScore * coef.coef_3,
+            10
+        )
+    }
 
     if (maxCertFinalScore === null && finalScore < coef.scoreToPass) {
         return new Decimal(finalScore).toDecimalPlaces(1)

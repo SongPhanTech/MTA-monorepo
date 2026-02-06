@@ -170,7 +170,15 @@ export default function NhapDiem({
                         fixedClass: {
                             include: {
                                 trainingCourse: {
-                                    include: {
+                                    select: {
+                                        coef_1: true,
+                                        coef_2: true,
+                                        coef_3: true,
+                                        scoreToTakeExam: true,
+                                        scoreToPass: true,
+                                        maxReExamScore: true,
+                                        reduceReExamScore: true,
+                                        examScoreToPass: true,
                                         scoreConverts: true,
                                     },
                                 },
@@ -918,6 +926,7 @@ export default function NhapDiem({
                                 scoreToPass: 4,
                                 maxReExamScore: 10,
                                 reduceReExamScore: 0,
+                                examScoreToPass: 5,
                             }
                             const finalScore = calcFinalScore(
                                 dataForCalc?.student?.fixedClass?.trainingCourse || defaultCoef,
