@@ -14,7 +14,7 @@ import {
 // import LecturerSurveyReport from '@components/sub-pages/khao-sat/bao-cao-giang-vien'
 // import SurveyReport from '@components/sub-pages/khao-sat/bao-cao'
 import { useSemesterStore, useTrainingMajorStore } from '@workspace/ui'
-import { Col, Flex, Input, Row, Skeleton, Tree } from 'antd'
+import { Col, Flex, Row, Skeleton, Tree } from 'antd'
 import { useMemo, useState } from 'react'
 // import ClusterSurveyReport from '@components/sub-pages/khao-sat/bao-cao-cum';
 import OrganizationSurveyReport from '@/components/sub-pages/khao-sat/bao-cao-don-vi'
@@ -368,14 +368,14 @@ export default function BaoCaoGiangVien() {
                             }}
                             dropdownMatchSelectWidth={false}
                         />
-                        <Input
+                        {/* <Input
                             placeholder="Tìm kiếm"
                             className="mr-4 w-[250px]"
                             value={searchText}
                             onChange={(e) => {
                                 setSearchText(e.target.value)
                             }}
-                        />
+                        /> */}
                     </Flex>
                     {/* <Button onClick={hanleSearchReport} type="primary">
                         Tìm kiếm
