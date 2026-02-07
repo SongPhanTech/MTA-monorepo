@@ -218,6 +218,8 @@ model ExpertProfile extends Base {
   coSupervisedTheses        ThesisProject[]        @relation("CoSupervisorToThesis")
   supervisorResearchTopic   StudentResearchTopic[] @relation("SupervisorToResearchTopic")
   coSupervisorResearchTopic StudentResearchTopic[] @relation("CoSupervisorToResearchTopic")
+  supervisorInternship      StudentInternship[]    @relation("SupervisorToInternship")
+  coSupervisorInternship    StudentInternship[]    @relation("CoSupervisorToInternship")
   subjectClass              SubjectClass[] // DS lớp đồ án chuyên gia tham gia hội đồng
   councilMemberships        CouncilMember[]
   // payments                PaymentRecord[]
