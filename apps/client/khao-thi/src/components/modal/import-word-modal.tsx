@@ -1,4 +1,5 @@
 import { UploadOutlined } from '@ant-design/icons'
+import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import HtmlTruncate from '@components/commons/html-truncate'
 import { renderWithMath } from '@components/commons/rich-text-editor/renderWithMath'
@@ -6,9 +7,9 @@ import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilter'
 import { DIFFICULT_LABELS, QUESTION_TYPE_LABELS } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import { type Difficult, QuestionType } from '@workspace/db'
+import { createId, type Difficult, QuestionType } from '@workspace/db'
 import { useCreateQuestion, useFindManyKnowledgeBlock } from '@workspace/db/hooks'
-import { generatePresignedUrl } from '@workspace/libs/api/model'
+import { generatePresignedUrl, sqlTransaction } from '@workspace/libs/api/model'
 import { env } from '@workspace/libs/utils'
 import { Button, Col, Form, Modal, message, Radio, Row, Select } from 'antd'
 import { XMLParser } from 'fast-xml-parser'
@@ -328,8 +329,6 @@ const WordImportModal: React.FC = () => {
                 return
             }
 
-            message.info('Đang đọc bảng Word...')
-
             const extractedQuestions: any[] = []
 
             for (const tbl of tables) {
@@ -410,12 +409,30 @@ const WordImportModal: React.FC = () => {
                             })
                         }
                         question.explanation = answerTextRaw
+                    } else if (type === QuestionType.ORDERING) {
+                        // ORDERING - parse options từ content
+                        question.content = rawQuestionText
+                        question.explanation = answerTextRaw
+                        question.answer = answerTextRaw
+
+                        // Parse options giống như SINGLE_CHOICE/MULTIPLE_CHOICE
+                        question.optionsRaw = rawQuestionText
+                            .split('\n')
+                            .map((l) => l.trim())
+                            .filter((l) => /^[A-D]\.\s*/i.test(l))
+                            .map((line) => {
+                                const match = line.match(/^([A-D])\.\s*(.+)$/i)
+                                return {
+                                    label: match?.[1],
+                                    content: match?.[2] || '',
+                                }
+                            })
                     } else {
-                        // ESSAY / ORAL / FILL / ORDERING
+                        // ESSAY / ORAL / FILL_IN_BLANK
                         question.content = cleanQuestionText(rawQuestionText)
                         question.explanation = answerTextRaw
 
-                        if (type === QuestionType.FILL_IN_BLANK || type === QuestionType.ORDERING) {
+                        if (type === QuestionType.FILL_IN_BLANK) {
                             question.answer = answerTextRaw
                         }
                     }
@@ -545,6 +562,89 @@ const WordImportModal: React.FC = () => {
         },
     })
 
+    const buildQuestionPayload = async (q: any, knowledgeBlockId?: string) => {
+        const content = await uploadImagesAndReplacePlaceholders(
+            q.content,
+            q.contentImagesRaw || []
+        )
+        const explanation = await uploadImagesAndReplacePlaceholders(
+            q.explanation,
+            q.explanationImagesRaw || []
+        )
+
+        const payload: any = {
+            content,
+            explanation,
+            type: q.type,
+            difficult: q.difficult,
+            point: q.point,
+            isAutoGraded: false,
+            questionBankId,
+            id: createId(),
+            ...(storageType === 'khung' ? { knowledgeBlockId } : {}),
+        }
+
+        if (
+            (q.type === QuestionType.SINGLE_CHOICE || q.type === QuestionType.MULTIPLE_CHOICE) &&
+            q.optionsRaw?.length > 0
+        ) {
+            payload.multipleChoiceOptions = {
+                create: q.optionsRaw.map((opt: any, index: number) => ({
+                    content: `${opt.label}. ${opt.content}`,
+                    isCorrect: opt.isCorrect,
+                    order: index + 1,
+                })),
+            }
+        }
+
+        if (q.type === QuestionType.ORDERING && q.optionsRaw?.length > 0) {
+            const orderMatch = q.answer?.match(
+                /([A-D])\s*(?:→|->)\s*([A-D])(?:\s*(?:→|->)\s*([A-D]))?(?:\s*(?:→|->)\s*([A-D]))?/
+            )
+
+            if (orderMatch) {
+                const correctSequence = orderMatch.slice(1).filter(Boolean) as string[]
+                const orderMap = new Map<string, number>()
+                correctSequence.forEach((label: string, idx: number) => {
+                    orderMap.set(label, idx + 1)
+                })
+
+                payload.orderingItems = {
+                    create: q.optionsRaw.map((opt: any) => ({
+                        content: `${opt.label}. ${opt.content}`,
+                        correctOrder: orderMap.get(opt.label) ?? q.optionsRaw.length + 1,
+                    })),
+                }
+            }
+        }
+
+        if (q.type === QuestionType.FILL_IN_BLANK) {
+            const slotMatches =
+                q.answer
+                    ?.split(/[\n;]/)
+                    .map((line: string) => {
+                        const match = line.match(/(\d+)\s*[:=]\s*(.+)/)
+                        if (!match) return null
+                        return {
+                            order: Number(match[1]),
+                            correctAnswer: match[2].trim(),
+                        }
+                    })
+                    .filter(Boolean) || []
+
+            if (slotMatches.length > 0) {
+                payload.fillInBlankSlots = {
+                    create: slotMatches.map((slot: any) => ({
+                        order: slot.order,
+                        correctAnswer: slot.correctAnswer,
+                    })),
+                }
+            }
+        }
+
+        return payload
+    }
+
     const onOk = async () => {
         try {
             const { knowledgeBlockId } = await form.validateFields()
@@ -557,125 +657,106 @@ const WordImportModal: React.FC = () => {
                 message.error('Bạn phải chọn Ngân hàng câu hỏi (Question Bank)!')
                 return
             }
-            // console.log('storageType:', storageType)
-            // console.log('selectedKnowledgeBlockId:', selectedKnowledgeBlockId)
 
             showSpinner()
             const selectedQuestions = questions.filter((q) => selectedRowKeys.includes(q.key))
 
-            for (const q of selectedQuestions) {
-                const content = await uploadImagesAndReplacePlaceholders(
-                    q.content,
-                    q.contentImagesRaw || []
-                )
-                const explanation = await uploadImagesAndReplacePlaceholders(
-                    q.explanation,
-                    q.explanationImagesRaw || []
-                )
+            // Upload ảnh và build payload cho tất cả câu hỏi song song
+            const payloads = await Promise.all(
+                selectedQuestions.map((q) => buildQuestionPayload(q, knowledgeBlockId))
+            )
 
-                const payload: any = {
-                    content,
-                    explanation,
-                    type: q.type,
-                    difficult: q.difficult,
-                    point: q.point,
-                    isAutoGraded: false,
-                    questionBankId,
-                    ...(storageType === 'khung' ? { knowledgeBlockId: knowledgeBlockId } : {}),
-                }
+            // Tách questions và relations để dùng createMany
+            const questionsData: any[] = []
+            const multipleChoiceOptionsData: any[] = []
+            const orderingItemsData: any[] = []
+            const fillInBlankSlotsData: any[] = []
 
-                if (
-                    (q.type === QuestionType.SINGLE_CHOICE ||
-                        q.type === QuestionType.MULTIPLE_CHOICE) &&
-                    q.optionsRaw?.length > 0
-                ) {
-                    payload.multipleChoiceOptions = {
-                        create: q.optionsRaw.map((opt: any, index: number) => ({
-                            content: `${opt.label}. ${opt.content}`,
-                            isCorrect: opt.isCorrect,
-                            order: index + 1,
-                        })),
-                    }
-                }
+            payloads.forEach((payload) => {
+                const { multipleChoiceOptions, orderingItems, fillInBlankSlots, ...questionData } =
+                    payload
 
-                if (q.type === QuestionType.ORDERING && q.optionsRaw?.length > 0) {
-                    // Parse thứ tự đúng từ answer (VD: "Thứ tự đúng là A → B → C" hoặc "A → B → C")
-                    const orderMatch = q.answer?.match(
-                        /([A-D])\s*(?:→|->)\s*([A-D])(?:\s*(?:→|->)\s*([A-D]))?(?:\s*(?:→|->)\s*([A-D]))?/
-                    )
+                questionsData.push(questionData)
 
-                    if (orderMatch) {
-                        // Lấy các label theo thứ tự đúng (A, B, C, D)
-                        const correctSequence = orderMatch.slice(1).filter(Boolean) as string[]
-
-                        // Tạo map từ label -> correctOrder
-                        const orderMap = new Map<string, number>()
-                        correctSequence.forEach((label: string, idx: number) => {
-                            orderMap.set(label, idx + 1)
+                if (multipleChoiceOptions?.create) {
+                    multipleChoiceOptions.create.forEach((option: any) => {
+                        multipleChoiceOptionsData.push({
+                            ...option,
+                            questionId: questionData.id,
                         })
-
-                        payload.orderingItems = {
-                            create: q.optionsRaw.map((opt: any) => ({
-                                content: `${opt.label}. ${opt.content}`,
-                                correctOrder: orderMap.get(opt.label) ?? q.optionsRaw.length + 1,
-                            })),
-                        }
-                    }
-
-                    if (q.type === QuestionType.FILL_IN_BLANK) {
-                        /**
-                         * Ví dụ answer:
-                         * 1: Paris
-                         * 2: France
-                         */
-                        const slotMatches =
-                            q.answer
-                                ?.split(/[\n;]/)
-                                .map((line: string) => {
-                                    const match = line.match(/(\d+)\s*[:=]\s*(.+)/)
-                                    if (!match) return null
-                                    return {
-                                        order: Number(match[1]),
-                                        correctAnswer: match[2].trim(),
-                                    }
-                                })
-                                .filter(Boolean) || []
-
-                        if (slotMatches.length > 0) {
-                            payload.fillInBlankSlots = {
-                                create: slotMatches.map((slot: any) => ({
-                                    order: slot.order,
-                                    correctAnswer: slot.correctAnswer,
-                                })),
-                            }
-                        }
-                    }
-
-                    if (q.type === QuestionType.ESSAY || q.type === QuestionType.ORAL) {
-                    }
-
-                    // if (q.type === QuestionType.TRUE_FALSE) {
-                    //   payload.multipleChoiceOptions = {
-                    //     create: [
-                    //       {
-                    //         content: "A. Đúng",
-                    //         isCorrect: q.answer === "TRUE",
-                    //         order: 1,
-                    //       },
-                    //       {
-                    //         content: "B. Sai",
-                    //         isCorrect: q.answer === "FALSE",
-                    //         order: 2,
-                    //       },
-                    //     ],
-                    //   };
-                    // }
+                    })
                 }
 
-                await createQuestion({ data: payload })
+                if (orderingItems?.create) {
+                    orderingItems.create.forEach((item: any) => {
+                        orderingItemsData.push({
+                            ...item,
+                            questionId: questionData.id,
+                        })
+                    })
+                }
+
+                if (fillInBlankSlots?.create) {
+                    fillInBlankSlots.create.forEach((slot: any) => {
+                        fillInBlankSlotsData.push({
+                            ...slot,
+                            questionId: questionData.id,
+                        })
+                    })
+                }
+            })
+
+            const operations: any[] = [
+                {
+                    model: 'Question',
+                    operation: 'createMany',
+                    data: {
+                        data: questionsData,
+                    },
+                },
+            ]
+
+            if (multipleChoiceOptionsData.length > 0) {
+                operations.push({
+                    model: 'MultipleChoiceOption',
+                    operation: 'createMany',
+                    data: {
+                        data: multipleChoiceOptionsData,
+                    },
+                })
+            }
+
+            if (orderingItemsData.length > 0) {
+                operations.push({
+                    model: 'OrderingItem',
+                    operation: 'createMany',
+                    data: {
+                        data: orderingItemsData,
+                    },
+                })
+            }
+
+            if (fillInBlankSlotsData.length > 0) {
+                operations.push({
+                    model: 'FillInBlankSlot',
+                    operation: 'createMany',
+                    data: {
+                        data: fillInBlankSlotsData,
+                    },
+                })
+            }
+
+            const res = await sqlTransaction(operations)
+
+            if (res.status !== 200) {
+                message.error('Lưu câu hỏi thất bại. Vui lòng kiểm tra lại.')
+                return
             }
 
             message.success('Import câu hỏi thành công')
+            queryClient.invalidateQueries({
+                queryKey: ['zenstack', 'Question'],
+            })
             onClose()
             setQuestions([])
             setSelectedRowKeys([])
@@ -776,8 +857,6 @@ const WordImportModal: React.FC = () => {
                     )}
                 </Row>
             </Form>
-
-            {loading && <div style={{ margin: '16px 0' }}>Đang đọc file...</div>}
 
             {questions.length > 0 && (
                 <div style={{ marginTop: 16 }}>
