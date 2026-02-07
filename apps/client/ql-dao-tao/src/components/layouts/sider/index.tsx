@@ -3,7 +3,7 @@ import { Menu } from 'antd'
 import type { ItemType, MenuItemType } from 'antd/es/menu/interface'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-
+import { useMemo } from 'react'
 // Định nghĩa kiểu dữ liệu cho props của SiderDefaultLayout
 interface SiderDefaultLayoutProps {
     theme: 'light' | 'dark'
@@ -64,18 +64,44 @@ const findOpenKeys = (menus: MenuItem[], currentPath: string | null): string[] =
     }
     return []
 }
+const findMatchingKey = (menus: MenuItem[], pathname: string | null): string | undefined => {
+    if (!pathname) return undefined
+
+    for (const item of menus) {
+        if (item.children && item.children.length > 0) {
+            const childMatch = findMatchingKey(item.children, pathname)
+            if (childMatch) return childMatch
+        }
+        if (item.path) {
+            const normalizedPath = item.path.replace(/\/$/, '')
+            const normalizedPathname = pathname.replace(/\/$/, '')
+
+            if (normalizedPathname === normalizedPath || pathname.startsWith(item.path + '/')) {
+                return item.path
+            }
+        }
+    }
+    return undefined
+}
 const SidebarMenuLayout = ({ items }: SiderDefaultLayoutProps) => {
     const pathname = usePathname()
+
+    const selectedKeys = useMemo(() => {
+        const cleanPathname = pathname?.split('?')[0].split('#')[0] || '/'
+        const matched = findMatchingKey(items, cleanPathname)
+        return matched ? [matched] : [cleanPathname]
+    }, [items, pathname])
+
+    const menuItems = useMemo(() => getMenus(items), [items])
+
     return (
         <Menu
-            theme={'light'}
+            theme="light"
             mode="horizontal"
             className="top-[60px] border-t-slate-200 border-t border-solid fixed w-full z-[999] bg-white"
-            selectedKeys={pathname ? [pathname] : []}
-            items={getMenus(items)}
-            style={{
-                background: 'white',
-            }}
+            selectedKeys={selectedKeys}
+            items={menuItems}
+            style={{ background: 'white' }}
         />
     )
 }
