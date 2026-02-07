@@ -23,7 +23,6 @@ import {
     RiAlignJustify,
     RiAlignLeft,
     RiAlignRight,
-    RiAtLine,
     RiBold,
     RiFunctions,
     RiImage2Line,
@@ -46,7 +45,6 @@ import {
     Trash2,
     Undo,
 } from 'lucide-react'
-import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const { Title } = Typography
 
