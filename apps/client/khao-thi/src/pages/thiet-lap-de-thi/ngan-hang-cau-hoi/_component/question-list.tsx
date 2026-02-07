@@ -14,6 +14,7 @@ import {
     useFindUniqueQuestionBank,
     useUpdateQuestion,
 } from '@workspace/db/hooks'
+import { sqlTransaction } from '@workspace/libs/api/model'
 import { env } from '@workspace/libs/utils'
 import { Button, Col, Flex, message, Row } from 'antd'
 import { BookPlus } from 'lucide-react'
@@ -138,8 +139,6 @@ export default function QuestionList({ questionBankId }: QuestionListProps) {
         queryOptions
     )
 
-    console.log('data: ', data)
-
     const { mutateAsync: updateQuestion } = useUpdateQuestion()
     async function handleDeleteQuestion(id: string) {
         try {
@@ -158,19 +157,29 @@ export default function QuestionList({ questionBankId }: QuestionListProps) {
 
     async function handleDeleteMany() {
         try {
-            await Promise.all(
-                selectedRowKeys.map((id) =>
-                    updateQuestion({
-                        where: { id },
-                        data: { deletedAt: new Date() },
-                    })
-                )
-            )
+            const res = await sqlTransaction([
+                {
+                    model: 'Question',
+                    operation: 'updateMany',
+                    data: {
+                        where: {
+                            id: { in: selectedRowKeys },
+                        },
+                        data: {
+                            deletedAt: new Date(),
+                        },
+                    },
+                },
+            ])
 
+            if (res.status !== 200) {
+                message.error('Xóa câu hỏi thất bại')
+                return
+            }
             message.success(`Đã xóa ${selectedRowKeys.length} câu hỏi`)
             setSelectedRowKeys([])
             queryClient.invalidateQueries({
-                queryKey: ['Question'],
+                queryKey: ['zenstack', 'Question'],
             })
         } catch {
             message.error('Xóa câu hỏi thất bại')
@@ -207,23 +216,42 @@ export default function QuestionList({ questionBankId }: QuestionListProps) {
         <div>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
-                    <Row gutter={[16, 16]} align="top" justify="end">
-                        <Col span={12}>
-                            <Flex justify="end" gap={8}>
+                    <Row gutter={[8, 8]} align="top" justify="end">
+                        <Col span={24}>
+                            <Flex justify="end" align="center" gap={8}>
                                 {selectedRowKeys.length > 0 && (
-                                    <Button
-                                        type="primary"
-                                        onClick={() =>
-                                            onOpenMoveQuestion({
-                                                questionIds: selectedRowKeys,
-                                                onDone: () => {
-                                                    setSelectedRowKeys([])
-                                                },
-                                            })
-                                        }
-                                    >
-                                        Chuyển tới
-                                    </Button>
+                                    <>
+                                        <span className="font-medium">
+                                            (Đã chọn {selectedRowKeys.length} mục)
+                                        </span>
+                                        <Button
+                                            type="primary"
+                                            className="bg-blue-600"
+                                            onClick={() => setSelectedRowKeys([])}
+                                        >
+                                            Bỏ chọn
+                                        </Button>
+                                        <Button
+                                            className="bg-red-600"
+                                            type="primary"
+                                            onClick={handleDeleteMany}
+                                        >
+                                            Xóa
+                                        </Button>
+                                        <Button
+                                            type="primary"
+                                            onClick={() =>
+                                                onOpenMoveQuestion({
+                                                    questionIds: selectedRowKeys,
+                                                    onDone: () => {
+                                                        setSelectedRowKeys([])
+                                                    },
+                                                })
+                                            }
+                                        >
+                                            Chuyển tới
+                                        </Button>
+                                    </>
                                 )}
                                 <Button
                                     size="middle"
@@ -264,32 +292,6 @@ export default function QuestionList({ questionBankId }: QuestionListProps) {
                             </Flex>
                         </Col>
                     </Row>
-                </Col>
-                <Col span={24}>
-                    {selectedRowKeys.length > 0 && (
-                        <Flex
-                            align="center"
-                            justify="space-between"
-                            className="mt-2"
-                            style={{
-                                padding: '10px 16px',
-                                marginBottom: 8,
-                                background: '#fafafa',
-                                border: '1px solid #f0f0f0',
-                                borderRadius: 6,
-                            }}
-                        >
-                            <span>Đã chọn {selectedRowKeys.length} mục</span>
-
-                            <Flex gap={8}>
-                                <Button onClick={() => setSelectedRowKeys([])}>Bỏ chọn</Button>
-
-                                <Button danger onClick={handleDeleteMany}>
-                                    Xóa
-                                </Button>
-                            </Flex>
-                        </Flex>
-                    )}
                 </Col>
                 <Col span={24}>
                     <Table

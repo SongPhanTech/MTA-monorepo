@@ -405,18 +405,16 @@ export default function QuestionBankTree({
     )
 
     return (
-        <div className="overflow-y-auto max-h-[calc(100vh-180px)] pr-2">
-            <Tree
-                showLine
-                showIcon={false}
-                expandedKeys={expandedKeys}
-                autoExpandParent={false}
-                onExpand={handleExpand}
-                onSelect={handleSelect}
-                treeData={treeData}
-                virtual
-                height={800}
-            />
-        </div>
+        <Tree
+            showLine
+            showIcon={false}
+            expandedKeys={expandedKeys}
+            autoExpandParent={false}
+            onExpand={handleExpand}
+            onSelect={handleSelect}
+            treeData={treeData}
+            virtual
+            height={800}
+        />
     )
 }
