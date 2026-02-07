@@ -5,7 +5,7 @@ import { useFindManyExamBank, useUpdateExamBank } from '@workspace/db/hooks'
 import { getMinioUrl } from '@workspace/libs/utils'
 import { Button, Divider, Flex, Input, Modal } from 'antd'
 import { TemplateHandler } from 'easy-template-x'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useReactToPrint } from 'react-to-print'
 import { convertHtmlBreaks, saveFile } from '@/utils/saveFile'
@@ -99,6 +99,27 @@ const PrintBatchExamBank = () => {
         }
     )
 
+    const dataRender = useMemo(() => {
+        if (exams?.length <= 0) return []
+        const result = exams.map((i) => {
+            const listQuestionChoice = i?.questions.filter((q) => q?.question?.type !== 'ESSAY')
+            const listQuestionEssay = i?.questions.filter((q) => q?.question?.type === 'ESSAY')
+            if (i?.isGroup) {
+                return {
+                    ...i,
+                    questions: [...listQuestionChoice, ...listQuestionEssay],
+                    listQuestionChoice: listQuestionChoice,
+                    listQuestionEssay: listQuestionEssay,
+                }
+            }
+            return {
+                ...i,
+                listQuestionChoice: listQuestionChoice,
+                listQuestionEssay: listQuestionEssay,
+            }
+        })
+        return result
+    }, [exams])
     // Tự động fill thời gian từ examFramework của exam đầu tiên
     useEffect(() => {
         if (exams.length > 0 && exams[0]?.examMatrix?.examFramework?.time) {
@@ -120,7 +141,7 @@ const PrintBatchExamBank = () => {
         const templateFile = await res.blob()
 
         const templateData = {
-            exams: exams.map((exam, index) => {
+            exams: dataRender.map((exam, index) => {
                 const examDate = exam?.examDay ? new Date(exam.examDay) : new Date()
                 return {
                     semester: exam?.exam?.semester?.name || '',
@@ -147,14 +168,14 @@ const PrintBatchExamBank = () => {
                             point: Number(q?.question?.point || 0).toFixed(1),
                             content: convertHtmlBreaks(q?.question?.content || ''),
                         })) || [],
-                    isLastExam: index === exams.length - 1,
+                    isLastExam: index === dataRender.length - 1,
                 }
             }),
         }
 
         const handler = new TemplateHandler()
         const doc = await handler.process(templateFile, templateData)
-        saveFile(`De-Thi-Hang-Loat-${exams[0]?.exam?.subjectVersion?.name}.docx`, doc)
+        saveFile(`De-Thi-Hang-Loat-${dataRender[0]?.exam?.subjectVersion?.name}.docx`, doc)
         setHasDownloaded(true)
     }
 
@@ -176,7 +197,10 @@ const PrintBatchExamBank = () => {
         onClose()
     }
 
-    const renderExamPreview = (exam: ExamBankType, index: number) => {
+    const renderExamPreview = (
+        exam: ExamBankType & { listQuestionEssay: any; listQuestionChoice: any },
+        index: number
+    ) => {
         const examDate = exam?.examDay ? new Date(exam.examDay) : new Date()
         const day = examDate.getDate()
         const month = examDate.getMonth() + 1
@@ -319,21 +343,66 @@ const PrintBatchExamBank = () => {
 
                     {/* Questions */}
                     <div style={{ marginBottom: '30px' }}>
-                        {exam?.questions?.map((q: any, qIndex: number) => (
-                            <div key={q?.id} style={{ marginBottom: '15px' }}>
-                                <div>
-                                    <strong>
-                                        Câu {q?.order || qIndex + 1}(
-                                        {Number(q?.question?.point || 0).toFixed(1)} điểm):
-                                    </strong>{' '}
-                                    <span
-                                        dangerouslySetInnerHTML={{
-                                            __html: renderWithMath(q?.question?.content || ''),
-                                        }}
-                                    />
-                                </div>
+                        {exam.isGroup ? (
+                            <div>
+                                <div className="font-semibold mb-2">I. Phần trắc nghiệm</div>
+                                {exam?.listQuestionChoice?.map((q: any, qIndex: number) => (
+                                    <div key={q?.id} style={{ marginBottom: '15px' }}>
+                                        <div>
+                                            <strong>
+                                                Câu {q?.order || qIndex + 1}(
+                                                {Number(q?.question?.point || 0).toFixed(1)} điểm):
+                                            </strong>{' '}
+                                            <span
+                                                dangerouslySetInnerHTML={{
+                                                    __html: renderWithMath(
+                                                        q?.question?.content || ''
+                                                    ),
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
+                                ))}
+                                <div className="font-semibold mb-2">II. Phần tự luận</div>
+                                {exam?.listQuestionEssay?.map((q: any, qIndex: number) => (
+                                    <div key={q?.id} style={{ marginBottom: '15px' }}>
+                                        <div>
+                                            <strong>
+                                                Câu {q?.order || qIndex + 1}(
+                                                {Number(q?.question?.point || 0).toFixed(1)} điểm):
+                                            </strong>{' '}
+                                            <span
+                                                dangerouslySetInnerHTML={{
+                                                    __html: renderWithMath(
+                                                        q?.question?.content || ''
+                                                    ),
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
-                        ))}
+                        ) : (
+                            <div>
+                                {exam?.questions?.map((q: any, qIndex: number) => (
+                                    <div key={q?.id} style={{ marginBottom: '15px' }}>
+                                        <div>
+                                            <strong>
+                                                Câu {q?.order || qIndex + 1}(
+                                                {Number(q?.question?.point || 0).toFixed(1)} điểm):
+                                            </strong>{' '}
+                                            <span
+                                                dangerouslySetInnerHTML={{
+                                                    __html: renderWithMath(
+                                                        q?.question?.content || ''
+                                                    ),
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
 
                     {/* Footer */}
@@ -416,8 +485,8 @@ const PrintBatchExamBank = () => {
                 }}
             >
                 <div ref={printRef}>
-                    {exams.length > 0 ? (
-                        exams.map((exam, index) => renderExamPreview(exam, index))
+                    {dataRender.length > 0 ? (
+                        dataRender.map((exam, index) => renderExamPreview(exam, index))
                     ) : (
                         <div style={{ textAlign: 'center', padding: '40px' }}>
                             Không có đề thi nào được chọn

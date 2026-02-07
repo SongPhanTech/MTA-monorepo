@@ -23,7 +23,6 @@ import {
     RiAlignJustify,
     RiAlignLeft,
     RiAlignRight,
-    RiAtLine,
     RiBold,
     RiFunctions,
     RiImage2Line,
@@ -46,7 +45,6 @@ import {
     Trash2,
     Undo,
 } from 'lucide-react'
-import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const { Title } = Typography
 
@@ -428,7 +426,7 @@ export default function TextEditorMenuBar({
                 isActive: false,
                 disabled: false,
                 description: 'Math latex block',
-            }
+            },
         ],
         [
             {
@@ -500,7 +498,7 @@ export default function TextEditorMenuBar({
                 icon: <Split className="size-5" />,
                 onClick: () => editor.chain().focus().splitCell().run(),
                 isActive: false,
-              disabled: !editor.can().chain().focus().splitCell().run(),
+                disabled: !editor.can().chain().focus().splitCell().run(),
                 description: 'Tách ô',
             },
             {
@@ -512,11 +510,11 @@ export default function TextEditorMenuBar({
             },
             {
                 id: 'redo',
-                icon: <Redo classitems-center Name="size-5" />,
+                icon: <Redo className="size-5" />,
                 onClick: () => editor.chain().focus().redo().run(),
                 isActive: false,
                 description: 'Làm lại',
-            },  
+            },
             {
                 id: 'deleteTable',
                 icon: <TableProperties className="size-5" />,

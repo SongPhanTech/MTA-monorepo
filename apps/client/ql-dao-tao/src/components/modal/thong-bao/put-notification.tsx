@@ -5,17 +5,18 @@ import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import { RichTextEditor } from '@components/commons/rich-text-editor'
 import useSpinner from '@hooks/spinner'
-import type { Notification } from '@workspace/db/client'
+import type { DocumentFile, Notification } from '@workspace/db/client'
 import { useCreateNotification, useFindUniqueNotification } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { Col, Form, Input, message, Radio } from 'antd'
 import dayjs from 'dayjs'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutNotification = Notification & {
     attachments?: UploadedFileItem[]
 }
 const PutNotificationModal = () => {
+    const [document, setDocument] = useState<DocumentFile[]>([])
     const [form] = Form.useForm<PutNotification>()
     const {
         isOpen,
@@ -136,6 +137,7 @@ const PutNotificationModal = () => {
                     notificationId: id || '',
                 })),
             })
+            setDocument(data.attachments)
         } else {
             form.setFieldsValue({
                 active: true,
@@ -182,7 +184,7 @@ const PutNotificationModal = () => {
                 <FormItem form={form} name="attachments" label="Tài liệu đính kèm">
                     <DocumentPaths
                         form={form}
-                        data={data?.attachments || []}
+                        data={document}
                         titleForm="attachments"
                         relationId={id || ''}
                         relationType="notificationId"

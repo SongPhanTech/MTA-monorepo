@@ -918,6 +918,7 @@ export default function NhapDiem({
                                 scoreToPass: 4,
                                 maxReExamScore: 10,
                                 reduceReExamScore: 0,
+                                examScoreToPass: 5,
                             }
                             const finalScore = calcFinalScore(
                                 dataForCalc?.student?.fixedClass?.trainingCourse || defaultCoef,

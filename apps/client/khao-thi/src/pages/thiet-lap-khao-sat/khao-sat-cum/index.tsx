@@ -4,12 +4,12 @@
 // import LecturerSurveyReport from '@components/sub-pages/khao-sat/bao-cao-giang-vien'
 import DetailSurveyPage from '@components/sub-pages/khao-sat/danh-sach-giang-vien'
 import DanhSachHocVien from '@components/sub-pages/khao-sat/danh-sach-hoc-vien'
+import ClusterSurveyEssay from '@components/sub-pages/khao-sat/liet-ke-cum'
 import TabDotKhaoSatCum from '@components/sub-pages/khat-sat-cum'
 import DefaultLayout from '@layouts/default-layout'
 import type { Lecturer, Survey } from '@workspace/db'
 import { Col, Row, Tabs } from 'antd'
 import { useMemo, useState } from 'react'
-import ClusterSurveyEssay from '@components/sub-pages/khao-sat/liet-ke-cum';
 // import OrganizationSurveyReport from '@components/sub-pages/khao-sat/bao-cao-don-vi'
 
 export type LectuerType = Lecturer & {
@@ -112,7 +112,12 @@ export default function ClussterSurveyPage() {
             {
                 key: '4',
                 label: 'Liệt kê câu hỏi tự luận',
-                children: <ClusterSurveyEssay selectedId={selectedId ||''} lecturerId={lecturer?.id || ''} />,
+                children: (
+                    <ClusterSurveyEssay
+                        selectedId={selectedId || ''}
+                        lecturerId={lecturer?.id || ''}
+                    />
+                ),
                 disabled: !lecturer?.id,
             },
         ]

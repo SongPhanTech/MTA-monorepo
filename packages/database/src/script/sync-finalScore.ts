@@ -49,6 +49,7 @@ const subjectScores = await prisma.studentSubjectScore.findMany({
                                 scoreToPass: true,
                                 maxReExamScore: true,
                                 reduceReExamScore: true,
+                                examScoreToPass: true,
                             },
                         },
                     },
@@ -66,6 +67,7 @@ const defaultCoef = {
     scoreToPass: 4,
     maxReExamScore: 10,
     reduceReExamScore: 0,
+    examScoreToPass: 5,
 }
 
 const updates = subjectScores.map((s) => {

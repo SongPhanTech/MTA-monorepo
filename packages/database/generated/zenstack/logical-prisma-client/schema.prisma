@@ -3104,6 +3104,7 @@ model TrainingCourse {
   coef_2                     Float                      @default(0.3)
   coef_3                     Float                      @default(0.6)
   scoreToTakeExam            Float                      @default(5)
+  examScoreToPass            Float                      @default(5)
   scoreToPass                Float                      @default(5)
   scoreToPassConditional     Float                      @default(5)
   scoreToTakeGraduation      Float                      @default(5)
@@ -6328,6 +6329,7 @@ model ExamBank {
   isLock         Boolean?           @default(false)
   /// được sử dụng tài liệu hay không
   isNote         Boolean?           @default(false)
+  isGroup        Boolean?           @default(true)
 
   @@unique([examId, examCode])
   @@schema("khao-thi")
@@ -6958,6 +6960,7 @@ model ScoreLinkSheet {
   fixedClassId             String
   semester                 Semester                  @relation(fields: [semesterId], references: [id])
   semesterId               String
+  status                   ScoreLinkStatus           @default(PENDING)
   scoreLinkSubjectVersions ScoreLinkSubjectVersion[]
   documents                DocumentFile[]
 
@@ -6981,7 +6984,6 @@ model ScoreLinkSubjectVersion {
   scoreLinkSheetId  String
   subjectVersion    SubjectVersion     @relation(fields: [subjectVersionId], references: [id])
   subjectVersionId  String
-  status            ScoreLinkStatus    @default(PENDING)
   scoreLinkStudents ScoreLinkStudent[]
   subjectClass      SubjectClass?
 
@@ -7002,7 +7004,7 @@ model ScoreLinkStudent {
   createdAt                 DateTime                @default(now())
   updatedAt                 DateTime                @default(now()) @updatedAt()
   createdBy                 String?                 @default("") @db.Uuid()
-  scoreLinkSubjectVersion   ScoreLinkSubjectVersion @relation(fields: [scoreLinkSubjectVersionId], references: [id])
+  scoreLinkSubjectVersion   ScoreLinkSubjectVersion @relation(fields: [scoreLinkSubjectVersionId], references: [id], onDelete: Cascade)
   scoreLinkSubjectVersionId String
   student                   Student                 @relation(fields: [studentId], references: [id])
   studentId                 String

@@ -80,25 +80,27 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
         }
     }
 
-    const getTotals = (configExams: ConfigExam[]): { quantity: number; point: number,total:number } => {
-        console.log('configExams:', configExams);
-        
+    const getTotals = (
+        configExams: ConfigExam[]
+    ): { quantity: number; point: number; total: number } => {
+        console.log('configExams:', configExams)
+
         return (
             configExams?.reduce(
                 (acc, config) => ({
                     quantity: acc.quantity + (config.quantity || 0),
                     point: acc.point + (config.point || 0),
-                    total: (acc?.total||0) + (config.point || 0) * (config.quantity || 0),
+                    total: (acc?.total || 0) + (config.point || 0) * (config.quantity || 0),
                 }),
-                { quantity: 0, point: 0,total:0 }
-            ) || { quantity: 0, point: 0,total:0 }
+                { quantity: 0, point: 0, total: 0 }
+            ) || { quantity: 0, point: 0, total: 0 }
         )
     }
     const calcTotal = (data: ConfigExam[]) => {
-  return data.reduce((total, item) => {
-    return total + item.point * item.quantity;
-  }, 0);
-};
+        return data.reduce((total, item) => {
+            return total + item.point * item.quantity
+        }, 0)
+    }
 
     const { mutateAsync: createDocumentFile } = useCreateDocumentFile()
 
@@ -191,22 +193,16 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
 
     const renderCell = (quantity: number, point: number) => (
         <div className="relative inline-block min-w-[40px]">
-                
-
             <div className="absolute -top-2 -right-2 text-xs text-green-500 font-semibold">
-                 <Tooltip title="Điểm mỗi câu đúng">
-                    <div>
-                        {point}
-                    </div>
+                <Tooltip title="Điểm mỗi câu đúng">
+                    <div>{point}</div>
                 </Tooltip>
             </div>
             <div className="text-base font-medium">
-                  <Tooltip title="Số câu hỏi">
-                    <div className="text-base font-medium">
-                        {quantity}
-                    </div>
+                <Tooltip title="Số câu hỏi">
+                    <div className="text-base font-medium">{quantity}</div>
                 </Tooltip>
-               </div>
+            </div>
         </div>
     )
 

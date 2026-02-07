@@ -1,6 +1,7 @@
 import HtmlTruncate from '@components/commons/html-truncate'
 import Table from '@components/commons/table'
 import { useStore } from '@tanstack/react-store'
+import type { SubjectClass } from '@workspace/db/client'
 import { useCountExam, useFindManyExam } from '@workspace/db/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { cn } from '@workspace/ui/lib/utils'
@@ -8,7 +9,6 @@ import { Checkbox, Col, DatePicker, Flex, Input, Popover, Row } from 'antd'
 import dayjs from 'dayjs'
 import { useCallback, useMemo, useState } from 'react'
 import { store } from '../index'
-import { SubjectClass } from '@workspace/db/client';
 
 const EXAM_TYPE_LABEL: Record<string, string> = {
     OfflineWritten: 'Thi viết (offline)',
@@ -18,7 +18,6 @@ const EXAM_TYPE_LABEL: Record<string, string> = {
     Project: 'Thi đồ án',
     Other: 'Khác',
 }
-
 export default function DanhSachKeHoachThi() {
     const { id: semesterId } = useSemesterStore()
     const selectedExamId = useStore(store, (state) => state.selectedExamId)
@@ -147,6 +146,7 @@ export default function DanhSachKeHoachThi() {
                     select: {
                         name: true,
                         id: true,
+                        code: true,
                     },
                 },
             },
@@ -300,7 +300,7 @@ export default function DanhSachKeHoachThi() {
 
                                 return (
                                     <div className="text-left">
-                                        <span className="font-semibold mr-1">
+                                        <span className="text-black-600 font-semibold mr-1">
                                             <HighlightText
                                                 text={code}
                                                 searchText={filters.searchText}
@@ -354,40 +354,33 @@ export default function DanhSachKeHoachThi() {
                                 }
 
                                 const totalRooms = record.examRooms.length
-                                const displayLimit = 3
+                                const displayLimit = 3 // Hiển thị tối đa 3 phòng
                                 const displayRooms = record.examRooms.slice(0, displayLimit)
                                 const remainingCount = totalRooms - displayLimit
 
-                                const renderRoom = (examRoom: any) => (
-                                    <div key={examRoom.id} className="mb-2">
-                                        <div className="font-semibold">{examRoom.room?.name}</div>
-                                        <ul className="list-disc pl-4 text-xs text-gray-700">
-                                            <li>{examRoom.examList?.length || 0} thí sinh</li>
-                                        </ul>
-                                    </div>
-                                )
-
+                                // Nội dung đầy đủ cho Popover
                                 const fullContent = (
                                     <div className="max-h-60 overflow-y-auto">
-                                        {record.examRooms.map(renderRoom)}
+                                        {record.examRooms.map((examRoom: any) => (
+                                            <div key={examRoom.id} className="py-1">
+                                                {examRoom.room?.name}
+                                            </div>
+                                        ))}
                                     </div>
                                 )
 
                                 return (
-                                    <div className="text-left">
-                                        <HtmlTruncate>
-                                            {displayRooms.map(renderRoom)}
-                                            {remainingCount > 0 && (
-                                                <Popover
-                                                    content={fullContent}
-                                                    title="Tất cả phòng thi"
-                                                >
-                                                    <span className="text-blue-600 cursor-pointer hover:underline">
-                                                        + {remainingCount} phòng khác
-                                                    </span>
-                                                </Popover>
-                                            )}
-                                        </HtmlTruncate>
+                                    <div className="text-center">
+                                        {displayRooms.map((examRoom: any) => (
+                                            <div key={examRoom.id}>{examRoom.room?.name}</div>
+                                        ))}
+                                        {remainingCount > 0 && (
+                                            <Popover content={fullContent} title="Tất cả phòng thi">
+                                                <span className="text-blue-600 cursor-pointer hover:underline">
+                                                    + {remainingCount} phòng khác
+                                                </span>
+                                            </Popover>
+                                        )}
                                     </div>
                                 )
                             },
@@ -415,7 +408,10 @@ export default function DanhSachKeHoachThi() {
                             render: (_, record) => {
                                 return record?.subjectClass.length > 0
                                     ? record?.subjectClass
-                                          .map((i: SubjectClass) => `${i?.code||''}-${i?.name||''}`)
+                                          .map(
+                                              (i: SubjectClass) =>
+                                                  `${i?.code || ''}-${i?.name || ''}`
+                                          )
                                           .join(', ')
                                     : ''
                             },

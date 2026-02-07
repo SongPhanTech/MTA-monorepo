@@ -4,6 +4,7 @@ import useSpinner from '@hooks/spinner'
 import type { ScholarshipAward } from '@workspace/db/client'
 import {
     useCreateScholarshipAward,
+    useFindManyFixedClass,
     useFindManyScholarship,
     useFindManyStudent,
     useFindUniqueScholarshipAward,
@@ -12,13 +13,17 @@ import {
 import { Col, Form, InputNumber, message } from 'antd'
 import { useWatch } from 'antd/es/form/Form'
 import dayjs from 'dayjs'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import './index.css'
 import { queryClient } from '@api/index'
 import Select from '@components/commons/select'
-export type PutScholarshipAward = ScholarshipAward
+import { SelectTrainingCourse } from '@workspace/ui'
+export type PutScholarshipAward = ScholarshipAward & {
+    trainingCourseId: string
+    fixedClassId: string
+}
 dayjs.locale('vi')
 
 type ScholarshipAwardInput = {
@@ -32,6 +37,14 @@ const PutScholarshipAward = () => {
     const { isOpen, onClose, input } = useDisclosure<ScholarshipAwardInput>({
         tag: 'PutScholarshipAward',
         onClose: form.resetFields,
+    })
+
+    const [selectedCourseId, setSelectedCourseId] = useState<string | undefined>(undefined)
+    const [selectedClassId, setSelectedClassId] = useState<string | undefined>(undefined)
+
+    const { data: fixedClasses } = useFindManyFixedClass({
+        where: { trainingCourseId: selectedCourseId },
+        orderBy: { name: 'asc' },
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -101,6 +114,10 @@ const PutScholarshipAward = () => {
                     semesterId: input?.semesterId,
                 },
             },
+            fixedClass: {
+                trainingCourseId: selectedCourseId,
+                id: selectedClassId,
+            },
         },
         include: {
             userProfile: true,
@@ -158,6 +175,30 @@ const PutScholarshipAward = () => {
             maskClosable={true}
             title={input?.id ? 'Sửa xét học bổng' : 'Thêm xét học bổng'}
         >
+            <Col span={12}>
+                <FormItem form={form} name="trainingCourseId" label="Khoá học">
+                    <SelectTrainingCourse
+                        placeholder="Chọn khoá"
+                        allowClear
+                        onChange={(val) => {
+                            setSelectedCourseId(val)
+                            setSelectedClassId(undefined)
+                        }}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="fixedClassId" label="Lớp quản lý">
+                    <Select
+                        placeholder="Chọn lớp"
+                        allowClear
+                        disabled={!selectedCourseId}
+                        value={selectedClassId}
+                        onChange={setSelectedClassId}
+                        options={fixedClasses?.map((c) => ({ label: c.name, value: c.id }))}
+                    />
+                </FormItem>
+            </Col>
             <Col span={12}>
                 <FormItem form={form} name="studentId" label="Sinh viên" required>
                     <Select

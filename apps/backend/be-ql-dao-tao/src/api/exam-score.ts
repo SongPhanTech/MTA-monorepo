@@ -256,6 +256,7 @@ app.openapi(saveExamScore, async (c) => {
                                             scoreToPass: true,
                                             maxReExamScore: true,
                                             reduceReExamScore: true,
+                                            examScoreToPass: true,
                                         },
                                     },
                                 },
@@ -302,6 +303,7 @@ app.openapi(saveExamScore, async (c) => {
         scoreToPass: 4,
         maxReExamScore: 10,
         reduceReExamScore: 0,
+        examScoreToPass: 5,
     }
 
     const updates = examPapers.map((p) => {

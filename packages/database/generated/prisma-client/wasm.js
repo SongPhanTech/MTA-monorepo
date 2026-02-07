@@ -1764,6 +1764,7 @@ exports.Prisma.TrainingCourseScalarFieldEnum = {
   coef_2: 'coef_2',
   coef_3: 'coef_3',
   scoreToTakeExam: 'scoreToTakeExam',
+  examScoreToPass: 'examScoreToPass',
   scoreToPass: 'scoreToPass',
   scoreToPassConditional: 'scoreToPassConditional',
   scoreToTakeGraduation: 'scoreToTakeGraduation',
@@ -3756,7 +3757,8 @@ exports.Prisma.ExamBankScalarFieldEnum = {
   examType: 'examType',
   examMatrixId: 'examMatrixId',
   isLock: 'isLock',
-  isNote: 'isNote'
+  isNote: 'isNote',
+  isGroup: 'isGroup'
 };
 
 exports.Prisma.ExamBankQuestionScalarFieldEnum = {
@@ -4166,7 +4168,8 @@ exports.Prisma.ScoreLinkSheetScalarFieldEnum = {
   note: 'note',
   decision: 'decision',
   fixedClassId: 'fixedClassId',
-  semesterId: 'semesterId'
+  semesterId: 'semesterId',
+  status: 'status'
 };
 
 exports.Prisma.ScoreLinkSubjectVersionScalarFieldEnum = {
@@ -4179,8 +4182,7 @@ exports.Prisma.ScoreLinkSubjectVersionScalarFieldEnum = {
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
   scoreLinkSheetId: 'scoreLinkSheetId',
-  subjectVersionId: 'subjectVersionId',
-  status: 'status'
+  subjectVersionId: 'subjectVersionId'
 };
 
 exports.Prisma.ScoreLinkStudentScalarFieldEnum = {
