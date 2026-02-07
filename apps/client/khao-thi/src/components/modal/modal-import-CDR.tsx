@@ -224,10 +224,9 @@ const ModalImportCDR = () => {
             }
 
             message.success(`Đã import ${selected.length} chuẩn đầu ra`)
-            //    queryClient.invalidateQueries({
-            //         queryKey: ['KnowledgeBlock'],
-            //     })
-            queryClient.invalidateQueries()
+               queryClient.invalidateQueries({
+                    queryKey: ['zenstack','KnowledgeBlock'],
+                })
 
             onClose()
         } catch (err) {
