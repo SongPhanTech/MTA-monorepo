@@ -4,10 +4,12 @@ import { useScheduleOptions } from '@hooks/subjectClassSchedule'
 import { useSubjectClassTypeOptions } from '@hooks/subjectClassType'
 import { useThesisProjectStatusOptions } from '@hooks/thesisProjectStatus'
 import { useFindUniqueLecturer } from '@workspace/db/hooks'
-import { Descriptions, Modal, Table, Tabs, Tag } from 'antd'
+import { Card, Col, Modal, Row, Table, Tabs, Tag, Typography } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
+
+const { Text, Title } = Typography
 
 dayjs.locale('vi')
 
@@ -205,63 +207,141 @@ const ModalChiTietGiangVien = () => {
             key: 'thong-tin-co-ban',
             label: 'Thông tin cơ bản',
             children: (
-                <Descriptions bordered column={2} size="small">
-                    <Descriptions.Item label="Mã giảng viên" span={1}>
-                        {lecturer.code}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="ID giảng viên" span={1}>
-                        {lecturer.lectureID}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="Họ và tên" span={2}>
-                        {lecturer.userProfile?.lastName} {lecturer.userProfile?.firstName}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="Ngày sinh" span={1}>
-                        {lecturer.userProfile?.dateOfBirth
-                            ? dayjs(lecturer.userProfile.dateOfBirth).format('DD/MM/YYYY')
-                            : ''}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="Giới tính" span={1}>
-                        {lecturer.userProfile?.gender?.sTen}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="CCCD/CMND" span={1}>
-                        {lecturer.userProfile?.idCardNumber}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="Số quân nhân" span={1}>
-                        {lecturer.userProfile?.officerNumber}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="Số điện thoại" span={1}>
-                        {lecturer.userProfile?.phoneNumber}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="Email" span={1}>
-                        {lecturer.userProfile?.email}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="Đơn vị" span={2}>
-                        {lecturer.organization?.sTen}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="Loại giảng viên" span={1}>
-                        {lecturer.lecturerType?.name}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="Học hàm" span={1}>
-                        {lecturer.userProfile?.academicRankType?.sTen}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="Học vị" span={1}>
-                        {lecturer.userProfile?.academicDegreeType?.sTen}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="Quân hàm" span={1}>
-                        {lecturer.userProfile?.rank?.sTen}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="Ngày vào ngành" span={1}>
-                        {lecturer.serviceDate
-                            ? dayjs(lecturer.serviceDate).format('DD/MM/YYYY')
-                            : ''}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="Từ ngày" span={1}>
-                        {lecturer.from ? dayjs(lecturer.from).format('DD/MM/YYYY') : ''}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="Mô tả" span={2}>
-                        {lecturer.description}
-                    </Descriptions.Item>
-                </Descriptions>
+                <Card className="border-primary" size="small">
+                    <Row gutter={[16, 24]}>
+                        {/* Hàng 1: Mã giảng viên, ID, Loại, Từ ngày */}
+                        <Col span={6}>
+                            <Text type="secondary">Mã giảng viên</Text>
+                            <div>
+                                <Text strong>{lecturer.code || '-'}</Text>
+                            </div>
+                        </Col>
+                        <Col span={6}>
+                            <Text type="secondary">ID giảng viên</Text>
+                            <div>
+                                <Text strong>{lecturer.lectureID || '-'}</Text>
+                            </div>
+                        </Col>
+                        <Col span={6}>
+                            <Text type="secondary">Loại giảng viên</Text>
+                            <div>
+                                <Text strong>{lecturer.lecturerType?.name || '-'}</Text>
+                            </div>
+                        </Col>
+                        <Col span={6}>
+                            <Text type="secondary">Từ ngày</Text>
+                            <div>
+                                <Text>
+                                    {lecturer.from
+                                        ? dayjs(lecturer.from).format('DD/MM/YYYY')
+                                        : '-'}
+                                </Text>
+                            </div>
+                        </Col>
+
+                        {/* Hàng 2: Họ và tên, Ngày sinh, Giới tính, CCCD/CMND */}
+                        <Col span={6}>
+                            <Text type="secondary">Họ và tên</Text>
+                            <div>
+                                <Text strong>
+                                    {lecturer.userProfile?.lastName} {lecturer.userProfile?.firstName}
+                                </Text>
+                            </div>
+                        </Col>
+                        <Col span={6}>
+                            <Text type="secondary">Ngày sinh</Text>
+                            <div>
+                                <Text>
+                                    {lecturer.userProfile?.dateOfBirth
+                                        ? dayjs(lecturer.userProfile.dateOfBirth).format('DD/MM/YYYY')
+                                        : '-'}
+                                </Text>
+                            </div>
+                        </Col>
+                        <Col span={6}>
+                            <Text type="secondary">Giới tính</Text>
+                            <div>
+                                <Text>{lecturer.userProfile?.gender?.sTen || '-'}</Text>
+                            </div>
+                        </Col>
+                        <Col span={6}>
+                            <Text type="secondary">CCCD/CMND</Text>
+                            <div>
+                                <Text>{lecturer.userProfile?.idCardNumber || '-'}</Text>
+                            </div>
+                        </Col>
+
+                        {/* Hàng 3: Số quân nhân, Ngày vào ngành, Đơn vị, Số điện thoại */}
+                        <Col span={6}>
+                            <Text type="secondary">Số quân nhân</Text>
+                            <div>
+                                <Text>{lecturer.userProfile?.officerNumber || '-'}</Text>
+                            </div>
+                        </Col>
+                        <Col span={6}>
+                            <Text type="secondary">Ngày vào ngành</Text>
+                            <div>
+                                <Text>
+                                    {lecturer.serviceDate
+                                        ? dayjs(lecturer.serviceDate).format('DD/MM/YYYY')
+                                        : '-'}
+                                </Text>
+                            </div>
+                        </Col>
+                        <Col span={6}>
+                            <Text type="secondary">Đơn vị</Text>
+                            <div>
+                                <Text>{lecturer.organization?.sTen || '-'}</Text>
+                            </div>
+                        </Col>
+                        <Col span={6}>
+                            <Text type="secondary">Số điện thoại</Text>
+                            <div>
+                                <Text>{lecturer.userProfile?.phoneNumber || '-'}</Text>
+                            </div>
+                        </Col>
+
+                        {/* Hàng 4: Email, Học hàm, Học vị, Quân hàm */}
+                        <Col span={6}>
+                            <Text type="secondary">Email</Text>
+                            <div>
+                                <Text>{lecturer.userProfile?.email || '-'}</Text>
+                            </div>
+                        </Col>
+                        <Col span={6}>
+                            <Text type="secondary">Học hàm</Text>
+                            <div>
+                                <Text strong>
+                                    {lecturer.userProfile?.academicRankType?.sTen || '-'}
+                                </Text>
+                            </div>
+                        </Col>
+                        <Col span={6}>
+                            <Text type="secondary">Học vị</Text>
+                            <div>
+                                <Text strong>
+                                    {lecturer.userProfile?.academicDegreeType?.sTen || '-'}
+                                </Text>
+                            </div>
+                        </Col>
+                        <Col span={6}>
+                            <Text type="secondary">Quân hàm</Text>
+                            <div>
+                                <Text strong>{lecturer.userProfile?.rank?.sTen || '-'}</Text>
+                            </div>
+                        </Col>
+
+                        {/* Hàng 5: Mô tả */}
+                        {lecturer.description && (
+                            <Col span={24}>
+                                <Text type="secondary">Mô tả</Text>
+                                <div>
+                                    <Text>{lecturer.description}</Text>
+                                </div>
+                            </Col>
+                        )}
+                    </Row>
+                </Card>
             ),
         },
         {
