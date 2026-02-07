@@ -90,7 +90,6 @@ const { onOpen: onOpenImportCDR } = useDisclosure<{
     const getTotals = (
         configExams: ConfigExam[]
     ): { quantity: number; point: number; total: number } => {
-        console.log('configExams:', configExams)
 
         return (
             configExams?.reduce(

@@ -184,53 +184,51 @@ const ModalImportCDR = () => {
         )
 
         if (duplicatedCodes.length) {
-            message.error(
-                `Các mã chuẩn đầu ra bị trùng: ${duplicatedCodes.join(', ')}`
-            )
+            message.error(`Các mã chuẩn đầu ra bị trùng: ${duplicatedCodes.join(', ')}`)
             return
         }
 
         try {
             showSpinner()
 
-            for (const item of selected) {
-                const res = await sqlTransaction([
-                    {
-                        model: 'KnowledgeBlock',
-                        operation: 'create',
+            const res = await sqlTransaction(
+                selected.map((item) => ({
+                    model: 'KnowledgeBlock',
+                    operation: 'create',
+                    data: {
                         data: {
-                            data: {
-                                code: item.code,
-                                name: item.name,
-                                description: item.description ?? undefined,
-                                examMatrixId: input.matrixId,
-                                configExams: {
-                                    create: item.exams.map((e) => ({
-                                        difficult: e.difficult,
-                                        quantity: e.quantity,
-                                        type: e.type ?? null,
-                                        point: e.point,
-                                    })),
-                                },
+                            code: item.code,
+                            name: item.name,
+                            description: item.description ?? undefined,
+                            examMatrixId: input.matrixId,
+                            configExams: {
+                                create: item.exams.map((e) => ({
+                                    difficult: e.difficult,
+                                    quantity: e.quantity,
+                                    type: e.type ?? null,
+                                    point: e.point,
+                                })),
                             },
                         },
                     },
-                ])
+                }))
+            )
 
-                if (res?.status !== 200) {
-                    if (res?.status === 409) {
-                        message.error(`Mã chuẩn đầu ra bị trùng: ${item.code} (${item.name})`)
-                    } else {
-                        message.error(
-                            `Import thất bại tại chuẩn đầu ra: ${item.code} (${item.name})`
-                        )
-                    }
-                    return
-                }
+            if (res?.status !== 200) {
+                message.error(
+                    `Không thể import. Các mã chuẩn đầu ra có vấn đề: ${selected
+                        .map((i) => `${i.code} (${i.name})`)
+                        .join(', ')}`
+                )
+                return
             }
 
             message.success(`Đã import ${selected.length} chuẩn đầu ra`)
-            queryClient.invalidateQueries({ queryKey: ['KnowledgeBlock'] })
+            //    queryClient.invalidateQueries({
+            //         queryKey: ['KnowledgeBlock'],
+            //     })
+            queryClient.invalidateQueries()
+
             onClose()
         } catch (err) {
             console.error(err)
