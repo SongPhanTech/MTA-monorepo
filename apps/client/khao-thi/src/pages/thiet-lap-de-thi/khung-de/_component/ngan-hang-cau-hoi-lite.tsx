@@ -61,6 +61,9 @@ export default function QuestionBankLite({
             include: {
                 configExams: true,
             },
+            orderBy: {
+                createdAt: 'desc',
+            },
         },
         { enabled: !!matrixId }
     )
