@@ -109,29 +109,31 @@ const PutTrainingCourseModal = () => {
         { enabled: !!selectedId }
     )
     const { mutateAsync: createTrainingCourse } = useCreateTrainingCourse()
-    const checkDuplicateStartSemester = (output: PutTrainingCourse): { isDuplicate: boolean; message: string } => {
+    const checkDuplicateStartSemester = (
+        output: PutTrainingCourse
+    ): { isDuplicate: boolean; message: string } => {
         const { semesterStartId, trainingObjectTypeId } = output
-        
+
         if (!semesterStartId || !trainingObjectTypeId) {
             return { isDuplicate: false, message: '' }
         }
         const duplicate = trainingCourses.find(
             (course) =>
-                course.id !== id && 
+                course.id !== id &&
                 course.semesterStartId === semesterStartId &&
                 course.trainingObjectTypeId === trainingObjectTypeId
         )
-        
+
         if (duplicate) {
             return {
                 isDuplicate: true,
                 message: `Đã tồn tại khoá (${duplicate.code} - ${duplicate.name}) bắt đầu ở học kỳ này trong cùng đối tượng đào tạo`,
             }
         }
-        
+
         return { isDuplicate: false, message: '' }
     }
-    
+
     async function onOk(output?: PutTrainingCourse) {
         if (!output) return
         const validation = checkDuplicateStartSemester(output)

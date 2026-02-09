@@ -188,16 +188,18 @@ const PutSemesterModal = () => {
                         disabled={!schoolYear}
                         disabledDate={(date) => {
                             if (!date || !schoolYear) return false
-                            
-                            if (date < dayjs(schoolYear.startDate).startOf('day') ||
-                                date > dayjs(schoolYear.endDate).endOf('day')) {
+
+                            if (
+                                date < dayjs(schoolYear.startDate).startOf('day') ||
+                                date > dayjs(schoolYear.endDate).endOf('day')
+                            ) {
                                 return true
                             }
-                            
+
                             if (endDate && date > dayjs(endDate).startOf('day')) {
                                 return true
                             }
-                            
+
                             return false
                         }}
                     />
@@ -215,15 +217,15 @@ const PutSemesterModal = () => {
                         disabled={!schoolYear || !startDate}
                         disabledDate={(date) => {
                             if (!date || !schoolYear || !startDate) return false
-                            
+
                             if (date < dayjs(startDate).startOf('day')) {
                                 return true
                             }
-                            
+
                             if (date > dayjs(schoolYear.endDate).endOf('day')) {
                                 return true
                             }
-                            
+
                             return false
                         }}
                     />

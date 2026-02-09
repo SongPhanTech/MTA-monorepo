@@ -95,6 +95,8 @@ export default function CaNhanHocLai() {
     const { data: res, refetch } = useOpenSubjectClassRetakeStudents(
         {
             search: filters.searchText || undefined,
+            trainingCourseId: filters.trainingCourseId,
+            fixedClassId: filters.fixedClassId,
             trainingObjectTypeId: trainingObjectTypeId || '',
             subjectVersionId: subjectClassData?.subjectId || '',
             page: currentPage,

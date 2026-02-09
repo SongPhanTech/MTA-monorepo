@@ -244,7 +244,8 @@ const ModalChiTietGiangVien = () => {
                             <Text type="secondary">Họ và tên</Text>
                             <div>
                                 <Text strong>
-                                    {lecturer.userProfile?.lastName} {lecturer.userProfile?.firstName}
+                                    {lecturer.userProfile?.lastName}{' '}
+                                    {lecturer.userProfile?.firstName}
                                 </Text>
                             </div>
                         </Col>
@@ -253,7 +254,9 @@ const ModalChiTietGiangVien = () => {
                             <div>
                                 <Text>
                                     {lecturer.userProfile?.dateOfBirth
-                                        ? dayjs(lecturer.userProfile.dateOfBirth).format('DD/MM/YYYY')
+                                        ? dayjs(lecturer.userProfile.dateOfBirth).format(
+                                              'DD/MM/YYYY'
+                                          )
                                         : '-'}
                                 </Text>
                             </div>
