@@ -76,12 +76,8 @@ const ImportCurriculumVersionModal = ({
                 file: file,
                 createNewSubjects: true,
             })
-
             if (res?.status === 200) {
-                message.success(
-                    res?.data?.message ||
-                        'Nhập dữ liệu phiên bản chương trình đào tạo từ file thành công'
-                )
+                message.success('Nhập dữ liệu phiên bản chương trình đào tạo từ file thành công')
             } else {
                 message.error(
                     res?.data?.message ||
