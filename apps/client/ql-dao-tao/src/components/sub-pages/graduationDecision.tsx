@@ -44,9 +44,20 @@ import { BookCheckIcon, FileDown, Presentation, Sheet } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { removeVietnameseTones } from '@/utils/removeVietnamese'
+import { formatDate } from '@lib/utils'
 
 interface GraduationDecisionProps {
     sessionId: string
+}
+
+const classificationCategory: Record<string, string> = {
+    EXCELLENT: 'Xuất sắc',
+    GOOD: 'Tốt',
+    FAIR: 'Khá',
+    MEDIUM: 'TB Khá',
+    AVERAGE: 'Trung bình',
+    POOR: 'Yếu',
+    VERY_POOR: 'Kém',
 }
 
 export default function GraduationDecision({ sessionId }: GraduationDecisionProps) {
@@ -61,94 +72,114 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
         diplomaNumber: '',
         originalDiplomaNumber: '',
         diplomaIssueDate: undefined,
+        classification: '',
+        diplomaTypeId: undefined,
     })
 
     const isFiltering = useMemo(() => {
         return Object.values(filters).some((value) => !!value)
     }, [filters])
 
-    const where: Prisma.GraduationDecisionWhereInput = useMemo(
-        () =>
-            isFiltering
-                ? {
-                      application: { sessionId },
-                      deletedAt: null,
-                      student: {
-                          ...(filters.code
-                              ? {
-                                    code: {
-                                        contains: filters.code,
-                                        mode: 'insensitive',
-                                    },
-                                }
-                              : {}),
-                          fixedClass: {
-                              ...(filters.fixedClassName
-                                  ? {
-                                        name: {
-                                            contains: filters.fixedClassName,
-                                            mode: 'insensitive' as const,
-                                        },
-                                    }
-                                  : {}),
-                              ...(filters.fixedClassCode
-                                  ? {
-                                        name: {
-                                            contains: filters.fixedClassCode,
-                                            mode: 'insensitive' as const,
-                                        },
-                                    }
-                                  : {}),
-                          },
-                          userProfile: {
-                              ...(filters.name
-                                  ? {
-                                        fullname: {
-                                            contains: filters.name,
-                                            mode: 'insensitive',
-                                        },
-                                    }
-                                  : {}),
-                              ...(filters.decisionDate
-                                  ? {
-                                        decisionDate: {
-                                            gte: filters.decisionDate[0],
-                                            lte: filters.decisionDate[1],
-                                        },
-                                    }
-                                  : {}),
-                              ...(filters.diplomaIssueDate
-                                  ? {
-                                        diplomaIssueDate: {
-                                            gte: filters.diplomaIssueDate[0],
-                                            lte: filters.diplomaIssueDate[1],
-                                        },
-                                    }
-                                  : {}),
-                              ...(filters.diplomaNumber
-                                  ? {
-                                        diplomaNumber: {
-                                            contains: filters.diplomaNumber,
-                                            mode: 'insensitive',
-                                        },
-                                    }
-                                  : {}),
-                              ...(filters.originalDiplomaNumber
-                                  ? {
-                                        originalDiplomaNumber: {
-                                            contains: filters.originalDiplomaNumber,
-                                            mode: 'insensitive',
-                                        },
-                                    }
-                                  : {}),
-                          },
-                      },
-                  }
-                : { application: { sessionId }, deletedAt: null },
-        [sessionId, filters, isFiltering]
-    )
+    const where: Prisma.GraduationDecisionWhereInput = useMemo(() => {
+        if (!isFiltering) {
+            return {
+                application: { sessionId },
+                deletedAt: null,
+            }
+        }
+
+        return {
+            deletedAt: null,
+            application: {
+                sessionId,
+            },
+
+            ...(filters.originalDiplomaNumber && {
+                originalDiplomaNumber: {
+                    contains: filters.originalDiplomaNumber,
+                    mode: 'insensitive',
+                },
+            }),
+
+            ...(filters.diplomaNumber && {
+                diplomaNumber: {
+                    contains: filters.diplomaNumber,
+                    mode: 'insensitive',
+                },
+            }),
+
+            ...(filters.diplomaIssueDate && {
+                diplomaIssueDate: {
+                    gte: formatDate(filters.diplomaIssueDate[0], 'Day'),
+                    lte: formatDate(filters.diplomaIssueDate[1], 'Day'),
+                },
+            }),
+
+            diplomaType: {
+                ...(filters.diplomaTypeId &&
+                    filters?.diplomaTypeId?.length > 0 && {
+                        id: { in: filters.diplomaTypeId },
+                    }),
+            },
+
+            ...(filters.decisionDate && {
+                decisionDate: {
+                    gte: formatDate(filters.decisionDate[0], 'Day'),
+                    lte: formatDate(filters.decisionDate[1], 'Day'),
+                },
+            }),
+
+            finalRanking: {
+                ...(filters.classification && {
+                    classification: {
+                        in: [...filters.classification],
+                    },
+                }),
+            },
+
+            student: {
+                ...(filters.code && {
+                    code: {
+                        contains: filters.code,
+                        mode: 'insensitive',
+                    },
+                }),
+
+                userProfile: {
+                    ...(filters.name && {
+                        fullname: {
+                            contains: filters.name,
+                            mode: 'insensitive',
+                        },
+                    }),
+                },
+
+                fixedClass: {
+                    ...(filters.fixedClassName && {
+                        name: {
+                            contains: filters.fixedClassName,
+                            mode: 'insensitive',
+                        },
+                    }),
+
+                    ...(filters.fixedClassCode && {
+                        code: {
+                            contains: filters.fixedClassCode,
+                            mode: 'insensitive',
+                        },
+                    }),
+                },
+            },
+        }
+    }, [sessionId, filters, isFiltering])
+
     const { data: diplomaTypeData = [] } = useFindManyDiplomaType()
-    const { data, refetch } = useFindManyGraduationDecision({
+    const {
+        data,
+        refetch,
+        isFetching: isFetchingGraduationDecision,
+        isLoading: isLoadingGraduationDecision,
+    } = useFindManyGraduationDecision({
         where,
         include: {
             diplomaType: true,
@@ -185,6 +216,7 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
             },
         },
         orderBy: [
+            { finalGpa: filters.finalGpa },
             { originalDiplomaNumber: 'asc' },
             { student: { userProfile: { firstName: 'asc' } } },
         ],
@@ -286,11 +318,14 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
     }
     const [isExportingTemplate, setIsExportingTemplate] = useState(false)
     const handleExportTemplate = async () => {
-        if (!sessionId || !data) return
+        if (!sessionId || !data || data.length === 0) {
+            message.warning('Không có dữ liệu để xuất mẫu in văn bằng')
+            return
+        }
         setIsExportingTemplate(true)
 
         try {
-            const allSheetOptions = data.map((item) => {
+            const allSheetOptions = data.map((item, index) => {
                 const { student, trainingMajor, diplomaNumber, diplomaIssueDate, id } = item
                 const profile = student?.userProfile
                 const dob = dayjs(profile?.dateOfBirth)
@@ -299,7 +334,7 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                     : ''
 
                 return {
-                    sheet: `${id}`,
+                    sheet: id ? `${id}` : `sheet_${index + 1}`, // 🟢 tránh undefined
                     tableStartCell: { row: 24, col: 1 },
                     rows: [{ cells: [{ value: null, colSpan: 18, border: false }] }],
                     data: {
@@ -307,8 +342,8 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                         tennganhtiengviet: trainingMajor?.trainingField?.name ?? '',
                         tentienganh: removeVietnameseTones(profile?.fullname ?? ''),
                         tentiengviet: profile?.fullname ?? '',
-                        ngaysinhta: dob.locale('en').format('D MMMM YYYY'),
-                        ngaysinhtv: dob.format('DD/MM/YYYY'),
+                        ngaysinhta: dob.isValid() ? dob.locale('en').format('D MMMM YYYY') : '',
+                        ngaysinhtv: dob.isValid() ? dob.format('DD/MM/YYYY') : '',
                         sohieuvanbang: diplomaNumber ?? '',
                         thoigian: ngayCap ? `Hà Nội, ${ngayCap}` : '',
                     },
@@ -421,7 +456,6 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
         },
         { enabled: !!student?.id }
     )
-
     return (
         <div className="bg-white rounded-lg shadow-sm px-4">
             <Flex align="center" justify="space-between" className="mt-4">
@@ -645,6 +679,7 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                 <Col span={24}>
                     <Table
                         rowKey={'id'}
+                        loading={isLoadingGraduationDecision || isFetchingGraduationDecision}
                         data={data}
                         filters={filters}
                         setFilters={(value) => {
@@ -750,6 +785,12 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                                 title: 'Xếp loại',
                                 align: 'center',
                                 type: 'select',
+                                options: Object.entries(classificationCategory).map(
+                                    ([_, value]) => ({
+                                        label: value,
+                                        value,
+                                    })
+                                ),
                                 dataIndex: 'classification',
                                 width: 100,
                                 render: (_, record) => record?.finalRanking?.classification,
@@ -758,6 +799,7 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                                 title: 'Loại bằng',
                                 align: 'center',
                                 type: 'select',
+                                dataIndex: 'diplomaTypeId',
                                 options: diplomaTypeData.map((item) => ({
                                     label: item.name,
                                     value: item.id,
