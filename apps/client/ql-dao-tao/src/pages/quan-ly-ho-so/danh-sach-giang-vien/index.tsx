@@ -260,8 +260,7 @@ export default function UserProfilePageLecture() {
         <div>
             <Row gutter={[16, 16]}>
                 <Col span={24}>
-                    {/* Row nút thêm */}
-                    <Row gutter={[16, 16]} align="middle" justify="end" className="gap-1 mx-2">
+                    <Row gutter={[16, 16]} align="middle" justify="end" className="gap-1">
                         {selectedRowKeys.length > 0 && (
                             <p>(Đang chọn {selectedRowKeys.length} GV)</p>
                         )}
@@ -296,6 +295,7 @@ export default function UserProfilePageLecture() {
                 </Col>
                 <Col span={24}>
                     <Table
+                        scroll={{ y: '68vh', x: 'max-content' }}
                         rowSelection={{
                             selectedRowKeys,
                             preserveSelectedRowKeys: true,
