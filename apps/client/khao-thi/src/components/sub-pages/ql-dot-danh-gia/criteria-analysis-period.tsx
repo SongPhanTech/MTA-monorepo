@@ -267,6 +267,12 @@ const CriteriaAnalysisPeriodSubPage = ({
                                                         comments={
                                                             record.evaluationCriterionComment || []
                                                         }
+                                                        lecturerUserProfileId={
+                                                            item.analysisCriterions?.lecturer
+                                                                ?.userProfileId ||
+                                                            item.analysisCriterions?.lecturer
+                                                                ?.userProfile?.id
+                                                        }
                                                     />
                                                 </div>
                                             )
