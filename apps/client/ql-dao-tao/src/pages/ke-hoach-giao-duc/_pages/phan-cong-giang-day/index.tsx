@@ -1666,6 +1666,12 @@ export default function PhanCongGiangDay({
                             scrollable
                             maxHeight={khoaBoMon ? 'calc(100vh - 370px)' : 'calc(100vh - 460px)'}
                             filters={filters}
+                             setFilters={(value) => {
+                                setFilters(value)
+                                setCurrentPage(1)
+                                console.log('12312');
+                                
+                            }}
                             rowSelection={{
                                 type: 'checkbox',
                                 columnWidth: 35,
@@ -1690,10 +1696,6 @@ export default function PhanCongGiangDay({
                                         className: cn(disabledRecord && 'hidden'),
                                     }
                                 },
-                            }}
-                            setFilters={(value) => {
-                                setFilters(value)
-                                setCurrentPage(1)
                             }}
                             defaultExpandAll
                             onRow={(record) => {
@@ -1769,7 +1771,7 @@ export default function PhanCongGiangDay({
                                     title: 'Tên môn',
                                     align: 'center',
                                     width: 250,
-                                    dataIndex: ['subject', 'name'],
+                                    dataIndex: 'name',
                                     type: 'input',
                                     onCell: (record) => ({
                                         rowSpan: record.rowSpan,

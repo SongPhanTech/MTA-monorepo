@@ -32,8 +32,9 @@ export default function TrainingFormPage({ trainingCourse }: { trainingCourse?: 
     const router = useRouter()
     const { data = [], refetch } = useFindManyTrainingForm({
         where: {
-            name: { contains: filters.name, mode: 'insensitive' },
-            code: { contains: filters.code, mode: 'insensitive' },
+            ...(filters.name &&filters.name!=='' ? { name: { contains: filters.name, mode: 'insensitive' } } : {}),
+            ...(filters.code &&filters.code!=='' ? { code: { contains: filters.code, mode: 'insensitive' } } : {}),
+            deletedAt: null,
         },
         orderBy: {
             name: 'asc',
@@ -44,8 +45,8 @@ export default function TrainingFormPage({ trainingCourse }: { trainingCourse?: 
 
     const { data: count } = useCountTrainingForm({
         where: {
-            name: { contains: filters.name, mode: 'insensitive' },
-            code: { contains: filters.code, mode: 'insensitive' },
+             ...(filters.name &&filters.name!=='' ? { name: { contains: filters.name, mode: 'insensitive' } } : {}),
+            ...(filters.code &&filters.code!=='' ? { code: { contains: filters.code, mode: 'insensitive' } } : {}),
             deletedAt: null,
         },
     })
@@ -112,6 +113,11 @@ export default function TrainingFormPage({ trainingCourse }: { trainingCourse?: 
                     <Table
                         rowKey="id"
                         id="fixed-class"
+                          filters={filters}
+                        setFilters={(value) => {
+                            setFilters(value)
+                            setCurrentPage(1)
+                        }}
                         columns={[
                             {
                                 title: 'STT',
