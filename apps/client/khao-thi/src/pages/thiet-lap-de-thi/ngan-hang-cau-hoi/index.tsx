@@ -75,7 +75,7 @@ export default function QuestionBank() {
 
     return (
         <div>
-            <Row gutter={[16, 16]}>
+            <Row gutter={[8, 8]}>
                 <Col span={24}>
                     <Flex justify="space-between" align="center">
                         <Space size="middle">
@@ -119,7 +119,7 @@ export default function QuestionBank() {
                     </div>
                 </Col>
 
-                <Col span={6}>
+                <Col span={8}>
                     <QuestionBankTree
                         searchName={searchName}
                         expandedKeys={expandedKeys}
@@ -131,7 +131,7 @@ export default function QuestionBank() {
                     />
                 </Col>
 
-                <Col span={18}>
+                <Col span={16}>
                     {selectedQuestionBankId ? (
                         <QuestionList questionBankId={selectedQuestionBankId} />
                     ) : (

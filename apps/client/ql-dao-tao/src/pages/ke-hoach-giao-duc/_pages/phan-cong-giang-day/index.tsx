@@ -110,6 +110,7 @@ export default function PhanCongGiangDay({
         enterGradeLecturer: undefined,
         examType: undefined,
         room: undefined,
+        managementOrganizationId: undefined,
     })
 
     const [filterStatus, setFilterStatus] = useState<FilterStatus>()
@@ -1666,6 +1667,12 @@ export default function PhanCongGiangDay({
                             scrollable
                             maxHeight={khoaBoMon ? 'calc(100vh - 370px)' : 'calc(100vh - 460px)'}
                             filters={filters}
+                             setFilters={(value) => {
+                                setFilters(value)
+                                setCurrentPage(1)
+                                console.log('12312');
+                                
+                            }}
                             rowSelection={{
                                 type: 'checkbox',
                                 columnWidth: 35,
@@ -1690,10 +1697,6 @@ export default function PhanCongGiangDay({
                                         className: cn(disabledRecord && 'hidden'),
                                     }
                                 },
-                            }}
-                            setFilters={(value) => {
-                                setFilters(value)
-                                setCurrentPage(1)
                             }}
                             defaultExpandAll
                             onRow={(record) => {
@@ -1769,7 +1772,7 @@ export default function PhanCongGiangDay({
                                     title: 'Tên môn',
                                     align: 'center',
                                     width: 250,
-                                    dataIndex: ['subject', 'name'],
+                                    dataIndex: 'name',
                                     type: 'input',
                                     onCell: (record) => ({
                                         rowSpan: record.rowSpan,
@@ -1814,7 +1817,6 @@ export default function PhanCongGiangDay({
                                     title: 'Số SV',
                                     width: 80,
                                     align: 'center',
-                                    type: 'order',
                                     distinctFilters: ['maxStudent'],
                                     render: (_, record) => (
                                         <p>
@@ -1955,6 +1957,7 @@ export default function PhanCongGiangDay({
                                     width: 150,
                                     type: 'select',
                                     options: options,
+                                    dataIndex: 'examType',
                                     render: (__, record) => (
                                         // khoaBoMon ? (
                                         <FormItem
@@ -1991,6 +1994,7 @@ export default function PhanCongGiangDay({
                                     align: 'center',
                                     width: 150,
                                     type: 'input',
+                                    dataIndex: 'room',
                                     render: (_, record) =>
                                         !khoaBoMon ? (
                                             <FormItem
@@ -2139,8 +2143,9 @@ export default function PhanCongGiangDay({
                                     title: <Tooltip title="Đơn vị phụ trách">ĐVPT</Tooltip>,
                                     width: 80,
                                     align: 'center',
-                                    type: 'tree_select',
-                                    options: treeData,
+                                    // type: 'tree_select',
+                                    // options: treeData,
+                                    // dataIndex: 'managementOrganizationId',
                                     render: (_, record) =>
                                         record.subject?.managementOrganization?.sMa || '',
                                 },

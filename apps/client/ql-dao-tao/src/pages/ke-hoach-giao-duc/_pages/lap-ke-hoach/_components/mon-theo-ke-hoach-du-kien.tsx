@@ -59,7 +59,7 @@ export default function MonTheoKeHoachDuKien() {
             nextSemester: 0,
             fixedClassId: fixedClassId,
         },
-        { query: { enabled: !!semesterId && !!trainingObjectTypeId && !!trainingCourseId } }
+        { query: { enabled: !!semesterId  } }
     )
 
     const data = useMemo(() => {

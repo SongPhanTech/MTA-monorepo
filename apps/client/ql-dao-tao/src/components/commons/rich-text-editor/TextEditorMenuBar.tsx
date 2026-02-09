@@ -510,7 +510,7 @@ export default function TextEditorMenuBar({
             },
             {
                 id: 'redo',
-                icon: <Redo classitems-center Name="size-5" />,
+                icon: <Redo className="size-5" />,
                 onClick: () => editor.chain().focus().redo().run(),
                 isActive: false,
                 description: 'Làm lại',

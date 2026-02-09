@@ -432,12 +432,12 @@ export default function DanhSachSinhVien() {
                     !score.examPostponed &&
                     (!score.onePoint ? score.attendanceScore && score.midtermScore : true)
             )
-            
+
             if (filteredStudentSubjectScores.length === 0) {
                 hideSpinner()
-                return;
+                return
             }
-            
+
             const skippedStudentSubjectScores = allStudentSubjectScores.filter(
                 (score) =>
                     score.examBanned ||

@@ -187,12 +187,18 @@ const PutSemesterModal = () => {
                         placeholder="Chọn ngày bắt đầu"
                         disabled={!schoolYear}
                         disabledDate={(date) => {
-                            return (
-                                date &&
-                                date > dayjs(endDate).startOf('day') &&
-                                (date < dayjs(schoolYear?.startDate).startOf('day') ||
-                                    date > dayjs(schoolYear?.endDate).endOf('day'))
-                            )
+                            if (!date || !schoolYear) return false
+                            
+                            if (date < dayjs(schoolYear.startDate).startOf('day') ||
+                                date > dayjs(schoolYear.endDate).endOf('day')) {
+                                return true
+                            }
+                            
+                            if (endDate && date > dayjs(endDate).startOf('day')) {
+                                return true
+                            }
+                            
+                            return false
                         }}
                     />
                 </FormItem>
@@ -205,16 +211,21 @@ const PutSemesterModal = () => {
                             type: 'mask',
                         }}
                         className="w-full"
+                        placeholder="Chọn ngày kết thúc"
                         disabled={!schoolYear || !startDate}
                         disabledDate={(date) => {
-                            return (
-                                date &&
-                                date < dayjs(startDate).startOf('day') &&
-                                (date < dayjs(startDate).startOf('day') ||
-                                    date > dayjs(schoolYear?.endDate).endOf('day'))
-                            )
+                            if (!date || !schoolYear || !startDate) return false
+                            
+                            if (date < dayjs(startDate).startOf('day')) {
+                                return true
+                            }
+                            
+                            if (date > dayjs(schoolYear.endDate).endOf('day')) {
+                                return true
+                            }
+                            
+                            return false
                         }}
-                        placeholder="Chọn ngày kết thúc"
                     />
                 </FormItem>
             </Col>

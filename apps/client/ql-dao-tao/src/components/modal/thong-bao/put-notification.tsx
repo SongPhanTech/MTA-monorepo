@@ -5,14 +5,13 @@ import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import { RichTextEditor } from '@components/commons/rich-text-editor'
 import useSpinner from '@hooks/spinner'
-import type { Notification } from '@workspace/db/client'
+import type { DocumentFile, Notification } from '@workspace/db/client'
 import { useCreateNotification, useFindUniqueNotification } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { Col, Form, Input, message, Radio } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import type { DocumentFile } from '@workspace/db/client'
 export type PutNotification = Notification & {
     attachments?: UploadedFileItem[]
 }

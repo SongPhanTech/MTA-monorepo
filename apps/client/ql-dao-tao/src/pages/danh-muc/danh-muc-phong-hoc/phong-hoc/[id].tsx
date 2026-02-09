@@ -17,7 +17,7 @@ import { Button, Col, Flex, message, Row, Tag } from 'antd'
 import _ from 'lodash'
 import { useRouter } from 'next/router'
 import type React from 'react'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function BuildingPage() {
@@ -28,29 +28,42 @@ export default function BuildingPage() {
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
+        code: '',
+        name: '',
+        active: undefined,
+        capacityOrder: undefined,
+        examCapacityOrder: undefined,
     })
-
-    const { data = [], refetch } = useFindManyRoom({
-        where: {
+    const where: any = useMemo(() => {
+        return {
             buildingId,
-            name: {
-                contains: filters.name,
-                mode: 'insensitive',
-            },
-            code: {
-                contains: filters.code,
-                mode: 'insensitive',
-            },
+            ...(filters.name && filters.name !== ''
+                ? { name: { contains: filters.name, mode: 'insensitive' } }
+                : {}),
+            ...(filters.code && filters.code !== ''
+                ? { code: { contains: filters.code, mode: 'insensitive' } }
+                : {}),
             ...(filters.active?.length === 1
                 ? {
-                      subjectVersion: {
+                      subjectClasses: {
                           some: { active: filters.active[0] },
                       },
                   }
                 : {}),
-        },
-        orderBy: {
-            createdAt: 'desc',
+        }
+    }, [filters, buildingId])
+
+    const { data = [], refetch } = useFindManyRoom({
+        where,
+        orderBy: [
+            ...(filters?.capacityOrder ? [{ capacity: filters.capacityOrder }] : []),
+
+            ...(filters?.examCapacityOrder ? [{ examCapacity: filters.examCapacityOrder }] : []),
+
+            { createdAt: 'desc' },
+        ],
+        include: {
+            subjectClasses:true
         },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
@@ -72,22 +85,7 @@ export default function BuildingPage() {
 
     const { data: count } = useCountRoom({
         where: {
-            buildingId,
-            name: {
-                contains: filters.name,
-                mode: 'insensitive',
-            },
-            code: {
-                contains: filters.code,
-                mode: 'insensitive',
-            },
-            ...(filters.active?.length === 1
-                ? {
-                      subjectVersion: {
-                          some: { active: filters.active[0] },
-                      },
-                  }
-                : {}),
+            ...where,
             deletedAt: null,
         },
     })
@@ -110,6 +108,10 @@ export default function BuildingPage() {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const handleModal = () => {
+        if (building?.active === false) {
+            message.error('Không thể thêm phòng vào tòa nhà đang không hoạt động')
+            return
+        }
         openPutRoom({
             buildingCode: building?.code ?? '',
             buildingId: buildingId,
@@ -167,6 +169,12 @@ export default function BuildingPage() {
                         {building ? `: ${building.trainingLocation?.name} - ${building.name}` : ''}
                     </span>
                     <Table
+                        rowKey={'id'}
+                        filters={filters}
+                        setFilters={(value) => {
+                            setFilters(value)
+                            setCurrentPage(1)
+                        }}
                         columns={[
                             {
                                 title: 'STT',
@@ -191,15 +199,17 @@ export default function BuildingPage() {
                             },
                             {
                                 title: 'Số chỗ ngồi',
-                                dataIndex: 'capacity',
+                                dataIndex: 'capacityOrder',
                                 align: 'center',
                                 type: 'order',
+                                render: (_, record) => record?.capacity,
                             },
                             {
                                 title: 'Số chỗ ngồi thi',
-                                dataIndex: 'examCapacity',
+                                dataIndex: 'examCapacityOrder',
                                 align: 'center',
                                 type: 'order',
+                                render: (_, record) => record?.examCapacity,
                             },
                             {
                                 title: 'Mô tả',

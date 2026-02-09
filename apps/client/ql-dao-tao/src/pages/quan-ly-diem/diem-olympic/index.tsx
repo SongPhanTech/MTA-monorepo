@@ -12,8 +12,8 @@ import { formatDate } from '@lib/utils'
 import type { ArchivedAwardOnStudentSubjectScore } from '@workspace/db'
 import {
     useCountArchivedAward,
+    useDeleteArchivedAward,
     useFindManyArchivedAward,
-    useUpdateArchivedAward,
     useUpdateManyArchivedAward,
     useUpdateManyArchivedAwardOnStudentSubjectScore,
 } from '@workspace/db/hooks'
@@ -62,7 +62,7 @@ export default function ArchivedAward() {
         onOpenExport()
     }
 
-    const { mutateAsync: updateArchivedAward } = useUpdateArchivedAward()
+    const { mutateAsync: deleteArchivedAward } = useDeleteArchivedAward()
     const { mutateAsync: updateManyArchivedAward } = useUpdateManyArchivedAward()
     const { mutateAsync: updateManyArchivedAwardOnStudentSubjectScore } =
         useUpdateManyArchivedAwardOnStudentSubjectScore()
@@ -71,10 +71,8 @@ export default function ArchivedAward() {
     async function handleDelete(id: string) {
         try {
             showSpinner()
-            await updateArchivedAward({
-                where: { id },
-                data: { status: 'CANCEL' },
-            })
+            await deleteArchivedAward({ where: { id } })
+            message.success('Xóa thành công')
         } catch (error: any) {
             if (error?.info?.message) {
                 message.error(error?.info?.message)

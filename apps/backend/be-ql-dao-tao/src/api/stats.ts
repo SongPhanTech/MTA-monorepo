@@ -2117,7 +2117,7 @@ app.openapi(
                 (SELECT COUNT(*) FROM "ql-dao-tao"."Curriculum" WHERE "active" = true) AS "activeCurricula",
                 (SELECT COUNT(*) FROM "ql-dao-tao"."CurriculumVersion" WHERE "active" = true) AS "activeCurriculumVersions"
         `
-        const { activeCurricula, activeCurriculumVersions } = result[0]!
+        const { activeCurricula, activeCurriculumVersions } = result[0]
 
         return c.json({
             data: [{ activeCurricula, activeCurriculumVersions }],

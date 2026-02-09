@@ -177,6 +177,9 @@ export type FilterProps = {
     bonusScoreStatus?: ArchivedCertificateStatus[]
     proposal?: string /// tờ trình
     scoreCorrectionStatus?: ScoreCorrectionStatus[]
+    capacityOrder?: 'asc' | 'desc'
+    examCapacityOrder?: 'asc' | 'desc'
+    trainingLocation?: string
 }
 export type ColumnTypeProps = ColumnsType & {
     type?: string

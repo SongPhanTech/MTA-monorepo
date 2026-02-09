@@ -1,4 +1,4 @@
-import { ClockCircleOutlined } from '@ant-design/icons'
+import { ClockCircleOutlined, DownloadOutlined, PaperClipOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilter'
 import CreateIcon from '@components/icons/create'
@@ -6,20 +6,40 @@ import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { cn } from '@lib/utils'
-import { QueryClient } from '@tanstack/react-query'
 import { useStore } from '@tanstack/react-store'
 import {
     useCountExamFramework,
     useFindManyExamFramework,
     useUpdateExamFramework,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Input, message, Row, Space, Typography } from 'antd'
+import { Button, Col, Flex, Input, message, Row, Space, Tooltip, Typography } from 'antd'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { store } from '../index'
+import type { UploadedFileItem } from '@components/commons/documentPaths'
+import { ChevronDown, ChevronUp } from 'lucide-react'
+import { getMinioUrl } from '@workspace/libs/utils'
+import type { Prisma } from '@workspace/db/client'
+import { queryClient } from '@api/index'
+
+type ExamFrameworkType = Prisma.ExamFrameworkGetPayload<{
+    include: {
+        subjectVersion: true
+        examMatrixs: {
+            include: {
+                knowledgeBlocks: true
+            }
+        }
+        documentFiles: true
+        _count: {
+            select: {
+                documentFiles: true
+            }
+        }
+    }
+}>
 
 export default function KhungDeList() {
-    const queryClient = new QueryClient()
     const examFrameworkId = useStore(store, (s) => s.examFrameworkId)
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -33,6 +53,14 @@ export default function KhungDeList() {
 
     const { onOpen: onOpenExamFramework } = useDisclosure<{ id: string }>({
         tag: 'ModalTaoKhungDe',
+    })
+
+    const { onOpen: onOpenPreview } = useDisclosure<{
+        uri: string
+        name?: string
+        mimeType?: string
+    }>({
+        tag: 'XemTaiLieu',
     })
 
     const { data: examFrameworkList = [] } = useFindManyExamFramework({
@@ -54,6 +82,12 @@ export default function KhungDeList() {
             subjectVersion: true,
             examMatrixs: {
                 include: { knowledgeBlocks: true },
+            },
+            documentFiles: true,
+            _count: {
+                select: {
+                    documentFiles: true,
+                },
             },
         },
         take: numberOfPages, //phân trang
@@ -113,10 +147,21 @@ export default function KhungDeList() {
 
             message.success('Xóa khung đề thành công')
 
-            // invalidate danh sách
             queryClient.invalidateQueries({ queryKey: ['examFramework'] })
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng thử lại')
+        }
+    }
+
+    const handlePreviewFile = async (file: UploadedFileItem) => {
+        try {
+            return onOpenPreview({
+                uri: getMinioUrl(file.path),
+                name: file.name,
+                mimeType: file.name.split('.').pop() || file.mimeType,
+            })
+        } catch (error) {
+            message.error('Không thể mở file')
         }
     }
 
@@ -167,6 +212,72 @@ export default function KhungDeList() {
                         },
                         showTotal: (total, range) =>
                             `${range[0]} - ${range[1]} trong tổng số ${totalExamFramework} bản ghi`,
+                    }}
+                    expandable={{
+                        expandedRowRender: (record) => (
+                            <div className="bg-gray-50">
+                                <p className="mb-3 font-semibold">Tài liệu đính kèm:</p>
+                                {record.documentFiles && record.documentFiles.length > 0 ? (
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                        {record.documentFiles.map((file: UploadedFileItem) => (
+                                            <div
+                                                key={file.id}
+                                                className="flex items-center border border-solid border-[#D1D5DB] rounded p-2 hover:bg-gray-50 cursor-pointer"
+                                                onClick={() => handlePreviewFile(file)}
+                                            >
+                                                <PaperClipOutlined
+                                                    style={{
+                                                        marginRight: 8,
+                                                        color: '#595959',
+                                                        fontSize: 16,
+                                                    }}
+                                                />
+                                                <Tooltip title={file.name}>
+                                                    <span
+                                                        style={{
+                                                            whiteSpace: 'nowrap',
+                                                            overflow: 'hidden',
+                                                            textOverflow: 'ellipsis',
+                                                            flex: 1,
+                                                        }}
+                                                    >
+                                                        {file.name}
+                                                    </span>
+                                                </Tooltip>
+                                                <Tooltip title="Tải xuống">
+                                                    <DownloadOutlined
+                                                        style={{
+                                                            marginLeft: 12,
+                                                            cursor: 'pointer',
+                                                            color: '#595959',
+                                                            fontSize: 14,
+                                                        }}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation()
+                                                            e.preventDefault()
+                                                            const link = document.createElement('a')
+                                                            link.href = file.path
+                                                            link.download = file.name
+                                                            link.click()
+                                                        }}
+                                                    />
+                                                </Tooltip>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <p className="text-gray-500">Không có tài liệu</p>
+                                )}
+                            </div>
+                        ),
+                        expandIcon: ({ expanded, onExpand, record }) => (
+                            <span
+                                className="flex justify-center"
+                                onClick={(e) => onExpand(record as ExamFrameworkType, e)}
+                            >
+                                {expanded ? <ChevronDown /> : <ChevronUp />}
+                            </span>
+                        ),
                     }}
                     onRow={(record) => {
                         return {
@@ -223,6 +334,12 @@ export default function KhungDeList() {
                             type: 'input',
                             width: '250px',
                             render: (_, record) => record?.subjectVersion?.name || '',
+                        },
+                        {
+                            title: 'Tài liệu đính kèm',
+                            align: 'center',
+                            width: 100,
+                            render: (_, record) => record?._count?.documentFiles || 0,
                         },
                         {
                             title: 'Thao tác',

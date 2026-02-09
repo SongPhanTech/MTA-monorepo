@@ -1,14 +1,15 @@
-import { Checkbox, Col, DatePicker, Flex, Input, Popover, Row } from 'antd'
-import { useCallback, useMemo, useState } from 'react'
+import HtmlTruncate from '@components/commons/html-truncate'
 import Table from '@components/commons/table'
 import { useStore } from '@tanstack/react-store'
 import type { SubjectClass } from '@workspace/db/client'
 import { useCountExam, useFindManyExam } from '@workspace/db/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import HtmlTruncate from '@components/commons/html-truncate'
-import dayjs from 'dayjs'
 import { cn } from '@workspace/ui/lib/utils'
+import { Checkbox, Col, Flex, Input, Popover, Row } from 'antd'
+import dayjs from 'dayjs'
+import { useCallback, useMemo, useState } from 'react'
 import { store } from '../index'
+import DatePicker from '@components/commons/date-picker'
 
 const EXAM_TYPE_LABEL: Record<string, string> = {
     OfflineWritten: 'Thi viết (offline)',
@@ -218,6 +219,10 @@ export default function DanhSachKeHoachThi() {
                         <DatePicker
                             placeholder="Chọn ngày thi"
                             allowClear
+                            format={{
+                                format: 'DD/MM/YYYY',
+                                type: 'mask',
+                            }}
                             onChange={(date) => {
                                 setFilters((prev: any) => ({
                                     ...prev,
@@ -292,6 +297,7 @@ export default function DanhSachKeHoachThi() {
                         {
                             title: 'Môn thi',
                             align: 'center',
+                            width: 350,
                             dataIndex: 'searchText',
                             type: 'input',
                             render: (_, record) => {
@@ -343,7 +349,7 @@ export default function DanhSachKeHoachThi() {
                             align: 'center',
                             // dataIndex: 'examRoom',
                             // type: 'input',
-                            width: 150,
+                            width: 100,
                             render: (_, record) => {
                                 if (!record?.examRooms || record.examRooms?.length === 0) {
                                     return (
