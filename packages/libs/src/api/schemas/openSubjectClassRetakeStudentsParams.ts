@@ -8,6 +8,7 @@
 export type OpenSubjectClassRetakeStudentsParams = {
     subjectVersionId: string
     trainingCourseId?: string
+    fixedClassId?: string
     search?: string
     trainingObjectTypeId: string
     /**

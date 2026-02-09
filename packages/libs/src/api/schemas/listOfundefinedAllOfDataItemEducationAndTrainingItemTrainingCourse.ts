@@ -54,6 +54,7 @@ export type ListOfundefinedAllOfDataItemEducationAndTrainingItemTrainingCourse =
     coef_2?: number
     coef_3?: number
     scoreToTakeExam?: number
+    examScoreToPass?: number
     scoreToPass?: number
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number

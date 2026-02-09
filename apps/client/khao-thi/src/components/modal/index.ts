@@ -49,7 +49,7 @@ import ThongTinKhaoSatModal from './show-exam'
 import SinhDeModal from './sinh-de-modal'
 import SinhDeThuCongModal from './sinh-de-thu-cong'
 import ModalTaoKhungDe from './tao-khung-de'
-import ModalImportCDR from './modal-import-CDR';
+import ModalImportCDR from './modal-import-CDR'
 
 export {
     ConfirmModal,

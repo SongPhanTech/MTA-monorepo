@@ -5,7 +5,6 @@ import { useStore } from '@tanstack/react-store'
 import { $Enums } from '@workspace/db/client'
 import {
     useFindManyFixedClass,
-    useFindManyStudent,
     useFindManyTrainingCourse,
     useFindUniqueSubjectClass,
 } from '@workspace/db/hooks'
@@ -17,6 +16,7 @@ import _ from 'lodash'
 import { Search } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { dangKyHocLaiStore } from '../..'
+import { diffArrays } from '@workspace/libs'
 
 interface FilterProps {
     searchText: string | null
@@ -44,6 +44,9 @@ export default function CaNhanHocLai() {
             select: {
                 subjectId: true,
                 subjectClassStudent: {
+                    where: {
+                        deletedAt: null,
+                    },
                     select: {
                         studentId: true,
                     },
@@ -55,20 +58,7 @@ export default function CaNhanHocLai() {
         }
     )
 
-    const { data: students = [] } = useFindManyStudent({
-        where: {
-            id: { in: studentIds },
-        },
-        select: {
-            id: true,
-            subjectClassStudent: {
-                where: {
-                    subjectVersionId: subjectClassData?.subjectId,
-                },
-                select: {},
-            },
-        },
-    })
+    console.log('subjectClassData: ', subjectClassData)
 
     const { id: semesterId } = useSemesterStore()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
@@ -95,6 +85,8 @@ export default function CaNhanHocLai() {
     const { data: res, refetch } = useOpenSubjectClassRetakeStudents(
         {
             search: filters.searchText || undefined,
+            trainingCourseId: filters.trainingCourseId,
+            fixedClassId: filters.fixedClassId,
             trainingObjectTypeId: trainingObjectTypeId || '',
             subjectVersionId: subjectClassData?.subjectId || '',
             page: currentPage,
@@ -102,44 +94,79 @@ export default function CaNhanHocLai() {
         },
         { query: { enabled: !!trainingObjectTypeId && !!subjectClassData?.subjectId } }
     )
+
     // queryKey /api/subject-class/open-subject-class-retake
 
     const handleSaveStudentClass = async () => {
         try {
             if (!subjectClassData) return
-            const res = await sqlTransaction([
-                {
+
+            // Lấy danh sách students hiện có trong database
+            const existingStudents = subjectClassData.subjectClassStudent.map((s) => ({
+                studentId: s.studentId,
+            }))
+
+            // Chuyển studentIds được chọn thành format tương tự
+            const selectedStudents = studentIds.map((id) => ({ studentId: id }))
+
+            // So sánh để tìm sự khác biệt
+            const { onlyInA, onlyInB } = diffArrays(existingStudents, selectedStudents, 'studentId')
+
+            // onlyInA: Students cần XÓA (có trong DB nhưng không được chọn)
+            const idsToDelete = onlyInA.map((s: { studentId: string }) => s.studentId)
+
+            // onlyInB: Students MỚI cần THÊM (được chọn nhưng chưa có trong DB)
+            const idsToCreate = onlyInB.map((s: { studentId: string }) => s.studentId)
+
+            // Tạo transaction operations
+            const operations: any[] = []
+
+            // Thêm operation xóa nếu có ids cần xóa
+            if (idsToDelete.length > 0) {
+                operations.push({
                     model: 'StudentSubjectScore',
                     operation: 'deleteMany',
                     data: {
                         where: {
+                            subjectClassId,
                             subjectClass: {
                                 semesterId,
                                 trainingObjectTypeId,
                                 type: $Enums.SubjectClassType.RETAKE,
                             },
+                            studentId: {
+                                in: idsToDelete,
+                            },
                         },
                     },
-                },
-                ...studentIds.map((studentId: string) => ({
-                    model: 'StudentSubjectScore' as const,
-                    operation: 'create',
-                    data: {
-                        data: {
-                            studentId,
-                            subjectClassId: subjectClassId,
-                            subjectVersionId: subjectClassData.subjectId,
-                        },
-                    },
-                })),
-            ])
-            if (res.status !== 200) {
-                throw new Error('Có lỗi xảy ra khi lưu đăng ký học!')
+                })
             }
-            dangKyHocLaiStore.setState((prev) => ({
-                ...prev,
-                studentIds: [],
-            }))
+
+            // Thêm operations tạo mới CHỈ cho những ids CHƯA TỒN TẠI
+            if (idsToCreate.length > 0) {
+                operations.push(
+                    ...idsToCreate.map((studentId: string) => ({
+                        model: 'StudentSubjectScore' as const,
+                        operation: 'create' as const,
+                        data: {
+                            data: {
+                                studentId,
+                                subjectClassId: subjectClassId,
+                                subjectVersionId: subjectClassData.subjectId,
+                            },
+                        },
+                    }))
+                )
+            }
+
+            // Chỉ thực hiện transaction nếu có thay đổi
+            if (operations.length > 0) {
+                const res = await sqlTransaction(operations)
+                if (res.status !== 200) {
+                    throw new Error('Có lỗi xảy ra khi lưu đăng ký học!')
+                }
+            }
+
             message.success('Lưu đăng ký học lại thành công!')
             queryClient.invalidateQueries({ queryKey: ['zenstack', 'StudentSubjectScore'] })
             queryClient.invalidateQueries({ queryKey: ['zenstack', 'SubjectClass'] })

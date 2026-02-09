@@ -22,18 +22,17 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
     const [expandedRowKeys, setExpandedRowKeys] = useState<string[]>([])
 
     const { onOpen: onOpenPutCDR } = useDisclosure<{
-    id?: string
-    matrixId?: string
-}>({
-    tag: 'PutChuongMucModal',
-})
+        id?: string
+        matrixId?: string
+    }>({
+        tag: 'PutChuongMucModal',
+    })
 
-const { onOpen: onOpenImportCDR } = useDisclosure<{
-    matrixId?: string
-}>({
-    tag: 'ModalImportCDR',
-})
-
+    const { onOpen: onOpenImportCDR } = useDisclosure<{
+        matrixId?: string
+    }>({
+        tag: 'ModalImportCDR',
+    })
 
     const { data: knowledgeBlocks = [] } = useFindManyKnowledgeBlock(
         {
@@ -90,7 +89,6 @@ const { onOpen: onOpenImportCDR } = useDisclosure<{
     const getTotals = (
         configExams: ConfigExam[]
     ): { quantity: number; point: number; total: number } => {
-
         return (
             configExams?.reduce(
                 (acc, config) => ({

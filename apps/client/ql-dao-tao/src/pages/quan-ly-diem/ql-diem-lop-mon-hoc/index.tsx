@@ -146,23 +146,27 @@ export default function QuanLyDiemLopMonHoc({
             scoreChecked: true,
         },
     })
-const p13HistoryDisplay = useMemo(() => {
-    const parts: string[] = []
-    
-    if (subjectClassHistoryIsLockExamScore?.createdAt) {
-        const timestamp = dayjs(subjectClassHistoryIsLockExamScore.createdAt).format('HH:mm DD/MM/YYYY')
-        const author = subjectClassHistoryIsLockExamScore.updatedBy?.fullname ?? '-'
-        parts.push(`Khoá: ${timestamp} bởi ${author}`)
-    }
-    
-    if (subjectClassHistoryScoreSubmitted?.createdAt) {
-        const timestamp = dayjs(subjectClassHistoryScoreSubmitted.createdAt).format('HH:mm DD/MM/YYYY')
-        const author = subjectClassHistoryScoreSubmitted.updatedBy?.fullname ?? '-'
-        parts.push(`Nhận phiếu điểm: ${timestamp} bởi ${author}`)
-    }
-    
-    return parts.join(' | ')
-}, [subjectClassHistoryIsLockExamScore, subjectClassHistoryScoreSubmitted])
+    const p13HistoryDisplay = useMemo(() => {
+        const parts: string[] = []
+
+        if (subjectClassHistoryIsLockExamScore?.createdAt) {
+            const timestamp = dayjs(subjectClassHistoryIsLockExamScore.createdAt).format(
+                'HH:mm DD/MM/YYYY'
+            )
+            const author = subjectClassHistoryIsLockExamScore.updatedBy?.fullname ?? '-'
+            parts.push(`Khoá: ${timestamp} bởi ${author}`)
+        }
+
+        if (subjectClassHistoryScoreSubmitted?.createdAt) {
+            const timestamp = dayjs(subjectClassHistoryScoreSubmitted.createdAt).format(
+                'HH:mm DD/MM/YYYY'
+            )
+            const author = subjectClassHistoryScoreSubmitted.updatedBy?.fullname ?? '-'
+            parts.push(`Nhận phiếu điểm: ${timestamp} bởi ${author}`)
+        }
+
+        return parts.join(' | ')
+    }, [subjectClassHistoryIsLockExamScore, subjectClassHistoryScoreSubmitted])
 
     const items = useMemo(() => {
         let baseMenu: TabsProps['items'] = [

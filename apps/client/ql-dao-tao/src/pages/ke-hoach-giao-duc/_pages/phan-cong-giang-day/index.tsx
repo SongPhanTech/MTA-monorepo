@@ -1667,11 +1667,10 @@ export default function PhanCongGiangDay({
                             scrollable
                             maxHeight={khoaBoMon ? 'calc(100vh - 370px)' : 'calc(100vh - 460px)'}
                             filters={filters}
-                             setFilters={(value) => {
+                            setFilters={(value) => {
                                 setFilters(value)
                                 setCurrentPage(1)
-                                console.log('12312');
-                                
+                                console.log('12312')
                             }}
                             rowSelection={{
                                 type: 'checkbox',

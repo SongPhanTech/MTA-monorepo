@@ -128,6 +128,7 @@ const openSubjectClassRetakeStudents = createRoute({
         query: z.object({
             subjectVersionId: z.string(),
             trainingCourseId: z.string().optional(),
+            fixedClassId: z.string().optional(),
             search: z.string().optional(),
             trainingObjectTypeId: z.string(),
             page: z.number({ coerce: true }).default(1),
@@ -255,6 +256,7 @@ const openSubjectClassReExamStudents = createRoute({
         query: z.object({
             subjectVersionId: z.string(),
             trainingCourseId: z.string().optional(),
+            fixedClassId: z.string().optional(),
             search: z.string().optional(),
             trainingObjectTypeId: z.string(),
             page: z.number({ coerce: true }).default(1),
@@ -884,8 +886,15 @@ app.openapi(openSubjectClassRetake, async (c) => {
 })
 
 app.openapi(openSubjectClassRetakeStudents, async (c) => {
-    const { page, pageSize, search, trainingCourseId, trainingObjectTypeId, subjectVersionId } =
-        c.req.valid('query')
+    const {
+        page,
+        pageSize,
+        search,
+        trainingCourseId,
+        fixedClassId,
+        trainingObjectTypeId,
+        subjectVersionId,
+    } = c.req.valid('query')
 
     type Result = {
         studentId: string
@@ -909,6 +918,7 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
                                sv."trainingObjectTypeId",
                                C."trainingMajorId",
                                TC.id                                                                                             as trainingCourseId,
+                               FC.id                                                                                             as fixedClassId,
                                SSS."studentId",
                                SSS."finalScore"                                                                                  as diem_cuoi,
                                SSS.withdrew,
@@ -973,6 +983,10 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
           and (
             ${trainingCourseId}::TEXT IS NULL
                 OR trainingCourseId = ${trainingCourseId}
+            )
+          and (
+            ${fixedClassId}::TEXT IS NULL
+                OR fixedClassId = ${fixedClassId}
             )
           and (
             ${search}::TEXT IS NULL
@@ -1184,8 +1198,15 @@ app.openapi(openSubjectClassReExam, async (c) => {
 })
 
 app.openapi(openSubjectClassReExamStudents, async (c) => {
-    const { page, pageSize, search, trainingCourseId, trainingObjectTypeId, subjectVersionId } =
-        c.req.valid('query')
+    const {
+        page,
+        pageSize,
+        search,
+        trainingCourseId,
+        trainingObjectTypeId,
+        fixedClassId,
+        subjectVersionId,
+    } = c.req.valid('query')
 
     type Result = {
         studentId: string
@@ -1205,6 +1226,7 @@ app.openapi(openSubjectClassReExamStudents, async (c) => {
                                sv."trainingObjectTypeId",
                                C."trainingMajorId",
                                TC.id                                                                                             as trainingCourseId,
+                               FC.id                                                                                             as fixedClassId,
                                SSS."studentId",
                                SSS."finalScore"                                                                                  as diem_cuoi,
                                SSS.withdrew,
@@ -1265,6 +1287,10 @@ app.openapi(openSubjectClassReExamStudents, async (c) => {
           and (
             ${trainingCourseId}::TEXT IS NULL
                 OR trainingCourseId = ${trainingCourseId}
+            )
+          and (
+            ${fixedClassId}::TEXT IS NULL
+                OR fixedClassId = ${fixedClassId}
             )
           and (
             ${search}::TEXT IS NULL

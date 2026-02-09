@@ -10,11 +10,12 @@ import {
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useOpenSubjectClassReExamStudents } from '@workspace/libs/api/training'
+import { diffArrays } from '@workspace/libs'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Checkbox, Col, Form, Input, message, Row, Select } from 'antd'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { dangKyThiLaiStore } from '../..'
 
 interface FilterProps {
@@ -35,14 +36,27 @@ export default function CaNhanThiLai() {
 
     const { subjectClassId, studentIds = [] } = useStore(dangKyThiLaiStore)
 
-    const { data: subjectClassData } = useFindUniqueSubjectClass({
-        where: {
-            id: subjectClassId,
+    const { data: subjectClassData } = useFindUniqueSubjectClass(
+        {
+            where: {
+                id: subjectClassId,
+            },
+            select: {
+                subjectId: true,
+                subjectClassStudent: {
+                    where: {
+                        deletedAt: null,
+                    },
+                    select: {
+                        studentId: true,
+                    },
+                },
+            },
         },
-        select: {
-            subjectId: true,
-        },
-    })
+        {
+            enabled: !!subjectClassId,
+        }
+    )
 
     const { id: semesterId } = useSemesterStore()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
@@ -70,6 +84,8 @@ export default function CaNhanThiLai() {
         {
             search: filters.searchText || undefined,
             trainingObjectTypeId: trainingObjectTypeId || '',
+            trainingCourseId: filters.trainingCourseId,
+            fixedClassId: filters.fixedClassId,
             subjectVersionId: subjectClassData?.subjectId || '',
             page: currentPage,
             pageSize: numberOfPages,
@@ -81,89 +97,138 @@ export default function CaNhanThiLai() {
     const handleSaveStudentClass = async () => {
         try {
             if (!subjectClassData) return
-            const studentsRes = await sqlTransaction([
-                {
-                    model: 'Student',
-                    operation: 'findMany',
-                    data: {
-                        where: {
-                            id: { in: studentIds },
-                            subjectClassStudent: {
-                                some: {
-                                    subjectVersionId: subjectClassData.subjectId,
-                                },
-                            },
-                        },
-                        select: {
-                            id: true,
-                            subjectClassStudent: {
-                                where: {
-                                    subjectVersionId: subjectClassData.subjectId,
-                                    attendanceScore: {
-                                        not: null,
-                                    },
-                                    midtermScore: {
-                                        not: null,
-                                    },
-                                },
-                                orderBy: {
-                                    createdAt: 'desc',
-                                },
-                                take: 1,
-                            },
-                        },
-                    },
-                },
-            ])
 
-            if (studentsRes.status !== 200) {
-                throw new Error('Có lỗi xảy ra khi kiểm tra điều kiện đăng ký học lại!')
+            // Lấy danh sách students hiện có trong database
+            const existingStudents = subjectClassData.subjectClassStudent.map((s) => ({
+                studentId: s.studentId,
+            }))
+
+            // Chuyển studentIds được chọn thành format tương tự
+            const selectedStudents = studentIds.map((id) => ({ studentId: id }))
+
+            // So sánh để tìm sự khác biệt
+            const { onlyInA, onlyInB } = diffArrays(existingStudents, selectedStudents, 'studentId')
+
+            // onlyInA: Students cần XÓA (có trong DB nhưng không được chọn)
+            const idsToDelete = onlyInA.map((s: { studentId: string }) => s.studentId)
+
+            // onlyInB: Students MỚI cần THÊM (được chọn nhưng chưa có trong DB)
+            const idsToCreate = onlyInB.map((s: { studentId: string }) => s.studentId)
+
+            // Nếu không có thay đổi, không cần làm gì
+            if (idsToDelete.length === 0 && idsToCreate.length === 0) {
+                message.info('Không có thay đổi nào để lưu!')
+                return
             }
 
-            const studentsData = studentsRes.data as Prisma.StudentGetPayload<{
+            // Query để lấy attendanceScore và midtermScore cho students mới
+            let studentsData: Prisma.StudentGetPayload<{
                 select: {
                     id: true
                     subjectClassStudent: true
                 }
-            }>[]
+            }>[] = []
 
-            const res = await sqlTransaction([
-                {
+            if (idsToCreate.length > 0) {
+                const studentsRes = await sqlTransaction([
+                    {
+                        model: 'Student',
+                        operation: 'findMany',
+                        data: {
+                            where: {
+                                id: { in: idsToCreate },
+                                subjectClassStudent: {
+                                    some: {
+                                        subjectVersionId: subjectClassData.subjectId,
+                                    },
+                                },
+                            },
+                            select: {
+                                id: true,
+                                subjectClassStudent: {
+                                    where: {
+                                        subjectVersionId: subjectClassData.subjectId,
+                                        attendanceScore: {
+                                            not: null,
+                                        },
+                                        midtermScore: {
+                                            not: null,
+                                        },
+                                    },
+                                    orderBy: {
+                                        createdAt: 'desc',
+                                    },
+                                    take: 1,
+                                },
+                            },
+                        },
+                    },
+                ])
+
+                if (studentsRes.status !== 200) {
+                    throw new Error('Có lỗi xảy ra khi kiểm tra điều kiện đăng ký thi lại!')
+                }
+
+                studentsData = studentsRes.data as Prisma.StudentGetPayload<{
+                    select: {
+                        id: true
+                        subjectClassStudent: true
+                    }
+                }>[]
+            }
+
+            // Tạo transaction operations
+            const operations: any[] = []
+
+            // Thêm operation xóa nếu có ids cần xóa
+            if (idsToDelete.length > 0) {
+                operations.push({
                     model: 'StudentSubjectScore',
                     operation: 'deleteMany',
                     data: {
                         where: {
+                            subjectClassId,
                             subjectClass: {
                                 semesterId,
                                 trainingObjectTypeId,
                                 type: $Enums.SubjectClassType.REEXAM,
                             },
+                            studentId: {
+                                in: idsToDelete,
+                            },
                         },
                     },
-                },
-                ...studentsData.map((student) => ({
-                    model: 'StudentSubjectScore' as const,
-                    operation: 'create',
-                    data: {
-                        data: {
-                            studentId: student.id,
-                            subjectClassId: subjectClassId,
-                            subjectVersionId: subjectClassData.subjectId,
-                            attendanceScore: student?.subjectClassStudent?.[0]?.attendanceScore,
-                            midtermScore: student?.subjectClassStudent?.[0]?.midtermScore,
-                        },
-                    },
-                })),
-            ])
-
-            if (res.status !== 200) {
-                throw new Error('Có lỗi xảy ra khi lưu đăng ký học!')
+                })
             }
-            dangKyThiLaiStore.setState((prev) => ({
-                ...prev,
-                studentIds: [],
-            }))
-            message.success('Lưu đăng ký học lại thành công!')
+
+            // Thêm operations tạo mới CHỈ cho những ids CHƯA TỒN TẠI
+            if (studentsData.length > 0) {
+                operations.push(
+                    ...studentsData.map((student) => ({
+                        model: 'StudentSubjectScore' as const,
+                        operation: 'create' as const,
+                        data: {
+                            data: {
+                                studentId: student.id,
+                                subjectClassId: subjectClassId,
+                                subjectVersionId: subjectClassData.subjectId,
+                                attendanceScore: student?.subjectClassStudent?.[0]?.attendanceScore,
+                                midtermScore: student?.subjectClassStudent?.[0]?.midtermScore,
+                            },
+                        },
+                    }))
+                )
+            }
+
+            // Chỉ thực hiện transaction nếu có thay đổi
+            if (operations.length > 0) {
+                const res = await sqlTransaction(operations)
+                if (res.status !== 200) {
+                    throw new Error('Có lỗi xảy ra khi lưu đăng ký thi lại!')
+                }
+            }
+
+            message.success('Lưu đăng ký thi lại thành công!')
             queryClient.invalidateQueries({ queryKey: ['zenstack', 'StudentSubjectScore'] })
             queryClient.invalidateQueries({ queryKey: ['zenstack', 'SubjectClass'] })
             queryClient.invalidateQueries({
@@ -187,6 +252,15 @@ export default function CaNhanThiLai() {
         }, 500),
         []
     )
+
+    useEffect(() => {
+        if (subjectClassData) {
+            dangKyThiLaiStore.setState((prev) => ({
+                ...prev,
+                studentIds: subjectClassData.subjectClassStudent.map((s) => s.studentId),
+            }))
+        }
+    }, [subjectClassData])
 
     const handleFilterChange = (key: string, value: string) => {
         setFilters((prev) => {

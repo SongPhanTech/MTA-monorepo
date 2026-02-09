@@ -63,7 +63,7 @@ export default function BuildingPage() {
             { createdAt: 'desc' },
         ],
         include: {
-            subjectClasses:true
+            subjectClasses: true,
         },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,

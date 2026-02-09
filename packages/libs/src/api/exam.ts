@@ -76,6 +76,8 @@ import type {
     GetSurveyResult,
     GetSurveyStatistics200,
     GetSurveyStatistics404,
+    GetSurveyStatisticsToFeild200,
+    GetSurveyStatisticsToFeild404,
     GetSurveysOfProfile200,
     GetSurveysOfProfile404,
     GetSurveysOfProfileParams,
@@ -1200,6 +1202,166 @@ export function useGetSurveyStatistics<
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
     const queryOptions = getGetSurveyStatisticsQueryOptions(id, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+/**
+ * @summary Thống kê câu trả lời cho từng nhóm câu hỏi trong một đợt khảo sát
+ */
+export type getSurveyStatisticsToFeildResponse200 = {
+    data: GetSurveyStatisticsToFeild200
+    status: 200
+}
+
+export type getSurveyStatisticsToFeildResponse404 = {
+    data: GetSurveyStatisticsToFeild404
+    status: 404
+}
+
+export type getSurveyStatisticsToFeildResponseSuccess = getSurveyStatisticsToFeildResponse200 & {
+    headers: Headers
+}
+export type getSurveyStatisticsToFeildResponseError = getSurveyStatisticsToFeildResponse404 & {
+    headers: Headers
+}
+
+export type getSurveyStatisticsToFeildResponse =
+    | getSurveyStatisticsToFeildResponseSuccess
+    | getSurveyStatisticsToFeildResponseError
+
+export const getGetSurveyStatisticsToFeildUrl = (id: string) => {
+    return `/api/survey/${id}/statistics-to-feild`
+}
+
+export const getSurveyStatisticsToFeild = async (
+    id: string,
+    options?: RequestInit
+): Promise<getSurveyStatisticsToFeildResponse> => {
+    return customExamFetch<getSurveyStatisticsToFeildResponse>(
+        getGetSurveyStatisticsToFeildUrl(id),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getGetSurveyStatisticsToFeildQueryKey = (id?: string) => {
+    return [`/api/survey/${id}/statistics-to-feild`] as const
+}
+
+export const getGetSurveyStatisticsToFeildQueryOptions = <
+    TData = Awaited<ReturnType<typeof getSurveyStatisticsToFeild>>,
+    TError = GetSurveyStatisticsToFeild404,
+>(
+    id: string,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatisticsToFeild>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customExamFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetSurveyStatisticsToFeildQueryKey(id)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSurveyStatisticsToFeild>>> = ({
+        signal,
+    }) => getSurveyStatisticsToFeild(id, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getSurveyStatisticsToFeild>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetSurveyStatisticsToFeildQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getSurveyStatisticsToFeild>>
+>
+export type GetSurveyStatisticsToFeildQueryError = GetSurveyStatisticsToFeild404
+
+export function useGetSurveyStatisticsToFeild<
+    TData = Awaited<ReturnType<typeof getSurveyStatisticsToFeild>>,
+    TError = GetSurveyStatisticsToFeild404,
+>(
+    id: string,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatisticsToFeild>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getSurveyStatisticsToFeild>>,
+                    TError,
+                    Awaited<ReturnType<typeof getSurveyStatisticsToFeild>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customExamFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSurveyStatisticsToFeild<
+    TData = Awaited<ReturnType<typeof getSurveyStatisticsToFeild>>,
+    TError = GetSurveyStatisticsToFeild404,
+>(
+    id: string,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatisticsToFeild>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getSurveyStatisticsToFeild>>,
+                    TError,
+                    Awaited<ReturnType<typeof getSurveyStatisticsToFeild>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customExamFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSurveyStatisticsToFeild<
+    TData = Awaited<ReturnType<typeof getSurveyStatisticsToFeild>>,
+    TError = GetSurveyStatisticsToFeild404,
+>(
+    id: string,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatisticsToFeild>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customExamFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Thống kê câu trả lời cho từng nhóm câu hỏi trong một đợt khảo sát
+ */
+
+export function useGetSurveyStatisticsToFeild<
+    TData = Awaited<ReturnType<typeof getSurveyStatisticsToFeild>>,
+    TError = GetSurveyStatisticsToFeild404,
+>(
+    id: string,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatisticsToFeild>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customExamFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetSurveyStatisticsToFeildQueryOptions(id, options)
 
     const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
         queryKey: DataTag<QueryKey, TData, TError>
