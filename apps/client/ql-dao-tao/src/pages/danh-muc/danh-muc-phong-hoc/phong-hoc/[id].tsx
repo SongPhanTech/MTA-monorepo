@@ -108,6 +108,10 @@ export default function BuildingPage() {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const handleModal = () => {
+        if (building?.active === false) {
+            message.error('Không thể thêm phòng vào tòa nhà đang không hoạt động')
+            return
+        }
         openPutRoom({
             buildingCode: building?.code ?? '',
             buildingId: buildingId,

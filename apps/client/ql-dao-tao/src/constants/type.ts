@@ -179,6 +179,7 @@ export type FilterProps = {
     scoreCorrectionStatus?: ScoreCorrectionStatus[]
     capacityOrder?: 'asc' | 'desc'
     examCapacityOrder?: 'asc' | 'desc'
+    trainingLocation?: string
 }
 export type ColumnTypeProps = ColumnsType & {
     type?: string

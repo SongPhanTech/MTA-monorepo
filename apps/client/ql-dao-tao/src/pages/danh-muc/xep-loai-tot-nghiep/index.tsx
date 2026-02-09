@@ -38,8 +38,17 @@ export default function GraduationRankingPage() {
     const where: Prisma.TrainingCourseWhereInput = useMemo(
         () => ({
             active: true,
+            trainingObjectTypeId,
+            deletedAt: null,
+        }),
+        [trainingObjectTypeId]
+    )
+
+    const includeQuery = useMemo(
+        () => ({
             academicRankingConvert: {
-                every: {
+                where: {
+                    context: RankingContext.GRADUATION,
                     ...(filters.searchText && filters.searchText.trim() !== ''
                         ? {
                               AND: [
@@ -57,23 +66,15 @@ export default function GraduationRankingPage() {
                           }
                         : {}),
                 },
+                orderBy: { base10Max: 'desc' as const },
             },
-            trainingObjectTypeId,
-            deletedAt: null,
         }),
-        [filters, trainingObjectTypeId]
+        [filters.searchText]
     )
 
     const { data = [], refetch } = useFindManyTrainingCourse({
         where,
-        include: {
-            academicRankingConvert: {
-                where: {
-                    context: RankingContext.GRADUATION,
-                },
-                orderBy: [{ trainingCourse: { createdAt: 'desc' } }, { base10Max: 'desc' }],
-            },
-        },
+        include: includeQuery,
         orderBy: {
             name: 'asc',
         },
