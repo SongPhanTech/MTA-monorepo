@@ -110,6 +110,7 @@ export default function PhanCongGiangDay({
         enterGradeLecturer: undefined,
         examType: undefined,
         room: undefined,
+        managementOrganizationId: undefined,
     })
 
     const [filterStatus, setFilterStatus] = useState<FilterStatus>()
@@ -1816,7 +1817,6 @@ export default function PhanCongGiangDay({
                                     title: 'Số SV',
                                     width: 80,
                                     align: 'center',
-                                    type: 'order',
                                     distinctFilters: ['maxStudent'],
                                     render: (_, record) => (
                                         <p>
@@ -1957,6 +1957,7 @@ export default function PhanCongGiangDay({
                                     width: 150,
                                     type: 'select',
                                     options: options,
+                                    dataIndex: 'examType',
                                     render: (__, record) => (
                                         // khoaBoMon ? (
                                         <FormItem
@@ -1993,6 +1994,7 @@ export default function PhanCongGiangDay({
                                     align: 'center',
                                     width: 150,
                                     type: 'input',
+                                    dataIndex: 'room',
                                     render: (_, record) =>
                                         !khoaBoMon ? (
                                             <FormItem
@@ -2141,8 +2143,9 @@ export default function PhanCongGiangDay({
                                     title: <Tooltip title="Đơn vị phụ trách">ĐVPT</Tooltip>,
                                     width: 80,
                                     align: 'center',
-                                    type: 'tree_select',
-                                    options: treeData,
+                                    // type: 'tree_select',
+                                    // options: treeData,
+                                    // dataIndex: 'managementOrganizationId',
                                     render: (_, record) =>
                                         record.subject?.managementOrganization?.sMa || '',
                                 },
