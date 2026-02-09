@@ -31,13 +31,13 @@ const PutDisciplinaryWarningReason = () => {
     const { mutateAsync: updateDisciplinaryWarningReason } = useUpdateDisciplinaryWarningReason()
     async function onOk(output?: PutDisciplinaryWarningReasonFormType) {
         if (!output) return
-        
+
         // Validate severityLevel
         if (!output.severityLevel || output.severityLevel < 1 || output.severityLevel > 4) {
             message.error('Mức nâng phải từ 1 đến 4')
             return
         }
-        
+
         try {
             showSpinner()
             const data = {
