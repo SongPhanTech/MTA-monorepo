@@ -158,6 +158,14 @@ const PutTrainingMajorModal = () => {
         }
     }, [level])
 
+    const handleCreditsChange = () => {
+        form.validateFields([
+            'numberCreditsMajor',
+            'numberCreditsRequired',
+            'numberCreditsElective',
+        ])
+    }
+
     return (
         <PutFormModal
             open={isOpen}
@@ -273,18 +281,101 @@ const PutTrainingMajorModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="numberCreditsMajor" label="Số TC Chuyên Ngành">
-                    <InputNumber type="number" style={{ width: '100%' }} min={0} step={1} />
+                <FormItem
+                    form={form}
+                    name="numberCreditsMajor"
+                    label="Số TC Chuyên Ngành"
+                    rules={[
+                        {
+                            validator: async (_, value) => {
+                                const required = form.getFieldValue('numberCreditsRequired') ?? 0
+                                const elective = form.getFieldValue('numberCreditsElective') ?? 0
+                                const total = required + elective
+
+                                if (typeof value === 'number' && total > value) {
+                                    return Promise.reject(
+                                        new Error(
+                                            'Tổng số tín chỉ bắt buộc và lựa chọn không được lớn hơn số tín chỉ chuyên ngành.'
+                                        )
+                                    )
+                                }
+
+                                return Promise.resolve()
+                            },
+                        },
+                    ]}
+                >
+                    <InputNumber
+                        type="number"
+                        style={{ width: '100%' }}
+                        min={0}
+                        step={1}
+                        onChange={handleCreditsChange}
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="numberCreditsRequired" label="Số TC Bắt Buộc">
-                    <InputNumber type="number" style={{ width: '100%' }} min={0} step={1} />
+                <FormItem
+                    form={form}
+                    name="numberCreditsRequired"
+                    label="Số TC Bắt Buộc"
+                    rules={[
+                        {
+                            validator: async (_, value) => {
+                                const major = form.getFieldValue('numberCreditsMajor') || 0
+                                const elective = form.getFieldValue('numberCreditsElective') || 0
+                                const total = (value || 0) + elective
+                                if (major && total > major) {
+                                    return Promise.reject(
+                                        new Error(
+                                            'Tổng số tín chỉ bắt buộc và lựa chọn không được lớn hơn số tín chỉ chuyên ngành.'
+                                        )
+                                    )
+                                }
+                                return Promise.resolve()
+                            },
+                        },
+                    ]}
+                >
+                    <InputNumber
+                        type="number"
+                        style={{ width: '100%' }}
+                        min={0}
+                        step={1}
+                        onChange={handleCreditsChange}
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="numberCreditsElective" label="Số TC Lựa Chọn">
-                    <InputNumber type="number" style={{ width: '100%' }} min={0} step={1} />
+                <FormItem
+                    form={form}
+                    name="numberCreditsElective"
+                    label="Số TC Lựa Chọn"
+                    rules={[
+                        {
+                            validator: async (_, value) => {
+                                const major = form.getFieldValue('numberCreditsMajor') || 0
+                                const required = form.getFieldValue('numberCreditsRequired') || 0
+                                const total = required + (value || 0)
+                                if (major && total > major) {
+                                    return Promise.reject(
+                                        new Error(
+                                            'Tổng số tín chỉ bắt buộc và lựa chọn không được lớn hơn số tín chỉ chuyên ngành.'
+                                        )
+                                    )
+                                }
+                                return Promise.resolve()
+                            },
+                        },
+                    ]}
+                >
+                    <InputNumber
+                        type="number"
+                        style={{ width: '100%' }}
+                        min={0}
+                        step={1}
+                        onChange={handleCreditsChange}
+                    />
                 </FormItem>
             </Col>
             <Col span={24}>
