@@ -68,17 +68,18 @@ const ModalLearningResult = () => {
         const filteredSubjects = block.subjects
             .filter((s) => s.useForFinalScore !== false)
             .map((s) => {
-                const lastScore = s.subject.studentSubjectScore?.at(-1)
-
+                const maxScore = s.subject.studentSubjectScore.reduce((prev, curr) => {
+                    return (prev && (prev?.finalScore ?? 0) > (curr?.finalScore ?? 0)) ? prev : curr;
+                })
                 return {
                     id: s.subject.id,
                     code: s.subject.code,
                     name: s.subject.name,
                     credit: s.subject.credit,
-                    finalScore: lastScore?.finalScore,
-                    attendanceScore: lastScore?.attendanceScore,
-                    examScore: lastScore?.examScore,
-                    midtermScore: lastScore?.midtermScore,
+                    finalScore: maxScore?.finalScore,
+                    attendanceScore: maxScore?.attendanceScore,
+                    examScore: maxScore?.examScore,
+                    midtermScore: maxScore?.midtermScore,
                 }
             })
 
@@ -94,17 +95,19 @@ const ModalLearningResult = () => {
         block.subjects
             .filter((s) => s.useForFinalScore === false)
             .map((s) => {
-                const lastScore = s.subject.studentSubjectScore?.at(-1)
+                const maxScore = s.subject.studentSubjectScore.reduce((prev, curr) => {
+                    return (prev && (prev?.finalScore ?? 0) > (curr?.finalScore ?? 0)) ? prev : curr;
+                })
 
                 return {
                     id: s.subject.id,
                     code: s.subject.code,
                     name: s.subject.name,
                     credit: s.subject.credit,
-                    finalScore: lastScore?.finalScore,
-                    attendanceScore: lastScore?.attendanceScore,
-                    examScore: lastScore?.examScore,
-                    midtermScore: lastScore?.midtermScore,
+                    finalScore: maxScore?.finalScore,
+                    attendanceScore: maxScore?.attendanceScore,
+                    examScore: maxScore?.examScore,
+                    midtermScore: maxScore?.midtermScore,
                 }
             })
     )
