@@ -269,7 +269,7 @@ const CriteriaEvaluationSubPage = ({
     )
 
     return (
-        <div className="flex flex-col h-[calc(100vh-200px)]">
+        <div className="flex flex-col h-[calc(100vh-230px)]">
             {headerSection}
             <div className="flex-1 overflow-y-auto overflow-x-hidden px-2">
                 <Form form={form} layout="vertical" className="form-evidence">

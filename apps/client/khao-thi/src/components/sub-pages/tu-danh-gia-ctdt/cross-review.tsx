@@ -276,7 +276,7 @@ export default function CrossReviewSubPage({
     const commentsCount = firstEvaluationCriterion?.evaluationCriterionComments?.length || 0
 
     return (
-        <div className="flex flex-col h-[calc(100vh-200px)]">
+        <div className="flex flex-col h-[calc(100vh-230px)]">
             <div className="sticky top-0 z-10 bg-white py-2 flex flex-row justify-between items-center gap-2">
                 <div className="flex flex-row gap-4 items-center text-xs">
                     <div className="flex items-center gap-1">

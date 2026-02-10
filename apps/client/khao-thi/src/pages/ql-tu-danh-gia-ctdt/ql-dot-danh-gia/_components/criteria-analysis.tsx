@@ -337,7 +337,7 @@ export default function CriteriaAnalysisPeriodList() {
                 <Col span={24}>
                     {data && data.standards.length > 0 ? (
                         <Tabs
-                            className="h-[calc(100vh-200px)] overflow-y-auto"
+                            className="h-[calc(100vh-230px)] overflow-y-auto"
                             tabPosition="left"
                             items={dataTab}
                             tabBarStyle={{
@@ -346,7 +346,7 @@ export default function CriteriaAnalysisPeriodList() {
                             }}
                         />
                     ) : (
-                        <div className="flex items-center justify-center h-[calc(100vh-200px)]">
+                        <div className="flex items-center justify-center h-[calc(100vh-230px)]">
                             <Empty
                                 description="Chưa có phiếu phân tích tiêu chí nào"
                                 image={Empty.PRESENTED_IMAGE_SIMPLE}

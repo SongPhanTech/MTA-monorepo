@@ -212,7 +212,7 @@ export default function EvaluationPeriod() {
                             setFilters(value)
                             setCurrentPage(1)
                         }}
-                        className="h-[calc(100vh-200px)]"
+                        className="h-[calc(100vh-230px)]"
                         onRow={(record) => {
                             return {
                                 onClick: () => {

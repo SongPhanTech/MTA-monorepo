@@ -314,7 +314,7 @@ function TabDotKhaoSatCum({
                 </Col>
                 <Col span={24}>
                     <Table
-                        className="h-[calc(100vh-200px)]"
+                        className="h-[calc(100vh-230px)]"
                         rowKey={'id'}
                         filters={filters}
                         setFilters={(value) => {

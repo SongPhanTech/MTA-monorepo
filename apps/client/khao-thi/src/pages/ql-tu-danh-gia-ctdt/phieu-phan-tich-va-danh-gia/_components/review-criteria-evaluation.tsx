@@ -109,7 +109,7 @@ const ReviewCriteriaEvaluation = () => {
                     key: standard.id,
                     label: `Tiêu chuẩn ${standard.order}`,
                     children: (
-                        <div className="h-[calc(100vh-200px)] overflow-y-auto">
+                        <div className="h-[calc(100vh-230px)] overflow-y-auto">
                             <ReviewCriteriaEvaluationSubpage
                                 key={standard.id}
                                 data={standard}
@@ -128,7 +128,7 @@ const ReviewCriteriaEvaluation = () => {
                 <Col span={24}>
                     {data && data.standards.length > 0 ? (
                         <Tabs
-                            className="h-[calc(100vh-200px)]"
+                            className="h-[calc(100vh-230px)]"
                             tabPosition="left"
                             items={dataTab}
                             tabBarStyle={{
@@ -137,7 +137,7 @@ const ReviewCriteriaEvaluation = () => {
                             }}
                         />
                     ) : (
-                        <div className="flex items-center justify-center h-[calc(100vh-200px)]">
+                        <div className="flex items-center justify-center h-[calc(100vh-230px)]">
                             <Empty
                                 description="Chưa có phiếu đánh giá tiêu chí nào"
                                 image={Empty.PRESENTED_IMAGE_SIMPLE}

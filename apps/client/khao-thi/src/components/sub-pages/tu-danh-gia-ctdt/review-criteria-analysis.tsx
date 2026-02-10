@@ -243,7 +243,7 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx }: Props) => {
     })
 
     return (
-        <div className="h-[calc(100vh-200px)] overflow-y-auto p-4">
+        <div className="h-[calc(100vh-230px)] overflow-y-auto p-4">
             <div className="flex items-center justify-between mb-3">
                 <div className="text-base">
                     <span className="font-bold">Tiêu chuẩn {idx}: </span>

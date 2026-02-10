@@ -100,7 +100,7 @@ export default function CriteriaEvaluationListSubPage({
     }
 
     return (
-        <div className="flex flex-col h-[calc(100vh-200px)]">
+        <div className="flex flex-col h-[calc(100vh-230px)]">
             {/* Header with export button */}
             <div className="sticky top-0 z-10 bg-white py-2 flex flex-row justify-end items-center gap-2 mb-4">
                 {allStandards && allStandards.length > 0 && (

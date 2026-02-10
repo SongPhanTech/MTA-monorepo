@@ -135,7 +135,7 @@ export default function EvaluationPeriodPage() {
                 </Col>
                 <Col span={24}>
                     <Tabs
-                        className="h-[calc(100vh-200px)] overflow-y-auto"
+                        className="h-[calc(100vh-230px)] overflow-y-auto"
                         tabPosition={'left'}
                         items={dataTab}
                         tabBarStyle={{ height: '100%', overflow: 'auto', width: '175px' }}

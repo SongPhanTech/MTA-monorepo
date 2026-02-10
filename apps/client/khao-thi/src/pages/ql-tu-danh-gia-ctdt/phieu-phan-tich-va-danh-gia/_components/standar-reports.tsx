@@ -89,7 +89,7 @@ export default function StandardReports() {
                 <Col span={24}>
                     {data && data.standards.length > 0 ? (
                         <Tabs
-                            className="h-[calc(100vh-200px)]"
+                            className="h-[calc(100vh-230px)]"
                             tabPosition="left"
                             items={data.standards.map(
                                 (standard: DataTabEvaluationCriterionType) => {
@@ -112,7 +112,7 @@ export default function StandardReports() {
                             }}
                         />
                     ) : (
-                        <div className="flex items-center justify-center h-[calc(100vh-200px)]">
+                        <div className="flex items-center justify-center h-[calc(100vh-230px)]">
                             <Empty
                                 description="Chưa có phiếu đánh giá tiêu chí nào"
                                 image={Empty.PRESENTED_IMAGE_SIMPLE}

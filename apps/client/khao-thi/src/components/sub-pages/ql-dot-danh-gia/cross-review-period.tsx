@@ -34,7 +34,7 @@ export default function CrossReviewPeriodSubPage({ data }: { data: DataTabCrossR
     }, [data, form])
 
     return (
-        <div className="flex flex-col h-[calc(100vh-200px)]">
+        <div className="flex flex-col h-[calc(100vh-230px)]">
             <div className="flex-1 overflow-y-auto overflow-x-hidden px-2">
                 <Form form={form} layout="vertical" className="form-evidence">
                     <Form.Item label="Mở đầu" name="opening">

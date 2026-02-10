@@ -148,7 +148,7 @@ export default function ReviewCriteriaAnalysis() {
             <Row gutter={[8, 0]}>
                 <Col span={24}>
                     <Tabs
-                        className="h-[calc(100vh-200px)] overflow-y-auto"
+                        className="h-[calc(100vh-230px)] overflow-y-auto"
                         tabPosition="left"
                         items={dataTab}
                         tabBarStyle={{

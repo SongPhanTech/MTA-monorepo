@@ -146,7 +146,7 @@ export default function EvaluationPeriod() {
                     rowKey="id"
                     data={assignments}
                     loading={isLoading}
-                    className="h-[calc(100vh-200px)]"
+                    className="h-[calc(100vh-230px)]"
                     onRow={(record) => {
                         return {
                             onClick: () => {
