@@ -625,38 +625,59 @@ export default function NhapDiem({
     const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
 
     const lockExam = async (subjectClassId?: string) => {
-        if (subjectClassId) {
+        if (!subjectClassId) {
+            message.warning('Không tìm thấy ID lớp học')
+            return false
+        }
+
+        try {
             await updateSubjectClass({
                 where: { id: subjectClassId },
-                data: { isLockScore: true, isLockExamScore: true },
+                data: {
+                    isLockScore: true,
+                    isLockExamScore: true,
+                    subjectClassHistory: {
+                        create: {
+                            isLockExamScore: true,
+                            isLockScore: true,
+                            updatedById: profileId,
+                        },
+                    },
+                },
             })
-            message.success('Cập nhật thành công')
+            message.success('Khóa điểm thành công')
+            return true
+        } catch (error) {
+            message.error('Có lỗi xảy ra khi khóa điểm')
+            console.error(error)
+            return false
         }
     }
-    const handlePrint = async () => {
+    const handlePrint = () => {
+        if (!selectedSubjectClassId) {
+            return message.warning('Vui lòng chọn lớp học trước khi in')
+        }
+
         Modal.confirm({
             title: 'Xác nhận',
-            content: 'Bạn có chắc chắn muốn in phiếu điểm và khoá nhập điểm lại không?',
+            content: 'Bạn có chắc chắn muốn in phiếu điểm và khóa nhập điểm lại không?',
             okText: 'Xác nhận',
             cancelText: 'Hủy',
             onOk: async () => {
-                // openStudentSubjectScore({
-                //     dataTable,
-                //     type: EnumInPhieuDiem.PHIEU_DIEM_KHOA,
-                // })
-                lockExam(selectedSubjectClassId)
-                openXemTaiLieu({
-                    uri: getUrl(
+                const isSuccess = await lockExam(selectedSubjectClassId)
+                if (isSuccess) {
+                    const baseUrl =
                         getRuntimeEnv('NEXT_PUBLIC_API_LMS_BASE_URL') ||
-                            'https://api.daotao.mta.swantech.vn',
-                        `${getExportSubjectClassScoreUrl({
-                            id: selectedSubjectClassId ?? '',
-                        })}`
-                    ),
-                    name: 'Phiếu điểm',
-                    mimeType: 'xlsx',
-                    convertTo: 'pdf',
-                })
+                        'https://api.daotao.mta.swantech.vn'
+                    const exportUrl = getExportSubjectClassScoreUrl({ id: selectedSubjectClassId })
+
+                    openXemTaiLieu({
+                        uri: getUrl(baseUrl, exportUrl),
+                        name: 'Phiếu điểm',
+                        mimeType: 'xlsx',
+                        convertTo: 'pdf',
+                    })
+                }
             },
         })
     }
