@@ -14,6 +14,7 @@ import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Col, Row, Tabs, type TabsProps } from 'antd'
 import { useMemo, useState } from 'react'
+import SumaryReport from './_components/sumary-report'
 
 export type EvaluationPeriodStoreState = {
     selectedEvaluationPeriodId?: string
@@ -117,6 +118,12 @@ export default function EvaluationPeriodTabPage() {
                     key: '7',
                     label: 'Báo cáo tiêu chuẩn',
                     children: <CrossReviewPeriod />,
+                    disabled: !selectedEvaluationPeriodId,
+                },
+                {
+                    key: '8',
+                    label: 'Viết báo cáo tự đánh giá',
+                    children: <SumaryReport />,
                     disabled: !selectedEvaluationPeriodId,
                 }
             )
