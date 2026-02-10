@@ -11,6 +11,7 @@ import {
     useFindUniqueSubjectVersion,
     useUpdateSubjectVersion,
 } from '@workspace/db/hooks'
+import { sqlTransaction } from '@workspace/libs/api/model'
 import { Col, Modal, message } from 'antd'
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -150,39 +151,119 @@ const PutSubjectTienQuyetSongHanh = () => {
     }, [initialValue, field])
 
     const handleSave = async () => {
-        if (!input?.id) return
+        if (!input?.id || !field) return
 
         try {
             showSpinner()
 
-            const relationData = selectedRowKeys.map((id) => ({ id: id as string }))
-            const field = getRelationField(input.keyEnum, input.type)
+            const result = await sqlTransaction([
+                {
+                    model: 'SubjectVersion' as const,
+                    operation: 'update' as const,
+                    data: {
+                        where: { id: input.id },
+                        data: {
+                            [field]: {
+                                set: selectedRowKeys.map((id) => ({ id: id as string })),
+                            },
+                        },
+                    },
+                },
+                {
+                    model: 'TrainingBlockSubject' as const,
+                    operation: 'findMany' as const,
+                    data: {
+                        where: {
+                            subjectId: input.id,
+                            deletedAt: null,
+                        },
+                        select: {
+                            trainingBlockOnCurriculumVersionId: true,
+                        },
+                    },
+                },
+            ])
 
-            const payload = field
-                ? {
-                      [field]: {
-                          set: relationData,
-                      },
-                  }
-                : {}
+            if (result?.status !== 200) {
+                throw new Error('Giao dịch cập nhật thất bại')
+            }
 
-            await updateSubjectVersion({
-                data: payload,
-                where: { id: input.id },
-            })
+            const trainingBlockIds = (
+                result.data[1] as { trainingBlockOnCurriculumVersionId: string }[]
+            ).map((i) => i.trainingBlockOnCurriculumVersionId)
 
-            message.success('Cập nhật thành công')
-
-            queryClient.invalidateQueries({
-                queryKey: ['SubjectVersion'],
-            })
-            onClose()
-        } catch (error: any) {
-            if (error?.info?.message) {
-                message.error(error?.info?.message)
+            if (trainingBlockIds.length === 0 || selectedRowKeys.length === 0) {
+                message.success('Cập nhật thành công')
+                onClose()
                 return
             }
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+
+            const existedResult = await sqlTransaction([
+                {
+                    model: 'TrainingBlockSubject' as const,
+                    operation: 'findMany' as const,
+                    data: {
+                        where: {
+                            trainingBlockOnCurriculumVersionId: { in: trainingBlockIds },
+                            subjectId: { in: selectedRowKeys as string[] },
+                            deletedAt: null,
+                        },
+                        select: {
+                            subjectId: true,
+                            trainingBlockOnCurriculumVersionId: true,
+                        },
+                    },
+                },
+            ])
+
+            if (existedResult?.status !== 200) {
+                throw new Error('Không thể kiểm tra các môn học đã tồn tại trong CTĐT')
+            }
+
+            const existedSet = new Set(
+                (
+                    existedResult.data[0] as {
+                        subjectId: string
+                        trainingBlockOnCurriculumVersionId: string
+                    }[]
+                ).map((i) => `${i.subjectId}_${i.trainingBlockOnCurriculumVersionId}`)
+            )
+
+            const createData = trainingBlockIds.flatMap((blockId) =>
+                selectedRowKeys
+                    .filter((subjectId) => !existedSet.has(`${subjectId as string}_${blockId}`))
+                    .map((subjectId) => ({
+                        subjectId: subjectId as string,
+                        trainingBlockOnCurriculumVersionId: blockId,
+                        type: 'Mandatory',
+                        useForFinalScore: true,
+                        graduation: false,
+                    }))
+            )
+
+            if (createData.length > 0) {
+                const createResult = await sqlTransaction([
+                    {
+                        model: 'TrainingBlockSubject' as const,
+                        operation: 'createMany' as const,
+                        data: {
+                            data: createData,
+                        },
+                    },
+                ])
+
+                if (createResult?.status !== 200) {
+                    throw new Error('Thêm môn học vào chương trình đào tạo thất bại')
+                }
+            }
+
+            message.success('Cập nhật thành công')
+            queryClient.invalidateQueries({ queryKey: ['SubjectVersion'] })
+            onClose()
+        } catch (error: any) {
+            message.error(
+                error?.info?.message || error?.message || 'Đã xảy ra lỗi trong quá trình xử lý'
+            )
         } finally {
             hideSpinner()
         }
