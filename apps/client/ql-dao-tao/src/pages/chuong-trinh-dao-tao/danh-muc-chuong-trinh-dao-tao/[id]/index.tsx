@@ -1058,9 +1058,9 @@ export default function TrainingProgramSubjects() {
                                                                 <div>
                                                                     <p>
                                                                         <strong>
-                                                                            Bạn có chắc chắn muốn xóa
-                                                                            môn học này khỏi chương
-                                                                            trình đào tạo?
+                                                                            Bạn có chắc chắn muốn
+                                                                            xóa môn học này khỏi
+                                                                            chương trình đào tạo?
                                                                         </strong>
                                                                     </p>
                                                                     <br />
@@ -1075,19 +1075,19 @@ export default function TrainingProgramSubjects() {
                                                                     >
                                                                         <li>
                                                                             Môn học chỉ bị xóa khỏi
-                                                                            CTĐT này, không ảnh hưởng
-                                                                            đến CTĐT khác
+                                                                            CTĐT này, không ảnh
+                                                                            hưởng đến CTĐT khác
                                                                         </li>
                                                                         <li>
                                                                             Nếu môn học đã được đưa
-                                                                            vào kế hoạch đào tạo hoặc
-                                                                            đã có lớp học, việc xóa có
-                                                                            thể gây ảnh hưởng
+                                                                            vào kế hoạch đào tạo
+                                                                            hoặc đã có lớp học, việc
+                                                                            xóa có thể gây ảnh hưởng
                                                                         </li>
                                                                         <li>
                                                                             Nếu sinh viên đã đăng ký
-                                                                            và có điểm, cần xem xét kỹ
-                                                                            trước khi xóa
+                                                                            và có điểm, cần xem xét
+                                                                            kỹ trước khi xóa
                                                                         </li>
                                                                     </ul>
                                                                 </div>

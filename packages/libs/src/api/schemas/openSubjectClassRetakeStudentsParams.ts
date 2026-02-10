@@ -11,6 +11,7 @@ export type OpenSubjectClassRetakeStudentsParams = {
     fixedClassId?: string
     search?: string
     trainingObjectTypeId: string
+    semesterId?: string
     /**
      * @nullable
      */

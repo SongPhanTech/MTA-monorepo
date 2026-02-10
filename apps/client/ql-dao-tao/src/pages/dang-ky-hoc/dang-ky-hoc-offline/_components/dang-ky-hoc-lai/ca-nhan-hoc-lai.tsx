@@ -2,7 +2,6 @@ import { queryClient } from '@api/index'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useStore } from '@tanstack/react-store'
-import { $Enums } from '@workspace/db/client'
 import {
     useFindManyFixedClass,
     useFindManyTrainingCourse,
@@ -58,8 +57,6 @@ export default function CaNhanHocLai() {
         }
     )
 
-    console.log('subjectClassData: ', subjectClassData)
-
     const { id: semesterId } = useSemesterStore()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
@@ -86,6 +83,7 @@ export default function CaNhanHocLai() {
         {
             search: filters.searchText || undefined,
             trainingCourseId: filters.trainingCourseId,
+            semesterId: semesterId,
             fixedClassId: filters.fixedClassId,
             trainingObjectTypeId: trainingObjectTypeId || '',
             subjectVersionId: subjectClassData?.subjectId || '',
@@ -129,11 +127,6 @@ export default function CaNhanHocLai() {
                     data: {
                         where: {
                             subjectClassId,
-                            subjectClass: {
-                                semesterId,
-                                trainingObjectTypeId,
-                                type: $Enums.SubjectClassType.RETAKE,
-                            },
                             studentId: {
                                 in: idsToDelete,
                             },
@@ -144,19 +137,17 @@ export default function CaNhanHocLai() {
 
             // Thêm operations tạo mới CHỈ cho những ids CHƯA TỒN TẠI
             if (idsToCreate.length > 0) {
-                operations.push(
-                    ...idsToCreate.map((studentId: string) => ({
-                        model: 'StudentSubjectScore' as const,
-                        operation: 'create' as const,
-                        data: {
-                            data: {
-                                studentId,
-                                subjectClassId: subjectClassId,
-                                subjectVersionId: subjectClassData.subjectId,
-                            },
-                        },
-                    }))
-                )
+                operations.push({
+                    model: 'StudentSubjectScore',
+                    operation: 'createMany',
+                    data: {
+                        data: idsToCreate.map((studentId: string) => ({
+                            studentId,
+                            subjectClassId: subjectClassId,
+                            subjectVersionId: subjectClassData.subjectId,
+                        })),
+                    },
+                })
             }
 
             // Chỉ thực hiện transaction nếu có thay đổi
