@@ -1053,6 +1053,48 @@ export default function TrainingProgramSubjects() {
                                                 ) && (
                                                     <DeleteIcon
                                                         popConfirm={{
+                                                            title: 'Xóa môn học khỏi CTĐT',
+                                                            description: (
+                                                                <div>
+                                                                    <p>
+                                                                        <strong>
+                                                                            Bạn có chắc chắn muốn xóa
+                                                                            môn học này khỏi chương
+                                                                            trình đào tạo?
+                                                                        </strong>
+                                                                    </p>
+                                                                    <br />
+                                                                    <p>
+                                                                        <strong>Lưu ý:</strong>
+                                                                    </p>
+                                                                    <ul
+                                                                        style={{
+                                                                            paddingInline: '10px',
+                                                                            marginTop: '8px',
+                                                                        }}
+                                                                    >
+                                                                        <li>
+                                                                            Môn học chỉ bị xóa khỏi
+                                                                            CTĐT này, không ảnh hưởng
+                                                                            đến CTĐT khác
+                                                                        </li>
+                                                                        <li>
+                                                                            Nếu môn học đã được đưa
+                                                                            vào kế hoạch đào tạo hoặc
+                                                                            đã có lớp học, việc xóa có
+                                                                            thể gây ảnh hưởng
+                                                                        </li>
+                                                                        <li>
+                                                                            Nếu sinh viên đã đăng ký
+                                                                            và có điểm, cần xem xét kỹ
+                                                                            trước khi xóa
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            ),
+                                                            okText: 'Xác nhận xóa',
+                                                            cancelText: 'Hủy',
+                                                            okType: 'danger',
                                                             onConfirm: () =>
                                                                 handleDeleteTrainingBlockSubject(
                                                                     record.id
