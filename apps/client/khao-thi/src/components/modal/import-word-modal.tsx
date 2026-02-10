@@ -228,6 +228,43 @@ const WordImportModal: React.FC = () => {
         return { value }
     }
 
+    const MAX_POINT_PER_QUESTION = 9
+
+    const checkQuestionPoint = (
+        value?: number
+    ): {
+        isInvalid: boolean
+        color: 'black' | 'red'
+        warning?: string
+    } => {
+        if (value === undefined) {
+            return { isInvalid: false, color: 'black' }
+        }
+
+        if (value > MAX_POINT_PER_QUESTION) {
+            return {
+                isInvalid: true,
+                color: 'red',
+                warning: `Điểm ${value} vượt quá ${MAX_POINT_PER_QUESTION} điểm / câu`,
+            }
+        }
+
+        const decimalPart = Number((value % 1).toFixed(2))
+
+        const isValidDecimal =
+            decimalPart === 0 || decimalPart === 0.25 || decimalPart === 0.5 || decimalPart === 0.75
+
+        if (!isValidDecimal) {
+            return {
+                isInvalid: true,
+                color: 'red',
+                warning: `Điểm ${value} không hợp lệ (chỉ nhận .25, .5, .75 hoặc số nguyên)`,
+            }
+        }
+
+        return { isInvalid: false, color: 'black' }
+    }
+
     const uploadImagesAndReplacePlaceholders = async (
         rawText: string,
         images: { name: string; blob: Blob }[]
@@ -357,16 +394,23 @@ const WordImportModal: React.FC = () => {
                     const type = typeText.trim() as QuestionType
                     const difficult = difficultText.trim() as Difficult
 
-                    const point = extractPointFromCell(cells[4])
+                    const pointRaw = extractPointFromCell(cells[4])
+                    const pointCheck = checkQuestionPoint(pointRaw.value)
+
+                    if (pointCheck.isInvalid) {
+                        message.warning(pointCheck.warning)
+                    }
+
                     const question: any = {
                         type,
                         difficult,
                         contentImagesRaw: questionCell.images,
                         explanationImagesRaw: answerCell.images,
-                        ...(point.value !== undefined ? { point: point.value } : {}),
+                        pointRaw: pointRaw.value,
+                        point: pointCheck.isInvalid ? undefined : pointRaw.value,
+                        pointStatus: pointCheck.color,
                     }
 
-                    // ===== XỬ LÝ THEO TYPE =====
                     if (
                         type === QuestionType.SINGLE_CHOICE ||
                         type === QuestionType.MULTIPLE_CHOICE
@@ -546,7 +590,16 @@ const WordImportModal: React.FC = () => {
             width: 80,
             key: 'point',
             align: 'center' as const,
-            render: (value?: number) => (value !== undefined ? value : '—'),
+            render: (_: any, record: any) => {
+                const value = record.pointRaw
+                const color = record.pointStatus === 'red' ? '#ff4d4f' : 'inherit'
+
+                return (
+                    <span style={{ color, fontWeight: 600 }}>
+                        {value !== undefined ? value : '—'}
+                    </span>
+                )
+            },
         },
     ]
 
