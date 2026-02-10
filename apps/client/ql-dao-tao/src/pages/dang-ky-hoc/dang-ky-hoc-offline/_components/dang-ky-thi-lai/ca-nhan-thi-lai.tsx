@@ -2,7 +2,7 @@ import { queryClient } from '@api/index'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useStore } from '@tanstack/react-store'
-import { $Enums, type Prisma } from '@workspace/db/client'
+import type { Prisma } from '@workspace/db/client'
 import {
     useFindManyFixedClass,
     useFindManyTrainingCourse,
@@ -11,7 +11,7 @@ import {
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useOpenSubjectClassReExamStudents } from '@workspace/libs/api/training'
 import { diffArrays } from '@workspace/libs'
-import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Checkbox, Col, Form, Input, message, Row, Select } from 'antd'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
@@ -58,7 +58,6 @@ export default function CaNhanThiLai() {
         }
     )
 
-    const { id: semesterId } = useSemesterStore()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         orderBy: {
@@ -188,11 +187,6 @@ export default function CaNhanThiLai() {
                     data: {
                         where: {
                             subjectClassId,
-                            subjectClass: {
-                                semesterId,
-                                trainingObjectTypeId,
-                                type: $Enums.SubjectClassType.REEXAM,
-                            },
                             studentId: {
                                 in: idsToDelete,
                             },
@@ -203,21 +197,19 @@ export default function CaNhanThiLai() {
 
             // Thêm operations tạo mới CHỈ cho những ids CHƯA TỒN TẠI
             if (studentsData.length > 0) {
-                operations.push(
-                    ...studentsData.map((student) => ({
-                        model: 'StudentSubjectScore' as const,
-                        operation: 'create' as const,
-                        data: {
-                            data: {
-                                studentId: student.id,
-                                subjectClassId: subjectClassId,
-                                subjectVersionId: subjectClassData.subjectId,
-                                attendanceScore: student?.subjectClassStudent?.[0]?.attendanceScore,
-                                midtermScore: student?.subjectClassStudent?.[0]?.midtermScore,
-                            },
-                        },
-                    }))
-                )
+                operations.push({
+                    model: 'StudentSubjectScore',
+                    operation: 'createMany',
+                    data: {
+                        data: studentsData.map((student) => ({
+                            studentId: student.id,
+                            subjectClassId: subjectClassId,
+                            subjectVersionId: subjectClassData.subjectId,
+                            attendanceScore: student?.subjectClassStudent?.[0]?.attendanceScore,
+                            midtermScore: student?.subjectClassStudent?.[0]?.midtermScore,
+                        })),
+                    },
+                })
             }
 
             // Chỉ thực hiện transaction nếu có thay đổi
