@@ -130,7 +130,6 @@ function YearAndSemester() {
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
-    console.log(data)
 
     const { data: dataFilterSchoolYear = [] } = useFindManySchoolYear({
         take: 1000,
