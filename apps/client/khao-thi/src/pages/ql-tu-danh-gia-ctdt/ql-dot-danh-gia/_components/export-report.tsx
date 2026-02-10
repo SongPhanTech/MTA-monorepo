@@ -523,6 +523,77 @@ export default function ExportReport({ id }: { id: string }) {
                 if (!data) return
                 const { evidenceTags, result }: any = CalcevidenceTags(data?.standards)
 
+                // ==== Phần Ⅰ. KHÁI QUÁT ====
+                const overviewChildren: any[] = []
+                overviewChildren.push(
+                    new Paragraph({
+                        alignment: AlignmentType.CENTER,
+                        heading: HeadingLevel.HEADING_1,
+                        children: [
+                            new TextRun({
+                                text: 'Phần Ⅰ. KHÁI QUÁT',
+                                bold: true,
+                                size: 32,
+                                color: '000000',
+                            }),
+                        ],
+                    })
+                )
+
+                // 1. Đặt vấn đề
+                overviewChildren.push(
+                    new Paragraph({
+                        indent: { firstLine: 720 },
+                        alignment: AlignmentType.JUSTIFIED,
+                        heading: HeadingLevel.HEADING_2,
+                        children: [
+                            new TextRun({
+                                text: '1. Đặt vấn đề',
+                                bold: true,
+                                size: 28,
+                                color: '000000',
+                            }),
+                        ],
+                    })
+                )
+                overviewChildren.push(...(await htmlToParagraphs(data?.overviewProblem || '')))
+
+                // 2. Tổng quan chung
+                overviewChildren.push(
+                    new Paragraph({
+                        indent: { firstLine: 720 },
+                        alignment: AlignmentType.JUSTIFIED,
+                        heading: HeadingLevel.HEADING_2,
+                        children: [
+                            new TextRun({
+                                text: '2. Tổng quan chung',
+                                bold: true,
+                                size: 28,
+                                color: '000000',
+                            }),
+                        ],
+                    })
+                )
+                overviewChildren.push(...(await htmlToParagraphs(data?.overviewGeneral || '')))
+
+                // 3. Kết quả rà soát việc đáp ứng quy định về chuẩn chương trình đào tạo
+                overviewChildren.push(
+                    new Paragraph({
+                        indent: { firstLine: 720 },
+                        alignment: AlignmentType.JUSTIFIED,
+                        heading: HeadingLevel.HEADING_2,
+                        children: [
+                            new TextRun({
+                                text: '3. Kết quả rà soát việc đáp ứng quy định về chuẩn chương trình đào tạo',
+                                bold: true,
+                                size: 28,
+                                color: '000000',
+                            }),
+                        ],
+                    })
+                )
+                overviewChildren.push(...(await htmlToParagraphs(data?.overviewResults || '')))
+
                 const listMembers = await Promise.all([
                     {
                         children: exportDanhSachHoiDong(data?.council?.members),
@@ -531,6 +602,24 @@ export default function ExportReport({ id }: { id: string }) {
                 const sections = await Promise.all([
                     ...data.standards.map(async (standard: any, idx: number) => {
                         const children: any = []
+
+                        // Phần Ⅱ. TỰ ĐÁNH GIÁ THEO CÁC TIÊU CHUẨN, TIÊU CHÍ (chỉ hiển thị trước Tiêu chuẩn 1)
+                        if (idx === 0) {
+                            children.push(
+                                new Paragraph({
+                                    alignment: AlignmentType.CENTER,
+                                    heading: HeadingLevel.HEADING_1,
+                                    children: [
+                                        new TextRun({
+                                            text: 'Phần Ⅱ. TỰ ĐÁNH GIÁ THEO CÁC TIÊU CHUẨN, TIÊU CHÍ',
+                                            bold: true,
+                                            size: 32,
+                                            color: '000000',
+                                        }),
+                                    ],
+                                })
+                            )
+                        }
 
                         // Tiêu chuẩn
                         children.push(
@@ -728,10 +817,25 @@ export default function ExportReport({ id }: { id: string }) {
 
                         return { children }
                     }),
-                    {
-                        children: exportDanhSachMinhchung(result),
-                    },
                 ])
+
+                // ==== Phần Ⅲ. KẾT LUẬN ====
+                const conclusionChildren: any[] = []
+                conclusionChildren.push(
+                    new Paragraph({
+                        alignment: AlignmentType.CENTER,
+                        heading: HeadingLevel.HEADING_1,
+                        children: [
+                            new TextRun({
+                                text: 'Phần Ⅲ. KẾT LUẬN',
+                                bold: true,
+                                size: 32,
+                                color: '000000',
+                            }),
+                        ],
+                    })
+                )
+                conclusionChildren.push(...(await htmlToParagraphs(data?.conclude || '')))
 
                 const doc = new Document({
                     features: {
@@ -762,7 +866,16 @@ export default function ExportReport({ id }: { id: string }) {
                                 }),
                             ],
                         },
+                        {
+                            children: overviewChildren,
+                        },
                         ...sections,
+                        {
+                            children: conclusionChildren,
+                        },
+                        {
+                            children: exportDanhSachMinhchung(result),
+                        },
                     ],
                 })
 
