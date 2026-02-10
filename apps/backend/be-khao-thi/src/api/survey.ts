@@ -294,6 +294,200 @@ app.openapi(getSurveyStatistics, async (c) => {
     return c.json(responseData, 200)
 })
 
+const getSurveyStatisticsToField = createRoute({
+    operationId: 'get-survey-statistics-to-Field',
+    path: '/{id}/statistics-to-Field',
+    method: 'get',
+    tags: ['Statistics'],
+    summary: 'Thống kê câu trả lời cho từng nhóm câu hỏi trong một đợt khảo sát',
+    request: {
+        params: z.object({
+            id: z.string().openapi({
+                description: 'ID của khảo sát cần xem thống kê.',
+            }),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Lấy dữ liệu thống kê thành công.',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        surveyId: z.string(),
+                        surveyName: z.string(),
+                        data: z.array(z.any()),
+                    }),
+                },
+            },
+        },
+        404: {
+            description: 'Không tìm thấy khảo sát.',
+            content: {
+                'application/json': {
+                    schema: z.object({ message: z.string() }),
+                },
+            },
+        },
+    },
+})
+
+app.openapi(getSurveyStatisticsToField, async (c) => {
+    const { id } = c.req.valid('param')
+
+    const survey = await prisma.survey.findUnique({
+        where: { id },
+        include: {
+            surveyQuestion: {
+                where: { type: 'SINGLE_CHOICE' },
+                include: {
+                    surveyQuestionGroup: true,
+                },
+            },
+            surveyChoice: true,
+        },
+    })
+
+    if (!survey) {
+        return c.json({ message: 'Không tìm thấy khảo sát' }, 404)
+    }
+
+    const questionIds = survey.surveyQuestion.map((q) => q.id)
+
+    const answerCounts = await prisma.surveyResponse.groupBy({
+        by: ['surveyQuestionId', 'surveyChoiceId'],
+        where: {
+            surveySession: { surveyId: survey.id },
+            surveyQuestionId: { in: questionIds },
+            surveyChoiceId: { not: null },
+        },
+        _count: { surveyChoiceId: true },
+    })
+
+    const questionToGroupMap = Object.fromEntries(
+        survey.surveyQuestion.map((q) => [q.id, q.surveyQuestionGroupId ?? 'ungrouped'])
+    )
+
+    const answerCountMap = answerCounts.reduce<Record<string, number>>((acc, curr) => {
+        if (!curr.surveyChoiceId) return acc
+
+        const groupId = questionToGroupMap[curr.surveyQuestionId]
+        const key = `${groupId}-${curr.surveyChoiceId}`
+
+        acc[key] = (acc[key] ?? 0) + curr._count.surveyChoiceId
+        return acc
+    }, {})
+
+    const groupsMap = new Map<
+        string,
+        {
+            id: string
+            name?: string
+            questions: any[]
+        }
+    >()
+
+    survey.surveyQuestion.forEach((question) => {
+        const groupId = question.surveyQuestionGroupId ?? 'ungrouped'
+
+        if (!groupsMap.has(groupId)) {
+            groupsMap.set(groupId, {
+                id: groupId,
+                name: question?.surveyQuestionGroup?.name,
+                questions: [],
+            })
+        }
+
+        const group = groupsMap.get(groupId)!
+
+        const answers = survey.surveyChoice.map((choice) => {
+            const key = `${groupId}-${choice.id}`
+
+            return {
+                id: choice.id,
+                answer: choice.answer,
+                description: choice.description,
+                count: answerCountMap[key] || 0,
+            }
+        })
+
+        group.questions.push({
+            id: question.id,
+            name: question.name,
+            answers,
+        })
+    })
+
+    function calcTotalCount(answers: any[]): any {
+        return answers.reduce((total, item) => total + item.count, 0)
+    }
+    function calcGroupAnswerTotals(groups: any[]) {
+        return groups.map((group) => {
+            const answers = group.questions[0].answers.map((i: any) => {
+                return { ...i, count: 0 }
+            })
+
+            group.questions.forEach((question: any) => {
+                question.answers.forEach((answer: any, index: number) => {
+                    answers[index].count += answer.count
+                })
+            })
+            const totalCount = calcTotalCount(answers)
+
+            return {
+                groupId: group.id,
+                groupName: group.name,
+                answers: answers.map((i: any) => {
+                    return {
+                        ...i,
+                        totalCount,
+                        percent:
+                            totalCount === 0
+                                ? 0
+                                : Number(((i.count / totalCount) * 100).toFixed(2)),
+                    }
+                }),
+            }
+        })
+    }
+
+    const result =
+        Array.from(groupsMap.values())?.length > 0
+            ? calcGroupAnswerTotals(Array.from(groupsMap.values()) || [])
+            : []
+
+    // const answerCountMap = answerCounts.reduce(
+    //     (acc, curr) => {
+    //         if (curr.surveyChoiceId) {
+    //             const key = `${curr.surveyQuestionId}-${curr.surveyChoiceId}`
+    //             acc[key] = curr._count.surveyChoiceId
+    //         }
+    //         return acc
+    //     },
+    //     {} as Record<string, number>
+    // )
+
+    // const questions = survey.surveyQuestion.map((question) => {
+    //     const answers = survey.surveyChoice.map((choice) => {
+    //         const key = `${question.id}-${choice.id}`
+    //         return {
+    //             id: choice.id,
+    //             answer: choice.answer,
+    //             description: choice.description,
+    //             count: answerCountMap[key] || 0,
+    //         }
+    //     })
+    //     return { id: question.id, name: question.name, answers }
+    // })
+
+    const responseData = {
+        surveyId: survey.id,
+        surveyName: survey.name,
+        data: result,
+    }
+
+    return c.json(responseData, 200)
+})
+
 const getSurveyObjects = createRoute({
     operationId: 'get-survey-objects',
     path: '/objects',

@@ -6,6 +6,7 @@ import DefaultLayout from '@layouts/default-layout'
 import type { Survey } from '@workspace/db/client'
 import { Col, Row, Tabs } from 'antd'
 import { useState } from 'react'
+import SurveyToFieldReport from '@components/sub-pages/khao-sat/bao-cao-theo-linh-vuc'
 
 export default function SurveyPage() {
     const [activeKey, setActiveKey] = useState('1')
@@ -34,6 +35,12 @@ export default function SurveyPage() {
             key: '3',
             label: 'Báo cáo khảo sát',
             children: <SurveyReport selectedId={selectedId?.id || ''} />,
+            disabled: !selectedId?.id,
+        },
+        {
+            key: '5',
+            label: 'Báo cáo theo lĩnh vực',
+            children: <SurveyToFieldReport selectedId={selectedId?.id || ''} />,
             disabled: !selectedId?.id,
         },
         {

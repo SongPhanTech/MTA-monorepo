@@ -76,8 +76,8 @@ import type {
     GetSurveyResult,
     GetSurveyStatistics200,
     GetSurveyStatistics404,
-    GetSurveyStatisticsToFeild200,
-    GetSurveyStatisticsToFeild404,
+    GetSurveyStatisticsToField200,
+    GetSurveyStatisticsToField404,
     GetSurveysOfProfile200,
     GetSurveysOfProfile404,
     GetSurveysOfProfileParams,
@@ -1215,37 +1215,37 @@ export function useGetSurveyStatistics<
 /**
  * @summary Thống kê câu trả lời cho từng nhóm câu hỏi trong một đợt khảo sát
  */
-export type getSurveyStatisticsToFeildResponse200 = {
-    data: GetSurveyStatisticsToFeild200
+export type getSurveyStatisticsToFieldResponse200 = {
+    data: GetSurveyStatisticsToField200
     status: 200
 }
 
-export type getSurveyStatisticsToFeildResponse404 = {
-    data: GetSurveyStatisticsToFeild404
+export type getSurveyStatisticsToFieldResponse404 = {
+    data: GetSurveyStatisticsToField404
     status: 404
 }
 
-export type getSurveyStatisticsToFeildResponseSuccess = getSurveyStatisticsToFeildResponse200 & {
+export type getSurveyStatisticsToFieldResponseSuccess = getSurveyStatisticsToFieldResponse200 & {
     headers: Headers
 }
-export type getSurveyStatisticsToFeildResponseError = getSurveyStatisticsToFeildResponse404 & {
+export type getSurveyStatisticsToFieldResponseError = getSurveyStatisticsToFieldResponse404 & {
     headers: Headers
 }
 
-export type getSurveyStatisticsToFeildResponse =
-    | getSurveyStatisticsToFeildResponseSuccess
-    | getSurveyStatisticsToFeildResponseError
+export type getSurveyStatisticsToFieldResponse =
+    | getSurveyStatisticsToFieldResponseSuccess
+    | getSurveyStatisticsToFieldResponseError
 
-export const getGetSurveyStatisticsToFeildUrl = (id: string) => {
-    return `/api/survey/${id}/statistics-to-feild`
+export const getGetSurveyStatisticsToFieldUrl = (id: string) => {
+    return `/api/survey/${id}/statistics-to-Field`
 }
 
-export const getSurveyStatisticsToFeild = async (
+export const getSurveyStatisticsToField = async (
     id: string,
     options?: RequestInit
-): Promise<getSurveyStatisticsToFeildResponse> => {
-    return customExamFetch<getSurveyStatisticsToFeildResponse>(
-        getGetSurveyStatisticsToFeildUrl(id),
+): Promise<getSurveyStatisticsToFieldResponse> => {
+    return customExamFetch<getSurveyStatisticsToFieldResponse>(
+        getGetSurveyStatisticsToFieldUrl(id),
         {
             ...options,
             method: 'GET',
@@ -1253,56 +1253,56 @@ export const getSurveyStatisticsToFeild = async (
     )
 }
 
-export const getGetSurveyStatisticsToFeildQueryKey = (id?: string) => {
-    return [`/api/survey/${id}/statistics-to-feild`] as const
+export const getGetSurveyStatisticsToFieldQueryKey = (id?: string) => {
+    return [`/api/survey/${id}/statistics-to-Field`] as const
 }
 
-export const getGetSurveyStatisticsToFeildQueryOptions = <
-    TData = Awaited<ReturnType<typeof getSurveyStatisticsToFeild>>,
-    TError = GetSurveyStatisticsToFeild404,
+export const getGetSurveyStatisticsToFieldQueryOptions = <
+    TData = Awaited<ReturnType<typeof getSurveyStatisticsToField>>,
+    TError = GetSurveyStatisticsToField404,
 >(
     id: string,
     options?: {
         query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatisticsToFeild>>, TError, TData>
+            UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatisticsToField>>, TError, TData>
         >
         request?: SecondParameter<typeof customExamFetch>
     }
 ) => {
     const { query: queryOptions, request: requestOptions } = options ?? {}
 
-    const queryKey = queryOptions?.queryKey ?? getGetSurveyStatisticsToFeildQueryKey(id)
+    const queryKey = queryOptions?.queryKey ?? getGetSurveyStatisticsToFieldQueryKey(id)
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSurveyStatisticsToFeild>>> = ({
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSurveyStatisticsToField>>> = ({
         signal,
-    }) => getSurveyStatisticsToFeild(id, { signal, ...requestOptions })
+    }) => getSurveyStatisticsToField(id, { signal, ...requestOptions })
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
-        Awaited<ReturnType<typeof getSurveyStatisticsToFeild>>,
+        Awaited<ReturnType<typeof getSurveyStatisticsToField>>,
         TError,
         TData
     > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetSurveyStatisticsToFeildQueryResult = NonNullable<
-    Awaited<ReturnType<typeof getSurveyStatisticsToFeild>>
+export type GetSurveyStatisticsToFieldQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getSurveyStatisticsToField>>
 >
-export type GetSurveyStatisticsToFeildQueryError = GetSurveyStatisticsToFeild404
+export type GetSurveyStatisticsToFieldQueryError = GetSurveyStatisticsToField404
 
-export function useGetSurveyStatisticsToFeild<
-    TData = Awaited<ReturnType<typeof getSurveyStatisticsToFeild>>,
-    TError = GetSurveyStatisticsToFeild404,
+export function useGetSurveyStatisticsToField<
+    TData = Awaited<ReturnType<typeof getSurveyStatisticsToField>>,
+    TError = GetSurveyStatisticsToField404,
 >(
     id: string,
     options: {
         query: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatisticsToFeild>>, TError, TData>
+            UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatisticsToField>>, TError, TData>
         > &
             Pick<
                 DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof getSurveyStatisticsToFeild>>,
+                    Awaited<ReturnType<typeof getSurveyStatisticsToField>>,
                     TError,
-                    Awaited<ReturnType<typeof getSurveyStatisticsToFeild>>
+                    Awaited<ReturnType<typeof getSurveyStatisticsToField>>
                 >,
                 'initialData'
             >
@@ -1310,20 +1310,20 @@ export function useGetSurveyStatisticsToFeild<
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSurveyStatisticsToFeild<
-    TData = Awaited<ReturnType<typeof getSurveyStatisticsToFeild>>,
-    TError = GetSurveyStatisticsToFeild404,
+export function useGetSurveyStatisticsToField<
+    TData = Awaited<ReturnType<typeof getSurveyStatisticsToField>>,
+    TError = GetSurveyStatisticsToField404,
 >(
     id: string,
     options?: {
         query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatisticsToFeild>>, TError, TData>
+            UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatisticsToField>>, TError, TData>
         > &
             Pick<
                 UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof getSurveyStatisticsToFeild>>,
+                    Awaited<ReturnType<typeof getSurveyStatisticsToField>>,
                     TError,
-                    Awaited<ReturnType<typeof getSurveyStatisticsToFeild>>
+                    Awaited<ReturnType<typeof getSurveyStatisticsToField>>
                 >,
                 'initialData'
             >
@@ -1331,14 +1331,14 @@ export function useGetSurveyStatisticsToFeild<
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSurveyStatisticsToFeild<
-    TData = Awaited<ReturnType<typeof getSurveyStatisticsToFeild>>,
-    TError = GetSurveyStatisticsToFeild404,
+export function useGetSurveyStatisticsToField<
+    TData = Awaited<ReturnType<typeof getSurveyStatisticsToField>>,
+    TError = GetSurveyStatisticsToField404,
 >(
     id: string,
     options?: {
         query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatisticsToFeild>>, TError, TData>
+            UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatisticsToField>>, TError, TData>
         >
         request?: SecondParameter<typeof customExamFetch>
     },
@@ -1348,20 +1348,20 @@ export function useGetSurveyStatisticsToFeild<
  * @summary Thống kê câu trả lời cho từng nhóm câu hỏi trong một đợt khảo sát
  */
 
-export function useGetSurveyStatisticsToFeild<
-    TData = Awaited<ReturnType<typeof getSurveyStatisticsToFeild>>,
-    TError = GetSurveyStatisticsToFeild404,
+export function useGetSurveyStatisticsToField<
+    TData = Awaited<ReturnType<typeof getSurveyStatisticsToField>>,
+    TError = GetSurveyStatisticsToField404,
 >(
     id: string,
     options?: {
         query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatisticsToFeild>>, TError, TData>
+            UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatisticsToField>>, TError, TData>
         >
         request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getGetSurveyStatisticsToFeildQueryOptions(id, options)
+    const queryOptions = getGetSurveyStatisticsToFieldQueryOptions(id, options)
 
     const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
         queryKey: DataTag<QueryKey, TData, TError>
