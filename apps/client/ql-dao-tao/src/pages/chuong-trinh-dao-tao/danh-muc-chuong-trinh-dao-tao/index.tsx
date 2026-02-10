@@ -28,26 +28,80 @@ import { Button, Col, Flex, Input, message, Row, Tag, Tooltip } from 'antd'
 import { BookPlus, Download, Search } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+
+const SESSION_KEYS = {
+    FILTERS: 'curriculum-filters',
+    PAGE: 'curriculum-current-page',
+}
+
+const createDefaultFilters = (): FilterProps => ({
+    searchText: '',
+    trainingObjectTypes: undefined,
+    trainingCourses: undefined,
+    code: '',
+    name: '',
+    trainingTime: undefined,
+    trainingMajorId: undefined,
+    managementOrganizationId: undefined,
+})
+
+const getStoredFilters = (): FilterProps => {
+    if (typeof window === 'undefined') return createDefaultFilters()
+
+    try {
+        const saved = sessionStorage.getItem(SESSION_KEYS.FILTERS)
+        if (!saved) return createDefaultFilters()
+
+        const parsed = JSON.parse(saved)
+
+        return {
+            ...createDefaultFilters(),
+            ...parsed,
+        }
+    } catch {
+        return createDefaultFilters()
+    }
+}
+const getStoredPage = (): number => {
+    if (typeof window === 'undefined') return 1
+
+    try {
+        const saved = sessionStorage.getItem(SESSION_KEYS.PAGE)
+        const p = Number(saved)
+
+        return Number.isInteger(p) && p > 0 ? p : 1
+    } catch {
+        return 1
+    }
+}
+
+const persistState = (filters: FilterProps, page: number) => {
+    if (typeof window === 'undefined') return
+    try {
+        sessionStorage.setItem(SESSION_KEYS.FILTERS, JSON.stringify(filters))
+        sessionStorage.setItem(SESSION_KEYS.PAGE, String(page))
+    } catch (e) {}
+}
+
 export default function TrainingProgramCatalog() {
     const { can, canSome } = useAbility()
     const [expandAll, setExpandAll] = useState(false)
     const router = useRouter()
-    const [currentPage, setCurrentPage] = useState(1)
+
+    const [currentPage, setCurrentPage] = useState(() => getStoredPage())
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [filters, setFilters] = useState<FilterProps>({
-        searchText: '',
-        trainingObjectTypes: undefined,
-        trainingCourses: undefined,
-        code: '',
-        name: '',
-        trainingTime: undefined,
-        trainingMajorId: undefined,
-        managementOrganizationId: undefined,
-    })
+    const [filters, setFilters] = useState<FilterProps>(() => getStoredFilters())
 
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+    useEffect(() => {
+        const t = setTimeout(() => {
+            persistState(filters, currentPage)
+        }, 300)
+
+        return () => clearTimeout(t)
+    }, [filters, currentPage])
 
     const where = useMemo(() => {
         const curriculumVersionFilter = {
@@ -362,6 +416,7 @@ export default function TrainingProgramCatalog() {
                                 <Col span={6}>
                                     <Input
                                         id="search"
+                                        value={filters.searchText}
                                         onChange={(e) =>
                                             setFilters({
                                                 ...filters,
@@ -384,6 +439,7 @@ export default function TrainingProgramCatalog() {
                                 <Col span={6}>
                                     <Select
                                         className="w-full"
+                                        value={filters.trainingCourses}
                                         placeholder="Chọn khóa đào tạo"
                                         options={trainingCourseData.map((i) => ({
                                             value: i.id,
@@ -402,6 +458,7 @@ export default function TrainingProgramCatalog() {
                                 <Col span={6}>
                                     <Select
                                         className="w-full"
+                                        value={filters.trainingMajorId}
                                         placeholder="Chọn chuyên ngành đào tạo"
                                         options={trainingMajorData.map((i: TrainingMajor) => ({
                                             value: i.id,
