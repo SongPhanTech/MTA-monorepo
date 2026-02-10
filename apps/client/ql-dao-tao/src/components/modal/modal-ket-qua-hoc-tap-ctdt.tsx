@@ -42,7 +42,7 @@ const ModalLearningResult = () => {
                                                     studentSubjectScore: {
                                                         where: {
                                                             studentId: id,
-                                                            finalScore: {not: null}
+                                                            finalScore: { not: null },
                                                         },
                                                         orderBy: {
                                                             finalScore: 'desc',
@@ -68,9 +68,14 @@ const ModalLearningResult = () => {
         const filteredSubjects = block.subjects
             .filter((s) => s.useForFinalScore !== false)
             .map((s) => {
-                const maxScore = s.subject.studentSubjectScore.reduce((prev, curr) => {
-                    return (prev && (prev?.finalScore ?? 0) > (curr?.finalScore ?? 0)) ? prev : curr;
-                })
+                const maxScore = s.subject.studentSubjectScore.length
+                    ? s.subject.studentSubjectScore.reduce((prev, curr) => {
+                          return Number(prev.finalScore ?? 0) > Number(curr.finalScore ?? 0)
+                              ? prev
+                              : curr
+                      })
+                    : null
+
                 return {
                     id: s.subject.id,
                     code: s.subject.code,
@@ -95,9 +100,13 @@ const ModalLearningResult = () => {
         block.subjects
             .filter((s) => s.useForFinalScore === false)
             .map((s) => {
-                const maxScore = s.subject.studentSubjectScore.reduce((prev, curr) => {
-                    return (prev && (prev?.finalScore ?? 0) > (curr?.finalScore ?? 0)) ? prev : curr;
-                })
+                const maxScore = s.subject.studentSubjectScore.length
+                    ? s.subject.studentSubjectScore.reduce((prev, curr) => {
+                          return Number(prev.finalScore ?? 0) > Number(curr.finalScore ?? 0)
+                              ? prev
+                              : curr
+                      })
+                    : null
 
                 return {
                     id: s.subject.id,
