@@ -550,7 +550,7 @@ const PutVersionSubjectModal = () => {
                                     title={
                                         <div>
                                             <div><strong>1 đầu điểm:</strong> Chỉ có 1 cột điểm cuối kỳ</div>
-                                            <div><strong>3 đầu điểm:</strong> Có điểm chuyên cần, điểm giữa kỳ và điểm cuối kỳ</div>
+                                            <div><strong>3 đầu điểm:</strong> Có điểm thường xuyên, định kỳ, thi (điểm học phần nhân theo hệ số)</div>
                                         </div>
                                     }
                                 >
