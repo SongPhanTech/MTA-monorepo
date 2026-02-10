@@ -1,4 +1,6 @@
 import PutFormModal from '@components/commons/put-modal'
+import Table from '@components/commons/table'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import type { StudentSubjectScore } from '@workspace/db/client'
 import {
@@ -7,15 +9,14 @@ import {
     useFindManyArchivedAward,
     useUpdateStudentSubjectScore,
 } from '@workspace/db/hooks'
+import { calcFinalScore } from '@workspace/libs/utils'
 import { Col, Flex, Form, Input, message, Row } from 'antd'
 import dayjs from 'dayjs'
+import 'dayjs/locale/vi'
+import _ from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import 'dayjs/locale/vi'
-import Table from '@components/commons/table'
-import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import { calcFinalScore } from '@workspace/libs/utils'
-import _ from 'lodash'
+
 export type PutStudentSubjectScore = StudentSubjectScore
 interface FilterProps {
     searchText: string | ''
@@ -53,27 +54,39 @@ const PutAddOlympicScoreModal = () => {
     const { showSpinner, hideSpinner } = useSpinner()
     const { mutateAsync: updateStudentSubjectScore } = useUpdateStudentSubjectScore()
 
+    const buildWhereCondition = () => {
+        const baseWhere: any = {
+            // studentId: input?.studentId,
+            deletedAt: null,
+            status: 'APPROVED',
+        }
+        if (filters.searchText) {
+            baseWhere.award = {
+                OR: [
+                    { name: { contains: filters.searchText, mode: 'insensitive' } },
+                    // { code: { contains: filters.searchText, mode: 'insensitive' } },
+                ]
+            }
+        }
+        return baseWhere
+    }
+
+    const whereCondition = buildWhereCondition()
+
     const { data: dataTable = [], refetch } = useFindManyArchivedAward({
-        where: {
-            OR: [
-                // { name: { contains: filters.searchText, mode: 'insensitive' } },
-                { code: { contains: filters.searchText, mode: 'insensitive' } },
-            ],
+        where: whereCondition,
+        include: {
+            award: true,
         },
-        include: {},
         orderBy: {
             code: 'asc',
         },
+        skip: (currentPage - 1) * numberOfPages,
+        take: numberOfPages,
     })
 
     const { data: count } = useCountArchivedAward({
-        where: {
-            OR: [
-                // { name: { contains: filters.searchText, mode: 'insensitive' } },
-                { code: { contains: filters.searchText, mode: 'insensitive' } },
-            ],
-            deletedAt: null,
-        },
+        where: whereCondition,
     })
 
     const debouncedRefetch = useCallback(
@@ -87,8 +100,11 @@ const PutAddOlympicScoreModal = () => {
         try {
             showSpinner()
             const listAward = []
+            const existingAwards = input?.subjectClassStudent?.awards?.map((a: any) => a.archivedAward) || [];
+            const currentTableAwards = dataTable || [];
+            const allAvailableAwards = [...existingAwards, ...currentTableAwards];
             for (const key of selectedRowKeys) {
-                const item = dataTable.find((item) => item.id === key)
+                const item = allAvailableAwards.find((item: any) => item.id === key)
                 if (item) {
                     listAward.push({ archivedAward: item })
                 }
@@ -124,10 +140,12 @@ const PutAddOlympicScoreModal = () => {
                 where: { id: input.id },
             })
             message.success('Cập nhật thành công')
+            if (input?.refetch) {
+                await input.refetch()
+            }
             onClose()
         } catch (error) {
             console.log(error)
-
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()
@@ -137,16 +155,22 @@ const PutAddOlympicScoreModal = () => {
     const handleFilterChange = (key: string, value: string) => {
         setFilters((prev) => {
             const newFilters = { ...prev, [key]: value }
-            debouncedRefetch()
             return newFilters
         })
     }
 
+    // useEffect(() => {
+    //     debouncedRefetch(   )
+    // }, [whereCondition, refetch])
+
+
     useEffect(() => {
         if (input?.list?.length) {
             setSelectedRowKeys(input?.list)
+        } else if (isOpen) {
+            setSelectedRowKeys([])
         }
-    }, [input])
+    }, [input, isOpen])
 
     return (
         <PutFormModal
@@ -175,18 +199,6 @@ const PutAddOlympicScoreModal = () => {
                         </Col>
                     </Flex>
                 </Col>
-
-                {/* <Col span={6}>
-                            <Flex justify="end" gap={4}>
-                                <Button type="primary" className="h-[40px]">
-                                    Thêm mới
-                                </Button>
-                                <Button type="primary" className="h-[40px]">
-                                    <EditIcon stroke="white" />
-                                    Nhập từ file danh sách
-                                </Button>
-                            </Flex>
-                        </Col> */}
             </Row>
             <Col span={24}>
                 <Table
@@ -207,7 +219,7 @@ const PutAddOlympicScoreModal = () => {
                         },
                         {
                             title: 'Tên giải thưởng',
-                            dataIndex: 'name',
+                            dataIndex: ['award', 'name'],
                             align: 'center',
                         },
                         {

@@ -153,6 +153,8 @@ model StudentSubjectScore extends Base {
   examPaper                    ExamPaper?
   /// chuyên đề nghiên cứu
   studentResearchTopic         StudentResearchTopic?
+  /// thực tập
+  studentInternship            StudentInternship?
 
   graduationGpaScores          StudentGraduationApplication[]             @relation("gpaScore")
   graduationSupplementaryScore StudentGraduationApplication[]             @relation("supplementaryScore")
@@ -220,6 +222,36 @@ model StudentResearchTopic extends Base {
   coSupervisorId        String?
 
   /// ngày báo cáo
+  reportDate            DateTime?
+
+  @@schema("ql-dao-tao")
+}
+
+model StudentInternship extends Base {
+  studentSubjectScore   StudentSubjectScore @relation(fields: [studentSubjectScoreId], references: [id])
+  studentSubjectScoreId String              @unique
+
+  /// hạn nhập thực tập
+  deadline              DateTime?
+  /// nội dung thực tập
+  internshipContent     String?
+  /// cơ quan thực tập
+  institution           String?
+  /// đơn vị thực tập
+  unit                  String?
+  /// địa chỉ thực tập
+  address               String?
+  /// GVHD 1
+  supervisor            ExpertProfile?      @relation("SupervisorToInternship", fields: [supervisorId], references: [id])
+  supervisorId          String?
+  /// GVHD 2
+  coSupervisor          ExpertProfile?      @relation("CoSupervisorToInternship", fields: [coSupervisorId], references: [id])
+  coSupervisorId        String?
+  /// thời gian bắt đầu thực tập
+  startDate             DateTime?
+  /// thời gian kết thúc thực tập
+  endDate               DateTime?
+  /// thời gian báo cáo
   reportDate            DateTime?
 
   @@schema("ql-dao-tao")

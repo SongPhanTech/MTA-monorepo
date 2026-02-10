@@ -537,9 +537,6 @@ export default function StudentScoreClassPage() {
                                 include: { archivedCertificate: true },
                             },
                             awards: {
-                                where: {
-                                    status: $Enums.ArchivedCertificateStatus.APPROVED,
-                                },
                                 include: { archivedAward: true },
                             },
                         },
@@ -751,16 +748,14 @@ export default function StudentScoreClassPage() {
                                     title: 'Điểm cộng',
                                     align: 'center',
                                     width: 100,
-                                    render: (_, { id, subjectClassStudent }) =>
-                                        subjectClassStudent?.[0]?.awards.reduce(
-                                            (
-                                                acc: number,
-                                                curr: {
-                                                    archivedAward: ArchivedAward
-                                                }
-                                            ) => acc + (curr?.archivedAward?.bonusScore ?? 0),
+                                    render: (_, { subjectClassStudent }) => {
+                                        const totalBonus = subjectClassStudent?.[0]?.awards.reduce(
+                                            (acc: number, curr: { archivedAward: { bonusScore: number } }) => 
+                                                acc + (curr?.archivedAward?.bonusScore ?? 0),
                                             0
-                                        ),
+                                        );
+                                        return totalBonus || 0;
+                                    },
                                 },
                                 {
                                     title: 'Chứng chỉ',
@@ -894,40 +889,31 @@ export default function StudentScoreClassPage() {
                                         <Row className="justify-center gap-2">
                                             <Tooltip title="Cộng điểm">
                                                 <BookCheckIcon
-                                                    onClick={onOpenModalAddScore.bind(null, {
-                                                        id: subjectClassStudent?.[0]?.id,
-                                                        studentId: studentId,
-                                                        list:
-                                                            subjectClassStudent?.length > 0
-                                                                ? subjectClassStudent[0]?.awards.map(
-                                                                      (i: {
-                                                                          archivedAwardId: string
-                                                                      }) => i.archivedAwardId
-                                                                  )
-                                                                : [],
-                                                        subjectClassStudent:
-                                                            subjectClassStudent?.[0],
-                                                    })}
+                                                    className="cursor-pointer hover:text-blue-500"
                                                     size={16}
+                                                    onClick={() => {
+                                                        const currentAwards = subjectClassStudent?.[0]?.awards || [];
+                                                        onOpenModalAddScore({
+                                                            id: subjectClassStudent?.[0]?.id,
+                                                            studentId: studentId,
+                                                            list: currentAwards.map((i: any) => i.archivedAwardId),
+                                                            subjectClassStudent: subjectClassStudent?.[0],
+                                                        })
+                                                    }}
                                                 />
                                             </Tooltip>
+                                            
                                             <Tooltip title="Thêm chứng chỉ">
                                                 <SafetyCertificateOutlined
-                                                    onClick={onOpenModalAddCertificate.bind(null, {
-                                                        id: subjectClassStudent?.[0]?.id,
-                                                        studentId: studentId,
-                                                        list:
-                                                            subjectClassStudent?.length > 0
-                                                                ? subjectClassStudent[0]?.certificates.map(
-                                                                      (i: {
-                                                                          archivedCertificateId: string
-                                                                      }) => i.archivedCertificateId
-                                                                  )
-                                                                : [],
-                                                        subjectClassStudent:
-                                                            subjectClassStudent?.[0],
-                                                    })}
-                                                    size={16}
+                                                    className="cursor-pointer hover:text-green-500"
+                                                    onClick={() => {
+                                                        onOpenModalAddCertificate({
+                                                            id: subjectClassStudent?.[0]?.id,
+                                                            studentId: studentId,
+                                                            list: subjectClassStudent?.[0]?.certificates.map((i: any) => i.archivedCertificateId) || [],
+                                                            subjectClassStudent: subjectClassStudent?.[0],
+                                                        })
+                                                    }}
                                                 />
                                             </Tooltip>
                                         </Row>

@@ -32,9 +32,8 @@ const PutDisciplinaryWarningReason = () => {
     async function onOk(output?: PutDisciplinaryWarningReasonFormType) {
         if (!output) return
 
-        // Validate severityLevel
-        if (!output.severityLevel || output.severityLevel < 1 || output.severityLevel > 4) {
-            message.error('Mức nâng phải từ 1 đến 4')
+        if (output.severityLevel === undefined || output.severityLevel < 0 || output.severityLevel > 4) {
+            message.error('Mức nâng phải từ 0 đến 4')
             return
         }
 
@@ -110,7 +109,7 @@ const PutDisciplinaryWarningReason = () => {
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem form={form} name="severityLevel" label="Mức nâng" required>
+                <FormItem form={form} name="severityLevel" label="Mức nâng (0-4)" required>
                     <InputNumber
                         type="number"
                         placeholder="Nhập mức nâng"
