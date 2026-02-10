@@ -491,6 +491,7 @@ export const Table = <T extends AnyObject>({
                             <Tree
                                 autoExpandParent={true}
                                 checkable={true}
+                                selectable={true}
                                 defaultExpandAll={true}
                                 multiple={true}
                                 treeData={optionsSearch}
@@ -501,6 +502,18 @@ export const Table = <T extends AnyObject>({
                                     setFiltersTable({
                                         ...filtersTable,
                                         [item.dataIndex as keyof FilterProps]: checkedKeys,
+                                    })
+                                }}
+                                onSelect={([key]) => {
+                                    const current =
+                                        (filtersTable[
+                                            item.dataIndex as keyof FilterProps
+                                        ] as string[]) || []
+
+                                    setFiltersTable({
+                                        ...filtersTable,
+                                        [item.dataIndex as keyof FilterProps]:
+                                            current[0] === key ? [] : [key],
                                     })
                                 }}
                                 checkStrictly={!!input}
