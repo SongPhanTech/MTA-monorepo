@@ -1019,6 +1019,19 @@ const policy = {
                 update: {},
             },
         },
+        studentInternship: {
+            modelLevel: {
+                read: { guard: StudentInternship_read, },
+                create: { guard: StudentInternship_create, inputChecker: StudentInternship_create_input, },
+                update: { guard: StudentInternship_update, },
+                postUpdate: { guard: StudentInternship_postUpdate, },
+                delete: { guard: StudentInternship_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
         archivedCertificateOnStudentSubjectScore: {
             modelLevel: {
                 read: { guard: ArchivedCertificateOnStudentSubjectScore_read, },
@@ -3517,6 +3530,7 @@ const policy = {
         studentSubjectScore: { hasValidation: true },
         studentSubjectScoreHistory: { hasValidation: true },
         studentResearchTopic: { hasValidation: false },
+        studentInternship: { hasValidation: false },
         archivedCertificateOnStudentSubjectScore: { hasValidation: false },
         archivedCertificate: { hasValidation: false },
         archivedAwardOnStudentSubjectScore: { hasValidation: false },
@@ -9737,6 +9751,84 @@ function StudentResearchTopic_delete(context, db) {
     return { OR: [] };
 }
 function $check_StudentResearchTopic_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function StudentInternship_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_StudentInternship_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function StudentInternship_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_StudentInternship_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function StudentInternship_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function StudentInternship_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_StudentInternship_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function StudentInternship_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_StudentInternship_postUpdate(input, context) {
+    return true;
+}
+function StudentInternship_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_StudentInternship_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {

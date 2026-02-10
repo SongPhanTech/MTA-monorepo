@@ -64,6 +64,8 @@ const relationSchema = z.object({
     coSupervisedTheses: z.array(z.unknown()).optional(),
     supervisorResearchTopic: z.array(z.unknown()).optional(),
     coSupervisorResearchTopic: z.array(z.unknown()).optional(),
+    supervisorInternship: z.array(z.unknown()).optional(),
+    coSupervisorInternship: z.array(z.unknown()).optional(),
     subjectClass: z.array(z.unknown()).optional(),
     councilMemberships: z.array(z.unknown()).optional(),
 }

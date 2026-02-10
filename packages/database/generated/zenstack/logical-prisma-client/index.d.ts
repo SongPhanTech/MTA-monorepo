@@ -792,6 +792,16 @@ export type StudentSubjectScoreHistory = $Result.DefaultSelection<Prisma.$Studen
  */
 export type StudentResearchTopic = $Result.DefaultSelection<Prisma.$StudentResearchTopicPayload>;
 /**
+ * Model StudentInternship
+ * @
+ * @allow ('all', auth() != null)
+ * @
+ * @deny ('read', deletedAt != null)
+ * @
+ * @allow ('read', auth() != null)
+ */
+export type StudentInternship = $Result.DefaultSelection<Prisma.$StudentInternshipPayload>;
+/**
  * Model ArchivedCertificateOnStudentSubjectScore
  * @
  * @allow ('all', auth() != null)
@@ -3557,6 +3567,15 @@ export class PrismaClient<ClientOptions extends Prisma.PrismaClientOptions = Pri
      */
     get studentResearchTopic(): Prisma.StudentResearchTopicDelegate<ExtArgs, ClientOptions>;
     /**
+     * `prisma.studentInternship`: Exposes CRUD operations for the **StudentInternship** model.
+     * Example usage:
+     * ```ts
+     * // Fetch zero or more StudentInternships
+     * const studentInternships = await prisma.studentInternship.findMany()
+     * ```
+     */
+    get studentInternship(): Prisma.StudentInternshipDelegate<ExtArgs, ClientOptions>;
+    /**
      * `prisma.archivedCertificateOnStudentSubjectScore`: Exposes CRUD operations for the **ArchivedCertificateOnStudentSubjectScore** model.
      * Example usage:
      * ```ts
@@ -6084,6 +6103,7 @@ export namespace Prisma {
         StudentSubjectScore: 'StudentSubjectScore',
         StudentSubjectScoreHistory: 'StudentSubjectScoreHistory',
         StudentResearchTopic: 'StudentResearchTopic',
+        StudentInternship: 'StudentInternship',
         ArchivedCertificateOnStudentSubjectScore: 'ArchivedCertificateOnStudentSubjectScore',
         ArchivedCertificate: 'ArchivedCertificate',
         ArchivedAwardOnStudentSubjectScore: 'ArchivedAwardOnStudentSubjectScore',
@@ -7691,6 +7711,27 @@ export namespace Prisma {
         mainContent: 'mainContent',
         supervisorId: 'supervisorId',
         coSupervisorId: 'coSupervisorId',
+        reportDate: 'reportDate'
+    };
+    export const StudentInternshipScalarFieldEnum: {
+        id: 'id',
+        code: 'code',
+        active: 'active',
+        description: 'description',
+        deletedAt: 'deletedAt',
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt',
+        createdBy: 'createdBy',
+        studentSubjectScoreId: 'studentSubjectScoreId',
+        deadline: 'deadline',
+        internshipContent: 'internshipContent',
+        institution: 'institution',
+        unit: 'unit',
+        address: 'address',
+        supervisorId: 'supervisorId',
+        coSupervisorId: 'coSupervisorId',
+        startDate: 'startDate',
+        endDate: 'endDate',
         reportDate: 'reportDate'
     };
     export const ArchivedCertificateOnStudentSubjectScoreScalarFieldEnum: {
@@ -11546,6 +11587,19 @@ export namespace Prisma {
         studentSubjectScoreId: 'studentSubjectScoreId',
         name: 'name',
         mainContent: 'mainContent',
+        supervisorId: 'supervisorId',
+        coSupervisorId: 'coSupervisorId'
+    };
+    export const StudentInternshipOrderByRelevanceFieldEnum: {
+        id: 'id',
+        code: 'code',
+        description: 'description',
+        createdBy: 'createdBy',
+        studentSubjectScoreId: 'studentSubjectScoreId',
+        internshipContent: 'internshipContent',
+        institution: 'institution',
+        unit: 'unit',
+        address: 'address',
         supervisorId: 'supervisorId',
         coSupervisorId: 'coSupervisorId'
     };
@@ -42939,6 +42993,7 @@ export namespace Prisma {
         student<T extends StudentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, StudentDefaultArgs<ExtArgs>>): Prisma__StudentClient<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
         examPaper<T extends StudentSubjectScore$examPaperArgs<ExtArgs> = {}>(args?: Subset<T, StudentSubjectScore$examPaperArgs<ExtArgs>>): Prisma__ExamPaperClient<$Result.GetResult<Prisma.$ExamPaperPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         studentResearchTopic<T extends StudentSubjectScore$studentResearchTopicArgs<ExtArgs> = {}>(args?: Subset<T, StudentSubjectScore$studentResearchTopicArgs<ExtArgs>>): Prisma__StudentResearchTopicClient<$Result.GetResult<Prisma.$StudentResearchTopicPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        studentInternship<T extends StudentSubjectScore$studentInternshipArgs<ExtArgs> = {}>(args?: Subset<T, StudentSubjectScore$studentInternshipArgs<ExtArgs>>): Prisma__StudentInternshipClient<$Result.GetResult<Prisma.$StudentInternshipPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         graduationGpaScores<T extends StudentSubjectScore$graduationGpaScoresArgs<ExtArgs> = {}>(args?: Subset<T, StudentSubjectScore$graduationGpaScoresArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentGraduationApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         graduationSupplementaryScore<T extends StudentSubjectScore$graduationSupplementaryScoreArgs<ExtArgs> = {}>(args?: Subset<T, StudentSubjectScore$graduationSupplementaryScoreArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentGraduationApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         certificates<T extends StudentSubjectScore$certificatesArgs<ExtArgs> = {}>(args?: Subset<T, StudentSubjectScore$certificatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ArchivedCertificateOnStudentSubjectScorePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
@@ -43782,6 +43837,399 @@ export namespace Prisma {
         readonly supervisorId: FieldRef<"StudentResearchTopic", 'String'>;
         readonly coSupervisorId: FieldRef<"StudentResearchTopic", 'String'>;
         readonly reportDate: FieldRef<"StudentResearchTopic", 'DateTime'>;
+    }
+
+    export interface StudentInternshipDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+        [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['StudentInternship'], meta: { name: 'StudentInternship' } };
+        /**
+         * Fields of the StudentInternship model
+         */
+        readonly fields: StudentInternshipFieldRefs;
+        /**
+         * Find zero or one StudentInternship that matches the filter.
+         * @param {StudentInternshipFindUniqueArgs} args - Arguments to find a StudentInternship
+         * @example
+         * // Get one StudentInternship
+         * const studentInternship = await prisma.studentInternship.findUnique({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUnique<T extends StudentInternshipFindUniqueArgs>(args: SelectSubset<T, StudentInternshipFindUniqueArgs<ExtArgs>>): Prisma__StudentInternshipClient<$Result.GetResult<Prisma.$StudentInternshipPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find one StudentInternship that matches the filter or throw an error with `error.code='P2025'`
+         * if no matches were found.
+         * @param {StudentInternshipFindUniqueOrThrowArgs} args - Arguments to find a StudentInternship
+         * @example
+         * // Get one StudentInternship
+         * const studentInternship = await prisma.studentInternship.findUniqueOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUniqueOrThrow<T extends StudentInternshipFindUniqueOrThrowArgs>(args: SelectSubset<T, StudentInternshipFindUniqueOrThrowArgs<ExtArgs>>): Prisma__StudentInternshipClient<$Result.GetResult<Prisma.$StudentInternshipPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first StudentInternship that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {StudentInternshipFindFirstArgs} args - Arguments to find a StudentInternship
+         * @example
+         * // Get one StudentInternship
+         * const studentInternship = await prisma.studentInternship.findFirst({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirst<T extends StudentInternshipFindFirstArgs>(args?: SelectSubset<T, StudentInternshipFindFirstArgs<ExtArgs>>): Prisma__StudentInternshipClient<$Result.GetResult<Prisma.$StudentInternshipPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first StudentInternship that matches the filter or
+         * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {StudentInternshipFindFirstOrThrowArgs} args - Arguments to find a StudentInternship
+         * @example
+         * // Get one StudentInternship
+         * const studentInternship = await prisma.studentInternship.findFirstOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirstOrThrow<T extends StudentInternshipFindFirstOrThrowArgs>(args?: SelectSubset<T, StudentInternshipFindFirstOrThrowArgs<ExtArgs>>): Prisma__StudentInternshipClient<$Result.GetResult<Prisma.$StudentInternshipPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find zero or more StudentInternships that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {StudentInternshipFindManyArgs} args - Arguments to filter and select certain fields only.
+         * @example
+         * // Get all StudentInternships
+         * const studentInternships = await prisma.studentInternship.findMany()
+         *
+         * // Get first 10 StudentInternships
+         * const studentInternships = await prisma.studentInternship.findMany({ take: 10 })
+         *
+         * // Only select the `id`
+         * const studentInternshipWithIdOnly = await prisma.studentInternship.findMany({ select: { id: true } })
+         */
+        findMany<T extends StudentInternshipFindManyArgs>(args?: SelectSubset<T, StudentInternshipFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentInternshipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+        /**
+         * Create a StudentInternship.
+         * @param {StudentInternshipCreateArgs} args - Arguments to create a StudentInternship.
+         * @example
+         * // Create one StudentInternship
+         * const StudentInternship = await prisma.studentInternship.create({
+         *   data: {
+         *     // ... data to create a StudentInternship
+         *   }
+         * })
+         */
+        create<T extends StudentInternshipCreateArgs>(args: SelectSubset<T, StudentInternshipCreateArgs<ExtArgs>>): Prisma__StudentInternshipClient<$Result.GetResult<Prisma.$StudentInternshipPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Create many StudentInternships.
+         * @param {StudentInternshipCreateManyArgs} args - Arguments to create many StudentInternships.
+         * @example
+         * // Create many StudentInternships
+         * const studentInternship = await prisma.studentInternship.createMany({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         */
+        createMany<T extends StudentInternshipCreateManyArgs>(args?: SelectSubset<T, StudentInternshipCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Create many StudentInternships and returns the data saved in the database.
+         * @param {StudentInternshipCreateManyAndReturnArgs} args - Arguments to create many StudentInternships.
+         * @example
+         * // Create many StudentInternships
+         * const studentInternship = await prisma.studentInternship.createManyAndReturn({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Create many StudentInternships and only return the `id`
+         * const studentInternshipWithIdOnly = await prisma.studentInternship.createManyAndReturn({
+         *   select: { id: true },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        createManyAndReturn<T extends StudentInternshipCreateManyAndReturnArgs>(args?: SelectSubset<T, StudentInternshipCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentInternshipPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Delete a StudentInternship.
+         * @param {StudentInternshipDeleteArgs} args - Arguments to delete one StudentInternship.
+         * @example
+         * // Delete one StudentInternship
+         * const StudentInternship = await prisma.studentInternship.delete({
+         *   where: {
+         *     // ... filter to delete one StudentInternship
+         *   }
+         * })
+         */
+        delete<T extends StudentInternshipDeleteArgs>(args: SelectSubset<T, StudentInternshipDeleteArgs<ExtArgs>>): Prisma__StudentInternshipClient<$Result.GetResult<Prisma.$StudentInternshipPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Update one StudentInternship.
+         * @param {StudentInternshipUpdateArgs} args - Arguments to update one StudentInternship.
+         * @example
+         * // Update one StudentInternship
+         * const studentInternship = await prisma.studentInternship.update({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        update<T extends StudentInternshipUpdateArgs>(args: SelectSubset<T, StudentInternshipUpdateArgs<ExtArgs>>): Prisma__StudentInternshipClient<$Result.GetResult<Prisma.$StudentInternshipPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Delete zero or more StudentInternships.
+         * @param {StudentInternshipDeleteManyArgs} args - Arguments to filter StudentInternships to delete.
+         * @example
+         * // Delete a few StudentInternships
+         * const { count } = await prisma.studentInternship.deleteMany({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        deleteMany<T extends StudentInternshipDeleteManyArgs>(args?: SelectSubset<T, StudentInternshipDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more StudentInternships.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {StudentInternshipUpdateManyArgs} args - Arguments to update one or more rows.
+         * @example
+         * // Update many StudentInternships
+         * const studentInternship = await prisma.studentInternship.updateMany({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        updateMany<T extends StudentInternshipUpdateManyArgs>(args: SelectSubset<T, StudentInternshipUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more StudentInternships and returns the data updated in the database.
+         * @param {StudentInternshipUpdateManyAndReturnArgs} args - Arguments to update many StudentInternships.
+         * @example
+         * // Update many StudentInternships
+         * const studentInternship = await prisma.studentInternship.updateManyAndReturn({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Update zero or more StudentInternships and only return the `id`
+         * const studentInternshipWithIdOnly = await prisma.studentInternship.updateManyAndReturn({
+         *   select: { id: true },
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        updateManyAndReturn<T extends StudentInternshipUpdateManyAndReturnArgs>(args: SelectSubset<T, StudentInternshipUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentInternshipPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Create or update one StudentInternship.
+         * @param {StudentInternshipUpsertArgs} args - Arguments to update or create a StudentInternship.
+         * @example
+         * // Update or create a StudentInternship
+         * const studentInternship = await prisma.studentInternship.upsert({
+         *   create: {
+         *     // ... data to create a StudentInternship
+         *   },
+         *   update: {
+         *     // ... in case it already exists, update
+         *   },
+         *   where: {
+         *     // ... the filter for the StudentInternship we want to update
+         *   }
+         * })
+         */
+        upsert<T extends StudentInternshipUpsertArgs>(args: SelectSubset<T, StudentInternshipUpsertArgs<ExtArgs>>): Prisma__StudentInternshipClient<$Result.GetResult<Prisma.$StudentInternshipPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Count the number of StudentInternships.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {StudentInternshipCountArgs} args - Arguments to filter StudentInternships to count.
+         * @example
+         * // Count the number of StudentInternships
+         * const count = await prisma.studentInternship.count({
+         *   where: {
+         *     // ... the filter for the StudentInternships we want to count
+         *   }
+         * })
+         */
+        count<T extends StudentInternshipCountArgs>(args?: Subset<T, StudentInternshipCountArgs>): Prisma.PrismaPromise<
+            T extends $Utils.Record<'select', any>
+            ? T['select'] extends true
+            ? number
+            : GetScalarType<T['select'], StudentInternshipCountAggregateOutputType>
+            : number
+        >;
+        /**
+         * Allows you to perform aggregations operations on a StudentInternship.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {StudentInternshipAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+         * @example
+         * // Ordered by age ascending
+         * // Where email contains prisma.io
+         * // Limited to the 10 users
+         * const aggregations = await prisma.user.aggregate({
+         *   _avg: {
+         *     age: true,
+         *   },
+         *   where: {
+         *     email: {
+         *       contains: "prisma.io",
+         *     },
+         *   },
+         *   orderBy: {
+         *     age: "asc",
+         *   },
+         *   take: 10,
+         * })
+         */
+        aggregate<T extends StudentInternshipAggregateArgs>(args: Subset<T, StudentInternshipAggregateArgs>): Prisma.PrismaPromise<GetStudentInternshipAggregateType<T>>;
+        /**
+         * Group by StudentInternship.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {StudentInternshipGroupByArgs} args - Group by arguments.
+         * @example
+         * // Group by city, order by createdAt, get count
+         * const result = await prisma.user.groupBy({
+         *   by: ['city', 'createdAt'],
+         *   orderBy: {
+         *     createdAt: true
+         *   },
+         *   _count: {
+         *     _all: true
+         *   },
+         * })
+         */
+        groupBy<T extends StudentInternshipGroupByArgs, HasSelectOrTake extends Or<
+            Extends<'skip', Keys<T>>,
+            Extends<'take', Keys<T>>
+        >, OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: StudentInternshipGroupByArgs['orderBy'] }
+        : { orderBy?: StudentInternshipGroupByArgs['orderBy'] }, OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>, ByFields extends MaybeTupleToUnion<T['by']>, ByValid extends Has<ByFields, OrderFields>, HavingFields extends GetHavingFields<T['having']>, HavingValid extends Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? True : False, InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+        ? {
+            [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+            ]
+        }[HavingFields]
+        : 'take' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+        : 'skip' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+        : ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]>(args: SubsetIntersection<T, StudentInternshipGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetStudentInternshipGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    }
+
+    /**
+     * The delegate class that acts as a "Promise-like" for StudentInternship.
+     * Why is this prefixed with `Prisma__`?
+     * Because we want to prevent naming conflicts as mentioned in
+     * https://github.com/prisma/prisma-client-js/issues/707
+     */
+    export interface Prisma__StudentInternshipClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+        readonly [Symbol.toStringTag]: "PrismaPromise";
+        studentSubjectScore<T extends StudentSubjectScoreDefaultArgs<ExtArgs> = {}>(args?: Subset<T, StudentSubjectScoreDefaultArgs<ExtArgs>>): Prisma__StudentSubjectScoreClient<$Result.GetResult<Prisma.$StudentSubjectScorePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        supervisor<T extends StudentInternship$supervisorArgs<ExtArgs> = {}>(args?: Subset<T, StudentInternship$supervisorArgs<ExtArgs>>): Prisma__ExpertProfileClient<$Result.GetResult<Prisma.$ExpertProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        coSupervisor<T extends StudentInternship$coSupervisorArgs<ExtArgs> = {}>(args?: Subset<T, StudentInternship$coSupervisorArgs<ExtArgs>>): Prisma__ExpertProfileClient<$Result.GetResult<Prisma.$ExpertProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Attaches callbacks for the resolution and/or rejection of the Promise.
+         * @param onfulfilled The callback to execute when the Promise is resolved.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of which ever callback is executed.
+         */
+        then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+        /**
+         * Attaches a callback for only the rejection of the Promise.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of the callback.
+         */
+        catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+        /**
+         * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+         * resolved value cannot be modified from the callback.
+         * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+         * @returns A Promise for the completion of the callback.
+         */
+        finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+    }
+
+    /**
+     * Fields of the StudentInternship model
+     */
+    interface StudentInternshipFieldRefs {
+        readonly id: FieldRef<"StudentInternship", 'String'>;
+        readonly code: FieldRef<"StudentInternship", 'String'>;
+        readonly active: FieldRef<"StudentInternship", 'Boolean'>;
+        readonly description: FieldRef<"StudentInternship", 'String'>;
+        readonly deletedAt: FieldRef<"StudentInternship", 'DateTime'>;
+        readonly createdAt: FieldRef<"StudentInternship", 'DateTime'>;
+        readonly updatedAt: FieldRef<"StudentInternship", 'DateTime'>;
+        readonly createdBy: FieldRef<"StudentInternship", 'String'>;
+        readonly studentSubjectScoreId: FieldRef<"StudentInternship", 'String'>;
+        readonly deadline: FieldRef<"StudentInternship", 'DateTime'>;
+        readonly internshipContent: FieldRef<"StudentInternship", 'String'>;
+        readonly institution: FieldRef<"StudentInternship", 'String'>;
+        readonly unit: FieldRef<"StudentInternship", 'String'>;
+        readonly address: FieldRef<"StudentInternship", 'String'>;
+        readonly supervisorId: FieldRef<"StudentInternship", 'String'>;
+        readonly coSupervisorId: FieldRef<"StudentInternship", 'String'>;
+        readonly startDate: FieldRef<"StudentInternship", 'DateTime'>;
+        readonly endDate: FieldRef<"StudentInternship", 'DateTime'>;
+        readonly reportDate: FieldRef<"StudentInternship", 'DateTime'>;
     }
 
     export interface ArchivedCertificateOnStudentSubjectScoreDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -73160,6 +73608,8 @@ export namespace Prisma {
         coSupervisedTheses<T extends ExpertProfile$coSupervisedThesesArgs<ExtArgs> = {}>(args?: Subset<T, ExpertProfile$coSupervisedThesesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ThesisProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         supervisorResearchTopic<T extends ExpertProfile$supervisorResearchTopicArgs<ExtArgs> = {}>(args?: Subset<T, ExpertProfile$supervisorResearchTopicArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentResearchTopicPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         coSupervisorResearchTopic<T extends ExpertProfile$coSupervisorResearchTopicArgs<ExtArgs> = {}>(args?: Subset<T, ExpertProfile$coSupervisorResearchTopicArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentResearchTopicPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        supervisorInternship<T extends ExpertProfile$supervisorInternshipArgs<ExtArgs> = {}>(args?: Subset<T, ExpertProfile$supervisorInternshipArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentInternshipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        coSupervisorInternship<T extends ExpertProfile$coSupervisorInternshipArgs<ExtArgs> = {}>(args?: Subset<T, ExpertProfile$coSupervisorInternshipArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentInternshipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         subjectClass<T extends ExpertProfile$subjectClassArgs<ExtArgs> = {}>(args?: Subset<T, ExpertProfile$subjectClassArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectClassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         councilMemberships<T extends ExpertProfile$councilMembershipsArgs<ExtArgs> = {}>(args?: Subset<T, ExpertProfile$councilMembershipsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CouncilMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
@@ -116255,7 +116705,7 @@ export namespace Prisma {
             omit: GlobalOmitOptions
         }
         meta: {
-            modelProps: "config" | "suggestion" | "changeLog" | "userProfile" | "hocHam" | "chucVuChinhQuyen" | "chucVuDang" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTraining" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "studentResearchTopic" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "scoreCorrectionTicket" | "scoreCorrectionItem" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "certificate" | "certificateOnSubject" | "award" | "diplomaType" | "scoreConvert" | "loadCategory" | "outputStandard" | "outputStandardOnCurriculum" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisSession" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "defaultSupervisorPayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "evaluationPeriod" | "evaluationStandardSet" | "standardCatalog" | "criterionCatalog" | "evidenceCategory" | "evidence" | "evaluationCriterionComment" | "requirementCriterionCatalog" | "standardPeriod" | "criterionPeriod" | "analysisCriterion" | "evaluationCriterion" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "specificChoice" | "surveyChoice" | "surveySession" | "surveyResponse" | "questionBank" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "examList" | "examBank" | "examBankQuestion" | "examPaper" | "examFramework" | "examMatrix" | "knowledgeBlock" | "configExam" | "staff" | "staffHistory" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationDowngraded" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "scoreLinkSheet" | "scoreLinkSubjectVersion" | "scoreLinkStudent" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_QuanHeThanNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiTinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
+            modelProps: "config" | "suggestion" | "changeLog" | "userProfile" | "hocHam" | "chucVuChinhQuyen" | "chucVuDang" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTraining" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "studentResearchTopic" | "studentInternship" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "scoreCorrectionTicket" | "scoreCorrectionItem" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "certificate" | "certificateOnSubject" | "award" | "diplomaType" | "scoreConvert" | "loadCategory" | "outputStandard" | "outputStandardOnCurriculum" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisSession" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "defaultSupervisorPayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "evaluationPeriod" | "evaluationStandardSet" | "standardCatalog" | "criterionCatalog" | "evidenceCategory" | "evidence" | "evaluationCriterionComment" | "requirementCriterionCatalog" | "standardPeriod" | "criterionPeriod" | "analysisCriterion" | "evaluationCriterion" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "specificChoice" | "surveyChoice" | "surveySession" | "surveyResponse" | "questionBank" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "examList" | "examBank" | "examBankQuestion" | "examPaper" | "examFramework" | "examMatrix" | "knowledgeBlock" | "configExam" | "staff" | "staffHistory" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationDowngraded" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "scoreLinkSheet" | "scoreLinkSubjectVersion" | "scoreLinkStudent" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_QuanHeThanNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiTinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
             txIsolationLevel: Prisma.TransactionIsolationLevel
         }
         model: {
@@ -122028,6 +122478,80 @@ export namespace Prisma {
                     count: {
                         args: Prisma.StudentResearchTopicCountArgs<ExtArgs>
                         result: $Utils.Optional<StudentResearchTopicCountAggregateOutputType> | number
+                    }
+                }
+            }
+            StudentInternship: {
+                payload: Prisma.$StudentInternshipPayload<ExtArgs>
+                fields: Prisma.StudentInternshipFieldRefs
+                operations: {
+                    findUnique: {
+                        args: Prisma.StudentInternshipFindUniqueArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$StudentInternshipPayload> | null
+                    }
+                    findUniqueOrThrow: {
+                        args: Prisma.StudentInternshipFindUniqueOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$StudentInternshipPayload>
+                    }
+                    findFirst: {
+                        args: Prisma.StudentInternshipFindFirstArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$StudentInternshipPayload> | null
+                    }
+                    findFirstOrThrow: {
+                        args: Prisma.StudentInternshipFindFirstOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$StudentInternshipPayload>
+                    }
+                    findMany: {
+                        args: Prisma.StudentInternshipFindManyArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$StudentInternshipPayload>[]
+                    }
+                    create: {
+                        args: Prisma.StudentInternshipCreateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$StudentInternshipPayload>
+                    }
+                    createMany: {
+                        args: Prisma.StudentInternshipCreateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    createManyAndReturn: {
+                        args: Prisma.StudentInternshipCreateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$StudentInternshipPayload>[]
+                    }
+                    delete: {
+                        args: Prisma.StudentInternshipDeleteArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$StudentInternshipPayload>
+                    }
+                    update: {
+                        args: Prisma.StudentInternshipUpdateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$StudentInternshipPayload>
+                    }
+                    deleteMany: {
+                        args: Prisma.StudentInternshipDeleteManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateMany: {
+                        args: Prisma.StudentInternshipUpdateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateManyAndReturn: {
+                        args: Prisma.StudentInternshipUpdateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$StudentInternshipPayload>[]
+                    }
+                    upsert: {
+                        args: Prisma.StudentInternshipUpsertArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$StudentInternshipPayload>
+                    }
+                    aggregate: {
+                        args: Prisma.StudentInternshipAggregateArgs<ExtArgs>
+                        result: $Utils.Optional<AggregateStudentInternship>
+                    }
+                    groupBy: {
+                        args: Prisma.StudentInternshipGroupByArgs<ExtArgs>
+                        result: $Utils.Optional<StudentInternshipGroupByOutputType>[]
+                    }
+                    count: {
+                        args: Prisma.StudentInternshipCountArgs<ExtArgs>
+                        result: $Utils.Optional<StudentInternshipCountAggregateOutputType> | number
                     }
                 }
             }
@@ -135904,6 +136428,7 @@ export namespace Prisma {
         studentSubjectScore?: StudentSubjectScoreOmit
         studentSubjectScoreHistory?: StudentSubjectScoreHistoryOmit
         studentResearchTopic?: StudentResearchTopicOmit
+        studentInternship?: StudentInternshipOmit
         archivedCertificateOnStudentSubjectScore?: ArchivedCertificateOnStudentSubjectScoreOmit
         archivedCertificate?: ArchivedCertificateOmit
         archivedAwardOnStudentSubjectScore?: ArchivedAwardOnStudentSubjectScoreOmit
@@ -140145,6 +140670,8 @@ export namespace Prisma {
         coSupervisedTheses: number
         supervisorResearchTopic: number
         coSupervisorResearchTopic: number
+        supervisorInternship: number
+        coSupervisorInternship: number
         subjectClass: number
         councilMemberships: number
     };
@@ -140154,6 +140681,8 @@ export namespace Prisma {
         coSupervisedTheses?: boolean | ExpertProfileCountOutputTypeCountCoSupervisedThesesArgs
         supervisorResearchTopic?: boolean | ExpertProfileCountOutputTypeCountSupervisorResearchTopicArgs
         coSupervisorResearchTopic?: boolean | ExpertProfileCountOutputTypeCountCoSupervisorResearchTopicArgs
+        supervisorInternship?: boolean | ExpertProfileCountOutputTypeCountSupervisorInternshipArgs
+        coSupervisorInternship?: boolean | ExpertProfileCountOutputTypeCountCoSupervisorInternshipArgs
         subjectClass?: boolean | ExpertProfileCountOutputTypeCountSubjectClassArgs
         councilMemberships?: boolean | ExpertProfileCountOutputTypeCountCouncilMembershipsArgs
     };
@@ -140195,6 +140724,18 @@ export namespace Prisma {
      */
     export type ExpertProfileCountOutputTypeCountCoSupervisorResearchTopicArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: StudentResearchTopicWhereInput
+    };
+    /**
+     * ExpertProfileCountOutputType without action
+     */
+    export type ExpertProfileCountOutputTypeCountSupervisorInternshipArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: StudentInternshipWhereInput
+    };
+    /**
+     * ExpertProfileCountOutputType without action
+     */
+    export type ExpertProfileCountOutputTypeCountCoSupervisorInternshipArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: StudentInternshipWhereInput
     };
     /**
      * ExpertProfileCountOutputType without action
@@ -202704,6 +203245,7 @@ export namespace Prisma {
         student?: boolean | StudentDefaultArgs<ExtArgs>
         examPaper?: boolean | StudentSubjectScore$examPaperArgs<ExtArgs>
         studentResearchTopic?: boolean | StudentSubjectScore$studentResearchTopicArgs<ExtArgs>
+        studentInternship?: boolean | StudentSubjectScore$studentInternshipArgs<ExtArgs>
         graduationGpaScores?: boolean | StudentSubjectScore$graduationGpaScoresArgs<ExtArgs>
         graduationSupplementaryScore?: boolean | StudentSubjectScore$graduationSupplementaryScoreArgs<ExtArgs>
         certificates?: boolean | StudentSubjectScore$certificatesArgs<ExtArgs>
@@ -202813,6 +203355,7 @@ export namespace Prisma {
         student?: boolean | StudentDefaultArgs<ExtArgs>
         examPaper?: boolean | StudentSubjectScore$examPaperArgs<ExtArgs>
         studentResearchTopic?: boolean | StudentSubjectScore$studentResearchTopicArgs<ExtArgs>
+        studentInternship?: boolean | StudentSubjectScore$studentInternshipArgs<ExtArgs>
         graduationGpaScores?: boolean | StudentSubjectScore$graduationGpaScoresArgs<ExtArgs>
         graduationSupplementaryScore?: boolean | StudentSubjectScore$graduationSupplementaryScoreArgs<ExtArgs>
         certificates?: boolean | StudentSubjectScore$certificatesArgs<ExtArgs>
@@ -202846,6 +203389,10 @@ export namespace Prisma {
              * chuyên đề nghiên cứu
              */
             studentResearchTopic: Prisma.$StudentResearchTopicPayload<ExtArgs> | null
+            /**
+             * thực tập
+             */
+            studentInternship: Prisma.$StudentInternshipPayload<ExtArgs> | null
             graduationGpaScores: Prisma.$StudentGraduationApplicationPayload<ExtArgs>[]
             graduationSupplementaryScore: Prisma.$StudentGraduationApplicationPayload<ExtArgs>[]
             certificates: Prisma.$ArchivedCertificateOnStudentSubjectScorePayload<ExtArgs>[]
@@ -203353,6 +203900,24 @@ export namespace Prisma {
          */
         include?: StudentResearchTopicInclude<ExtArgs> | null
         where?: StudentResearchTopicWhereInput
+    };
+    /**
+     * StudentSubjectScore.studentInternship
+     */
+    export type StudentSubjectScore$studentInternshipArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the StudentInternship
+         */
+        select?: StudentInternshipSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the StudentInternship
+         */
+        omit?: StudentInternshipOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: StudentInternshipInclude<ExtArgs> | null
+        where?: StudentInternshipWhereInput
     };
     /**
      * StudentSubjectScore.graduationGpaScores
@@ -205202,6 +205767,847 @@ export namespace Prisma {
          * Choose, which related nodes to fetch as well
          */
         include?: StudentResearchTopicInclude<ExtArgs> | null
+    };
+    /**
+     * Model StudentInternship
+     */
+    export type AggregateStudentInternship = {
+        _count: StudentInternshipCountAggregateOutputType | null
+        _min: StudentInternshipMinAggregateOutputType | null
+        _max: StudentInternshipMaxAggregateOutputType | null
+    };
+    export type StudentInternshipMinAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        createdBy: string | null
+        studentSubjectScoreId: string | null
+        deadline: Date | null
+        internshipContent: string | null
+        institution: string | null
+        unit: string | null
+        address: string | null
+        supervisorId: string | null
+        coSupervisorId: string | null
+        startDate: Date | null
+        endDate: Date | null
+        reportDate: Date | null
+    };
+    export type StudentInternshipMaxAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        createdBy: string | null
+        studentSubjectScoreId: string | null
+        deadline: Date | null
+        internshipContent: string | null
+        institution: string | null
+        unit: string | null
+        address: string | null
+        supervisorId: string | null
+        coSupervisorId: string | null
+        startDate: Date | null
+        endDate: Date | null
+        reportDate: Date | null
+    };
+    export type StudentInternshipCountAggregateOutputType = {
+        id: number
+        code: number
+        active: number
+        description: number
+        deletedAt: number
+        createdAt: number
+        updatedAt: number
+        createdBy: number
+        studentSubjectScoreId: number
+        deadline: number
+        internshipContent: number
+        institution: number
+        unit: number
+        address: number
+        supervisorId: number
+        coSupervisorId: number
+        startDate: number
+        endDate: number
+        reportDate: number
+        _all: number
+    };
+    export type StudentInternshipMinAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        studentSubjectScoreId?: true
+        deadline?: true
+        internshipContent?: true
+        institution?: true
+        unit?: true
+        address?: true
+        supervisorId?: true
+        coSupervisorId?: true
+        startDate?: true
+        endDate?: true
+        reportDate?: true
+    };
+    export type StudentInternshipMaxAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        studentSubjectScoreId?: true
+        deadline?: true
+        internshipContent?: true
+        institution?: true
+        unit?: true
+        address?: true
+        supervisorId?: true
+        coSupervisorId?: true
+        startDate?: true
+        endDate?: true
+        reportDate?: true
+    };
+    export type StudentInternshipCountAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        studentSubjectScoreId?: true
+        deadline?: true
+        internshipContent?: true
+        institution?: true
+        unit?: true
+        address?: true
+        supervisorId?: true
+        coSupervisorId?: true
+        startDate?: true
+        endDate?: true
+        reportDate?: true
+        _all?: true
+    };
+    export type StudentInternshipAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which StudentInternship to aggregate.
+         */
+        where?: StudentInternshipWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of StudentInternships to fetch.
+         */
+        orderBy?: StudentInternshipOrderByWithRelationInput | StudentInternshipOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the start position
+         */
+        cursor?: StudentInternshipWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` StudentInternships from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` StudentInternships.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Count returned StudentInternships
+        **/
+        _count?: true | StudentInternshipCountAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the minimum value
+        **/
+        _min?: StudentInternshipMinAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the maximum value
+        **/
+        _max?: StudentInternshipMaxAggregateInputType
+    };
+    export type GetStudentInternshipAggregateType<T extends StudentInternshipAggregateArgs> = {
+        [P in keyof T & keyof AggregateStudentInternship]: P extends '_count' | 'count'
+        ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateStudentInternship[P]>
+        : GetScalarType<T[P], AggregateStudentInternship[P]>
+    };
+    export type StudentInternshipGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: StudentInternshipWhereInput
+        orderBy?: StudentInternshipOrderByWithAggregationInput | StudentInternshipOrderByWithAggregationInput[]
+        by: StudentInternshipScalarFieldEnum[] | StudentInternshipScalarFieldEnum
+        having?: StudentInternshipScalarWhereWithAggregatesInput
+        take?: number
+        skip?: number
+        _count?: StudentInternshipCountAggregateInputType | true
+        _min?: StudentInternshipMinAggregateInputType
+        _max?: StudentInternshipMaxAggregateInputType
+    };
+    export type StudentInternshipGroupByOutputType = {
+        id: string
+        code: string | null
+        active: boolean
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date
+        updatedAt: Date
+        createdBy: string | null
+        studentSubjectScoreId: string
+        deadline: Date | null
+        internshipContent: string | null
+        institution: string | null
+        unit: string | null
+        address: string | null
+        supervisorId: string | null
+        coSupervisorId: string | null
+        startDate: Date | null
+        endDate: Date | null
+        reportDate: Date | null
+        _count: StudentInternshipCountAggregateOutputType | null
+        _min: StudentInternshipMinAggregateOutputType | null
+        _max: StudentInternshipMaxAggregateOutputType | null
+    };
+    type GetStudentInternshipGroupByPayload<T extends StudentInternshipGroupByArgs> = Prisma.PrismaPromise<
+        Array<
+            PickEnumerable<StudentInternshipGroupByOutputType, T['by']> &
+            {
+                [P in ((keyof T) & (keyof StudentInternshipGroupByOutputType))]: P extends '_count'
+                ? T[P] extends boolean
+                ? number
+                : GetScalarType<T[P], StudentInternshipGroupByOutputType[P]>
+                : GetScalarType<T[P], StudentInternshipGroupByOutputType[P]>
+            }
+        >
+    >;
+    export type StudentInternshipSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        studentSubjectScoreId?: boolean
+        deadline?: boolean
+        internshipContent?: boolean
+        institution?: boolean
+        unit?: boolean
+        address?: boolean
+        supervisorId?: boolean
+        coSupervisorId?: boolean
+        startDate?: boolean
+        endDate?: boolean
+        reportDate?: boolean
+        studentSubjectScore?: boolean | StudentSubjectScoreDefaultArgs<ExtArgs>
+        supervisor?: boolean | StudentInternship$supervisorArgs<ExtArgs>
+        coSupervisor?: boolean | StudentInternship$coSupervisorArgs<ExtArgs>
+    }, ExtArgs["result"]["studentInternship"]>;
+    export type StudentInternshipSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        studentSubjectScoreId?: boolean
+        deadline?: boolean
+        internshipContent?: boolean
+        institution?: boolean
+        unit?: boolean
+        address?: boolean
+        supervisorId?: boolean
+        coSupervisorId?: boolean
+        startDate?: boolean
+        endDate?: boolean
+        reportDate?: boolean
+        studentSubjectScore?: boolean | StudentSubjectScoreDefaultArgs<ExtArgs>
+        supervisor?: boolean | StudentInternship$supervisorArgs<ExtArgs>
+        coSupervisor?: boolean | StudentInternship$coSupervisorArgs<ExtArgs>
+    }, ExtArgs["result"]["studentInternship"]>;
+    export type StudentInternshipSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        studentSubjectScoreId?: boolean
+        deadline?: boolean
+        internshipContent?: boolean
+        institution?: boolean
+        unit?: boolean
+        address?: boolean
+        supervisorId?: boolean
+        coSupervisorId?: boolean
+        startDate?: boolean
+        endDate?: boolean
+        reportDate?: boolean
+        studentSubjectScore?: boolean | StudentSubjectScoreDefaultArgs<ExtArgs>
+        supervisor?: boolean | StudentInternship$supervisorArgs<ExtArgs>
+        coSupervisor?: boolean | StudentInternship$coSupervisorArgs<ExtArgs>
+    }, ExtArgs["result"]["studentInternship"]>;
+    export type StudentInternshipSelectScalar = {
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        studentSubjectScoreId?: boolean
+        deadline?: boolean
+        internshipContent?: boolean
+        institution?: boolean
+        unit?: boolean
+        address?: boolean
+        supervisorId?: boolean
+        coSupervisorId?: boolean
+        startDate?: boolean
+        endDate?: boolean
+        reportDate?: boolean
+    };
+    export type StudentInternshipOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "studentSubjectScoreId" | "deadline" | "internshipContent" | "institution" | "unit" | "address" | "supervisorId" | "coSupervisorId" | "startDate" | "endDate" | "reportDate", ExtArgs["result"]["studentInternship"]>;
+    export type StudentInternshipInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        studentSubjectScore?: boolean | StudentSubjectScoreDefaultArgs<ExtArgs>
+        supervisor?: boolean | StudentInternship$supervisorArgs<ExtArgs>
+        coSupervisor?: boolean | StudentInternship$coSupervisorArgs<ExtArgs>
+    };
+    export type StudentInternshipIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        studentSubjectScore?: boolean | StudentSubjectScoreDefaultArgs<ExtArgs>
+        supervisor?: boolean | StudentInternship$supervisorArgs<ExtArgs>
+        coSupervisor?: boolean | StudentInternship$coSupervisorArgs<ExtArgs>
+    };
+    export type StudentInternshipIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        studentSubjectScore?: boolean | StudentSubjectScoreDefaultArgs<ExtArgs>
+        supervisor?: boolean | StudentInternship$supervisorArgs<ExtArgs>
+        coSupervisor?: boolean | StudentInternship$coSupervisorArgs<ExtArgs>
+    };
+    export type $StudentInternshipPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        name: "StudentInternship"
+        objects: {
+            studentSubjectScore: Prisma.$StudentSubjectScorePayload<ExtArgs>
+            /**
+             * GVHD 1
+             */
+            supervisor: Prisma.$ExpertProfilePayload<ExtArgs> | null
+            /**
+             * GVHD 2
+             */
+            coSupervisor: Prisma.$ExpertProfilePayload<ExtArgs> | null
+        }
+        scalars: $Extensions.GetPayloadResult<{
+            id: string
+            code: string | null
+            active: boolean
+            description: string | null
+            deletedAt: Date | null
+            createdAt: Date
+            updatedAt: Date
+            createdBy: string | null
+            studentSubjectScoreId: string
+            /**
+             * hạn nhập thực tập
+             */
+            deadline: Date | null
+            /**
+             * nội dung thực tập
+             */
+            internshipContent: string | null
+            /**
+             * cơ quan thực tập
+             */
+            institution: string | null
+            /**
+             * đơn vị thực tập
+             */
+            unit: string | null
+            /**
+             * địa chỉ thực tập
+             */
+            address: string | null
+            supervisorId: string | null
+            coSupervisorId: string | null
+            /**
+             * thời gian bắt đầu thực tập
+             */
+            startDate: Date | null
+            /**
+             * thời gian kết thúc thực tập
+             */
+            endDate: Date | null
+            /**
+             * thời gian báo cáo
+             */
+            reportDate: Date | null
+        }, ExtArgs["result"]["studentInternship"]>
+        composites: {}
+    };
+    type StudentInternshipGetPayload<S extends boolean | null | undefined | StudentInternshipDefaultArgs> = $Result.GetResult<Prisma.$StudentInternshipPayload, S>;
+    type StudentInternshipCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Omit<StudentInternshipFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+        select?: StudentInternshipCountAggregateInputType | true
+    };
+    /**
+     * StudentInternship findUnique
+     */
+    export type StudentInternshipFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the StudentInternship
+         */
+        select?: StudentInternshipSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the StudentInternship
+         */
+        omit?: StudentInternshipOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: StudentInternshipInclude<ExtArgs> | null
+        /**
+         * Filter, which StudentInternship to fetch.
+         */
+        where: StudentInternshipWhereUniqueInput
+    };
+    /**
+     * StudentInternship findUniqueOrThrow
+     */
+    export type StudentInternshipFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the StudentInternship
+         */
+        select?: StudentInternshipSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the StudentInternship
+         */
+        omit?: StudentInternshipOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: StudentInternshipInclude<ExtArgs> | null
+        /**
+         * Filter, which StudentInternship to fetch.
+         */
+        where: StudentInternshipWhereUniqueInput
+    };
+    /**
+     * StudentInternship findFirst
+     */
+    export type StudentInternshipFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the StudentInternship
+         */
+        select?: StudentInternshipSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the StudentInternship
+         */
+        omit?: StudentInternshipOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: StudentInternshipInclude<ExtArgs> | null
+        /**
+         * Filter, which StudentInternship to fetch.
+         */
+        where?: StudentInternshipWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of StudentInternships to fetch.
+         */
+        orderBy?: StudentInternshipOrderByWithRelationInput | StudentInternshipOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for StudentInternships.
+         */
+        cursor?: StudentInternshipWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` StudentInternships from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` StudentInternships.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of StudentInternships.
+         */
+        distinct?: StudentInternshipScalarFieldEnum | StudentInternshipScalarFieldEnum[]
+    };
+    /**
+     * StudentInternship findFirstOrThrow
+     */
+    export type StudentInternshipFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the StudentInternship
+         */
+        select?: StudentInternshipSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the StudentInternship
+         */
+        omit?: StudentInternshipOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: StudentInternshipInclude<ExtArgs> | null
+        /**
+         * Filter, which StudentInternship to fetch.
+         */
+        where?: StudentInternshipWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of StudentInternships to fetch.
+         */
+        orderBy?: StudentInternshipOrderByWithRelationInput | StudentInternshipOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for StudentInternships.
+         */
+        cursor?: StudentInternshipWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` StudentInternships from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` StudentInternships.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of StudentInternships.
+         */
+        distinct?: StudentInternshipScalarFieldEnum | StudentInternshipScalarFieldEnum[]
+    };
+    /**
+     * StudentInternship findMany
+     */
+    export type StudentInternshipFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the StudentInternship
+         */
+        select?: StudentInternshipSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the StudentInternship
+         */
+        omit?: StudentInternshipOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: StudentInternshipInclude<ExtArgs> | null
+        /**
+         * Filter, which StudentInternships to fetch.
+         */
+        where?: StudentInternshipWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of StudentInternships to fetch.
+         */
+        orderBy?: StudentInternshipOrderByWithRelationInput | StudentInternshipOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for listing StudentInternships.
+         */
+        cursor?: StudentInternshipWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` StudentInternships from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` StudentInternships.
+         */
+        skip?: number
+        distinct?: StudentInternshipScalarFieldEnum | StudentInternshipScalarFieldEnum[]
+    };
+    /**
+     * StudentInternship create
+     */
+    export type StudentInternshipCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the StudentInternship
+         */
+        select?: StudentInternshipSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the StudentInternship
+         */
+        omit?: StudentInternshipOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: StudentInternshipInclude<ExtArgs> | null
+        /**
+         * The data needed to create a StudentInternship.
+         */
+        data: XOR<StudentInternshipCreateInput, StudentInternshipUncheckedCreateInput>
+    };
+    /**
+     * StudentInternship createMany
+     */
+    export type StudentInternshipCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to create many StudentInternships.
+         */
+        data: StudentInternshipCreateManyInput | StudentInternshipCreateManyInput[]
+        skipDuplicates?: boolean
+    };
+    /**
+     * StudentInternship createManyAndReturn
+     */
+    export type StudentInternshipCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the StudentInternship
+         */
+        select?: StudentInternshipSelectCreateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the StudentInternship
+         */
+        omit?: StudentInternshipOmit<ExtArgs> | null
+        /**
+         * The data used to create many StudentInternships.
+         */
+        data: StudentInternshipCreateManyInput | StudentInternshipCreateManyInput[]
+        skipDuplicates?: boolean
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: StudentInternshipIncludeCreateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * StudentInternship update
+     */
+    export type StudentInternshipUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the StudentInternship
+         */
+        select?: StudentInternshipSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the StudentInternship
+         */
+        omit?: StudentInternshipOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: StudentInternshipInclude<ExtArgs> | null
+        /**
+         * The data needed to update a StudentInternship.
+         */
+        data: XOR<StudentInternshipUpdateInput, StudentInternshipUncheckedUpdateInput>
+        /**
+         * Choose, which StudentInternship to update.
+         */
+        where: StudentInternshipWhereUniqueInput
+    };
+    /**
+     * StudentInternship updateMany
+     */
+    export type StudentInternshipUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to update StudentInternships.
+         */
+        data: XOR<StudentInternshipUpdateManyMutationInput, StudentInternshipUncheckedUpdateManyInput>
+        /**
+         * Filter which StudentInternships to update
+         */
+        where?: StudentInternshipWhereInput
+        /**
+         * Limit how many StudentInternships to update.
+         */
+        limit?: number
+    };
+    /**
+     * StudentInternship updateManyAndReturn
+     */
+    export type StudentInternshipUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the StudentInternship
+         */
+        select?: StudentInternshipSelectUpdateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the StudentInternship
+         */
+        omit?: StudentInternshipOmit<ExtArgs> | null
+        /**
+         * The data used to update StudentInternships.
+         */
+        data: XOR<StudentInternshipUpdateManyMutationInput, StudentInternshipUncheckedUpdateManyInput>
+        /**
+         * Filter which StudentInternships to update
+         */
+        where?: StudentInternshipWhereInput
+        /**
+         * Limit how many StudentInternships to update.
+         */
+        limit?: number
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: StudentInternshipIncludeUpdateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * StudentInternship upsert
+     */
+    export type StudentInternshipUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the StudentInternship
+         */
+        select?: StudentInternshipSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the StudentInternship
+         */
+        omit?: StudentInternshipOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: StudentInternshipInclude<ExtArgs> | null
+        /**
+         * The filter to search for the StudentInternship to update in case it exists.
+         */
+        where: StudentInternshipWhereUniqueInput
+        /**
+         * In case the StudentInternship found by the `where` argument doesn't exist, create a new StudentInternship with this data.
+         */
+        create: XOR<StudentInternshipCreateInput, StudentInternshipUncheckedCreateInput>
+        /**
+         * In case the StudentInternship was found with the provided `where` argument, update it with this data.
+         */
+        update: XOR<StudentInternshipUpdateInput, StudentInternshipUncheckedUpdateInput>
+    };
+    /**
+     * StudentInternship delete
+     */
+    export type StudentInternshipDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the StudentInternship
+         */
+        select?: StudentInternshipSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the StudentInternship
+         */
+        omit?: StudentInternshipOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: StudentInternshipInclude<ExtArgs> | null
+        /**
+         * Filter which StudentInternship to delete.
+         */
+        where: StudentInternshipWhereUniqueInput
+    };
+    /**
+     * StudentInternship deleteMany
+     */
+    export type StudentInternshipDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which StudentInternships to delete
+         */
+        where?: StudentInternshipWhereInput
+        /**
+         * Limit how many StudentInternships to delete.
+         */
+        limit?: number
+    };
+    /**
+     * StudentInternship.supervisor
+     */
+    export type StudentInternship$supervisorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ExpertProfile
+         */
+        select?: ExpertProfileSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ExpertProfile
+         */
+        omit?: ExpertProfileOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ExpertProfileInclude<ExtArgs> | null
+        where?: ExpertProfileWhereInput
+    };
+    /**
+     * StudentInternship.coSupervisor
+     */
+    export type StudentInternship$coSupervisorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ExpertProfile
+         */
+        select?: ExpertProfileSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ExpertProfile
+         */
+        omit?: ExpertProfileOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ExpertProfileInclude<ExtArgs> | null
+        where?: ExpertProfileWhereInput
+    };
+    /**
+     * StudentInternship without action
+     */
+    export type StudentInternshipDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the StudentInternship
+         */
+        select?: StudentInternshipSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the StudentInternship
+         */
+        omit?: StudentInternshipOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: StudentInternshipInclude<ExtArgs> | null
     };
     /**
      * Model ArchivedCertificateOnStudentSubjectScore
@@ -268478,6 +269884,8 @@ export namespace Prisma {
         coSupervisedTheses?: boolean | ExpertProfile$coSupervisedThesesArgs<ExtArgs>
         supervisorResearchTopic?: boolean | ExpertProfile$supervisorResearchTopicArgs<ExtArgs>
         coSupervisorResearchTopic?: boolean | ExpertProfile$coSupervisorResearchTopicArgs<ExtArgs>
+        supervisorInternship?: boolean | ExpertProfile$supervisorInternshipArgs<ExtArgs>
+        coSupervisorInternship?: boolean | ExpertProfile$coSupervisorInternshipArgs<ExtArgs>
         subjectClass?: boolean | ExpertProfile$subjectClassArgs<ExtArgs>
         councilMemberships?: boolean | ExpertProfile$councilMembershipsArgs<ExtArgs>
         _count?: boolean | ExpertProfileCountOutputTypeDefaultArgs<ExtArgs>
@@ -268570,6 +269978,8 @@ export namespace Prisma {
         coSupervisedTheses?: boolean | ExpertProfile$coSupervisedThesesArgs<ExtArgs>
         supervisorResearchTopic?: boolean | ExpertProfile$supervisorResearchTopicArgs<ExtArgs>
         coSupervisorResearchTopic?: boolean | ExpertProfile$coSupervisorResearchTopicArgs<ExtArgs>
+        supervisorInternship?: boolean | ExpertProfile$supervisorInternshipArgs<ExtArgs>
+        coSupervisorInternship?: boolean | ExpertProfile$coSupervisorInternshipArgs<ExtArgs>
         subjectClass?: boolean | ExpertProfile$subjectClassArgs<ExtArgs>
         councilMemberships?: boolean | ExpertProfile$councilMembershipsArgs<ExtArgs>
         _count?: boolean | ExpertProfileCountOutputTypeDefaultArgs<ExtArgs>
@@ -268589,6 +269999,8 @@ export namespace Prisma {
             coSupervisedTheses: Prisma.$ThesisProjectPayload<ExtArgs>[]
             supervisorResearchTopic: Prisma.$StudentResearchTopicPayload<ExtArgs>[]
             coSupervisorResearchTopic: Prisma.$StudentResearchTopicPayload<ExtArgs>[]
+            supervisorInternship: Prisma.$StudentInternshipPayload<ExtArgs>[]
+            coSupervisorInternship: Prisma.$StudentInternshipPayload<ExtArgs>[]
             subjectClass: Prisma.$SubjectClassPayload<ExtArgs>[]
             councilMemberships: Prisma.$CouncilMemberPayload<ExtArgs>[]
         }
@@ -269136,6 +270548,52 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: StudentResearchTopicScalarFieldEnum | StudentResearchTopicScalarFieldEnum[]
+    };
+    /**
+     * ExpertProfile.supervisorInternship
+     */
+    export type ExpertProfile$supervisorInternshipArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the StudentInternship
+         */
+        select?: StudentInternshipSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the StudentInternship
+         */
+        omit?: StudentInternshipOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: StudentInternshipInclude<ExtArgs> | null
+        where?: StudentInternshipWhereInput
+        orderBy?: StudentInternshipOrderByWithRelationInput | StudentInternshipOrderByWithRelationInput[]
+        cursor?: StudentInternshipWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: StudentInternshipScalarFieldEnum | StudentInternshipScalarFieldEnum[]
+    };
+    /**
+     * ExpertProfile.coSupervisorInternship
+     */
+    export type ExpertProfile$coSupervisorInternshipArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the StudentInternship
+         */
+        select?: StudentInternshipSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the StudentInternship
+         */
+        omit?: StudentInternshipOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: StudentInternshipInclude<ExtArgs> | null
+        where?: StudentInternshipWhereInput
+        orderBy?: StudentInternshipOrderByWithRelationInput | StudentInternshipOrderByWithRelationInput[]
+        cursor?: StudentInternshipWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: StudentInternshipScalarFieldEnum | StudentInternshipScalarFieldEnum[]
     };
     /**
      * ExpertProfile.subjectClass
@@ -350203,6 +351661,7 @@ export namespace Prisma {
     export type StudentSubjectScoreScalarFieldEnum = (typeof StudentSubjectScoreScalarFieldEnum)[keyof typeof StudentSubjectScoreScalarFieldEnum];
     export type StudentSubjectScoreHistoryScalarFieldEnum = (typeof StudentSubjectScoreHistoryScalarFieldEnum)[keyof typeof StudentSubjectScoreHistoryScalarFieldEnum];
     export type StudentResearchTopicScalarFieldEnum = (typeof StudentResearchTopicScalarFieldEnum)[keyof typeof StudentResearchTopicScalarFieldEnum];
+    export type StudentInternshipScalarFieldEnum = (typeof StudentInternshipScalarFieldEnum)[keyof typeof StudentInternshipScalarFieldEnum];
     export type ArchivedCertificateOnStudentSubjectScoreScalarFieldEnum = (typeof ArchivedCertificateOnStudentSubjectScoreScalarFieldEnum)[keyof typeof ArchivedCertificateOnStudentSubjectScoreScalarFieldEnum];
     export type ArchivedCertificateScalarFieldEnum = (typeof ArchivedCertificateScalarFieldEnum)[keyof typeof ArchivedCertificateScalarFieldEnum];
     export type ArchivedAwardOnStudentSubjectScoreScalarFieldEnum = (typeof ArchivedAwardOnStudentSubjectScoreScalarFieldEnum)[keyof typeof ArchivedAwardOnStudentSubjectScoreScalarFieldEnum];
@@ -350472,6 +351931,7 @@ export namespace Prisma {
     export type StudentSubjectScoreOrderByRelevanceFieldEnum = (typeof StudentSubjectScoreOrderByRelevanceFieldEnum)[keyof typeof StudentSubjectScoreOrderByRelevanceFieldEnum];
     export type StudentSubjectScoreHistoryOrderByRelevanceFieldEnum = (typeof StudentSubjectScoreHistoryOrderByRelevanceFieldEnum)[keyof typeof StudentSubjectScoreHistoryOrderByRelevanceFieldEnum];
     export type StudentResearchTopicOrderByRelevanceFieldEnum = (typeof StudentResearchTopicOrderByRelevanceFieldEnum)[keyof typeof StudentResearchTopicOrderByRelevanceFieldEnum];
+    export type StudentInternshipOrderByRelevanceFieldEnum = (typeof StudentInternshipOrderByRelevanceFieldEnum)[keyof typeof StudentInternshipOrderByRelevanceFieldEnum];
     export type ArchivedCertificateOnStudentSubjectScoreOrderByRelevanceFieldEnum = (typeof ArchivedCertificateOnStudentSubjectScoreOrderByRelevanceFieldEnum)[keyof typeof ArchivedCertificateOnStudentSubjectScoreOrderByRelevanceFieldEnum];
     export type ArchivedCertificateOrderByRelevanceFieldEnum = (typeof ArchivedCertificateOrderByRelevanceFieldEnum)[keyof typeof ArchivedCertificateOrderByRelevanceFieldEnum];
     export type ArchivedAwardOnStudentSubjectScoreOrderByRelevanceFieldEnum = (typeof ArchivedAwardOnStudentSubjectScoreOrderByRelevanceFieldEnum)[keyof typeof ArchivedAwardOnStudentSubjectScoreOrderByRelevanceFieldEnum];
@@ -359742,6 +361202,7 @@ export namespace Prisma {
         student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
         examPaper?: XOR<ExamPaperNullableScalarRelationFilter, ExamPaperWhereInput> | null
         studentResearchTopic?: XOR<StudentResearchTopicNullableScalarRelationFilter, StudentResearchTopicWhereInput> | null
+        studentInternship?: XOR<StudentInternshipNullableScalarRelationFilter, StudentInternshipWhereInput> | null
         graduationGpaScores?: StudentGraduationApplicationListRelationFilter
         graduationSupplementaryScore?: StudentGraduationApplicationListRelationFilter
         certificates?: ArchivedCertificateOnStudentSubjectScoreListRelationFilter
@@ -359783,6 +361244,7 @@ export namespace Prisma {
         student?: StudentOrderByWithRelationInput
         examPaper?: ExamPaperOrderByWithRelationInput
         studentResearchTopic?: StudentResearchTopicOrderByWithRelationInput
+        studentInternship?: StudentInternshipOrderByWithRelationInput
         graduationGpaScores?: StudentGraduationApplicationOrderByRelationAggregateInput
         graduationSupplementaryScore?: StudentGraduationApplicationOrderByRelationAggregateInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreOrderByRelationAggregateInput
@@ -359829,6 +361291,7 @@ export namespace Prisma {
         student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
         examPaper?: XOR<ExamPaperNullableScalarRelationFilter, ExamPaperWhereInput> | null
         studentResearchTopic?: XOR<StudentResearchTopicNullableScalarRelationFilter, StudentResearchTopicWhereInput> | null
+        studentInternship?: XOR<StudentInternshipNullableScalarRelationFilter, StudentInternshipWhereInput> | null
         graduationGpaScores?: StudentGraduationApplicationListRelationFilter
         graduationSupplementaryScore?: StudentGraduationApplicationListRelationFilter
         certificates?: ArchivedCertificateOnStudentSubjectScoreListRelationFilter
@@ -360145,6 +361608,133 @@ export namespace Prisma {
         supervisorId?: StringNullableWithAggregatesFilter<"StudentResearchTopic"> | string | null
         coSupervisorId?: StringNullableWithAggregatesFilter<"StudentResearchTopic"> | string | null
         reportDate?: DateTimeNullableWithAggregatesFilter<"StudentResearchTopic"> | Date | string | null
+    };
+    export type StudentInternshipWhereInput = {
+        AND?: StudentInternshipWhereInput | StudentInternshipWhereInput[]
+        OR?: StudentInternshipWhereInput[]
+        NOT?: StudentInternshipWhereInput | StudentInternshipWhereInput[]
+        id?: StringFilter<"StudentInternship"> | string
+        code?: StringNullableFilter<"StudentInternship"> | string | null
+        active?: BoolFilter<"StudentInternship"> | boolean
+        description?: StringNullableFilter<"StudentInternship"> | string | null
+        deletedAt?: DateTimeNullableFilter<"StudentInternship"> | Date | string | null
+        createdAt?: DateTimeFilter<"StudentInternship"> | Date | string
+        updatedAt?: DateTimeFilter<"StudentInternship"> | Date | string
+        createdBy?: UuidNullableFilter<"StudentInternship"> | string | null
+        studentSubjectScoreId?: StringFilter<"StudentInternship"> | string
+        deadline?: DateTimeNullableFilter<"StudentInternship"> | Date | string | null
+        internshipContent?: StringNullableFilter<"StudentInternship"> | string | null
+        institution?: StringNullableFilter<"StudentInternship"> | string | null
+        unit?: StringNullableFilter<"StudentInternship"> | string | null
+        address?: StringNullableFilter<"StudentInternship"> | string | null
+        supervisorId?: StringNullableFilter<"StudentInternship"> | string | null
+        coSupervisorId?: StringNullableFilter<"StudentInternship"> | string | null
+        startDate?: DateTimeNullableFilter<"StudentInternship"> | Date | string | null
+        endDate?: DateTimeNullableFilter<"StudentInternship"> | Date | string | null
+        reportDate?: DateTimeNullableFilter<"StudentInternship"> | Date | string | null
+        studentSubjectScore?: XOR<StudentSubjectScoreScalarRelationFilter, StudentSubjectScoreWhereInput>
+        supervisor?: XOR<ExpertProfileNullableScalarRelationFilter, ExpertProfileWhereInput> | null
+        coSupervisor?: XOR<ExpertProfileNullableScalarRelationFilter, ExpertProfileWhereInput> | null
+    };
+    export type StudentInternshipOrderByWithRelationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrderInput | SortOrder
+        studentSubjectScoreId?: SortOrder
+        deadline?: SortOrderInput | SortOrder
+        internshipContent?: SortOrderInput | SortOrder
+        institution?: SortOrderInput | SortOrder
+        unit?: SortOrderInput | SortOrder
+        address?: SortOrderInput | SortOrder
+        supervisorId?: SortOrderInput | SortOrder
+        coSupervisorId?: SortOrderInput | SortOrder
+        startDate?: SortOrderInput | SortOrder
+        endDate?: SortOrderInput | SortOrder
+        reportDate?: SortOrderInput | SortOrder
+        studentSubjectScore?: StudentSubjectScoreOrderByWithRelationInput
+        supervisor?: ExpertProfileOrderByWithRelationInput
+        coSupervisor?: ExpertProfileOrderByWithRelationInput
+        _relevance?: StudentInternshipOrderByRelevanceInput
+    };
+    export type StudentInternshipWhereUniqueInput = Prisma.AtLeast<{
+        id?: string
+        code?: string
+        studentSubjectScoreId?: string
+        AND?: StudentInternshipWhereInput | StudentInternshipWhereInput[]
+        OR?: StudentInternshipWhereInput[]
+        NOT?: StudentInternshipWhereInput | StudentInternshipWhereInput[]
+        active?: BoolFilter<"StudentInternship"> | boolean
+        description?: StringNullableFilter<"StudentInternship"> | string | null
+        deletedAt?: DateTimeNullableFilter<"StudentInternship"> | Date | string | null
+        createdAt?: DateTimeFilter<"StudentInternship"> | Date | string
+        updatedAt?: DateTimeFilter<"StudentInternship"> | Date | string
+        createdBy?: UuidNullableFilter<"StudentInternship"> | string | null
+        deadline?: DateTimeNullableFilter<"StudentInternship"> | Date | string | null
+        internshipContent?: StringNullableFilter<"StudentInternship"> | string | null
+        institution?: StringNullableFilter<"StudentInternship"> | string | null
+        unit?: StringNullableFilter<"StudentInternship"> | string | null
+        address?: StringNullableFilter<"StudentInternship"> | string | null
+        supervisorId?: StringNullableFilter<"StudentInternship"> | string | null
+        coSupervisorId?: StringNullableFilter<"StudentInternship"> | string | null
+        startDate?: DateTimeNullableFilter<"StudentInternship"> | Date | string | null
+        endDate?: DateTimeNullableFilter<"StudentInternship"> | Date | string | null
+        reportDate?: DateTimeNullableFilter<"StudentInternship"> | Date | string | null
+        studentSubjectScore?: XOR<StudentSubjectScoreScalarRelationFilter, StudentSubjectScoreWhereInput>
+        supervisor?: XOR<ExpertProfileNullableScalarRelationFilter, ExpertProfileWhereInput> | null
+        coSupervisor?: XOR<ExpertProfileNullableScalarRelationFilter, ExpertProfileWhereInput> | null
+    }, "id" | "code" | "studentSubjectScoreId">;
+    export type StudentInternshipOrderByWithAggregationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrderInput | SortOrder
+        studentSubjectScoreId?: SortOrder
+        deadline?: SortOrderInput | SortOrder
+        internshipContent?: SortOrderInput | SortOrder
+        institution?: SortOrderInput | SortOrder
+        unit?: SortOrderInput | SortOrder
+        address?: SortOrderInput | SortOrder
+        supervisorId?: SortOrderInput | SortOrder
+        coSupervisorId?: SortOrderInput | SortOrder
+        startDate?: SortOrderInput | SortOrder
+        endDate?: SortOrderInput | SortOrder
+        reportDate?: SortOrderInput | SortOrder
+        _count?: StudentInternshipCountOrderByAggregateInput
+        _max?: StudentInternshipMaxOrderByAggregateInput
+        _min?: StudentInternshipMinOrderByAggregateInput
+    };
+    export type StudentInternshipScalarWhereWithAggregatesInput = {
+        AND?: StudentInternshipScalarWhereWithAggregatesInput | StudentInternshipScalarWhereWithAggregatesInput[]
+        OR?: StudentInternshipScalarWhereWithAggregatesInput[]
+        NOT?: StudentInternshipScalarWhereWithAggregatesInput | StudentInternshipScalarWhereWithAggregatesInput[]
+        id?: StringWithAggregatesFilter<"StudentInternship"> | string
+        code?: StringNullableWithAggregatesFilter<"StudentInternship"> | string | null
+        active?: BoolWithAggregatesFilter<"StudentInternship"> | boolean
+        description?: StringNullableWithAggregatesFilter<"StudentInternship"> | string | null
+        deletedAt?: DateTimeNullableWithAggregatesFilter<"StudentInternship"> | Date | string | null
+        createdAt?: DateTimeWithAggregatesFilter<"StudentInternship"> | Date | string
+        updatedAt?: DateTimeWithAggregatesFilter<"StudentInternship"> | Date | string
+        createdBy?: UuidNullableWithAggregatesFilter<"StudentInternship"> | string | null
+        studentSubjectScoreId?: StringWithAggregatesFilter<"StudentInternship"> | string
+        deadline?: DateTimeNullableWithAggregatesFilter<"StudentInternship"> | Date | string | null
+        internshipContent?: StringNullableWithAggregatesFilter<"StudentInternship"> | string | null
+        institution?: StringNullableWithAggregatesFilter<"StudentInternship"> | string | null
+        unit?: StringNullableWithAggregatesFilter<"StudentInternship"> | string | null
+        address?: StringNullableWithAggregatesFilter<"StudentInternship"> | string | null
+        supervisorId?: StringNullableWithAggregatesFilter<"StudentInternship"> | string | null
+        coSupervisorId?: StringNullableWithAggregatesFilter<"StudentInternship"> | string | null
+        startDate?: DateTimeNullableWithAggregatesFilter<"StudentInternship"> | Date | string | null
+        endDate?: DateTimeNullableWithAggregatesFilter<"StudentInternship"> | Date | string | null
+        reportDate?: DateTimeNullableWithAggregatesFilter<"StudentInternship"> | Date | string | null
     };
     export type ArchivedCertificateOnStudentSubjectScoreWhereInput = {
         AND?: ArchivedCertificateOnStudentSubjectScoreWhereInput | ArchivedCertificateOnStudentSubjectScoreWhereInput[]
@@ -369074,6 +370664,8 @@ export namespace Prisma {
         coSupervisedTheses?: ThesisProjectListRelationFilter
         supervisorResearchTopic?: StudentResearchTopicListRelationFilter
         coSupervisorResearchTopic?: StudentResearchTopicListRelationFilter
+        supervisorInternship?: StudentInternshipListRelationFilter
+        coSupervisorInternship?: StudentInternshipListRelationFilter
         subjectClass?: SubjectClassListRelationFilter
         councilMemberships?: CouncilMemberListRelationFilter
     };
@@ -369108,6 +370700,8 @@ export namespace Prisma {
         coSupervisedTheses?: ThesisProjectOrderByRelationAggregateInput
         supervisorResearchTopic?: StudentResearchTopicOrderByRelationAggregateInput
         coSupervisorResearchTopic?: StudentResearchTopicOrderByRelationAggregateInput
+        supervisorInternship?: StudentInternshipOrderByRelationAggregateInput
+        coSupervisorInternship?: StudentInternshipOrderByRelationAggregateInput
         subjectClass?: SubjectClassOrderByRelationAggregateInput
         councilMemberships?: CouncilMemberOrderByRelationAggregateInput
         _relevance?: ExpertProfileOrderByRelevanceInput
@@ -369146,6 +370740,8 @@ export namespace Prisma {
         coSupervisedTheses?: ThesisProjectListRelationFilter
         supervisorResearchTopic?: StudentResearchTopicListRelationFilter
         coSupervisorResearchTopic?: StudentResearchTopicListRelationFilter
+        supervisorInternship?: StudentInternshipListRelationFilter
+        coSupervisorInternship?: StudentInternshipListRelationFilter
         subjectClass?: SubjectClassListRelationFilter
         councilMemberships?: CouncilMemberListRelationFilter
     }, "id" | "code" | "lecturerId">;
@@ -389211,6 +390807,7 @@ export namespace Prisma {
         student: StudentCreateNestedOneWithoutSubjectClassStudentInput
         examPaper?: ExamPaperCreateNestedOneWithoutStudentSubjectScoreInput
         studentResearchTopic?: StudentResearchTopicCreateNestedOneWithoutStudentSubjectScoreInput
+        studentInternship?: StudentInternshipCreateNestedOneWithoutStudentSubjectScoreInput
         graduationGpaScores?: StudentGraduationApplicationCreateNestedManyWithoutGpaScoreInput
         graduationSupplementaryScore?: StudentGraduationApplicationCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
@@ -389249,6 +390846,7 @@ export namespace Prisma {
         isImproving?: boolean
         examPaper?: ExamPaperUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
         studentResearchTopic?: StudentResearchTopicUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
+        studentInternship?: StudentInternshipUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
         graduationGpaScores?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutGpaScoreInput
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
@@ -389287,6 +390885,7 @@ export namespace Prisma {
         student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
         examPaper?: ExamPaperUpdateOneWithoutStudentSubjectScoreNestedInput
         studentResearchTopic?: StudentResearchTopicUpdateOneWithoutStudentSubjectScoreNestedInput
+        studentInternship?: StudentInternshipUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationGpaScores?: StudentGraduationApplicationUpdateManyWithoutGpaScoreNestedInput
         graduationSupplementaryScore?: StudentGraduationApplicationUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -389325,6 +390924,7 @@ export namespace Prisma {
         isImproving?: BoolFieldUpdateOperationsInput | boolean
         examPaper?: ExamPaperUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
         studentResearchTopic?: StudentResearchTopicUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
+        studentInternship?: StudentInternshipUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationGpaScores?: StudentGraduationApplicationUncheckedUpdateManyWithoutGpaScoreNestedInput
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -389690,6 +391290,150 @@ export namespace Prisma {
         mainContent?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        reportDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    };
+    export type StudentInternshipCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        deadline?: Date | string | null
+        internshipContent?: string | null
+        institution?: string | null
+        unit?: string | null
+        address?: string | null
+        startDate?: Date | string | null
+        endDate?: Date | string | null
+        reportDate?: Date | string | null
+        studentSubjectScore: StudentSubjectScoreCreateNestedOneWithoutStudentInternshipInput
+        supervisor?: ExpertProfileCreateNestedOneWithoutSupervisorInternshipInput
+        coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisorInternshipInput
+    };
+    export type StudentInternshipUncheckedCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        studentSubjectScoreId: string
+        deadline?: Date | string | null
+        internshipContent?: string | null
+        institution?: string | null
+        unit?: string | null
+        address?: string | null
+        supervisorId?: string | null
+        coSupervisorId?: string | null
+        startDate?: Date | string | null
+        endDate?: Date | string | null
+        reportDate?: Date | string | null
+    };
+    export type StudentInternshipUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        internshipContent?: NullableStringFieldUpdateOperationsInput | string | null
+        institution?: NullableStringFieldUpdateOperationsInput | string | null
+        unit?: NullableStringFieldUpdateOperationsInput | string | null
+        address?: NullableStringFieldUpdateOperationsInput | string | null
+        startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reportDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        studentSubjectScore?: StudentSubjectScoreUpdateOneRequiredWithoutStudentInternshipNestedInput
+        supervisor?: ExpertProfileUpdateOneWithoutSupervisorInternshipNestedInput
+        coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisorInternshipNestedInput
+    };
+    export type StudentInternshipUncheckedUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        studentSubjectScoreId?: StringFieldUpdateOperationsInput | string
+        deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        internshipContent?: NullableStringFieldUpdateOperationsInput | string | null
+        institution?: NullableStringFieldUpdateOperationsInput | string | null
+        unit?: NullableStringFieldUpdateOperationsInput | string | null
+        address?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reportDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    };
+    export type StudentInternshipCreateManyInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        studentSubjectScoreId: string
+        deadline?: Date | string | null
+        internshipContent?: string | null
+        institution?: string | null
+        unit?: string | null
+        address?: string | null
+        supervisorId?: string | null
+        coSupervisorId?: string | null
+        startDate?: Date | string | null
+        endDate?: Date | string | null
+        reportDate?: Date | string | null
+    };
+    export type StudentInternshipUpdateManyMutationInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        internshipContent?: NullableStringFieldUpdateOperationsInput | string | null
+        institution?: NullableStringFieldUpdateOperationsInput | string | null
+        unit?: NullableStringFieldUpdateOperationsInput | string | null
+        address?: NullableStringFieldUpdateOperationsInput | string | null
+        startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reportDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    };
+    export type StudentInternshipUncheckedUpdateManyInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        studentSubjectScoreId?: StringFieldUpdateOperationsInput | string
+        deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        internshipContent?: NullableStringFieldUpdateOperationsInput | string | null
+        institution?: NullableStringFieldUpdateOperationsInput | string | null
+        unit?: NullableStringFieldUpdateOperationsInput | string | null
+        address?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         reportDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     };
     export type ArchivedCertificateOnStudentSubjectScoreCreateInput = {
@@ -399797,6 +401541,8 @@ export namespace Prisma {
         coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
         supervisorResearchTopic?: StudentResearchTopicCreateNestedManyWithoutSupervisorInput
         coSupervisorResearchTopic?: StudentResearchTopicCreateNestedManyWithoutCoSupervisorInput
+        supervisorInternship?: StudentInternshipCreateNestedManyWithoutSupervisorInput
+        coSupervisorInternship?: StudentInternshipCreateNestedManyWithoutCoSupervisorInput
         subjectClass?: SubjectClassCreateNestedManyWithoutExpertProfileInput
         councilMemberships?: CouncilMemberCreateNestedManyWithoutExpertInput
     };
@@ -399830,6 +401576,8 @@ export namespace Prisma {
         coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
         supervisorResearchTopic?: StudentResearchTopicUncheckedCreateNestedManyWithoutSupervisorInput
         coSupervisorResearchTopic?: StudentResearchTopicUncheckedCreateNestedManyWithoutCoSupervisorInput
+        supervisorInternship?: StudentInternshipUncheckedCreateNestedManyWithoutSupervisorInput
+        coSupervisorInternship?: StudentInternshipUncheckedCreateNestedManyWithoutCoSupervisorInput
         subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExpertProfileInput
         councilMemberships?: CouncilMemberUncheckedCreateNestedManyWithoutExpertInput
     };
@@ -399863,6 +401611,8 @@ export namespace Prisma {
         coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
         supervisorResearchTopic?: StudentResearchTopicUpdateManyWithoutSupervisorNestedInput
         coSupervisorResearchTopic?: StudentResearchTopicUpdateManyWithoutCoSupervisorNestedInput
+        supervisorInternship?: StudentInternshipUpdateManyWithoutSupervisorNestedInput
+        coSupervisorInternship?: StudentInternshipUpdateManyWithoutCoSupervisorNestedInput
         subjectClass?: SubjectClassUpdateManyWithoutExpertProfileNestedInput
         councilMemberships?: CouncilMemberUpdateManyWithoutExpertNestedInput
     };
@@ -399896,6 +401646,8 @@ export namespace Prisma {
         coSupervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutCoSupervisorNestedInput
         supervisorResearchTopic?: StudentResearchTopicUncheckedUpdateManyWithoutSupervisorNestedInput
         coSupervisorResearchTopic?: StudentResearchTopicUncheckedUpdateManyWithoutCoSupervisorNestedInput
+        supervisorInternship?: StudentInternshipUncheckedUpdateManyWithoutSupervisorNestedInput
+        coSupervisorInternship?: StudentInternshipUncheckedUpdateManyWithoutCoSupervisorNestedInput
         subjectClass?: SubjectClassUncheckedUpdateManyWithoutExpertProfileNestedInput
         councilMemberships?: CouncilMemberUncheckedUpdateManyWithoutExpertNestedInput
     };
@@ -417350,6 +419102,10 @@ export namespace Prisma {
         is?: StudentResearchTopicWhereInput | null
         isNot?: StudentResearchTopicWhereInput | null
     };
+    export type StudentInternshipNullableScalarRelationFilter = {
+        is?: StudentInternshipWhereInput | null
+        isNot?: StudentInternshipWhereInput | null
+    };
     export type StudentGraduationApplicationListRelationFilter = {
         every?: StudentGraduationApplicationWhereInput
         some?: StudentGraduationApplicationWhereInput
@@ -417680,6 +419436,74 @@ export namespace Prisma {
         mainContent?: SortOrder
         supervisorId?: SortOrder
         coSupervisorId?: SortOrder
+        reportDate?: SortOrder
+    };
+    export type StudentInternshipOrderByRelevanceInput = {
+        fields: StudentInternshipOrderByRelevanceFieldEnum | StudentInternshipOrderByRelevanceFieldEnum[]
+        sort: SortOrder
+        search: string
+    };
+    export type StudentInternshipCountOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        studentSubjectScoreId?: SortOrder
+        deadline?: SortOrder
+        internshipContent?: SortOrder
+        institution?: SortOrder
+        unit?: SortOrder
+        address?: SortOrder
+        supervisorId?: SortOrder
+        coSupervisorId?: SortOrder
+        startDate?: SortOrder
+        endDate?: SortOrder
+        reportDate?: SortOrder
+    };
+    export type StudentInternshipMaxOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        studentSubjectScoreId?: SortOrder
+        deadline?: SortOrder
+        internshipContent?: SortOrder
+        institution?: SortOrder
+        unit?: SortOrder
+        address?: SortOrder
+        supervisorId?: SortOrder
+        coSupervisorId?: SortOrder
+        startDate?: SortOrder
+        endDate?: SortOrder
+        reportDate?: SortOrder
+    };
+    export type StudentInternshipMinOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        studentSubjectScoreId?: SortOrder
+        deadline?: SortOrder
+        internshipContent?: SortOrder
+        institution?: SortOrder
+        unit?: SortOrder
+        address?: SortOrder
+        supervisorId?: SortOrder
+        coSupervisorId?: SortOrder
+        startDate?: SortOrder
+        endDate?: SortOrder
         reportDate?: SortOrder
     };
     export type ArchivedCertificateScalarRelationFilter = {
@@ -423926,12 +425750,20 @@ export namespace Prisma {
         some?: StudentResearchTopicWhereInput
         none?: StudentResearchTopicWhereInput
     };
+    export type StudentInternshipListRelationFilter = {
+        every?: StudentInternshipWhereInput
+        some?: StudentInternshipWhereInput
+        none?: StudentInternshipWhereInput
+    };
     export type CouncilMemberListRelationFilter = {
         every?: CouncilMemberWhereInput
         some?: CouncilMemberWhereInput
         none?: CouncilMemberWhereInput
     };
     export type StudentResearchTopicOrderByRelationAggregateInput = {
+        _count?: SortOrder
+    };
+    export type StudentInternshipOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
     export type CouncilMemberOrderByRelationAggregateInput = {
@@ -436926,6 +438758,11 @@ export namespace Prisma {
         connectOrCreate?: StudentResearchTopicCreateOrConnectWithoutStudentSubjectScoreInput
         connect?: StudentResearchTopicWhereUniqueInput
     };
+    export type StudentInternshipCreateNestedOneWithoutStudentSubjectScoreInput = {
+        create?: XOR<StudentInternshipCreateWithoutStudentSubjectScoreInput, StudentInternshipUncheckedCreateWithoutStudentSubjectScoreInput>
+        connectOrCreate?: StudentInternshipCreateOrConnectWithoutStudentSubjectScoreInput
+        connect?: StudentInternshipWhereUniqueInput
+    };
     export type StudentGraduationApplicationCreateNestedManyWithoutGpaScoreInput = {
         create?: XOR<StudentGraduationApplicationCreateWithoutGpaScoreInput, StudentGraduationApplicationUncheckedCreateWithoutGpaScoreInput> | StudentGraduationApplicationCreateWithoutGpaScoreInput[] | StudentGraduationApplicationUncheckedCreateWithoutGpaScoreInput[]
         connectOrCreate?: StudentGraduationApplicationCreateOrConnectWithoutGpaScoreInput | StudentGraduationApplicationCreateOrConnectWithoutGpaScoreInput[]
@@ -436975,6 +438812,11 @@ export namespace Prisma {
         create?: XOR<StudentResearchTopicCreateWithoutStudentSubjectScoreInput, StudentResearchTopicUncheckedCreateWithoutStudentSubjectScoreInput>
         connectOrCreate?: StudentResearchTopicCreateOrConnectWithoutStudentSubjectScoreInput
         connect?: StudentResearchTopicWhereUniqueInput
+    };
+    export type StudentInternshipUncheckedCreateNestedOneWithoutStudentSubjectScoreInput = {
+        create?: XOR<StudentInternshipCreateWithoutStudentSubjectScoreInput, StudentInternshipUncheckedCreateWithoutStudentSubjectScoreInput>
+        connectOrCreate?: StudentInternshipCreateOrConnectWithoutStudentSubjectScoreInput
+        connect?: StudentInternshipWhereUniqueInput
     };
     export type StudentGraduationApplicationUncheckedCreateNestedManyWithoutGpaScoreInput = {
         create?: XOR<StudentGraduationApplicationCreateWithoutGpaScoreInput, StudentGraduationApplicationUncheckedCreateWithoutGpaScoreInput> | StudentGraduationApplicationCreateWithoutGpaScoreInput[] | StudentGraduationApplicationUncheckedCreateWithoutGpaScoreInput[]
@@ -437070,6 +438912,15 @@ export namespace Prisma {
         delete?: StudentResearchTopicWhereInput | boolean
         connect?: StudentResearchTopicWhereUniqueInput
         update?: XOR<XOR<StudentResearchTopicUpdateToOneWithWhereWithoutStudentSubjectScoreInput, StudentResearchTopicUpdateWithoutStudentSubjectScoreInput>, StudentResearchTopicUncheckedUpdateWithoutStudentSubjectScoreInput>
+    };
+    export type StudentInternshipUpdateOneWithoutStudentSubjectScoreNestedInput = {
+        create?: XOR<StudentInternshipCreateWithoutStudentSubjectScoreInput, StudentInternshipUncheckedCreateWithoutStudentSubjectScoreInput>
+        connectOrCreate?: StudentInternshipCreateOrConnectWithoutStudentSubjectScoreInput
+        upsert?: StudentInternshipUpsertWithoutStudentSubjectScoreInput
+        disconnect?: StudentInternshipWhereInput | boolean
+        delete?: StudentInternshipWhereInput | boolean
+        connect?: StudentInternshipWhereUniqueInput
+        update?: XOR<XOR<StudentInternshipUpdateToOneWithWhereWithoutStudentSubjectScoreInput, StudentInternshipUpdateWithoutStudentSubjectScoreInput>, StudentInternshipUncheckedUpdateWithoutStudentSubjectScoreInput>
     };
     export type StudentGraduationApplicationUpdateManyWithoutGpaScoreNestedInput = {
         create?: XOR<StudentGraduationApplicationCreateWithoutGpaScoreInput, StudentGraduationApplicationUncheckedCreateWithoutGpaScoreInput> | StudentGraduationApplicationCreateWithoutGpaScoreInput[] | StudentGraduationApplicationUncheckedCreateWithoutGpaScoreInput[]
@@ -437177,6 +439028,15 @@ export namespace Prisma {
         delete?: StudentResearchTopicWhereInput | boolean
         connect?: StudentResearchTopicWhereUniqueInput
         update?: XOR<XOR<StudentResearchTopicUpdateToOneWithWhereWithoutStudentSubjectScoreInput, StudentResearchTopicUpdateWithoutStudentSubjectScoreInput>, StudentResearchTopicUncheckedUpdateWithoutStudentSubjectScoreInput>
+    };
+    export type StudentInternshipUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput = {
+        create?: XOR<StudentInternshipCreateWithoutStudentSubjectScoreInput, StudentInternshipUncheckedCreateWithoutStudentSubjectScoreInput>
+        connectOrCreate?: StudentInternshipCreateOrConnectWithoutStudentSubjectScoreInput
+        upsert?: StudentInternshipUpsertWithoutStudentSubjectScoreInput
+        disconnect?: StudentInternshipWhereInput | boolean
+        delete?: StudentInternshipWhereInput | boolean
+        connect?: StudentInternshipWhereUniqueInput
+        update?: XOR<XOR<StudentInternshipUpdateToOneWithWhereWithoutStudentSubjectScoreInput, StudentInternshipUpdateWithoutStudentSubjectScoreInput>, StudentInternshipUncheckedUpdateWithoutStudentSubjectScoreInput>
     };
     export type StudentGraduationApplicationUncheckedUpdateManyWithoutGpaScoreNestedInput = {
         create?: XOR<StudentGraduationApplicationCreateWithoutGpaScoreInput, StudentGraduationApplicationUncheckedCreateWithoutGpaScoreInput> | StudentGraduationApplicationCreateWithoutGpaScoreInput[] | StudentGraduationApplicationUncheckedCreateWithoutGpaScoreInput[]
@@ -437332,6 +439192,46 @@ export namespace Prisma {
         delete?: ExpertProfileWhereInput | boolean
         connect?: ExpertProfileWhereUniqueInput
         update?: XOR<XOR<ExpertProfileUpdateToOneWithWhereWithoutCoSupervisorResearchTopicInput, ExpertProfileUpdateWithoutCoSupervisorResearchTopicInput>, ExpertProfileUncheckedUpdateWithoutCoSupervisorResearchTopicInput>
+    };
+    export type StudentSubjectScoreCreateNestedOneWithoutStudentInternshipInput = {
+        create?: XOR<StudentSubjectScoreCreateWithoutStudentInternshipInput, StudentSubjectScoreUncheckedCreateWithoutStudentInternshipInput>
+        connectOrCreate?: StudentSubjectScoreCreateOrConnectWithoutStudentInternshipInput
+        connect?: StudentSubjectScoreWhereUniqueInput
+    };
+    export type ExpertProfileCreateNestedOneWithoutSupervisorInternshipInput = {
+        create?: XOR<ExpertProfileCreateWithoutSupervisorInternshipInput, ExpertProfileUncheckedCreateWithoutSupervisorInternshipInput>
+        connectOrCreate?: ExpertProfileCreateOrConnectWithoutSupervisorInternshipInput
+        connect?: ExpertProfileWhereUniqueInput
+    };
+    export type ExpertProfileCreateNestedOneWithoutCoSupervisorInternshipInput = {
+        create?: XOR<ExpertProfileCreateWithoutCoSupervisorInternshipInput, ExpertProfileUncheckedCreateWithoutCoSupervisorInternshipInput>
+        connectOrCreate?: ExpertProfileCreateOrConnectWithoutCoSupervisorInternshipInput
+        connect?: ExpertProfileWhereUniqueInput
+    };
+    export type StudentSubjectScoreUpdateOneRequiredWithoutStudentInternshipNestedInput = {
+        create?: XOR<StudentSubjectScoreCreateWithoutStudentInternshipInput, StudentSubjectScoreUncheckedCreateWithoutStudentInternshipInput>
+        connectOrCreate?: StudentSubjectScoreCreateOrConnectWithoutStudentInternshipInput
+        upsert?: StudentSubjectScoreUpsertWithoutStudentInternshipInput
+        connect?: StudentSubjectScoreWhereUniqueInput
+        update?: XOR<XOR<StudentSubjectScoreUpdateToOneWithWhereWithoutStudentInternshipInput, StudentSubjectScoreUpdateWithoutStudentInternshipInput>, StudentSubjectScoreUncheckedUpdateWithoutStudentInternshipInput>
+    };
+    export type ExpertProfileUpdateOneWithoutSupervisorInternshipNestedInput = {
+        create?: XOR<ExpertProfileCreateWithoutSupervisorInternshipInput, ExpertProfileUncheckedCreateWithoutSupervisorInternshipInput>
+        connectOrCreate?: ExpertProfileCreateOrConnectWithoutSupervisorInternshipInput
+        upsert?: ExpertProfileUpsertWithoutSupervisorInternshipInput
+        disconnect?: ExpertProfileWhereInput | boolean
+        delete?: ExpertProfileWhereInput | boolean
+        connect?: ExpertProfileWhereUniqueInput
+        update?: XOR<XOR<ExpertProfileUpdateToOneWithWhereWithoutSupervisorInternshipInput, ExpertProfileUpdateWithoutSupervisorInternshipInput>, ExpertProfileUncheckedUpdateWithoutSupervisorInternshipInput>
+    };
+    export type ExpertProfileUpdateOneWithoutCoSupervisorInternshipNestedInput = {
+        create?: XOR<ExpertProfileCreateWithoutCoSupervisorInternshipInput, ExpertProfileUncheckedCreateWithoutCoSupervisorInternshipInput>
+        connectOrCreate?: ExpertProfileCreateOrConnectWithoutCoSupervisorInternshipInput
+        upsert?: ExpertProfileUpsertWithoutCoSupervisorInternshipInput
+        disconnect?: ExpertProfileWhereInput | boolean
+        delete?: ExpertProfileWhereInput | boolean
+        connect?: ExpertProfileWhereUniqueInput
+        update?: XOR<XOR<ExpertProfileUpdateToOneWithWhereWithoutCoSupervisorInternshipInput, ExpertProfileUpdateWithoutCoSupervisorInternshipInput>, ExpertProfileUncheckedUpdateWithoutCoSupervisorInternshipInput>
     };
     export type StudentSubjectScoreCreateNestedOneWithoutCertificatesInput = {
         create?: XOR<StudentSubjectScoreCreateWithoutCertificatesInput, StudentSubjectScoreUncheckedCreateWithoutCertificatesInput>
@@ -447518,6 +449418,18 @@ export namespace Prisma {
         createMany?: StudentResearchTopicCreateManyCoSupervisorInputEnvelope
         connect?: StudentResearchTopicWhereUniqueInput | StudentResearchTopicWhereUniqueInput[]
     };
+    export type StudentInternshipCreateNestedManyWithoutSupervisorInput = {
+        create?: XOR<StudentInternshipCreateWithoutSupervisorInput, StudentInternshipUncheckedCreateWithoutSupervisorInput> | StudentInternshipCreateWithoutSupervisorInput[] | StudentInternshipUncheckedCreateWithoutSupervisorInput[]
+        connectOrCreate?: StudentInternshipCreateOrConnectWithoutSupervisorInput | StudentInternshipCreateOrConnectWithoutSupervisorInput[]
+        createMany?: StudentInternshipCreateManySupervisorInputEnvelope
+        connect?: StudentInternshipWhereUniqueInput | StudentInternshipWhereUniqueInput[]
+    };
+    export type StudentInternshipCreateNestedManyWithoutCoSupervisorInput = {
+        create?: XOR<StudentInternshipCreateWithoutCoSupervisorInput, StudentInternshipUncheckedCreateWithoutCoSupervisorInput> | StudentInternshipCreateWithoutCoSupervisorInput[] | StudentInternshipUncheckedCreateWithoutCoSupervisorInput[]
+        connectOrCreate?: StudentInternshipCreateOrConnectWithoutCoSupervisorInput | StudentInternshipCreateOrConnectWithoutCoSupervisorInput[]
+        createMany?: StudentInternshipCreateManyCoSupervisorInputEnvelope
+        connect?: StudentInternshipWhereUniqueInput | StudentInternshipWhereUniqueInput[]
+    };
     export type SubjectClassCreateNestedManyWithoutExpertProfileInput = {
         create?: XOR<SubjectClassCreateWithoutExpertProfileInput, SubjectClassUncheckedCreateWithoutExpertProfileInput> | SubjectClassCreateWithoutExpertProfileInput[] | SubjectClassUncheckedCreateWithoutExpertProfileInput[]
         connectOrCreate?: SubjectClassCreateOrConnectWithoutExpertProfileInput | SubjectClassCreateOrConnectWithoutExpertProfileInput[]
@@ -447557,6 +449469,18 @@ export namespace Prisma {
         connectOrCreate?: StudentResearchTopicCreateOrConnectWithoutCoSupervisorInput | StudentResearchTopicCreateOrConnectWithoutCoSupervisorInput[]
         createMany?: StudentResearchTopicCreateManyCoSupervisorInputEnvelope
         connect?: StudentResearchTopicWhereUniqueInput | StudentResearchTopicWhereUniqueInput[]
+    };
+    export type StudentInternshipUncheckedCreateNestedManyWithoutSupervisorInput = {
+        create?: XOR<StudentInternshipCreateWithoutSupervisorInput, StudentInternshipUncheckedCreateWithoutSupervisorInput> | StudentInternshipCreateWithoutSupervisorInput[] | StudentInternshipUncheckedCreateWithoutSupervisorInput[]
+        connectOrCreate?: StudentInternshipCreateOrConnectWithoutSupervisorInput | StudentInternshipCreateOrConnectWithoutSupervisorInput[]
+        createMany?: StudentInternshipCreateManySupervisorInputEnvelope
+        connect?: StudentInternshipWhereUniqueInput | StudentInternshipWhereUniqueInput[]
+    };
+    export type StudentInternshipUncheckedCreateNestedManyWithoutCoSupervisorInput = {
+        create?: XOR<StudentInternshipCreateWithoutCoSupervisorInput, StudentInternshipUncheckedCreateWithoutCoSupervisorInput> | StudentInternshipCreateWithoutCoSupervisorInput[] | StudentInternshipUncheckedCreateWithoutCoSupervisorInput[]
+        connectOrCreate?: StudentInternshipCreateOrConnectWithoutCoSupervisorInput | StudentInternshipCreateOrConnectWithoutCoSupervisorInput[]
+        createMany?: StudentInternshipCreateManyCoSupervisorInputEnvelope
+        connect?: StudentInternshipWhereUniqueInput | StudentInternshipWhereUniqueInput[]
     };
     export type SubjectClassUncheckedCreateNestedManyWithoutExpertProfileInput = {
         create?: XOR<SubjectClassCreateWithoutExpertProfileInput, SubjectClassUncheckedCreateWithoutExpertProfileInput> | SubjectClassCreateWithoutExpertProfileInput[] | SubjectClassUncheckedCreateWithoutExpertProfileInput[]
@@ -447641,6 +449565,32 @@ export namespace Prisma {
         update?: StudentResearchTopicUpdateWithWhereUniqueWithoutCoSupervisorInput | StudentResearchTopicUpdateWithWhereUniqueWithoutCoSupervisorInput[]
         updateMany?: StudentResearchTopicUpdateManyWithWhereWithoutCoSupervisorInput | StudentResearchTopicUpdateManyWithWhereWithoutCoSupervisorInput[]
         deleteMany?: StudentResearchTopicScalarWhereInput | StudentResearchTopicScalarWhereInput[]
+    };
+    export type StudentInternshipUpdateManyWithoutSupervisorNestedInput = {
+        create?: XOR<StudentInternshipCreateWithoutSupervisorInput, StudentInternshipUncheckedCreateWithoutSupervisorInput> | StudentInternshipCreateWithoutSupervisorInput[] | StudentInternshipUncheckedCreateWithoutSupervisorInput[]
+        connectOrCreate?: StudentInternshipCreateOrConnectWithoutSupervisorInput | StudentInternshipCreateOrConnectWithoutSupervisorInput[]
+        upsert?: StudentInternshipUpsertWithWhereUniqueWithoutSupervisorInput | StudentInternshipUpsertWithWhereUniqueWithoutSupervisorInput[]
+        createMany?: StudentInternshipCreateManySupervisorInputEnvelope
+        set?: StudentInternshipWhereUniqueInput | StudentInternshipWhereUniqueInput[]
+        disconnect?: StudentInternshipWhereUniqueInput | StudentInternshipWhereUniqueInput[]
+        delete?: StudentInternshipWhereUniqueInput | StudentInternshipWhereUniqueInput[]
+        connect?: StudentInternshipWhereUniqueInput | StudentInternshipWhereUniqueInput[]
+        update?: StudentInternshipUpdateWithWhereUniqueWithoutSupervisorInput | StudentInternshipUpdateWithWhereUniqueWithoutSupervisorInput[]
+        updateMany?: StudentInternshipUpdateManyWithWhereWithoutSupervisorInput | StudentInternshipUpdateManyWithWhereWithoutSupervisorInput[]
+        deleteMany?: StudentInternshipScalarWhereInput | StudentInternshipScalarWhereInput[]
+    };
+    export type StudentInternshipUpdateManyWithoutCoSupervisorNestedInput = {
+        create?: XOR<StudentInternshipCreateWithoutCoSupervisorInput, StudentInternshipUncheckedCreateWithoutCoSupervisorInput> | StudentInternshipCreateWithoutCoSupervisorInput[] | StudentInternshipUncheckedCreateWithoutCoSupervisorInput[]
+        connectOrCreate?: StudentInternshipCreateOrConnectWithoutCoSupervisorInput | StudentInternshipCreateOrConnectWithoutCoSupervisorInput[]
+        upsert?: StudentInternshipUpsertWithWhereUniqueWithoutCoSupervisorInput | StudentInternshipUpsertWithWhereUniqueWithoutCoSupervisorInput[]
+        createMany?: StudentInternshipCreateManyCoSupervisorInputEnvelope
+        set?: StudentInternshipWhereUniqueInput | StudentInternshipWhereUniqueInput[]
+        disconnect?: StudentInternshipWhereUniqueInput | StudentInternshipWhereUniqueInput[]
+        delete?: StudentInternshipWhereUniqueInput | StudentInternshipWhereUniqueInput[]
+        connect?: StudentInternshipWhereUniqueInput | StudentInternshipWhereUniqueInput[]
+        update?: StudentInternshipUpdateWithWhereUniqueWithoutCoSupervisorInput | StudentInternshipUpdateWithWhereUniqueWithoutCoSupervisorInput[]
+        updateMany?: StudentInternshipUpdateManyWithWhereWithoutCoSupervisorInput | StudentInternshipUpdateManyWithWhereWithoutCoSupervisorInput[]
+        deleteMany?: StudentInternshipScalarWhereInput | StudentInternshipScalarWhereInput[]
     };
     export type SubjectClassUpdateManyWithoutExpertProfileNestedInput = {
         create?: XOR<SubjectClassCreateWithoutExpertProfileInput, SubjectClassUncheckedCreateWithoutExpertProfileInput> | SubjectClassCreateWithoutExpertProfileInput[] | SubjectClassUncheckedCreateWithoutExpertProfileInput[]
@@ -447730,6 +449680,32 @@ export namespace Prisma {
         update?: StudentResearchTopicUpdateWithWhereUniqueWithoutCoSupervisorInput | StudentResearchTopicUpdateWithWhereUniqueWithoutCoSupervisorInput[]
         updateMany?: StudentResearchTopicUpdateManyWithWhereWithoutCoSupervisorInput | StudentResearchTopicUpdateManyWithWhereWithoutCoSupervisorInput[]
         deleteMany?: StudentResearchTopicScalarWhereInput | StudentResearchTopicScalarWhereInput[]
+    };
+    export type StudentInternshipUncheckedUpdateManyWithoutSupervisorNestedInput = {
+        create?: XOR<StudentInternshipCreateWithoutSupervisorInput, StudentInternshipUncheckedCreateWithoutSupervisorInput> | StudentInternshipCreateWithoutSupervisorInput[] | StudentInternshipUncheckedCreateWithoutSupervisorInput[]
+        connectOrCreate?: StudentInternshipCreateOrConnectWithoutSupervisorInput | StudentInternshipCreateOrConnectWithoutSupervisorInput[]
+        upsert?: StudentInternshipUpsertWithWhereUniqueWithoutSupervisorInput | StudentInternshipUpsertWithWhereUniqueWithoutSupervisorInput[]
+        createMany?: StudentInternshipCreateManySupervisorInputEnvelope
+        set?: StudentInternshipWhereUniqueInput | StudentInternshipWhereUniqueInput[]
+        disconnect?: StudentInternshipWhereUniqueInput | StudentInternshipWhereUniqueInput[]
+        delete?: StudentInternshipWhereUniqueInput | StudentInternshipWhereUniqueInput[]
+        connect?: StudentInternshipWhereUniqueInput | StudentInternshipWhereUniqueInput[]
+        update?: StudentInternshipUpdateWithWhereUniqueWithoutSupervisorInput | StudentInternshipUpdateWithWhereUniqueWithoutSupervisorInput[]
+        updateMany?: StudentInternshipUpdateManyWithWhereWithoutSupervisorInput | StudentInternshipUpdateManyWithWhereWithoutSupervisorInput[]
+        deleteMany?: StudentInternshipScalarWhereInput | StudentInternshipScalarWhereInput[]
+    };
+    export type StudentInternshipUncheckedUpdateManyWithoutCoSupervisorNestedInput = {
+        create?: XOR<StudentInternshipCreateWithoutCoSupervisorInput, StudentInternshipUncheckedCreateWithoutCoSupervisorInput> | StudentInternshipCreateWithoutCoSupervisorInput[] | StudentInternshipUncheckedCreateWithoutCoSupervisorInput[]
+        connectOrCreate?: StudentInternshipCreateOrConnectWithoutCoSupervisorInput | StudentInternshipCreateOrConnectWithoutCoSupervisorInput[]
+        upsert?: StudentInternshipUpsertWithWhereUniqueWithoutCoSupervisorInput | StudentInternshipUpsertWithWhereUniqueWithoutCoSupervisorInput[]
+        createMany?: StudentInternshipCreateManyCoSupervisorInputEnvelope
+        set?: StudentInternshipWhereUniqueInput | StudentInternshipWhereUniqueInput[]
+        disconnect?: StudentInternshipWhereUniqueInput | StudentInternshipWhereUniqueInput[]
+        delete?: StudentInternshipWhereUniqueInput | StudentInternshipWhereUniqueInput[]
+        connect?: StudentInternshipWhereUniqueInput | StudentInternshipWhereUniqueInput[]
+        update?: StudentInternshipUpdateWithWhereUniqueWithoutCoSupervisorInput | StudentInternshipUpdateWithWhereUniqueWithoutCoSupervisorInput[]
+        updateMany?: StudentInternshipUpdateManyWithWhereWithoutCoSupervisorInput | StudentInternshipUpdateManyWithWhereWithoutCoSupervisorInput[]
+        deleteMany?: StudentInternshipScalarWhereInput | StudentInternshipScalarWhereInput[]
     };
     export type SubjectClassUncheckedUpdateManyWithoutExpertProfileNestedInput = {
         create?: XOR<SubjectClassCreateWithoutExpertProfileInput, SubjectClassUncheckedCreateWithoutExpertProfileInput> | SubjectClassCreateWithoutExpertProfileInput[] | SubjectClassUncheckedCreateWithoutExpertProfileInput[]
@@ -505290,6 +507266,50 @@ export namespace Prisma {
         where: StudentResearchTopicWhereUniqueInput
         create: XOR<StudentResearchTopicCreateWithoutStudentSubjectScoreInput, StudentResearchTopicUncheckedCreateWithoutStudentSubjectScoreInput>
     };
+    export type StudentInternshipCreateWithoutStudentSubjectScoreInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        deadline?: Date | string | null
+        internshipContent?: string | null
+        institution?: string | null
+        unit?: string | null
+        address?: string | null
+        startDate?: Date | string | null
+        endDate?: Date | string | null
+        reportDate?: Date | string | null
+        supervisor?: ExpertProfileCreateNestedOneWithoutSupervisorInternshipInput
+        coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisorInternshipInput
+    };
+    export type StudentInternshipUncheckedCreateWithoutStudentSubjectScoreInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        deadline?: Date | string | null
+        internshipContent?: string | null
+        institution?: string | null
+        unit?: string | null
+        address?: string | null
+        supervisorId?: string | null
+        coSupervisorId?: string | null
+        startDate?: Date | string | null
+        endDate?: Date | string | null
+        reportDate?: Date | string | null
+    };
+    export type StudentInternshipCreateOrConnectWithoutStudentSubjectScoreInput = {
+        where: StudentInternshipWhereUniqueInput
+        create: XOR<StudentInternshipCreateWithoutStudentSubjectScoreInput, StudentInternshipUncheckedCreateWithoutStudentSubjectScoreInput>
+    };
     export type StudentGraduationApplicationCreateWithoutGpaScoreInput = {
         id?: string
         code?: string | null
@@ -506133,6 +508153,55 @@ export namespace Prisma {
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         reportDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     };
+    export type StudentInternshipUpsertWithoutStudentSubjectScoreInput = {
+        update: XOR<StudentInternshipUpdateWithoutStudentSubjectScoreInput, StudentInternshipUncheckedUpdateWithoutStudentSubjectScoreInput>
+        create: XOR<StudentInternshipCreateWithoutStudentSubjectScoreInput, StudentInternshipUncheckedCreateWithoutStudentSubjectScoreInput>
+        where?: StudentInternshipWhereInput
+    };
+    export type StudentInternshipUpdateToOneWithWhereWithoutStudentSubjectScoreInput = {
+        where?: StudentInternshipWhereInput
+        data: XOR<StudentInternshipUpdateWithoutStudentSubjectScoreInput, StudentInternshipUncheckedUpdateWithoutStudentSubjectScoreInput>
+    };
+    export type StudentInternshipUpdateWithoutStudentSubjectScoreInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        internshipContent?: NullableStringFieldUpdateOperationsInput | string | null
+        institution?: NullableStringFieldUpdateOperationsInput | string | null
+        unit?: NullableStringFieldUpdateOperationsInput | string | null
+        address?: NullableStringFieldUpdateOperationsInput | string | null
+        startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reportDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        supervisor?: ExpertProfileUpdateOneWithoutSupervisorInternshipNestedInput
+        coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisorInternshipNestedInput
+    };
+    export type StudentInternshipUncheckedUpdateWithoutStudentSubjectScoreInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        internshipContent?: NullableStringFieldUpdateOperationsInput | string | null
+        institution?: NullableStringFieldUpdateOperationsInput | string | null
+        unit?: NullableStringFieldUpdateOperationsInput | string | null
+        address?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reportDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    };
     export type StudentGraduationApplicationUpsertWithWhereUniqueWithoutGpaScoreInput = {
         where: StudentGraduationApplicationWhereUniqueInput
         update: XOR<StudentGraduationApplicationUpdateWithoutGpaScoreInput, StudentGraduationApplicationUncheckedUpdateWithoutGpaScoreInput>
@@ -506372,6 +508441,7 @@ export namespace Prisma {
         student: StudentCreateNestedOneWithoutSubjectClassStudentInput
         examPaper?: ExamPaperCreateNestedOneWithoutStudentSubjectScoreInput
         studentResearchTopic?: StudentResearchTopicCreateNestedOneWithoutStudentSubjectScoreInput
+        studentInternship?: StudentInternshipCreateNestedOneWithoutStudentSubjectScoreInput
         graduationGpaScores?: StudentGraduationApplicationCreateNestedManyWithoutGpaScoreInput
         graduationSupplementaryScore?: StudentGraduationApplicationCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
@@ -506409,6 +508479,7 @@ export namespace Prisma {
         isImproving?: boolean
         examPaper?: ExamPaperUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
         studentResearchTopic?: StudentResearchTopicUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
+        studentInternship?: StudentInternshipUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
         graduationGpaScores?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutGpaScoreInput
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
@@ -506807,6 +508878,7 @@ export namespace Prisma {
         student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
         examPaper?: ExamPaperUpdateOneWithoutStudentSubjectScoreNestedInput
         studentResearchTopic?: StudentResearchTopicUpdateOneWithoutStudentSubjectScoreNestedInput
+        studentInternship?: StudentInternshipUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationGpaScores?: StudentGraduationApplicationUpdateManyWithoutGpaScoreNestedInput
         graduationSupplementaryScore?: StudentGraduationApplicationUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -506844,6 +508916,7 @@ export namespace Prisma {
         isImproving?: BoolFieldUpdateOperationsInput | boolean
         examPaper?: ExamPaperUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
         studentResearchTopic?: StudentResearchTopicUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
+        studentInternship?: StudentInternshipUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationGpaScores?: StudentGraduationApplicationUncheckedUpdateManyWithoutGpaScoreNestedInput
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -507233,6 +509306,7 @@ export namespace Prisma {
         subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
         student: StudentCreateNestedOneWithoutSubjectClassStudentInput
         examPaper?: ExamPaperCreateNestedOneWithoutStudentSubjectScoreInput
+        studentInternship?: StudentInternshipCreateNestedOneWithoutStudentSubjectScoreInput
         graduationGpaScores?: StudentGraduationApplicationCreateNestedManyWithoutGpaScoreInput
         graduationSupplementaryScore?: StudentGraduationApplicationCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
@@ -507270,6 +509344,7 @@ export namespace Prisma {
         repeatedReason?: string | null
         isImproving?: boolean
         examPaper?: ExamPaperUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
+        studentInternship?: StudentInternshipUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
         graduationGpaScores?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutGpaScoreInput
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
@@ -507311,6 +509386,8 @@ export namespace Prisma {
         supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
         coSupervisorResearchTopic?: StudentResearchTopicCreateNestedManyWithoutCoSupervisorInput
+        supervisorInternship?: StudentInternshipCreateNestedManyWithoutSupervisorInput
+        coSupervisorInternship?: StudentInternshipCreateNestedManyWithoutCoSupervisorInput
         subjectClass?: SubjectClassCreateNestedManyWithoutExpertProfileInput
         councilMemberships?: CouncilMemberCreateNestedManyWithoutExpertInput
     };
@@ -507343,6 +509420,8 @@ export namespace Prisma {
         supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
         coSupervisorResearchTopic?: StudentResearchTopicUncheckedCreateNestedManyWithoutCoSupervisorInput
+        supervisorInternship?: StudentInternshipUncheckedCreateNestedManyWithoutSupervisorInput
+        coSupervisorInternship?: StudentInternshipUncheckedCreateNestedManyWithoutCoSupervisorInput
         subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExpertProfileInput
         councilMemberships?: CouncilMemberUncheckedCreateNestedManyWithoutExpertInput
     };
@@ -507379,6 +509458,8 @@ export namespace Prisma {
         supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
         supervisorResearchTopic?: StudentResearchTopicCreateNestedManyWithoutSupervisorInput
+        supervisorInternship?: StudentInternshipCreateNestedManyWithoutSupervisorInput
+        coSupervisorInternship?: StudentInternshipCreateNestedManyWithoutCoSupervisorInput
         subjectClass?: SubjectClassCreateNestedManyWithoutExpertProfileInput
         councilMemberships?: CouncilMemberCreateNestedManyWithoutExpertInput
     };
@@ -507411,6 +509492,8 @@ export namespace Prisma {
         supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
         supervisorResearchTopic?: StudentResearchTopicUncheckedCreateNestedManyWithoutSupervisorInput
+        supervisorInternship?: StudentInternshipUncheckedCreateNestedManyWithoutSupervisorInput
+        coSupervisorInternship?: StudentInternshipUncheckedCreateNestedManyWithoutCoSupervisorInput
         subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExpertProfileInput
         councilMemberships?: CouncilMemberUncheckedCreateNestedManyWithoutExpertInput
     };
@@ -507456,6 +509539,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
         student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
         examPaper?: ExamPaperUpdateOneWithoutStudentSubjectScoreNestedInput
+        studentInternship?: StudentInternshipUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationGpaScores?: StudentGraduationApplicationUpdateManyWithoutGpaScoreNestedInput
         graduationSupplementaryScore?: StudentGraduationApplicationUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -507493,6 +509577,7 @@ export namespace Prisma {
         repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
         isImproving?: BoolFieldUpdateOperationsInput | boolean
         examPaper?: ExamPaperUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
+        studentInternship?: StudentInternshipUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationGpaScores?: StudentGraduationApplicationUncheckedUpdateManyWithoutGpaScoreNestedInput
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -507539,6 +509624,8 @@ export namespace Prisma {
         supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
         coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
         coSupervisorResearchTopic?: StudentResearchTopicUpdateManyWithoutCoSupervisorNestedInput
+        supervisorInternship?: StudentInternshipUpdateManyWithoutSupervisorNestedInput
+        coSupervisorInternship?: StudentInternshipUpdateManyWithoutCoSupervisorNestedInput
         subjectClass?: SubjectClassUpdateManyWithoutExpertProfileNestedInput
         councilMemberships?: CouncilMemberUpdateManyWithoutExpertNestedInput
     };
@@ -507571,6 +509658,8 @@ export namespace Prisma {
         supervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutSupervisorNestedInput
         coSupervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutCoSupervisorNestedInput
         coSupervisorResearchTopic?: StudentResearchTopicUncheckedUpdateManyWithoutCoSupervisorNestedInput
+        supervisorInternship?: StudentInternshipUncheckedUpdateManyWithoutSupervisorNestedInput
+        coSupervisorInternship?: StudentInternshipUncheckedUpdateManyWithoutCoSupervisorNestedInput
         subjectClass?: SubjectClassUncheckedUpdateManyWithoutExpertProfileNestedInput
         councilMemberships?: CouncilMemberUncheckedUpdateManyWithoutExpertNestedInput
     };
@@ -507612,6 +509701,8 @@ export namespace Prisma {
         supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
         coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
         supervisorResearchTopic?: StudentResearchTopicUpdateManyWithoutSupervisorNestedInput
+        supervisorInternship?: StudentInternshipUpdateManyWithoutSupervisorNestedInput
+        coSupervisorInternship?: StudentInternshipUpdateManyWithoutCoSupervisorNestedInput
         subjectClass?: SubjectClassUpdateManyWithoutExpertProfileNestedInput
         councilMemberships?: CouncilMemberUpdateManyWithoutExpertNestedInput
     };
@@ -507644,6 +509735,471 @@ export namespace Prisma {
         supervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutSupervisorNestedInput
         coSupervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutCoSupervisorNestedInput
         supervisorResearchTopic?: StudentResearchTopicUncheckedUpdateManyWithoutSupervisorNestedInput
+        supervisorInternship?: StudentInternshipUncheckedUpdateManyWithoutSupervisorNestedInput
+        coSupervisorInternship?: StudentInternshipUncheckedUpdateManyWithoutCoSupervisorNestedInput
+        subjectClass?: SubjectClassUncheckedUpdateManyWithoutExpertProfileNestedInput
+        councilMemberships?: CouncilMemberUncheckedUpdateManyWithoutExpertNestedInput
+    };
+    export type StudentSubjectScoreCreateWithoutStudentInternshipInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        attendanceScore?: number | null
+        midtermScore?: number | null
+        examScore?: number | null
+        finalScore?: Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: number | null
+        examPostponed?: boolean
+        examPostponedReason?: string | null
+        exempted?: boolean
+        withdrew?: boolean
+        examBanned?: boolean
+        examBannedReason?: string | null
+        suspended?: boolean
+        suspendedReason?: string | null
+        repeated?: boolean
+        repeatedReason?: string | null
+        isImproving?: boolean
+        subjectClass?: SubjectClassCreateNestedOneWithoutSubjectClassStudentInput
+        subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
+        student: StudentCreateNestedOneWithoutSubjectClassStudentInput
+        examPaper?: ExamPaperCreateNestedOneWithoutStudentSubjectScoreInput
+        studentResearchTopic?: StudentResearchTopicCreateNestedOneWithoutStudentSubjectScoreInput
+        graduationGpaScores?: StudentGraduationApplicationCreateNestedManyWithoutGpaScoreInput
+        graduationSupplementaryScore?: StudentGraduationApplicationCreateNestedManyWithoutSupplementaryScoreInput
+        certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
+        awards?: ArchivedAwardOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
+        studentThesisRegistration?: StudentThesisRegistrationCreateNestedManyWithoutStudentSubjectScoreInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutStudentSubjectScoreInput
+        scoreCorrectionItem?: ScoreCorrectionItemCreateNestedManyWithoutStudentSubjectScoreInput
+    };
+    export type StudentSubjectScoreUncheckedCreateWithoutStudentInternshipInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        subjectClassId?: string | null
+        subjectVersionId: string
+        studentId: string
+        attendanceScore?: number | null
+        midtermScore?: number | null
+        examScore?: number | null
+        finalScore?: Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: number | null
+        examPostponed?: boolean
+        examPostponedReason?: string | null
+        exempted?: boolean
+        withdrew?: boolean
+        examBanned?: boolean
+        examBannedReason?: string | null
+        suspended?: boolean
+        suspendedReason?: string | null
+        repeated?: boolean
+        repeatedReason?: string | null
+        isImproving?: boolean
+        examPaper?: ExamPaperUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
+        studentResearchTopic?: StudentResearchTopicUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
+        graduationGpaScores?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutGpaScoreInput
+        graduationSupplementaryScore?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutSupplementaryScoreInput
+        certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+        awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+        studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+        scoreCorrectionItem?: ScoreCorrectionItemUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+    };
+    export type StudentSubjectScoreCreateOrConnectWithoutStudentInternshipInput = {
+        where: StudentSubjectScoreWhereUniqueInput
+        create: XOR<StudentSubjectScoreCreateWithoutStudentInternshipInput, StudentSubjectScoreUncheckedCreateWithoutStudentInternshipInput>
+    };
+    export type ExpertProfileCreateWithoutSupervisorInternshipInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name?: string | null
+        academicRank?: string | null
+        academicDegree?: string | null
+        organization?: string | null
+        position?: string | null
+        specialization?: string | null
+        workplace?: string | null
+        phone?: string | null
+        email?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
+        projectExpert?: boolean
+        thesisExpert?: boolean
+        eligiblePresident: boolean
+        eligibleSecretary: boolean
+        lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
+        major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
+        supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
+        coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
+        supervisorResearchTopic?: StudentResearchTopicCreateNestedManyWithoutSupervisorInput
+        coSupervisorResearchTopic?: StudentResearchTopicCreateNestedManyWithoutCoSupervisorInput
+        coSupervisorInternship?: StudentInternshipCreateNestedManyWithoutCoSupervisorInput
+        subjectClass?: SubjectClassCreateNestedManyWithoutExpertProfileInput
+        councilMemberships?: CouncilMemberCreateNestedManyWithoutExpertInput
+    };
+    export type ExpertProfileUncheckedCreateWithoutSupervisorInternshipInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        lecturerId?: string | null
+        name?: string | null
+        academicRank?: string | null
+        academicDegree?: string | null
+        organization?: string | null
+        position?: string | null
+        specialization?: string | null
+        workplace?: string | null
+        phone?: string | null
+        email?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
+        projectExpert?: boolean
+        thesisExpert?: boolean
+        eligiblePresident: boolean
+        eligibleSecretary: boolean
+        major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
+        supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
+        coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
+        supervisorResearchTopic?: StudentResearchTopicUncheckedCreateNestedManyWithoutSupervisorInput
+        coSupervisorResearchTopic?: StudentResearchTopicUncheckedCreateNestedManyWithoutCoSupervisorInput
+        coSupervisorInternship?: StudentInternshipUncheckedCreateNestedManyWithoutCoSupervisorInput
+        subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExpertProfileInput
+        councilMemberships?: CouncilMemberUncheckedCreateNestedManyWithoutExpertInput
+    };
+    export type ExpertProfileCreateOrConnectWithoutSupervisorInternshipInput = {
+        where: ExpertProfileWhereUniqueInput
+        create: XOR<ExpertProfileCreateWithoutSupervisorInternshipInput, ExpertProfileUncheckedCreateWithoutSupervisorInternshipInput>
+    };
+    export type ExpertProfileCreateWithoutCoSupervisorInternshipInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name?: string | null
+        academicRank?: string | null
+        academicDegree?: string | null
+        organization?: string | null
+        position?: string | null
+        specialization?: string | null
+        workplace?: string | null
+        phone?: string | null
+        email?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
+        projectExpert?: boolean
+        thesisExpert?: boolean
+        eligiblePresident: boolean
+        eligibleSecretary: boolean
+        lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
+        major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
+        supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
+        coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
+        supervisorResearchTopic?: StudentResearchTopicCreateNestedManyWithoutSupervisorInput
+        coSupervisorResearchTopic?: StudentResearchTopicCreateNestedManyWithoutCoSupervisorInput
+        supervisorInternship?: StudentInternshipCreateNestedManyWithoutSupervisorInput
+        subjectClass?: SubjectClassCreateNestedManyWithoutExpertProfileInput
+        councilMemberships?: CouncilMemberCreateNestedManyWithoutExpertInput
+    };
+    export type ExpertProfileUncheckedCreateWithoutCoSupervisorInternshipInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        lecturerId?: string | null
+        name?: string | null
+        academicRank?: string | null
+        academicDegree?: string | null
+        organization?: string | null
+        position?: string | null
+        specialization?: string | null
+        workplace?: string | null
+        phone?: string | null
+        email?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
+        projectExpert?: boolean
+        thesisExpert?: boolean
+        eligiblePresident: boolean
+        eligibleSecretary: boolean
+        major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
+        supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
+        coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
+        supervisorResearchTopic?: StudentResearchTopicUncheckedCreateNestedManyWithoutSupervisorInput
+        coSupervisorResearchTopic?: StudentResearchTopicUncheckedCreateNestedManyWithoutCoSupervisorInput
+        supervisorInternship?: StudentInternshipUncheckedCreateNestedManyWithoutSupervisorInput
+        subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExpertProfileInput
+        councilMemberships?: CouncilMemberUncheckedCreateNestedManyWithoutExpertInput
+    };
+    export type ExpertProfileCreateOrConnectWithoutCoSupervisorInternshipInput = {
+        where: ExpertProfileWhereUniqueInput
+        create: XOR<ExpertProfileCreateWithoutCoSupervisorInternshipInput, ExpertProfileUncheckedCreateWithoutCoSupervisorInternshipInput>
+    };
+    export type StudentSubjectScoreUpsertWithoutStudentInternshipInput = {
+        update: XOR<StudentSubjectScoreUpdateWithoutStudentInternshipInput, StudentSubjectScoreUncheckedUpdateWithoutStudentInternshipInput>
+        create: XOR<StudentSubjectScoreCreateWithoutStudentInternshipInput, StudentSubjectScoreUncheckedCreateWithoutStudentInternshipInput>
+        where?: StudentSubjectScoreWhereInput
+    };
+    export type StudentSubjectScoreUpdateToOneWithWhereWithoutStudentInternshipInput = {
+        where?: StudentSubjectScoreWhereInput
+        data: XOR<StudentSubjectScoreUpdateWithoutStudentInternshipInput, StudentSubjectScoreUncheckedUpdateWithoutStudentInternshipInput>
+    };
+    export type StudentSubjectScoreUpdateWithoutStudentInternshipInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        attendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        midtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examPostponed?: BoolFieldUpdateOperationsInput | boolean
+        examPostponedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        exempted?: BoolFieldUpdateOperationsInput | boolean
+        withdrew?: BoolFieldUpdateOperationsInput | boolean
+        examBanned?: BoolFieldUpdateOperationsInput | boolean
+        examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        suspended?: BoolFieldUpdateOperationsInput | boolean
+        suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        repeated?: BoolFieldUpdateOperationsInput | boolean
+        repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        isImproving?: BoolFieldUpdateOperationsInput | boolean
+        subjectClass?: SubjectClassUpdateOneWithoutSubjectClassStudentNestedInput
+        subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
+        student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
+        examPaper?: ExamPaperUpdateOneWithoutStudentSubjectScoreNestedInput
+        studentResearchTopic?: StudentResearchTopicUpdateOneWithoutStudentSubjectScoreNestedInput
+        graduationGpaScores?: StudentGraduationApplicationUpdateManyWithoutGpaScoreNestedInput
+        graduationSupplementaryScore?: StudentGraduationApplicationUpdateManyWithoutSupplementaryScoreNestedInput
+        certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
+        awards?: ArchivedAwardOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
+        studentThesisRegistration?: StudentThesisRegistrationUpdateManyWithoutStudentSubjectScoreNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutStudentSubjectScoreNestedInput
+        scoreCorrectionItem?: ScoreCorrectionItemUpdateManyWithoutStudentSubjectScoreNestedInput
+    };
+    export type StudentSubjectScoreUncheckedUpdateWithoutStudentInternshipInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectVersionId?: StringFieldUpdateOperationsInput | string
+        studentId?: StringFieldUpdateOperationsInput | string
+        attendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        midtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examPostponed?: BoolFieldUpdateOperationsInput | boolean
+        examPostponedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        exempted?: BoolFieldUpdateOperationsInput | boolean
+        withdrew?: BoolFieldUpdateOperationsInput | boolean
+        examBanned?: BoolFieldUpdateOperationsInput | boolean
+        examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        suspended?: BoolFieldUpdateOperationsInput | boolean
+        suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        repeated?: BoolFieldUpdateOperationsInput | boolean
+        repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        isImproving?: BoolFieldUpdateOperationsInput | boolean
+        examPaper?: ExamPaperUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
+        studentResearchTopic?: StudentResearchTopicUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
+        graduationGpaScores?: StudentGraduationApplicationUncheckedUpdateManyWithoutGpaScoreNestedInput
+        graduationSupplementaryScore?: StudentGraduationApplicationUncheckedUpdateManyWithoutSupplementaryScoreNestedInput
+        certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+        awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+        studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+        scoreCorrectionItem?: ScoreCorrectionItemUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+    };
+    export type ExpertProfileUpsertWithoutSupervisorInternshipInput = {
+        update: XOR<ExpertProfileUpdateWithoutSupervisorInternshipInput, ExpertProfileUncheckedUpdateWithoutSupervisorInternshipInput>
+        create: XOR<ExpertProfileCreateWithoutSupervisorInternshipInput, ExpertProfileUncheckedCreateWithoutSupervisorInternshipInput>
+        where?: ExpertProfileWhereInput
+    };
+    export type ExpertProfileUpdateToOneWithWhereWithoutSupervisorInternshipInput = {
+        where?: ExpertProfileWhereInput
+        data: XOR<ExpertProfileUpdateWithoutSupervisorInternshipInput, ExpertProfileUncheckedUpdateWithoutSupervisorInternshipInput>
+    };
+    export type ExpertProfileUpdateWithoutSupervisorInternshipInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
+        organization?: NullableStringFieldUpdateOperationsInput | string | null
+        position?: NullableStringFieldUpdateOperationsInput | string | null
+        specialization?: NullableStringFieldUpdateOperationsInput | string | null
+        workplace?: NullableStringFieldUpdateOperationsInput | string | null
+        phone?: NullableStringFieldUpdateOperationsInput | string | null
+        email?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        projectExpert?: BoolFieldUpdateOperationsInput | boolean
+        thesisExpert?: BoolFieldUpdateOperationsInput | boolean
+        eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
+        eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
+        lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
+        major?: TrainingMajorUpdateManyWithoutExpertProfileNestedInput
+        supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
+        coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
+        supervisorResearchTopic?: StudentResearchTopicUpdateManyWithoutSupervisorNestedInput
+        coSupervisorResearchTopic?: StudentResearchTopicUpdateManyWithoutCoSupervisorNestedInput
+        coSupervisorInternship?: StudentInternshipUpdateManyWithoutCoSupervisorNestedInput
+        subjectClass?: SubjectClassUpdateManyWithoutExpertProfileNestedInput
+        councilMemberships?: CouncilMemberUpdateManyWithoutExpertNestedInput
+    };
+    export type ExpertProfileUncheckedUpdateWithoutSupervisorInternshipInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
+        organization?: NullableStringFieldUpdateOperationsInput | string | null
+        position?: NullableStringFieldUpdateOperationsInput | string | null
+        specialization?: NullableStringFieldUpdateOperationsInput | string | null
+        workplace?: NullableStringFieldUpdateOperationsInput | string | null
+        phone?: NullableStringFieldUpdateOperationsInput | string | null
+        email?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        projectExpert?: BoolFieldUpdateOperationsInput | boolean
+        thesisExpert?: BoolFieldUpdateOperationsInput | boolean
+        eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
+        eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
+        major?: TrainingMajorUncheckedUpdateManyWithoutExpertProfileNestedInput
+        supervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutSupervisorNestedInput
+        coSupervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutCoSupervisorNestedInput
+        supervisorResearchTopic?: StudentResearchTopicUncheckedUpdateManyWithoutSupervisorNestedInput
+        coSupervisorResearchTopic?: StudentResearchTopicUncheckedUpdateManyWithoutCoSupervisorNestedInput
+        coSupervisorInternship?: StudentInternshipUncheckedUpdateManyWithoutCoSupervisorNestedInput
+        subjectClass?: SubjectClassUncheckedUpdateManyWithoutExpertProfileNestedInput
+        councilMemberships?: CouncilMemberUncheckedUpdateManyWithoutExpertNestedInput
+    };
+    export type ExpertProfileUpsertWithoutCoSupervisorInternshipInput = {
+        update: XOR<ExpertProfileUpdateWithoutCoSupervisorInternshipInput, ExpertProfileUncheckedUpdateWithoutCoSupervisorInternshipInput>
+        create: XOR<ExpertProfileCreateWithoutCoSupervisorInternshipInput, ExpertProfileUncheckedCreateWithoutCoSupervisorInternshipInput>
+        where?: ExpertProfileWhereInput
+    };
+    export type ExpertProfileUpdateToOneWithWhereWithoutCoSupervisorInternshipInput = {
+        where?: ExpertProfileWhereInput
+        data: XOR<ExpertProfileUpdateWithoutCoSupervisorInternshipInput, ExpertProfileUncheckedUpdateWithoutCoSupervisorInternshipInput>
+    };
+    export type ExpertProfileUpdateWithoutCoSupervisorInternshipInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
+        organization?: NullableStringFieldUpdateOperationsInput | string | null
+        position?: NullableStringFieldUpdateOperationsInput | string | null
+        specialization?: NullableStringFieldUpdateOperationsInput | string | null
+        workplace?: NullableStringFieldUpdateOperationsInput | string | null
+        phone?: NullableStringFieldUpdateOperationsInput | string | null
+        email?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        projectExpert?: BoolFieldUpdateOperationsInput | boolean
+        thesisExpert?: BoolFieldUpdateOperationsInput | boolean
+        eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
+        eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
+        lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
+        major?: TrainingMajorUpdateManyWithoutExpertProfileNestedInput
+        supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
+        coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
+        supervisorResearchTopic?: StudentResearchTopicUpdateManyWithoutSupervisorNestedInput
+        coSupervisorResearchTopic?: StudentResearchTopicUpdateManyWithoutCoSupervisorNestedInput
+        supervisorInternship?: StudentInternshipUpdateManyWithoutSupervisorNestedInput
+        subjectClass?: SubjectClassUpdateManyWithoutExpertProfileNestedInput
+        councilMemberships?: CouncilMemberUpdateManyWithoutExpertNestedInput
+    };
+    export type ExpertProfileUncheckedUpdateWithoutCoSupervisorInternshipInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
+        organization?: NullableStringFieldUpdateOperationsInput | string | null
+        position?: NullableStringFieldUpdateOperationsInput | string | null
+        specialization?: NullableStringFieldUpdateOperationsInput | string | null
+        workplace?: NullableStringFieldUpdateOperationsInput | string | null
+        phone?: NullableStringFieldUpdateOperationsInput | string | null
+        email?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        projectExpert?: BoolFieldUpdateOperationsInput | boolean
+        thesisExpert?: BoolFieldUpdateOperationsInput | boolean
+        eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
+        eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
+        major?: TrainingMajorUncheckedUpdateManyWithoutExpertProfileNestedInput
+        supervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutSupervisorNestedInput
+        coSupervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutCoSupervisorNestedInput
+        supervisorResearchTopic?: StudentResearchTopicUncheckedUpdateManyWithoutSupervisorNestedInput
+        coSupervisorResearchTopic?: StudentResearchTopicUncheckedUpdateManyWithoutCoSupervisorNestedInput
+        supervisorInternship?: StudentInternshipUncheckedUpdateManyWithoutSupervisorNestedInput
         subjectClass?: SubjectClassUncheckedUpdateManyWithoutExpertProfileNestedInput
         councilMemberships?: CouncilMemberUncheckedUpdateManyWithoutExpertNestedInput
     };
@@ -507677,6 +510233,7 @@ export namespace Prisma {
         student: StudentCreateNestedOneWithoutSubjectClassStudentInput
         examPaper?: ExamPaperCreateNestedOneWithoutStudentSubjectScoreInput
         studentResearchTopic?: StudentResearchTopicCreateNestedOneWithoutStudentSubjectScoreInput
+        studentInternship?: StudentInternshipCreateNestedOneWithoutStudentSubjectScoreInput
         graduationGpaScores?: StudentGraduationApplicationCreateNestedManyWithoutGpaScoreInput
         graduationSupplementaryScore?: StudentGraduationApplicationCreateNestedManyWithoutSupplementaryScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
@@ -507714,6 +510271,7 @@ export namespace Prisma {
         isImproving?: boolean
         examPaper?: ExamPaperUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
         studentResearchTopic?: StudentResearchTopicUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
+        studentInternship?: StudentInternshipUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
         graduationGpaScores?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutGpaScoreInput
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutSupplementaryScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
@@ -507806,6 +510364,7 @@ export namespace Prisma {
         student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
         examPaper?: ExamPaperUpdateOneWithoutStudentSubjectScoreNestedInput
         studentResearchTopic?: StudentResearchTopicUpdateOneWithoutStudentSubjectScoreNestedInput
+        studentInternship?: StudentInternshipUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationGpaScores?: StudentGraduationApplicationUpdateManyWithoutGpaScoreNestedInput
         graduationSupplementaryScore?: StudentGraduationApplicationUpdateManyWithoutSupplementaryScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -507843,6 +510402,7 @@ export namespace Prisma {
         isImproving?: BoolFieldUpdateOperationsInput | boolean
         examPaper?: ExamPaperUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
         studentResearchTopic?: StudentResearchTopicUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
+        studentInternship?: StudentInternshipUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationGpaScores?: StudentGraduationApplicationUncheckedUpdateManyWithoutGpaScoreNestedInput
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedUpdateManyWithoutSupplementaryScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -508425,6 +510985,7 @@ export namespace Prisma {
         student: StudentCreateNestedOneWithoutSubjectClassStudentInput
         examPaper?: ExamPaperCreateNestedOneWithoutStudentSubjectScoreInput
         studentResearchTopic?: StudentResearchTopicCreateNestedOneWithoutStudentSubjectScoreInput
+        studentInternship?: StudentInternshipCreateNestedOneWithoutStudentSubjectScoreInput
         graduationGpaScores?: StudentGraduationApplicationCreateNestedManyWithoutGpaScoreInput
         graduationSupplementaryScore?: StudentGraduationApplicationCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
@@ -508462,6 +511023,7 @@ export namespace Prisma {
         isImproving?: boolean
         examPaper?: ExamPaperUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
         studentResearchTopic?: StudentResearchTopicUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
+        studentInternship?: StudentInternshipUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
         graduationGpaScores?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutGpaScoreInput
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
@@ -508548,6 +511110,7 @@ export namespace Prisma {
         student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
         examPaper?: ExamPaperUpdateOneWithoutStudentSubjectScoreNestedInput
         studentResearchTopic?: StudentResearchTopicUpdateOneWithoutStudentSubjectScoreNestedInput
+        studentInternship?: StudentInternshipUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationGpaScores?: StudentGraduationApplicationUpdateManyWithoutGpaScoreNestedInput
         graduationSupplementaryScore?: StudentGraduationApplicationUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -508585,6 +511148,7 @@ export namespace Prisma {
         isImproving?: BoolFieldUpdateOperationsInput | boolean
         examPaper?: ExamPaperUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
         studentResearchTopic?: StudentResearchTopicUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
+        studentInternship?: StudentInternshipUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationGpaScores?: StudentGraduationApplicationUncheckedUpdateManyWithoutGpaScoreNestedInput
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -518352,6 +520916,7 @@ export namespace Prisma {
         student: StudentCreateNestedOneWithoutSubjectClassStudentInput
         examPaper?: ExamPaperCreateNestedOneWithoutStudentSubjectScoreInput
         studentResearchTopic?: StudentResearchTopicCreateNestedOneWithoutStudentSubjectScoreInput
+        studentInternship?: StudentInternshipCreateNestedOneWithoutStudentSubjectScoreInput
         graduationGpaScores?: StudentGraduationApplicationCreateNestedManyWithoutGpaScoreInput
         graduationSupplementaryScore?: StudentGraduationApplicationCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
@@ -518389,6 +520954,7 @@ export namespace Prisma {
         isImproving?: boolean
         examPaper?: ExamPaperUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
         studentResearchTopic?: StudentResearchTopicUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
+        studentInternship?: StudentInternshipUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
         graduationGpaScores?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutGpaScoreInput
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
@@ -522560,6 +525126,7 @@ export namespace Prisma {
         student: StudentCreateNestedOneWithoutSubjectClassStudentInput
         examPaper?: ExamPaperCreateNestedOneWithoutStudentSubjectScoreInput
         studentResearchTopic?: StudentResearchTopicCreateNestedOneWithoutStudentSubjectScoreInput
+        studentInternship?: StudentInternshipCreateNestedOneWithoutStudentSubjectScoreInput
         graduationGpaScores?: StudentGraduationApplicationCreateNestedManyWithoutGpaScoreInput
         graduationSupplementaryScore?: StudentGraduationApplicationCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
@@ -522597,6 +525164,7 @@ export namespace Prisma {
         isImproving?: boolean
         examPaper?: ExamPaperUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
         studentResearchTopic?: StudentResearchTopicUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
+        studentInternship?: StudentInternshipUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
         graduationGpaScores?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutGpaScoreInput
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
@@ -522869,6 +525437,8 @@ export namespace Prisma {
         coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
         supervisorResearchTopic?: StudentResearchTopicCreateNestedManyWithoutSupervisorInput
         coSupervisorResearchTopic?: StudentResearchTopicCreateNestedManyWithoutCoSupervisorInput
+        supervisorInternship?: StudentInternshipCreateNestedManyWithoutSupervisorInput
+        coSupervisorInternship?: StudentInternshipCreateNestedManyWithoutCoSupervisorInput
         councilMemberships?: CouncilMemberCreateNestedManyWithoutExpertInput
     };
     export type ExpertProfileUncheckedCreateWithoutSubjectClassInput = {
@@ -522901,6 +525471,8 @@ export namespace Prisma {
         coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
         supervisorResearchTopic?: StudentResearchTopicUncheckedCreateNestedManyWithoutSupervisorInput
         coSupervisorResearchTopic?: StudentResearchTopicUncheckedCreateNestedManyWithoutCoSupervisorInput
+        supervisorInternship?: StudentInternshipUncheckedCreateNestedManyWithoutSupervisorInput
+        coSupervisorInternship?: StudentInternshipUncheckedCreateNestedManyWithoutCoSupervisorInput
         councilMemberships?: CouncilMemberUncheckedCreateNestedManyWithoutExpertInput
     };
     export type ExpertProfileCreateOrConnectWithoutSubjectClassInput = {
@@ -526751,6 +529323,7 @@ export namespace Prisma {
         student: StudentCreateNestedOneWithoutSubjectClassStudentInput
         examPaper?: ExamPaperCreateNestedOneWithoutStudentSubjectScoreInput
         studentResearchTopic?: StudentResearchTopicCreateNestedOneWithoutStudentSubjectScoreInput
+        studentInternship?: StudentInternshipCreateNestedOneWithoutStudentSubjectScoreInput
         graduationGpaScores?: StudentGraduationApplicationCreateNestedManyWithoutGpaScoreInput
         graduationSupplementaryScore?: StudentGraduationApplicationCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
@@ -526788,6 +529361,7 @@ export namespace Prisma {
         isImproving?: boolean
         examPaper?: ExamPaperUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
         studentResearchTopic?: StudentResearchTopicUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
+        studentInternship?: StudentInternshipUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
         graduationGpaScores?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutGpaScoreInput
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
@@ -526881,6 +529455,7 @@ export namespace Prisma {
         student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
         examPaper?: ExamPaperUpdateOneWithoutStudentSubjectScoreNestedInput
         studentResearchTopic?: StudentResearchTopicUpdateOneWithoutStudentSubjectScoreNestedInput
+        studentInternship?: StudentInternshipUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationGpaScores?: StudentGraduationApplicationUpdateManyWithoutGpaScoreNestedInput
         graduationSupplementaryScore?: StudentGraduationApplicationUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -526918,6 +529493,7 @@ export namespace Prisma {
         isImproving?: BoolFieldUpdateOperationsInput | boolean
         examPaper?: ExamPaperUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
         studentResearchTopic?: StudentResearchTopicUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
+        studentInternship?: StudentInternshipUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationGpaScores?: StudentGraduationApplicationUncheckedUpdateManyWithoutGpaScoreNestedInput
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -531252,6 +533828,8 @@ export namespace Prisma {
         coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
         supervisorResearchTopic?: StudentResearchTopicCreateNestedManyWithoutSupervisorInput
         coSupervisorResearchTopic?: StudentResearchTopicCreateNestedManyWithoutCoSupervisorInput
+        supervisorInternship?: StudentInternshipCreateNestedManyWithoutSupervisorInput
+        coSupervisorInternship?: StudentInternshipCreateNestedManyWithoutCoSupervisorInput
         subjectClass?: SubjectClassCreateNestedManyWithoutExpertProfileInput
         councilMemberships?: CouncilMemberCreateNestedManyWithoutExpertInput
     };
@@ -531284,6 +533862,8 @@ export namespace Prisma {
         coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
         supervisorResearchTopic?: StudentResearchTopicUncheckedCreateNestedManyWithoutSupervisorInput
         coSupervisorResearchTopic?: StudentResearchTopicUncheckedCreateNestedManyWithoutCoSupervisorInput
+        supervisorInternship?: StudentInternshipUncheckedCreateNestedManyWithoutSupervisorInput
+        coSupervisorInternship?: StudentInternshipUncheckedCreateNestedManyWithoutCoSupervisorInput
         subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExpertProfileInput
         councilMemberships?: CouncilMemberUncheckedCreateNestedManyWithoutExpertInput
     };
@@ -534502,6 +537082,7 @@ export namespace Prisma {
         subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
         examPaper?: ExamPaperCreateNestedOneWithoutStudentSubjectScoreInput
         studentResearchTopic?: StudentResearchTopicCreateNestedOneWithoutStudentSubjectScoreInput
+        studentInternship?: StudentInternshipCreateNestedOneWithoutStudentSubjectScoreInput
         graduationGpaScores?: StudentGraduationApplicationCreateNestedManyWithoutGpaScoreInput
         graduationSupplementaryScore?: StudentGraduationApplicationCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
@@ -534539,6 +537120,7 @@ export namespace Prisma {
         isImproving?: boolean
         examPaper?: ExamPaperUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
         studentResearchTopic?: StudentResearchTopicUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
+        studentInternship?: StudentInternshipUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
         graduationGpaScores?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutGpaScoreInput
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
@@ -544770,6 +547352,8 @@ export namespace Prisma {
         coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
         supervisorResearchTopic?: StudentResearchTopicCreateNestedManyWithoutSupervisorInput
         coSupervisorResearchTopic?: StudentResearchTopicCreateNestedManyWithoutCoSupervisorInput
+        supervisorInternship?: StudentInternshipCreateNestedManyWithoutSupervisorInput
+        coSupervisorInternship?: StudentInternshipCreateNestedManyWithoutCoSupervisorInput
         subjectClass?: SubjectClassCreateNestedManyWithoutExpertProfileInput
         councilMemberships?: CouncilMemberCreateNestedManyWithoutExpertInput
     };
@@ -544802,6 +547386,8 @@ export namespace Prisma {
         coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
         supervisorResearchTopic?: StudentResearchTopicUncheckedCreateNestedManyWithoutSupervisorInput
         coSupervisorResearchTopic?: StudentResearchTopicUncheckedCreateNestedManyWithoutCoSupervisorInput
+        supervisorInternship?: StudentInternshipUncheckedCreateNestedManyWithoutSupervisorInput
+        coSupervisorInternship?: StudentInternshipUncheckedCreateNestedManyWithoutCoSupervisorInput
         subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExpertProfileInput
         councilMemberships?: CouncilMemberUncheckedCreateNestedManyWithoutExpertInput
     };
@@ -548524,6 +551110,8 @@ export namespace Prisma {
         coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
         supervisorResearchTopic?: StudentResearchTopicCreateNestedManyWithoutSupervisorInput
         coSupervisorResearchTopic?: StudentResearchTopicCreateNestedManyWithoutCoSupervisorInput
+        supervisorInternship?: StudentInternshipCreateNestedManyWithoutSupervisorInput
+        coSupervisorInternship?: StudentInternshipCreateNestedManyWithoutCoSupervisorInput
         subjectClass?: SubjectClassCreateNestedManyWithoutExpertProfileInput
         councilMemberships?: CouncilMemberCreateNestedManyWithoutExpertInput
     };
@@ -548556,6 +551144,8 @@ export namespace Prisma {
         coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
         supervisorResearchTopic?: StudentResearchTopicUncheckedCreateNestedManyWithoutSupervisorInput
         coSupervisorResearchTopic?: StudentResearchTopicUncheckedCreateNestedManyWithoutCoSupervisorInput
+        supervisorInternship?: StudentInternshipUncheckedCreateNestedManyWithoutSupervisorInput
+        coSupervisorInternship?: StudentInternshipUncheckedCreateNestedManyWithoutCoSupervisorInput
         subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExpertProfileInput
         councilMemberships?: CouncilMemberUncheckedCreateNestedManyWithoutExpertInput
     };
@@ -548626,6 +551216,8 @@ export namespace Prisma {
         supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
         supervisorResearchTopic?: StudentResearchTopicCreateNestedManyWithoutSupervisorInput
         coSupervisorResearchTopic?: StudentResearchTopicCreateNestedManyWithoutCoSupervisorInput
+        supervisorInternship?: StudentInternshipCreateNestedManyWithoutSupervisorInput
+        coSupervisorInternship?: StudentInternshipCreateNestedManyWithoutCoSupervisorInput
         subjectClass?: SubjectClassCreateNestedManyWithoutExpertProfileInput
         councilMemberships?: CouncilMemberCreateNestedManyWithoutExpertInput
     };
@@ -548658,6 +551250,8 @@ export namespace Prisma {
         supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
         supervisorResearchTopic?: StudentResearchTopicUncheckedCreateNestedManyWithoutSupervisorInput
         coSupervisorResearchTopic?: StudentResearchTopicUncheckedCreateNestedManyWithoutCoSupervisorInput
+        supervisorInternship?: StudentInternshipUncheckedCreateNestedManyWithoutSupervisorInput
+        coSupervisorInternship?: StudentInternshipUncheckedCreateNestedManyWithoutCoSupervisorInput
         subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExpertProfileInput
         councilMemberships?: CouncilMemberUncheckedCreateNestedManyWithoutExpertInput
     };
@@ -549251,6 +551845,8 @@ export namespace Prisma {
         coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
         supervisorResearchTopic?: StudentResearchTopicUpdateManyWithoutSupervisorNestedInput
         coSupervisorResearchTopic?: StudentResearchTopicUpdateManyWithoutCoSupervisorNestedInput
+        supervisorInternship?: StudentInternshipUpdateManyWithoutSupervisorNestedInput
+        coSupervisorInternship?: StudentInternshipUpdateManyWithoutCoSupervisorNestedInput
         subjectClass?: SubjectClassUpdateManyWithoutExpertProfileNestedInput
         councilMemberships?: CouncilMemberUpdateManyWithoutExpertNestedInput
     };
@@ -549283,6 +551879,8 @@ export namespace Prisma {
         coSupervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutCoSupervisorNestedInput
         supervisorResearchTopic?: StudentResearchTopicUncheckedUpdateManyWithoutSupervisorNestedInput
         coSupervisorResearchTopic?: StudentResearchTopicUncheckedUpdateManyWithoutCoSupervisorNestedInput
+        supervisorInternship?: StudentInternshipUncheckedUpdateManyWithoutSupervisorNestedInput
+        coSupervisorInternship?: StudentInternshipUncheckedUpdateManyWithoutCoSupervisorNestedInput
         subjectClass?: SubjectClassUncheckedUpdateManyWithoutExpertProfileNestedInput
         councilMemberships?: CouncilMemberUncheckedUpdateManyWithoutExpertNestedInput
     };
@@ -549363,6 +551961,8 @@ export namespace Prisma {
         supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
         supervisorResearchTopic?: StudentResearchTopicUpdateManyWithoutSupervisorNestedInput
         coSupervisorResearchTopic?: StudentResearchTopicUpdateManyWithoutCoSupervisorNestedInput
+        supervisorInternship?: StudentInternshipUpdateManyWithoutSupervisorNestedInput
+        coSupervisorInternship?: StudentInternshipUpdateManyWithoutCoSupervisorNestedInput
         subjectClass?: SubjectClassUpdateManyWithoutExpertProfileNestedInput
         councilMemberships?: CouncilMemberUpdateManyWithoutExpertNestedInput
     };
@@ -549395,6 +551995,8 @@ export namespace Prisma {
         supervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutSupervisorNestedInput
         supervisorResearchTopic?: StudentResearchTopicUncheckedUpdateManyWithoutSupervisorNestedInput
         coSupervisorResearchTopic?: StudentResearchTopicUncheckedUpdateManyWithoutCoSupervisorNestedInput
+        supervisorInternship?: StudentInternshipUncheckedUpdateManyWithoutSupervisorNestedInput
+        coSupervisorInternship?: StudentInternshipUncheckedUpdateManyWithoutCoSupervisorNestedInput
         subjectClass?: SubjectClassUncheckedUpdateManyWithoutExpertProfileNestedInput
         councilMemberships?: CouncilMemberUncheckedUpdateManyWithoutExpertNestedInput
     };
@@ -550066,6 +552668,7 @@ export namespace Prisma {
         student: StudentCreateNestedOneWithoutSubjectClassStudentInput
         examPaper?: ExamPaperCreateNestedOneWithoutStudentSubjectScoreInput
         studentResearchTopic?: StudentResearchTopicCreateNestedOneWithoutStudentSubjectScoreInput
+        studentInternship?: StudentInternshipCreateNestedOneWithoutStudentSubjectScoreInput
         graduationGpaScores?: StudentGraduationApplicationCreateNestedManyWithoutGpaScoreInput
         graduationSupplementaryScore?: StudentGraduationApplicationCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
@@ -550103,6 +552706,7 @@ export namespace Prisma {
         isImproving?: boolean
         examPaper?: ExamPaperUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
         studentResearchTopic?: StudentResearchTopicUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
+        studentInternship?: StudentInternshipUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
         graduationGpaScores?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutGpaScoreInput
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
@@ -550512,6 +553116,7 @@ export namespace Prisma {
         student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
         examPaper?: ExamPaperUpdateOneWithoutStudentSubjectScoreNestedInput
         studentResearchTopic?: StudentResearchTopicUpdateOneWithoutStudentSubjectScoreNestedInput
+        studentInternship?: StudentInternshipUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationGpaScores?: StudentGraduationApplicationUpdateManyWithoutGpaScoreNestedInput
         graduationSupplementaryScore?: StudentGraduationApplicationUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -550549,6 +553154,7 @@ export namespace Prisma {
         isImproving?: BoolFieldUpdateOperationsInput | boolean
         examPaper?: ExamPaperUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
         studentResearchTopic?: StudentResearchTopicUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
+        studentInternship?: StudentInternshipUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationGpaScores?: StudentGraduationApplicationUncheckedUpdateManyWithoutGpaScoreNestedInput
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -551209,6 +553815,102 @@ export namespace Prisma {
         data: StudentResearchTopicCreateManyCoSupervisorInput | StudentResearchTopicCreateManyCoSupervisorInput[]
         skipDuplicates?: boolean
     };
+    export type StudentInternshipCreateWithoutSupervisorInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        deadline?: Date | string | null
+        internshipContent?: string | null
+        institution?: string | null
+        unit?: string | null
+        address?: string | null
+        startDate?: Date | string | null
+        endDate?: Date | string | null
+        reportDate?: Date | string | null
+        studentSubjectScore: StudentSubjectScoreCreateNestedOneWithoutStudentInternshipInput
+        coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisorInternshipInput
+    };
+    export type StudentInternshipUncheckedCreateWithoutSupervisorInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        studentSubjectScoreId: string
+        deadline?: Date | string | null
+        internshipContent?: string | null
+        institution?: string | null
+        unit?: string | null
+        address?: string | null
+        coSupervisorId?: string | null
+        startDate?: Date | string | null
+        endDate?: Date | string | null
+        reportDate?: Date | string | null
+    };
+    export type StudentInternshipCreateOrConnectWithoutSupervisorInput = {
+        where: StudentInternshipWhereUniqueInput
+        create: XOR<StudentInternshipCreateWithoutSupervisorInput, StudentInternshipUncheckedCreateWithoutSupervisorInput>
+    };
+    export type StudentInternshipCreateManySupervisorInputEnvelope = {
+        data: StudentInternshipCreateManySupervisorInput | StudentInternshipCreateManySupervisorInput[]
+        skipDuplicates?: boolean
+    };
+    export type StudentInternshipCreateWithoutCoSupervisorInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        deadline?: Date | string | null
+        internshipContent?: string | null
+        institution?: string | null
+        unit?: string | null
+        address?: string | null
+        startDate?: Date | string | null
+        endDate?: Date | string | null
+        reportDate?: Date | string | null
+        studentSubjectScore: StudentSubjectScoreCreateNestedOneWithoutStudentInternshipInput
+        supervisor?: ExpertProfileCreateNestedOneWithoutSupervisorInternshipInput
+    };
+    export type StudentInternshipUncheckedCreateWithoutCoSupervisorInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        studentSubjectScoreId: string
+        deadline?: Date | string | null
+        internshipContent?: string | null
+        institution?: string | null
+        unit?: string | null
+        address?: string | null
+        supervisorId?: string | null
+        startDate?: Date | string | null
+        endDate?: Date | string | null
+        reportDate?: Date | string | null
+    };
+    export type StudentInternshipCreateOrConnectWithoutCoSupervisorInput = {
+        where: StudentInternshipWhereUniqueInput
+        create: XOR<StudentInternshipCreateWithoutCoSupervisorInput, StudentInternshipUncheckedCreateWithoutCoSupervisorInput>
+    };
+    export type StudentInternshipCreateManyCoSupervisorInputEnvelope = {
+        data: StudentInternshipCreateManyCoSupervisorInput | StudentInternshipCreateManyCoSupervisorInput[]
+        skipDuplicates?: boolean
+    };
     export type SubjectClassCreateWithoutExpertProfileInput = {
         id?: string
         active?: boolean
@@ -551518,6 +554220,56 @@ export namespace Prisma {
     export type StudentResearchTopicUpdateManyWithWhereWithoutCoSupervisorInput = {
         where: StudentResearchTopicScalarWhereInput
         data: XOR<StudentResearchTopicUpdateManyMutationInput, StudentResearchTopicUncheckedUpdateManyWithoutCoSupervisorInput>
+    };
+    export type StudentInternshipUpsertWithWhereUniqueWithoutSupervisorInput = {
+        where: StudentInternshipWhereUniqueInput
+        update: XOR<StudentInternshipUpdateWithoutSupervisorInput, StudentInternshipUncheckedUpdateWithoutSupervisorInput>
+        create: XOR<StudentInternshipCreateWithoutSupervisorInput, StudentInternshipUncheckedCreateWithoutSupervisorInput>
+    };
+    export type StudentInternshipUpdateWithWhereUniqueWithoutSupervisorInput = {
+        where: StudentInternshipWhereUniqueInput
+        data: XOR<StudentInternshipUpdateWithoutSupervisorInput, StudentInternshipUncheckedUpdateWithoutSupervisorInput>
+    };
+    export type StudentInternshipUpdateManyWithWhereWithoutSupervisorInput = {
+        where: StudentInternshipScalarWhereInput
+        data: XOR<StudentInternshipUpdateManyMutationInput, StudentInternshipUncheckedUpdateManyWithoutSupervisorInput>
+    };
+    export type StudentInternshipScalarWhereInput = {
+        AND?: StudentInternshipScalarWhereInput | StudentInternshipScalarWhereInput[]
+        OR?: StudentInternshipScalarWhereInput[]
+        NOT?: StudentInternshipScalarWhereInput | StudentInternshipScalarWhereInput[]
+        id?: StringFilter<"StudentInternship"> | string
+        code?: StringNullableFilter<"StudentInternship"> | string | null
+        active?: BoolFilter<"StudentInternship"> | boolean
+        description?: StringNullableFilter<"StudentInternship"> | string | null
+        deletedAt?: DateTimeNullableFilter<"StudentInternship"> | Date | string | null
+        createdAt?: DateTimeFilter<"StudentInternship"> | Date | string
+        updatedAt?: DateTimeFilter<"StudentInternship"> | Date | string
+        createdBy?: UuidNullableFilter<"StudentInternship"> | string | null
+        studentSubjectScoreId?: StringFilter<"StudentInternship"> | string
+        deadline?: DateTimeNullableFilter<"StudentInternship"> | Date | string | null
+        internshipContent?: StringNullableFilter<"StudentInternship"> | string | null
+        institution?: StringNullableFilter<"StudentInternship"> | string | null
+        unit?: StringNullableFilter<"StudentInternship"> | string | null
+        address?: StringNullableFilter<"StudentInternship"> | string | null
+        supervisorId?: StringNullableFilter<"StudentInternship"> | string | null
+        coSupervisorId?: StringNullableFilter<"StudentInternship"> | string | null
+        startDate?: DateTimeNullableFilter<"StudentInternship"> | Date | string | null
+        endDate?: DateTimeNullableFilter<"StudentInternship"> | Date | string | null
+        reportDate?: DateTimeNullableFilter<"StudentInternship"> | Date | string | null
+    };
+    export type StudentInternshipUpsertWithWhereUniqueWithoutCoSupervisorInput = {
+        where: StudentInternshipWhereUniqueInput
+        update: XOR<StudentInternshipUpdateWithoutCoSupervisorInput, StudentInternshipUncheckedUpdateWithoutCoSupervisorInput>
+        create: XOR<StudentInternshipCreateWithoutCoSupervisorInput, StudentInternshipUncheckedCreateWithoutCoSupervisorInput>
+    };
+    export type StudentInternshipUpdateWithWhereUniqueWithoutCoSupervisorInput = {
+        where: StudentInternshipWhereUniqueInput
+        data: XOR<StudentInternshipUpdateWithoutCoSupervisorInput, StudentInternshipUncheckedUpdateWithoutCoSupervisorInput>
+    };
+    export type StudentInternshipUpdateManyWithWhereWithoutCoSupervisorInput = {
+        where: StudentInternshipScalarWhereInput
+        data: XOR<StudentInternshipUpdateManyMutationInput, StudentInternshipUncheckedUpdateManyWithoutCoSupervisorInput>
     };
     export type SubjectClassUpsertWithWhereUniqueWithoutExpertProfileInput = {
         where: SubjectClassWhereUniqueInput
@@ -552277,6 +555029,8 @@ export namespace Prisma {
         coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
         supervisorResearchTopic?: StudentResearchTopicCreateNestedManyWithoutSupervisorInput
         coSupervisorResearchTopic?: StudentResearchTopicCreateNestedManyWithoutCoSupervisorInput
+        supervisorInternship?: StudentInternshipCreateNestedManyWithoutSupervisorInput
+        coSupervisorInternship?: StudentInternshipCreateNestedManyWithoutCoSupervisorInput
         subjectClass?: SubjectClassCreateNestedManyWithoutExpertProfileInput
     };
     export type ExpertProfileUncheckedCreateWithoutCouncilMembershipsInput = {
@@ -552309,6 +555063,8 @@ export namespace Prisma {
         coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
         supervisorResearchTopic?: StudentResearchTopicUncheckedCreateNestedManyWithoutSupervisorInput
         coSupervisorResearchTopic?: StudentResearchTopicUncheckedCreateNestedManyWithoutCoSupervisorInput
+        supervisorInternship?: StudentInternshipUncheckedCreateNestedManyWithoutSupervisorInput
+        coSupervisorInternship?: StudentInternshipUncheckedCreateNestedManyWithoutCoSupervisorInput
         subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExpertProfileInput
     };
     export type ExpertProfileCreateOrConnectWithoutCouncilMembershipsInput = {
@@ -552451,6 +555207,8 @@ export namespace Prisma {
         coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
         supervisorResearchTopic?: StudentResearchTopicUpdateManyWithoutSupervisorNestedInput
         coSupervisorResearchTopic?: StudentResearchTopicUpdateManyWithoutCoSupervisorNestedInput
+        supervisorInternship?: StudentInternshipUpdateManyWithoutSupervisorNestedInput
+        coSupervisorInternship?: StudentInternshipUpdateManyWithoutCoSupervisorNestedInput
         subjectClass?: SubjectClassUpdateManyWithoutExpertProfileNestedInput
     };
     export type ExpertProfileUncheckedUpdateWithoutCouncilMembershipsInput = {
@@ -552483,6 +555241,8 @@ export namespace Prisma {
         coSupervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutCoSupervisorNestedInput
         supervisorResearchTopic?: StudentResearchTopicUncheckedUpdateManyWithoutSupervisorNestedInput
         coSupervisorResearchTopic?: StudentResearchTopicUncheckedUpdateManyWithoutCoSupervisorNestedInput
+        supervisorInternship?: StudentInternshipUncheckedUpdateManyWithoutSupervisorNestedInput
+        coSupervisorInternship?: StudentInternshipUncheckedUpdateManyWithoutCoSupervisorNestedInput
         subjectClass?: SubjectClassUncheckedUpdateManyWithoutExpertProfileNestedInput
     };
     export type PaymentRecordUpsertWithoutCouncilMemberInput = {
@@ -565636,6 +568396,7 @@ export namespace Prisma {
         subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
         student: StudentCreateNestedOneWithoutSubjectClassStudentInput
         studentResearchTopic?: StudentResearchTopicCreateNestedOneWithoutStudentSubjectScoreInput
+        studentInternship?: StudentInternshipCreateNestedOneWithoutStudentSubjectScoreInput
         graduationGpaScores?: StudentGraduationApplicationCreateNestedManyWithoutGpaScoreInput
         graduationSupplementaryScore?: StudentGraduationApplicationCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
@@ -565673,6 +568434,7 @@ export namespace Prisma {
         repeatedReason?: string | null
         isImproving?: boolean
         studentResearchTopic?: StudentResearchTopicUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
+        studentInternship?: StudentInternshipUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
         graduationGpaScores?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutGpaScoreInput
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
@@ -565766,6 +568528,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
         student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
         studentResearchTopic?: StudentResearchTopicUpdateOneWithoutStudentSubjectScoreNestedInput
+        studentInternship?: StudentInternshipUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationGpaScores?: StudentGraduationApplicationUpdateManyWithoutGpaScoreNestedInput
         graduationSupplementaryScore?: StudentGraduationApplicationUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -565803,6 +568566,7 @@ export namespace Prisma {
         repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
         isImproving?: BoolFieldUpdateOperationsInput | boolean
         studentResearchTopic?: StudentResearchTopicUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
+        studentInternship?: StudentInternshipUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationGpaScores?: StudentGraduationApplicationUncheckedUpdateManyWithoutGpaScoreNestedInput
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -570967,6 +573731,7 @@ export namespace Prisma {
         student: StudentCreateNestedOneWithoutSubjectClassStudentInput
         examPaper?: ExamPaperCreateNestedOneWithoutStudentSubjectScoreInput
         studentResearchTopic?: StudentResearchTopicCreateNestedOneWithoutStudentSubjectScoreInput
+        studentInternship?: StudentInternshipCreateNestedOneWithoutStudentSubjectScoreInput
         graduationSupplementaryScore?: StudentGraduationApplicationCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
@@ -571004,6 +573769,7 @@ export namespace Prisma {
         isImproving?: boolean
         examPaper?: ExamPaperUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
         studentResearchTopic?: StudentResearchTopicUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
+        studentInternship?: StudentInternshipUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
@@ -571045,6 +573811,7 @@ export namespace Prisma {
         student: StudentCreateNestedOneWithoutSubjectClassStudentInput
         examPaper?: ExamPaperCreateNestedOneWithoutStudentSubjectScoreInput
         studentResearchTopic?: StudentResearchTopicCreateNestedOneWithoutStudentSubjectScoreInput
+        studentInternship?: StudentInternshipCreateNestedOneWithoutStudentSubjectScoreInput
         graduationGpaScores?: StudentGraduationApplicationCreateNestedManyWithoutGpaScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
@@ -571082,6 +573849,7 @@ export namespace Prisma {
         isImproving?: boolean
         examPaper?: ExamPaperUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
         studentResearchTopic?: StudentResearchTopicUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
+        studentInternship?: StudentInternshipUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
         graduationGpaScores?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutGpaScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
@@ -617409,6 +620177,7 @@ export namespace Prisma {
         student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
         examPaper?: ExamPaperUpdateOneWithoutStudentSubjectScoreNestedInput
         studentResearchTopic?: StudentResearchTopicUpdateOneWithoutStudentSubjectScoreNestedInput
+        studentInternship?: StudentInternshipUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationGpaScores?: StudentGraduationApplicationUpdateManyWithoutGpaScoreNestedInput
         graduationSupplementaryScore?: StudentGraduationApplicationUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -617446,6 +620215,7 @@ export namespace Prisma {
         isImproving?: BoolFieldUpdateOperationsInput | boolean
         examPaper?: ExamPaperUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
         studentResearchTopic?: StudentResearchTopicUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
+        studentInternship?: StudentInternshipUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationGpaScores?: StudentGraduationApplicationUncheckedUpdateManyWithoutGpaScoreNestedInput
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -618415,6 +621185,7 @@ export namespace Prisma {
         student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
         examPaper?: ExamPaperUpdateOneWithoutStudentSubjectScoreNestedInput
         studentResearchTopic?: StudentResearchTopicUpdateOneWithoutStudentSubjectScoreNestedInput
+        studentInternship?: StudentInternshipUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationGpaScores?: StudentGraduationApplicationUpdateManyWithoutGpaScoreNestedInput
         graduationSupplementaryScore?: StudentGraduationApplicationUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -618452,6 +621223,7 @@ export namespace Prisma {
         isImproving?: BoolFieldUpdateOperationsInput | boolean
         examPaper?: ExamPaperUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
         studentResearchTopic?: StudentResearchTopicUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
+        studentInternship?: StudentInternshipUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationGpaScores?: StudentGraduationApplicationUncheckedUpdateManyWithoutGpaScoreNestedInput
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -618817,6 +621589,8 @@ export namespace Prisma {
         coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
         supervisorResearchTopic?: StudentResearchTopicUpdateManyWithoutSupervisorNestedInput
         coSupervisorResearchTopic?: StudentResearchTopicUpdateManyWithoutCoSupervisorNestedInput
+        supervisorInternship?: StudentInternshipUpdateManyWithoutSupervisorNestedInput
+        coSupervisorInternship?: StudentInternshipUpdateManyWithoutCoSupervisorNestedInput
         councilMemberships?: CouncilMemberUpdateManyWithoutExpertNestedInput
     };
     export type ExpertProfileUncheckedUpdateWithoutSubjectClassInput = {
@@ -618849,6 +621623,8 @@ export namespace Prisma {
         coSupervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutCoSupervisorNestedInput
         supervisorResearchTopic?: StudentResearchTopicUncheckedUpdateManyWithoutSupervisorNestedInput
         coSupervisorResearchTopic?: StudentResearchTopicUncheckedUpdateManyWithoutCoSupervisorNestedInput
+        supervisorInternship?: StudentInternshipUncheckedUpdateManyWithoutSupervisorNestedInput
+        coSupervisorInternship?: StudentInternshipUncheckedUpdateManyWithoutCoSupervisorNestedInput
         councilMemberships?: CouncilMemberUncheckedUpdateManyWithoutExpertNestedInput
     };
     export type ExpertProfileUncheckedUpdateManyWithoutSubjectClassInput = {
@@ -623891,6 +626667,8 @@ export namespace Prisma {
         coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
         supervisorResearchTopic?: StudentResearchTopicUpdateManyWithoutSupervisorNestedInput
         coSupervisorResearchTopic?: StudentResearchTopicUpdateManyWithoutCoSupervisorNestedInput
+        supervisorInternship?: StudentInternshipUpdateManyWithoutSupervisorNestedInput
+        coSupervisorInternship?: StudentInternshipUpdateManyWithoutCoSupervisorNestedInput
         subjectClass?: SubjectClassUpdateManyWithoutExpertProfileNestedInput
         councilMemberships?: CouncilMemberUpdateManyWithoutExpertNestedInput
     };
@@ -623923,6 +626701,8 @@ export namespace Prisma {
         coSupervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutCoSupervisorNestedInput
         supervisorResearchTopic?: StudentResearchTopicUncheckedUpdateManyWithoutSupervisorNestedInput
         coSupervisorResearchTopic?: StudentResearchTopicUncheckedUpdateManyWithoutCoSupervisorNestedInput
+        supervisorInternship?: StudentInternshipUncheckedUpdateManyWithoutSupervisorNestedInput
+        coSupervisorInternship?: StudentInternshipUncheckedUpdateManyWithoutCoSupervisorNestedInput
         subjectClass?: SubjectClassUncheckedUpdateManyWithoutExpertProfileNestedInput
         councilMemberships?: CouncilMemberUncheckedUpdateManyWithoutExpertNestedInput
     };
@@ -625768,6 +628548,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
         examPaper?: ExamPaperUpdateOneWithoutStudentSubjectScoreNestedInput
         studentResearchTopic?: StudentResearchTopicUpdateOneWithoutStudentSubjectScoreNestedInput
+        studentInternship?: StudentInternshipUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationGpaScores?: StudentGraduationApplicationUpdateManyWithoutGpaScoreNestedInput
         graduationSupplementaryScore?: StudentGraduationApplicationUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -625805,6 +628586,7 @@ export namespace Prisma {
         isImproving?: BoolFieldUpdateOperationsInput | boolean
         examPaper?: ExamPaperUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
         studentResearchTopic?: StudentResearchTopicUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
+        studentInternship?: StudentInternshipUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationGpaScores?: StudentGraduationApplicationUncheckedUpdateManyWithoutGpaScoreNestedInput
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -629660,6 +632442,8 @@ export namespace Prisma {
         coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
         supervisorResearchTopic?: StudentResearchTopicUpdateManyWithoutSupervisorNestedInput
         coSupervisorResearchTopic?: StudentResearchTopicUpdateManyWithoutCoSupervisorNestedInput
+        supervisorInternship?: StudentInternshipUpdateManyWithoutSupervisorNestedInput
+        coSupervisorInternship?: StudentInternshipUpdateManyWithoutCoSupervisorNestedInput
         subjectClass?: SubjectClassUpdateManyWithoutExpertProfileNestedInput
         councilMemberships?: CouncilMemberUpdateManyWithoutExpertNestedInput
     };
@@ -629692,6 +632476,8 @@ export namespace Prisma {
         coSupervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutCoSupervisorNestedInput
         supervisorResearchTopic?: StudentResearchTopicUncheckedUpdateManyWithoutSupervisorNestedInput
         coSupervisorResearchTopic?: StudentResearchTopicUncheckedUpdateManyWithoutCoSupervisorNestedInput
+        supervisorInternship?: StudentInternshipUncheckedUpdateManyWithoutSupervisorNestedInput
+        coSupervisorInternship?: StudentInternshipUncheckedUpdateManyWithoutCoSupervisorNestedInput
         subjectClass?: SubjectClassUncheckedUpdateManyWithoutExpertProfileNestedInput
         councilMemberships?: CouncilMemberUncheckedUpdateManyWithoutExpertNestedInput
     };
@@ -630889,6 +633675,46 @@ export namespace Prisma {
         supervisorId?: string | null
         reportDate?: Date | string | null
     };
+    export type StudentInternshipCreateManySupervisorInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        studentSubjectScoreId: string
+        deadline?: Date | string | null
+        internshipContent?: string | null
+        institution?: string | null
+        unit?: string | null
+        address?: string | null
+        coSupervisorId?: string | null
+        startDate?: Date | string | null
+        endDate?: Date | string | null
+        reportDate?: Date | string | null
+    };
+    export type StudentInternshipCreateManyCoSupervisorInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        studentSubjectScoreId: string
+        deadline?: Date | string | null
+        internshipContent?: string | null
+        institution?: string | null
+        unit?: string | null
+        address?: string | null
+        supervisorId?: string | null
+        startDate?: Date | string | null
+        endDate?: Date | string | null
+        reportDate?: Date | string | null
+    };
     export type CouncilMemberCreateManyExpertInput = {
         id?: string
         code?: string | null
@@ -631369,6 +634195,126 @@ export namespace Prisma {
         name?: NullableStringFieldUpdateOperationsInput | string | null
         mainContent?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        reportDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    };
+    export type StudentInternshipUpdateWithoutSupervisorInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        internshipContent?: NullableStringFieldUpdateOperationsInput | string | null
+        institution?: NullableStringFieldUpdateOperationsInput | string | null
+        unit?: NullableStringFieldUpdateOperationsInput | string | null
+        address?: NullableStringFieldUpdateOperationsInput | string | null
+        startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reportDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        studentSubjectScore?: StudentSubjectScoreUpdateOneRequiredWithoutStudentInternshipNestedInput
+        coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisorInternshipNestedInput
+    };
+    export type StudentInternshipUncheckedUpdateWithoutSupervisorInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        studentSubjectScoreId?: StringFieldUpdateOperationsInput | string
+        deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        internshipContent?: NullableStringFieldUpdateOperationsInput | string | null
+        institution?: NullableStringFieldUpdateOperationsInput | string | null
+        unit?: NullableStringFieldUpdateOperationsInput | string | null
+        address?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reportDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    };
+    export type StudentInternshipUncheckedUpdateManyWithoutSupervisorInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        studentSubjectScoreId?: StringFieldUpdateOperationsInput | string
+        deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        internshipContent?: NullableStringFieldUpdateOperationsInput | string | null
+        institution?: NullableStringFieldUpdateOperationsInput | string | null
+        unit?: NullableStringFieldUpdateOperationsInput | string | null
+        address?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reportDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    };
+    export type StudentInternshipUpdateWithoutCoSupervisorInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        internshipContent?: NullableStringFieldUpdateOperationsInput | string | null
+        institution?: NullableStringFieldUpdateOperationsInput | string | null
+        unit?: NullableStringFieldUpdateOperationsInput | string | null
+        address?: NullableStringFieldUpdateOperationsInput | string | null
+        startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reportDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        studentSubjectScore?: StudentSubjectScoreUpdateOneRequiredWithoutStudentInternshipNestedInput
+        supervisor?: ExpertProfileUpdateOneWithoutSupervisorInternshipNestedInput
+    };
+    export type StudentInternshipUncheckedUpdateWithoutCoSupervisorInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        studentSubjectScoreId?: StringFieldUpdateOperationsInput | string
+        deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        internshipContent?: NullableStringFieldUpdateOperationsInput | string | null
+        institution?: NullableStringFieldUpdateOperationsInput | string | null
+        unit?: NullableStringFieldUpdateOperationsInput | string | null
+        address?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reportDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    };
+    export type StudentInternshipUncheckedUpdateManyWithoutCoSupervisorInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        studentSubjectScoreId?: StringFieldUpdateOperationsInput | string
+        deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        internshipContent?: NullableStringFieldUpdateOperationsInput | string | null
+        institution?: NullableStringFieldUpdateOperationsInput | string | null
+        unit?: NullableStringFieldUpdateOperationsInput | string | null
+        address?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         reportDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     };
     export type SubjectClassUpdateWithoutExpertProfileInput = {
@@ -637613,6 +640559,7 @@ export namespace Prisma {
         student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
         examPaper?: ExamPaperUpdateOneWithoutStudentSubjectScoreNestedInput
         studentResearchTopic?: StudentResearchTopicUpdateOneWithoutStudentSubjectScoreNestedInput
+        studentInternship?: StudentInternshipUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationSupplementaryScore?: StudentGraduationApplicationUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -637650,6 +640597,7 @@ export namespace Prisma {
         isImproving?: BoolFieldUpdateOperationsInput | boolean
         examPaper?: ExamPaperUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
         studentResearchTopic?: StudentResearchTopicUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
+        studentInternship?: StudentInternshipUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -637716,6 +640664,7 @@ export namespace Prisma {
         student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
         examPaper?: ExamPaperUpdateOneWithoutStudentSubjectScoreNestedInput
         studentResearchTopic?: StudentResearchTopicUpdateOneWithoutStudentSubjectScoreNestedInput
+        studentInternship?: StudentInternshipUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationGpaScores?: StudentGraduationApplicationUpdateManyWithoutGpaScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -637753,6 +640702,7 @@ export namespace Prisma {
         isImproving?: BoolFieldUpdateOperationsInput | boolean
         examPaper?: ExamPaperUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
         studentResearchTopic?: StudentResearchTopicUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
+        studentInternship?: StudentInternshipUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationGpaScores?: StudentGraduationApplicationUncheckedUpdateManyWithoutGpaScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput

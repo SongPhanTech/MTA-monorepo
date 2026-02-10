@@ -2516,6 +2516,8 @@ model StudentSubjectScore {
   examPaper                    ExamPaper?
   /// chuyên đề nghiên cứu
   studentResearchTopic         StudentResearchTopic?
+  /// thực tập
+  studentInternship            StudentInternship?
   graduationGpaScores          StudentGraduationApplication[]             @relation("gpaScore")
   graduationSupplementaryScore StudentGraduationApplication[]             @relation("supplementaryScore")
   certificates                 ArchivedCertificateOnStudentSubjectScore[]
@@ -2589,6 +2591,43 @@ model StudentResearchTopic {
   coSupervisor          ExpertProfile?      @relation("CoSupervisorToResearchTopic", fields: [coSupervisorId], references: [id])
   coSupervisorId        String?
   /// ngày báo cáo
+  reportDate            DateTime?
+
+  @@schema("ql-dao-tao")
+}
+
+model StudentInternship {
+  id                    String              @id() @default(cuid())
+  code                  String?             @unique()
+  active                Boolean             @default(true)
+  description           String?             @db.Text()
+  deletedAt             DateTime?
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @default(now()) @updatedAt()
+  createdBy             String?             @db.Uuid()
+  studentSubjectScore   StudentSubjectScore @relation(fields: [studentSubjectScoreId], references: [id])
+  studentSubjectScoreId String              @unique()
+  /// hạn nhập thực tập
+  deadline              DateTime?
+  /// nội dung thực tập
+  internshipContent     String?
+  /// cơ quan thực tập
+  institution           String?
+  /// đơn vị thực tập
+  unit                  String?
+  /// địa chỉ thực tập
+  address               String?
+  /// GVHD 1
+  supervisor            ExpertProfile?      @relation("SupervisorToInternship", fields: [supervisorId], references: [id])
+  supervisorId          String?
+  /// GVHD 2
+  coSupervisor          ExpertProfile?      @relation("CoSupervisorToInternship", fields: [coSupervisorId], references: [id])
+  coSupervisorId        String?
+  /// thời gian bắt đầu thực tập
+  startDate             DateTime?
+  /// thời gian kết thúc thực tập
+  endDate               DateTime?
+  /// thời gian báo cáo
   reportDate            DateTime?
 
   @@schema("ql-dao-tao")
@@ -4716,6 +4755,8 @@ model ExpertProfile {
   coSupervisedTheses        ThesisProject[]        @relation("CoSupervisorToThesis")
   supervisorResearchTopic   StudentResearchTopic[] @relation("SupervisorToResearchTopic")
   coSupervisorResearchTopic StudentResearchTopic[] @relation("CoSupervisorToResearchTopic")
+  supervisorInternship      StudentInternship[]    @relation("SupervisorToInternship")
+  coSupervisorInternship    StudentInternship[]    @relation("CoSupervisorToInternship")
   subjectClass              SubjectClass[]
   councilMemberships        CouncilMember[]
 
