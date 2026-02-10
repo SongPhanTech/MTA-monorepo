@@ -117,6 +117,7 @@ export type FilterProps = {
     examDate?: Date[]
     endDate?: Date[]
     englishName?: string | ''
+    classification?: string
     creditCmp?: { lte?: number | null; gte?: number | null }
     periodCmp?: { lte?: number | null; gte?: number | null }
     numberOfTheoryCmp?: { lte?: number | null; gte?: number | null }

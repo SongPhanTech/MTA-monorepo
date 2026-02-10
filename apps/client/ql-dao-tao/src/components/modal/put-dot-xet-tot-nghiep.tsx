@@ -31,6 +31,8 @@ const PutGraduationSession = () => {
         tag: 'PutGraduationSession',
         onClose: form.resetFields,
     })
+    const sessionDate = Form.useWatch('sessionDate', form);
+    const applicationStart = Form.useWatch('applicationStart', form);
 
     const { showSpinner, hideSpinner } = useSpinner()
 
@@ -146,7 +148,7 @@ const PutGraduationSession = () => {
                         }}
                         className="w-full"
                         disabledDate={(current) => {
-                            const startTime = dayjs()
+                            const startTime = dayjs().add(1, 'day');
                             if (!startTime) return false
                             return current && current < dayjs(startTime).startOf('day')
                         }}
@@ -166,6 +168,11 @@ const PutGraduationSession = () => {
                             format: 'DD/MM/YYYY',
                             type: 'mask',
                         }}
+                        disabled={!sessionDate}
+                        disabledDate={(current) => {
+                            if(!sessionDate) return false
+                            return current && (sessionDate && current.isAfter(dayjs(sessionDate, 'day')))
+                        }}
                         className="w-full"
                         placeholder="Chọn ngày bắt đầu nhận đơn"
                     />
@@ -179,10 +186,11 @@ const PutGraduationSession = () => {
                             type: 'mask',
                         }}
                         className="w-full"
+                        disabled={!sessionDate || !applicationStart}
                         disabledDate={(current) => {
-                            const startTime = form.getFieldValue('applicationStart')
-                            if (!startTime) return false
-                            return current && current < dayjs(startTime).startOf('day')
+                            if (!applicationStart) return false
+                            if(!sessionDate) return false
+                            return current && (( current.isBefore(dayjs(applicationStart, 'day'))) || (sessionDate && current.isAfter(dayjs(sessionDate, 'day'))))
                         }}
                         placeholder="Chọn ngày kết thúc nhận đơn"
                     />
