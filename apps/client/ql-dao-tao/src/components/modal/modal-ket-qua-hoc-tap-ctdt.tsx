@@ -42,7 +42,7 @@ const ModalLearningResult = () => {
                                                     studentSubjectScore: {
                                                         where: {
                                                             studentId: id,
-                                                            finalScore: { not: null },
+                                                            finalScore: {not: null}
                                                         },
                                                         orderBy: {
                                                             finalScore: 'desc',
@@ -67,16 +67,20 @@ const ModalLearningResult = () => {
     const subjectsInCurriculumByBlock = trainingBlocks.map((block) => {
         const filteredSubjects = block.subjects
             .filter((s) => s.useForFinalScore !== false)
-            .map((s) => ({
-                id: s.subject.id,
-                code: s.subject.code,
-                name: s.subject.name,
-                credit: s.subject.credit,
-                finalScore: s.subject.studentSubjectScore?.[0]?.finalScore,
-                attendanceScore: s.subject.studentSubjectScore?.[0]?.attendanceScore,
-                examScore: s.subject.studentSubjectScore?.[0]?.examScore,
-                midtermScore: s.subject.studentSubjectScore?.[0]?.midtermScore,
-            }))
+            .map((s) => {
+                const lastScore = s.subject.studentSubjectScore?.at(-1)
+
+                return {
+                    id: s.subject.id,
+                    code: s.subject.code,
+                    name: s.subject.name,
+                    credit: s.subject.credit,
+                    finalScore: lastScore?.finalScore,
+                    attendanceScore: lastScore?.attendanceScore,
+                    examScore: lastScore?.examScore,
+                    midtermScore: lastScore?.midtermScore,
+                }
+            })
 
         return {
             id: block.trainingBlock.id,
@@ -89,16 +93,20 @@ const ModalLearningResult = () => {
     const nonFinalSubjects = trainingBlocks.flatMap((block) =>
         block.subjects
             .filter((s) => s.useForFinalScore === false)
-            .map((s) => ({
-                id: s.subject.id,
-                code: s.subject.code,
-                name: s.subject.name,
-                credit: s.subject.credit,
-                finalScore: s.subject.studentSubjectScore?.[0]?.finalScore,
-                attendanceScore: s.subject.studentSubjectScore?.[0]?.attendanceScore,
-                examScore: s.subject.studentSubjectScore?.[0]?.examScore,
-                midtermScore: s.subject.studentSubjectScore?.[0]?.midtermScore,
-            }))
+            .map((s) => {
+                const lastScore = s.subject.studentSubjectScore?.at(-1)
+
+                return {
+                    id: s.subject.id,
+                    code: s.subject.code,
+                    name: s.subject.name,
+                    credit: s.subject.credit,
+                    finalScore: lastScore?.finalScore,
+                    attendanceScore: lastScore?.attendanceScore,
+                    examScore: lastScore?.examScore,
+                    midtermScore: lastScore?.midtermScore,
+                }
+            })
     )
 
     const subjectIdsInCurriculum = new Set(
@@ -192,7 +200,8 @@ const ModalLearningResult = () => {
                             title: 'Điểm học phần',
                             width: 80,
                             align: 'center',
-                            render: (_, record) => record?.finalScore?.toNumber(),
+                            render: (_, r) =>
+                                r.finalScore != null ? r.finalScore.toNumber() : '—',
                         },
                     ]}
                     pagination={{
