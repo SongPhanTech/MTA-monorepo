@@ -8454,6 +8454,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isOptional: true,
                     backLink: 'studentSubjectScore',
+                }, studentInternship: {
+                    name: "studentInternship",
+                    type: "StudentInternship",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'studentSubjectScore',
                 }, graduationGpaScores: {
                     name: "graduationGpaScores",
                     type: "StudentGraduationApplication",
@@ -8738,6 +8744,136 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'coSupervisor',
+                }, reportDate: {
+                    name: "reportDate",
+                    type: "DateTime",
+                    isOptional: true,
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, studentSubjectScoreId: {
+                    name: "studentSubjectScoreId",
+                    fields: ["studentSubjectScoreId"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        studentInternship: {
+            name: 'StudentInternship', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$StudentInternship$createdBy,
+                }, studentSubjectScore: {
+                    name: "studentSubjectScore",
+                    type: "StudentSubjectScore",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'studentInternship',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentSubjectScoreId" },
+                }, studentSubjectScoreId: {
+                    name: "studentSubjectScoreId",
+                    type: "String",
+                    attributes: [{ "name": "@unique", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'studentSubjectScore',
+                }, deadline: {
+                    name: "deadline",
+                    type: "DateTime",
+                    isOptional: true,
+                }, internshipContent: {
+                    name: "internshipContent",
+                    type: "String",
+                    isOptional: true,
+                }, institution: {
+                    name: "institution",
+                    type: "String",
+                    isOptional: true,
+                }, unit: {
+                    name: "unit",
+                    type: "String",
+                    isOptional: true,
+                }, address: {
+                    name: "address",
+                    type: "String",
+                    isOptional: true,
+                }, supervisor: {
+                    name: "supervisor",
+                    type: "ExpertProfile",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "SupervisorToInternship" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'supervisorInternship',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "supervisorId" },
+                }, supervisorId: {
+                    name: "supervisorId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'supervisor',
+                }, coSupervisor: {
+                    name: "coSupervisor",
+                    type: "ExpertProfile",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "CoSupervisorToInternship" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'coSupervisorInternship',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "coSupervisorId" },
+                }, coSupervisorId: {
+                    name: "coSupervisorId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'coSupervisor',
+                }, startDate: {
+                    name: "startDate",
+                    type: "DateTime",
+                    isOptional: true,
+                }, endDate: {
+                    name: "endDate",
+                    type: "DateTime",
+                    isOptional: true,
                 }, reportDate: {
                     name: "reportDate",
                     type: "DateTime",
@@ -18129,6 +18265,20 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "CoSupervisorToResearchTopic" }] }],
+                    backLink: 'coSupervisor',
+                }, supervisorInternship: {
+                    name: "supervisorInternship",
+                    type: "StudentInternship",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "SupervisorToInternship" }] }],
+                    backLink: 'supervisor',
+                }, coSupervisorInternship: {
+                    name: "coSupervisorInternship",
+                    type: "StudentInternship",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "CoSupervisorToInternship" }] }],
                     backLink: 'coSupervisor',
                 }, subjectClass: {
                     name: "subjectClass",
@@ -28190,6 +28340,10 @@ function $default$StudentSubjectScoreHistory$createdBy(user: any): unknown {
 }
 
 function $default$StudentResearchTopic$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$StudentInternship$createdBy(user: any): unknown {
     return user?.id;
 }
 

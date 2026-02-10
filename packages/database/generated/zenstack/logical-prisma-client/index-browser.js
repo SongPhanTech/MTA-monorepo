@@ -1610,6 +1610,28 @@ exports.Prisma.StudentResearchTopicScalarFieldEnum = {
   reportDate: 'reportDate'
 };
 
+exports.Prisma.StudentInternshipScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  studentSubjectScoreId: 'studentSubjectScoreId',
+  deadline: 'deadline',
+  internshipContent: 'internshipContent',
+  institution: 'institution',
+  unit: 'unit',
+  address: 'address',
+  supervisorId: 'supervisorId',
+  coSupervisorId: 'coSupervisorId',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  reportDate: 'reportDate'
+};
+
 exports.Prisma.ArchivedCertificateOnStudentSubjectScoreScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -5735,6 +5757,20 @@ exports.Prisma.StudentResearchTopicOrderByRelevanceFieldEnum = {
   coSupervisorId: 'coSupervisorId'
 };
 
+exports.Prisma.StudentInternshipOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  studentSubjectScoreId: 'studentSubjectScoreId',
+  internshipContent: 'internshipContent',
+  institution: 'institution',
+  unit: 'unit',
+  address: 'address',
+  supervisorId: 'supervisorId',
+  coSupervisorId: 'coSupervisorId'
+};
+
 exports.Prisma.ArchivedCertificateOnStudentSubjectScoreOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -8173,6 +8209,7 @@ exports.Prisma.ModelName = {
   StudentSubjectScore: 'StudentSubjectScore',
   StudentSubjectScoreHistory: 'StudentSubjectScoreHistory',
   StudentResearchTopic: 'StudentResearchTopic',
+  StudentInternship: 'StudentInternship',
   ArchivedCertificateOnStudentSubjectScore: 'ArchivedCertificateOnStudentSubjectScore',
   ArchivedCertificate: 'ArchivedCertificate',
   ArchivedAwardOnStudentSubjectScore: 'ArchivedAwardOnStudentSubjectScore',

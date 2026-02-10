@@ -1629,6 +1629,26 @@ const policy: PolicyDef = {
             },
 
         },
+        studentInternship: {
+            modelLevel: {
+                read: { guard: StudentInternship_read, },
+                create: { guard: StudentInternship_create, inputChecker: StudentInternship_create_input, },
+                update: { guard: StudentInternship_update, },
+                postUpdate: { guard: StudentInternship_postUpdate, },
+                delete: { guard: StudentInternship_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
         archivedCertificateOnStudentSubjectScore: {
             modelLevel: {
                 read: { guard: ArchivedCertificateOnStudentSubjectScore_read, },
@@ -5429,6 +5449,7 @@ const policy: PolicyDef = {
         studentSubjectScore: { hasValidation: true },
         studentSubjectScoreHistory: { hasValidation: true },
         studentResearchTopic: { hasValidation: false },
+        studentInternship: { hasValidation: false },
         archivedCertificateOnStudentSubjectScore: { hasValidation: false },
         archivedCertificate: { hasValidation: false },
         archivedAwardOnStudentSubjectScore: { hasValidation: false },
@@ -10662,6 +10683,71 @@ function StudentResearchTopic_delete(context: QueryContext, db: CrudContract): a
 }
 
 function $check_StudentResearchTopic_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function StudentInternship_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_StudentInternship_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function StudentInternship_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_StudentInternship_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function StudentInternship_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function StudentInternship_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_StudentInternship_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function StudentInternship_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_StudentInternship_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function StudentInternship_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_StudentInternship_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 

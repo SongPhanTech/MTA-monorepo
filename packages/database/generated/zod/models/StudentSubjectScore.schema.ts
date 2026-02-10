@@ -91,6 +91,7 @@ const relationSchema = z.object({
     student: z.record(z.string(), z.unknown()),
     examPaper: z.record(z.string(), z.unknown()).optional(),
     studentResearchTopic: z.record(z.string(), z.unknown()).optional(),
+    studentInternship: z.record(z.string(), z.unknown()).optional(),
     graduationGpaScores: z.array(z.unknown()).optional(),
     graduationSupplementaryScore: z.array(z.unknown()).optional(),
     certificates: z.array(z.unknown()).optional(),

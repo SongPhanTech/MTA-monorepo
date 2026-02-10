@@ -17,13 +17,14 @@ import {
     useUpdateSubjectVersion,
 } from '@workspace/db/hooks'
 import { useFindManyTrainingObjectTypePermission, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Col, Form, Input, InputNumber, message, Radio, Row, Switch } from 'antd'
+import { Col, Form, Input, InputNumber, message, Radio, Row, Switch, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import TreeSelect from '@/components/commons/tree-select'
 import 'dayjs/locale/vi'
 import { subjectVersionTypeOptions } from '@workspace/libs/constants'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { BadgeHelpIcon } from 'lucide-react'
 
 export type PutSubjectVersion = SubjectVersion & {
     documentFiles?: DocumentFile[]
@@ -536,7 +537,28 @@ const PutVersionSubjectModal = () => {
                     </FormItem>
                 </Col>
                 <Col span={8}>
-                    <FormItem form={form} name="onePoint" label="Một đầu điểm">
+                    <FormItem 
+                        form={form} 
+                        name="onePoint"
+                        label={
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                <span className="">
+                                    Một đầu điểm
+                                </span>
+                                <Tooltip
+                                    placement="topLeft"
+                                    title={
+                                        <div>
+                                            <div><strong>1 đầu điểm:</strong> Chỉ nhập điểm thi (điểm học phần bằng điểm thi)</div>
+                                            <div><strong>3 đầu điểm:</strong> Có điểm thường xuyên, định kỳ, thi (điểm học phần nhân theo hệ số)</div>
+                                        </div>
+                                    }
+                                >
+                                    <BadgeHelpIcon size={16} style={{ margin: '0 0 -1px' }} />
+                                </Tooltip>
+                            </div>
+                        }
+                    >
                         <Switch checkedChildren="1 đầu điểm" unCheckedChildren="3 đầu điểm" />
                     </FormItem>
                 </Col>
