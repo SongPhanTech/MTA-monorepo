@@ -1,5 +1,4 @@
 import { normalizeVietnamese } from '@workspace/libs/utils'
-import { message } from 'antd'
 import clsx, { type ClassValue } from 'clsx'
 import dayjs, { type Dayjs } from 'dayjs'
 import { twMerge } from 'tailwind-merge'
@@ -176,13 +175,30 @@ export const buildOrgFlat = (
     return result
 }
 
-export const validateExamScore = (score?: number | null, isOnePoint = false) => {
+export const validateExamScore = (score?: number | null) => {
     if (score === null || score === undefined) {
         return Promise.resolve()
     }
     if (score < 0 || score > 10) {
         return Promise.reject(new Error('Điểm phải nằm trong khoảng từ 0 đến 10'))
     }
+
+    const scaledValue = score * 10
+    if (scaledValue !== Math.round(scaledValue)) {
+        // message.error('Điểm phải là bội số của 0.1')
+        return Promise.reject(new Error('Điểm phải là bội số của 0.1'))
+    }
+    return Promise.resolve()
+}
+
+export const validateScore = (score: number | null | undefined, isOnePoint: boolean) => {
+    if (score === null || score === undefined) {
+        return Promise.resolve()
+    }
+    if (score < 0 || score > 10) {
+        return Promise.reject(new Error('Điểm phải nằm trong khoảng từ 0 đến 10'))
+    }
+
     if (!isOnePoint) {
         if (score % 0.5 !== 0) {
             // message.error('Điểm phải là bội số của 0.5')
@@ -194,21 +210,6 @@ export const validateExamScore = (score?: number | null, isOnePoint = false) => 
             // message.error('Điểm phải là bội số của 0.1')
             return Promise.reject(new Error('Điểm phải là bội số của 0.1'))
         }
-    }
-    return Promise.resolve()
-}
-
-export const validateScore = (score?: number | null) => {
-    if (score === null || score === undefined) {
-        return Promise.resolve()
-    }
-    if (score < 0 || score > 10) {
-        return Promise.reject(new Error('Điểm phải nằm trong khoảng từ 0 đến 10'))
-    }
-
-    if (score % 0.5 !== 0) {
-        message.error('Điểm phải là bội số của 0.5')
-        return Promise.reject()
     }
 
     return Promise.resolve()

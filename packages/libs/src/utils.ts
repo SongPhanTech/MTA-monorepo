@@ -428,12 +428,6 @@ export const calcFinalScore = (
         return maxCertFinalScore || null
     }
 
-    // if (
-    //     (subjectScore.attendanceScore || subjectScore.midtermScore || subjectScore.examScore) === 0
-    // ) {
-    //     return maxCertFinalScore || new Decimal(0)
-    // }
-
     // 3. Check if not enough to take exam
     if (
         subjectScore.attendanceScore < coef.scoreToTakeExam ||
@@ -449,19 +443,15 @@ export const calcFinalScore = (
             : subjectScore.examScore
 
     // 4. Calculate final score
-    let finalScore: number
-    if (examScore < coef.examScoreToPass) {
-        finalScore = examScore
-    } else if (examScore < coef.scoreToPass) {
-        finalScore = examScore
-    } else {
-        finalScore = Math.min(
-            subjectScore.attendanceScore * coef.coef_1 +
-                subjectScore.midtermScore * coef.coef_2 +
-                examScore * coef.coef_3,
-            10
-        )
-    }
+    const finalScore =
+        examScore < coef.examScoreToPass
+            ? examScore
+            : Math.min(
+                  subjectScore.attendanceScore * coef.coef_1 +
+                      subjectScore.midtermScore * coef.coef_2 +
+                      examScore * coef.coef_3,
+                  10
+              )
 
     if (maxCertFinalScore === null && finalScore < coef.scoreToPass) {
         return new Decimal(finalScore).toDecimalPlaces(1)

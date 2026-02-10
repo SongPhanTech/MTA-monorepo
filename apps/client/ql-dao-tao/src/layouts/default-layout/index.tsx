@@ -13,6 +13,7 @@ import { useRouter } from 'next/router'
 import { type ReactNode, useMemo } from 'react'
 import { IdleTimerProvider } from 'react-idle-timer'
 import HeaderApp from '@/components/header'
+import packageInfo from '../../../package.json'
 
 const { Header, Content, Footer } = Layout
 interface BreadcrumbListProps {
@@ -132,8 +133,12 @@ const DefaultLayout = ({
                         </div>
                     )}
                 </Content>
-                <Footer className="fixed bottom-0 w-full bg-red z-[1000] flex items-center p-2">
-                    Học viện Kỹ thuật Quân sự - Địa chỉ: Số 236, Hoàng Quốc Việt, Cầu Giấy, Hà Nội
+                <Footer className="fixed bottom-0 w-full z-[1000] flex items-center p-2">
+                    <div>
+                        Học viện Kỹ thuật Quân sự - Địa chỉ: Số 236, Hoàng Quốc Việt, Cầu Giấy, Hà
+                        Nội
+                    </div>
+                    <div className="ml-auto">Phiên bản: {packageInfo.version}</div>
                 </Footer>
             </Layout>
         </IdleTimerProvider>

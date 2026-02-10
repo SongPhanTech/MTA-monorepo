@@ -287,10 +287,14 @@ export default function NhapDiem({
     )
 
     const handleSave = async () => {
+        if (!dataDetailSubjectClass?.subject) {
+            message.error('Không tìm thấy thông tin môn học')
+            return
+        }
         for (const [_, value] of Object.entries(listForm)) {
             try {
-                await validateScore(value.attendanceScore)
-                await validateScore(value.midtermScore)
+                await validateScore(value.attendanceScore, dataDetailSubjectClass?.subject.onePoint)
+                await validateScore(value.midtermScore, dataDetailSubjectClass?.subject.onePoint)
                 await validateExamScore(value.examScore)
                 if (value.examBanned && !value.examBannedReason) {
                     message.error('Vui lòng nhập lý do cấm thi')
@@ -1095,7 +1099,12 @@ export default function NhapDiem({
                                             label=""
                                             rules={[
                                                 {
-                                                    validator: (_, value) => validateScore(value),
+                                                    validator: (_, value) =>
+                                                        validateScore(
+                                                            value,
+                                                            dataDetailSubjectClass?.subject
+                                                                .onePoint || false
+                                                        ),
                                                 },
                                             ]}
                                         >
@@ -1139,7 +1148,12 @@ export default function NhapDiem({
                                             label=""
                                             rules={[
                                                 {
-                                                    validator: (_, value) => validateScore(value),
+                                                    validator: (_, value) =>
+                                                        validateScore(
+                                                            value,
+                                                            dataDetailSubjectClass?.subject
+                                                                .onePoint || false
+                                                        ),
                                                 },
                                             ]}
                                         >
@@ -1201,10 +1215,7 @@ export default function NhapDiem({
                                             rules={[
                                                 {
                                                     validator: (_, value) =>
-                                                        validateExamScore(
-                                                            value,
-                                                            subjectClass?.subject?.onePoint
-                                                        ),
+                                                        validateExamScore(value),
                                                 },
                                             ]}
                                         >
