@@ -320,7 +320,7 @@ function YearAndSemester() {
                             align: 'center',
                             width: 120,
                             type: 'select',
-                            options: semesterOption,
+                            options: semesterOption.filter((opt) => opt.value !== null),
                             render: (value) => getSemesterTypeLabel(value),
                         },
                         {
