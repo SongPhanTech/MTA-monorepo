@@ -556,9 +556,7 @@ export default function ExportReport({ id }: { id: string }) {
                         ],
                     })
                 )
-                overviewChildren.push(
-                    ...(await htmlToParagraphs(data?.overviewProblem || ''))
-                )
+                overviewChildren.push(...(await htmlToParagraphs(data?.overviewProblem || '')))
 
                 // 2. Tổng quan chung
                 overviewChildren.push(
@@ -576,9 +574,7 @@ export default function ExportReport({ id }: { id: string }) {
                         ],
                     })
                 )
-                overviewChildren.push(
-                    ...(await htmlToParagraphs(data?.overviewGeneral || ''))
-                )
+                overviewChildren.push(...(await htmlToParagraphs(data?.overviewGeneral || '')))
 
                 // 3. Kết quả rà soát việc đáp ứng quy định về chuẩn chương trình đào tạo
                 overviewChildren.push(
@@ -596,9 +592,7 @@ export default function ExportReport({ id }: { id: string }) {
                         ],
                     })
                 )
-                overviewChildren.push(
-                    ...(await htmlToParagraphs(data?.overviewResults || ''))
-                )
+                overviewChildren.push(...(await htmlToParagraphs(data?.overviewResults || '')))
 
                 const listMembers = await Promise.all([
                     {
@@ -823,10 +817,25 @@ export default function ExportReport({ id }: { id: string }) {
 
                         return { children }
                     }),
-                    {
-                        children: exportDanhSachMinhchung(result),
-                    },
                 ])
+
+                // ==== Phần Ⅲ. KẾT LUẬN ====
+                const conclusionChildren: any[] = []
+                conclusionChildren.push(
+                    new Paragraph({
+                        alignment: AlignmentType.CENTER,
+                        heading: HeadingLevel.HEADING_1,
+                        children: [
+                            new TextRun({
+                                text: 'Phần Ⅲ. KẾT LUẬN',
+                                bold: true,
+                                size: 32,
+                                color: '000000',
+                            }),
+                        ],
+                    })
+                )
+                conclusionChildren.push(...(await htmlToParagraphs(data?.conclude || '')))
 
                 const doc = new Document({
                     features: {
@@ -861,6 +870,12 @@ export default function ExportReport({ id }: { id: string }) {
                             children: overviewChildren,
                         },
                         ...sections,
+                        {
+                            children: conclusionChildren,
+                        },
+                        {
+                            children: exportDanhSachMinhchung(result),
+                        },
                     ],
                 })
 
