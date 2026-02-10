@@ -67,3 +67,6 @@
 .table-subject-score th.ant-table-cell {
     padding: 8px 4px !important;
 }
+.row-disabled {
+  pointer-events: none;
+}

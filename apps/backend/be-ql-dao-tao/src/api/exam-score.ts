@@ -341,16 +341,13 @@ app.openapi(saveExamScore, async (c) => {
               ON es."id" = data."examPaperId"
           WHERE sss."id" = es."studentSubjectScoreId";
           `)
-
-        const subjectClasses = await prisma.subjectClass.findMany({
+        const subjectClasses = await tx.subjectClass.findMany({
             where: {
                 subjectClassStudent: {
                     some: {
-                        student: {
-                            id: {
+                         id: {
                                 in: examPapers.map((p) => p.studentSubjectScore.id),
                             },
-                        },
                     },
                 },
             },
@@ -358,6 +355,8 @@ app.openapi(saveExamScore, async (c) => {
                 subjectClassStudent: true,
             },
         })
+
+        
 
         for (const cls of subjectClasses) {
             const enteredExamScore = cls.subjectClassStudent.every((s) => {

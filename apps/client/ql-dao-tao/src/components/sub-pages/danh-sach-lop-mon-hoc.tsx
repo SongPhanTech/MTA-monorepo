@@ -18,14 +18,14 @@ import {
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Checkbox, Col, Flex, Form, Input, Row, Tag, Tooltip } from 'antd'
+import { Checkbox, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
 import { type Key, useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-export default function DanhSachLopMonHoc({ role = 'GV', setActiveKey }: DiemLopMonHocProps) {
+export default function DanhSachLopMonHoc({ role = 'GV', setActiveKey, score }: DiemLopMonHocProps) {
     const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -334,7 +334,11 @@ export default function DanhSachLopMonHoc({ role = 'GV', setActiveKey }: DiemLop
                         rowSelection={{
                             type: 'radio',
                             selectedRowKeys: [selectedSubjectClassId as Key],
-                            onChange: (selectedRowKeys) => {
+                            onChange: (selectedRowKeys,selectedRows,info) => {
+                                   if (selectedRows[0]?.subject?.examType === 'OfflineWritten' && score==='THI') {
+                                        message.error('Lớp thi viết không được nhập điểm trực tiếp')
+                                        return
+                                    }
                                 diemLopMonHocStore.setState({
                                     selectedSubjectClassId: selectedRowKeys?.[0] as string,
                                 })
@@ -344,11 +348,19 @@ export default function DanhSachLopMonHoc({ role = 'GV', setActiveKey }: DiemLop
                         onRow={(record) => {
                             return {
                                 onClick: () => {
+                                    if (record?.subject?.examType === 'OfflineWritten' && score==='THI') {
+                                        message.error('Lớp thi viết không được nhập điểm trực tiếp')
+                                        return
+                                    }
                                     diemLopMonHocStore.setState({
                                         selectedSubjectClassId: record.id,
                                     })
                                 },
                                 onDoubleClick: () => {
+                                    if (record?.subject?.examType === 'OfflineWritten' && score==='THI') {
+                                        message.error('Lớp thi viết không được nhập điểm trực tiếp')
+                                        return
+                                    }
                                     setActiveKey?.('2')
                                 },
                                 className: cn(
