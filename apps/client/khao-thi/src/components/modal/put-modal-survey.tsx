@@ -1,4 +1,3 @@
-import { queryClient } from '@api/index'
 import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
@@ -32,7 +31,7 @@ import {
 import dayjs from 'dayjs'
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-
+import { sqlTransaction } from '@workspace/libs/api/model'
 const { Step } = Steps
 
 export type PutSurveyType = Survey & {
@@ -163,7 +162,6 @@ const PutSurveyModal = () => {
         if (!output) return
         try {
             showSpinner()
-            console.log(output, semesterIdStore)
 
             if (input?.type === 'multiple') {
                 const res = await createMultiple({
@@ -190,53 +188,86 @@ const PutSurveyModal = () => {
                     return
                 }
             } else {
-                if (input?.id) {
-                    await update({
-                        data: {
-                            code: output.code,
-                            name: output.name.trim(),
-                            surveyObjectType: {
-                                set: output.surveyObjectTypes.map((item) => ({ id: item })) || [],
+                if (input?.id && output.surveyChoice?.length > 0) {
+                    let listTransition: any = [
+                        {
+                            model: 'Survey',
+                            operation: 'update',
+                            data: {
+                                data: {
+                                    code: output.code,
+                                    name: output.name.trim(),
+                                    surveyObjectType: {
+                                        set:
+                                            output.surveyObjectTypes.map((item) => ({
+                                                id: item,
+                                            })) || [],
+                                    },
+                                    startDate: output.startDate,
+                                    endDate: output.endDate,
+                                    description: output.description,
+                                    isPublic: output.isPublic,
+                                    anonymous: !output.isPublic ? false : output.anonymous,
+                                    surveyChoice: {
+                                        deleteMany: {},
+                                    },
+                                    surveyQuestion: {
+                                        set: output.surveyQuestionIds.length
+                                            ? output.surveyQuestionIds.map((item) => ({ id: item }))
+                                            : [],
+                                    },
+                                },
+                                where: {
+                                    id: input?.id,
+                                },
                             },
-                            startDate: output.startDate,
-                            endDate: output.endDate,
-                            description: output.description,
-                            isPublic: output.isPublic,
-                            anonymous: !output.isPublic ? false : output.anonymous,
-                            surveyChoice: {
-                                deleteMany: {
-                                    id: {
-                                        notIn: output.surveyChoice.map((item) => item.id),
+                        },
+                        {
+                            model: 'SurveyChoice',
+                            operation: 'deleteMany',
+                            data: {
+                                where: {
+                                    survey: {
+                                        some: {
+                                            id: input?.id,
+                                        }
                                     },
                                 },
                             },
-                            surveyQuestion: {
-                                set: output.surveyQuestionIds.length
-                                    ? output.surveyQuestionIds.map((item) => ({ id: item }))
-                                    : [],
-                            },
-                        },
-                        where: {
-                            id: input?.id,
-                        },
-                    })
-
-                    // TODO: fix create survey choice
-                    for (const choice of output.surveyChoice) {
-                        await createSurveyChoice({
-                            data: {
-                                survey: { connect: { id: input?.id } },
-                                answer: choice.answer,
-                                description: choice.description,
-                                requireExplanation: choice.requireExplanation,
-                            },
-                        })
+                        }
+                    ]
+                    if(output.surveyChoice?.length>0){
+                        listTransition = [
+                        ...listTransition,
+                        ...output.surveyChoice.map((i: any) => {
+                            return {
+                                model: 'SurveyChoice',
+                                operation: 'create',
+                                data: {
+                                    data: {
+                                        answer: i.answer,
+                                        description: i.description,
+                                        requireExplanation: i.requireExplanation,
+                                        survey: {
+                                            connect: {
+                                                id: input?.id,
+                                            },
+                                        },
+                                    },
+                                },
+                            }
+                        }),
+                    ]
                     }
+                    
+                    const res:any = sqlTransaction(listTransition)
 
-                    message.success('Cập nhật thành công')
-                    queryClient.invalidateQueries({
-                        queryKey: ['Level'],
-                    })
+                     if (res?.status === 200) {
+                        message.success('Tạo thành công')
+                        onClose()
+                        return
+                    }
+                 
                 } else {
                     const res = await create({
                         data: {
@@ -292,9 +323,6 @@ const PutSurveyModal = () => {
                     }
                     message.success('Thêm mới thành công')
                 }
-                queryClient.invalidateQueries({
-                    queryKey: ['Survey'],
-                })
                 onClose()
             }
 
@@ -528,6 +556,7 @@ const PutSurveyModal = () => {
         semesterId,
         isPublic,
         anonymous,
+        form
     ])
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
