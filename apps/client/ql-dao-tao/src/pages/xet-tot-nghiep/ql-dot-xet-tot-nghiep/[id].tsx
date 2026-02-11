@@ -61,6 +61,7 @@ export default function StudentGraduationApplication() {
     const where = useMemo(
         () => ({
             sessionId: graduationSessionId,
+            deletedAt: null,
             student: {
                 ...(filters.code && filters.code !== ''
                     ? {
@@ -175,6 +176,7 @@ export default function StudentGraduationApplication() {
                 orderBy: { createdAt: 'asc' },
                 take: numberOfPages,
                 skip: (currentPage - 1) * numberOfPages,
+                distinct: ['studentId'],
             },
             {
                 enabled: !!graduationSessionId,
