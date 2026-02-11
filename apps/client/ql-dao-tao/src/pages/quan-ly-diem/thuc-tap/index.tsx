@@ -6,7 +6,7 @@ import TreeSelect from '@components/commons/tree-select'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgFlat, buildOrgTree } from '@lib/utils'
 import { SubjectVersionType } from '@workspace/db'
-import { $Enums, type Prisma } from '@workspace/db/client'
+import { type Prisma } from '@workspace/db/client'
 import {
     useCountStudentInternship,
     useCreateManyStudentInternship,
@@ -15,14 +15,13 @@ import {
     useFindManySubjectClass,
     useFindManyTrainingCourse,
 } from '@workspace/db/hooks'
-import { excelTemplate, sqlTransaction } from '@workspace/libs/api/model'
+import { sqlTransaction } from '@workspace/libs/api/model'
 import { whereOrganization } from '@workspace/libs/constants'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { cn } from '@workspace/ui/lib/utils'
 import { Button, Col, Flex, Form, Modal, message, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import ExcelJS from 'exceljs'
-import { saveAs } from 'file-saver'
 import { SquarePen } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -1427,6 +1426,18 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
                             fixed: 'left',
                             render: (_, record) => {
                                 return record?.studentSubjectScore?.student?.userProfile?.fullname
+                            },
+                        },
+                        {
+                            title: 'Mã lớp môn học',
+                            width: 150,
+                            align: 'center',
+                            render: (_, record) => {
+                                return (
+                                    <Tooltip title={record?.studentSubjectScore?.subjectClass?.name}>
+                                        {record?.studentSubjectScore?.subjectClass?.code || ''}
+                                    </Tooltip>
+                                )
                             },
                         },
                         {
