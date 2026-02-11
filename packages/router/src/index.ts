@@ -186,11 +186,13 @@ const NAVIGATION: NavigationType = {
             {
                 id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KHOA_BO_MON_PHAN_CONG_GIANG_DAY,
                 label: 'Phân công giảng dạy',
+                icon: BookUser,
                 path: ROUTER_PATH.QL_DAO_TAO.KHOA_BO_MON_PHAN_CONG_GIANG_DAY,
             },
             {
                 id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KHOA_BO_MON_PHAN_CONG_CHUYEN_DE_NGHIEN_CU,
                 label: 'Phân công CĐNC',
+                icon: ClipboardCheck,
                 path: ROUTER_PATH.QL_DAO_TAO.KHOA_BO_MON_PHAN_CONG_CHUYEN_DE_NGHIEN_CU,
             },
             {
@@ -201,6 +203,7 @@ const NAVIGATION: NavigationType = {
             {
                 id: 'dang-ky-hoc',
                 label: 'Đăng ký học',
+                icon: CalendarRange,
                 description: 'Đăng ký học',
                 children: [
                     {
@@ -683,18 +686,21 @@ const NAVIGATION: NavigationType = {
             {
                 id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_THONG_BAO,
                 label: 'Thông báo',
+                icon: MessageOutlined,
                 path: ROUTER_PATH.QL_DAO_TAO.THONG_BAO,
                 description: 'Quản lý thông báo đào tạo',
             },
             {
                 id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_LICH_TUAN_THANG,
                 label: 'Lịch tuần tháng',
+                icon: CalendarRange,
                 path: ROUTER_PATH.QL_DAO_TAO.LICH_TUAN_THANG,
                 description: 'Quản lý lịch tuần tháng',
             },
             {
                 id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_LICH_KIEM_TRA_GIANG_DAY,
                 label: 'Lịch kiểm tra giảng dạy',
+                icon: CalendarRange,
                 path: ROUTER_PATH.QL_DAO_TAO.LICH_KIEM_TRA_GIANG_DAY,
                 description: 'Quản lý lịch kiểm tra giảng dạy',
             },

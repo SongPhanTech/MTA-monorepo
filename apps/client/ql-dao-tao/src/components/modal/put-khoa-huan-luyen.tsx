@@ -21,7 +21,19 @@ import {
     useFindUniqueTrainingCourse,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
-import { Button, Col, Form, Input, InputNumber, message, Radio, Row, Switch, Tooltip } from 'antd'
+import {
+    Button,
+    Col,
+    Form,
+    Input,
+    InputNumber,
+    message,
+    Modal,
+    Radio,
+    Row,
+    Switch,
+    Tooltip,
+} from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import type { DocumentFile } from '@workspace/db/client'
@@ -134,13 +146,7 @@ const PutTrainingCourseModal = () => {
         return { isDuplicate: false, message: '' }
     }
 
-    async function onOk(output?: PutTrainingCourse) {
-        if (!output) return
-        const validation = checkDuplicateStartSemester(output)
-        if (validation.isDuplicate) {
-            message.warning(validation.message)
-            return
-        }
+    async function performSave(output: PutTrainingCourse) {
         const {
             trainingObjectTypeId,
             semesterStartId,
@@ -418,6 +424,25 @@ const PutTrainingCourseModal = () => {
             hideSpinner()
         }
     }
+
+    async function onOk(output?: PutTrainingCourse) {
+        if (!output) return
+        const validation = checkDuplicateStartSemester(output)
+        if (validation.isDuplicate) {
+            Modal.confirm({
+                title: 'Cảnh báo trùng lặp',
+                content: `${validation.message}Bạn có muốn tiếp tục tạo mới không?`,
+                okText: 'Tiếp tục',
+                cancelText: 'Hủy',
+                onOk() {
+                    performSave(output)
+                },
+            })
+            return
+        }
+        await performSave(output)
+    }
+
     const schoolYearIdForm = Form.useWatch('schoolYearId', form)
 
     const { data: dataSchoolYear = [] } = useFindManySchoolYear()
