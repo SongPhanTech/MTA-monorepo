@@ -230,44 +230,43 @@ const PutSurveyModal = () => {
                                     survey: {
                                         some: {
                                             id: input?.id,
-                                        }
-                                    },
-                                },
-                            },
-                        }
-                    ]
-                    if(output.surveyChoice?.length>0){
-                        listTransition = [
-                        ...listTransition,
-                        ...output.surveyChoice.map((i: any) => {
-                            return {
-                                model: 'SurveyChoice',
-                                operation: 'create',
-                                data: {
-                                    data: {
-                                        answer: i.answer,
-                                        description: i.description,
-                                        requireExplanation: i.requireExplanation,
-                                        survey: {
-                                            connect: {
-                                                id: input?.id,
-                                            },
                                         },
                                     },
                                 },
-                            }
-                        }),
+                            },
+                        },
                     ]
+                    if (output.surveyChoice?.length > 0) {
+                        listTransition = [
+                            ...listTransition,
+                            ...output.surveyChoice.map((i: any) => {
+                                return {
+                                    model: 'SurveyChoice',
+                                    operation: 'create',
+                                    data: {
+                                        data: {
+                                            answer: i.answer,
+                                            description: i.description,
+                                            requireExplanation: i.requireExplanation,
+                                            survey: {
+                                                connect: {
+                                                    id: input?.id,
+                                                },
+                                            },
+                                        },
+                                    },
+                                }
+                            }),
+                        ]
                     }
-                    
-                    const res:any = sqlTransaction(listTransition)
 
-                     if (res?.status === 200) {
+                    const res: any = sqlTransaction(listTransition)
+
+                    if (res?.status === 200) {
                         message.success('Tạo thành công')
                         onClose()
                         return
                     }
-                 
                 } else {
                     const res = await create({
                         data: {
@@ -556,7 +555,7 @@ const PutSurveyModal = () => {
         semesterId,
         isPublic,
         anonymous,
-        form
+        form,
     ])
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {

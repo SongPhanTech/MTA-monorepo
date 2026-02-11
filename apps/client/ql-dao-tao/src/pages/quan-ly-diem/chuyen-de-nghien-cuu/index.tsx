@@ -1419,7 +1419,9 @@ export default function ChuyenDeNghienCuu({ role = 'P7' }: { role: 'P7' | 'KHOA_
                             align: 'center',
                             render: (_, record) => {
                                 return (
-                                    <Tooltip title={record?.studentSubjectScore?.subjectClass?.name}>
+                                    <Tooltip
+                                        title={record?.studentSubjectScore?.subjectClass?.name}
+                                    >
                                         {record?.studentSubjectScore?.subjectClass?.code || ''}
                                     </Tooltip>
                                 )

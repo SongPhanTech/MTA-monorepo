@@ -1863,9 +1863,12 @@ export default function PhanCongGiangDay({
                                             >
                                                 <LectureTreeSelect
                                                     placeholder="Chọn giảng viên"
-                                                    ignoreLectureIds={[
-                                                        subjectClassForm?.[record.id]?.extraLecturerId,
-                                                    ].filter(Boolean) as string[]}
+                                                    ignoreLectureIds={
+                                                        [
+                                                            subjectClassForm?.[record.id]
+                                                                ?.extraLecturerId,
+                                                        ].filter(Boolean) as string[]
+                                                    }
                                                     disabled={
                                                         !!record?.submitLecturerAssignmentAt ||
                                                         (!!record.lecturerAssignmentDeadline &&
@@ -1904,9 +1907,12 @@ export default function PhanCongGiangDay({
                                             >
                                                 <LectureTreeSelect
                                                     placeholder="Chọn giảng viên"
-                                                    ignoreLectureIds={[
-                                                        subjectClassForm?.[record.id]?.lecturerId,
-                                                    ].filter(Boolean) as string[]}
+                                                    ignoreLectureIds={
+                                                        [
+                                                            subjectClassForm?.[record.id]
+                                                                ?.lecturerId,
+                                                        ].filter(Boolean) as string[]
+                                                    }
                                                     disabled={
                                                         subjectClassForm?.[record.id]?.cancelled ||
                                                         !!record?.submitLecturerAssignmentAt ||

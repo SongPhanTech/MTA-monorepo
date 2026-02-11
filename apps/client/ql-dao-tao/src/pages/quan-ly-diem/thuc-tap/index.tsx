@@ -1434,7 +1434,9 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
                             align: 'center',
                             render: (_, record) => {
                                 return (
-                                    <Tooltip title={record?.studentSubjectScore?.subjectClass?.name}>
+                                    <Tooltip
+                                        title={record?.studentSubjectScore?.subjectClass?.name}
+                                    >
                                         {record?.studentSubjectScore?.subjectClass?.code || ''}
                                     </Tooltip>
                                 )
