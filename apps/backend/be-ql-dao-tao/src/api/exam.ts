@@ -66,7 +66,9 @@ app.openapi(createNewExamList, async (c) => {
             isLockExamScore: false,
             status: 'OFFICIAL',
             active: true,
-            type: $Enums.SubjectClassType.NORMAL,
+            type: {
+                in:['NORMAL', 'RETAKE','REEXAM']
+            },
             examId: null,
         },
         select: {
