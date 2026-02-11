@@ -2105,6 +2105,7 @@ export default function PhanCongGiangDay({
                                                 allowClear
                                                 treeNodeFilterProp="title"
                                                 multiple={false}
+                                                treeExpandAction="click"
                                                 showCheckedStrategy="SHOW_CHILD"
                                                 dropdownStyle={{
                                                     width: 400,
