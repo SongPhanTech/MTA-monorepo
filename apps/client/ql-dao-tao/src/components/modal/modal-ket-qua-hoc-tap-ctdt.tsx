@@ -1,11 +1,12 @@
 import PutFormModal from '@components/commons/put-modal'
 import type { Student } from '@workspace/db/client'
 import { useFindUniqueStudent } from '@workspace/db/hooks'
-import { Col, Form, Table } from 'antd'
+import { Col, Form } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import TableCollapse from '@components/commons/tableCollapse'
+import { Table } from '@components/commons/table'
 export type Student1 = Student
 dayjs.locale('vi')
 
@@ -172,25 +173,25 @@ const ModalLearningResult = () => {
                         },
                         {
                             title: 'Điểm thường xuyên',
-                            width: 80,
+                            width: 200,
                             align: 'center',
                             render: (_, record) => record?.attendanceScore,
                         },
                         {
                             title: 'Điểm định kỳ',
-                            width: 80,
+                            width: 200,
                             align: 'center',
                             render: (_, record) => record?.midtermScore,
                         },
                         {
                             title: 'Điểm thi',
-                            width: 80,
+                            width: 200,
                             align: 'center',
                             render: (_, record) => record?.examScore,
                         },
                         {
                             title: 'Điểm học phần',
-                            width: 80,
+                            width: 200,
                             align: 'center',
                             render: (_, record) => record?.finalScore?.toNumber(),
                         },
@@ -212,7 +213,7 @@ const ModalLearningResult = () => {
                     dataSource={electiveSubjects}
                     columns={[
                         {
-                            title: 'STT',
+                            title: 'TT',
                             width: 60,
                             align: 'center',
                             fixed: 'left',
@@ -280,10 +281,10 @@ const ModalLearningResult = () => {
                     dataSource={nonFinalSubjects}
                     columns={[
                         {
-                            title: 'STT',
+                            title: 'TT',
                             width: 60,
                             align: 'center',
-                            fixed: 'left',
+                            // fixed: 'left',
                             render: (_, __, index) => index + 1,
                         },
                         {
@@ -297,7 +298,7 @@ const ModalLearningResult = () => {
                             title: 'Tên môn học',
                             dataIndex: 'name',
                             width: 200,
-                            fixed: 'left',
+                            // fixed: 'left',
                         },
                         {
                             title: 'Số TC',
@@ -308,25 +309,25 @@ const ModalLearningResult = () => {
                         {
                             title: 'Điểm thường xuyên',
                             dataIndex: 'attendanceScore',
-                            width: 80,
+                            width: 200,
                             align: 'center',
                         },
                         {
                             title: 'Điểm định kỳ',
                             dataIndex: 'midtermScore',
-                            width: 80,
+                            width: 200,
                             align: 'center',
                         },
                         {
                             title: 'Điểm thi',
                             dataIndex: 'examScore',
-                            width: 80,
+                            width: 200,
                             align: 'center',
                         },
                         {
                             title: 'Điểm học phần',
                             dataIndex: 'finalScore',
-                            width: 80,
+                            width: 200,
                             align: 'center',
                             render: (record) => record?.toNumber(),
                         },

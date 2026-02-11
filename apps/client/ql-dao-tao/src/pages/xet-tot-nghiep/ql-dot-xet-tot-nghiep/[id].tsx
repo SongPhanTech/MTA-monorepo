@@ -553,6 +553,7 @@ export default function StudentGraduationApplication() {
                                             label: c.name,
                                         }
                                     })}
+                                    popupMatchSelectWidth={false}
                                 />
                                 <div>Lớp</div>
                                 <Select
@@ -565,6 +566,7 @@ export default function StudentGraduationApplication() {
                                             label: c.name,
                                         }
                                     })}
+                                    popupMatchSelectWidth={false}
                                 />
                                 <Button
                                     type="primary"
@@ -999,7 +1001,8 @@ export default function StudentGraduationApplication() {
                                                                 <Row className="justify-center gap-2">
                                                                     <ViewIcon
                                                                         title="KQHT theo CTĐT"
-                                                                        onClick={() => {
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation()
                                                                             handleOpenModalLearningResult(
                                                                                 record
                                                                             )
