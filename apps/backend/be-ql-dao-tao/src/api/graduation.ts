@@ -462,7 +462,6 @@ app.openapi(graduationCheck, async (c) => {
 
             if (!subjectScore && !equivGroups.length) {
                 reasons.push(`Chưa đạt môn bắt buộc (${subject.subject.name})`)
-                continue
             }
 
             let hasEquivalencyGroup = false

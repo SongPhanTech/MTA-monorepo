@@ -72,10 +72,9 @@ function ConfigSurveyExam({
     const handleAddChoices = () => {
         const newList = [...listForm, { answer: '', description: '' }]
         setChoices(newList)
-        
-        form.setFieldsValue({ surveyChoice: newList }) // ✅ cập nhật form theo state
-        console.log(form.getFieldValue('surveyChoice'),123);
 
+        form.setFieldsValue({ surveyChoice: newList }) // ✅ cập nhật form theo state
+        console.log(form.getFieldValue('surveyChoice'), 123)
     }
 
     const handleRemoveChoices = (index: number) => {
