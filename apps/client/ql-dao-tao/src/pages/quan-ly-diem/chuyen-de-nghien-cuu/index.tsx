@@ -1353,7 +1353,7 @@ export default function ChuyenDeNghienCuu({ role = 'P7' }: { role: 'P7' | 'KHOA_
                         {
                             title: '',
                             width: 40,
-                            fixed: 'right',
+                            fixed: 'left',
                             align: 'center',
                             render: (_, record) => {
                                 return (
@@ -1408,8 +1408,26 @@ export default function ChuyenDeNghienCuu({ role = 'P7' }: { role: 'P7' | 'KHOA_
                             title: 'Họ và tên',
                             width: 150,
                             align: 'left',
+                            fixed: 'left',
                             render: (_, record) => {
                                 return record?.studentSubjectScore?.student?.userProfile?.fullname
+                            },
+                        },
+                        {
+                            title: 'Mã lớp môn học',
+                            width: 150,
+                            align: 'left',
+                            render: (_, record) => {
+                                return record?.studentSubjectScore?.subjectClass?.code || ''
+                            },
+                        },
+                        {
+                            title: 'Tên lớp môn học',
+                            width: 300,
+                            align: 'left',
+                            fixed: 'left',
+                            render: (_, record) => {
+                                return record?.studentSubjectScore?.subjectClass?.name || ''
                             },
                         },
                         {
@@ -1520,6 +1538,7 @@ export default function ChuyenDeNghienCuu({ role = 'P7' }: { role: 'P7' | 'KHOA_
                             title: 'Điểm',
                             width: 80,
                             align: 'center',
+                            fixed: 'right',
                             render: (_, record) => {
                                 return record?.studentSubjectScore?.finalScore
                                     ? Number(record?.studentSubjectScore?.finalScore).toFixedSmart(
