@@ -194,6 +194,11 @@ const NAVIGATION: NavigationType = {
                 path: ROUTER_PATH.QL_DAO_TAO.KHOA_BO_MON_PHAN_CONG_CHUYEN_DE_NGHIEN_CU,
             },
             {
+                id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KHOA_BO_MON_PHAN_CONG_THUC_TAP,
+                label: 'Phân công Thực tập',
+                path: ROUTER_PATH.QL_DAO_TAO.KHOA_BO_MON_PHAN_CONG_THUC_TAP,
+            },
+            {
                 id: 'dang-ky-hoc',
                 label: 'Đăng ký học',
                 description: 'Đăng ký học',
@@ -306,6 +311,12 @@ const NAVIGATION: NavigationType = {
                         label: 'Chuyên đề nghiên cứu',
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_CHUYEN_DE_NGHIEN_CUU,
                         description: 'Chuyên đề nghiên cứu',
+                    },
+                    {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_THUC_TAP,
+                        label: 'Thực tập',
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_THUC_TAP,
+                        description: 'Thực tập',
                     },
                 ],
             },

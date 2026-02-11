@@ -76,6 +76,7 @@ export default {
     "KE_HOACH_HOC_LAI": "/ke-hoach-hoc-lai",
     "KE_HOACH_THI_LAI": "/ke-hoach-thi-lai",
     "KHOA_BO_MON_PHAN_CONG_CHUYEN_DE_NGHIEN_CU": "/khoa-bo-mon-phan-cong-chuyen-de-nghien-cu",
+    "KHOA_BO_MON_PHAN_CONG_THUC_TAP": "/khoa-bo-mon-phan-cong-thuc-tap",
     "KHOA_BO_MON_PHAN_CONG_GIANG_DAY": "/khoa-bo-mon-phan-cong-giang-day",
     "LICH_KIEM_TRA_GIANG_DAY": "/lich-kiem-tra-giang-day",
     "LICH_TUAN_THANG": "/lich-tuan-thang",
@@ -135,7 +136,8 @@ export default {
     "TO_CHUC_THI_LAP_DANH_SANH_THI": "/to-chuc-thi/lap-danh-sanh-thi",
     "XET_TOT_NGHIEP_PHU_LUC_VAN_BANG": "/xet-tot-nghiep/phu-luc-van-bang",
     "XET_TOT_NGHIEP_QL_DOT_XET_TOT_NGHIEP_ID": "/xet-tot-nghiep/ql-dot-xet-tot-nghiep/[id]",
-    "XET_TOT_NGHIEP_QL_DOT_XET_TOT_NGHIEP": "/xet-tot-nghiep/ql-dot-xet-tot-nghiep"
+    "XET_TOT_NGHIEP_QL_DOT_XET_TOT_NGHIEP": "/xet-tot-nghiep/ql-dot-xet-tot-nghiep",
+    "QUAN_LY_DIEM_THUC_TAP": "/quan-ly-diem/thuc-tap"
   },
   "QL_HO_SO": {
     "DANH_MUC_HO_SO_BAC_LUONG": "/danh-muc-ho-so/bac-luong",

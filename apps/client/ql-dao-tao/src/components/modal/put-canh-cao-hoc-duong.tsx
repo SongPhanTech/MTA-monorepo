@@ -32,7 +32,11 @@ const PutDisciplinaryWarningReason = () => {
     async function onOk(output?: PutDisciplinaryWarningReasonFormType) {
         if (!output) return
 
-        if (output.severityLevel === undefined || output.severityLevel < 0 || output.severityLevel > 4) {
+        if (
+            output.severityLevel === undefined ||
+            output.severityLevel < 0 ||
+            output.severityLevel > 4
+        ) {
             message.error('Mức nâng phải từ 0 đến 4')
             return
         }
