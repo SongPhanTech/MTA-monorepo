@@ -324,7 +324,7 @@ export const buildTrainingBlockMapOrThrow = async (
         select: { name: true, id: true },
     })
 
-    const missing = uniqNames.filter((name) => !existing.some((item) => item.name === name))
+    const missing = uniqNames.filter((name) => !existing.some((item) => item.name.toUpperCase() === name.toUpperCase()))
 
     if (missing.length) {
         throw new HTTPException(400, {

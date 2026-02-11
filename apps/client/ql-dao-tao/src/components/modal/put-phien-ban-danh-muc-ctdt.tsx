@@ -33,7 +33,7 @@ import { importPhienBanCTDTSubject } from '@workspace/libs/api/training'
 import type { SubjectResult } from '@workspace/libs/parseExcel'
 import { parseSheetSubject } from '@workspace/libs/parseExcel'
 import { useFindManyTrainingObjectTypePermission, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Col, Form, Input, InputNumber, message, Radio, Row } from 'antd'
+import { Button, Col, Form, Input, InputNumber, message, Modal, Radio, Row } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import { useEffect, useState } from 'react'
@@ -352,10 +352,26 @@ const PutCurriculumVersion = () => {
             onClose()
         } catch (error: any) {
             if (error?.info?.message || error?.message) {
-                message.error(error?.info?.message || error?.message)
+                Modal.error({
+                    title: 'Lỗi',
+                    content: error?.info?.message || error?.message,
+                    width: 500,
+                    okText: 'Đóng',
+                    okButtonProps: {
+                        className: 'bg-red-500 hover:bg-red-600',
+                    },
+                })
                 return
             }
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+            Modal.error({
+                title: 'Lỗi',
+                content: 'Đã xảy ra lỗi, vui lòng kiểm tra lại',
+                width: 500,
+                okText: 'Đóng',
+                okButtonProps: {
+                    className: 'bg-red-500 hover:bg-red-600',
+                },
+            })
         } finally {
             hideSpinner()
         }
