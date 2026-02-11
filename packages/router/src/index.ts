@@ -198,6 +198,7 @@ const NAVIGATION: NavigationType = {
             {
                 id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KHOA_BO_MON_PHAN_CONG_THUC_TAP,
                 label: 'Phân công Thực tập',
+                icon: ClipboardCheck,
                 path: ROUTER_PATH.QL_DAO_TAO.KHOA_BO_MON_PHAN_CONG_THUC_TAP,
             },
             {
