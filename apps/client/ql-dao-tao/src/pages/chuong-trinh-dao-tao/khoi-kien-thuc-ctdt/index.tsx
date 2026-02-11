@@ -24,6 +24,7 @@ import { BookPlus } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import ViewIcon from '@components/icons/view'
 
 interface TreeNode {
     id: string
@@ -117,6 +118,20 @@ export default function TrainingBlock() {
         }
     }
 
+    const { onOpen: onOpenModalCurriculumVersionByTrainingBlock } = useDisclosure<{
+        trainingBlockId: string
+        trainingBlockName?: string
+    }>({
+        tag: 'ModalCurriculumVersionByTrainingBlock',
+    })
+
+    const handleOpenModalCurriculumVersionByTrainingBlock = (record: any) => {
+        onOpenModalCurriculumVersionByTrainingBlock({
+            trainingBlockId: record.id,
+            trainingBlockName: record.name,
+        })
+    }
+
     const treeColumns: NestedColumn<TrainingBlockType>[] = [
         {
             title: 'Mã khối kiến thức',
@@ -159,6 +174,12 @@ export default function TrainingBlock() {
 
                     return (
                         <Row className="justify-center gap-2">
+                            <ViewIcon
+                                title="KQHT theo CTĐT"
+                                onClick={() => {
+                                    handleOpenModalCurriculumVersionByTrainingBlock(record)
+                                }}
+                            />
                             {can(
                                 QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_KHOI_KIEN_THUC_CTDT,
                                 'SUA'

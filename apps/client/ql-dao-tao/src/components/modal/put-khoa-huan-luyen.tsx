@@ -508,6 +508,7 @@ const PutTrainingCourseModal = () => {
                     ? dayjs(trainingCourse.admissionEndDate)
                     : undefined,
                 schoolYearId: trainingCourse.semesterStart?.schoolYearId,
+                examScoreToPass: trainingCourse.examScoreToPass,
             })
             setDocument(trainingCourse?.documentFiles)
         } else if (selectedTrainingCourse) {
@@ -517,6 +518,7 @@ const PutTrainingCourseModal = () => {
                 coef_3: selectedTrainingCourse.coef_3,
                 scoreToTakeExam: selectedTrainingCourse.scoreToTakeExam,
                 scoreToPass: selectedTrainingCourse.scoreToPass,
+                examScoreToPass: selectedTrainingCourse.examScoreToPass,
                 scoreToPassConditional: selectedTrainingCourse.scoreToPassConditional,
                 scoreToTakeGraduation: selectedTrainingCourse.scoreToTakeGraduation,
                 scoreToPassGraduation: selectedTrainingCourse.scoreToPassGraduation,
@@ -929,6 +931,43 @@ const PutTrainingCourseModal = () => {
                             // min={0}
                             type="number"
                             placeholder="Nhập điểm tối thiểu để qua"
+                            className="w-full"
+                            readOnly={isScoreConfigLocked}
+                        />
+                    </FormItem>
+                </Col>
+                <Col span={8}>
+                    <FormItem
+                        form={form}
+                        name="examScoreToPass"
+                        label="Điểm thi tối thiểu để qua"
+                        required
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Vui lòng nhập điểm thi tối thiểu để qua',
+                            },
+                            {
+                                validator: (_: any, value: any) => {
+                                    if (value === undefined || value === null) {
+                                        return Promise.resolve()
+                                    }
+                                    const numValue = Number.parseFloat(value)
+                                    if (Number.isNaN(numValue) || numValue < 0) {
+                                        return Promise.reject(
+                                            new Error('Điểm thi tối thiểu để qua phải lớn hơn 0')
+                                        )
+                                    }
+
+                                    return Promise.resolve()
+                                },
+                            },
+                        ]}
+                    >
+                        <InputNumber
+                            // min={0}
+                            type="number"
+                            placeholder="Nhập điểm thi tối thiểu để qua"
                             className="w-full"
                             readOnly={isScoreConfigLocked}
                         />

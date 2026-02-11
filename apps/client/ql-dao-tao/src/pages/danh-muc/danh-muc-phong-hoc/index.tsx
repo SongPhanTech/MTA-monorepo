@@ -134,10 +134,7 @@ export default function TrainingLocationPage() {
                                     <DeleteIcon
                                         popConfirm={{
                                             onConfirm: (e) => {
-                                                // handleDeleteBuilding(
-                                                //     id,
-                                                //     trainingLocationId
-                                                // )
+                                                handleDeleteBuilding(id)
                                                 e?.stopPropagation()
                                             },
                                             onCancel: (e) => {

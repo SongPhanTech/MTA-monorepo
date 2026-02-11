@@ -65,6 +65,12 @@ export default function SinhPhach() {
                 studentSubjectScore: {
                     examBanned: false,
                     examPostponed: false,
+                    attendanceScore:{
+                        not: null
+                    },
+                    midtermScore: {
+                        not: null
+                    },
                 },
             },
             include: {

@@ -14,12 +14,15 @@ import {
     useUpdateManyStudent,
 } from '@workspace/db/hooks'
 import { Select } from '@workspace/ui'
-import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Popconfirm, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { ArrowBigLeftDash, ArrowBigRightDash } from 'lucide-react'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+
+const SCROLL_DELAY = 300
+const HIGHLIGHT_DURATION = 3000
 
 const ModalChuyenLop = () => {
     const [currentPageNotClass, setCurrentPageNotClass] = useState(1)
@@ -28,6 +31,11 @@ const ModalChuyenLop = () => {
     const [selectedRows, setSelectedRows] = useState<string[]>([])
     const [selectedRowsInClass, setSelectedRowsInClass] = useState<string[]>([])
     const [transferredStudentIds, setTransferredStudentIds] = useState<string[]>([])
+    const [highlightedRows, setHighlightedRows] = useState<string[]>([])
+    const tableLeftRef = useRef<HTMLDivElement>(null)
+    const tableRightRef = useRef<HTMLDivElement>(null)
+    const scrollTimerRef = useRef<NodeJS.Timeout>()
+    const highlightTimerRef = useRef<NodeJS.Timeout>()
     const [filter, setFilter] = useState<{
         search?: string
         searchClassArrive?: string
@@ -229,44 +237,83 @@ const ModalChuyenLop = () => {
         }
     )
 
-    const debouncedRefetch = useCallback(
-        _.debounce(() => {
-            refetch()
-        }, 500),
-        []
+    const debouncedRefetch = useMemo(
+        () =>
+            _.debounce(() => {
+                refetch()
+            }, 500),
+        [refetch]
     )
 
-    const debouncedRefetchStudentClassArrive = useCallback(
-        _.debounce(() => {
-            refetchClassArrives()
-        }, 500),
-        []
+    const debouncedRefetchStudentClassArrive = useMemo(
+        () =>
+            _.debounce(() => {
+                refetchClassArrives()
+            }, 500),
+        [refetchClassArrives]
     )
 
     useEffect(() => {
         return () => {
             debouncedRefetch.cancel()
             debouncedRefetchStudentClassArrive.cancel()
+            clearTimeout(scrollTimerRef.current)
+            clearTimeout(highlightTimerRef.current)
         }
     }, [debouncedRefetch, debouncedRefetchStudentClassArrive])
 
-    const handleSearch = (key: string, value: string) => {
-        setFilter((prev) => {
-            const newFilter = { ...prev, [key]: value }
-            debouncedRefetch()
-            return newFilter
-        })
-    }
+    const handleSearch = useCallback(
+        (key: string, value: string) => {
+            setFilter((prev) => {
+                const newFilter = { ...prev, [key]: value }
+                debouncedRefetch()
+                return newFilter
+            })
+        },
+        [debouncedRefetch]
+    )
 
-    const handleSearchStudentClassArrive = (key: string, value: string) => {
-        setFilter((prev) => {
-            const newFilter = { ...prev, [key]: value }
-            debouncedRefetchStudentClassArrive()
-            return newFilter
-        })
-    }
+    const handleSearchStudentClassArrive = useCallback(
+        (key: string, value: string) => {
+            setFilter((prev) => {
+                const newFilter = { ...prev, [key]: value }
+                debouncedRefetchStudentClassArrive()
+                return newFilter
+            })
+        },
+        [debouncedRefetchStudentClassArrive]
+    )
 
     const { mutateAsync: updateManyStudents } = useUpdateManyStudent()
+
+    const fixedClassOptions = useMemo(
+        () =>
+            fixedClasses.map((fixedClass) => ({
+                label: `${fixedClass.name} - ${fixedClass.trainingCourse?.name || ''}`,
+                value: fixedClass.id,
+            })),
+        [fixedClasses]
+    )
+
+    const scrollAndHighlightRows = useCallback((rowIds: string[], targetRef: React.RefObject<HTMLDivElement>) => {
+        setHighlightedRows(rowIds)
+
+        clearTimeout(scrollTimerRef.current)
+        clearTimeout(highlightTimerRef.current)
+
+        scrollTimerRef.current = setTimeout(() => {
+            targetRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+
+            highlightTimerRef.current = setTimeout(() => {
+                setHighlightedRows([])
+            }, HIGHLIGHT_DURATION)
+        }, SCROLL_DELAY)
+    }, [])
+
+    const getRowClassName = useCallback(
+        (record: any) => (highlightedRows.includes(record.id) ? 'bg-green-100' : ''),
+        [highlightedRows]
+    )
 
     const onOk = async () => {
         setSelectedRows([])
@@ -281,7 +328,7 @@ const ModalChuyenLop = () => {
         onClose()
     }
 
-    const updateStudentsToNewClass = async () => {
+    const updateStudentsToNewClass = useCallback(async () => {
         if (!filter.fixedClassArriveId) {
             message.error('Vui lòng chọn lớp đến')
             return
@@ -316,9 +363,12 @@ const ModalChuyenLop = () => {
 
             message.success('Cập nhật thành công')
             setTransferredStudentIds((prev) => [...prev, ...selectedRows])
+            const transferredIds = [...selectedRows]
             setSelectedRows([])
             refetch()
             refetchClassArrives()
+
+            scrollAndHighlightRows(transferredIds, tableRightRef)
         } catch (error: any) {
             if (error?.info?.message) {
                 message.error(error?.info?.message)
@@ -328,9 +378,20 @@ const ModalChuyenLop = () => {
         } finally {
             hideSpinner()
         }
-    }
+    }, [
+        filter.fixedClassArriveId,
+        filter.fixedClassId,
+        selectedRows,
+        fixedClasses,
+        updateManyStudents,
+        showSpinner,
+        hideSpinner,
+        refetch,
+        refetchClassArrives,
+        scrollAndHighlightRows,
+    ])
 
-    const removeStudentsFromClass = async () => {
+    const removeStudentsFromClass = useCallback(async () => {
         try {
             showSpinner()
             await updateManyStudents({
@@ -350,9 +411,12 @@ const ModalChuyenLop = () => {
             setTransferredStudentIds((prev) =>
                 prev.filter((id) => !selectedRowsInClass.includes(id))
             )
+            const removedIds = [...selectedRowsInClass]
             setSelectedRowsInClass([])
             refetch()
             refetchClassArrives()
+
+            scrollAndHighlightRows(removedIds, tableLeftRef)
         } catch (error: any) {
             if (error?.info?.message) {
                 message.error(error?.info?.message)
@@ -362,7 +426,17 @@ const ModalChuyenLop = () => {
         } finally {
             hideSpinner()
         }
-    }
+    }, [
+        selectedRowsInClass,
+        filter.fixedClassId,
+        fixedClasses,
+        updateManyStudents,
+        showSpinner,
+        hideSpinner,
+        refetch,
+        refetchClassArrives,
+        scrollAndHighlightRows,
+    ])
 
     return (
         <PutFormModal
@@ -375,7 +449,7 @@ const ModalChuyenLop = () => {
             className="w-[100vw]"
         >
             <Row gutter={16}>
-                <Col span={11}>
+                <Col span={11} ref={tableLeftRef}>
                     <Flex gap={8} className="mb-4">
                         <Select
                             placeholder="Chọn lớp quản lý"
@@ -389,10 +463,7 @@ const ModalChuyenLop = () => {
                             }}
                             className="w-96 flex-1 min-w-0"
                             allowClear
-                            options={fixedClasses.map((fixedClass) => ({
-                                label: `${fixedClass.name} - ${fixedClass.trainingCourse?.name || ''}`,
-                                value: fixedClass.id,
-                            }))}
+                            options={fixedClassOptions}
                         />
 
                         <Input
@@ -408,6 +479,7 @@ const ModalChuyenLop = () => {
                     </Flex>
                     <Table
                         rowKey="id"
+                        rowClassName={getRowClassName}
                         rowSelection={{
                             selectedRowKeys: selectedRows,
                             onChange: (selectedKeys: any) => setSelectedRows(selectedKeys),
@@ -520,27 +592,37 @@ const ModalChuyenLop = () => {
                 </Col>
                 <Col span={2} className="flex items-center justify-center">
                     <Flex align="center" justify="center" vertical>
-                        <Tooltip placement="top">
-                            <Button
+                        <Tooltip placement="top" title="Chuyển sinh viên sang lớp mới">
+                            <Popconfirm
+                                title="Xác nhận chuyển lớp"
+                                description={`Bạn có chắc chắn muốn chuyển ${selectedRows.length} sinh viên sang lớp mới?`}
+                                onConfirm={updateStudentsToNewClass}
+                                okText="Xác nhận"
+                                cancelText="Hủy"
                                 disabled={!selectedRows?.length}
-                                className="mb-2"
-                                onClick={updateStudentsToNewClass}
                             >
-                                <ArrowBigRightDash className="cursor-pointer" />
-                            </Button>
+                                <Button disabled={!selectedRows?.length} className="mb-2">
+                                    <ArrowBigRightDash className="cursor-pointer" />
+                                </Button>
+                            </Popconfirm>
                         </Tooltip>
-                        <Tooltip placement="top">
-                            <Button
+                        <Tooltip placement="top" title="Chuyển sinh viên về lớp cũ">
+                            <Popconfirm
+                                title="Xác nhận chuyển lại"
+                                description={`Bạn có chắc chắn muốn chuyển ${selectedRowsInClass.length} sinh viên về lớp cũ?`}
+                                onConfirm={removeStudentsFromClass}
+                                okText="Xác nhận"
+                                cancelText="Hủy"
                                 disabled={!selectedRowsInClass?.length}
-                                className="mb-2"
-                                onClick={removeStudentsFromClass}
                             >
-                                <ArrowBigLeftDash className="cursor-pointer" />
-                            </Button>
+                                <Button disabled={!selectedRowsInClass?.length} className="mb-2">
+                                    <ArrowBigLeftDash className="cursor-pointer" />
+                                </Button>
+                            </Popconfirm>
                         </Tooltip>
                     </Flex>
                 </Col>
-                <Col span={11}>
+                <Col span={11} ref={tableRightRef}>
                     <Flex gap={8} className="mb-4">
                         <Select
                             placeholder="Chọn lớp đến"
@@ -554,10 +636,7 @@ const ModalChuyenLop = () => {
                             }}
                             className="w-96 flex-1 min-w-0"
                             allowClear
-                            options={fixedClasses.map((fixedClass) => ({
-                                label: `${fixedClass.name} - ${fixedClass.trainingCourse?.name || ''}`,
-                                value: fixedClass.id,
-                            }))}
+                            options={fixedClassOptions}
                         />
                         <Input
                             placeholder="Tìm kiếm theo tên..."
@@ -572,6 +651,7 @@ const ModalChuyenLop = () => {
                     </Flex>
                     <Table
                         rowKey="id"
+                        rowClassName={getRowClassName}
                         rowSelection={{
                             selectedRowKeys: selectedRowsInClass,
                             onChange: (selectedKeys: any) => setSelectedRowsInClass(selectedKeys),
