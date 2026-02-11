@@ -1416,18 +1416,13 @@ export default function ChuyenDeNghienCuu({ role = 'P7' }: { role: 'P7' | 'KHOA_
                         {
                             title: 'Mã lớp môn học',
                             width: 150,
-                            align: 'left',
+                            align: 'center',
                             render: (_, record) => {
-                                return record?.studentSubjectScore?.subjectClass?.code || ''
-                            },
-                        },
-                        {
-                            title: 'Tên lớp môn học',
-                            width: 300,
-                            align: 'left',
-                            fixed: 'left',
-                            render: (_, record) => {
-                                return record?.studentSubjectScore?.subjectClass?.name || ''
+                                return (
+                                    <Tooltip title={record?.studentSubjectScore?.subjectClass?.name}>
+                                        {record?.studentSubjectScore?.subjectClass?.code || ''}
+                                    </Tooltip>
+                                )
                             },
                         },
                         {
