@@ -151,81 +151,105 @@ const PutSubjectTienQuyetSongHanh = () => {
     }, [initialValue, field])
 
     const handleSave = async () => {
-        if (!input?.id || !field) return
+    if (!input?.id || !field) return
 
-        try {
-            showSpinner()
+    try {
+        showSpinner()
 
-            const blockRes = await sqlTransaction([
-                {
-                    model: 'TrainingBlockSubject' as const,
-                    operation: 'findMany' as const,
-                    data: {
-                        where: {
-                            subjectId: input.id,
-                            deletedAt: null,
-                        },
-                        select: {
-                            trainingBlockOnCurriculumVersionId: true,
-                        },
+        const checkRes = await sqlTransaction([
+            {
+                model: 'TrainingBlockSubject',
+                operation: 'findMany',
+                data: {
+                    where: {
+                        deletedAt: null,
+                        OR: [
+                            { subjectId: input.id },
+                            { subjectId: { in: selectedRowKeys as string[] } }, // để kiểm tra tồn tại
+                        ],
+                    },
+                    select: {
+                        subjectId: true,
+                        trainingBlockOnCurriculumVersionId: true,
                     },
                 },
-            ])
+            },
+        ])
 
-            if (blockRes?.status !== 200) {
-                throw new Error('Không lấy được block')
-            }
-            const blockIds =
-                (blockRes.data[0] as { trainingBlockOnCurriculumVersionId: string }[])?.map(
-                    (b) => b.trainingBlockOnCurriculumVersionId
-                ) || []
-            const result = await sqlTransaction([
-                {
-                    model: 'SubjectVersion',
-                    operation: 'update',
-                    data: {
-                        where: { id: input.id },
-                        data: {
-                            [field]: {
-                                set: selectedRowKeys.map((id) => ({ id: id as string })),
-                            },
-                        },
-                    },
-                },
-
-                {
-                    model: 'TrainingBlockSubject',
-                    operation: 'createMany',
-                    data: {
-                        data: blockIds.flatMap((blockId: string) =>
-                            selectedRowKeys.map((subjectId) => ({
-                                subjectId: subjectId as string,
-                                trainingBlockOnCurriculumVersionId: blockId,
-                                type: 'Mandatory',
-                                useForFinalScore: true,
-                                graduation: false,
-                            }))
-                        ),
-                        skipDuplicates: true,
-                    },
-                },
-            ])
-
-            if (result?.status !== 200) {
-                throw new Error('Transaction thất bại')
-            }
-
-            message.success('Cập nhật thành công')
-            queryClient.invalidateQueries({ queryKey: ['SubjectVersion'] })
-            onClose()
-        } catch (error: any) {
-            message.error(
-                error?.info?.message || error?.message || 'Đã xảy ra lỗi trong quá trình xử lý'
-            )
-        } finally {
-            hideSpinner()
+        if (checkRes?.status !== 200) {
+            throw new Error('Không lấy được dữ liệu')
         }
+
+        const all = checkRes.data[0] as any[]
+
+        const blockIds = all
+            .filter((i) => i.subjectId === input.id)
+            .map((i) => i.trainingBlockOnCurriculumVersionId)
+
+        const existedSet = new Set(
+            all
+                .filter((i) => selectedRowKeys.includes(i.subjectId))
+                .map((i) => `${i.subjectId}_${i.trainingBlockOnCurriculumVersionId}`)
+        )
+
+        const result = await sqlTransaction([
+            {
+                model: 'SubjectVersion'as const,
+                operation: 'update',
+                data: {
+                    where: { id: input.id },
+                    data: {
+                        [field]: {
+                            set: selectedRowKeys.map((id) => ({ id: id as string })),
+                        },
+                    },
+                },
+            },
+
+            ...(blockIds.length && selectedRowKeys.length
+                ? [
+                      {
+                          model: 'TrainingBlockSubject'as const,
+                          operation: 'createMany',
+                          data: {
+                              data: blockIds.flatMap((blockId: string) =>
+                                  selectedRowKeys
+                                      .filter(
+                                          (subjectId) =>
+                                              !existedSet.has(
+                                                  `${subjectId}_${blockId}`
+                                              )
+                                      )
+                                      .map((subjectId) => ({
+                                          subjectId: subjectId as string,
+                                          trainingBlockOnCurriculumVersionId: blockId,
+                                          type: 'Mandatory',
+                                          useForFinalScore: true,
+                                          graduation: false,
+                                      }))
+                              ),
+                          },
+                      },
+                  ]
+                : []),
+        ])
+
+        if (result?.status !== 200) {
+            throw new Error('Transaction thất bại')
+        }
+
+        message.success('Cập nhật thành công')
+        queryClient.invalidateQueries({ queryKey: ['SubjectVersion'] })
+        onClose()
+    } catch (error: any) {
+        message.error(
+            error?.info?.message || error?.message || 'Đã xảy ra lỗi trong quá trình xử lý'
+        )
+    } finally {
+        hideSpinner()
     }
+}
+
 
     return (
         <Modal
