@@ -1,8 +1,8 @@
 import Table from '@components/commons/table'
-import { DEFAULT_PAGINATE_SIZE } from '@constants/constants';
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useFindManyTrainingBlockOnCurriculumVersion } from '@workspace/db/hooks'
 import { Modal } from 'antd'
-import { useMemo,useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface TrainingBlockInput {
