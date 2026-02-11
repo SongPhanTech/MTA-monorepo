@@ -5,13 +5,7 @@ import TableCollapse from '@components/commons/tableCollapse'
 import type { FilterProps } from '@constants/type'
 import { useScoreConverter } from '@hooks/scoreConverter'
 import DefaultLayout from '@layouts/default-layout'
-import {
-    $Enums,
-    type ArchivedAward,
-    type ArchivedCertificate,
-    type Prisma,
-    type StudentSubjectScore,
-} from '@workspace/db/client'
+import type { ArchivedCertificate, Prisma, StudentSubjectScore } from '@workspace/db/client'
 import {
     useFindManySemester,
     useFindManyStudentSubjectScore,
@@ -25,7 +19,7 @@ import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Divider, Flex, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
-import { BookCheckIcon, Check, X } from 'lucide-react'
+import { Check, X } from 'lucide-react'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -889,7 +883,7 @@ export default function StudentScoreClassPage() {
                                     fixed: 'right',
                                     render: (_, { id, subjectClassStudent }) => (
                                         <Row className="justify-center gap-2">
-                                            <Tooltip title="Cộng điểm">
+                                            {/* <Tooltip title="Cộng điểm">
                                                 <BookCheckIcon
                                                     className="cursor-pointer hover:text-blue-500"
                                                     size={16}
@@ -907,7 +901,7 @@ export default function StudentScoreClassPage() {
                                                         })
                                                     }}
                                                 />
-                                            </Tooltip>
+                                            </Tooltip> */}
 
                                             <Tooltip title="Thêm chứng chỉ">
                                                 <SafetyCertificateOutlined
