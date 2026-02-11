@@ -65,7 +65,7 @@ const PutAddOlympicScoreModal = () => {
                 OR: [
                     { name: { contains: filters.searchText, mode: 'insensitive' } },
                     // { code: { contains: filters.searchText, mode: 'insensitive' } },
-                ]
+                ],
             }
         }
         return baseWhere
@@ -100,9 +100,10 @@ const PutAddOlympicScoreModal = () => {
         try {
             showSpinner()
             const listAward = []
-            const existingAwards = input?.subjectClassStudent?.awards?.map((a: any) => a.archivedAward) || [];
-            const currentTableAwards = dataTable || [];
-            const allAvailableAwards = [...existingAwards, ...currentTableAwards];
+            const existingAwards =
+                input?.subjectClassStudent?.awards?.map((a: any) => a.archivedAward) || []
+            const currentTableAwards = dataTable || []
+            const allAvailableAwards = [...existingAwards, ...currentTableAwards]
             for (const key of selectedRowKeys) {
                 const item = allAvailableAwards.find((item: any) => item.id === key)
                 if (item) {
@@ -162,7 +163,6 @@ const PutAddOlympicScoreModal = () => {
     // useEffect(() => {
     //     debouncedRefetch(   )
     // }, [whereCondition, refetch])
-
 
     useEffect(() => {
         if (input?.list?.length) {

@@ -88,6 +88,7 @@ export const SqlTransactionBodyItemModel = {
     StudentSubjectScore: 'StudentSubjectScore',
     StudentSubjectScoreHistory: 'StudentSubjectScoreHistory',
     StudentResearchTopic: 'StudentResearchTopic',
+    StudentInternship: 'StudentInternship',
     ArchivedCertificateOnStudentSubjectScore: 'ArchivedCertificateOnStudentSubjectScore',
     ArchivedCertificate: 'ArchivedCertificate',
     ArchivedAwardOnStudentSubjectScore: 'ArchivedAwardOnStudentSubjectScore',

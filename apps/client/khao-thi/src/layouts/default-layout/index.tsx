@@ -16,7 +16,7 @@ import { useRouter } from 'next/router'
 import { type ReactNode, useEffect, useMemo, useState } from 'react'
 import { IdleTimerProvider } from 'react-idle-timer'
 import HeaderApp from '@/components/header'
-import { Footer } from 'antd/es/layout/layout';
+import { Footer } from 'antd/es/layout/layout'
 import packageInfo from '../../../package.json'
 
 const { Header, Content } = Layout
@@ -189,16 +189,14 @@ const DefaultLayout = ({
                             </div>
                         )}
                     </Content>
-              
                 </Layout>
             </Layout>
-                    <Footer className="fixed bottom-0 w-full z-[1000] flex items-center p-2">
-                    <div>
-                        Học viện Kỹ thuật Quân sự - Địa chỉ: Số 236, Hoàng Quốc Việt, Cầu Giấy, Hà
-                        Nội
-                    </div>
-                    <div className="ml-auto">Phiên bản: {packageInfo.version}</div>
-                </Footer>
+            <Footer className="fixed bottom-0 w-full z-[1000] flex items-center p-2">
+                <div>
+                    Học viện Kỹ thuật Quân sự - Địa chỉ: Số 236, Hoàng Quốc Việt, Cầu Giấy, Hà Nội
+                </div>
+                <div className="ml-auto">Phiên bản: {packageInfo.version}</div>
+            </Footer>
         </IdleTimerProvider>
     )
 }

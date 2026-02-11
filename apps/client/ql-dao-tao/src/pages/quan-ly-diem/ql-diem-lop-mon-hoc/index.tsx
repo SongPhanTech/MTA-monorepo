@@ -173,7 +173,9 @@ export default function QuanLyDiemLopMonHoc({
             {
                 label: 'Danh sách lớp môn học',
                 key: '1',
-                children: <DanhSachLopMonHoc role={role} setActiveKey={setActiveKey} score={score} />,
+                children: (
+                    <DanhSachLopMonHoc role={role} setActiveKey={setActiveKey} score={score} />
+                ),
             },
         ]
 
@@ -199,7 +201,7 @@ export default function QuanLyDiemLopMonHoc({
                         label: 'Nhập điểm thi',
                         key: '2',
                         children: <NhapDiem role={role} score="THI" loadData={activeKey !== '1'} />,
-                        disabled: !data ,
+                        disabled: !data,
                     },
                 ]
             }

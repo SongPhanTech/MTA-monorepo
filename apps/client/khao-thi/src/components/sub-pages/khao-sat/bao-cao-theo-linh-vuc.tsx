@@ -2,9 +2,7 @@ import { DownloadOutlined, FileExcelOutlined, FileWordOutlined } from '@ant-desi
 import HtmlTruncate from '@components/commons/html-truncate'
 import Table from '@components/commons/table'
 import useSpinner from '@hooks/spinner'
-import {
-    useGetSurveyStatisticsToField,
-} from '@workspace/libs/api/exam'
+import { useGetSurveyStatisticsToField } from '@workspace/libs/api/exam'
 import type { GetSurveyStatistics200QuestionsItemAnswersItem } from '@workspace/libs/api/schemas'
 import { Button, Col, Dropdown, Empty, Row, Typography } from 'antd'
 import { Document, Table as DocxTable, Packer, Paragraph, TableCell, TableRow, TextRun } from 'docx'
@@ -36,9 +34,7 @@ function SurveyToFieldReport({ selectedId }: { selectedId: string }) {
 
     const { data: dataLevel } = useGetSurveyStatisticsToField(selectedId as string)
 
-    function convertToStackChartData(
-        data: any[],
-    ) {
+    function convertToStackChartData(data: any[]) {
         // Map answer -> description
         const color = ['#dd0b31', '#ea8585', '#ffc769', '#4b50db', '#028850']
         // const answerMap: Record<string, string> = {}
@@ -55,7 +51,7 @@ function SurveyToFieldReport({ selectedId }: { selectedId: string }) {
         const categories = data.map((item) => item.groupName)
 
         // Series stack bar
-        const series = data[0]?.answers.map((i:any, index: number) => ({
+        const series = data[0]?.answers.map((i: any, index: number) => ({
             name: i?.description,
             type: 'bar' as const,
             stack: 'total',
@@ -64,7 +60,7 @@ function SurveyToFieldReport({ selectedId }: { selectedId: string }) {
                 formatter: '{c}',
             },
             data: data.map((item) => {
-                const found = item.answers.find((a:any) => a?.answer === i?.answer)
+                const found = item.answers.find((a: any) => a?.answer === i?.answer)
                 return found ? found.count : 0
             }),
             itemStyle: { color: color[index] },
@@ -78,9 +74,7 @@ function SurveyToFieldReport({ selectedId }: { selectedId: string }) {
             label = dataLevel?.data?.data?.map(
                 (item: any, index: number) => `Lĩnh vực ${index + 1}`
             )
-            const { categories, series } = convertToStackChartData(
-                dataLevel?.data?.data,
-            )
+            const { categories, series } = convertToStackChartData(dataLevel?.data?.data)
             return {
                 tooltip: {
                     trigger: 'axis',
@@ -494,7 +488,7 @@ function SurveyToFieldReport({ selectedId }: { selectedId: string }) {
     return (
         <div>
             <Row gutter={[16, 8]}>
-                 {/* {dataLevel?.status === 200 && dataLevel?.data?.data?.length > 0 && (
+                {/* {dataLevel?.status === 200 && dataLevel?.data?.data?.length > 0 && (
                     <Col span={24}>
                         <div className="bg-white h-full flex flex-col">
                             <div className="px-4 pb-4 flex justify-between">

@@ -25,7 +25,11 @@ import { Search } from 'lucide-react'
 import { type Key, useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-export default function DanhSachLopMonHoc({ role = 'GV', setActiveKey, score }: DiemLopMonHocProps) {
+export default function DanhSachLopMonHoc({
+    role = 'GV',
+    setActiveKey,
+    score,
+}: DiemLopMonHocProps) {
     const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -334,11 +338,14 @@ export default function DanhSachLopMonHoc({ role = 'GV', setActiveKey, score }: 
                         rowSelection={{
                             type: 'radio',
                             selectedRowKeys: [selectedSubjectClassId as Key],
-                            onChange: (selectedRowKeys,selectedRows,info) => {
-                                   if (selectedRows[0]?.subject?.examType === 'OfflineWritten' && score==='THI') {
-                                        message.error('Lớp thi viết không được nhập điểm trực tiếp')
-                                        return
-                                    }
+                            onChange: (selectedRowKeys, selectedRows, info) => {
+                                if (
+                                    selectedRows[0]?.subject?.examType === 'OfflineWritten' &&
+                                    score === 'THI'
+                                ) {
+                                    message.error('Lớp thi viết không được nhập điểm trực tiếp')
+                                    return
+                                }
                                 diemLopMonHocStore.setState({
                                     selectedSubjectClassId: selectedRowKeys?.[0] as string,
                                 })
@@ -348,7 +355,10 @@ export default function DanhSachLopMonHoc({ role = 'GV', setActiveKey, score }: 
                         onRow={(record) => {
                             return {
                                 onClick: () => {
-                                    if (record?.subject?.examType === 'OfflineWritten' && score==='THI') {
+                                    if (
+                                        record?.subject?.examType === 'OfflineWritten' &&
+                                        score === 'THI'
+                                    ) {
                                         message.error('Lớp thi viết không được nhập điểm trực tiếp')
                                         return
                                     }
@@ -357,7 +367,10 @@ export default function DanhSachLopMonHoc({ role = 'GV', setActiveKey, score }: 
                                     })
                                 },
                                 onDoubleClick: () => {
-                                    if (record?.subject?.examType === 'OfflineWritten' && score==='THI') {
+                                    if (
+                                        record?.subject?.examType === 'OfflineWritten' &&
+                                        score === 'THI'
+                                    ) {
                                         message.error('Lớp thi viết không được nhập điểm trực tiếp')
                                         return
                                     }

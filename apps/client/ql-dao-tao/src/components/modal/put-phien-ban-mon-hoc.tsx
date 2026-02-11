@@ -537,20 +537,24 @@ const PutVersionSubjectModal = () => {
                     </FormItem>
                 </Col>
                 <Col span={8}>
-                    <FormItem 
-                        form={form} 
+                    <FormItem
+                        form={form}
                         name="onePoint"
                         label={
                             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                <span className="">
-                                    Một đầu điểm
-                                </span>
+                                <span className="">Một đầu điểm</span>
                                 <Tooltip
                                     placement="topLeft"
                                     title={
                                         <div>
-                                            <div><strong>1 đầu điểm:</strong> Chỉ nhập điểm thi (điểm học phần bằng điểm thi)</div>
-                                            <div><strong>3 đầu điểm:</strong> Có điểm thường xuyên, định kỳ, thi (điểm học phần nhân theo hệ số)</div>
+                                            <div>
+                                                <strong>1 đầu điểm:</strong> Chỉ nhập điểm thi (điểm
+                                                học phần bằng điểm thi)
+                                            </div>
+                                            <div>
+                                                <strong>3 đầu điểm:</strong> Có điểm thường xuyên,
+                                                định kỳ, thi (điểm học phần nhân theo hệ số)
+                                            </div>
                                         </div>
                                     }
                                 >

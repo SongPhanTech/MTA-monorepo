@@ -351,9 +351,9 @@ app.openapi(saveExamScore, async (c) => {
             where: {
                 subjectClassStudent: {
                     some: {
-                         id: {
-                                in: examPapers.map((p) => p.studentSubjectScore.id),
-                            },
+                        id: {
+                            in: examPapers.map((p) => p.studentSubjectScore.id),
+                        },
                     },
                 },
             },
@@ -361,8 +361,6 @@ app.openapi(saveExamScore, async (c) => {
                 subjectClassStudent: true,
             },
         })
-
-        
 
         for (const cls of subjectClasses) {
             const enteredExamScore = cls.subjectClassStudent.every((s) => {

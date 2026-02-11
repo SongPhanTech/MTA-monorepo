@@ -68,5 +68,5 @@
     padding: 8px 4px !important;
 }
 .row-disabled {
-  pointer-events: none;
+    pointer-events: none;
 }

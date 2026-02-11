@@ -750,11 +750,13 @@ export default function StudentScoreClassPage() {
                                     width: 100,
                                     render: (_, { subjectClassStudent }) => {
                                         const totalBonus = subjectClassStudent?.[0]?.awards.reduce(
-                                            (acc: number, curr: { archivedAward: { bonusScore: number } }) => 
-                                                acc + (curr?.archivedAward?.bonusScore ?? 0),
+                                            (
+                                                acc: number,
+                                                curr: { archivedAward: { bonusScore: number } }
+                                            ) => acc + (curr?.archivedAward?.bonusScore ?? 0),
                                             0
-                                        );
-                                        return totalBonus || 0;
+                                        )
+                                        return totalBonus || 0
                                     },
                                 },
                                 {
@@ -892,17 +894,21 @@ export default function StudentScoreClassPage() {
                                                     className="cursor-pointer hover:text-blue-500"
                                                     size={16}
                                                     onClick={() => {
-                                                        const currentAwards = subjectClassStudent?.[0]?.awards || [];
+                                                        const currentAwards =
+                                                            subjectClassStudent?.[0]?.awards || []
                                                         onOpenModalAddScore({
                                                             id: subjectClassStudent?.[0]?.id,
                                                             studentId: studentId,
-                                                            list: currentAwards.map((i: any) => i.archivedAwardId),
-                                                            subjectClassStudent: subjectClassStudent?.[0],
+                                                            list: currentAwards.map(
+                                                                (i: any) => i.archivedAwardId
+                                                            ),
+                                                            subjectClassStudent:
+                                                                subjectClassStudent?.[0],
                                                         })
                                                     }}
                                                 />
                                             </Tooltip>
-                                            
+
                                             <Tooltip title="Thêm chứng chỉ">
                                                 <SafetyCertificateOutlined
                                                     className="cursor-pointer hover:text-green-500"
@@ -910,8 +916,13 @@ export default function StudentScoreClassPage() {
                                                         onOpenModalAddCertificate({
                                                             id: subjectClassStudent?.[0]?.id,
                                                             studentId: studentId,
-                                                            list: subjectClassStudent?.[0]?.certificates.map((i: any) => i.archivedCertificateId) || [],
-                                                            subjectClassStudent: subjectClassStudent?.[0],
+                                                            list:
+                                                                subjectClassStudent?.[0]?.certificates.map(
+                                                                    (i: any) =>
+                                                                        i.archivedCertificateId
+                                                                ) || [],
+                                                            subjectClassStudent:
+                                                                subjectClassStudent?.[0],
                                                         })
                                                     }}
                                                 />
