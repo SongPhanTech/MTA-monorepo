@@ -295,20 +295,23 @@ const ModalChuyenLop = () => {
         [fixedClasses]
     )
 
-    const scrollAndHighlightRows = useCallback((rowIds: string[], targetRef: React.RefObject<HTMLDivElement>) => {
-        setHighlightedRows(rowIds)
+    const scrollAndHighlightRows = useCallback(
+        (rowIds: string[], targetRef: React.RefObject<HTMLDivElement>) => {
+            setHighlightedRows(rowIds)
 
-        clearTimeout(scrollTimerRef.current)
-        clearTimeout(highlightTimerRef.current)
+            clearTimeout(scrollTimerRef.current)
+            clearTimeout(highlightTimerRef.current)
 
-        scrollTimerRef.current = setTimeout(() => {
-            targetRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+            scrollTimerRef.current = setTimeout(() => {
+                targetRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 
-            highlightTimerRef.current = setTimeout(() => {
-                setHighlightedRows([])
-            }, HIGHLIGHT_DURATION)
-        }, SCROLL_DELAY)
-    }, [])
+                highlightTimerRef.current = setTimeout(() => {
+                    setHighlightedRows([])
+                }, HIGHLIGHT_DURATION)
+            }, SCROLL_DELAY)
+        },
+        []
+    )
 
     const getRowClassName = useCallback(
         (record: any) => (highlightedRows.includes(record.id) ? 'bg-green-100' : ''),

@@ -194,7 +194,7 @@ app.openapi(graduationCheck, async (c) => {
             where: { deletedAt: null, active: true, isRequired: true },
         },
     }
-    applicationLoop: for (const [idx, application] of session.applications.entries()) {
+    for (const [idx, application] of session.applications.entries()) {
         const student = await prisma.student.findFirstOrThrow({
             where: { id: application.studentId },
             select: {
@@ -261,6 +261,8 @@ app.openapi(graduationCheck, async (c) => {
             continue
         }
 
+        const reasons: string[] = []
+
         const lackOfOutputStandard = curriculumVersion.outputStandardOnCurriculum.filter(
             (standard) => {
                 const notCompleted = standard.outputStandard.certificates.every((cert) => {
@@ -274,16 +276,11 @@ app.openapi(graduationCheck, async (c) => {
         )
 
         if (lackOfOutputStandard.length > 0) {
-            results.push({
-                applicationId: application.id,
-                graduation: false,
-                reason: `Chưa đạt chuẩn đầu ra: ${lackOfOutputStandard
+            reasons.push(
+                `Chưa đạt chuẩn đầu ra: ${lackOfOutputStandard
                     .map((standard) => standard.outputStandard.name)
-                    .join(', ')}`,
-                trainingMajor: null,
-                diplomaType: null,
-            })
-            continue
+                    .join(', ')}`
+            )
         }
 
         const curriculumSubjects = curriculumVersion.trainingBlocks.flatMap(
@@ -298,6 +295,36 @@ app.openapi(graduationCheck, async (c) => {
             scoreToRetain,
             scoreConverts,
         } = student.fixedClass.trainingCourse
+
+        // Query các môn học có lỗi (hoãn thi, cấm thi, đình chỉ, học lại)
+        const subjectScoresWithIssues = await prisma.studentSubjectScore.findMany({
+            where: {
+                studentId: application.studentId,
+                deletedAt: null,
+                OR: [
+                    { examPostponed: true },
+                    { examBanned: true },
+                    { suspended: true },
+                    { repeated: true },
+                ],
+            },
+            include: { subjectVersion: true },
+        })
+
+        for (const score of subjectScoresWithIssues) {
+            if (score.examPostponed && score.examPostponedReason) {
+                reasons.push(`Môn ${score.subjectVersion.name}: ${score.examPostponedReason}`)
+            }
+            if (score.examBanned && score.examBannedReason) {
+                reasons.push(`Môn ${score.subjectVersion.name}: ${score.examBannedReason}`)
+            }
+            if (score.suspended && score.suspendedReason) {
+                reasons.push(`Môn ${score.subjectVersion.name}: ${score.suspendedReason}`)
+            }
+            if (score.repeated && score.repeatedReason) {
+                reasons.push(`Môn ${score.subjectVersion.name}: ${score.repeatedReason}`)
+            }
+        }
 
         // include failed subjects for count
         const rawSubjectScores = await prisma.studentSubjectScore.findMany({
@@ -434,14 +461,8 @@ app.openapi(graduationCheck, async (c) => {
                 .filter(({ id }) => !processedEquivalencyGroups.has(id))
 
             if (!subjectScore && !equivGroups.length) {
-                results.push({
-                    applicationId: application.id,
-                    graduation: false,
-                    reason: `Chưa đạt môn bắt buộc (${subject.subject.name})`,
-                    diplomaType: null,
-                    trainingMajor: curriculumVersion.curriculum.trainingMajor,
-                })
-                continue applicationLoop
+                reasons.push(`Chưa đạt môn bắt buộc (${subject.subject.name})`)
+                continue
             }
 
             let hasEquivalencyGroup = false
@@ -531,14 +552,7 @@ app.openapi(graduationCheck, async (c) => {
                 subject.useForFinalScore &&
                 subject.type === SubjectRequirementType.Mandatory
             ) {
-                results.push({
-                    applicationId: application.id,
-                    graduation: false,
-                    reason: `Chưa đạt môn bắt buộc (${subject.subject.name})`,
-                    diplomaType: null,
-                    trainingMajor: curriculumVersion.curriculum.trainingMajor,
-                })
-                continue applicationLoop
+                reasons.push(`Chưa đạt môn bắt buộc (${subject.subject.name})`)
             }
         }
 
@@ -577,14 +591,9 @@ app.openapi(graduationCheck, async (c) => {
             curriculumVersion.requiredCredits &&
             totalPassCredit < curriculumVersion.requiredCredits
         ) {
-            results.push({
-                applicationId: application.id,
-                graduation: false,
-                reason: `Chưa đạt số tín chỉ (${totalPassCredit} < ${curriculumVersion.requiredCredits})`,
-                trainingMajor: curriculumVersion.curriculum.trainingMajor,
-                diplomaType: curriculumVersion.diplomaType,
-            })
-            continue
+            reasons.push(
+                `Chưa đạt số tín chỉ (${totalPassCredit} < ${curriculumVersion.requiredCredits})`
+            )
         }
 
         const cumulativeBase10 = totalPassCredit
@@ -596,14 +605,7 @@ app.openapi(graduationCheck, async (c) => {
 
         const rankLevels = student.fixedClass?.trainingCourse.academicRankingConvert
         if (!rankLevels?.length) {
-            results.push({
-                applicationId: application.id,
-                graduation: false,
-                reason: 'Không có hạng xếp loại',
-                trainingMajor: curriculumVersion.curriculum.trainingMajor,
-                diplomaType: curriculumVersion.diplomaType,
-            })
-            continue
+            reasons.push('Không có hạng xếp loại')
         }
 
         const CUMULATIVE_GPA = Number(
@@ -662,6 +664,19 @@ app.openapi(graduationCheck, async (c) => {
             IS_STUDY_DURATION_EXCEEDED: false,
             IS_DEBT_SUBJECT_CONSECUTIVE: false,
             HAS_IMPROVEMENT_REGISTRATION: false,
+        }
+
+        if (reasons.length > 0) {
+            results.push({
+                applicationId: application.id,
+                graduation: false,
+                gpa: CUMULATIVE_GPA,
+                rank: null,
+                reason: reasons.join('\n'),
+                trainingMajor: curriculumVersion.curriculum.trainingMajor,
+                diplomaType: curriculumVersion.diplomaType,
+            })
+            continue
         }
 
         for (const [

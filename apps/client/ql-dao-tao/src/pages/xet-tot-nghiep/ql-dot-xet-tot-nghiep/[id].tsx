@@ -56,6 +56,8 @@ export default function StudentGraduationApplication() {
     const [fixedClassSelected, setFixedClassSelected] = useState<string>()
     const [requiredCertificateIds, setRequiredCertificateIds] = useState<string[]>([])
 
+    const { showSpinner, hideSpinner } = useSpinner()
+
     const where = useMemo(
         () => ({
             sessionId: graduationSessionId,
@@ -252,12 +254,6 @@ export default function StudentGraduationApplication() {
         }
     }
 
-    // Tạo Set từ requiredCertificateIds để lookup nhanh hơn
-    const requiredCertificateSet = useMemo(
-        () => new Set(requiredCertificateIds),
-        [requiredCertificateIds]
-    )
-
     const data = useMemo(() => {
         if (!studentGraduationApplicationData) return []
 
@@ -296,7 +292,11 @@ export default function StudentGraduationApplication() {
         tag: 'PutGraduationApplication',
     })
 
-    const { showSpinner, hideSpinner } = useSpinner()
+    const { onOpen: onOpenModalPreviewReason } = useDisclosure<{
+        id: string
+    }>({
+        tag: 'ModalPreviewReason',
+    })
 
     const handleModal = () => {
         onOpen({ id: null, graduationSessionId })
@@ -322,25 +322,6 @@ export default function StudentGraduationApplication() {
                 data: { deletedAt: new Date() },
             })
             message.success('Xóa thành công')
-        } catch (error: any) {
-            if (error?.info?.message) {
-                message.error(error?.info?.message)
-                return
-            }
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        } finally {
-            hideSpinner()
-        }
-    }
-
-    async function handleReject(id: string) {
-        try {
-            showSpinner()
-            await updateStudentGraduationApplication({
-                where: { id },
-                data: { status: ApplicationStatus.REJECTED },
-            })
-            message.success('Từ chối thành công')
         } catch (error: any) {
             if (error?.info?.message) {
                 message.error(error?.info?.message)
@@ -640,10 +621,6 @@ export default function StudentGraduationApplication() {
                                             </Col>
                                             <Col span={12}>
                                                 <Flex justify="end" gap={4} className="ml-auto">
-                                                    {/* <Button type="primary">
-                                                        <FileUp />
-                                                        Nhập đơn xét tốt nghiệp
-                                                    </Button> */}
                                                     <Button
                                                         onClick={handleRejectAll}
                                                         type="primary"
@@ -703,6 +680,34 @@ export default function StudentGraduationApplication() {
                                             rowSelection={{
                                                 type: 'checkbox',
                                                 ...rowSelection,
+                                            }}
+                                            onRow={(record) => {
+                                                return {
+                                                    onClick: () => {
+                                                        const isDisabled =
+                                                            record.status ===
+                                                                ApplicationStatus.REJECTED ||
+                                                            record.status ===
+                                                                ApplicationStatus.APPROVED ||
+                                                            (requiredCertificateIds.length > 0 &&
+                                                                !record.hasAllRequiredCerts)
+
+                                                        if (isDisabled) return
+
+                                                        if (selectedRowKeys.includes(record.id)) {
+                                                            setSelectedRowKeys(
+                                                                selectedRowKeys.filter(
+                                                                    (key) => key !== record.id
+                                                                )
+                                                            )
+                                                        } else {
+                                                            setSelectedRowKeys([
+                                                                ...selectedRowKeys,
+                                                                record.id,
+                                                            ])
+                                                        }
+                                                    },
+                                                }
                                             }}
                                             filters={filters}
                                             setFilters={(value) => {
@@ -861,7 +866,57 @@ export default function StudentGraduationApplication() {
                                                             )
                                                         }
                                                         if (record?.reason) {
-                                                            return <span>{record.reason}</span>
+                                                            let reasons = record.reason
+                                                                .split(/\r?\n|\\n/)
+                                                                .filter(Boolean)
+                                                            if (reasons.length <= 1) {
+                                                                reasons = record.reason
+                                                                    .split('\n')
+                                                                    .filter(Boolean)
+                                                                    .map((s: string) => s.trim())
+                                                            }
+                                                            const visibleReasons = reasons.slice(
+                                                                0,
+                                                                2
+                                                            )
+
+                                                            return (
+                                                                <div className="text-left">
+                                                                    <ul
+                                                                        style={{
+                                                                            paddingLeft: 0,
+                                                                            margin: 0,
+                                                                            listStyle: 'none',
+                                                                        }}
+                                                                    >
+                                                                        {visibleReasons.map(
+                                                                            (
+                                                                                r: string,
+                                                                                i: number
+                                                                            ) => (
+                                                                                <li key={i}>
+                                                                                    - {r}
+                                                                                </li>
+                                                                            )
+                                                                        )}
+                                                                    </ul>
+                                                                    {reasons.length > 2 && (
+                                                                        <div
+                                                                            className="flex justify-end text-xs text-green-700 cursor-pointer"
+                                                                            onClick={() =>
+                                                                                onOpenModalPreviewReason(
+                                                                                    {
+                                                                                        id: record.id,
+                                                                                    }
+                                                                                )
+                                                                            }
+                                                                        >
+                                                                            Xem thêm (
+                                                                            {reasons.length - 2})
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            )
                                                         }
                                                         return null
                                                     },

@@ -67,7 +67,7 @@ app.openapi(createNewExamList, async (c) => {
             status: 'OFFICIAL',
             active: true,
             type: {
-                in:['NORMAL', 'RETAKE','REEXAM']
+                in: ['NORMAL', 'RETAKE', 'REEXAM'],
             },
             examId: null,
         },
