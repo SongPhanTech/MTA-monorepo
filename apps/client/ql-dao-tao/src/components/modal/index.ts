@@ -110,6 +110,7 @@ import PutAcademicActionConfig from './put-xu-ly-hoc-tap'
 import PutDeadlineScoreModal from './set-deadline-score'
 import PutAddOlympicScoreModal from './them-diem-cong'
 import ThongTinBaoCaoModal from './thong-tin-bao-cao'
+import ModalCurriculumVersionByTrainingBlock from './modal-ctdt-theo-kkt';
 export {
     ExportStatsArchivedAwardModal,
     ModalChiTietLopBienChe,
@@ -225,6 +226,7 @@ export {
     ModalChuyenDoiChungChiThanhDiem,
     PutResearchTopicModal,
     ModalChuyenDiemLopMonHoc,
+    ModalCurriculumVersionByTrainingBlock,
 }
 export * from './ke-hoach-dao-tao'
 export * from './thong-bao'
