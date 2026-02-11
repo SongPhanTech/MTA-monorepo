@@ -14,7 +14,10 @@ interface SiderDefaultLayoutProps {
 function getMenus(menus: MenuItem[]): ItemType<MenuItemType>[] {
     return menus.map((item) => ({
         label: item.children ? (
-            item.label
+            <span className="flex items-center gap-2">
+                {item.icon ? <item.icon /> : undefined}
+                {item.label}
+            </span>
         ) : (
             <Link href={item.path || '#'} className="flex items-center gap-2">
                 {item.icon ? <item.icon /> : undefined}
