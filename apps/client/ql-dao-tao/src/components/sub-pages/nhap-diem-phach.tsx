@@ -26,6 +26,12 @@ export default function NhapDiemPhach() {
                     suspended: false,
                     examBanned: false,
                     examPostponed: false,
+                    attendanceScore:{
+                        not: null
+                    },
+                    midtermScore: {
+                        not: null
+                    },
                 },
             },
             include: {
