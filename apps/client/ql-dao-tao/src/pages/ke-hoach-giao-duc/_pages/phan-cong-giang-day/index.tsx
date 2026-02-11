@@ -1647,6 +1647,23 @@ export default function PhanCongGiangDay({
                                     if ('lecturerId' in changedField) {
                                         newSubjectClassData.enterGradeLecturerId =
                                             changedField.lecturerId
+                                        if (
+                                            changedField.lecturerId &&
+                                            subjectClassForm?.[subjectClassId]?.extraLecturerId ===
+                                                changedField.lecturerId
+                                        ) {
+                                            newSubjectClassData.extraLecturerId = null
+                                        }
+                                    }
+
+                                    if ('extraLecturerId' in changedField) {
+                                        if (
+                                            changedField.extraLecturerId &&
+                                            subjectClassForm?.[subjectClassId]?.lecturerId ===
+                                                changedField.extraLecturerId
+                                        ) {
+                                            newSubjectClassData.lecturerId = null
+                                        }
                                     }
 
                                     if ('trainingLocationId' in changedField) {
@@ -1846,11 +1863,9 @@ export default function PhanCongGiangDay({
                                             >
                                                 <LectureTreeSelect
                                                     placeholder="Chọn giảng viên"
-                                                    ignoreLectureIds={
-                                                        record?.extraLecturerId
-                                                            ? [record?.extraLecturerId]
-                                                            : []
-                                                    }
+                                                    ignoreLectureIds={[
+                                                        subjectClassForm?.[record.id]?.extraLecturerId,
+                                                    ].filter(Boolean) as string[]}
                                                     disabled={
                                                         !!record?.submitLecturerAssignmentAt ||
                                                         (!!record.lecturerAssignmentDeadline &&
@@ -1889,11 +1904,9 @@ export default function PhanCongGiangDay({
                                             >
                                                 <LectureTreeSelect
                                                     placeholder="Chọn giảng viên"
-                                                    ignoreLectureIds={
-                                                        record?.lecturerId
-                                                            ? [record?.lecturerId]
-                                                            : []
-                                                    }
+                                                    ignoreLectureIds={[
+                                                        subjectClassForm?.[record.id]?.lecturerId,
+                                                    ].filter(Boolean) as string[]}
                                                     disabled={
                                                         subjectClassForm?.[record.id]?.cancelled ||
                                                         !!record?.submitLecturerAssignmentAt ||
