@@ -263,7 +263,7 @@ const PutSurveyImportQuestionModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={input?.id ? 'Chỉnh sửa câu hỏi khảo sát' : 'Thêm mới câu hỏi khảo sát'}
+            title={'Nhập câu hỏi khảo sát'}
             className="w-[700px]"
         >
             <Col span={24}>
