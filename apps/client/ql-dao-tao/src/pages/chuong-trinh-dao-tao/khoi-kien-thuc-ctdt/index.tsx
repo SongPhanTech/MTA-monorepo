@@ -13,6 +13,7 @@ import type { Prisma } from '@workspace/db/client'
 import {
     useCountTrainingBlock,
     useFindManyTrainingBlock,
+    useFindManyTrainingBlockOnCurriculumVersion,
     useUpdateTrainingBlock,
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
@@ -22,7 +23,7 @@ import { Button, Col, Flex, message, Row, Tag, Tooltip } from 'antd'
 import _ from 'lodash'
 import { BookPlus } from 'lucide-react'
 import type React from 'react'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import ViewIcon from '@components/icons/view'
 
@@ -82,6 +83,43 @@ export default function TrainingBlock() {
             deletedAt: null,
         },
     })
+
+    const { data: trainingBlockOnCurriculumData = [] } = useFindManyTrainingBlockOnCurriculumVersion(
+        {
+            where: {
+                trainingBlock: {
+                    trainingObjectTypeId,
+                },
+                curriculumVersion: {
+                    deletedAt: null,
+                },
+            },
+            include: {
+                curriculumVersion: true,
+            },
+        },
+        {
+            enabled: !!trainingObjectTypeId,
+        }
+    )
+
+    const curriculumVersionCountMap = useMemo(() => {
+        const countMap = new Map<string, number>()
+        
+        trainingBlockOnCurriculumData.forEach((item) => {
+            if (item.trainingBlockId && item.curriculumVersion) {
+                const curriculumVersionsByBlock = trainingBlockOnCurriculumData.filter(
+                    (d) => d.trainingBlockId === item.trainingBlockId
+                )
+                const uniqueVersions = new Set(
+                    curriculumVersionsByBlock.map((d) => d.curriculumVersionId)
+                )
+                countMap.set(item.trainingBlockId, uniqueVersions.size)
+            }
+        })
+        
+        return countMap
+    }, [trainingBlockOnCurriculumData])
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -155,6 +193,26 @@ export default function TrainingBlock() {
                     <Tag color="error">Ngừng đào tạo</Tag>
                 ) : (
                     <Tag color="success">Đang đào tạo</Tag>
+                )
+            },
+        },
+        {
+            title: 'Số lượng CTĐT',
+            align: 'center',
+            width: 150,
+            render: (_: any, record: TrainingBlockType) => {
+                const count = curriculumVersionCountMap.get(record.id) || 0
+                return (
+                    <span
+                        className="text-blue-600 cursor-pointer hover:underline"
+                        onClick={() => {
+                            if (count > 0) {
+                                handleOpenModalCurriculumVersionByTrainingBlock(record)
+                            }
+                        }}
+                    >
+                        {count}
+                    </span>
                 )
             },
         },
