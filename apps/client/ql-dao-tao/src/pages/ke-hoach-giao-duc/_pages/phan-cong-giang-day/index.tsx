@@ -1292,7 +1292,7 @@ export default function PhanCongGiangDay({
                                                     ])
 
                                                     if (res.status !== 200) {
-                                                        throw new Error('Lỗi khi xuất báo dạy')
+                                                        throw new Error('Lỗi khi xuất PCGD')
                                                     }
 
                                                     const payload = res.data[0] as Array<{
@@ -1603,7 +1603,7 @@ export default function PhanCongGiangDay({
                                             type="primary"
                                             className="bg-blue-500"
                                         >
-                                            3. Xuất báo dạy
+                                            3. Xuất PCGD
                                         </Button>
                                     )}
                                     {!khoaBoMon &&
