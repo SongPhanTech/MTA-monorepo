@@ -44,7 +44,6 @@ export default function KhungDeList() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
-        searchText: '',
         evidenceName: '',
         name: '',
         subjectVersionIdString: '',
@@ -173,10 +172,10 @@ export default function KhungDeList() {
 
                     <div className="flex gap-2">
                         <Input
-                            placeholder="Tìm theo tên hoặc mã (Phiên bản môn học, Ngân hàng câu hỏi)"
-                            value={filters.searchText}
+                            placeholder="Tìm theo tên khung đề"
+                            value={filters.name}
                             onChange={(e) =>
-                                setFilters((prev) => ({ ...prev, searchText: e.target.value }))
+                                setFilters((prev) => ({ ...prev, name: e.target.value }))
                             }
                             className="w-96 h-8"
                             allowClear
