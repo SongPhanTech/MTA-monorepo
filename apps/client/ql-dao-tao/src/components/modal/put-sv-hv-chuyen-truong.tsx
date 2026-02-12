@@ -9,7 +9,6 @@ import type {
     SubjectVersion,
 } from '@workspace/db/client'
 import {
-    useCreateManyStudentSubjectScore,
     useCreateStudentScoreConvert,
     useFindManyStudent,
     useFindUniqueStudent,
@@ -66,7 +65,7 @@ const PutStudentScoreConvertModal = () => {
         () => new Set(selectedSubjects.map((s: any) => s?.subjectVersionId).filter(Boolean)),
         [selectedSubjects]
     )
-    const { data: studentList = [], isFetching: loadingStudents } = useFindManyStudent({
+    const { data: studentList = [], isLoading: loadingStudents, isFetching: fetchingStudents } = useFindManyStudent({
         where: {
             active: true,
             OR: [
@@ -106,9 +105,6 @@ const PutStudentScoreConvertModal = () => {
         },
         { enabled: !!selectedStudentId }
     )
-
-    const { mutateAsync: createManyStudentSubjectScore } = useCreateManyStudentSubjectScore()
-    console.log('selectedStudent', selectedStudent)
 
     const allSubjectOptions = useMemo(() => {
         const cv =
@@ -385,7 +381,7 @@ const PutStudentScoreConvertModal = () => {
                     <Select
                         showSearch
                         placeholder="Chọn sinh viên"
-                        loading={loadingStudents}
+                        loading={loadingStudents || fetchingStudents}
                         filterOption={false}
                         onSearch={(v) => setStudentKeyword(v)}
                         {...(isEdit || isViewMode ? { variant: 'borderless', open: false } : {})}
