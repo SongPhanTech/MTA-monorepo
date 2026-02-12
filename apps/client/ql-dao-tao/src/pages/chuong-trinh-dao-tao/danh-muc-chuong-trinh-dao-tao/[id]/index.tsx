@@ -329,6 +329,11 @@ export default function TrainingProgramSubjects() {
                                     trainingMajors: true,
                                 },
                             },
+                            subjectClass: {
+                                where: { deletedAt: null, active: true },
+                                select: { id: true },
+                                take: 1,
+                            },
                         },
                     },
                 },
@@ -1008,106 +1013,79 @@ export default function TrainingProgramSubjects() {
                             //     },
                             // },
                             {
-                                title: 'Thao tác',
-                                width: 100,
-                                align: 'center',
-                                // hidden: !canSome(
-                                //     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
-                                //     'SUA'
-                                // ),
-                                render: (_, record) => {
-                                    if (record.trainingBlockOnCurriculumVersionId) {
-                                        return (
-                                            <Row className="justify-center gap-2">
-                                                {can(
-                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC,
-                                                    'XEM'
-                                                ) && (
-                                                    <ViewIcon
-                                                        onClick={() =>
-                                                            handleModalSubjectVersion(
-                                                                '',
-                                                                record.subjectId,
-                                                                !can(
-                                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC,
-                                                                    'SUA'
-                                                                )
-                                                            )
-                                                        }
-                                                        className="text-sm text-blue-700 cursor-pointer"
-                                                    />
-                                                )}
-                                                <EditIcon
-                                                    onClick={(_e) => {
-                                                        onOpenTrainingBlockSubject({
-                                                            trainingBlockOnCurriculumVersionId:
-                                                                record?.trainingBlockOnCurriculumVersionId,
-                                                            trainingBlockSubjectId: record?.id,
-                                                        })
-                                                    }}
+                            title: 'Thao tác',
+                            width: 100,
+                            align: 'center',
+                            render: (_, record) => {
+
+                                const hasSubjectClass = record?.subject?.subjectClass?.length && record?.subject?.subjectClass?.length > 0;
+
+                                if (record.trainingBlockOnCurriculumVersionId) {
+                                    return (
+                                        <Row className="justify-center gap-2">
+                                            {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC, 'XEM') && (
+                                                <ViewIcon
+                                                    onClick={() =>
+                                                        handleModalSubjectVersion(
+                                                            '',
+                                                            record.subjectId,
+                                                            !can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC, 'SUA')
+                                                        )
+                                                    }
                                                     className="text-sm text-blue-700 cursor-pointer"
                                                 />
-                                                {can(
-                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC,
-                                                    'XOA'
-                                                ) && (
-                                                    <DeleteIcon
-                                                        popConfirm={{
-                                                            title: 'Xóa môn học khỏi CTĐT',
-                                                            description: (
-                                                                <div>
-                                                                    <p>
-                                                                        <strong>
-                                                                            Bạn có chắc chắn muốn
-                                                                            xóa môn học này khỏi
-                                                                            chương trình đào tạo?
-                                                                        </strong>
-                                                                    </p>
-                                                                    <br />
-                                                                    <p>
-                                                                        <strong>Lưu ý:</strong>
-                                                                    </p>
-                                                                    <ul
-                                                                        style={{
-                                                                            paddingInline: '10px',
-                                                                            marginTop: '8px',
-                                                                        }}
-                                                                    >
-                                                                        <li>
-                                                                            Môn học chỉ bị xóa khỏi
-                                                                            CTĐT này, không ảnh
-                                                                            hưởng đến CTĐT khác
-                                                                        </li>
-                                                                        <li>
-                                                                            Nếu môn học đã được đưa
-                                                                            vào kế hoạch đào tạo
-                                                                            hoặc đã có lớp học, việc
-                                                                            xóa có thể gây ảnh hưởng
-                                                                        </li>
-                                                                        <li>
-                                                                            Nếu sinh viên đã đăng ký
-                                                                            và có điểm, cần xem xét
-                                                                            kỹ trước khi xóa
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                            ),
-                                                            okText: 'Xác nhận xóa',
-                                                            cancelText: 'Hủy',
-                                                            okType: 'danger',
-                                                            onConfirm: () =>
-                                                                handleDeleteTrainingBlockSubject(
-                                                                    record.id
+                                            )}
+
+                                            <EditIcon
+                                                onClick={(_e) => {
+                                                    onOpenTrainingBlockSubject({
+                                                        trainingBlockOnCurriculumVersionId: record?.trainingBlockOnCurriculumVersionId,
+                                                        trainingBlockSubjectId: record?.id,
+                                                    })
+                                                }}
+                                                className="text-sm text-blue-700 cursor-pointer"
+                                            />
+
+                                            {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC, 'XOA') && (
+                                                <>
+                                                    {hasSubjectClass ? (
+                                                        <Tooltip title="Môn học đã được đưa vào giảng dạy (đã mở lớp), không thể xóa.">
+                                                            <span className="opacity-40">
+                                                                <DeleteIcon disabled/>
+                                                            </span>
+                                                        </Tooltip>
+                                                    ) : (
+                                                        <DeleteIcon
+                                                            popConfirm={{
+                                                                title: 'Xóa môn học khỏi CTĐT',
+                                                                description: (
+                                                                    <div>
+                                                                        <p><strong>Bạn có chắc chắn muốn xóa môn học này khỏi chương trình đào tạo?</strong></p>
+                                                                        <br />
+                                                                        <p><strong>Lưu ý:</strong></p>
+                                                                        <ul style={{ paddingInline: '10px', marginTop: '8px' }}>
+                                                                            <li>Môn học chỉ bị xóa khỏi CTĐT này, không ảnh hưởng đến CTĐT khác</li>
+                                                                            <li>Nếu môn học đã được đưa vào kế hoạch đào tạo hoặc đã có lớp học, việc xóa có thể gây ảnh hưởng</li>
+                                                                            <li>Nếu sinh viên đã đăng ký và có điểm, cần xem xét kỹ trước khi xóa</li>
+                                                                        </ul>
+                                                                    </div>
                                                                 ),
-                                                        }}
-                                                    />
-                                                )}
-                                            </Row>
-                                        )
-                                    }
-                                    return ''
-                                },
+                                                                okText: 'Xác nhận xóa',
+                                                                cancelText: 'Hủy',
+                                                                okType: 'danger',
+                                                                onConfirm: () => handleDeleteTrainingBlockSubject(record.id),
+                                                            }}
+                                                            onClick={(e) => e.stopPropagation()}
+                                                        />
+                                                    )}
+                                                </>
+                                            )}
+                                        </Row>
+                                    )
+                                }
+                                return ''
                             },
+                        },
                         ]}
                         data={data}
                         // headerRight={({ id }) => (
