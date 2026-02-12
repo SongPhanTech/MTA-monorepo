@@ -177,11 +177,12 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
             id: true,
             name: true,
             examCapacity: true,
+            trainingRoom: true,
         },
     })
 
     const resetField = () => {
-        if (exams) {
+        if (exams && rooms.length > 0) {
             form.setFieldsValue({
                 list: exams.reduce(
                     (acc, exam) => {
@@ -189,6 +190,10 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                             rooms:
                                 exam.examRooms
                                     .filter((er) => !!er.roomId)
+                                    .filter((er) => {
+                                        const roomInfo = rooms.find((r) => r.id === er.roomId)
+                                        return roomInfo?.trainingRoom
+                                    })
                                     ?.map((er) => ({
                                         roomId: er.roomId ?? '',
                                         quantity: er.capacity,
@@ -207,7 +212,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
     // biome-ignore lint/correctness/useExhaustiveDependencies: <skip function>
     useEffect(() => {
         resetField()
-    }, [exams])
+    }, [exams, rooms])
 
     const { mutateAsync: createExam } = useCreateExams()
     const { mutateAsync: mergeExam } = useMergeExam()
@@ -320,13 +325,18 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                             },
                         },
                     },
-                    ...listChanges.map(({ examId, rooms, session }) => ({
+                    ...listChanges.map(({ examId, rooms: selectedRooms, session }) => ({
                         model: 'Exam' as const,
                         operation: 'update',
                         data: {
                             data: {
                                 examRooms: {
-                                    create: rooms.map((room) => ({
+                                    create: selectedRooms
+                                        .filter((r) => {
+                                            const roomInfo = rooms.find((room) => room.id === r.roomId)
+                                            return roomInfo?.trainingRoom
+                                        })
+                                        .map((room) => ({
                                         roomId: room.roomId,
                                         capacity: room.quantity,
                                         examList: {
