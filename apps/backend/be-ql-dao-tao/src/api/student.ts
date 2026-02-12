@@ -2,6 +2,7 @@ import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { AcademicActionType, StudentStatus } from '@workspace/db'
 import { getTemplateBuffer } from '@workspace/libs/server'
 import dayjs from 'dayjs'
+import ExcelJS from 'exceljs'
 import XlsxTemplate from 'xlsx-template'
 import { prisma } from '..'
 import {
@@ -796,6 +797,42 @@ app.openapi(debtStatistics, async (c) => {
     })
 })
 
+const downloadStudentImportTemplate = createRoute({
+    operationId: 'downloadStudentImportTemplate',
+    tags: ['Student'],
+    path: '/download-student-import-template',
+    method: 'get',
+    responses: {
+        200: {
+            description: 'Download template file with category sheets',
+            content: {
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': {
+                    schema: z.any().openapi({ type: 'string', format: 'binary' }),
+                },
+            },
+        },
+        404: {
+            description: 'Not found',
+            content: {
+                'application/json': {
+                    schema: z.object({ message: z.string() }),
+                },
+            },
+        },
+        500: {
+            description: 'Internal server error',
+            content: {
+                'application/json': {
+                    schema: z.object({ 
+                        message: z.string(),
+                        error: z.string().optional(),
+                    }),
+                },
+            },
+        },
+    },
+})
+
 const exportStudentProfiles = createRoute({
     operationId: 'exportStudentProfiles',
     tags: ['Student'],
@@ -828,6 +865,388 @@ const exportStudentProfiles = createRoute({
             },
         },
     },
+})
+
+app.openapi(downloadStudentImportTemplate, async (c) => {
+    try {
+        // Tạo workbook mới
+        const workbook = new ExcelJS.Workbook()
+
+        // Query danh sách tỉnh
+        const provinces = await prisma.dM_Tinh.findMany({
+            where: {
+                bActive: true,
+                bDeleted: false,
+            },
+            select: {
+                sMa: true,
+                sTen: true,
+            },
+            orderBy: {
+                sTen: 'asc',
+            },
+        })
+
+        // Query danh sách khoá học
+        const trainingCourses = await prisma.trainingCourse.findMany({
+            where: {
+                active: true,
+                deletedAt: null,
+            },
+            select: {
+                id: true,
+                name: true,
+                code: true,
+            },
+            orderBy: {
+                name: 'asc',
+            },
+        })
+
+        // Query danh sách ngành
+        const trainingFields = await prisma.trainingField.findMany({
+            select: {
+                id: true,
+                name: true,
+                code: true,
+            },
+            orderBy: {
+                name: 'asc',
+            },
+        })
+
+        // Query danh sách chuyên ngành
+        const trainingMajors = await prisma.trainingMajor.findMany({
+            select: {
+                id: true,
+                name: true,
+                code: true,
+            },
+            orderBy: {
+                name: 'asc',
+            },
+        })
+
+        // Query danh sách CTĐT
+        const curriculumVersions = await prisma.curriculumVersion.findMany({
+            select: {
+                id: true,
+                name: true,
+                code: true,
+            },
+            orderBy: {
+                name: 'asc',
+            },
+        })
+
+        // Sheet 1: IMPORT - Sheet chính
+        const importSheet = workbook.addWorksheet('IMPORT')
+
+        const headers = [
+            'STT',
+            'Mã sinh viên',
+            'Họ và tên đệm',
+            'Tên',
+            'Ngày sinh',
+            'Giới tính',
+            'CCCD',
+            'Nơi sinh',
+            'Quê quán',
+            'Tỉnh thường trú',
+            'Số điện thoại',
+            'Email',
+            'Khoá học',
+            'Ngành',
+            'Chuyên ngành',
+            'CTĐT',
+            'Ghi chú',
+        ]
+
+        importSheet.addRow(headers)
+
+        // Style cho header
+        const headerRow = importSheet.getRow(1)
+        headerRow.font = { bold: true, color: { argb: 'FFFFFFFF' } }
+        headerRow.fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: 'FF4472C4' },
+        }
+        headerRow.alignment = { vertical: 'middle', horizontal: 'center' }
+        headerRow.height = 30
+
+        // Set width cho các cột
+        importSheet.columns = [
+            { width: 6 }, // STT
+            { width: 15 }, // Mã sinh viên
+            { width: 20 }, // Họ và tên đệm
+            { width: 12 }, // Tên
+            { width: 12 }, // Ngày sinh
+            { width: 10 }, // Giới tính
+            { width: 15 }, // CCCD
+            { width: 20 }, // Nơi sinh
+            { width: 20 }, // Quê quán
+            { width: 15 }, // Tỉnh thường trú
+            { width: 13 }, // Số điện thoại
+            { width: 25 }, // Email
+            { width: 12 }, // Khoá học
+            { width: 30 }, // Ngành
+            { width: 30 }, // Chuyên ngành
+            { width: 30 }, // CTĐT
+            { width: 25 }, // Ghi chú
+        ]
+
+        // Sheet 2: DanhMucTinh
+        const provinceSheet = workbook.addWorksheet('DanhMucTinh')
+        provinceSheet.addRow(['STT', 'Mã', 'Tên'])
+        provinceSheet.getRow(1).font = { bold: true }
+        provinceSheet.getRow(1).fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: 'FFD9E1F2' },
+        }
+        provinceSheet.columns = [{ width: 6 }, { width: 10 }, { width: 30 }]
+
+        provinces.forEach((p, idx) => {
+            provinceSheet.addRow([idx + 1, p.sMa || '', p.sTen || ''])
+        })
+
+        // Sheet 3: DanhMucKhoaHoc
+        const courseSheet = workbook.addWorksheet('DanhMucKhoaHoc')
+        courseSheet.addRow(['STT', 'Mã', 'Tên'])
+        courseSheet.getRow(1).font = { bold: true }
+        courseSheet.getRow(1).fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: 'FFD9E1F2' },
+        }
+        courseSheet.columns = [{ width: 6 }, { width: 10 }, { width: 30 }]
+
+        trainingCourses.forEach((c, idx) => {
+            courseSheet.addRow([idx + 1, c.code || '', c.name || ''])
+        })
+
+        // Sheet 4: DanhMucNganh
+        const fieldSheet = workbook.addWorksheet('DanhMucNganh')
+        fieldSheet.addRow(['STT', 'Mã', 'Tên'])
+        fieldSheet.getRow(1).font = { bold: true }
+        fieldSheet.getRow(1).fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: 'FFD9E1F2' },
+        }
+        fieldSheet.columns = [{ width: 6 }, { width: 10 }, { width: 40 }]
+
+        trainingFields.forEach((f, idx) => {
+            fieldSheet.addRow([idx + 1, f.code || '', f.name || ''])
+        })
+
+        // Sheet 5: DanhMucChuyenNganh
+        const majorSheet = workbook.addWorksheet('DanhMucChuyenNganh')
+        majorSheet.addRow(['STT', 'Mã', 'Tên'])
+        majorSheet.getRow(1).font = { bold: true }
+        majorSheet.getRow(1).fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: 'FFD9E1F2' },
+        }
+        majorSheet.columns = [{ width: 6 }, { width: 10 }, { width: 40 }]
+
+        trainingMajors.forEach((m, idx) => {
+            majorSheet.addRow([idx + 1, m.code || '', m.name || ''])
+        })
+
+        // Sheet 6: DanhMucCTDT
+        const curriculumSheet = workbook.addWorksheet('DanhMucCTDT')
+        curriculumSheet.addRow(['STT', 'Mã', 'Tên'])
+        curriculumSheet.getRow(1).font = { bold: true }
+        curriculumSheet.getRow(1).fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: 'FFD9E1F2' },
+        }
+        curriculumSheet.columns = [{ width: 6 }, { width: 10 }, { width: 40 }]
+
+        curriculumVersions.forEach((cv, idx) => {
+            curriculumSheet.addRow([idx + 1, cv.code || '', cv.name || ''])
+        })
+
+        // Thêm Data Validation cho sheet IMPORT
+        // Validation cho Giới tính
+        importSheet.dataValidations.add('F2:F1000', {
+            type: 'list',
+            allowBlank: true,
+            formulae: ['"Nam,Nữ"'],
+        })
+
+        // Validation cho Tỉnh thường trú (từ sheet DanhMucTinh)
+        if (provinces.length > 0) {
+            importSheet.dataValidations.add('J2:J1000', {
+                type: 'list',
+                allowBlank: true,
+                formulae: [`DanhMucTinh!$C$2:$C$${provinces.length + 1}`],
+            })
+        }
+
+        // Validation cho Khoá học
+        if (trainingCourses.length > 0) {
+            importSheet.dataValidations.add('M2:M1000', {
+                type: 'list',
+                allowBlank: true,
+                formulae: [`DanhMucKhoaHoc!$C$2:$C$${trainingCourses.length + 1}`],
+            })
+        }
+
+        // Validation cho Ngành
+        if (trainingFields.length > 0) {
+            importSheet.dataValidations.add('N2:N1000', {
+                type: 'list',
+                allowBlank: true,
+                formulae: [`DanhMucNganh!$C$2:$C$${trainingFields.length + 1}`],
+            })
+        }
+
+        // Validation cho Chuyên ngành
+        if (trainingMajors.length > 0) {
+            importSheet.dataValidations.add('O2:O1000', {
+                type: 'list',
+                allowBlank: true,
+                formulae: [`DanhMucChuyenNganh!$C$2:$C$${trainingMajors.length + 1}`],
+            })
+        }
+
+        // Validation cho CTĐT
+        if (curriculumVersions.length > 0) {
+            importSheet.dataValidations.add('P2:P1000', {
+                type: 'list',
+                allowBlank: true,
+                formulae: [`DanhMucCTDT!$C$2:$C$${curriculumVersions.length + 1}`],
+            })
+        }
+
+        // Ẩn các sheet danh mục
+        provinceSheet.state = 'hidden'
+        courseSheet.state = 'hidden'
+        fieldSheet.state = 'hidden'
+        majorSheet.state = 'hidden'
+        curriculumSheet.state = 'hidden'
+
+        // Generate buffer
+        const buffer = await workbook.xlsx.writeBuffer()
+
+        const fileName = 'MauImportDSHV.xlsx'
+        const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
+
+        return c.body(buffer, 200, {
+            'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'Content-Disposition': disposition,
+        })
+    } catch (error) {
+        console.error('Error generating template:', error)
+        return c.json(
+            {
+                message:
+                    'Lỗi khi tạo file template. Vui lòng liên hệ quản trị viên.',
+                error: error instanceof Error ? error.message : String(error),
+            },
+            500
+        )
+    }
+})
+            name: 'asc',
+        },
+    })
+
+    // Query danh sách CTĐT
+    const curriculumVersions = await prisma.curriculumVersion.findMany({
+        where: {
+            // trainingObjectTypeId,
+        },
+        select: {
+            id: true,
+            name: true,
+            code: true,
+        },
+        orderBy: {
+            name: 'asc',
+        },
+    })
+
+    // Substitute data vào sheet DanhMucTinh
+    template.substitute('DanhMucTinh', {
+        provinces: provinces.map((p, idx) => ({
+            STT: idx + 1,
+            Ma: p.sMa || '',
+            Ten: p.sTen || '',
+        })),
+    })
+
+    // Substitute data vào sheet DanhMucKhoaHoc
+    template.substitute('DanhMucKhoaHoc', {
+        courses: trainingCourses.map((c, idx) => ({
+            STT: idx + 1,
+            Ma: c.code || '',
+            Ten: c.name || '',
+        })),
+    })
+
+    // Substitute data vào sheet DanhMucLop (nếu có)
+    // if (fixedClasses.length > 0) {
+    //     template.substitute('DanhMucLop', {
+    //         classes: fixedClasses.map((fc, idx) => ({
+    //             STT: idx + 1,
+    //             Ma: fc.code || '',
+    //             Ten: fc.name || '',
+    //         })),
+    //     })
+    // }
+
+    // Substitute data vào sheet DanhMucNganh
+    template.substitute('DanhMucNganh', {
+        fields: trainingFields.map((f, idx) => ({
+            STT: idx + 1,
+            Ma: f.code || '',
+            Ten: f.name || '',
+        })),
+    })
+
+    // Substitute data vào sheet DanhMucChuyenNganh
+    template.substitute('DanhMucChuyenNganh', {
+        majors: trainingMajors.map((m, idx) => ({
+            STT: idx + 1,
+            Ma: m.code || '',
+            Ten: m.name || '',
+        })),
+    })
+
+    // Substitute data vào sheet DanhMucCTDT
+    template.substitute('DanhMucCTDT', {
+        curriculums: curriculumVersions.map((cv, idx) => ({
+            STT: idx + 1,
+            Ma: cv.code || '',
+            Ten: cv.name || '',
+        })),
+    })
+
+    const result = (await template.generate({ type: 'arraybuffer' })) as ArrayBuffer
+
+    const fileName = 'MauImportDSHV.xlsx'
+    const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
+
+    return c.body(result, 200, {
+        'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'Content-Disposition': disposition,
+    })
+    } catch (error) {
+        console.error('Error generating template:', error)
+        return c.json(
+            { 
+                message: 'Lỗi khi tạo file template. Vui lòng kiểm tra template MAU_IMPORT_DSHV đã được upload vào hệ thống chưa.',
+                error: error instanceof Error ? error.message : String(error)
+            },
+            500
+        )
+    }
 })
 
 app.openapi(exportStudentProfiles, async (c) => {
