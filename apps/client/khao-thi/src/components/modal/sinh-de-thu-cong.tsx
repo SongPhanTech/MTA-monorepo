@@ -12,7 +12,6 @@ import {
     useFindManySubjectVersion,
     useFindUniqueExam,
     useFindUniqueExamBank,
-    useUpdateExamBank,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { Button, Checkbox, Col, DatePicker, Form, Input, message, Row, Steps } from 'antd'
@@ -167,7 +166,6 @@ const SinhDeThuCongModal = () => {
     }
 
     const { mutateAsync: create } = useCreateExamBank()
-    const { mutateAsync: update } = useUpdateExamBank()
     const orderedQuestionIds = items.map((it: { value: string }) => it.value)
     const onOk = async (values: PutMaTranDeInputType) => {
         try {
@@ -215,6 +213,9 @@ const SinhDeThuCongModal = () => {
                 ])
                 if (res?.status === 200) {
                     message.success('Cập nhật đề thành công!')
+                    queryClient.invalidateQueries({
+                        queryKey: ['zenstack', 'ExamBank'],
+                    })
                 } else {
                     message.error('Cập nhật đề thất bại!')
                     return
@@ -477,7 +478,7 @@ const SinhDeThuCongModal = () => {
                                 </Col>
                                 <Col span={24}>
                                     <DndProvider backend={HTML5Backend}>
-                                        <div className="mt-3">
+                                        <div className="mt-3 max-h-[400px] overflow-y-auto pr-2">
                                             {items.map((item: Item, index: number) => (
                                                 <DraggableItem
                                                     key={item.value}
