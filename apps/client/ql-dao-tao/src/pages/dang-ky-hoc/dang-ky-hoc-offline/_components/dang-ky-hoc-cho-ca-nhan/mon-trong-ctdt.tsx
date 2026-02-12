@@ -5,6 +5,7 @@ import { useStore } from '@tanstack/react-store'
 import { $Enums, type ScoreConvert } from '@workspace/db/client'
 import {
     useCountSubjectClass,
+    useFindFirstTrainingCourseRegulation,
     useFindManySubjectClass,
     useFindUniqueStudent,
 } from '@workspace/db/hooks'
@@ -50,12 +51,40 @@ export default function MonTrongCTDT() {
                         },
                     },
                 },
+                studentSemesterResult: {
+                    select: {
+                        totalFailedCredits: true,
+                    },
+                    orderBy: {
+                        semester: {
+                            startDate: 'desc',
+                        },
+                    },
+                },
+                fixedClass: {
+                    select: {
+                        trainingCourseId: true,
+                    },
+                },
             },
         },
         {
             enabled: !!studentId,
         }
     )
+
+    const { data: tcNoToiThieuLamDoAn } = useFindFirstTrainingCourseRegulation(
+        {
+            where: {
+                code: 'TC_NO_TOI_THIEU_LAM_DO_AN',
+                trainingCourseId: student?.fixedClass?.trainingCourseId,
+            },
+        },
+        {
+            enabled: !!student?.fixedClass?.trainingCourseId,
+        }
+    )
+
     const studentSubjects = student?.curriculumVersion?.trainingBlocks.flatMap((tb) => tb.subjects)
 
     const { id: semesterId } = useSemesterStore()
@@ -343,9 +372,13 @@ export default function MonTrongCTDT() {
                     data={subjectClassData}
                     onRow={(record) => {
                         const notAllowSelect =
-                            subjectVersionIds.includes(record.subject.id) &&
-                            !selectedSubjectClassRowKeys.includes(record.id)
-
+                            (subjectVersionIds.includes(record.subject.id) &&
+                                !selectedSubjectClassRowKeys.includes(record.id)) ||
+                            ((record?.subject?.type === 'Project' ||
+                                record?.subject?.type === 'Thesis') &&
+                                !!tcNoToiThieuLamDoAn?.value &&
+                                (student?.studentSemesterResult?.[0]?.totalFailedCredits || 0) >=
+                                    tcNoToiThieuLamDoAn?.value)
                         return {
                             onClick: () => {
                                 if (notAllowSelect) return
@@ -372,8 +405,13 @@ export default function MonTrongCTDT() {
                         },
                         getCheckboxProps: (record) => ({
                             disabled:
-                                subjectVersionIds.includes(record.subject.id) &&
-                                !selectedSubjectClassRowKeys.includes(record.id),
+                                (subjectVersionIds.includes(record.subject.id) &&
+                                    !selectedSubjectClassRowKeys.includes(record.id)) ||
+                                ((record?.subject?.type === 'Project' ||
+                                    record?.subject?.type === 'Thesis') &&
+                                    !!tcNoToiThieuLamDoAn?.value &&
+                                    (student?.studentSemesterResult?.[0]?.totalFailedCredits ||
+                                        0) >= tcNoToiThieuLamDoAn?.value),
                         }),
                         columnWidth: 35,
                     }}

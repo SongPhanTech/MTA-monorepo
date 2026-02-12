@@ -3,7 +3,12 @@ import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useStore } from '@tanstack/react-store'
 import { $Enums, type ScoreConvert } from '@workspace/db/client'
-import { useCountSubjectClass, useFindManySubjectClass } from '@workspace/db/hooks'
+import {
+    useCountSubjectClass,
+    useFindFirstTrainingCourseRegulation,
+    useFindManySubjectClass,
+    useFindUniqueStudent,
+} from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
@@ -32,6 +37,41 @@ export default function MonToanTruong() {
     const { studentId } = useStore(dangKyHocChoCaNhanStore)
     const { id: semesterId } = useSemesterStore()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+
+    const { data: student } = useFindUniqueStudent({
+        where: {
+            id: studentId as string,
+        },
+        select: {
+            studentSemesterResult: {
+                select: {
+                    totalFailedCredits: true,
+                },
+                orderBy: {
+                    semester: {
+                        startDate: 'desc',
+                    },
+                },
+            },
+            fixedClass: {
+                select: {
+                    trainingCourseId: true,
+                },
+            },
+        },
+    })
+
+    const { data: tcNoToiThieuLamDoAn } = useFindFirstTrainingCourseRegulation(
+        {
+            where: {
+                code: 'TC_NO_TOI_THIEU_LAM_DO_AN',
+                trainingCourseId: student?.fixedClass?.trainingCourseId,
+            },
+        },
+        {
+            enabled: !!student?.fixedClass?.trainingCourseId,
+        }
+    )
 
     const { data: subjectClassData = [], refetch } = useFindManySubjectClass(
         {
@@ -309,8 +349,13 @@ export default function MonToanTruong() {
                     data={subjectClassData}
                     onRow={(record) => {
                         const notAllowSelect =
-                            subjectVersionIds.includes(record.subject.id) &&
-                            !selectedSubjectClassRowKeys.includes(record.id)
+                            (subjectVersionIds.includes(record.subject.id) &&
+                                !selectedSubjectClassRowKeys.includes(record.id)) ||
+                            ((record?.subject?.type === 'Project' ||
+                                record?.subject?.type === 'Thesis') &&
+                                !!tcNoToiThieuLamDoAn?.value &&
+                                (student?.studentSemesterResult?.[0]?.totalFailedCredits || 0) >=
+                                    tcNoToiThieuLamDoAn?.value)
 
                         return {
                             onClick: () => {
@@ -338,8 +383,13 @@ export default function MonToanTruong() {
                         },
                         getCheckboxProps: (record) => ({
                             disabled:
-                                subjectVersionIds.includes(record.subject.id) &&
-                                !selectedSubjectClassRowKeys.includes(record.id),
+                                (subjectVersionIds.includes(record.subject.id) &&
+                                    !selectedSubjectClassRowKeys.includes(record.id)) ||
+                                ((record?.subject?.type === 'Project' ||
+                                    record?.subject?.type === 'Thesis') &&
+                                    !!tcNoToiThieuLamDoAn?.value &&
+                                    (student?.studentSemesterResult?.[0]?.totalFailedCredits ||
+                                        0) >= tcNoToiThieuLamDoAn?.value),
                         }),
                         columnWidth: 35,
                     }}

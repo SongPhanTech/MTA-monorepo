@@ -6,6 +6,7 @@ import type { StudentSubjectScore } from '@workspace/db'
 import type { ScoreConvert } from '@workspace/db/client'
 import {
     useCountStudent,
+    useFindFirstTrainingCourseRegulation,
     useFindManyFixedClass,
     useFindManyStudent,
     useFindUniqueSubjectClass,
@@ -15,7 +16,7 @@ import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Checkbox, Col, Form, Input, message, Row, Select } from 'antd'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
-import { type Key, useCallback, useEffect, useState } from 'react'
+import { type Key, useCallback, useEffect, useMemo, useState } from 'react'
 import { dangKyHocChoLopQuanLyStore } from '../..'
 
 interface FilterProps {
@@ -100,6 +101,7 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
                 select: {
                     gpaBase10: true,
                     cumulativeGpaBase10: true,
+                    totalFailedCredits: true,
                 },
                 orderBy: {
                     semester: {
@@ -182,6 +184,16 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
         },
         select: {
             id: true,
+            studentSemesterResult: {
+                select: {
+                    totalFailedCredits: true,
+                },
+                orderBy: {
+                    semester: {
+                        startDate: 'desc',
+                    },
+                },
+            },
         },
     })
 
@@ -198,10 +210,40 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
                         studentId: true,
                     },
                 },
+                subject: {
+                    select: {
+                        type: true,
+                    },
+                },
             },
         },
         { enabled: !!semesterId && !!subjectClassId }
     )
+
+    const { data: tcNoToiThieuLamDoAn } = useFindFirstTrainingCourseRegulation(
+        {
+            where: {
+                code: 'TC_NO_TOI_THIEU_LAM_DO_AN',
+                trainingCourseId: fixedClassData?.[0]?.trainingCourseId,
+            },
+        },
+        {
+            enabled:
+                (selectedSubjectClass?.subject?.type === 'Project' ||
+                    selectedSubjectClass?.subject?.type === 'Thesis') &&
+                !!fixedClassData?.[0]?.trainingCourseId,
+        }
+    )
+
+    const tcNoToiThieuLamDoAnValue = useMemo(() => {
+        if (
+            selectedSubjectClass?.subject?.type === 'Project' ||
+            selectedSubjectClass?.subject?.type === 'Thesis'
+        ) {
+            return tcNoToiThieuLamDoAn?.value
+        }
+        return Number.POSITIVE_INFINITY
+    }, [tcNoToiThieuLamDoAn, selectedSubjectClass])
 
     const { data: countStudents = 0 } = useCountStudent({
         where: {
@@ -423,6 +465,13 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
                     data={students}
                     onRow={(record) => ({
                         onClick: () => {
+                            if (
+                                !!tcNoToiThieuLamDoAnValue &&
+                                record?.studentSemesterResult?.[0]?.totalFailedCredits >=
+                                    tcNoToiThieuLamDoAnValue
+                            ) {
+                                return
+                            }
                             if (!selectedRowKeys.includes(record.id)) {
                                 handleRowSelection([...selectedRowKeys, record.id])
                             } else {
@@ -446,6 +495,12 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
                             } else handleRowSelection(selectedKeys)
                         },
                         type: 'checkbox',
+                        getCheckboxProps: (record) => ({
+                            disabled:
+                                !!tcNoToiThieuLamDoAnValue &&
+                                record?.studentSemesterResult?.[0]?.totalFailedCredits >=
+                                    tcNoToiThieuLamDoAnValue,
+                        }),
                         columnWidth: 35,
                     }}
                     columns={[
@@ -485,15 +540,32 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
                             ),
                         },
                         {
-                            title: 'GPA tích luỹ',
+                            title: 'GPA',
                             align: 'center',
                             // dataIndex: ['studentSemesterResult', 0, 'cumulativeGpaBase10'],
-                            width: 80,
+                            width: 50,
                             render: (_, record) =>
                                 record?.studentSemesterResult.length > 0 ? (
                                     <span>
                                         {Number(
                                             record.studentSemesterResult[0]?.cumulativeGpaBase10
+                                        ).toFixedSmart(2)}
+                                    </span>
+                                ) : (
+                                    <span>-</span>
+                                ),
+                            // render: (text) => (text ? Number(text).toFixedSmart(2) : '-'),
+                        },
+                        {
+                            title: 'TC nợ',
+                            align: 'center',
+                            // dataIndex: ['studentSemesterResult', 0, 'cumulativeGpaBase10'],
+                            width: 60,
+                            render: (_, record) =>
+                                record?.studentSemesterResult.length > 0 ? (
+                                    <span>
+                                        {Number(
+                                            record.studentSemesterResult[0]?.totalFailedCredits
                                         ).toFixedSmart(2)}
                                     </span>
                                 ) : (
