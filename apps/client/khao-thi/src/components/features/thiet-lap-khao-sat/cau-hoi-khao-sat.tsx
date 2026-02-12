@@ -1,3 +1,4 @@
+import { DownloadOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilter'
 import DeleteIcon from '@components/icons/delete'
@@ -10,6 +11,7 @@ import {
     useFindManySurveyQuestion,
     useUpdateSurveyQuestion,
 } from '@workspace/db/hooks'
+import { getMinioUrl } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, message, Row } from 'antd'
@@ -139,7 +141,15 @@ function CauHoiKhaoSat({ id, type }: { id: string; type: string }) {
             <Row gutter={[16, 8]}>
                 <Col span={24}>
                     <Flex justify="end" className="gap-2">
-                        <Button onClick={handleImport} size="small">
+                        <Button
+                            size="small"
+                            icon={<DownloadOutlined />}
+                            href={getMinioUrl('mta/template/Mau-import-cau-hoi-khao-sat.docx')}
+                            type="primary"
+                        >
+                            Tải file mẫu
+                        </Button>
+                        <Button onClick={handleImport} type="primary"size="small">
                             Import câu hỏi
                         </Button>
                         {can(

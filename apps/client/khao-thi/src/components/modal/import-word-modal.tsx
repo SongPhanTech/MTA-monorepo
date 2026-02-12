@@ -827,10 +827,11 @@ const WordImportModal: React.FC = () => {
             open={isOpen}
             width="90vw"
             onCancel={onClose}
-            style={{ top: 20 }}
+            style={{ top: storageType === 'khung' ? 8 : 40 }}
             styles={{
                 body: {
-                    maxHeight: '78vh',
+                    height:
+                        questions.length === 0 ? 'auto' : storageType === 'khung' ? '80vh' : '70vh',
                     overflow: 'hidden',
                 },
             }}
@@ -873,8 +874,8 @@ const WordImportModal: React.FC = () => {
                         </Button>
                     </Col>
                     <Col span={24}>
-                        <div className="mt-2 mb-4">
-                            <div className="text-sm font-medium mb-2">Vị trí lưu trữ</div>
+                        <div className="mt-2 mb-2">
+                            <div className="text-sm font-medium">Vị trí lưu trữ</div>
                             <Radio.Group
                                 value={storageType}
                                 onChange={(e) => {
@@ -894,7 +895,7 @@ const WordImportModal: React.FC = () => {
 
                     {storageType === 'khung' && (
                         <Col span={24}>
-                            <Col span={8}>
+                            <Col span={6}>
                                 <FormItem
                                     form={form}
                                     name="knowledgeBlockId"
@@ -918,7 +919,7 @@ const WordImportModal: React.FC = () => {
             </Form>
 
             {questions.length > 0 && (
-                <div style={{ marginTop: 16 }}>
+                <div>
                     <Table
                         rowKey="key"
                         filters={filters}
@@ -931,13 +932,13 @@ const WordImportModal: React.FC = () => {
                         rowSelection={rowSelection}
                         scroll={{
                             x: '100%',
-                            y: 'calc(70vh - 130px)',
+                            y: 'calc(60vh - 130px)',
                         }}
                         sticky={{
                             offsetHeader: 0,
                         }}
                         style={{
-                            maxHeight: '70vh',
+                            maxHeight: '50vh',
                         }}
                         pagination={{
                             position: ['bottomRight'],

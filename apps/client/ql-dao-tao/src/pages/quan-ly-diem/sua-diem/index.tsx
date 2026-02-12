@@ -42,6 +42,7 @@ import {
 } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
+import { validateExamScore, validateScore } from '@lib/utils'
 
 const SCORE_CORRECTION_STATUS_MAP = {
     INITIALIZED: { text: 'Khởi tạo', color: 'default' },
@@ -965,6 +966,7 @@ function EditScoreModal({
     onCancel: () => void
     onSuccess: () => void
 }) {
+
     const [form] = Form.useForm()
     const { mutateAsync: updateItem } = useUpdateScoreCorrectionItem()
 
@@ -979,14 +981,26 @@ function EditScoreModal({
 
     const onFinish = async (values: any) => {
         try {
-            await updateItem({
-                where: { id: item.id },
-                data: {
-                    newAttendanceScore: values.newAttendanceScore,
-                    newMidtermScore: values.newMidtermScore,
-                    newExamScore: values.newExamScore,
-                },
-            })
+            if (!!item?.studentSubjectScore?.subjectVersion?.onePoint) {
+                await updateItem({
+                    where: { id: item.id },
+                    data: {
+                        newAttendanceScore: values.newExamScore,
+                        newMidtermScore: values.newExamScore,
+                        newExamScore: values.newExamScore,
+                    },
+                })
+            } else {
+                await updateItem({
+                    where: { id: item.id },
+                    data: {
+                        newAttendanceScore: values.newAttendanceScore,
+                        newMidtermScore: values.newMidtermScore,
+                        newExamScore: values.newExamScore,
+                    },
+                })
+            }
+
             message.success('Cập nhật điểm thành công')
             onSuccess()
         } catch (error) {
@@ -995,7 +1009,18 @@ function EditScoreModal({
     }
 
     return (
-        <Modal title="Nhập điểm mới" open={open} onCancel={onCancel} onOk={() => form.submit()}>
+        <Modal width={600} title="Nhập điểm mới" open={open} onCancel={onCancel} onOk={() => form.submit()}>
+            <div className="mb-4 flex gap-4">
+                <div className="w-1/2">
+                     <span className="font-bold mr-1">Họ tên:</span>
+                <span>{item?.studentSubjectScore?.student?.userProfile?.fullname||'-'}</span>
+                </div>
+                 <div className="w-1/2">
+                     <span className="font-bold mr-1">Môn học:</span>
+                <span>{item?.studentSubjectScore?.subjectVersion.name||'-'}</span>
+                </div>
+               
+            </div>
             <div className="mb-4">
                 <p className="font-bold">Điểm hiện tại:</p>
                 <p>
@@ -1003,20 +1028,81 @@ function EditScoreModal({
                     THI: {item?.oldExamScore ?? '-'}
                 </p>
             </div>
+            {!!item?.studentSubjectScore?.subjectVersion?.onePoint && (
+                <div className="mb-4">
+                    <p className="font-bold">Môn 1 đầu điểm(Chỉ nhập điểm thi)</p>
+                </div>
+            )}
+
             <Form form={form} layout="vertical" onFinish={onFinish}>
                 <Row gutter={16}>
                     <Col span={8}>
-                        <Form.Item name="newAttendanceScore" label="Điểm TX mới">
-                            <InputNumber min={0} max={10} step={0.1} className="w-full" />
+                        <Form.Item
+                            name={
+                                !!item?.studentSubjectScore?.subjectVersion?.onePoint
+                                    ? 'newExamScore'
+                                    : 'newAttendanceScore'
+                            }
+                            label="Điểm TX mới"
+                            rules={[
+                                {
+                                    validator: (_, value) =>
+                                        validateScore(
+                                            value,
+                                            item?.studentSubjectScore?.subjectVersion?.onePoint ||
+                                                false
+                                        ),
+                                },
+                            ]}
+                        >
+                            <InputNumber
+                                disabled={!!item?.studentSubjectScore?.subjectVersion?.onePoint}
+                                min={0}
+                                max={10}
+                                step={0.5}
+                                controls={false}
+                                className="w-full"
+                            />
                         </Form.Item>
                     </Col>
                     <Col span={8}>
-                        <Form.Item name="newMidtermScore" label="Điểm ĐK mới">
-                            <InputNumber min={0} max={10} step={0.1} className="w-full" />
+                        <Form.Item
+                            name={
+                                !!item?.studentSubjectScore?.subjectVersion?.onePoint
+                                    ? 'newExamScore'
+                                    : 'newMidtermScore'
+                            }
+                            label="Điểm ĐK mới"
+                            rules={[
+                                {
+                                    validator: (_, value) =>
+                                        validateScore(
+                                            value,
+                                            item?.studentSubjectScore?.subjectVersion?.onePoint ||
+                                                false
+                                        ),
+                                },
+                            ]}
+                        >
+                            <InputNumber
+                                disabled={!!item?.studentSubjectScore?.subjectVersion?.onePoint}
+                                min={0}
+                                max={10}
+                                step={0.1}
+                                className="w-full"
+                            />
                         </Form.Item>
                     </Col>
                     <Col span={8}>
-                        <Form.Item name="newExamScore" label="Điểm Thi mới">
+                        <Form.Item
+                            name="newExamScore"
+                            label="Điểm Thi mới"
+                            rules={[
+                                {
+                                    validator: (_, value) => validateExamScore(value),
+                                },
+                            ]}
+                        >
                             <InputNumber min={0} max={10} step={0.1} className="w-full" />
                         </Form.Item>
                     </Col>
