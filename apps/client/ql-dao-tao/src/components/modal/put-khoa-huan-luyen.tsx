@@ -139,7 +139,7 @@ const PutTrainingCourseModal = () => {
         if (duplicate) {
             return {
                 isDuplicate: true,
-                message: `Đã tồn tại khoá (${duplicate.code} - ${duplicate.name}) bắt đầu ở học kỳ này trong cùng đối tượng đào tạo`,
+                message: `Đã tồn tại khoá (${duplicate.code} - ${duplicate.name}) bắt đầu ở học kỳ này trong cùng đối tượng đào tạo.`,
             }
         }
 
