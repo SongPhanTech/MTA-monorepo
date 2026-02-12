@@ -9,11 +9,11 @@ import { useArchivedCertificateStatusOptions } from '@hooks/paymentStatus'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { formatDate } from '@lib/utils'
-import type { ArchivedAwardOnStudentSubjectScore } from '@workspace/db'
+import { ArchivedCertificateStatus, type ArchivedAwardOnStudentSubjectScore } from '@workspace/db'
 import {
     useCountArchivedAward,
-    useDeleteArchivedAward,
     useFindManyArchivedAward,
+    useUpdateArchivedAward,
     useUpdateManyArchivedAward,
     useUpdateManyArchivedAwardOnStudentSubjectScore,
 } from '@workspace/db/hooks'
@@ -36,7 +36,6 @@ export default function ArchivedAward() {
         count: undefined,
     })
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
-
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const {
         archivedCertificateStatusOptions,
@@ -46,7 +45,7 @@ export default function ArchivedAward() {
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { onOpen, onClose } = useDisclosure<string>({
+    const { onOpen } = useDisclosure<string>({
         tag: 'PutArchivedAwardModal',
     })
 
@@ -61,27 +60,41 @@ export default function ArchivedAward() {
     const handleExportModal = () => {
         onOpenExport()
     }
-
-    const { mutateAsync: deleteArchivedAward } = useDeleteArchivedAward()
+    const { mutateAsync: updateArchivedAward } = useUpdateArchivedAward({
+        onSuccess: () => {
+            message.success('Xóa thành công')
+        },
+        onError: (_error: any) => {
+            if (_error?.info?.message) {
+                message.error(_error?.info?.message)
+                return
+            }
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        },
+        onSettled: () => {
+            hideSpinner()
+        },
+    })
     const { mutateAsync: updateManyArchivedAward } = useUpdateManyArchivedAward()
     const { mutateAsync: updateManyArchivedAwardOnStudentSubjectScore } =
         useUpdateManyArchivedAwardOnStudentSubjectScore()
     const { mutateAsync: approveAwardScore } = useApproveAwardScore()
 
     async function handleDelete(id: string) {
-        try {
-            showSpinner()
-            await deleteArchivedAward({ where: { id } })
-            message.success('Xóa thành công')
-        } catch (error: any) {
-            if (error?.info?.message) {
-                message.error(error?.info?.message)
-                return
-            }
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        } finally {
-            hideSpinner()
-        }
+        showSpinner()
+        await updateArchivedAward({
+            where: { id },
+            data: {
+                studentSubjectScore: {
+                    updateMany: {
+                        where: {},
+                        data: {
+                            status: ArchivedCertificateStatus.CANCEL,
+                        },
+                    },
+                },
+            },
+        })
     }
 
     const where = useMemo(() => {
@@ -476,10 +489,9 @@ export default function ArchivedAward() {
                             type: 'select',
                             options: archivedCertificateStatusOptions,
                             render: (_, record) => {
-                                const label = getArchivedCertificateStatusStatusLabel(
-                                    record?.studentSubjectScore[0]?.status
-                                )
-                                const color = getArchivedCertificateStatusColor(record?.status)
+                                const status = record?.studentSubjectScore[0]?.status
+                                const label = getArchivedCertificateStatusStatusLabel(status)
+                                const color = getArchivedCertificateStatusColor(status)
                                 return <Tag color={color}>{label}</Tag>
                             },
                         },
