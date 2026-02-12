@@ -38,12 +38,12 @@ export const useArchivedCertificateStatusOptions = () => {
     ]
 
     const getArchivedCertificateStatusStatusLabel = (
-        value: PaymentStatus | null | undefined
+        value: ArchivedCertificateStatus | null | undefined
     ): string => {
         return archivedCertificateStatusOptions.find((opt) => opt.value === value)?.label || ''
     }
 
-    const getArchivedCertificateStatusColor = (value: PaymentStatus | null | undefined): string => {
+    const getArchivedCertificateStatusColor = (value: ArchivedCertificateStatus | null | undefined): string => {
         return (
             archivedCertificateStatusOptions.find((opt) => opt.value === value)?.color || 'default'
         )
