@@ -8,7 +8,6 @@ import {
     useCreateKnowledgeBlock,
     useFindManyKnowledgeBlock,
     useFindUniqueKnowledgeBlock,
-    useUpdateKnowledgeBlock,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { Col, Form, Input, InputNumber, message, Row } from 'antd'
@@ -37,7 +36,6 @@ const PutChuongMucModal = () => {
     const watchedValues = Form.useWatch([], form)
 
     const { mutateAsync: createKnowledgeBlock } = useCreateKnowledgeBlock()
-    const { mutateAsync: updateKnowledgeBlock } = useUpdateKnowledgeBlock()
 
     const { data: knowledgeBlockData } = useFindUniqueKnowledgeBlock(
         {
@@ -135,6 +133,10 @@ const PutChuongMucModal = () => {
                 if (res?.status === 200) {
                     message.success('Cập nhật chuẩn đầu ra thành công')
                 }
+
+                queryClient.invalidateQueries({
+                    queryKey: ['zenstack', 'KnowledgeBlock'],
+                })
             } else {
                 const createData: any = {
                     code: values.code,
@@ -153,10 +155,11 @@ const PutChuongMucModal = () => {
                     data: createData,
                 })
                 message.success('Thêm mới chuẩn đầu ra thành công')
+
+                queryClient.invalidateQueries({
+                    queryKey: ['KnowledgeBlock'],
+                })
             }
-            queryClient.invalidateQueries({
-                queryKey: ['KnowledgeBlock'],
-            })
 
             onClose()
         } catch (error: any) {

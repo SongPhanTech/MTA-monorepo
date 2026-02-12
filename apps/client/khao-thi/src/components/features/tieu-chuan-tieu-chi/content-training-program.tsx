@@ -119,6 +119,10 @@ const ContentTrainingProgram = () => {
         },
     })
 
+    const selectedStandardSet = evaluationStandardSets.find(
+        (set) => set.id === selectedStandardSetId
+    )
+
     const { onOpen: onOpenPutStandardCatalog } = useDisclosure<{
         id: string
         count: number
@@ -175,17 +179,16 @@ const ContentTrainingProgram = () => {
 
     return (
         <div>
-            {evaluationStandardSets.length === 0 ? (
+            {!selectedStandardSet ? (
                 <div className="flex flex-col items-center justify-center h-[70vh] bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
                     <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mb-6">
                         <FolderClosed className="w-12 h-12 text-green-600" />
                     </div>
                     <h3 className="text-xl font-semibold text-gray-700 mb-2">
-                        Chọn bộ tiêu chuẩn - tiêu chí cơ sở vật chất
+                        Chọn bộ tiêu chuẩn - tiêu chí chương trình đào tạo
                     </h3>
                     <p className="text-gray-500 text-center max-w-md mb-4 text-sm">
-                        Vui lòng chọn một bộ tiêu chuẩn - tiêu chí cơ sở vật chất để xem và quản lý
-                        câu hỏi
+                        Vui lòng chọn một bộ tiêu chuẩn - tiêu chí chương trình đào tạo
                     </p>
                 </div>
             ) : (
@@ -334,21 +337,6 @@ const ContentTrainingProgram = () => {
                                         if (record?.id) {
                                             return (
                                                 <Row className="justify-center gap-2">
-                                                    {/* {can(
-                                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
-                                                    'XEM'
-                                                ) && (
-                                                    <Tooltip
-                                                        title="Chi tiết tiêu chí"
-                                                        placement="top"
-                                                    >
-                                                        <EyeOutlined
-                                                            style={{ fontSize: '24px' }}
-                                                            className="text-sm cursor-pointer"
-                                                        />
-                                                    </Tooltip>
-                                                )} */}
-
                                                     {can(
                                                         KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
                                                         'SUA'

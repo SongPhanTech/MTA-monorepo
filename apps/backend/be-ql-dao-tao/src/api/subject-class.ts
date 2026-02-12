@@ -895,7 +895,6 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
         fixedClassId,
         trainingObjectTypeId,
         subjectVersionId,
-        semesterId,
     } = c.req.valid('query')
 
     type Result = {
@@ -996,18 +995,6 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
                 OR "fullname" ILIKE ${`%${search}%`}
             )
           and id = ${subjectVersionId}
-        --   -- Loại bỏ sinh viên đã có điểm trong học kỳ hiện tại
-        --   and (
-        --     ${semesterId}::TEXT IS NULL
-        --         OR NOT EXISTS (
-        --             SELECT 1
-        --             FROM "ql-dao-tao"."StudentSubjectScore" sss2
-        --             INNER JOIN "ql-dao-tao"."SubjectClass" sc2 ON sc2.id = sss2."subjectClassId"
-        --             WHERE sss2."studentId" = "studentId"
-        --               AND sss2."subjectVersionId" = ${subjectVersionId}
-        --               AND sc2."semesterId" = ${semesterId}
-        --         )
-        --     )
         limit ${pageSize} offset ${pageSize} * (${page} - 1)
     `
 

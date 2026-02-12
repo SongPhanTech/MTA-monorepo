@@ -83,7 +83,6 @@ export default function CaNhanHocLai() {
         {
             search: filters.searchText || undefined,
             trainingCourseId: filters.trainingCourseId,
-            semesterId: semesterId,
             fixedClassId: filters.fixedClassId,
             trainingObjectTypeId: trainingObjectTypeId || '',
             subjectVersionId: subjectClassData?.subjectId || '',
@@ -162,7 +161,7 @@ export default function CaNhanHocLai() {
             queryClient.invalidateQueries({ queryKey: ['zenstack', 'StudentSubjectScore'] })
             queryClient.invalidateQueries({ queryKey: ['zenstack', 'SubjectClass'] })
             queryClient.invalidateQueries({
-                queryKey: ['/api/subject-class/open-subject-class-retake'],
+                queryKey: ['/api/subject-class/open-subject-class-retake-students'],
             })
         } catch (error: any) {
             if (error?.info?.message) {
