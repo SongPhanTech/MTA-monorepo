@@ -366,7 +366,7 @@ function SurveyToFieldReport({ selectedId }: { selectedId: string }) {
                 children: [
                     centerCell('STT'),
                     centerCell('Lĩnh vực'),
-                   
+
                     ...answerHeaders.map(centerCell),
                 ],
             }),
