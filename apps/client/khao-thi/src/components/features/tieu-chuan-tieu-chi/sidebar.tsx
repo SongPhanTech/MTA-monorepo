@@ -57,6 +57,9 @@ const SidebarStandardSet = ({ objectType }: SidebarProps) => {
                 },
             })
 
+            localStorage.removeItem('selected-standard-id')
+            store.setState((s) => ({ ...s, selectedStandardSetId: undefined }))
+
             queryClient.invalidateQueries({
                 queryKey: ['EvaluationStandardSet'],
             })
