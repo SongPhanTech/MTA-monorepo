@@ -827,7 +827,13 @@ const WordImportModal: React.FC = () => {
             open={isOpen}
             width="90vw"
             onCancel={onClose}
-            style={{ top: 20, maxHeight: '90vh', overflowY: 'auto' }}
+            style={{ top: 20 }}
+            styles={{
+                body: {
+                    maxHeight: '78vh',
+                    overflow: 'hidden',
+                },
+            }}
             footer={[
                 <Button key="cancel" onClick={onClose}>
                     Đóng
