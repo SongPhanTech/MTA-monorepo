@@ -144,7 +144,7 @@ function CauHoiKhaoSat({ id, type }: { id: string; type: string }) {
                         <Button
                             size="small"
                             icon={<DownloadOutlined />}
-                            href={getMinioUrl('mta/template/file-mau-import-cau-hoi-khao-sat.docx')}
+                            href={getMinioUrl('mta/template/Mau-import-cau-hoi-khao-sat.docx')}
                             type="primary"
                         >
                             Tải file mẫu

@@ -827,10 +827,11 @@ const WordImportModal: React.FC = () => {
             open={isOpen}
             width="90vw"
             onCancel={onClose}
-            style={{ top: storageType === 'khung' ? 8 : 40,}}
+            style={{ top: storageType === 'khung' ? 8 : 40 }}
             styles={{
                 body: {
-                    height: storageType === 'khung' ? '80vh' : '70vh',
+                    height:
+                        questions.length === 0 ? 'auto' : storageType === 'khung' ? '80vh' : '70vh',
                     overflow: 'hidden',
                 },
             }}
