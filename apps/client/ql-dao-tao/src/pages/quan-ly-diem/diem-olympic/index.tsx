@@ -85,6 +85,7 @@ export default function ArchivedAward() {
         await updateArchivedAward({
             where: { id },
             data: {
+                status: ArchivedCertificateStatus.CANCEL,
                 studentSubjectScore: {
                     updateMany: {
                         where: {},
