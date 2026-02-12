@@ -8,7 +8,7 @@ import { useMemo } from 'react'
 
 export default function CriteriaAnalysisWrite() {
     const { data: me } = useSession()
-    const idProfile = me?.sDM_NhanVienId || '8cab103d-8159-4aa8-8e25-0edcdba5d0a1'
+    const idProfile = me?.sDM_NhanVienId || '8b6c039d-c687-4d52-96fb-368d9052edc5'
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
 
     const { data, refetch } = useFindUniqueEvaluationPeriod(

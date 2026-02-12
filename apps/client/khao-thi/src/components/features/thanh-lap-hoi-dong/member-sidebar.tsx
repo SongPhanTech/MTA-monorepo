@@ -19,7 +19,7 @@ export type GroupKey =
 export interface TreeNode {
     key: GroupKey
     label: string
-    count: number
+    count?: number
     icon?: React.ReactNode
     children?: TreeNode[]
 }
@@ -65,7 +65,7 @@ const TreeItem = ({
             <div
                 onClick={handleClick}
                 className={`
-                    flex items-center justify-between px-3 py-2.5 mx-2 my-0.5 rounded-lg cursor-pointer
+                    flex items-center justify-between px-3 py-2.5 mx-2 rounded-lg cursor-pointer
                     transition-all duration-200 group
                     ${
                         isSelected
@@ -190,7 +190,6 @@ export function createTreeData(
         {
             key: 'specialized',
             label: 'Danh sách Nhóm chuyên trách',
-            count: totalSpecialized,
             icon: <FolderTree size={16} />,
             children: specializedGroups.map((group) => ({
                 key: `specialized-${group.key}` as GroupKey,

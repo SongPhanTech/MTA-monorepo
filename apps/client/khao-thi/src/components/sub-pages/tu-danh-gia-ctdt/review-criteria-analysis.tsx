@@ -346,7 +346,7 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx }: Props) => {
                                                 }}
                                             >
                                                 <Button type="primary" size="small">
-                                                    Nộp tiêu chí
+                                                    Phê duyệt tiêu chí
                                                 </Button>
                                             </Popconfirm>
                                         )}

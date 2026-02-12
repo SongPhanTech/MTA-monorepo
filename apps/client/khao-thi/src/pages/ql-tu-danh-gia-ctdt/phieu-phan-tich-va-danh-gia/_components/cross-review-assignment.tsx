@@ -438,28 +438,33 @@ export default function CrossReviewAssignment() {
                                                 className="w-full"
                                                 onClick={(e) => e.stopPropagation()}
                                                 disabled={!canApprove}
-                                                options={lecturers.map((i) => {
-                                                    const academicRank =
-                                                        i.lecturer.userProfile?.academicRankType
-                                                            ?.sTen || ''
-                                                    const degreeRank =
-                                                        i.lecturer.userProfile?.academicDegreeType
-                                                            ?.sTen || ''
+                                                options={lecturers
+                                                    .filter((i) => {
+                                                        const writerLecturerId = record.evaluationCriterion?.lecturer?.id
+                                                        return i.lecturer.id !== writerLecturerId
+                                                    })
+                                                    .map((i) => {
+                                                        const academicRank =
+                                                            i.lecturer.userProfile?.academicRankType
+                                                                ?.sTen || ''
+                                                        const degreeRank =
+                                                            i.lecturer.userProfile?.academicDegreeType
+                                                                ?.sTen || ''
 
-                                                    const fullName = i?.lecturer.userProfile
-                                                        ?.fullname
-                                                        ? i?.lecturer.userProfile?.fullname
-                                                        : `${i?.lecturer.userProfile?.firstName} ${i?.lecturer.userProfile?.lastName}`
+                                                        const fullName = i?.lecturer.userProfile
+                                                            ?.fullname
+                                                            ? i?.lecturer.userProfile?.fullname
+                                                            : `${i?.lecturer.userProfile?.firstName} ${i?.lecturer.userProfile?.lastName}`
 
-                                                    const academicTitle = [academicRank, degreeRank]
-                                                        .filter(Boolean)
-                                                        .join('.')
+                                                        const academicTitle = [academicRank, degreeRank]
+                                                            .filter(Boolean)
+                                                            .join('.')
 
-                                                    return {
-                                                        value: i?.id,
-                                                        label: `${academicTitle ? `${academicTitle} ` : ''}${fullName}`,
-                                                    }
-                                                })}
+                                                        return {
+                                                            value: i?.id,
+                                                            label: `${academicTitle ? `${academicTitle} ` : ''}${fullName}`,
+                                                        }
+                                                    })}
                                             />
                                         </Form.Item>
                                     )

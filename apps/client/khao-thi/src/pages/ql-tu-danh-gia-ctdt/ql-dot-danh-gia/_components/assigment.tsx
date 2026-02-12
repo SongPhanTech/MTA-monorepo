@@ -49,7 +49,7 @@ export default function AssigmentOfAssessmentTab() {
     const [form] = Form.useForm<EvaluationAssignmentFormType>()
 
     const { data: me } = useSession()
-    const idProfile = me?.sDM_NhanVienId || 'f1218263-341e-40c4-b269-a711a0186c74'
+    const idProfile = me?.sDM_NhanVienId || '97edb89d-9803-45b9-ac83-e81125dd59c4'
 
     const { onOpen: openPhanCongHangLoat } = useDisclosure<PutPhanCongHangLoatModalProps>({
         tag: 'PutPhanCongHangLoatModal',
