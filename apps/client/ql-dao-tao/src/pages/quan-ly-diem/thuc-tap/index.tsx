@@ -39,7 +39,7 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
     const trainingCourseId = Form.useWatch('trainingCourseId', form)
     const subjectClassId = Form.useWatch('subjectClassId', form)
     const [currentPage, setCurrentPage] = useState(1)
-    const [numberOfPages, setNumberOfPages] = useState(20)
+    const [numberOfPages, setNumberOfPages] = useState(10)
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { id: semesterId } = useSemesterStore()
 
@@ -1360,7 +1360,7 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
                     </Flex>
                 </Form>
                 <Table
-                    scrollable
+                    scrollable={studentInternshipData.length > 0}
                     maxHeight={'calc(100vh - 330px)'}
                     columns={[
                         {
@@ -1392,7 +1392,7 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
                             title: 'Hạn nhập',
                             width: 80,
                             align: 'center',
-                            // fixed: 'left',
+                            fixed: 'left',
                             render: (_, record) => {
                                 return (
                                     <p
@@ -1414,7 +1414,7 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
                             title: 'Mã SV',
                             width: 100,
                             align: 'center',
-                            // fixed: 'left',
+                            fixed: 'left',
                             render: (_, record) => {
                                 return record?.studentSubjectScore?.student?.code || ''
                             },
