@@ -202,8 +202,17 @@ app.openapi(getClassesInfo, async (c) => {
                             trainingCourse: true,
                         },
                     },
+                    studentSemesterResult: true,
                 },
+                orderBy: { createdAt: 'desc' },
             },
+        },
+    })
+
+    const tcNoToiThieuLamDoAn = await prisma.trainingCourseRegulation.findFirst({
+        where: {
+            code: 'TC_NO_TOI_THIEU_LAM_DO_AN',
+            trainingCourseId: profile.educationAndTraining[0]?.fixedClass?.trainingCourseId,
         },
     })
 
@@ -344,18 +353,29 @@ app.openapi(getClassesInfo, async (c) => {
         },
     })
 
-    const data = subjectVersions.map((version) => {
-        const subjectVersion = curriculumSubjects.find((item) => item.subjectId === version.id)
+    const data = subjectVersions
+        .map((version) => {
+            const subjectVersion = curriculumSubjects.find((item) => item.subjectId === version.id)
 
-        return {
-            ...version,
-            subjectClass: version.subjectClass.map((subjectClass) => ({
-                ...subjectClass,
-                credit: version.credit ?? 0,
-                type: subjectVersion?.type,
-            })),
-        }
-    })
+            return {
+                ...version,
+                subjectClass: version.subjectClass.map((subjectClass) => ({
+                    ...subjectClass,
+                    credit: version.credit ?? 0,
+                    type: subjectVersion?.type,
+                })),
+            }
+        })
+        .filter((version) => {
+            if (version.type === 'Project' || version.type === 'Thesis') {
+                return (
+                    !!tcNoToiThieuLamDoAn?.value &&
+                    (profile?.educationAndTraining?.[0]?.studentSemesterResult?.[0]
+                        ?.totalFailedCredits || 0) >= tcNoToiThieuLamDoAn?.value
+                )
+            }
+            return true
+        })
 
     return c.json(data, 200)
 })
