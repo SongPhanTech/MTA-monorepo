@@ -2,9 +2,8 @@ import { RichTextEditor } from '@components/commons/rich-text-editor'
 import { getStatusConfig } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import type { DataTabEvaluationCriterionType } from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/standar-reports'
-import { $Enums, type CriterionPeriod, type EvaluationCriterion } from '@workspace/db/client'
+import { $Enums } from '@workspace/db/client'
 import { useUpdateStandardPeriod } from '@workspace/db/hooks'
-import { sqlTransaction } from '@workspace/libs/api/model'
 import { Button, Collapse, Form, message, Tag } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
@@ -48,60 +47,6 @@ const StandarReportsSubPage = ({
             }
 
             message.success('Lưu báo cáo tiêu chuẩn thành công')
-        } catch (error: any) {
-            if (error?.info?.message) {
-                message.error(error?.info?.message)
-                return
-            }
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        } finally {
-            hideSpinner()
-        }
-    }
-
-    const handleEvaluationForm = async () => {
-        try {
-            const dataSubmit = form.getFieldsValue()
-
-            if (!dataSubmit.criteria || dataSubmit.criteria.length === 0) {
-                message.warning('Không có dữ liệu để nộp')
-                return
-            }
-            showSpinner()
-
-            const listSqlTransaction = dataSubmit.criteria.map(
-                (
-                    i: CriterionPeriod & {
-                        evaluationCriterion: EvaluationCriterion
-                    }
-                ) => {
-                    return {
-                        model: 'EvaluationCriterion',
-                        operation: 'update',
-                        data: {
-                            where: {
-                                id: i.evaluationCriterion.id,
-                            },
-                            data: {
-                                status: $Enums.EvaluationStatus.COMPLETED,
-                            },
-                        },
-                    }
-                }
-            )
-
-            const res = await sqlTransaction(listSqlTransaction)
-
-            if (res.status !== 200) {
-                message.error('Có lỗi xảy ra, vui lòng thử lại')
-                return
-            }
-
-            message.success('Nộp báo cáo tiêu chí thành công')
-
-            if (onRefetch) {
-                onRefetch()
-            }
         } catch (error: any) {
             if (error?.info?.message) {
                 message.error(error?.info?.message)
@@ -169,19 +114,9 @@ const StandarReportsSubPage = ({
 
             <div className="flex gap-2 mr-2">
                 {
-                    <>
-                        <Button type="primary" size="small" onClick={handleSubmit}>
-                            Lưu báo cáo
-                        </Button>
-                        <Button
-                            type="primary"
-                            className="bg-blue-500"
-                            size="small"
-                            onClick={handleEvaluationForm}
-                        >
-                            Nộp báo cáo tiêu chuẩn
-                        </Button>
-                    </>
+                    <Button type="primary" size="small" onClick={handleSubmit}>
+                        Lưu báo cáo
+                    </Button>
                 }
             </div>
         </div>
