@@ -120,10 +120,15 @@ const ContentFacilities = () => {
         },
     })
 
+    const selectedStandardSet = evaluationStandardSets.find(
+        (set) => set.id === selectedStandardSetId
+    )
+
     const { onOpen: onOpenPutStandardCatalog } = useDisclosure<{
         id: string
         count: number
         objectType?: $Enums.StandardCatalogType
+        standardSetId?: string
     }>({
         tag: 'PutStandardCatalog',
     })
@@ -175,7 +180,7 @@ const ContentFacilities = () => {
 
     return (
         <div>
-            {evaluationStandardSets.length === 0 ? (
+            {!selectedStandardSet ? (
                 <div className="flex flex-col items-center justify-center h-[70vh] bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
                     <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mb-6">
                         <FolderClosed className="w-12 h-12 text-green-600" />
@@ -184,8 +189,7 @@ const ContentFacilities = () => {
                         Chọn bộ tiêu chuẩn - tiêu chí cơ sở vật chất
                     </h3>
                     <p className="text-gray-500 text-center max-w-md mb-4 text-sm">
-                        Vui lòng chọn một bộ tiêu chuẩn - tiêu chí cơ sở vật chất để xem và quản lý
-                        câu hỏi
+                        Vui lòng chọn một bộ tiêu chuẩn - tiêu chí cơ sở vật chất
                     </p>
                 </div>
             ) : (
@@ -208,6 +212,7 @@ const ContentFacilities = () => {
                                             id: '',
                                             count: count || 0,
                                             objectType: $Enums.StandardCatalogType.ASSET,
+                                            standardSetId: selectedStandardSetId,
                                         })
                                     }}
                                 >
@@ -260,6 +265,7 @@ const ContentFacilities = () => {
                                                 onOpenPutStandardCatalog({
                                                     id: record?.id,
                                                     count: count || 0,
+                                                    standardSetId: selectedStandardSetId,
                                                 })
                                             }}
                                             className="text-sm text-blue-700 cursor-pointer"
