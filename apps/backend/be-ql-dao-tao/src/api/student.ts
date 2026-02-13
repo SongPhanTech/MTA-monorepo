@@ -954,10 +954,10 @@ app.openapi(downloadStudentImportTemplate, async (c) => {
 
         const provinceSheet = workbook.getWorksheet('DanhMucTinh')
         if (provinceSheet) {
-            const rowCount = provinceSheet.rowCount
-            if (rowCount > 1) {
-                provinceSheet.spliceRows(2, rowCount - 1)
-            }
+            // const rowCount = provinceSheet.rowCount
+            // if (rowCount > 1) {
+            //     provinceSheet.spliceRows(2, rowCount - 1)
+            // }
 
             provinces.forEach((p) => {
                 provinceSheet.addRow([p.sTen || ''])
@@ -974,10 +974,10 @@ app.openapi(downloadStudentImportTemplate, async (c) => {
 
         const fieldSheet = workbook.getWorksheet('DanhMucNganh')
         if (fieldSheet) {
-            const rowCount = fieldSheet.rowCount
-            if (rowCount > 1) {
-                fieldSheet.spliceRows(2, rowCount - 1)
-            }
+            // const rowCount = fieldSheet.rowCount
+            // if (rowCount > 1) {
+            //     fieldSheet.spliceRows(2, rowCount - 1)
+            // }
 
             trainingFields.forEach((f) => {
                 fieldSheet.addRow([f.name || ''])
