@@ -65,7 +65,11 @@ const PutStudentScoreConvertModal = () => {
         () => new Set(selectedSubjects.map((s: any) => s?.subjectVersionId).filter(Boolean)),
         [selectedSubjects]
     )
-    const { data: studentList = [], isLoading: loadingStudents, isFetching: fetchingStudents } = useFindManyStudent({
+    const {
+        data: studentList = [],
+        isLoading: loadingStudents,
+        isFetching: fetchingStudents,
+    } = useFindManyStudent({
         where: {
             active: true,
             OR: [

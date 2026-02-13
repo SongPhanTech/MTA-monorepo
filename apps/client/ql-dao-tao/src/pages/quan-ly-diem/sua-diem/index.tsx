@@ -966,7 +966,6 @@ function EditScoreModal({
     onCancel: () => void
     onSuccess: () => void
 }) {
-
     const [form] = Form.useForm()
     const { mutateAsync: updateItem } = useUpdateScoreCorrectionItem()
 
@@ -1009,17 +1008,22 @@ function EditScoreModal({
     }
 
     return (
-        <Modal width={600} title="Nhập điểm mới" open={open} onCancel={onCancel} onOk={() => form.submit()}>
+        <Modal
+            width={600}
+            title="Nhập điểm mới"
+            open={open}
+            onCancel={onCancel}
+            onOk={() => form.submit()}
+        >
             <div className="mb-4 flex gap-4">
                 <div className="w-1/2">
-                     <span className="font-bold mr-1">Họ tên:</span>
-                <span>{item?.studentSubjectScore?.student?.userProfile?.fullname||'-'}</span>
+                    <span className="font-bold mr-1">Họ tên:</span>
+                    <span>{item?.studentSubjectScore?.student?.userProfile?.fullname || '-'}</span>
                 </div>
-                 <div className="w-1/2">
-                     <span className="font-bold mr-1">Môn học:</span>
-                <span>{item?.studentSubjectScore?.subjectVersion.name||'-'}</span>
+                <div className="w-1/2">
+                    <span className="font-bold mr-1">Môn học:</span>
+                    <span>{item?.studentSubjectScore?.subjectVersion.name || '-'}</span>
                 </div>
-               
             </div>
             <div className="mb-4">
                 <p className="font-bold">Điểm hiện tại:</p>

@@ -440,7 +440,8 @@ export default function CrossReviewAssignment() {
                                                 disabled={!canApprove}
                                                 options={lecturers
                                                     .filter((i) => {
-                                                        const writerLecturerId = record.evaluationCriterion?.lecturer?.id
+                                                        const writerLecturerId =
+                                                            record.evaluationCriterion?.lecturer?.id
                                                         return i.lecturer.id !== writerLecturerId
                                                     })
                                                     .map((i) => {
@@ -448,15 +449,18 @@ export default function CrossReviewAssignment() {
                                                             i.lecturer.userProfile?.academicRankType
                                                                 ?.sTen || ''
                                                         const degreeRank =
-                                                            i.lecturer.userProfile?.academicDegreeType
-                                                                ?.sTen || ''
+                                                            i.lecturer.userProfile
+                                                                ?.academicDegreeType?.sTen || ''
 
                                                         const fullName = i?.lecturer.userProfile
                                                             ?.fullname
                                                             ? i?.lecturer.userProfile?.fullname
                                                             : `${i?.lecturer.userProfile?.firstName} ${i?.lecturer.userProfile?.lastName}`
 
-                                                        const academicTitle = [academicRank, degreeRank]
+                                                        const academicTitle = [
+                                                            academicRank,
+                                                            degreeRank,
+                                                        ]
                                                             .filter(Boolean)
                                                             .join('.')
 

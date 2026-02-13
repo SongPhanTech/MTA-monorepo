@@ -149,7 +149,7 @@ function CauHoiKhaoSat({ id, type }: { id: string; type: string }) {
                         >
                             Tải file mẫu
                         </Button>
-                        <Button onClick={handleImport} type="primary"size="small">
+                        <Button onClick={handleImport} type="primary" size="small">
                             Import câu hỏi
                         </Button>
                         {can(

@@ -170,6 +170,10 @@ const SinhDeThuCongModal = () => {
     const onOk = async (values: PutMaTranDeInputType) => {
         try {
             if (!values || !selectedExamId) return
+
+            // Lấy examMatrixId từ KnowledgeBlock
+            const examMatrixId = KnowledgeBlockData[0]?.examMatrixId
+
             if (input?.id) {
                 const res = await sqlTransaction([
                     {
@@ -187,6 +191,7 @@ const SinhDeThuCongModal = () => {
                                 examType: values.examType,
                                 subjectClassId: values.subjectClassId ?? undefined,
                                 isGroup: values.isGroup || true,
+                                examMatrixId: examMatrixId ?? undefined,
                             },
                         },
                     },
@@ -230,6 +235,7 @@ const SinhDeThuCongModal = () => {
                         examType: values.examType,
                         subjectClassId: values.subjectClassId ?? undefined,
                         isGroup: values.isGroup || true,
+                        examMatrixId: examMatrixId ?? undefined,
                         questions: {
                             createMany: {
                                 data: orderedQuestionIds.map((questionId, index) => ({

@@ -979,9 +979,9 @@ export default function NhapDiem({
 
                             const finalScoreBase4 = scoreConvertResult?.base4
                             const letter = scoreConvertResult?.letter
-                            
-                            console.log(attendanceScore,midtermScore);
-                            
+
+                            console.log(attendanceScore, midtermScore)
+
                             form.setFieldsValue({
                                 list: {
                                     ...listForm,

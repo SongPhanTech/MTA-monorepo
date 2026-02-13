@@ -84,28 +84,29 @@ export default function TrainingBlock() {
         },
     })
 
-    const { data: trainingBlockOnCurriculumData = [] } = useFindManyTrainingBlockOnCurriculumVersion(
-        {
-            where: {
-                trainingBlock: {
-                    trainingObjectTypeId,
+    const { data: trainingBlockOnCurriculumData = [] } =
+        useFindManyTrainingBlockOnCurriculumVersion(
+            {
+                where: {
+                    trainingBlock: {
+                        trainingObjectTypeId,
+                    },
+                    curriculumVersion: {
+                        deletedAt: null,
+                    },
                 },
-                curriculumVersion: {
-                    deletedAt: null,
+                include: {
+                    curriculumVersion: true,
                 },
             },
-            include: {
-                curriculumVersion: true,
-            },
-        },
-        {
-            enabled: !!trainingObjectTypeId,
-        }
-    )
+            {
+                enabled: !!trainingObjectTypeId,
+            }
+        )
 
     const curriculumVersionCountMap = useMemo(() => {
         const countMap = new Map<string, number>()
-        
+
         trainingBlockOnCurriculumData.forEach((item) => {
             if (item.trainingBlockId && item.curriculumVersion) {
                 const curriculumVersionsByBlock = trainingBlockOnCurriculumData.filter(
@@ -117,7 +118,7 @@ export default function TrainingBlock() {
                 countMap.set(item.trainingBlockId, uniqueVersions.size)
             }
         })
-        
+
         return countMap
     }, [trainingBlockOnCurriculumData])
 
