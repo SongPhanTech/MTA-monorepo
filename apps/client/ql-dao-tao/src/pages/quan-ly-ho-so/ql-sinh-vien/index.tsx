@@ -27,6 +27,7 @@ import {
     useUpdateStudent,
 } from '@workspace/db/hooks'
 import { useExportStudentProfiles } from '@workspace/libs/api/training'
+// import { useDownloadStudentImportTemplate } from '@workspace/libs/api/student-template'
 import { getMinioUrl } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
@@ -68,7 +69,26 @@ export default function UserProfilePageDs() {
     const [importModalVisible, setImportModalVisible] = useState(false)
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { mutateAsync: exportStudentProfiles } = useExportStudentProfiles()
+    // const { mutateAsync: downloadTemplate } = useDownloadStudentImportTemplate()
 
+
+    const handleDownloadTemplate = async () => {
+        try {
+            showSpinner()
+            // const res = await downloadTemplate()
+
+            // if (res.status === 200) {
+            //     saveAs(res.data, 'MauImportDSHV.xlsx')
+            // } else {
+            //     message.error(res.data.message)
+            // }
+        } catch (error) {
+            console.log(error)
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
+    }
     const handleExportStudentProfiles = async () => {
         if (!filters.trainingCourseId) {
             message.error('Vui lòng chọn khoá học')
