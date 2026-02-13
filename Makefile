@@ -23,8 +23,8 @@ PKG_DANG_KY_HOC := dang-ky-hoc
 
 # Maps for build types (backend/frontend)
 BE_PKGS := $(PKG_BE_MODEL) $(PKG_BE_DAO_TAO) $(PKG_BE_KHAO_THI) $(PKG_BE_PORTAL) $(PKG_BE_DAO_TAO_SHARED) $(PKG_BE_EXCHANGE)
-FE_PKGS := $(PKG_DAO_TAO) $(PKG_KHAO_THI) $(PKG_HO_SO) $(PKG_DANG_KY_HOC)
-# FE_PKGS := $(PKG_DAO_TAO) $(PKG_AI) $(PKG_KHAO_THI) $(PKG_HO_SO) $(PKG_DANG_KY_HOC)
+# FE_PKGS := $(PKG_DAO_TAO) $(PKG_KHAO_THI) $(PKG_HO_SO) $(PKG_DANG_KY_HOC)
+FE_PKGS := $(PKG_DAO_TAO) $(PKG_AI) $(PKG_KHAO_THI) $(PKG_HO_SO) $(PKG_DANG_KY_HOC)
 
 # Client App Mappings
 CDN_NAME_ql-dao-tao = lms-cdn

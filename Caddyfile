@@ -1,0 +1,487 @@
+(security) {
+    header {
+        # Enable HSTS (1 year)
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        # Prevent some XSS attacks
+        X-XSS-Protection "1; mode=block"
+        # Prevent clickjacking (allow same origin)
+        X-Frame-Options "SAMEORIGIN"
+        # Prevent MIME sniffing
+        X-Content-Type-Options "nosniff"
+        # Referrer Policy
+        Referrer-Policy "strict-origin-when-cross-origin"
+    }
+}
+
+(common) {
+    # Enable compression
+    encode zstd gzip
+    # Import security headers
+    import security
+}
+
+*.api.csvc.swantech.vn {
+    import common
+    reverse_proxy 45.117.177.26:3030
+}
+
+am.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:9444 45.117.177.26:9444
+}
+
+api.am.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:8243 45.117.177.26:8243
+}
+
+api.chat.chatbot.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:8011
+}
+
+api.chcn.swantech.vn {
+    import common
+    reverse_proxy 45.117.177.26:3020
+}
+
+api.csvc.swantech.vn {
+    import common
+    reverse_proxy 45.117.177.26:3030
+}
+
+api.daotao.mta.swantech.vn {
+    import common
+    reverse_proxy 113.192.17.90:3042
+}
+
+api.dareus.live {
+    import common
+    reverse_proxy 14.224.217.69:8000 222.252.127.174:8000
+}
+
+api.dev.dareus.live {
+    import common
+    reverse_proxy 113.190.202.92:8000
+}
+
+api.doc.chatbot.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:8010
+}
+
+api.equipment.nhamay.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:4090
+}
+
+api.equipment.vkthq.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:6090
+}
+
+api.equipment.x52.swantech.vn {
+    import common
+    reverse_proxy 103.172.78.45:3090 14.248.86.185:3090
+}
+
+api.exchange.mta.swantech.vn {
+    import common
+    reverse_proxy 113.192.17.90:3046
+}
+
+api.hvlq.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:3030
+}
+
+api.khaothi.mta.swantech.vn {
+    import common
+    reverse_proxy 113.192.17.90:3043
+}
+
+api.model.mta.swantech.vn {
+    import common
+    reverse_proxy 113.192.17.90:3041
+}
+
+api.model.nhamay.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:4070
+}
+
+api.model.vkthq.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:6070
+}
+
+api.model.x52.swantech.vn {
+    import common
+    reverse_proxy 103.172.78.45:3070
+}
+
+api.portal.mta.swantech.vn {
+    import common
+    reverse_proxy 113.192.17.90:3044
+}
+
+api.shared.daotao.mta.swantech.vn {
+    import common
+    reverse_proxy 113.192.17.90:3045
+}
+
+api.swantech.luanbt.com {
+    import common
+    reverse_proxy 14.224.217.69:3044
+}
+
+api.ttn.nhamay.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:4060
+}
+
+api.ttn.vkthq.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:6060
+}
+
+api.ttn.x52.swantech.vn {
+    import common
+    reverse_proxy 103.172.78.45:3060
+}
+
+api.user.mta.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:3040 45.117.177.26:3040
+}
+
+api.user.nhamay.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:4050
+}
+
+api.user.vkthq.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:6050
+}
+
+api.user.x52.swantech.vn {
+    import common
+    reverse_proxy 103.172.78.45:3050
+}
+
+api.work.nhamay.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:4080
+}
+
+api.work.vkthq.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:6080
+}
+
+api.work.x52.swantech.vn {
+    import common
+    reverse_proxy 103.172.78.45:3080
+}
+
+auth.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:9443
+}
+
+backup.mta.swantech.vn {
+    import common
+    reverse_proxy 113.192.17.90:8085 14.224.217.69:8085
+}
+
+backup.x52.swantech.vn {
+    import common
+    reverse_proxy 103.172.78.45:8085
+}
+
+chat.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:8065
+}
+
+chatbot.mta.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:3101
+}
+
+chcn.swantech.vn {
+    import common
+    reverse_proxy 45.117.177.26:3021
+}
+
+chihuy.nhamay.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:4141
+}
+
+chihuy.vkthq.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:6014
+}
+
+chihuy.x52.swantech.vn {
+    import common
+    reverse_proxy 103.172.78.45:3141
+}
+
+cms.mta.swantech.vn {
+    import common
+    reverse_proxy 103.172.78.45:8081
+}
+
+csvc.swantech.vn {
+    import common
+    reverse_proxy 45.117.177.26:5030 45.117.177.26:5031
+}
+
+daotao.mta.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:3103
+}
+
+dareus.live {
+    import common
+    reverse_proxy 14.224.217.69:8001
+}
+
+db.swantech.vn {
+    import common
+    reverse_proxy 222.254.6.154:5432
+}
+
+dev.api.csvc.swantech.vn {
+    import common
+    reverse_proxy 45.117.177.26:4030
+}
+
+dev.csvc.swantech.vn {
+    import common
+    reverse_proxy 45.117.177.26:4031
+}
+
+doc.x52.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:3100
+}
+
+equipment.nhamay.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:4081
+}
+
+equipment.vkthq.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:6081
+}
+
+equipment.x52.swantech.vn {
+    import common
+    reverse_proxy 103.172.78.45:3081
+}
+
+git.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:8929
+}
+
+goithau.vkthq.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:6013 14.224.217.69:6015
+}
+
+haucan.nhamay.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:4131
+}
+
+haucan.vkthq.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:6013
+}
+
+haucan.x52.swantech.vn {
+    import common
+    reverse_proxy 103.172.78.45:3131
+}
+
+hoso.nhamay.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:4111
+}
+
+hoso.vkthq.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:6011
+}
+
+hoso.x52.swantech.vn {
+    import common
+    reverse_proxy 103.172.78.45:3111
+}
+
+hvlq.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:3031
+}
+
+mi.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:8290
+}
+
+minio.swantech.vn {
+    import common
+    reverse_proxy 45.117.177.26:9000
+}
+
+mta.swantech.vn {
+    import common
+    reverse_proxy 113.192.17.90:80
+}
+
+nckh.nhamay.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:4121
+}
+
+nckh.vkthq.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:6012
+}
+
+nckh.x52.swantech.vn {
+    import common
+    reverse_proxy 103.172.78.45:3121
+}
+
+observer.swantech.vn {
+    import common
+    reverse_proxy 14.232.238.203:5080
+}
+
+portal.mta.swantech.vn {
+    import common
+    reverse_proxy 103.172.78.45:3000
+}
+
+post.swantech.vn {
+    import common
+    reverse_proxy 45.117.177.26:3051
+}
+
+prisma.mta.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:3331
+}
+
+quanlyduan.swantech.vn {
+    import common
+    reverse_proxy 113.192.17.90:3999
+}
+
+swantech.vn {
+    import common
+    reverse_proxy 45.117.177.26:3021 45.117.177.26:8080
+}
+
+trace.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:5080
+}
+
+ttn.nhamay.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:4061
+}
+
+ttn.vkthq.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:6061
+}
+
+ttn.x52.swantech.vn {
+    import common
+    reverse_proxy 103.172.78.45:3061
+}
+
+tvs.nhamay.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:4091
+}
+
+tvs.vkthq.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:6091
+}
+
+tvs.x52.swantech.vn {
+    import common
+    reverse_proxy 103.172.78.45:3091
+}
+
+ui.minio.swantech.vn {
+    import common
+    reverse_proxy 45.117.177.26:9001
+}
+
+user.mta.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:3102
+}
+
+user.nhamay.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:4051
+}
+
+user.swantech.vn {
+    import common
+    reverse_proxy 45.117.177.26:3041
+}
+
+user.vkthq.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:6051
+}
+
+user.x52.swantech.vn {
+    import common
+    reverse_proxy 103.172.78.45:3051
+}
+
+v2.dev.csvc.swantech.vn {
+    import common
+    reverse_proxy 45.117.177.26:5031
+}
+
+vkthq.minio.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:6100
+}
+
+work.nhamay.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:4071
+}
+
+work.vkthq.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:6071
+}
+
+work.x52.swantech.vn {
+    import common
+    reverse_proxy 103.172.78.45:3071
+}
+
+x52.swantech.vn {
+    import common
+    reverse_proxy 14.224.217.69:80
+}
+
