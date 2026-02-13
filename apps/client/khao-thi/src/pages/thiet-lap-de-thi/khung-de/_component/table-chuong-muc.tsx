@@ -1,4 +1,4 @@
-import { PlusOutlined, UploadOutlined } from '@ant-design/icons'
+import { DownloadOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons'
 import { queryClient } from '@api/index'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
@@ -13,6 +13,7 @@ import {
 import { Button, Flex, message, Tooltip, Upload } from 'antd'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { getMinioUrl } from '../../../../../../../../packages/libs/src/utils'
 
 interface TableChuongMucProps {
     matrixId?: string
@@ -424,7 +425,16 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
                 >
                     Import chuẩn đầu ra
                 </Button>
-            </div>
+                <Button
+                    type="primary"
+                    icon={<DownloadOutlined />}
+                    iconPosition="end"
+                    className="mr-2"
+                    href={getMinioUrl('mta/template/File-mau-chuan-dau-ra.xlsx')}
+                >
+                    Tải mẫu
+                </Button>
+            </div>  
         </div>
     )
 }
