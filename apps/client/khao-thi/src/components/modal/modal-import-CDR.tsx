@@ -1,8 +1,8 @@
-import { UploadOutlined } from '@ant-design/icons'
+import { DownloadOutlined, UploadOutlined } from '@ant-design/icons'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
 import { queryClient } from '@api/index'
-import { Button, Col, Form, message, Table, Upload } from 'antd'
+import { Button, Col, Flex, Form, message, Table, Upload } from 'antd'
 import * as XLSX from 'xlsx'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -13,6 +13,7 @@ import type { KnowledgeBlockFormData } from './put-chuan-dau-ra'
 import { useFindManyKnowledgeBlock } from '@workspace/db/hooks'
 import type { Difficult, QuestionType } from '@workspace/db'
 import { sqlTransaction } from '@workspace/libs/api/model'
+import { getMinioUrl } from '@workspace/libs'
 
 type ImportedKnowledgeBlock = {
     key: number
@@ -247,9 +248,22 @@ const ModalImportCDR = () => {
             className="w-[900px]"
         >
             <Col span={24}>
-                <Upload accept=".xlsx" showUploadList={false} beforeUpload={handleImportExcel}>
-                    <Button icon={<UploadOutlined />}>Import Excel</Button>
-                </Upload>
+                <Flex align="center" gap={16}>
+                    <Upload accept=".xlsx" showUploadList={false} beforeUpload={handleImportExcel}>
+                        <Button type="primary" icon={<UploadOutlined />}>
+                            Import Excel
+                        </Button>
+                    </Upload>
+                    <Button
+                        type="primary"
+                        icon={<DownloadOutlined />}
+                        iconPosition="end"
+                        className="mr-2"
+                        href={getMinioUrl('mta/template/File-mau-chuan-dau-ra.xlsx')}
+                    >
+                        Tải file mẫu
+                    </Button>
+                </Flex>
             </Col>
 
             {data.length > 0 && (
