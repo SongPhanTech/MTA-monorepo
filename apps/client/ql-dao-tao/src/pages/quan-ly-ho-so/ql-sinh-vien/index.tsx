@@ -71,7 +71,6 @@ export default function UserProfilePageDs() {
     const { mutateAsync: exportStudentProfiles } = useExportStudentProfiles()
     // const { mutateAsync: downloadTemplate } = useDownloadStudentImportTemplate()
 
-
     const handleDownloadTemplate = async () => {
         try {
             showSpinner()

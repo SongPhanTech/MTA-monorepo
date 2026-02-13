@@ -43,7 +43,9 @@ export const useArchivedCertificateStatusOptions = () => {
         return archivedCertificateStatusOptions.find((opt) => opt.value === value)?.label || ''
     }
 
-    const getArchivedCertificateStatusColor = (value: ArchivedCertificateStatus | null | undefined): string => {
+    const getArchivedCertificateStatusColor = (
+        value: ArchivedCertificateStatus | null | undefined
+    ): string => {
         return (
             archivedCertificateStatusOptions.find((opt) => opt.value === value)?.color || 'default'
         )

@@ -333,19 +333,21 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                                 examRooms: {
                                     create: selectedRooms
                                         .filter((r) => {
-                                            const roomInfo = rooms.find((room) => room.id === r.roomId)
+                                            const roomInfo = rooms.find(
+                                                (room) => room.id === r.roomId
+                                            )
                                             return roomInfo?.trainingRoom
                                         })
                                         .map((room) => ({
-                                        roomId: room.roomId,
-                                        capacity: room.quantity,
-                                        examList: {
-                                            create: session.map((s) => ({
-                                                start: s.sessionNumber,
-                                                end: s.sessionNumber,
-                                            })),
-                                        },
-                                    })),
+                                            roomId: room.roomId,
+                                            capacity: room.quantity,
+                                            examList: {
+                                                create: session.map((s) => ({
+                                                    start: s.sessionNumber,
+                                                    end: s.sessionNumber,
+                                                })),
+                                            },
+                                        })),
                                 },
                                 session: session.length,
                             },
