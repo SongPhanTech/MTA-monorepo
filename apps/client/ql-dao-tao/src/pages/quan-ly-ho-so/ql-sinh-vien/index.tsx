@@ -69,19 +69,19 @@ export default function UserProfilePageDs() {
     const [importModalVisible, setImportModalVisible] = useState(false)
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { mutateAsync: exportStudentProfiles } = useExportStudentProfiles()
-    const { mutateAsync: downloadTemplate } = useDownloadStudentImportTemplate()
+    // const { mutateAsync: downloadTemplate } = useDownloadStudentImportTemplate()
 
 
     const handleDownloadTemplate = async () => {
         try {
             showSpinner()
-            const res = await downloadTemplate()
+            // const res = await downloadTemplate()
 
-            if (res.status === 200) {
-                saveAs(res.data, 'MauImportDSHV.xlsx')
-            } else {
-                message.error(res.data.message)
-            }
+            // if (res.status === 200) {
+            //     saveAs(res.data, 'MauImportDSHV.xlsx')
+            // } else {
+            //     message.error(res.data.message)
+            // }
         } catch (error) {
             console.log(error)
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
