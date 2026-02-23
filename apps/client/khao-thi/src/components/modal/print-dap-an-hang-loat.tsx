@@ -442,7 +442,10 @@ const PrintBatchExplanation = () => {
                                                 dangerouslySetInnerHTML={{
                                                     __html: renderWithMath(
                                                         q?.question?.content || ''
-                                                    ),
+                                                    )
+                                                        .replace(/<p[^>]*>/g, '')
+                                                        .replace(/<\/p>/g, ' ')
+                                                        .trim(),
                                                 }}
                                             />
                                         </div>
@@ -485,7 +488,10 @@ const PrintBatchExplanation = () => {
                                                     dangerouslySetInnerHTML={{
                                                         __html: renderWithMath(
                                                             q?.question?.explanation || ''
-                                                        ),
+                                                        )
+                                                            .replace(/<p[^>]*>/g, '')
+                                                            .replace(/<\/p>/g, ' ')
+                                                            .trim(),
                                                     }}
                                                 />
                                             )}

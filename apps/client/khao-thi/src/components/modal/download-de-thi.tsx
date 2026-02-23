@@ -116,8 +116,8 @@ const PrintExamBank = () => {
             ),
             isNote:
                 data?.isNote === true
-                    ? 'Được sử dụng tài liệu'
-                    : data?.explain || 'Không được sử dụng tài liệu',
+                    ? `Được sử dụng tài liệu${data?.explain ? ` ${data.explain}` : ''}`
+                    : `Không được sử dụng tài liệu${data?.explain ? ` ${data.explain}` : ''}`,
             day: String(day),
             month: String(month),
             year: String(year),
@@ -335,7 +335,10 @@ const PrintExamBank = () => {
                                                 dangerouslySetInnerHTML={{
                                                     __html: renderWithMath(
                                                         q?.question?.content || ''
-                                                    ),
+                                                    )
+                                                        .replace(/<p[^>]*>/g, '')
+                                                        .replace(/<\/p>/g, ' ')
+                                                        .trim(),
                                                 }}
                                             />
                                         </div>
@@ -353,7 +356,10 @@ const PrintExamBank = () => {
                                                 dangerouslySetInnerHTML={{
                                                     __html: renderWithMath(
                                                         q?.question?.content || ''
-                                                    ),
+                                                    )
+                                                        .replace(/<p[^>]*>/g, '')
+                                                        .replace(/<\/p>/g, ' ')
+                                                        .trim(),
                                                 }}
                                             />
                                         </div>
@@ -373,7 +379,10 @@ const PrintExamBank = () => {
                                                 dangerouslySetInnerHTML={{
                                                     __html: renderWithMath(
                                                         q?.question?.content || ''
-                                                    ),
+                                                    )
+                                                        .replace(/<p[^>]*>/g, '')
+                                                        .replace(/<\/p>/g, ' ')
+                                                        .trim(),
                                                 }}
                                             />
                                         </div>
@@ -389,11 +398,9 @@ const PrintExamBank = () => {
                             -----HẾT-----
                         </div>
                         <div style={{ fontStyle: 'italic', marginBottom: '20px' }}>
-                            {data?.isNote
-                                ? '(Được sử dụng tài liệu)'
-                                : data?.explain
-                                  ? `(${data.explain})`
-                                  : '(Không được sử dụng tài liệu)'}
+                            {data?.isNote === true
+                                ? `(Được sử dụng tài liệu${data?.explain ? ` ${data.explain}` : ''})`
+                                : `(Không được sử dụng tài liệu${data?.explain ? ` ${data.explain}` : ''})`}
                         </div>
                     </div>
 
