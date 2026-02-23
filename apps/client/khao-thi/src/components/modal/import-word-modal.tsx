@@ -1,4 +1,4 @@
-import { UploadOutlined } from '@ant-design/icons'
+import { DownloadOutlined, UploadOutlined } from '@ant-design/icons'
 import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import HtmlTruncate from '@components/commons/html-truncate'
@@ -86,6 +86,36 @@ const WordImportModal: React.FC = () => {
         return filteredQuestions.slice(start, start + pageSize)
     }, [filteredQuestions, currentPage, pageSize])
 
+    const { onOpen: onOpenAddHuongDanNganHang } = useDisclosure({
+        tag: 'AddHuongDanNganHang',
+    })
+
+    const handleDownloadTemplate = async () => {
+        try {
+            const response = await fetch(
+                `${env.NEXT_PUBLIC_ASSET_PREFIX}/files/file-mau-import-cau-hoi.docx`
+            )
+            const blob = await response.blob()
+            const url = window.URL.createObjectURL(blob)
+
+            const link = document.createElement('a')
+            link.href = url
+            link.download = 'file-mau-import-cau-hoi.docx'
+            document.body.appendChild(link)
+            link.click()
+
+            setTimeout(() => {
+                document.body.removeChild(link)
+                window.URL.revokeObjectURL(url)
+            }, 100)
+
+            message.success('Tải xuống thành công')
+        } catch (error) {
+            message.error('Không thể tải file mẫu')
+            console.error('Lỗi tải file:', error)
+        }
+    }
+
     const { isOpen, onClose, input } = useDisclosure<WordImportModalInput>({
         tag: 'WordImportModal',
         onClose: () => {
@@ -134,6 +164,33 @@ const WordImportModal: React.FC = () => {
     }
 
     const cleanQuestionText = (text: string) => text
+
+    const mapQuestionTypeFromText = (raw: string): QuestionType | undefined => {
+        const value = raw.trim().toUpperCase().replace(/\s+/g, '')
+
+        const mapping: Record<string, QuestionType> = {
+            TL: QuestionType.ESSAY,
+            TN: QuestionType.SINGLE_CHOICE,
+            TNN: QuestionType.MULTIPLE_CHOICE,
+            DK: QuestionType.FILL_IN_BLANK,
+            SX: QuestionType.ORDERING,
+        }
+
+        return mapping[value]
+    }
+
+    const mapDifficultFromText = (raw: string): Difficult | undefined => {
+        const value = raw.trim().toUpperCase().replace(/\s+/g, '')
+
+        const mapping: Record<string, Difficult> = {
+            NB: 'D1',
+            TH: 'D2',
+            VD: 'D3',
+            VDC: 'D4',
+        }
+
+        return mapping[value]
+    }
 
     const extractTextAndImagesFromCell = (cell: any, zip: PizZip, relMap: Map<string, string>) => {
         const paragraphs = Array.isArray(cell?.['w:p']) ? cell['w:p'] : [cell?.['w:p']]
@@ -391,8 +448,15 @@ const WordImportModal: React.FC = () => {
                     const typeText = extractTextAndImagesFromCell(cells[2], zip, relMap).text
                     const difficultText = extractTextAndImagesFromCell(cells[3], zip, relMap).text
 
-                    const type = typeText.trim() as QuestionType
-                    const difficult = difficultText.trim() as Difficult
+                    const type = mapQuestionTypeFromText(typeText)
+                    const difficult = mapDifficultFromText(difficultText)
+
+                    if (!type || !difficult) {
+                        message.warning(
+                            'Có câu hỏi thiếu hoặc sai mã Loại câu hỏi/Độ khó (TL, TN, TNM, DK, SX | NB, TH, VD, VDC)'
+                        )
+                        continue
+                    }
 
                     const pointRaw = extractPointFromCell(cells[4])
                     const pointCheck = checkQuestionPoint(pointRaw.value)
@@ -871,6 +935,20 @@ const WordImportModal: React.FC = () => {
                             onClick={() => document.getElementById('word-import-input')?.click()}
                         >
                             Chọn File Word
+                        </Button>
+                    </Col>
+                    <Col>
+                        <Button
+                            icon={<DownloadOutlined />}
+                            type="primary"
+                            onClick={handleDownloadTemplate}
+                        >
+                            Tải file mẫu
+                        </Button>
+                    </Col>
+                    <Col>
+                        <Button onClick={onOpenAddHuongDanNganHang} type="primary">
+                            Hướng dẫn điền file Word
                         </Button>
                     </Col>
                     <Col span={24}>
