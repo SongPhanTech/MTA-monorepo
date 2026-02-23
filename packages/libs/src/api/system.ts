@@ -282,6 +282,7 @@ import type {
     GetUserPermissionsPermissionAppCodeUserId401,
     GetUserPermissionsPermissionAppCodeUserId403,
     GetUserPermissionsPermissionAppCodeUserId500,
+    GetVersionAppDTO,
     NhanVienEditDto,
     NotificationMessageRequest,
     PostDMCapBacsList400,
@@ -14887,6 +14888,273 @@ export function useGetUserPermissionsHealthz<
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
     const queryOptions = getGetUserPermissionsHealthzQueryOptions(options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+/**
+ * Lấy danh sách các phiên bản theo từng ứng dụng
+ * @summary Phiên bản ứng dụng - Danh sách
+ */
+export type getVersionAppsResponse200 = {
+    data: GetVersionAppDTO
+    status: 200
+}
+
+export type getVersionAppsResponseSuccess = getVersionAppsResponse200 & {
+    headers: Headers
+}
+
+export type getVersionAppsResponse = getVersionAppsResponseSuccess
+
+export const getGetVersionAppsUrl = () => {
+    return `/VersionApps`
+}
+
+export const getVersionApps = async (options?: RequestInit): Promise<getVersionAppsResponse> => {
+    return customSystemFetch<getVersionAppsResponse>(getGetVersionAppsUrl(), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getGetVersionAppsQueryKey = () => {
+    return [`/VersionApps`] as const
+}
+
+export const getGetVersionAppsQueryOptions = <
+    TData = Awaited<ReturnType<typeof getVersionApps>>,
+    TError = unknown,
+>(options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersionApps>>, TError, TData>>
+    request?: SecondParameter<typeof customSystemFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetVersionAppsQueryKey()
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getVersionApps>>> = ({ signal }) =>
+        getVersionApps({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getVersionApps>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetVersionAppsQueryResult = NonNullable<Awaited<ReturnType<typeof getVersionApps>>>
+export type GetVersionAppsQueryError = unknown
+
+export function useGetVersionApps<
+    TData = Awaited<ReturnType<typeof getVersionApps>>,
+    TError = unknown,
+>(
+    options: {
+        query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersionApps>>, TError, TData>> &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getVersionApps>>,
+                    TError,
+                    Awaited<ReturnType<typeof getVersionApps>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetVersionApps<
+    TData = Awaited<ReturnType<typeof getVersionApps>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getVersionApps>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getVersionApps>>,
+                    TError,
+                    Awaited<ReturnType<typeof getVersionApps>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetVersionApps<
+    TData = Awaited<ReturnType<typeof getVersionApps>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersionApps>>, TError, TData>>
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Phiên bản ứng dụng - Danh sách
+ */
+
+export function useGetVersionApps<
+    TData = Awaited<ReturnType<typeof getVersionApps>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersionApps>>, TError, TData>>
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetVersionAppsQueryOptions(options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+/**
+ * Kiểm tra tình trạng API
+ * @summary Kiểm tra tình trạng API
+ */
+export type getVersionAppsHealthzResponse200 = {
+    data: void
+    status: 200
+}
+
+export type getVersionAppsHealthzResponseSuccess = getVersionAppsHealthzResponse200 & {
+    headers: Headers
+}
+
+export type getVersionAppsHealthzResponse = getVersionAppsHealthzResponseSuccess
+
+export const getGetVersionAppsHealthzUrl = () => {
+    return `/VersionApps/healthz`
+}
+
+export const getVersionAppsHealthz = async (
+    options?: RequestInit
+): Promise<getVersionAppsHealthzResponse> => {
+    return customSystemFetch<getVersionAppsHealthzResponse>(getGetVersionAppsHealthzUrl(), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getGetVersionAppsHealthzQueryKey = () => {
+    return [`/VersionApps/healthz`] as const
+}
+
+export const getGetVersionAppsHealthzQueryOptions = <
+    TData = Awaited<ReturnType<typeof getVersionAppsHealthz>>,
+    TError = unknown,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<Awaited<ReturnType<typeof getVersionAppsHealthz>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetVersionAppsHealthzQueryKey()
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getVersionAppsHealthz>>> = ({
+        signal,
+    }) => getVersionAppsHealthz({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getVersionAppsHealthz>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetVersionAppsHealthzQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getVersionAppsHealthz>>
+>
+export type GetVersionAppsHealthzQueryError = unknown
+
+export function useGetVersionAppsHealthz<
+    TData = Awaited<ReturnType<typeof getVersionAppsHealthz>>,
+    TError = unknown,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getVersionAppsHealthz>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getVersionAppsHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getVersionAppsHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetVersionAppsHealthz<
+    TData = Awaited<ReturnType<typeof getVersionAppsHealthz>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getVersionAppsHealthz>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getVersionAppsHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getVersionAppsHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetVersionAppsHealthz<
+    TData = Awaited<ReturnType<typeof getVersionAppsHealthz>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getVersionAppsHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Kiểm tra tình trạng API
+ */
+
+export function useGetVersionAppsHealthz<
+    TData = Awaited<ReturnType<typeof getVersionAppsHealthz>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getVersionAppsHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetVersionAppsHealthzQueryOptions(options)
 
     const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
         queryKey: DataTag<QueryKey, TData, TError>
