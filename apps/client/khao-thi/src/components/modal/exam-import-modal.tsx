@@ -101,16 +101,53 @@ const ExamImportModal: React.FC = () => {
         return match ? match[1].trim() : ''
     }
 
+    // Regex pattern cho câu hỏi - dùng chung cho split và match
+    const questionPattern =
+        /Câu\s*(\d+)\s*[(\uff08](\d+(?:[.,]\d+)?)\s*điểm[)\uff09]\s*[:：]\s*/i
+
     // Parse câu hỏi từ text
     const parseQuestions = (lines: string[]): ParsedQuestion[] => {
+        // Bước 1: Normalize và tách các dòng có nhiều câu hỏi gộp chung
+        const splitLines: string[] = []
+        for (const line of lines) {
+            const normalized = line
+                .replace(/[\u00A0\u202F\u2009\u2060\uFEFF]/g, ' ')
+                .trim()
+            if (!normalized) continue
+
+            // Tìm tất cả vị trí "Câu X(Y điểm):" trong dòng
+            const positions: number[] = []
+            const globalPattern = new RegExp(questionPattern.source, 'gi')
+            let m = globalPattern.exec(normalized)
+            while (m !== null) {
+                positions.push(m.index)
+                m = globalPattern.exec(normalized)
+            }
+
+            if (positions.length <= 1) {
+                // 0 hoặc 1 câu hỏi trong dòng → giữ nguyên
+                splitLines.push(normalized)
+            } else {
+                // Nhiều câu hỏi gộp trong 1 dòng → tách ra
+                for (let i = 0; i < positions.length; i++) {
+                    const start = positions[i]
+                    const end =
+                        i < positions.length - 1
+                            ? positions[i + 1]
+                            : normalized.length
+                    const part = normalized.substring(start, end).trim()
+                    if (part) splitLines.push(part)
+                }
+            }
+        }
+
+        // Bước 2: Parse từng dòng đã tách
         const questions: ParsedQuestion[] = []
         let currentQuestion: ParsedQuestion | null = null
 
-        for (const line of lines) {
-            const trimmed = line.trim()
-
+        for (const trimmed of splitLines) {
             const questionMatch = trimmed.match(
-                /^Câu\s+(\d+)\s*\((\d+(?:\.\d+)?)\s*điểm\)\s*:\s*(.*)$/i
+                /^Câu\s*(\d+)\s*[(\uff08](\d+(?:[.,]\d+)?)\s*điểm[)\uff09]\s*[:：]\s*(.*)$/i
             )
 
             if (questionMatch) {
@@ -128,10 +165,8 @@ const ExamImportModal: React.FC = () => {
                     content,
                 }
             } else if (currentQuestion && trimmed && !trimmed.startsWith('-----HẾT-----')) {
-                // Nội dung tiếp theo của câu hỏi hiện tại
                 currentQuestion.content += `\n${trimmed}`
             } else if (trimmed.startsWith('-----HẾT-----')) {
-                // Kết thúc
                 if (currentQuestion) {
                     questions.push(currentQuestion)
                 }
@@ -174,25 +209,83 @@ const ExamImportModal: React.FC = () => {
         return ''
     }
 
+    // Helper: extract tất cả runs từ một paragraph (bao gồm w:r, w:hyperlink, w:sdt)
+    const extractRunsFromParagraph = (p: any): string => {
+        if (!p) return ''
+        let text = ''
+
+        const runs = p['w:r']
+        if (runs) {
+            const runArray = Array.isArray(runs) ? runs : [runs]
+            for (const r of runArray) {
+                text += extractTextFromWt(r['w:t'])
+            }
+        }
+
+        const hyperlinks = p['w:hyperlink']
+        if (hyperlinks) {
+            const hlArray = Array.isArray(hyperlinks) ? hyperlinks : [hyperlinks]
+            for (const hl of hlArray) {
+                const hlRuns = hl['w:r']
+                if (!hlRuns) continue
+                const hlRunArray = Array.isArray(hlRuns) ? hlRuns : [hlRuns]
+                for (const r of hlRunArray) {
+                    text += extractTextFromWt(r['w:t'])
+                }
+            }
+        }
+
+        const sdts = p['w:sdt']
+        if (sdts) {
+            const sdtArray = Array.isArray(sdts) ? sdts : [sdts]
+            for (const sdt of sdtArray) {
+                const sdtContent = sdt['w:sdtContent']
+                if (!sdtContent) continue
+                const sdtRuns = sdtContent['w:r']
+                if (sdtRuns) {
+                    const sdtRunArray = Array.isArray(sdtRuns) ? sdtRuns : [sdtRuns]
+                    for (const r of sdtRunArray) {
+                        text += extractTextFromWt(r['w:t'])
+                    }
+                }
+            }
+        }
+
+        return text
+    }
+
     // Extract text từ table cell
     const extractTextFromCell = (cell: any): string => {
         if (!cell) return ''
 
-        const paragraphs = Array.isArray(cell['w:p']) ? cell['w:p'] : [cell['w:p']]
+        // Lấy paragraphs trực tiếp trong cell
+        let allParagraphs: any[] = []
+
+        const directPs = cell['w:p']
+        if (directPs) {
+            allParagraphs = Array.isArray(directPs) ? directPs : [directPs]
+        }
+
+        // Cũng kiểm tra w:sdt trong cell (Word có thể wrap content trong sdt)
+        const sdts = cell['w:sdt']
+        if (sdts) {
+            const sdtArray = Array.isArray(sdts) ? sdts : [sdts]
+            for (const sdt of sdtArray) {
+                const sdtContent = sdt['w:sdtContent']
+                if (!sdtContent) continue
+                const sdtPs = sdtContent['w:p']
+                if (sdtPs) {
+                    const sdtPArray = Array.isArray(sdtPs) ? sdtPs : [sdtPs]
+                    allParagraphs = allParagraphs.concat(sdtPArray)
+                }
+            }
+        }
+
         let fullText = ''
 
-        for (const p of paragraphs) {
+        for (const p of allParagraphs) {
             if (!p) continue
-            const runs = p['w:r']
-            if (!runs) continue
-
-            const runArray = Array.isArray(runs) ? runs : [runs]
-
-            // Nối tất cả runs trong paragraph lại KHÔNG trim giữa các runs
-            for (const r of runArray) {
-                fullText += extractTextFromWt(r['w:t'])
-            }
-
+            fullText += extractRunsFromParagraph(p)
             // Thêm khoảng trắng giữa các paragraphs
             fullText += ' '
         }
@@ -219,20 +312,17 @@ const ExamImportModal: React.FC = () => {
 
             // Helper: extract lines từ một body/hdr element (dùng chung cho document và header)
             const extractLinesFromBody = (bodyEl: any) => {
+                // Extract từ paragraphs trực tiếp
                 const ps = bodyEl['w:p']
                 if (ps) {
                     const pArray = Array.isArray(ps) ? ps : [ps]
                     for (const p of pArray) {
-                        const runs = p['w:r']
-                        if (!runs) continue
-                        const runArray = Array.isArray(runs) ? runs : [runs]
-                        let content = ''
-                        for (const r of runArray) {
-                            content += extractTextFromWt(r['w:t'])
-                        }
+                        const content = extractRunsFromParagraph(p)
                         if (content.trim().length > 0) lines.push(content.trim())
                     }
                 }
+
+                // Extract từ tables
                 const tbls = bodyEl['w:tbl']
                 if (tbls) {
                     const tArray = Array.isArray(tbls) ? tbls : [tbls]
@@ -259,6 +349,19 @@ const ExamImportModal: React.FC = () => {
                             }
                             rowText = rowText.trim()
                             if (rowText) lines.push(rowText)
+                        }
+                    }
+                }
+
+                // Extract từ w:sdt (Structured Document Tags) - wrapper phổ biến trong Word templates
+                const sdts = bodyEl['w:sdt']
+                if (sdts) {
+                    const sdtArray = Array.isArray(sdts) ? sdts : [sdts]
+                    for (const sdt of sdtArray) {
+                        const sdtContent = sdt['w:sdtContent']
+                        if (sdtContent) {
+                            // Đệ quy xử lý nội dung bên trong w:sdt
+                            extractLinesFromBody(sdtContent)
                         }
                     }
                 }
@@ -332,6 +435,9 @@ const ExamImportModal: React.FC = () => {
                     }
                 }
             }
+
+            // Debug: log các dòng trích xuất được từ Word
+            console.log('Extracted lines from Word:', lines)
 
             // Parse câu hỏi
             const questions = parseQuestions(lines)
