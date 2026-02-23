@@ -191,6 +191,7 @@ const SinhDeThuCongModal = () => {
                                 examType: values.examType,
                                 subjectClassId: values.subjectClassId ?? undefined,
                                 isGroup: values.isGroup || true,
+                                isNote: values.isNote,
                                 examMatrixId: examMatrixId ?? undefined,
                             },
                         },
@@ -235,6 +236,7 @@ const SinhDeThuCongModal = () => {
                         examType: values.examType,
                         subjectClassId: values.subjectClassId ?? undefined,
                         isGroup: values.isGroup || true,
+                        isNote: values.isNote,
                         examMatrixId: examMatrixId ?? undefined,
                         questions: {
                             createMany: {
@@ -430,7 +432,10 @@ const SinhDeThuCongModal = () => {
                         </Col>
                         <Col span={4}>
                             <Form.Item>
-                                <Checkbox onChange={(e) => setShowExplain(e.target.checked)}>
+                                <Checkbox
+                                    checked={showExplain}
+                                    onChange={(e) => setShowExplain(e.target.checked)}
+                                >
                                     Khác
                                 </Checkbox>
                             </Form.Item>
@@ -514,6 +519,7 @@ const SinhDeThuCongModal = () => {
                     label: i.question.content,
                 })) || []
             setItems(initialItems)
+            setShowExplain(!!data.explain)
             form.setFieldsValue({
                 ...data,
                 examDay: data.examDay ? dayjs(data.examDay) : undefined,

@@ -415,7 +415,10 @@ const PrintExplanation = () => {
                                                 dangerouslySetInnerHTML={{
                                                     __html: renderWithMath(
                                                         q?.question?.content || ''
-                                                    ),
+                                                    )
+                                                        .replace(/<p[^>]*>/g, '')
+                                                        .replace(/<\/p>/g, ' ')
+                                                        .trim(),
                                                 }}
                                             />
                                             {q?.question?.multipleChoiceOptions &&
@@ -506,7 +509,10 @@ const PrintExplanation = () => {
                                                     dangerouslySetInnerHTML={{
                                                         __html: renderWithMath(
                                                             q?.question?.explanation || ''
-                                                        ),
+                                                        )
+                                                            .replace(/<p[^>]*>/g, '')
+                                                            .replace(/<\/p>/g, ' ')
+                                                            .trim(),
                                                     }}
                                                 />
                                             )}

@@ -160,8 +160,8 @@ const PrintBatchExamBank = () => {
                     teacherName: name,
                     isNote:
                         exam?.isNote === true
-                            ? 'Được sử dụng tài liệu'
-                            : exam?.explain || 'Không được sử dụng tài liệu',
+                            ? `Được sử dụng tài liệu${exam?.explain ? ` ${exam.explain}` : ''}`
+                            : `Không được sử dụng tài liệu${exam?.explain ? ` ${exam.explain}` : ''}`,
                     questions:
                         exam?.questions?.map((q: any, qIndex: number) => ({
                             order: q?.order || qIndex + 1,
@@ -357,7 +357,10 @@ const PrintBatchExamBank = () => {
                                                 dangerouslySetInnerHTML={{
                                                     __html: renderWithMath(
                                                         q?.question?.content || ''
-                                                    ),
+                                                    )
+                                                        .replace(/<p[^>]*>/g, '')
+                                                        .replace(/<\/p>/g, ' ')
+                                                        .trim(),
                                                 }}
                                             />
                                         </div>
@@ -375,7 +378,10 @@ const PrintBatchExamBank = () => {
                                                 dangerouslySetInnerHTML={{
                                                     __html: renderWithMath(
                                                         q?.question?.content || ''
-                                                    ),
+                                                    )
+                                                        .replace(/<p[^>]*>/g, '')
+                                                        .replace(/<\/p>/g, ' ')
+                                                        .trim(),
                                                 }}
                                             />
                                         </div>
@@ -395,7 +401,10 @@ const PrintBatchExamBank = () => {
                                                 dangerouslySetInnerHTML={{
                                                     __html: renderWithMath(
                                                         q?.question?.content || ''
-                                                    ),
+                                                    )
+                                                        .replace(/<p[^>]*>/g, '')
+                                                        .replace(/<\/p>/g, ' ')
+                                                        .trim(),
                                                 }}
                                             />
                                         </div>
@@ -411,11 +420,9 @@ const PrintBatchExamBank = () => {
                             -----HẾT-----
                         </div>
                         <div style={{ fontStyle: 'italic', marginBottom: '20px' }}>
-                            {exam?.isNote
-                                ? '(Được sử dụng tài liệu)'
-                                : exam?.explain
-                                  ? `(${exam.explain})`
-                                  : '(Không được sử dụng tài liệu)'}
+                            {exam?.isNote === true
+                                ? `(Được sử dụng tài liệu${exam?.explain ? ` ${exam.explain}` : ''})`
+                                : `(Không được sử dụng tài liệu${exam?.explain ? ` ${exam.explain}` : ''})`}
                         </div>
                     </div>
 
