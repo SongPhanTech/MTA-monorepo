@@ -1,4 +1,4 @@
-import { DownloadOutlined, FileWordOutlined } from '@ant-design/icons'
+import { FileWordOutlined } from '@ant-design/icons'
 import { queryClient } from '@api/index'
 import HtmlTruncate from '@components/commons/html-truncate'
 import { renderWithMath } from '@components/commons/rich-text-editor/renderWithMath'
@@ -15,7 +15,6 @@ import {
     useUpdateQuestion,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
-import { env } from '@workspace/libs/utils'
 import { Button, Col, Flex, message, Row } from 'antd'
 import { BookPlus } from 'lucide-react'
 import { useMemo, useState } from 'react'
@@ -186,32 +185,6 @@ export default function QuestionList({ questionBankId }: QuestionListProps) {
         }
     }
 
-    const handleDownloadTemplate = async () => {
-        try {
-            const response = await fetch(
-                `${env.NEXT_PUBLIC_ASSET_PREFIX}/files/file-mau-import-cau-hoi.docx`
-            )
-            const blob = await response.blob()
-            const url = window.URL.createObjectURL(blob)
-
-            const link = document.createElement('a')
-            link.href = url
-            link.download = 'file-mau-import-cau-hoi.docx'
-            document.body.appendChild(link)
-            link.click()
-
-            setTimeout(() => {
-                document.body.removeChild(link)
-                window.URL.revokeObjectURL(url)
-            }, 100)
-
-            message.success('Đang tải file mẫu...')
-        } catch (error) {
-            message.error('Không thể tải file mẫu')
-            console.error('Lỗi tải file:', error)
-        }
-    }
-
     return (
         <div>
             <Row gutter={[16, 0]}>
@@ -253,14 +226,6 @@ export default function QuestionList({ questionBankId }: QuestionListProps) {
                                         </Button>
                                     </>
                                 )}
-                                <Button
-                                    size="middle"
-                                    icon={<DownloadOutlined />}
-                                    onClick={handleDownloadTemplate}
-                                    type="primary"
-                                >
-                                    Tải file mẫu
-                                </Button>
                                 <Button
                                     size="middle"
                                     icon={<FileWordOutlined />}
