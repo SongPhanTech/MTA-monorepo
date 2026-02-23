@@ -28,6 +28,8 @@ interface ParsedExamData {
     examCode: string
     examDay: Date | null
     examName: string
+    examDuration: string
+    examiner: string
     questions: ParsedQuestion[]
 }
 
@@ -50,7 +52,9 @@ const ExamImportModal: React.FC = () => {
 
     // Parse ngày thi từ text "Ngày DD tháng MM năm YYYY"
     const parseExamDay = (text: string): Date | null => {
-        const match = text.match(/Ngày\s+(\d+)\s+tháng\s+(\d+)\s+năm\s+(\d+)/i)
+        // Normalize non-breaking spaces và các ký tự whitespace đặc biệt thành space thường
+        const normalized = text.replace(/[\u00A0\u202F\u2009\u2060\uFEFF]/g, ' ')
+        const match = normalized.match(/Ngày\s*(\d+)\s*tháng\s*(\d+)\s*năm\s*(\d+)/i)
         if (match) {
             const day = Number.parseInt(match[1], 10)
             const month = Number.parseInt(match[2], 10) - 1 // month is 0-indexed
@@ -61,12 +65,16 @@ const ExamImportModal: React.FC = () => {
     }
 
     // Parse mã đề từ text "Đề thi số: XX" hoặc "Đề thi số : XX"
+    // Mã đề có thể là số, chữ, hoặc kết hợp (VD: 001, TEST_SINH_3, TEST SINH_3)
     const parseExamCode = (text: string): string | null => {
-        let match = text.match(/Đề\s+thi\s+số\s*:\s*(\d+(?:[_-]\d+)?)/i)
-        if (match) return match[1]
+        // Match "Đề thi số: CODE" - CODE có thể gồm chữ, số, gạch dưới, khoảng trắng
+        let match = text.match(/Đề\s+thi\s+số\s*:\s*([A-Z0-9][A-Z0-9_\s-]*)/i)
+        if (match) return match[1].trim()
 
-        match = text.match(/^(\d{3}|\d{2}[_-]\d{1,3})$/)
-        if (match && match[1].length <= 6) return match[1]
+        // Match standalone code gồm chữ + gạch dưới/khoảng trắng + số (VD: TEST_SINH_3)
+        match = text.match(/^([A-Z0-9][A-Z0-9_ -]*)$/i)
+        if (match && match[1].trim().length > 0 && match[1].trim().length <= 30)
+            return match[1].trim()
 
         return null
     }
@@ -75,6 +83,22 @@ const ExamImportModal: React.FC = () => {
     const parseExamName = (text: string): string => {
         const match = text.match(/Học\s+kỳ\s+\d+\s+năm\s+\d{4}-\d{4}/i)
         return match ? match[0] : ''
+    }
+
+    // Parse thời gian làm bài từ text "Thời gian làm bài: 60 phút"
+    const parseExamDuration = (text: string): string => {
+        const normalized = text.replace(/[\u00A0\u202F\u2009\u2060\uFEFF]/g, ' ')
+        const match = normalized.match(/Thời\s*gian\s*làm\s*bài\s*:\s*(\d+)\s*(phút)/i)
+        return match ? `${match[1]} ${match[2]}` : ''
+    }
+
+    // Parse người ra đề: chỉ lấy tên người sau "ĐBCLGD-ĐT"
+    // Chỉ tìm trong dòng có "Thời gian làm bài" để tránh match nhầm dòng header
+    const parseExaminer = (text: string): string => {
+        const normalized = text.replace(/[\u00A0\u202F\u2009\u2060\uFEFF]/g, ' ')
+        if (!normalized.match(/Thời\s*gian\s*làm\s*bài/i)) return ''
+        const match = normalized.match(/ĐBCLGD-ĐT\s+(.+)/i)
+        return match ? match[1].trim() : ''
     }
 
     // Parse câu hỏi từ text
@@ -193,80 +217,76 @@ const ExamImportModal: React.FC = () => {
             // Thu thập tất cả các dòng text từ cả paragraphs và tables
             const lines: string[] = []
 
-            // Parse paragraphs
-            const paragraphs = body['w:p']
-            if (paragraphs) {
-                const pArray = Array.isArray(paragraphs) ? paragraphs : [paragraphs]
-
-                for (const p of pArray) {
-                    const runs = p['w:r']
-                    if (!runs) continue
-
-                    const runArray = Array.isArray(runs) ? runs : [runs]
-                    let content = ''
-
-                    for (const r of runArray) {
-                        content += extractTextFromWt(r['w:t'])
-                    }
-
-                    if (content.trim().length > 0) {
-                        lines.push(content.trim())
+            // Helper: extract lines từ một body/hdr element (dùng chung cho document và header)
+            const extractLinesFromBody = (bodyEl: any) => {
+                const ps = bodyEl['w:p']
+                if (ps) {
+                    const pArray = Array.isArray(ps) ? ps : [ps]
+                    for (const p of pArray) {
+                        const runs = p['w:r']
+                        if (!runs) continue
+                        const runArray = Array.isArray(runs) ? runs : [runs]
+                        let content = ''
+                        for (const r of runArray) {
+                            content += extractTextFromWt(r['w:t'])
+                        }
+                        if (content.trim().length > 0) lines.push(content.trim())
                     }
                 }
-            }
-
-            // Parse tables
-            const tables = body['w:tbl']
-            if (tables) {
-                const tArray = Array.isArray(tables) ? tables : [tables]
-
-                for (const table of tArray) {
-                    const rows = Array.isArray(table['w:tr']) ? table['w:tr'] : [table['w:tr']]
-
-                    for (const row of rows) {
-                        if (!row) continue
-                        const cells = Array.isArray(row['w:tc']) ? row['w:tc'] : [row['w:tc']]
-
-                        // Merge tất cả cells trong cùng row thành một dòng
-                        const rowTexts: string[] = []
-                        for (const cell of cells) {
-                            const cellText = extractTextFromCell(cell)
-                            if (cellText) {
-                                rowTexts.push(cellText)
+                const tbls = bodyEl['w:tbl']
+                if (tbls) {
+                    const tArray = Array.isArray(tbls) ? tbls : [tbls]
+                    for (const table of tArray) {
+                        const rows = Array.isArray(table['w:tr']) ? table['w:tr'] : [table['w:tr']]
+                        for (const row of rows) {
+                            if (!row) continue
+                            const cells = Array.isArray(row['w:tc']) ? row['w:tc'] : [row['w:tc']]
+                            const rowTexts: string[] = []
+                            for (const cell of cells) {
+                                const cellText = extractTextFromCell(cell)
+                                if (cellText) rowTexts.push(cellText)
                             }
-                        }
-
-                        // Join cells, nhưng cẩn thận với số
-                        let rowText = ''
-                        for (let i = 0; i < rowTexts.length; i++) {
-                            const current = rowTexts[i]
-                            const next = rowTexts[i + 1]
-
-                            rowText += current
-
-                            // Nếu cell hiện tại kết thúc bằng số VÀ cell tiếp theo bắt đầu bằng số
-                            // thì KHÔNG thêm khoảng trắng (để ghép "00" + "2" thành "002")
-                            if (next) {
-                                const endsWithDigit = /\d$/.test(current)
-                                const startsWithDigit = /^\d/.test(next)
-                                if (!(endsWithDigit && startsWithDigit)) {
-                                    rowText += ' '
+                            let rowText = ''
+                            for (let i = 0; i < rowTexts.length; i++) {
+                                const current = rowTexts[i]
+                                const next = rowTexts[i + 1]
+                                rowText += current
+                                if (next) {
+                                    const endsWithDigit = /\d$/.test(current)
+                                    const startsWithDigit = /^\d/.test(next)
+                                    if (!(endsWithDigit && startsWithDigit)) rowText += ' '
                                 }
                             }
-                        }
-
-                        rowText = rowText.trim()
-                        if (rowText) {
-                            lines.push(rowText)
+                            rowText = rowText.trim()
+                            if (rowText) lines.push(rowText)
                         }
                     }
                 }
             }
+
+            // Đọc thêm từ Word header files (word/header1.xml, header2.xml, ...)
+            for (let i = 1; i <= 3; i++) {
+                const headerXml = zip.file(`word/header${i}.xml`)?.asText()
+                if (headerXml) {
+                    try {
+                        const headerDoc = parser.parse(headerXml)
+                        const hdr = headerDoc['w:hdr']
+                        if (hdr) extractLinesFromBody(hdr)
+                    } catch {
+                        // bỏ qua nếu header không parse được
+                    }
+                }
+            }
+
+            // Parse body (paragraphs + tables)
+            extractLinesFromBody(body)
 
             // Parse metadata
             let examCode = ''
             let examDay: Date | null = null
             let examName = ''
+            let examDuration = ''
+            let examiner = ''
 
             // Ưu tiên tìm mã đề có "Đề thi số:" trước
             for (const line of lines) {
@@ -283,15 +303,31 @@ const ExamImportModal: React.FC = () => {
                     const name = parseExamName(line)
                     if (name) examName = name
                 }
+
+                if (!examDuration) {
+                    const duration = parseExamDuration(line)
+                    if (duration) examDuration = duration
+                }
+
+                if (!examiner) {
+                    const name = parseExaminer(line)
+                    if (name) examiner = name
+                }
             }
 
-            // Nếu chưa tìm thấy mã đề, tìm pattern số 3 chữ số trong các lines
+            // Nếu chưa tìm thấy mã đề, tìm pattern chữ+số hoặc số 3 chữ số trong các lines
             if (!examCode) {
                 for (const line of lines) {
+                    // Tìm mã dạng chữ-gạch dưới-số (VD: TEST_SINH_3, TEST SINH 3)
+                    const alphaMatch = line.match(/\b([A-Z][A-Z0-9]*(?:[_ ][A-Z0-9]+)+)\b/i)
+                    if (alphaMatch) {
+                        examCode = alphaMatch[1]
+                        break
+                    }
                     // Tìm số 3 chữ số (001, 002, 003, etc.)
-                    const match = line.match(/\b(\d{3})\b/)
-                    if (match) {
-                        examCode = match[1]
+                    const numMatch = line.match(/\b(\d{3})\b/)
+                    if (numMatch) {
+                        examCode = numMatch[1]
                         break
                     }
                 }
@@ -313,6 +349,8 @@ const ExamImportModal: React.FC = () => {
                 examCode,
                 examDay,
                 examName,
+                examDuration,
+                examiner,
                 questions,
             })
         } catch (error: any) {
@@ -390,7 +428,7 @@ const ExamImportModal: React.FC = () => {
             }
 
             if (!questionBankId) {
-                throw new Error('Không thể tạo Question Bank')
+                throw new Error('Không thể tạo ngân hàng câu hỏi')
             }
 
             // Tìm kiếm hoặc tạo các câu hỏi
@@ -473,7 +511,7 @@ const ExamImportModal: React.FC = () => {
 
     return (
         <Modal
-            title="Import đề thi từ Word"
+            title="Import đề thi từ file word"
             open={isOpen}
             width="90vw"
             onCancel={onClose}
@@ -517,19 +555,23 @@ const ExamImportModal: React.FC = () => {
                                 ? parsedData.examDay.toLocaleDateString('vi-VN')
                                 : 'Chưa xác định'}
                         </Descriptions.Item>
-                        <Descriptions.Item label="Kỳ thi" span={2}>
+                        <Descriptions.Item label="Kỳ thi">
                             {parsedData.examName || 'Chưa xác định'}
                         </Descriptions.Item>
-                        <Descriptions.Item label="Số câu hỏi" span={2}>
+                        <Descriptions.Item label="Số câu hỏi">
                             {parsedData.questions.length} câu
                         </Descriptions.Item>
-                        <Descriptions.Item label="Hình thức thi" span={2}>
-                            Thi viết
+                        <Descriptions.Item label="Hình thức thi">Thi viết</Descriptions.Item>
+                        <Descriptions.Item label="Thời gian làm bài">
+                            {parsedData.examDuration || 'Chưa xác định'}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Người ra đề">
+                            {parsedData.examiner || 'Chưa xác định'}
                         </Descriptions.Item>
                     </Descriptions>
 
                     <div style={{ marginTop: 16 }}>
-                        <h3>Danh sách câu hỏi</h3>
+                        <h3>Danh sách câu hỏi: </h3>
                         <Table
                             columns={columns}
                             dataSource={parsedData.questions}

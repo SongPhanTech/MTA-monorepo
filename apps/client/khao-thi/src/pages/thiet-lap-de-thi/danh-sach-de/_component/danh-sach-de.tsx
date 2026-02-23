@@ -79,7 +79,6 @@ export default function ExamListPage() {
 
         return {
             examId: selectedExamId,
-
             ...(filters.exam &&
                 filters.exam !== '' && {
                     OR: [
@@ -512,7 +511,7 @@ export default function ExamListPage() {
                     {
                         title: 'Mã đề',
                         dataIndex: 'examCode',
-                        width: 70,
+                        width: 100,
                         type: 'input',
                         render: (__, record) => {
                             return (
@@ -529,6 +528,7 @@ export default function ExamListPage() {
                         title: 'Kỳ thi',
                         dataIndex: 'name',
                         type: 'input',
+                        width: 150,
                         render: (__, record) => {
                             return <span>{record?.exam?.semester?.name || ''}</span>
                         },
