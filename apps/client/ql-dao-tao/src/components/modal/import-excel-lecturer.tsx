@@ -49,6 +49,7 @@ const ImportLecturerModal = ({ visible, onSuccess, onCancel }: ImportStudentModa
         setFile(null)
         setFileName('')
         setPreviewData([])
+        setErrorData([])
         // Reset input file để có thể chọn lại file cùng tên
         const fileInput = document.getElementById('file-upload') as HTMLInputElement
         if (fileInput) {

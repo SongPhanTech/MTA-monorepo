@@ -126,6 +126,15 @@ export const parseSheetLecturer = (file: ArrayBufferLike) => {
                 })
             }
 
+            const phoneNumber = row[cols.phoneNumber]?.trim()
+            if (phoneNumber && !/^\d{10}$/.test(phoneNumber)) {
+                errors.push({
+                    sheetRef: sheetName,
+                    cellRef: `${cols.phoneNumber}${row.__rowNum__ + 1}`,
+                    message: 'Số điện thoại phải có đúng 10 số',
+                })
+            }
+
             return {
                 stt: row[cols.stt],
                 code: row[cols.code]?.trim() as string,
