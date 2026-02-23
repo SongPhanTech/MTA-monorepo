@@ -49,8 +49,6 @@ const SinhDeModal = () => {
         }
     )
 
-    console.log('dataExam: ', dataExam)
-
     const dataOption = useMemo(() => {
         return dataExam?.subjectClass
             ? dataExam?.subjectClass.map((item) => {
@@ -93,17 +91,6 @@ const SinhDeModal = () => {
         try {
             if (!values || !selectedExamId) return
 
-            // const matrixData = await fetch('http://localhost:3030/sinh-de', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //     },
-            //     body: JSON.stringify({ ...values, examId: selectedExamId }),
-            // })
-
-            // console.log(values,selectedExamId);
-            // return
-
             const res = await automaticTopicGeneration({
                 ...values,
                 isNote: values.isNote || false,
@@ -145,20 +132,30 @@ const SinhDeModal = () => {
             <Col span={24}>
                 <Row gutter={[16, 0]}>
                     <Col span={12}>
-                        <FormItem form={form} name="examCode" label="Mã đề">
+                        <FormItem form={form} name="examCode" label="Mã đề" required>
                             <Input placeholder="Nhập mã đề" />
                         </FormItem>
                     </Col>
                     <Col span={12}>
-                        <FormItem form={form} name="codeFrom" label="Từ">
-                            <InputNumber className="w-full" placeholder="Nhập mã đề" />
+                        <FormItem
+                            form={form}
+                            name="codeFrom"
+                            label="Số thứ tự bắt đầu"
+                            initialValue={1}
+                            required
+                        >
+                            <InputNumber
+                                className="w-full"
+                                placeholder="Nhập số thứ tự bắt đầu"
+                                min={1}
+                            />
                         </FormItem>
                     </Col>
                     <Col span={12}>
                         <FormItem form={form} name="quantity" label="Số đề cần tạo" required>
                             <InputNumber
                                 className="w-full"
-                                placeholder="Nhập tên ma trận đề"
+                                placeholder="Nhập số lượng đề cần tạo"
                                 min={1}
                             />
                         </FormItem>
