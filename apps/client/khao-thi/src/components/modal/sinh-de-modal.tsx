@@ -110,7 +110,7 @@ const SinhDeModal = () => {
                 })
                 onClose()
             } else {
-                message.error('Lỗi tạo đề')
+                message.error(res?.data?.message || 'Tạo đề thất bại!')
             }
 
             // onClose()
