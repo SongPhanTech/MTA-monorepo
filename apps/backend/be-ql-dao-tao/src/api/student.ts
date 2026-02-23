@@ -11,7 +11,7 @@ import {
     CourseStudentDecreaseAcademicWarningResult,
     CourseStudentScholarshipResult,
 } from '../dto/student-info.dto'
-import { exportStudentProfile } from '../services/student'
+import { exportStudentProfile, exportStudentScholarship } from '../services/student'
 import {
     calculateStudentSemesterResult,
     calculateStudentYearResult,
@@ -153,6 +153,57 @@ const exportScholarshipJson = createRoute({
             },
         },
     },
+})
+
+const exportScholarshipExcel = createRoute({
+    operationId: 'exportStudentScholarshipExcel',
+    path: '/export-excel-list-student-scholarship',
+    tags: ['Student'],
+    summary: 'Xuất Excel danh sách học bổng của học viên',
+    description:
+        'Xuất danh sách học viên đạt học bổng dưới dạng file Excel (dữ liệu đã được làm phẳng)',
+    method: 'get',
+    request: {
+        query: z.object({
+            semesterId: z.string().openapi('semesterId', {
+                description: 'ID của kỳ học',
+            }),
+            trainingObjectTypeId: z
+                .string()
+                .openapi('trainingObjectTypeId', { description: 'ID loại đối tượng đào tạo' }),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Export list of student scholarship as Excel',
+            content: {
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': {
+                    schema: z.string().openapi({ type: 'string', format: 'binary' }),
+                },
+            },
+        },
+        404: {
+            description: 'Not found',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                    }),
+                },
+            },
+        },
+    },
+})
+
+app.openapi(exportScholarshipExcel, async (c) => {
+    const { semesterId, trainingObjectTypeId } = c.req.valid('query')
+
+    const buffer = await exportStudentScholarship({ semesterId, trainingObjectTypeId })
+
+    return c.body(buffer, 200, {
+        'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'Content-Disposition': `attachment; filename="Danh_sach_hoc_bong.xlsx"`,
+    })
 })
 
 const exportAcademicWarningJson = createRoute({
@@ -880,7 +931,6 @@ app.openapi(downloadStudentImportTemplate, async (c) => {
 
         const arrayBuffer = await response.arrayBuffer()
         const buffer = Buffer.from(arrayBuffer)
-
         const workbook = new ExcelJS.Workbook()
         await workbook.xlsx.load(buffer)
 
