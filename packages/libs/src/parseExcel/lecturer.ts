@@ -126,6 +126,15 @@ export const parseSheetLecturer = (file: ArrayBufferLike) => {
                 })
             }
 
+            const phoneNumber = row[cols.phoneNumber]?.trim()
+            if (phoneNumber && !/^0[35789]\d{8}$/.test(phoneNumber)) {
+                errors.push({
+                    sheetRef: sheetName,
+                    cellRef: `${cols.phoneNumber}${row.__rowNum__ + 1}`,
+                    message: 'Số điện thoại không hợp lệ',
+                })
+            }
+
             return {
                 stt: row[cols.stt],
                 code: row[cols.code]?.trim() as string,
