@@ -1,6 +1,6 @@
 {
 	"name": "@client/khao-thi",
-	"version": "R2.260223.1",
+	"version": "R2.260223.2",
 	"private": true,
 	"scripts": {
 		"dev": "cross-env NODE_OPTIONS='--inspect --max_old_space_size=8096' next dev --turbopack",
