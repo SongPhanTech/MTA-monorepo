@@ -13,6 +13,7 @@ import {
     type GetProp,
     Input,
     message,
+    Spin,
     Upload,
     type UploadFile,
     type UploadProps,
@@ -55,6 +56,7 @@ import { sqlTransaction } from '@workspace/libs/api/model'
 import { putDMNhanViens } from '@workspace/libs/api/system'
 import { getRuntimeEnv } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
+import { useSession } from '@workspace/auth/react'
 import ImgCrop from 'antd-img-crop'
 import axios from 'axios'
 import dayjs from 'dayjs'
@@ -70,6 +72,7 @@ type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
 export default function UpdateUserPage() {
     const { can, canSome } = useAbility()
+    const { status } = useSession()
     const router = useRouter()
     const id = router.query.id as string
     const [form] = Form.useForm<SubmitForm>()
@@ -1238,6 +1241,14 @@ export default function UpdateUserPage() {
             fillUserInfo(cccdUserProfileData)
         }
     }, [cccdUserProfileData, fillUserInfo])
+
+    if (status === 'loading') {
+        return (
+            <div className="flex items-center justify-center h-screen">
+                <Spin size="large" />
+            </div>
+        )
+    }
 
     return (
         <>
