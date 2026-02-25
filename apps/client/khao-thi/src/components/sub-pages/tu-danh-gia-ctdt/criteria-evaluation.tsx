@@ -17,6 +17,7 @@ import { Badge, Button, Collapse, Form, message, Tag } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { getDeadlineStatus } from '@/utils/getDeadlineStatus'
+import { queryClient } from '@api/index'
 
 export type DataTabEvaluationCriterionType = StandardPeriod & {
     criteria: (CriterionPeriod & {
@@ -35,13 +36,7 @@ export type PutRequirementCriterion = {
     criteria: Record<string, any>
 }
 
-const CriteriaEvaluationSubPage = ({
-    data,
-    onRefetch,
-}: {
-    data: DataTabEvaluationCriterionType
-    onRefetch?: () => void
-}) => {
+const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionType }) => {
     const [form] = Form.useForm<PutRequirementCriterion>()
     const [showCommentsCriterionId, setShowCommentsCriterionId] = useState<string | null>(null)
     const [activeCollapseKeys, setActiveCollapseKeys] = useState<string[]>([])
@@ -130,9 +125,9 @@ const CriteriaEvaluationSubPage = ({
 
             message.success('Nộp phiếu tiêu chí thành công')
 
-            if (onRefetch) {
-                onRefetch()
-            }
+            queryClient.invalidateQueries({
+                queryKey: ['zenstack', 'EvaluationPeriod'],
+            })
         } catch (error: any) {
             if (error?.info?.message) {
                 message.error(error?.info?.message)
@@ -475,6 +470,7 @@ const CriteriaEvaluationSubPage = ({
                                                                         editable={
                                                                             !isCriterionReadOnly
                                                                         }
+                                                                        defaultTable={true}
                                                                         stickyToolbar={false}
                                                                     />
                                                                 </Form.Item>

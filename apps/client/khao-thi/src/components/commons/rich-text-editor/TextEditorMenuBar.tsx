@@ -175,6 +175,10 @@ export default function TextEditorMenuBar({
                             },
                         ],
                     })
+                    .command(({ tr, dispatch }) => {
+                        if (dispatch) tr.setStoredMarks([])
+                        return true
+                    })
                     .run()
             } catch (error) {
                 message.error('Lỗi ghim dữ liệu')
