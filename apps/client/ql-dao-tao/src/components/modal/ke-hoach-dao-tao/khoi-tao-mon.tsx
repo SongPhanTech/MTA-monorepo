@@ -6,9 +6,9 @@ import Table from '@components/commons/table'
 import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import {
-    useFindManySubject,
     useFindManySubjectVersion,
     useFindManyTrainingCourse,
+    useInfiniteFindManySubject,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useSemesterStore, useTrainingCourseStore, useTrainingObjectTypeStore } from '@workspace/ui'
@@ -17,9 +17,13 @@ import type { DataNode } from 'antd/es/tree'
 import dayjs from 'dayjs'
 import TreeSelect from '@/components/commons/tree-select'
 import 'dayjs/locale/vi'
-import type { $Enums, PlanTraining } from '@workspace/db/client'
+import type { $Enums, PlanTraining, Prisma } from '@workspace/db/client'
 import { Trash2Icon } from 'lucide-react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { useCallback } from 'react'
+import type { Subject, SubjectVersion } from '@workspace/db'
+
+const PAGE_SIZE = 10
 
 export type KhoiTaoMonFormType = {
     managementOrganizationIds: string[]
@@ -34,13 +38,12 @@ const KhoiTaoMon = () => {
         tag: 'KhoiTaoMon',
         onClose: form.resetFields,
     })
+    const { showSpinner, hideSpinner } = useSpinner()
     const { id: semesterId } = useSemesterStore()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { id: trainingCourseId } = useTrainingCourseStore()
     const managementOrganizationIds = Form.useWatch('managementOrganizationIds', form) || []
     const subjectVersionIds = Form.useWatch('subjectVersionIds', form) || {}
-
-    const { showSpinner, hideSpinner } = useSpinner()
 
     async function onOk(output?: KhoiTaoMonFormType) {
         if (!output) return
@@ -91,29 +94,32 @@ const KhoiTaoMon = () => {
                             model: 'TrainingBlockSubject',
                             operation: 'findFirst',
                             data: {
-                                data: {
-                                    where: {
-                                        subjectId: subjectVersionId,
-                                        trainingBlockOnCurriculumVersion: {
-                                            curriculumVersion: {
-                                                fixedClass: {
-                                                    id: {
-                                                        in: fixedClassIds.map((id) => ({ id })),
-                                                    },
-                                                },
-                                            },
+                                where: {
+                                    subjectId: subjectVersionId,
+                                    trainingBlockOnCurriculumVersion: {
+                                        curriculumVersion: {
+                                            ...(fixedClassIds?.length
+                                                ? {
+                                                      fixedClass: {
+                                                          id: {
+                                                              in: fixedClassIds,
+                                                          },
+                                                      },
+                                                  }
+                                                : {}),
                                         },
                                     },
-                                    select: {
-                                        subjectId: true,
-                                        trainingBlockOnCurriculumVersion: {
-                                            select: {
-                                                curriculumVersion: {
-                                                    select: {
-                                                        fixedClass: {
-                                                            select: {
-                                                                id: true,
-                                                            },
+                                },
+                                select: {
+                                    id: true,
+                                    subjectId: true,
+                                    trainingBlockOnCurriculumVersion: {
+                                        select: {
+                                            curriculumVersion: {
+                                                select: {
+                                                    fixedClass: {
+                                                        select: {
+                                                            id: true,
                                                         },
                                                     },
                                                 },
@@ -126,7 +132,6 @@ const KhoiTaoMon = () => {
                     }
                 )
             )
-
             const res = await sqlTransaction(
                 resTB?.data?.map((tbs: any) => {
                     return {
@@ -135,14 +140,10 @@ const KhoiTaoMon = () => {
                         data: {
                             data: {
                                 planTraining: {
-                                    connect: {
-                                        id: planTrainingId,
-                                    },
+                                    connect: { id: planTrainingId },
                                 },
                                 trainingBlockSubject: {
-                                    connect: {
-                                        id: tbs?.id,
-                                    },
+                                    connect: { id: tbs?.id },
                                 },
                             },
                         },
@@ -175,8 +176,7 @@ const KhoiTaoMon = () => {
     }
 
     const { getExamTypeLabel } = useExamTypeOptions()
-
-    const { data: subjectVersionData = [] } = useFindManySubject({
+    const fetchArgs = {
         where: {
             subjectVersion: {
                 none: {
@@ -208,6 +208,28 @@ const KhoiTaoMon = () => {
             deletedAt: null,
         },
         include: { subjectVersion: true },
+        take: PAGE_SIZE,
+        distinct: ['id'],
+    }
+    const {
+        data: subjectVersionData,
+        isLoading: isLoadingSubjectVersionData,
+        isFetching: isFetchingSubjectVersionData,
+        hasNextPage,
+        fetchNextPage: fetchNextPageSubjectVersionData,
+        isFetchingNextPage: isFetchingNextPageSubjectVersionData,
+    } = useInfiniteFindManySubject(fetchArgs as Prisma.SubjectDefaultArgs, {
+        getNextPageParam: (lastPage: [], pages: [][]) => {
+            if (lastPage.length < PAGE_SIZE) {
+                return undefined
+            }
+            const fetched = pages.flat().length
+            return {
+                ...fetchArgs,
+                skip: fetched,
+            }
+        },
+        enabled: managementOrganizationIds.length > 0,
     })
 
     const { data: trainingCourse = [] } = useFindManyTrainingCourse({
@@ -215,6 +237,7 @@ const KhoiTaoMon = () => {
             active: true,
             deletedAt: null,
             trainingObjectTypeId,
+            id: trainingCourseId,
         },
         select: {
             name: true,
@@ -225,16 +248,29 @@ const KhoiTaoMon = () => {
                     id: true,
                     code: true,
                     name: true,
+                    curriculumVersion: {},
+                    planTrainingSubject: {
+                        select: {
+                            trainingBlockSubject: true,
+                        },
+                    },
                 },
             },
         },
     })
 
-    const { data: subjectVersionTable = [] } = useFindManySubjectVersion(
+    const {
+        data: subjectVersionTable = [],
+        isLoading: isLoadingSubjectVersionTable,
+        isFetching: isFetchingSubjectVersionTable,
+    } = useFindManySubjectVersion(
         {
             where: {
                 active: true,
                 deletedAt: null,
+                managementOrganizationId: {
+                    in: managementOrganizationIds,
+                },
                 id: { in: Object.keys(subjectVersionIds) },
             },
         },
@@ -243,8 +279,8 @@ const KhoiTaoMon = () => {
         }
     )
 
-    const treeData: DataNode[] = subjectVersionData
-        .map((subject) => {
+    const treeData: DataNode[] = (subjectVersionData?.pages?.flat() || [])
+        .map((subject: Subject & { subjectVersion: SubjectVersion[] }) => {
             const children: DataNode[] = subject.subjectVersion
                 .filter((sv) => !subjectVersionIds[sv.id])
                 .map((sv) => ({
@@ -265,17 +301,44 @@ const KhoiTaoMon = () => {
         })
         .filter((item): item is DataNode => item !== null)
 
-    const treeDataFixedClass: DataNode[] = trainingCourse.map((tc) => ({
-        key: tc.id,
-        value: tc.id,
-        label: [tc.code, tc.name].filter(Boolean).join(' - '),
-        selectable: false,
-        children: tc.fixedClass.map((fc) => ({
-            key: fc.id,
-            value: fc.id,
-            label: <p className="text-primary">{fc.code}</p>,
-        })),
-    }))
+    const treeDataFixedClass = (_record: SubjectVersion): DataNode[] => {
+        const result = trainingCourse.map((tc) => ({
+            key: tc.id,
+            value: tc.id,
+            label: [tc.code, tc.name].filter(Boolean).join(' - '),
+            selectable: false,
+            children: tc.fixedClass
+                .filter((fxc) => fxc?.planTrainingSubject?.trainingBlockSubject?.id === _record?.id)
+                ?.map((fc) => ({
+                    key: fc.id,
+                    value: fc.id,
+                    label: <p className="text-primary">{fc.code}</p>,
+                })),
+        }))
+        return result?.filter?.((item) => item?.children?.length > 0)
+    }
+
+    const handleLoadMoreSubjectVersion = useCallback(
+        (e: React.UIEvent<HTMLDivElement>) => {
+            const { scrollTop, scrollHeight, clientHeight } = e.currentTarget
+            if (
+                scrollHeight - scrollTop - clientHeight < 50 &&
+                hasNextPage &&
+                !isFetchingNextPageSubjectVersionData &&
+                !isFetchingSubjectVersionData &&
+                !isLoadingSubjectVersionData
+            ) {
+                fetchNextPageSubjectVersionData()
+            }
+        },
+        [
+            hasNextPage,
+            isFetchingNextPageSubjectVersionData,
+            isLoadingSubjectVersionData,
+            isFetchingSubjectVersionData,
+            fetchNextPageSubjectVersionData,
+        ]
+    )
 
     return (
         <PutFormModal
@@ -296,6 +359,7 @@ const KhoiTaoMon = () => {
                 <FormItem form={form} name="subjectVersionIds" hidden />
                 <Form.Item label="Môn học">
                     <TreeSelect
+                        disabled={managementOrganizationIds?.length === 0}
                         placeholder="Chọn môn học"
                         treeData={treeData}
                         allowClear
@@ -308,6 +372,7 @@ const KhoiTaoMon = () => {
                                 },
                             })
                         }}
+                        onPopupScroll={handleLoadMoreSubjectVersion}
                         multiple
                         treeDefaultExpandAll
                         style={{ width: '100%' }}
@@ -318,6 +383,7 @@ const KhoiTaoMon = () => {
             <Col span={24}>
                 <Table
                     data={subjectVersionTable}
+                    loading={isFetchingSubjectVersionTable || isFetchingSubjectVersionTable}
                     columns={[
                         {
                             title: 'TT',
@@ -351,6 +417,7 @@ const KhoiTaoMon = () => {
                         {
                             title: 'Lớp QL',
                             align: 'center',
+                            width: 180,
                             render: (__, record) => (
                                 // <Form.Item
                                 //     name={['subjectVersionIds', record.id]}
@@ -360,7 +427,7 @@ const KhoiTaoMon = () => {
 
                                 // </Form.Item>
                                 <TreeSelect
-                                    treeData={treeDataFixedClass}
+                                    treeData={treeDataFixedClass(record as SubjectVersion)}
                                     className="w-full"
                                     dropdownStyle={{
                                         width: 400,
