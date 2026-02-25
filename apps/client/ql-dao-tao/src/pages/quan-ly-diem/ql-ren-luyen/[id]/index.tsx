@@ -260,7 +260,7 @@ export default function SubjectClassScore() {
                     <Row gutter={16}>
                         <Col span={24}>
                             <Flex justify="end" gap={4}>
-                                {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QL_REN_LUYEN, 'DUYET') && (
+                                {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN, 'DUYET') && (
                                     <Popover
                                         content={
                                             <div className="max-w-56">
@@ -294,7 +294,7 @@ export default function SubjectClassScore() {
                                     </Popover>
                                 )}
 
-                                {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QL_REN_LUYEN, 'SUA') && (
+                                {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN, 'SUA') && (
                                     <>
                                         <Popover
                                             content={
@@ -460,7 +460,7 @@ export default function SubjectClassScore() {
                                         align: 'center',
                                         render: (_, record) => {
                                             return can(
-                                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QL_REN_LUYEN,
+                                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN,
                                                 'SUA'
                                             ) || record.scoreStatus !== 'APPROVED' ? (
                                                 <Select
@@ -543,7 +543,7 @@ export default function SubjectClassScore() {
                                         width: 100,
                                         align: 'center',
                                         hidden: !canSome(
-                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QL_REN_LUYEN,
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN,
                                             'DUYET'
                                         ),
                                         render: (text, record) => (
@@ -621,7 +621,7 @@ SubjectClassScore.getLayout = function getLayout(page: React.ReactElement) {
                 { title: 'Quản lý đào tạo' },
                 {
                     title: 'Quản lý đợt rèn luyện',
-                    href: ROUTER_PATH.QL_DAO_TAO.QL_REN_LUYEN,
+                    href: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_REN_LUYEN,
                 },
                 { title: 'Chi tiết đợt rèn luyện' },
             ]}

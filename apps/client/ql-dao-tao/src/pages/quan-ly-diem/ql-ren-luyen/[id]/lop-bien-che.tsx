@@ -27,7 +27,7 @@ const LopBienCheItem: React.FC<LopBienCheItemProps> = ({
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
     // Kiểm tra quyền XEM_TAT_CA
-    const canViewAll = can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QL_REN_LUYEN, 'XEM_TAT_CA')
+    const canViewAll = can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN, 'XEM_TAT_CA')
 
     // Lấy thông tin Lecturer của user hiện tại (nếu có)
     const { data: currentLecturer, isLoading: isLoadingLecturer } = useFindUniqueLecturer(
