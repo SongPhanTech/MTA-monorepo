@@ -2,7 +2,6 @@ import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { AcademicActionType, StudentStatus } from '@workspace/db'
 import { getTemplateBuffer } from '@workspace/libs/server'
 import dayjs from 'dayjs'
-import ExcelJS from 'exceljs'
 import XlsxTemplate from 'xlsx-template'
 import { prisma } from '..'
 import {
@@ -11,7 +10,7 @@ import {
     CourseStudentDecreaseAcademicWarningResult,
     CourseStudentScholarshipResult,
 } from '../dto/student-info.dto'
-import { exportStudentProfile } from '../services/student'
+import { exportStudentProfile, generateStudentImportTemplate } from '../services/student'
 import {
     calculateStudentSemesterResult,
     calculateStudentYearResult,
@@ -868,229 +867,15 @@ const exportStudentProfiles = createRoute({
 })
 
 app.openapi(downloadStudentImportTemplate, async (c) => {
-    try {
-        const minioUrl = process.env.MINIO_ENDPOINT || 'https://minio.swantech.vn'
-        const templatePath = 'mta/template/MauImportDSHV.xlsx'
-        const templateUrl = `${minioUrl}/${templatePath}`
-
-        const response = await fetch(templateUrl)
-        if (!response.ok) {
-            throw new Error(`Không thể tải file template từ ${templatePath}`)
-        }
-
-        const arrayBuffer = await response.arrayBuffer()
-        const buffer = Buffer.from(arrayBuffer)
-
-        const workbook = new ExcelJS.Workbook()
-        await workbook.xlsx.load(buffer)
-
-        const provinces = await prisma.dM_Tinh_New.findMany({
-            where: {
-                bActive: true,
-                bDeleted: false,
-            },
-            select: {
-                sTen: true,
-            },
-            orderBy: {
-                sTen: 'asc',
-            },
-        })
-
-        const trainingFields = await prisma.trainingField.findMany({
-            select: {
-                name: true,
-            },
-            orderBy: {
-                name: 'asc',
-            },
-        })
-
-        const trainingMajors = await prisma.trainingMajor.findMany({
-            select: {
-                name: true,
-            },
-            orderBy: {
-                name: 'asc',
-            },
-        })
-
-        const curriculumVersions = await prisma.curriculumVersion.findMany({
-            select: {
-                name: true,
-            },
-            orderBy: {
-                name: 'asc',
-            },
-        })
-
-        const genders = [{ name: 'Nam' }, { name: 'Nữ' }]
-
-        const nationalities = await prisma.dM_QuocGia.findMany({
-            where: {
-                bActive: true,
-                bDeleted: false,
-            },
-            select: {
-                sTen: true,
-            },
-            orderBy: {
-                sTen: 'asc',
-            },
-        })
-
-        const ethnicities = await prisma.dM_DanToc.findMany({
-            where: {
-                bActive: true,
-                bDeleted: false,
-            },
-            select: {
-                sTen: true,
-            },
-            orderBy: {
-                sTen: 'asc',
-            },
-        })
-
-        const provinceSheet = workbook.getWorksheet('DanhMucTinh')
-        if (provinceSheet) {
-            // const rowCount = provinceSheet.rowCount
-            // if (rowCount > 1) {
-            //     provinceSheet.spliceRows(2, rowCount - 1)
-            // }
-
-            provinces.forEach((p) => {
-                provinceSheet.addRow([p.sTen || ''])
-            })
-
-            if (provinces.length > 0) {
-                workbook.definedNames.removeAllNames('danhmuctinh')
-                workbook.definedNames.add(
-                    `danhmuctinh!$A$2:$A$${provinces.length + 1}`,
-                    'danhmuctinh'
-                )
-            }
-        }
-
-        const fieldSheet = workbook.getWorksheet('DanhMucNganh')
-        if (fieldSheet) {
-            // const rowCount = fieldSheet.rowCount
-            // if (rowCount > 1) {
-            //     fieldSheet.spliceRows(2, rowCount - 1)
-            // }
-
-            trainingFields.forEach((f) => {
-                fieldSheet.addRow([f.name || ''])
-            })
-
-            if (trainingFields.length > 0) {
-                workbook.definedNames.removeAllNames('danhmucnganh')
-                workbook.definedNames.add(
-                    `danhmucnganh!$A$2:$A$${trainingFields.length + 1}`,
-                    'danhmucnganh'
-                )
-            }
-        }
-
-        const genderSheet = workbook.getWorksheet('DanhMucGioiTinh')
-        if (genderSheet) {
-            const rowCount = genderSheet.rowCount
-            if (rowCount > 1) {
-                genderSheet.spliceRows(2, rowCount - 1)
-            }
-
-            genders.forEach((g) => {
-                genderSheet.addRow([g.name || ''])
-            })
-
-            if (genders.length > 0) {
-                workbook.definedNames.removeAllNames('danhmucgioitinh')
-                workbook.definedNames.add(
-                    `danhmucgioitinh!$A$2:$A$${genders.length + 1}`,
-                    'danhmucgioitinh'
-                )
-            }
-        }
-
-        const nationalitySheet = workbook.getWorksheet('DanhMucQuocTich')
-        if (nationalitySheet) {
-            const rowCount = nationalitySheet.rowCount
-            if (rowCount > 1) {
-                nationalitySheet.spliceRows(2, rowCount - 1)
-            }
-
-            nationalities.forEach((n) => {
-                nationalitySheet.addRow([n.sTen || ''])
-            })
-
-            if (nationalities.length > 0) {
-                workbook.definedNames.removeAllNames('danhmucquoctich')
-                workbook.definedNames.add(
-                    `danhmucquoctich!$A$2:$A$${nationalities.length + 1}`,
-                    'danhmucquoctich'
-                )
-            }
-        }
-
-        const ethnicitySheet = workbook.getWorksheet('DanhMucDanToc')
-        if (ethnicitySheet) {
-            const rowCount = ethnicitySheet.rowCount
-            if (rowCount > 1) {
-                ethnicitySheet.spliceRows(2, rowCount - 1)
-            }
-
-            ethnicities.forEach((e) => {
-                ethnicitySheet.addRow([e.sTen || ''])
-            })
-
-            if (ethnicities.length > 0) {
-                workbook.definedNames.removeAllNames('danhmucdantoc')
-                workbook.definedNames.add(
-                    `danhmucdantoc!$A$2:$A$${ethnicities.length + 1}`,
-                    'danhmucdantoc'
-                )
-            }
-        }
-
-        const majorSheet = workbook.getWorksheet('DanhMucChuyenNganh')
-        if (majorSheet) {
-            const rowCount = majorSheet.rowCount
-            if (rowCount > 1) {
-                majorSheet.spliceRows(2, rowCount - 1)
-            }
-
-            trainingMajors.forEach((m) => {
-                majorSheet.addRow([m.name || ''])
-            })
-
-            if (trainingMajors.length > 0) {
-                workbook.definedNames.removeAllNames('danhmuchuyennganh')
-                workbook.definedNames.add(
-                    `danhmuchuyennganh!$A$2:$A$${trainingMajors.length + 1}`,
-                    'danhmuchuyennganh'
-                )
-            }
-        }
-
-        const resultBuffer = await workbook.xlsx.writeBuffer()
-
+   
+        const result = await generateStudentImportTemplate()
         const fileName = 'MauImportDSHV.xlsx'
         const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
-
-        return c.body(resultBuffer, 200, {
+        return c.body(result, 200, {
             'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             'Content-Disposition': disposition,
         })
-    } catch (error) {
-        console.error('Error generating template:', error)
-        return c.json(
-            {
-                message: 'Lỗi khi tạo file template',
-                error: error instanceof Error ? error.message : String(error),
-            },
-            500
-        )
-    }
+    
 })
 
 app.openapi(exportStudentProfiles, async (c) => {

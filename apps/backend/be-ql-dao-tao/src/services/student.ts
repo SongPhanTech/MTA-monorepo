@@ -1,6 +1,7 @@
 import { TrainingObjectTypes } from '@workspace/db'
 import { getTemplateBuffer } from '@workspace/libs/server'
 import dayjs from 'dayjs'
+import ExcelJS from 'exceljs'
 import XlsxTemplate from 'xlsx-template'
 import { prisma } from '..'
 
@@ -147,4 +148,79 @@ export async function exportStudentProfile({ trainingCourseId }: { trainingCours
     const result = (await template.generate({ type: 'arraybuffer' })) as ArrayBuffer
 
     return result
+}
+
+export async function generateStudentImportTemplate(): Promise<ArrayBuffer> {
+    const minioUrl = (process.env.MINIO_ENDPOINT || 'https://minio.swantech.vn').replace(/\/$/, '')
+    const templateUrl = `${minioUrl}/mta/template/MauImportDSHV.xlsx`
+
+    const [
+        templateResponse,
+        provinces,
+        trainingFields,
+        trainingMajors,
+        nationalities,
+        ethnicities,
+        genders,
+    ] = await Promise.all([
+        fetch(templateUrl),
+        prisma.dM_Tinh_New.findMany({
+            where: { bActive: true, bDeleted: false },
+            select: { sTen: true },
+            orderBy: { sTen: 'asc' },
+        }),
+        prisma.trainingField.findMany({
+            select: { name: true },
+            orderBy: { name: 'asc' },
+        }),
+        prisma.trainingMajor.findMany({
+            select: { name: true },
+            orderBy: { name: 'asc' },
+        }),
+        prisma.dM_QuocGia.findMany({
+            where: { bActive: true, bDeleted: false },
+            select: { sTen: true },
+            orderBy: { sTen: 'asc' },
+        }),
+        prisma.dM_DanToc.findMany({
+            where: { bActive: true, bDeleted: false },
+            select: { sTen: true },
+            orderBy: { sTen: 'asc' },
+        }),
+        prisma.dM_GioiTinh.findMany({
+            where: { bActive: true, bDeleted: false },
+            select: { sTen: true },
+            orderBy: { sTen: 'asc' },
+        }),
+    ])
+
+    if (!templateResponse.ok) {
+        throw new Error(`Không thể tải file template: ${templateResponse.status} ${templateUrl}`)
+    }
+
+
+    const buffer = await getTemplateBuffer(prisma, 'MauImportDSHV.xlsx')
+
+    console.log(111,buffer.length);
+    
+    const template = new XlsxTemplate(buffer)
+
+    
+    // const templateBuffer = Buffer.from(await templateResponse.arrayBuffer())
+    
+    // const template = new XlsxTemplate(templateBuffer)
+    const provinceList = provinces.map((p) => ({ value: p.sTen ?? 'abc' }));
+    
+        template.substitute('DanhMucTinh', { provinceList })
+
+    // template.substitute('DanhMucTinh', { data: provinces.map((p) => ({ value: p.sTen ?? '' })) })
+    console.log(123);
+    
+    // template.substitute('DanhMucNganh', { data: trainingFields.map((p) => ({ value: p.name ?? '' })) })
+    // template.substitute('DanhMucGioiTinh', { data: genders.map((p) => ({ value: p.sTen ?? '' })) })
+    // template.substitute('DanhMucQuocTich', { data: nationalities.map((p) => ({ value: p.sTen ?? '' })) })
+    // template.substitute('DanhMucDanToc', { data: ethnicities.map((p) => ({ value: p.sTen ?? '' })) })
+    // template.substitute('DanhMucChuyenNganh', { data: trainingMajors.map((p) => ({ value: p.name ?? '' })) })
+
+    return template.generate({ type: 'arraybuffer' }) as Promise<ArrayBuffer>
 }
