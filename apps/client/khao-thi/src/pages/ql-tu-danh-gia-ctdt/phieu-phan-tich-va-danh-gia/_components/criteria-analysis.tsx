@@ -112,7 +112,6 @@ export default function CriteriaAnalysisWrite() {
         },
         {
             enabled: !!idProfile && !!selectedEvaluationPeriodId,
-            refetchOnWindowFocus: false,
         }
     )
 

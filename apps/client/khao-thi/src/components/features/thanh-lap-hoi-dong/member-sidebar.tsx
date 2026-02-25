@@ -1,4 +1,4 @@
-import { Badge } from 'antd'
+import { Badge, Tooltip } from 'antd'
 import {
     ChevronRight,
     ClipboardList,
@@ -18,7 +18,7 @@ export type GroupKey =
 
 export interface TreeNode {
     key: GroupKey
-    label: string
+    label: React.ReactNode
     count?: number
     icon?: React.ReactNode
     children?: TreeNode[]
@@ -189,11 +189,19 @@ export function createTreeData(
         },
         {
             key: 'specialized',
-            label: 'Danh sách Nhóm chuyên trách',
+            label: (
+                <Tooltip title="Danh sách nhóm chuyên trách">
+                    <span>Danh sách nhóm chuyên trách</span>
+                </Tooltip>
+            ),
             icon: <FolderTree size={16} />,
             children: specializedGroups.map((group) => ({
                 key: `specialized-${group.key}` as GroupKey,
-                label: group.label,
+                label: (
+                    <Tooltip title={group.label}>
+                        <span>{group.label}</span>
+                    </Tooltip>
+                ),
                 count: group.count,
             })),
         },

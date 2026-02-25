@@ -54,10 +54,6 @@ const CriteriaEvaluationSubPage = ({
 
     const { hideSpinner, showSpinner } = useSpinner()
 
-    const statusConfig = getStatusConfig(
-        data?.criteria?.[0]?.evaluationCriterion?.status || $Enums.EvaluationStatus.LOCK
-    )
-
     const currentStatus =
         data?.criteria?.[0]?.evaluationCriterion?.status || $Enums.EvaluationStatus.LOCK
 
@@ -113,45 +109,26 @@ const CriteriaEvaluationSubPage = ({
         }
     }
 
-    const handleEvaluationForm = async () => {
+    const handleCriterionSubmit = async (criterionId: string) => {
         try {
-            const dataSubmit = form.getFieldsValue()
-
-            if (!dataSubmit.criteria || dataSubmit.criteria.length === 0) {
-                message.warning('Không có dữ liệu để nộp')
-                return
-            }
             showSpinner()
-
-            const listSqlTransaction = dataSubmit.criteria.map(
-                (
-                    i: CriterionPeriod & {
-                        evaluationCriterion: EvaluationCriterion
-                    }
-                ) => {
-                    return {
-                        model: 'EvaluationCriterion',
-                        operation: 'update',
-                        data: {
-                            where: {
-                                id: i.evaluationCriterion.id,
-                            },
-                            data: {
-                                status: $Enums.EvaluationStatus.SUBMITTED,
-                            },
-                        },
-                    }
-                }
-            )
-
-            const res = await sqlTransaction(listSqlTransaction)
+            const res = await sqlTransaction([
+                {
+                    model: 'EvaluationCriterion',
+                    operation: 'update',
+                    data: {
+                        where: { id: criterionId },
+                        data: { status: $Enums.EvaluationStatus.SUBMITTED },
+                    },
+                },
+            ])
 
             if (res.status !== 200) {
                 message.error('Có lỗi xảy ra, vui lòng thử lại')
                 return
             }
 
-            message.success('Nộp phiếu đánh giá tiêu chí thành công')
+            message.success('Nộp phiếu tiêu chí thành công')
 
             if (onRefetch) {
                 onRefetch()
@@ -186,7 +163,6 @@ const CriteriaEvaluationSubPage = ({
         }
     }, [data, form])
 
-    // Tự động mở collapse cho các tiêu chí có comment khi ở trạng thái REJECTED
     useEffect(() => {
         if (data && currentStatus === $Enums.EvaluationStatus.REVISION) {
             const criteriaWithComments = data.criteria
@@ -204,66 +180,16 @@ const CriteriaEvaluationSubPage = ({
         }
     }, [data, currentStatus])
 
-    const isReadOnly =
-        !canEdit ||
-        currentStatus === $Enums.EvaluationStatus.SUBMITTED ||
-        currentStatus === $Enums.EvaluationStatus.APPROVED ||
-        currentStatus === $Enums.EvaluationStatus.COMPLETED
-
-    const deadline = data?.criteria?.[0]?.evaluationCriterion?.deadline
-    const deadlineStatus = deadline ? getDeadlineStatus(deadline) : null
-
     const headerSection = (
         <div className="sticky top-0 z-10 bg-white py-2 flex flex-row justify-between items-center gap-2">
-            <div className="flex flex-row gap-4 items-center text-xs">
-                <div className="flex items-center gap-1">
-                    <span className="text-sm text-gray-500">
-                        Người viết phiếu:{' '}
-                        {data?.criteria?.[0]?.evaluationCriterion?.lecturer?.userProfile
-                            ?.fullname || 'Chưa phân công'}
-                    </span>
-                </div>
-                <div className="flex items-center gap-1">
-                    {deadline && deadlineStatus && deadlineStatus.text && (
-                        <Tag color={deadlineStatus.color}>
-                            Hạn: {dayjs(deadline).format('DD/MM/YYYY')}
-                            {deadlineStatus.text && ` (${deadlineStatus.text})`}
-                        </Tag>
-                    )}
-                </div>
-                <div className="flex items-center gap-1">
-                    <span className="text-sm text-gray-500">Trạng thái:</span>
-                    <Tag color={statusConfig.color} className="text-xs">
-                        {statusConfig.text}
-                    </Tag>
-                </div>
-            </div>
-
+            <span className="text-sm font-bold text-green-700">
+                Tiêu chuẩn {data.order}: {data.name}
+            </span>
             <div className="flex gap-2 mr-2">
                 <ExportCriteriaEvaluation data={data} />
-                {currentStatus !== $Enums.EvaluationStatus.SUBMITTED &&
-                    currentStatus !== $Enums.EvaluationStatus.APPROVED &&
-                    currentStatus !== $Enums.EvaluationStatus.COMPLETED && (
-                        <>
-                            <Button
-                                type="primary"
-                                size="small"
-                                onClick={handleSubmit}
-                                disabled={!canEdit}
-                            >
-                                Lưu đánh giá
-                            </Button>
-                            <Button
-                                type="primary"
-                                className="bg-blue-500"
-                                size="small"
-                                onClick={handleEvaluationForm}
-                                disabled={!canEdit}
-                            >
-                                Nộp phiếu đánh giá
-                            </Button>
-                        </>
-                    )}
+                <Button type="primary" size="small" onClick={handleSubmit} disabled={!canEdit}>
+                    Lưu đánh giá
+                </Button>
             </div>
         </div>
     )
@@ -278,6 +204,19 @@ const CriteriaEvaluationSubPage = ({
                             <>
                                 {fields.map(({ key, name }, idx: number) => {
                                     const item = data.criteria[name]
+                                    const criterionStatus =
+                                        item.evaluationCriterion?.status ||
+                                        $Enums.EvaluationStatus.LOCK
+                                    const isCriterionReadOnly =
+                                        !canEdit ||
+                                        criterionStatus === $Enums.EvaluationStatus.SUBMITTED ||
+                                        criterionStatus === $Enums.EvaluationStatus.APPROVED ||
+                                        criterionStatus === $Enums.EvaluationStatus.COMPLETED
+                                    const criterionDeadline = item.evaluationCriterion?.deadline
+                                    const criterionDeadlineStatus = criterionDeadline
+                                        ? getDeadlineStatus(criterionDeadline)
+                                        : null
+                                    const criterionStatusConfig = getStatusConfig(criterionStatus)
                                     return (
                                         <div key={key} style={{ marginBottom: 24 }}>
                                             <Collapse
@@ -290,72 +229,167 @@ const CriteriaEvaluationSubPage = ({
                                                 items={[
                                                     {
                                                         label: (
-                                                            <div>
-                                                                <span className="font-bold">
-                                                                    Tiêu chí {data.order}.
-                                                                    {item.order}:{' '}
-                                                                </span>
-                                                                {item?.name}
-                                                            </div>
-                                                        ),
-                                                        extra: (
                                                             <div
+                                                                className="flex flex-col w-full pr-2 gap-1"
                                                                 onClick={(e) => e.stopPropagation()}
                                                             >
-                                                                {item.evaluationCriterion && (
-                                                                    <Badge
-                                                                        count={
-                                                                            item.evaluationCriterion
-                                                                                ?.evaluationCriterionComments
-                                                                                ?.length || 0
-                                                                        }
-                                                                        showZero
-                                                                        offset={[-5, 5]}
+                                                                <div className="flex items-center justify-between gap-2">
+                                                                    <div
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation()
+                                                                            setActiveCollapseKeys(
+                                                                                (prev) =>
+                                                                                    prev.includes(
+                                                                                        item.id
+                                                                                    )
+                                                                                        ? prev.filter(
+                                                                                              (k) =>
+                                                                                                  k !==
+                                                                                                  item.id
+                                                                                          )
+                                                                                        : [
+                                                                                              ...prev,
+                                                                                              item.id,
+                                                                                          ]
+                                                                            )
+                                                                        }}
+                                                                        className="cursor-pointer flex-1"
                                                                     >
-                                                                        <Button
-                                                                            type="primary"
-                                                                            className="bg-yellow-400"
-                                                                            size="small"
-                                                                            onClick={() => {
-                                                                                const criterionId =
+                                                                        <span className="font-bold">
+                                                                            Tiêu chí {data.order}.
+                                                                            {item.order}:{' '}
+                                                                        </span>
+                                                                        {item?.name}
+                                                                    </div>
+                                                                    <div className="flex gap-2 shrink-0">
+                                                                        {item.evaluationCriterion && (
+                                                                            <Badge
+                                                                                count={
+                                                                                    item
+                                                                                        .evaluationCriterion
+                                                                                        ?.evaluationCriterionComments
+                                                                                        ?.length ||
+                                                                                    0
+                                                                                }
+                                                                                showZero
+                                                                                offset={[-5, 5]}
+                                                                            >
+                                                                                <Button
+                                                                                    type="primary"
+                                                                                    className="bg-yellow-400"
+                                                                                    size="small"
+                                                                                    onClick={() => {
+                                                                                        const criterionId =
+                                                                                            item
+                                                                                                .evaluationCriterion
+                                                                                                ?.id
+                                                                                        const isClosing =
+                                                                                            showCommentsCriterionId ===
+                                                                                            criterionId
+
+                                                                                        setShowCommentsCriterionId(
+                                                                                            isClosing
+                                                                                                ? null
+                                                                                                : criterionId ||
+                                                                                                      null
+                                                                                        )
+
+                                                                                        if (
+                                                                                            !isClosing &&
+                                                                                            !activeCollapseKeys.includes(
+                                                                                                item.id
+                                                                                            )
+                                                                                        ) {
+                                                                                            setActiveCollapseKeys(
+                                                                                                [
+                                                                                                    ...activeCollapseKeys,
+                                                                                                    item.id,
+                                                                                                ]
+                                                                                            )
+                                                                                        }
+                                                                                    }}
+                                                                                >
+                                                                                    {showCommentsCriterionId ===
                                                                                     item
                                                                                         .evaluationCriterion
                                                                                         ?.id
-                                                                                const isClosing =
-                                                                                    showCommentsCriterionId ===
-                                                                                    criterionId
-
-                                                                                setShowCommentsCriterionId(
-                                                                                    isClosing
-                                                                                        ? null
-                                                                                        : criterionId ||
-                                                                                              null
-                                                                                )
-
-                                                                                // Mở collapse khi xem đánh giá
-                                                                                if (
-                                                                                    !isClosing &&
-                                                                                    !activeCollapseKeys.includes(
-                                                                                        item.id
-                                                                                    )
-                                                                                ) {
-                                                                                    setActiveCollapseKeys(
-                                                                                        [
-                                                                                            ...activeCollapseKeys,
-                                                                                            item.id,
-                                                                                        ]
-                                                                                    )
-                                                                                }
-                                                                            }}
-                                                                        >
-                                                                            {showCommentsCriterionId ===
+                                                                                        ? 'Đóng đánh giá'
+                                                                                        : 'Xem đánh giá'}
+                                                                                </Button>
+                                                                            </Badge>
+                                                                        )}
+                                                                        {item.evaluationCriterion &&
+                                                                            canEdit &&
                                                                             item.evaluationCriterion
-                                                                                ?.id
-                                                                                ? 'Đóng đánh giá'
-                                                                                : 'Xem đánh giá'}
-                                                                        </Button>
-                                                                    </Badge>
-                                                                )}
+                                                                                .status !==
+                                                                                $Enums
+                                                                                    .EvaluationStatus
+                                                                                    .SUBMITTED &&
+                                                                            item.evaluationCriterion
+                                                                                .status !==
+                                                                                $Enums
+                                                                                    .EvaluationStatus
+                                                                                    .APPROVED &&
+                                                                            item.evaluationCriterion
+                                                                                .status !==
+                                                                                $Enums
+                                                                                    .EvaluationStatus
+                                                                                    .COMPLETED && (
+                                                                                <Button
+                                                                                    type="primary"
+                                                                                    className="bg-blue-500"
+                                                                                    size="small"
+                                                                                    onClick={() =>
+                                                                                        handleCriterionSubmit(
+                                                                                            item
+                                                                                                .evaluationCriterion
+                                                                                                ?.id ??
+                                                                                                ''
+                                                                                        )
+                                                                                    }
+                                                                                >
+                                                                                    Nộp phiếu
+                                                                                </Button>
+                                                                            )}
+                                                                    </div>
+                                                                </div>
+                                                                <div className="flex gap-3 items-center mt-1 flex-wrap">
+                                                                    <span className="text-xs text-gray-500">
+                                                                        Người viết phiếu:{' '}
+                                                                        {item.evaluationCriterion
+                                                                            ?.lecturer?.userProfile
+                                                                            ?.fullname ||
+                                                                            'Chưa phân công'}
+                                                                    </span>
+                                                                    {criterionDeadline &&
+                                                                        criterionDeadlineStatus && (
+                                                                            <Tag
+                                                                                color={
+                                                                                    criterionDeadlineStatus.color
+                                                                                }
+                                                                            >
+                                                                                Hạn:{' '}
+                                                                                {dayjs(
+                                                                                    criterionDeadline
+                                                                                ).format(
+                                                                                    'DD/MM/YYYY'
+                                                                                )}
+                                                                                {criterionDeadlineStatus.text &&
+                                                                                    ` (${criterionDeadlineStatus.text})`}
+                                                                            </Tag>
+                                                                        )}
+                                                                    <span className="text-xs text-gray-500">
+                                                                        Trạng thái:
+                                                                    </span>
+                                                                    <Tag
+                                                                        color={
+                                                                            criterionStatusConfig.color
+                                                                        }
+                                                                        className="text-xs"
+                                                                    >
+                                                                        {criterionStatusConfig.text}
+                                                                    </Tag>
+                                                                </div>
                                                             </div>
                                                         ),
                                                         key: item.id,
@@ -387,7 +421,9 @@ const CriteriaEvaluationSubPage = ({
                                                                 >
                                                                     <RichTextEditor
                                                                         id={item.id}
-                                                                        editable={!isReadOnly}
+                                                                        editable={
+                                                                            !isCriterionReadOnly
+                                                                        }
                                                                         stickyToolbar={false}
                                                                     />
                                                                 </Form.Item>
@@ -402,7 +438,9 @@ const CriteriaEvaluationSubPage = ({
                                                                 >
                                                                     <RichTextEditor
                                                                         id={item.id}
-                                                                        editable={!isReadOnly}
+                                                                        editable={
+                                                                            !isCriterionReadOnly
+                                                                        }
                                                                         stickyToolbar={false}
                                                                     />
                                                                 </Form.Item>
@@ -417,7 +455,9 @@ const CriteriaEvaluationSubPage = ({
                                                                 >
                                                                     <RichTextEditor
                                                                         id={item.id}
-                                                                        editable={!isReadOnly}
+                                                                        editable={
+                                                                            !isCriterionReadOnly
+                                                                        }
                                                                         stickyToolbar={false}
                                                                     />
                                                                 </Form.Item>
@@ -432,7 +472,9 @@ const CriteriaEvaluationSubPage = ({
                                                                 >
                                                                     <RichTextEditor
                                                                         id={item.id}
-                                                                        editable={!isReadOnly}
+                                                                        editable={
+                                                                            !isCriterionReadOnly
+                                                                        }
                                                                         stickyToolbar={false}
                                                                     />
                                                                 </Form.Item>
@@ -446,7 +488,9 @@ const CriteriaEvaluationSubPage = ({
                                                                 >
                                                                     <RichTextEditor
                                                                         id={item.id}
-                                                                        editable={!isReadOnly}
+                                                                        editable={
+                                                                            !isCriterionReadOnly
+                                                                        }
                                                                         stickyToolbar={false}
                                                                     />
                                                                 </Form.Item>

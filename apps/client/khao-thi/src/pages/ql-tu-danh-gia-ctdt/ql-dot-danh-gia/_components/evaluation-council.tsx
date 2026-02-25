@@ -15,7 +15,7 @@ import {
 } from '@workspace/db/hooks'
 import { Button, Empty, Flex, message, Typography } from 'antd'
 import { BookPlus } from 'lucide-react'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState, type ReactNode } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function EvaluationCouncilTab() {
@@ -163,7 +163,7 @@ export default function EvaluationCouncilTab() {
     }, [selectedGroup, categorizedMembers])
 
     const currentGroupLabel = useMemo(() => {
-        const findLabel = (nodes: typeof treeData): string => {
+        const findLabel = (nodes: typeof treeData): ReactNode => {
             for (const node of nodes) {
                 if (node.key === selectedGroup) return node.label
                 if (node.children) {

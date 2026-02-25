@@ -37,7 +37,12 @@ export default function PutPhanCongHangLoatModal() {
             evaluationCouncil: {
                 periodId: selectedEvaluationPeriodId,
             },
-            role: $Enums.EvaluationMemberRole.SPECIALIZED,
+            role: {
+                in: [
+                    $Enums.EvaluationMemberRole.SPECIALIZED,
+                    $Enums.EvaluationMemberRole.HEAD_SPECIALIZED,
+                ],
+            },
         },
         include: {
             lecturer: {

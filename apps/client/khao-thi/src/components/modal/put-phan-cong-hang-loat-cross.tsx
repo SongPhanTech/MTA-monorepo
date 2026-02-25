@@ -122,6 +122,10 @@ export default function PutPhanCongHangLoatCrossModal() {
                     input.refetch()
                 }
 
+                if (input.clearSelected) {
+                    input.clearSelected()
+                }
+
                 onClose()
             }
         } catch (error) {
