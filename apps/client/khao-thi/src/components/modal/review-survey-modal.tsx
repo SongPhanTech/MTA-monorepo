@@ -1,3 +1,4 @@
+import { toRoman } from '@lib/utils'
 import { useFindFirstSurveySession } from '@workspace/db/hooks'
 import type { GetSurveyResult } from '@workspace/libs/api/schemas'
 import { Modal as AntdModal, Button, Col, Form, Input, Radio, Row, Skeleton, Table } from 'antd'
@@ -54,6 +55,12 @@ const ReviewSurveyModal = () => {
                 survey: {
                     include: {
                         surveyChoice: true,
+                        surveyQuestion: {
+                            include: {
+                                surveyQuestionGroup: true,
+                                specificChoice: true,
+                            },
+                        },
                     },
                 },
             },
@@ -67,6 +74,58 @@ const ReviewSurveyModal = () => {
         return data?.survey?.surveyChoice
             ?.filter((i: any) => !!i?.requireExplanation)
             .map((i) => i.id)
+    }, [data])
+
+    const groupedData = useMemo(() => {
+        if (!data?.survey?.surveyQuestion || !data?.responses) return []
+
+        const responseMap = new Map(data.responses.map((r: any) => [r.surveyQuestionId, r]))
+
+        const groupedMap: Record<string, any> = {}
+        data.survey.surveyQuestion.forEach((question: any) => {
+            const group = question.surveyQuestionGroup
+            const groupId = group.id
+
+            if (!groupedMap[groupId]) {
+                groupedMap[groupId] = {
+                    id: groupId,
+                    name: group.name,
+                    questions: [],
+                }
+            }
+
+            const response = responseMap.get(question.id)
+
+            if (response) {
+                groupedMap[groupId].questions.push(response)
+            }
+        })
+
+        let runningIndex = 1
+
+        return Object.values(groupedMap).flatMap((group: any, groupIndex) => {
+            const groupRow = {
+                id: `group-${group.id}`,
+                name: group.name,
+                isParent: true,
+                index: toRoman(groupIndex + 1),
+            }
+
+            const questionRows = group.questions.map((q: any) => {
+                const row = {
+                    ...q,
+                    isParent: false,
+                    index: runningIndex,
+                    isFullWidth:
+                        q?.surveyQuestion?.type === 'ESSAY' ||
+                        q?.surveyQuestion?.type === 'SINGLE_CHOICE',
+                }
+                runningIndex++
+                return row
+            })
+
+            return [groupRow, ...questionRows]
+        })
     }, [data])
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
@@ -118,6 +177,10 @@ const ReviewSurveyModal = () => {
                                     <Table
                                         rowKey="id"
                                         dataSource={[{ id: 'abc' }]}
+                                        className="custom-red-table"
+                                        rowClassName={(record: any) =>
+                                            record.isParent ? 'group-row' : ''
+                                        }
                                         columns={data?.survey.surveyChoice.map((i) => {
                                             return {
                                                 title: `${i?.description} ${i?.requireExplanation === true ? '*' : ''}`,
@@ -143,20 +206,108 @@ const ReviewSurveyModal = () => {
                                         className="px-6 max-w-[1100px] w-full mx-auto"
                                     >
                                         <Table
-                                            rowKey="id"
-                                            dataSource={data?.responses || []}
+                                            rowKey={(record) =>
+                                                record.isParent ? `group-${record.id}` : record.id
+                                            }
+                                            dataSource={groupedData}
+                                            className="custom-red-table"
+                                            rowClassName={(record: any) =>
+                                                record.isParent ? 'group-row' : ''
+                                            }
                                             pagination={false}
                                             columns={[
                                                 {
                                                     title: 'STT',
                                                     width: 50,
                                                     align: 'center',
-                                                    render: (_, __, index) => index + 1,
+                                                    render: (_, record: any) => (
+                                                        <div
+                                                            className={
+                                                                record.isParent
+                                                                    ? 'font-semibold'
+                                                                    : ''
+                                                            }
+                                                        >
+                                                            {record.index}
+                                                        </div>
+                                                    ),
                                                 },
                                                 {
                                                     title: 'Nội dung phản hồi',
-                                                    dataIndex: 'content',
-                                                    render: (_, record) => {
+                                                    render: (_, record: any) => {
+                                                        if (record.isParent) {
+                                                            return (
+                                                                <div className="font-semibold uppercase">
+                                                                    {record.name}
+                                                                </div>
+                                                            )
+                                                        }
+
+                                                        // ESSAY
+                                                        if (
+                                                            record?.surveyQuestion?.type === 'ESSAY'
+                                                        ) {
+                                                            return (
+                                                                <div>
+                                                                    <div
+                                                                        dangerouslySetInnerHTML={{
+                                                                            __html: record
+                                                                                ?.surveyQuestion
+                                                                                ?.name,
+                                                                        }}
+                                                                    />
+
+                                                                    <Input.TextArea
+                                                                        value={record.answerText}
+                                                                        readOnly
+                                                                        className="mt-2"
+                                                                    />
+                                                                </div>
+                                                            )
+                                                        }
+
+                                                        // specificChoice (câu 12–13)
+                                                        if (
+                                                            record?.surveyQuestion?.specificChoice
+                                                                ?.length > 0
+                                                        ) {
+                                                            return (
+                                                                <div>
+                                                                    <div
+                                                                        dangerouslySetInnerHTML={{
+                                                                            __html: record
+                                                                                ?.surveyQuestion
+                                                                                ?.name,
+                                                                        }}
+                                                                    />
+
+                                                                    <Radio.Group
+                                                                        value={
+                                                                            record.surveyChoiceId
+                                                                        }
+                                                                        disabled
+                                                                        className="flex gap-x-6 mt-3"
+                                                                    >
+                                                                        {record.surveyQuestion.specificChoice.map(
+                                                                            (choice: any) => (
+                                                                                <Radio
+                                                                                    key={choice.id}
+                                                                                    value={
+                                                                                        choice.id
+                                                                                    }
+                                                                                >
+                                                                                    {
+                                                                                        choice.description
+                                                                                    }
+                                                                                </Radio>
+                                                                            )
+                                                                        )}
+                                                                    </Radio.Group>
+                                                                </div>
+                                                            )
+                                                        }
+
+                                                        // SINGLE_CHOICE thường (chỉ hiển thị nội dung)
                                                         return (
                                                             <div
                                                                 dangerouslySetInnerHTML={{
@@ -166,31 +317,44 @@ const ReviewSurveyModal = () => {
                                                             />
                                                         )
                                                     },
+
+                                                    onCell: (record: any) => ({
+                                                        colSpan:
+                                                            record.isParent ||
+                                                            record?.surveyQuestion?.specificChoice
+                                                                ?.length > 0 ||
+                                                            record?.surveyQuestion?.type === 'ESSAY'
+                                                                ? 2
+                                                                : 1,
+                                                    }),
                                                 },
+
                                                 {
                                                     title: 'Mức phản hồi',
                                                     width: 200,
                                                     align: 'center',
-                                                    render: (_, record, qIndex) => {
-                                                        return record?.surveyQuestion?.type ===
-                                                            'SINGLE_CHOICE' ? (
-                                                            <Form.Item
-                                                                name={[
-                                                                    'questionsList',
-                                                                    qIndex,
-                                                                    'surveyChoiceId',
-                                                                ]}
-                                                                rules={[
-                                                                    {
-                                                                        required: true,
-                                                                        message:
-                                                                            'Vui lòng chọn mức phản hồi',
-                                                                    },
-                                                                ]}
-                                                                style={{ marginBottom: 0 }}
-                                                                className="w-full"
-                                                            >
-                                                                <Radio.Group className="w-full gap-x-2 flex">
+
+                                                    onCell: (record: any) => ({
+                                                        colSpan:
+                                                            record.isParent ||
+                                                            record?.surveyQuestion?.specificChoice
+                                                                ?.length > 0 ||
+                                                            record?.surveyQuestion?.type === 'ESSAY'
+                                                                ? 0
+                                                                : 1,
+                                                    }),
+
+                                                    render: (_, record, index) => {
+                                                        if (record.isParent) return null
+                                                        if (
+                                                            record?.surveyQuestion?.type ===
+                                                            'SINGLE_CHOICE'
+                                                        ) {
+                                                            return (
+                                                                <Radio.Group
+                                                                    value={record.surveyChoiceId}
+                                                                    className="flex gap-x-6 mt-2"
+                                                                >
                                                                     {data?.survey?.surveyChoice.map(
                                                                         (i) => (
                                                                             <Radio.Button
@@ -202,24 +366,10 @@ const ReviewSurveyModal = () => {
                                                                         )
                                                                     )}
                                                                 </Radio.Group>
-                                                            </Form.Item>
-                                                        ) : (
-                                                            <Form.Item
-                                                                name={[
-                                                                    'questionsList',
-                                                                    qIndex,
-                                                                    'answerText',
-                                                                ]}
-                                                                rules={[
-                                                                    {
-                                                                        required: true,
-                                                                        message: 'Nhập câu trả lời',
-                                                                    },
-                                                                ]}
-                                                            >
-                                                                <Input.TextArea placeholder="Nhập câu trả lời" />
-                                                            </Form.Item>
-                                                        )
+                                                            )
+                                                        }
+
+                                                        return null
                                                     },
                                                 },
                                             ]}
@@ -267,6 +417,55 @@ const ReviewSurveyModal = () => {
                     <Button onClick={onClose}>Quay lại</Button>
                 </div>
             </Col>
+            <style>
+                {`
+    .custom-red-table .ant-table-thead > tr > th {
+        background: #ffe5e5 !important;
+        border: 0.5px solid red !important;
+    }
+        .custom-red-table .group-row > td {
+        background: #ffe5e5 !important;
+        font-weight: 600;
+    }
+
+    .custom-red-table .ant-table,
+    .custom-red-table .ant-table-container,
+    .custom-red-table .ant-table-content table,
+    .custom-red-table .ant-table-cell {
+        border: 0.5px solid red !important;
+    }
+
+    .custom-red-table .ant-radio-button-wrapper {
+        border: 0.5px solid red !important;
+        box-shadow: none !important;
+    }
+
+    
+    .custom-red-table .ant-radio-button-wrapper-checked {
+        background: #ff0000 !important;
+        border-color: #ff0000 !important;
+        color: #ffffff !important;
+    }
+
+    .custom-red-table .ant-radio-button-wrapper-checked::before {
+        background-color: #ff0000 !important;
+    }
+
+    .custom-red-table textarea,
+    .custom-red-table .ant-input {
+        border: 0.5px solid red !important;
+        box-shadow: none !important;
+    }
+
+    .custom-red-table textarea:focus,
+    .custom-red-table .ant-input:focus,
+    .custom-red-table .ant-input-focused {
+        border: 0.5px solid red !important;
+        box-shadow: none !important;
+        outline: none !important;
+    }
+    `}
+            </style>
         </AntdModal>
     )
 }
