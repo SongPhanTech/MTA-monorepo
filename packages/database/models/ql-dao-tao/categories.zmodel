@@ -266,6 +266,9 @@ model Certificate extends Base {
   /// môn học có thể phiên điểm
   subjects            CertificateOnSubject[]
 
+  // phân biệt chứng chỉ dùng điểm hay đạt/không đạt
+  isUsingScore              Boolean               @default(true)
+
   @@schema("ql-dao-tao")
 }
 

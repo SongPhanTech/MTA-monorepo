@@ -8534,7 +8534,8 @@ export namespace Prisma {
         createdBy: 'createdBy',
         name: 'name',
         englishName: 'englishName',
-        outputStandardId: 'outputStandardId'
+        outputStandardId: 'outputStandardId',
+        isUsingScore: 'isUsingScore'
     };
     export const CertificateOnSubjectScalarFieldEnum: {
         id: 'id',
@@ -61914,6 +61915,7 @@ export namespace Prisma {
         readonly name: FieldRef<"Certificate", 'String'>;
         readonly englishName: FieldRef<"Certificate", 'String'>;
         readonly outputStandardId: FieldRef<"Certificate", 'String'>;
+        readonly isUsingScore: FieldRef<"Certificate", 'Boolean'>;
     }
 
     export interface CertificateOnSubjectDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -244660,6 +244662,7 @@ export namespace Prisma {
         name: string | null
         englishName: string | null
         outputStandardId: string | null
+        isUsingScore: boolean | null
     };
     export type CertificateMaxAggregateOutputType = {
         id: string | null
@@ -244673,6 +244676,7 @@ export namespace Prisma {
         name: string | null
         englishName: string | null
         outputStandardId: string | null
+        isUsingScore: boolean | null
     };
     export type CertificateCountAggregateOutputType = {
         id: number
@@ -244686,6 +244690,7 @@ export namespace Prisma {
         name: number
         englishName: number
         outputStandardId: number
+        isUsingScore: number
         _all: number
     };
     export type CertificateMinAggregateInputType = {
@@ -244700,6 +244705,7 @@ export namespace Prisma {
         name?: true
         englishName?: true
         outputStandardId?: true
+        isUsingScore?: true
     };
     export type CertificateMaxAggregateInputType = {
         id?: true
@@ -244713,6 +244719,7 @@ export namespace Prisma {
         name?: true
         englishName?: true
         outputStandardId?: true
+        isUsingScore?: true
     };
     export type CertificateCountAggregateInputType = {
         id?: true
@@ -244726,6 +244733,7 @@ export namespace Prisma {
         name?: true
         englishName?: true
         outputStandardId?: true
+        isUsingScore?: true
         _all?: true
     };
     export type CertificateAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -244806,6 +244814,7 @@ export namespace Prisma {
         name: string
         englishName: string | null
         outputStandardId: string | null
+        isUsingScore: boolean
         _count: CertificateCountAggregateOutputType | null
         _min: CertificateMinAggregateOutputType | null
         _max: CertificateMaxAggregateOutputType | null
@@ -244834,6 +244843,7 @@ export namespace Prisma {
         name?: boolean
         englishName?: boolean
         outputStandardId?: boolean
+        isUsingScore?: boolean
         outputStandard?: boolean | Certificate$outputStandardArgs<ExtArgs>
         archivedCertificate?: boolean | Certificate$archivedCertificateArgs<ExtArgs>
         subjects?: boolean | Certificate$subjectsArgs<ExtArgs>
@@ -244851,6 +244861,7 @@ export namespace Prisma {
         name?: boolean
         englishName?: boolean
         outputStandardId?: boolean
+        isUsingScore?: boolean
         outputStandard?: boolean | Certificate$outputStandardArgs<ExtArgs>
     }, ExtArgs["result"]["certificate"]>;
     export type CertificateSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -244865,6 +244876,7 @@ export namespace Prisma {
         name?: boolean
         englishName?: boolean
         outputStandardId?: boolean
+        isUsingScore?: boolean
         outputStandard?: boolean | Certificate$outputStandardArgs<ExtArgs>
     }, ExtArgs["result"]["certificate"]>;
     export type CertificateSelectScalar = {
@@ -244879,8 +244891,9 @@ export namespace Prisma {
         name?: boolean
         englishName?: boolean
         outputStandardId?: boolean
+        isUsingScore?: boolean
     };
-    export type CertificateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "englishName" | "outputStandardId", ExtArgs["result"]["certificate"]>;
+    export type CertificateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "englishName" | "outputStandardId" | "isUsingScore", ExtArgs["result"]["certificate"]>;
     export type CertificateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         outputStandard?: boolean | Certificate$outputStandardArgs<ExtArgs>
         archivedCertificate?: boolean | Certificate$archivedCertificateArgs<ExtArgs>
@@ -244921,6 +244934,7 @@ export namespace Prisma {
             name: string
             englishName: string | null
             outputStandardId: string | null
+            isUsingScore: boolean
         }, ExtArgs["result"]["certificate"]>
         composites: {}
     };
@@ -369491,6 +369505,7 @@ export namespace Prisma {
         name?: StringFilter<"Certificate"> | string
         englishName?: StringNullableFilter<"Certificate"> | string | null
         outputStandardId?: StringNullableFilter<"Certificate"> | string | null
+        isUsingScore?: BoolFilter<"Certificate"> | boolean
         outputStandard?: XOR<OutputStandardNullableScalarRelationFilter, OutputStandardWhereInput> | null
         archivedCertificate?: ArchivedCertificateListRelationFilter
         subjects?: CertificateOnSubjectListRelationFilter
@@ -369507,6 +369522,7 @@ export namespace Prisma {
         name?: SortOrder
         englishName?: SortOrderInput | SortOrder
         outputStandardId?: SortOrderInput | SortOrder
+        isUsingScore?: SortOrder
         outputStandard?: OutputStandardOrderByWithRelationInput
         archivedCertificate?: ArchivedCertificateOrderByRelationAggregateInput
         subjects?: CertificateOnSubjectOrderByRelationAggregateInput
@@ -369527,6 +369543,7 @@ export namespace Prisma {
         name?: StringFilter<"Certificate"> | string
         englishName?: StringNullableFilter<"Certificate"> | string | null
         outputStandardId?: StringNullableFilter<"Certificate"> | string | null
+        isUsingScore?: BoolFilter<"Certificate"> | boolean
         outputStandard?: XOR<OutputStandardNullableScalarRelationFilter, OutputStandardWhereInput> | null
         archivedCertificate?: ArchivedCertificateListRelationFilter
         subjects?: CertificateOnSubjectListRelationFilter
@@ -369543,6 +369560,7 @@ export namespace Prisma {
         name?: SortOrder
         englishName?: SortOrderInput | SortOrder
         outputStandardId?: SortOrderInput | SortOrder
+        isUsingScore?: SortOrder
         _count?: CertificateCountOrderByAggregateInput
         _max?: CertificateMaxOrderByAggregateInput
         _min?: CertificateMinOrderByAggregateInput
@@ -369562,6 +369580,7 @@ export namespace Prisma {
         name?: StringWithAggregatesFilter<"Certificate"> | string
         englishName?: StringNullableWithAggregatesFilter<"Certificate"> | string | null
         outputStandardId?: StringNullableWithAggregatesFilter<"Certificate"> | string | null
+        isUsingScore?: BoolWithAggregatesFilter<"Certificate"> | boolean
     };
     export type CertificateOnSubjectWhereInput = {
         AND?: CertificateOnSubjectWhereInput | CertificateOnSubjectWhereInput[]
@@ -394424,7 +394443,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
-        finalScore: number
+        finalScore?: number
         score?: number | null
         issuedBy?: string | null
         issuedDate?: Date | string | null
@@ -394446,7 +394465,7 @@ export namespace Prisma {
         createdBy?: string | null
         certificateId: string
         studentId: string
-        finalScore: number
+        finalScore?: number
         score?: number | null
         issuedBy?: string | null
         issuedDate?: Date | string | null
@@ -394506,7 +394525,7 @@ export namespace Prisma {
         createdBy?: string | null
         certificateId: string
         studentId: string
-        finalScore: number
+        finalScore?: number
         score?: number | null
         issuedBy?: string | null
         issuedDate?: Date | string | null
@@ -400050,6 +400069,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         englishName?: string | null
+        isUsingScore?: boolean
         outputStandard?: OutputStandardCreateNestedOneWithoutCertificatesInput
         archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutCertificateInput
         subjects?: CertificateOnSubjectCreateNestedManyWithoutCertificateInput
@@ -400066,6 +400086,7 @@ export namespace Prisma {
         name: string
         englishName?: string | null
         outputStandardId?: string | null
+        isUsingScore?: boolean
         archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutCertificateInput
         subjects?: CertificateOnSubjectUncheckedCreateNestedManyWithoutCertificateInput
     };
@@ -400080,6 +400101,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        isUsingScore?: BoolFieldUpdateOperationsInput | boolean
         outputStandard?: OutputStandardUpdateOneWithoutCertificatesNestedInput
         archivedCertificate?: ArchivedCertificateUpdateManyWithoutCertificateNestedInput
         subjects?: CertificateOnSubjectUpdateManyWithoutCertificateNestedInput
@@ -400096,6 +400118,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
         outputStandardId?: NullableStringFieldUpdateOperationsInput | string | null
+        isUsingScore?: BoolFieldUpdateOperationsInput | boolean
         archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutCertificateNestedInput
         subjects?: CertificateOnSubjectUncheckedUpdateManyWithoutCertificateNestedInput
     };
@@ -400111,6 +400134,7 @@ export namespace Prisma {
         name: string
         englishName?: string | null
         outputStandardId?: string | null
+        isUsingScore?: boolean
     };
     export type CertificateUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -400123,6 +400147,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        isUsingScore?: BoolFieldUpdateOperationsInput | boolean
     };
     export type CertificateUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -400136,6 +400161,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
         outputStandardId?: NullableStringFieldUpdateOperationsInput | string | null
+        isUsingScore?: BoolFieldUpdateOperationsInput | boolean
     };
     export type CertificateOnSubjectCreateInput = {
         id?: string
@@ -426180,6 +426206,7 @@ export namespace Prisma {
         name?: SortOrder
         englishName?: SortOrder
         outputStandardId?: SortOrder
+        isUsingScore?: SortOrder
     };
     export type CertificateMaxOrderByAggregateInput = {
         id?: SortOrder
@@ -426193,6 +426220,7 @@ export namespace Prisma {
         name?: SortOrder
         englishName?: SortOrder
         outputStandardId?: SortOrder
+        isUsingScore?: SortOrder
     };
     export type CertificateMinOrderByAggregateInput = {
         id?: SortOrder
@@ -426206,6 +426234,7 @@ export namespace Prisma {
         name?: SortOrder
         englishName?: SortOrder
         outputStandardId?: SortOrder
+        isUsingScore?: SortOrder
     };
     export type CertificateOnSubjectOrderByRelevanceInput = {
         fields: CertificateOnSubjectOrderByRelevanceFieldEnum | CertificateOnSubjectOrderByRelevanceFieldEnum[]
@@ -513892,7 +513921,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
-        finalScore: number
+        finalScore?: number
         score?: number | null
         issuedBy?: string | null
         issuedDate?: Date | string | null
@@ -513913,7 +513942,7 @@ export namespace Prisma {
         createdBy?: string | null
         certificateId: string
         studentId: string
-        finalScore: number
+        finalScore?: number
         score?: number | null
         issuedBy?: string | null
         issuedDate?: Date | string | null
@@ -514068,6 +514097,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         englishName?: string | null
+        isUsingScore?: boolean
         outputStandard?: OutputStandardCreateNestedOneWithoutCertificatesInput
         subjects?: CertificateOnSubjectCreateNestedManyWithoutCertificateInput
     };
@@ -514083,6 +514113,7 @@ export namespace Prisma {
         name: string
         englishName?: string | null
         outputStandardId?: string | null
+        isUsingScore?: boolean
         subjects?: CertificateOnSubjectUncheckedCreateNestedManyWithoutCertificateInput
     };
     export type CertificateCreateOrConnectWithoutArchivedCertificateInput = {
@@ -514367,6 +514398,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        isUsingScore?: BoolFieldUpdateOperationsInput | boolean
         outputStandard?: OutputStandardUpdateOneWithoutCertificatesNestedInput
         subjects?: CertificateOnSubjectUpdateManyWithoutCertificateNestedInput
     };
@@ -514382,6 +514414,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
         outputStandardId?: NullableStringFieldUpdateOperationsInput | string | null
+        isUsingScore?: BoolFieldUpdateOperationsInput | boolean
         subjects?: CertificateOnSubjectUncheckedUpdateManyWithoutCertificateNestedInput
     };
     export type StudentUpsertWithoutArchivedCertificateInput = {
@@ -539326,7 +539359,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
-        finalScore: number
+        finalScore?: number
         score?: number | null
         issuedBy?: string | null
         issuedDate?: Date | string | null
@@ -539346,7 +539379,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         studentId: string
-        finalScore: number
+        finalScore?: number
         score?: number | null
         issuedBy?: string | null
         issuedDate?: Date | string | null
@@ -539488,6 +539521,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         englishName?: string | null
+        isUsingScore?: boolean
         outputStandard?: OutputStandardCreateNestedOneWithoutCertificatesInput
         archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutCertificateInput
     };
@@ -539503,6 +539537,7 @@ export namespace Prisma {
         name: string
         englishName?: string | null
         outputStandardId?: string | null
+        isUsingScore?: boolean
         archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutCertificateInput
     };
     export type CertificateCreateOrConnectWithoutSubjectsInput = {
@@ -539565,6 +539600,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        isUsingScore?: BoolFieldUpdateOperationsInput | boolean
         outputStandard?: OutputStandardUpdateOneWithoutCertificatesNestedInput
         archivedCertificate?: ArchivedCertificateUpdateManyWithoutCertificateNestedInput
     };
@@ -539580,6 +539616,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
         outputStandardId?: NullableStringFieldUpdateOperationsInput | string | null
+        isUsingScore?: BoolFieldUpdateOperationsInput | boolean
         archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutCertificateNestedInput
     };
     export type SubjectUpsertWithoutCertificateOnSubjectInput = {
@@ -540274,6 +540311,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         englishName?: string | null
+        isUsingScore?: boolean
         archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutCertificateInput
         subjects?: CertificateOnSubjectCreateNestedManyWithoutCertificateInput
     };
@@ -540288,6 +540326,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         englishName?: string | null
+        isUsingScore?: boolean
         archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutCertificateInput
         subjects?: CertificateOnSubjectUncheckedCreateNestedManyWithoutCertificateInput
     };
@@ -540435,6 +540474,7 @@ export namespace Prisma {
         name?: StringFilter<"Certificate"> | string
         englishName?: StringNullableFilter<"Certificate"> | string | null
         outputStandardId?: StringNullableFilter<"Certificate"> | string | null
+        isUsingScore?: BoolFilter<"Certificate"> | boolean
     };
     export type OutputStandardOnCurriculumUpsertWithWhereUniqueWithoutOutputStandardInput = {
         where: OutputStandardOnCurriculumWhereUniqueInput
@@ -541851,7 +541891,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
-        finalScore: number
+        finalScore?: number
         score?: number | null
         issuedBy?: string | null
         issuedDate?: Date | string | null
@@ -541871,7 +541911,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         certificateId: string
-        finalScore: number
+        finalScore?: number
         score?: number | null
         issuedBy?: string | null
         issuedDate?: Date | string | null
@@ -545537,7 +545577,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
-        finalScore: number
+        finalScore?: number
         score?: number | null
         issuedBy?: string | null
         issuedDate?: Date | string | null
@@ -545558,7 +545598,7 @@ export namespace Prisma {
         createdBy?: string | null
         certificateId: string
         studentId: string
-        finalScore: number
+        finalScore?: number
         score?: number | null
         issuedBy?: string | null
         issuedDate?: Date | string | null
@@ -632499,7 +632539,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         studentId: string
-        finalScore: number
+        finalScore?: number
         score?: number | null
         issuedBy?: string | null
         issuedDate?: Date | string | null
@@ -633140,6 +633180,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         englishName?: string | null
+        isUsingScore?: boolean
     };
     export type OutputStandardOnCurriculumCreateManyOutputStandardInput = {
         id?: string
@@ -633165,6 +633206,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        isUsingScore?: BoolFieldUpdateOperationsInput | boolean
         archivedCertificate?: ArchivedCertificateUpdateManyWithoutCertificateNestedInput
         subjects?: CertificateOnSubjectUpdateManyWithoutCertificateNestedInput
     };
@@ -633179,6 +633221,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        isUsingScore?: BoolFieldUpdateOperationsInput | boolean
         archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutCertificateNestedInput
         subjects?: CertificateOnSubjectUncheckedUpdateManyWithoutCertificateNestedInput
     };
@@ -633193,6 +633236,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        isUsingScore?: BoolFieldUpdateOperationsInput | boolean
     };
     export type OutputStandardOnCurriculumUpdateWithoutOutputStandardInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -633480,7 +633524,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         certificateId: string
-        finalScore: number
+        finalScore?: number
         score?: number | null
         issuedBy?: string | null
         issuedDate?: Date | string | null

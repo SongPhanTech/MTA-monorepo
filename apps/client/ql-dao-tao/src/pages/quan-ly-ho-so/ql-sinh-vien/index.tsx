@@ -26,7 +26,7 @@ import {
     useFindManyTrainingMajor,
     useUpdateStudent,
 } from '@workspace/db/hooks'
-import { useExportStudentProfiles } from '@workspace/libs/api/training'
+import { useExportStudentProfiles, downloadStudentImportTemplate } from '@workspace/libs/api/training'
 // import { useDownloadStudentImportTemplate } from '@workspace/libs/api/student-template'
 import { getMinioUrl } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
@@ -69,18 +69,18 @@ export default function UserProfilePageDs() {
     const [importModalVisible, setImportModalVisible] = useState(false)
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { mutateAsync: exportStudentProfiles } = useExportStudentProfiles()
-    // const { mutateAsync: downloadTemplate } = useDownloadStudentImportTemplate()
+    // const { mutateAsync: downloadTemplate } = downloadStudentImportTemplate()
 
     const handleDownloadTemplate = async () => {
         try {
             showSpinner()
-            // const res = await downloadTemplate()
+            const res = await downloadStudentImportTemplate()
 
-            // if (res.status === 200) {
-            //     saveAs(res.data, 'MauImportDSHV.xlsx')
-            // } else {
-            //     message.error(res.data.message)
-            // }
+            if (res.status === 200) {
+                saveAs(res.data, 'MauImportDSHV.xlsx')
+            } else {
+                message.error(res.data.message)
+            }
         } catch (error) {
             console.log(error)
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
@@ -455,7 +455,8 @@ export default function UserProfilePageDs() {
                                     <>
                                         <Button
                                             className="px-4 py-1"
-                                            href={getMinioUrl('mta/template/MauImportDSHV.xlsx')}
+                                            // href={getMinioUrl('mta/template/MauImportDSHV.xlsx')}
+                                            onClick={() => handleDownloadTemplate()}
                                             type="primary"
                                         >
                                             <DownloadOutlined />

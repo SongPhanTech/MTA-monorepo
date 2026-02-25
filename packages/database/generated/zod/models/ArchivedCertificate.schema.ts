@@ -16,7 +16,7 @@ const baseSchema = z.object({
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
     createdBy: z.string().uuid().nullish(),
-    finalScore: z.number(),
+    finalScore: z.number().default(0),
     score: z.number().nullish(),
     issuedBy: z.string().nullish(),
     issuedDate: z.coerce.date().nullish(),
@@ -99,7 +99,7 @@ export const ArchivedCertificatePrismaUpdateSchema = z.object({
  * `ArchivedCertificate` schema for create operations excluding foreign keys and relations.
  */
 export const ArchivedCertificateCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, status: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, finalScore: true, status: true
 });
 
 
