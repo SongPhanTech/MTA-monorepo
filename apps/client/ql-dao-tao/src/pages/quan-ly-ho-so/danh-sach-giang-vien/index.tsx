@@ -295,7 +295,7 @@ export default function UserProfilePageLecture() {
                 </Col>
                 <Col span={24}>
                     <Table
-                        scroll={{ y: '68vh', x: 'max-content' }}
+                        className="h-[calc(100vh-250px)]"
                         rowSelection={{
                             selectedRowKeys,
                             preserveSelectedRowKeys: true,
