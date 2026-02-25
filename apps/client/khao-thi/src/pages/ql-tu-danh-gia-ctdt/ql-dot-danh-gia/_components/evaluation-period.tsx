@@ -248,6 +248,7 @@ export default function EvaluationPeriod() {
                             {
                                 title: 'Hội đồng đánh giá',
                                 width: 250,
+                                align: 'center',
                                 render: (_, record) => {
                                     return <div className="text-left">{record.council?.name}</div>
                                 },
@@ -258,7 +259,7 @@ export default function EvaluationPeriod() {
                                         <span>SLTV</span>
                                     </Tooltip>
                                 ),
-                                width: 70,
+                                width: 60,
                                 align: 'center',
                                 render: (_, record) => {
                                     return <div>{record.council?.members?.length || 0}</div>
@@ -266,13 +267,13 @@ export default function EvaluationPeriod() {
                             },
                             {
                                 title: 'Năm học',
-                                width: 180,
+                                width: 70,
                                 render: (_, record) => record?.schoolYear?.name,
                             },
                             {
                                 title: 'Ngày bắt đầu',
                                 dataIndex: 'startDate',
-                                width: 120,
+                                width: 70,
                                 type: 'date',
                                 render: (_, record) =>
                                     record?.startDate
@@ -282,7 +283,7 @@ export default function EvaluationPeriod() {
                             {
                                 title: 'Ngày kết thúc',
                                 dataIndex: 'endDate',
-                                width: 120,
+                                width: 70,
                                 type: 'date',
                                 render: (_, record) =>
                                     record?.endDate
@@ -292,7 +293,7 @@ export default function EvaluationPeriod() {
                             {
                                 title: 'Tài liệu hội đồng',
                                 align: 'center',
-                                width: 120,
+                                width: 70,
                                 render: (_, record) => record?._count?.documentFiles || 0,
                             },
                             {

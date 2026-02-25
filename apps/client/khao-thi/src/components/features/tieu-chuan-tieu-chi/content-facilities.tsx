@@ -1,4 +1,3 @@
-import { EyeOutlined } from '@ant-design/icons'
 import TableIndexCollapse from '@components/commons/table-collapse-index'
 import type { FilterProps } from '@components/commons/typeFilter'
 import { store } from '@components/features/tieu-chuan-tieu-chi/sidebar'
@@ -335,21 +334,6 @@ const ContentFacilities = () => {
                                         if (record?.id) {
                                             return (
                                                 <Row className="justify-end gap-2 px-3">
-                                                    {can(
-                                                        KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
-                                                        'XEM'
-                                                    ) && (
-                                                        <Tooltip
-                                                            title="Chi tiết tiêu chí"
-                                                            placement="top"
-                                                        >
-                                                            <EyeOutlined
-                                                                style={{ fontSize: '24px' }}
-                                                                className="text-sm cursor-pointer"
-                                                            />
-                                                        </Tooltip>
-                                                    )}
-
                                                     {can(
                                                         KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
                                                         'SUA'
