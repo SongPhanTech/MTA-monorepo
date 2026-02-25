@@ -2,6 +2,7 @@ import CommentList from '@components/commons/comment-list'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import EditIcon from '@components/icons/edit'
+import ExportCriteriaAnalysis from '@components/modal/export-criteria-analysis'
 import {
     DEADLINE_OPTIONS,
     EVALUATION_CRITERION_STATUS_OPTIONS,
@@ -218,9 +219,7 @@ const CriteriaAnalysisSubPage = ({
                             </Popconfirm>
                         )}
 
-                    <Button type="primary" size="small">
-                        Xuất file
-                    </Button>
+                    <ExportCriteriaAnalysis data={data} idx={idx} />
                 </div>
             </div>
             {!filteredCriteria || filteredCriteria.length === 0 ? (
