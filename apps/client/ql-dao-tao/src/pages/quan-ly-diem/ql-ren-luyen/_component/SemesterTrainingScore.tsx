@@ -2,7 +2,8 @@ import Table from '@components/commons/table'
 import {  Button,
 Col, Flex, Form, InputNumber, message, Row,Tag } from 'antd'
 import { FilterProps } from '@constants/type'
-import { useMemo, useState } from 'react'
+import { useEffect,
+useMemo, useState } from 'react'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useAbility } from '@workspace/permissions/hooks'
 import { useRouter } from 'next/router'
@@ -20,6 +21,7 @@ import { useStudentTrainingTypeOptions,
 useTrainingScoreStatusStatusOptions } from '@hooks/studentTrainingType';
 import { Save } from 'lucide-react';
 import useSpinner from '@hooks/spinner';
+import { sqlTransaction } from '@workspace/libs/api/model';
 // import { useDisclosure } from 'react-hook-disclosure-modal'
 export default function SemesterTrainingScore({selectedFixedClass}:{selectedFixedClass?:string}) {
 
@@ -148,50 +150,60 @@ export default function SemesterTrainingScore({selectedFixedClass}:{selectedFixe
                   const item:any = data.find(i=>i.id===key);
                 if (item?.semesterTrainingScore?.length>0) {
                     listUpdate.push({
-                        id: key,
+                        ...item,
+                        semesterTrainingScoreId: item.semesterTrainingScore[0].id,
                         score: value.score,
                     });
                 }else {
                     listCreate.push({
-                        id: key,
+                        ...item,
                         score: value.score,
                     })
                 }
             });
            
             let listTransaction: any = [];
-            // if (listCreate.length > 0) {
-            //     listTransaction.push({
-            //       model: 'Staff',
-            //             operation: 'createMany',
-            //             data:{
-            //                 data: listCreate.map((t) => {
-            //                     return {
-            //                         studentId: item.id,
-            //                         score: item.score,
-            //                         semesterId:semesterId
-            //                     }
-            //                 })
-            //             }
+            if (listCreate.length > 0) {
+                listTransaction.push({
+                  model: 'SemesterTrainingScore',
+                        operation: 'createMany',
+                        data:{
+                            data: listCreate.map((t:any) => {
+                                return {
+                                    studentId: t.id,
+                                    score: t.score,
+                                    semesterId:semesterId
+                                }
+                            })
+                        }
 
-            //     });
-            // }
-            // if (listUpdate.length > 0) {
-            //     listTransaction.push({
-            //         update: {
-            //             data: listUpdate,
-            //         },
-            //     });
-            // }
-            // if (listTransaction.length > 0) {
-            //     const res = await updateManySemesterTrainingScore({
-            //         data: listTransaction,
-            //     });
-            //     if (res?.status === 200) {
-            //         message.success('Lưu điểm rén luyện thành công');
-            //         refetch();
-            // }
-            // } 
+                });
+            }
+            if (listUpdate.length > 0) {
+                listUpdate.forEach((t:any) => {
+                      listTransaction.push({
+                  model: 'SemesterTrainingScore',
+                        operation: 'update',
+                        data:{
+                            where:{
+                                id:t.semesterTrainingScoreId
+                            },
+                            data: {
+                        score: t.score,
+                            }
+                        }
+
+                });
+                })
+              
+            }
+            if (listTransaction.length > 0) {
+                const res = await sqlTransaction(listTransaction)
+                if (res?.status === 200) {
+                    message.success('Lưu điểm rén luyện thành công');
+                    refetch();
+            }
+            } 
 
             
       
@@ -205,6 +217,33 @@ export default function SemesterTrainingScore({selectedFixedClass}:{selectedFixe
             hideSpinner()
         }
     }
+        // biome-ignore lint/correctness/useExhaustiveDependencies: <>
+        useEffect(() => {
+      if(data?.length>0){
+        const list=data.map(i=>{
+            return {
+                score:i.semesterTrainingScore[0]?.score,
+            }
+        })
+         form.setFieldsValue({
+                list: data.reduce(
+                    (acc, cur) => {
+                        if (!acc) {
+                            return {
+
+                            }
+                        }
+                        acc[cur.id] = {
+                            ...cur,
+                            score: cur.semesterTrainingScore[0]?.score
+                        }
+                        return acc
+                    },
+                    {} as any
+                ),
+            })
+      }
+    }, [data])
     return (
         <Row gutter={[0, 0]}>
                  <Col span={24}>
@@ -288,7 +327,7 @@ export default function SemesterTrainingScore({selectedFixedClass}:{selectedFixe
                                             >
                                                 <InputNumber
                                                     style={{ width: '100%' }}
-                                                    step={0.1}
+                                                    step={1}
                                                     controls={false}
                                                     parser={(value) => {
                                                         if (!value) return ''
