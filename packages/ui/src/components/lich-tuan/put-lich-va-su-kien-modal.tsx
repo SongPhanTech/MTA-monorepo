@@ -151,6 +151,9 @@ const PutLichVaSuKienModal = () => {
     const { data: classSchedules = [] } = useFindManyClassSchedule(
         {
             where: {
+                periodType: {
+                    not: 'CHECK',
+                },
                 subjectClass: {
                     trainingObjectTypeId,
                     semesterId,
@@ -649,12 +652,12 @@ const PutLichVaSuKienModal = () => {
                 onClose()
             }}
             title="Lịch và sự kiện"
-            closable={false}
+            closable={true}
             className={cn(payload?.periodType === 'CHECK' ? 'w-[85vw]' : 'w-[600px]')}
             initialValues={undefined}
-            formProps={{
-                disabled: payload?.periodType === 'CHECK',
-            }}
+            // formProps={{
+            //     disabled: payload?.periodType === 'CHECK',
+            // }}
             footer={
                 <div className="flex justify-between gap-2">
                     {!!payload?.id && (
@@ -722,6 +725,8 @@ const PutLichVaSuKienModal = () => {
                                     {
                                         title: 'TT',
                                         width: 35,
+                                        align: 'center',
+                                        render: (_, __, index) => index + 1,
                                     },
                                     {
                                         title: 'Mã LMH',
@@ -820,6 +825,8 @@ const PutLichVaSuKienModal = () => {
                                     {
                                         title: 'TT',
                                         width: 35,
+                                        align: 'center',
+                                        render: (_, __, index) => index + 1,
                                     },
                                     {
                                         title: 'Ngày học',
