@@ -33,6 +33,7 @@ import {
     Button,
     Checkbox,
     Col,
+    Empty,
     Flex,
     Form,
     Input,
@@ -726,6 +727,14 @@ export default function NhapDiem({
             })
         }
     }, [dataTable])
+
+    if (!selectedSubjectClassId) {
+        return (
+            <div className="flex items-center justify-center h-[calc(100vh-300px)]">
+                <Empty description="Vui lòng chọn lớp học phần để nhập điểm" />
+            </div>
+        )
+    }
 
     return (
         <Row gutter={[8, 8]}>
