@@ -127,7 +127,7 @@ export const parseSheetLecturer = (file: ArrayBufferLike) => {
             }
 
             const phoneNumber = row[cols.phoneNumber]?.trim()
-            if (phoneNumber && !/^0[35789]\d{8}$/.test(phoneNumber)) {
+            if (phoneNumber && !/^0\d{9}$/.test(phoneNumber)) {
                 errors.push({
                     sheetRef: sheetName,
                     cellRef: `${cols.phoneNumber}${row.__rowNum__ + 1}`,
