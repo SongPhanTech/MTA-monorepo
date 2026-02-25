@@ -28,7 +28,7 @@ export default function EvaluationPeriodTabPage() {
     const [activeKey, setActiveKey] = useState('1')
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
     const { data: me } = useSession()
-    const idProfile = me?.sDM_NhanVienId || '0dbb92be-c919-4799-bf9d-a9a3b4189145'
+    const idProfile = me?.sDM_NhanVienId || 'f1218263-341e-40c4-b269-a711a0186c74'
     const { can } = useAbility()
     const { data: lecturer } = useFindUniqueLecturer(
         {
