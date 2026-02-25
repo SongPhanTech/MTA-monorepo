@@ -451,6 +451,13 @@ export function RichTextEditor({
         }
     }, [value, editor, defaultTable])
 
+    useEffect(() => {
+        if (!editor) return
+        if (editor.isEditable !== editable) {
+            editor.setEditable(editable)
+        }
+    }, [editor, editable])
+
     return (
         <div className="border rounded-md">
             <div
