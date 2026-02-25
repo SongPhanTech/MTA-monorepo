@@ -146,6 +146,8 @@ export * from './AcademicActionCondition.schema';
 export * from './StudentAcademicDecision.schema';
 export * from './TrainingScoreSession.schema';
 export * from './StudentTrainingScore.schema';
+export * from './SemesterTrainingScore.schema';
+export * from './SchoolYearTrainingScore.schema';
 export * from './LecturerType.schema';
 export * from './StaffType.schema';
 export * from './StaffPosition.schema';

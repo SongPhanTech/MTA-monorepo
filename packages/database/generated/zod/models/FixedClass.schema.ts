@@ -48,6 +48,7 @@ const relationSchema = z.object({
     notifications: z.array(z.unknown()).optional(),
     surveyObjectTypes: z.array(z.unknown()).optional(),
     scoreLinkSheets: z.array(z.unknown()).optional(),
+    planTrainingSubject: z.record(z.string(), z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
@@ -58,6 +59,7 @@ const fkSchema = z.object({
     lecturerManagementId: z.string().nullish(),
     staffManagementId: z.string().nullish(),
     curriculumVersionId: z.string().nullish(),
+    planTrainingSubjectId: z.string().nullish(),
 }
 );
 

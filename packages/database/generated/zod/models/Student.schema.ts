@@ -121,6 +121,8 @@ const relationSchema = z.object({
     classRegisterLogs: z.array(z.unknown()).optional(),
     notes: z.array(z.unknown()).optional(),
     noteFolders: z.array(z.unknown()).optional(),
+    semesterTrainingScore: z.array(z.unknown()).optional(),
+    schoolYearTrainingScore: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

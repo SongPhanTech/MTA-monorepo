@@ -1830,7 +1830,8 @@ exports.Prisma.FixedClassScalarFieldEnum = {
   managementOrganizationId: 'managementOrganizationId',
   lecturerManagementId: 'lecturerManagementId',
   staffManagementId: 'staffManagementId',
-  curriculumVersionId: 'curriculumVersionId'
+  curriculumVersionId: 'curriculumVersionId',
+  planTrainingSubjectId: 'planTrainingSubjectId'
 };
 
 exports.Prisma.CurriculumScalarFieldEnum = {
@@ -2820,6 +2821,36 @@ exports.Prisma.StudentTrainingScoreScalarFieldEnum = {
   studentId: 'studentId',
   score: 'score',
   studentTrainingType: 'studentTrainingType',
+  status: 'status'
+};
+
+exports.Prisma.SemesterTrainingScoreScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  semesterId: 'semesterId',
+  studentId: 'studentId',
+  score: 'score',
+  status: 'status'
+};
+
+exports.Prisma.SchoolYearTrainingScoreScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  schoolYearId: 'schoolYearId',
+  studentId: 'studentId',
+  score: 'score',
   status: 'status'
 };
 
@@ -5881,7 +5912,8 @@ exports.Prisma.FixedClassOrderByRelevanceFieldEnum = {
   managementOrganizationId: 'managementOrganizationId',
   lecturerManagementId: 'lecturerManagementId',
   staffManagementId: 'staffManagementId',
-  curriculumVersionId: 'curriculumVersionId'
+  curriculumVersionId: 'curriculumVersionId',
+  planTrainingSubjectId: 'planTrainingSubjectId'
 };
 
 exports.Prisma.CurriculumOrderByRelevanceFieldEnum = {
@@ -6457,6 +6489,24 @@ exports.Prisma.StudentTrainingScoreOrderByRelevanceFieldEnum = {
   description: 'description',
   createdBy: 'createdBy',
   trainingScoreSessionId: 'trainingScoreSessionId',
+  studentId: 'studentId'
+};
+
+exports.Prisma.SemesterTrainingScoreOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  semesterId: 'semesterId',
+  studentId: 'studentId'
+};
+
+exports.Prisma.SchoolYearTrainingScoreOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  schoolYearId: 'schoolYearId',
   studentId: 'studentId'
 };
 
@@ -8273,6 +8323,8 @@ exports.Prisma.ModelName = {
   StudentAcademicDecision: 'StudentAcademicDecision',
   TrainingScoreSession: 'TrainingScoreSession',
   StudentTrainingScore: 'StudentTrainingScore',
+  SemesterTrainingScore: 'SemesterTrainingScore',
+  SchoolYearTrainingScore: 'SchoolYearTrainingScore',
   LecturerType: 'LecturerType',
   StaffType: 'StaffType',
   StaffPosition: 'StaffPosition',

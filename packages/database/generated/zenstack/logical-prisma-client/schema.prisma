@@ -2636,19 +2636,20 @@ model PlanTraining {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model PlanTrainingSubject {
-  id                     String               @id() @default(cuid())
-  active                 Boolean              @default(true)
-  description            String?              @db.Text()
+  id                     String                @id() @default(cuid())
+  active                 Boolean               @default(true)
+  description            String?               @db.Text()
   deletedAt              DateTime?
-  createdAt              DateTime             @default(now())
-  updatedAt              DateTime             @default(now()) @updatedAt()
-  createdBy              String?              @default("") @db.Uuid()
-  planTraining           PlanTraining         @relation(fields: [planTrainingId], references: [id])
+  createdAt              DateTime              @default(now())
+  updatedAt              DateTime              @default(now()) @updatedAt()
+  createdBy              String?               @default("") @db.Uuid()
+  planTraining           PlanTraining          @relation(fields: [planTrainingId], references: [id])
   planTrainingId         String
-  trainingBlockSubjectId String
-  trainingBlockSubject   TrainingBlockSubject @relation(fields: [trainingBlockSubjectId], references: [id])
-  studentCount           Int                  @default(0)
-  subjectClassType       SubjectClassType     @default(NORMAL)
+  trainingBlockSubjectId String?
+  trainingBlockSubject   TrainingBlockSubject? @relation(fields: [trainingBlockSubjectId], references: [id])
+  studentCount           Int                   @default(0)
+  subjectClassType       SubjectClassType      @default(NORMAL)
+  fixedClass             FixedClass[]
 
   @@schema("ql-dao-tao")
 }
@@ -3013,6 +3014,7 @@ model SchoolYear {
   studentYearResult       StudentYearResult[]
   studentAcademicDecision StudentAcademicDecision[]
   evaluationPeriod        EvaluationPeriod[]
+  schoolYearTrainingScore SchoolYearTrainingScore[]
 
   @@schema("ql-dao-tao")
 }
@@ -3050,6 +3052,7 @@ model Semester {
   survey                  Survey[]
   exam                    Exam[]
   scoreLinkSheets         ScoreLinkSheet[]
+  semesterTrainingScore   SemesterTrainingScore[]
 
   @@schema("ql-dao-tao")
 }
@@ -3204,37 +3207,39 @@ model TrainingCourseRegulation {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model FixedClass {
-  id                       String             @id() @default(cuid())
-  code                     String?            @unique()
-  active                   Boolean            @default(true)
-  description              String?            @db.Text()
+  id                       String               @id() @default(cuid())
+  code                     String?              @unique()
+  active                   Boolean              @default(true)
+  description              String?              @db.Text()
   deletedAt                DateTime?
-  createdAt                DateTime           @default(now())
-  updatedAt                DateTime           @default(now()) @updatedAt()
-  createdBy                String?            @default("") @db.Uuid()
+  createdAt                DateTime             @default(now())
+  updatedAt                DateTime             @default(now()) @updatedAt()
+  createdBy                String?              @default("") @db.Uuid()
   name                     String
   summary                  String?
   startYear                Int?
-  graduated                Boolean            @default(false)
-  classMonitor             Student?           @relation("ClassMonitor", fields: [classMonitorId], references: [id])
-  classMonitorId           String?            @unique()
-  unionLeader              Student?           @relation("UnionLeader", fields: [unionLeaderId], references: [id])
-  unionLeaderId            String?            @unique()
-  trainingCourse           TrainingCourse     @relation(fields: [trainingCourseId], references: [id])
+  graduated                Boolean              @default(false)
+  classMonitor             Student?             @relation("ClassMonitor", fields: [classMonitorId], references: [id])
+  classMonitorId           String?              @unique()
+  unionLeader              Student?             @relation("UnionLeader", fields: [unionLeaderId], references: [id])
+  unionLeaderId            String?              @unique()
+  trainingCourse           TrainingCourse       @relation(fields: [trainingCourseId], references: [id])
   trainingCourseId         String
-  managementOrganization   DM_DonVi?          @relation(fields: [managementOrganizationId], references: [Id])
-  managementOrganizationId String?            @db.Uuid()
-  lecturerManagement       Lecturer?          @relation(name: "ManageLecturer", fields: [lecturerManagementId], references: [id])
+  managementOrganization   DM_DonVi?            @relation(fields: [managementOrganizationId], references: [Id])
+  managementOrganizationId String?              @db.Uuid()
+  lecturerManagement       Lecturer?            @relation(name: "ManageLecturer", fields: [lecturerManagementId], references: [id])
   lecturerManagementId     String?
-  staffManagement          Staff?             @relation(name: "ManageStaff", fields: [staffManagementId], references: [id])
+  staffManagement          Staff?               @relation(name: "ManageStaff", fields: [staffManagementId], references: [id])
   staffManagementId        String?
   students                 Student[]
-  curriculumVersion        CurriculumVersion? @relation(fields: [curriculumVersionId], references: [id])
-  curriculumVersionId      String?            @unique()
+  curriculumVersion        CurriculumVersion?   @relation(fields: [curriculumVersionId], references: [id])
+  curriculumVersionId      String?              @unique()
   subjectClasses           SubjectClass[]
   notifications            Notification[]
   surveyObjectTypes        SurveyObjectType[]
   scoreLinkSheets          ScoreLinkSheet[]
+  planTrainingSubject      PlanTrainingSubject? @relation(fields: [planTrainingSubjectId], references: [id])
+  planTrainingSubjectId    String?
 
   @@unique([name, trainingCourseId, curriculumVersionId])
   @@schema("ql-dao-tao")
@@ -4497,6 +4502,8 @@ model Student {
   classRegisterLogs              ClassRegisterLogs[]
   notes                          Note[]
   noteFolders                    NoteFolder[]
+  semesterTrainingScore          SemesterTrainingScore[]
+  schoolYearTrainingScore        SchoolYearTrainingScore[]
 
   @@schema("ql-dao-tao")
 }
@@ -4841,6 +4848,50 @@ model StudentTrainingScore {
   status                 TrainingScoreStatus  @default(PENDING)
 
   @@unique([trainingScoreSessionId, studentId])
+  @@schema("ql-dao-tao")
+}
+
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model SemesterTrainingScore {
+  id          String              @id() @default(cuid())
+  code        String?             @unique()
+  active      Boolean             @default(true)
+  description String?             @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @default(now()) @updatedAt()
+  createdBy   String?             @default("") @db.Uuid()
+  semester    Semester            @relation(fields: [semesterId], references: [id])
+  semesterId  String
+  student     Student             @relation(fields: [studentId], references: [id])
+  studentId   String
+  score       Int?
+  status      TrainingScoreStatus @default(PENDING)
+
+  @@schema("ql-dao-tao")
+}
+
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model SchoolYearTrainingScore {
+  id           String              @id() @default(cuid())
+  code         String?             @unique()
+  active       Boolean             @default(true)
+  description  String?             @db.Text()
+  deletedAt    DateTime?
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @default(now()) @updatedAt()
+  createdBy    String?             @default("") @db.Uuid()
+  schoolYear   SchoolYear          @relation(fields: [schoolYearId], references: [id])
+  schoolYearId String
+  student      Student             @relation(fields: [studentId], references: [id])
+  studentId    String
+  score        Int?
+  status       TrainingScoreStatus @default(PENDING)
+
   @@schema("ql-dao-tao")
 }
 

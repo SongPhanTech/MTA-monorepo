@@ -42,12 +42,13 @@ model PlanTrainingSubject extends BaseNoCode {
   planTraining           PlanTraining         @relation(fields: [planTrainingId], references: [id])
   planTrainingId         String
 
-  trainingBlockSubjectId String
-  trainingBlockSubject   TrainingBlockSubject @relation(fields: [trainingBlockSubjectId], references: [id])
+  trainingBlockSubjectId String?
+  trainingBlockSubject   TrainingBlockSubject? @relation(fields: [trainingBlockSubjectId], references: [id])
 
   studentCount           Int                  @default(0) // Số SV đăng ký học phần này trong kỳ
-
   subjectClassType       SubjectClassType     @default(NORMAL)
+  fixedClass             FixedClass[]
+
   @@schema("ql-dao-tao")
 }
 
@@ -351,8 +352,10 @@ model SchoolYear extends Base {
   studentYearResult       StudentYearResult[]
   studentAcademicDecision StudentAcademicDecision[]
   evaluationPeriod        EvaluationPeriod[]
+	schoolYearTrainingScore SchoolYearTrainingScore[]
 
   @@schema("ql-dao-tao")
+
 }
 
 enum SemesterType {
@@ -388,8 +391,10 @@ model Semester extends Base {
   survey                  Survey[]
   exam                    Exam[]
   scoreLinkSheets         ScoreLinkSheet[]
+	semesterTrainingScore SemesterTrainingScore[]
 
   @@schema("ql-dao-tao")
+
 }
 
 /// Mốc huấn luyện
@@ -538,10 +543,14 @@ model FixedClass extends Base {
   surveyObjectTypes        SurveyObjectType[]
 
   scoreLinkSheets          ScoreLinkSheet[]
-
+	planTrainingSubject      PlanTrainingSubject? @relation(fields: [planTrainingSubjectId], references: [id])
+	planTrainingSubjectId    String?
   @@unique([name, trainingCourseId, curriculumVersionId])
 
   @@schema("ql-dao-tao")
+
+
+
 }
 
 /// chương trình đào tạo
