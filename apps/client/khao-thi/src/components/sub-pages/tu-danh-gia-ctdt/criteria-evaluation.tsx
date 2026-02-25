@@ -475,6 +475,7 @@ const CriteriaEvaluationSubPage = ({
                                                                         editable={
                                                                             !isCriterionReadOnly
                                                                         }
+                                                                        defaultTable={true}
                                                                         stickyToolbar={false}
                                                                     />
                                                                 </Form.Item>

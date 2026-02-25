@@ -12,7 +12,7 @@ import {
     useEditor,
 } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import './index.css'
 import Image from '@tiptap/extension-image'
 import { Mathematics } from '@tiptap/extension-mathematics'
@@ -38,6 +38,7 @@ type TextEditorProps = {
     id?: string
     editable?: boolean
     stickyToolbar?: boolean
+    defaultTable?: boolean
 }
 
 export function RichTextEditor({
@@ -49,6 +50,7 @@ export function RichTextEditor({
     id,
     editable = true,
     stickyToolbar = false,
+    defaultTable = false,
 }: TextEditorProps) {
     const editor = useEditor({
         immediatelyRender: false,
@@ -62,22 +64,6 @@ export function RichTextEditor({
             Highlight,
             CustomTextStyle,
             Color.configure({ types: ['textStyle'] }),
-            // ExportDocx.configure({
-            //     onCompleteExport: (result: ArrayBuffer) => {
-            //         setIsLoading(false)
-            //         const blob = new Blob([result], {
-            //             type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-            //         })
-            //         const url = URL.createObjectURL(blob)
-            //         const a = document.createElement('a')
-
-            //         a.href = url
-            //         a.download = 'export.docx'
-            //         a.click()
-            //         URL.revokeObjectURL(url)
-            //     },
-            // }),
-            // Highlight.configure({ multicolor: true }),
             Image.configure({
                 inline: true,
                 allowBase64: false,
@@ -131,24 +117,6 @@ export function RichTextEditor({
                     class: 'p-2 border',
                 },
             }),
-            // TextStyle.configure({ mergeNestedSpanStyles: true }),
-            //   ImportDocx.configure({
-            //     appId: 'your-app-id',
-            //     token: 'your-jwt',
-            //     // This is our demo endpoint, and it won't work outside this environment, in production you should remove this field
-            //     endpoint: 'https://api-demo.tiptap.dev/v2/convert',
-            //     // This is our demo endpoint, and it won't work outside this environment, in production you should use your own image upload endpoint
-            //     imageUploadCallbackUrl: 'https://api-demo.tiptap.dev/v2/convert/upload',
-            //   }),
-            // Table,
-            // TableRow,
-            // TableCell,
-            // TableHeader,
-            // TextAlign.configure({ types: ['heading', 'paragraph'] }),
-            // Link,
-            // Color,
-            // FontFamily,
-            // Underline,
         ],
         content: value || '', // Khởi tạo với giá trị từ form
         onUpdate: ({ editor }) => {
@@ -317,11 +285,73 @@ export function RichTextEditor({
             throw error
         }
     }
+    const defaultTableInserted = useRef(false)
+
     useEffect(() => {
-        if (editor && value !== editor.getHTML()) {
+        if (editor && defaultTable && !value && !defaultTableInserted.current) {
+            defaultTableInserted.current = true
+
+            const makeCell = (text: string, isHeader = false, colwidth?: number) => ({
+                type: isHeader ? 'tableHeader' : 'tableCell',
+                attrs: { colspan: 1, rowspan: 1, colwidth: colwidth ? [colwidth] : null },
+                content: [{ type: 'paragraph', content: text ? [{ type: 'text', text }] : [] }],
+            })
+
+            const headers: { text: string; width: number }[] = [
+                { text: 'TT', width: 50 },
+                { text: 'Mục tiêu', width: 150 },
+                { text: 'Nội dung', width: 200 },
+                { text: 'Đơn vị, người thực hiện', width: 180 },
+                { text: 'Thời gian thực hiện hoặc hoàn thành', width: 180 },
+                { text: 'Ghi chú', width: 120 },
+            ]
+
+            editor.commands.setContent({
+                type: 'doc',
+                content: [
+                    {
+                        type: 'table',
+                        content: [
+                            {
+                                type: 'tableRow',
+                                content: headers.map(({ text, width }) =>
+                                    makeCell(text, true, width)
+                                ),
+                            },
+                            {
+                                type: 'tableRow',
+                                content: headers.map((_, i) =>
+                                    makeCell(
+                                        i === 0 ? '1' : i === 1 ? 'Khắc phục điểm tồn tại' : '',
+                                        false,
+                                        headers[i].width
+                                    )
+                                ),
+                            },
+                            {
+                                type: 'tableRow',
+                                content: headers.map((_, i) =>
+                                    makeCell(
+                                        i === 0 ? '2' : i === 1 ? 'Phát huy điểm mạnh' : '',
+                                        false,
+                                        headers[i].width
+                                    )
+                                ),
+                            },
+                        ],
+                    },
+                ],
+            })
+        }
+    }, [editor, defaultTable, value])
+
+    useEffect(() => {
+        if (!editor) return
+        if (!value && defaultTable) return
+        if (value !== editor.getHTML()) {
             editor.commands.setContent(value || '', false)
         }
-    }, [value, editor])
+    }, [value, editor, defaultTable])
 
     return (
         <div className="border rounded-md">
