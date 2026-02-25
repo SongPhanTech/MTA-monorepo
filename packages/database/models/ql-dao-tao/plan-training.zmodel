@@ -39,14 +39,14 @@ model PlanTraining extends BaseNoCode {
 }
 
 model PlanTrainingSubject extends BaseNoCode {
-  planTraining           PlanTraining         @relation(fields: [planTrainingId], references: [id])
+  planTraining           PlanTraining          @relation(fields: [planTrainingId], references: [id])
   planTrainingId         String
 
   trainingBlockSubjectId String?
   trainingBlockSubject   TrainingBlockSubject? @relation(fields: [trainingBlockSubjectId], references: [id])
 
-  studentCount           Int                  @default(0) // Số SV đăng ký học phần này trong kỳ
-  subjectClassType       SubjectClassType     @default(NORMAL)
+  studentCount           Int                   @default(0) // Số SV đăng ký học phần này trong kỳ
+  subjectClassType       SubjectClassType      @default(NORMAL)
   fixedClass             FixedClass[]
 
   @@schema("ql-dao-tao")
@@ -287,7 +287,7 @@ model ArchivedCertificate extends Base {
   student             Student                                    @relation(fields: [studentId], references: [id])
   studentId           String
 
-  finalScore          Float
+  finalScore          Float                                      @default(0)
   // TODO: dùng `code` cho mã/ID chứng chỉ
 
   /// điểm chứng chỉ
@@ -352,10 +352,9 @@ model SchoolYear extends Base {
   studentYearResult       StudentYearResult[]
   studentAcademicDecision StudentAcademicDecision[]
   evaluationPeriod        EvaluationPeriod[]
-	schoolYearTrainingScore SchoolYearTrainingScore[]
+  schoolYearTrainingScore SchoolYearTrainingScore[]
 
   @@schema("ql-dao-tao")
-
 }
 
 enum SemesterType {
@@ -391,10 +390,9 @@ model Semester extends Base {
   survey                  Survey[]
   exam                    Exam[]
   scoreLinkSheets         ScoreLinkSheet[]
-	semesterTrainingScore SemesterTrainingScore[]
+  semesterTrainingScore   SemesterTrainingScore[]
 
   @@schema("ql-dao-tao")
-
 }
 
 /// Mốc huấn luyện
@@ -513,44 +511,41 @@ model FixedClass extends Base {
   name                     String
   summary                  String?
   startYear                Int?
-  graduated                Boolean            @default(false)
+  graduated                Boolean              @default(false)
 
-  classMonitor             Student?           @relation("ClassMonitor", fields: [classMonitorId], references: [id])
-  classMonitorId           String?            @unique
+  classMonitor             Student?             @relation("ClassMonitor", fields: [classMonitorId], references: [id])
+  classMonitorId           String?              @unique
 
-  unionLeader              Student?           @relation("UnionLeader", fields: [unionLeaderId], references: [id])
-  unionLeaderId            String?            @unique
+  unionLeader              Student?             @relation("UnionLeader", fields: [unionLeaderId], references: [id])
+  unionLeaderId            String?              @unique
 
-  trainingCourse           TrainingCourse     @relation(fields: [trainingCourseId], references: [id]) // Khoá học
+  trainingCourse           TrainingCourse       @relation(fields: [trainingCourseId], references: [id]) // Khoá học
   trainingCourseId         String
 
-  managementOrganization   DM_DonVi?          @relation(fields: [managementOrganizationId], references: [Id])
-  managementOrganizationId String?            @db.Uuid
+  managementOrganization   DM_DonVi?            @relation(fields: [managementOrganizationId], references: [Id])
+  managementOrganizationId String?              @db.Uuid
 
-  lecturerManagement       Lecturer?          @relation(name: "ManageLecturer", fields: [lecturerManagementId], references: [id])
+  lecturerManagement       Lecturer?            @relation(name: "ManageLecturer", fields: [lecturerManagementId], references: [id])
   lecturerManagementId     String?
 
-  staffManagement          Staff?             @relation(name: "ManageStaff", fields: [staffManagementId], references: [id])
+  staffManagement          Staff?               @relation(name: "ManageStaff", fields: [staffManagementId], references: [id])
   staffManagementId        String?
 
   students                 Student[]
 
-  curriculumVersion        CurriculumVersion? @relation(fields: [curriculumVersionId], references: [id])
-  curriculumVersionId      String?            @unique
+  curriculumVersion        CurriculumVersion?   @relation(fields: [curriculumVersionId], references: [id])
+  curriculumVersionId      String?              @unique
 
   subjectClasses           SubjectClass[]
   notifications            Notification[]  // Thông báo cho lớp
   surveyObjectTypes        SurveyObjectType[]
 
   scoreLinkSheets          ScoreLinkSheet[]
-	planTrainingSubject      PlanTrainingSubject? @relation(fields: [planTrainingSubjectId], references: [id])
-	planTrainingSubjectId    String?
+  planTrainingSubject      PlanTrainingSubject? @relation(fields: [planTrainingSubjectId], references: [id])
+  planTrainingSubjectId    String?
   @@unique([name, trainingCourseId, curriculumVersionId])
 
   @@schema("ql-dao-tao")
-
-
-
 }
 
 /// chương trình đào tạo

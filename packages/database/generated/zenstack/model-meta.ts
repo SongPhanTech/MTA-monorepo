@@ -9049,6 +9049,7 @@ const metadata: ModelMeta = {
                 }, finalScore: {
                     name: "finalScore",
                     type: "Float",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, score: {
                     name: "score",
                     type: "Float",
@@ -14204,6 +14205,10 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'certificate',
+                }, isUsingScore: {
+                    name: "isUsingScore",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 },
             }, uniqueConstraints: {
                 id: {

@@ -2436,7 +2436,8 @@ exports.Prisma.CertificateScalarFieldEnum = {
   createdBy: 'createdBy',
   name: 'name',
   englishName: 'englishName',
-  outputStandardId: 'outputStandardId'
+  outputStandardId: 'outputStandardId',
+  isUsingScore: 'isUsingScore'
 };
 
 exports.Prisma.CertificateOnSubjectScalarFieldEnum = {

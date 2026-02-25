@@ -2666,7 +2666,7 @@ model ArchivedCertificate {
   certificateId       String
   student             Student                                    @relation(fields: [studentId], references: [id])
   studentId           String
-  finalScore          Float
+  finalScore          Float                                      @default(0)
   /// điểm chứng chỉ
   score               Float?
   /// nơi cấp
@@ -3843,6 +3843,7 @@ model Certificate {
   archivedCertificate ArchivedCertificate[]
   /// môn học có thể phiên điểm
   subjects            CertificateOnSubject[]
+  isUsingScore        Boolean                @default(true)
 
   @@schema("ql-dao-tao")
 }

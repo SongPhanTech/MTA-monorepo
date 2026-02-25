@@ -16,6 +16,7 @@ const baseSchema = z.object({
     createdBy: z.string().uuid().nullish(),
     name: z.string(),
     englishName: z.string().nullish(),
+    isUsingScore: z.boolean().default(true),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -29,6 +30,7 @@ const baseSchemaWithoutDefaults = z.object({
     createdBy: z.string().uuid().nullish(),
     name: z.string(),
     englishName: z.string().nullish(),
+    isUsingScore: z.boolean(),
 }
 ).strict();
 const relationSchema = z.object({
@@ -75,7 +77,8 @@ export const CertificatePrismaUpdateSchema = z.object({
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
     name: z.string(),
-    englishName: z.string().nullish()
+    englishName: z.string().nullish(),
+    isUsingScore: z.boolean()
 }).partial().passthrough();
 
 
@@ -83,7 +86,7 @@ export const CertificatePrismaUpdateSchema = z.object({
  * `Certificate` schema for create operations excluding foreign keys and relations.
  */
 export const CertificateCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, isUsingScore: true
 });
 
 
