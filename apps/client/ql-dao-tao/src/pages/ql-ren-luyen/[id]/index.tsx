@@ -18,7 +18,7 @@ import {
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useAbility } from '@workspace/permissions/hooks'
-import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
+import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { Select } from '@workspace/ui'
 import { Button, Col, Divider, Flex, message, Popconfirm, Popover, Row, Tag, Tooltip } from 'antd'
 import { Save, X } from 'lucide-react'
@@ -615,5 +615,18 @@ export default function SubjectClassScore() {
 }
 
 SubjectClassScore.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout unLayout={true}>{page}</DefaultLayout>
+    return (
+        <DefaultLayout
+            breadcrumbList={[
+                { title: 'Quản lý đào tạo' },
+                {
+                    title: 'Quản lý đợt rèn luyện',
+                    href: ROUTER_PATH.QL_DAO_TAO.QL_REN_LUYEN,
+                },
+                { title: 'Chi tiết đợt rèn luyện' },
+            ]}
+        >
+            {page}
+        </DefaultLayout>
+    )
 }
