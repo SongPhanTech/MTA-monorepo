@@ -121,9 +121,13 @@ export function useGetVersionApps<
 
 export function useAppVersionInfo(options?: { request?: RequestInit }) {
     const query = useGetVersionApps({ request: options?.request })
-    const appCode = getRuntimeEnv('NEXT_PUBLIC_APP_CODE') || process.env.NEXT_PUBLIC_APP_CODE
+    const appCode =
+        getRuntimeEnv('NEXT_PUBLIC_APP_CODE') ||
+        process.env.NEXT_PUBLIC_APP_CODE
 
-    const versionData = query.data?.data?.[0]
+    const versionData = Array.isArray(query.data?.data)
+        ? query.data.data[0]
+        : undefined
 
     return {
         ...query,
