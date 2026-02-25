@@ -245,20 +245,20 @@ export default function MonDaLapKeHoach({ type }: { type?: $Enums.SubjectClassTy
                                                                 {
                                                                     value:
                                                                         item.trainingBlockSubject
-                                                                            .subject?.code ?? '',
+                                                                            ?.subject?.code ?? '',
                                                                     align: 'center',
                                                                     rowSpan,
                                                                 },
                                                                 {
                                                                     value:
                                                                         item.trainingBlockSubject
-                                                                            .subject?.name ?? '',
+                                                                            ?.subject?.name ?? '',
                                                                     rowSpan,
                                                                 },
                                                                 {
                                                                     value:
                                                                         item.trainingBlockSubject
-                                                                            .subject?.credit ?? '',
+                                                                            ?.subject?.credit ?? '',
                                                                     align: 'center',
                                                                     rowSpan,
                                                                 },

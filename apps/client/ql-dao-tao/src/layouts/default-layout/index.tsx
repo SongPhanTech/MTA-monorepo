@@ -140,9 +140,7 @@ const DefaultLayout = ({
                         Học viện Kỹ thuật Quân sự - Địa chỉ: Số 236, Hoàng Quốc Việt, Cầu Giấy, Hà
                         Nội
                     </div>
-                    <div className="ml-auto">
-                        Phiên bản: {isLoadingVersion ? '...' : version}
-                    </div>
+                    <div className="ml-auto">Phiên bản: {isLoadingVersion ? '...' : version}</div>
                 </Footer>
             </Layout>
         </IdleTimerProvider>

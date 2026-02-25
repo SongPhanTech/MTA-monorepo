@@ -791,7 +791,7 @@ export default function DanhMucDoAn() {
                                 const name =
                                     record?.council?.members.find(
                                         (x: any) => x.role === CouncilRole.SECRETARY
-                                    )?.expert?.lecturer.userProfile.fullname ||
+                                    )?.expert?.lecturer?.userProfile?.fullname ||
                                     record?.council?.members.find(
                                         (x: any) => x.role === CouncilRole.SECRETARY
                                     )?.expert?.name ||
@@ -834,7 +834,7 @@ export default function DanhMucDoAn() {
                                 const name =
                                     record?.council?.members.find(
                                         (x: any) => x.role === CouncilRole.REVIEWER_1
-                                    )?.expert?.lecturer.userProfile.fullname ||
+                                    )?.expert?.lecturer?.userProfile?.fullname ||
                                     record?.council?.members.find(
                                         (x: any) => x.role === CouncilRole.REVIEWER_1
                                     )?.expert?.name ||
@@ -877,7 +877,7 @@ export default function DanhMucDoAn() {
                                 const name =
                                     record?.council?.members.find(
                                         (x: any) => x.role === CouncilRole.REVIEWER_2
-                                    )?.expert?.lecturer.userProfile.fullname ||
+                                    )?.expert?.lecturer?.userProfile?.fullname ||
                                     record?.council?.members.find(
                                         (x: any) => x.role === CouncilRole.REVIEWER_2
                                     )?.expert?.name ||
@@ -922,7 +922,7 @@ export default function DanhMucDoAn() {
                                 const name =
                                     record?.council?.members.find(
                                         (x: any) => x.role === CouncilRole.MEMBER
-                                    )?.expert?.lecturer.userProfile.fullname ||
+                                    )?.expert?.lecturer?.userProfile?.fullname ||
                                     record?.council?.members.find(
                                         (x: any) => x.role === CouncilRole.MEMBER
                                     )?.expert?.name ||
