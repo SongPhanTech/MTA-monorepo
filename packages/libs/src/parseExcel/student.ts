@@ -420,11 +420,12 @@ export const parseSheetStudent = (file: ArrayBufferLike) => {
                 })
             }
 
-            if (!row[cols.idCardNumber]) {
+            const idCardNumber = row[cols.idCardNumber]?.trim()
+            if (!idCardNumber || !/^[0-9]{12}$/.test(idCardNumber)) {
                 errors.push({
                     sheetRef: sheetName,
                     cellRef: `${cols.idCardNumber}${row.__rowNum__ + 1}`,
-                    message: 'CCCD không được để trống',
+                    message: 'CCCD không hợp lệ',
                 })
             }
 
@@ -461,6 +462,15 @@ export const parseSheetStudent = (file: ArrayBufferLike) => {
                 })
             }
 
+            const phoneNumber = row[cols.phoneNumber]?.trim()
+            if (phoneNumber && !/^0\d{9,10}$/.test(phoneNumber)) {
+                errors.push({
+                    sheetRef: sheetName,
+                    cellRef: `${cols.phoneNumber}${row.__rowNum__ + 1}`,
+                    message: 'Số điện thoại không hợp lệ',
+                })
+            }
+
             return {
                 stt: row[cols.stt],
                 registerNumber: row[cols.registerNumber]?.trim(),
@@ -472,8 +482,8 @@ export const parseSheetStudent = (file: ArrayBufferLike) => {
                 ethnicity: row[cols.ethnicity]?.trim(),
                 nationality: row[cols.nationality]?.trim(),
                 provinceHometown: row[cols.provinceHometown]?.trim(),
-                idCardNumber: row[cols.idCardNumber]?.trim() as string,
-                phoneNumber: row[cols.phoneNumber]?.trim(),
+                idCardNumber: idCardNumber as string,
+                phoneNumber,
                 admissionCombination: row[cols.admissionCombination]?.trim(),
                 entryScore: row[cols.entryScore]?.trim(),
                 competencyScore: row[cols.competencyScore]?.trim(),

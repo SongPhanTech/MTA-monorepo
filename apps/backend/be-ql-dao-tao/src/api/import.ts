@@ -120,12 +120,35 @@ app.openapi(importLecturer, async (c) => {
 
     const existingLecturer = await prisma.lecturer.findMany({
         where: { code: { in: data.lecturers.map((lecturer) => lecturer.code) } },
-        select: { id: true, code: true, userProfileId: true },
+        select: {
+            id: true,
+            code: true,
+            userProfileId: true,
+            userProfile: {
+                select: { idCardNumber: true },
+            },
+        },
     })
 
     const existingLecturerMap = new Map(
-        existingLecturer.map(({ code, id, userProfileId }) => [code, { id, userProfileId }])
+        existingLecturer.map(({ code, id, userProfileId, userProfile }) => [
+            code,
+            { id, userProfileId, idCardNumber: userProfile.idCardNumber },
+        ])
     )
+
+    // validate duplicate lecturer.code identify by lecturer.userProfile.idCardNumber
+    const duplicateCode: string[] = []
+    for (const l of data.lecturers) {
+        const existingLecturer = existingLecturerMap.get(l.code)
+        if (existingLecturer && existingLecturer.idCardNumber !== l.idCardNumber) {
+            duplicateCode.push(l.code)
+        }
+    }
+
+    if (duplicateCode.length) {
+        return c.json({ message: 'Mã giảng viên đã tồn tại', errors: duplicateCode }, 400)
+    }
 
     // await prisma.$transaction(
     //     async (tx) => {
@@ -548,11 +571,21 @@ app.openapi(importStudent, async (c) => {
 
     const existingStudent = await prisma.student.findMany({
         where: { code: { in: data.students.map((student) => student.code) } },
-        select: { id: true, code: true, userProfileId: true },
+        select: {
+            id: true,
+            code: true,
+            userProfileId: true,
+            userProfile: {
+                select: { idCardNumber: true },
+            },
+        },
     })
 
     const existingStudentMap = new Map(
-        existingStudent.map(({ code, id, userProfileId }) => [code, { id, userProfileId }])
+        existingStudent.map(({ code, id, userProfileId, userProfile }) => [
+            code,
+            { id, userProfileId, idCardNumber: userProfile.idCardNumber },
+        ])
     )
 
     const existingProfile = await prisma.userProfile.findMany({
@@ -563,6 +596,19 @@ app.openapi(importStudent, async (c) => {
     const existingProfileMap = new Map(
         existingProfile.map(({ idCardNumber, id, code }) => [idCardNumber, { id, code }])
     )
+
+    // validate duplicate student.code identify by student.userProfile.idCardNumber
+    const duplicateCode: string[] = []
+    for (const l of data.students) {
+        const existingStudent = existingStudentMap.get(l.code)
+        if (existingStudent && existingStudent.idCardNumber !== l.idCardNumber) {
+            duplicateCode.push(l.code)
+        }
+    }
+
+    if (duplicateCode.length) {
+        return c.json({ message: 'Mã sinh viên đã tồn tại', errors: duplicateCode }, 400)
+    }
 
     const start = Date.now()
     // await prisma.$transaction(

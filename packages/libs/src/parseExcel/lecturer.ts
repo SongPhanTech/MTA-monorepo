@@ -110,11 +110,12 @@ export const parseSheetLecturer = (file: ArrayBufferLike) => {
                 })
             }
 
-            if (!row[cols.idCardNumber]) {
+            const idCardNumber = row[cols.idCardNumber]?.trim()
+            if (!idCardNumber || !/^[0-9]{12}$/.test(idCardNumber)) {
                 errors.push({
                     sheetRef: sheetName,
                     cellRef: `${cols.idCardNumber}${row.__rowNum__ + 1}`,
-                    message: 'CCCD không được để trống',
+                    message: 'CCCD không hợp lệ',
                 })
             }
 
@@ -127,7 +128,7 @@ export const parseSheetLecturer = (file: ArrayBufferLike) => {
             }
 
             const phoneNumber = row[cols.phoneNumber]?.trim()
-            if (phoneNumber && !/^0\d{9}$/.test(phoneNumber)) {
+            if (phoneNumber && !/^0\d{9,10}$/.test(phoneNumber)) {
                 errors.push({
                     sheetRef: sheetName,
                     cellRef: `${cols.phoneNumber}${row.__rowNum__ + 1}`,
@@ -147,9 +148,9 @@ export const parseSheetLecturer = (file: ArrayBufferLike) => {
                 facultyOrganization: row[cols.facultyOrganization]?.trim() as string,
                 departmentOrganization: row[cols.departmentOrganization]?.trim() as string,
                 currentAddress: row[cols.currentAddress]?.trim(),
-                phoneNumber: row[cols.phoneNumber]?.trim(),
+                phoneNumber,
                 email: row[cols.email]?.trim(),
-                idCardNumber: row[cols.idCardNumber]?.trim() as string,
+                idCardNumber: idCardNumber as string,
                 description: row[cols.description]?.trim(),
             }
         })

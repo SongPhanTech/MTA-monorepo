@@ -75,9 +75,7 @@ app.openapi(createNewExamList, async (c) => {
             id: true,
             subjectId: true,
             subjectClassStudent: {
-                select: {
-                    id: true,
-                },
+                select: { id: true },
                 where: {
                     exempted: false,
                     withdrew: false,
@@ -90,12 +88,11 @@ app.openapi(createNewExamList, async (c) => {
 
     const mapExamToSubjectClass: Record<string, string> = {}
     const exams = subjectClasses.map(({ id, subjectId, roomId, subjectClassStudent }) => {
-        if (mapExamToSubjectClass) {
-            if (!mapExamToSubjectClass?.[subjectId]) {
-                mapExamToSubjectClass[subjectId] = createId()
-            }
+        if (!mapExamToSubjectClass[subjectId]) {
+            mapExamToSubjectClass[subjectId] = createId()
         }
         const examId = isGroupBySubject ? mapExamToSubjectClass[subjectId] : createId()
+
         return {
             examId: examId as string,
             subjectClassId: id,
