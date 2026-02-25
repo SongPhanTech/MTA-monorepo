@@ -12,7 +12,7 @@ export default function CriteriaEvaluationWrite() {
 
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
 
-    const { data, refetch } = useFindUniqueEvaluationPeriod(
+    const { data } = useFindUniqueEvaluationPeriod(
         {
             where: {
                 id: selectedEvaluationPeriodId,
@@ -104,6 +104,7 @@ export default function CriteriaEvaluationWrite() {
         },
         {
             enabled: !!idProfile && !!selectedEvaluationPeriodId,
+            refetchOnWindowFocus: false,
         }
     )
 
@@ -123,7 +124,6 @@ export default function CriteriaEvaluationWrite() {
                                         <CriteriaEvaluationSubPage
                                             key={standard.id}
                                             data={standard}
-                                            onRefetch={refetch}
                                         />
                                     ),
                                 }

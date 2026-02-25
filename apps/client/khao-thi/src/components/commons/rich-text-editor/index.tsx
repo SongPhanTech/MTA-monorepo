@@ -28,6 +28,7 @@ import TableCell from '@tiptap/extension-table-cell'
 import TableHeader from '@tiptap/extension-table-header'
 import TableRow from '@tiptap/extension-table-row'
 import { CustomTextStyle } from './CustomTextStyle'
+import { CustomParagraph } from './CustomParagraph'
 
 type TextEditorProps = {
     value?: string
@@ -56,7 +57,8 @@ export function RichTextEditor({
         immediatelyRender: false,
         editable,
         extensions: [
-            StarterKit,
+            StarterKit.configure({ paragraph: false }),
+            CustomParagraph,
             Underline,
             TextAlign.configure({
                 types: ['heading', 'paragraph', 'textStyle', 'image'],
@@ -129,6 +131,102 @@ export function RichTextEditor({
                     className
                 ),
                 spellcheck: false,
+            },
+            transformPastedHTML: (html: string) => {
+                const isWordContent =
+                    html.includes('mso-') ||
+                    html.includes('Microsoft Word') ||
+                    html.includes('urn:schemas-microsoft-com')
+                if (!isWordContent) return html
+
+                const parser = new DOMParser()
+                const doc = parser.parseFromString(html, 'text/html')
+
+                // --- Step 1: Extract indent rules from Word's <style> block ---
+                // Word stores paragraph default styles in a CSS class (e.g. .MsoNormal),
+                // NOT as inline styles. We need to read those rules too.
+                type IndentRule = { marginLeft?: string; textIndent?: string }
+                const cssClassRules = new Map<string, IndentRule>()
+
+                const styleEl = doc.querySelector('style')
+                if (styleEl) {
+                    const cssText = styleEl.textContent || ''
+                    // Match rules like: .ClassName { ... margin-left: X; text-indent: Y; ... }
+                    const ruleRegex = /\.([A-Za-z0-9_-]+)[^{]*\{([^}]*)\}/g
+                    let match = ruleRegex.exec(cssText)
+                    while (match !== null) {
+                        const className = match[1]
+                        const declarations = match[2]
+                        const mlMatch = declarations.match(/margin-left\s*:\s*([^;]+)/i)
+                        const tiMatch = declarations.match(/text-indent\s*:\s*([^;]+)/i)
+                        if (mlMatch || tiMatch) {
+                            cssClassRules.set(className, {
+                                marginLeft: mlMatch?.[1]?.trim(),
+                                textIndent: tiMatch?.[1]?.trim(),
+                            })
+                        }
+                        match = ruleRegex.exec(cssText)
+                    }
+                }
+
+                const isZeroValue = (v: string | undefined) =>
+                    !v ||
+                    v === '0' ||
+                    v === '0in' ||
+                    v === '0cm' ||
+                    v === '0pt' ||
+                    v === '0px' ||
+                    v === '0em'
+
+                // --- Step 2: Process each paragraph ---
+                doc.querySelectorAll('p').forEach((el) => {
+                    if (!(el instanceof HTMLElement)) return
+
+                    // Read inline styles first (highest priority)
+                    let marginLeft = el.style.marginLeft
+                    let textIndent = el.style.textIndent
+                    const textAlign = el.style.textAlign
+
+                    // Fall back to CSS class rules if no inline indent found
+                    if (isZeroValue(marginLeft) || isZeroValue(textIndent)) {
+                        for (const cls of el.classList) {
+                            const rules = cssClassRules.get(cls)
+                            if (!rules) continue
+                            if (isZeroValue(marginLeft) && !isZeroValue(rules.marginLeft)) {
+                                marginLeft = rules.marginLeft ?? ''
+                            }
+                            if (isZeroValue(textIndent) && !isZeroValue(rules.textIndent)) {
+                                textIndent = rules.textIndent ?? ''
+                            }
+                        }
+                    }
+
+                    // Strip mso-* noise, rebuild clean style
+                    const currentStyle = el.getAttribute('style') || ''
+                    const cleanStyle = currentStyle
+                        .split(';')
+                        .map((s) => s.trim())
+                        .filter((s) => {
+                            if (!s) return false
+                            const prop = s.split(':')[0]?.trim().toLowerCase()
+                            return (
+                                !!prop &&
+                                !prop.startsWith('mso-') &&
+                                !prop.startsWith('panose-') &&
+                                prop !== 'font-family'
+                            )
+                        })
+                        .join('; ')
+
+                    el.setAttribute('style', cleanStyle)
+
+                    // Re-apply resolved indentation explicitly
+                    if (!isZeroValue(marginLeft)) el.style.marginLeft = marginLeft
+                    if (!isZeroValue(textIndent)) el.style.textIndent = textIndent
+                    if (textAlign) el.style.textAlign = textAlign
+                })
+
+                return doc.body.innerHTML
             },
             handlePaste: (view, event, slice) => {
                 const items = event.clipboardData?.items
