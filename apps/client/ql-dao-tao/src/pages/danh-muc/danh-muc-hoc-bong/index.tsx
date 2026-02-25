@@ -11,15 +11,15 @@ import DefaultLayout from '@layouts/default-layout'
 import type { Prisma, TrainingCourse } from '@workspace/db/client'
 import {
     useCountScholarship,
+    useDeleteScholarship,
+    useDeleteScholarshipCriteria,
     useFindManyScholarship,
     useFindManyTrainingCourse,
-    useUpdateScholarship,
-    useUpdateScholarshipCriteria,
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Checkbox, Col, Flex, message, Row, Tag, Tooltip } from 'antd'
+import { Button, Checkbox, Col, Flex, message, Row, Tooltip } from 'antd'
 import _ from 'lodash'
 import { BookPlus } from 'lucide-react'
 import type React from 'react'
@@ -138,14 +138,12 @@ export default function Scholarship() {
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { mutateAsync: updateScholarship } = useUpdateScholarship()
+    const { mutateAsync: deleteScholarship } = useDeleteScholarship()
     async function handleDeleteScholarship(id: string) {
         try {
             showSpinner()
-            await updateScholarship({
-                where: { id },
-                data: { deletedAt: new Date() },
-            })
+            await deleteScholarship({ where: { id } })
+            message.success('Xóa học bổng thành công')
         } catch (error: any) {
             if (error?.info?.message) {
                 message.error(error?.info?.message)
@@ -157,14 +155,12 @@ export default function Scholarship() {
         }
     }
 
-    const { mutateAsync: updateScholarshipCriteria } = useUpdateScholarshipCriteria()
+    const { mutateAsync: deleteScholarshipCriteria } = useDeleteScholarshipCriteria()
     async function handleDeleteScholarshipCriteria(id: string) {
         try {
             showSpinner()
-            await updateScholarshipCriteria({
-                where: { id },
-                data: { deletedAt: new Date() },
-            })
+            await deleteScholarshipCriteria({ where: { id } })
+            message.success('Xóa tiêu chí thành công')
         } catch (error: any) {
             if (error?.info?.message) {
                 message.error(error?.info?.message)
@@ -303,19 +299,19 @@ export default function Scholarship() {
                                     )
                                 },
                             },
-                            {
-                                title: 'Trạng thái',
-                                align: 'center',
-                                width: 130,
-                                fixed: 'right',
-                                render: (value, record) => {
-                                    return !record?.active ? (
-                                        <Tag color="error">Không hoạt động</Tag>
-                                    ) : (
-                                        <Tag color="success">Đang hoạt động</Tag>
-                                    )
-                                },
-                            },
+                            // {
+                            //     title: 'Trạng thái',
+                            //     align: 'center',
+                            //     width: 130,
+                            //     fixed: 'right',
+                            //     render: (value, record) => {
+                            //         return !record?.active ? (
+                            //             <Tag color="error">Không hoạt động</Tag>
+                            //         ) : (
+                            //             <Tag color="success">Đang hoạt động</Tag>
+                            //         )
+                            //     },
+                            // },
                             {
                                 title: 'Thao tác',
                                 width: 100,

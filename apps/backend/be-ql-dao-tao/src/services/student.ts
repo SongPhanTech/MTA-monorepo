@@ -2,8 +2,10 @@ import { TrainingObjectTypes } from '@workspace/db'
 import { getTemplateBuffer } from '@workspace/libs/server'
 import dayjs from 'dayjs'
 import ExcelJS from 'exceljs'
+import ExcelJS from 'exceljs'
 import XlsxTemplate from 'xlsx-template'
 import { prisma } from '..'
+import { listStudentResultInfo, resultCourseStudentScholarship } from './student-result.service'
 
 export async function exportStudentProfile({ trainingCourseId }: { trainingCourseId: string }) {
     const trainingCourse = await prisma.trainingCourse.findUniqueOrThrow({
@@ -148,6 +150,90 @@ export async function exportStudentProfile({ trainingCourseId }: { trainingCours
     const result = (await template.generate({ type: 'arraybuffer' })) as ArrayBuffer
 
     return result
+}
+
+export const exportStudentScholarship = async ({
+    semesterId,
+    trainingObjectTypeId,
+}: {
+    semesterId: string
+    trainingObjectTypeId: string
+}) => {
+    const students = await listStudentResultInfo(semesterId, trainingObjectTypeId)
+
+    if (!students || students.length === 0) {
+        throw new Error('Không có sinh viên nào trong danh sách')
+    }
+
+    const filteredCourseStudents = await resultCourseStudentScholarship(students, semesterId)
+
+    // Flatten data
+    const rows = []
+    for (const courseItem of filteredCourseStudents) {
+        for (const student of courseItem.students) {
+            // Check if student has scholarships
+            if (student.hasScholarship && student.scholarship && student.scholarship.length > 0) {
+                // Get general student info
+                const studentName =
+                    (student.userProfile as any)?.fullname ||
+                    (student.studentSemesterResult as any)?.studentName ||
+                    ''
+                const dob = (student.userProfile as any)?.dateOfBirth
+                    ? dayjs((student.userProfile as any).dateOfBirth).format('DD/MM/YYYY')
+                    : ''
+                const studentCode = student.code || ''
+                const className = student.fixedClass?.name || ''
+                const courseName = courseItem.courseName
+
+                // Semester Result info
+                const result: any = student.studentSemesterResult
+                const gpaSemester = result?.gpaBase10 || 0
+                const trainingPoint = result?.conductScore || 0
+                const academicClassification = result?.academicClassification || ''
+
+                for (const scholarship of student.scholarship) {
+                    rows.push({
+                        studentCode,
+                        studentName,
+                        dob,
+                        className,
+                        courseName,
+                        scholarshipName: scholarship.name,
+                        gpaSemester,
+                        trainingPoint,
+                        academicClassification,
+                    })
+                }
+            }
+        }
+    }
+
+    if (rows.length === 0) {
+        throw new Error('Không có dữ liệu học bổng để xuất')
+    }
+
+    const workbook = new ExcelJS.Workbook()
+    const worksheet = workbook.addWorksheet('Danh sách học bổng')
+
+    worksheet.columns = [
+        { header: 'Mã SV', key: 'studentCode', width: 15 },
+        { header: 'Họ và tên', key: 'studentName', width: 25 },
+        { header: 'Ngày sinh', key: 'dob', width: 15 },
+        { header: 'Lớp', key: 'className', width: 15 },
+        { header: 'Khoá', key: 'courseName', width: 15 },
+        { header: 'Học bổng', key: 'scholarshipName', width: 30 },
+        { header: 'ĐTB Học kỳ', key: 'gpaSemester', width: 15 },
+        { header: 'ĐRL', key: 'trainingPoint', width: 10 },
+        { header: 'Xếp loại HT', key: 'academicClassification', width: 15 },
+    ]
+
+    // Style header
+    worksheet.getRow(1).font = { bold: true }
+
+    worksheet.addRows(rows)
+
+    const buffer = await workbook.xlsx.writeBuffer()
+    return buffer
 }
 
 export async function generateStudentImportTemplate(): Promise<ArrayBuffer> {

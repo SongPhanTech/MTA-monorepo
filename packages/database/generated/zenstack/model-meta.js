@@ -8103,12 +8103,14 @@ const metadata = {
                 }, trainingBlockSubjectId: {
                     name: "trainingBlockSubjectId",
                     type: "String",
+                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'trainingBlockSubject',
                 }, trainingBlockSubject: {
                     name: "trainingBlockSubject",
                     type: "TrainingBlockSubject",
                     isDataModel: true,
+                    isOptional: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'planTrainingSubjects',
                     isRelationOwner: true,
@@ -8121,6 +8123,12 @@ const metadata = {
                     name: "subjectClassType",
                     type: "SubjectClassType",
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, fixedClass: {
+                    name: "fixedClass",
+                    type: "FixedClass",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'planTrainingSubject',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -9345,6 +9353,12 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'schoolYear',
+                }, schoolYearTrainingScore: {
+                    name: "schoolYearTrainingScore",
+                    type: "SchoolYearTrainingScore",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'schoolYear',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -9501,6 +9515,12 @@ const metadata = {
                 }, scoreLinkSheets: {
                     name: "scoreLinkSheets",
                     type: "ScoreLinkSheet",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'semester',
+                }, semesterTrainingScore: {
+                    name: "semesterTrainingScore",
+                    type: "SemesterTrainingScore",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'semester',
@@ -10221,6 +10241,21 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'fixedClass',
+                }, planTrainingSubject: {
+                    name: "planTrainingSubject",
+                    type: "PlanTrainingSubject",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'fixedClass',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "planTrainingSubjectId" },
+                }, planTrainingSubjectId: {
+                    name: "planTrainingSubjectId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'planTrainingSubject',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -15136,6 +15171,18 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'student',
+                }, semesterTrainingScore: {
+                    name: "semesterTrainingScore",
+                    type: "SemesterTrainingScore",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'student',
+                }, schoolYearTrainingScore: {
+                    name: "schoolYearTrainingScore",
+                    type: "SchoolYearTrainingScore",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'student',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -16622,6 +16669,176 @@ const metadata = {
                 },
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        semesterTrainingScore: {
+            name: 'SemesterTrainingScore', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$SemesterTrainingScore$createdBy,
+                }, semester: {
+                    name: "semester",
+                    type: "Semester",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'semesterTrainingScore',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "semesterId" },
+                }, semesterId: {
+                    name: "semesterId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'semester',
+                }, student: {
+                    name: "student",
+                    type: "Student",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'semesterTrainingScore',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentId" },
+                }, studentId: {
+                    name: "studentId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'student',
+                }, score: {
+                    name: "score",
+                    type: "Int",
+                    isOptional: true,
+                }, status: {
+                    name: "status",
+                    type: "TrainingScoreStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        schoolYearTrainingScore: {
+            name: 'SchoolYearTrainingScore', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$SchoolYearTrainingScore$createdBy,
+                }, schoolYear: {
+                    name: "schoolYear",
+                    type: "SchoolYear",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'schoolYearTrainingScore',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "schoolYearId" },
+                }, schoolYearId: {
+                    name: "schoolYearId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'schoolYear',
+                }, student: {
+                    name: "student",
+                    type: "Student",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'schoolYearTrainingScore',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentId" },
+                }, studentId: {
+                    name: "studentId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'student',
+                }, score: {
+                    name: "score",
+                    type: "Int",
+                    isOptional: true,
+                }, status: {
+                    name: "status",
+                    type: "TrainingScoreStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         lecturerType: {
             name: 'LecturerType', fields: {
@@ -28474,6 +28691,12 @@ function $default$TrainingScoreSession$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
 function $default$StudentTrainingScore$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
+function $default$SemesterTrainingScore$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
+function $default$SchoolYearTrainingScore$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
 function $default$LecturerType$createdBy(user) {

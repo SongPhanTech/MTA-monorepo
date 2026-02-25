@@ -146,6 +146,8 @@ export * from './academic-action-condition';
 export * from './student-academic-decision';
 export * from './training-score-session';
 export * from './student-training-score';
+export * from './semester-training-score';
+export * from './school-year-training-score';
 export * from './lecturer-type';
 export * from './staff-type';
 export * from './staff-position';

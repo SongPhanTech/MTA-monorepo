@@ -2909,6 +2909,46 @@ const policy: PolicyDef = {
             },
 
         },
+        semesterTrainingScore: {
+            modelLevel: {
+                read: { guard: SemesterTrainingScore_read, },
+                create: { guard: SemesterTrainingScore_create, inputChecker: SemesterTrainingScore_create_input, },
+                update: { guard: SemesterTrainingScore_update, },
+                postUpdate: { guard: SemesterTrainingScore_postUpdate, },
+                delete: { guard: SemesterTrainingScore_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        schoolYearTrainingScore: {
+            modelLevel: {
+                read: { guard: SchoolYearTrainingScore_read, },
+                create: { guard: SchoolYearTrainingScore_create, inputChecker: SchoolYearTrainingScore_create_input, },
+                update: { guard: SchoolYearTrainingScore_update, },
+                postUpdate: { guard: SchoolYearTrainingScore_postUpdate, },
+                delete: { guard: SchoolYearTrainingScore_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
         lecturerType: {
             modelLevel: {
                 read: { guard: LecturerType_read, },
@@ -5513,6 +5553,8 @@ const policy: PolicyDef = {
         studentAcademicDecision: { hasValidation: false },
         trainingScoreSession: { hasValidation: false },
         studentTrainingScore: { hasValidation: false },
+        semesterTrainingScore: { hasValidation: false },
+        schoolYearTrainingScore: { hasValidation: false },
         lecturerType: { hasValidation: false },
         staffType: { hasValidation: false },
         staffPosition: { hasValidation: false },
@@ -14843,6 +14885,136 @@ function StudentTrainingScore_delete(context: QueryContext, db: CrudContract): a
 }
 
 function $check_StudentTrainingScore_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function SemesterTrainingScore_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_SemesterTrainingScore_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function SemesterTrainingScore_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_SemesterTrainingScore_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function SemesterTrainingScore_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function SemesterTrainingScore_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_SemesterTrainingScore_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function SemesterTrainingScore_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_SemesterTrainingScore_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function SemesterTrainingScore_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_SemesterTrainingScore_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function SchoolYearTrainingScore_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_SchoolYearTrainingScore_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function SchoolYearTrainingScore_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_SchoolYearTrainingScore_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function SchoolYearTrainingScore_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function SchoolYearTrainingScore_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_SchoolYearTrainingScore_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function SchoolYearTrainingScore_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_SchoolYearTrainingScore_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function SchoolYearTrainingScore_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_SchoolYearTrainingScore_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 

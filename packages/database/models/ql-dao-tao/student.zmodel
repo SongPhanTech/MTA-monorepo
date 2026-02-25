@@ -125,8 +125,12 @@ model Student extends Base {
   classRegisterLogs              ClassRegisterLogs[]
   notes                          Note[]
   noteFolders                    NoteFolder[]
+  semesterTrainingScore          SemesterTrainingScore[]
+	schoolYearTrainingScore        SchoolYearTrainingScore[]
 
   @@schema("ql-dao-tao")
+
+	
 }
 
 model StudentSemesterResult extends Base {

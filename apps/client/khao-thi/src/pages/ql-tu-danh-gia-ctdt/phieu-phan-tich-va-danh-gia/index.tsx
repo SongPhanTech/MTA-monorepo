@@ -20,7 +20,7 @@ import { useMemo, useState } from 'react'
 export default function CriteriaAnalysisAndEvaluationPage() {
     const [activeKey, setActiveKey] = useState('1')
     const { data: me } = useSession()
-    const idProfile = me?.sDM_NhanVienId || '8b6c039d-c687-4d52-96fb-368d9052edc5'
+    const idProfile = me?.sDM_NhanVienId || '7247c121-ab5a-4a72-a018-4a4090c7948a'
 
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
     const { can } = useAbility()

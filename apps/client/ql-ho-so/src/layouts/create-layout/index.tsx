@@ -13,6 +13,8 @@ import { useRouter } from 'next/router'
 import { type ReactNode, useEffect, useMemo, useState } from 'react'
 import { IdleTimerProvider } from 'react-idle-timer'
 import HeaderApp from '@/components/header'
+import { Footer } from 'antd/es/layout/layout'
+import { useAppVersionInfo } from '@workspace/libs/api/public'
 
 const { Header, Content } = Layout
 interface breadcrumListProps {
@@ -37,6 +39,8 @@ const CreateLayout = ({
     const [collapsed, setCollapsed] = useState(() => {
         return typeof window !== 'undefined' && localStorage.getItem('collapsed') === 'true'
     })
+
+    const { version, isLoading: isLoadingVersion } = useAppVersionInfo()
 
     const listBreadcrumb = useMemo(() => {
         return breadcrumb?.length > 0
@@ -168,6 +172,12 @@ const CreateLayout = ({
                     </Content>
                 </Layout>
             </Layout>
+            <Footer className="fixed bottom-0 w-full z-[1000] flex items-center p-2">
+                <div>
+                    Học viện Kỹ thuật Quân sự - Địa chỉ: Số 236, Hoàng Quốc Việt, Cầu Giấy, Hà Nội
+                </div>
+                <div className="ml-auto">Phiên bản: {isLoadingVersion ? '...' : version}</div>
+            </Footer>
         </IdleTimerProvider>
     )
 }

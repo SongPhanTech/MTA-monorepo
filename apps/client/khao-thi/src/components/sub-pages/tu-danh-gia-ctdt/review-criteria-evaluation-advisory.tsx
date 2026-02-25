@@ -154,50 +154,27 @@ const ReviewCriteriaEvaluationAdvisorySubpage = ({
         }
     }, [data, form])
 
-    const firstEvaluationCriterion = data.criteria.find(
-        (c) => c.evaluationCriterion
-    )?.evaluationCriterion
-    const evaluatorName = firstEvaluationCriterion?.lecturer?.userProfile?.fullname
-    const reviewDeadline = firstEvaluationCriterion?.deadlineReview
-    const deadlineStatus = reviewDeadline ? getDeadlineStatus(reviewDeadline) : null
-    const status = firstEvaluationCriterion?.status
-    const statusConfig = getStatusConfig(status || $Enums.EvaluationStatus.LOCK)
+    const hasApprovableItems = data.criteria.some(
+        (c) =>
+            c.evaluationCriterion &&
+            c.evaluationCriterion.status !== $Enums.EvaluationStatus.PENDING &&
+            c.evaluationCriterion.status !== $Enums.EvaluationStatus.COMPLETED &&
+            c.evaluationCriterion.status !== $Enums.EvaluationStatus.APPROVED
+    )
 
     return (
         <div className="flex flex-col h-[calc(100vh-230px)]">
             <div className="sticky top-0 z-10 bg-white py-2 flex flex-row justify-between items-center gap-2">
-                <div className="flex flex-row gap-4 items-center text-xs">
-                    <div className="flex items-center gap-1">
-                        {evaluatorName && (
-                            <span className="text-sm text-gray-500">
-                                Người viết đánh giá: {evaluatorName}
-                            </span>
-                        )}
+                <span className="text-sm font-bold text-green-700">
+                    Tiêu chuẩn {data.order}: {data.name}
+                </span>
+                {hasApprovableItems && (
+                    <div className="flex gap-2 mr-2">
+                        <Button type="primary" size="small" onClick={handleSubmitCross}>
+                            Phê duyệt tất cả
+                        </Button>
                     </div>
-                    <div className="flex items-center gap-1">
-                        {reviewDeadline && deadlineStatus && deadlineStatus.text && (
-                            <Tag color={deadlineStatus.color}>
-                                Hạn phản biện: {dayjs(reviewDeadline).format('DD/MM/YYYY')}
-                                {deadlineStatus.text && ` (${deadlineStatus.text})`}
-                            </Tag>
-                        )}
-                    </div>
-                    <div className="flex items-center gap-1">
-                        <span className="text-sm text-gray-500">Trạng thái:</span>
-                        <Tag color={statusConfig.color} className="text-xs">
-                            {statusConfig.text}
-                        </Tag>
-                    </div>
-                </div>
-
-                {status !== $Enums.EvaluationStatus.PENDING &&
-                    status !== $Enums.EvaluationStatus.COMPLETED && (
-                        <div className="flex gap-2 mr-2">
-                            <Button type="primary" size="small" onClick={handleSubmitCross}>
-                                Phê duyệt
-                            </Button>
-                        </div>
-                    )}
+                )}
             </div>
 
             <div className="flex-1 overflow-y-auto overflow-x-hidden px-2">
@@ -207,32 +184,55 @@ const ReviewCriteriaEvaluationAdvisorySubpage = ({
                             <>
                                 {fields.map(({ key, name }, idx: number) => {
                                     const item = data.criteria[name]
+                                    const criterionStatus =
+                                        item.evaluationCriterion?.status ||
+                                        $Enums.EvaluationStatus.LOCK
+                                    const criterionStatusConfig = getStatusConfig(criterionStatus)
+                                    const reviewDeadline = item.evaluationCriterion?.deadlineReview
+                                    const deadlineStatus = reviewDeadline
+                                        ? getDeadlineStatus(reviewDeadline)
+                                        : null
+                                    const evaluatorName =
+                                        item.evaluationCriterion?.lecturer?.userProfile?.fullname
                                     return (
                                         <div key={key} style={{ marginBottom: 24 }}>
                                             <Collapse
                                                 items={[
                                                     {
                                                         label: (
-                                                            <div className="flex items-center gap-2">
-                                                                <span className="font-bold">
-                                                                    Tiêu chí {data.order}.
-                                                                    {item.order}:{' '}
-                                                                </span>
-                                                                <span>{item?.name}</span>
-                                                            </div>
-                                                        ),
-                                                        extra: (
                                                             <div
+                                                                className="flex flex-col w-full pr-2 gap-1"
                                                                 onClick={(e) => e.stopPropagation()}
                                                             >
-                                                                {item.evaluationCriterion &&
-                                                                    status !==
-                                                                        $Enums.EvaluationStatus
-                                                                            .PENDING &&
-                                                                    status !==
-                                                                        $Enums.EvaluationStatus
-                                                                            .COMPLETED && (
-                                                                        <div className="flex gap-2">
+                                                                <div className="flex items-center justify-between gap-2">
+                                                                    <div
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation()
+                                                                            setOpenCollapseKeys(
+                                                                                (prev) => ({
+                                                                                    ...prev,
+                                                                                    [item.id]:
+                                                                                        !prev[
+                                                                                            item.id
+                                                                                        ],
+                                                                                })
+                                                                            )
+                                                                        }}
+                                                                        className="cursor-pointer flex-1"
+                                                                    >
+                                                                        <span className="font-bold">
+                                                                            Tiêu chí {data.order}.
+                                                                            {item.order}:{' '}
+                                                                        </span>
+                                                                        {item?.name}
+                                                                    </div>
+                                                                    {item.evaluationCriterion &&
+                                                                        criterionStatus !==
+                                                                            $Enums.EvaluationStatus
+                                                                                .PENDING &&
+                                                                        criterionStatus !==
+                                                                            $Enums.EvaluationStatus
+                                                                                .APPROVED && (
                                                                             <Badge
                                                                                 count={
                                                                                     item
@@ -284,8 +284,43 @@ const ReviewCriteriaEvaluationAdvisorySubpage = ({
                                                                                         : 'Gửi ý kiến phản biện'}
                                                                                 </Button>
                                                                             </Badge>
-                                                                        </div>
-                                                                    )}
+                                                                        )}
+                                                                </div>
+                                                                <div className="flex gap-3 items-center mt-1 flex-wrap">
+                                                                    <span className="text-xs text-gray-500">
+                                                                        Người viết phiếu:{' '}
+                                                                        {evaluatorName ||
+                                                                            'Chưa phân công'}
+                                                                    </span>
+                                                                    {reviewDeadline &&
+                                                                        deadlineStatus && (
+                                                                            <Tag
+                                                                                color={
+                                                                                    deadlineStatus.color
+                                                                                }
+                                                                            >
+                                                                                Hạn:{' '}
+                                                                                {dayjs(
+                                                                                    reviewDeadline
+                                                                                ).format(
+                                                                                    'DD/MM/YYYY'
+                                                                                )}
+                                                                                {deadlineStatus.text &&
+                                                                                    ` (${deadlineStatus.text})`}
+                                                                            </Tag>
+                                                                        )}
+                                                                    <span className="text-xs text-gray-500">
+                                                                        Trạng thái:
+                                                                    </span>
+                                                                    <Tag
+                                                                        color={
+                                                                            criterionStatusConfig.color
+                                                                        }
+                                                                        className="text-xs"
+                                                                    >
+                                                                        {criterionStatusConfig.text}
+                                                                    </Tag>
+                                                                </div>
                                                             </div>
                                                         ),
                                                         key: item.id,

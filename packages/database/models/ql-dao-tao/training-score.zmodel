@@ -47,6 +47,37 @@ model StudentTrainingScore extends Base {
   @@schema("ql-dao-tao")
 }
 
+
+// Điểm rèn luyện theo học kỳ
+model SemesterTrainingScore extends Base {
+  semester                Semester              @relation(fields: [semesterId], references: [id])
+  semesterId              String
+
+  student                Student              @relation(fields: [studentId], references: [id])
+  studentId              String
+
+  score                  Int?
+
+  status                 TrainingScoreStatus  @default(PENDING)
+
+  @@schema("ql-dao-tao")
+}
+
+// Điểm rèn luyện theo năm học
+model SchoolYearTrainingScore extends Base {
+  schoolYear                SchoolYear              @relation(fields: [schoolYearId], references: [id])
+  schoolYearId              String
+
+  student                Student              @relation(fields: [studentId], references: [id])
+  studentId              String
+
+  score                  Int?
+  
+  status                 TrainingScoreStatus  @default(PENDING)
+
+  @@schema("ql-dao-tao")
+}
+
 enum StudentTrainingType {
   EXCELLENT // Xuất sắc - cho SV DS
   GOOD      // Tốt

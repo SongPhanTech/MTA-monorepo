@@ -17,7 +17,8 @@ import { type ReactNode, useEffect, useMemo, useState } from 'react'
 import { IdleTimerProvider } from 'react-idle-timer'
 import HeaderApp from '@/components/header'
 import { Footer } from 'antd/es/layout/layout'
-import packageInfo from '../../../package.json'
+import { useAppVersionInfo } from '@workspace/libs/api/public'
+//import packageInfo from '../../../package.json'
 
 const { Header, Content } = Layout
 interface breadcrumListProps {
@@ -39,6 +40,7 @@ const DefaultLayout = ({
     const menus = useMenuList()
     const { status } = useSession()
     const router = useRouter()
+    const { version, isLoading: isLoadingVersion } = useAppVersionInfo()
     const currentPath = router.pathname
     const breadcrumb = getDynamicBreadcrumb('KHAO_THI', currentPath)
     const [collapsed, setCollapsed] = useState(() => {
@@ -195,7 +197,7 @@ const DefaultLayout = ({
                 <div>
                     Học viện Kỹ thuật Quân sự - Địa chỉ: Số 236, Hoàng Quốc Việt, Cầu Giấy, Hà Nội
                 </div>
-                <div className="ml-auto">Phiên bản: {packageInfo.version}</div>
+                <div className="ml-auto">Phiên bản: {isLoadingVersion ? '...' : version}</div>
             </Footer>
         </IdleTimerProvider>
     )

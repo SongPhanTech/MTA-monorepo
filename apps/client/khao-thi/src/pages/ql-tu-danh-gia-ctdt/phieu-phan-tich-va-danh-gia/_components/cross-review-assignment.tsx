@@ -53,6 +53,7 @@ export type PutPhanCongHangLoatCrossModalInput = {
     selectedCriteriaIds?: string[]
     tableData?: StandardData[]
     refetch?: () => void
+    clearSelected?: () => void
 }
 
 export default function CrossReviewAssignment() {
@@ -321,6 +322,7 @@ export default function CrossReviewAssignment() {
                                     refetch: refetch,
                                     selectedCriteriaIds: getSelectedCriteria(),
                                     tableData: tableData,
+                                    clearSelected: () => setSelectedRowKeys([]),
                                 })
                             }
                         >

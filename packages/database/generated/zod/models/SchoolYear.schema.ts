@@ -39,6 +39,7 @@ const relationSchema = z.object({
     studentYearResult: z.array(z.unknown()).optional(),
     studentAcademicDecision: z.array(z.unknown()).optional(),
     evaluationPeriod: z.array(z.unknown()).optional(),
+    schoolYearTrainingScore: z.array(z.unknown()).optional(),
 }
 );
 

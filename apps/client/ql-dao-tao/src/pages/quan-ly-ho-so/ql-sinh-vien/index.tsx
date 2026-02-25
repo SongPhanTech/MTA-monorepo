@@ -406,7 +406,7 @@ export default function UserProfilePageDs() {
 
     return (
         <div>
-            <Row gutter={[16, 0]}>
+            <Row gutter={[16, 16]}>
                 <Col span={24}>
                     {/* Row nút thêm */}
                     <Row gutter={[16, 16]} align="top" justify="end">
@@ -447,7 +447,7 @@ export default function UserProfilePageDs() {
                             </Flex>
                         </Col>
                         <Col xs={12}>
-                            <Flex justify="end" wrap="wrap" gap="8px" className="mt-1">
+                            <Flex justify="end" wrap="wrap" gap="8px">
                                 {can(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_QL_SINH_VIEN,
                                     'NHAP_EXCEL'
@@ -502,6 +502,7 @@ export default function UserProfilePageDs() {
                 </Col>
                 <Col span={24}>
                     <Table
+                        className="h-[calc(100vh-250px)]"
                         filters={filters}
                         setFilters={(value) => {
                             setFilters(value)

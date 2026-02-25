@@ -12,7 +12,7 @@ import {
     useEditor,
 } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import './index.css'
 import Image from '@tiptap/extension-image'
 import { Mathematics } from '@tiptap/extension-mathematics'
@@ -28,6 +28,7 @@ import TableCell from '@tiptap/extension-table-cell'
 import TableHeader from '@tiptap/extension-table-header'
 import TableRow from '@tiptap/extension-table-row'
 import { CustomTextStyle } from './CustomTextStyle'
+import { CustomParagraph } from './CustomParagraph'
 
 type TextEditorProps = {
     value?: string
@@ -38,6 +39,7 @@ type TextEditorProps = {
     id?: string
     editable?: boolean
     stickyToolbar?: boolean
+    defaultTable?: boolean
 }
 
 export function RichTextEditor({
@@ -49,12 +51,14 @@ export function RichTextEditor({
     id,
     editable = true,
     stickyToolbar = false,
+    defaultTable = false,
 }: TextEditorProps) {
     const editor = useEditor({
         immediatelyRender: false,
         editable,
         extensions: [
-            StarterKit,
+            StarterKit.configure({ paragraph: false }),
+            CustomParagraph,
             Underline,
             TextAlign.configure({
                 types: ['heading', 'paragraph', 'textStyle', 'image'],
@@ -62,22 +66,6 @@ export function RichTextEditor({
             Highlight,
             CustomTextStyle,
             Color.configure({ types: ['textStyle'] }),
-            // ExportDocx.configure({
-            //     onCompleteExport: (result: ArrayBuffer) => {
-            //         setIsLoading(false)
-            //         const blob = new Blob([result], {
-            //             type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-            //         })
-            //         const url = URL.createObjectURL(blob)
-            //         const a = document.createElement('a')
-
-            //         a.href = url
-            //         a.download = 'export.docx'
-            //         a.click()
-            //         URL.revokeObjectURL(url)
-            //     },
-            // }),
-            // Highlight.configure({ multicolor: true }),
             Image.configure({
                 inline: true,
                 allowBase64: false,
@@ -131,24 +119,6 @@ export function RichTextEditor({
                     class: 'p-2 border',
                 },
             }),
-            // TextStyle.configure({ mergeNestedSpanStyles: true }),
-            //   ImportDocx.configure({
-            //     appId: 'your-app-id',
-            //     token: 'your-jwt',
-            //     // This is our demo endpoint, and it won't work outside this environment, in production you should remove this field
-            //     endpoint: 'https://api-demo.tiptap.dev/v2/convert',
-            //     // This is our demo endpoint, and it won't work outside this environment, in production you should use your own image upload endpoint
-            //     imageUploadCallbackUrl: 'https://api-demo.tiptap.dev/v2/convert/upload',
-            //   }),
-            // Table,
-            // TableRow,
-            // TableCell,
-            // TableHeader,
-            // TextAlign.configure({ types: ['heading', 'paragraph'] }),
-            // Link,
-            // Color,
-            // FontFamily,
-            // Underline,
         ],
         content: value || '', // Khởi tạo với giá trị từ form
         onUpdate: ({ editor }) => {
@@ -161,6 +131,102 @@ export function RichTextEditor({
                     className
                 ),
                 spellcheck: false,
+            },
+            transformPastedHTML: (html: string) => {
+                const isWordContent =
+                    html.includes('mso-') ||
+                    html.includes('Microsoft Word') ||
+                    html.includes('urn:schemas-microsoft-com')
+                if (!isWordContent) return html
+
+                const parser = new DOMParser()
+                const doc = parser.parseFromString(html, 'text/html')
+
+                // --- Step 1: Extract indent rules from Word's <style> block ---
+                // Word stores paragraph default styles in a CSS class (e.g. .MsoNormal),
+                // NOT as inline styles. We need to read those rules too.
+                type IndentRule = { marginLeft?: string; textIndent?: string }
+                const cssClassRules = new Map<string, IndentRule>()
+
+                const styleEl = doc.querySelector('style')
+                if (styleEl) {
+                    const cssText = styleEl.textContent || ''
+                    // Match rules like: .ClassName { ... margin-left: X; text-indent: Y; ... }
+                    const ruleRegex = /\.([A-Za-z0-9_-]+)[^{]*\{([^}]*)\}/g
+                    let match = ruleRegex.exec(cssText)
+                    while (match !== null) {
+                        const className = match[1]
+                        const declarations = match[2]
+                        const mlMatch = declarations.match(/margin-left\s*:\s*([^;]+)/i)
+                        const tiMatch = declarations.match(/text-indent\s*:\s*([^;]+)/i)
+                        if (mlMatch || tiMatch) {
+                            cssClassRules.set(className, {
+                                marginLeft: mlMatch?.[1]?.trim(),
+                                textIndent: tiMatch?.[1]?.trim(),
+                            })
+                        }
+                        match = ruleRegex.exec(cssText)
+                    }
+                }
+
+                const isZeroValue = (v: string | undefined) =>
+                    !v ||
+                    v === '0' ||
+                    v === '0in' ||
+                    v === '0cm' ||
+                    v === '0pt' ||
+                    v === '0px' ||
+                    v === '0em'
+
+                // --- Step 2: Process each paragraph ---
+                doc.querySelectorAll('p').forEach((el) => {
+                    if (!(el instanceof HTMLElement)) return
+
+                    // Read inline styles first (highest priority)
+                    let marginLeft = el.style.marginLeft
+                    let textIndent = el.style.textIndent
+                    const textAlign = el.style.textAlign
+
+                    // Fall back to CSS class rules if no inline indent found
+                    if (isZeroValue(marginLeft) || isZeroValue(textIndent)) {
+                        for (const cls of el.classList) {
+                            const rules = cssClassRules.get(cls)
+                            if (!rules) continue
+                            if (isZeroValue(marginLeft) && !isZeroValue(rules.marginLeft)) {
+                                marginLeft = rules.marginLeft ?? ''
+                            }
+                            if (isZeroValue(textIndent) && !isZeroValue(rules.textIndent)) {
+                                textIndent = rules.textIndent ?? ''
+                            }
+                        }
+                    }
+
+                    // Strip mso-* noise, rebuild clean style
+                    const currentStyle = el.getAttribute('style') || ''
+                    const cleanStyle = currentStyle
+                        .split(';')
+                        .map((s) => s.trim())
+                        .filter((s) => {
+                            if (!s) return false
+                            const prop = s.split(':')[0]?.trim().toLowerCase()
+                            return (
+                                !!prop &&
+                                !prop.startsWith('mso-') &&
+                                !prop.startsWith('panose-') &&
+                                prop !== 'font-family'
+                            )
+                        })
+                        .join('; ')
+
+                    el.setAttribute('style', cleanStyle)
+
+                    // Re-apply resolved indentation explicitly
+                    if (!isZeroValue(marginLeft)) el.style.marginLeft = marginLeft
+                    if (!isZeroValue(textIndent)) el.style.textIndent = textIndent
+                    if (textAlign) el.style.textAlign = textAlign
+                })
+
+                return doc.body.innerHTML
             },
             handlePaste: (view, event, slice) => {
                 const items = event.clipboardData?.items
@@ -317,11 +383,80 @@ export function RichTextEditor({
             throw error
         }
     }
+    const defaultTableInserted = useRef(false)
+
     useEffect(() => {
-        if (editor && value !== editor.getHTML()) {
+        if (editor && defaultTable && !value && !defaultTableInserted.current) {
+            defaultTableInserted.current = true
+
+            const makeCell = (text: string, isHeader = false, colwidth?: number) => ({
+                type: isHeader ? 'tableHeader' : 'tableCell',
+                attrs: { colspan: 1, rowspan: 1, colwidth: colwidth ? [colwidth] : null },
+                content: [{ type: 'paragraph', content: text ? [{ type: 'text', text }] : [] }],
+            })
+
+            const headers: { text: string; width: number }[] = [
+                { text: 'TT', width: 50 },
+                { text: 'Mục tiêu', width: 150 },
+                { text: 'Nội dung', width: 200 },
+                { text: 'Đơn vị, người thực hiện', width: 180 },
+                { text: 'Thời gian thực hiện hoặc hoàn thành', width: 180 },
+                { text: 'Ghi chú', width: 120 },
+            ]
+
+            editor.commands.setContent({
+                type: 'doc',
+                content: [
+                    {
+                        type: 'table',
+                        content: [
+                            {
+                                type: 'tableRow',
+                                content: headers.map(({ text, width }) =>
+                                    makeCell(text, true, width)
+                                ),
+                            },
+                            {
+                                type: 'tableRow',
+                                content: headers.map((_, i) =>
+                                    makeCell(
+                                        i === 0 ? '1' : i === 1 ? 'Khắc phục điểm tồn tại' : '',
+                                        false,
+                                        headers[i].width
+                                    )
+                                ),
+                            },
+                            {
+                                type: 'tableRow',
+                                content: headers.map((_, i) =>
+                                    makeCell(
+                                        i === 0 ? '2' : i === 1 ? 'Phát huy điểm mạnh' : '',
+                                        false,
+                                        headers[i].width
+                                    )
+                                ),
+                            },
+                        ],
+                    },
+                ],
+            })
+        }
+    }, [editor, defaultTable, value])
+
+    useEffect(() => {
+        if (!editor) return
+        if (!value && defaultTable) return
+        if (value !== editor.getHTML()) {
             editor.commands.setContent(value || '', false)
         }
-    }, [value, editor])
+    }, [value, editor, defaultTable])
+
+    useEffect(() => {
+        if (!editor) return
+        if (editor.isEditable !== editable) {
+            editor.setEditable(editable)
+        }
+    }, [editor, editable])
 
     return (
         <div className="border rounded-md">

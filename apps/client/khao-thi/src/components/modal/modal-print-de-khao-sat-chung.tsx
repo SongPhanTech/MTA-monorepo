@@ -100,6 +100,16 @@ const ModalPrintExamSurvey = () => {
             tr {
                 page-break-inside: avoid;
             }
+            .custom-red-table .ant-table,
+            .custom-red-table .ant-table-container,
+            .custom-red-table .ant-table-content table {
+             border: 2px solid red !important;
+            }
+
+            .custom-red-table .ant-table-cell {
+            border: 2px solid red !important;
+            }
+
         }
       `,
     })
@@ -188,6 +198,8 @@ const ModalPrintExamSurvey = () => {
                             <Table
                                 rowKey="id"
                                 dataSource={[{ id: 'abc' }]}
+                                className="custom-red-table"
+                                rowClassName={(record: any) => (record.isParent ? 'group-row' : '')}
                                 columns={survey.surveyChoice.map((i) => {
                                     return {
                                         title: `${i?.description} ${i?.requireExplanation === true ? '*' : ''}`,
@@ -211,6 +223,8 @@ const ModalPrintExamSurvey = () => {
                             <Table
                                 rowKey="id"
                                 dataSource={dataTest || []}
+                                className="custom-red-table"
+                                rowClassName={(record: any) => (record.isParent ? 'group-row' : '')}
                                 pagination={false}
                                 columns={[
                                     {
@@ -379,6 +393,64 @@ const ModalPrintExamSurvey = () => {
             </div>
             <style>
                 {`
+                    .custom-red-table .ant-table-thead > tr > th {
+                        background: #ffe5e5 !important;
+                        border: 0.5px solid red !important;
+                    }
+
+                    .custom-red-table .group-row > td {
+                        background: #ffe5e5 !important;
+                        border: 0.5px solid red !important;
+                        font-weight: 700;
+                    }
+
+                    .custom-red-table .ant-table,
+                    .custom-red-table .ant-table-container,
+                    .custom-red-table .ant-table-content table,
+                    .custom-red-table .ant-table-cell {
+                        border: 0.5px solid red !important;
+                    }
+
+                    .custom-red-table .ant-radio-inner {
+                        border: 0.5px solid red !important;
+                        background: white !important;
+                        box-shadow: none !important;
+                    }
+
+                    .custom-red-table .ant-radio-checked .ant-radio-inner {
+                    border-color: red !important;
+                    background: white !important;
+                    }
+
+                    .custom-red-table .ant-radio-checked .ant-radio-inner::after {
+                        background: red !important;
+                        transform: scale(1) !important;
+                    }
+
+                    .custom-red-table .ant-radio-wrapper:hover .ant-radio-inner,
+                    .custom-red-table .ant-radio-input:focus + .ant-radio-inner {
+                        border-color: red !important;
+                        box-shadow: none !important;
+                    }
+
+                    .custom-red-table .ant-radio-input:focus {
+                        outline: none !important;
+                    }
+
+                    .custom-red-table textarea,
+                    .custom-red-table .ant-input {
+                        border: 0.5px solid red !important;
+                        box-shadow: none !important;
+                    }
+
+                    .custom-red-table textarea:focus,
+                    .custom-red-table .ant-input:focus,
+                    .custom-red-table .ant-input-focused {
+                        border: 0.5px solid red !important;
+                        box-shadow: none !important;
+                        outline: none !important;
+                    }
+                        
                     @media print {
                     .color-black {
                         color: #000 !important;
@@ -402,6 +474,7 @@ const ModalPrintExamSurvey = () => {
                     }
                     @page {
                         size: A4;
+                        margin: 0;
                     }
                     @media screen {
                         .page {

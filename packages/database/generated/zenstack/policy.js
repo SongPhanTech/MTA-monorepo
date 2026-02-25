@@ -1851,6 +1851,32 @@ const policy = {
                 update: {},
             },
         },
+        semesterTrainingScore: {
+            modelLevel: {
+                read: { guard: SemesterTrainingScore_read, },
+                create: { guard: SemesterTrainingScore_create, inputChecker: SemesterTrainingScore_create_input, },
+                update: { guard: SemesterTrainingScore_update, },
+                postUpdate: { guard: SemesterTrainingScore_postUpdate, },
+                delete: { guard: SemesterTrainingScore_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        schoolYearTrainingScore: {
+            modelLevel: {
+                read: { guard: SchoolYearTrainingScore_read, },
+                create: { guard: SchoolYearTrainingScore_create, inputChecker: SchoolYearTrainingScore_create_input, },
+                update: { guard: SchoolYearTrainingScore_update, },
+                postUpdate: { guard: SchoolYearTrainingScore_postUpdate, },
+                delete: { guard: SchoolYearTrainingScore_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
         lecturerType: {
             modelLevel: {
                 read: { guard: LecturerType_read, },
@@ -3594,6 +3620,8 @@ const policy = {
         studentAcademicDecision: { hasValidation: false },
         trainingScoreSession: { hasValidation: false },
         studentTrainingScore: { hasValidation: false },
+        semesterTrainingScore: { hasValidation: false },
+        schoolYearTrainingScore: { hasValidation: false },
         lecturerType: { hasValidation: false },
         staffType: { hasValidation: false },
         staffPosition: { hasValidation: false },
@@ -14743,6 +14771,162 @@ function StudentTrainingScore_delete(context, db) {
     return { OR: [] };
 }
 function $check_StudentTrainingScore_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function SemesterTrainingScore_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_SemesterTrainingScore_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function SemesterTrainingScore_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_SemesterTrainingScore_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function SemesterTrainingScore_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function SemesterTrainingScore_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_SemesterTrainingScore_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function SemesterTrainingScore_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_SemesterTrainingScore_postUpdate(input, context) {
+    return true;
+}
+function SemesterTrainingScore_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_SemesterTrainingScore_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function SchoolYearTrainingScore_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_SchoolYearTrainingScore_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function SchoolYearTrainingScore_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_SchoolYearTrainingScore_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function SchoolYearTrainingScore_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function SchoolYearTrainingScore_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_SchoolYearTrainingScore_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function SchoolYearTrainingScore_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_SchoolYearTrainingScore_postUpdate(input, context) {
+    return true;
+}
+function SchoolYearTrainingScore_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_SchoolYearTrainingScore_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {

@@ -22,7 +22,6 @@ import {
     House,
     Landmark,
     Library,
-    ListChecks,
     ListTree,
     type LucideProps,
     ScrollText,
@@ -321,6 +320,12 @@ const NAVIGATION: NavigationType = {
                         label: 'Thực tập',
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_THUC_TAP,
                         description: 'Thực tập',
+                    },
+                    {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN,
+                        label: 'QL điểm rèn luyện',
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_REN_LUYEN,
+                        description: 'QL điểm rèn luyện',
                     },
                 ],
             },
@@ -624,13 +629,7 @@ const NAVIGATION: NavigationType = {
                     },
                 ],
             },
-            {
-                id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QL_REN_LUYEN,
-                label: 'Quản lý đợt rèn luyện',
-                icon: ListChecks,
-                path: ROUTER_PATH.QL_DAO_TAO.QL_REN_LUYEN,
-                description: 'Quản lý đợt rèn luyện',
-            },
+         
             {
                 id: 'quan-ly-van-bang',
                 label: 'Quản lý văn bằng',
