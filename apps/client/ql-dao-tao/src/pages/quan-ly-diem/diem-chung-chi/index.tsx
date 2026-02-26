@@ -406,10 +406,24 @@ export default function ArchivedCertificate() {
                             <Select
                                 className="w-full"
                                 placeholder="Chọn khóa học"
-                                options={trainingCourseData.map((i: TrainingCourse) => ({
-                                    value: i.id,
-                                    label: i.name,
-                                }))}
+                                options={trainingCourseData
+                                    .filter((trainingCourse: TrainingCourse) => {
+                                        if (!filters.fixedClassId) return true
+
+                                        const selectedFixedClass = fixedClassData.find(
+                                            (fixedClass: FixedClass) =>
+                                                fixedClass.id === filters.fixedClassId
+                                        )
+
+                                        return (
+                                            selectedFixedClass?.trainingCourseId ===
+                                            trainingCourse.id
+                                        )
+                                    })
+                                    .map((i: TrainingCourse) => ({
+                                        value: i.id,
+                                        label: i.name,
+                                    }))}
                                 onChange={(val) =>
                                     setFilters({
                                         ...filters,
@@ -426,12 +440,17 @@ export default function ArchivedCertificate() {
                                     value: i.id,
                                     label: i.name,
                                 }))}
-                                onChange={(val) =>
+                                onChange={(val) => {
+                                    const selectedFixedClass = fixedClassData.find(
+                                        (fixedClass: FixedClass) => fixedClass.id === val
+                                    )
+
                                     setFilters({
                                         ...filters,
                                         fixedClassId: val,
+                                        trainingCourseId: selectedFixedClass?.trainingCourseId,
                                     })
-                                }
+                                }}
                                 value={filters.fixedClassId}
                                 allowClear
                             />
