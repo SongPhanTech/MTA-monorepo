@@ -112,7 +112,7 @@
 .ant-pagination-options .ant-select-dropdown {
     bottom: 100% !important;
     top: auto !important;
-    min-height: 100px;
+    min-height: 150px;
 }
 .ant-table-empty .ant-table-wrapper .ant-table-tbody > tr > td {
     border-bottom: 0px solid #f0f0f0;

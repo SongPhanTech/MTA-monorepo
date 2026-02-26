@@ -1,6 +1,9 @@
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import { useFindManyTrainingBlockOnCurriculumVersion } from '@workspace/db/hooks'
+import {
+    useCountTrainingBlockOnCurriculumVersion,
+    useFindManyTrainingBlockOnCurriculumVersion,
+} from '@workspace/db/hooks'
 import { Modal } from 'antd'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -19,13 +22,26 @@ const ModalCurriculumVersionByTrainingBlock = () => {
     })
 
     const { trainingBlockId, trainingBlockName } = input || {}
+    const where = {
+        trainingBlockId: trainingBlockId || '',
+        curriculumVersion: {
+            deletedAt: null,
+        },
+    }
 
-    const { data = [] } = useFindManyTrainingBlockOnCurriculumVersion({
+    const { data: count } = useCountTrainingBlockOnCurriculumVersion({
         where: {
-            trainingBlockId: trainingBlockId || '',
-            curriculumVersion: {
-                deletedAt: null,
-            },
+            ...where,
+        },
+    })
+
+    const {
+        data = [],
+        isLoading,
+        isFetching,
+    } = useFindManyTrainingBlockOnCurriculumVersion({
+        where: {
+            ...where,
         },
         include: {
             curriculumVersion: {
@@ -43,6 +59,8 @@ const ModalCurriculumVersionByTrainingBlock = () => {
         orderBy: {
             priority: 'asc',
         },
+        take: numberOfPages,
+        skip: numberOfPages * (currentPage - 1),
     })
 
     const uniqueCurriculumVersions = useMemo(() => {
@@ -66,12 +84,16 @@ const ModalCurriculumVersionByTrainingBlock = () => {
         >
             <Table
                 rowKey="id"
+                loading={isLoading || isFetching}
                 dataSource={uniqueCurriculumVersions}
                 pagination={{
                     current: currentPage,
                     pageSize: numberOfPages,
-                    total: uniqueCurriculumVersions.length,
-                    onChange: (page) => setCurrentPage(page),
+                    total: count,
+                    onChange: (page, pageSize) => {
+                        setCurrentPage(page)
+                        setNumberOfPages(pageSize)
+                    },
                 }}
                 columns={[
                     {

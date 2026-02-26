@@ -278,7 +278,7 @@ const DiemTrungBinhKyHoc = () => {
                             </Flex>
                         </Col>
                         <Col span={6}>
-                            <Flex justify="end gap-2">
+                            <Flex justify="end" gap={5}>
                                 <Button type="primary" onClick={handleSummaryClick}>
                                     Tổng kết kết quả năm học
                                 </Button>
