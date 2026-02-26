@@ -16,7 +16,6 @@ import {
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, message, Row } from 'antd'
-import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import CauHoiKhaoSat from './cau-hoi-khao-sat'
@@ -26,7 +25,6 @@ function TabNhomCauHoi({ topicSlected }: { topicSlected: SurveyTopic | null }) {
     const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const router = useRouter()
     const [filters, setFilters] = useState<FilterProps>({
         name: '',
         surveyTopicId: undefined,
