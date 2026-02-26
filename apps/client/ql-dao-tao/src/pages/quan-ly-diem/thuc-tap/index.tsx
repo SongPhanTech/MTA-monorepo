@@ -1,3 +1,4 @@
+import { ExportOutlined, TableOutlined, UploadOutlined } from '@ant-design/icons'
 import { FileOutlined } from '@ant-design/icons'
 import DatePicker from '@components/commons/date-picker'
 import Select from '@components/commons/select'
@@ -25,6 +26,9 @@ import ExcelJS from 'exceljs'
 import { SquarePen } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import ExportTemplateInternship from '../../../components/modal/export-template-internship'
+import type React from 'react'
+import { exportLecturerProfile } from '@workspace/libs/api/training'
 
 interface ThucTapForm {
     trainingCourseId: string
@@ -34,6 +38,7 @@ interface ThucTapForm {
 }
 
 export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' }) {
+    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const [form] = Form.useForm<ThucTapForm>()
     const organizationId = Form.useWatch('organizationId', form)
     const trainingCourseId = Form.useWatch('trainingCourseId', form)
@@ -42,6 +47,7 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
     const [numberOfPages, setNumberOfPages] = useState(10)
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { id: semesterId } = useSemesterStore()
+    const [importModalVisible, setImportModalVisible] = useState(false)
 
     const { onOpen: openPutInternshipModal } = useDisclosure<{
         studentInternshipId: string
@@ -437,6 +443,15 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
             loading()
         }
     }
+    const handleExportInternship = async () => {
+        const { status, data } = await exportInternshipProfile({
+            studentInternshipIds: selectedRowKeys as string[],
+        })
+
+        if (status === 200) {
+            saveAs(data, 'danh_sach_thuc_tap.xlsx') 
+        }
+    }
     const confirmImport = (file: File) => {
         Modal.confirm({
             title: 'Xác nhận Import dữ liệu',
@@ -468,6 +483,40 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
 
     return (
         <Row gutter={[8, 8]}>
+            <Col span={24}>
+                <Row gutter={[16, 16]} align="middle" justify="end" className="gap-1">
+                    {selectedRowKeys.length > 0 && (
+                        <p>(Đang chọn {selectedRowKeys.length} TTS)</p>
+                    )}
+                    <Button
+                        type="primary"
+                        onClick={handleExportInternship}
+                        icon={<TableOutlined />}
+                    >
+                        Xuất DS TTS
+                    </Button>
+                    <Button
+                        type="primary"
+                        onClick={() => setImportModalVisible(true)}
+                        icon={<UploadOutlined />}
+                    >
+                        Nhập dữ liệu Excel
+                    </Button>
+                    {/* <ImportLecturerModal
+                        visible={importModalVisible}
+                        onSuccess={() => {
+                            setImportModalVisible(false)
+                            refetch()
+                            refetchCount()
+                        }}
+                        onCancel={() => setImportModalVisible(false)}
+                    /> */}
+                    <ExportTemplateInternship />
+                    {/* <Button onClick={handleModal} type="primary">
+                                Thêm mới
+                            </Button> */}
+                </Row>
+            </Col>
             <Col span={24}>
                 <Form form={form}>
                     <Flex gap={6} wrap="wrap">
@@ -1362,6 +1411,13 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
                 <Table
                     scrollable={studentInternshipData.length > 0}
                     maxHeight={'calc(100vh - 330px)'}
+                    // rowSelection={{
+                    //     selectedRowKeys,
+                    //     preserveSelectedRowKeys: true,
+                    //     onChange: (keys) => {
+                    //         setSelectedRowKeys(keys)
+                    //     },
+                    // }}
                     columns={[
                         {
                             title: '',
@@ -1605,6 +1661,7 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
                         },
                     ]}
                     data={studentInternshipData}
+                    // rowKey="id"
                     pagination={{
                         current: currentPage,
                         pageSize: numberOfPages,
