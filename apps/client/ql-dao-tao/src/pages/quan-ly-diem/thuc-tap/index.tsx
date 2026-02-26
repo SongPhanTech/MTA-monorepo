@@ -4,6 +4,7 @@ import DatePicker from '@components/commons/date-picker'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import TreeSelect from '@components/commons/tree-select'
+import type { FilterProps } from '@constants/type'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgFlat, buildOrgTree } from '@lib/utils'
 import { SubjectVersionType } from '@workspace/db'
@@ -49,6 +50,11 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { id: semesterId } = useSemesterStore()
     const [importModalVisible, setImportModalVisible] = useState(false)
+    const [filters, setFilters] = useState<FilterProps>({
+        code: '',
+        name: '',
+        subjectName: '',
+    })
 
     const { onOpen: openPutInternshipModal } = useDisclosure<{
         studentInternshipId: string
@@ -117,6 +123,14 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
                     cancelled: false,
                     active: true,
                     ...(subjectClassId ? { id: subjectClassId } : {}),
+                    ...(filters.subjectName
+                        ? {
+                              code: {
+                                  contains: filters.subjectName,
+                                  mode: 'insensitive' as const,
+                              },
+                          }
+                        : {}),
                 },
                 student: {
                     fixedClass: {
@@ -125,6 +139,24 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
                     status: 'ENROLLED',
                     active: true,
                     deletedAt: null,
+                    ...(filters.code
+                        ? {
+                              code: {
+                                  contains: filters.code,
+                                  mode: 'insensitive' as const,
+                              },
+                          }
+                        : {}),
+                    ...(filters.name
+                        ? {
+                              userProfile: {
+                                  fullname: {
+                                      contains: filters.name,
+                                      mode: 'insensitive' as const,
+                                  },
+                              },
+                          }
+                        : {}),
                 },
             },
             deletedAt: null,
@@ -142,6 +174,7 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
         semesterId,
         orgIds,
         role,
+        filters,
     ])
     const { data: studentInternshipData = [], refetch: refetchStudentInternship } =
         useFindManyStudentInternship({
@@ -484,40 +517,6 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
 
     return (
         <Row gutter={[8, 8]}>
-            <Col span={24}>
-                <Row gutter={[16, 16]} align="middle" justify="end" className="gap-1">
-                    {selectedRowKeys.length > 0 && (
-                        <p>(Đang chọn {selectedRowKeys.length} TTS)</p>
-                    )}
-                    <Button
-                        type="primary"
-                        onClick={handleExportInternship}
-                        icon={<TableOutlined />}
-                    >
-                        Xuất DS TTS
-                    </Button>
-                    <Button
-                        type="primary"
-                        onClick={() => setImportModalVisible(true)}
-                        icon={<UploadOutlined />}
-                    >
-                        Nhập dữ liệu Excel
-                    </Button>
-                    {/* <ImportLecturerModal
-                        visible={importModalVisible}
-                        onSuccess={() => {
-                            setImportModalVisible(false)
-                            refetch()
-                            refetchCount()
-                        }}
-                        onCancel={() => setImportModalVisible(false)}
-                    /> */}
-                    <ExportTemplateInternship />
-                    {/* <Button onClick={handleModal} type="primary">
-                                Thêm mới
-                            </Button> */}
-                </Row>
-            </Col>
             <Col span={24}>
                 <Form form={form}>
                     <Flex gap={6} wrap="wrap">
@@ -1409,6 +1408,40 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
                         )} */}
                     </Flex>
                 </Form>
+                <Col span={24} className="pt-1">
+                    <Row gutter={[16, 16]} align="middle" justify="end" className="gap-1">
+                        {selectedRowKeys.length > 0 && (
+                            <p>(Đang chọn {selectedRowKeys.length} TTS)</p>
+                        )}
+                        <Button
+                            type="primary"
+                            onClick={handleExportInternship}
+                            icon={<TableOutlined />}
+                        >
+                            Xuất DS TTS
+                        </Button>
+                        <Button
+                            type="primary"
+                            onClick={() => setImportModalVisible(true)}
+                            icon={<UploadOutlined />}
+                        >
+                            Nhập dữ liệu Excel
+                        </Button>
+                        {/* <ImportLecturerModal
+                            visible={importModalVisible}
+                            onSuccess={() => {
+                                setImportModalVisible(false)
+                                refetch()
+                                refetchCount()
+                            }}
+                            onCancel={() => setImportModalVisible(false)}
+                        /> */}
+                        <ExportTemplateInternship />
+                        {/* <Button onClick={handleModal} type="primary">
+                                    Thêm mới
+                                </Button> */}
+                    </Row>
+                </Col>
                 <Table
                     scrollable={studentInternshipData.length > 0}
                     maxHeight={'calc(100vh - 330px)'}
@@ -1419,6 +1452,11 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
                     //         setSelectedRowKeys(keys)
                     //     },
                     // }}
+                    filters={filters}
+                    setFilters={(value) => {
+                        setFilters(value)
+                        setCurrentPage(1)
+                    }}
                     columns={[
                         {
                             title: '',
@@ -1472,6 +1510,8 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
                             width: 100,
                             align: 'center',
                             fixed: 'left',
+                            dataIndex: 'code',
+                            type: 'input',
                             render: (_, record) => {
                                 return record?.studentSubjectScore?.student?.code || ''
                             },
@@ -1481,6 +1521,8 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
                             width: 150,
                             align: 'left',
                             fixed: 'left',
+                            dataIndex: 'name',
+                            type: 'input',
                             render: (_, record) => {
                                 return record?.studentSubjectScore?.student?.userProfile?.fullname
                             },
@@ -1489,6 +1531,8 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
                             title: 'Mã lớp môn học',
                             width: 150,
                             align: 'center',
+                            dataIndex: 'subjectName',
+                            type: 'input',
                             render: (_, record) => {
                                 return (
                                     <Tooltip
