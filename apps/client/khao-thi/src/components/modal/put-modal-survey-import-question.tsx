@@ -6,11 +6,7 @@ import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import { useSurveyQuestionTypeOptions } from '@hooks/survey-question-type'
 import { type SurveyQuestion, type SurveyQuestionGroup, SurveyQuestionType } from '@workspace/db'
-import {
-    useCreateSurveyQuestion,
-    useFindManySurveyQuestionGroup,
-    useFindUniqueSurveyQuestion,
-} from '@workspace/db/hooks'
+import { useFindManySurveyQuestionGroup, useFindUniqueSurveyQuestion } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { PizZip } from '@workspace/libs/docxjs'
 import { Button, Col, Form, message, Table, Upload } from 'antd'
@@ -25,11 +21,11 @@ type ImportedQuestion = {
     type: SurveyQuestionType
 }
 function detectQuestionType(text: string): SurveyQuestionType {
-    if (/\(TN\)/i.test(text)) {
+    if (/\(\s*TN\s*\)/i.test(text)) {
         return SurveyQuestionType.SINGLE_CHOICE
     }
 
-    if (/\(TL\)/i.test(text)) {
+    if (/\(\s*TL\s*\)/i.test(text)) {
         return SurveyQuestionType.ESSAY
     }
 
@@ -67,7 +63,7 @@ function stripLeadingIndex(text: string): string {
         text
             .trim()
             // remove (TN) / (TL)
-            .replace(/\((TN|TL)\)/gi, '')
+            .replace(/\(\s*(TN|TL)\s*\)/gi, '')
             // dấu . hoặc - đứng một mình
             .replace(/^[.-]\s*/, '')
             // 1. , 1.1 , 1.2.3 , 01.02
@@ -95,16 +91,13 @@ const PutSurveyImportQuestionModal = () => {
     const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([])
 
     const { showSpinner, hideSpinner } = useSpinner()
-    const { options: surveyQuestionTypeOptions, getSurveyQuestionTypeLabel } =
-        useSurveyQuestionTypeOptions()
+    const { getSurveyQuestionTypeLabel } = useSurveyQuestionTypeOptions()
 
     const tableData = importedQuestions.map((q, index) => ({
         key: index,
         content: q.content,
         type: getSurveyQuestionTypeLabel(q.type),
     }))
-
-    const { mutateAsync: create } = useCreateSurveyQuestion()
 
     const { data: surveyQuestionGroupData = [] } = useFindManySurveyQuestionGroup()
 
@@ -189,40 +182,26 @@ const PutSurveyImportQuestionModal = () => {
 
         try {
             showSpinner()
-            let listTransition: any = []
-            listTransition = [
-                ...listTransition,
-                selectedQuestions.map((i) => {
-                    return {
-                        model: 'SurveyQuestion',
-                        operation: 'create',
-                        data: {
-                            data: {
-                                name: i.content,
-                                surveyQuestionGroupId: output.surveyQuestionGroupId,
-                                type: i.type,
-                                description: null,
-                            },
-                        },
-                    }
-                }),
-            ]
-            const res = await sqlTransaction(listTransition)
-            if (res?.status === 200) {
-                message.success('Thêm mới thành công')
-            }
-            // for (const q of selectedQuestions) {
-            //     await create({
-            //         data: {
-            //             name: q.content,
-            //             surveyQuestionGroupId: output.surveyQuestionGroupId,
-            //             type: q.type,
-            //             description: null,
-            //         },
-            //     })
 
-            // }
-            queryClient.invalidateQueries({ queryKey: ['SurveyQuestion'] })
+            const res = await sqlTransaction([
+                {
+                    model: 'SurveyQuestion',
+                    operation: 'createMany',
+                    data: {
+                        data: selectedQuestions.map((i) => ({
+                            name: i.content,
+                            surveyQuestionGroupId: output.surveyQuestionGroupId,
+                            type: i.type,
+                            description: null,
+                        })),
+                    },
+                },
+            ])
+            if (res?.status !== 200) {
+                message.error('Có lỗi xảy ra khi thêm mới câu hỏi')
+                return
+            }
+            queryClient.invalidateQueries({ queryKey: ['zenstack', 'SurveyQuestion'] })
             message.success(`Đã import ${selectedQuestions.length} câu hỏi`)
             onClose()
         } catch (err) {
@@ -299,14 +278,6 @@ const PutSurveyImportQuestionModal = () => {
                     />
                 </FormItem>
             </Col>
-            {/* <Col span={12}>
-                <FormItem form={form} name="type" label="Loại câu hỏi khảo sát" required>
-                    <Select
-                        placeholder="Chọn loại câu hỏi khảo sát"
-                        options={surveyQuestionTypeOptions}
-                    />
-                </FormItem>
-            </Col> */}
             <Col span={24}>
                 {importedQuestions.length > 0 && (
                     <Col span={24}>

@@ -15,13 +15,11 @@ import { getMinioUrl } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, message, Row } from 'antd'
-import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 function CauHoiKhaoSat({ id, type }: { id: string; type: string }) {
     const { can, canSome } = useAbility()
-    const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const { options: surveyQuestionTypeOptions, getSurveyQuestionTypeLabel } =
@@ -66,7 +64,7 @@ function CauHoiKhaoSat({ id, type }: { id: string; type: string }) {
         [filters.code, filters.name, filters.surveyId, filters.surveyQuestionType, id]
     )
 
-    const { data = [], refetch } = useFindManySurveyQuestion(
+    const { data = [] } = useFindManySurveyQuestion(
         {
             where,
             include: { survey: true },
