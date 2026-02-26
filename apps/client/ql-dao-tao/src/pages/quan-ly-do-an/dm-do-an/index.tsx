@@ -989,32 +989,37 @@ export default function DanhMucDoAn() {
                             align: 'left',
                             dataIndex: 'defenseSession',
                             render: (_, record) => {
-                                if (editingRowKeys.includes(record?.id)) {
-                                    const currentValue = record?.defenseSessionId || ''
+                                const isEditing = editingRowKeys.includes(record?.id)
+
+                                if (isEditing) {
+                                    // Lấy giá trị ID hiện tại để Select hiển thị đúng option đã chọn
+                                    const currentValue =
+                                        record?.defenseSessionId || record?.defenseSession?.id
+
                                     return (
                                         <Select
-                                            className="w-28"
-                                            options={defenseSessionData?.map((item) => ({
-                                                label: item?.startTime
-                                                    ? dayjs(
-                                                          record?.defenseSession?.startTime
-                                                      ).format('HH:mm')
-                                                    : '',
-                                                value: item.id,
-                                            }))}
-                                            value={currentValue || undefined}
+                                            className="w-full" // Thay w-28 bằng w-full để linh hoạt hơn theo cột
                                             placeholder="Chọn ca"
+                                            value={currentValue || undefined}
                                             onChange={(value) =>
                                                 handleEditChange(
                                                     record?.id,
-                                                    'defenseSession',
+                                                    'defenseSessionId',
                                                     value
                                                 )
                                             }
+                                            options={defenseSessionData?.map((item) => ({
+                                                // SỬA TẠI ĐÂY: Dùng item.startTime chứ không dùng record
+                                                label: item?.startTime
+                                                    ? dayjs(item.startTime).format('HH:mm')
+                                                    : 'Không xác định',
+                                                value: item.id,
+                                            }))}
                                         />
                                     )
                                 }
 
+                                // Hiển thị ở chế độ Read-only
                                 return record?.defenseSession?.startTime
                                     ? dayjs(record?.defenseSession?.startTime).format('HH:mm')
                                     : ''
