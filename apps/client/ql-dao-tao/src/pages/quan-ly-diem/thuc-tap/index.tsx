@@ -29,6 +29,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import ExportTemplateInternship from '../../../components/modal/export-template-internship'
 import type React from 'react'
 import { exportLecturerProfile } from '@workspace/libs/api/training'
+import { saveAs } from 'file-saver'
 
 interface ThucTapForm {
     trainingCourseId: string
