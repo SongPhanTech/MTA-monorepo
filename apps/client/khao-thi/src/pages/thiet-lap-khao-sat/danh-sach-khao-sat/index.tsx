@@ -116,7 +116,7 @@ export default function DetailSurveyPage() {
             </Col> */}
             <Col span={24}>
                 <Table
-                    className="h-[calc(100vh-130px)]"
+                    className="h-[calc(100vh-150px)]"
                     filters={filters}
                     setFilters={(value) => {
                         setFilters(value)

@@ -177,7 +177,7 @@ const DefaultLayout = ({
                         ) : (
                             <div
                                 className={cn(
-                                    'min-h-[calc(100vh-100px)] bg-white shadow-sm px-4',
+                                    'min-h-[calc(100vh-100px)] bg-white shadow-sm px-4 mb-8',
                                     className
                                 )}
                                 style={{
