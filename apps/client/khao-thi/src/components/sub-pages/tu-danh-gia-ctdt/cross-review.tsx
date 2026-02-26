@@ -228,7 +228,6 @@ export default function CrossReviewSubPage({
         (c) =>
             c.evaluationCriterion &&
             c.evaluationCriterion.status !== $Enums.EvaluationStatus.PENDING &&
-            c.evaluationCriterion.status !== $Enums.EvaluationStatus.COMPLETED &&
             c.evaluationCriterion.status !== $Enums.EvaluationStatus.APPROVED
     )
 
