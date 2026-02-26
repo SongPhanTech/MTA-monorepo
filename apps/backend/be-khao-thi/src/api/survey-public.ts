@@ -265,8 +265,8 @@ app.openapi(savePublicSurvey, async (c) => {
     if (!survey) {
         return c.json({ message: 'Đợt khảo sát không tồn tại' }, 404)
     }
-
-    if (!survey.anonymous) {
+    if(survey.isPublic) {
+           if (!survey.anonymous) {
         if (!studentCode) {
             return c.json({ message: 'Vui lý nhập mã SV' }, 400)
         }
@@ -281,6 +281,8 @@ app.openapi(savePublicSurvey, async (c) => {
         studentId = student.id
         profileId = student.userProfileId
     }
+    }
+ 
 
     if (survey.startDate > new Date()) {
         return c.json({ message: 'Khảo sát chưa mở' }, 400)
