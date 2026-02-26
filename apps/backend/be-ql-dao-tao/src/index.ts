@@ -22,6 +22,7 @@ import ExportStudentYearResultApp from './api/export-student-year-result'
 import FixedClassApp from './api/fixed-class'
 import GraduationApp from './api/graduation'
 import ImportApp from './api/import'
+import InternshipApp from './api/internship'
 import LecturerApp from './api/lecturer'
 import PlanTraining from './api/plan-training'
 import RoomApp from './api/room'
@@ -96,6 +97,7 @@ app.route('/api/training-score', TrainingScoreApp)
 app.route('/api/curriculum', CurriculumApp)
 app.route('/api/curriculum-subject', CurriculumSubjectApp)
 app.route('/api/graduation', GraduationApp)
+app.route('/api/internship', InternshipApp)
 app.route('/api/plan-training', PlanTraining)
 app.route('/api/stats', Stats)
 app.route('/api/import', ImportApp)

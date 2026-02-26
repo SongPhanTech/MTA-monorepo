@@ -28,7 +28,7 @@ import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import ExportTemplateInternship from '../../../components/modal/export-template-internship'
 import type React from 'react'
-import { exportLecturerProfile } from '@workspace/libs/api/training'
+import { exportInternshipProfile } from '@workspace/libs/api/training'
 import { saveAs } from 'file-saver'
 
 interface ThucTapForm {
@@ -445,12 +445,12 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
         }
     }
     const handleExportInternship = async () => {
-        const { status, data } = await exportInternshipProfile({
-            studentInternshipIds: selectedRowKeys as string[],
-        })
+        // const { status, data } = await exportInternshipProfile({
+        //     internshipIds: selectedRowKeys as string[],
+        // })
 
         if (status === 200) {
-            saveAs(data, 'danh_sach_thuc_tap.xlsx') 
+            saveAs(data, 'danh_sach_TTS.xlsx')
         }
     }
     const confirmImport = (file: File) => {

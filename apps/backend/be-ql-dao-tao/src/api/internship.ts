@@ -152,7 +152,7 @@ app.openapi(exportInternshipProfile, async (c) => {
         finalScore: internship.studentSubjectScore?.finalScore?.toString() || '',
     }))
 
-    const buffer = await getTemplateBuffer(prisma, 'DANH_SACH_THUC_TAP')
+    const buffer = await getTemplateBuffer(prisma, 'danh_sach_TTS')
 
     const template = new XlsxTemplate(buffer)
 
@@ -160,7 +160,7 @@ app.openapi(exportInternshipProfile, async (c) => {
 
     const result = await template.generate({ type: 'arraybuffer' })
 
-    const fileName = 'danh_sach_thuc_tap.xlsx'
+    const fileName = 'danh_sach_TTS.xlsx'
     const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 
     return c.body(result, 200, {
