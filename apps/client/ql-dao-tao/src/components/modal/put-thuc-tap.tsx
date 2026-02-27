@@ -209,7 +209,6 @@ const PutInternshipModal = () => {
                         />
                     </FormItem>
                 </Col>
-                
                 <Col span={12}>
                     <FormItem form={form} name="address" label="Địa chỉ thực tập" required>
                         <TextArea
