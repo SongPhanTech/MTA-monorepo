@@ -1724,7 +1724,6 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
                         {
                             title: '',
                             width: 40,
-                            fixed: 'left',
                             align: 'center',
                             fixed: 'right',
                             render: (_, record) => {
