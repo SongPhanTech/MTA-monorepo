@@ -146,7 +146,7 @@ export const StudentInfoCheck = z.object({
     soTinChiMoTrongKy: z.number().describe('Số tín chỉ mở trong kỳ'),
     trinhDoNgoaiNgu: z.boolean().describe('Đạt trình độ ngoại ngữ theo quy định'),
     trinhDoTinHoc: z.boolean().describe('Đạt trình độ tin học theo quy định'),
-    xepLoaiRenLuyen: z.string().describe('Xếp loại rèn luyện'),
+    xepLoaiRenLuyen: z.string().nullable().describe('Xếp loại rèn luyện'),
     biKyLuat: z.boolean().describe('Bị kỷ luật từ khiển trách trở lên'),
     chucVuHocVien: z.string().describe('Chức vụ học viên'),
     diemThuong: z.number().describe('Điểm thưởng chức vụ'),
@@ -159,7 +159,7 @@ export const StudentInfoCheck = z.object({
     namDangHoc: z.number().describe('Năm đang học'),
     mucCanhCaoHocTap: z.number().describe('Mức cảnh cáo học tập'),
     mucCanhCaoHocDuong: z.number().describe('Mức cảnh cáo học đường'),
-    xepLoaiRenLuyenKy: z.string().describe('Xếp loại rèn luyện'),
+    xepLoaiRenLuyenKy: z.string().nullable().describe('Xếp loại rèn luyện'),
     lyDoXepLoai: z.string().describe('Lý do xếp loại'),
     userProfile: z.any().describe('Thông tin người dùng'),
 })

@@ -150,7 +150,7 @@ model StudentSemesterResult extends Base {
   cumulativeGpaBase10      Decimal                 @db.Decimal(5, 2)    // Tích luỹ hệ 10
 
   conductScore             Float?   // Điểm rèn luyện trung bình của học kỳ
-  studentTrainingType      StudentTrainingType // xếp loại rèn luyện
+  studentTrainingType      StudentTrainingType? // xếp loại rèn luyện
 
   rank                     AcademicRankingConvert? @relation(fields: [rankId], references: [id])
   rankId                   String?
@@ -205,7 +205,7 @@ model StudentYearResult extends  Base {
   cumulativeGpaBase10      Decimal                 @db.Decimal(5, 2)    // Tích luỹ hệ 10
 
   conductScore             Float?   // Điểm rèn luyện trung bình của năm
-  studentTrainingType      StudentTrainingType // xếp loại rèn luyện
+  studentTrainingType      StudentTrainingType? // xếp loại rèn luyện
 
   rank                     AcademicRankingConvert? @relation(fields: [rankId], references: [id])
   rankId                   String?

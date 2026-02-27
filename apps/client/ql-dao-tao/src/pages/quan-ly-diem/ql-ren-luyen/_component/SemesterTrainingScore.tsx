@@ -1,7 +1,7 @@
 import Table from '@components/commons/table'
 import { Button, Col, Flex, Form, InputNumber, message, Row, Tag } from 'antd'
-import type { FilterProps } from '@constants/type'
-import { useEffect, useMemo, useState } from 'react'
+import { FilterProps } from '@constants/type'
+import { Key, useEffect, useMemo, useState } from 'react'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useAbility } from '@workspace/permissions/hooks'
 import { useRouter } from 'next/router'
@@ -9,7 +9,7 @@ import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useCountStudent, useFindManyStudent } from '@workspace/db/hooks'
 import { useSemesterStore } from '@workspace/ui'
 import dayjs from 'dayjs'
-import type { UserProfile } from '@workspace/db'
+import { UserProfile } from '@workspace/db'
 import {
     useStudentTrainingTypeOptions,
     useTrainingScoreStatusStatusOptions,
@@ -34,6 +34,7 @@ export default function SemesterTrainingScore({
         code: '',
         name: '',
     })
+    const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([])
     const {
         options: studentTrainingTypeOptions,
         getStudentTrainingTypeLabel,
@@ -143,6 +144,40 @@ export default function SemesterTrainingScore({
     //     })
     // }
 
+    const handleApproved = async () => {
+        try {
+            showSpinner()
+            if (selectedRowKeys?.length === 0) return
+
+            const res = await sqlTransaction([
+                {
+                    model: 'SemesterTrainingScore',
+                    operation: 'updateMany',
+                    data: {
+                        where: {
+                            id: {
+                                in: selectedRowKeys as string[],
+                            },
+                        },
+                        data: {
+                            status: 'APPROVED',
+                        },
+                    },
+                }
+            ])
+            if (res?.status !== 200) {
+                message.success('Lưu điểm rèn luyện thành công')
+                refetch()
+            }
+
+            refetchCount()
+            hideSpinner()
+        } catch (error) {
+            message.error('Lưu điểm rèn luyện thất bại')
+            hideSpinner()
+        }
+    }
+
     const handleSave = async () => {
         try {
             showSpinner()
@@ -166,7 +201,7 @@ export default function SemesterTrainingScore({
                 }
             })
 
-            const listTransaction: any = []
+            let listTransaction: any = []
             if (listCreate.length > 0) {
                 listTransaction.push({
                     model: 'SemesterTrainingScore',
@@ -177,6 +212,12 @@ export default function SemesterTrainingScore({
                                 studentId: t.id,
                                 score: t.score,
                                 semesterId: semesterId,
+                                status: can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN,
+                                    'XEM_TAT_CA'
+                                )
+                                    ? 'APPROVED'
+                                    : 'PENDING',
                             }
                         }),
                     },
@@ -193,6 +234,12 @@ export default function SemesterTrainingScore({
                             },
                             data: {
                                 score: t.score,
+                                status: can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN,
+                                    'XEM_TAT_CA'
+                                )
+                                    ? 'APPROVED'
+                                    : 'PENDING',
                             },
                         },
                     })
@@ -201,7 +248,7 @@ export default function SemesterTrainingScore({
             if (listTransaction.length > 0) {
                 const res = await sqlTransaction(listTransaction)
                 if (res?.status === 200) {
-                    message.success('Lưu điểm rén luyện thành công')
+                    message.success('Lưu điểm rèn luyện thành công')
                     refetch()
                 }
             }
@@ -241,6 +288,19 @@ export default function SemesterTrainingScore({
         <Row gutter={[0, 0]}>
             <Col span={24}>
                 <Flex justify="end" align="center">
+                    {can(
+                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN,
+                        'XEM_TAT_CA'
+                    ) && (
+                        <Button
+                            type="primary"
+                            className="mr-3"
+                            disabled={selectedRowKeys.length === 0}
+                            onClick={handleApproved}
+                        >
+                            Phê duyệt
+                        </Button>
+                    )}
                     {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN, 'SUA') && (
                         <Button type="primary" onClick={handleSave}>
                             <Save stroke="white" />
@@ -355,10 +415,10 @@ export default function SemesterTrainingScore({
                                 },
                             ]}
                             rowKey="id"
-                            // rowSelection={{
-                            //     selectedRowKeys,
-                            //     onChange: (selectedKeys) => setSelectedRowKeys(selectedKeys),
-                            // }}
+                            rowSelection={{
+                                selectedRowKeys,
+                                onChange: (selectedKeys) => setSelectedRowKeys(selectedKeys),
+                            }}
                             data={data}
                             pagination={{
                                 current: currentPage,

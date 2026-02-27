@@ -15303,6 +15303,7 @@ const metadata: ModelMeta = {
                 }, studentTrainingType: {
                     name: "studentTrainingType",
                     type: "StudentTrainingType",
+                    isOptional: true,
                 }, rank: {
                     name: "rank",
                     type: "AcademicRankingConvert",
@@ -15502,6 +15503,7 @@ const metadata: ModelMeta = {
                 }, studentTrainingType: {
                     name: "studentTrainingType",
                     type: "StudentTrainingType",
+                    isOptional: true,
                 }, rank: {
                     name: "rank",
                     type: "AcademicRankingConvert",

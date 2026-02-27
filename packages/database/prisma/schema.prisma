@@ -4115,7 +4115,7 @@ model StudentSemesterResult {
   gpaBase10                Decimal                 @db.Decimal(5, 2)
   cumulativeGpaBase10      Decimal                 @db.Decimal(5, 2)
   conductScore             Float?
-  studentTrainingType      StudentTrainingType
+  studentTrainingType      StudentTrainingType?
   rank                     AcademicRankingConvert? @relation(fields: [rankId], references: [id])
   rankId                   String?
   lowestFinalScore         Float
@@ -4165,7 +4165,7 @@ model StudentYearResult {
   gpaBase10                Decimal                 @db.Decimal(5, 2)
   cumulativeGpaBase10      Decimal                 @db.Decimal(5, 2)
   conductScore             Float?
-  studentTrainingType      StudentTrainingType
+  studentTrainingType      StudentTrainingType?
   rank                     AcademicRankingConvert? @relation(fields: [rankId], references: [id])
   rankId                   String?
   lowestFinalScore         Float?

@@ -1,15 +1,15 @@
 import Table from '@components/commons/table'
 import { Button, Col, Flex, Form, InputNumber, message, Row, Tag } from 'antd'
-import type { FilterProps } from '@constants/type'
-import { useEffect, useMemo, useState } from 'react'
+import { FilterProps } from '@constants/type'
+import { Key, useEffect, useMemo, useState } from 'react'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useAbility } from '@workspace/permissions/hooks'
 import { useRouter } from 'next/router'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import { useCountStudent, useFindManyStudent } from '@workspace/db/hooks'
-import { useSemesterStore } from '@workspace/ui'
+import { useCountStudent, useFindManySchoolYear, useFindManyStudent } from '@workspace/db/hooks'
 import dayjs from 'dayjs'
-import type { UserProfile } from '@workspace/db'
+import { SchoolYear,
+UserProfile } from '@workspace/db'
 import {
     useStudentTrainingTypeOptions,
     useTrainingScoreStatusStatusOptions,
@@ -17,6 +17,7 @@ import {
 import { Save } from 'lucide-react'
 import useSpinner from '@hooks/spinner'
 import { sqlTransaction } from '@workspace/libs/api/model'
+import Select from '@components/commons/select';
 // import { useDisclosure } from 'react-hook-disclosure-modal'
 export default function SchoolYearTrainingScore({
     selectedFixedClass,
@@ -24,12 +25,13 @@ export default function SchoolYearTrainingScore({
     selectedFixedClass?: string
 }) {
     const { showSpinner, hideSpinner } = useSpinner()
+    const [schoolYearId, setSchoolYearId] = useState<string>()
     const [form] = Form.useForm<{ list: Record<string, { score: number | null }> }>()
     const router = useRouter()
-    const { id: semesterId } = useSemesterStore()
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([])
     const [filters, setFilters] = useState<FilterProps>({
         code: '',
         name: '',
@@ -50,11 +52,6 @@ export default function SchoolYearTrainingScore({
             fixedClass: {
                 id: selectedFixedClass,
             },
-            // schoolYearTrainingScore: {
-            //     some: {
-            //         semesterId:semesterId
-            //     }
-            // },
             ...(filters.code
                 ? {
                       code: {
@@ -100,7 +97,7 @@ export default function SchoolYearTrainingScore({
                 userProfile: true,
                 schoolYearTrainingScore: {
                     where: {
-                        schoolYearId: semesterId,
+                        schoolYearId,
                     },
                 },
             },
@@ -109,7 +106,7 @@ export default function SchoolYearTrainingScore({
             skip: (currentPage - 1) * numberOfPages,
         },
         {
-            enabled: !!selectedFixedClass,
+            enabled: !!selectedFixedClass && !!schoolYearId,
         }
     )
 
@@ -121,9 +118,18 @@ export default function SchoolYearTrainingScore({
             },
         },
         {
-            enabled: !!selectedFixedClass,
+            enabled: !!selectedFixedClass && !!schoolYearId,
         }
     )
+
+    const { data: schoolYears=[], isLoading: schoolYearLoading } = useFindManySchoolYear({
+        orderBy: { startDate: 'desc' },
+        include: {
+            semesters: {
+                orderBy: { createdAt: 'desc' },
+            },
+        },
+    })
 
     // const { onOpen, onClose } = useDisclosure<{
     //     tag?: string
@@ -143,8 +149,45 @@ export default function SchoolYearTrainingScore({
     //     })
     // }
 
+    const handleApproved = async () => {
+        try {
+            showSpinner()
+            if (selectedRowKeys?.length === 0) return
+
+            const res = await sqlTransaction([
+                {
+                    model: 'SchoolYearTrainingScore',
+                    operation: 'updateMany',
+                    data: {
+                        where: {
+                            id: {
+                                in: selectedRowKeys as string[],
+                            },
+                        },
+                        data: {
+                            status: 'APPROVED',
+                        },
+                    },
+                },
+            ])
+            if (res?.status !== 200) {
+                message.success('Lưu điểm rèn luyện thành công')
+                refetch()
+            }
+
+            refetchCount()
+            hideSpinner()
+        } catch (error) {
+            message.error('Lưu điểm rèn luyện thất bại')
+            hideSpinner()
+        }
+    }
+
     const handleSave = async () => {
         try {
+            if (!schoolYearId) {
+                return message.error('Vui lòng chọn năm học')
+            }
             showSpinner()
             const dataSubmit = form.getFieldsValue()
             const keys = Object.keys(dataSubmit.list)
@@ -166,7 +209,7 @@ export default function SchoolYearTrainingScore({
                 }
             })
 
-            const listTransaction: any = []
+            let listTransaction: any = []
             if (listCreate.length > 0) {
                 listTransaction.push({
                     model: 'SchoolYearTrainingScore',
@@ -176,7 +219,13 @@ export default function SchoolYearTrainingScore({
                             return {
                                 studentId: t.id,
                                 score: t.score,
-                                semesterId: semesterId,
+                                schoolYearId,
+                                status: can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN_THEO_NAM,
+                                    'XEM_TAT_CA'
+                                )
+                                    ? 'APPROVED'
+                                    : 'PENDING',
                             }
                         }),
                     },
@@ -193,6 +242,12 @@ export default function SchoolYearTrainingScore({
                             },
                             data: {
                                 score: t.score,
+                                status: can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN_THEO_NAM,
+                                    'XEM_TAT_CA'
+                                )
+                                    ? 'APPROVED'
+                                    : 'PENDING',
                             },
                         },
                     })
@@ -240,14 +295,48 @@ export default function SchoolYearTrainingScore({
     return (
         <Row gutter={[0, 0]}>
             <Col span={24}>
+                <Flex justify="space-between" align="center">
+                  <div>
+                        <Select
+                            placeholder="Chọn năm học"
+                            options={schoolYears.map((i: SchoolYear) => {
+                                return {
+                                    value: i.id,
+                                    label: i.name,
+                                }
+                            })}
+                            value={schoolYearId}
+                            onChange={(value) => {
+                                setSchoolYearId(value)
+                            }}
+                            className="w-[250px]"
+                        />
+                  </div>
                 <Flex justify="end" align="center">
-                    {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN, 'SUA') && (
+                      {can(
+                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN_THEO_NAM,
+                        'XEM_TAT_CA'
+                    ) && (
+                        <Button
+                            type="primary"
+                            className="mr-3"
+                            disabled={selectedRowKeys.length === 0}
+                            onClick={handleApproved}
+                        >
+                            Phê duyệt
+                        </Button>
+                    )}
+                    {can(
+                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN_THEO_NAM,
+                        'SUA'
+                    ) && (
                         <Button type="primary" onClick={handleSave}>
                             <Save stroke="white" />
                             Lưu
                         </Button>
                     )}
                 </Flex>
+                 </Flex>
             </Col>
             <Col span={24}>
                 <Form form={form}>
@@ -257,6 +346,10 @@ export default function SchoolYearTrainingScore({
                             setFilters={(value) => {
                                 setFilters(value)
                                 setCurrentPage(1)
+                            }}
+                            rowSelection={{
+                                selectedRowKeys,
+                                onChange: (selectedKeys) => setSelectedRowKeys(selectedKeys),
                             }}
                             columns={[
                                 {

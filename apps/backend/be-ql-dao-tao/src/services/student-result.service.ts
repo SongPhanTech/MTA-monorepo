@@ -14,7 +14,6 @@ import {
     type ScholarshipCriteria,
     SemesterType,
     StudentStatus,
-    StudentTrainingType,
     SubjectRequirementType,
     type TrainingBlockSubject,
 } from '@workspace/db'
@@ -791,12 +790,13 @@ export const calculateStudentSemesterResult = async (
                     return
                 }
 
-                const conductScore = await prisma.studentTrainingScore.findFirst({
+                const conductScore = await prisma.semesterTrainingScore.findFirst({
                     where: {
                         studentId: student.id,
-                        trainingScoreSession: { semesterId },
+                        semesterId,
                         deletedAt: null,
                         active: true,
+                        status: 'APPROVED',
                     },
                     orderBy: { createdAt: 'desc' },
                 })
@@ -826,8 +826,6 @@ export const calculateStudentSemesterResult = async (
                     accumulatedCredits: thongTinTichLuy.tongTinChiDaTichLuy, // Số tín chỉ đã tích lũy
                     totalCreditsByCurriculum: thongTinTichLuy.tongTinChiYeuCauDenThoiDiemHienTai, // Số tín chỉ yêu cầu theo CTDT
                     totalFailedCredits: thongTinTichLuy.tongTinChiNoTichLuy, // Số tín chỉ nợ tích lũy
-                    studentTrainingType:
-                        conductScore?.studentTrainingType ?? StudentTrainingType.GOOD,
                     rankId: thongTinTichLuy.rank?.id ?? null,
                     foreignLangPass: student.foreignLangPass, // Đạt trình độ ngoại nsgữ theo quy định
                     isClassMonitor: student.id === student.fixedClass?.classMonitorId, // là lớp trưởng nếu id trùng classMonitorId)
@@ -1300,12 +1298,13 @@ export async function calculateStudentYearResult({
         orderBy: { createdAt: 'desc' },
     })
 
-    const trainingScore = await prisma.studentTrainingScore.findFirst({
+    const trainingScore = await prisma.schoolYearTrainingScore.findFirst({
         where: {
             studentId,
-            trainingScoreSession: {
-                semesterId: { in: semesterIds },
-            },
+            schoolYearId,
+            deletedAt: null,
+            active: true,
+            status: 'APPROVED',
         },
         orderBy: {
             createdAt: 'desc',
@@ -1348,13 +1347,12 @@ export async function calculateStudentYearResult({
         cumulativeGpaBase4: cumulativeGpa4,
         totalCredits: cumulativePassedCredits,
         failedCredits: yearFailedCredits,
-        conductScore: trainingScore?.score,
+        conductScore: trainingScore?.score||8,
         rankId: rank?.id,
         academicWarningLevel: academicWarning?.level || 0,
         disciplinaryWarningLevel: disciplinaryWarning?.level || 0,
         isLastStudyYear: false,
         baseScore: student.fixedClass.trainingCourse.baseScore,
-        studentTrainingType: trainingScore?.studentTrainingType || 'GOOD',
         lowestFinalScore: courseGradeLowest,
         lowestGraduationScore,
         retakingCredits,
