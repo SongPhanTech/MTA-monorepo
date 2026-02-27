@@ -1054,33 +1054,6 @@ app.openapi(importInternship, async (c) => {
         return c.json({ message: 'Lỗi khi đọc file', errors: data.errors }, 400)
     }
 
-    // Cleanup: Xóa các bản ghi duplicate cũ (giữ lại bản ghi mới nhất)
-    try {
-        await prisma.$executeRaw`
-            WITH duplicates AS (
-                SELECT 
-                    id,
-                    "studentSubjectScoreId",
-                    ROW_NUMBER() OVER (
-                        PARTITION BY "studentSubjectScoreId" 
-                        ORDER BY "createdAt" DESC
-                    ) as rn
-                FROM "ql-dao-tao"."StudentInternship"
-                WHERE "deletedAt" IS NULL
-            )
-            UPDATE "ql-dao-tao"."StudentInternship"
-            SET "deletedAt" = NOW()
-            WHERE id IN (
-                SELECT id 
-                FROM duplicates 
-                WHERE rn > 1
-            )
-        `
-        console.log('Cleaned up duplicate StudentInternship records')
-    } catch (error) {
-        console.error('Error cleaning up duplicates:', error)
-    }
-
     // Collect all student codes and subject class codes
     const studentCodes = [...new Set(data.internships.map((i) => i.code))]
     const subjectClassCodes = [...new Set(data.internships.map((i) => i.subjectClassCode))]
