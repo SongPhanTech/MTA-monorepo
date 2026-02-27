@@ -8,8 +8,7 @@ import { useRouter } from 'next/router'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useCountStudent, useFindManySchoolYear, useFindManyStudent } from '@workspace/db/hooks'
 import dayjs from 'dayjs'
-import { SchoolYear,
-UserProfile } from '@workspace/db'
+import { SchoolYear, UserProfile } from '@workspace/db'
 import {
     useStudentTrainingTypeOptions,
     useTrainingScoreStatusStatusOptions,
@@ -17,7 +16,7 @@ import {
 import { Save } from 'lucide-react'
 import useSpinner from '@hooks/spinner'
 import { sqlTransaction } from '@workspace/libs/api/model'
-import Select from '@components/commons/select';
+import Select from '@components/commons/select'
 // import { useDisclosure } from 'react-hook-disclosure-modal'
 export default function SchoolYearTrainingScore({
     selectedFixedClass,
@@ -122,7 +121,7 @@ export default function SchoolYearTrainingScore({
         }
     )
 
-    const { data: schoolYears=[], isLoading: schoolYearLoading } = useFindManySchoolYear({
+    const { data: schoolYears = [], isLoading: schoolYearLoading } = useFindManySchoolYear({
         orderBy: { startDate: 'desc' },
         include: {
             semesters: {
@@ -296,7 +295,7 @@ export default function SchoolYearTrainingScore({
         <Row gutter={[0, 0]}>
             <Col span={24}>
                 <Flex justify="space-between" align="center">
-                  <div>
+                    <div>
                         <Select
                             placeholder="Chọn năm học"
                             options={schoolYears.map((i: SchoolYear) => {
@@ -311,32 +310,32 @@ export default function SchoolYearTrainingScore({
                             }}
                             className="w-[250px]"
                         />
-                  </div>
-                <Flex justify="end" align="center">
-                      {can(
-                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN_THEO_NAM,
-                        'XEM_TAT_CA'
-                    ) && (
-                        <Button
-                            type="primary"
-                            className="mr-3"
-                            disabled={selectedRowKeys.length === 0}
-                            onClick={handleApproved}
-                        >
-                            Phê duyệt
-                        </Button>
-                    )}
-                    {can(
-                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN_THEO_NAM,
-                        'SUA'
-                    ) && (
-                        <Button type="primary" onClick={handleSave}>
-                            <Save stroke="white" />
-                            Lưu
-                        </Button>
-                    )}
+                    </div>
+                    <Flex justify="end" align="center">
+                        {can(
+                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN_THEO_NAM,
+                            'XEM_TAT_CA'
+                        ) && (
+                            <Button
+                                type="primary"
+                                className="mr-3"
+                                disabled={selectedRowKeys.length === 0}
+                                onClick={handleApproved}
+                            >
+                                Phê duyệt
+                            </Button>
+                        )}
+                        {can(
+                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN_THEO_NAM,
+                            'SUA'
+                        ) && (
+                            <Button type="primary" onClick={handleSave}>
+                                <Save stroke="white" />
+                                Lưu
+                            </Button>
+                        )}
+                    </Flex>
                 </Flex>
-                 </Flex>
             </Col>
             <Col span={24}>
                 <Form form={form}>
@@ -403,32 +402,25 @@ export default function SchoolYearTrainingScore({
                                                 className="w-full mb-0"
                                                 name={['list', record.id, 'score']}
                                                 label=""
-                                                // rules={[
-                                                //     {
-                                                //         validator: (_, value) =>
-                                                //             validateExamScore(value),
-                                                //     },
-                                                // ]}
+                                                rules={[
+                                                    {
+                                                        validator: (_, value) =>
+                                                            value >= 1 && value <= 10
+                                                                ? Promise.resolve()
+                                                                : Promise.reject(
+                                                                      'Chỉ được nhập số từ 1 đến 10'
+                                                                  ),
+                                                    },
+                                                ]}
                                             >
                                                 <InputNumber
                                                     style={{ width: '100%' }}
                                                     step={1}
                                                     controls={false}
-                                                    parser={(value) => {
-                                                        if (!value) return ''
-                                                        const num = Number(value)
-                                                        if (Number.isNaN(num)) return ''
-                                                        return num > 10
-                                                            ? Number((num / 10).toFixedSmart(2))
-                                                            : num
-                                                    }}
-                                                    formatter={(value) => {
-                                                        if (!value) return ''
-                                                        const num = Number(value)
-                                                        if (Number.isNaN(num)) return ''
-                                                        return num > 10
-                                                            ? (num / 10).toFixedSmart(2)
-                                                            : num.toString()
+                                                    onKeyDown={(e) => {
+                                                        if (e.key === '.' || e.key === ',') {
+                                                            e.preventDefault()
+                                                        }
                                                     }}
                                                 />
                                             </Form.Item>

@@ -163,7 +163,7 @@ export default function SemesterTrainingScore({
                             status: 'APPROVED',
                         },
                     },
-                }
+                },
             ])
             if (res?.status !== 200) {
                 message.success('Lưu điểm rèn luyện thành công')
@@ -370,32 +370,25 @@ export default function SemesterTrainingScore({
                                                 className="w-full mb-0"
                                                 name={['list', record.id, 'score']}
                                                 label=""
-                                                // rules={[
-                                                //     {
-                                                //         validator: (_, value) =>
-                                                //             validateExamScore(value),
-                                                //     },
-                                                // ]}
+                                                rules={[
+                                                    {
+                                                        validator: (_, value) =>
+                                                            value >= 1 && value <= 10
+                                                                ? Promise.resolve()
+                                                                : Promise.reject(
+                                                                      'Chỉ được nhập số từ 1 đến 10'
+                                                                  ),
+                                                    },
+                                                ]}
                                             >
                                                 <InputNumber
                                                     style={{ width: '100%' }}
                                                     step={1}
                                                     controls={false}
-                                                    parser={(value) => {
-                                                        if (!value) return ''
-                                                        const num = Number(value)
-                                                        if (Number.isNaN(num)) return ''
-                                                        return num > 10
-                                                            ? Number((num / 10).toFixedSmart(2))
-                                                            : num
-                                                    }}
-                                                    formatter={(value) => {
-                                                        if (!value) return ''
-                                                        const num = Number(value)
-                                                        if (Number.isNaN(num)) return ''
-                                                        return num > 10
-                                                            ? (num / 10).toFixedSmart(2)
-                                                            : num.toString()
+                                                    onKeyDown={(e) => {
+                                                        if (e.key === '.' || e.key === ',') {
+                                                            e.preventDefault()
+                                                        }
                                                     }}
                                                 />
                                             </Form.Item>

@@ -541,10 +541,10 @@ const NAVIGATION: NavigationType = {
                         description: 'Danh sách chuyên gia',
                     },
                     {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_QUAN_LY_DO_AN_CAU_HINH_THOI_GIAN_BAO_VE,
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_CAU_HINH_THOI_GIAN_BAO_VE,
                         label: 'Thời gian bảo vệ',
                         path: ROUTER_PATH.QL_DAO_TAO
-                            .QUAN_LY_DO_AN_QUAN_LY_DO_AN_CAU_HINH_THOI_GIAN_BAO_VE,
+                            .QUAN_LY_DO_AN_CAU_HINH_THOI_GIAN_BAO_VE,
                         description: 'Cấu hình thời gian bảo vệ đồ án',
                     },
                     // {

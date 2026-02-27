@@ -2,12 +2,12 @@ import DefaultLayout from '@layouts/default-layout'
 
 import { useState } from 'react'
 import { Col, message, Row } from 'antd'
-import SchoolYearTrainingScore from '../_component/SchoolYearTrainingScore'
-import LopBienCheItem from '../_component/lop-bien-che'
+import SchoolYearTrainingScore from './_component/SchoolYearTrainingScore'
+import LopBienCheItem from './_component/lop-bien-che'
 import useSpinner from '@hooks/spinner'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 
-export default function QuanLyDiemRenLuyen() {
+export default function QuanLyDiemRenLuyenTheoNam() {
     const [activeTabKey, setActiveTabKey] = useState(0)
     const { showSpinner, hideSpinner } = useSpinner()
     const { id: trainingObjectId } = useTrainingObjectTypeStore()
@@ -42,6 +42,6 @@ export default function QuanLyDiemRenLuyen() {
     )
 }
 
-QuanLyDiemRenLuyen.getLayout = function getLayout(page: React.ReactElement) {
+QuanLyDiemRenLuyenTheoNam.getLayout = function getLayout(page: React.ReactElement) {
     return <DefaultLayout>{page}</DefaultLayout>
 }
