@@ -69,9 +69,9 @@ API này cho phép các ứng dụng truy cập từ client hoặc server thông
 4. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { PagingRequestDto } from './pagingRequestDto'
+import type { PagingRequestDto } from './pagingRequestDto';
 
 /**
  * @nullable
  */
-export type ExportListParameterPagingRequestDto = PagingRequestDto | null
+export type ExportListParameterPagingRequestDto = PagingRequestDto | null;

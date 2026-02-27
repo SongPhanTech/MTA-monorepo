@@ -55,17 +55,17 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  * Đơn vị
  */
 export interface PublicApiGetAllDMDonViDTO {
-    Id?: string
-    /**
-     * Mã đơn vị
-     * @nullable
-     */
-    sMa?: string | null
-    /**
-     * Tên đơn vị
-     * @nullable
-     */
-    sTen?: string | null
-    /** Đơn vị cấp trên */
-    sParentId?: string
+  Id?: string;
+  /**
+   * Mã đơn vị
+   * @nullable
+   */
+  sMa?: string | null;
+  /**
+   * Tên đơn vị
+   * @nullable
+   */
+  sTen?: string | null;
+  /** Đơn vị cấp trên */
+  sParentId?: string;
 }

@@ -73,4 +73,4 @@ API này cho phép các ứng dụng truy cập từ client hoặc server thông
 /**
  * @nullable
  */
-export type AddNewRequestDtoCustomParam = { [key: string]: unknown | null } | null
+export type AddNewRequestDtoCustomParam = {[key: string]: unknown | null} | null;

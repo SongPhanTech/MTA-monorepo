@@ -6,9 +6,9 @@
  */
 
 export type GetSurveyStatistics200QuestionsItemAnswersItem = {
-    id: string
-    answer: string
-    /** @nullable */
-    description: string | null
-    count: number
-}
+  id: string;
+  answer: string;
+  /** @nullable */
+  description: string | null;
+  count: number;
+};

@@ -6,5 +6,5 @@
  */
 
 export type PostApiStatsHighestIncorrectAnswerRateQuestionsBody = {
-    preview?: boolean
-}
+  preview?: boolean;
+};

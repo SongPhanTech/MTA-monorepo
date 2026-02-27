@@ -4,10 +4,10 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetSurveyStatisticsToField200DataItem } from './getSurveyStatisticsToField200DataItem'
+import type { GetSurveyStatisticsToField200DataItem } from './getSurveyStatisticsToField200DataItem';
 
 export type GetSurveyStatisticsToField200 = {
-    surveyId: string
-    surveyName: string
-    data: GetSurveyStatisticsToField200DataItem[]
-}
+  surveyId: string;
+  surveyName: string;
+  data: GetSurveyStatisticsToField200DataItem[];
+};

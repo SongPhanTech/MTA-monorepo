@@ -4,28 +4,28 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetSurveyResultSurveyQuestionItemType } from './getSurveyResultSurveyQuestionItemType'
-import type { GetSurveyResultSurveyQuestionItemSurveyQuestionGroup } from './getSurveyResultSurveyQuestionItemSurveyQuestionGroup'
-import type { GetSurveyResultSurveyQuestionItemSpecificChoiceItem } from './getSurveyResultSurveyQuestionItemSpecificChoiceItem'
+import type { GetSurveyResultSurveyQuestionItemType } from './getSurveyResultSurveyQuestionItemType';
+import type { GetSurveyResultSurveyQuestionItemSurveyQuestionGroup } from './getSurveyResultSurveyQuestionItemSurveyQuestionGroup';
+import type { GetSurveyResultSurveyQuestionItemSpecificChoiceItem } from './getSurveyResultSurveyQuestionItemSpecificChoiceItem';
 
 export type GetSurveyResultSurveyQuestionItem = {
-    id: string
-    /** @nullable */
-    code?: string | null
-    active?: boolean
-    /** @nullable */
-    description?: string | null
-    /** @nullable */
-    deletedAt?: string | null
-    /** @nullable */
-    createdAt?: string | null
-    /** @nullable */
-    updatedAt?: string | null
-    /** @nullable */
-    createdBy?: string | null
-    name: string
-    type: GetSurveyResultSurveyQuestionItemType
-    /** @nullable */
-    surveyQuestionGroup: GetSurveyResultSurveyQuestionItemSurveyQuestionGroup
-    specificChoice: GetSurveyResultSurveyQuestionItemSpecificChoiceItem[]
-}
+  id: string;
+  /** @nullable */
+  code?: string | null;
+  active?: boolean;
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  deletedAt?: string | null;
+  /** @nullable */
+  createdAt?: string | null;
+  /** @nullable */
+  updatedAt?: string | null;
+  /** @nullable */
+  createdBy?: string | null;
+  name: string;
+  type: GetSurveyResultSurveyQuestionItemType;
+  /** @nullable */
+  surveyQuestionGroup: GetSurveyResultSurveyQuestionItemSurveyQuestionGroup;
+  specificChoice: GetSurveyResultSurveyQuestionItemSpecificChoiceItem[];
+};

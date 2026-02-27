@@ -8,4 +8,4 @@
 /**
  * @nullable
  */
-export type Applications200ItemGROUPID = unknown | null
+export type Applications200ItemGROUPID = unknown | null;

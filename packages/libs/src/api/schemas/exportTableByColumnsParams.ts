@@ -4,12 +4,12 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { ExportTableByColumnsDbType } from './exportTableByColumnsDbType'
+import type { ExportTableByColumnsDbType } from './exportTableByColumnsDbType';
 
 export type ExportTableByColumnsParams = {
-    url: string
-    database: string
-    table: string
-    columns: string[] | string
-    dbType?: ExportTableByColumnsDbType
-}
+url: string;
+database: string;
+table: string;
+columns: string[] | string;
+dbType?: ExportTableByColumnsDbType;
+};

@@ -5,13 +5,13 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GetSurveyObjectCount200ItemTypeItem =
-    (typeof GetSurveyObjectCount200ItemTypeItem)[keyof typeof GetSurveyObjectCount200ItemTypeItem]
+export type GetSurveyObjectCount200ItemTypeItem = typeof GetSurveyObjectCount200ItemTypeItem[keyof typeof GetSurveyObjectCount200ItemTypeItem];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetSurveyObjectCount200ItemTypeItem = {
-    MILITARY_STUDENT: 'MILITARY_STUDENT',
-    CIVILIAN_STUDENT: 'CIVILIAN_STUDENT',
-    LECTURER: 'LECTURER',
-    STAFF: 'STAFF',
-} as const
+  MILITARY_STUDENT: 'MILITARY_STUDENT',
+  CIVILIAN_STUDENT: 'CIVILIAN_STUDENT',
+  LECTURER: 'LECTURER',
+  STAFF: 'STAFF',
+} as const;

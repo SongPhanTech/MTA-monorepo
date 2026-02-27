@@ -8,4 +8,4 @@
 /**
  * @nullable
  */
-export type GetClusterSurveyStatisticsForOrganization200SurveysItem = unknown | null
+export type GetClusterSurveyStatisticsForOrganization200SurveysItem = unknown | null;

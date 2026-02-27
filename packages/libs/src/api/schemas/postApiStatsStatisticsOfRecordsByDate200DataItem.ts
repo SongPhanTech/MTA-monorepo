@@ -6,7 +6,7 @@
  */
 
 export type PostApiStatsStatisticsOfRecordsByDate200DataItem = {
-    organizationId: string
-    label: string
-    data: number[]
-}
+  organizationId: string;
+  label: string;
+  data: number[];
+};

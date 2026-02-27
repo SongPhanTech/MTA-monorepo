@@ -4,9 +4,9 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetSurveysOfProfile200AllOfAllOfDataItem } from './getSurveysOfProfile200AllOfAllOfDataItem'
+import type { GetSurveysOfProfile200AllOfAllOfDataItem } from './getSurveysOfProfile200AllOfAllOfDataItem';
 
 export type GetSurveysOfProfile200AllOfAllOf = {
-    data: GetSurveysOfProfile200AllOfAllOfDataItem[]
-    count: number
-}
+  data: GetSurveysOfProfile200AllOfAllOfDataItem[];
+  count: number;
+};

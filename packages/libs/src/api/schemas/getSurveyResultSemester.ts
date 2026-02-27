@@ -4,33 +4,33 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetSurveyResultSemesterSemesterType } from './getSurveyResultSemesterSemesterType'
+import type { GetSurveyResultSemesterSemesterType } from './getSurveyResultSemesterSemesterType';
 
 /**
  * @nullable
  */
 export type GetSurveyResultSemester = {
-    id: string
-    /** @nullable */
-    code?: string | null
-    active?: boolean
-    /** @nullable */
-    description?: string | null
-    /** @nullable */
-    deletedAt?: string | null
-    /** @nullable */
-    createdAt?: string | null
-    /** @nullable */
-    updatedAt?: string | null
-    /** @nullable */
-    createdBy?: string | null
-    name: string
-    /** @nullable */
-    shortName?: string | null
-    /** @nullable */
-    semesterType?: GetSurveyResultSemesterSemesterType
-    /** @nullable */
-    startDate: string | null
-    /** @nullable */
-    endDate: string | null
-} | null
+  id: string;
+  /** @nullable */
+  code?: string | null;
+  active?: boolean;
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  deletedAt?: string | null;
+  /** @nullable */
+  createdAt?: string | null;
+  /** @nullable */
+  updatedAt?: string | null;
+  /** @nullable */
+  createdBy?: string | null;
+  name: string;
+  /** @nullable */
+  shortName?: string | null;
+  /** @nullable */
+  semesterType?: GetSurveyResultSemesterSemesterType;
+  /** @nullable */
+  startDate: string | null;
+  /** @nullable */
+  endDate: string | null;
+} | null;

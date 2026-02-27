@@ -4,8 +4,8 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetClassesInfo200ItemSubjectClassItemClassRegisterLogsItemStudent } from './getClassesInfo200ItemSubjectClassItemClassRegisterLogsItemStudent'
+import type { GetClassesInfo200ItemSubjectClassItemClassRegisterLogsItemStudent } from './getClassesInfo200ItemSubjectClassItemClassRegisterLogsItemStudent';
 
 export type GetClassesInfo200ItemSubjectClassItemClassRegisterLogsItem = {
-    student: GetClassesInfo200ItemSubjectClassItemClassRegisterLogsItemStudent
-}
+  student: GetClassesInfo200ItemSubjectClassItemClassRegisterLogsItemStudent;
+};

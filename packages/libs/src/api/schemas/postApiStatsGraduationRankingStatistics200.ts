@@ -4,13 +4,13 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { PostApiStatsGraduationRankingStatistics200Summary } from './postApiStatsGraduationRankingStatistics200Summary'
-import type { PostApiStatsGraduationRankingStatistics200DataItem } from './postApiStatsGraduationRankingStatistics200DataItem'
+import type { PostApiStatsGraduationRankingStatistics200Summary } from './postApiStatsGraduationRankingStatistics200Summary';
+import type { PostApiStatsGraduationRankingStatistics200DataItem } from './postApiStatsGraduationRankingStatistics200DataItem';
 
 export type PostApiStatsGraduationRankingStatistics200 = {
-    summary: PostApiStatsGraduationRankingStatistics200Summary
-    count: number
-    preview?: boolean
-    labels?: string[]
-    data: PostApiStatsGraduationRankingStatistics200DataItem[]
-}
+  summary: PostApiStatsGraduationRankingStatistics200Summary;
+  count: number;
+  preview?: boolean;
+  labels?: string[];
+  data: PostApiStatsGraduationRankingStatistics200DataItem[];
+};

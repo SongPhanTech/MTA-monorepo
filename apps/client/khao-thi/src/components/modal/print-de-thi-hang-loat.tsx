@@ -102,8 +102,9 @@ const PrintBatchExamBank = () => {
     const dataRender = useMemo(() => {
         if (exams?.length <= 0) return []
         const result = exams.map((i) => {
-            const listQuestionChoice = i?.questions.filter((q) => q?.question?.type !== 'ESSAY')
-            const listQuestionEssay = i?.questions.filter((q) => q?.question?.type === 'ESSAY')
+            const sorted = [...(i?.questions || [])].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+            const listQuestionChoice = sorted.filter((q) => q?.question?.type !== 'ESSAY')
+            const listQuestionEssay = sorted.filter((q) => q?.question?.type === 'ESSAY')
             if (i?.isGroup) {
                 return {
                     ...i,
@@ -114,6 +115,7 @@ const PrintBatchExamBank = () => {
             }
             return {
                 ...i,
+                questions: sorted,
                 listQuestionChoice: listQuestionChoice,
                 listQuestionEssay: listQuestionEssay,
             }
@@ -164,7 +166,7 @@ const PrintBatchExamBank = () => {
                             : `Không được sử dụng tài liệu${exam?.explain ? ` ${exam.explain}` : ''}`,
                     questions:
                         exam?.questions?.map((q: any, qIndex: number) => ({
-                            order: q?.order || qIndex + 1,
+                            order: qIndex + 1,
                             point: Number(q?.question?.point || 0).toFixed(1),
                             content: convertHtmlBreaks(q?.question?.content || ''),
                         })) || [],
@@ -350,7 +352,7 @@ const PrintBatchExamBank = () => {
                                     <div key={q?.id} style={{ marginBottom: '15px' }}>
                                         <div>
                                             <strong>
-                                                Câu {q?.order || qIndex + 1}(
+                                                Câu {qIndex + 1}(
                                                 {Number(q?.question?.point || 0).toFixed(1)} điểm):
                                             </strong>{' '}
                                             <span
@@ -371,8 +373,11 @@ const PrintBatchExamBank = () => {
                                     <div key={q?.id} style={{ marginBottom: '15px' }}>
                                         <div>
                                             <strong>
-                                                Câu {q?.order || qIndex + 1}(
-                                                {Number(q?.question?.point || 0).toFixed(1)} điểm):
+                                                Câu{' '}
+                                                {(exam?.listQuestionChoice?.length ?? 0) +
+                                                    qIndex +
+                                                    1}
+                                                ({Number(q?.question?.point || 0).toFixed(1)} điểm):
                                             </strong>{' '}
                                             <span
                                                 dangerouslySetInnerHTML={{
@@ -394,7 +399,7 @@ const PrintBatchExamBank = () => {
                                     <div key={q?.id} style={{ marginBottom: '15px' }}>
                                         <div>
                                             <strong>
-                                                Câu {q?.order || qIndex + 1}(
+                                                Câu {qIndex + 1}(
                                                 {Number(q?.question?.point || 0).toFixed(1)} điểm):
                                             </strong>{' '}
                                             <span

@@ -6,5 +6,5 @@
  */
 
 export type SavePublicSurvey404 = {
-    message: string
-}
+  message: string;
+};

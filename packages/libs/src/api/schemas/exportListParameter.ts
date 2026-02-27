@@ -69,28 +69,28 @@ API này cho phép các ứng dụng truy cập từ client hoặc server thông
 4. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { MTGridColumn } from './mTGridColumn'
-import type { ExportListParameterSummaryData } from './exportListParameterSummaryData'
-import type { IExportType } from './iExportType'
-import type { ExportListParameterPagingRequestDto } from './exportListParameterPagingRequestDto'
+import type { MTGridColumn } from './mTGridColumn';
+import type { ExportListParameterSummaryData } from './exportListParameterSummaryData';
+import type { IExportType } from './iExportType';
+import type { ExportListParameterPagingRequestDto } from './exportListParameterPagingRequestDto';
 
 export interface ExportListParameter {
-    /** @nullable */
-    Columns?: MTGridColumn[] | null
-    /** @nullable */
-    Title?: string | null
-    /** @nullable */
-    SubTitle?: string | null
-    /** @nullable */
-    Data?: unknown[] | null
-    /** @nullable */
-    SummaryData?: ExportListParameterSummaryData
-    IsTree?: boolean
-    /** @nullable */
-    TreeCode?: string | null
-    /** @nullable */
-    FileNameDownload?: string | null
-    iExportType?: IExportType
-    /** @nullable */
-    PagingRequestDto?: ExportListParameterPagingRequestDto
+  /** @nullable */
+  Columns?: MTGridColumn[] | null;
+  /** @nullable */
+  Title?: string | null;
+  /** @nullable */
+  SubTitle?: string | null;
+  /** @nullable */
+  Data?: unknown[] | null;
+  /** @nullable */
+  SummaryData?: ExportListParameterSummaryData;
+  IsTree?: boolean;
+  /** @nullable */
+  TreeCode?: string | null;
+  /** @nullable */
+  FileNameDownload?: string | null;
+  iExportType?: IExportType;
+  /** @nullable */
+  PagingRequestDto?: ExportListParameterPagingRequestDto;
 }

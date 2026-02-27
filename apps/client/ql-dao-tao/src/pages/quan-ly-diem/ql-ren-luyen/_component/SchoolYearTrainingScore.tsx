@@ -5,8 +5,6 @@ import { useEffect, useMemo, useState } from 'react'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useAbility } from '@workspace/permissions/hooks'
 import { useRouter } from 'next/router'
-import DeleteIcon from '@components/icons/delete'
-import EditIcon from '@components/icons/edit'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useCountStudent, useFindManyStudent } from '@workspace/db/hooks'
 import { useSemesterStore } from '@workspace/ui'
@@ -203,16 +201,15 @@ export default function SchoolYearTrainingScore({
             if (listTransaction.length > 0) {
                 const res = await sqlTransaction(listTransaction)
                 if (res?.status === 200) {
-                    message.success('Lưu điểm rén luyện thành công')
-                    refetch()
-                }
+                    message.success('Lưu điểm rèn luyện năm học thành công');
+                    refetch();
             }
 
-            // message.success('Lưu điểm rèn luyện thành công')
+            // message.success('Lưu điểm rèn luyện năm học thành công')
             // refetch()
             // setEditableData(new Map())
         } catch (error) {
-            message.error('Đã xảy ra lỗi khi lưu điểm rèn luyện')
+            message.error('Đã xảy ra lỗi khi lưu điểm rèn luyện năm học')
         } finally {
             hideSpinner()
         }
@@ -344,60 +341,32 @@ export default function SchoolYearTrainingScore({
                                         )
                                     },
                                 },
-                                {
-                                    title: 'Trạng thái',
-                                    align: 'center',
-                                    dataIndex: 'name',
-                                    width: 150,
-                                    render: (_, record) => (
-                                        <Tag color={getTrainingScoreStatusColor(record.status)}>
-                                            {getTrainingScoreStatusLabel(record.status)}
-                                        </Tag>
-                                    ),
-                                },
-
-                                {
-                                    title: 'Thao tác',
-                                    width: 130,
-                                    align: 'center',
-                                    fixed: 'right',
-                                    render: (_, record) => (
-                                        <Row className="justify-center gap-2">
-                                            {can(
-                                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_QL_SINH_VIEN,
-                                                'SUA'
-                                            ) && (
-                                                <EditIcon
-                                                    // onClick={onOpenUpdate.bind(null, {
-                                                    //     id: record.id,
-                                                    // })}
-                                                    className="text-sm text-blue-700 cursor-pointer"
-                                                />
-                                            )}
-                                            {can(
-                                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_QL_SINH_VIEN,
-                                                'XOA'
-                                            ) && (
-                                                <DeleteIcon
-                                                // popConfirm={{
-                                                //     onConfirm: () => handleDelete(record.id),
-                                                // }}
-                                                />
-                                            )}
-                                        </Row>
-                                    ),
-                                },
-                            ]}
-                            rowKey="id"
-                            // rowSelection={{
-                            //     selectedRowKeys,
-                            //     onChange: (selectedKeys) => setSelectedRowKeys(selectedKeys),
-                            // }}
-                            data={data}
-                            pagination={{
-                                current: currentPage,
-                                pageSize: numberOfPages,
-                                total: count,
+                               {
+                                        title: 'Trạng thái',
+                                        align: 'center',
+                                        dataIndex: 'name',
+                                        width: 150,
+                                        render: (_, record) => (
+                                            <Tag
+                                                color={getTrainingScoreStatusColor(
+                                                    record.status
+                                                )}
+                                            >
+                                                {getTrainingScoreStatusLabel(record.status)}
+                                            </Tag>
+                                        ),
+                                    },
+                    ]}
+                    rowKey="id"
+                    // rowSelection={{
+                    //     selectedRowKeys,
+                    //     onChange: (selectedKeys) => setSelectedRowKeys(selectedKeys),
+                    // }}
+                    data={data}
+                    pagination={{
+                        current: currentPage,
+                        pageSize: numberOfPages,
+                        total: count,
 
                                 onChange: (page, pageSize) => {
                                     if (numberOfPages === pageSize) {

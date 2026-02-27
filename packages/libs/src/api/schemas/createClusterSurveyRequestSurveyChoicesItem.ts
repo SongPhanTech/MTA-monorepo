@@ -6,7 +6,7 @@
  */
 
 export type CreateClusterSurveyRequestSurveyChoicesItem = {
-    answer: string
-    description: string
-    requireExplanation: boolean
-}
+  answer: string;
+  description: string;
+  requireExplanation: boolean;
+};

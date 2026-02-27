@@ -4,12 +4,12 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { SqlTransactionBodyItemModel } from './sqlTransactionBodyItemModel'
-import type { SqlTransactionBodyItemData } from './sqlTransactionBodyItemData'
+import type { SqlTransactionBodyItemModel } from './sqlTransactionBodyItemModel';
+import type { SqlTransactionBodyItemData } from './sqlTransactionBodyItemData';
 
 export type SqlTransactionBodyItem = {
-    model: SqlTransactionBodyItemModel
-    operation: string
-    /** @nullable */
-    data?: SqlTransactionBodyItemData
-}
+  model: SqlTransactionBodyItemModel;
+  operation: string;
+  /** @nullable */
+  data?: SqlTransactionBodyItemData;
+};

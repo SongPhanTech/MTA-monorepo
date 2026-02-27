@@ -6,5 +6,5 @@
  */
 
 export type GetClassRegisterSession400 = {
-    message: string
-}
+  message: string;
+};

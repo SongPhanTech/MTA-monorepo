@@ -6,5 +6,5 @@
  */
 
 export type GetDatabases200Item = {
-    Database: string
-}
+  Database: string;
+};

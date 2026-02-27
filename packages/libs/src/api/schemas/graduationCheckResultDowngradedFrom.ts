@@ -4,37 +4,37 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GraduationCheckResultDowngradedFromContext } from './graduationCheckResultDowngradedFromContext'
-import type { GraduationCheckResultDowngradedFromBaseScore } from './graduationCheckResultDowngradedFromBaseScore'
+import type { GraduationCheckResultDowngradedFromContext } from './graduationCheckResultDowngradedFromContext';
+import type { GraduationCheckResultDowngradedFromBaseScore } from './graduationCheckResultDowngradedFromBaseScore';
 
 export type GraduationCheckResultDowngradedFrom = {
-    id: string
-    /** @nullable */
-    code?: string | null
-    active?: boolean
-    /** @nullable */
-    description?: string | null
-    /** @nullable */
-    deletedAt?: string | null
-    /** @nullable */
-    createdAt?: string | null
-    /** @nullable */
-    updatedAt?: string | null
-    /** @nullable */
-    createdBy?: string | null
-    classification: string
-    /** @nullable */
-    classificationEnglish?: string | null
-    context: GraduationCheckResultDowngradedFromContext
-    rankOrder: number
-    baseScore: GraduationCheckResultDowngradedFromBaseScore
-    /** @nullable */
-    base10Min?: number | null
-    /** @nullable */
-    base10Max?: number | null
-    /** @nullable */
-    base4Min?: number | null
-    /** @nullable */
-    base4Max?: number | null
-    graduated: boolean
-}
+  id: string;
+  /** @nullable */
+  code?: string | null;
+  active?: boolean;
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  deletedAt?: string | null;
+  /** @nullable */
+  createdAt?: string | null;
+  /** @nullable */
+  updatedAt?: string | null;
+  /** @nullable */
+  createdBy?: string | null;
+  classification: string;
+  /** @nullable */
+  classificationEnglish?: string | null;
+  context: GraduationCheckResultDowngradedFromContext;
+  rankOrder: number;
+  baseScore: GraduationCheckResultDowngradedFromBaseScore;
+  /** @nullable */
+  base10Min?: number | null;
+  /** @nullable */
+  base10Max?: number | null;
+  /** @nullable */
+  base4Min?: number | null;
+  /** @nullable */
+  base4Max?: number | null;
+  graduated: boolean;
+};

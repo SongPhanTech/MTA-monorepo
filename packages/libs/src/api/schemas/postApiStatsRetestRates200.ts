@@ -4,9 +4,9 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { PostApiStatsRetestRates200Data } from './postApiStatsRetestRates200Data'
+import type { PostApiStatsRetestRates200Data } from './postApiStatsRetestRates200Data';
 
 export type PostApiStatsRetestRates200 = {
-    success: boolean
-    data: PostApiStatsRetestRates200Data
-}
+  success: boolean;
+  data: PostApiStatsRetestRates200Data;
+};

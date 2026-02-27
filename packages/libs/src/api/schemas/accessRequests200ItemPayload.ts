@@ -8,4 +8,4 @@
 /**
  * @nullable
  */
-export type AccessRequests200ItemPayload = unknown | null
+export type AccessRequests200ItemPayload = unknown | null;

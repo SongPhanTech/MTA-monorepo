@@ -6,5 +6,5 @@
  */
 
 export type SaveExamScore400 = {
-    message: string
-}
+  message: string;
+};

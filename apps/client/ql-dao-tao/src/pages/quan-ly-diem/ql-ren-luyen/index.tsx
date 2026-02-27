@@ -1,11 +1,11 @@
-import DefaultLayout from '@layouts/default-layout'
+vb    import DefaultLayout from '@layouts/default-layout'
 
 import { useState } from 'react'
 import { Col, message, Row } from 'antd'
 import SemesterTrainingScore from './_component/SemesterTrainingScore'
-import LopBienCheItem from './[id]/lop-bien-che'
-import useSpinner from '@hooks/spinner'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
+import LopBienCheItem from './_component/lop-bien-che';
+import useSpinner from '@hooks/spinner';
+import { useTrainingObjectTypeStore } from '@workspace/ui';
 
 export default function QuanLyDiemRenLuyen() {
     const [activeTabKey, setActiveTabKey] = useState(0)

@@ -5,11 +5,11 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GenerateDiplomaNumberBodyField =
-    (typeof GenerateDiplomaNumberBodyField)[keyof typeof GenerateDiplomaNumberBodyField]
+export type GenerateDiplomaNumberBodyField = typeof GenerateDiplomaNumberBodyField[keyof typeof GenerateDiplomaNumberBodyField];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GenerateDiplomaNumberBodyField = {
-    originalDiplomaNumber: 'originalDiplomaNumber',
-    diplomaNumber: 'diplomaNumber',
-} as const
+  originalDiplomaNumber: 'originalDiplomaNumber',
+  diplomaNumber: 'diplomaNumber',
+} as const;

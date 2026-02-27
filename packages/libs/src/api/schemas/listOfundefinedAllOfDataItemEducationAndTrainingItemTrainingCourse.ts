@@ -4,62 +4,62 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { ListOfundefinedAllOfDataItemEducationAndTrainingItemTrainingCourseBaseScore } from './listOfundefinedAllOfDataItemEducationAndTrainingItemTrainingCourseBaseScore'
+import type { ListOfundefinedAllOfDataItemEducationAndTrainingItemTrainingCourseBaseScore } from './listOfundefinedAllOfDataItemEducationAndTrainingItemTrainingCourseBaseScore';
 
 export type ListOfundefinedAllOfDataItemEducationAndTrainingItemTrainingCourse = {
-    id: string
-    /** @nullable */
-    code?: string | null
-    active?: boolean
-    /** @nullable */
-    description?: string | null
-    /** @nullable */
-    deletedAt?: string | null
-    /** @nullable */
-    createdAt?: string | null
-    /** @nullable */
-    updatedAt?: string | null
-    /** @nullable */
-    createdBy?: string | null
-    name: string
-    /** @nullable */
-    startYear?: number | null
-    /** @nullable */
-    endYear?: number | null
-    /** @nullable */
-    academicYear?: string | null
-    /** @nullable */
-    maxTrainingTime?: number | null
-    /** @nullable */
-    admissionQuota?: number | null
-    /** @nullable */
-    admittedStudent?: number | null
-    /** @nullable */
-    enrolledStudent?: number | null
-    /** @nullable */
-    admissionStartDate?: string | null
-    /** @nullable */
-    admissionEndDate?: string | null
-    /** @nullable */
-    admissionDecision?: string | null
-    /** @nullable */
-    studentRecognitionDecision?: string | null
-    /** @nullable */
-    regulation?: string | null
-    isGeneralInfoLocked?: boolean
-    isRegulationLocked?: boolean
-    isScoreConfigLocked?: boolean
-    baseScore: ListOfundefinedAllOfDataItemEducationAndTrainingItemTrainingCourseBaseScore
-    coef_1?: number
-    coef_2?: number
-    coef_3?: number
-    scoreToTakeExam?: number
-    examScoreToPass?: number
-    scoreToPass?: number
-    scoreToPassConditional?: number
-    scoreToTakeGraduation?: number
-    scoreToPassGraduation?: number
-    maxReExamScore?: number
-    reduceReExamScore?: number
-    scoreToRetain?: number
-}
+  id: string;
+  /** @nullable */
+  code?: string | null;
+  active?: boolean;
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  deletedAt?: string | null;
+  /** @nullable */
+  createdAt?: string | null;
+  /** @nullable */
+  updatedAt?: string | null;
+  /** @nullable */
+  createdBy?: string | null;
+  name: string;
+  /** @nullable */
+  startYear?: number | null;
+  /** @nullable */
+  endYear?: number | null;
+  /** @nullable */
+  academicYear?: string | null;
+  /** @nullable */
+  maxTrainingTime?: number | null;
+  /** @nullable */
+  admissionQuota?: number | null;
+  /** @nullable */
+  admittedStudent?: number | null;
+  /** @nullable */
+  enrolledStudent?: number | null;
+  /** @nullable */
+  admissionStartDate?: string | null;
+  /** @nullable */
+  admissionEndDate?: string | null;
+  /** @nullable */
+  admissionDecision?: string | null;
+  /** @nullable */
+  studentRecognitionDecision?: string | null;
+  /** @nullable */
+  regulation?: string | null;
+  isGeneralInfoLocked?: boolean;
+  isRegulationLocked?: boolean;
+  isScoreConfigLocked?: boolean;
+  baseScore: ListOfundefinedAllOfDataItemEducationAndTrainingItemTrainingCourseBaseScore;
+  coef_1?: number;
+  coef_2?: number;
+  coef_3?: number;
+  scoreToTakeExam?: number;
+  examScoreToPass?: number;
+  scoreToPass?: number;
+  scoreToPassConditional?: number;
+  scoreToTakeGraduation?: number;
+  scoreToPassGraduation?: number;
+  maxReExamScore?: number;
+  reduceReExamScore?: number;
+  scoreToRetain?: number;
+};

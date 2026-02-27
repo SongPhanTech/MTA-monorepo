@@ -71,20 +71,20 @@ API này cho phép các ứng dụng truy cập từ client hoặc server thông
  */
 
 export interface NhanVienPatchDto {
-    /** @nullable */
-    sHoVaDem?: string | null
-    /** @nullable */
-    sTen?: string | null
-    /** @nullable */
-    sCCCD?: string | null
-    /** @nullable */
-    dNgaySinh?: string | null
-    /** @nullable */
-    sDM_GioiTinhId?: string | null
-    /** @nullable */
-    sAvatarId?: string | null
-    /** @nullable */
-    sEmail?: string | null
-    /** @nullable */
-    sSDTDiDong?: string | null
+  /** @nullable */
+  sHoVaDem?: string | null;
+  /** @nullable */
+  sTen?: string | null;
+  /** @nullable */
+  sCCCD?: string | null;
+  /** @nullable */
+  dNgaySinh?: string | null;
+  /** @nullable */
+  sDM_GioiTinhId?: string | null;
+  /** @nullable */
+  sAvatarId?: string | null;
+  /** @nullable */
+  sEmail?: string | null;
+  /** @nullable */
+  sSDTDiDong?: string | null;
 }

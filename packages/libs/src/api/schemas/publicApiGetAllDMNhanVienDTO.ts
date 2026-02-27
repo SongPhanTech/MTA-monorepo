@@ -55,54 +55,54 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  * Cán bộ, nhân viên
  */
 export interface PublicApiGetAllDMNhanVienDTO {
-    Id?: string
-    /** @nullable */
-    sMa?: string | null
-    /**
-     * Họ và đệm
-     * @nullable
-     */
-    sHoVaDem?: string | null
-    /**
-     * Tên
-     * @nullable
-     */
-    sTen?: string | null
-    /**
-     * Tên đầy đủ
-     * @nullable
-     */
-    sTenDayDu?: string | null
-    /**
-     * Ngày sinh
-     * @nullable
-     */
-    dNgaySinh?: string | null
-    /** Id Giới tính */
-    sDM_GioiTinhId?: string
-    /**
-     * Tên đơn vị
-     * @nullable
-     */
-    sTenDonVi?: string | null
-    /**
-     * Vị trí công việc
-     * @nullable
-     */
-    sTenViTriCongViec?: string | null
-    /**
-     * Số điện thoại
-     * @nullable
-     */
-    sSDTDiDong?: string | null
-    /**
-     * Email
-     * @nullable
-     */
-    sEmail?: string | null
-    /**
-     * Địa chỉ
-     * @nullable
-     */
-    sDiaChi?: string | null
+  Id?: string;
+  /** @nullable */
+  sMa?: string | null;
+  /**
+   * Họ và đệm
+   * @nullable
+   */
+  sHoVaDem?: string | null;
+  /**
+   * Tên
+   * @nullable
+   */
+  sTen?: string | null;
+  /**
+   * Tên đầy đủ
+   * @nullable
+   */
+  sTenDayDu?: string | null;
+  /**
+   * Ngày sinh
+   * @nullable
+   */
+  dNgaySinh?: string | null;
+  /** Id Giới tính */
+  sDM_GioiTinhId?: string;
+  /**
+   * Tên đơn vị
+   * @nullable
+   */
+  sTenDonVi?: string | null;
+  /**
+   * Vị trí công việc
+   * @nullable
+   */
+  sTenViTriCongViec?: string | null;
+  /**
+   * Số điện thoại
+   * @nullable
+   */
+  sSDTDiDong?: string | null;
+  /**
+   * Email
+   * @nullable
+   */
+  sEmail?: string | null;
+  /**
+   * Địa chỉ
+   * @nullable
+   */
+  sDiaChi?: string | null;
 }

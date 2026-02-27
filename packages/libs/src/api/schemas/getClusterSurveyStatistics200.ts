@@ -4,46 +4,46 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetClusterSurveyStatistics200SurveyTopic } from './getClusterSurveyStatistics200SurveyTopic'
-import type { GetClusterSurveyStatistics200SurveyObjectTypeItem } from './getClusterSurveyStatistics200SurveyObjectTypeItem'
-import type { GetClusterSurveyStatistics200LecturersItem } from './getClusterSurveyStatistics200LecturersItem'
-import type { GetClusterSurveyStatistics200SurveyChoiceItem } from './getClusterSurveyStatistics200SurveyChoiceItem'
-import type { GetClusterSurveyStatistics200SurveyQuestionItem } from './getClusterSurveyStatistics200SurveyQuestionItem'
-import type { GetClusterSurveyStatistics200SurveysItem } from './getClusterSurveyStatistics200SurveysItem'
-import type { GetClusterSurveyStatistics200ChoicesItem } from './getClusterSurveyStatistics200ChoicesItem'
-import type { GetClusterSurveyStatistics200DataItem } from './getClusterSurveyStatistics200DataItem'
+import type { GetClusterSurveyStatistics200SurveyTopic } from './getClusterSurveyStatistics200SurveyTopic';
+import type { GetClusterSurveyStatistics200SurveyObjectTypeItem } from './getClusterSurveyStatistics200SurveyObjectTypeItem';
+import type { GetClusterSurveyStatistics200LecturersItem } from './getClusterSurveyStatistics200LecturersItem';
+import type { GetClusterSurveyStatistics200SurveyChoiceItem } from './getClusterSurveyStatistics200SurveyChoiceItem';
+import type { GetClusterSurveyStatistics200SurveyQuestionItem } from './getClusterSurveyStatistics200SurveyQuestionItem';
+import type { GetClusterSurveyStatistics200SurveysItem } from './getClusterSurveyStatistics200SurveysItem';
+import type { GetClusterSurveyStatistics200ChoicesItem } from './getClusterSurveyStatistics200ChoicesItem';
+import type { GetClusterSurveyStatistics200DataItem } from './getClusterSurveyStatistics200DataItem';
 
 export type GetClusterSurveyStatistics200 = {
-    id: string
-    /** @nullable */
-    code?: string | null
-    active?: boolean
-    /** @nullable */
-    description?: string | null
-    /** @nullable */
-    deletedAt?: string | null
-    /** @nullable */
-    createdAt?: string | null
-    /** @nullable */
-    updatedAt?: string | null
-    /** @nullable */
-    createdBy?: string | null
-    name: string
-    /** @nullable */
-    startDate: string | null
-    /** @nullable */
-    endDate?: string | null
-    isPublic?: boolean
-    anonymous?: boolean
-    surveyTopicId: string
-    surveyTopic?: GetClusterSurveyStatistics200SurveyTopic
-    surveyObjectType?: GetClusterSurveyStatistics200SurveyObjectTypeItem[]
-    lecturers?: GetClusterSurveyStatistics200LecturersItem[]
-    surveyChoice?: GetClusterSurveyStatistics200SurveyChoiceItem[]
-    surveyQuestion?: GetClusterSurveyStatistics200SurveyQuestionItem[]
-    surveys?: GetClusterSurveyStatistics200SurveysItem[]
-    choices: GetClusterSurveyStatistics200ChoicesItem[]
-    choicesAnswer: string[]
-    choicesDesc: (string | null)[]
-    data: GetClusterSurveyStatistics200DataItem[]
-}
+  id: string;
+  /** @nullable */
+  code?: string | null;
+  active?: boolean;
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  deletedAt?: string | null;
+  /** @nullable */
+  createdAt?: string | null;
+  /** @nullable */
+  updatedAt?: string | null;
+  /** @nullable */
+  createdBy?: string | null;
+  name: string;
+  /** @nullable */
+  startDate: string | null;
+  /** @nullable */
+  endDate?: string | null;
+  isPublic?: boolean;
+  anonymous?: boolean;
+  surveyTopicId: string;
+  surveyTopic?: GetClusterSurveyStatistics200SurveyTopic;
+  surveyObjectType?: GetClusterSurveyStatistics200SurveyObjectTypeItem[];
+  lecturers?: GetClusterSurveyStatistics200LecturersItem[];
+  surveyChoice?: GetClusterSurveyStatistics200SurveyChoiceItem[];
+  surveyQuestion?: GetClusterSurveyStatistics200SurveyQuestionItem[];
+  surveys?: GetClusterSurveyStatistics200SurveysItem[];
+  choices: GetClusterSurveyStatistics200ChoicesItem[];
+  choicesAnswer: string[];
+  choicesDesc: (string | null)[];
+  data: GetClusterSurveyStatistics200DataItem[];
+};

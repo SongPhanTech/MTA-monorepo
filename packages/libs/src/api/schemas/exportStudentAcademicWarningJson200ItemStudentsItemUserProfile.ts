@@ -9,4 +9,4 @@
  * Thông tin người dùng
  * @nullable
  */
-export type ExportStudentAcademicWarningJson200ItemStudentsItemUserProfile = unknown | null
+export type ExportStudentAcademicWarningJson200ItemStudentsItemUserProfile = unknown | null;

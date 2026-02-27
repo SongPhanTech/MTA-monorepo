@@ -8,4 +8,4 @@
 /**
  * ID của đơn vị
  */
-export type OrganizationId = string
+export type OrganizationId = string;

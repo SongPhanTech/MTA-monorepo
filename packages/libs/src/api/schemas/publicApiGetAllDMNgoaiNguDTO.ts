@@ -55,15 +55,15 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  * Ngoại ngữ
  */
 export interface PublicApiGetAllDMNgoaiNguDTO {
-    Id?: string
-    /**
-     * Mã ngoại ngữ
-     * @nullable
-     */
-    sMa?: string | null
-    /**
-     * Tên ngoại ngữ
-     * @nullable
-     */
-    sTen?: string | null
+  Id?: string;
+  /**
+   * Mã ngoại ngữ
+   * @nullable
+   */
+  sMa?: string | null;
+  /**
+   * Tên ngoại ngữ
+   * @nullable
+   */
+  sTen?: string | null;
 }

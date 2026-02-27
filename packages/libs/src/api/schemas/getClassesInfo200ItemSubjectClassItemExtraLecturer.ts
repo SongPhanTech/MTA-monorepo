@@ -4,11 +4,11 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetClassesInfo200ItemSubjectClassItemExtraLecturerUserProfile } from './getClassesInfo200ItemSubjectClassItemExtraLecturerUserProfile'
+import type { GetClassesInfo200ItemSubjectClassItemExtraLecturerUserProfile } from './getClassesInfo200ItemSubjectClassItemExtraLecturerUserProfile';
 
 /**
  * @nullable
  */
 export type GetClassesInfo200ItemSubjectClassItemExtraLecturer = {
-    userProfile: GetClassesInfo200ItemSubjectClassItemExtraLecturerUserProfile
-} | null
+  userProfile: GetClassesInfo200ItemSubjectClassItemExtraLecturerUserProfile;
+} | null;

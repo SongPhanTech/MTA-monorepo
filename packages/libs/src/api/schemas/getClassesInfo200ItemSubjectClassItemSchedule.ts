@@ -8,13 +8,12 @@
 /**
  * @nullable
  */
-export type GetClassesInfo200ItemSubjectClassItemSchedule =
-    | (typeof GetClassesInfo200ItemSubjectClassItemSchedule)[keyof typeof GetClassesInfo200ItemSubjectClassItemSchedule]
-    | null
+export type GetClassesInfo200ItemSubjectClassItemSchedule = typeof GetClassesInfo200ItemSubjectClassItemSchedule[keyof typeof GetClassesInfo200ItemSubjectClassItemSchedule] | null;
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetClassesInfo200ItemSubjectClassItemSchedule = {
-    MORNING: 'MORNING',
-    AFTERNOON: 'AFTERNOON',
-    EVENING: 'EVENING',
-} as const
+  MORNING: 'MORNING',
+  AFTERNOON: 'AFTERNOON',
+  EVENING: 'EVENING',
+} as const;

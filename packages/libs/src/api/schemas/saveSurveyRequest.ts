@@ -4,15 +4,15 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { SaveSurveyRequestResponsesItem } from './saveSurveyRequestResponsesItem'
+import type { SaveSurveyRequestResponsesItem } from './saveSurveyRequestResponsesItem';
 
 export interface SaveSurveyRequest {
-    surveyId: string
-    profileId?: string
-    studentId?: string
-    studentCode?: string
-    /** @nullable */
-    surveyObjectTypeId?: string | null
-    startedAt?: string
-    responses: SaveSurveyRequestResponsesItem[]
+  surveyId: string;
+  profileId?: string;
+  studentId?: string;
+  studentCode?: string;
+  /** @nullable */
+  surveyObjectTypeId?: string | null;
+  startedAt?: string;
+  responses: SaveSurveyRequestResponsesItem[];
 }

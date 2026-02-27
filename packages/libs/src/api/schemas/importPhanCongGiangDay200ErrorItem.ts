@@ -6,5 +6,5 @@
  */
 
 export type ImportPhanCongGiangDay200ErrorItem = {
-    message: string
-}
+  message: string;
+};

@@ -50,6 +50,7 @@ import type {
     DebtStatisticsParams,
     DownloadStudentImportTemplate404,
     DownloadStudentImportTemplate500,
+    DownloadStudentImportTemplateParams,
     EnrollFixedClassOnSubjectClassBody,
     ExamCodes,
     ExportDiplomaVerification400,
@@ -4108,15 +4109,30 @@ export type downloadStudentImportTemplateResponse =
     | downloadStudentImportTemplateResponseSuccess
     | downloadStudentImportTemplateResponseError
 
-export const getDownloadStudentImportTemplateUrl = () => {
-    return `/api/student/download-student-import-template`
+export const getDownloadStudentImportTemplateUrl = (
+    params: DownloadStudentImportTemplateParams
+) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/student/download-student-import-template?${stringifiedParams}`
+        : `/api/student/download-student-import-template`
 }
 
 export const downloadStudentImportTemplate = async (
+    params: DownloadStudentImportTemplateParams,
     options?: RequestInit
 ): Promise<downloadStudentImportTemplateResponse> => {
     return customTrainingFetch<downloadStudentImportTemplateResponse>(
-        getDownloadStudentImportTemplateUrl(),
+        getDownloadStudentImportTemplateUrl(params),
         {
             ...options,
             method: 'GET',
@@ -4124,26 +4140,35 @@ export const downloadStudentImportTemplate = async (
     )
 }
 
-export const getDownloadStudentImportTemplateQueryKey = () => {
-    return [`/api/student/download-student-import-template`] as const
+export const getDownloadStudentImportTemplateQueryKey = (
+    params?: DownloadStudentImportTemplateParams
+) => {
+    return [`/api/student/download-student-import-template`, ...(params ? [params] : [])] as const
 }
 
 export const getDownloadStudentImportTemplateQueryOptions = <
     TData = Awaited<ReturnType<typeof downloadStudentImportTemplate>>,
     TError = DownloadStudentImportTemplate404 | DownloadStudentImportTemplate500,
->(options?: {
-    query?: Partial<
-        UseQueryOptions<Awaited<ReturnType<typeof downloadStudentImportTemplate>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}) => {
+>(
+    params: DownloadStudentImportTemplateParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof downloadStudentImportTemplate>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
     const { query: queryOptions, request: requestOptions } = options ?? {}
 
-    const queryKey = queryOptions?.queryKey ?? getDownloadStudentImportTemplateQueryKey()
+    const queryKey = queryOptions?.queryKey ?? getDownloadStudentImportTemplateQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof downloadStudentImportTemplate>>> = ({
         signal,
-    }) => downloadStudentImportTemplate({ signal, ...requestOptions })
+    }) => downloadStudentImportTemplate(params, { signal, ...requestOptions })
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof downloadStudentImportTemplate>>,
@@ -4163,6 +4188,7 @@ export function useDownloadStudentImportTemplate<
     TData = Awaited<ReturnType<typeof downloadStudentImportTemplate>>,
     TError = DownloadStudentImportTemplate404 | DownloadStudentImportTemplate500,
 >(
+    params: DownloadStudentImportTemplateParams,
     options: {
         query: Partial<
             UseQueryOptions<
@@ -4187,6 +4213,7 @@ export function useDownloadStudentImportTemplate<
     TData = Awaited<ReturnType<typeof downloadStudentImportTemplate>>,
     TError = DownloadStudentImportTemplate404 | DownloadStudentImportTemplate500,
 >(
+    params: DownloadStudentImportTemplateParams,
     options?: {
         query?: Partial<
             UseQueryOptions<
@@ -4211,6 +4238,7 @@ export function useDownloadStudentImportTemplate<
     TData = Awaited<ReturnType<typeof downloadStudentImportTemplate>>,
     TError = DownloadStudentImportTemplate404 | DownloadStudentImportTemplate500,
 >(
+    params: DownloadStudentImportTemplateParams,
     options?: {
         query?: Partial<
             UseQueryOptions<
@@ -4228,6 +4256,7 @@ export function useDownloadStudentImportTemplate<
     TData = Awaited<ReturnType<typeof downloadStudentImportTemplate>>,
     TError = DownloadStudentImportTemplate404 | DownloadStudentImportTemplate500,
 >(
+    params: DownloadStudentImportTemplateParams,
     options?: {
         query?: Partial<
             UseQueryOptions<
@@ -4240,7 +4269,7 @@ export function useDownloadStudentImportTemplate<
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getDownloadStudentImportTemplateQueryOptions(options)
+    const queryOptions = getDownloadStudentImportTemplateQueryOptions(params, options)
 
     const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
         queryKey: DataTag<QueryKey, TData, TError>

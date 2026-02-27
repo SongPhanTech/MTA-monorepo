@@ -6,8 +6,8 @@
  */
 
 export type Room200Item = {
-    id: string
-    name: string
-    /** @nullable */
-    code: string | null
-}
+  id: string;
+  name: string;
+  /** @nullable */
+  code: string | null;
+};

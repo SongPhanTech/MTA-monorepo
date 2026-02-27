@@ -6,7 +6,7 @@
  */
 
 export type PostApiStatsSubjectClassStatisticsBody = {
-    preview?: boolean
-    /** Semester.id - ID học kỳ */
-    semesterId: string
-}
+  preview?: boolean;
+  /** Semester.id - ID học kỳ */
+  semesterId: string;
+};

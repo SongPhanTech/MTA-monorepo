@@ -55,16 +55,16 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  * Chức vụ
  */
 export interface PublicApiGetAllDMChucVuDTO {
-    /** Id chức vụ */
-    Id?: string
-    /**
-     * Mã chức vụ
-     * @nullable
-     */
-    sMa?: string | null
-    /**
-     * Tên chức vụ
-     * @nullable
-     */
-    sTen?: string | null
+  /** Id chức vụ */
+  Id?: string;
+  /**
+   * Mã chức vụ
+   * @nullable
+   */
+  sMa?: string | null;
+  /**
+   * Tên chức vụ
+   * @nullable
+   */
+  sTen?: string | null;
 }

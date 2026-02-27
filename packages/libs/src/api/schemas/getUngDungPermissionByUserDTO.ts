@@ -52,18 +52,18 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  */
 
 export interface GetUngDungPermissionByUserDTO {
-    /** Id ứng dụng */
-    Id?: string
-    /**
-     * Mã ứng dụng
-     * @nullable
-     */
-    sMa?: string | null
-    /**
-     * Tên ứng dụng
-     * @nullable
-     */
-    sTen?: string | null
-    /** Số thứ tự ứng dụng */
-    iSTT?: number
+  /** Id ứng dụng */
+  Id?: string;
+  /**
+   * Mã ứng dụng
+   * @nullable
+   */
+  sMa?: string | null;
+  /**
+   * Tên ứng dụng
+   * @nullable
+   */
+  sTen?: string | null;
+  /** Số thứ tự ứng dụng */
+  iSTT?: number;
 }

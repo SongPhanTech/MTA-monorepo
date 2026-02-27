@@ -4,8 +4,8 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { SurveyId } from './surveyId'
+import type { SurveyId } from './surveyId';
 
 export interface ExportReportSurvey {
-    surveyId: SurveyId
+  surveyId: SurveyId;
 }

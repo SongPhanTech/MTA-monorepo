@@ -4,7 +4,7 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { ListOfundefined } from './listOfundefined'
-import type { GetSurveysOfProfile200AllOf } from './getSurveysOfProfile200AllOf'
+import type { ListOfundefined } from './listOfundefined';
+import type { GetSurveysOfProfile200AllOf } from './getSurveysOfProfile200AllOf';
 
-export type GetSurveysOfProfile200 = ListOfundefined & GetSurveysOfProfile200AllOf
+export type GetSurveysOfProfile200 = ListOfundefined & GetSurveysOfProfile200AllOf;

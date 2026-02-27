@@ -6,5 +6,5 @@
  */
 
 export interface CertificateIds {
-    archivedCertificateIds: string[]
+  archivedCertificateIds: string[];
 }

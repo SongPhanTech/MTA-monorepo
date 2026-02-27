@@ -55,15 +55,15 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  * Học vị
  */
 export interface PublicApiGetAllDMHocViDTO {
-    Id?: string
-    /**
-     * Mã học vị
-     * @nullable
-     */
-    sMa?: string | null
-    /**
-     * Tên học vị
-     * @nullable
-     */
-    sTen?: string | null
+  Id?: string;
+  /**
+   * Mã học vị
+   * @nullable
+   */
+  sMa?: string | null;
+  /**
+   * Tên học vị
+   * @nullable
+   */
+  sTen?: string | null;
 }
