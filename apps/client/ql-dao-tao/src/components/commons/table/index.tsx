@@ -167,28 +167,33 @@ export const Table = <T extends AnyObject>({
         })
     }
 
-    function searchVietnameseTree(data: TreeNode[], keyword: string): TreeNode[] {
+    function searchVietnameseTree(
+        data: TreeNode[],
+        keyword: string
+    ): { tree: TreeNode[]; expanded: string[] } {
         const normalizedKeyword = normalizeVietnamese(keyword.trim())
-        if (!normalizedKeyword) return data
+        if (!normalizedKeyword) return { tree: data, expanded: [] }
+
+        const expandedKeys: string[] = []
 
         const searchRecursive = (nodes: TreeNode[]): TreeNode[] => {
             const result: TreeNode[] = []
 
             for (const node of nodes) {
                 const normalizedLabel = normalizeVietnamese(node.label)
-                const normalizedValue = normalizeVietnamese(node.value)
 
-                const matchSelf =
-                    normalizedLabel.includes(normalizedKeyword) ||
-                    normalizedValue.includes(normalizedKeyword)
+                const match = normalizedLabel.includes(normalizedKeyword)
 
-                const matchedChildren = node.children ? searchRecursive(node.children) : []
+                const children = node.children ? searchRecursive(node.children) : []
 
-                // Nếu node hiện tại match hoặc có con match => giữ lại
-                if (matchSelf || matchedChildren.length > 0) {
+                if (match || children.length > 0) {
+                    if (children.length > 0) {
+                        expandedKeys.push(node.value)
+                    }
+
                     result.push({
                         ...node,
-                        children: matchedChildren.length > 0 ? matchedChildren : undefined,
+                        children: children.length > 0 ? children : node.children,
                     })
                 }
             }
@@ -196,7 +201,10 @@ export const Table = <T extends AnyObject>({
             return result
         }
 
-        return searchRecursive(data)
+        return {
+            tree: searchRecursive(data),
+            expanded: expandedKeys,
+        }
     }
 
     type TreeNode = {
@@ -452,7 +460,7 @@ export const Table = <T extends AnyObject>({
                     if (!item.options) return
                     const [input, setInput] = useState('')
                     const [optionsSearch, setOptionsSearch] = useState(item?.options || [])
-                    const [checkStrictly, setCheckStrictly] = useState(false)
+                    const [expandedKeys, setExpandedKeys] = useState<string[]>([])
 
                     const handleSearchTree = async (value: string) => {
                         if (!value.trim()) {
@@ -461,8 +469,13 @@ export const Table = <T extends AnyObject>({
                         }
 
                         try {
-                            const response = searchVietnameseTree(item?.options || [], value.trim())
-                            setOptionsSearch(response)
+                            const { tree, expanded } = searchVietnameseTree(
+                                item?.options || [],
+                                value.trim()
+                            )
+
+                            setOptionsSearch(tree)
+                            setExpandedKeys(expanded)
                         } catch (_error: unknown) {
                             setOptionsSearch(item?.options || [])
                         }
@@ -489,33 +502,29 @@ export const Table = <T extends AnyObject>({
                                 style={{ height: 36, width: '100%', marginBottom: 16 }}
                             />
                             <Tree
-                                autoExpandParent={true}
-                                checkable={true}
-                                selectable={true}
-                                defaultExpandAll={true}
-                                multiple={true}
+                                checkable
+                                selectable={false}
+                                
+                                multiple
                                 treeData={optionsSearch}
                                 checkedKeys={
-                                    filtersTable[item.dataIndex as keyof FilterProps] as string[]
+                                    (filtersTable[
+                                        item.dataIndex as keyof FilterProps
+                                    ] as string[]) || []
                                 }
+                                expandedKeys={expandedKeys}
+                                onExpand={(keys) => setExpandedKeys(keys as string[])}
                                 onCheck={(checkedKeys) => {
-                                    setFiltersTable({
-                                        ...filtersTable,
-                                        [item.dataIndex as keyof FilterProps]: checkedKeys,
-                                    })
-                                }}
-                                onSelect={([key]) => {
-                                    const current =
-                                        (filtersTable[
-                                            item.dataIndex as keyof FilterProps
-                                        ] as string[]) || []
+                                    const value = Array.isArray(checkedKeys)
+                                        ? checkedKeys
+                                        : checkedKeys.checked
 
-                                    setFiltersTable({
-                                        ...filtersTable,
-                                        [item.dataIndex as keyof FilterProps]:
-                                            current[0] === key ? [] : [key],
-                                    })
+                                    setFiltersTable((prev) => ({
+                                        ...prev,
+                                        [item.dataIndex as keyof FilterProps]: value,
+                                    }))
                                 }}
+                                autoExpandParent
                                 checkStrictly={!!input}
                                 fieldNames={{
                                     title: 'label',
