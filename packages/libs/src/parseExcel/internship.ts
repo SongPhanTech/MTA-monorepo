@@ -101,6 +101,20 @@ export const parseSheetInternship = (file: ArrayBufferLike) => {
                 })
             }
 
+            const rawInstitutionValue = (row[cols.institution] || '').toString().trim()
+            let institution = ''
+            let unit = ''
+
+            if (rawInstitutionValue.includes('/')) {
+                // Format: "Institution / Unit"
+                const parts = rawInstitutionValue.split('/').map(p => p.trim())
+                institution = parts[0] || ''
+                unit = parts[1] || ''
+            } else {
+                unit = rawInstitutionValue
+                institution = ''
+            }
+
             return {
                 stt: row[cols.stt],
                 code: row[cols.code]?.trim() as string,
@@ -109,7 +123,8 @@ export const parseSheetInternship = (file: ArrayBufferLike) => {
                 subjectClassCode: row[cols.subjectClassCode]?.trim() as string,
                 subjectClassName: row[cols.subjectClassName]?.trim(),
                 gender: row[cols.gender]?.trim(),
-                institution: row[cols.institution]?.trim(),
+                institution,
+                unit,
                 address: row[cols.address]?.trim(),
                 internshipContent: row[cols.internshipContent]?.trim(),
                 supervisor: row[cols.supervisor]?.trim(),

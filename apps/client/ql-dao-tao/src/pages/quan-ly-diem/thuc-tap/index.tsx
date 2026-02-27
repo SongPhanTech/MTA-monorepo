@@ -1501,31 +1501,6 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
                     }}
                     columns={[
                         {
-                            title: '',
-                            width: 40,
-                            fixed: 'left',
-                            align: 'center',
-                            render: (_, record) => {
-                                return (
-                                    <div className="flex justify-center items-center">
-                                        {((record?.deadline &&
-                                            dayjs().isBefore(dayjs(record.deadline))) ||
-                                            role === 'P7') && (
-                                            <SquarePen
-                                                className="text-sm cursor-pointer m-1"
-                                                onClick={() =>
-                                                    openPutInternshipModal({
-                                                        studentInternshipId: record.id,
-                                                        role,
-                                                    })
-                                                }
-                                            />
-                                        )}
-                                    </div>
-                                )
-                            },
-                        },
-                        {
                             title: 'Hạn nhập',
                             width: 80,
                             align: 'center',
@@ -1616,19 +1591,19 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
                         //     },
                         // },
                         {
-                            title: 'Đơn vị thực tập',
-                            width: 170,
-                            align: 'left',
-                            render: (_, record) => {
-                                return record?.unit || ''
-                            },
-                        },
-                        {
                             title: 'Cơ quan thực tập',
                             width: 170,
                             align: 'left',
                             render: (_, record) => {
                                 return record?.institution || ''
+                            },
+                        },
+                        {
+                            title: 'Đơn vị thực tập',
+                            width: 170,
+                            align: 'left',
+                            render: (_, record) => {
+                                return record?.unit || ''
                             },
                         },
                         {
@@ -1744,6 +1719,32 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
                                           2
                                       )
                                     : ''
+                            },
+                        },
+                        {
+                            title: '',
+                            width: 40,
+                            fixed: 'left',
+                            align: 'center',
+                            fixed: 'right',
+                            render: (_, record) => {
+                                return (
+                                    <div className="flex justify-center items-center">
+                                        {((record?.deadline &&
+                                            dayjs().isBefore(dayjs(record.deadline))) ||
+                                            role === 'P7') && (
+                                            <SquarePen
+                                                className="text-sm cursor-pointer m-1"
+                                                onClick={() =>
+                                                    openPutInternshipModal({
+                                                        studentInternshipId: record.id,
+                                                        role,
+                                                    })
+                                                }
+                                            />
+                                        )}
+                                    </div>
+                                )
                             },
                         },
                     ]}

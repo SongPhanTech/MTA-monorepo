@@ -1054,18 +1054,15 @@ app.openapi(importInternship, async (c) => {
         return c.json({ message: 'Lỗi khi đọc file', errors: data.errors }, 400)
     }
 
-    // Collect all student codes and subject class codes
     const studentCodes = [...new Set(data.internships.map((i) => i.code))]
     const subjectClassCodes = [...new Set(data.internships.map((i) => i.subjectClassCode))]
 
-    // Fetch students
     const students = await prisma.student.findMany({
         where: { code: { in: studentCodes } },
         select: { id: true, code: true },
     })
     const studentMap = new Map(students.map((s) => [s.code, s.id]))
 
-    // Fetch subject classes
     const subjectClasses = await prisma.subjectClass.findMany({
         where: { code: { in: subjectClassCodes } },
         select: { id: true, code: true, subjectId: true },
@@ -1074,7 +1071,6 @@ app.openapi(importInternship, async (c) => {
         subjectClasses.map((sc) => [sc.code, { id: sc.id, subjectVersionId: sc.subjectId }])
     )
 
-    // Validate missing students or subject classes
     const missingStudents = studentCodes.filter((code) => !studentMap.has(code))
     const missingSubjectClasses = subjectClassCodes.filter((code) => !subjectClassMap.has(code))
 
@@ -1106,7 +1102,6 @@ app.openapi(importInternship, async (c) => {
                 continue
             }
 
-            // Find or create StudentSubjectScore
             let studentSubjectScore = await prisma.studentSubjectScore.findFirst({
                 where: {
                     studentId,
@@ -1124,14 +1119,14 @@ app.openapi(importInternship, async (c) => {
                 })
             }
 
-            // Upsert StudentInternship
             await prisma.studentInternship.upsert({
                 where: {
                     studentSubjectScoreId: studentSubjectScore.id,
                 },
                 create: {
                     studentSubjectScoreId: studentSubjectScore.id,
-                    institution: internship.institution ?? undefined,
+                    institution: internship.institution || undefined,
+                    unit: internship.unit || undefined,
                     address: internship.address ?? undefined,
                     internshipContent: internship.internshipContent ?? undefined,
                     startDate: internship.startDate ?? undefined,
@@ -1139,7 +1134,8 @@ app.openapi(importInternship, async (c) => {
                     reportDate: internship.reportDate ?? undefined,
                 },
                 update: {
-                    institution: internship.institution ?? undefined,
+                    institution: internship.institution || undefined,
+                    unit: internship.unit || undefined,
                     address: internship.address ?? undefined,
                     internshipContent: internship.internshipContent ?? undefined,
                     startDate: internship.startDate ?? undefined,
@@ -1168,7 +1164,7 @@ app.openapi(importInternship, async (c) => {
 
     return c.json(
         {
-            message: `Import internships successfully: ${successCount}`,
+            message: `Nhập dữ liệu thực tập sinh thành công: ${successCount}`,
             time: Date.now() - start,
         },
         200

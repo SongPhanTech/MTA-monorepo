@@ -1,6 +1,7 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { getTemplateBuffer } from '@workspace/libs/server'
 import dayjs from 'dayjs'
+import ExcelJS from 'exceljs'
 import XlsxTemplate from 'xlsx-template'
 import { prisma } from '..'
 
@@ -110,7 +111,7 @@ app.openapi(exportInternshipProfile, async (c) => {
         subjectClassName: internship.studentSubjectScore?.subjectClass?.name || '',
         gender: internship.studentSubjectScore?.student?.userProfile?.gender?.sTen || '',
         institution: internship.institution && internship.unit
-            ? `${internship.institution}/${internship.unit}`
+            ? `${internship.institution} / ${internship.unit}`
             : internship.unit || internship.institution || '',
         address: internship.address || '',
         internshipContent: internship.internshipContent || '',
@@ -156,7 +157,38 @@ app.openapi(exportInternshipProfile, async (c) => {
 
     template.substitute(1, { data })
 
-    const result = await template.generate({ type: 'arraybuffer' })
+    const templateResult = await template.generate({ type: 'nodebuffer' })
+
+    const workbook = new ExcelJS.Workbook()
+    await workbook.xlsx.load(templateResult)
+    const worksheet = workbook.getWorksheet(1)
+
+    if (worksheet) {
+        worksheet.eachRow((row) => {
+            row.eachCell((cell) => {
+                cell.protection = { locked: false }
+            })
+        })
+
+        const scoreColumnIndex = 16
+        worksheet.getColumn(scoreColumnIndex).eachCell((cell) => {
+            cell.protection = { locked: true }
+        })
+
+        await worksheet.protect('', {
+            selectLockedCells: true,
+            selectUnlockedCells: true,
+            formatCells: false,
+            formatColumns: false,
+            formatRows: false,
+            insertColumns: false,
+            insertRows: false,
+            deleteColumns: false,
+            deleteRows: false,
+        })
+    }
+
+    const result = await workbook.xlsx.writeBuffer()
 
     const fileName = 'danh_sach_TTS.xlsx'
     const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
