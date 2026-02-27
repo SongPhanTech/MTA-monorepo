@@ -998,7 +998,7 @@ export default function DanhMucDoAn() {
               },
             },
             {
-              title: "Ca bảo vệ",
+              title: "Thời gian bảo vệ",
               width: 150,
               align: "left",
               dataIndex: "defenseSession",
@@ -1018,7 +1018,7 @@ export default function DanhMucDoAn() {
                   return (
                     <Select
                       className="w-full"
-                      placeholder="Chọn ca"
+                      placeholder="Chọn thời gian"
                       value={currentValue || undefined}
                       onChange={(value) =>
                         handleEditChange(record?.id, "defenseSessionId", value)

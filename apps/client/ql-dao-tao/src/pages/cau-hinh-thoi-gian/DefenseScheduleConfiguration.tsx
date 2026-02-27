@@ -220,7 +220,7 @@ export default function DefenseScheduleConfigurationPage({ isThesis }: { isThesi
                         <TimePicker 
                         format="HH:mm" 
                         className="w-full" 
-                        placeholder="Chọn giờ"
+                        placeholder="Chọn thời gian bắt đầu"
                         />
                     </Form.Item>
                 </Form>
