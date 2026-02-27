@@ -5,11 +5,10 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GetColumnsDbType = typeof GetColumnsDbType[keyof typeof GetColumnsDbType];
-
+export type GetColumnsDbType = (typeof GetColumnsDbType)[keyof typeof GetColumnsDbType]
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetColumnsDbType = {
-  mysql: 'mysql',
-  mssql: 'mssql',
-} as const;
+    mysql: 'mysql',
+    mssql: 'mssql',
+} as const

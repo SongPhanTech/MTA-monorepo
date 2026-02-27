@@ -88,12 +88,15 @@ export const customPortalFetch = async <T>(url: string, options: RequestInit): P
 
 export const customPublicFetch = async <T>(url: string, options: RequestInit): Promise<T> => {
     const requestUrl = getUrl(
-        getRuntimeEnv('NEXT_PUBLIC_API_PUBLIC_BASE_URL') || 'https://mta.swantech.vn/api/system/public',
+        getRuntimeEnv('NEXT_PUBLIC_API_PUBLIC_BASE_URL') ||
+            'https://mta.swantech.vn/api/system/public',
         url
     )
 
-    const clientId = getRuntimeEnv('NEXT_PUBLIC_CLIENT_ID') || process.env.NEXT_PUBLIC_CLIENT_ID || ''
-    const clientSecret = getRuntimeEnv('NEXT_PUBLIC_CLIENT_SECRET') || process.env.NEXT_PUBLIC_CLIENT_SECRET || ''
+    const clientId =
+        getRuntimeEnv('NEXT_PUBLIC_CLIENT_ID') || process.env.NEXT_PUBLIC_CLIENT_ID || ''
+    const clientSecret =
+        getRuntimeEnv('NEXT_PUBLIC_CLIENT_SECRET') || process.env.NEXT_PUBLIC_CLIENT_SECRET || ''
 
     const response = await fetchInstance(requestUrl, {
         ...options,

@@ -6,5 +6,5 @@
  */
 
 export interface ApproveScoreCorrectionInput {
-  ticketId: string;
+    ticketId: string
 }

@@ -6,6 +6,6 @@
  */
 
 export type ExportStudentDecreaseAcademicWarningJsonParams = {
-semesterId: string;
-trainingObjectTypeId: string;
-};
+    semesterId: string
+    trainingObjectTypeId: string
+}

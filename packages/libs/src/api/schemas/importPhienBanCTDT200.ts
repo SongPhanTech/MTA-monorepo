@@ -6,5 +6,5 @@
  */
 
 export type ImportPhienBanCTDT200 = {
-  message: string;
-};
+    message: string
+}

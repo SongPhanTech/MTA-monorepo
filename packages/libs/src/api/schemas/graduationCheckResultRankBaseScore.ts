@@ -5,11 +5,11 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GraduationCheckResultRankBaseScore = typeof GraduationCheckResultRankBaseScore[keyof typeof GraduationCheckResultRankBaseScore];
-
+export type GraduationCheckResultRankBaseScore =
+    (typeof GraduationCheckResultRankBaseScore)[keyof typeof GraduationCheckResultRankBaseScore]
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GraduationCheckResultRankBaseScore = {
-  Base10: 'Base10',
-  Base4: 'Base4',
-} as const;
+    Base10: 'Base10',
+    Base4: 'Base4',
+} as const

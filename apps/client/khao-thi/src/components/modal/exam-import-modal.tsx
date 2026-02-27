@@ -102,17 +102,14 @@ const ExamImportModal: React.FC = () => {
     }
 
     // Regex pattern cho câu hỏi - dùng chung cho split và match
-    const questionPattern =
-        /Câu\s*(\d+)\s*[(\uff08](\d+(?:[.,]\d+)?)\s*điểm[)\uff09]\s*[:：]\s*/i
+    const questionPattern = /Câu\s*(\d+)\s*[(\uff08](\d+(?:[.,]\d+)?)\s*điểm[)\uff09]\s*[:：]\s*/i
 
     // Parse câu hỏi từ text
     const parseQuestions = (lines: string[]): ParsedQuestion[] => {
         // Bước 1: Normalize và tách các dòng có nhiều câu hỏi gộp chung
         const splitLines: string[] = []
         for (const line of lines) {
-            const normalized = line
-                .replace(/[\u00A0\u202F\u2009\u2060\uFEFF]/g, ' ')
-                .trim()
+            const normalized = line.replace(/[\u00A0\u202F\u2009\u2060\uFEFF]/g, ' ').trim()
             if (!normalized) continue
 
             // Tìm tất cả vị trí "Câu X(Y điểm):" trong dòng
@@ -131,10 +128,7 @@ const ExamImportModal: React.FC = () => {
                 // Nhiều câu hỏi gộp trong 1 dòng → tách ra
                 for (let i = 0; i < positions.length; i++) {
                     const start = positions[i]
-                    const end =
-                        i < positions.length - 1
-                            ? positions[i + 1]
-                            : normalized.length
+                    const end = i < positions.length - 1 ? positions[i + 1] : normalized.length
                     const part = normalized.substring(start, end).trim()
                     if (part) splitLines.push(part)
                 }

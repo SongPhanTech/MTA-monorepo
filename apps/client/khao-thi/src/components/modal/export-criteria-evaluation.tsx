@@ -132,25 +132,26 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
 
                     for (const tr of trs) {
                         const cells: TableCell[] = []
-                        const tds = Array.from(
-                            tr.querySelectorAll(':scope > td, :scope > th')
-                        )
+                        const tds = Array.from(tr.querySelectorAll(':scope > td, :scope > th'))
                         for (const td of tds) {
-                            const colspan = Number.parseInt(
-                                td.getAttribute('colspan') || '1',
-                                10
-                            )
-                            const rowspan = Number.parseInt(
-                                td.getAttribute('rowspan') || '1',
-                                10
-                            )
+                            const colspan = Number.parseInt(td.getAttribute('colspan') || '1', 10)
+                            const rowspan = Number.parseInt(td.getAttribute('rowspan') || '1', 10)
                             const cellChildren = await htmlToParagraphs(td.innerHTML)
                             cells.push(
                                 new TableCell({
                                     children:
                                         cellChildren.length > 0
                                             ? (cellChildren as Paragraph[])
-                                            : [new Paragraph({ children: [new TextRun({ text: '', size: SIZE_BODY })] })],
+                                            : [
+                                                  new Paragraph({
+                                                      children: [
+                                                          new TextRun({
+                                                              text: '',
+                                                              size: SIZE_BODY,
+                                                          }),
+                                                      ],
+                                                  }),
+                                              ],
                                     width: {
                                         size: colWidthDXA * colspan,
                                         type: WidthType.DXA,

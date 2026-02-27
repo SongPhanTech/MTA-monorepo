@@ -6,7 +6,7 @@
  */
 
 export type PostApiStatsStudentDistributionByTrainingObjectTypeFiltered200DataItem = {
-  trainingObjectTypeId: string;
-  name: string;
-  count: number;
-};
+    trainingObjectTypeId: string
+    name: string
+    count: number
+}

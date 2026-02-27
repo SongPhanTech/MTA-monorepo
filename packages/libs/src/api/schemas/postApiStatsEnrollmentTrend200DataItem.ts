@@ -6,10 +6,10 @@
  */
 
 export type PostApiStatsEnrollmentTrend200DataItem = {
-  year: number;
-  majorId: string;
-  majorName: string;
-  courseId: string;
-  courseName: string;
-  count: number;
-};
+    year: number
+    majorId: string
+    majorName: string
+    courseId: string
+    courseName: string
+    count: number
+}

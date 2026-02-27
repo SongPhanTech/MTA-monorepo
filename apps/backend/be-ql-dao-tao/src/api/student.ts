@@ -10,7 +10,11 @@ import {
     CourseStudentDecreaseAcademicWarningResult,
     CourseStudentScholarshipResult,
 } from '../dto/student-info.dto'
-import { exportStudentProfile, generateStudentImportTemplate, exportStudentScholarship } from '../services/student'
+import {
+    exportStudentProfile,
+    generateStudentImportTemplate,
+    exportStudentScholarship,
+} from '../services/student'
 import {
     calculateStudentSemesterResult,
     calculateStudentYearResult,
@@ -925,8 +929,7 @@ const exportStudentProfiles = createRoute({
 })
 
 app.openapi(downloadStudentImportTemplate, async (c) => {
-    const { trainingObjectTypeId } = c.req.valid('query')
-    const result = await generateStudentImportTemplate(trainingObjectTypeId)
+    const result = await generateStudentImportTemplate()
     const fileName = 'MauImportDSHV.xlsx'
     const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
     return c.body(result, 200, {

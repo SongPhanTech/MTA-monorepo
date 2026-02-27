@@ -435,7 +435,7 @@ export default function ExportReport({ id }: { id: string }) {
 
                 let evidenceCount = 0
 
-            for (const req of reqList) {
+                for (const req of reqList) {
                     const evidencesList = req?.evidences
 
                     if (!Array.isArray(evidencesList)) {

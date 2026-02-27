@@ -6,7 +6,7 @@
  */
 
 export type StatisticsGraduationDecision200Item = {
-  count: number;
-  year: number;
-  classification: string;
-};
+    count: number
+    year: number
+    classification: string
+}
