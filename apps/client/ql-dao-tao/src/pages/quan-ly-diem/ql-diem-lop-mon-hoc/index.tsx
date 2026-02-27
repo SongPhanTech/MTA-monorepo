@@ -147,31 +147,31 @@ export default function QuanLyDiemLopMonHoc({
         },
     })
     const p13HistoryDisplay = useMemo(() => {
-    const parts: string[] = []
+        const parts: string[] = []
 
-    if (data?.isLockExamScore && subjectClassHistoryIsLockExamScore?.createdAt) {
-        const timestamp = dayjs(subjectClassHistoryIsLockExamScore.createdAt).format(
-            'HH:mm DD/MM/YYYY'
-        )
-        const author = subjectClassHistoryIsLockExamScore.updatedBy?.fullname ?? '-'
-        parts.push(`Khoá: ${timestamp} bởi ${author}`)
-    }
+        if (data?.isLockExamScore && subjectClassHistoryIsLockExamScore?.createdAt) {
+            const timestamp = dayjs(subjectClassHistoryIsLockExamScore.createdAt).format(
+                'HH:mm DD/MM/YYYY'
+            )
+            const author = subjectClassHistoryIsLockExamScore.updatedBy?.fullname ?? '-'
+            parts.push(`Khoá: ${timestamp} bởi ${author}`)
+        }
 
-    if (data?.scoreSubmitted && subjectClassHistoryScoreSubmitted?.createdAt) {
-        const timestamp = dayjs(subjectClassHistoryScoreSubmitted.createdAt).format(
-            'HH:mm DD/MM/YYYY'
-        )
-        const author = subjectClassHistoryScoreSubmitted.updatedBy?.fullname ?? '-'
-        parts.push(`Nhận phiếu điểm: ${timestamp} bởi ${author}`)
-    }
+        if (data?.scoreSubmitted && subjectClassHistoryScoreSubmitted?.createdAt) {
+            const timestamp = dayjs(subjectClassHistoryScoreSubmitted.createdAt).format(
+                'HH:mm DD/MM/YYYY'
+            )
+            const author = subjectClassHistoryScoreSubmitted.updatedBy?.fullname ?? '-'
+            parts.push(`Nhận phiếu điểm: ${timestamp} bởi ${author}`)
+        }
 
-    return parts.join(' | ')
-}, [
-    data?.isLockExamScore,
-    data?.scoreSubmitted,
-    subjectClassHistoryIsLockExamScore,
-    subjectClassHistoryScoreSubmitted,
-])
+        return parts.join(' | ')
+    }, [
+        data?.isLockExamScore,
+        data?.scoreSubmitted,
+        subjectClassHistoryIsLockExamScore,
+        subjectClassHistoryScoreSubmitted,
+    ])
 
     const items = useMemo(() => {
         let baseMenu: TabsProps['items'] = [

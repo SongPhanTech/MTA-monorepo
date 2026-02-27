@@ -91,15 +91,14 @@ export default function SemesterTrainingScore({
                       },
                   }
                 : {}),
-                ...(filters.idCardNumber
+            ...(filters.idCardNumber
                 ? {
-                    userProfile:{
+                      userProfile: {
                           idCardNumber: {
-                          contains: filters.idCardNumber,
-                          mode: 'insensitive' as const,
+                              contains: filters.idCardNumber,
+                              mode: 'insensitive' as const,
+                          },
                       },
-                    }
-                    
                   }
                 : {}),
         }),

@@ -236,7 +236,7 @@ const PutCertificateArchivedModal = () => {
 
                     // Lấy file đã upload cho dòng này
                     const studentFiles = studentDataForRow.documentFiles || []
-                    
+
                     const result = await createArchivedCertificate({
                         data: {
                             studentId: row.studentId,
@@ -458,7 +458,9 @@ const PutCertificateArchivedModal = () => {
                                     align: 'center',
                                     render: (_, record) => {
                                         const selectedCert = certificate.find(
-                                            (c) => c.id === studentFormData?.[record.rowId]?.certificateId
+                                            (c) =>
+                                                c.id ===
+                                                studentFormData?.[record.rowId]?.certificateId
                                         )
                                         return (
                                             <FormItem
@@ -515,7 +517,9 @@ const PutCertificateArchivedModal = () => {
                                         <FormItem
                                             form={form}
                                             name={['student', record.rowId, 'issuedDate']}
-                                            dependencies={[['student', record.rowId, 'expiredDate']]}
+                                            dependencies={[
+                                                ['student', record.rowId, 'expiredDate'],
+                                            ]}
                                             rules={[
                                                 {
                                                     required:
@@ -665,7 +669,6 @@ const PutCertificateArchivedModal = () => {
                     </FormItem>
                 </Col>
             )}
-
         </PutFormModal>
     )
 }

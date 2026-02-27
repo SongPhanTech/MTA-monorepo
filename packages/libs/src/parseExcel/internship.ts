@@ -107,7 +107,7 @@ export const parseSheetInternship = (file: ArrayBufferLike) => {
 
             if (rawInstitutionValue.includes('/')) {
                 // Format: "Institution / Unit"
-                const parts = rawInstitutionValue.split('/').map(p => p.trim())
+                const parts = rawInstitutionValue.split('/').map((p) => p.trim())
                 institution = parts[0] || ''
                 unit = parts[1] || ''
             } else {

@@ -348,7 +348,6 @@ export default function DanhSachSinhVien() {
     }
 
     const handlePhanPhongThi = async () => {
-        
         try {
             showSpinner()
 
@@ -583,24 +582,24 @@ export default function DanhSachSinhVien() {
     const updateExamDataFn = async () => {
         try {
             showSpinner()
-             await updateExamData({
-                    where: {
-                        id: selectedExamId || '',
+            await updateExamData({
+                where: {
+                    id: selectedExamId || '',
+                },
+                data: {
+                    lockExamSessions: true,
+                    subjectClass: {
+                        updateMany: {
+                            data: {
+                                isLockScore: true,
+                            },
+                            where: {},
+                        },
                     },
-                    data: {
-                        lockExamSessions: true,
-                        subjectClass: {
-                                    updateMany: {
-                                        data: {
-                                            isLockScore:true,
-                                        },
-                                        where: {},
-                                    },
-                                },
-                    },
-                })
-                hideSpinner()
-        }catch (error: any) {
+                },
+            })
+            hideSpinner()
+        } catch (error: any) {
             console.error(error)
         }
     }

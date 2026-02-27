@@ -85,15 +85,14 @@ export default function SchoolYearTrainingScore({
                       },
                   }
                 : {}),
-                 ...(filters.idCardNumber
+            ...(filters.idCardNumber
                 ? {
-                    userProfile:{
+                      userProfile: {
                           idCardNumber: {
-                          contains: filters.idCardNumber,
-                          mode: 'insensitive' as const,
+                              contains: filters.idCardNumber,
+                              mode: 'insensitive' as const,
+                          },
                       },
-                    }
-                    
                   }
                 : {}),
         }),

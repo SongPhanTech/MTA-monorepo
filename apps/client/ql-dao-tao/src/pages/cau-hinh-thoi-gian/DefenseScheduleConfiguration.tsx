@@ -182,15 +182,16 @@ export default function DefenseScheduleConfigurationPage({ isThesis }: { isThesi
                                                 }}
                                             />
 
-                                        <DeleteIcon
-                                            title="Xóa ca bảo vệ"
-                                            popConfirm={{
-                                                title: "Xóa ca bảo vệ",
-                                                description: "Bạn có chắc chắn muốn xóa ca bảo vệ này?",
-                                                onConfirm: () => handleDelete(row.id),
-                                                onPopupClick: (e) => e.stopPropagation(),
-                                            }}
-                                        />
+                                            <DeleteIcon
+                                                title="Xóa ca bảo vệ"
+                                                popConfirm={{
+                                                    title: 'Xóa ca bảo vệ',
+                                                    description:
+                                                        'Bạn có chắc chắn muốn xóa ca bảo vệ này?',
+                                                    onConfirm: () => handleDelete(row.id),
+                                                    onPopupClick: (e) => e.stopPropagation(),
+                                                }}
+                                            />
                                         </div>
                                     )
                                 },
@@ -206,21 +207,21 @@ export default function DefenseScheduleConfigurationPage({ isThesis }: { isThesi
                 onOk={handleSave}
                 destroyOnClose
             >
-              <Form form={form} layout="vertical">
+                <Form form={form} layout="vertical">
                     <Form.Item
                         name="time"
                         label="Thời gian bắt đầu"
                         rules={[
-                        {
-                            required: true,
-                            message: 'Vui lòng chọn thời gian bắt đầu!',
-                        },
+                            {
+                                required: true,
+                                message: 'Vui lòng chọn thời gian bắt đầu!',
+                            },
                         ]}
                     >
-                        <TimePicker 
-                        format="HH:mm" 
-                        className="w-full" 
-                        placeholder="Chọn thời gian bắt đầu"
+                        <TimePicker
+                            format="HH:mm"
+                            className="w-full"
+                            placeholder="Chọn thời gian bắt đầu"
                         />
                     </Form.Item>
                 </Form>

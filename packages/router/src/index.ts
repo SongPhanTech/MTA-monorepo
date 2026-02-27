@@ -543,8 +543,7 @@ const NAVIGATION: NavigationType = {
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_CAU_HINH_THOI_GIAN_BAO_VE,
                         label: 'Thời gian bảo vệ',
-                        path: ROUTER_PATH.QL_DAO_TAO
-                            .QUAN_LY_DO_AN_CAU_HINH_THOI_GIAN_BAO_VE,
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_CAU_HINH_THOI_GIAN_BAO_VE,
                         description: 'Cấu hình thời gian bảo vệ đồ án',
                     },
                     // {

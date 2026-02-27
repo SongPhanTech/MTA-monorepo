@@ -488,7 +488,7 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
     }
     const handleExportInternship = async () => {
         let internshipIds: string[]
-        
+
         if (selectedRowKeys.length > 0) {
             // Nếu có chọn row, chỉ export những row đã chọn
             internshipIds = selectedRowKeys as string[]
@@ -507,10 +507,10 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
                     },
                 ])
                 loading()
-                
+
                 const allInternships = allData.data?.[0] as Array<{ id: string }>
-                internshipIds = allInternships?.map(item => item.id) || []
-                
+                internshipIds = allInternships?.map((item) => item.id) || []
+
                 if (internshipIds.length === 0) {
                     return message.warning('Không có dữ liệu để xuất')
                 }
@@ -519,7 +519,7 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
                 return message.error('Có lỗi khi tải dữ liệu')
             }
         }
-        
+
         const { status, data } = await exportInternshipProfile({
             internshipIds,
         })

@@ -395,7 +395,7 @@ const DiemTrungBinhKyHoc = () => {
                                 width: 120,
                                 align: 'center',
                                 render: (value) => (
-                                    <div>{value}</ div>
+                                    <div>{value}</div>
                                     // <Tag color={getStudentTrainingTypeColor(value)}>
                                     //     {getStudentTrainingTypeLabel(value)}
                                     // </Tag>

@@ -1347,7 +1347,7 @@ export async function calculateStudentYearResult({
         cumulativeGpaBase4: cumulativeGpa4,
         totalCredits: cumulativePassedCredits,
         failedCredits: yearFailedCredits,
-        conductScore: trainingScore?.score||8,
+        conductScore: trainingScore?.score || 8,
         rankId: rank?.id,
         academicWarningLevel: academicWarning?.level || 0,
         disciplinaryWarningLevel: disciplinaryWarning?.level || 0,
