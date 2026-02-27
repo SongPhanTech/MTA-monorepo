@@ -47,13 +47,24 @@ const PutTrainingLocationModal = () => {
         { enabled: isOpen }
     )
     async function onOk(value: PutTrainingLocation) {
-        console.log('value', value)
         try {
             showSpinner()
             if (id) {
                 await updateTrainingLocation({
                     data: {
                         ...value,
+                        buildings: {
+                            updateMany: {
+                                where: {
+                                    trainingLocationId: value?.id,
+                                },
+                                data: {
+                                    ...(value.active === false
+                                        ? { active: false }
+                                        : { active: true }),
+                                },
+                            },
+                        },
                     },
                     where: { id },
                 })
