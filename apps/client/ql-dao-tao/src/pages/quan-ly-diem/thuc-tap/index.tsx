@@ -1,4 +1,4 @@
-import { ExportOutlined, TableOutlined, UploadOutlined } from '@ant-design/icons'
+import { TableOutlined, UploadOutlined } from '@ant-design/icons'
 import { FileOutlined } from '@ant-design/icons'
 import DatePicker from '@components/commons/date-picker'
 import Select from '@components/commons/select'
@@ -8,7 +8,7 @@ import type { FilterProps } from '@constants/type'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgFlat, buildOrgTree } from '@lib/utils'
 import { SubjectVersionType } from '@workspace/db'
-import { type Prisma } from '@workspace/db/client'
+import type { Prisma } from '@workspace/db/client'
 import {
     useCountStudentInternship,
     useCreateManyStudentInternship,
@@ -29,8 +29,8 @@ import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import ExportTemplateInternship from '../../../components/modal/export-template-internship'
 import type React from 'react'
-import { exportInternshipProfile } from '@workspace/libs/api/training'
 import { saveAs } from 'file-saver'
+import { exportInternshipProfile } from '@workspace/libs/api/training'
 
 interface ThucTapForm {
     trainingCourseId: string
@@ -478,9 +478,9 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
         }
     }
     const handleExportInternship = async () => {
-        // const { status, data } = await exportInternshipProfile({
-        //     internshipIds: selectedRowKeys as string[],
-        // })
+        const { status, data } = await exportInternshipProfile({
+            internshipIds: selectedRowKeys as string[],
+        })
 
         if (status === 200) {
             saveAs(data, 'danh_sach_TTS.xlsx')
