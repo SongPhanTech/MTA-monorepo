@@ -6,6 +6,6 @@
  */
 
 export type PostApiStatsScienceTechnologyOverview200DataItem = {
-    name: string
-    count: number
-}
+  name: string;
+  count: number;
+};

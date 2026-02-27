@@ -52,39 +52,39 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  */
 
 export interface GetVersionAppDTO {
-    /**
-     * Id của vai trò
-     * @nullable
-     */
-    Id?: string | null
-    /**
-     * Id ứng dụng
-     * @nullable
-     */
-    sDM_UngDungId?: string | null
-    /**
-     * Tên ứng dụng
-     * @nullable
-     */
-    sTenUngDung?: string | null
-    /**
-     * Mã ứng dụng
-     * @nullable
-     */
-    sMaUngDung?: string | null
-    /**
-     * Tên phiên bản
-     * @nullable
-     */
-    sTenVersion?: string | null
-    /**
-     * Ghi chú
-     * @nullable
-     */
-    sDescription?: string | null
-    /**
-     * Ngày phát hành
-     * @nullable
-     */
-    dNgayPhatHanh?: string | null
+  /**
+   * Id của vai trò
+   * @nullable
+   */
+  Id?: string | null;
+  /**
+   * Id ứng dụng
+   * @nullable
+   */
+  sDM_UngDungId?: string | null;
+  /**
+   * Tên ứng dụng
+   * @nullable
+   */
+  sTenUngDung?: string | null;
+  /**
+   * Mã ứng dụng
+   * @nullable
+   */
+  sMaUngDung?: string | null;
+  /**
+   * Tên phiên bản
+   * @nullable
+   */
+  sTenVersion?: string | null;
+  /**
+   * Ghi chú
+   * @nullable
+   */
+  sDescription?: string | null;
+  /**
+   * Ngày phát hành
+   * @nullable
+   */
+  dNgayPhatHanh?: string | null;
 }

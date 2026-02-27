@@ -6,5 +6,5 @@
  */
 
 export type GenerateDiplomaNumber404 = {
-    message: string
-}
+  message: string;
+};

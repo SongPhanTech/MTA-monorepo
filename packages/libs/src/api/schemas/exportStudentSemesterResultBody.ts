@@ -6,6 +6,6 @@
  */
 
 export type ExportStudentSemesterResultBody = {
-    semesterId: string
-    trainingObjectTypeId: string
-}
+  semesterId: string;
+  trainingObjectTypeId: string;
+};

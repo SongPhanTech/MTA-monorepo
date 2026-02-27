@@ -71,16 +71,16 @@ API này cho phép các ứng dụng truy cập từ client hoặc server thông
  */
 
 export interface MTGridColumn {
-    /** @nullable */
-    dataIndex?: string | null
-    /** @nullable */
-    text?: string | null
-    width?: number
-    minWidth?: number
-    /** @nullable */
-    dataType?: string | null
-    /** @nullable */
-    enumName?: string | null
-    /** @nullable */
-    align?: string | null
+  /** @nullable */
+  dataIndex?: string | null;
+  /** @nullable */
+  text?: string | null;
+  width?: number;
+  minWidth?: number;
+  /** @nullable */
+  dataType?: string | null;
+  /** @nullable */
+  enumName?: string | null;
+  /** @nullable */
+  align?: string | null;
 }

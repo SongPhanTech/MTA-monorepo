@@ -6,5 +6,5 @@
  */
 
 export type GetTables200Item = {
-    tableName: string
-}
+  tableName: string;
+};

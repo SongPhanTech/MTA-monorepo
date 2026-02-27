@@ -6,5 +6,5 @@
  */
 
 export type ValidateUserSurvey404 = {
-    message: string
-}
+  message: string;
+};

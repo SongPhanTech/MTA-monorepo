@@ -26,9 +26,11 @@ import {
     useFindManyTrainingMajor,
     useUpdateStudent,
 } from '@workspace/db/hooks'
-import { useExportStudentProfiles, downloadStudentImportTemplate } from '@workspace/libs/api/training'
+import {
+    useExportStudentProfiles,
+    downloadStudentImportTemplate,
+} from '@workspace/libs/api/training'
 // import { useDownloadStudentImportTemplate } from '@workspace/libs/api/student-template'
-import { getMinioUrl } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
@@ -72,14 +74,29 @@ export default function UserProfilePageDs() {
     // const { mutateAsync: downloadTemplate } = downloadStudentImportTemplate()
 
     const handleDownloadTemplate = async () => {
+        if (!trainingObjectTypeId) {
+            message.error('Vui lòng chọn đối tượng đào tạo')
+            return
+        }
         try {
             showSpinner()
-            const res = await downloadStudentImportTemplate()
+            // Custom fetch with query parameter (until API client is regenerated with params)
+            const baseUrl = '/api/student/download-student-import-template'
+            const url = `${baseUrl}?trainingObjectTypeId=${trainingObjectTypeId}`
+            
+            const res = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
 
-            if (res.status === 200) {
-                saveAs(res.data, 'MauImportDSHV.xlsx')
+            if (res.ok) {
+                const blob = await res.blob()
+                saveAs(blob, 'MauImportDSHV.xlsx')
             } else {
-                message.error(res.data.message)
+                const errorData = await res.json()
+                message.error(errorData.message || 'Đã xảy ra lỗi, vui lòng kiểm tra lại')
             }
         } catch (error) {
             console.log(error)

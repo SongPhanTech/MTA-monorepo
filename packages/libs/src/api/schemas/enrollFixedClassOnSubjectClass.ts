@@ -4,42 +4,42 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { EnrollFixedClassOnSubjectClassStatus } from './enrollFixedClassOnSubjectClassStatus'
-import type { EnrollFixedClassOnSubjectClassUserProfile } from './enrollFixedClassOnSubjectClassUserProfile'
-import type { EnrollFixedClassOnSubjectClassFixedClass } from './enrollFixedClassOnSubjectClassFixedClass'
+import type { EnrollFixedClassOnSubjectClassStatus } from './enrollFixedClassOnSubjectClassStatus';
+import type { EnrollFixedClassOnSubjectClassUserProfile } from './enrollFixedClassOnSubjectClassUserProfile';
+import type { EnrollFixedClassOnSubjectClassFixedClass } from './enrollFixedClassOnSubjectClassFixedClass';
 
 export interface EnrollFixedClassOnSubjectClass {
-    id: string
-    code: string
-    active: boolean
-    /** @nullable */
-    description: string | null
-    /** @nullable */
-    deletedAt: string | null
-    /** @nullable */
-    createdAt: string | null
-    /** @nullable */
-    updatedAt: string | null
-    /** @nullable */
-    from: string | null
-    /** @nullable */
-    to: string | null
-    /** @nullable */
-    trainingLocationId: string | null
-    status: EnrollFixedClassOnSubjectClassStatus
-    fixedClassId: string
-    userProfileId: string
-    /** @nullable */
-    trainingLevelId: string | null
-    /** @nullable */
-    trainingObjectTypeId: string | null
-    /** @nullable */
-    trainingTypeId: string | null
-    /** @nullable */
-    trainingFormId: string | null
-    /** @nullable */
-    registrationAreaId: string | null
-    curriculumVersionId: string
-    userProfile: EnrollFixedClassOnSubjectClassUserProfile
-    fixedClass: EnrollFixedClassOnSubjectClassFixedClass
+  id: string;
+  code: string;
+  active: boolean;
+  /** @nullable */
+  description: string | null;
+  /** @nullable */
+  deletedAt: string | null;
+  /** @nullable */
+  createdAt: string | null;
+  /** @nullable */
+  updatedAt: string | null;
+  /** @nullable */
+  from: string | null;
+  /** @nullable */
+  to: string | null;
+  /** @nullable */
+  trainingLocationId: string | null;
+  status: EnrollFixedClassOnSubjectClassStatus;
+  fixedClassId: string;
+  userProfileId: string;
+  /** @nullable */
+  trainingLevelId: string | null;
+  /** @nullable */
+  trainingObjectTypeId: string | null;
+  /** @nullable */
+  trainingTypeId: string | null;
+  /** @nullable */
+  trainingFormId: string | null;
+  /** @nullable */
+  registrationAreaId: string | null;
+  curriculumVersionId: string;
+  userProfile: EnrollFixedClassOnSubjectClassUserProfile;
+  fixedClass: EnrollFixedClassOnSubjectClassFixedClass;
 }

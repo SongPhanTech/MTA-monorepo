@@ -4,13 +4,13 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { PostApiStatsLecturerWorkload200Summary } from './postApiStatsLecturerWorkload200Summary'
-import type { PostApiStatsLecturerWorkload200DataItem } from './postApiStatsLecturerWorkload200DataItem'
+import type { PostApiStatsLecturerWorkload200Summary } from './postApiStatsLecturerWorkload200Summary';
+import type { PostApiStatsLecturerWorkload200DataItem } from './postApiStatsLecturerWorkload200DataItem';
 
 export type PostApiStatsLecturerWorkload200 = {
-    summary: PostApiStatsLecturerWorkload200Summary
-    count: number
-    preview?: boolean
-    labels?: string[]
-    data: PostApiStatsLecturerWorkload200DataItem[]
-}
+  summary: PostApiStatsLecturerWorkload200Summary;
+  count: number;
+  preview?: boolean;
+  labels?: string[];
+  data: PostApiStatsLecturerWorkload200DataItem[];
+};

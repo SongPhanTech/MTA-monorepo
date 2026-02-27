@@ -6,5 +6,5 @@
  */
 
 export type ExportStudentDecreaseAcademicWarningJson404 = {
-    message: string
-}
+  message: string;
+};

@@ -6,5 +6,5 @@
  */
 
 export type AwardScore400 = {
-    message: string
-}
+  message: string;
+};

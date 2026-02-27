@@ -4,40 +4,40 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { AutomaticTopicGenerationBodyExamType } from './automaticTopicGenerationBodyExamType'
+import type { AutomaticTopicGenerationBodyExamType } from './automaticTopicGenerationBodyExamType';
 
 export type AutomaticTopicGenerationBody = {
-    id: string
-    /** @nullable */
-    code?: string | null
-    active?: boolean
-    description?: string
-    /** @nullable */
-    deletedAt?: string | null
-    /** @nullable */
-    createdAt?: string | null
-    /** @nullable */
-    updatedAt?: string | null
-    /** @nullable */
-    createdBy?: string | null
-    examCode: string
-    /** @nullable */
-    explain?: string | null
-    /** @nullable */
-    examDay?: string | null
-    /** @nullable */
-    examType?: AutomaticTopicGenerationBodyExamType
-    /** @nullable */
-    isLock?: boolean | null
-    isNote: boolean
-    isGroup: boolean
-    quantity: number
-    /** @minLength 1 */
-    examFrameworkId: string
-    /** @minLength 1 */
-    examMatrixId: string
-    /** @minLength 1 */
-    examId: string
-    codeFrom: number
-    subjectClassId: string
-}
+  id: string;
+  /** @nullable */
+  code?: string | null;
+  active?: boolean;
+  description?: string;
+  /** @nullable */
+  deletedAt?: string | null;
+  /** @nullable */
+  createdAt?: string | null;
+  /** @nullable */
+  updatedAt?: string | null;
+  /** @nullable */
+  createdBy?: string | null;
+  examCode: string;
+  /** @nullable */
+  explain?: string | null;
+  /** @nullable */
+  examDay?: string | null;
+  /** @nullable */
+  examType?: AutomaticTopicGenerationBodyExamType;
+  /** @nullable */
+  isLock?: boolean | null;
+  isNote: boolean;
+  isGroup: boolean;
+  quantity: number;
+  /** @minLength 1 */
+  examFrameworkId: string;
+  /** @minLength 1 */
+  examMatrixId: string;
+  /** @minLength 1 */
+  examId: string;
+  codeFrom: number;
+  subjectClassId: string;
+};

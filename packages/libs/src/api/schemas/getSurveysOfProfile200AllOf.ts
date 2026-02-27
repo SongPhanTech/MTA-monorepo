@@ -4,7 +4,7 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { PaginationQuery } from './paginationQuery'
-import type { GetSurveysOfProfile200AllOfAllOf } from './getSurveysOfProfile200AllOfAllOf'
+import type { PaginationQuery } from './paginationQuery';
+import type { GetSurveysOfProfile200AllOfAllOf } from './getSurveysOfProfile200AllOfAllOf';
 
-export type GetSurveysOfProfile200AllOf = PaginationQuery & GetSurveysOfProfile200AllOfAllOf
+export type GetSurveysOfProfile200AllOf = PaginationQuery & GetSurveysOfProfile200AllOfAllOf;

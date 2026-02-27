@@ -71,6 +71,6 @@ API này cho phép các ứng dụng truy cập từ client hoặc server thông
  */
 
 export type GetFilesAvatarInitialsParams = {
-    fullName?: string
-    size?: number
-}
+fullName?: string;
+size?: number;
+};

@@ -6,5 +6,5 @@
  */
 
 export interface UnmergeExamRequest {
-    examId: string
+  examId: string;
 }

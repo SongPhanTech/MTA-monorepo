@@ -4,11 +4,11 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetColumnsDbType } from './getColumnsDbType'
+import type { GetColumnsDbType } from './getColumnsDbType';
 
 export type GetColumnsParams = {
-    url: string
-    database: string
-    table: string
-    dbType?: GetColumnsDbType
-}
+url: string;
+database: string;
+table: string;
+dbType?: GetColumnsDbType;
+};

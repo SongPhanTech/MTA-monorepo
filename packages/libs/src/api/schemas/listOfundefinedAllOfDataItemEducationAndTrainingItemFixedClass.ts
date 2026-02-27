@@ -4,32 +4,32 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersion } from './listOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersion'
+import type { ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersion } from './listOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersion';
 
 /**
  * @nullable
  */
 export type ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClass = {
-    id: string
-    /** @nullable */
-    code?: string | null
-    active?: boolean
-    /** @nullable */
-    description?: string | null
-    /** @nullable */
-    deletedAt?: string | null
-    /** @nullable */
-    createdAt?: string | null
-    /** @nullable */
-    updatedAt?: string | null
-    /** @nullable */
-    createdBy?: string | null
-    name: string
-    /** @nullable */
-    summary?: string | null
-    /** @nullable */
-    startYear?: number | null
-    graduated?: boolean
-    /** @nullable */
-    curriculumVersion: ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersion
-} | null
+  id: string;
+  /** @nullable */
+  code?: string | null;
+  active?: boolean;
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  deletedAt?: string | null;
+  /** @nullable */
+  createdAt?: string | null;
+  /** @nullable */
+  updatedAt?: string | null;
+  /** @nullable */
+  createdBy?: string | null;
+  name: string;
+  /** @nullable */
+  summary?: string | null;
+  /** @nullable */
+  startYear?: number | null;
+  graduated?: boolean;
+  /** @nullable */
+  curriculumVersion: ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersion;
+} | null;

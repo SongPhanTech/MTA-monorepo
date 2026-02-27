@@ -6,5 +6,5 @@
  */
 
 export type GetClassesInfo200ItemSubjectClassItemClassRegisterLogsItemStudent = {
-    userProfileId?: string
-}
+  userProfileId?: string;
+};

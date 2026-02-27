@@ -55,10 +55,10 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  * Nhóm vị trí
  */
 export interface PublicApiGetAllDMNhomViTriDTO {
-    Id?: string
-    /**
-     * Tên nhóm
-     * @nullable
-     */
-    sTen?: string | null
+  Id?: string;
+  /**
+   * Tên nhóm
+   * @nullable
+   */
+  sTen?: string | null;
 }

@@ -6,10 +6,10 @@
  */
 
 export type DebtStatisticsParams = {
-    trainingObjectTypeId: string
-    trainingCourseId: string
-    /**
-     * @nullable
-     */
-    date?: string | null
-}
+trainingObjectTypeId: string;
+trainingCourseId: string;
+/**
+ * @nullable
+ */
+date?: string | null;
+};

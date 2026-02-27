@@ -5,12 +5,12 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GetSurveyObjectsIsStudent =
-    (typeof GetSurveyObjectsIsStudent)[keyof typeof GetSurveyObjectsIsStudent]
+export type GetSurveyObjectsIsStudent = typeof GetSurveyObjectsIsStudent[keyof typeof GetSurveyObjectsIsStudent];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetSurveyObjectsIsStudent = {
-    student: 'student',
-    lecturer: 'lecturer',
-    all: 'all',
-} as const
+  student: 'student',
+  lecturer: 'lecturer',
+  all: 'all',
+} as const;

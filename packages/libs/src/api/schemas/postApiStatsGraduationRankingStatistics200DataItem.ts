@@ -6,6 +6,6 @@
  */
 
 export type PostApiStatsGraduationRankingStatistics200DataItem = {
-    ranking: string
-    count: number
-}
+  ranking: string;
+  count: number;
+};

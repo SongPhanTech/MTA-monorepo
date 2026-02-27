@@ -4,10 +4,10 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetTablesDbType } from './getTablesDbType'
+import type { GetTablesDbType } from './getTablesDbType';
 
 export type GetTablesParams = {
-    url: string
-    database: string
-    dbType?: GetTablesDbType
-}
+url: string;
+database: string;
+dbType?: GetTablesDbType;
+};

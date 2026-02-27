@@ -4,42 +4,42 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetClusterSurveyStatisticsForLecturer200SurveyTopic } from './getClusterSurveyStatisticsForLecturer200SurveyTopic'
-import type { GetClusterSurveyStatisticsForLecturer200SurveyObjectTypeItem } from './getClusterSurveyStatisticsForLecturer200SurveyObjectTypeItem'
-import type { GetClusterSurveyStatisticsForLecturer200LecturersItem } from './getClusterSurveyStatisticsForLecturer200LecturersItem'
-import type { GetClusterSurveyStatisticsForLecturer200SurveyChoiceItem } from './getClusterSurveyStatisticsForLecturer200SurveyChoiceItem'
-import type { GetClusterSurveyStatisticsForLecturer200SurveyQuestionItem } from './getClusterSurveyStatisticsForLecturer200SurveyQuestionItem'
-import type { GetClusterSurveyStatisticsForLecturer200SurveysItem } from './getClusterSurveyStatisticsForLecturer200SurveysItem'
-import type { GetClusterSurveyStatisticsForLecturer200Data } from './getClusterSurveyStatisticsForLecturer200Data'
+import type { GetClusterSurveyStatisticsForLecturer200SurveyTopic } from './getClusterSurveyStatisticsForLecturer200SurveyTopic';
+import type { GetClusterSurveyStatisticsForLecturer200SurveyObjectTypeItem } from './getClusterSurveyStatisticsForLecturer200SurveyObjectTypeItem';
+import type { GetClusterSurveyStatisticsForLecturer200LecturersItem } from './getClusterSurveyStatisticsForLecturer200LecturersItem';
+import type { GetClusterSurveyStatisticsForLecturer200SurveyChoiceItem } from './getClusterSurveyStatisticsForLecturer200SurveyChoiceItem';
+import type { GetClusterSurveyStatisticsForLecturer200SurveyQuestionItem } from './getClusterSurveyStatisticsForLecturer200SurveyQuestionItem';
+import type { GetClusterSurveyStatisticsForLecturer200SurveysItem } from './getClusterSurveyStatisticsForLecturer200SurveysItem';
+import type { GetClusterSurveyStatisticsForLecturer200Data } from './getClusterSurveyStatisticsForLecturer200Data';
 
 export type GetClusterSurveyStatisticsForLecturer200 = {
-    id: string
-    /** @nullable */
-    code?: string | null
-    active?: boolean
-    /** @nullable */
-    description?: string | null
-    /** @nullable */
-    deletedAt?: string | null
-    /** @nullable */
-    createdAt?: string | null
-    /** @nullable */
-    updatedAt?: string | null
-    /** @nullable */
-    createdBy?: string | null
-    name: string
-    /** @nullable */
-    startDate: string | null
-    /** @nullable */
-    endDate?: string | null
-    isPublic?: boolean
-    anonymous?: boolean
-    surveyTopicId: string
-    surveyTopic?: GetClusterSurveyStatisticsForLecturer200SurveyTopic
-    surveyObjectType?: GetClusterSurveyStatisticsForLecturer200SurveyObjectTypeItem[]
-    lecturers?: GetClusterSurveyStatisticsForLecturer200LecturersItem[]
-    surveyChoice?: GetClusterSurveyStatisticsForLecturer200SurveyChoiceItem[]
-    surveyQuestion?: GetClusterSurveyStatisticsForLecturer200SurveyQuestionItem[]
-    surveys?: GetClusterSurveyStatisticsForLecturer200SurveysItem[]
-    data: GetClusterSurveyStatisticsForLecturer200Data
-}
+  id: string;
+  /** @nullable */
+  code?: string | null;
+  active?: boolean;
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  deletedAt?: string | null;
+  /** @nullable */
+  createdAt?: string | null;
+  /** @nullable */
+  updatedAt?: string | null;
+  /** @nullable */
+  createdBy?: string | null;
+  name: string;
+  /** @nullable */
+  startDate: string | null;
+  /** @nullable */
+  endDate?: string | null;
+  isPublic?: boolean;
+  anonymous?: boolean;
+  surveyTopicId: string;
+  surveyTopic?: GetClusterSurveyStatisticsForLecturer200SurveyTopic;
+  surveyObjectType?: GetClusterSurveyStatisticsForLecturer200SurveyObjectTypeItem[];
+  lecturers?: GetClusterSurveyStatisticsForLecturer200LecturersItem[];
+  surveyChoice?: GetClusterSurveyStatisticsForLecturer200SurveyChoiceItem[];
+  surveyQuestion?: GetClusterSurveyStatisticsForLecturer200SurveyQuestionItem[];
+  surveys?: GetClusterSurveyStatisticsForLecturer200SurveysItem[];
+  data: GetClusterSurveyStatisticsForLecturer200Data;
+};

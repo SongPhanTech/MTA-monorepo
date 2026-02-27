@@ -4,41 +4,41 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetSurveysOfProfile200AllOfAllOfDataItemLecture } from './getSurveysOfProfile200AllOfAllOfDataItemLecture'
-import type { GetSurveysOfProfile200AllOfAllOfDataItemSubjectClass } from './getSurveysOfProfile200AllOfAllOfDataItemSubjectClass'
-import type { GetSurveysOfProfile200AllOfAllOfDataItemSurveyTopic } from './getSurveysOfProfile200AllOfAllOfDataItemSurveyTopic'
-import type { GetSurveysOfProfile200AllOfAllOfDataItemSurveyQuestionItem } from './getSurveysOfProfile200AllOfAllOfDataItemSurveyQuestionItem'
-import type { GetSurveysOfProfile200AllOfAllOfDataItemSurveySessionsItem } from './getSurveysOfProfile200AllOfAllOfDataItemSurveySessionsItem'
+import type { GetSurveysOfProfile200AllOfAllOfDataItemLecture } from './getSurveysOfProfile200AllOfAllOfDataItemLecture';
+import type { GetSurveysOfProfile200AllOfAllOfDataItemSubjectClass } from './getSurveysOfProfile200AllOfAllOfDataItemSubjectClass';
+import type { GetSurveysOfProfile200AllOfAllOfDataItemSurveyTopic } from './getSurveysOfProfile200AllOfAllOfDataItemSurveyTopic';
+import type { GetSurveysOfProfile200AllOfAllOfDataItemSurveyQuestionItem } from './getSurveysOfProfile200AllOfAllOfDataItemSurveyQuestionItem';
+import type { GetSurveysOfProfile200AllOfAllOfDataItemSurveySessionsItem } from './getSurveysOfProfile200AllOfAllOfDataItemSurveySessionsItem';
 
 export type GetSurveysOfProfile200AllOfAllOfDataItem = {
-    id: string
-    /** @nullable */
-    code?: string | null
-    active?: boolean
-    /** @nullable */
-    description?: string | null
-    /** @nullable */
-    deletedAt?: string | null
-    /** @nullable */
-    createdAt?: string | null
-    /** @nullable */
-    updatedAt?: string | null
-    /** @nullable */
-    createdBy?: string | null
-    name: string
-    /** @nullable */
-    startDate: string | null
-    /** @nullable */
-    endDate?: string | null
-    isPublic?: boolean
-    anonymous?: boolean
-    /** @nullable */
-    lecture: GetSurveysOfProfile200AllOfAllOfDataItemLecture
-    /** @nullable */
-    subjectClass: GetSurveysOfProfile200AllOfAllOfDataItemSubjectClass
-    surveyTopic: GetSurveysOfProfile200AllOfAllOfDataItemSurveyTopic
-    /** @nullable */
-    surveyQuestion: GetSurveysOfProfile200AllOfAllOfDataItemSurveyQuestionItem[] | null
-    /** @nullable */
-    surveySessions: GetSurveysOfProfile200AllOfAllOfDataItemSurveySessionsItem[] | null
-}
+  id: string;
+  /** @nullable */
+  code?: string | null;
+  active?: boolean;
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  deletedAt?: string | null;
+  /** @nullable */
+  createdAt?: string | null;
+  /** @nullable */
+  updatedAt?: string | null;
+  /** @nullable */
+  createdBy?: string | null;
+  name: string;
+  /** @nullable */
+  startDate: string | null;
+  /** @nullable */
+  endDate?: string | null;
+  isPublic?: boolean;
+  anonymous?: boolean;
+  /** @nullable */
+  lecture: GetSurveysOfProfile200AllOfAllOfDataItemLecture;
+  /** @nullable */
+  subjectClass: GetSurveysOfProfile200AllOfAllOfDataItemSubjectClass;
+  surveyTopic: GetSurveysOfProfile200AllOfAllOfDataItemSurveyTopic;
+  /** @nullable */
+  surveyQuestion: GetSurveysOfProfile200AllOfAllOfDataItemSurveyQuestionItem[] | null;
+  /** @nullable */
+  surveySessions: GetSurveysOfProfile200AllOfAllOfDataItemSurveySessionsItem[] | null;
+};

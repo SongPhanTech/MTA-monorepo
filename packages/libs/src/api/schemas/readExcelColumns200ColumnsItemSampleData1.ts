@@ -8,4 +8,4 @@
 /**
  * @nullable
  */
-export type ReadExcelColumns200ColumnsItemSampleData1 = unknown | null
+export type ReadExcelColumns200ColumnsItemSampleData1 = unknown | null;

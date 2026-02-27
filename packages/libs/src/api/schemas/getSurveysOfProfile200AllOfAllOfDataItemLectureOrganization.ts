@@ -6,51 +6,51 @@
  */
 
 export type GetSurveysOfProfile200AllOfAllOfDataItemLectureOrganization = {
-    Id: string
-    /** @nullable */
-    sMa?: string | null
-    /** @nullable */
-    sTen?: string | null
-    /** @nullable */
-    sGhiChu?: string | null
-    /** @nullable */
-    iSTT?: number | null
-    /** @nullable */
-    bActive?: boolean | null
-    /** @nullable */
-    bDeleted?: boolean | null
-    /** @nullable */
-    bSystem?: boolean | null
-    /** @nullable */
-    iDictionaryKey?: number | null
-    /** @nullable */
-    dNgayTao?: string | null
-    /** @nullable */
-    dNgaySua?: string | null
-    /** @nullable */
-    sNguoiTao?: string | null
-    /** @nullable */
-    sNguoiSua?: string | null
-    /** @nullable */
-    sThietBiTao?: string | null
-    /** @nullable */
-    sThietBiSua?: string | null
-    /** @nullable */
-    sCode?: string | null
-    /** @nullable */
-    sTenVietTat?: string | null
-    /** @nullable */
-    sParentId?: string | null
-    /** @nullable */
-    sTruongDonVi?: string | null
-    /** @nullable */
-    sChucNangNhiemVu?: string | null
-    /** @nullable */
-    sDiaChi?: string | null
-    /** @nullable */
-    iNhomDonVi?: number | null
-    /** @nullable */
-    iCapDonVi?: number | null
-    /** @nullable */
-    iLoaiDonVi?: number | null
-}
+  Id: string;
+  /** @nullable */
+  sMa?: string | null;
+  /** @nullable */
+  sTen?: string | null;
+  /** @nullable */
+  sGhiChu?: string | null;
+  /** @nullable */
+  iSTT?: number | null;
+  /** @nullable */
+  bActive?: boolean | null;
+  /** @nullable */
+  bDeleted?: boolean | null;
+  /** @nullable */
+  bSystem?: boolean | null;
+  /** @nullable */
+  iDictionaryKey?: number | null;
+  /** @nullable */
+  dNgayTao?: string | null;
+  /** @nullable */
+  dNgaySua?: string | null;
+  /** @nullable */
+  sNguoiTao?: string | null;
+  /** @nullable */
+  sNguoiSua?: string | null;
+  /** @nullable */
+  sThietBiTao?: string | null;
+  /** @nullable */
+  sThietBiSua?: string | null;
+  /** @nullable */
+  sCode?: string | null;
+  /** @nullable */
+  sTenVietTat?: string | null;
+  /** @nullable */
+  sParentId?: string | null;
+  /** @nullable */
+  sTruongDonVi?: string | null;
+  /** @nullable */
+  sChucNangNhiemVu?: string | null;
+  /** @nullable */
+  sDiaChi?: string | null;
+  /** @nullable */
+  iNhomDonVi?: number | null;
+  /** @nullable */
+  iCapDonVi?: number | null;
+  /** @nullable */
+  iLoaiDonVi?: number | null;
+};
