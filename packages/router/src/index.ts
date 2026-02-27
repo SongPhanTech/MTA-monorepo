@@ -629,7 +629,7 @@ const NAVIGATION: NavigationType = {
                     },
                 ],
             },
-         
+
             {
                 id: 'quan-ly-van-bang',
                 label: 'Quản lý văn bằng',

@@ -26,7 +26,10 @@ import {
     useFindManyTrainingMajor,
     useUpdateStudent,
 } from '@workspace/db/hooks'
-import { useExportStudentProfiles, downloadStudentImportTemplate } from '@workspace/libs/api/training'
+import {
+    useExportStudentProfiles,
+    downloadStudentImportTemplate,
+} from '@workspace/libs/api/training'
 // import { useDownloadStudentImportTemplate } from '@workspace/libs/api/student-template'
 import { getMinioUrl } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'

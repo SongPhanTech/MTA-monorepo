@@ -260,7 +260,10 @@ export default function SubjectClassScore() {
                     <Row gutter={16}>
                         <Col span={24}>
                             <Flex justify="end" gap={4}>
-                                {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN, 'DUYET') && (
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN,
+                                    'DUYET'
+                                ) && (
                                     <Popover
                                         content={
                                             <div className="max-w-56">
@@ -294,7 +297,10 @@ export default function SubjectClassScore() {
                                     </Popover>
                                 )}
 
-                                {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN, 'SUA') && (
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN,
+                                    'SUA'
+                                ) && (
                                     <>
                                         <Popover
                                             content={

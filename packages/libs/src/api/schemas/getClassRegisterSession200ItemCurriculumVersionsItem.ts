@@ -11,8 +11,6 @@ import type { GetClassRegisterSession200ItemCurriculumVersionsItemType } from '.
  */
 export type GetClassRegisterSession200ItemCurriculumVersionsItem = {
     id: string
-    /** @nullable */
-    code?: string | null
     active?: boolean
     /** @nullable */
     description?: string | null
@@ -24,6 +22,8 @@ export type GetClassRegisterSession200ItemCurriculumVersionsItem = {
     updatedAt?: string | null
     /** @nullable */
     createdBy?: string | null
+    /** @nullable */
+    code?: string | null
     name: string
     /** @nullable */
     shortName?: string | null

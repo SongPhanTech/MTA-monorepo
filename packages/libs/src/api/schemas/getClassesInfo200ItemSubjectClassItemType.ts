@@ -10,7 +10,6 @@ export type GetClassesInfo200ItemSubjectClassItemType =
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetClassesInfo200ItemSubjectClassItemType = {
-    None: 'None',
     Mandatory: 'Mandatory',
     Optional: 'Optional',
 } as const

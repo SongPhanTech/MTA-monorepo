@@ -3,15 +3,15 @@ import DefaultLayout from '@layouts/default-layout'
 import { useState } from 'react'
 import { Col, message, Row } from 'antd'
 import SemesterTrainingScore from './_component/SemesterTrainingScore'
-import LopBienCheItem from './[id]/lop-bien-che';
-import useSpinner from '@hooks/spinner';
-import { useTrainingObjectTypeStore } from '@workspace/ui';
+import LopBienCheItem from './[id]/lop-bien-che'
+import useSpinner from '@hooks/spinner'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 
 export default function QuanLyDiemRenLuyen() {
     const [activeTabKey, setActiveTabKey] = useState(0)
-     const { showSpinner, hideSpinner } = useSpinner()
-     const { id: trainingObjectId } = useTrainingObjectTypeStore()
-     const [selectedFixedClass, setSelectedFixedClass] = useState<string | undefined>(undefined)
+    const { showSpinner, hideSpinner } = useSpinner()
+    const { id: trainingObjectId } = useTrainingObjectTypeStore()
+    const [selectedFixedClass, setSelectedFixedClass] = useState<string | undefined>(undefined)
 
     const handleChangeFixedClass = (id: string) => {
         try {
@@ -35,7 +35,7 @@ export default function QuanLyDiemRenLuyen() {
                     />
                 </Col>
                 <Col span={20}>
-                 <SemesterTrainingScore selectedFixedClass={selectedFixedClass} />
+                    <SemesterTrainingScore selectedFixedClass={selectedFixedClass} />
                 </Col>
             </Row>
         </div>

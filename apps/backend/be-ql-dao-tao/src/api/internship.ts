@@ -142,13 +142,9 @@ app.openapi(exportInternshipProfile, async (c) => {
               ]
                   .filter(Boolean)
                   .join('. '),
-        startDate: internship.startDate
-            ? dayjs(internship.startDate).format('DD/MM/YYYY')
-            : '',
+        startDate: internship.startDate ? dayjs(internship.startDate).format('DD/MM/YYYY') : '',
         endDate: internship.endDate ? dayjs(internship.endDate).format('DD/MM/YYYY') : '',
-        reportDate: internship.reportDate
-            ? dayjs(internship.reportDate).format('DD/MM/YYYY')
-            : '',
+        reportDate: internship.reportDate ? dayjs(internship.reportDate).format('DD/MM/YYYY') : '',
         finalScore: internship.studentSubjectScore?.finalScore?.toString() || '',
     }))
 

@@ -56,6 +56,8 @@ import type {
     ExportDiplomaVerificationParams,
     ExportGraduationDecisionPptx400,
     ExportGraduationDecisionPptxBody,
+    ExportInternshipProfile400,
+    ExportInternshipProfileBody,
     ExportLecturerProfile400,
     ExportLecturerProfileBody,
     ExportStudentAcademicActionJson200Item,
@@ -69,6 +71,8 @@ import type {
     ExportStudentDecreaseAcademicWarningJsonParams,
     ExportStudentProfiles404,
     ExportStudentProfilesBody,
+    ExportStudentScholarshipExcel404,
+    ExportStudentScholarshipExcelParams,
     ExportStudentScholarshipJson200Item,
     ExportStudentScholarshipJson404,
     ExportStudentScholarshipJsonParams,
@@ -99,6 +103,9 @@ import type {
     ImportHeQuanSu200,
     ImportHeQuanSu400,
     ImportHeQuanSuRequest,
+    ImportInternship200,
+    ImportInternship400,
+    ImportInternshipBody,
     ImportLecturer200,
     ImportLecturer400,
     ImportLecturerBody,
@@ -2539,6 +2546,208 @@ export function useExportSubjectClassScore<
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
     const queryOptions = getExportSubjectClassScoreQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+/**
+ * Xuất danh sách học viên đạt học bổng dưới dạng file Excel (dữ liệu đã được làm phẳng)
+ * @summary Xuất Excel danh sách học bổng của học viên
+ */
+export type exportStudentScholarshipExcelResponse200 = {
+    data: Blob
+    status: 200
+}
+
+export type exportStudentScholarshipExcelResponse404 = {
+    data: ExportStudentScholarshipExcel404
+    status: 404
+}
+
+export type exportStudentScholarshipExcelResponseSuccess =
+    exportStudentScholarshipExcelResponse200 & {
+        headers: Headers
+    }
+export type exportStudentScholarshipExcelResponseError =
+    exportStudentScholarshipExcelResponse404 & {
+        headers: Headers
+    }
+
+export type exportStudentScholarshipExcelResponse =
+    | exportStudentScholarshipExcelResponseSuccess
+    | exportStudentScholarshipExcelResponseError
+
+export const getExportStudentScholarshipExcelUrl = (
+    params: ExportStudentScholarshipExcelParams
+) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/student/export-excel-list-student-scholarship?${stringifiedParams}`
+        : `/api/student/export-excel-list-student-scholarship`
+}
+
+export const exportStudentScholarshipExcel = async (
+    params: ExportStudentScholarshipExcelParams,
+    options?: RequestInit
+): Promise<exportStudentScholarshipExcelResponse> => {
+    return customTrainingFetch<exportStudentScholarshipExcelResponse>(
+        getExportStudentScholarshipExcelUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getExportStudentScholarshipExcelQueryKey = (
+    params?: ExportStudentScholarshipExcelParams
+) => {
+    return [
+        `/api/student/export-excel-list-student-scholarship`,
+        ...(params ? [params] : []),
+    ] as const
+}
+
+export const getExportStudentScholarshipExcelQueryOptions = <
+    TData = Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
+    TError = ExportStudentScholarshipExcel404,
+>(
+    params: ExportStudentScholarshipExcelParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getExportStudentScholarshipExcelQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportStudentScholarshipExcel>>> = ({
+        signal,
+    }) => exportStudentScholarshipExcel(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ExportStudentScholarshipExcelQueryResult = NonNullable<
+    Awaited<ReturnType<typeof exportStudentScholarshipExcel>>
+>
+export type ExportStudentScholarshipExcelQueryError = ExportStudentScholarshipExcel404
+
+export function useExportStudentScholarshipExcel<
+    TData = Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
+    TError = ExportStudentScholarshipExcel404,
+>(
+    params: ExportStudentScholarshipExcelParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportStudentScholarshipExcel>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentScholarshipExcel<
+    TData = Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
+    TError = ExportStudentScholarshipExcel404,
+>(
+    params: ExportStudentScholarshipExcelParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportStudentScholarshipExcel>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentScholarshipExcel<
+    TData = Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
+    TError = ExportStudentScholarshipExcel404,
+>(
+    params: ExportStudentScholarshipExcelParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Xuất Excel danh sách học bổng của học viên
+ */
+
+export function useExportStudentScholarshipExcel<
+    TData = Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
+    TError = ExportStudentScholarshipExcel404,
+>(
+    params: ExportStudentScholarshipExcelParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getExportStudentScholarshipExcelQueryOptions(params, options)
 
     const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
         queryKey: DataTag<QueryKey, TData, TError>
@@ -5547,6 +5756,107 @@ export const useExportGraduationDecisionPptx = <
     TContext
 > => {
     const mutationOptions = getExportGraduationDecisionPptxMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type exportInternshipProfileResponse200 = {
+    data: Blob
+    status: 200
+}
+
+export type exportInternshipProfileResponse400 = {
+    data: ExportInternshipProfile400
+    status: 400
+}
+
+export type exportInternshipProfileResponseSuccess = exportInternshipProfileResponse200 & {
+    headers: Headers
+}
+export type exportInternshipProfileResponseError = exportInternshipProfileResponse400 & {
+    headers: Headers
+}
+
+export type exportInternshipProfileResponse =
+    | exportInternshipProfileResponseSuccess
+    | exportInternshipProfileResponseError
+
+export const getExportInternshipProfileUrl = () => {
+    return `/api/internship/export-internship-profile`
+}
+
+export const exportInternshipProfile = async (
+    exportInternshipProfileBody: ExportInternshipProfileBody,
+    options?: RequestInit
+): Promise<exportInternshipProfileResponse> => {
+    return customTrainingFetch<exportInternshipProfileResponse>(getExportInternshipProfileUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(exportInternshipProfileBody),
+    })
+}
+
+export const getExportInternshipProfileMutationOptions = <
+    TError = ExportInternshipProfile400,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof exportInternshipProfile>>,
+        TError,
+        { data: ExportInternshipProfileBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof exportInternshipProfile>>,
+    TError,
+    { data: ExportInternshipProfileBody },
+    TContext
+> => {
+    const mutationKey = ['exportInternshipProfile']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof exportInternshipProfile>>,
+        { data: ExportInternshipProfileBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return exportInternshipProfile(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type ExportInternshipProfileMutationResult = NonNullable<
+    Awaited<ReturnType<typeof exportInternshipProfile>>
+>
+export type ExportInternshipProfileMutationBody = ExportInternshipProfileBody
+export type ExportInternshipProfileMutationError = ExportInternshipProfile400
+
+export const useExportInternshipProfile = <TError = ExportInternshipProfile400, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof exportInternshipProfile>>,
+            TError,
+            { data: ExportInternshipProfileBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof exportInternshipProfile>>,
+    TError,
+    { data: ExportInternshipProfileBody },
+    TContext
+> => {
+    const mutationOptions = getExportInternshipProfileMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }
@@ -11124,6 +11434,112 @@ export const useImportHeQuanSu = <TError = ImportHeQuanSu400, TContext = unknown
     TContext
 > => {
     const mutationOptions = getImportHeQuanSuMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type importInternshipResponse200 = {
+    data: ImportInternship200
+    status: 200
+}
+
+export type importInternshipResponse400 = {
+    data: ImportInternship400
+    status: 400
+}
+
+export type importInternshipResponseSuccess = importInternshipResponse200 & {
+    headers: Headers
+}
+export type importInternshipResponseError = importInternshipResponse400 & {
+    headers: Headers
+}
+
+export type importInternshipResponse =
+    | importInternshipResponseSuccess
+    | importInternshipResponseError
+
+export const getImportInternshipUrl = () => {
+    return `/api/import/import-internship`
+}
+
+export const importInternship = async (
+    importInternshipBody: ImportInternshipBody,
+    options?: RequestInit
+): Promise<importInternshipResponse> => {
+    const formData = new FormData()
+    formData.append(`file`, importInternshipBody.file)
+    if (importInternshipBody.timeout !== undefined && importInternshipBody.timeout !== null) {
+        formData.append(`timeout`, importInternshipBody.timeout.toString())
+    }
+
+    return customTrainingFetch<importInternshipResponse>(getImportInternshipUrl(), {
+        ...options,
+        method: 'POST',
+        body: formData,
+    })
+}
+
+export const getImportInternshipMutationOptions = <
+    TError = ImportInternship400,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof importInternship>>,
+        TError,
+        { data: ImportInternshipBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof importInternship>>,
+    TError,
+    { data: ImportInternshipBody },
+    TContext
+> => {
+    const mutationKey = ['importInternship']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof importInternship>>,
+        { data: ImportInternshipBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return importInternship(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type ImportInternshipMutationResult = NonNullable<
+    Awaited<ReturnType<typeof importInternship>>
+>
+export type ImportInternshipMutationBody = ImportInternshipBody
+export type ImportInternshipMutationError = ImportInternship400
+
+export const useImportInternship = <TError = ImportInternship400, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof importInternship>>,
+            TError,
+            { data: ImportInternshipBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof importInternship>>,
+    TError,
+    { data: ImportInternshipBody },
+    TContext
+> => {
+    const mutationOptions = getImportInternshipMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }
