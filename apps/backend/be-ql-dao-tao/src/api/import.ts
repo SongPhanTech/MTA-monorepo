@@ -313,7 +313,7 @@ app.openapi(importLecturer, async (c) => {
 
     return c.json(
         {
-            message: `Import lecturers successfully: ${data.lecturers.length}`,
+            message: `Khai báo giảng viên thành công: ${data.lecturers.length}`,
             time: Date.now() - start,
         },
         200
