@@ -6,7 +6,7 @@
  */
 
 export type PostApiStatsArticlesStatisticsByYear200DataItem = {
-  id: string;
-  name: string;
-  count: number;
-};
+    id: string
+    name: string
+    count: number
+}

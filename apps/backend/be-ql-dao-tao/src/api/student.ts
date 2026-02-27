@@ -929,15 +929,13 @@ const exportStudentProfiles = createRoute({
 })
 
 app.openapi(downloadStudentImportTemplate, async (c) => {
-   
-        const result = await generateStudentImportTemplate()
-        const fileName = 'MauImportDSHV.xlsx'
-        const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
-        return c.body(result, 200, {
-            'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            'Content-Disposition': disposition,
-        })
-    
+    const result = await generateStudentImportTemplate()
+    const fileName = 'MauImportDSHV.xlsx'
+    const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
+    return c.body(result, 200, {
+        'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'Content-Disposition': disposition,
+    })
 })
 
 app.openapi(exportStudentProfiles, async (c) => {

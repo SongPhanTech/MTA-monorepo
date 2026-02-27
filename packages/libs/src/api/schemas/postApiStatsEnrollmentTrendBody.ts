@@ -6,5 +6,5 @@
  */
 
 export type PostApiStatsEnrollmentTrendBody = {
-  preview?: boolean;
-};
+    preview?: boolean
+}

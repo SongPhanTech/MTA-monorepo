@@ -69,7 +69,9 @@ const ImportInternshipModal = ({ visible, onSuccess, onCancel }: ImportInternshi
             if (!file) return
             const res = await importInternship({ file: file, timeout: 30 })
             if (res?.status === 200) {
-                message.success(res?.data?.message || 'Nhập dữ liệu thực tập sinh từ file thành công')
+                message.success(
+                    res?.data?.message || 'Nhập dữ liệu thực tập sinh từ file thành công'
+                )
                 onSuccess()
             } else {
                 message.error(res?.data?.message || 'Nhập dữ liệu thực tập sinh từ file thất bại')

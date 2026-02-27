@@ -6,6 +6,6 @@
  */
 
 export interface AwardIdsResult {
-  success: boolean;
-  message: string;
+    success: boolean
+    message: string
 }

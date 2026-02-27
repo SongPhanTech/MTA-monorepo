@@ -8,4 +8,4 @@
 /**
  * @nullable
  */
-export type ClassDivision200Item = unknown | null;
+export type ClassDivision200Item = unknown | null

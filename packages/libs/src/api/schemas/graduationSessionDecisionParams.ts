@@ -6,5 +6,5 @@
  */
 
 export type GraduationSessionDecisionParams = {
-sessionId: string;
-};
+    sessionId: string
+}

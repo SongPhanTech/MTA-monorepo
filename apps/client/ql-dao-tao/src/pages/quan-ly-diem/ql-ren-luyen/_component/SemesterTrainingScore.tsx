@@ -354,48 +354,48 @@ export default function SemesterTrainingScore({
                                     ),
                                 },
 
-                        {
-                            title: 'Thao tác',
-                            width: 130,
-                            align: 'center',
-                            fixed: 'right',
-                            render: (_, record) => (
-                                <Row className="justify-center gap-2">
-                                    {can(
-                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_QL_SINH_VIEN,
-                                        'SUA'
-                                    ) && (
-                                        <EditIcon
-                                            // onClick={onOpenUpdate.bind(null, {
-                                            //     id: record.id,
-                                            // })}
-                                            className="text-sm text-blue-700 cursor-pointer"
-                                        />
-                                    )}
-                                    {can(
-                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_QL_SINH_VIEN,
-                                        'XOA'
-                                    ) && (
-                                        <DeleteIcon
-                                        // popConfirm={{
-                                        //     onConfirm: () => handleDelete(record.id),
-                                        // }}
-                                        />
-                                    )}
-                                </Row>
-                            ),
-                        },
-                    ]}
-                    rowKey="id"
-                    // rowSelection={{
-                    //     selectedRowKeys,
-                    //     onChange: (selectedKeys) => setSelectedRowKeys(selectedKeys),
-                    // }}
-                    data={data}
-                    pagination={{
-                        current: currentPage,
-                        pageSize: numberOfPages,
-                        total: count,
+                                {
+                                    title: 'Thao tác',
+                                    width: 130,
+                                    align: 'center',
+                                    fixed: 'right',
+                                    render: (_, record) => (
+                                        <Row className="justify-center gap-2">
+                                            {can(
+                                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_QL_SINH_VIEN,
+                                                'SUA'
+                                            ) && (
+                                                <EditIcon
+                                                    // onClick={onOpenUpdate.bind(null, {
+                                                    //     id: record.id,
+                                                    // })}
+                                                    className="text-sm text-blue-700 cursor-pointer"
+                                                />
+                                            )}
+                                            {can(
+                                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_QL_SINH_VIEN,
+                                                'XOA'
+                                            ) && (
+                                                <DeleteIcon
+                                                // popConfirm={{
+                                                //     onConfirm: () => handleDelete(record.id),
+                                                // }}
+                                                />
+                                            )}
+                                        </Row>
+                                    ),
+                                },
+                            ]}
+                            rowKey="id"
+                            // rowSelection={{
+                            //     selectedRowKeys,
+                            //     onChange: (selectedKeys) => setSelectedRowKeys(selectedKeys),
+                            // }}
+                            data={data}
+                            pagination={{
+                                current: currentPage,
+                                pageSize: numberOfPages,
+                                total: count,
 
                                 onChange: (page, pageSize) => {
                                     if (numberOfPages === pageSize) {

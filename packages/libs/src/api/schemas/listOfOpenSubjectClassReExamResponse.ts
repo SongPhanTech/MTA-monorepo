@@ -4,7 +4,8 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { PaginationQuery } from './paginationQuery';
-import type { ListOfOpenSubjectClassReExamResponseAllOf } from './listOfOpenSubjectClassReExamResponseAllOf';
+import type { PaginationQuery } from './paginationQuery'
+import type { ListOfOpenSubjectClassReExamResponseAllOf } from './listOfOpenSubjectClassReExamResponseAllOf'
 
-export type ListOfOpenSubjectClassReExamResponse = PaginationQuery & ListOfOpenSubjectClassReExamResponseAllOf;
+export type ListOfOpenSubjectClassReExamResponse = PaginationQuery &
+    ListOfOpenSubjectClassReExamResponseAllOf

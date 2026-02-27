@@ -4,15 +4,15 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { TrainingField200ItemTrainingMajorsItem } from './trainingField200ItemTrainingMajorsItem';
+import type { TrainingField200ItemTrainingMajorsItem } from './trainingField200ItemTrainingMajorsItem'
 
 export type TrainingField200Item = {
-  id: string;
-  name: string;
-  /** @nullable */
-  code: string | null;
-  /** @nullable */
-  description: string | null;
-  /** @nullable */
-  trainingMajors: TrainingField200ItemTrainingMajorsItem[] | null;
-};
+    id: string
+    name: string
+    /** @nullable */
+    code: string | null
+    /** @nullable */
+    description: string | null
+    /** @nullable */
+    trainingMajors: TrainingField200ItemTrainingMajorsItem[] | null
+}

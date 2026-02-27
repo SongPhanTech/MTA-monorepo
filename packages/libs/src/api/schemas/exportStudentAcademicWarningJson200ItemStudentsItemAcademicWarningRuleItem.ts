@@ -4,32 +4,32 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { ExportStudentAcademicWarningJson200ItemStudentsItemAcademicWarningRuleItemField } from './exportStudentAcademicWarningJson200ItemStudentsItemAcademicWarningRuleItemField';
-import type { ExportStudentAcademicWarningJson200ItemStudentsItemAcademicWarningRuleItemOperator } from './exportStudentAcademicWarningJson200ItemStudentsItemAcademicWarningRuleItemOperator';
+import type { ExportStudentAcademicWarningJson200ItemStudentsItemAcademicWarningRuleItemField } from './exportStudentAcademicWarningJson200ItemStudentsItemAcademicWarningRuleItemField'
+import type { ExportStudentAcademicWarningJson200ItemStudentsItemAcademicWarningRuleItemOperator } from './exportStudentAcademicWarningJson200ItemStudentsItemAcademicWarningRuleItemOperator'
 
 export type ExportStudentAcademicWarningJson200ItemStudentsItemAcademicWarningRuleItem = {
-  id: string;
-  /** @nullable */
-  code?: string | null;
-  active?: boolean;
-  /** @nullable */
-  description?: string | null;
-  /** @nullable */
-  deletedAt?: string | null;
-  /** @nullable */
-  createdAt?: string | null;
-  /** @nullable */
-  updatedAt?: string | null;
-  /** @nullable */
-  createdBy?: string | null;
-  field: ExportStudentAcademicWarningJson200ItemStudentsItemAcademicWarningRuleItemField;
-  operator: ExportStudentAcademicWarningJson200ItemStudentsItemAcademicWarningRuleItemOperator;
-  invert?: boolean;
-  threshold: number;
-  tuple: string[];
-  severity: number;
-  /** @nullable */
-  yearCondition?: number | null;
-  /** @nullable */
-  semesterCondition?: number | null;
-};
+    id: string
+    /** @nullable */
+    code?: string | null
+    active?: boolean
+    /** @nullable */
+    description?: string | null
+    /** @nullable */
+    deletedAt?: string | null
+    /** @nullable */
+    createdAt?: string | null
+    /** @nullable */
+    updatedAt?: string | null
+    /** @nullable */
+    createdBy?: string | null
+    field: ExportStudentAcademicWarningJson200ItemStudentsItemAcademicWarningRuleItemField
+    operator: ExportStudentAcademicWarningJson200ItemStudentsItemAcademicWarningRuleItemOperator
+    invert?: boolean
+    threshold: number
+    tuple: string[]
+    severity: number
+    /** @nullable */
+    yearCondition?: number | null
+    /** @nullable */
+    semesterCondition?: number | null
+}

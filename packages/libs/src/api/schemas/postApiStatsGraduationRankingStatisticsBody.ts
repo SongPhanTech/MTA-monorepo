@@ -6,5 +6,5 @@
  */
 
 export type PostApiStatsGraduationRankingStatisticsBody = {
-  preview?: boolean;
-};
+    preview?: boolean
+}

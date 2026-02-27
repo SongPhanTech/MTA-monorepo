@@ -6,7 +6,7 @@
  */
 
 export type PostApiStatsHighestIncorrectAnswerRateQuestions200DataItem = {
-  questionId: string;
-  content: string;
-  incorrectRate: number;
-};
+    questionId: string
+    content: string
+    incorrectRate: number
+}

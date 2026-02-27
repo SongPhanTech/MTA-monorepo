@@ -6,21 +6,21 @@
  */
 
 export type StatsArchivedAward200DataItem = {
-  studentCode: string;
-  studentName: string;
-  /** @nullable */
-  dateOfBirth: string | null;
-  classCode: string;
-  className: string;
-  awardName: string;
-  awardDate: string;
-  receivedSemester: string;
-  /** @nullable */
-  bonusScore: number | null;
-  /** @nullable */
-  subjectName: string | null;
-  /** @nullable */
-  subjectSemester: string | null;
-  /** @nullable */
-  subjectScore: number | null;
-};
+    studentCode: string
+    studentName: string
+    /** @nullable */
+    dateOfBirth: string | null
+    classCode: string
+    className: string
+    awardName: string
+    awardDate: string
+    receivedSemester: string
+    /** @nullable */
+    bonusScore: number | null
+    /** @nullable */
+    subjectName: string | null
+    /** @nullable */
+    subjectSemester: string | null
+    /** @nullable */
+    subjectScore: number | null
+}

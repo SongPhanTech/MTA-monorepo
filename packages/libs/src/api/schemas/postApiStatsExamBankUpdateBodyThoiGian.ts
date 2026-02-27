@@ -6,6 +6,6 @@
  */
 
 export type PostApiStatsExamBankUpdateBodyThoiGian = {
-  from: string;
-  to: string;
-};
+    from: string
+    to: string
+}
