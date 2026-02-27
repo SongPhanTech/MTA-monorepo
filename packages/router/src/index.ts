@@ -323,9 +323,15 @@ const NAVIGATION: NavigationType = {
                     },
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN,
-                        label: 'QL điểm rèn luyện',
+                        label: 'QL điểm rèn luyện học kỳ',
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_REN_LUYEN,
-                        description: 'QL điểm rèn luyện',
+                        description: 'QL điểm rèn luyện theo học kỳ',
+                    },
+                    {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN_THEO_NAM,
+                        label: 'QL điểm rèn luyện năm học',
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_REN_LUYEN_THEO_NAM,
+                        description: 'QL điểm rèn luyện theo năm',
                     },
                 ],
             },
