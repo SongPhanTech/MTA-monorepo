@@ -296,7 +296,7 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
     const handleAssignDate = async () => {
         const reportDate = form.getFieldValue('reportDate')
         if (!reportDate) {
-            return message.warning('Vui lòng chọn hạn nhập chuyên đề trước khi gán!')
+            return message.warning('Vui lòng chọn hạn nhập thực tập trước khi gán!')
         }
 
         const res = await sqlTransaction([
@@ -376,9 +376,9 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
             const buffer = await file.arrayBuffer()
             await workbook.xlsx.load(buffer)
 
-            const worksheet = workbook.getWorksheet('Danh sách chuyên đề')
+            const worksheet = workbook.getWorksheet('Danh sách thực tập')
             if (!worksheet) {
-                return message.error('Không tìm thấy Sheet "Danh sách chuyên đề" trong file!')
+                return message.error('Không tìm thấy Sheet "Danh sách thực tập" trong file!')
             }
 
             const dataToUpdate: any[] = []
@@ -630,12 +630,12 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
                             <>
                                 <Form.Item
                                     name="reportDate"
-                                    label="Hạn nhập chuyên đề"
+                                    label="Hạn nhập thực tập"
                                     className="mb-0 ml-2"
                                 >
                                     <DatePicker
                                         className="w-44"
-                                        placeholder="Chọn hạn nhập chuyên đề"
+                                        placeholder="Chọn hạn nhập thực tập"
                                     />
                                 </Form.Item>
                                 <Form.Item className="mb-0">
@@ -718,7 +718,7 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
                                             )
                                         }}
                                     >
-                                        QĐ giao chuyên đề nghiên cứu
+                                        QĐ giao thực tập nghiên cứu
                                     </Button>
                                     <Button
                                         type="primary"
@@ -909,7 +909,7 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
                                             )
                                         }}
                                     >
-                                        Phụ lục QĐ chuyên đề nghiên cứu
+                                        Phụ lục QĐ thực tập nghiên cứu
                                     </Button>
                                     <Button
                                         type="primary"
@@ -1615,7 +1615,7 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
                             },
                         },
                         // {
-                        //     title: 'Tên chuyên đề',
+                        //     title: 'Tên thực tập',
                         //     width: 250,
                         //     align: 'left',
                         //     render: (_, record) => {
