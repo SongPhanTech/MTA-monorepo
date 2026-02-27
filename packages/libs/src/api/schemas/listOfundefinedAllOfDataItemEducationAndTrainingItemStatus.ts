@@ -5,18 +5,18 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type ListOfundefinedAllOfDataItemEducationAndTrainingItemStatus =
-    (typeof ListOfundefinedAllOfDataItemEducationAndTrainingItemStatus)[keyof typeof ListOfundefinedAllOfDataItemEducationAndTrainingItemStatus]
+export type ListOfundefinedAllOfDataItemEducationAndTrainingItemStatus = typeof ListOfundefinedAllOfDataItemEducationAndTrainingItemStatus[keyof typeof ListOfundefinedAllOfDataItemEducationAndTrainingItemStatus];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ListOfundefinedAllOfDataItemEducationAndTrainingItemStatus = {
-    ENROLLED: 'ENROLLED',
-    GRADUATED: 'GRADUATED',
-    DEFERRED_STUDY: 'DEFERRED_STUDY',
-    SUSPENDED_STUDY: 'SUSPENDED_STUDY',
-    WITHDRAWN: 'WITHDRAWN',
-    TRANSFERRED: 'TRANSFERRED',
-    PENDING_GRADUATION_REVIEW: 'PENDING_GRADUATION_REVIEW',
-    ACADEMIC_SUSPENSION: 'ACADEMIC_SUSPENSION',
-    REPEATED: 'REPEATED',
-} as const
+  ENROLLED: 'ENROLLED',
+  GRADUATED: 'GRADUATED',
+  DEFERRED_STUDY: 'DEFERRED_STUDY',
+  SUSPENDED_STUDY: 'SUSPENDED_STUDY',
+  WITHDRAWN: 'WITHDRAWN',
+  TRANSFERRED: 'TRANSFERRED',
+  PENDING_GRADUATION_REVIEW: 'PENDING_GRADUATION_REVIEW',
+  ACADEMIC_SUSPENSION: 'ACADEMIC_SUSPENSION',
+  REPEATED: 'REPEATED',
+} as const;

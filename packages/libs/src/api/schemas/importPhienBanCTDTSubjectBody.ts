@@ -6,13 +6,13 @@
  */
 
 export type ImportPhienBanCTDTSubjectBody = {
-    file: Blob
-    trainingObjectTypeId: string
-    curriculumVersionId: string
-    /** @nullable */
-    createNewSubjects?: boolean | null
-    /** @nullable */
-    deleteOldData?: boolean | null
-    /** @nullable */
-    timeout?: number | null
-}
+  file: Blob;
+  trainingObjectTypeId: string;
+  curriculumVersionId: string;
+  /** @nullable */
+  createNewSubjects?: boolean | null;
+  /** @nullable */
+  deleteOldData?: boolean | null;
+  /** @nullable */
+  timeout?: number | null;
+};

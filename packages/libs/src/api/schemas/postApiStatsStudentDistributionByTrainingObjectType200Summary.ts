@@ -5,6 +5,4 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type PostApiStatsStudentDistributionByTrainingObjectType200Summary = {
-    [key: string]: unknown | null
-}
+export type PostApiStatsStudentDistributionByTrainingObjectType200Summary = {[key: string]: unknown | null};

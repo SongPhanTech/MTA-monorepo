@@ -6,5 +6,5 @@
  */
 
 export type GetClassesInfo400 = {
-    message: string
-}
+  message: string;
+};

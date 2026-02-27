@@ -852,6 +852,13 @@ const downloadStudentImportTemplate = createRoute({
     tags: ['Student'],
     path: '/download-student-import-template',
     method: 'get',
+    request: {
+        query: z.object({
+            trainingObjectTypeId: z.string().openapi('trainingObjectTypeId', {
+                description: 'ID loại đối tượng đào tạo',
+            }),
+        }),
+    },
     responses: {
         200: {
             description: 'Download template file with category sheets',
@@ -918,15 +925,14 @@ const exportStudentProfiles = createRoute({
 })
 
 app.openapi(downloadStudentImportTemplate, async (c) => {
-   
-        const result = await generateStudentImportTemplate()
-        const fileName = 'MauImportDSHV.xlsx'
-        const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
-        return c.body(result, 200, {
-            'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            'Content-Disposition': disposition,
-        })
-    
+    const { trainingObjectTypeId } = c.req.valid('query')
+    const result = await generateStudentImportTemplate(trainingObjectTypeId)
+    const fileName = 'MauImportDSHV.xlsx'
+    const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
+    return c.body(result, 200, {
+        'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'Content-Disposition': disposition,
+    })
 })
 
 app.openapi(exportStudentProfiles, async (c) => {

@@ -4,11 +4,11 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { Id } from './id'
-import type { ExamId } from './examId'
+import type { Id } from './id';
+import type { ExamId } from './examId';
 
 export type ExportSubjectClassScoreParams = {
-    id?: Id
-    examId?: ExamId
-    type?: string
-}
+id?: Id;
+examId?: ExamId;
+type?: string;
+};

@@ -6,5 +6,5 @@
  */
 
 export type ExportSubjectClassScore404 = {
-    message: string
-}
+  message: string;
+};

@@ -8,4 +8,4 @@
 /**
  * ID loại đối tượng đào tạo
  */
-export type TrainingObjectTypeId = string
+export type TrainingObjectTypeId = string;

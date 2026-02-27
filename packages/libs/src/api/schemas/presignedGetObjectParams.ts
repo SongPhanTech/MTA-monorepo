@@ -6,5 +6,5 @@
  */
 
 export type PresignedGetObjectParams = {
-    objectName: string
-}
+objectName: string;
+};

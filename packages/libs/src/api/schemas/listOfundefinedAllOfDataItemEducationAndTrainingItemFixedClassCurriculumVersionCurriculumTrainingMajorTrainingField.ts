@@ -5,26 +5,25 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersionCurriculumTrainingMajorTrainingField =
-    {
-        id: string
-        /** @nullable */
-        code?: string | null
-        active?: boolean
-        /** @nullable */
-        description?: string | null
-        /** @nullable */
-        deletedAt?: string | null
-        /** @nullable */
-        createdAt?: string | null
-        /** @nullable */
-        updatedAt?: string | null
-        /** @nullable */
-        createdBy?: string | null
-        name: string
-        englishName: string
-        /** @nullable */
-        publishDate: string | null
-        /** @nullable */
-        decisionNo?: string | null
-    }
+export type ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersionCurriculumTrainingMajorTrainingField = {
+  id: string;
+  /** @nullable */
+  code?: string | null;
+  active?: boolean;
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  deletedAt?: string | null;
+  /** @nullable */
+  createdAt?: string | null;
+  /** @nullable */
+  updatedAt?: string | null;
+  /** @nullable */
+  createdBy?: string | null;
+  name: string;
+  englishName: string;
+  /** @nullable */
+  publishDate: string | null;
+  /** @nullable */
+  decisionNo?: string | null;
+};

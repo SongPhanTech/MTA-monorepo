@@ -6,5 +6,5 @@
  */
 
 export type ExportClusterSurveyStatisticsParams = {
-    organizations?: string[]
-}
+organizations?: string[];
+};

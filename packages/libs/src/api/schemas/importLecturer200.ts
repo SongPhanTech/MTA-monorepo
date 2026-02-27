@@ -6,6 +6,6 @@
  */
 
 export type ImportLecturer200 = {
-    message: string
-    time: number
-}
+  message: string;
+  time: number;
+};

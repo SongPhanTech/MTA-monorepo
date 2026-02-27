@@ -73,4 +73,4 @@ API này cho phép các ứng dụng truy cập từ client hoặc server thông
 /**
  * @nullable
  */
-export type PagingRequestDtoCustomParam = { [key: string]: unknown | null } | null
+export type PagingRequestDtoCustomParam = {[key: string]: unknown | null} | null;

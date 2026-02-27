@@ -50,10 +50,10 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { UnitInfo } from './unitInfo'
-import type { UnitInfoEditDtoState } from './unitInfoEditDtoState'
+import type { UnitInfo } from './unitInfo';
+import type { UnitInfoEditDtoState } from './unitInfoEditDtoState';
 
 export type UnitInfoEditDto = UnitInfo & {
-    /** @nullable */
-    State?: UnitInfoEditDtoState
-}
+  /** @nullable */
+  State?: UnitInfoEditDtoState;
+};

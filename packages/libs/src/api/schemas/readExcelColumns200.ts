@@ -4,9 +4,9 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { ReadExcelColumns200ColumnsItem } from './readExcelColumns200ColumnsItem'
+import type { ReadExcelColumns200ColumnsItem } from './readExcelColumns200ColumnsItem';
 
 export type ReadExcelColumns200 = {
-    columns: ReadExcelColumns200ColumnsItem[]
-    count: number
-}
+  columns: ReadExcelColumns200ColumnsItem[];
+  count: number;
+};

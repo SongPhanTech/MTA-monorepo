@@ -55,36 +55,36 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  * Chứng chỉ tin học
  */
 export interface PublicApiGetAllDMChungChiTinHocDTO {
-    /** Id chứng chỉ */
-    Id?: string
-    /**
-     * Mã chứng chỉ
-     * @nullable
-     */
-    sMa?: string | null
-    /**
-     * Tên chứng chỉ
-     * @nullable
-     */
-    sTen?: string | null
-    /**
-     * nguồn cấp
-     * @nullable
-     */
-    sNguonCap?: string | null
-    /**
-     * Nội dung
-     * @nullable
-     */
-    sNoiDung?: string | null
-    /**
-     * Giá trị
-     * @nullable
-     */
-    sGiaTri?: string | null
-    /**
-     * Đối tượng
-     * @nullable
-     */
-    sDoiTuong?: string | null
+  /** Id chứng chỉ */
+  Id?: string;
+  /**
+   * Mã chứng chỉ
+   * @nullable
+   */
+  sMa?: string | null;
+  /**
+   * Tên chứng chỉ
+   * @nullable
+   */
+  sTen?: string | null;
+  /**
+   * nguồn cấp
+   * @nullable
+   */
+  sNguonCap?: string | null;
+  /**
+   * Nội dung
+   * @nullable
+   */
+  sNoiDung?: string | null;
+  /**
+   * Giá trị
+   * @nullable
+   */
+  sGiaTri?: string | null;
+  /**
+   * Đối tượng
+   * @nullable
+   */
+  sDoiTuong?: string | null;
 }

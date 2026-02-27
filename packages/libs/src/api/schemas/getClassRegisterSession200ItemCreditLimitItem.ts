@@ -4,35 +4,35 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetClassRegisterSession200ItemCreditLimitItemBaseScore } from './getClassRegisterSession200ItemCreditLimitItemBaseScore'
-import type { GetClassRegisterSession200ItemCreditLimitItemClassRegisterSession } from './getClassRegisterSession200ItemCreditLimitItemClassRegisterSession'
+import type { GetClassRegisterSession200ItemCreditLimitItemBaseScore } from './getClassRegisterSession200ItemCreditLimitItemBaseScore';
+import type { GetClassRegisterSession200ItemCreditLimitItemClassRegisterSession } from './getClassRegisterSession200ItemCreditLimitItemClassRegisterSession';
 
 export type GetClassRegisterSession200ItemCreditLimitItem = {
-    id: string
-    /** @nullable */
-    code?: string | null
-    active?: boolean
-    /** @nullable */
-    description?: string | null
-    /** @nullable */
-    deletedAt?: string | null
-    /** @nullable */
-    createdAt?: string | null
-    /** @nullable */
-    updatedAt?: string | null
-    /** @nullable */
-    createdBy?: string | null
-    minCredit?: number
-    maxCredit?: number
-    baseScore: GetClassRegisterSession200ItemCreditLimitItemBaseScore
-    /** @nullable */
-    base10Min?: number | null
-    /** @nullable */
-    base10Max?: number | null
-    /** @nullable */
-    base4Min?: number | null
-    /** @nullable */
-    base4Max?: number | null
-    classRegisterSessionId: string
-    classRegisterSession?: GetClassRegisterSession200ItemCreditLimitItemClassRegisterSession
-}
+  id: string;
+  /** @nullable */
+  code?: string | null;
+  active?: boolean;
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  deletedAt?: string | null;
+  /** @nullable */
+  createdAt?: string | null;
+  /** @nullable */
+  updatedAt?: string | null;
+  /** @nullable */
+  createdBy?: string | null;
+  minCredit?: number;
+  maxCredit?: number;
+  baseScore: GetClassRegisterSession200ItemCreditLimitItemBaseScore;
+  /** @nullable */
+  base10Min?: number | null;
+  /** @nullable */
+  base10Max?: number | null;
+  /** @nullable */
+  base4Min?: number | null;
+  /** @nullable */
+  base4Max?: number | null;
+  classRegisterSessionId: string;
+  classRegisterSession?: GetClassRegisterSession200ItemCreditLimitItemClassRegisterSession;
+};

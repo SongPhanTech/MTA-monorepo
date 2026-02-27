@@ -4,18 +4,18 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { PostApiStatsDemographics200DataItemByGenderItem } from './postApiStatsDemographics200DataItemByGenderItem'
-import type { PostApiStatsDemographics200DataItemByEthnicityItem } from './postApiStatsDemographics200DataItemByEthnicityItem'
-import type { PostApiStatsDemographics200DataItemByReligionItem } from './postApiStatsDemographics200DataItemByReligionItem'
-import type { PostApiStatsDemographics200DataItemByProvinceItem } from './postApiStatsDemographics200DataItemByProvinceItem'
+import type { PostApiStatsDemographics200DataItemByGenderItem } from './postApiStatsDemographics200DataItemByGenderItem';
+import type { PostApiStatsDemographics200DataItemByEthnicityItem } from './postApiStatsDemographics200DataItemByEthnicityItem';
+import type { PostApiStatsDemographics200DataItemByReligionItem } from './postApiStatsDemographics200DataItemByReligionItem';
+import type { PostApiStatsDemographics200DataItemByProvinceItem } from './postApiStatsDemographics200DataItemByProvinceItem';
 
 export type PostApiStatsDemographics200DataItem = {
-    byGender: PostApiStatsDemographics200DataItemByGenderItem[]
-    byEthnicity: PostApiStatsDemographics200DataItemByEthnicityItem[]
-    byReligion: PostApiStatsDemographics200DataItemByReligionItem[]
-    byProvince: PostApiStatsDemographics200DataItemByProvinceItem[]
-    byGenderLabels: string[]
-    byEthnicityLabels: string[]
-    byReligionLabels: string[]
-    byProvinceLabels: string[]
-}
+  byGender: PostApiStatsDemographics200DataItemByGenderItem[];
+  byEthnicity: PostApiStatsDemographics200DataItemByEthnicityItem[];
+  byReligion: PostApiStatsDemographics200DataItemByReligionItem[];
+  byProvince: PostApiStatsDemographics200DataItemByProvinceItem[];
+  byGenderLabels: string[];
+  byEthnicityLabels: string[];
+  byReligionLabels: string[];
+  byProvinceLabels: string[];
+};

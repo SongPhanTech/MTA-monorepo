@@ -51,13 +51,14 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  * OpenAPI spec version: v1.0
  */
 
-export type EnumSate = (typeof EnumSate)[keyof typeof EnumSate]
+export type EnumSate = typeof EnumSate[keyof typeof EnumSate];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const EnumSate = {
-    NUMBER_0: 0,
-    NUMBER_1: 1,
-    NUMBER_2: 2,
-    NUMBER_3: 3,
-    NUMBER_4: 4,
-} as const
+  NUMBER_0: 0,
+  NUMBER_1: 1,
+  NUMBER_2: 2,
+  NUMBER_3: 3,
+  NUMBER_4: 4,
+} as const;

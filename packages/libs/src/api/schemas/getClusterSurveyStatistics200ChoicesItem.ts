@@ -4,30 +4,30 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetClusterSurveyStatistics200ChoicesItemClusterSurvey } from './getClusterSurveyStatistics200ChoicesItemClusterSurvey'
-import type { GetClusterSurveyStatistics200ChoicesItemSurveyItem } from './getClusterSurveyStatistics200ChoicesItemSurveyItem'
-import type { GetClusterSurveyStatistics200ChoicesItemSurveyResponsesItem } from './getClusterSurveyStatistics200ChoicesItemSurveyResponsesItem'
+import type { GetClusterSurveyStatistics200ChoicesItemClusterSurvey } from './getClusterSurveyStatistics200ChoicesItemClusterSurvey';
+import type { GetClusterSurveyStatistics200ChoicesItemSurveyItem } from './getClusterSurveyStatistics200ChoicesItemSurveyItem';
+import type { GetClusterSurveyStatistics200ChoicesItemSurveyResponsesItem } from './getClusterSurveyStatistics200ChoicesItemSurveyResponsesItem';
 
 export type GetClusterSurveyStatistics200ChoicesItem = {
-    id: string
-    /** @nullable */
-    code?: string | null
-    active?: boolean
-    /** @nullable */
-    description?: string | null
-    /** @nullable */
-    deletedAt?: string | null
-    /** @nullable */
-    createdAt?: string | null
-    /** @nullable */
-    updatedAt?: string | null
-    /** @nullable */
-    createdBy?: string | null
-    answer: string
-    requireExplanation: boolean
-    /** @nullable */
-    clusterSurveyId?: string | null
-    clusterSurvey?: GetClusterSurveyStatistics200ChoicesItemClusterSurvey
-    survey?: GetClusterSurveyStatistics200ChoicesItemSurveyItem[]
-    surveyResponses?: GetClusterSurveyStatistics200ChoicesItemSurveyResponsesItem[]
-}
+  id: string;
+  /** @nullable */
+  code?: string | null;
+  active?: boolean;
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  deletedAt?: string | null;
+  /** @nullable */
+  createdAt?: string | null;
+  /** @nullable */
+  updatedAt?: string | null;
+  /** @nullable */
+  createdBy?: string | null;
+  answer: string;
+  requireExplanation: boolean;
+  /** @nullable */
+  clusterSurveyId?: string | null;
+  clusterSurvey?: GetClusterSurveyStatistics200ChoicesItemClusterSurvey;
+  survey?: GetClusterSurveyStatistics200ChoicesItemSurveyItem[];
+  surveyResponses?: GetClusterSurveyStatistics200ChoicesItemSurveyResponsesItem[];
+};

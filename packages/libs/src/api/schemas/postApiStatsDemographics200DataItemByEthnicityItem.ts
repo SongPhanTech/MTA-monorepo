@@ -6,7 +6,7 @@
  */
 
 export type PostApiStatsDemographics200DataItemByEthnicityItem = {
-    id: string
-    name: string
-    count: number
-}
+  id: string;
+  name: string;
+  count: number;
+};

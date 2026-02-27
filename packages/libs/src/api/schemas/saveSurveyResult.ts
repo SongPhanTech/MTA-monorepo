@@ -6,6 +6,6 @@
  */
 
 export interface SaveSurveyResult {
-    success: boolean
-    message: string
+  success: boolean;
+  message: string;
 }

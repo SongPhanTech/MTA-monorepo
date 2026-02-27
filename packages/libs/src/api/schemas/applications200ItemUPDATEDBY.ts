@@ -8,4 +8,4 @@
 /**
  * @nullable
  */
-export type Applications200ItemUPDATEDBY = unknown | null
+export type Applications200ItemUPDATEDBY = unknown | null;

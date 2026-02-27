@@ -6,5 +6,5 @@
  */
 
 export type ExportStudentScholarshipJson404 = {
-    message: string
-}
+  message: string;
+};

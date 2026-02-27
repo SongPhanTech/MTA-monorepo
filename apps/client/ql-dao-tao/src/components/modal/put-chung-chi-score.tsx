@@ -8,7 +8,7 @@ import {
     useFindUniqueCertificate,
     useUpdateCertificate,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message } from 'antd'
+import { Col, Form, Input, message, Radio } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import { useEffect, useState } from 'react'
@@ -38,6 +38,7 @@ const PutCertificateScoreModal = () => {
                 await updateCertificate({
                     data: {
                         name: rest.name,
+                        isUsingScore: rest.isUsingScore,
                     },
                     where: { id },
                 })
@@ -81,6 +82,7 @@ const PutCertificateScoreModal = () => {
         } else {
             form.setFieldsValue({
                 active: true,
+                isUsingScore: true,
             })
         }
     }, [level])
@@ -98,6 +100,14 @@ const PutCertificateScoreModal = () => {
             <Col span={24}>
                 <FormItem form={form} name="name" label="Tên chứng chỉ" required>
                     <Input placeholder="Nhập tên chứng chỉ" />
+                </FormItem>
+            </Col>
+            <Col span={24}>
+                <FormItem form={form} name="isUsingScore" label="Phương thức phiên điểm" required>
+                    <Radio.Group>
+                        <Radio value={true}>Điểm</Radio>
+                        <Radio value={false}>Đạt/Không đạt</Radio>
+                    </Radio.Group>
                 </FormItem>
             </Col>
             {/* <Col span={24}>

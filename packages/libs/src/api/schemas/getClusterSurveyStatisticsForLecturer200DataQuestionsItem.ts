@@ -4,10 +4,10 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetClusterSurveyStatisticsForLecturer200DataQuestionsItemAnswersItem } from './getClusterSurveyStatisticsForLecturer200DataQuestionsItemAnswersItem'
+import type { GetClusterSurveyStatisticsForLecturer200DataQuestionsItemAnswersItem } from './getClusterSurveyStatisticsForLecturer200DataQuestionsItemAnswersItem';
 
 export type GetClusterSurveyStatisticsForLecturer200DataQuestionsItem = {
-    id: string
-    name: string
-    answers: GetClusterSurveyStatisticsForLecturer200DataQuestionsItemAnswersItem[]
-}
+  id: string;
+  name: string;
+  answers: GetClusterSurveyStatisticsForLecturer200DataQuestionsItemAnswersItem[];
+};

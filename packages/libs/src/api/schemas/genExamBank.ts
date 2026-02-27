@@ -4,12 +4,12 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { ExamId } from './examId'
-import type { NOfnExamBank } from './nOfnExamBank'
-import type { Replace } from './replace'
+import type { ExamId } from './examId';
+import type { NOfnExamBank } from './nOfnExamBank';
+import type { Replace } from './replace';
 
 export interface GenExamBank {
-    examId: ExamId
-    nOfnExamBank: NOfnExamBank
-    replace?: Replace
+  examId: ExamId;
+  nOfnExamBank: NOfnExamBank;
+  replace?: Replace;
 }

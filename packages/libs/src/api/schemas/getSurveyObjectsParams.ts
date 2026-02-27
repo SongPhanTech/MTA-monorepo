@@ -4,25 +4,25 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetSurveyObjectsIsStudent } from './getSurveyObjectsIsStudent'
+import type { GetSurveyObjectsIsStudent } from './getSurveyObjectsIsStudent';
 
 export type GetSurveyObjectsParams = {
-    /**
-     * @nullable
-     */
-    page?: number | null
-    /**
-     * @nullable
-     */
-    limit?: number | null
-    id: string
-    fullname?: string
-    organizationId?: string[]
-    lecturerCode?: string
-    staffCode?: string
-    studentCode?: string
-    fixedClassIds?: string[]
-    trainingCourseIds?: string[]
-    taken?: boolean
-    isStudent?: GetSurveyObjectsIsStudent
-}
+/**
+ * @nullable
+ */
+page?: number | null;
+/**
+ * @nullable
+ */
+limit?: number | null;
+id: string;
+fullname?: string;
+organizationId?: string[];
+lecturerCode?: string;
+staffCode?: string;
+studentCode?: string;
+fixedClassIds?: string[];
+trainingCourseIds?: string[];
+taken?: boolean;
+isStudent?: GetSurveyObjectsIsStudent;
+};

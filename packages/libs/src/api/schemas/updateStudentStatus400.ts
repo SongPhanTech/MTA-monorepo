@@ -6,5 +6,5 @@
  */
 
 export type UpdateStudentStatus400 = {
-    message: string
-}
+  message: string;
+};

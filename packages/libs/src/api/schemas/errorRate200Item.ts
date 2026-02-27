@@ -6,8 +6,8 @@
  */
 
 export type ErrorRate200Item = {
-    api: string
-    error_count: number
-    total_count: number
-    error_rate: number
-}
+  api: string;
+  error_count: number;
+  total_count: number;
+  error_rate: number;
+};

@@ -6,5 +6,5 @@
  */
 
 export type PostApiStatsRelearnRatesBody = {
-    preview?: boolean
-}
+  preview?: boolean;
+};

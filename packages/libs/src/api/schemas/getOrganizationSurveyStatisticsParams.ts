@@ -6,5 +6,5 @@
  */
 
 export type GetOrganizationSurveyStatisticsParams = {
-    organizationId: string
-}
+organizationId: string;
+};

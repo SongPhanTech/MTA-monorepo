@@ -6,5 +6,5 @@
  */
 
 export type GetLectureSurveyStatisticsParams = {
-    organizations?: string
-}
+organizations?: string;
+};

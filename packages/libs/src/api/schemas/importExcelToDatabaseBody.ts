@@ -4,13 +4,13 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { ImportExcelToDatabaseBodyDbType } from './importExcelToDatabaseBodyDbType'
+import type { ImportExcelToDatabaseBodyDbType } from './importExcelToDatabaseBodyDbType';
 
 export type ImportExcelToDatabaseBody = {
-    file: Blob
-    url: string
-    database: string
-    table: string
-    columns: string
-    dbType?: ImportExcelToDatabaseBodyDbType
-}
+  file: Blob;
+  url: string;
+  database: string;
+  table: string;
+  columns: string;
+  dbType?: ImportExcelToDatabaseBodyDbType;
+};

@@ -235,7 +235,9 @@ export const exportStudentScholarship = async ({
     return buffer
 }
 
-export async function generateStudentImportTemplate(): Promise<ArrayBuffer> {
+export async function generateStudentImportTemplate(
+    trainingObjectTypeId: string
+): Promise<ArrayBuffer> {
     const [provinces, trainingFields, trainingMajors, nationalities, ethnicities, genders] =
         await Promise.all([
             prisma.dM_Tinh_New.findMany({
@@ -244,10 +246,12 @@ export async function generateStudentImportTemplate(): Promise<ArrayBuffer> {
                 orderBy: { sTen: 'asc' },
             }),
             prisma.trainingField.findMany({
+                where: { trainingObjectTypes: { some: { trainingObjectTypeId } } },
                 select: { name: true },
                 orderBy: { name: 'asc' },
             }),
             prisma.trainingMajor.findMany({
+                where: { trainingObjectTypes: { some: { trainingObjectTypeId } } },
                 select: { name: true },
                 orderBy: { name: 'asc' },
             }),

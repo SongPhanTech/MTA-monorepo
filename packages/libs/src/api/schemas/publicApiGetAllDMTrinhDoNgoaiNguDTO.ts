@@ -55,15 +55,15 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  * Trình độ ngoại ngữ
  */
 export interface PublicApiGetAllDMTrinhDoNgoaiNguDTO {
-    Id?: string
-    /**
-     * Tên
-     * @nullable
-     */
-    sTen?: string | null
-    /**
-     * Khung
-     * @nullable
-     */
-    sKhung?: string | null
+  Id?: string;
+  /**
+   * Tên
+   * @nullable
+   */
+  sTen?: string | null;
+  /**
+   * Khung
+   * @nullable
+   */
+  sKhung?: string | null;
 }

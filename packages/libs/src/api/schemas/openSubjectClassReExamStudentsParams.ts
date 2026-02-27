@@ -6,17 +6,17 @@
  */
 
 export type OpenSubjectClassReExamStudentsParams = {
-    subjectVersionId: string
-    trainingCourseId?: string
-    fixedClassId?: string
-    search?: string
-    trainingObjectTypeId: string
-    /**
-     * @nullable
-     */
-    page?: number | null
-    /**
-     * @nullable
-     */
-    pageSize?: number | null
-}
+subjectVersionId: string;
+trainingCourseId?: string;
+fixedClassId?: string;
+search?: string;
+trainingObjectTypeId: string;
+/**
+ * @nullable
+ */
+page?: number | null;
+/**
+ * @nullable
+ */
+pageSize?: number | null;
+};

@@ -4,42 +4,42 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetClusterSurveyStatisticsForAll200SurveyTopic } from './getClusterSurveyStatisticsForAll200SurveyTopic'
-import type { GetClusterSurveyStatisticsForAll200SurveyObjectTypeItem } from './getClusterSurveyStatisticsForAll200SurveyObjectTypeItem'
-import type { GetClusterSurveyStatisticsForAll200LecturersItem } from './getClusterSurveyStatisticsForAll200LecturersItem'
-import type { GetClusterSurveyStatisticsForAll200SurveyChoiceItem } from './getClusterSurveyStatisticsForAll200SurveyChoiceItem'
-import type { GetClusterSurveyStatisticsForAll200SurveyQuestionItem } from './getClusterSurveyStatisticsForAll200SurveyQuestionItem'
-import type { GetClusterSurveyStatisticsForAll200SurveysItem } from './getClusterSurveyStatisticsForAll200SurveysItem'
-import type { GetClusterSurveyStatisticsForAll200Data } from './getClusterSurveyStatisticsForAll200Data'
+import type { GetClusterSurveyStatisticsForAll200SurveyTopic } from './getClusterSurveyStatisticsForAll200SurveyTopic';
+import type { GetClusterSurveyStatisticsForAll200SurveyObjectTypeItem } from './getClusterSurveyStatisticsForAll200SurveyObjectTypeItem';
+import type { GetClusterSurveyStatisticsForAll200LecturersItem } from './getClusterSurveyStatisticsForAll200LecturersItem';
+import type { GetClusterSurveyStatisticsForAll200SurveyChoiceItem } from './getClusterSurveyStatisticsForAll200SurveyChoiceItem';
+import type { GetClusterSurveyStatisticsForAll200SurveyQuestionItem } from './getClusterSurveyStatisticsForAll200SurveyQuestionItem';
+import type { GetClusterSurveyStatisticsForAll200SurveysItem } from './getClusterSurveyStatisticsForAll200SurveysItem';
+import type { GetClusterSurveyStatisticsForAll200Data } from './getClusterSurveyStatisticsForAll200Data';
 
 export type GetClusterSurveyStatisticsForAll200 = {
-    id: string
-    /** @nullable */
-    code?: string | null
-    active?: boolean
-    /** @nullable */
-    description?: string | null
-    /** @nullable */
-    deletedAt?: string | null
-    /** @nullable */
-    createdAt?: string | null
-    /** @nullable */
-    updatedAt?: string | null
-    /** @nullable */
-    createdBy?: string | null
-    name: string
-    /** @nullable */
-    startDate: string | null
-    /** @nullable */
-    endDate?: string | null
-    isPublic?: boolean
-    anonymous?: boolean
-    surveyTopicId: string
-    surveyTopic?: GetClusterSurveyStatisticsForAll200SurveyTopic
-    surveyObjectType?: GetClusterSurveyStatisticsForAll200SurveyObjectTypeItem[]
-    lecturers?: GetClusterSurveyStatisticsForAll200LecturersItem[]
-    surveyChoice?: GetClusterSurveyStatisticsForAll200SurveyChoiceItem[]
-    surveyQuestion?: GetClusterSurveyStatisticsForAll200SurveyQuestionItem[]
-    surveys?: GetClusterSurveyStatisticsForAll200SurveysItem[]
-    data: GetClusterSurveyStatisticsForAll200Data
-}
+  id: string;
+  /** @nullable */
+  code?: string | null;
+  active?: boolean;
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  deletedAt?: string | null;
+  /** @nullable */
+  createdAt?: string | null;
+  /** @nullable */
+  updatedAt?: string | null;
+  /** @nullable */
+  createdBy?: string | null;
+  name: string;
+  /** @nullable */
+  startDate: string | null;
+  /** @nullable */
+  endDate?: string | null;
+  isPublic?: boolean;
+  anonymous?: boolean;
+  surveyTopicId: string;
+  surveyTopic?: GetClusterSurveyStatisticsForAll200SurveyTopic;
+  surveyObjectType?: GetClusterSurveyStatisticsForAll200SurveyObjectTypeItem[];
+  lecturers?: GetClusterSurveyStatisticsForAll200LecturersItem[];
+  surveyChoice?: GetClusterSurveyStatisticsForAll200SurveyChoiceItem[];
+  surveyQuestion?: GetClusterSurveyStatisticsForAll200SurveyQuestionItem[];
+  surveys?: GetClusterSurveyStatisticsForAll200SurveysItem[];
+  data: GetClusterSurveyStatisticsForAll200Data;
+};

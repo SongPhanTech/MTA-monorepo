@@ -5,11 +5,11 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GetClassesInfo200ItemSubjectClassItemStatus =
-    (typeof GetClassesInfo200ItemSubjectClassItemStatus)[keyof typeof GetClassesInfo200ItemSubjectClassItemStatus]
+export type GetClassesInfo200ItemSubjectClassItemStatus = typeof GetClassesInfo200ItemSubjectClassItemStatus[keyof typeof GetClassesInfo200ItemSubjectClassItemStatus];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetClassesInfo200ItemSubjectClassItemStatus = {
-    DRAFT: 'DRAFT',
-    OFFICIAL: 'OFFICIAL',
-} as const
+  DRAFT: 'DRAFT',
+  OFFICIAL: 'OFFICIAL',
+} as const;

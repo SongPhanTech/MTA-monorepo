@@ -6,5 +6,5 @@
  */
 
 export type ExportReportSurvey400 = {
-    message: string
-}
+  message: string;
+};

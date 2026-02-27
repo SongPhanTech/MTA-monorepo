@@ -4,32 +4,32 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetClassRegisterSession200ItemSemesterSemesterType } from './getClassRegisterSession200ItemSemesterSemesterType'
-import type { GetClassRegisterSession200ItemSemesterSchoolYear } from './getClassRegisterSession200ItemSemesterSchoolYear'
+import type { GetClassRegisterSession200ItemSemesterSemesterType } from './getClassRegisterSession200ItemSemesterSemesterType';
+import type { GetClassRegisterSession200ItemSemesterSchoolYear } from './getClassRegisterSession200ItemSemesterSchoolYear';
 
 export type GetClassRegisterSession200ItemSemester = {
-    id: string
-    /** @nullable */
-    code?: string | null
-    active?: boolean
-    /** @nullable */
-    description?: string | null
-    /** @nullable */
-    deletedAt?: string | null
-    /** @nullable */
-    createdAt?: string | null
-    /** @nullable */
-    updatedAt?: string | null
-    /** @nullable */
-    createdBy?: string | null
-    name: string
-    /** @nullable */
-    shortName?: string | null
-    /** @nullable */
-    semesterType?: GetClassRegisterSession200ItemSemesterSemesterType
-    /** @nullable */
-    startDate: string | null
-    /** @nullable */
-    endDate: string | null
-    schoolYear: GetClassRegisterSession200ItemSemesterSchoolYear
-}
+  id: string;
+  /** @nullable */
+  code?: string | null;
+  active?: boolean;
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  deletedAt?: string | null;
+  /** @nullable */
+  createdAt?: string | null;
+  /** @nullable */
+  updatedAt?: string | null;
+  /** @nullable */
+  createdBy?: string | null;
+  name: string;
+  /** @nullable */
+  shortName?: string | null;
+  /** @nullable */
+  semesterType?: GetClassRegisterSession200ItemSemesterSemesterType;
+  /** @nullable */
+  startDate: string | null;
+  /** @nullable */
+  endDate: string | null;
+  schoolYear: GetClassRegisterSession200ItemSemesterSchoolYear;
+};

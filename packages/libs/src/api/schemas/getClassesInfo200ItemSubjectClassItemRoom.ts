@@ -4,13 +4,13 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetClassesInfo200ItemSubjectClassItemRoomBuilding } from './getClassesInfo200ItemSubjectClassItemRoomBuilding'
+import type { GetClassesInfo200ItemSubjectClassItemRoomBuilding } from './getClassesInfo200ItemSubjectClassItemRoomBuilding';
 
 /**
  * @nullable
  */
 export type GetClassesInfo200ItemSubjectClassItemRoom = {
-    name: string
-    /** @nullable */
-    building?: GetClassesInfo200ItemSubjectClassItemRoomBuilding
-} | null
+  name: string;
+  /** @nullable */
+  building?: GetClassesInfo200ItemSubjectClassItemRoomBuilding;
+} | null;

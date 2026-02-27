@@ -52,6 +52,6 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  */
 
 export interface AccessLevelDTO {
-    /** Id của đơn vị */
-    sDM_DonviId?: string
+  /** Id của đơn vị */
+  sDM_DonviId?: string;
 }

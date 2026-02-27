@@ -6,12 +6,12 @@
  */
 
 export type SaveSurveyRequestResponsesItem = {
-    surveyQuestionId: string
-    /** @nullable */
-    answerText?: string | null
-    /** @nullable */
-    explanation?: string | null
-    /** @nullable */
-    surveyChoiceId?: string | null
-    answeredAt?: string
-}
+  surveyQuestionId: string;
+  /** @nullable */
+  answerText?: string | null;
+  /** @nullable */
+  explanation?: string | null;
+  /** @nullable */
+  surveyChoiceId?: string | null;
+  answeredAt?: string;
+};

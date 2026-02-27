@@ -6,5 +6,5 @@
  */
 
 export type GetClusterSurveyStatisticsForLecturer404 = {
-    message: string
-}
+  message: string;
+};
