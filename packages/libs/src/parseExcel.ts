@@ -1,4 +1,5 @@
 export * from './parseExcel/curriculum'
+export * from './parseExcel/internship'
 export * from './parseExcel/lecturer'
 export * from './parseExcel/student'
 export * from './parseExcel/subject'

@@ -1,0 +1,128 @@
+import { parseDate } from '@workspace/libs/utils'
+import dayjs from 'dayjs'
+import customParseFormat from 'dayjs/plugin/customParseFormat'
+import { read, utils } from 'xlsx'
+import type { ParseSheetError } from './types'
+
+dayjs.extend(customParseFormat)
+
+export const parseSheetInternship = (file: ArrayBufferLike) => {
+    const wb = read(file)
+    const sheetName = 'Danh sách thực tập'
+    const errors: ParseSheetError[] = []
+
+    const ws = wb.Sheets[sheetName]
+    if (!ws) {
+        errors.push({
+            sheetRef: sheetName,
+            cellRef: sheetName,
+            message: `Không tìm thấy sheet "${sheetName}" trong file`,
+        })
+        return {
+            internships: [],
+            errors,
+        }
+    }
+
+    const startRow = 0
+    const cols = {
+        stt: 'A',
+        code: 'B',
+        fullname: 'C',
+        dateOfBirth: 'D',
+        subjectClassCode: 'E',
+        subjectClassName: 'F',
+        gender: 'G',
+        institution: 'H',
+        address: 'I',
+        internshipContent: 'J',
+        supervisor: 'K',
+        coSupervisor: 'L',
+        startDate: 'M',
+        endDate: 'N',
+        reportDate: 'O',
+        finalScore: 'P',
+    }
+
+    const records = utils.sheet_to_json(ws, {
+        defval: '',
+        blankrows: false,
+        raw: false,
+        header: 'A',
+        range: startRow,
+    }) as (Record<(typeof cols)[keyof typeof cols], string> & {
+        __rowNum__: number
+    })[]
+
+    const data = records
+        .filter((row) => Number.isInteger(Number.parseFloat(row[cols.stt] || '')))
+        .map((row) => {
+            const startDate = parseDate(row[cols.startDate])
+            const endDate = parseDate(row[cols.endDate])
+            const reportDate = parseDate(row[cols.reportDate])
+
+            if (row[cols.startDate] && !startDate.isValid()) {
+                errors.push({
+                    sheetRef: sheetName,
+                    cellRef: `${cols.startDate}${row.__rowNum__ + 1}`,
+                    message: 'Ngày bắt đầu không hợp lệ (ngày/tháng/năm)',
+                })
+            }
+
+            if (row[cols.endDate] && !endDate.isValid()) {
+                errors.push({
+                    sheetRef: sheetName,
+                    cellRef: `${cols.endDate}${row.__rowNum__ + 1}`,
+                    message: 'Ngày kết thúc không hợp lệ (ngày/tháng/năm)',
+                })
+            }
+
+            if (row[cols.reportDate] && !reportDate.isValid()) {
+                errors.push({
+                    sheetRef: sheetName,
+                    cellRef: `${cols.reportDate}${row.__rowNum__ + 1}`,
+                    message: 'Ngày báo cáo không hợp lệ (ngày/tháng/năm)',
+                })
+            }
+
+            if (!row[cols.code]) {
+                errors.push({
+                    sheetRef: sheetName,
+                    cellRef: `${cols.code}${row.__rowNum__ + 1}`,
+                    message: 'Mã sinh viên không được để trống',
+                })
+            }
+
+            if (!row[cols.subjectClassCode]) {
+                errors.push({
+                    sheetRef: sheetName,
+                    cellRef: `${cols.subjectClassCode}${row.__rowNum__ + 1}`,
+                    message: 'Mã lớp học phần không được để trống',
+                })
+            }
+
+            return {
+                stt: row[cols.stt],
+                code: row[cols.code]?.trim() as string,
+                fullname: row[cols.fullname]?.trim(),
+                dateOfBirth: row[cols.dateOfBirth]?.trim(),
+                subjectClassCode: row[cols.subjectClassCode]?.trim() as string,
+                subjectClassName: row[cols.subjectClassName]?.trim(),
+                gender: row[cols.gender]?.trim(),
+                institution: row[cols.institution]?.trim(),
+                address: row[cols.address]?.trim(),
+                internshipContent: row[cols.internshipContent]?.trim(),
+                supervisor: row[cols.supervisor]?.trim(),
+                coSupervisor: row[cols.coSupervisor]?.trim(),
+                startDate: startDate.isValid() ? startDate.toDate() : null,
+                endDate: endDate.isValid() ? endDate.toDate() : null,
+                reportDate: reportDate.isValid() ? reportDate.toDate() : null,
+                finalScore: row[cols.finalScore]?.trim(),
+            }
+        })
+
+    return {
+        internships: data,
+        errors,
+    }
+}
