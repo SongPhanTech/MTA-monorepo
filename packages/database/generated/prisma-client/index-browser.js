@@ -1661,7 +1661,8 @@ exports.Prisma.ArchivedCertificateScalarFieldEnum = {
   issuedBy: 'issuedBy',
   issuedDate: 'issuedDate',
   expiredDate: 'expiredDate',
-  status: 'status'
+  status: 'status',
+  DecisionNumber: 'DecisionNumber'
 };
 
 exports.Prisma.ArchivedAwardOnStudentSubjectScoreScalarFieldEnum = {
@@ -5819,7 +5820,8 @@ exports.Prisma.ArchivedCertificateOrderByRelevanceFieldEnum = {
   createdBy: 'createdBy',
   certificateId: 'certificateId',
   studentId: 'studentId',
-  issuedBy: 'issuedBy'
+  issuedBy: 'issuedBy',
+  DecisionNumber: 'DecisionNumber'
 };
 
 exports.Prisma.ArchivedAwardOnStudentSubjectScoreOrderByRelevanceFieldEnum = {

@@ -1,14 +1,15 @@
 import { queryClient } from '@api/index'
 import DatePicker from '@components/commons/date-picker'
 import DocumentPaths from '@components/commons/documentPaths'
+import FileUploadButton from '@components/commons/file-upload-button'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import useSpinner from '@hooks/spinner'
 import type { DocumentFile } from '@workspace/db'
+import { DeleteOutlined } from '@ant-design/icons'
 import {
-    useCountStudent,
     useCreateArchivedCertificate,
     useFindManyCertificate,
     useFindManyFixedClass,
@@ -17,12 +18,20 @@ import {
     useUpdateArchivedCertificate,
 } from '@workspace/db/hooks'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
-import { Col, Form, Input, InputNumber, message, Typography } from 'antd'
+import { Button, Col, Form, Input, InputNumber, message, Typography } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
-import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+
+// Mỗi dòng trong table có rowId duy nhất (cho phép 1 SV chọn nhiều lần)
+type SelectedStudentRow = {
+    rowId: string
+    studentId: string
+    code: string
+    fullname: string
+    dateOfBirth: Date | string | null
+}
 
 export type PutArchivedCertificate = {
     documentFiles?: DocumentFile[]
@@ -36,6 +45,7 @@ export type PutArchivedCertificate = {
             issuedBy: string
             issuedDate?: dayjs.Dayjs
             expiredDate?: dayjs.Dayjs
+            documentFiles?: DocumentFile[]
         }
     >
 }
@@ -44,11 +54,9 @@ dayjs.locale('vi')
 const { Title } = Typography
 
 const PutCertificateArchivedModal = () => {
-    const [document, setDocument] = useState<DocumentFile[]>([])
-    const [allUploadedFiles, setAllUploadedFiles] = useState<DocumentFile[]>([])
-    const [uploadingCount, setUploadingCount] = useState<number>(0)
-    const [studentCurrentPage, setStudentCurrentPage] = useState(1)
-    const [studentPageSize, setStudentPageSize] = useState(DEFAULT_PAGINATE_SIZE)
+    const [documentFiles, setDocumentFiles] = useState<DocumentFile[]>([])
+    const [selectedStudents, setSelectedStudents] = useState<SelectedStudentRow[]>([])
+    const [rowCounter, setRowCounter] = useState(0)
     const [form] = Form.useForm<PutArchivedCertificate>()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const {
@@ -59,7 +67,8 @@ const PutCertificateArchivedModal = () => {
         tag: 'PutCertificateArchivedModal',
         onClose: () => {
             form.resetFields()
-            setStudentCurrentPage(1)
+            setSelectedStudents([])
+            setRowCounter(0)
         },
     })
     const { showSpinner, hideSpinner } = useSpinner()
@@ -87,7 +96,6 @@ const PutCertificateArchivedModal = () => {
     // Lấy certificateId từ form
     const fixedClassId = Form.useWatch('fixedClassesId', form)
     const trainingCoursesId = Form.useWatch('trainingCoursesId', form)
-    const uploadedFiles = Form.useWatch('allDocumentFiles', form)
     const studentFormData = Form.useWatch('student', form) ?? {}
 
     // Lấy danh sách FixedClass
@@ -96,16 +104,6 @@ const PutCertificateArchivedModal = () => {
             trainingCourseId: trainingCoursesId ?? undefined,
         },
     })
-
-    useEffect(() => {
-        if (uploadedFiles) {
-            setAllUploadedFiles((prev) => {
-                const existingPaths = new Set(prev.map((f) => f.path))
-                const newFiles = uploadedFiles.filter((f: any) => !existingPaths.has(f.path))
-                return [...prev, ...newFiles]
-            })
-        }
-    }, [uploadedFiles])
 
     // Build where condition for student query
     const studentWhere = useMemo(() => {
@@ -117,7 +115,7 @@ const PutCertificateArchivedModal = () => {
         }
     }, [trainingCoursesId, fixedClassId])
 
-    // Lấy danh sách sinh viên với phân trang
+    // Lấy danh sách sinh viên cho dropdown chọn
     const { data: studentData = [] } = useFindManyStudent(
         {
             where: studentWhere || {},
@@ -136,28 +134,46 @@ const PutCertificateArchivedModal = () => {
                     firstName: 'asc',
                 },
             },
-            take: studentPageSize,
-            skip: (studentCurrentPage - 1) * studentPageSize,
         },
         { enabled: !!trainingObjectTypeId && !!fixedClassId }
     )
 
-    // Đếm tổng số sinh viên
-    const { data: studentCount = 0 } = useCountStudent(
-        {
-            where: studentWhere || {},
+    // Thêm sinh viên vào danh sách đã chọn
+    const handleAddStudent = useCallback(
+        (studentId: string) => {
+            const student = studentData.find((s: any) => s.id === studentId)
+            if (!student) return
+
+            const newRowId = `row_${rowCounter}`
+            setRowCounter((prev) => prev + 1)
+            setSelectedStudents((prev) => [
+                ...prev,
+                {
+                    rowId: newRowId,
+                    studentId: student.id,
+                    code: student.userProfile?.code || '',
+                    fullname: student.userProfile?.fullname || '',
+                    dateOfBirth: student.userProfile?.dateOfBirth || null,
+                },
+            ])
         },
-        { enabled: !!trainingObjectTypeId && !!fixedClassId }
+        [studentData, rowCounter]
+    )
+
+    // Xoá dòng khỏi danh sách
+    const handleRemoveRow = useCallback(
+        (rowId: string) => {
+            setSelectedStudents((prev) => prev.filter((r) => r.rowId !== rowId))
+            // Xoá form data của dòng đó
+            const currentStudent = form.getFieldValue('student') || {}
+            delete currentStudent[rowId]
+            form.setFieldValue('student', currentStudent)
+        },
+        [form]
     )
 
     async function onOk({ ...rest }: PutArchivedCertificate) {
         try {
-            // Kiểm tra nếu đang upload file
-            if (uploadingCount > 0) {
-                message.warning(`Vui lòng đợi ${uploadingCount} file đang upload hoàn thành`)
-                return
-            }
-
             showSpinner()
 
             if (id) {
@@ -213,26 +229,23 @@ const PutCertificateArchivedModal = () => {
 
                 const createdCertificates: any[] = []
 
-                // Tạo chứng chỉ cho từng sinh viên với file riêng
-                for (const studentId of Object.keys(studentFormData)) {
-                    const studentDataForId = studentFormData[studentId]
-                    if (!studentDataForId.certificateId) continue
-                    const studentDetail = studentData.find((s) => s.id === studentId)
-                    const studentCode = studentDetail?.userProfile?.code || ''
+                // Tạo chứng chỉ cho từng dòng đã chọn
+                for (const row of selectedStudents) {
+                    const studentDataForRow = studentFormData[row.rowId]
+                    if (!studentDataForRow?.certificateId) continue
 
-                    // Lấy file có tên chứa mã sinh viên
-                    const studentFiles = allUploadedFiles.filter((file: DocumentFile) =>
-                        file.name.toLowerCase().includes(studentCode.toLowerCase())
-                    )
+                    // Lấy file đã upload cho dòng này
+                    const studentFiles = studentDataForRow.documentFiles || []
+                    
                     const result = await createArchivedCertificate({
                         data: {
-                            studentId,
-                            certificateId: studentDataForId.certificateId,
+                            studentId: row.studentId,
+                            certificateId: studentDataForRow.certificateId,
                             finalScore: 0,
-                            score: studentDataForId.score || 0,
-                            issuedBy: studentDataForId.issuedBy || '',
-                            issuedDate: studentDataForId.issuedDate?.toDate() as Date,
-                            expiredDate: studentDataForId.expiredDate?.toDate() || null,
+                            score: studentDataForRow.score || 0,
+                            issuedBy: studentDataForRow.issuedBy || '',
+                            issuedDate: studentDataForRow.issuedDate?.toDate() as Date,
+                            expiredDate: studentDataForRow.expiredDate?.toDate() || null,
                             status: 'PENDING',
                             documentFiles: {
                                 create: studentFiles.map((file: any) => ({
@@ -245,7 +258,7 @@ const PutCertificateArchivedModal = () => {
                         },
                     })
                     if (result) {
-                        createdCertificates.push({ id: result.id, studentId })
+                        createdCertificates.push({ id: result.id, studentId: row.studentId })
                     }
                 }
 
@@ -274,31 +287,6 @@ const PutCertificateArchivedModal = () => {
         }
     }
 
-    // Tính toán trạng thái upload cho từng sinh viên dựa trên tên file
-    const studentUploadStatus = useMemo(() => {
-        if (allUploadedFiles.length === 0) {
-            return {}
-        }
-
-        const status: Record<string, { count: number; files: DocumentFile[] }> = {}
-
-        studentData.forEach((student) => {
-            const studentCode = student?.userProfile?.code || ''
-
-            // Tìm file có tên chứa mã sinh viên (không phân biệt hoa thường)
-            const matchedFiles = allUploadedFiles.filter((file: DocumentFile) =>
-                file.name.toLowerCase().includes(studentCode.toLowerCase())
-            )
-
-            status[student.id as string] = {
-                count: matchedFiles.length,
-                files: matchedFiles,
-            }
-        })
-
-        return status
-    }, [allUploadedFiles, studentData])
-
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         // if () {
@@ -313,9 +301,8 @@ const PutCertificateArchivedModal = () => {
         form.setFieldsValue({
             documentFiles: [],
         })
-        setDocument([])
-        setAllUploadedFiles([])
-        setUploadingCount(0)
+        setDocumentFiles([])
+
         // }
     }, [])
 
@@ -360,7 +347,7 @@ const PutCertificateArchivedModal = () => {
                 </FormItem>
             </Col>
 
-            {/* Bảng chọn sinh viên với phân trang - chỉ hiện khi thêm mới */}
+            {/* Bảng chọn sinh viên - chỉ hiện khi thêm mới */}
             {!id && (
                 <Col span={24} className="mb-4">
                     <div className="flex justify-between items-center mb-2">
@@ -368,45 +355,64 @@ const PutCertificateArchivedModal = () => {
                             Học viên, sinh viên
                         </Title>
                     </div>
-                    {!studentWhere ? (
-                        <div className="text-gray-500 text-center py-4 border rounded">
-                            Vui lòng chọn Khoá hoặc Lớp quản lý để hiển thị danh sách sinh viên
+
+                    {/* Input chọn sinh viên */}
+                    {fixedClassId ? (
+                        <div className="mb-3">
+                            <Select
+                                showSearch
+                                style={{ width: '100%' }}
+                                placeholder="Tìm và chọn sinh viên để thêm vào danh sách..."
+                                value={undefined}
+                                onSelect={(value: string) => handleAddStudent(value)}
+                                options={studentData.map((item: any) => ({
+                                    label: `${item.userProfile?.code || ''} - ${item.userProfile?.fullname || ''}`,
+                                    value: item.id,
+                                }))}
+                                filterOption={(input, option) =>
+                                    String(option?.label ?? '')
+                                        .toLowerCase()
+                                        .includes(input.toLowerCase())
+                                }
+                            />
                         </div>
                     ) : (
+                        <div className="text-gray-500 text-center py-4 border rounded">
+                            Vui lòng chọn Khoá và Lớp quản lý để hiển thị danh sách sinh viên
+                        </div>
+                    )}
+
+                    {/* Table danh sách đã chọn */}
+                    {selectedStudents.length > 0 && (
                         <Table
-                            rowKey="id"
-                            data={studentData}
+                            rowKey="rowId"
+                            data={selectedStudents}
                             scroll={{ y: 300 }}
                             columns={[
                                 {
                                     title: 'TT',
                                     width: 35,
                                     align: 'center',
-                                    render: (_, __, index) =>
-                                        index + 1 + (studentCurrentPage - 1) * studentPageSize,
+                                    render: (_, __, index) => index + 1,
                                 },
                                 {
                                     title: 'Mã SV',
                                     width: 120,
                                     align: 'center',
-                                    render: (_, record) =>
-                                        `${record?.userProfile?.code || ''}`.trim(),
+                                    render: (_, record) => record.code,
                                 },
                                 {
                                     title: 'Họ và tên',
                                     align: 'left',
-                                    render: (_, record) =>
-                                        `${record?.userProfile?.fullname || ''}`.trim(),
+                                    render: (_, record) => record.fullname,
                                 },
                                 {
                                     title: 'Ngày sinh',
                                     width: 100,
                                     align: 'center',
                                     render: (_, record) =>
-                                        record?.userProfile?.dateOfBirth
-                                            ? dayjs(record?.userProfile?.dateOfBirth).format(
-                                                  'DD/MM/YYYY'
-                                              )
+                                        record.dateOfBirth
+                                            ? dayjs(record.dateOfBirth).format('DD/MM/YYYY')
                                             : '',
                                 },
                                 {
@@ -416,7 +422,7 @@ const PutCertificateArchivedModal = () => {
                                     render: (_, record) => (
                                         <FormItem
                                             form={form}
-                                            name={['student', record.id, 'certificateId']}
+                                            name={['student', record.rowId, 'certificateId']}
                                         >
                                             <Select
                                                 variant="underlined"
@@ -438,7 +444,7 @@ const PutCertificateArchivedModal = () => {
                                             .find(
                                                 (c) =>
                                                     c.id ===
-                                                    studentFormData?.[record.id]?.certificateId
+                                                    studentFormData?.[record.rowId]?.certificateId
                                             )
                                             ?.subjects.map((sub) => (
                                                 <p>
@@ -450,27 +456,31 @@ const PutCertificateArchivedModal = () => {
                                     title: 'Điểm chứng chỉ',
                                     width: 150,
                                     align: 'center',
-                                    render: (_, record) => (
-                                        <FormItem
-                                            form={form}
-                                            name={['student', record.id, 'score']}
-                                            rules={[
-                                                {
-                                                    required:
-                                                        !!studentFormData?.[record.id]
-                                                            ?.certificateId,
-                                                    message: 'Vui lòng nhập điểm chứng chỉ',
-                                                },
-                                            ]}
-                                        >
-                                            <InputNumber
-                                                min={1}
-                                                variant="underlined"
-                                                className="w-full"
-                                                placeholder="Nhập điểm phiên cho môn học"
-                                            />
-                                        </FormItem>
-                                    ),
+                                    render: (_, record) => {
+                                        const selectedCert = certificate.find(
+                                            (c) => c.id === studentFormData?.[record.rowId]?.certificateId
+                                        )
+                                        return (
+                                            <FormItem
+                                                form={form}
+                                                name={['student', record.rowId, 'score']}
+                                                rules={[
+                                                    {
+                                                        required: !!selectedCert?.isUsingScore,
+                                                        message: 'Vui lòng nhập điểm chứng chỉ',
+                                                    },
+                                                ]}
+                                            >
+                                                <InputNumber
+                                                    min={1}
+                                                    variant="underlined"
+                                                    className="w-full"
+                                                    placeholder="Nhập điểm phiên cho môn học"
+                                                    disabled={!selectedCert?.isUsingScore}
+                                                />
+                                            </FormItem>
+                                        )
+                                    },
                                 },
                                 {
                                     title: 'Nơi cấp',
@@ -479,11 +489,11 @@ const PutCertificateArchivedModal = () => {
                                     render: (_, record) => (
                                         <FormItem
                                             form={form}
-                                            name={['student', record.id, 'issuedBy']}
+                                            name={['student', record.rowId, 'issuedBy']}
                                             rules={[
                                                 {
                                                     required:
-                                                        !!studentFormData?.[record.id]
+                                                        !!studentFormData?.[record.rowId]
                                                             ?.certificateId,
                                                     message: 'Vui lòng nhập nơi cấp',
                                                 },
@@ -504,12 +514,12 @@ const PutCertificateArchivedModal = () => {
                                     render: (_, record) => (
                                         <FormItem
                                             form={form}
-                                            name={['student', record.id, 'issuedDate']}
-                                            dependencies={[['student', record.id, 'expiredDate']]}
+                                            name={['student', record.rowId, 'issuedDate']}
+                                            dependencies={[['student', record.rowId, 'expiredDate']]}
                                             rules={[
                                                 {
                                                     required:
-                                                        !!studentFormData?.[record.id]
+                                                        !!studentFormData?.[record.rowId]
                                                             ?.certificateId,
                                                     message: 'Vui lòng nhập ngày cấp',
                                                 },
@@ -517,7 +527,7 @@ const PutCertificateArchivedModal = () => {
                                                     validator(_, value) {
                                                         const expiredDate = getFieldValue([
                                                             'student',
-                                                            record.id,
+                                                            record.rowId,
                                                             'expiredDate',
                                                         ])
                                                         if (
@@ -550,12 +560,12 @@ const PutCertificateArchivedModal = () => {
                                     render: (_, record) => (
                                         <FormItem
                                             form={form}
-                                            name={['student', record.id, 'expiredDate']}
-                                            dependencies={[['student', record.id, 'issuedDate']]}
+                                            name={['student', record.rowId, 'expiredDate']}
+                                            dependencies={[['student', record.rowId, 'issuedDate']]}
                                             rules={[
                                                 {
                                                     required:
-                                                        !!studentFormData?.[record.id]
+                                                        !!studentFormData?.[record.rowId]
                                                             ?.certificateId,
                                                     message: 'Vui lòng nhập ngày hết hạn',
                                                 },
@@ -563,7 +573,7 @@ const PutCertificateArchivedModal = () => {
                                                     validator(_, value) {
                                                         const issuedDate = getFieldValue([
                                                             'student',
-                                                            record.id,
+                                                            record.rowId,
                                                             'issuedDate',
                                                         ])
                                                         if (
@@ -591,37 +601,31 @@ const PutCertificateArchivedModal = () => {
                                 },
                                 {
                                     title: 'Minh chứng',
-                                    width: 100,
+                                    width: 200,
                                     align: 'center',
-                                    render: (_, record) => {
-                                        const status = studentUploadStatus[record.id]
-                                        if (!status || status.count === 0) {
-                                            return (
-                                                <span className="text-red-500 font-medium">
-                                                    Chưa có file
-                                                </span>
-                                            )
-                                        }
-                                        return (
-                                            <span className="text-green-600 font-medium">
-                                                Đã có {status.count} file
-                                            </span>
-                                        )
-                                    },
+                                    render: (_, record) => (
+                                        <FileUploadButton
+                                            form={form}
+                                            fieldName={['student', record.rowId, 'documentFiles']}
+                                        />
+                                    ),
+                                },
+                                {
+                                    title: '',
+                                    width: 50,
+                                    align: 'center',
+                                    render: (_, record) => (
+                                        <Button
+                                            type="text"
+                                            danger
+                                            icon={<DeleteOutlined />}
+                                            size="small"
+                                            onClick={() => handleRemoveRow(record.rowId)}
+                                        />
+                                    ),
                                 },
                             ]}
-                            pagination={{
-                                current: studentCurrentPage,
-                                pageSize: studentPageSize,
-                                total: studentCount,
-                                showSizeChanger: true,
-                                showTotal: (total, range) =>
-                                    `${range[0]}-${range[1]} / ${total} sinh viên`,
-                                onChange: (page, pageSize) => {
-                                    setStudentCurrentPage(page)
-                                    setStudentPageSize(pageSize)
-                                },
-                            }}
+                            pagination={false}
                         />
                     )}
                 </Col>
@@ -654,50 +658,14 @@ const PutCertificateArchivedModal = () => {
                     <FormItem form={form} name="documentFiles" label="Minh chứng">
                         <DocumentPaths
                             form={form}
-                            data={document}
+                            data={documentFiles}
                             relationId={id ?? ''}
                             relationType="curriculumId"
                         />
                     </FormItem>
                 </Col>
             )}
-            <Col span={24} className="mb-0">
-                <div>
-                    <div className="mb-0">
-                        <strong>Upload minh chứng chứng chỉ (nhiều file cùng lúc)</strong>
-                    </div>
-                    <FormItem form={form} name={'allDocumentFiles' as any} className="mb-3">
-                        <DocumentPaths
-                            form={form}
-                            data={[]}
-                            relationId=""
-                            relationType="curriculumId"
-                            titleForm="allDocumentFiles"
-                            multiple={true}
-                            text="Kéo thả hoặc click để upload nhiều file cùng lúc (PDF, DOC, JPG, PNG)"
-                            accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-                            onUploadingChange={(count) => setUploadingCount(count)}
-                        />
-                    </FormItem>
-                    <div className="mt-2">
-                        <div className="mb-2">
-                            <strong>Trạng thái upload</strong>
-                            <span className="text-gray-500 text-xs ml-2">
-                                (Tổng: {allUploadedFiles.length} file đã upload)
-                            </span>
-                            {uploadingCount > 0 && (
-                                <span className="text-orange-500 text-xs ml-2">
-                                    Đang upload {uploadingCount} file...
-                                </span>
-                            )}
-                        </div>
-                    </div>
-                    <p className="text-blue-500 text-xs mt-0">
-                        <strong>Hướng dẫn:</strong> Tên file phải chứa MSSV để hệ thống tự động nhận
-                        diện.
-                    </p>
-                </div>
-            </Col>
+
         </PutFormModal>
     )
 }

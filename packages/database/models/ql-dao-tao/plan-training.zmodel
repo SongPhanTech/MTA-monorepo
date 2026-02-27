@@ -301,6 +301,7 @@ model ArchivedCertificate extends Base {
   status              ArchivedCertificateStatus                  @default(PENDING)
 
   documentFiles       DocumentFile[]
+  DecisionNumber      String? // Số QĐ công nhận chứng chỉ
   studentSubjectScore ArchivedCertificateOnStudentSubjectScore[]
   @@schema("ql-dao-tao")
 }

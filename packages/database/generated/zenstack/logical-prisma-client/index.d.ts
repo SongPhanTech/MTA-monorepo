@@ -7802,7 +7802,8 @@ export namespace Prisma {
         issuedBy: 'issuedBy',
         issuedDate: 'issuedDate',
         expiredDate: 'expiredDate',
-        status: 'status'
+        status: 'status',
+        DecisionNumber: 'DecisionNumber'
     };
     export const ArchivedAwardOnStudentSubjectScoreScalarFieldEnum: {
         id: 'id',
@@ -11688,7 +11689,8 @@ export namespace Prisma {
         createdBy: 'createdBy',
         certificateId: 'certificateId',
         studentId: 'studentId',
-        issuedBy: 'issuedBy'
+        issuedBy: 'issuedBy',
+        DecisionNumber: 'DecisionNumber'
     };
     export const ArchivedAwardOnStudentSubjectScoreOrderByRelevanceFieldEnum: {
         id: 'id',
@@ -45092,6 +45094,7 @@ export namespace Prisma {
         readonly issuedDate: FieldRef<"ArchivedCertificate", 'DateTime'>;
         readonly expiredDate: FieldRef<"ArchivedCertificate", 'DateTime'>;
         readonly status: FieldRef<"ArchivedCertificate", 'ArchivedCertificateStatus'>;
+        readonly DecisionNumber: FieldRef<"ArchivedCertificate", 'String'>;
     }
 
     export interface ArchivedAwardOnStudentSubjectScoreDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -208421,6 +208424,7 @@ export namespace Prisma {
         issuedDate: Date | null
         expiredDate: Date | null
         status: $Enums.ArchivedCertificateStatus | null
+        DecisionNumber: string | null
     };
     export type ArchivedCertificateMaxAggregateOutputType = {
         id: string | null
@@ -208439,6 +208443,7 @@ export namespace Prisma {
         issuedDate: Date | null
         expiredDate: Date | null
         status: $Enums.ArchivedCertificateStatus | null
+        DecisionNumber: string | null
     };
     export type ArchivedCertificateCountAggregateOutputType = {
         id: number
@@ -208457,6 +208462,7 @@ export namespace Prisma {
         issuedDate: number
         expiredDate: number
         status: number
+        DecisionNumber: number
         _all: number
     };
     export type ArchivedCertificateAvgAggregateInputType = {
@@ -208484,6 +208490,7 @@ export namespace Prisma {
         issuedDate?: true
         expiredDate?: true
         status?: true
+        DecisionNumber?: true
     };
     export type ArchivedCertificateMaxAggregateInputType = {
         id?: true
@@ -208502,6 +208509,7 @@ export namespace Prisma {
         issuedDate?: true
         expiredDate?: true
         status?: true
+        DecisionNumber?: true
     };
     export type ArchivedCertificateCountAggregateInputType = {
         id?: true
@@ -208520,6 +208528,7 @@ export namespace Prisma {
         issuedDate?: true
         expiredDate?: true
         status?: true
+        DecisionNumber?: true
         _all?: true
     };
     export type ArchivedCertificateAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -208619,6 +208628,7 @@ export namespace Prisma {
         issuedDate: Date | null
         expiredDate: Date | null
         status: $Enums.ArchivedCertificateStatus
+        DecisionNumber: string | null
         _count: ArchivedCertificateCountAggregateOutputType | null
         _avg: ArchivedCertificateAvgAggregateOutputType | null
         _sum: ArchivedCertificateSumAggregateOutputType | null
@@ -208654,6 +208664,7 @@ export namespace Prisma {
         issuedDate?: boolean
         expiredDate?: boolean
         status?: boolean
+        DecisionNumber?: boolean
         certificate?: boolean | CertificateDefaultArgs<ExtArgs>
         student?: boolean | StudentDefaultArgs<ExtArgs>
         documentFiles?: boolean | ArchivedCertificate$documentFilesArgs<ExtArgs>
@@ -208677,6 +208688,7 @@ export namespace Prisma {
         issuedDate?: boolean
         expiredDate?: boolean
         status?: boolean
+        DecisionNumber?: boolean
         certificate?: boolean | CertificateDefaultArgs<ExtArgs>
         student?: boolean | StudentDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["archivedCertificate"]>;
@@ -208697,6 +208709,7 @@ export namespace Prisma {
         issuedDate?: boolean
         expiredDate?: boolean
         status?: boolean
+        DecisionNumber?: boolean
         certificate?: boolean | CertificateDefaultArgs<ExtArgs>
         student?: boolean | StudentDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["archivedCertificate"]>;
@@ -208717,8 +208730,9 @@ export namespace Prisma {
         issuedDate?: boolean
         expiredDate?: boolean
         status?: boolean
+        DecisionNumber?: boolean
     };
-    export type ArchivedCertificateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "certificateId" | "studentId" | "finalScore" | "score" | "issuedBy" | "issuedDate" | "expiredDate" | "status", ExtArgs["result"]["archivedCertificate"]>;
+    export type ArchivedCertificateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "certificateId" | "studentId" | "finalScore" | "score" | "issuedBy" | "issuedDate" | "expiredDate" | "status" | "DecisionNumber", ExtArgs["result"]["archivedCertificate"]>;
     export type ArchivedCertificateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         certificate?: boolean | CertificateDefaultArgs<ExtArgs>
         student?: boolean | StudentDefaultArgs<ExtArgs>
@@ -208771,6 +208785,7 @@ export namespace Prisma {
              */
             expiredDate: Date | null
             status: $Enums.ArchivedCertificateStatus
+            DecisionNumber: string | null
         }, ExtArgs["result"]["archivedCertificate"]>
         composites: {}
     };
@@ -364541,6 +364556,7 @@ export namespace Prisma {
         issuedDate?: DateTimeNullableFilter<"ArchivedCertificate"> | Date | string | null
         expiredDate?: DateTimeNullableFilter<"ArchivedCertificate"> | Date | string | null
         status?: EnumArchivedCertificateStatusFilter<"ArchivedCertificate"> | $Enums.ArchivedCertificateStatus
+        DecisionNumber?: StringNullableFilter<"ArchivedCertificate"> | string | null
         certificate?: XOR<CertificateScalarRelationFilter, CertificateWhereInput>
         student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
         documentFiles?: DocumentFileListRelationFilter
@@ -364563,6 +364579,7 @@ export namespace Prisma {
         issuedDate?: SortOrderInput | SortOrder
         expiredDate?: SortOrderInput | SortOrder
         status?: SortOrder
+        DecisionNumber?: SortOrderInput | SortOrder
         certificate?: CertificateOrderByWithRelationInput
         student?: StudentOrderByWithRelationInput
         documentFiles?: DocumentFileOrderByRelationAggregateInput
@@ -364589,6 +364606,7 @@ export namespace Prisma {
         issuedDate?: DateTimeNullableFilter<"ArchivedCertificate"> | Date | string | null
         expiredDate?: DateTimeNullableFilter<"ArchivedCertificate"> | Date | string | null
         status?: EnumArchivedCertificateStatusFilter<"ArchivedCertificate"> | $Enums.ArchivedCertificateStatus
+        DecisionNumber?: StringNullableFilter<"ArchivedCertificate"> | string | null
         certificate?: XOR<CertificateScalarRelationFilter, CertificateWhereInput>
         student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
         documentFiles?: DocumentFileListRelationFilter
@@ -364611,6 +364629,7 @@ export namespace Prisma {
         issuedDate?: SortOrderInput | SortOrder
         expiredDate?: SortOrderInput | SortOrder
         status?: SortOrder
+        DecisionNumber?: SortOrderInput | SortOrder
         _count?: ArchivedCertificateCountOrderByAggregateInput
         _avg?: ArchivedCertificateAvgOrderByAggregateInput
         _max?: ArchivedCertificateMaxOrderByAggregateInput
@@ -364637,6 +364656,7 @@ export namespace Prisma {
         issuedDate?: DateTimeNullableWithAggregatesFilter<"ArchivedCertificate"> | Date | string | null
         expiredDate?: DateTimeNullableWithAggregatesFilter<"ArchivedCertificate"> | Date | string | null
         status?: EnumArchivedCertificateStatusWithAggregatesFilter<"ArchivedCertificate"> | $Enums.ArchivedCertificateStatus
+        DecisionNumber?: StringNullableWithAggregatesFilter<"ArchivedCertificate"> | string | null
     };
     export type ArchivedAwardOnStudentSubjectScoreWhereInput = {
         AND?: ArchivedAwardOnStudentSubjectScoreWhereInput | ArchivedAwardOnStudentSubjectScoreWhereInput[]
@@ -394449,6 +394469,7 @@ export namespace Prisma {
         issuedDate?: Date | string | null
         expiredDate?: Date | string | null
         status?: $Enums.ArchivedCertificateStatus
+        DecisionNumber?: string | null
         certificate: CertificateCreateNestedOneWithoutArchivedCertificateInput
         student: StudentCreateNestedOneWithoutArchivedCertificateInput
         documentFiles?: DocumentFileCreateNestedManyWithoutArchivedCertificateInput
@@ -394471,6 +394492,7 @@ export namespace Prisma {
         issuedDate?: Date | string | null
         expiredDate?: Date | string | null
         status?: $Enums.ArchivedCertificateStatus
+        DecisionNumber?: string | null
         documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutArchivedCertificateInput
         studentSubjectScore?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutArchivedCertificateInput
     };
@@ -394489,6 +394511,7 @@ export namespace Prisma {
         issuedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         expiredDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumArchivedCertificateStatusFieldUpdateOperationsInput | $Enums.ArchivedCertificateStatus
+        DecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
         certificate?: CertificateUpdateOneRequiredWithoutArchivedCertificateNestedInput
         student?: StudentUpdateOneRequiredWithoutArchivedCertificateNestedInput
         documentFiles?: DocumentFileUpdateManyWithoutArchivedCertificateNestedInput
@@ -394511,6 +394534,7 @@ export namespace Prisma {
         issuedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         expiredDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumArchivedCertificateStatusFieldUpdateOperationsInput | $Enums.ArchivedCertificateStatus
+        DecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
         documentFiles?: DocumentFileUncheckedUpdateManyWithoutArchivedCertificateNestedInput
         studentSubjectScore?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutArchivedCertificateNestedInput
     };
@@ -394531,6 +394555,7 @@ export namespace Prisma {
         issuedDate?: Date | string | null
         expiredDate?: Date | string | null
         status?: $Enums.ArchivedCertificateStatus
+        DecisionNumber?: string | null
     };
     export type ArchivedCertificateUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -394547,6 +394572,7 @@ export namespace Prisma {
         issuedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         expiredDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumArchivedCertificateStatusFieldUpdateOperationsInput | $Enums.ArchivedCertificateStatus
+        DecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type ArchivedCertificateUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -394565,6 +394591,7 @@ export namespace Prisma {
         issuedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         expiredDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumArchivedCertificateStatusFieldUpdateOperationsInput | $Enums.ArchivedCertificateStatus
+        DecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type ArchivedAwardOnStudentSubjectScoreCreateInput = {
         id?: string
@@ -422724,6 +422751,7 @@ export namespace Prisma {
         issuedDate?: SortOrder
         expiredDate?: SortOrder
         status?: SortOrder
+        DecisionNumber?: SortOrder
     };
     export type ArchivedCertificateAvgOrderByAggregateInput = {
         finalScore?: SortOrder
@@ -422746,6 +422774,7 @@ export namespace Prisma {
         issuedDate?: SortOrder
         expiredDate?: SortOrder
         status?: SortOrder
+        DecisionNumber?: SortOrder
     };
     export type ArchivedCertificateMinOrderByAggregateInput = {
         id?: SortOrder
@@ -422764,6 +422793,7 @@ export namespace Prisma {
         issuedDate?: SortOrder
         expiredDate?: SortOrder
         status?: SortOrder
+        DecisionNumber?: SortOrder
     };
     export type ArchivedCertificateSumOrderByAggregateInput = {
         finalScore?: SortOrder
@@ -513894,6 +513924,7 @@ export namespace Prisma {
         issuedDate?: Date | string | null
         expiredDate?: Date | string | null
         status?: $Enums.ArchivedCertificateStatus
+        DecisionNumber?: string | null
         certificate: CertificateCreateNestedOneWithoutArchivedCertificateInput
         student: StudentCreateNestedOneWithoutArchivedCertificateInput
         documentFiles?: DocumentFileCreateNestedManyWithoutArchivedCertificateInput
@@ -513915,6 +513946,7 @@ export namespace Prisma {
         issuedDate?: Date | string | null
         expiredDate?: Date | string | null
         status?: $Enums.ArchivedCertificateStatus
+        DecisionNumber?: string | null
         documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutArchivedCertificateInput
     };
     export type ArchivedCertificateCreateOrConnectWithoutStudentSubjectScoreInput = {
@@ -514030,6 +514062,7 @@ export namespace Prisma {
         issuedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         expiredDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumArchivedCertificateStatusFieldUpdateOperationsInput | $Enums.ArchivedCertificateStatus
+        DecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
         certificate?: CertificateUpdateOneRequiredWithoutArchivedCertificateNestedInput
         student?: StudentUpdateOneRequiredWithoutArchivedCertificateNestedInput
         documentFiles?: DocumentFileUpdateManyWithoutArchivedCertificateNestedInput
@@ -514051,6 +514084,7 @@ export namespace Prisma {
         issuedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         expiredDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumArchivedCertificateStatusFieldUpdateOperationsInput | $Enums.ArchivedCertificateStatus
+        DecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
         documentFiles?: DocumentFileUncheckedUpdateManyWithoutArchivedCertificateNestedInput
     };
     export type CertificateCreateWithoutArchivedCertificateInput = {
@@ -539332,6 +539366,7 @@ export namespace Prisma {
         issuedDate?: Date | string | null
         expiredDate?: Date | string | null
         status?: $Enums.ArchivedCertificateStatus
+        DecisionNumber?: string | null
         student: StudentCreateNestedOneWithoutArchivedCertificateInput
         documentFiles?: DocumentFileCreateNestedManyWithoutArchivedCertificateInput
         studentSubjectScore?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutArchivedCertificateInput
@@ -539352,6 +539387,7 @@ export namespace Prisma {
         issuedDate?: Date | string | null
         expiredDate?: Date | string | null
         status?: $Enums.ArchivedCertificateStatus
+        DecisionNumber?: string | null
         documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutArchivedCertificateInput
         studentSubjectScore?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutArchivedCertificateInput
     };
@@ -539463,6 +539499,7 @@ export namespace Prisma {
         issuedDate?: DateTimeNullableFilter<"ArchivedCertificate"> | Date | string | null
         expiredDate?: DateTimeNullableFilter<"ArchivedCertificate"> | Date | string | null
         status?: EnumArchivedCertificateStatusFilter<"ArchivedCertificate"> | $Enums.ArchivedCertificateStatus
+        DecisionNumber?: StringNullableFilter<"ArchivedCertificate"> | string | null
     };
     export type CertificateOnSubjectUpsertWithWhereUniqueWithoutCertificateInput = {
         where: CertificateOnSubjectWhereUniqueInput
@@ -541864,6 +541901,7 @@ export namespace Prisma {
         issuedDate?: Date | string | null
         expiredDate?: Date | string | null
         status?: $Enums.ArchivedCertificateStatus
+        DecisionNumber?: string | null
         certificate: CertificateCreateNestedOneWithoutArchivedCertificateInput
         documentFiles?: DocumentFileCreateNestedManyWithoutArchivedCertificateInput
         studentSubjectScore?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutArchivedCertificateInput
@@ -541884,6 +541922,7 @@ export namespace Prisma {
         issuedDate?: Date | string | null
         expiredDate?: Date | string | null
         status?: $Enums.ArchivedCertificateStatus
+        DecisionNumber?: string | null
         documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutArchivedCertificateInput
         studentSubjectScore?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutArchivedCertificateInput
     };
@@ -545550,6 +545589,7 @@ export namespace Prisma {
         issuedDate?: Date | string | null
         expiredDate?: Date | string | null
         status?: $Enums.ArchivedCertificateStatus
+        DecisionNumber?: string | null
         certificate: CertificateCreateNestedOneWithoutArchivedCertificateInput
         student: StudentCreateNestedOneWithoutArchivedCertificateInput
         studentSubjectScore?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutArchivedCertificateInput
@@ -545571,6 +545611,7 @@ export namespace Prisma {
         issuedDate?: Date | string | null
         expiredDate?: Date | string | null
         status?: $Enums.ArchivedCertificateStatus
+        DecisionNumber?: string | null
         studentSubjectScore?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutArchivedCertificateInput
     };
     export type ArchivedCertificateCreateOrConnectWithoutDocumentFilesInput = {
@@ -546721,6 +546762,7 @@ export namespace Prisma {
         issuedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         expiredDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumArchivedCertificateStatusFieldUpdateOperationsInput | $Enums.ArchivedCertificateStatus
+        DecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
         certificate?: CertificateUpdateOneRequiredWithoutArchivedCertificateNestedInput
         student?: StudentUpdateOneRequiredWithoutArchivedCertificateNestedInput
         studentSubjectScore?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutArchivedCertificateNestedInput
@@ -546742,6 +546784,7 @@ export namespace Prisma {
         issuedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         expiredDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumArchivedCertificateStatusFieldUpdateOperationsInput | $Enums.ArchivedCertificateStatus
+        DecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
         studentSubjectScore?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutArchivedCertificateNestedInput
     };
     export type TrainingCourseUpsertWithoutDocumentFilesInput = {
@@ -632512,6 +632555,7 @@ export namespace Prisma {
         issuedDate?: Date | string | null
         expiredDate?: Date | string | null
         status?: $Enums.ArchivedCertificateStatus
+        DecisionNumber?: string | null
     };
     export type CertificateOnSubjectCreateManyCertificateInput = {
         id?: string
@@ -632540,6 +632584,7 @@ export namespace Prisma {
         issuedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         expiredDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumArchivedCertificateStatusFieldUpdateOperationsInput | $Enums.ArchivedCertificateStatus
+        DecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
         student?: StudentUpdateOneRequiredWithoutArchivedCertificateNestedInput
         documentFiles?: DocumentFileUpdateManyWithoutArchivedCertificateNestedInput
         studentSubjectScore?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutArchivedCertificateNestedInput
@@ -632560,6 +632605,7 @@ export namespace Prisma {
         issuedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         expiredDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumArchivedCertificateStatusFieldUpdateOperationsInput | $Enums.ArchivedCertificateStatus
+        DecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
         documentFiles?: DocumentFileUncheckedUpdateManyWithoutArchivedCertificateNestedInput
         studentSubjectScore?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutArchivedCertificateNestedInput
     };
@@ -632579,6 +632625,7 @@ export namespace Prisma {
         issuedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         expiredDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumArchivedCertificateStatusFieldUpdateOperationsInput | $Enums.ArchivedCertificateStatus
+        DecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type CertificateOnSubjectUpdateWithoutCertificateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -633497,6 +633544,7 @@ export namespace Prisma {
         issuedDate?: Date | string | null
         expiredDate?: Date | string | null
         status?: $Enums.ArchivedCertificateStatus
+        DecisionNumber?: string | null
     };
     export type ArchivedAwardCreateManyStudentInput = {
         id?: string
@@ -634232,6 +634280,7 @@ export namespace Prisma {
         issuedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         expiredDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumArchivedCertificateStatusFieldUpdateOperationsInput | $Enums.ArchivedCertificateStatus
+        DecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
         certificate?: CertificateUpdateOneRequiredWithoutArchivedCertificateNestedInput
         documentFiles?: DocumentFileUpdateManyWithoutArchivedCertificateNestedInput
         studentSubjectScore?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutArchivedCertificateNestedInput
@@ -634252,6 +634301,7 @@ export namespace Prisma {
         issuedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         expiredDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumArchivedCertificateStatusFieldUpdateOperationsInput | $Enums.ArchivedCertificateStatus
+        DecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
         documentFiles?: DocumentFileUncheckedUpdateManyWithoutArchivedCertificateNestedInput
         studentSubjectScore?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutArchivedCertificateNestedInput
     };
@@ -634271,6 +634321,7 @@ export namespace Prisma {
         issuedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         expiredDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumArchivedCertificateStatusFieldUpdateOperationsInput | $Enums.ArchivedCertificateStatus
+        DecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type ArchivedAwardUpdateWithoutStudentInput = {
         id?: StringFieldUpdateOperationsInput | string
