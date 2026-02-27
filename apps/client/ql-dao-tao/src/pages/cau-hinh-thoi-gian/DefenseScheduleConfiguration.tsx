@@ -11,7 +11,7 @@ import dayjs, { type Dayjs } from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import { useEffect, useState } from 'react'
 import EditOutlined from '@components/icons/edit'
-import DeleteOutlined from '@components/icons/delete'
+import DeleteIcon from '@components/icons/delete'
 dayjs.extend(utc)
 
 interface DefenseSessionRow {
@@ -182,17 +182,15 @@ export default function DefenseScheduleConfigurationPage({ isThesis }: { isThesi
                                                 }}
                                             />
 
-                                            <Popconfirm
-                                                title="Xóa ca bảo vệ"
-                                                description="Bạn có chắc chắn muốn xóa ca bảo vệ này?"
-                                                onConfirm={() => handleDelete(row.id)}
-                                                okText="Xóa"
-                                                cancelText="Hủy"
-                                            >
-                                                <span onClick={(e) => e.stopPropagation()}>
-                                                    <DeleteOutlined className="text-sm text-red-600 cursor-pointer" />
-                                                </span>
-                                            </Popconfirm>
+                                        <DeleteIcon
+                                            title="Xóa ca bảo vệ"
+                                            popConfirm={{
+                                                title: "Xóa ca bảo vệ",
+                                                description: "Bạn có chắc chắn muốn xóa ca bảo vệ này?",
+                                                onConfirm: () => handleDelete(row.id),
+                                                onPopupClick: (e) => e.stopPropagation(),
+                                            }}
+                                        />
                                         </div>
                                     )
                                 },
@@ -208,18 +206,22 @@ export default function DefenseScheduleConfigurationPage({ isThesis }: { isThesi
                 onOk={handleSave}
                 destroyOnClose
             >
-                <Form form={form} layout="vertical">
+              <Form form={form} layout="vertical">
                     <Form.Item
                         name="time"
                         label="Thời gian bắt đầu"
                         rules={[
-                            {
-                                required: true,
-                                message: 'Vui lòng chọn thời gian bắt đầu!',
-                            },
+                        {
+                            required: true,
+                            message: 'Vui lòng chọn thời gian bắt đầu!',
+                        },
                         ]}
                     >
-                        <TimePicker format="HH:mm" className="w-full" />
+                        <TimePicker 
+                        format="HH:mm" 
+                        className="w-full" 
+                        placeholder="Chọn giờ"
+                        />
                     </Form.Item>
                 </Form>
             </Modal>
