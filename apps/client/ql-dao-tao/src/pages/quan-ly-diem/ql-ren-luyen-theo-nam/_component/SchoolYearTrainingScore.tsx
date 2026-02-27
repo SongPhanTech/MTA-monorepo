@@ -85,6 +85,17 @@ export default function SchoolYearTrainingScore({
                       },
                   }
                 : {}),
+                 ...(filters.idCardNumber
+                ? {
+                    userProfile:{
+                          idCardNumber: {
+                          contains: filters.idCardNumber,
+                          mode: 'insensitive' as const,
+                      },
+                    }
+                    
+                  }
+                : {}),
         }),
         [filters, selectedFixedClass]
     )

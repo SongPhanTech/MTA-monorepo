@@ -33,6 +33,7 @@ export default function SemesterTrainingScore({
     const [filters, setFilters] = useState<FilterProps>({
         code: '',
         name: '',
+        idCardNumber: '',
     })
     const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([])
     const {
@@ -88,6 +89,17 @@ export default function SemesterTrainingScore({
                               },
                           ],
                       },
+                  }
+                : {}),
+                ...(filters.idCardNumber
+                ? {
+                    userProfile:{
+                          idCardNumber: {
+                          contains: filters.idCardNumber,
+                          mode: 'insensitive' as const,
+                      },
+                    }
+                    
                   }
                 : {}),
         }),

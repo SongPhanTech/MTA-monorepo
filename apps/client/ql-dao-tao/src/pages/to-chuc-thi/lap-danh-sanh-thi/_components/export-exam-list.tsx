@@ -74,6 +74,7 @@ interface ExportExamListProps {
     data: ExamListData[]
     examName?: string
     disabled?: boolean
+    updateExamData?: any
 }
 
 // Helper function to sanitize Excel sheet name
@@ -85,7 +86,7 @@ const sanitizeSheetName = (name: string): string => {
         .slice(0, 31) // Excel limits sheet name to 31 chars
 }
 
-const ExportExamList = ({ data, examName, disabled }: ExportExamListProps) => {
+const ExportExamList = ({ data, examName, disabled, updateExamData }: ExportExamListProps) => {
     const exportToExcel = async () => {
         if (!data || data.length === 0) {
             message.warning('Không có dữ liệu để xuất')
@@ -101,6 +102,7 @@ const ExportExamList = ({ data, examName, disabled }: ExportExamListProps) => {
         }
 
         try {
+            await updateExamData()
             const workbook = new ExcelJS.Workbook()
 
             // Global font style

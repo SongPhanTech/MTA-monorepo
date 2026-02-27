@@ -348,8 +348,10 @@ export default function DanhSachSinhVien() {
     }
 
     const handlePhanPhongThi = async () => {
+        
         try {
             showSpinner()
+
             const resExam = await sqlTransaction([
                 {
                     model: 'Exam' as const,
@@ -578,6 +580,31 @@ export default function DanhSachSinhVien() {
         hideSpinner()
     }
 
+    const updateExamDataFn = async () => {
+        try {
+            showSpinner()
+             await updateExamData({
+                    where: {
+                        id: selectedExamId || '',
+                    },
+                    data: {
+                        lockExamSessions: true,
+                        subjectClass: {
+                                    updateMany: {
+                                        data: {
+                                            isLockScore:true,
+                                        },
+                                        where: {},
+                                    },
+                                },
+                    },
+                })
+                hideSpinner()
+        }catch (error: any) {
+            console.error(error)
+        }
+    }
+
     const handleSaveExamDecision = async () => {
         try {
             showSpinner()
@@ -733,6 +760,7 @@ export default function DanhSachSinhVien() {
                             <ExportExamList
                                 data={data}
                                 disabled={!selectedExamId || data.length === 0}
+                                updateExamData={updateExamDataFn}
                             />
                         </Flex>
                     </Col>
