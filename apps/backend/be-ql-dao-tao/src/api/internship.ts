@@ -109,7 +109,9 @@ app.openapi(exportInternshipProfile, async (c) => {
         subjectClassCode: internship.studentSubjectScore?.subjectClass?.code || '',
         subjectClassName: internship.studentSubjectScore?.subjectClass?.name || '',
         gender: internship.studentSubjectScore?.student?.userProfile?.gender?.sTen || '',
-        institution: internship.institution || '',
+        institution: internship.institution && internship.unit
+            ? `${internship.institution}/${internship.unit}`
+            : internship.unit || internship.institution || '',
         address: internship.address || '',
         internshipContent: internship.internshipContent || '',
         supervisor: internship.supervisor?.lecturer
