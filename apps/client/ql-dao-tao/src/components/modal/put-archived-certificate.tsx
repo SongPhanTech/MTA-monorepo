@@ -97,12 +97,13 @@ const PutCertificateArchivedModal = () => {
         },
     })
 
-    // Cập nhật allUploadedFiles khi uploadedFiles thay đổi
     useEffect(() => {
         if (uploadedFiles) {
-            setAllUploadedFiles(uploadedFiles)
-        } else {
-            setAllUploadedFiles([])
+            setAllUploadedFiles((prev) => {
+                const existingPaths = new Set(prev.map((f) => f.path))
+                const newFiles = uploadedFiles.filter((f) => !existingPaths.has(f.path))
+                return [...prev, ...newFiles]
+            })
         }
     }, [uploadedFiles])
 

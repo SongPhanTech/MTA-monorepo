@@ -105,7 +105,7 @@ export const buildProvinceMapOrThrow = async (
 ) => {
     const uniqNames = Array.from(new Set(names.filter((name): name is string => Boolean(name))))
 
-    const existing = await prisma.dM_Tinh.findMany({
+    const existing = await prisma.dM_Tinh_New.findMany({
         where: { sTen: { in: uniqNames } },
         select: { sTen: true, Id: true },
     })
