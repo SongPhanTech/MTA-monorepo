@@ -487,8 +487,41 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
         }
     }
     const handleExportInternship = async () => {
+        let internshipIds: string[]
+        
+        if (selectedRowKeys.length > 0) {
+            // Nếu có chọn row, chỉ export những row đã chọn
+            internshipIds = selectedRowKeys as string[]
+        } else {
+            // Nếu không chọn row nào, fetch tất cả IDs thỏa mãn filter (không pagination)
+            const loading = message.loading('Đang tải dữ liệu...', 0)
+            try {
+                const allData = await sqlTransaction([
+                    {
+                        model: 'StudentInternship',
+                        operation: 'findMany',
+                        data: {
+                            where,
+                            select: { id: true },
+                        },
+                    },
+                ])
+                loading()
+                
+                const allInternships = allData.data?.[0] as Array<{ id: string }>
+                internshipIds = allInternships?.map(item => item.id) || []
+                
+                if (internshipIds.length === 0) {
+                    return message.warning('Không có dữ liệu để xuất')
+                }
+            } catch (error) {
+                loading()
+                return message.error('Có lỗi khi tải dữ liệu')
+            }
+        }
+        
         const { status, data } = await exportInternshipProfile({
-            internshipIds: selectedRowKeys as string[],
+            internshipIds,
         })
 
         if (status === 200) {
@@ -1454,13 +1487,13 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
                 <Table
                     scrollable={studentInternshipData.length > 0}
                     maxHeight={'calc(100vh - 330px)'}
-                    // rowSelection={{
-                    //     selectedRowKeys,
-                    //     preserveSelectedRowKeys: true,
-                    //     onChange: (keys) => {
-                    //         setSelectedRowKeys(keys)
-                    //     },
-                    // }}
+                    rowSelection={{
+                        selectedRowKeys,
+                        preserveSelectedRowKeys: true,
+                        onChange: (keys) => {
+                            setSelectedRowKeys(keys)
+                        },
+                    }}
                     filters={filters}
                     setFilters={(value) => {
                         setFilters(value)
@@ -1715,7 +1748,7 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
                         },
                     ]}
                     data={studentInternshipData}
-                    // rowKey="id"
+                    rowKey="id"
                     pagination={{
                         current: currentPage,
                         pageSize: numberOfPages,
