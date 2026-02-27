@@ -194,17 +194,17 @@ const PutInternshipModal = () => {
                     </FormItem>
                 </Col>
                 <Col span={12}>
-                    <FormItem form={form} name="unit" label="Tên đơn vị" required>
+                    <FormItem form={form} name="institution" label="Tên cơ sở" required>
                         <TextArea
-                            placeholder="Nhập tên đơn vị"
+                            placeholder="Nhập tên cơ sở"
                             autoSize={{ minRows: 2, maxRows: 6 }}
                         />
                     </FormItem>
                 </Col>
                 <Col span={12}>
-                    <FormItem form={form} name="institution" label="Tên cơ sở" required>
+                    <FormItem form={form} name="unit" label="Tên đơn vị" required>
                         <TextArea
-                            placeholder="Nhập tên cơ sở"
+                            placeholder="Nhập tên đơn vị"
                             autoSize={{ minRows: 2, maxRows: 6 }}
                         />
                     </FormItem>

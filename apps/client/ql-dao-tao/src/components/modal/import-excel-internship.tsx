@@ -261,11 +261,17 @@ const ImportInternshipModal = ({ visible, onSuccess, onCancel }: ImportInternshi
                         width: 100,
                     },
                     {
-                        title: 'Cơ sở thực tập',
-                        dataIndex: 'institution',
-                        key: 'institution',
+                        title: 'Đơn vị thực tập',
+                        key: 'unit',
                         align: 'center',
                         width: 200,
+                        render: (_: any, record: any) => {
+                            // Hiển thị như Excel: "institution / unit" hoặc chỉ unit
+                            if (record.institution && record.unit) {
+                                return `${record.institution} / ${record.unit}`
+                            }
+                            return record.unit || record.institution || ''
+                        },
                     },
                     {
                         title: 'Địa chỉ',
@@ -281,14 +287,14 @@ const ImportInternshipModal = ({ visible, onSuccess, onCancel }: ImportInternshi
                         width: 200,
                     },
                     {
-                        title: 'GV hướng dẫn',
+                        title: 'GV hướng dẫn 1',
                         dataIndex: 'supervisor',
                         key: 'supervisor',
                         align: 'center',
                         width: 200,
                     },
                     {
-                        title: 'GV phản biện',
+                        title: 'GV hướng dẫn 2',
                         dataIndex: 'coSupervisor',
                         key: 'coSupervisor',
                         align: 'center',
