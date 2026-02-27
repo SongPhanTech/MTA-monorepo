@@ -5,4 +5,6 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GetClusterSurveyStatistics200ChoicesItemClusterSurvey = {[key: string]: unknown | null};
+export type GetClusterSurveyStatistics200ChoicesItemClusterSurvey = {
+    [key: string]: unknown | null
+}

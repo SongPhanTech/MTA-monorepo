@@ -9,11 +9,11 @@
  * Thông tin lớp học
  */
 export type ExportStudentAcademicWarningJson200ItemStudentsItemFixedClass = {
-  /**
-   * Mã lớp
-   * @nullable
-   */
-  code: string | null;
-  /** Tên lớp */
-  name: string;
-};
+    /**
+     * Mã lớp
+     * @nullable
+     */
+    code: string | null
+    /** Tên lớp */
+    name: string
+}

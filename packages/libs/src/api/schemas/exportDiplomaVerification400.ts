@@ -6,5 +6,5 @@
  */
 
 export type ExportDiplomaVerification400 = {
-  message: string;
-};
+    message: string
+}

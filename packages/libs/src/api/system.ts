@@ -50,11396 +50,15117 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import {
-  useMutation,
-  useQuery
-} from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query'
 import type {
-  DataTag,
-  DefinedInitialDataOptions,
-  DefinedUseQueryResult,
-  MutationFunction,
-  QueryClient,
-  QueryFunction,
-  QueryKey,
-  UndefinedInitialDataOptions,
-  UseMutationOptions,
-  UseMutationResult,
-  UseQueryOptions,
-  UseQueryResult
-} from '@tanstack/react-query';
+    DataTag,
+    DefinedInitialDataOptions,
+    DefinedUseQueryResult,
+    MutationFunction,
+    QueryClient,
+    QueryFunction,
+    QueryKey,
+    UndefinedInitialDataOptions,
+    UseMutationOptions,
+    UseMutationResult,
+    UseQueryOptions,
+    UseQueryResult,
+} from '@tanstack/react-query'
 
 import type {
-  AccessLevelDTO,
-  DeleteDMNhanViensId400,
-  DeleteDMNhanViensId401,
-  DeleteDMNhanViensId403,
-  GetDMCapBacsHealthz400,
-  GetDMCapBacsHealthz401,
-  GetDMCapBacsHealthz403,
-  GetDMCapBacsHealthz500,
-  GetDMCapBacsId400,
-  GetDMCapBacsId401,
-  GetDMCapBacsId403,
-  GetDMCapBacsIdParams,
-  GetDMChucDanhsHealthz400,
-  GetDMChucDanhsHealthz401,
-  GetDMChucDanhsHealthz403,
-  GetDMChucDanhsHealthz500,
-  GetDMChucDanhsId400,
-  GetDMChucDanhsId401,
-  GetDMChucDanhsId403,
-  GetDMChucDanhsIdParams,
-  GetDMChucVusHealthz400,
-  GetDMChucVusHealthz401,
-  GetDMChucVusHealthz403,
-  GetDMChucVusHealthz500,
-  GetDMChucVusId400,
-  GetDMChucVusId401,
-  GetDMChucVusId403,
-  GetDMChucVusIdParams,
-  GetDMChungChiTinHocsHealthz400,
-  GetDMChungChiTinHocsHealthz401,
-  GetDMChungChiTinHocsHealthz403,
-  GetDMChungChiTinHocsHealthz500,
-  GetDMChungChiTinHocsId400,
-  GetDMChungChiTinHocsId401,
-  GetDMChungChiTinHocsId403,
-  GetDMChungChiTinHocsIdParams,
-  GetDMDanTocsHealthz400,
-  GetDMDanTocsHealthz401,
-  GetDMDanTocsHealthz403,
-  GetDMDanTocsHealthz500,
-  GetDMDanTocsId400,
-  GetDMDanTocsId401,
-  GetDMDanTocsId403,
-  GetDMDanTocsIdParams,
-  GetDMDonVisHealthz400,
-  GetDMDonVisHealthz401,
-  GetDMDonVisHealthz403,
-  GetDMDonVisHealthz500,
-  GetDMDonVisId400,
-  GetDMDonVisId401,
-  GetDMDonVisId403,
-  GetDMDonVisIdParams,
-  GetDMGioiTinhsHealthz400,
-  GetDMGioiTinhsHealthz401,
-  GetDMGioiTinhsHealthz403,
-  GetDMGioiTinhsHealthz500,
-  GetDMGioiTinhsId400,
-  GetDMGioiTinhsId401,
-  GetDMGioiTinhsId403,
-  GetDMGioiTinhsIdParams,
-  GetDMHocHamsHealthz400,
-  GetDMHocHamsHealthz401,
-  GetDMHocHamsHealthz403,
-  GetDMHocHamsHealthz500,
-  GetDMHocHamsId400,
-  GetDMHocHamsId401,
-  GetDMHocHamsId403,
-  GetDMHocHamsIdParams,
-  GetDMHocVisHealthz400,
-  GetDMHocVisHealthz401,
-  GetDMHocVisHealthz403,
-  GetDMHocVisHealthz500,
-  GetDMHocVisId400,
-  GetDMHocVisId401,
-  GetDMHocVisId403,
-  GetDMHocVisIdParams,
-  GetDMNgoaiNgusHealthz400,
-  GetDMNgoaiNgusHealthz401,
-  GetDMNgoaiNgusHealthz403,
-  GetDMNgoaiNgusHealthz500,
-  GetDMNgoaiNgusId400,
-  GetDMNgoaiNgusId401,
-  GetDMNgoaiNgusId403,
-  GetDMNgoaiNgusIdParams,
-  GetDMNhanViensHealthz400,
-  GetDMNhanViensHealthz401,
-  GetDMNhanViensHealthz403,
-  GetDMNhanViensHealthz500,
-  GetDMNhanViensId400,
-  GetDMNhanViensId401,
-  GetDMNhanViensId403,
-  GetDMNhanViensIdParams,
-  GetDMNhomViTrisHealthz400,
-  GetDMNhomViTrisHealthz401,
-  GetDMNhomViTrisHealthz403,
-  GetDMNhomViTrisHealthz500,
-  GetDMNhomViTrisId400,
-  GetDMNhomViTrisId401,
-  GetDMNhomViTrisId403,
-  GetDMNhomViTrisIdParams,
-  GetDMPhanCapChatLuongTTBsHealthz400,
-  GetDMPhanCapChatLuongTTBsHealthz401,
-  GetDMPhanCapChatLuongTTBsHealthz403,
-  GetDMPhanCapChatLuongTTBsHealthz500,
-  GetDMPhanCapChatLuongTTBsId400,
-  GetDMPhanCapChatLuongTTBsId401,
-  GetDMPhanCapChatLuongTTBsId403,
-  GetDMPhanCapChatLuongTTBsIdParams,
-  GetDMPhanLoaiCSKTsHealthz400,
-  GetDMPhanLoaiCSKTsHealthz401,
-  GetDMPhanLoaiCSKTsHealthz403,
-  GetDMPhanLoaiCSKTsHealthz500,
-  GetDMPhanLoaiCSKTsId400,
-  GetDMPhanLoaiCSKTsId401,
-  GetDMPhanLoaiCSKTsId403,
-  GetDMPhanLoaiCSKTsIdParams,
-  GetDMQuanHuyensHealthz400,
-  GetDMQuanHuyensHealthz401,
-  GetDMQuanHuyensHealthz403,
-  GetDMQuanHuyensHealthz500,
-  GetDMQuanHuyensId400,
-  GetDMQuanHuyensId401,
-  GetDMQuanHuyensId403,
-  GetDMQuanHuyensIdParams,
-  GetDMQuocGiasHealthz400,
-  GetDMQuocGiasHealthz401,
-  GetDMQuocGiasHealthz403,
-  GetDMQuocGiasHealthz500,
-  GetDMQuocGiasId400,
-  GetDMQuocGiasId401,
-  GetDMQuocGiasId403,
-  GetDMQuocGiasIdParams,
-  GetDMTinhNewsHealthz400,
-  GetDMTinhNewsHealthz401,
-  GetDMTinhNewsHealthz403,
-  GetDMTinhNewsHealthz500,
-  GetDMTinhNewsId400,
-  GetDMTinhNewsId401,
-  GetDMTinhNewsId403,
-  GetDMTinhNewsIdParams,
-  GetDMTinhsHealthz400,
-  GetDMTinhsHealthz401,
-  GetDMTinhsHealthz403,
-  GetDMTinhsHealthz500,
-  GetDMTinhsId400,
-  GetDMTinhsId401,
-  GetDMTinhsId403,
-  GetDMTinhsIdParams,
-  GetDMTonGiaosHealthz400,
-  GetDMTonGiaosHealthz401,
-  GetDMTonGiaosHealthz403,
-  GetDMTonGiaosHealthz500,
-  GetDMTonGiaosId400,
-  GetDMTonGiaosId401,
-  GetDMTonGiaosId403,
-  GetDMTonGiaosIdParams,
-  GetDMTrinhDoNgoaiNgusHealthz400,
-  GetDMTrinhDoNgoaiNgusHealthz401,
-  GetDMTrinhDoNgoaiNgusHealthz403,
-  GetDMTrinhDoNgoaiNgusHealthz500,
-  GetDMTrinhDoNgoaiNgusId400,
-  GetDMTrinhDoNgoaiNgusId401,
-  GetDMTrinhDoNgoaiNgusId403,
-  GetDMTrinhDoNgoaiNgusIdParams,
-  GetDMTrinhDoTinHocsHealthz400,
-  GetDMTrinhDoTinHocsHealthz401,
-  GetDMTrinhDoTinHocsHealthz403,
-  GetDMTrinhDoTinHocsHealthz500,
-  GetDMTrinhDoTinHocsId400,
-  GetDMTrinhDoTinHocsId401,
-  GetDMTrinhDoTinHocsId403,
-  GetDMTrinhDoTinHocsIdParams,
-  GetDMVaiTroDTO,
-  GetDMViTriCongViecsHealthz400,
-  GetDMViTriCongViecsHealthz401,
-  GetDMViTriCongViecsHealthz403,
-  GetDMViTriCongViecsHealthz500,
-  GetDMViTriCongViecsId400,
-  GetDMViTriCongViecsId401,
-  GetDMViTriCongViecsId403,
-  GetDMViTriCongViecsIdParams,
-  GetDMXaPhuongNewsHealthz400,
-  GetDMXaPhuongNewsHealthz401,
-  GetDMXaPhuongNewsHealthz403,
-  GetDMXaPhuongNewsHealthz500,
-  GetDMXaPhuongNewsId400,
-  GetDMXaPhuongNewsId401,
-  GetDMXaPhuongNewsId403,
-  GetDMXaPhuongNewsIdParams,
-  GetDMXaPhuongsHealthz400,
-  GetDMXaPhuongsHealthz401,
-  GetDMXaPhuongsHealthz403,
-  GetDMXaPhuongsHealthz500,
-  GetDMXaPhuongsId400,
-  GetDMXaPhuongsId401,
-  GetDMXaPhuongsId403,
-  GetDMXaPhuongsIdParams,
-  GetMenusPermissionDTO,
-  GetUserPermissionDTO,
-  GetUserPermissionsAccessLevelAppCodeUserId400,
-  GetUserPermissionsAccessLevelAppCodeUserId401,
-  GetUserPermissionsAccessLevelAppCodeUserId403,
-  GetUserPermissionsAccessLevelAppCodeUserId500,
-  GetUserPermissionsHealthz400,
-  GetUserPermissionsHealthz401,
-  GetUserPermissionsHealthz403,
-  GetUserPermissionsHealthz500,
-  GetUserPermissionsMenusPermissionUserId400,
-  GetUserPermissionsMenusPermissionUserId401,
-  GetUserPermissionsMenusPermissionUserId403,
-  GetUserPermissionsMenusPermissionUserId500,
-  GetUserPermissionsPermissionAppCodeUserId400,
-  GetUserPermissionsPermissionAppCodeUserId401,
-  GetUserPermissionsPermissionAppCodeUserId403,
-  GetUserPermissionsPermissionAppCodeUserId500,
-  GetVersionAppDTO,
-  NhanVienEditDto,
-  NotificationMessageRequest,
-  PostDMCapBacsList400,
-  PostDMCapBacsList401,
-  PostDMCapBacsList403,
-  PostDMChucDanhsList400,
-  PostDMChucDanhsList401,
-  PostDMChucDanhsList403,
-  PostDMChucVusList400,
-  PostDMChucVusList401,
-  PostDMChucVusList403,
-  PostDMChungChiTinHocsList400,
-  PostDMChungChiTinHocsList401,
-  PostDMChungChiTinHocsList403,
-  PostDMDanTocsList400,
-  PostDMDanTocsList401,
-  PostDMDanTocsList403,
-  PostDMDonVisList400,
-  PostDMDonVisList401,
-  PostDMDonVisList403,
-  PostDMGioiTinhsList400,
-  PostDMGioiTinhsList401,
-  PostDMGioiTinhsList403,
-  PostDMHocHamsList400,
-  PostDMHocHamsList401,
-  PostDMHocHamsList403,
-  PostDMHocVisList400,
-  PostDMHocVisList401,
-  PostDMHocVisList403,
-  PostDMNgoaiNgusList400,
-  PostDMNgoaiNgusList401,
-  PostDMNgoaiNgusList403,
-  PostDMNhanViens400,
-  PostDMNhanViens401,
-  PostDMNhanViens403,
-  PostDMNhanViensList400,
-  PostDMNhanViensList401,
-  PostDMNhanViensList403,
-  PostDMNhomViTrisList400,
-  PostDMNhomViTrisList401,
-  PostDMNhomViTrisList403,
-  PostDMPhanCapChatLuongTTBsList400,
-  PostDMPhanCapChatLuongTTBsList401,
-  PostDMPhanCapChatLuongTTBsList403,
-  PostDMPhanLoaiCSKTsList400,
-  PostDMPhanLoaiCSKTsList401,
-  PostDMPhanLoaiCSKTsList403,
-  PostDMQuanHuyensList400,
-  PostDMQuanHuyensList401,
-  PostDMQuanHuyensList403,
-  PostDMQuocGiasList400,
-  PostDMQuocGiasList401,
-  PostDMQuocGiasList403,
-  PostDMTinhNewsList400,
-  PostDMTinhNewsList401,
-  PostDMTinhNewsList403,
-  PostDMTinhsList400,
-  PostDMTinhsList401,
-  PostDMTinhsList403,
-  PostDMTonGiaosList400,
-  PostDMTonGiaosList401,
-  PostDMTonGiaosList403,
-  PostDMTrinhDoNgoaiNgusList400,
-  PostDMTrinhDoNgoaiNgusList401,
-  PostDMTrinhDoNgoaiNgusList403,
-  PostDMTrinhDoTinHocsList400,
-  PostDMTrinhDoTinHocsList401,
-  PostDMTrinhDoTinHocsList403,
-  PostDMViTriCongViecsList400,
-  PostDMViTriCongViecsList401,
-  PostDMViTriCongViecsList403,
-  PostDMXaPhuongNewsList400,
-  PostDMXaPhuongNewsList401,
-  PostDMXaPhuongNewsList403,
-  PostDMXaPhuongsList400,
-  PostDMXaPhuongsList401,
-  PostDMXaPhuongsList403,
-  PublicApiGetAllDMCapBacDTO,
-  PublicApiGetAllDMChucDanhDTO,
-  PublicApiGetAllDMChucVuDTO,
-  PublicApiGetAllDMChungChiTinHocDTO,
-  PublicApiGetAllDMDanTocDTO,
-  PublicApiGetAllDMDonViDTO,
-  PublicApiGetAllDMGioiTinhDTO,
-  PublicApiGetAllDMHocHamDTO,
-  PublicApiGetAllDMHocViDTO,
-  PublicApiGetAllDMNgoaiNguDTO,
-  PublicApiGetAllDMNhanVienDTO,
-  PublicApiGetAllDMNhomViTriDTO,
-  PublicApiGetAllDMPhanCapChatLuongTTBDTO,
-  PublicApiGetAllDMPhanLoaiCSKTDTO,
-  PublicApiGetAllDMQuanHuyenDTO,
-  PublicApiGetAllDMQuocGiaDTO,
-  PublicApiGetAllDMTinhDTO,
-  PublicApiGetAllDMTinhNewDTO,
-  PublicApiGetAllDMTonGiaoDTO,
-  PublicApiGetAllDMTrinhDoNgoaiNguDTO,
-  PublicApiGetAllDMTrinhDoTinHocDTO,
-  PublicApiGetAllDMViTriCongViecDTO,
-  PublicApiGetAllDMXaPhuongDTO,
-  PublicApiGetAllDMXaPhuongNewDTO,
-  PublicApiPagingRequestDto,
-  PutDMNhanViens400,
-  PutDMNhanViens401,
-  PutDMNhanViens403,
-  UnitInfoEditDto
-} from './schemas';
+    AccessLevelDTO,
+    DeleteDMNhanViensId400,
+    DeleteDMNhanViensId401,
+    DeleteDMNhanViensId403,
+    GetDMCapBacsHealthz400,
+    GetDMCapBacsHealthz401,
+    GetDMCapBacsHealthz403,
+    GetDMCapBacsHealthz500,
+    GetDMCapBacsId400,
+    GetDMCapBacsId401,
+    GetDMCapBacsId403,
+    GetDMCapBacsIdParams,
+    GetDMChucDanhsHealthz400,
+    GetDMChucDanhsHealthz401,
+    GetDMChucDanhsHealthz403,
+    GetDMChucDanhsHealthz500,
+    GetDMChucDanhsId400,
+    GetDMChucDanhsId401,
+    GetDMChucDanhsId403,
+    GetDMChucDanhsIdParams,
+    GetDMChucVusHealthz400,
+    GetDMChucVusHealthz401,
+    GetDMChucVusHealthz403,
+    GetDMChucVusHealthz500,
+    GetDMChucVusId400,
+    GetDMChucVusId401,
+    GetDMChucVusId403,
+    GetDMChucVusIdParams,
+    GetDMChungChiTinHocsHealthz400,
+    GetDMChungChiTinHocsHealthz401,
+    GetDMChungChiTinHocsHealthz403,
+    GetDMChungChiTinHocsHealthz500,
+    GetDMChungChiTinHocsId400,
+    GetDMChungChiTinHocsId401,
+    GetDMChungChiTinHocsId403,
+    GetDMChungChiTinHocsIdParams,
+    GetDMDanTocsHealthz400,
+    GetDMDanTocsHealthz401,
+    GetDMDanTocsHealthz403,
+    GetDMDanTocsHealthz500,
+    GetDMDanTocsId400,
+    GetDMDanTocsId401,
+    GetDMDanTocsId403,
+    GetDMDanTocsIdParams,
+    GetDMDonVisHealthz400,
+    GetDMDonVisHealthz401,
+    GetDMDonVisHealthz403,
+    GetDMDonVisHealthz500,
+    GetDMDonVisId400,
+    GetDMDonVisId401,
+    GetDMDonVisId403,
+    GetDMDonVisIdParams,
+    GetDMGioiTinhsHealthz400,
+    GetDMGioiTinhsHealthz401,
+    GetDMGioiTinhsHealthz403,
+    GetDMGioiTinhsHealthz500,
+    GetDMGioiTinhsId400,
+    GetDMGioiTinhsId401,
+    GetDMGioiTinhsId403,
+    GetDMGioiTinhsIdParams,
+    GetDMHocHamsHealthz400,
+    GetDMHocHamsHealthz401,
+    GetDMHocHamsHealthz403,
+    GetDMHocHamsHealthz500,
+    GetDMHocHamsId400,
+    GetDMHocHamsId401,
+    GetDMHocHamsId403,
+    GetDMHocHamsIdParams,
+    GetDMHocVisHealthz400,
+    GetDMHocVisHealthz401,
+    GetDMHocVisHealthz403,
+    GetDMHocVisHealthz500,
+    GetDMHocVisId400,
+    GetDMHocVisId401,
+    GetDMHocVisId403,
+    GetDMHocVisIdParams,
+    GetDMNgoaiNgusHealthz400,
+    GetDMNgoaiNgusHealthz401,
+    GetDMNgoaiNgusHealthz403,
+    GetDMNgoaiNgusHealthz500,
+    GetDMNgoaiNgusId400,
+    GetDMNgoaiNgusId401,
+    GetDMNgoaiNgusId403,
+    GetDMNgoaiNgusIdParams,
+    GetDMNhanViensHealthz400,
+    GetDMNhanViensHealthz401,
+    GetDMNhanViensHealthz403,
+    GetDMNhanViensHealthz500,
+    GetDMNhanViensId400,
+    GetDMNhanViensId401,
+    GetDMNhanViensId403,
+    GetDMNhanViensIdParams,
+    GetDMNhomViTrisHealthz400,
+    GetDMNhomViTrisHealthz401,
+    GetDMNhomViTrisHealthz403,
+    GetDMNhomViTrisHealthz500,
+    GetDMNhomViTrisId400,
+    GetDMNhomViTrisId401,
+    GetDMNhomViTrisId403,
+    GetDMNhomViTrisIdParams,
+    GetDMPhanCapChatLuongTTBsHealthz400,
+    GetDMPhanCapChatLuongTTBsHealthz401,
+    GetDMPhanCapChatLuongTTBsHealthz403,
+    GetDMPhanCapChatLuongTTBsHealthz500,
+    GetDMPhanCapChatLuongTTBsId400,
+    GetDMPhanCapChatLuongTTBsId401,
+    GetDMPhanCapChatLuongTTBsId403,
+    GetDMPhanCapChatLuongTTBsIdParams,
+    GetDMPhanLoaiCSKTsHealthz400,
+    GetDMPhanLoaiCSKTsHealthz401,
+    GetDMPhanLoaiCSKTsHealthz403,
+    GetDMPhanLoaiCSKTsHealthz500,
+    GetDMPhanLoaiCSKTsId400,
+    GetDMPhanLoaiCSKTsId401,
+    GetDMPhanLoaiCSKTsId403,
+    GetDMPhanLoaiCSKTsIdParams,
+    GetDMQuanHuyensHealthz400,
+    GetDMQuanHuyensHealthz401,
+    GetDMQuanHuyensHealthz403,
+    GetDMQuanHuyensHealthz500,
+    GetDMQuanHuyensId400,
+    GetDMQuanHuyensId401,
+    GetDMQuanHuyensId403,
+    GetDMQuanHuyensIdParams,
+    GetDMQuocGiasHealthz400,
+    GetDMQuocGiasHealthz401,
+    GetDMQuocGiasHealthz403,
+    GetDMQuocGiasHealthz500,
+    GetDMQuocGiasId400,
+    GetDMQuocGiasId401,
+    GetDMQuocGiasId403,
+    GetDMQuocGiasIdParams,
+    GetDMTinhNewsHealthz400,
+    GetDMTinhNewsHealthz401,
+    GetDMTinhNewsHealthz403,
+    GetDMTinhNewsHealthz500,
+    GetDMTinhNewsId400,
+    GetDMTinhNewsId401,
+    GetDMTinhNewsId403,
+    GetDMTinhNewsIdParams,
+    GetDMTinhsHealthz400,
+    GetDMTinhsHealthz401,
+    GetDMTinhsHealthz403,
+    GetDMTinhsHealthz500,
+    GetDMTinhsId400,
+    GetDMTinhsId401,
+    GetDMTinhsId403,
+    GetDMTinhsIdParams,
+    GetDMTonGiaosHealthz400,
+    GetDMTonGiaosHealthz401,
+    GetDMTonGiaosHealthz403,
+    GetDMTonGiaosHealthz500,
+    GetDMTonGiaosId400,
+    GetDMTonGiaosId401,
+    GetDMTonGiaosId403,
+    GetDMTonGiaosIdParams,
+    GetDMTrinhDoNgoaiNgusHealthz400,
+    GetDMTrinhDoNgoaiNgusHealthz401,
+    GetDMTrinhDoNgoaiNgusHealthz403,
+    GetDMTrinhDoNgoaiNgusHealthz500,
+    GetDMTrinhDoNgoaiNgusId400,
+    GetDMTrinhDoNgoaiNgusId401,
+    GetDMTrinhDoNgoaiNgusId403,
+    GetDMTrinhDoNgoaiNgusIdParams,
+    GetDMTrinhDoTinHocsHealthz400,
+    GetDMTrinhDoTinHocsHealthz401,
+    GetDMTrinhDoTinHocsHealthz403,
+    GetDMTrinhDoTinHocsHealthz500,
+    GetDMTrinhDoTinHocsId400,
+    GetDMTrinhDoTinHocsId401,
+    GetDMTrinhDoTinHocsId403,
+    GetDMTrinhDoTinHocsIdParams,
+    GetDMVaiTroDTO,
+    GetDMViTriCongViecsHealthz400,
+    GetDMViTriCongViecsHealthz401,
+    GetDMViTriCongViecsHealthz403,
+    GetDMViTriCongViecsHealthz500,
+    GetDMViTriCongViecsId400,
+    GetDMViTriCongViecsId401,
+    GetDMViTriCongViecsId403,
+    GetDMViTriCongViecsIdParams,
+    GetDMXaPhuongNewsHealthz400,
+    GetDMXaPhuongNewsHealthz401,
+    GetDMXaPhuongNewsHealthz403,
+    GetDMXaPhuongNewsHealthz500,
+    GetDMXaPhuongNewsId400,
+    GetDMXaPhuongNewsId401,
+    GetDMXaPhuongNewsId403,
+    GetDMXaPhuongNewsIdParams,
+    GetDMXaPhuongsHealthz400,
+    GetDMXaPhuongsHealthz401,
+    GetDMXaPhuongsHealthz403,
+    GetDMXaPhuongsHealthz500,
+    GetDMXaPhuongsId400,
+    GetDMXaPhuongsId401,
+    GetDMXaPhuongsId403,
+    GetDMXaPhuongsIdParams,
+    GetMenusPermissionDTO,
+    GetUserPermissionDTO,
+    GetUserPermissionsAccessLevelAppCodeUserId400,
+    GetUserPermissionsAccessLevelAppCodeUserId401,
+    GetUserPermissionsAccessLevelAppCodeUserId403,
+    GetUserPermissionsAccessLevelAppCodeUserId500,
+    GetUserPermissionsHealthz400,
+    GetUserPermissionsHealthz401,
+    GetUserPermissionsHealthz403,
+    GetUserPermissionsHealthz500,
+    GetUserPermissionsMenusPermissionUserId400,
+    GetUserPermissionsMenusPermissionUserId401,
+    GetUserPermissionsMenusPermissionUserId403,
+    GetUserPermissionsMenusPermissionUserId500,
+    GetUserPermissionsPermissionAppCodeUserId400,
+    GetUserPermissionsPermissionAppCodeUserId401,
+    GetUserPermissionsPermissionAppCodeUserId403,
+    GetUserPermissionsPermissionAppCodeUserId500,
+    GetVersionAppDTO,
+    NhanVienEditDto,
+    NotificationMessageRequest,
+    PostDMCapBacsList400,
+    PostDMCapBacsList401,
+    PostDMCapBacsList403,
+    PostDMChucDanhsList400,
+    PostDMChucDanhsList401,
+    PostDMChucDanhsList403,
+    PostDMChucVusList400,
+    PostDMChucVusList401,
+    PostDMChucVusList403,
+    PostDMChungChiTinHocsList400,
+    PostDMChungChiTinHocsList401,
+    PostDMChungChiTinHocsList403,
+    PostDMDanTocsList400,
+    PostDMDanTocsList401,
+    PostDMDanTocsList403,
+    PostDMDonVisList400,
+    PostDMDonVisList401,
+    PostDMDonVisList403,
+    PostDMGioiTinhsList400,
+    PostDMGioiTinhsList401,
+    PostDMGioiTinhsList403,
+    PostDMHocHamsList400,
+    PostDMHocHamsList401,
+    PostDMHocHamsList403,
+    PostDMHocVisList400,
+    PostDMHocVisList401,
+    PostDMHocVisList403,
+    PostDMNgoaiNgusList400,
+    PostDMNgoaiNgusList401,
+    PostDMNgoaiNgusList403,
+    PostDMNhanViens400,
+    PostDMNhanViens401,
+    PostDMNhanViens403,
+    PostDMNhanViensList400,
+    PostDMNhanViensList401,
+    PostDMNhanViensList403,
+    PostDMNhomViTrisList400,
+    PostDMNhomViTrisList401,
+    PostDMNhomViTrisList403,
+    PostDMPhanCapChatLuongTTBsList400,
+    PostDMPhanCapChatLuongTTBsList401,
+    PostDMPhanCapChatLuongTTBsList403,
+    PostDMPhanLoaiCSKTsList400,
+    PostDMPhanLoaiCSKTsList401,
+    PostDMPhanLoaiCSKTsList403,
+    PostDMQuanHuyensList400,
+    PostDMQuanHuyensList401,
+    PostDMQuanHuyensList403,
+    PostDMQuocGiasList400,
+    PostDMQuocGiasList401,
+    PostDMQuocGiasList403,
+    PostDMTinhNewsList400,
+    PostDMTinhNewsList401,
+    PostDMTinhNewsList403,
+    PostDMTinhsList400,
+    PostDMTinhsList401,
+    PostDMTinhsList403,
+    PostDMTonGiaosList400,
+    PostDMTonGiaosList401,
+    PostDMTonGiaosList403,
+    PostDMTrinhDoNgoaiNgusList400,
+    PostDMTrinhDoNgoaiNgusList401,
+    PostDMTrinhDoNgoaiNgusList403,
+    PostDMTrinhDoTinHocsList400,
+    PostDMTrinhDoTinHocsList401,
+    PostDMTrinhDoTinHocsList403,
+    PostDMViTriCongViecsList400,
+    PostDMViTriCongViecsList401,
+    PostDMViTriCongViecsList403,
+    PostDMXaPhuongNewsList400,
+    PostDMXaPhuongNewsList401,
+    PostDMXaPhuongNewsList403,
+    PostDMXaPhuongsList400,
+    PostDMXaPhuongsList401,
+    PostDMXaPhuongsList403,
+    PublicApiGetAllDMCapBacDTO,
+    PublicApiGetAllDMChucDanhDTO,
+    PublicApiGetAllDMChucVuDTO,
+    PublicApiGetAllDMChungChiTinHocDTO,
+    PublicApiGetAllDMDanTocDTO,
+    PublicApiGetAllDMDonViDTO,
+    PublicApiGetAllDMGioiTinhDTO,
+    PublicApiGetAllDMHocHamDTO,
+    PublicApiGetAllDMHocViDTO,
+    PublicApiGetAllDMNgoaiNguDTO,
+    PublicApiGetAllDMNhanVienDTO,
+    PublicApiGetAllDMNhomViTriDTO,
+    PublicApiGetAllDMPhanCapChatLuongTTBDTO,
+    PublicApiGetAllDMPhanLoaiCSKTDTO,
+    PublicApiGetAllDMQuanHuyenDTO,
+    PublicApiGetAllDMQuocGiaDTO,
+    PublicApiGetAllDMTinhDTO,
+    PublicApiGetAllDMTinhNewDTO,
+    PublicApiGetAllDMTonGiaoDTO,
+    PublicApiGetAllDMTrinhDoNgoaiNguDTO,
+    PublicApiGetAllDMTrinhDoTinHocDTO,
+    PublicApiGetAllDMViTriCongViecDTO,
+    PublicApiGetAllDMXaPhuongDTO,
+    PublicApiGetAllDMXaPhuongNewDTO,
+    PublicApiPagingRequestDto,
+    PutDMNhanViens400,
+    PutDMNhanViens401,
+    PutDMNhanViens403,
+    UnitInfoEditDto,
+} from './schemas'
 
-import { customSystemFetch } from './custom-instance';
-type AwaitedInput<T> = PromiseLike<T> | T;
+import { customSystemFetch } from './custom-instance'
+type AwaitedInput<T> = PromiseLike<T> | T
 
-      type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
+type Awaited<O> = O extends AwaitedInput<infer T> ? T : never
 
-
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
-
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 
 /**
  * Lấy danh sách các vai trò theo từng ứng dụng
  * @summary Vai trò - Danh sách
  */
 export type getDMVaiTrosResponse200 = {
-  data: GetDMVaiTroDTO
-  status: 200
+    data: GetDMVaiTroDTO
+    status: 200
 }
-    
-export type getDMVaiTrosResponseSuccess = (getDMVaiTrosResponse200) & {
-  headers: Headers;
-};
-;
 
-export type getDMVaiTrosResponse = (getDMVaiTrosResponseSuccess)
+export type getDMVaiTrosResponseSuccess = getDMVaiTrosResponse200 & {
+    headers: Headers
+}
+
+export type getDMVaiTrosResponse = getDMVaiTrosResponseSuccess
 
 export const getGetDMVaiTrosUrl = () => {
-
-
-  
-
-  return `/DM_VaiTros`
+    return `/DM_VaiTros`
 }
 
-export const getDMVaiTros = async ( options?: RequestInit): Promise<getDMVaiTrosResponse> => {
-  
-  return customSystemFetch<getDMVaiTrosResponse>(getGetDMVaiTrosUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-
+export const getDMVaiTros = async (options?: RequestInit): Promise<getDMVaiTrosResponse> => {
+    return customSystemFetch<getDMVaiTrosResponse>(getGetDMVaiTrosUrl(), {
+        ...options,
+        method: 'GET',
+    })
+}
 
 export const getGetDMVaiTrosQueryKey = () => {
-    return [
-    `/DM_VaiTros`
-    ] as const;
-    }
+    return [`/DM_VaiTros`] as const
+}
 
-    
-export const getGetDMVaiTrosQueryOptions = <TData = Awaited<ReturnType<typeof getDMVaiTros>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMVaiTros>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
-) => {
+export const getGetDMVaiTrosQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMVaiTros>>,
+    TError = unknown,
+>(options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMVaiTros>>, TError, TData>>
+    request?: SecondParameter<typeof customSystemFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    const queryKey = queryOptions?.queryKey ?? getGetDMVaiTrosQueryKey()
 
-  const queryKey =  queryOptions?.queryKey ?? getGetDMVaiTrosQueryKey();
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMVaiTros>>> = ({ signal }) =>
+        getDMVaiTros({ signal, ...requestOptions })
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMVaiTros>>> = ({ signal }) => getDMVaiTros({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMVaiTros>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMVaiTros>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetDMVaiTrosQueryResult = NonNullable<Awaited<ReturnType<typeof getDMVaiTros>>>
 export type GetDMVaiTrosQueryError = unknown
 
-
 export function useGetDMVaiTros<TData = Awaited<ReturnType<typeof getDMVaiTros>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMVaiTros>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMVaiTros>>,
-          TError,
-          Awaited<ReturnType<typeof getDMVaiTros>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+    options: {
+        query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMVaiTros>>, TError, TData>> &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMVaiTros>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMVaiTros>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetDMVaiTros<TData = Awaited<ReturnType<typeof getDMVaiTros>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMVaiTros>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMVaiTros>>,
-          TError,
-          Awaited<ReturnType<typeof getDMVaiTros>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMVaiTros>>, TError, TData>> &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMVaiTros>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMVaiTros>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetDMVaiTros<TData = Awaited<ReturnType<typeof getDMVaiTros>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMVaiTros>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMVaiTros>>, TError, TData>>
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Vai trò - Danh sách
  */
 
 export function useGetDMVaiTros<TData = Awaited<ReturnType<typeof getDMVaiTros>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMVaiTros>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMVaiTros>>, TError, TData>>
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMVaiTrosQueryOptions(options)
 
-  const queryOptions = getGetDMVaiTrosQueryOptions(options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Kiểm tra tình trạng API
  * @summary Kiểm tra tình trạng API
  */
 export type getDMVaiTrosHealthzResponse200 = {
-  data: void
-  status: 200
+    data: void
+    status: 200
 }
-    
-export type getDMVaiTrosHealthzResponseSuccess = (getDMVaiTrosHealthzResponse200) & {
-  headers: Headers;
-};
-;
 
-export type getDMVaiTrosHealthzResponse = (getDMVaiTrosHealthzResponseSuccess)
+export type getDMVaiTrosHealthzResponseSuccess = getDMVaiTrosHealthzResponse200 & {
+    headers: Headers
+}
+
+export type getDMVaiTrosHealthzResponse = getDMVaiTrosHealthzResponseSuccess
 
 export const getGetDMVaiTrosHealthzUrl = () => {
-
-
-  
-
-  return `/DM_VaiTros/healthz`
+    return `/DM_VaiTros/healthz`
 }
 
-export const getDMVaiTrosHealthz = async ( options?: RequestInit): Promise<getDMVaiTrosHealthzResponse> => {
-  
-  return customSystemFetch<getDMVaiTrosHealthzResponse>(getGetDMVaiTrosHealthzUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-
+export const getDMVaiTrosHealthz = async (
+    options?: RequestInit
+): Promise<getDMVaiTrosHealthzResponse> => {
+    return customSystemFetch<getDMVaiTrosHealthzResponse>(getGetDMVaiTrosHealthzUrl(), {
+        ...options,
+        method: 'GET',
+    })
+}
 
 export const getGetDMVaiTrosHealthzQueryKey = () => {
-    return [
-    `/DM_VaiTros/healthz`
-    ] as const;
-    }
-
-    
-export const getGetDMVaiTrosHealthzQueryOptions = <TData = Awaited<ReturnType<typeof getDMVaiTrosHealthz>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMVaiTrosHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetDMVaiTrosHealthzQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMVaiTrosHealthz>>> = ({ signal }) => getDMVaiTrosHealthz({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMVaiTrosHealthz>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return [`/DM_VaiTros/healthz`] as const
 }
 
-export type GetDMVaiTrosHealthzQueryResult = NonNullable<Awaited<ReturnType<typeof getDMVaiTrosHealthz>>>
+export const getGetDMVaiTrosHealthzQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMVaiTrosHealthz>>,
+    TError = unknown,
+>(options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMVaiTrosHealthz>>, TError, TData>>
+    request?: SecondParameter<typeof customSystemFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetDMVaiTrosHealthzQueryKey()
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMVaiTrosHealthz>>> = ({ signal }) =>
+        getDMVaiTrosHealthz({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMVaiTrosHealthz>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDMVaiTrosHealthzQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getDMVaiTrosHealthz>>
+>
 export type GetDMVaiTrosHealthzQueryError = unknown
 
-
-export function useGetDMVaiTrosHealthz<TData = Awaited<ReturnType<typeof getDMVaiTrosHealthz>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMVaiTrosHealthz>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMVaiTrosHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMVaiTrosHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMVaiTrosHealthz<TData = Awaited<ReturnType<typeof getDMVaiTrosHealthz>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMVaiTrosHealthz>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMVaiTrosHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMVaiTrosHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMVaiTrosHealthz<TData = Awaited<ReturnType<typeof getDMVaiTrosHealthz>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMVaiTrosHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMVaiTrosHealthz<
+    TData = Awaited<ReturnType<typeof getDMVaiTrosHealthz>>,
+    TError = unknown,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMVaiTrosHealthz>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMVaiTrosHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMVaiTrosHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMVaiTrosHealthz<
+    TData = Awaited<ReturnType<typeof getDMVaiTrosHealthz>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMVaiTrosHealthz>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMVaiTrosHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMVaiTrosHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMVaiTrosHealthz<
+    TData = Awaited<ReturnType<typeof getDMVaiTrosHealthz>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMVaiTrosHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Kiểm tra tình trạng API
  */
 
-export function useGetDMVaiTrosHealthz<TData = Awaited<ReturnType<typeof getDMVaiTrosHealthz>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMVaiTrosHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMVaiTrosHealthz<
+    TData = Awaited<ReturnType<typeof getDMVaiTrosHealthz>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMVaiTrosHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMVaiTrosHealthzQueryOptions(options)
 
-  const queryOptions = getGetDMVaiTrosHealthzQueryOptions(options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Lấy danh sách các Cấp bậc
  * @summary Cấp bậc - Danh sách
  */
 export type postDMCapBacsListResponse200 = {
-  data: PublicApiGetAllDMCapBacDTO
-  status: 200
+    data: PublicApiGetAllDMCapBacDTO
+    status: 200
 }
 
 export type postDMCapBacsListResponse400 = {
-  data: PostDMCapBacsList400
-  status: 400
+    data: PostDMCapBacsList400
+    status: 400
 }
 
 export type postDMCapBacsListResponse401 = {
-  data: PostDMCapBacsList401
-  status: 401
+    data: PostDMCapBacsList401
+    status: 401
 }
 
 export type postDMCapBacsListResponse403 = {
-  data: PostDMCapBacsList403
-  status: 403
+    data: PostDMCapBacsList403
+    status: 403
 }
 
 export type postDMCapBacsListResponse500 = {
-  data: void
-  status: 500
+    data: void
+    status: 500
 }
-    
-export type postDMCapBacsListResponseSuccess = (postDMCapBacsListResponse200) & {
-  headers: Headers;
-};
-export type postDMCapBacsListResponseError = (postDMCapBacsListResponse400 | postDMCapBacsListResponse401 | postDMCapBacsListResponse403 | postDMCapBacsListResponse500) & {
-  headers: Headers;
-};
 
-export type postDMCapBacsListResponse = (postDMCapBacsListResponseSuccess | postDMCapBacsListResponseError)
+export type postDMCapBacsListResponseSuccess = postDMCapBacsListResponse200 & {
+    headers: Headers
+}
+export type postDMCapBacsListResponseError = (
+    | postDMCapBacsListResponse400
+    | postDMCapBacsListResponse401
+    | postDMCapBacsListResponse403
+    | postDMCapBacsListResponse500
+) & {
+    headers: Headers
+}
+
+export type postDMCapBacsListResponse =
+    | postDMCapBacsListResponseSuccess
+    | postDMCapBacsListResponseError
 
 export const getPostDMCapBacsListUrl = () => {
-
-
-  
-
-  return `/DM_CapBacs/list`
+    return `/DM_CapBacs/list`
 }
 
-export const postDMCapBacsList = async (publicApiPagingRequestDto: PublicApiPagingRequestDto, options?: RequestInit): Promise<postDMCapBacsListResponse> => {
-  
-  return customSystemFetch<postDMCapBacsListResponse>(getPostDMCapBacsListUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
-    body: JSON.stringify(
-      publicApiPagingRequestDto,)
-  }
-);}
+export const postDMCapBacsList = async (
+    publicApiPagingRequestDto: PublicApiPagingRequestDto,
+    options?: RequestInit
+): Promise<postDMCapBacsListResponse> => {
+    return customSystemFetch<postDMCapBacsListResponse>(getPostDMCapBacsListUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
+        body: JSON.stringify(publicApiPagingRequestDto),
+    })
+}
 
-
-
-
-export const getPostDMCapBacsListMutationOptions = <TError = PostDMCapBacsList400 | PostDMCapBacsList401 | PostDMCapBacsList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMCapBacsList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof postDMCapBacsList>>, TError,{data: PublicApiPagingRequestDto}, TContext> => {
-
-const mutationKey = ['postDMCapBacsList'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postDMCapBacsList>>, {data: PublicApiPagingRequestDto}> = (props) => {
-          const {data} = props ?? {};
-
-          return  postDMCapBacsList(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PostDMCapBacsListMutationResult = NonNullable<Awaited<ReturnType<typeof postDMCapBacsList>>>
-    export type PostDMCapBacsListMutationBody = PublicApiPagingRequestDto
-    export type PostDMCapBacsListMutationError = PostDMCapBacsList400 | PostDMCapBacsList401 | PostDMCapBacsList403 | void
-
-    /**
- * @summary Cấp bậc - Danh sách
- */
-export const usePostDMCapBacsList = <TError = PostDMCapBacsList400 | PostDMCapBacsList401 | PostDMCapBacsList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMCapBacsList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getPostDMCapBacsListMutationOptions = <
+    TError = PostDMCapBacsList400 | PostDMCapBacsList401 | PostDMCapBacsList403 | void,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postDMCapBacsList>>,
         TError,
-        {data: PublicApiPagingRequestDto},
+        { data: PublicApiPagingRequestDto },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postDMCapBacsList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationKey = ['postDMCapBacsList']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getPostDMCapBacsListMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postDMCapBacsList>>,
+        { data: PublicApiPagingRequestDto }
+    > = (props) => {
+        const { data } = props ?? {}
 
-      return useMutation(mutationOptions, queryClient);
+        return postDMCapBacsList(data, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostDMCapBacsListMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postDMCapBacsList>>
+>
+export type PostDMCapBacsListMutationBody = PublicApiPagingRequestDto
+export type PostDMCapBacsListMutationError =
+    | PostDMCapBacsList400
+    | PostDMCapBacsList401
+    | PostDMCapBacsList403
+    | void
+
+/**
+ * @summary Cấp bậc - Danh sách
+ */
+export const usePostDMCapBacsList = <
+    TError = PostDMCapBacsList400 | PostDMCapBacsList401 | PostDMCapBacsList403 | void,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postDMCapBacsList>>,
+            TError,
+            { data: PublicApiPagingRequestDto },
+            TContext
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postDMCapBacsList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationOptions = getPostDMCapBacsListMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * Lấy thông tin Cấp bậc theo ID
  * @summary Cấp bậc - Theo Id
  */
 export type getDMCapBacsIdResponse200 = {
-  data: PublicApiGetAllDMCapBacDTO
-  status: 200
+    data: PublicApiGetAllDMCapBacDTO
+    status: 200
 }
 
 export type getDMCapBacsIdResponse400 = {
-  data: GetDMCapBacsId400
-  status: 400
+    data: GetDMCapBacsId400
+    status: 400
 }
 
 export type getDMCapBacsIdResponse401 = {
-  data: GetDMCapBacsId401
-  status: 401
+    data: GetDMCapBacsId401
+    status: 401
 }
 
 export type getDMCapBacsIdResponse403 = {
-  data: GetDMCapBacsId403
-  status: 403
+    data: GetDMCapBacsId403
+    status: 403
 }
 
 export type getDMCapBacsIdResponse500 = {
-  data: void
-  status: 500
-}
-    
-export type getDMCapBacsIdResponseSuccess = (getDMCapBacsIdResponse200) & {
-  headers: Headers;
-};
-export type getDMCapBacsIdResponseError = (getDMCapBacsIdResponse400 | getDMCapBacsIdResponse401 | getDMCapBacsIdResponse403 | getDMCapBacsIdResponse500) & {
-  headers: Headers;
-};
-
-export type getDMCapBacsIdResponse = (getDMCapBacsIdResponseSuccess | getDMCapBacsIdResponseError)
-
-export const getGetDMCapBacsIdUrl = (id: string,
-    params?: GetDMCapBacsIdParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/DM_CapBacs/${id}?${stringifiedParams}` : `/DM_CapBacs/${id}`
+    data: void
+    status: 500
 }
 
-export const getDMCapBacsId = async (id: string,
-    params?: GetDMCapBacsIdParams, options?: RequestInit): Promise<getDMCapBacsIdResponse> => {
-  
-  return customSystemFetch<getDMCapBacsIdResponse>(getGetDMCapBacsIdUrl(id,params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type getDMCapBacsIdResponseSuccess = getDMCapBacsIdResponse200 & {
+    headers: Headers
+}
+export type getDMCapBacsIdResponseError = (
+    | getDMCapBacsIdResponse400
+    | getDMCapBacsIdResponse401
+    | getDMCapBacsIdResponse403
+    | getDMCapBacsIdResponse500
+) & {
+    headers: Headers
+}
 
+export type getDMCapBacsIdResponse = getDMCapBacsIdResponseSuccess | getDMCapBacsIdResponseError
 
+export const getGetDMCapBacsIdUrl = (id: string, params?: GetDMCapBacsIdParams) => {
+    const normalizedParams = new URLSearchParams()
 
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
+    const stringifiedParams = normalizedParams.toString()
 
-export const getGetDMCapBacsIdQueryKey = (id?: string,
-    params?: GetDMCapBacsIdParams,) => {
-    return [
-    `/DM_CapBacs/${id}`, ...(params ? [params]: [])
-    ] as const;
+    return stringifiedParams.length > 0
+        ? `/DM_CapBacs/${id}?${stringifiedParams}`
+        : `/DM_CapBacs/${id}`
+}
+
+export const getDMCapBacsId = async (
+    id: string,
+    params?: GetDMCapBacsIdParams,
+    options?: RequestInit
+): Promise<getDMCapBacsIdResponse> => {
+    return customSystemFetch<getDMCapBacsIdResponse>(getGetDMCapBacsIdUrl(id, params), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getGetDMCapBacsIdQueryKey = (id?: string, params?: GetDMCapBacsIdParams) => {
+    return [`/DM_CapBacs/${id}`, ...(params ? [params] : [])] as const
+}
+
+export const getGetDMCapBacsIdQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMCapBacsId>>,
+    TError = GetDMCapBacsId400 | GetDMCapBacsId401 | GetDMCapBacsId403 | void,
+>(
+    id: string,
+    params?: GetDMCapBacsIdParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMCapBacsId>>, TError, TData>>
+        request?: SecondParameter<typeof customSystemFetch>
     }
-
-    
-export const getGetDMCapBacsIdQueryOptions = <TData = Awaited<ReturnType<typeof getDMCapBacsId>>, TError = GetDMCapBacsId400 | GetDMCapBacsId401 | GetDMCapBacsId403 | void>(id: string,
-    params?: GetDMCapBacsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMCapBacsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
 ) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    const queryKey = queryOptions?.queryKey ?? getGetDMCapBacsIdQueryKey(id, params)
 
-  const queryKey =  queryOptions?.queryKey ?? getGetDMCapBacsIdQueryKey(id,params);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMCapBacsId>>> = ({ signal }) =>
+        getDMCapBacsId(id, params, { signal, ...requestOptions })
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMCapBacsId>>> = ({ signal }) => getDMCapBacsId(id,params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMCapBacsId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMCapBacsId>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetDMCapBacsIdQueryResult = NonNullable<Awaited<ReturnType<typeof getDMCapBacsId>>>
-export type GetDMCapBacsIdQueryError = GetDMCapBacsId400 | GetDMCapBacsId401 | GetDMCapBacsId403 | void
+export type GetDMCapBacsIdQueryError =
+    | GetDMCapBacsId400
+    | GetDMCapBacsId401
+    | GetDMCapBacsId403
+    | void
 
-
-export function useGetDMCapBacsId<TData = Awaited<ReturnType<typeof getDMCapBacsId>>, TError = GetDMCapBacsId400 | GetDMCapBacsId401 | GetDMCapBacsId403 | void>(
- id: string,
-    params: undefined |  GetDMCapBacsIdParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMCapBacsId>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMCapBacsId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMCapBacsId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMCapBacsId<TData = Awaited<ReturnType<typeof getDMCapBacsId>>, TError = GetDMCapBacsId400 | GetDMCapBacsId401 | GetDMCapBacsId403 | void>(
- id: string,
-    params?: GetDMCapBacsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMCapBacsId>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMCapBacsId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMCapBacsId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMCapBacsId<TData = Awaited<ReturnType<typeof getDMCapBacsId>>, TError = GetDMCapBacsId400 | GetDMCapBacsId401 | GetDMCapBacsId403 | void>(
- id: string,
-    params?: GetDMCapBacsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMCapBacsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMCapBacsId<
+    TData = Awaited<ReturnType<typeof getDMCapBacsId>>,
+    TError = GetDMCapBacsId400 | GetDMCapBacsId401 | GetDMCapBacsId403 | void,
+>(
+    id: string,
+    params: undefined | GetDMCapBacsIdParams,
+    options: {
+        query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMCapBacsId>>, TError, TData>> &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMCapBacsId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMCapBacsId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMCapBacsId<
+    TData = Awaited<ReturnType<typeof getDMCapBacsId>>,
+    TError = GetDMCapBacsId400 | GetDMCapBacsId401 | GetDMCapBacsId403 | void,
+>(
+    id: string,
+    params?: GetDMCapBacsIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMCapBacsId>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMCapBacsId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMCapBacsId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMCapBacsId<
+    TData = Awaited<ReturnType<typeof getDMCapBacsId>>,
+    TError = GetDMCapBacsId400 | GetDMCapBacsId401 | GetDMCapBacsId403 | void,
+>(
+    id: string,
+    params?: GetDMCapBacsIdParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMCapBacsId>>, TError, TData>>
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Cấp bậc - Theo Id
  */
 
-export function useGetDMCapBacsId<TData = Awaited<ReturnType<typeof getDMCapBacsId>>, TError = GetDMCapBacsId400 | GetDMCapBacsId401 | GetDMCapBacsId403 | void>(
- id: string,
-    params?: GetDMCapBacsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMCapBacsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMCapBacsId<
+    TData = Awaited<ReturnType<typeof getDMCapBacsId>>,
+    TError = GetDMCapBacsId400 | GetDMCapBacsId401 | GetDMCapBacsId403 | void,
+>(
+    id: string,
+    params?: GetDMCapBacsIdParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMCapBacsId>>, TError, TData>>
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMCapBacsIdQueryOptions(id, params, options)
 
-  const queryOptions = getGetDMCapBacsIdQueryOptions(id,params,options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Kiểm tra tình trạng API
  * @summary Kiểm tra tình trạng API
  */
 export type getDMCapBacsHealthzResponse400 = {
-  data: GetDMCapBacsHealthz400
-  status: 400
+    data: GetDMCapBacsHealthz400
+    status: 400
 }
 
 export type getDMCapBacsHealthzResponse401 = {
-  data: GetDMCapBacsHealthz401
-  status: 401
+    data: GetDMCapBacsHealthz401
+    status: 401
 }
 
 export type getDMCapBacsHealthzResponse403 = {
-  data: GetDMCapBacsHealthz403
-  status: 403
+    data: GetDMCapBacsHealthz403
+    status: 403
 }
 
 export type getDMCapBacsHealthzResponse500 = {
-  data: GetDMCapBacsHealthz500
-  status: 500
+    data: GetDMCapBacsHealthz500
+    status: 500
 }
-    
-;
-export type getDMCapBacsHealthzResponseError = (getDMCapBacsHealthzResponse400 | getDMCapBacsHealthzResponse401 | getDMCapBacsHealthzResponse403 | getDMCapBacsHealthzResponse500) & {
-  headers: Headers;
-};
+export type getDMCapBacsHealthzResponseError = (
+    | getDMCapBacsHealthzResponse400
+    | getDMCapBacsHealthzResponse401
+    | getDMCapBacsHealthzResponse403
+    | getDMCapBacsHealthzResponse500
+) & {
+    headers: Headers
+}
 
-export type getDMCapBacsHealthzResponse = (getDMCapBacsHealthzResponseError)
+export type getDMCapBacsHealthzResponse = getDMCapBacsHealthzResponseError
 
 export const getGetDMCapBacsHealthzUrl = () => {
-
-
-  
-
-  return `/DM_CapBacs/healthz`
+    return `/DM_CapBacs/healthz`
 }
 
-export const getDMCapBacsHealthz = async ( options?: RequestInit): Promise<getDMCapBacsHealthzResponse> => {
-  
-  return customSystemFetch<getDMCapBacsHealthzResponse>(getGetDMCapBacsHealthzUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-
+export const getDMCapBacsHealthz = async (
+    options?: RequestInit
+): Promise<getDMCapBacsHealthzResponse> => {
+    return customSystemFetch<getDMCapBacsHealthzResponse>(getGetDMCapBacsHealthzUrl(), {
+        ...options,
+        method: 'GET',
+    })
+}
 
 export const getGetDMCapBacsHealthzQueryKey = () => {
-    return [
-    `/DM_CapBacs/healthz`
-    ] as const;
-    }
-
-    
-export const getGetDMCapBacsHealthzQueryOptions = <TData = Awaited<ReturnType<typeof getDMCapBacsHealthz>>, TError = GetDMCapBacsHealthz400 | GetDMCapBacsHealthz401 | GetDMCapBacsHealthz403 | GetDMCapBacsHealthz500>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMCapBacsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetDMCapBacsHealthzQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMCapBacsHealthz>>> = ({ signal }) => getDMCapBacsHealthz({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMCapBacsHealthz>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return [`/DM_CapBacs/healthz`] as const
 }
 
-export type GetDMCapBacsHealthzQueryResult = NonNullable<Awaited<ReturnType<typeof getDMCapBacsHealthz>>>
-export type GetDMCapBacsHealthzQueryError = GetDMCapBacsHealthz400 | GetDMCapBacsHealthz401 | GetDMCapBacsHealthz403 | GetDMCapBacsHealthz500
+export const getGetDMCapBacsHealthzQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMCapBacsHealthz>>,
+    TError =
+        | GetDMCapBacsHealthz400
+        | GetDMCapBacsHealthz401
+        | GetDMCapBacsHealthz403
+        | GetDMCapBacsHealthz500,
+>(options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMCapBacsHealthz>>, TError, TData>>
+    request?: SecondParameter<typeof customSystemFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
+    const queryKey = queryOptions?.queryKey ?? getGetDMCapBacsHealthzQueryKey()
 
-export function useGetDMCapBacsHealthz<TData = Awaited<ReturnType<typeof getDMCapBacsHealthz>>, TError = GetDMCapBacsHealthz400 | GetDMCapBacsHealthz401 | GetDMCapBacsHealthz403 | GetDMCapBacsHealthz500>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMCapBacsHealthz>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMCapBacsHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMCapBacsHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMCapBacsHealthz<TData = Awaited<ReturnType<typeof getDMCapBacsHealthz>>, TError = GetDMCapBacsHealthz400 | GetDMCapBacsHealthz401 | GetDMCapBacsHealthz403 | GetDMCapBacsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMCapBacsHealthz>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMCapBacsHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMCapBacsHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMCapBacsHealthz<TData = Awaited<ReturnType<typeof getDMCapBacsHealthz>>, TError = GetDMCapBacsHealthz400 | GetDMCapBacsHealthz401 | GetDMCapBacsHealthz403 | GetDMCapBacsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMCapBacsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMCapBacsHealthz>>> = ({ signal }) =>
+        getDMCapBacsHealthz({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMCapBacsHealthz>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDMCapBacsHealthzQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getDMCapBacsHealthz>>
+>
+export type GetDMCapBacsHealthzQueryError =
+    | GetDMCapBacsHealthz400
+    | GetDMCapBacsHealthz401
+    | GetDMCapBacsHealthz403
+    | GetDMCapBacsHealthz500
+
+export function useGetDMCapBacsHealthz<
+    TData = Awaited<ReturnType<typeof getDMCapBacsHealthz>>,
+    TError =
+        | GetDMCapBacsHealthz400
+        | GetDMCapBacsHealthz401
+        | GetDMCapBacsHealthz403
+        | GetDMCapBacsHealthz500,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMCapBacsHealthz>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMCapBacsHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMCapBacsHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMCapBacsHealthz<
+    TData = Awaited<ReturnType<typeof getDMCapBacsHealthz>>,
+    TError =
+        | GetDMCapBacsHealthz400
+        | GetDMCapBacsHealthz401
+        | GetDMCapBacsHealthz403
+        | GetDMCapBacsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMCapBacsHealthz>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMCapBacsHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMCapBacsHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMCapBacsHealthz<
+    TData = Awaited<ReturnType<typeof getDMCapBacsHealthz>>,
+    TError =
+        | GetDMCapBacsHealthz400
+        | GetDMCapBacsHealthz401
+        | GetDMCapBacsHealthz403
+        | GetDMCapBacsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMCapBacsHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Kiểm tra tình trạng API
  */
 
-export function useGetDMCapBacsHealthz<TData = Awaited<ReturnType<typeof getDMCapBacsHealthz>>, TError = GetDMCapBacsHealthz400 | GetDMCapBacsHealthz401 | GetDMCapBacsHealthz403 | GetDMCapBacsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMCapBacsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMCapBacsHealthz<
+    TData = Awaited<ReturnType<typeof getDMCapBacsHealthz>>,
+    TError =
+        | GetDMCapBacsHealthz400
+        | GetDMCapBacsHealthz401
+        | GetDMCapBacsHealthz403
+        | GetDMCapBacsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMCapBacsHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMCapBacsHealthzQueryOptions(options)
 
-  const queryOptions = getGetDMCapBacsHealthzQueryOptions(options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Lấy danh sách các Chức danh
  * @summary Chức danh - Danh sách
  */
 export type postDMChucDanhsListResponse200 = {
-  data: PublicApiGetAllDMChucDanhDTO
-  status: 200
+    data: PublicApiGetAllDMChucDanhDTO
+    status: 200
 }
 
 export type postDMChucDanhsListResponse400 = {
-  data: PostDMChucDanhsList400
-  status: 400
+    data: PostDMChucDanhsList400
+    status: 400
 }
 
 export type postDMChucDanhsListResponse401 = {
-  data: PostDMChucDanhsList401
-  status: 401
+    data: PostDMChucDanhsList401
+    status: 401
 }
 
 export type postDMChucDanhsListResponse403 = {
-  data: PostDMChucDanhsList403
-  status: 403
+    data: PostDMChucDanhsList403
+    status: 403
 }
 
 export type postDMChucDanhsListResponse500 = {
-  data: void
-  status: 500
+    data: void
+    status: 500
 }
-    
-export type postDMChucDanhsListResponseSuccess = (postDMChucDanhsListResponse200) & {
-  headers: Headers;
-};
-export type postDMChucDanhsListResponseError = (postDMChucDanhsListResponse400 | postDMChucDanhsListResponse401 | postDMChucDanhsListResponse403 | postDMChucDanhsListResponse500) & {
-  headers: Headers;
-};
 
-export type postDMChucDanhsListResponse = (postDMChucDanhsListResponseSuccess | postDMChucDanhsListResponseError)
+export type postDMChucDanhsListResponseSuccess = postDMChucDanhsListResponse200 & {
+    headers: Headers
+}
+export type postDMChucDanhsListResponseError = (
+    | postDMChucDanhsListResponse400
+    | postDMChucDanhsListResponse401
+    | postDMChucDanhsListResponse403
+    | postDMChucDanhsListResponse500
+) & {
+    headers: Headers
+}
+
+export type postDMChucDanhsListResponse =
+    | postDMChucDanhsListResponseSuccess
+    | postDMChucDanhsListResponseError
 
 export const getPostDMChucDanhsListUrl = () => {
-
-
-  
-
-  return `/DM_ChucDanhs/list`
+    return `/DM_ChucDanhs/list`
 }
 
-export const postDMChucDanhsList = async (publicApiPagingRequestDto: PublicApiPagingRequestDto, options?: RequestInit): Promise<postDMChucDanhsListResponse> => {
-  
-  return customSystemFetch<postDMChucDanhsListResponse>(getPostDMChucDanhsListUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
-    body: JSON.stringify(
-      publicApiPagingRequestDto,)
-  }
-);}
+export const postDMChucDanhsList = async (
+    publicApiPagingRequestDto: PublicApiPagingRequestDto,
+    options?: RequestInit
+): Promise<postDMChucDanhsListResponse> => {
+    return customSystemFetch<postDMChucDanhsListResponse>(getPostDMChucDanhsListUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
+        body: JSON.stringify(publicApiPagingRequestDto),
+    })
+}
 
-
-
-
-export const getPostDMChucDanhsListMutationOptions = <TError = PostDMChucDanhsList400 | PostDMChucDanhsList401 | PostDMChucDanhsList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMChucDanhsList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof postDMChucDanhsList>>, TError,{data: PublicApiPagingRequestDto}, TContext> => {
-
-const mutationKey = ['postDMChucDanhsList'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postDMChucDanhsList>>, {data: PublicApiPagingRequestDto}> = (props) => {
-          const {data} = props ?? {};
-
-          return  postDMChucDanhsList(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PostDMChucDanhsListMutationResult = NonNullable<Awaited<ReturnType<typeof postDMChucDanhsList>>>
-    export type PostDMChucDanhsListMutationBody = PublicApiPagingRequestDto
-    export type PostDMChucDanhsListMutationError = PostDMChucDanhsList400 | PostDMChucDanhsList401 | PostDMChucDanhsList403 | void
-
-    /**
- * @summary Chức danh - Danh sách
- */
-export const usePostDMChucDanhsList = <TError = PostDMChucDanhsList400 | PostDMChucDanhsList401 | PostDMChucDanhsList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMChucDanhsList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getPostDMChucDanhsListMutationOptions = <
+    TError = PostDMChucDanhsList400 | PostDMChucDanhsList401 | PostDMChucDanhsList403 | void,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postDMChucDanhsList>>,
         TError,
-        {data: PublicApiPagingRequestDto},
+        { data: PublicApiPagingRequestDto },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postDMChucDanhsList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationKey = ['postDMChucDanhsList']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getPostDMChucDanhsListMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postDMChucDanhsList>>,
+        { data: PublicApiPagingRequestDto }
+    > = (props) => {
+        const { data } = props ?? {}
 
-      return useMutation(mutationOptions, queryClient);
+        return postDMChucDanhsList(data, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostDMChucDanhsListMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postDMChucDanhsList>>
+>
+export type PostDMChucDanhsListMutationBody = PublicApiPagingRequestDto
+export type PostDMChucDanhsListMutationError =
+    | PostDMChucDanhsList400
+    | PostDMChucDanhsList401
+    | PostDMChucDanhsList403
+    | void
+
+/**
+ * @summary Chức danh - Danh sách
+ */
+export const usePostDMChucDanhsList = <
+    TError = PostDMChucDanhsList400 | PostDMChucDanhsList401 | PostDMChucDanhsList403 | void,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postDMChucDanhsList>>,
+            TError,
+            { data: PublicApiPagingRequestDto },
+            TContext
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postDMChucDanhsList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationOptions = getPostDMChucDanhsListMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * Lấy thông tin Chức danh theo ID
  * @summary Chức danh - Theo Id
  */
 export type getDMChucDanhsIdResponse200 = {
-  data: PublicApiGetAllDMChucDanhDTO
-  status: 200
+    data: PublicApiGetAllDMChucDanhDTO
+    status: 200
 }
 
 export type getDMChucDanhsIdResponse400 = {
-  data: GetDMChucDanhsId400
-  status: 400
+    data: GetDMChucDanhsId400
+    status: 400
 }
 
 export type getDMChucDanhsIdResponse401 = {
-  data: GetDMChucDanhsId401
-  status: 401
+    data: GetDMChucDanhsId401
+    status: 401
 }
 
 export type getDMChucDanhsIdResponse403 = {
-  data: GetDMChucDanhsId403
-  status: 403
+    data: GetDMChucDanhsId403
+    status: 403
 }
 
 export type getDMChucDanhsIdResponse500 = {
-  data: void
-  status: 500
-}
-    
-export type getDMChucDanhsIdResponseSuccess = (getDMChucDanhsIdResponse200) & {
-  headers: Headers;
-};
-export type getDMChucDanhsIdResponseError = (getDMChucDanhsIdResponse400 | getDMChucDanhsIdResponse401 | getDMChucDanhsIdResponse403 | getDMChucDanhsIdResponse500) & {
-  headers: Headers;
-};
-
-export type getDMChucDanhsIdResponse = (getDMChucDanhsIdResponseSuccess | getDMChucDanhsIdResponseError)
-
-export const getGetDMChucDanhsIdUrl = (id: string,
-    params?: GetDMChucDanhsIdParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/DM_ChucDanhs/${id}?${stringifiedParams}` : `/DM_ChucDanhs/${id}`
+    data: void
+    status: 500
 }
 
-export const getDMChucDanhsId = async (id: string,
-    params?: GetDMChucDanhsIdParams, options?: RequestInit): Promise<getDMChucDanhsIdResponse> => {
-  
-  return customSystemFetch<getDMChucDanhsIdResponse>(getGetDMChucDanhsIdUrl(id,params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type getDMChucDanhsIdResponseSuccess = getDMChucDanhsIdResponse200 & {
+    headers: Headers
+}
+export type getDMChucDanhsIdResponseError = (
+    | getDMChucDanhsIdResponse400
+    | getDMChucDanhsIdResponse401
+    | getDMChucDanhsIdResponse403
+    | getDMChucDanhsIdResponse500
+) & {
+    headers: Headers
+}
 
+export type getDMChucDanhsIdResponse =
+    | getDMChucDanhsIdResponseSuccess
+    | getDMChucDanhsIdResponseError
 
+export const getGetDMChucDanhsIdUrl = (id: string, params?: GetDMChucDanhsIdParams) => {
+    const normalizedParams = new URLSearchParams()
 
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
+    const stringifiedParams = normalizedParams.toString()
 
-export const getGetDMChucDanhsIdQueryKey = (id?: string,
-    params?: GetDMChucDanhsIdParams,) => {
-    return [
-    `/DM_ChucDanhs/${id}`, ...(params ? [params]: [])
-    ] as const;
+    return stringifiedParams.length > 0
+        ? `/DM_ChucDanhs/${id}?${stringifiedParams}`
+        : `/DM_ChucDanhs/${id}`
+}
+
+export const getDMChucDanhsId = async (
+    id: string,
+    params?: GetDMChucDanhsIdParams,
+    options?: RequestInit
+): Promise<getDMChucDanhsIdResponse> => {
+    return customSystemFetch<getDMChucDanhsIdResponse>(getGetDMChucDanhsIdUrl(id, params), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getGetDMChucDanhsIdQueryKey = (id?: string, params?: GetDMChucDanhsIdParams) => {
+    return [`/DM_ChucDanhs/${id}`, ...(params ? [params] : [])] as const
+}
+
+export const getGetDMChucDanhsIdQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMChucDanhsId>>,
+    TError = GetDMChucDanhsId400 | GetDMChucDanhsId401 | GetDMChucDanhsId403 | void,
+>(
+    id: string,
+    params?: GetDMChucDanhsIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMChucDanhsId>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
     }
-
-    
-export const getGetDMChucDanhsIdQueryOptions = <TData = Awaited<ReturnType<typeof getDMChucDanhsId>>, TError = GetDMChucDanhsId400 | GetDMChucDanhsId401 | GetDMChucDanhsId403 | void>(id: string,
-    params?: GetDMChucDanhsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMChucDanhsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
 ) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    const queryKey = queryOptions?.queryKey ?? getGetDMChucDanhsIdQueryKey(id, params)
 
-  const queryKey =  queryOptions?.queryKey ?? getGetDMChucDanhsIdQueryKey(id,params);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMChucDanhsId>>> = ({ signal }) =>
+        getDMChucDanhsId(id, params, { signal, ...requestOptions })
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMChucDanhsId>>> = ({ signal }) => getDMChucDanhsId(id,params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMChucDanhsId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMChucDanhsId>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetDMChucDanhsIdQueryResult = NonNullable<Awaited<ReturnType<typeof getDMChucDanhsId>>>
-export type GetDMChucDanhsIdQueryError = GetDMChucDanhsId400 | GetDMChucDanhsId401 | GetDMChucDanhsId403 | void
+export type GetDMChucDanhsIdQueryError =
+    | GetDMChucDanhsId400
+    | GetDMChucDanhsId401
+    | GetDMChucDanhsId403
+    | void
 
-
-export function useGetDMChucDanhsId<TData = Awaited<ReturnType<typeof getDMChucDanhsId>>, TError = GetDMChucDanhsId400 | GetDMChucDanhsId401 | GetDMChucDanhsId403 | void>(
- id: string,
-    params: undefined |  GetDMChucDanhsIdParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMChucDanhsId>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMChucDanhsId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMChucDanhsId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMChucDanhsId<TData = Awaited<ReturnType<typeof getDMChucDanhsId>>, TError = GetDMChucDanhsId400 | GetDMChucDanhsId401 | GetDMChucDanhsId403 | void>(
- id: string,
-    params?: GetDMChucDanhsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMChucDanhsId>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMChucDanhsId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMChucDanhsId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMChucDanhsId<TData = Awaited<ReturnType<typeof getDMChucDanhsId>>, TError = GetDMChucDanhsId400 | GetDMChucDanhsId401 | GetDMChucDanhsId403 | void>(
- id: string,
-    params?: GetDMChucDanhsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMChucDanhsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMChucDanhsId<
+    TData = Awaited<ReturnType<typeof getDMChucDanhsId>>,
+    TError = GetDMChucDanhsId400 | GetDMChucDanhsId401 | GetDMChucDanhsId403 | void,
+>(
+    id: string,
+    params: undefined | GetDMChucDanhsIdParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMChucDanhsId>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMChucDanhsId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMChucDanhsId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMChucDanhsId<
+    TData = Awaited<ReturnType<typeof getDMChucDanhsId>>,
+    TError = GetDMChucDanhsId400 | GetDMChucDanhsId401 | GetDMChucDanhsId403 | void,
+>(
+    id: string,
+    params?: GetDMChucDanhsIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMChucDanhsId>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMChucDanhsId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMChucDanhsId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMChucDanhsId<
+    TData = Awaited<ReturnType<typeof getDMChucDanhsId>>,
+    TError = GetDMChucDanhsId400 | GetDMChucDanhsId401 | GetDMChucDanhsId403 | void,
+>(
+    id: string,
+    params?: GetDMChucDanhsIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMChucDanhsId>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Chức danh - Theo Id
  */
 
-export function useGetDMChucDanhsId<TData = Awaited<ReturnType<typeof getDMChucDanhsId>>, TError = GetDMChucDanhsId400 | GetDMChucDanhsId401 | GetDMChucDanhsId403 | void>(
- id: string,
-    params?: GetDMChucDanhsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMChucDanhsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMChucDanhsId<
+    TData = Awaited<ReturnType<typeof getDMChucDanhsId>>,
+    TError = GetDMChucDanhsId400 | GetDMChucDanhsId401 | GetDMChucDanhsId403 | void,
+>(
+    id: string,
+    params?: GetDMChucDanhsIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMChucDanhsId>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMChucDanhsIdQueryOptions(id, params, options)
 
-  const queryOptions = getGetDMChucDanhsIdQueryOptions(id,params,options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Kiểm tra tình trạng API
  * @summary Kiểm tra tình trạng API
  */
 export type getDMChucDanhsHealthzResponse400 = {
-  data: GetDMChucDanhsHealthz400
-  status: 400
+    data: GetDMChucDanhsHealthz400
+    status: 400
 }
 
 export type getDMChucDanhsHealthzResponse401 = {
-  data: GetDMChucDanhsHealthz401
-  status: 401
+    data: GetDMChucDanhsHealthz401
+    status: 401
 }
 
 export type getDMChucDanhsHealthzResponse403 = {
-  data: GetDMChucDanhsHealthz403
-  status: 403
+    data: GetDMChucDanhsHealthz403
+    status: 403
 }
 
 export type getDMChucDanhsHealthzResponse500 = {
-  data: GetDMChucDanhsHealthz500
-  status: 500
+    data: GetDMChucDanhsHealthz500
+    status: 500
 }
-    
-;
-export type getDMChucDanhsHealthzResponseError = (getDMChucDanhsHealthzResponse400 | getDMChucDanhsHealthzResponse401 | getDMChucDanhsHealthzResponse403 | getDMChucDanhsHealthzResponse500) & {
-  headers: Headers;
-};
+export type getDMChucDanhsHealthzResponseError = (
+    | getDMChucDanhsHealthzResponse400
+    | getDMChucDanhsHealthzResponse401
+    | getDMChucDanhsHealthzResponse403
+    | getDMChucDanhsHealthzResponse500
+) & {
+    headers: Headers
+}
 
-export type getDMChucDanhsHealthzResponse = (getDMChucDanhsHealthzResponseError)
+export type getDMChucDanhsHealthzResponse = getDMChucDanhsHealthzResponseError
 
 export const getGetDMChucDanhsHealthzUrl = () => {
-
-
-  
-
-  return `/DM_ChucDanhs/healthz`
+    return `/DM_ChucDanhs/healthz`
 }
 
-export const getDMChucDanhsHealthz = async ( options?: RequestInit): Promise<getDMChucDanhsHealthzResponse> => {
-  
-  return customSystemFetch<getDMChucDanhsHealthzResponse>(getGetDMChucDanhsHealthzUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-
+export const getDMChucDanhsHealthz = async (
+    options?: RequestInit
+): Promise<getDMChucDanhsHealthzResponse> => {
+    return customSystemFetch<getDMChucDanhsHealthzResponse>(getGetDMChucDanhsHealthzUrl(), {
+        ...options,
+        method: 'GET',
+    })
+}
 
 export const getGetDMChucDanhsHealthzQueryKey = () => {
-    return [
-    `/DM_ChucDanhs/healthz`
-    ] as const;
-    }
-
-    
-export const getGetDMChucDanhsHealthzQueryOptions = <TData = Awaited<ReturnType<typeof getDMChucDanhsHealthz>>, TError = GetDMChucDanhsHealthz400 | GetDMChucDanhsHealthz401 | GetDMChucDanhsHealthz403 | GetDMChucDanhsHealthz500>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMChucDanhsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetDMChucDanhsHealthzQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMChucDanhsHealthz>>> = ({ signal }) => getDMChucDanhsHealthz({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMChucDanhsHealthz>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return [`/DM_ChucDanhs/healthz`] as const
 }
 
-export type GetDMChucDanhsHealthzQueryResult = NonNullable<Awaited<ReturnType<typeof getDMChucDanhsHealthz>>>
-export type GetDMChucDanhsHealthzQueryError = GetDMChucDanhsHealthz400 | GetDMChucDanhsHealthz401 | GetDMChucDanhsHealthz403 | GetDMChucDanhsHealthz500
+export const getGetDMChucDanhsHealthzQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMChucDanhsHealthz>>,
+    TError =
+        | GetDMChucDanhsHealthz400
+        | GetDMChucDanhsHealthz401
+        | GetDMChucDanhsHealthz403
+        | GetDMChucDanhsHealthz500,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<Awaited<ReturnType<typeof getDMChucDanhsHealthz>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
+    const queryKey = queryOptions?.queryKey ?? getGetDMChucDanhsHealthzQueryKey()
 
-export function useGetDMChucDanhsHealthz<TData = Awaited<ReturnType<typeof getDMChucDanhsHealthz>>, TError = GetDMChucDanhsHealthz400 | GetDMChucDanhsHealthz401 | GetDMChucDanhsHealthz403 | GetDMChucDanhsHealthz500>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMChucDanhsHealthz>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMChucDanhsHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMChucDanhsHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMChucDanhsHealthz<TData = Awaited<ReturnType<typeof getDMChucDanhsHealthz>>, TError = GetDMChucDanhsHealthz400 | GetDMChucDanhsHealthz401 | GetDMChucDanhsHealthz403 | GetDMChucDanhsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMChucDanhsHealthz>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMChucDanhsHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMChucDanhsHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMChucDanhsHealthz<TData = Awaited<ReturnType<typeof getDMChucDanhsHealthz>>, TError = GetDMChucDanhsHealthz400 | GetDMChucDanhsHealthz401 | GetDMChucDanhsHealthz403 | GetDMChucDanhsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMChucDanhsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMChucDanhsHealthz>>> = ({
+        signal,
+    }) => getDMChucDanhsHealthz({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMChucDanhsHealthz>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDMChucDanhsHealthzQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getDMChucDanhsHealthz>>
+>
+export type GetDMChucDanhsHealthzQueryError =
+    | GetDMChucDanhsHealthz400
+    | GetDMChucDanhsHealthz401
+    | GetDMChucDanhsHealthz403
+    | GetDMChucDanhsHealthz500
+
+export function useGetDMChucDanhsHealthz<
+    TData = Awaited<ReturnType<typeof getDMChucDanhsHealthz>>,
+    TError =
+        | GetDMChucDanhsHealthz400
+        | GetDMChucDanhsHealthz401
+        | GetDMChucDanhsHealthz403
+        | GetDMChucDanhsHealthz500,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMChucDanhsHealthz>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMChucDanhsHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMChucDanhsHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMChucDanhsHealthz<
+    TData = Awaited<ReturnType<typeof getDMChucDanhsHealthz>>,
+    TError =
+        | GetDMChucDanhsHealthz400
+        | GetDMChucDanhsHealthz401
+        | GetDMChucDanhsHealthz403
+        | GetDMChucDanhsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMChucDanhsHealthz>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMChucDanhsHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMChucDanhsHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMChucDanhsHealthz<
+    TData = Awaited<ReturnType<typeof getDMChucDanhsHealthz>>,
+    TError =
+        | GetDMChucDanhsHealthz400
+        | GetDMChucDanhsHealthz401
+        | GetDMChucDanhsHealthz403
+        | GetDMChucDanhsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMChucDanhsHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Kiểm tra tình trạng API
  */
 
-export function useGetDMChucDanhsHealthz<TData = Awaited<ReturnType<typeof getDMChucDanhsHealthz>>, TError = GetDMChucDanhsHealthz400 | GetDMChucDanhsHealthz401 | GetDMChucDanhsHealthz403 | GetDMChucDanhsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMChucDanhsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMChucDanhsHealthz<
+    TData = Awaited<ReturnType<typeof getDMChucDanhsHealthz>>,
+    TError =
+        | GetDMChucDanhsHealthz400
+        | GetDMChucDanhsHealthz401
+        | GetDMChucDanhsHealthz403
+        | GetDMChucDanhsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMChucDanhsHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMChucDanhsHealthzQueryOptions(options)
 
-  const queryOptions = getGetDMChucDanhsHealthzQueryOptions(options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Lấy danh sách các Chức vụ
  * @summary Chức vụ - Danh sách
  */
 export type postDMChucVusListResponse200 = {
-  data: PublicApiGetAllDMChucVuDTO
-  status: 200
+    data: PublicApiGetAllDMChucVuDTO
+    status: 200
 }
 
 export type postDMChucVusListResponse400 = {
-  data: PostDMChucVusList400
-  status: 400
+    data: PostDMChucVusList400
+    status: 400
 }
 
 export type postDMChucVusListResponse401 = {
-  data: PostDMChucVusList401
-  status: 401
+    data: PostDMChucVusList401
+    status: 401
 }
 
 export type postDMChucVusListResponse403 = {
-  data: PostDMChucVusList403
-  status: 403
+    data: PostDMChucVusList403
+    status: 403
 }
 
 export type postDMChucVusListResponse500 = {
-  data: void
-  status: 500
+    data: void
+    status: 500
 }
-    
-export type postDMChucVusListResponseSuccess = (postDMChucVusListResponse200) & {
-  headers: Headers;
-};
-export type postDMChucVusListResponseError = (postDMChucVusListResponse400 | postDMChucVusListResponse401 | postDMChucVusListResponse403 | postDMChucVusListResponse500) & {
-  headers: Headers;
-};
 
-export type postDMChucVusListResponse = (postDMChucVusListResponseSuccess | postDMChucVusListResponseError)
+export type postDMChucVusListResponseSuccess = postDMChucVusListResponse200 & {
+    headers: Headers
+}
+export type postDMChucVusListResponseError = (
+    | postDMChucVusListResponse400
+    | postDMChucVusListResponse401
+    | postDMChucVusListResponse403
+    | postDMChucVusListResponse500
+) & {
+    headers: Headers
+}
+
+export type postDMChucVusListResponse =
+    | postDMChucVusListResponseSuccess
+    | postDMChucVusListResponseError
 
 export const getPostDMChucVusListUrl = () => {
-
-
-  
-
-  return `/DM_ChucVus/list`
+    return `/DM_ChucVus/list`
 }
 
-export const postDMChucVusList = async (publicApiPagingRequestDto: PublicApiPagingRequestDto, options?: RequestInit): Promise<postDMChucVusListResponse> => {
-  
-  return customSystemFetch<postDMChucVusListResponse>(getPostDMChucVusListUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
-    body: JSON.stringify(
-      publicApiPagingRequestDto,)
-  }
-);}
+export const postDMChucVusList = async (
+    publicApiPagingRequestDto: PublicApiPagingRequestDto,
+    options?: RequestInit
+): Promise<postDMChucVusListResponse> => {
+    return customSystemFetch<postDMChucVusListResponse>(getPostDMChucVusListUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
+        body: JSON.stringify(publicApiPagingRequestDto),
+    })
+}
 
-
-
-
-export const getPostDMChucVusListMutationOptions = <TError = PostDMChucVusList400 | PostDMChucVusList401 | PostDMChucVusList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMChucVusList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof postDMChucVusList>>, TError,{data: PublicApiPagingRequestDto}, TContext> => {
-
-const mutationKey = ['postDMChucVusList'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postDMChucVusList>>, {data: PublicApiPagingRequestDto}> = (props) => {
-          const {data} = props ?? {};
-
-          return  postDMChucVusList(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PostDMChucVusListMutationResult = NonNullable<Awaited<ReturnType<typeof postDMChucVusList>>>
-    export type PostDMChucVusListMutationBody = PublicApiPagingRequestDto
-    export type PostDMChucVusListMutationError = PostDMChucVusList400 | PostDMChucVusList401 | PostDMChucVusList403 | void
-
-    /**
- * @summary Chức vụ - Danh sách
- */
-export const usePostDMChucVusList = <TError = PostDMChucVusList400 | PostDMChucVusList401 | PostDMChucVusList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMChucVusList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getPostDMChucVusListMutationOptions = <
+    TError = PostDMChucVusList400 | PostDMChucVusList401 | PostDMChucVusList403 | void,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postDMChucVusList>>,
         TError,
-        {data: PublicApiPagingRequestDto},
+        { data: PublicApiPagingRequestDto },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postDMChucVusList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationKey = ['postDMChucVusList']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getPostDMChucVusListMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postDMChucVusList>>,
+        { data: PublicApiPagingRequestDto }
+    > = (props) => {
+        const { data } = props ?? {}
 
-      return useMutation(mutationOptions, queryClient);
+        return postDMChucVusList(data, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostDMChucVusListMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postDMChucVusList>>
+>
+export type PostDMChucVusListMutationBody = PublicApiPagingRequestDto
+export type PostDMChucVusListMutationError =
+    | PostDMChucVusList400
+    | PostDMChucVusList401
+    | PostDMChucVusList403
+    | void
+
+/**
+ * @summary Chức vụ - Danh sách
+ */
+export const usePostDMChucVusList = <
+    TError = PostDMChucVusList400 | PostDMChucVusList401 | PostDMChucVusList403 | void,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postDMChucVusList>>,
+            TError,
+            { data: PublicApiPagingRequestDto },
+            TContext
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postDMChucVusList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationOptions = getPostDMChucVusListMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * Lấy thông tin Chức vụ theo ID
  * @summary Chức vụ - Theo Id
  */
 export type getDMChucVusIdResponse200 = {
-  data: PublicApiGetAllDMChucVuDTO
-  status: 200
+    data: PublicApiGetAllDMChucVuDTO
+    status: 200
 }
 
 export type getDMChucVusIdResponse400 = {
-  data: GetDMChucVusId400
-  status: 400
+    data: GetDMChucVusId400
+    status: 400
 }
 
 export type getDMChucVusIdResponse401 = {
-  data: GetDMChucVusId401
-  status: 401
+    data: GetDMChucVusId401
+    status: 401
 }
 
 export type getDMChucVusIdResponse403 = {
-  data: GetDMChucVusId403
-  status: 403
+    data: GetDMChucVusId403
+    status: 403
 }
 
 export type getDMChucVusIdResponse500 = {
-  data: void
-  status: 500
-}
-    
-export type getDMChucVusIdResponseSuccess = (getDMChucVusIdResponse200) & {
-  headers: Headers;
-};
-export type getDMChucVusIdResponseError = (getDMChucVusIdResponse400 | getDMChucVusIdResponse401 | getDMChucVusIdResponse403 | getDMChucVusIdResponse500) & {
-  headers: Headers;
-};
-
-export type getDMChucVusIdResponse = (getDMChucVusIdResponseSuccess | getDMChucVusIdResponseError)
-
-export const getGetDMChucVusIdUrl = (id: string,
-    params?: GetDMChucVusIdParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/DM_ChucVus/${id}?${stringifiedParams}` : `/DM_ChucVus/${id}`
+    data: void
+    status: 500
 }
 
-export const getDMChucVusId = async (id: string,
-    params?: GetDMChucVusIdParams, options?: RequestInit): Promise<getDMChucVusIdResponse> => {
-  
-  return customSystemFetch<getDMChucVusIdResponse>(getGetDMChucVusIdUrl(id,params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type getDMChucVusIdResponseSuccess = getDMChucVusIdResponse200 & {
+    headers: Headers
+}
+export type getDMChucVusIdResponseError = (
+    | getDMChucVusIdResponse400
+    | getDMChucVusIdResponse401
+    | getDMChucVusIdResponse403
+    | getDMChucVusIdResponse500
+) & {
+    headers: Headers
+}
 
+export type getDMChucVusIdResponse = getDMChucVusIdResponseSuccess | getDMChucVusIdResponseError
 
+export const getGetDMChucVusIdUrl = (id: string, params?: GetDMChucVusIdParams) => {
+    const normalizedParams = new URLSearchParams()
 
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
+    const stringifiedParams = normalizedParams.toString()
 
-export const getGetDMChucVusIdQueryKey = (id?: string,
-    params?: GetDMChucVusIdParams,) => {
-    return [
-    `/DM_ChucVus/${id}`, ...(params ? [params]: [])
-    ] as const;
+    return stringifiedParams.length > 0
+        ? `/DM_ChucVus/${id}?${stringifiedParams}`
+        : `/DM_ChucVus/${id}`
+}
+
+export const getDMChucVusId = async (
+    id: string,
+    params?: GetDMChucVusIdParams,
+    options?: RequestInit
+): Promise<getDMChucVusIdResponse> => {
+    return customSystemFetch<getDMChucVusIdResponse>(getGetDMChucVusIdUrl(id, params), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getGetDMChucVusIdQueryKey = (id?: string, params?: GetDMChucVusIdParams) => {
+    return [`/DM_ChucVus/${id}`, ...(params ? [params] : [])] as const
+}
+
+export const getGetDMChucVusIdQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMChucVusId>>,
+    TError = GetDMChucVusId400 | GetDMChucVusId401 | GetDMChucVusId403 | void,
+>(
+    id: string,
+    params?: GetDMChucVusIdParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMChucVusId>>, TError, TData>>
+        request?: SecondParameter<typeof customSystemFetch>
     }
-
-    
-export const getGetDMChucVusIdQueryOptions = <TData = Awaited<ReturnType<typeof getDMChucVusId>>, TError = GetDMChucVusId400 | GetDMChucVusId401 | GetDMChucVusId403 | void>(id: string,
-    params?: GetDMChucVusIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMChucVusId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
 ) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    const queryKey = queryOptions?.queryKey ?? getGetDMChucVusIdQueryKey(id, params)
 
-  const queryKey =  queryOptions?.queryKey ?? getGetDMChucVusIdQueryKey(id,params);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMChucVusId>>> = ({ signal }) =>
+        getDMChucVusId(id, params, { signal, ...requestOptions })
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMChucVusId>>> = ({ signal }) => getDMChucVusId(id,params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMChucVusId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMChucVusId>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetDMChucVusIdQueryResult = NonNullable<Awaited<ReturnType<typeof getDMChucVusId>>>
-export type GetDMChucVusIdQueryError = GetDMChucVusId400 | GetDMChucVusId401 | GetDMChucVusId403 | void
+export type GetDMChucVusIdQueryError =
+    | GetDMChucVusId400
+    | GetDMChucVusId401
+    | GetDMChucVusId403
+    | void
 
-
-export function useGetDMChucVusId<TData = Awaited<ReturnType<typeof getDMChucVusId>>, TError = GetDMChucVusId400 | GetDMChucVusId401 | GetDMChucVusId403 | void>(
- id: string,
-    params: undefined |  GetDMChucVusIdParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMChucVusId>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMChucVusId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMChucVusId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMChucVusId<TData = Awaited<ReturnType<typeof getDMChucVusId>>, TError = GetDMChucVusId400 | GetDMChucVusId401 | GetDMChucVusId403 | void>(
- id: string,
-    params?: GetDMChucVusIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMChucVusId>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMChucVusId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMChucVusId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMChucVusId<TData = Awaited<ReturnType<typeof getDMChucVusId>>, TError = GetDMChucVusId400 | GetDMChucVusId401 | GetDMChucVusId403 | void>(
- id: string,
-    params?: GetDMChucVusIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMChucVusId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMChucVusId<
+    TData = Awaited<ReturnType<typeof getDMChucVusId>>,
+    TError = GetDMChucVusId400 | GetDMChucVusId401 | GetDMChucVusId403 | void,
+>(
+    id: string,
+    params: undefined | GetDMChucVusIdParams,
+    options: {
+        query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMChucVusId>>, TError, TData>> &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMChucVusId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMChucVusId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMChucVusId<
+    TData = Awaited<ReturnType<typeof getDMChucVusId>>,
+    TError = GetDMChucVusId400 | GetDMChucVusId401 | GetDMChucVusId403 | void,
+>(
+    id: string,
+    params?: GetDMChucVusIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMChucVusId>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMChucVusId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMChucVusId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMChucVusId<
+    TData = Awaited<ReturnType<typeof getDMChucVusId>>,
+    TError = GetDMChucVusId400 | GetDMChucVusId401 | GetDMChucVusId403 | void,
+>(
+    id: string,
+    params?: GetDMChucVusIdParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMChucVusId>>, TError, TData>>
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Chức vụ - Theo Id
  */
 
-export function useGetDMChucVusId<TData = Awaited<ReturnType<typeof getDMChucVusId>>, TError = GetDMChucVusId400 | GetDMChucVusId401 | GetDMChucVusId403 | void>(
- id: string,
-    params?: GetDMChucVusIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMChucVusId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMChucVusId<
+    TData = Awaited<ReturnType<typeof getDMChucVusId>>,
+    TError = GetDMChucVusId400 | GetDMChucVusId401 | GetDMChucVusId403 | void,
+>(
+    id: string,
+    params?: GetDMChucVusIdParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMChucVusId>>, TError, TData>>
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMChucVusIdQueryOptions(id, params, options)
 
-  const queryOptions = getGetDMChucVusIdQueryOptions(id,params,options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Kiểm tra tình trạng API
  * @summary Kiểm tra tình trạng API
  */
 export type getDMChucVusHealthzResponse400 = {
-  data: GetDMChucVusHealthz400
-  status: 400
+    data: GetDMChucVusHealthz400
+    status: 400
 }
 
 export type getDMChucVusHealthzResponse401 = {
-  data: GetDMChucVusHealthz401
-  status: 401
+    data: GetDMChucVusHealthz401
+    status: 401
 }
 
 export type getDMChucVusHealthzResponse403 = {
-  data: GetDMChucVusHealthz403
-  status: 403
+    data: GetDMChucVusHealthz403
+    status: 403
 }
 
 export type getDMChucVusHealthzResponse500 = {
-  data: GetDMChucVusHealthz500
-  status: 500
+    data: GetDMChucVusHealthz500
+    status: 500
 }
-    
-;
-export type getDMChucVusHealthzResponseError = (getDMChucVusHealthzResponse400 | getDMChucVusHealthzResponse401 | getDMChucVusHealthzResponse403 | getDMChucVusHealthzResponse500) & {
-  headers: Headers;
-};
+export type getDMChucVusHealthzResponseError = (
+    | getDMChucVusHealthzResponse400
+    | getDMChucVusHealthzResponse401
+    | getDMChucVusHealthzResponse403
+    | getDMChucVusHealthzResponse500
+) & {
+    headers: Headers
+}
 
-export type getDMChucVusHealthzResponse = (getDMChucVusHealthzResponseError)
+export type getDMChucVusHealthzResponse = getDMChucVusHealthzResponseError
 
 export const getGetDMChucVusHealthzUrl = () => {
-
-
-  
-
-  return `/DM_ChucVus/healthz`
+    return `/DM_ChucVus/healthz`
 }
 
-export const getDMChucVusHealthz = async ( options?: RequestInit): Promise<getDMChucVusHealthzResponse> => {
-  
-  return customSystemFetch<getDMChucVusHealthzResponse>(getGetDMChucVusHealthzUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-
+export const getDMChucVusHealthz = async (
+    options?: RequestInit
+): Promise<getDMChucVusHealthzResponse> => {
+    return customSystemFetch<getDMChucVusHealthzResponse>(getGetDMChucVusHealthzUrl(), {
+        ...options,
+        method: 'GET',
+    })
+}
 
 export const getGetDMChucVusHealthzQueryKey = () => {
-    return [
-    `/DM_ChucVus/healthz`
-    ] as const;
-    }
-
-    
-export const getGetDMChucVusHealthzQueryOptions = <TData = Awaited<ReturnType<typeof getDMChucVusHealthz>>, TError = GetDMChucVusHealthz400 | GetDMChucVusHealthz401 | GetDMChucVusHealthz403 | GetDMChucVusHealthz500>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMChucVusHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetDMChucVusHealthzQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMChucVusHealthz>>> = ({ signal }) => getDMChucVusHealthz({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMChucVusHealthz>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return [`/DM_ChucVus/healthz`] as const
 }
 
-export type GetDMChucVusHealthzQueryResult = NonNullable<Awaited<ReturnType<typeof getDMChucVusHealthz>>>
-export type GetDMChucVusHealthzQueryError = GetDMChucVusHealthz400 | GetDMChucVusHealthz401 | GetDMChucVusHealthz403 | GetDMChucVusHealthz500
+export const getGetDMChucVusHealthzQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMChucVusHealthz>>,
+    TError =
+        | GetDMChucVusHealthz400
+        | GetDMChucVusHealthz401
+        | GetDMChucVusHealthz403
+        | GetDMChucVusHealthz500,
+>(options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMChucVusHealthz>>, TError, TData>>
+    request?: SecondParameter<typeof customSystemFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
+    const queryKey = queryOptions?.queryKey ?? getGetDMChucVusHealthzQueryKey()
 
-export function useGetDMChucVusHealthz<TData = Awaited<ReturnType<typeof getDMChucVusHealthz>>, TError = GetDMChucVusHealthz400 | GetDMChucVusHealthz401 | GetDMChucVusHealthz403 | GetDMChucVusHealthz500>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMChucVusHealthz>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMChucVusHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMChucVusHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMChucVusHealthz<TData = Awaited<ReturnType<typeof getDMChucVusHealthz>>, TError = GetDMChucVusHealthz400 | GetDMChucVusHealthz401 | GetDMChucVusHealthz403 | GetDMChucVusHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMChucVusHealthz>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMChucVusHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMChucVusHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMChucVusHealthz<TData = Awaited<ReturnType<typeof getDMChucVusHealthz>>, TError = GetDMChucVusHealthz400 | GetDMChucVusHealthz401 | GetDMChucVusHealthz403 | GetDMChucVusHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMChucVusHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMChucVusHealthz>>> = ({ signal }) =>
+        getDMChucVusHealthz({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMChucVusHealthz>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDMChucVusHealthzQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getDMChucVusHealthz>>
+>
+export type GetDMChucVusHealthzQueryError =
+    | GetDMChucVusHealthz400
+    | GetDMChucVusHealthz401
+    | GetDMChucVusHealthz403
+    | GetDMChucVusHealthz500
+
+export function useGetDMChucVusHealthz<
+    TData = Awaited<ReturnType<typeof getDMChucVusHealthz>>,
+    TError =
+        | GetDMChucVusHealthz400
+        | GetDMChucVusHealthz401
+        | GetDMChucVusHealthz403
+        | GetDMChucVusHealthz500,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMChucVusHealthz>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMChucVusHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMChucVusHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMChucVusHealthz<
+    TData = Awaited<ReturnType<typeof getDMChucVusHealthz>>,
+    TError =
+        | GetDMChucVusHealthz400
+        | GetDMChucVusHealthz401
+        | GetDMChucVusHealthz403
+        | GetDMChucVusHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMChucVusHealthz>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMChucVusHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMChucVusHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMChucVusHealthz<
+    TData = Awaited<ReturnType<typeof getDMChucVusHealthz>>,
+    TError =
+        | GetDMChucVusHealthz400
+        | GetDMChucVusHealthz401
+        | GetDMChucVusHealthz403
+        | GetDMChucVusHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMChucVusHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Kiểm tra tình trạng API
  */
 
-export function useGetDMChucVusHealthz<TData = Awaited<ReturnType<typeof getDMChucVusHealthz>>, TError = GetDMChucVusHealthz400 | GetDMChucVusHealthz401 | GetDMChucVusHealthz403 | GetDMChucVusHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMChucVusHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMChucVusHealthz<
+    TData = Awaited<ReturnType<typeof getDMChucVusHealthz>>,
+    TError =
+        | GetDMChucVusHealthz400
+        | GetDMChucVusHealthz401
+        | GetDMChucVusHealthz403
+        | GetDMChucVusHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMChucVusHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMChucVusHealthzQueryOptions(options)
 
-  const queryOptions = getGetDMChucVusHealthzQueryOptions(options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Lấy danh sách các Chứng chỉ tin học
  * @summary Chứng chỉ tin học - Danh sách
  */
 export type postDMChungChiTinHocsListResponse200 = {
-  data: PublicApiGetAllDMChungChiTinHocDTO
-  status: 200
+    data: PublicApiGetAllDMChungChiTinHocDTO
+    status: 200
 }
 
 export type postDMChungChiTinHocsListResponse400 = {
-  data: PostDMChungChiTinHocsList400
-  status: 400
+    data: PostDMChungChiTinHocsList400
+    status: 400
 }
 
 export type postDMChungChiTinHocsListResponse401 = {
-  data: PostDMChungChiTinHocsList401
-  status: 401
+    data: PostDMChungChiTinHocsList401
+    status: 401
 }
 
 export type postDMChungChiTinHocsListResponse403 = {
-  data: PostDMChungChiTinHocsList403
-  status: 403
+    data: PostDMChungChiTinHocsList403
+    status: 403
 }
 
 export type postDMChungChiTinHocsListResponse500 = {
-  data: void
-  status: 500
+    data: void
+    status: 500
 }
-    
-export type postDMChungChiTinHocsListResponseSuccess = (postDMChungChiTinHocsListResponse200) & {
-  headers: Headers;
-};
-export type postDMChungChiTinHocsListResponseError = (postDMChungChiTinHocsListResponse400 | postDMChungChiTinHocsListResponse401 | postDMChungChiTinHocsListResponse403 | postDMChungChiTinHocsListResponse500) & {
-  headers: Headers;
-};
 
-export type postDMChungChiTinHocsListResponse = (postDMChungChiTinHocsListResponseSuccess | postDMChungChiTinHocsListResponseError)
+export type postDMChungChiTinHocsListResponseSuccess = postDMChungChiTinHocsListResponse200 & {
+    headers: Headers
+}
+export type postDMChungChiTinHocsListResponseError = (
+    | postDMChungChiTinHocsListResponse400
+    | postDMChungChiTinHocsListResponse401
+    | postDMChungChiTinHocsListResponse403
+    | postDMChungChiTinHocsListResponse500
+) & {
+    headers: Headers
+}
+
+export type postDMChungChiTinHocsListResponse =
+    | postDMChungChiTinHocsListResponseSuccess
+    | postDMChungChiTinHocsListResponseError
 
 export const getPostDMChungChiTinHocsListUrl = () => {
-
-
-  
-
-  return `/DM_ChungChiTinHocs/list`
+    return `/DM_ChungChiTinHocs/list`
 }
 
-export const postDMChungChiTinHocsList = async (publicApiPagingRequestDto: PublicApiPagingRequestDto, options?: RequestInit): Promise<postDMChungChiTinHocsListResponse> => {
-  
-  return customSystemFetch<postDMChungChiTinHocsListResponse>(getPostDMChungChiTinHocsListUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
-    body: JSON.stringify(
-      publicApiPagingRequestDto,)
-  }
-);}
+export const postDMChungChiTinHocsList = async (
+    publicApiPagingRequestDto: PublicApiPagingRequestDto,
+    options?: RequestInit
+): Promise<postDMChungChiTinHocsListResponse> => {
+    return customSystemFetch<postDMChungChiTinHocsListResponse>(getPostDMChungChiTinHocsListUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
+        body: JSON.stringify(publicApiPagingRequestDto),
+    })
+}
 
-
-
-
-export const getPostDMChungChiTinHocsListMutationOptions = <TError = PostDMChungChiTinHocsList400 | PostDMChungChiTinHocsList401 | PostDMChungChiTinHocsList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMChungChiTinHocsList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof postDMChungChiTinHocsList>>, TError,{data: PublicApiPagingRequestDto}, TContext> => {
-
-const mutationKey = ['postDMChungChiTinHocsList'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postDMChungChiTinHocsList>>, {data: PublicApiPagingRequestDto}> = (props) => {
-          const {data} = props ?? {};
-
-          return  postDMChungChiTinHocsList(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PostDMChungChiTinHocsListMutationResult = NonNullable<Awaited<ReturnType<typeof postDMChungChiTinHocsList>>>
-    export type PostDMChungChiTinHocsListMutationBody = PublicApiPagingRequestDto
-    export type PostDMChungChiTinHocsListMutationError = PostDMChungChiTinHocsList400 | PostDMChungChiTinHocsList401 | PostDMChungChiTinHocsList403 | void
-
-    /**
- * @summary Chứng chỉ tin học - Danh sách
- */
-export const usePostDMChungChiTinHocsList = <TError = PostDMChungChiTinHocsList400 | PostDMChungChiTinHocsList401 | PostDMChungChiTinHocsList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMChungChiTinHocsList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getPostDMChungChiTinHocsListMutationOptions = <
+    TError =
+        | PostDMChungChiTinHocsList400
+        | PostDMChungChiTinHocsList401
+        | PostDMChungChiTinHocsList403
+        | void,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postDMChungChiTinHocsList>>,
         TError,
-        {data: PublicApiPagingRequestDto},
+        { data: PublicApiPagingRequestDto },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postDMChungChiTinHocsList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationKey = ['postDMChungChiTinHocsList']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getPostDMChungChiTinHocsListMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postDMChungChiTinHocsList>>,
+        { data: PublicApiPagingRequestDto }
+    > = (props) => {
+        const { data } = props ?? {}
 
-      return useMutation(mutationOptions, queryClient);
+        return postDMChungChiTinHocsList(data, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostDMChungChiTinHocsListMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postDMChungChiTinHocsList>>
+>
+export type PostDMChungChiTinHocsListMutationBody = PublicApiPagingRequestDto
+export type PostDMChungChiTinHocsListMutationError =
+    | PostDMChungChiTinHocsList400
+    | PostDMChungChiTinHocsList401
+    | PostDMChungChiTinHocsList403
+    | void
+
+/**
+ * @summary Chứng chỉ tin học - Danh sách
+ */
+export const usePostDMChungChiTinHocsList = <
+    TError =
+        | PostDMChungChiTinHocsList400
+        | PostDMChungChiTinHocsList401
+        | PostDMChungChiTinHocsList403
+        | void,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postDMChungChiTinHocsList>>,
+            TError,
+            { data: PublicApiPagingRequestDto },
+            TContext
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postDMChungChiTinHocsList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationOptions = getPostDMChungChiTinHocsListMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * Lấy thông tin Chứng chỉ tin học theo ID
  * @summary Chứng chỉ tin học - Theo Id
  */
 export type getDMChungChiTinHocsIdResponse200 = {
-  data: PublicApiGetAllDMChungChiTinHocDTO
-  status: 200
+    data: PublicApiGetAllDMChungChiTinHocDTO
+    status: 200
 }
 
 export type getDMChungChiTinHocsIdResponse400 = {
-  data: GetDMChungChiTinHocsId400
-  status: 400
+    data: GetDMChungChiTinHocsId400
+    status: 400
 }
 
 export type getDMChungChiTinHocsIdResponse401 = {
-  data: GetDMChungChiTinHocsId401
-  status: 401
+    data: GetDMChungChiTinHocsId401
+    status: 401
 }
 
 export type getDMChungChiTinHocsIdResponse403 = {
-  data: GetDMChungChiTinHocsId403
-  status: 403
+    data: GetDMChungChiTinHocsId403
+    status: 403
 }
 
 export type getDMChungChiTinHocsIdResponse500 = {
-  data: void
-  status: 500
-}
-    
-export type getDMChungChiTinHocsIdResponseSuccess = (getDMChungChiTinHocsIdResponse200) & {
-  headers: Headers;
-};
-export type getDMChungChiTinHocsIdResponseError = (getDMChungChiTinHocsIdResponse400 | getDMChungChiTinHocsIdResponse401 | getDMChungChiTinHocsIdResponse403 | getDMChungChiTinHocsIdResponse500) & {
-  headers: Headers;
-};
-
-export type getDMChungChiTinHocsIdResponse = (getDMChungChiTinHocsIdResponseSuccess | getDMChungChiTinHocsIdResponseError)
-
-export const getGetDMChungChiTinHocsIdUrl = (id: string,
-    params?: GetDMChungChiTinHocsIdParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/DM_ChungChiTinHocs/${id}?${stringifiedParams}` : `/DM_ChungChiTinHocs/${id}`
+    data: void
+    status: 500
 }
 
-export const getDMChungChiTinHocsId = async (id: string,
-    params?: GetDMChungChiTinHocsIdParams, options?: RequestInit): Promise<getDMChungChiTinHocsIdResponse> => {
-  
-  return customSystemFetch<getDMChungChiTinHocsIdResponse>(getGetDMChungChiTinHocsIdUrl(id,params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type getDMChungChiTinHocsIdResponseSuccess = getDMChungChiTinHocsIdResponse200 & {
+    headers: Headers
+}
+export type getDMChungChiTinHocsIdResponseError = (
+    | getDMChungChiTinHocsIdResponse400
+    | getDMChungChiTinHocsIdResponse401
+    | getDMChungChiTinHocsIdResponse403
+    | getDMChungChiTinHocsIdResponse500
+) & {
+    headers: Headers
+}
 
+export type getDMChungChiTinHocsIdResponse =
+    | getDMChungChiTinHocsIdResponseSuccess
+    | getDMChungChiTinHocsIdResponseError
 
+export const getGetDMChungChiTinHocsIdUrl = (id: string, params?: GetDMChungChiTinHocsIdParams) => {
+    const normalizedParams = new URLSearchParams()
 
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
+    const stringifiedParams = normalizedParams.toString()
 
-export const getGetDMChungChiTinHocsIdQueryKey = (id?: string,
-    params?: GetDMChungChiTinHocsIdParams,) => {
-    return [
-    `/DM_ChungChiTinHocs/${id}`, ...(params ? [params]: [])
-    ] as const;
-    }
+    return stringifiedParams.length > 0
+        ? `/DM_ChungChiTinHocs/${id}?${stringifiedParams}`
+        : `/DM_ChungChiTinHocs/${id}`
+}
 
-    
-export const getGetDMChungChiTinHocsIdQueryOptions = <TData = Awaited<ReturnType<typeof getDMChungChiTinHocsId>>, TError = GetDMChungChiTinHocsId400 | GetDMChungChiTinHocsId401 | GetDMChungChiTinHocsId403 | void>(id: string,
-    params?: GetDMChungChiTinHocsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMChungChiTinHocsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
+export const getDMChungChiTinHocsId = async (
+    id: string,
+    params?: GetDMChungChiTinHocsIdParams,
+    options?: RequestInit
+): Promise<getDMChungChiTinHocsIdResponse> => {
+    return customSystemFetch<getDMChungChiTinHocsIdResponse>(
+        getGetDMChungChiTinHocsIdUrl(id, params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getGetDMChungChiTinHocsIdQueryKey = (
+    id?: string,
+    params?: GetDMChungChiTinHocsIdParams
 ) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetDMChungChiTinHocsIdQueryKey(id,params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMChungChiTinHocsId>>> = ({ signal }) => getDMChungChiTinHocsId(id,params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMChungChiTinHocsId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return [`/DM_ChungChiTinHocs/${id}`, ...(params ? [params] : [])] as const
 }
 
-export type GetDMChungChiTinHocsIdQueryResult = NonNullable<Awaited<ReturnType<typeof getDMChungChiTinHocsId>>>
-export type GetDMChungChiTinHocsIdQueryError = GetDMChungChiTinHocsId400 | GetDMChungChiTinHocsId401 | GetDMChungChiTinHocsId403 | void
+export const getGetDMChungChiTinHocsIdQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMChungChiTinHocsId>>,
+    TError =
+        | GetDMChungChiTinHocsId400
+        | GetDMChungChiTinHocsId401
+        | GetDMChungChiTinHocsId403
+        | void,
+>(
+    id: string,
+    params?: GetDMChungChiTinHocsIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMChungChiTinHocsId>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
+    const queryKey = queryOptions?.queryKey ?? getGetDMChungChiTinHocsIdQueryKey(id, params)
 
-export function useGetDMChungChiTinHocsId<TData = Awaited<ReturnType<typeof getDMChungChiTinHocsId>>, TError = GetDMChungChiTinHocsId400 | GetDMChungChiTinHocsId401 | GetDMChungChiTinHocsId403 | void>(
- id: string,
-    params: undefined |  GetDMChungChiTinHocsIdParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMChungChiTinHocsId>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMChungChiTinHocsId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMChungChiTinHocsId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMChungChiTinHocsId<TData = Awaited<ReturnType<typeof getDMChungChiTinHocsId>>, TError = GetDMChungChiTinHocsId400 | GetDMChungChiTinHocsId401 | GetDMChungChiTinHocsId403 | void>(
- id: string,
-    params?: GetDMChungChiTinHocsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMChungChiTinHocsId>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMChungChiTinHocsId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMChungChiTinHocsId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMChungChiTinHocsId<TData = Awaited<ReturnType<typeof getDMChungChiTinHocsId>>, TError = GetDMChungChiTinHocsId400 | GetDMChungChiTinHocsId401 | GetDMChungChiTinHocsId403 | void>(
- id: string,
-    params?: GetDMChungChiTinHocsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMChungChiTinHocsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMChungChiTinHocsId>>> = ({
+        signal,
+    }) => getDMChungChiTinHocsId(id, params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMChungChiTinHocsId>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDMChungChiTinHocsIdQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getDMChungChiTinHocsId>>
+>
+export type GetDMChungChiTinHocsIdQueryError =
+    | GetDMChungChiTinHocsId400
+    | GetDMChungChiTinHocsId401
+    | GetDMChungChiTinHocsId403
+    | void
+
+export function useGetDMChungChiTinHocsId<
+    TData = Awaited<ReturnType<typeof getDMChungChiTinHocsId>>,
+    TError =
+        | GetDMChungChiTinHocsId400
+        | GetDMChungChiTinHocsId401
+        | GetDMChungChiTinHocsId403
+        | void,
+>(
+    id: string,
+    params: undefined | GetDMChungChiTinHocsIdParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMChungChiTinHocsId>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMChungChiTinHocsId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMChungChiTinHocsId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMChungChiTinHocsId<
+    TData = Awaited<ReturnType<typeof getDMChungChiTinHocsId>>,
+    TError =
+        | GetDMChungChiTinHocsId400
+        | GetDMChungChiTinHocsId401
+        | GetDMChungChiTinHocsId403
+        | void,
+>(
+    id: string,
+    params?: GetDMChungChiTinHocsIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMChungChiTinHocsId>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMChungChiTinHocsId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMChungChiTinHocsId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMChungChiTinHocsId<
+    TData = Awaited<ReturnType<typeof getDMChungChiTinHocsId>>,
+    TError =
+        | GetDMChungChiTinHocsId400
+        | GetDMChungChiTinHocsId401
+        | GetDMChungChiTinHocsId403
+        | void,
+>(
+    id: string,
+    params?: GetDMChungChiTinHocsIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMChungChiTinHocsId>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Chứng chỉ tin học - Theo Id
  */
 
-export function useGetDMChungChiTinHocsId<TData = Awaited<ReturnType<typeof getDMChungChiTinHocsId>>, TError = GetDMChungChiTinHocsId400 | GetDMChungChiTinHocsId401 | GetDMChungChiTinHocsId403 | void>(
- id: string,
-    params?: GetDMChungChiTinHocsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMChungChiTinHocsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMChungChiTinHocsId<
+    TData = Awaited<ReturnType<typeof getDMChungChiTinHocsId>>,
+    TError =
+        | GetDMChungChiTinHocsId400
+        | GetDMChungChiTinHocsId401
+        | GetDMChungChiTinHocsId403
+        | void,
+>(
+    id: string,
+    params?: GetDMChungChiTinHocsIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMChungChiTinHocsId>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMChungChiTinHocsIdQueryOptions(id, params, options)
 
-  const queryOptions = getGetDMChungChiTinHocsIdQueryOptions(id,params,options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Kiểm tra tình trạng API
  * @summary Kiểm tra tình trạng API
  */
 export type getDMChungChiTinHocsHealthzResponse400 = {
-  data: GetDMChungChiTinHocsHealthz400
-  status: 400
+    data: GetDMChungChiTinHocsHealthz400
+    status: 400
 }
 
 export type getDMChungChiTinHocsHealthzResponse401 = {
-  data: GetDMChungChiTinHocsHealthz401
-  status: 401
+    data: GetDMChungChiTinHocsHealthz401
+    status: 401
 }
 
 export type getDMChungChiTinHocsHealthzResponse403 = {
-  data: GetDMChungChiTinHocsHealthz403
-  status: 403
+    data: GetDMChungChiTinHocsHealthz403
+    status: 403
 }
 
 export type getDMChungChiTinHocsHealthzResponse500 = {
-  data: GetDMChungChiTinHocsHealthz500
-  status: 500
+    data: GetDMChungChiTinHocsHealthz500
+    status: 500
 }
-    
-;
-export type getDMChungChiTinHocsHealthzResponseError = (getDMChungChiTinHocsHealthzResponse400 | getDMChungChiTinHocsHealthzResponse401 | getDMChungChiTinHocsHealthzResponse403 | getDMChungChiTinHocsHealthzResponse500) & {
-  headers: Headers;
-};
+export type getDMChungChiTinHocsHealthzResponseError = (
+    | getDMChungChiTinHocsHealthzResponse400
+    | getDMChungChiTinHocsHealthzResponse401
+    | getDMChungChiTinHocsHealthzResponse403
+    | getDMChungChiTinHocsHealthzResponse500
+) & {
+    headers: Headers
+}
 
-export type getDMChungChiTinHocsHealthzResponse = (getDMChungChiTinHocsHealthzResponseError)
+export type getDMChungChiTinHocsHealthzResponse = getDMChungChiTinHocsHealthzResponseError
 
 export const getGetDMChungChiTinHocsHealthzUrl = () => {
-
-
-  
-
-  return `/DM_ChungChiTinHocs/healthz`
+    return `/DM_ChungChiTinHocs/healthz`
 }
 
-export const getDMChungChiTinHocsHealthz = async ( options?: RequestInit): Promise<getDMChungChiTinHocsHealthzResponse> => {
-  
-  return customSystemFetch<getDMChungChiTinHocsHealthzResponse>(getGetDMChungChiTinHocsHealthzUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-
+export const getDMChungChiTinHocsHealthz = async (
+    options?: RequestInit
+): Promise<getDMChungChiTinHocsHealthzResponse> => {
+    return customSystemFetch<getDMChungChiTinHocsHealthzResponse>(
+        getGetDMChungChiTinHocsHealthzUrl(),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
 
 export const getGetDMChungChiTinHocsHealthzQueryKey = () => {
-    return [
-    `/DM_ChungChiTinHocs/healthz`
-    ] as const;
-    }
-
-    
-export const getGetDMChungChiTinHocsHealthzQueryOptions = <TData = Awaited<ReturnType<typeof getDMChungChiTinHocsHealthz>>, TError = GetDMChungChiTinHocsHealthz400 | GetDMChungChiTinHocsHealthz401 | GetDMChungChiTinHocsHealthz403 | GetDMChungChiTinHocsHealthz500>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMChungChiTinHocsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetDMChungChiTinHocsHealthzQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMChungChiTinHocsHealthz>>> = ({ signal }) => getDMChungChiTinHocsHealthz({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMChungChiTinHocsHealthz>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return [`/DM_ChungChiTinHocs/healthz`] as const
 }
 
-export type GetDMChungChiTinHocsHealthzQueryResult = NonNullable<Awaited<ReturnType<typeof getDMChungChiTinHocsHealthz>>>
-export type GetDMChungChiTinHocsHealthzQueryError = GetDMChungChiTinHocsHealthz400 | GetDMChungChiTinHocsHealthz401 | GetDMChungChiTinHocsHealthz403 | GetDMChungChiTinHocsHealthz500
+export const getGetDMChungChiTinHocsHealthzQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMChungChiTinHocsHealthz>>,
+    TError =
+        | GetDMChungChiTinHocsHealthz400
+        | GetDMChungChiTinHocsHealthz401
+        | GetDMChungChiTinHocsHealthz403
+        | GetDMChungChiTinHocsHealthz500,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<Awaited<ReturnType<typeof getDMChungChiTinHocsHealthz>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
+    const queryKey = queryOptions?.queryKey ?? getGetDMChungChiTinHocsHealthzQueryKey()
 
-export function useGetDMChungChiTinHocsHealthz<TData = Awaited<ReturnType<typeof getDMChungChiTinHocsHealthz>>, TError = GetDMChungChiTinHocsHealthz400 | GetDMChungChiTinHocsHealthz401 | GetDMChungChiTinHocsHealthz403 | GetDMChungChiTinHocsHealthz500>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMChungChiTinHocsHealthz>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMChungChiTinHocsHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMChungChiTinHocsHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMChungChiTinHocsHealthz<TData = Awaited<ReturnType<typeof getDMChungChiTinHocsHealthz>>, TError = GetDMChungChiTinHocsHealthz400 | GetDMChungChiTinHocsHealthz401 | GetDMChungChiTinHocsHealthz403 | GetDMChungChiTinHocsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMChungChiTinHocsHealthz>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMChungChiTinHocsHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMChungChiTinHocsHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMChungChiTinHocsHealthz<TData = Awaited<ReturnType<typeof getDMChungChiTinHocsHealthz>>, TError = GetDMChungChiTinHocsHealthz400 | GetDMChungChiTinHocsHealthz401 | GetDMChungChiTinHocsHealthz403 | GetDMChungChiTinHocsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMChungChiTinHocsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMChungChiTinHocsHealthz>>> = ({
+        signal,
+    }) => getDMChungChiTinHocsHealthz({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMChungChiTinHocsHealthz>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDMChungChiTinHocsHealthzQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getDMChungChiTinHocsHealthz>>
+>
+export type GetDMChungChiTinHocsHealthzQueryError =
+    | GetDMChungChiTinHocsHealthz400
+    | GetDMChungChiTinHocsHealthz401
+    | GetDMChungChiTinHocsHealthz403
+    | GetDMChungChiTinHocsHealthz500
+
+export function useGetDMChungChiTinHocsHealthz<
+    TData = Awaited<ReturnType<typeof getDMChungChiTinHocsHealthz>>,
+    TError =
+        | GetDMChungChiTinHocsHealthz400
+        | GetDMChungChiTinHocsHealthz401
+        | GetDMChungChiTinHocsHealthz403
+        | GetDMChungChiTinHocsHealthz500,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMChungChiTinHocsHealthz>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMChungChiTinHocsHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMChungChiTinHocsHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMChungChiTinHocsHealthz<
+    TData = Awaited<ReturnType<typeof getDMChungChiTinHocsHealthz>>,
+    TError =
+        | GetDMChungChiTinHocsHealthz400
+        | GetDMChungChiTinHocsHealthz401
+        | GetDMChungChiTinHocsHealthz403
+        | GetDMChungChiTinHocsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMChungChiTinHocsHealthz>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMChungChiTinHocsHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMChungChiTinHocsHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMChungChiTinHocsHealthz<
+    TData = Awaited<ReturnType<typeof getDMChungChiTinHocsHealthz>>,
+    TError =
+        | GetDMChungChiTinHocsHealthz400
+        | GetDMChungChiTinHocsHealthz401
+        | GetDMChungChiTinHocsHealthz403
+        | GetDMChungChiTinHocsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMChungChiTinHocsHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Kiểm tra tình trạng API
  */
 
-export function useGetDMChungChiTinHocsHealthz<TData = Awaited<ReturnType<typeof getDMChungChiTinHocsHealthz>>, TError = GetDMChungChiTinHocsHealthz400 | GetDMChungChiTinHocsHealthz401 | GetDMChungChiTinHocsHealthz403 | GetDMChungChiTinHocsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMChungChiTinHocsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMChungChiTinHocsHealthz<
+    TData = Awaited<ReturnType<typeof getDMChungChiTinHocsHealthz>>,
+    TError =
+        | GetDMChungChiTinHocsHealthz400
+        | GetDMChungChiTinHocsHealthz401
+        | GetDMChungChiTinHocsHealthz403
+        | GetDMChungChiTinHocsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMChungChiTinHocsHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMChungChiTinHocsHealthzQueryOptions(options)
 
-  const queryOptions = getGetDMChungChiTinHocsHealthzQueryOptions(options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Lấy danh sách các Dân tộc
  * @summary Dân tộc - Danh sách
  */
 export type postDMDanTocsListResponse200 = {
-  data: PublicApiGetAllDMDanTocDTO
-  status: 200
+    data: PublicApiGetAllDMDanTocDTO
+    status: 200
 }
 
 export type postDMDanTocsListResponse400 = {
-  data: PostDMDanTocsList400
-  status: 400
+    data: PostDMDanTocsList400
+    status: 400
 }
 
 export type postDMDanTocsListResponse401 = {
-  data: PostDMDanTocsList401
-  status: 401
+    data: PostDMDanTocsList401
+    status: 401
 }
 
 export type postDMDanTocsListResponse403 = {
-  data: PostDMDanTocsList403
-  status: 403
+    data: PostDMDanTocsList403
+    status: 403
 }
 
 export type postDMDanTocsListResponse500 = {
-  data: void
-  status: 500
+    data: void
+    status: 500
 }
-    
-export type postDMDanTocsListResponseSuccess = (postDMDanTocsListResponse200) & {
-  headers: Headers;
-};
-export type postDMDanTocsListResponseError = (postDMDanTocsListResponse400 | postDMDanTocsListResponse401 | postDMDanTocsListResponse403 | postDMDanTocsListResponse500) & {
-  headers: Headers;
-};
 
-export type postDMDanTocsListResponse = (postDMDanTocsListResponseSuccess | postDMDanTocsListResponseError)
+export type postDMDanTocsListResponseSuccess = postDMDanTocsListResponse200 & {
+    headers: Headers
+}
+export type postDMDanTocsListResponseError = (
+    | postDMDanTocsListResponse400
+    | postDMDanTocsListResponse401
+    | postDMDanTocsListResponse403
+    | postDMDanTocsListResponse500
+) & {
+    headers: Headers
+}
+
+export type postDMDanTocsListResponse =
+    | postDMDanTocsListResponseSuccess
+    | postDMDanTocsListResponseError
 
 export const getPostDMDanTocsListUrl = () => {
-
-
-  
-
-  return `/DM_DanTocs/list`
+    return `/DM_DanTocs/list`
 }
 
-export const postDMDanTocsList = async (publicApiPagingRequestDto: PublicApiPagingRequestDto, options?: RequestInit): Promise<postDMDanTocsListResponse> => {
-  
-  return customSystemFetch<postDMDanTocsListResponse>(getPostDMDanTocsListUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
-    body: JSON.stringify(
-      publicApiPagingRequestDto,)
-  }
-);}
+export const postDMDanTocsList = async (
+    publicApiPagingRequestDto: PublicApiPagingRequestDto,
+    options?: RequestInit
+): Promise<postDMDanTocsListResponse> => {
+    return customSystemFetch<postDMDanTocsListResponse>(getPostDMDanTocsListUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
+        body: JSON.stringify(publicApiPagingRequestDto),
+    })
+}
 
-
-
-
-export const getPostDMDanTocsListMutationOptions = <TError = PostDMDanTocsList400 | PostDMDanTocsList401 | PostDMDanTocsList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMDanTocsList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof postDMDanTocsList>>, TError,{data: PublicApiPagingRequestDto}, TContext> => {
-
-const mutationKey = ['postDMDanTocsList'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postDMDanTocsList>>, {data: PublicApiPagingRequestDto}> = (props) => {
-          const {data} = props ?? {};
-
-          return  postDMDanTocsList(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PostDMDanTocsListMutationResult = NonNullable<Awaited<ReturnType<typeof postDMDanTocsList>>>
-    export type PostDMDanTocsListMutationBody = PublicApiPagingRequestDto
-    export type PostDMDanTocsListMutationError = PostDMDanTocsList400 | PostDMDanTocsList401 | PostDMDanTocsList403 | void
-
-    /**
- * @summary Dân tộc - Danh sách
- */
-export const usePostDMDanTocsList = <TError = PostDMDanTocsList400 | PostDMDanTocsList401 | PostDMDanTocsList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMDanTocsList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getPostDMDanTocsListMutationOptions = <
+    TError = PostDMDanTocsList400 | PostDMDanTocsList401 | PostDMDanTocsList403 | void,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postDMDanTocsList>>,
         TError,
-        {data: PublicApiPagingRequestDto},
+        { data: PublicApiPagingRequestDto },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postDMDanTocsList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationKey = ['postDMDanTocsList']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getPostDMDanTocsListMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postDMDanTocsList>>,
+        { data: PublicApiPagingRequestDto }
+    > = (props) => {
+        const { data } = props ?? {}
 
-      return useMutation(mutationOptions, queryClient);
+        return postDMDanTocsList(data, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostDMDanTocsListMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postDMDanTocsList>>
+>
+export type PostDMDanTocsListMutationBody = PublicApiPagingRequestDto
+export type PostDMDanTocsListMutationError =
+    | PostDMDanTocsList400
+    | PostDMDanTocsList401
+    | PostDMDanTocsList403
+    | void
+
+/**
+ * @summary Dân tộc - Danh sách
+ */
+export const usePostDMDanTocsList = <
+    TError = PostDMDanTocsList400 | PostDMDanTocsList401 | PostDMDanTocsList403 | void,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postDMDanTocsList>>,
+            TError,
+            { data: PublicApiPagingRequestDto },
+            TContext
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postDMDanTocsList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationOptions = getPostDMDanTocsListMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * Lấy thông tin Dân tộc theo ID
  * @summary Dân tộc - Theo Id
  */
 export type getDMDanTocsIdResponse200 = {
-  data: PublicApiGetAllDMDanTocDTO
-  status: 200
+    data: PublicApiGetAllDMDanTocDTO
+    status: 200
 }
 
 export type getDMDanTocsIdResponse400 = {
-  data: GetDMDanTocsId400
-  status: 400
+    data: GetDMDanTocsId400
+    status: 400
 }
 
 export type getDMDanTocsIdResponse401 = {
-  data: GetDMDanTocsId401
-  status: 401
+    data: GetDMDanTocsId401
+    status: 401
 }
 
 export type getDMDanTocsIdResponse403 = {
-  data: GetDMDanTocsId403
-  status: 403
+    data: GetDMDanTocsId403
+    status: 403
 }
 
 export type getDMDanTocsIdResponse500 = {
-  data: void
-  status: 500
-}
-    
-export type getDMDanTocsIdResponseSuccess = (getDMDanTocsIdResponse200) & {
-  headers: Headers;
-};
-export type getDMDanTocsIdResponseError = (getDMDanTocsIdResponse400 | getDMDanTocsIdResponse401 | getDMDanTocsIdResponse403 | getDMDanTocsIdResponse500) & {
-  headers: Headers;
-};
-
-export type getDMDanTocsIdResponse = (getDMDanTocsIdResponseSuccess | getDMDanTocsIdResponseError)
-
-export const getGetDMDanTocsIdUrl = (id: string,
-    params?: GetDMDanTocsIdParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/DM_DanTocs/${id}?${stringifiedParams}` : `/DM_DanTocs/${id}`
+    data: void
+    status: 500
 }
 
-export const getDMDanTocsId = async (id: string,
-    params?: GetDMDanTocsIdParams, options?: RequestInit): Promise<getDMDanTocsIdResponse> => {
-  
-  return customSystemFetch<getDMDanTocsIdResponse>(getGetDMDanTocsIdUrl(id,params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type getDMDanTocsIdResponseSuccess = getDMDanTocsIdResponse200 & {
+    headers: Headers
+}
+export type getDMDanTocsIdResponseError = (
+    | getDMDanTocsIdResponse400
+    | getDMDanTocsIdResponse401
+    | getDMDanTocsIdResponse403
+    | getDMDanTocsIdResponse500
+) & {
+    headers: Headers
+}
 
+export type getDMDanTocsIdResponse = getDMDanTocsIdResponseSuccess | getDMDanTocsIdResponseError
 
+export const getGetDMDanTocsIdUrl = (id: string, params?: GetDMDanTocsIdParams) => {
+    const normalizedParams = new URLSearchParams()
 
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
+    const stringifiedParams = normalizedParams.toString()
 
-export const getGetDMDanTocsIdQueryKey = (id?: string,
-    params?: GetDMDanTocsIdParams,) => {
-    return [
-    `/DM_DanTocs/${id}`, ...(params ? [params]: [])
-    ] as const;
+    return stringifiedParams.length > 0
+        ? `/DM_DanTocs/${id}?${stringifiedParams}`
+        : `/DM_DanTocs/${id}`
+}
+
+export const getDMDanTocsId = async (
+    id: string,
+    params?: GetDMDanTocsIdParams,
+    options?: RequestInit
+): Promise<getDMDanTocsIdResponse> => {
+    return customSystemFetch<getDMDanTocsIdResponse>(getGetDMDanTocsIdUrl(id, params), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getGetDMDanTocsIdQueryKey = (id?: string, params?: GetDMDanTocsIdParams) => {
+    return [`/DM_DanTocs/${id}`, ...(params ? [params] : [])] as const
+}
+
+export const getGetDMDanTocsIdQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMDanTocsId>>,
+    TError = GetDMDanTocsId400 | GetDMDanTocsId401 | GetDMDanTocsId403 | void,
+>(
+    id: string,
+    params?: GetDMDanTocsIdParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMDanTocsId>>, TError, TData>>
+        request?: SecondParameter<typeof customSystemFetch>
     }
-
-    
-export const getGetDMDanTocsIdQueryOptions = <TData = Awaited<ReturnType<typeof getDMDanTocsId>>, TError = GetDMDanTocsId400 | GetDMDanTocsId401 | GetDMDanTocsId403 | void>(id: string,
-    params?: GetDMDanTocsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMDanTocsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
 ) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    const queryKey = queryOptions?.queryKey ?? getGetDMDanTocsIdQueryKey(id, params)
 
-  const queryKey =  queryOptions?.queryKey ?? getGetDMDanTocsIdQueryKey(id,params);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMDanTocsId>>> = ({ signal }) =>
+        getDMDanTocsId(id, params, { signal, ...requestOptions })
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMDanTocsId>>> = ({ signal }) => getDMDanTocsId(id,params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMDanTocsId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMDanTocsId>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetDMDanTocsIdQueryResult = NonNullable<Awaited<ReturnType<typeof getDMDanTocsId>>>
-export type GetDMDanTocsIdQueryError = GetDMDanTocsId400 | GetDMDanTocsId401 | GetDMDanTocsId403 | void
+export type GetDMDanTocsIdQueryError =
+    | GetDMDanTocsId400
+    | GetDMDanTocsId401
+    | GetDMDanTocsId403
+    | void
 
-
-export function useGetDMDanTocsId<TData = Awaited<ReturnType<typeof getDMDanTocsId>>, TError = GetDMDanTocsId400 | GetDMDanTocsId401 | GetDMDanTocsId403 | void>(
- id: string,
-    params: undefined |  GetDMDanTocsIdParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMDanTocsId>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMDanTocsId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMDanTocsId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMDanTocsId<TData = Awaited<ReturnType<typeof getDMDanTocsId>>, TError = GetDMDanTocsId400 | GetDMDanTocsId401 | GetDMDanTocsId403 | void>(
- id: string,
-    params?: GetDMDanTocsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMDanTocsId>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMDanTocsId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMDanTocsId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMDanTocsId<TData = Awaited<ReturnType<typeof getDMDanTocsId>>, TError = GetDMDanTocsId400 | GetDMDanTocsId401 | GetDMDanTocsId403 | void>(
- id: string,
-    params?: GetDMDanTocsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMDanTocsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMDanTocsId<
+    TData = Awaited<ReturnType<typeof getDMDanTocsId>>,
+    TError = GetDMDanTocsId400 | GetDMDanTocsId401 | GetDMDanTocsId403 | void,
+>(
+    id: string,
+    params: undefined | GetDMDanTocsIdParams,
+    options: {
+        query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMDanTocsId>>, TError, TData>> &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMDanTocsId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMDanTocsId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMDanTocsId<
+    TData = Awaited<ReturnType<typeof getDMDanTocsId>>,
+    TError = GetDMDanTocsId400 | GetDMDanTocsId401 | GetDMDanTocsId403 | void,
+>(
+    id: string,
+    params?: GetDMDanTocsIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMDanTocsId>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMDanTocsId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMDanTocsId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMDanTocsId<
+    TData = Awaited<ReturnType<typeof getDMDanTocsId>>,
+    TError = GetDMDanTocsId400 | GetDMDanTocsId401 | GetDMDanTocsId403 | void,
+>(
+    id: string,
+    params?: GetDMDanTocsIdParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMDanTocsId>>, TError, TData>>
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Dân tộc - Theo Id
  */
 
-export function useGetDMDanTocsId<TData = Awaited<ReturnType<typeof getDMDanTocsId>>, TError = GetDMDanTocsId400 | GetDMDanTocsId401 | GetDMDanTocsId403 | void>(
- id: string,
-    params?: GetDMDanTocsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMDanTocsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMDanTocsId<
+    TData = Awaited<ReturnType<typeof getDMDanTocsId>>,
+    TError = GetDMDanTocsId400 | GetDMDanTocsId401 | GetDMDanTocsId403 | void,
+>(
+    id: string,
+    params?: GetDMDanTocsIdParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMDanTocsId>>, TError, TData>>
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMDanTocsIdQueryOptions(id, params, options)
 
-  const queryOptions = getGetDMDanTocsIdQueryOptions(id,params,options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Kiểm tra tình trạng API
  * @summary Kiểm tra tình trạng API
  */
 export type getDMDanTocsHealthzResponse400 = {
-  data: GetDMDanTocsHealthz400
-  status: 400
+    data: GetDMDanTocsHealthz400
+    status: 400
 }
 
 export type getDMDanTocsHealthzResponse401 = {
-  data: GetDMDanTocsHealthz401
-  status: 401
+    data: GetDMDanTocsHealthz401
+    status: 401
 }
 
 export type getDMDanTocsHealthzResponse403 = {
-  data: GetDMDanTocsHealthz403
-  status: 403
+    data: GetDMDanTocsHealthz403
+    status: 403
 }
 
 export type getDMDanTocsHealthzResponse500 = {
-  data: GetDMDanTocsHealthz500
-  status: 500
+    data: GetDMDanTocsHealthz500
+    status: 500
 }
-    
-;
-export type getDMDanTocsHealthzResponseError = (getDMDanTocsHealthzResponse400 | getDMDanTocsHealthzResponse401 | getDMDanTocsHealthzResponse403 | getDMDanTocsHealthzResponse500) & {
-  headers: Headers;
-};
+export type getDMDanTocsHealthzResponseError = (
+    | getDMDanTocsHealthzResponse400
+    | getDMDanTocsHealthzResponse401
+    | getDMDanTocsHealthzResponse403
+    | getDMDanTocsHealthzResponse500
+) & {
+    headers: Headers
+}
 
-export type getDMDanTocsHealthzResponse = (getDMDanTocsHealthzResponseError)
+export type getDMDanTocsHealthzResponse = getDMDanTocsHealthzResponseError
 
 export const getGetDMDanTocsHealthzUrl = () => {
-
-
-  
-
-  return `/DM_DanTocs/healthz`
+    return `/DM_DanTocs/healthz`
 }
 
-export const getDMDanTocsHealthz = async ( options?: RequestInit): Promise<getDMDanTocsHealthzResponse> => {
-  
-  return customSystemFetch<getDMDanTocsHealthzResponse>(getGetDMDanTocsHealthzUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-
+export const getDMDanTocsHealthz = async (
+    options?: RequestInit
+): Promise<getDMDanTocsHealthzResponse> => {
+    return customSystemFetch<getDMDanTocsHealthzResponse>(getGetDMDanTocsHealthzUrl(), {
+        ...options,
+        method: 'GET',
+    })
+}
 
 export const getGetDMDanTocsHealthzQueryKey = () => {
-    return [
-    `/DM_DanTocs/healthz`
-    ] as const;
-    }
-
-    
-export const getGetDMDanTocsHealthzQueryOptions = <TData = Awaited<ReturnType<typeof getDMDanTocsHealthz>>, TError = GetDMDanTocsHealthz400 | GetDMDanTocsHealthz401 | GetDMDanTocsHealthz403 | GetDMDanTocsHealthz500>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMDanTocsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetDMDanTocsHealthzQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMDanTocsHealthz>>> = ({ signal }) => getDMDanTocsHealthz({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMDanTocsHealthz>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return [`/DM_DanTocs/healthz`] as const
 }
 
-export type GetDMDanTocsHealthzQueryResult = NonNullable<Awaited<ReturnType<typeof getDMDanTocsHealthz>>>
-export type GetDMDanTocsHealthzQueryError = GetDMDanTocsHealthz400 | GetDMDanTocsHealthz401 | GetDMDanTocsHealthz403 | GetDMDanTocsHealthz500
+export const getGetDMDanTocsHealthzQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMDanTocsHealthz>>,
+    TError =
+        | GetDMDanTocsHealthz400
+        | GetDMDanTocsHealthz401
+        | GetDMDanTocsHealthz403
+        | GetDMDanTocsHealthz500,
+>(options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMDanTocsHealthz>>, TError, TData>>
+    request?: SecondParameter<typeof customSystemFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
+    const queryKey = queryOptions?.queryKey ?? getGetDMDanTocsHealthzQueryKey()
 
-export function useGetDMDanTocsHealthz<TData = Awaited<ReturnType<typeof getDMDanTocsHealthz>>, TError = GetDMDanTocsHealthz400 | GetDMDanTocsHealthz401 | GetDMDanTocsHealthz403 | GetDMDanTocsHealthz500>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMDanTocsHealthz>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMDanTocsHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMDanTocsHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMDanTocsHealthz<TData = Awaited<ReturnType<typeof getDMDanTocsHealthz>>, TError = GetDMDanTocsHealthz400 | GetDMDanTocsHealthz401 | GetDMDanTocsHealthz403 | GetDMDanTocsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMDanTocsHealthz>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMDanTocsHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMDanTocsHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMDanTocsHealthz<TData = Awaited<ReturnType<typeof getDMDanTocsHealthz>>, TError = GetDMDanTocsHealthz400 | GetDMDanTocsHealthz401 | GetDMDanTocsHealthz403 | GetDMDanTocsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMDanTocsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMDanTocsHealthz>>> = ({ signal }) =>
+        getDMDanTocsHealthz({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMDanTocsHealthz>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDMDanTocsHealthzQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getDMDanTocsHealthz>>
+>
+export type GetDMDanTocsHealthzQueryError =
+    | GetDMDanTocsHealthz400
+    | GetDMDanTocsHealthz401
+    | GetDMDanTocsHealthz403
+    | GetDMDanTocsHealthz500
+
+export function useGetDMDanTocsHealthz<
+    TData = Awaited<ReturnType<typeof getDMDanTocsHealthz>>,
+    TError =
+        | GetDMDanTocsHealthz400
+        | GetDMDanTocsHealthz401
+        | GetDMDanTocsHealthz403
+        | GetDMDanTocsHealthz500,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMDanTocsHealthz>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMDanTocsHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMDanTocsHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMDanTocsHealthz<
+    TData = Awaited<ReturnType<typeof getDMDanTocsHealthz>>,
+    TError =
+        | GetDMDanTocsHealthz400
+        | GetDMDanTocsHealthz401
+        | GetDMDanTocsHealthz403
+        | GetDMDanTocsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMDanTocsHealthz>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMDanTocsHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMDanTocsHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMDanTocsHealthz<
+    TData = Awaited<ReturnType<typeof getDMDanTocsHealthz>>,
+    TError =
+        | GetDMDanTocsHealthz400
+        | GetDMDanTocsHealthz401
+        | GetDMDanTocsHealthz403
+        | GetDMDanTocsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMDanTocsHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Kiểm tra tình trạng API
  */
 
-export function useGetDMDanTocsHealthz<TData = Awaited<ReturnType<typeof getDMDanTocsHealthz>>, TError = GetDMDanTocsHealthz400 | GetDMDanTocsHealthz401 | GetDMDanTocsHealthz403 | GetDMDanTocsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMDanTocsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMDanTocsHealthz<
+    TData = Awaited<ReturnType<typeof getDMDanTocsHealthz>>,
+    TError =
+        | GetDMDanTocsHealthz400
+        | GetDMDanTocsHealthz401
+        | GetDMDanTocsHealthz403
+        | GetDMDanTocsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMDanTocsHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMDanTocsHealthzQueryOptions(options)
 
-  const queryOptions = getGetDMDanTocsHealthzQueryOptions(options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Lấy danh sách các đơn vị
  * @summary Đơn vị - Danh sách
  */
 export type postDMDonVisListResponse200 = {
-  data: PublicApiGetAllDMDonViDTO
-  status: 200
+    data: PublicApiGetAllDMDonViDTO
+    status: 200
 }
 
 export type postDMDonVisListResponse400 = {
-  data: PostDMDonVisList400
-  status: 400
+    data: PostDMDonVisList400
+    status: 400
 }
 
 export type postDMDonVisListResponse401 = {
-  data: PostDMDonVisList401
-  status: 401
+    data: PostDMDonVisList401
+    status: 401
 }
 
 export type postDMDonVisListResponse403 = {
-  data: PostDMDonVisList403
-  status: 403
+    data: PostDMDonVisList403
+    status: 403
 }
 
 export type postDMDonVisListResponse500 = {
-  data: void
-  status: 500
+    data: void
+    status: 500
 }
-    
-export type postDMDonVisListResponseSuccess = (postDMDonVisListResponse200) & {
-  headers: Headers;
-};
-export type postDMDonVisListResponseError = (postDMDonVisListResponse400 | postDMDonVisListResponse401 | postDMDonVisListResponse403 | postDMDonVisListResponse500) & {
-  headers: Headers;
-};
 
-export type postDMDonVisListResponse = (postDMDonVisListResponseSuccess | postDMDonVisListResponseError)
+export type postDMDonVisListResponseSuccess = postDMDonVisListResponse200 & {
+    headers: Headers
+}
+export type postDMDonVisListResponseError = (
+    | postDMDonVisListResponse400
+    | postDMDonVisListResponse401
+    | postDMDonVisListResponse403
+    | postDMDonVisListResponse500
+) & {
+    headers: Headers
+}
+
+export type postDMDonVisListResponse =
+    | postDMDonVisListResponseSuccess
+    | postDMDonVisListResponseError
 
 export const getPostDMDonVisListUrl = () => {
-
-
-  
-
-  return `/DM_DonVis/list`
+    return `/DM_DonVis/list`
 }
 
-export const postDMDonVisList = async (publicApiPagingRequestDto: PublicApiPagingRequestDto, options?: RequestInit): Promise<postDMDonVisListResponse> => {
-  
-  return customSystemFetch<postDMDonVisListResponse>(getPostDMDonVisListUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
-    body: JSON.stringify(
-      publicApiPagingRequestDto,)
-  }
-);}
+export const postDMDonVisList = async (
+    publicApiPagingRequestDto: PublicApiPagingRequestDto,
+    options?: RequestInit
+): Promise<postDMDonVisListResponse> => {
+    return customSystemFetch<postDMDonVisListResponse>(getPostDMDonVisListUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
+        body: JSON.stringify(publicApiPagingRequestDto),
+    })
+}
 
-
-
-
-export const getPostDMDonVisListMutationOptions = <TError = PostDMDonVisList400 | PostDMDonVisList401 | PostDMDonVisList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMDonVisList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof postDMDonVisList>>, TError,{data: PublicApiPagingRequestDto}, TContext> => {
-
-const mutationKey = ['postDMDonVisList'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postDMDonVisList>>, {data: PublicApiPagingRequestDto}> = (props) => {
-          const {data} = props ?? {};
-
-          return  postDMDonVisList(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PostDMDonVisListMutationResult = NonNullable<Awaited<ReturnType<typeof postDMDonVisList>>>
-    export type PostDMDonVisListMutationBody = PublicApiPagingRequestDto
-    export type PostDMDonVisListMutationError = PostDMDonVisList400 | PostDMDonVisList401 | PostDMDonVisList403 | void
-
-    /**
- * @summary Đơn vị - Danh sách
- */
-export const usePostDMDonVisList = <TError = PostDMDonVisList400 | PostDMDonVisList401 | PostDMDonVisList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMDonVisList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getPostDMDonVisListMutationOptions = <
+    TError = PostDMDonVisList400 | PostDMDonVisList401 | PostDMDonVisList403 | void,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postDMDonVisList>>,
         TError,
-        {data: PublicApiPagingRequestDto},
+        { data: PublicApiPagingRequestDto },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postDMDonVisList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationKey = ['postDMDonVisList']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getPostDMDonVisListMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postDMDonVisList>>,
+        { data: PublicApiPagingRequestDto }
+    > = (props) => {
+        const { data } = props ?? {}
 
-      return useMutation(mutationOptions, queryClient);
+        return postDMDonVisList(data, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostDMDonVisListMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postDMDonVisList>>
+>
+export type PostDMDonVisListMutationBody = PublicApiPagingRequestDto
+export type PostDMDonVisListMutationError =
+    | PostDMDonVisList400
+    | PostDMDonVisList401
+    | PostDMDonVisList403
+    | void
+
+/**
+ * @summary Đơn vị - Danh sách
+ */
+export const usePostDMDonVisList = <
+    TError = PostDMDonVisList400 | PostDMDonVisList401 | PostDMDonVisList403 | void,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postDMDonVisList>>,
+            TError,
+            { data: PublicApiPagingRequestDto },
+            TContext
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postDMDonVisList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationOptions = getPostDMDonVisListMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * Lấy thông tin đơn vị theo ID
  * @summary Đơn vị - Theo Id
  */
 export type getDMDonVisIdResponse200 = {
-  data: PublicApiGetAllDMDonViDTO
-  status: 200
+    data: PublicApiGetAllDMDonViDTO
+    status: 200
 }
 
 export type getDMDonVisIdResponse400 = {
-  data: GetDMDonVisId400
-  status: 400
+    data: GetDMDonVisId400
+    status: 400
 }
 
 export type getDMDonVisIdResponse401 = {
-  data: GetDMDonVisId401
-  status: 401
+    data: GetDMDonVisId401
+    status: 401
 }
 
 export type getDMDonVisIdResponse403 = {
-  data: GetDMDonVisId403
-  status: 403
+    data: GetDMDonVisId403
+    status: 403
 }
 
 export type getDMDonVisIdResponse500 = {
-  data: void
-  status: 500
-}
-    
-export type getDMDonVisIdResponseSuccess = (getDMDonVisIdResponse200) & {
-  headers: Headers;
-};
-export type getDMDonVisIdResponseError = (getDMDonVisIdResponse400 | getDMDonVisIdResponse401 | getDMDonVisIdResponse403 | getDMDonVisIdResponse500) & {
-  headers: Headers;
-};
-
-export type getDMDonVisIdResponse = (getDMDonVisIdResponseSuccess | getDMDonVisIdResponseError)
-
-export const getGetDMDonVisIdUrl = (id: string,
-    params?: GetDMDonVisIdParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/DM_DonVis/${id}?${stringifiedParams}` : `/DM_DonVis/${id}`
+    data: void
+    status: 500
 }
 
-export const getDMDonVisId = async (id: string,
-    params?: GetDMDonVisIdParams, options?: RequestInit): Promise<getDMDonVisIdResponse> => {
-  
-  return customSystemFetch<getDMDonVisIdResponse>(getGetDMDonVisIdUrl(id,params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type getDMDonVisIdResponseSuccess = getDMDonVisIdResponse200 & {
+    headers: Headers
+}
+export type getDMDonVisIdResponseError = (
+    | getDMDonVisIdResponse400
+    | getDMDonVisIdResponse401
+    | getDMDonVisIdResponse403
+    | getDMDonVisIdResponse500
+) & {
+    headers: Headers
+}
 
+export type getDMDonVisIdResponse = getDMDonVisIdResponseSuccess | getDMDonVisIdResponseError
 
+export const getGetDMDonVisIdUrl = (id: string, params?: GetDMDonVisIdParams) => {
+    const normalizedParams = new URLSearchParams()
 
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
+    const stringifiedParams = normalizedParams.toString()
 
-export const getGetDMDonVisIdQueryKey = (id?: string,
-    params?: GetDMDonVisIdParams,) => {
-    return [
-    `/DM_DonVis/${id}`, ...(params ? [params]: [])
-    ] as const;
+    return stringifiedParams.length > 0
+        ? `/DM_DonVis/${id}?${stringifiedParams}`
+        : `/DM_DonVis/${id}`
+}
+
+export const getDMDonVisId = async (
+    id: string,
+    params?: GetDMDonVisIdParams,
+    options?: RequestInit
+): Promise<getDMDonVisIdResponse> => {
+    return customSystemFetch<getDMDonVisIdResponse>(getGetDMDonVisIdUrl(id, params), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getGetDMDonVisIdQueryKey = (id?: string, params?: GetDMDonVisIdParams) => {
+    return [`/DM_DonVis/${id}`, ...(params ? [params] : [])] as const
+}
+
+export const getGetDMDonVisIdQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMDonVisId>>,
+    TError = GetDMDonVisId400 | GetDMDonVisId401 | GetDMDonVisId403 | void,
+>(
+    id: string,
+    params?: GetDMDonVisIdParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMDonVisId>>, TError, TData>>
+        request?: SecondParameter<typeof customSystemFetch>
     }
-
-    
-export const getGetDMDonVisIdQueryOptions = <TData = Awaited<ReturnType<typeof getDMDonVisId>>, TError = GetDMDonVisId400 | GetDMDonVisId401 | GetDMDonVisId403 | void>(id: string,
-    params?: GetDMDonVisIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMDonVisId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
 ) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    const queryKey = queryOptions?.queryKey ?? getGetDMDonVisIdQueryKey(id, params)
 
-  const queryKey =  queryOptions?.queryKey ?? getGetDMDonVisIdQueryKey(id,params);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMDonVisId>>> = ({ signal }) =>
+        getDMDonVisId(id, params, { signal, ...requestOptions })
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMDonVisId>>> = ({ signal }) => getDMDonVisId(id,params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMDonVisId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMDonVisId>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetDMDonVisIdQueryResult = NonNullable<Awaited<ReturnType<typeof getDMDonVisId>>>
 export type GetDMDonVisIdQueryError = GetDMDonVisId400 | GetDMDonVisId401 | GetDMDonVisId403 | void
 
-
-export function useGetDMDonVisId<TData = Awaited<ReturnType<typeof getDMDonVisId>>, TError = GetDMDonVisId400 | GetDMDonVisId401 | GetDMDonVisId403 | void>(
- id: string,
-    params: undefined |  GetDMDonVisIdParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMDonVisId>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMDonVisId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMDonVisId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMDonVisId<TData = Awaited<ReturnType<typeof getDMDonVisId>>, TError = GetDMDonVisId400 | GetDMDonVisId401 | GetDMDonVisId403 | void>(
- id: string,
-    params?: GetDMDonVisIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMDonVisId>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMDonVisId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMDonVisId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMDonVisId<TData = Awaited<ReturnType<typeof getDMDonVisId>>, TError = GetDMDonVisId400 | GetDMDonVisId401 | GetDMDonVisId403 | void>(
- id: string,
-    params?: GetDMDonVisIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMDonVisId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMDonVisId<
+    TData = Awaited<ReturnType<typeof getDMDonVisId>>,
+    TError = GetDMDonVisId400 | GetDMDonVisId401 | GetDMDonVisId403 | void,
+>(
+    id: string,
+    params: undefined | GetDMDonVisIdParams,
+    options: {
+        query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMDonVisId>>, TError, TData>> &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMDonVisId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMDonVisId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMDonVisId<
+    TData = Awaited<ReturnType<typeof getDMDonVisId>>,
+    TError = GetDMDonVisId400 | GetDMDonVisId401 | GetDMDonVisId403 | void,
+>(
+    id: string,
+    params?: GetDMDonVisIdParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMDonVisId>>, TError, TData>> &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMDonVisId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMDonVisId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMDonVisId<
+    TData = Awaited<ReturnType<typeof getDMDonVisId>>,
+    TError = GetDMDonVisId400 | GetDMDonVisId401 | GetDMDonVisId403 | void,
+>(
+    id: string,
+    params?: GetDMDonVisIdParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMDonVisId>>, TError, TData>>
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Đơn vị - Theo Id
  */
 
-export function useGetDMDonVisId<TData = Awaited<ReturnType<typeof getDMDonVisId>>, TError = GetDMDonVisId400 | GetDMDonVisId401 | GetDMDonVisId403 | void>(
- id: string,
-    params?: GetDMDonVisIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMDonVisId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMDonVisId<
+    TData = Awaited<ReturnType<typeof getDMDonVisId>>,
+    TError = GetDMDonVisId400 | GetDMDonVisId401 | GetDMDonVisId403 | void,
+>(
+    id: string,
+    params?: GetDMDonVisIdParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMDonVisId>>, TError, TData>>
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMDonVisIdQueryOptions(id, params, options)
 
-  const queryOptions = getGetDMDonVisIdQueryOptions(id,params,options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Kiểm tra tình trạng API
  * @summary Kiểm tra tình trạng API
  */
 export type getDMDonVisHealthzResponse400 = {
-  data: GetDMDonVisHealthz400
-  status: 400
+    data: GetDMDonVisHealthz400
+    status: 400
 }
 
 export type getDMDonVisHealthzResponse401 = {
-  data: GetDMDonVisHealthz401
-  status: 401
+    data: GetDMDonVisHealthz401
+    status: 401
 }
 
 export type getDMDonVisHealthzResponse403 = {
-  data: GetDMDonVisHealthz403
-  status: 403
+    data: GetDMDonVisHealthz403
+    status: 403
 }
 
 export type getDMDonVisHealthzResponse500 = {
-  data: GetDMDonVisHealthz500
-  status: 500
+    data: GetDMDonVisHealthz500
+    status: 500
 }
-    
-;
-export type getDMDonVisHealthzResponseError = (getDMDonVisHealthzResponse400 | getDMDonVisHealthzResponse401 | getDMDonVisHealthzResponse403 | getDMDonVisHealthzResponse500) & {
-  headers: Headers;
-};
+export type getDMDonVisHealthzResponseError = (
+    | getDMDonVisHealthzResponse400
+    | getDMDonVisHealthzResponse401
+    | getDMDonVisHealthzResponse403
+    | getDMDonVisHealthzResponse500
+) & {
+    headers: Headers
+}
 
-export type getDMDonVisHealthzResponse = (getDMDonVisHealthzResponseError)
+export type getDMDonVisHealthzResponse = getDMDonVisHealthzResponseError
 
 export const getGetDMDonVisHealthzUrl = () => {
-
-
-  
-
-  return `/DM_DonVis/healthz`
+    return `/DM_DonVis/healthz`
 }
 
-export const getDMDonVisHealthz = async ( options?: RequestInit): Promise<getDMDonVisHealthzResponse> => {
-  
-  return customSystemFetch<getDMDonVisHealthzResponse>(getGetDMDonVisHealthzUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-
+export const getDMDonVisHealthz = async (
+    options?: RequestInit
+): Promise<getDMDonVisHealthzResponse> => {
+    return customSystemFetch<getDMDonVisHealthzResponse>(getGetDMDonVisHealthzUrl(), {
+        ...options,
+        method: 'GET',
+    })
+}
 
 export const getGetDMDonVisHealthzQueryKey = () => {
-    return [
-    `/DM_DonVis/healthz`
-    ] as const;
-    }
-
-    
-export const getGetDMDonVisHealthzQueryOptions = <TData = Awaited<ReturnType<typeof getDMDonVisHealthz>>, TError = GetDMDonVisHealthz400 | GetDMDonVisHealthz401 | GetDMDonVisHealthz403 | GetDMDonVisHealthz500>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMDonVisHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetDMDonVisHealthzQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMDonVisHealthz>>> = ({ signal }) => getDMDonVisHealthz({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMDonVisHealthz>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return [`/DM_DonVis/healthz`] as const
 }
 
-export type GetDMDonVisHealthzQueryResult = NonNullable<Awaited<ReturnType<typeof getDMDonVisHealthz>>>
-export type GetDMDonVisHealthzQueryError = GetDMDonVisHealthz400 | GetDMDonVisHealthz401 | GetDMDonVisHealthz403 | GetDMDonVisHealthz500
+export const getGetDMDonVisHealthzQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMDonVisHealthz>>,
+    TError =
+        | GetDMDonVisHealthz400
+        | GetDMDonVisHealthz401
+        | GetDMDonVisHealthz403
+        | GetDMDonVisHealthz500,
+>(options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMDonVisHealthz>>, TError, TData>>
+    request?: SecondParameter<typeof customSystemFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
+    const queryKey = queryOptions?.queryKey ?? getGetDMDonVisHealthzQueryKey()
 
-export function useGetDMDonVisHealthz<TData = Awaited<ReturnType<typeof getDMDonVisHealthz>>, TError = GetDMDonVisHealthz400 | GetDMDonVisHealthz401 | GetDMDonVisHealthz403 | GetDMDonVisHealthz500>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMDonVisHealthz>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMDonVisHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMDonVisHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMDonVisHealthz<TData = Awaited<ReturnType<typeof getDMDonVisHealthz>>, TError = GetDMDonVisHealthz400 | GetDMDonVisHealthz401 | GetDMDonVisHealthz403 | GetDMDonVisHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMDonVisHealthz>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMDonVisHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMDonVisHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMDonVisHealthz<TData = Awaited<ReturnType<typeof getDMDonVisHealthz>>, TError = GetDMDonVisHealthz400 | GetDMDonVisHealthz401 | GetDMDonVisHealthz403 | GetDMDonVisHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMDonVisHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMDonVisHealthz>>> = ({ signal }) =>
+        getDMDonVisHealthz({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMDonVisHealthz>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDMDonVisHealthzQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getDMDonVisHealthz>>
+>
+export type GetDMDonVisHealthzQueryError =
+    | GetDMDonVisHealthz400
+    | GetDMDonVisHealthz401
+    | GetDMDonVisHealthz403
+    | GetDMDonVisHealthz500
+
+export function useGetDMDonVisHealthz<
+    TData = Awaited<ReturnType<typeof getDMDonVisHealthz>>,
+    TError =
+        | GetDMDonVisHealthz400
+        | GetDMDonVisHealthz401
+        | GetDMDonVisHealthz403
+        | GetDMDonVisHealthz500,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMDonVisHealthz>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMDonVisHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMDonVisHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMDonVisHealthz<
+    TData = Awaited<ReturnType<typeof getDMDonVisHealthz>>,
+    TError =
+        | GetDMDonVisHealthz400
+        | GetDMDonVisHealthz401
+        | GetDMDonVisHealthz403
+        | GetDMDonVisHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMDonVisHealthz>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMDonVisHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMDonVisHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMDonVisHealthz<
+    TData = Awaited<ReturnType<typeof getDMDonVisHealthz>>,
+    TError =
+        | GetDMDonVisHealthz400
+        | GetDMDonVisHealthz401
+        | GetDMDonVisHealthz403
+        | GetDMDonVisHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMDonVisHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Kiểm tra tình trạng API
  */
 
-export function useGetDMDonVisHealthz<TData = Awaited<ReturnType<typeof getDMDonVisHealthz>>, TError = GetDMDonVisHealthz400 | GetDMDonVisHealthz401 | GetDMDonVisHealthz403 | GetDMDonVisHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMDonVisHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMDonVisHealthz<
+    TData = Awaited<ReturnType<typeof getDMDonVisHealthz>>,
+    TError =
+        | GetDMDonVisHealthz400
+        | GetDMDonVisHealthz401
+        | GetDMDonVisHealthz403
+        | GetDMDonVisHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMDonVisHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMDonVisHealthzQueryOptions(options)
 
-  const queryOptions = getGetDMDonVisHealthzQueryOptions(options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Lấy danh sách các Giới tính
  * @summary Giới tính - Danh sách
  */
 export type postDMGioiTinhsListResponse200 = {
-  data: PublicApiGetAllDMGioiTinhDTO
-  status: 200
+    data: PublicApiGetAllDMGioiTinhDTO
+    status: 200
 }
 
 export type postDMGioiTinhsListResponse400 = {
-  data: PostDMGioiTinhsList400
-  status: 400
+    data: PostDMGioiTinhsList400
+    status: 400
 }
 
 export type postDMGioiTinhsListResponse401 = {
-  data: PostDMGioiTinhsList401
-  status: 401
+    data: PostDMGioiTinhsList401
+    status: 401
 }
 
 export type postDMGioiTinhsListResponse403 = {
-  data: PostDMGioiTinhsList403
-  status: 403
+    data: PostDMGioiTinhsList403
+    status: 403
 }
 
 export type postDMGioiTinhsListResponse500 = {
-  data: void
-  status: 500
+    data: void
+    status: 500
 }
-    
-export type postDMGioiTinhsListResponseSuccess = (postDMGioiTinhsListResponse200) & {
-  headers: Headers;
-};
-export type postDMGioiTinhsListResponseError = (postDMGioiTinhsListResponse400 | postDMGioiTinhsListResponse401 | postDMGioiTinhsListResponse403 | postDMGioiTinhsListResponse500) & {
-  headers: Headers;
-};
 
-export type postDMGioiTinhsListResponse = (postDMGioiTinhsListResponseSuccess | postDMGioiTinhsListResponseError)
+export type postDMGioiTinhsListResponseSuccess = postDMGioiTinhsListResponse200 & {
+    headers: Headers
+}
+export type postDMGioiTinhsListResponseError = (
+    | postDMGioiTinhsListResponse400
+    | postDMGioiTinhsListResponse401
+    | postDMGioiTinhsListResponse403
+    | postDMGioiTinhsListResponse500
+) & {
+    headers: Headers
+}
+
+export type postDMGioiTinhsListResponse =
+    | postDMGioiTinhsListResponseSuccess
+    | postDMGioiTinhsListResponseError
 
 export const getPostDMGioiTinhsListUrl = () => {
-
-
-  
-
-  return `/DM_GioiTinhs/list`
+    return `/DM_GioiTinhs/list`
 }
 
-export const postDMGioiTinhsList = async (publicApiPagingRequestDto: PublicApiPagingRequestDto, options?: RequestInit): Promise<postDMGioiTinhsListResponse> => {
-  
-  return customSystemFetch<postDMGioiTinhsListResponse>(getPostDMGioiTinhsListUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
-    body: JSON.stringify(
-      publicApiPagingRequestDto,)
-  }
-);}
+export const postDMGioiTinhsList = async (
+    publicApiPagingRequestDto: PublicApiPagingRequestDto,
+    options?: RequestInit
+): Promise<postDMGioiTinhsListResponse> => {
+    return customSystemFetch<postDMGioiTinhsListResponse>(getPostDMGioiTinhsListUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
+        body: JSON.stringify(publicApiPagingRequestDto),
+    })
+}
 
-
-
-
-export const getPostDMGioiTinhsListMutationOptions = <TError = PostDMGioiTinhsList400 | PostDMGioiTinhsList401 | PostDMGioiTinhsList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMGioiTinhsList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof postDMGioiTinhsList>>, TError,{data: PublicApiPagingRequestDto}, TContext> => {
-
-const mutationKey = ['postDMGioiTinhsList'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postDMGioiTinhsList>>, {data: PublicApiPagingRequestDto}> = (props) => {
-          const {data} = props ?? {};
-
-          return  postDMGioiTinhsList(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PostDMGioiTinhsListMutationResult = NonNullable<Awaited<ReturnType<typeof postDMGioiTinhsList>>>
-    export type PostDMGioiTinhsListMutationBody = PublicApiPagingRequestDto
-    export type PostDMGioiTinhsListMutationError = PostDMGioiTinhsList400 | PostDMGioiTinhsList401 | PostDMGioiTinhsList403 | void
-
-    /**
- * @summary Giới tính - Danh sách
- */
-export const usePostDMGioiTinhsList = <TError = PostDMGioiTinhsList400 | PostDMGioiTinhsList401 | PostDMGioiTinhsList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMGioiTinhsList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getPostDMGioiTinhsListMutationOptions = <
+    TError = PostDMGioiTinhsList400 | PostDMGioiTinhsList401 | PostDMGioiTinhsList403 | void,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postDMGioiTinhsList>>,
         TError,
-        {data: PublicApiPagingRequestDto},
+        { data: PublicApiPagingRequestDto },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postDMGioiTinhsList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationKey = ['postDMGioiTinhsList']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getPostDMGioiTinhsListMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postDMGioiTinhsList>>,
+        { data: PublicApiPagingRequestDto }
+    > = (props) => {
+        const { data } = props ?? {}
 
-      return useMutation(mutationOptions, queryClient);
+        return postDMGioiTinhsList(data, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostDMGioiTinhsListMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postDMGioiTinhsList>>
+>
+export type PostDMGioiTinhsListMutationBody = PublicApiPagingRequestDto
+export type PostDMGioiTinhsListMutationError =
+    | PostDMGioiTinhsList400
+    | PostDMGioiTinhsList401
+    | PostDMGioiTinhsList403
+    | void
+
+/**
+ * @summary Giới tính - Danh sách
+ */
+export const usePostDMGioiTinhsList = <
+    TError = PostDMGioiTinhsList400 | PostDMGioiTinhsList401 | PostDMGioiTinhsList403 | void,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postDMGioiTinhsList>>,
+            TError,
+            { data: PublicApiPagingRequestDto },
+            TContext
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postDMGioiTinhsList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationOptions = getPostDMGioiTinhsListMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * Lấy thông tin Giới tính theo ID
  * @summary Giới tính - Theo Id
  */
 export type getDMGioiTinhsIdResponse200 = {
-  data: PublicApiGetAllDMGioiTinhDTO
-  status: 200
+    data: PublicApiGetAllDMGioiTinhDTO
+    status: 200
 }
 
 export type getDMGioiTinhsIdResponse400 = {
-  data: GetDMGioiTinhsId400
-  status: 400
+    data: GetDMGioiTinhsId400
+    status: 400
 }
 
 export type getDMGioiTinhsIdResponse401 = {
-  data: GetDMGioiTinhsId401
-  status: 401
+    data: GetDMGioiTinhsId401
+    status: 401
 }
 
 export type getDMGioiTinhsIdResponse403 = {
-  data: GetDMGioiTinhsId403
-  status: 403
+    data: GetDMGioiTinhsId403
+    status: 403
 }
 
 export type getDMGioiTinhsIdResponse500 = {
-  data: void
-  status: 500
-}
-    
-export type getDMGioiTinhsIdResponseSuccess = (getDMGioiTinhsIdResponse200) & {
-  headers: Headers;
-};
-export type getDMGioiTinhsIdResponseError = (getDMGioiTinhsIdResponse400 | getDMGioiTinhsIdResponse401 | getDMGioiTinhsIdResponse403 | getDMGioiTinhsIdResponse500) & {
-  headers: Headers;
-};
-
-export type getDMGioiTinhsIdResponse = (getDMGioiTinhsIdResponseSuccess | getDMGioiTinhsIdResponseError)
-
-export const getGetDMGioiTinhsIdUrl = (id: string,
-    params?: GetDMGioiTinhsIdParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/DM_GioiTinhs/${id}?${stringifiedParams}` : `/DM_GioiTinhs/${id}`
+    data: void
+    status: 500
 }
 
-export const getDMGioiTinhsId = async (id: string,
-    params?: GetDMGioiTinhsIdParams, options?: RequestInit): Promise<getDMGioiTinhsIdResponse> => {
-  
-  return customSystemFetch<getDMGioiTinhsIdResponse>(getGetDMGioiTinhsIdUrl(id,params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type getDMGioiTinhsIdResponseSuccess = getDMGioiTinhsIdResponse200 & {
+    headers: Headers
+}
+export type getDMGioiTinhsIdResponseError = (
+    | getDMGioiTinhsIdResponse400
+    | getDMGioiTinhsIdResponse401
+    | getDMGioiTinhsIdResponse403
+    | getDMGioiTinhsIdResponse500
+) & {
+    headers: Headers
+}
 
+export type getDMGioiTinhsIdResponse =
+    | getDMGioiTinhsIdResponseSuccess
+    | getDMGioiTinhsIdResponseError
 
+export const getGetDMGioiTinhsIdUrl = (id: string, params?: GetDMGioiTinhsIdParams) => {
+    const normalizedParams = new URLSearchParams()
 
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
+    const stringifiedParams = normalizedParams.toString()
 
-export const getGetDMGioiTinhsIdQueryKey = (id?: string,
-    params?: GetDMGioiTinhsIdParams,) => {
-    return [
-    `/DM_GioiTinhs/${id}`, ...(params ? [params]: [])
-    ] as const;
+    return stringifiedParams.length > 0
+        ? `/DM_GioiTinhs/${id}?${stringifiedParams}`
+        : `/DM_GioiTinhs/${id}`
+}
+
+export const getDMGioiTinhsId = async (
+    id: string,
+    params?: GetDMGioiTinhsIdParams,
+    options?: RequestInit
+): Promise<getDMGioiTinhsIdResponse> => {
+    return customSystemFetch<getDMGioiTinhsIdResponse>(getGetDMGioiTinhsIdUrl(id, params), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getGetDMGioiTinhsIdQueryKey = (id?: string, params?: GetDMGioiTinhsIdParams) => {
+    return [`/DM_GioiTinhs/${id}`, ...(params ? [params] : [])] as const
+}
+
+export const getGetDMGioiTinhsIdQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMGioiTinhsId>>,
+    TError = GetDMGioiTinhsId400 | GetDMGioiTinhsId401 | GetDMGioiTinhsId403 | void,
+>(
+    id: string,
+    params?: GetDMGioiTinhsIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMGioiTinhsId>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
     }
-
-    
-export const getGetDMGioiTinhsIdQueryOptions = <TData = Awaited<ReturnType<typeof getDMGioiTinhsId>>, TError = GetDMGioiTinhsId400 | GetDMGioiTinhsId401 | GetDMGioiTinhsId403 | void>(id: string,
-    params?: GetDMGioiTinhsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMGioiTinhsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
 ) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    const queryKey = queryOptions?.queryKey ?? getGetDMGioiTinhsIdQueryKey(id, params)
 
-  const queryKey =  queryOptions?.queryKey ?? getGetDMGioiTinhsIdQueryKey(id,params);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMGioiTinhsId>>> = ({ signal }) =>
+        getDMGioiTinhsId(id, params, { signal, ...requestOptions })
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMGioiTinhsId>>> = ({ signal }) => getDMGioiTinhsId(id,params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMGioiTinhsId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMGioiTinhsId>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetDMGioiTinhsIdQueryResult = NonNullable<Awaited<ReturnType<typeof getDMGioiTinhsId>>>
-export type GetDMGioiTinhsIdQueryError = GetDMGioiTinhsId400 | GetDMGioiTinhsId401 | GetDMGioiTinhsId403 | void
+export type GetDMGioiTinhsIdQueryError =
+    | GetDMGioiTinhsId400
+    | GetDMGioiTinhsId401
+    | GetDMGioiTinhsId403
+    | void
 
-
-export function useGetDMGioiTinhsId<TData = Awaited<ReturnType<typeof getDMGioiTinhsId>>, TError = GetDMGioiTinhsId400 | GetDMGioiTinhsId401 | GetDMGioiTinhsId403 | void>(
- id: string,
-    params: undefined |  GetDMGioiTinhsIdParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMGioiTinhsId>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMGioiTinhsId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMGioiTinhsId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMGioiTinhsId<TData = Awaited<ReturnType<typeof getDMGioiTinhsId>>, TError = GetDMGioiTinhsId400 | GetDMGioiTinhsId401 | GetDMGioiTinhsId403 | void>(
- id: string,
-    params?: GetDMGioiTinhsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMGioiTinhsId>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMGioiTinhsId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMGioiTinhsId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMGioiTinhsId<TData = Awaited<ReturnType<typeof getDMGioiTinhsId>>, TError = GetDMGioiTinhsId400 | GetDMGioiTinhsId401 | GetDMGioiTinhsId403 | void>(
- id: string,
-    params?: GetDMGioiTinhsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMGioiTinhsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMGioiTinhsId<
+    TData = Awaited<ReturnType<typeof getDMGioiTinhsId>>,
+    TError = GetDMGioiTinhsId400 | GetDMGioiTinhsId401 | GetDMGioiTinhsId403 | void,
+>(
+    id: string,
+    params: undefined | GetDMGioiTinhsIdParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMGioiTinhsId>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMGioiTinhsId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMGioiTinhsId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMGioiTinhsId<
+    TData = Awaited<ReturnType<typeof getDMGioiTinhsId>>,
+    TError = GetDMGioiTinhsId400 | GetDMGioiTinhsId401 | GetDMGioiTinhsId403 | void,
+>(
+    id: string,
+    params?: GetDMGioiTinhsIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMGioiTinhsId>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMGioiTinhsId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMGioiTinhsId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMGioiTinhsId<
+    TData = Awaited<ReturnType<typeof getDMGioiTinhsId>>,
+    TError = GetDMGioiTinhsId400 | GetDMGioiTinhsId401 | GetDMGioiTinhsId403 | void,
+>(
+    id: string,
+    params?: GetDMGioiTinhsIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMGioiTinhsId>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Giới tính - Theo Id
  */
 
-export function useGetDMGioiTinhsId<TData = Awaited<ReturnType<typeof getDMGioiTinhsId>>, TError = GetDMGioiTinhsId400 | GetDMGioiTinhsId401 | GetDMGioiTinhsId403 | void>(
- id: string,
-    params?: GetDMGioiTinhsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMGioiTinhsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMGioiTinhsId<
+    TData = Awaited<ReturnType<typeof getDMGioiTinhsId>>,
+    TError = GetDMGioiTinhsId400 | GetDMGioiTinhsId401 | GetDMGioiTinhsId403 | void,
+>(
+    id: string,
+    params?: GetDMGioiTinhsIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMGioiTinhsId>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMGioiTinhsIdQueryOptions(id, params, options)
 
-  const queryOptions = getGetDMGioiTinhsIdQueryOptions(id,params,options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Kiểm tra tình trạng API
  * @summary Kiểm tra tình trạng API
  */
 export type getDMGioiTinhsHealthzResponse400 = {
-  data: GetDMGioiTinhsHealthz400
-  status: 400
+    data: GetDMGioiTinhsHealthz400
+    status: 400
 }
 
 export type getDMGioiTinhsHealthzResponse401 = {
-  data: GetDMGioiTinhsHealthz401
-  status: 401
+    data: GetDMGioiTinhsHealthz401
+    status: 401
 }
 
 export type getDMGioiTinhsHealthzResponse403 = {
-  data: GetDMGioiTinhsHealthz403
-  status: 403
+    data: GetDMGioiTinhsHealthz403
+    status: 403
 }
 
 export type getDMGioiTinhsHealthzResponse500 = {
-  data: GetDMGioiTinhsHealthz500
-  status: 500
+    data: GetDMGioiTinhsHealthz500
+    status: 500
 }
-    
-;
-export type getDMGioiTinhsHealthzResponseError = (getDMGioiTinhsHealthzResponse400 | getDMGioiTinhsHealthzResponse401 | getDMGioiTinhsHealthzResponse403 | getDMGioiTinhsHealthzResponse500) & {
-  headers: Headers;
-};
+export type getDMGioiTinhsHealthzResponseError = (
+    | getDMGioiTinhsHealthzResponse400
+    | getDMGioiTinhsHealthzResponse401
+    | getDMGioiTinhsHealthzResponse403
+    | getDMGioiTinhsHealthzResponse500
+) & {
+    headers: Headers
+}
 
-export type getDMGioiTinhsHealthzResponse = (getDMGioiTinhsHealthzResponseError)
+export type getDMGioiTinhsHealthzResponse = getDMGioiTinhsHealthzResponseError
 
 export const getGetDMGioiTinhsHealthzUrl = () => {
-
-
-  
-
-  return `/DM_GioiTinhs/healthz`
+    return `/DM_GioiTinhs/healthz`
 }
 
-export const getDMGioiTinhsHealthz = async ( options?: RequestInit): Promise<getDMGioiTinhsHealthzResponse> => {
-  
-  return customSystemFetch<getDMGioiTinhsHealthzResponse>(getGetDMGioiTinhsHealthzUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-
+export const getDMGioiTinhsHealthz = async (
+    options?: RequestInit
+): Promise<getDMGioiTinhsHealthzResponse> => {
+    return customSystemFetch<getDMGioiTinhsHealthzResponse>(getGetDMGioiTinhsHealthzUrl(), {
+        ...options,
+        method: 'GET',
+    })
+}
 
 export const getGetDMGioiTinhsHealthzQueryKey = () => {
-    return [
-    `/DM_GioiTinhs/healthz`
-    ] as const;
-    }
-
-    
-export const getGetDMGioiTinhsHealthzQueryOptions = <TData = Awaited<ReturnType<typeof getDMGioiTinhsHealthz>>, TError = GetDMGioiTinhsHealthz400 | GetDMGioiTinhsHealthz401 | GetDMGioiTinhsHealthz403 | GetDMGioiTinhsHealthz500>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMGioiTinhsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetDMGioiTinhsHealthzQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMGioiTinhsHealthz>>> = ({ signal }) => getDMGioiTinhsHealthz({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMGioiTinhsHealthz>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return [`/DM_GioiTinhs/healthz`] as const
 }
 
-export type GetDMGioiTinhsHealthzQueryResult = NonNullable<Awaited<ReturnType<typeof getDMGioiTinhsHealthz>>>
-export type GetDMGioiTinhsHealthzQueryError = GetDMGioiTinhsHealthz400 | GetDMGioiTinhsHealthz401 | GetDMGioiTinhsHealthz403 | GetDMGioiTinhsHealthz500
+export const getGetDMGioiTinhsHealthzQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMGioiTinhsHealthz>>,
+    TError =
+        | GetDMGioiTinhsHealthz400
+        | GetDMGioiTinhsHealthz401
+        | GetDMGioiTinhsHealthz403
+        | GetDMGioiTinhsHealthz500,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<Awaited<ReturnType<typeof getDMGioiTinhsHealthz>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
+    const queryKey = queryOptions?.queryKey ?? getGetDMGioiTinhsHealthzQueryKey()
 
-export function useGetDMGioiTinhsHealthz<TData = Awaited<ReturnType<typeof getDMGioiTinhsHealthz>>, TError = GetDMGioiTinhsHealthz400 | GetDMGioiTinhsHealthz401 | GetDMGioiTinhsHealthz403 | GetDMGioiTinhsHealthz500>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMGioiTinhsHealthz>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMGioiTinhsHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMGioiTinhsHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMGioiTinhsHealthz<TData = Awaited<ReturnType<typeof getDMGioiTinhsHealthz>>, TError = GetDMGioiTinhsHealthz400 | GetDMGioiTinhsHealthz401 | GetDMGioiTinhsHealthz403 | GetDMGioiTinhsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMGioiTinhsHealthz>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMGioiTinhsHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMGioiTinhsHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMGioiTinhsHealthz<TData = Awaited<ReturnType<typeof getDMGioiTinhsHealthz>>, TError = GetDMGioiTinhsHealthz400 | GetDMGioiTinhsHealthz401 | GetDMGioiTinhsHealthz403 | GetDMGioiTinhsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMGioiTinhsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMGioiTinhsHealthz>>> = ({
+        signal,
+    }) => getDMGioiTinhsHealthz({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMGioiTinhsHealthz>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDMGioiTinhsHealthzQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getDMGioiTinhsHealthz>>
+>
+export type GetDMGioiTinhsHealthzQueryError =
+    | GetDMGioiTinhsHealthz400
+    | GetDMGioiTinhsHealthz401
+    | GetDMGioiTinhsHealthz403
+    | GetDMGioiTinhsHealthz500
+
+export function useGetDMGioiTinhsHealthz<
+    TData = Awaited<ReturnType<typeof getDMGioiTinhsHealthz>>,
+    TError =
+        | GetDMGioiTinhsHealthz400
+        | GetDMGioiTinhsHealthz401
+        | GetDMGioiTinhsHealthz403
+        | GetDMGioiTinhsHealthz500,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMGioiTinhsHealthz>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMGioiTinhsHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMGioiTinhsHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMGioiTinhsHealthz<
+    TData = Awaited<ReturnType<typeof getDMGioiTinhsHealthz>>,
+    TError =
+        | GetDMGioiTinhsHealthz400
+        | GetDMGioiTinhsHealthz401
+        | GetDMGioiTinhsHealthz403
+        | GetDMGioiTinhsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMGioiTinhsHealthz>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMGioiTinhsHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMGioiTinhsHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMGioiTinhsHealthz<
+    TData = Awaited<ReturnType<typeof getDMGioiTinhsHealthz>>,
+    TError =
+        | GetDMGioiTinhsHealthz400
+        | GetDMGioiTinhsHealthz401
+        | GetDMGioiTinhsHealthz403
+        | GetDMGioiTinhsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMGioiTinhsHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Kiểm tra tình trạng API
  */
 
-export function useGetDMGioiTinhsHealthz<TData = Awaited<ReturnType<typeof getDMGioiTinhsHealthz>>, TError = GetDMGioiTinhsHealthz400 | GetDMGioiTinhsHealthz401 | GetDMGioiTinhsHealthz403 | GetDMGioiTinhsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMGioiTinhsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMGioiTinhsHealthz<
+    TData = Awaited<ReturnType<typeof getDMGioiTinhsHealthz>>,
+    TError =
+        | GetDMGioiTinhsHealthz400
+        | GetDMGioiTinhsHealthz401
+        | GetDMGioiTinhsHealthz403
+        | GetDMGioiTinhsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMGioiTinhsHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMGioiTinhsHealthzQueryOptions(options)
 
-  const queryOptions = getGetDMGioiTinhsHealthzQueryOptions(options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Lấy danh sách các Học hàm
  * @summary Học hàm - Danh sách
  */
 export type postDMHocHamsListResponse200 = {
-  data: PublicApiGetAllDMHocHamDTO
-  status: 200
+    data: PublicApiGetAllDMHocHamDTO
+    status: 200
 }
 
 export type postDMHocHamsListResponse400 = {
-  data: PostDMHocHamsList400
-  status: 400
+    data: PostDMHocHamsList400
+    status: 400
 }
 
 export type postDMHocHamsListResponse401 = {
-  data: PostDMHocHamsList401
-  status: 401
+    data: PostDMHocHamsList401
+    status: 401
 }
 
 export type postDMHocHamsListResponse403 = {
-  data: PostDMHocHamsList403
-  status: 403
+    data: PostDMHocHamsList403
+    status: 403
 }
 
 export type postDMHocHamsListResponse500 = {
-  data: void
-  status: 500
+    data: void
+    status: 500
 }
-    
-export type postDMHocHamsListResponseSuccess = (postDMHocHamsListResponse200) & {
-  headers: Headers;
-};
-export type postDMHocHamsListResponseError = (postDMHocHamsListResponse400 | postDMHocHamsListResponse401 | postDMHocHamsListResponse403 | postDMHocHamsListResponse500) & {
-  headers: Headers;
-};
 
-export type postDMHocHamsListResponse = (postDMHocHamsListResponseSuccess | postDMHocHamsListResponseError)
+export type postDMHocHamsListResponseSuccess = postDMHocHamsListResponse200 & {
+    headers: Headers
+}
+export type postDMHocHamsListResponseError = (
+    | postDMHocHamsListResponse400
+    | postDMHocHamsListResponse401
+    | postDMHocHamsListResponse403
+    | postDMHocHamsListResponse500
+) & {
+    headers: Headers
+}
+
+export type postDMHocHamsListResponse =
+    | postDMHocHamsListResponseSuccess
+    | postDMHocHamsListResponseError
 
 export const getPostDMHocHamsListUrl = () => {
-
-
-  
-
-  return `/DM_HocHams/list`
+    return `/DM_HocHams/list`
 }
 
-export const postDMHocHamsList = async (publicApiPagingRequestDto: PublicApiPagingRequestDto, options?: RequestInit): Promise<postDMHocHamsListResponse> => {
-  
-  return customSystemFetch<postDMHocHamsListResponse>(getPostDMHocHamsListUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
-    body: JSON.stringify(
-      publicApiPagingRequestDto,)
-  }
-);}
+export const postDMHocHamsList = async (
+    publicApiPagingRequestDto: PublicApiPagingRequestDto,
+    options?: RequestInit
+): Promise<postDMHocHamsListResponse> => {
+    return customSystemFetch<postDMHocHamsListResponse>(getPostDMHocHamsListUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
+        body: JSON.stringify(publicApiPagingRequestDto),
+    })
+}
 
-
-
-
-export const getPostDMHocHamsListMutationOptions = <TError = PostDMHocHamsList400 | PostDMHocHamsList401 | PostDMHocHamsList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMHocHamsList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof postDMHocHamsList>>, TError,{data: PublicApiPagingRequestDto}, TContext> => {
-
-const mutationKey = ['postDMHocHamsList'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postDMHocHamsList>>, {data: PublicApiPagingRequestDto}> = (props) => {
-          const {data} = props ?? {};
-
-          return  postDMHocHamsList(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PostDMHocHamsListMutationResult = NonNullable<Awaited<ReturnType<typeof postDMHocHamsList>>>
-    export type PostDMHocHamsListMutationBody = PublicApiPagingRequestDto
-    export type PostDMHocHamsListMutationError = PostDMHocHamsList400 | PostDMHocHamsList401 | PostDMHocHamsList403 | void
-
-    /**
- * @summary Học hàm - Danh sách
- */
-export const usePostDMHocHamsList = <TError = PostDMHocHamsList400 | PostDMHocHamsList401 | PostDMHocHamsList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMHocHamsList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getPostDMHocHamsListMutationOptions = <
+    TError = PostDMHocHamsList400 | PostDMHocHamsList401 | PostDMHocHamsList403 | void,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postDMHocHamsList>>,
         TError,
-        {data: PublicApiPagingRequestDto},
+        { data: PublicApiPagingRequestDto },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postDMHocHamsList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationKey = ['postDMHocHamsList']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getPostDMHocHamsListMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postDMHocHamsList>>,
+        { data: PublicApiPagingRequestDto }
+    > = (props) => {
+        const { data } = props ?? {}
 
-      return useMutation(mutationOptions, queryClient);
+        return postDMHocHamsList(data, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostDMHocHamsListMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postDMHocHamsList>>
+>
+export type PostDMHocHamsListMutationBody = PublicApiPagingRequestDto
+export type PostDMHocHamsListMutationError =
+    | PostDMHocHamsList400
+    | PostDMHocHamsList401
+    | PostDMHocHamsList403
+    | void
+
+/**
+ * @summary Học hàm - Danh sách
+ */
+export const usePostDMHocHamsList = <
+    TError = PostDMHocHamsList400 | PostDMHocHamsList401 | PostDMHocHamsList403 | void,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postDMHocHamsList>>,
+            TError,
+            { data: PublicApiPagingRequestDto },
+            TContext
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postDMHocHamsList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationOptions = getPostDMHocHamsListMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * Lấy thông tin Học hàm theo ID
  * @summary Học hàm - Theo Id
  */
 export type getDMHocHamsIdResponse200 = {
-  data: PublicApiGetAllDMHocHamDTO
-  status: 200
+    data: PublicApiGetAllDMHocHamDTO
+    status: 200
 }
 
 export type getDMHocHamsIdResponse400 = {
-  data: GetDMHocHamsId400
-  status: 400
+    data: GetDMHocHamsId400
+    status: 400
 }
 
 export type getDMHocHamsIdResponse401 = {
-  data: GetDMHocHamsId401
-  status: 401
+    data: GetDMHocHamsId401
+    status: 401
 }
 
 export type getDMHocHamsIdResponse403 = {
-  data: GetDMHocHamsId403
-  status: 403
+    data: GetDMHocHamsId403
+    status: 403
 }
 
 export type getDMHocHamsIdResponse500 = {
-  data: void
-  status: 500
-}
-    
-export type getDMHocHamsIdResponseSuccess = (getDMHocHamsIdResponse200) & {
-  headers: Headers;
-};
-export type getDMHocHamsIdResponseError = (getDMHocHamsIdResponse400 | getDMHocHamsIdResponse401 | getDMHocHamsIdResponse403 | getDMHocHamsIdResponse500) & {
-  headers: Headers;
-};
-
-export type getDMHocHamsIdResponse = (getDMHocHamsIdResponseSuccess | getDMHocHamsIdResponseError)
-
-export const getGetDMHocHamsIdUrl = (id: string,
-    params?: GetDMHocHamsIdParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/DM_HocHams/${id}?${stringifiedParams}` : `/DM_HocHams/${id}`
+    data: void
+    status: 500
 }
 
-export const getDMHocHamsId = async (id: string,
-    params?: GetDMHocHamsIdParams, options?: RequestInit): Promise<getDMHocHamsIdResponse> => {
-  
-  return customSystemFetch<getDMHocHamsIdResponse>(getGetDMHocHamsIdUrl(id,params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type getDMHocHamsIdResponseSuccess = getDMHocHamsIdResponse200 & {
+    headers: Headers
+}
+export type getDMHocHamsIdResponseError = (
+    | getDMHocHamsIdResponse400
+    | getDMHocHamsIdResponse401
+    | getDMHocHamsIdResponse403
+    | getDMHocHamsIdResponse500
+) & {
+    headers: Headers
+}
 
+export type getDMHocHamsIdResponse = getDMHocHamsIdResponseSuccess | getDMHocHamsIdResponseError
 
+export const getGetDMHocHamsIdUrl = (id: string, params?: GetDMHocHamsIdParams) => {
+    const normalizedParams = new URLSearchParams()
 
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
+    const stringifiedParams = normalizedParams.toString()
 
-export const getGetDMHocHamsIdQueryKey = (id?: string,
-    params?: GetDMHocHamsIdParams,) => {
-    return [
-    `/DM_HocHams/${id}`, ...(params ? [params]: [])
-    ] as const;
+    return stringifiedParams.length > 0
+        ? `/DM_HocHams/${id}?${stringifiedParams}`
+        : `/DM_HocHams/${id}`
+}
+
+export const getDMHocHamsId = async (
+    id: string,
+    params?: GetDMHocHamsIdParams,
+    options?: RequestInit
+): Promise<getDMHocHamsIdResponse> => {
+    return customSystemFetch<getDMHocHamsIdResponse>(getGetDMHocHamsIdUrl(id, params), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getGetDMHocHamsIdQueryKey = (id?: string, params?: GetDMHocHamsIdParams) => {
+    return [`/DM_HocHams/${id}`, ...(params ? [params] : [])] as const
+}
+
+export const getGetDMHocHamsIdQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMHocHamsId>>,
+    TError = GetDMHocHamsId400 | GetDMHocHamsId401 | GetDMHocHamsId403 | void,
+>(
+    id: string,
+    params?: GetDMHocHamsIdParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMHocHamsId>>, TError, TData>>
+        request?: SecondParameter<typeof customSystemFetch>
     }
-
-    
-export const getGetDMHocHamsIdQueryOptions = <TData = Awaited<ReturnType<typeof getDMHocHamsId>>, TError = GetDMHocHamsId400 | GetDMHocHamsId401 | GetDMHocHamsId403 | void>(id: string,
-    params?: GetDMHocHamsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMHocHamsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
 ) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    const queryKey = queryOptions?.queryKey ?? getGetDMHocHamsIdQueryKey(id, params)
 
-  const queryKey =  queryOptions?.queryKey ?? getGetDMHocHamsIdQueryKey(id,params);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMHocHamsId>>> = ({ signal }) =>
+        getDMHocHamsId(id, params, { signal, ...requestOptions })
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMHocHamsId>>> = ({ signal }) => getDMHocHamsId(id,params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMHocHamsId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMHocHamsId>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetDMHocHamsIdQueryResult = NonNullable<Awaited<ReturnType<typeof getDMHocHamsId>>>
-export type GetDMHocHamsIdQueryError = GetDMHocHamsId400 | GetDMHocHamsId401 | GetDMHocHamsId403 | void
+export type GetDMHocHamsIdQueryError =
+    | GetDMHocHamsId400
+    | GetDMHocHamsId401
+    | GetDMHocHamsId403
+    | void
 
-
-export function useGetDMHocHamsId<TData = Awaited<ReturnType<typeof getDMHocHamsId>>, TError = GetDMHocHamsId400 | GetDMHocHamsId401 | GetDMHocHamsId403 | void>(
- id: string,
-    params: undefined |  GetDMHocHamsIdParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMHocHamsId>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMHocHamsId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMHocHamsId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMHocHamsId<TData = Awaited<ReturnType<typeof getDMHocHamsId>>, TError = GetDMHocHamsId400 | GetDMHocHamsId401 | GetDMHocHamsId403 | void>(
- id: string,
-    params?: GetDMHocHamsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMHocHamsId>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMHocHamsId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMHocHamsId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMHocHamsId<TData = Awaited<ReturnType<typeof getDMHocHamsId>>, TError = GetDMHocHamsId400 | GetDMHocHamsId401 | GetDMHocHamsId403 | void>(
- id: string,
-    params?: GetDMHocHamsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMHocHamsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMHocHamsId<
+    TData = Awaited<ReturnType<typeof getDMHocHamsId>>,
+    TError = GetDMHocHamsId400 | GetDMHocHamsId401 | GetDMHocHamsId403 | void,
+>(
+    id: string,
+    params: undefined | GetDMHocHamsIdParams,
+    options: {
+        query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMHocHamsId>>, TError, TData>> &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMHocHamsId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMHocHamsId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMHocHamsId<
+    TData = Awaited<ReturnType<typeof getDMHocHamsId>>,
+    TError = GetDMHocHamsId400 | GetDMHocHamsId401 | GetDMHocHamsId403 | void,
+>(
+    id: string,
+    params?: GetDMHocHamsIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMHocHamsId>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMHocHamsId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMHocHamsId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMHocHamsId<
+    TData = Awaited<ReturnType<typeof getDMHocHamsId>>,
+    TError = GetDMHocHamsId400 | GetDMHocHamsId401 | GetDMHocHamsId403 | void,
+>(
+    id: string,
+    params?: GetDMHocHamsIdParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMHocHamsId>>, TError, TData>>
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Học hàm - Theo Id
  */
 
-export function useGetDMHocHamsId<TData = Awaited<ReturnType<typeof getDMHocHamsId>>, TError = GetDMHocHamsId400 | GetDMHocHamsId401 | GetDMHocHamsId403 | void>(
- id: string,
-    params?: GetDMHocHamsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMHocHamsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMHocHamsId<
+    TData = Awaited<ReturnType<typeof getDMHocHamsId>>,
+    TError = GetDMHocHamsId400 | GetDMHocHamsId401 | GetDMHocHamsId403 | void,
+>(
+    id: string,
+    params?: GetDMHocHamsIdParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMHocHamsId>>, TError, TData>>
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMHocHamsIdQueryOptions(id, params, options)
 
-  const queryOptions = getGetDMHocHamsIdQueryOptions(id,params,options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Kiểm tra tình trạng API
  * @summary Kiểm tra tình trạng API
  */
 export type getDMHocHamsHealthzResponse400 = {
-  data: GetDMHocHamsHealthz400
-  status: 400
+    data: GetDMHocHamsHealthz400
+    status: 400
 }
 
 export type getDMHocHamsHealthzResponse401 = {
-  data: GetDMHocHamsHealthz401
-  status: 401
+    data: GetDMHocHamsHealthz401
+    status: 401
 }
 
 export type getDMHocHamsHealthzResponse403 = {
-  data: GetDMHocHamsHealthz403
-  status: 403
+    data: GetDMHocHamsHealthz403
+    status: 403
 }
 
 export type getDMHocHamsHealthzResponse500 = {
-  data: GetDMHocHamsHealthz500
-  status: 500
+    data: GetDMHocHamsHealthz500
+    status: 500
 }
-    
-;
-export type getDMHocHamsHealthzResponseError = (getDMHocHamsHealthzResponse400 | getDMHocHamsHealthzResponse401 | getDMHocHamsHealthzResponse403 | getDMHocHamsHealthzResponse500) & {
-  headers: Headers;
-};
+export type getDMHocHamsHealthzResponseError = (
+    | getDMHocHamsHealthzResponse400
+    | getDMHocHamsHealthzResponse401
+    | getDMHocHamsHealthzResponse403
+    | getDMHocHamsHealthzResponse500
+) & {
+    headers: Headers
+}
 
-export type getDMHocHamsHealthzResponse = (getDMHocHamsHealthzResponseError)
+export type getDMHocHamsHealthzResponse = getDMHocHamsHealthzResponseError
 
 export const getGetDMHocHamsHealthzUrl = () => {
-
-
-  
-
-  return `/DM_HocHams/healthz`
+    return `/DM_HocHams/healthz`
 }
 
-export const getDMHocHamsHealthz = async ( options?: RequestInit): Promise<getDMHocHamsHealthzResponse> => {
-  
-  return customSystemFetch<getDMHocHamsHealthzResponse>(getGetDMHocHamsHealthzUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-
+export const getDMHocHamsHealthz = async (
+    options?: RequestInit
+): Promise<getDMHocHamsHealthzResponse> => {
+    return customSystemFetch<getDMHocHamsHealthzResponse>(getGetDMHocHamsHealthzUrl(), {
+        ...options,
+        method: 'GET',
+    })
+}
 
 export const getGetDMHocHamsHealthzQueryKey = () => {
-    return [
-    `/DM_HocHams/healthz`
-    ] as const;
-    }
-
-    
-export const getGetDMHocHamsHealthzQueryOptions = <TData = Awaited<ReturnType<typeof getDMHocHamsHealthz>>, TError = GetDMHocHamsHealthz400 | GetDMHocHamsHealthz401 | GetDMHocHamsHealthz403 | GetDMHocHamsHealthz500>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMHocHamsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetDMHocHamsHealthzQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMHocHamsHealthz>>> = ({ signal }) => getDMHocHamsHealthz({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMHocHamsHealthz>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return [`/DM_HocHams/healthz`] as const
 }
 
-export type GetDMHocHamsHealthzQueryResult = NonNullable<Awaited<ReturnType<typeof getDMHocHamsHealthz>>>
-export type GetDMHocHamsHealthzQueryError = GetDMHocHamsHealthz400 | GetDMHocHamsHealthz401 | GetDMHocHamsHealthz403 | GetDMHocHamsHealthz500
+export const getGetDMHocHamsHealthzQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMHocHamsHealthz>>,
+    TError =
+        | GetDMHocHamsHealthz400
+        | GetDMHocHamsHealthz401
+        | GetDMHocHamsHealthz403
+        | GetDMHocHamsHealthz500,
+>(options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMHocHamsHealthz>>, TError, TData>>
+    request?: SecondParameter<typeof customSystemFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
+    const queryKey = queryOptions?.queryKey ?? getGetDMHocHamsHealthzQueryKey()
 
-export function useGetDMHocHamsHealthz<TData = Awaited<ReturnType<typeof getDMHocHamsHealthz>>, TError = GetDMHocHamsHealthz400 | GetDMHocHamsHealthz401 | GetDMHocHamsHealthz403 | GetDMHocHamsHealthz500>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMHocHamsHealthz>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMHocHamsHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMHocHamsHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMHocHamsHealthz<TData = Awaited<ReturnType<typeof getDMHocHamsHealthz>>, TError = GetDMHocHamsHealthz400 | GetDMHocHamsHealthz401 | GetDMHocHamsHealthz403 | GetDMHocHamsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMHocHamsHealthz>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMHocHamsHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMHocHamsHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMHocHamsHealthz<TData = Awaited<ReturnType<typeof getDMHocHamsHealthz>>, TError = GetDMHocHamsHealthz400 | GetDMHocHamsHealthz401 | GetDMHocHamsHealthz403 | GetDMHocHamsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMHocHamsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMHocHamsHealthz>>> = ({ signal }) =>
+        getDMHocHamsHealthz({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMHocHamsHealthz>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDMHocHamsHealthzQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getDMHocHamsHealthz>>
+>
+export type GetDMHocHamsHealthzQueryError =
+    | GetDMHocHamsHealthz400
+    | GetDMHocHamsHealthz401
+    | GetDMHocHamsHealthz403
+    | GetDMHocHamsHealthz500
+
+export function useGetDMHocHamsHealthz<
+    TData = Awaited<ReturnType<typeof getDMHocHamsHealthz>>,
+    TError =
+        | GetDMHocHamsHealthz400
+        | GetDMHocHamsHealthz401
+        | GetDMHocHamsHealthz403
+        | GetDMHocHamsHealthz500,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMHocHamsHealthz>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMHocHamsHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMHocHamsHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMHocHamsHealthz<
+    TData = Awaited<ReturnType<typeof getDMHocHamsHealthz>>,
+    TError =
+        | GetDMHocHamsHealthz400
+        | GetDMHocHamsHealthz401
+        | GetDMHocHamsHealthz403
+        | GetDMHocHamsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMHocHamsHealthz>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMHocHamsHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMHocHamsHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMHocHamsHealthz<
+    TData = Awaited<ReturnType<typeof getDMHocHamsHealthz>>,
+    TError =
+        | GetDMHocHamsHealthz400
+        | GetDMHocHamsHealthz401
+        | GetDMHocHamsHealthz403
+        | GetDMHocHamsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMHocHamsHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Kiểm tra tình trạng API
  */
 
-export function useGetDMHocHamsHealthz<TData = Awaited<ReturnType<typeof getDMHocHamsHealthz>>, TError = GetDMHocHamsHealthz400 | GetDMHocHamsHealthz401 | GetDMHocHamsHealthz403 | GetDMHocHamsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMHocHamsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMHocHamsHealthz<
+    TData = Awaited<ReturnType<typeof getDMHocHamsHealthz>>,
+    TError =
+        | GetDMHocHamsHealthz400
+        | GetDMHocHamsHealthz401
+        | GetDMHocHamsHealthz403
+        | GetDMHocHamsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMHocHamsHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMHocHamsHealthzQueryOptions(options)
 
-  const queryOptions = getGetDMHocHamsHealthzQueryOptions(options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Lấy danh sách các Học vị
  * @summary Học vị - Danh sách
  */
 export type postDMHocVisListResponse200 = {
-  data: PublicApiGetAllDMHocViDTO
-  status: 200
+    data: PublicApiGetAllDMHocViDTO
+    status: 200
 }
 
 export type postDMHocVisListResponse400 = {
-  data: PostDMHocVisList400
-  status: 400
+    data: PostDMHocVisList400
+    status: 400
 }
 
 export type postDMHocVisListResponse401 = {
-  data: PostDMHocVisList401
-  status: 401
+    data: PostDMHocVisList401
+    status: 401
 }
 
 export type postDMHocVisListResponse403 = {
-  data: PostDMHocVisList403
-  status: 403
+    data: PostDMHocVisList403
+    status: 403
 }
 
 export type postDMHocVisListResponse500 = {
-  data: void
-  status: 500
+    data: void
+    status: 500
 }
-    
-export type postDMHocVisListResponseSuccess = (postDMHocVisListResponse200) & {
-  headers: Headers;
-};
-export type postDMHocVisListResponseError = (postDMHocVisListResponse400 | postDMHocVisListResponse401 | postDMHocVisListResponse403 | postDMHocVisListResponse500) & {
-  headers: Headers;
-};
 
-export type postDMHocVisListResponse = (postDMHocVisListResponseSuccess | postDMHocVisListResponseError)
+export type postDMHocVisListResponseSuccess = postDMHocVisListResponse200 & {
+    headers: Headers
+}
+export type postDMHocVisListResponseError = (
+    | postDMHocVisListResponse400
+    | postDMHocVisListResponse401
+    | postDMHocVisListResponse403
+    | postDMHocVisListResponse500
+) & {
+    headers: Headers
+}
+
+export type postDMHocVisListResponse =
+    | postDMHocVisListResponseSuccess
+    | postDMHocVisListResponseError
 
 export const getPostDMHocVisListUrl = () => {
-
-
-  
-
-  return `/DM_HocVis/list`
+    return `/DM_HocVis/list`
 }
 
-export const postDMHocVisList = async (publicApiPagingRequestDto: PublicApiPagingRequestDto, options?: RequestInit): Promise<postDMHocVisListResponse> => {
-  
-  return customSystemFetch<postDMHocVisListResponse>(getPostDMHocVisListUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
-    body: JSON.stringify(
-      publicApiPagingRequestDto,)
-  }
-);}
+export const postDMHocVisList = async (
+    publicApiPagingRequestDto: PublicApiPagingRequestDto,
+    options?: RequestInit
+): Promise<postDMHocVisListResponse> => {
+    return customSystemFetch<postDMHocVisListResponse>(getPostDMHocVisListUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
+        body: JSON.stringify(publicApiPagingRequestDto),
+    })
+}
 
-
-
-
-export const getPostDMHocVisListMutationOptions = <TError = PostDMHocVisList400 | PostDMHocVisList401 | PostDMHocVisList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMHocVisList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof postDMHocVisList>>, TError,{data: PublicApiPagingRequestDto}, TContext> => {
-
-const mutationKey = ['postDMHocVisList'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postDMHocVisList>>, {data: PublicApiPagingRequestDto}> = (props) => {
-          const {data} = props ?? {};
-
-          return  postDMHocVisList(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PostDMHocVisListMutationResult = NonNullable<Awaited<ReturnType<typeof postDMHocVisList>>>
-    export type PostDMHocVisListMutationBody = PublicApiPagingRequestDto
-    export type PostDMHocVisListMutationError = PostDMHocVisList400 | PostDMHocVisList401 | PostDMHocVisList403 | void
-
-    /**
- * @summary Học vị - Danh sách
- */
-export const usePostDMHocVisList = <TError = PostDMHocVisList400 | PostDMHocVisList401 | PostDMHocVisList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMHocVisList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getPostDMHocVisListMutationOptions = <
+    TError = PostDMHocVisList400 | PostDMHocVisList401 | PostDMHocVisList403 | void,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postDMHocVisList>>,
         TError,
-        {data: PublicApiPagingRequestDto},
+        { data: PublicApiPagingRequestDto },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postDMHocVisList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationKey = ['postDMHocVisList']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getPostDMHocVisListMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postDMHocVisList>>,
+        { data: PublicApiPagingRequestDto }
+    > = (props) => {
+        const { data } = props ?? {}
 
-      return useMutation(mutationOptions, queryClient);
+        return postDMHocVisList(data, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostDMHocVisListMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postDMHocVisList>>
+>
+export type PostDMHocVisListMutationBody = PublicApiPagingRequestDto
+export type PostDMHocVisListMutationError =
+    | PostDMHocVisList400
+    | PostDMHocVisList401
+    | PostDMHocVisList403
+    | void
+
+/**
+ * @summary Học vị - Danh sách
+ */
+export const usePostDMHocVisList = <
+    TError = PostDMHocVisList400 | PostDMHocVisList401 | PostDMHocVisList403 | void,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postDMHocVisList>>,
+            TError,
+            { data: PublicApiPagingRequestDto },
+            TContext
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postDMHocVisList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationOptions = getPostDMHocVisListMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * Lấy thông tin Học vị theo ID
  * @summary Học vị - Theo Id
  */
 export type getDMHocVisIdResponse200 = {
-  data: PublicApiGetAllDMHocViDTO
-  status: 200
+    data: PublicApiGetAllDMHocViDTO
+    status: 200
 }
 
 export type getDMHocVisIdResponse400 = {
-  data: GetDMHocVisId400
-  status: 400
+    data: GetDMHocVisId400
+    status: 400
 }
 
 export type getDMHocVisIdResponse401 = {
-  data: GetDMHocVisId401
-  status: 401
+    data: GetDMHocVisId401
+    status: 401
 }
 
 export type getDMHocVisIdResponse403 = {
-  data: GetDMHocVisId403
-  status: 403
+    data: GetDMHocVisId403
+    status: 403
 }
 
 export type getDMHocVisIdResponse500 = {
-  data: void
-  status: 500
-}
-    
-export type getDMHocVisIdResponseSuccess = (getDMHocVisIdResponse200) & {
-  headers: Headers;
-};
-export type getDMHocVisIdResponseError = (getDMHocVisIdResponse400 | getDMHocVisIdResponse401 | getDMHocVisIdResponse403 | getDMHocVisIdResponse500) & {
-  headers: Headers;
-};
-
-export type getDMHocVisIdResponse = (getDMHocVisIdResponseSuccess | getDMHocVisIdResponseError)
-
-export const getGetDMHocVisIdUrl = (id: string,
-    params?: GetDMHocVisIdParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/DM_HocVis/${id}?${stringifiedParams}` : `/DM_HocVis/${id}`
+    data: void
+    status: 500
 }
 
-export const getDMHocVisId = async (id: string,
-    params?: GetDMHocVisIdParams, options?: RequestInit): Promise<getDMHocVisIdResponse> => {
-  
-  return customSystemFetch<getDMHocVisIdResponse>(getGetDMHocVisIdUrl(id,params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type getDMHocVisIdResponseSuccess = getDMHocVisIdResponse200 & {
+    headers: Headers
+}
+export type getDMHocVisIdResponseError = (
+    | getDMHocVisIdResponse400
+    | getDMHocVisIdResponse401
+    | getDMHocVisIdResponse403
+    | getDMHocVisIdResponse500
+) & {
+    headers: Headers
+}
 
+export type getDMHocVisIdResponse = getDMHocVisIdResponseSuccess | getDMHocVisIdResponseError
 
+export const getGetDMHocVisIdUrl = (id: string, params?: GetDMHocVisIdParams) => {
+    const normalizedParams = new URLSearchParams()
 
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
+    const stringifiedParams = normalizedParams.toString()
 
-export const getGetDMHocVisIdQueryKey = (id?: string,
-    params?: GetDMHocVisIdParams,) => {
-    return [
-    `/DM_HocVis/${id}`, ...(params ? [params]: [])
-    ] as const;
+    return stringifiedParams.length > 0
+        ? `/DM_HocVis/${id}?${stringifiedParams}`
+        : `/DM_HocVis/${id}`
+}
+
+export const getDMHocVisId = async (
+    id: string,
+    params?: GetDMHocVisIdParams,
+    options?: RequestInit
+): Promise<getDMHocVisIdResponse> => {
+    return customSystemFetch<getDMHocVisIdResponse>(getGetDMHocVisIdUrl(id, params), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getGetDMHocVisIdQueryKey = (id?: string, params?: GetDMHocVisIdParams) => {
+    return [`/DM_HocVis/${id}`, ...(params ? [params] : [])] as const
+}
+
+export const getGetDMHocVisIdQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMHocVisId>>,
+    TError = GetDMHocVisId400 | GetDMHocVisId401 | GetDMHocVisId403 | void,
+>(
+    id: string,
+    params?: GetDMHocVisIdParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMHocVisId>>, TError, TData>>
+        request?: SecondParameter<typeof customSystemFetch>
     }
-
-    
-export const getGetDMHocVisIdQueryOptions = <TData = Awaited<ReturnType<typeof getDMHocVisId>>, TError = GetDMHocVisId400 | GetDMHocVisId401 | GetDMHocVisId403 | void>(id: string,
-    params?: GetDMHocVisIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMHocVisId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
 ) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    const queryKey = queryOptions?.queryKey ?? getGetDMHocVisIdQueryKey(id, params)
 
-  const queryKey =  queryOptions?.queryKey ?? getGetDMHocVisIdQueryKey(id,params);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMHocVisId>>> = ({ signal }) =>
+        getDMHocVisId(id, params, { signal, ...requestOptions })
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMHocVisId>>> = ({ signal }) => getDMHocVisId(id,params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMHocVisId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMHocVisId>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetDMHocVisIdQueryResult = NonNullable<Awaited<ReturnType<typeof getDMHocVisId>>>
 export type GetDMHocVisIdQueryError = GetDMHocVisId400 | GetDMHocVisId401 | GetDMHocVisId403 | void
 
-
-export function useGetDMHocVisId<TData = Awaited<ReturnType<typeof getDMHocVisId>>, TError = GetDMHocVisId400 | GetDMHocVisId401 | GetDMHocVisId403 | void>(
- id: string,
-    params: undefined |  GetDMHocVisIdParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMHocVisId>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMHocVisId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMHocVisId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMHocVisId<TData = Awaited<ReturnType<typeof getDMHocVisId>>, TError = GetDMHocVisId400 | GetDMHocVisId401 | GetDMHocVisId403 | void>(
- id: string,
-    params?: GetDMHocVisIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMHocVisId>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMHocVisId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMHocVisId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMHocVisId<TData = Awaited<ReturnType<typeof getDMHocVisId>>, TError = GetDMHocVisId400 | GetDMHocVisId401 | GetDMHocVisId403 | void>(
- id: string,
-    params?: GetDMHocVisIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMHocVisId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMHocVisId<
+    TData = Awaited<ReturnType<typeof getDMHocVisId>>,
+    TError = GetDMHocVisId400 | GetDMHocVisId401 | GetDMHocVisId403 | void,
+>(
+    id: string,
+    params: undefined | GetDMHocVisIdParams,
+    options: {
+        query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMHocVisId>>, TError, TData>> &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMHocVisId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMHocVisId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMHocVisId<
+    TData = Awaited<ReturnType<typeof getDMHocVisId>>,
+    TError = GetDMHocVisId400 | GetDMHocVisId401 | GetDMHocVisId403 | void,
+>(
+    id: string,
+    params?: GetDMHocVisIdParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMHocVisId>>, TError, TData>> &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMHocVisId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMHocVisId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMHocVisId<
+    TData = Awaited<ReturnType<typeof getDMHocVisId>>,
+    TError = GetDMHocVisId400 | GetDMHocVisId401 | GetDMHocVisId403 | void,
+>(
+    id: string,
+    params?: GetDMHocVisIdParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMHocVisId>>, TError, TData>>
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Học vị - Theo Id
  */
 
-export function useGetDMHocVisId<TData = Awaited<ReturnType<typeof getDMHocVisId>>, TError = GetDMHocVisId400 | GetDMHocVisId401 | GetDMHocVisId403 | void>(
- id: string,
-    params?: GetDMHocVisIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMHocVisId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMHocVisId<
+    TData = Awaited<ReturnType<typeof getDMHocVisId>>,
+    TError = GetDMHocVisId400 | GetDMHocVisId401 | GetDMHocVisId403 | void,
+>(
+    id: string,
+    params?: GetDMHocVisIdParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMHocVisId>>, TError, TData>>
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMHocVisIdQueryOptions(id, params, options)
 
-  const queryOptions = getGetDMHocVisIdQueryOptions(id,params,options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Kiểm tra tình trạng API
  * @summary Kiểm tra tình trạng API
  */
 export type getDMHocVisHealthzResponse400 = {
-  data: GetDMHocVisHealthz400
-  status: 400
+    data: GetDMHocVisHealthz400
+    status: 400
 }
 
 export type getDMHocVisHealthzResponse401 = {
-  data: GetDMHocVisHealthz401
-  status: 401
+    data: GetDMHocVisHealthz401
+    status: 401
 }
 
 export type getDMHocVisHealthzResponse403 = {
-  data: GetDMHocVisHealthz403
-  status: 403
+    data: GetDMHocVisHealthz403
+    status: 403
 }
 
 export type getDMHocVisHealthzResponse500 = {
-  data: GetDMHocVisHealthz500
-  status: 500
+    data: GetDMHocVisHealthz500
+    status: 500
 }
-    
-;
-export type getDMHocVisHealthzResponseError = (getDMHocVisHealthzResponse400 | getDMHocVisHealthzResponse401 | getDMHocVisHealthzResponse403 | getDMHocVisHealthzResponse500) & {
-  headers: Headers;
-};
+export type getDMHocVisHealthzResponseError = (
+    | getDMHocVisHealthzResponse400
+    | getDMHocVisHealthzResponse401
+    | getDMHocVisHealthzResponse403
+    | getDMHocVisHealthzResponse500
+) & {
+    headers: Headers
+}
 
-export type getDMHocVisHealthzResponse = (getDMHocVisHealthzResponseError)
+export type getDMHocVisHealthzResponse = getDMHocVisHealthzResponseError
 
 export const getGetDMHocVisHealthzUrl = () => {
-
-
-  
-
-  return `/DM_HocVis/healthz`
+    return `/DM_HocVis/healthz`
 }
 
-export const getDMHocVisHealthz = async ( options?: RequestInit): Promise<getDMHocVisHealthzResponse> => {
-  
-  return customSystemFetch<getDMHocVisHealthzResponse>(getGetDMHocVisHealthzUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-
+export const getDMHocVisHealthz = async (
+    options?: RequestInit
+): Promise<getDMHocVisHealthzResponse> => {
+    return customSystemFetch<getDMHocVisHealthzResponse>(getGetDMHocVisHealthzUrl(), {
+        ...options,
+        method: 'GET',
+    })
+}
 
 export const getGetDMHocVisHealthzQueryKey = () => {
-    return [
-    `/DM_HocVis/healthz`
-    ] as const;
-    }
-
-    
-export const getGetDMHocVisHealthzQueryOptions = <TData = Awaited<ReturnType<typeof getDMHocVisHealthz>>, TError = GetDMHocVisHealthz400 | GetDMHocVisHealthz401 | GetDMHocVisHealthz403 | GetDMHocVisHealthz500>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMHocVisHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetDMHocVisHealthzQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMHocVisHealthz>>> = ({ signal }) => getDMHocVisHealthz({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMHocVisHealthz>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return [`/DM_HocVis/healthz`] as const
 }
 
-export type GetDMHocVisHealthzQueryResult = NonNullable<Awaited<ReturnType<typeof getDMHocVisHealthz>>>
-export type GetDMHocVisHealthzQueryError = GetDMHocVisHealthz400 | GetDMHocVisHealthz401 | GetDMHocVisHealthz403 | GetDMHocVisHealthz500
+export const getGetDMHocVisHealthzQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMHocVisHealthz>>,
+    TError =
+        | GetDMHocVisHealthz400
+        | GetDMHocVisHealthz401
+        | GetDMHocVisHealthz403
+        | GetDMHocVisHealthz500,
+>(options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMHocVisHealthz>>, TError, TData>>
+    request?: SecondParameter<typeof customSystemFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
+    const queryKey = queryOptions?.queryKey ?? getGetDMHocVisHealthzQueryKey()
 
-export function useGetDMHocVisHealthz<TData = Awaited<ReturnType<typeof getDMHocVisHealthz>>, TError = GetDMHocVisHealthz400 | GetDMHocVisHealthz401 | GetDMHocVisHealthz403 | GetDMHocVisHealthz500>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMHocVisHealthz>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMHocVisHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMHocVisHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMHocVisHealthz<TData = Awaited<ReturnType<typeof getDMHocVisHealthz>>, TError = GetDMHocVisHealthz400 | GetDMHocVisHealthz401 | GetDMHocVisHealthz403 | GetDMHocVisHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMHocVisHealthz>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMHocVisHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMHocVisHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMHocVisHealthz<TData = Awaited<ReturnType<typeof getDMHocVisHealthz>>, TError = GetDMHocVisHealthz400 | GetDMHocVisHealthz401 | GetDMHocVisHealthz403 | GetDMHocVisHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMHocVisHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMHocVisHealthz>>> = ({ signal }) =>
+        getDMHocVisHealthz({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMHocVisHealthz>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDMHocVisHealthzQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getDMHocVisHealthz>>
+>
+export type GetDMHocVisHealthzQueryError =
+    | GetDMHocVisHealthz400
+    | GetDMHocVisHealthz401
+    | GetDMHocVisHealthz403
+    | GetDMHocVisHealthz500
+
+export function useGetDMHocVisHealthz<
+    TData = Awaited<ReturnType<typeof getDMHocVisHealthz>>,
+    TError =
+        | GetDMHocVisHealthz400
+        | GetDMHocVisHealthz401
+        | GetDMHocVisHealthz403
+        | GetDMHocVisHealthz500,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMHocVisHealthz>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMHocVisHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMHocVisHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMHocVisHealthz<
+    TData = Awaited<ReturnType<typeof getDMHocVisHealthz>>,
+    TError =
+        | GetDMHocVisHealthz400
+        | GetDMHocVisHealthz401
+        | GetDMHocVisHealthz403
+        | GetDMHocVisHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMHocVisHealthz>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMHocVisHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMHocVisHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMHocVisHealthz<
+    TData = Awaited<ReturnType<typeof getDMHocVisHealthz>>,
+    TError =
+        | GetDMHocVisHealthz400
+        | GetDMHocVisHealthz401
+        | GetDMHocVisHealthz403
+        | GetDMHocVisHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMHocVisHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Kiểm tra tình trạng API
  */
 
-export function useGetDMHocVisHealthz<TData = Awaited<ReturnType<typeof getDMHocVisHealthz>>, TError = GetDMHocVisHealthz400 | GetDMHocVisHealthz401 | GetDMHocVisHealthz403 | GetDMHocVisHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMHocVisHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMHocVisHealthz<
+    TData = Awaited<ReturnType<typeof getDMHocVisHealthz>>,
+    TError =
+        | GetDMHocVisHealthz400
+        | GetDMHocVisHealthz401
+        | GetDMHocVisHealthz403
+        | GetDMHocVisHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMHocVisHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMHocVisHealthzQueryOptions(options)
 
-  const queryOptions = getGetDMHocVisHealthzQueryOptions(options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Lấy danh sách các Ngoại ngữ
  * @summary Ngoại ngữ - Danh sách
  */
 export type postDMNgoaiNgusListResponse200 = {
-  data: PublicApiGetAllDMNgoaiNguDTO
-  status: 200
+    data: PublicApiGetAllDMNgoaiNguDTO
+    status: 200
 }
 
 export type postDMNgoaiNgusListResponse400 = {
-  data: PostDMNgoaiNgusList400
-  status: 400
+    data: PostDMNgoaiNgusList400
+    status: 400
 }
 
 export type postDMNgoaiNgusListResponse401 = {
-  data: PostDMNgoaiNgusList401
-  status: 401
+    data: PostDMNgoaiNgusList401
+    status: 401
 }
 
 export type postDMNgoaiNgusListResponse403 = {
-  data: PostDMNgoaiNgusList403
-  status: 403
+    data: PostDMNgoaiNgusList403
+    status: 403
 }
 
 export type postDMNgoaiNgusListResponse500 = {
-  data: void
-  status: 500
+    data: void
+    status: 500
 }
-    
-export type postDMNgoaiNgusListResponseSuccess = (postDMNgoaiNgusListResponse200) & {
-  headers: Headers;
-};
-export type postDMNgoaiNgusListResponseError = (postDMNgoaiNgusListResponse400 | postDMNgoaiNgusListResponse401 | postDMNgoaiNgusListResponse403 | postDMNgoaiNgusListResponse500) & {
-  headers: Headers;
-};
 
-export type postDMNgoaiNgusListResponse = (postDMNgoaiNgusListResponseSuccess | postDMNgoaiNgusListResponseError)
+export type postDMNgoaiNgusListResponseSuccess = postDMNgoaiNgusListResponse200 & {
+    headers: Headers
+}
+export type postDMNgoaiNgusListResponseError = (
+    | postDMNgoaiNgusListResponse400
+    | postDMNgoaiNgusListResponse401
+    | postDMNgoaiNgusListResponse403
+    | postDMNgoaiNgusListResponse500
+) & {
+    headers: Headers
+}
+
+export type postDMNgoaiNgusListResponse =
+    | postDMNgoaiNgusListResponseSuccess
+    | postDMNgoaiNgusListResponseError
 
 export const getPostDMNgoaiNgusListUrl = () => {
-
-
-  
-
-  return `/DM_NgoaiNgus/list`
+    return `/DM_NgoaiNgus/list`
 }
 
-export const postDMNgoaiNgusList = async (publicApiPagingRequestDto: PublicApiPagingRequestDto, options?: RequestInit): Promise<postDMNgoaiNgusListResponse> => {
-  
-  return customSystemFetch<postDMNgoaiNgusListResponse>(getPostDMNgoaiNgusListUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
-    body: JSON.stringify(
-      publicApiPagingRequestDto,)
-  }
-);}
+export const postDMNgoaiNgusList = async (
+    publicApiPagingRequestDto: PublicApiPagingRequestDto,
+    options?: RequestInit
+): Promise<postDMNgoaiNgusListResponse> => {
+    return customSystemFetch<postDMNgoaiNgusListResponse>(getPostDMNgoaiNgusListUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
+        body: JSON.stringify(publicApiPagingRequestDto),
+    })
+}
 
-
-
-
-export const getPostDMNgoaiNgusListMutationOptions = <TError = PostDMNgoaiNgusList400 | PostDMNgoaiNgusList401 | PostDMNgoaiNgusList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMNgoaiNgusList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof postDMNgoaiNgusList>>, TError,{data: PublicApiPagingRequestDto}, TContext> => {
-
-const mutationKey = ['postDMNgoaiNgusList'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postDMNgoaiNgusList>>, {data: PublicApiPagingRequestDto}> = (props) => {
-          const {data} = props ?? {};
-
-          return  postDMNgoaiNgusList(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PostDMNgoaiNgusListMutationResult = NonNullable<Awaited<ReturnType<typeof postDMNgoaiNgusList>>>
-    export type PostDMNgoaiNgusListMutationBody = PublicApiPagingRequestDto
-    export type PostDMNgoaiNgusListMutationError = PostDMNgoaiNgusList400 | PostDMNgoaiNgusList401 | PostDMNgoaiNgusList403 | void
-
-    /**
- * @summary Ngoại ngữ - Danh sách
- */
-export const usePostDMNgoaiNgusList = <TError = PostDMNgoaiNgusList400 | PostDMNgoaiNgusList401 | PostDMNgoaiNgusList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMNgoaiNgusList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getPostDMNgoaiNgusListMutationOptions = <
+    TError = PostDMNgoaiNgusList400 | PostDMNgoaiNgusList401 | PostDMNgoaiNgusList403 | void,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postDMNgoaiNgusList>>,
         TError,
-        {data: PublicApiPagingRequestDto},
+        { data: PublicApiPagingRequestDto },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postDMNgoaiNgusList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationKey = ['postDMNgoaiNgusList']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getPostDMNgoaiNgusListMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postDMNgoaiNgusList>>,
+        { data: PublicApiPagingRequestDto }
+    > = (props) => {
+        const { data } = props ?? {}
 
-      return useMutation(mutationOptions, queryClient);
+        return postDMNgoaiNgusList(data, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostDMNgoaiNgusListMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postDMNgoaiNgusList>>
+>
+export type PostDMNgoaiNgusListMutationBody = PublicApiPagingRequestDto
+export type PostDMNgoaiNgusListMutationError =
+    | PostDMNgoaiNgusList400
+    | PostDMNgoaiNgusList401
+    | PostDMNgoaiNgusList403
+    | void
+
+/**
+ * @summary Ngoại ngữ - Danh sách
+ */
+export const usePostDMNgoaiNgusList = <
+    TError = PostDMNgoaiNgusList400 | PostDMNgoaiNgusList401 | PostDMNgoaiNgusList403 | void,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postDMNgoaiNgusList>>,
+            TError,
+            { data: PublicApiPagingRequestDto },
+            TContext
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postDMNgoaiNgusList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationOptions = getPostDMNgoaiNgusListMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * Lấy thông tin Ngoại ngữ theo ID
  * @summary Ngoại ngữ - Theo Id
  */
 export type getDMNgoaiNgusIdResponse200 = {
-  data: PublicApiGetAllDMNgoaiNguDTO
-  status: 200
+    data: PublicApiGetAllDMNgoaiNguDTO
+    status: 200
 }
 
 export type getDMNgoaiNgusIdResponse400 = {
-  data: GetDMNgoaiNgusId400
-  status: 400
+    data: GetDMNgoaiNgusId400
+    status: 400
 }
 
 export type getDMNgoaiNgusIdResponse401 = {
-  data: GetDMNgoaiNgusId401
-  status: 401
+    data: GetDMNgoaiNgusId401
+    status: 401
 }
 
 export type getDMNgoaiNgusIdResponse403 = {
-  data: GetDMNgoaiNgusId403
-  status: 403
+    data: GetDMNgoaiNgusId403
+    status: 403
 }
 
 export type getDMNgoaiNgusIdResponse500 = {
-  data: void
-  status: 500
-}
-    
-export type getDMNgoaiNgusIdResponseSuccess = (getDMNgoaiNgusIdResponse200) & {
-  headers: Headers;
-};
-export type getDMNgoaiNgusIdResponseError = (getDMNgoaiNgusIdResponse400 | getDMNgoaiNgusIdResponse401 | getDMNgoaiNgusIdResponse403 | getDMNgoaiNgusIdResponse500) & {
-  headers: Headers;
-};
-
-export type getDMNgoaiNgusIdResponse = (getDMNgoaiNgusIdResponseSuccess | getDMNgoaiNgusIdResponseError)
-
-export const getGetDMNgoaiNgusIdUrl = (id: string,
-    params?: GetDMNgoaiNgusIdParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/DM_NgoaiNgus/${id}?${stringifiedParams}` : `/DM_NgoaiNgus/${id}`
+    data: void
+    status: 500
 }
 
-export const getDMNgoaiNgusId = async (id: string,
-    params?: GetDMNgoaiNgusIdParams, options?: RequestInit): Promise<getDMNgoaiNgusIdResponse> => {
-  
-  return customSystemFetch<getDMNgoaiNgusIdResponse>(getGetDMNgoaiNgusIdUrl(id,params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type getDMNgoaiNgusIdResponseSuccess = getDMNgoaiNgusIdResponse200 & {
+    headers: Headers
+}
+export type getDMNgoaiNgusIdResponseError = (
+    | getDMNgoaiNgusIdResponse400
+    | getDMNgoaiNgusIdResponse401
+    | getDMNgoaiNgusIdResponse403
+    | getDMNgoaiNgusIdResponse500
+) & {
+    headers: Headers
+}
 
+export type getDMNgoaiNgusIdResponse =
+    | getDMNgoaiNgusIdResponseSuccess
+    | getDMNgoaiNgusIdResponseError
 
+export const getGetDMNgoaiNgusIdUrl = (id: string, params?: GetDMNgoaiNgusIdParams) => {
+    const normalizedParams = new URLSearchParams()
 
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
+    const stringifiedParams = normalizedParams.toString()
 
-export const getGetDMNgoaiNgusIdQueryKey = (id?: string,
-    params?: GetDMNgoaiNgusIdParams,) => {
-    return [
-    `/DM_NgoaiNgus/${id}`, ...(params ? [params]: [])
-    ] as const;
+    return stringifiedParams.length > 0
+        ? `/DM_NgoaiNgus/${id}?${stringifiedParams}`
+        : `/DM_NgoaiNgus/${id}`
+}
+
+export const getDMNgoaiNgusId = async (
+    id: string,
+    params?: GetDMNgoaiNgusIdParams,
+    options?: RequestInit
+): Promise<getDMNgoaiNgusIdResponse> => {
+    return customSystemFetch<getDMNgoaiNgusIdResponse>(getGetDMNgoaiNgusIdUrl(id, params), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getGetDMNgoaiNgusIdQueryKey = (id?: string, params?: GetDMNgoaiNgusIdParams) => {
+    return [`/DM_NgoaiNgus/${id}`, ...(params ? [params] : [])] as const
+}
+
+export const getGetDMNgoaiNgusIdQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMNgoaiNgusId>>,
+    TError = GetDMNgoaiNgusId400 | GetDMNgoaiNgusId401 | GetDMNgoaiNgusId403 | void,
+>(
+    id: string,
+    params?: GetDMNgoaiNgusIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMNgoaiNgusId>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
     }
-
-    
-export const getGetDMNgoaiNgusIdQueryOptions = <TData = Awaited<ReturnType<typeof getDMNgoaiNgusId>>, TError = GetDMNgoaiNgusId400 | GetDMNgoaiNgusId401 | GetDMNgoaiNgusId403 | void>(id: string,
-    params?: GetDMNgoaiNgusIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMNgoaiNgusId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
 ) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    const queryKey = queryOptions?.queryKey ?? getGetDMNgoaiNgusIdQueryKey(id, params)
 
-  const queryKey =  queryOptions?.queryKey ?? getGetDMNgoaiNgusIdQueryKey(id,params);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMNgoaiNgusId>>> = ({ signal }) =>
+        getDMNgoaiNgusId(id, params, { signal, ...requestOptions })
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMNgoaiNgusId>>> = ({ signal }) => getDMNgoaiNgusId(id,params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMNgoaiNgusId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMNgoaiNgusId>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetDMNgoaiNgusIdQueryResult = NonNullable<Awaited<ReturnType<typeof getDMNgoaiNgusId>>>
-export type GetDMNgoaiNgusIdQueryError = GetDMNgoaiNgusId400 | GetDMNgoaiNgusId401 | GetDMNgoaiNgusId403 | void
+export type GetDMNgoaiNgusIdQueryError =
+    | GetDMNgoaiNgusId400
+    | GetDMNgoaiNgusId401
+    | GetDMNgoaiNgusId403
+    | void
 
-
-export function useGetDMNgoaiNgusId<TData = Awaited<ReturnType<typeof getDMNgoaiNgusId>>, TError = GetDMNgoaiNgusId400 | GetDMNgoaiNgusId401 | GetDMNgoaiNgusId403 | void>(
- id: string,
-    params: undefined |  GetDMNgoaiNgusIdParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMNgoaiNgusId>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMNgoaiNgusId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMNgoaiNgusId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMNgoaiNgusId<TData = Awaited<ReturnType<typeof getDMNgoaiNgusId>>, TError = GetDMNgoaiNgusId400 | GetDMNgoaiNgusId401 | GetDMNgoaiNgusId403 | void>(
- id: string,
-    params?: GetDMNgoaiNgusIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMNgoaiNgusId>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMNgoaiNgusId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMNgoaiNgusId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMNgoaiNgusId<TData = Awaited<ReturnType<typeof getDMNgoaiNgusId>>, TError = GetDMNgoaiNgusId400 | GetDMNgoaiNgusId401 | GetDMNgoaiNgusId403 | void>(
- id: string,
-    params?: GetDMNgoaiNgusIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMNgoaiNgusId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMNgoaiNgusId<
+    TData = Awaited<ReturnType<typeof getDMNgoaiNgusId>>,
+    TError = GetDMNgoaiNgusId400 | GetDMNgoaiNgusId401 | GetDMNgoaiNgusId403 | void,
+>(
+    id: string,
+    params: undefined | GetDMNgoaiNgusIdParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMNgoaiNgusId>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMNgoaiNgusId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMNgoaiNgusId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMNgoaiNgusId<
+    TData = Awaited<ReturnType<typeof getDMNgoaiNgusId>>,
+    TError = GetDMNgoaiNgusId400 | GetDMNgoaiNgusId401 | GetDMNgoaiNgusId403 | void,
+>(
+    id: string,
+    params?: GetDMNgoaiNgusIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMNgoaiNgusId>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMNgoaiNgusId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMNgoaiNgusId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMNgoaiNgusId<
+    TData = Awaited<ReturnType<typeof getDMNgoaiNgusId>>,
+    TError = GetDMNgoaiNgusId400 | GetDMNgoaiNgusId401 | GetDMNgoaiNgusId403 | void,
+>(
+    id: string,
+    params?: GetDMNgoaiNgusIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMNgoaiNgusId>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Ngoại ngữ - Theo Id
  */
 
-export function useGetDMNgoaiNgusId<TData = Awaited<ReturnType<typeof getDMNgoaiNgusId>>, TError = GetDMNgoaiNgusId400 | GetDMNgoaiNgusId401 | GetDMNgoaiNgusId403 | void>(
- id: string,
-    params?: GetDMNgoaiNgusIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMNgoaiNgusId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMNgoaiNgusId<
+    TData = Awaited<ReturnType<typeof getDMNgoaiNgusId>>,
+    TError = GetDMNgoaiNgusId400 | GetDMNgoaiNgusId401 | GetDMNgoaiNgusId403 | void,
+>(
+    id: string,
+    params?: GetDMNgoaiNgusIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMNgoaiNgusId>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMNgoaiNgusIdQueryOptions(id, params, options)
 
-  const queryOptions = getGetDMNgoaiNgusIdQueryOptions(id,params,options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Kiểm tra tình trạng API
  * @summary Kiểm tra tình trạng API
  */
 export type getDMNgoaiNgusHealthzResponse400 = {
-  data: GetDMNgoaiNgusHealthz400
-  status: 400
+    data: GetDMNgoaiNgusHealthz400
+    status: 400
 }
 
 export type getDMNgoaiNgusHealthzResponse401 = {
-  data: GetDMNgoaiNgusHealthz401
-  status: 401
+    data: GetDMNgoaiNgusHealthz401
+    status: 401
 }
 
 export type getDMNgoaiNgusHealthzResponse403 = {
-  data: GetDMNgoaiNgusHealthz403
-  status: 403
+    data: GetDMNgoaiNgusHealthz403
+    status: 403
 }
 
 export type getDMNgoaiNgusHealthzResponse500 = {
-  data: GetDMNgoaiNgusHealthz500
-  status: 500
+    data: GetDMNgoaiNgusHealthz500
+    status: 500
 }
-    
-;
-export type getDMNgoaiNgusHealthzResponseError = (getDMNgoaiNgusHealthzResponse400 | getDMNgoaiNgusHealthzResponse401 | getDMNgoaiNgusHealthzResponse403 | getDMNgoaiNgusHealthzResponse500) & {
-  headers: Headers;
-};
+export type getDMNgoaiNgusHealthzResponseError = (
+    | getDMNgoaiNgusHealthzResponse400
+    | getDMNgoaiNgusHealthzResponse401
+    | getDMNgoaiNgusHealthzResponse403
+    | getDMNgoaiNgusHealthzResponse500
+) & {
+    headers: Headers
+}
 
-export type getDMNgoaiNgusHealthzResponse = (getDMNgoaiNgusHealthzResponseError)
+export type getDMNgoaiNgusHealthzResponse = getDMNgoaiNgusHealthzResponseError
 
 export const getGetDMNgoaiNgusHealthzUrl = () => {
-
-
-  
-
-  return `/DM_NgoaiNgus/healthz`
+    return `/DM_NgoaiNgus/healthz`
 }
 
-export const getDMNgoaiNgusHealthz = async ( options?: RequestInit): Promise<getDMNgoaiNgusHealthzResponse> => {
-  
-  return customSystemFetch<getDMNgoaiNgusHealthzResponse>(getGetDMNgoaiNgusHealthzUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-
+export const getDMNgoaiNgusHealthz = async (
+    options?: RequestInit
+): Promise<getDMNgoaiNgusHealthzResponse> => {
+    return customSystemFetch<getDMNgoaiNgusHealthzResponse>(getGetDMNgoaiNgusHealthzUrl(), {
+        ...options,
+        method: 'GET',
+    })
+}
 
 export const getGetDMNgoaiNgusHealthzQueryKey = () => {
-    return [
-    `/DM_NgoaiNgus/healthz`
-    ] as const;
-    }
-
-    
-export const getGetDMNgoaiNgusHealthzQueryOptions = <TData = Awaited<ReturnType<typeof getDMNgoaiNgusHealthz>>, TError = GetDMNgoaiNgusHealthz400 | GetDMNgoaiNgusHealthz401 | GetDMNgoaiNgusHealthz403 | GetDMNgoaiNgusHealthz500>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMNgoaiNgusHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetDMNgoaiNgusHealthzQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMNgoaiNgusHealthz>>> = ({ signal }) => getDMNgoaiNgusHealthz({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMNgoaiNgusHealthz>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return [`/DM_NgoaiNgus/healthz`] as const
 }
 
-export type GetDMNgoaiNgusHealthzQueryResult = NonNullable<Awaited<ReturnType<typeof getDMNgoaiNgusHealthz>>>
-export type GetDMNgoaiNgusHealthzQueryError = GetDMNgoaiNgusHealthz400 | GetDMNgoaiNgusHealthz401 | GetDMNgoaiNgusHealthz403 | GetDMNgoaiNgusHealthz500
+export const getGetDMNgoaiNgusHealthzQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMNgoaiNgusHealthz>>,
+    TError =
+        | GetDMNgoaiNgusHealthz400
+        | GetDMNgoaiNgusHealthz401
+        | GetDMNgoaiNgusHealthz403
+        | GetDMNgoaiNgusHealthz500,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<Awaited<ReturnType<typeof getDMNgoaiNgusHealthz>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
+    const queryKey = queryOptions?.queryKey ?? getGetDMNgoaiNgusHealthzQueryKey()
 
-export function useGetDMNgoaiNgusHealthz<TData = Awaited<ReturnType<typeof getDMNgoaiNgusHealthz>>, TError = GetDMNgoaiNgusHealthz400 | GetDMNgoaiNgusHealthz401 | GetDMNgoaiNgusHealthz403 | GetDMNgoaiNgusHealthz500>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMNgoaiNgusHealthz>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMNgoaiNgusHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMNgoaiNgusHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMNgoaiNgusHealthz<TData = Awaited<ReturnType<typeof getDMNgoaiNgusHealthz>>, TError = GetDMNgoaiNgusHealthz400 | GetDMNgoaiNgusHealthz401 | GetDMNgoaiNgusHealthz403 | GetDMNgoaiNgusHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMNgoaiNgusHealthz>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMNgoaiNgusHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMNgoaiNgusHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMNgoaiNgusHealthz<TData = Awaited<ReturnType<typeof getDMNgoaiNgusHealthz>>, TError = GetDMNgoaiNgusHealthz400 | GetDMNgoaiNgusHealthz401 | GetDMNgoaiNgusHealthz403 | GetDMNgoaiNgusHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMNgoaiNgusHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMNgoaiNgusHealthz>>> = ({
+        signal,
+    }) => getDMNgoaiNgusHealthz({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMNgoaiNgusHealthz>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDMNgoaiNgusHealthzQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getDMNgoaiNgusHealthz>>
+>
+export type GetDMNgoaiNgusHealthzQueryError =
+    | GetDMNgoaiNgusHealthz400
+    | GetDMNgoaiNgusHealthz401
+    | GetDMNgoaiNgusHealthz403
+    | GetDMNgoaiNgusHealthz500
+
+export function useGetDMNgoaiNgusHealthz<
+    TData = Awaited<ReturnType<typeof getDMNgoaiNgusHealthz>>,
+    TError =
+        | GetDMNgoaiNgusHealthz400
+        | GetDMNgoaiNgusHealthz401
+        | GetDMNgoaiNgusHealthz403
+        | GetDMNgoaiNgusHealthz500,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMNgoaiNgusHealthz>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMNgoaiNgusHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMNgoaiNgusHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMNgoaiNgusHealthz<
+    TData = Awaited<ReturnType<typeof getDMNgoaiNgusHealthz>>,
+    TError =
+        | GetDMNgoaiNgusHealthz400
+        | GetDMNgoaiNgusHealthz401
+        | GetDMNgoaiNgusHealthz403
+        | GetDMNgoaiNgusHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMNgoaiNgusHealthz>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMNgoaiNgusHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMNgoaiNgusHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMNgoaiNgusHealthz<
+    TData = Awaited<ReturnType<typeof getDMNgoaiNgusHealthz>>,
+    TError =
+        | GetDMNgoaiNgusHealthz400
+        | GetDMNgoaiNgusHealthz401
+        | GetDMNgoaiNgusHealthz403
+        | GetDMNgoaiNgusHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMNgoaiNgusHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Kiểm tra tình trạng API
  */
 
-export function useGetDMNgoaiNgusHealthz<TData = Awaited<ReturnType<typeof getDMNgoaiNgusHealthz>>, TError = GetDMNgoaiNgusHealthz400 | GetDMNgoaiNgusHealthz401 | GetDMNgoaiNgusHealthz403 | GetDMNgoaiNgusHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMNgoaiNgusHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMNgoaiNgusHealthz<
+    TData = Awaited<ReturnType<typeof getDMNgoaiNgusHealthz>>,
+    TError =
+        | GetDMNgoaiNgusHealthz400
+        | GetDMNgoaiNgusHealthz401
+        | GetDMNgoaiNgusHealthz403
+        | GetDMNgoaiNgusHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMNgoaiNgusHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMNgoaiNgusHealthzQueryOptions(options)
 
-  const queryOptions = getGetDMNgoaiNgusHealthzQueryOptions(options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Lấy danh sách các cán bộ, nhân viên
  * @summary CB, NV - Danh sách
  */
 export type postDMNhanViensListResponse200 = {
-  data: PublicApiGetAllDMNhanVienDTO
-  status: 200
+    data: PublicApiGetAllDMNhanVienDTO
+    status: 200
 }
 
 export type postDMNhanViensListResponse400 = {
-  data: PostDMNhanViensList400
-  status: 400
+    data: PostDMNhanViensList400
+    status: 400
 }
 
 export type postDMNhanViensListResponse401 = {
-  data: PostDMNhanViensList401
-  status: 401
+    data: PostDMNhanViensList401
+    status: 401
 }
 
 export type postDMNhanViensListResponse403 = {
-  data: PostDMNhanViensList403
-  status: 403
+    data: PostDMNhanViensList403
+    status: 403
 }
 
 export type postDMNhanViensListResponse500 = {
-  data: void
-  status: 500
+    data: void
+    status: 500
 }
-    
-export type postDMNhanViensListResponseSuccess = (postDMNhanViensListResponse200) & {
-  headers: Headers;
-};
-export type postDMNhanViensListResponseError = (postDMNhanViensListResponse400 | postDMNhanViensListResponse401 | postDMNhanViensListResponse403 | postDMNhanViensListResponse500) & {
-  headers: Headers;
-};
 
-export type postDMNhanViensListResponse = (postDMNhanViensListResponseSuccess | postDMNhanViensListResponseError)
+export type postDMNhanViensListResponseSuccess = postDMNhanViensListResponse200 & {
+    headers: Headers
+}
+export type postDMNhanViensListResponseError = (
+    | postDMNhanViensListResponse400
+    | postDMNhanViensListResponse401
+    | postDMNhanViensListResponse403
+    | postDMNhanViensListResponse500
+) & {
+    headers: Headers
+}
+
+export type postDMNhanViensListResponse =
+    | postDMNhanViensListResponseSuccess
+    | postDMNhanViensListResponseError
 
 export const getPostDMNhanViensListUrl = () => {
-
-
-  
-
-  return `/DM_NhanViens/list`
+    return `/DM_NhanViens/list`
 }
 
-export const postDMNhanViensList = async (publicApiPagingRequestDto: PublicApiPagingRequestDto, options?: RequestInit): Promise<postDMNhanViensListResponse> => {
-  
-  return customSystemFetch<postDMNhanViensListResponse>(getPostDMNhanViensListUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
-    body: JSON.stringify(
-      publicApiPagingRequestDto,)
-  }
-);}
+export const postDMNhanViensList = async (
+    publicApiPagingRequestDto: PublicApiPagingRequestDto,
+    options?: RequestInit
+): Promise<postDMNhanViensListResponse> => {
+    return customSystemFetch<postDMNhanViensListResponse>(getPostDMNhanViensListUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
+        body: JSON.stringify(publicApiPagingRequestDto),
+    })
+}
 
-
-
-
-export const getPostDMNhanViensListMutationOptions = <TError = PostDMNhanViensList400 | PostDMNhanViensList401 | PostDMNhanViensList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMNhanViensList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof postDMNhanViensList>>, TError,{data: PublicApiPagingRequestDto}, TContext> => {
-
-const mutationKey = ['postDMNhanViensList'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postDMNhanViensList>>, {data: PublicApiPagingRequestDto}> = (props) => {
-          const {data} = props ?? {};
-
-          return  postDMNhanViensList(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PostDMNhanViensListMutationResult = NonNullable<Awaited<ReturnType<typeof postDMNhanViensList>>>
-    export type PostDMNhanViensListMutationBody = PublicApiPagingRequestDto
-    export type PostDMNhanViensListMutationError = PostDMNhanViensList400 | PostDMNhanViensList401 | PostDMNhanViensList403 | void
-
-    /**
- * @summary CB, NV - Danh sách
- */
-export const usePostDMNhanViensList = <TError = PostDMNhanViensList400 | PostDMNhanViensList401 | PostDMNhanViensList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMNhanViensList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getPostDMNhanViensListMutationOptions = <
+    TError = PostDMNhanViensList400 | PostDMNhanViensList401 | PostDMNhanViensList403 | void,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postDMNhanViensList>>,
         TError,
-        {data: PublicApiPagingRequestDto},
+        { data: PublicApiPagingRequestDto },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postDMNhanViensList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationKey = ['postDMNhanViensList']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getPostDMNhanViensListMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postDMNhanViensList>>,
+        { data: PublicApiPagingRequestDto }
+    > = (props) => {
+        const { data } = props ?? {}
 
-      return useMutation(mutationOptions, queryClient);
+        return postDMNhanViensList(data, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostDMNhanViensListMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postDMNhanViensList>>
+>
+export type PostDMNhanViensListMutationBody = PublicApiPagingRequestDto
+export type PostDMNhanViensListMutationError =
+    | PostDMNhanViensList400
+    | PostDMNhanViensList401
+    | PostDMNhanViensList403
+    | void
+
+/**
+ * @summary CB, NV - Danh sách
+ */
+export const usePostDMNhanViensList = <
+    TError = PostDMNhanViensList400 | PostDMNhanViensList401 | PostDMNhanViensList403 | void,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postDMNhanViensList>>,
+            TError,
+            { data: PublicApiPagingRequestDto },
+            TContext
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postDMNhanViensList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationOptions = getPostDMNhanViensListMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * Lấy thông tin cán bộ, nhân viên theo ID
  * @summary CB, NV - Theo Id
  */
 export type getDMNhanViensIdResponse200 = {
-  data: PublicApiGetAllDMNhanVienDTO
-  status: 200
+    data: PublicApiGetAllDMNhanVienDTO
+    status: 200
 }
 
 export type getDMNhanViensIdResponse400 = {
-  data: GetDMNhanViensId400
-  status: 400
+    data: GetDMNhanViensId400
+    status: 400
 }
 
 export type getDMNhanViensIdResponse401 = {
-  data: GetDMNhanViensId401
-  status: 401
+    data: GetDMNhanViensId401
+    status: 401
 }
 
 export type getDMNhanViensIdResponse403 = {
-  data: GetDMNhanViensId403
-  status: 403
+    data: GetDMNhanViensId403
+    status: 403
 }
 
 export type getDMNhanViensIdResponse500 = {
-  data: void
-  status: 500
-}
-    
-export type getDMNhanViensIdResponseSuccess = (getDMNhanViensIdResponse200) & {
-  headers: Headers;
-};
-export type getDMNhanViensIdResponseError = (getDMNhanViensIdResponse400 | getDMNhanViensIdResponse401 | getDMNhanViensIdResponse403 | getDMNhanViensIdResponse500) & {
-  headers: Headers;
-};
-
-export type getDMNhanViensIdResponse = (getDMNhanViensIdResponseSuccess | getDMNhanViensIdResponseError)
-
-export const getGetDMNhanViensIdUrl = (id: string,
-    params?: GetDMNhanViensIdParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/DM_NhanViens/${id}?${stringifiedParams}` : `/DM_NhanViens/${id}`
+    data: void
+    status: 500
 }
 
-export const getDMNhanViensId = async (id: string,
-    params?: GetDMNhanViensIdParams, options?: RequestInit): Promise<getDMNhanViensIdResponse> => {
-  
-  return customSystemFetch<getDMNhanViensIdResponse>(getGetDMNhanViensIdUrl(id,params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type getDMNhanViensIdResponseSuccess = getDMNhanViensIdResponse200 & {
+    headers: Headers
+}
+export type getDMNhanViensIdResponseError = (
+    | getDMNhanViensIdResponse400
+    | getDMNhanViensIdResponse401
+    | getDMNhanViensIdResponse403
+    | getDMNhanViensIdResponse500
+) & {
+    headers: Headers
+}
 
+export type getDMNhanViensIdResponse =
+    | getDMNhanViensIdResponseSuccess
+    | getDMNhanViensIdResponseError
 
+export const getGetDMNhanViensIdUrl = (id: string, params?: GetDMNhanViensIdParams) => {
+    const normalizedParams = new URLSearchParams()
 
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
+    const stringifiedParams = normalizedParams.toString()
 
-export const getGetDMNhanViensIdQueryKey = (id?: string,
-    params?: GetDMNhanViensIdParams,) => {
-    return [
-    `/DM_NhanViens/${id}`, ...(params ? [params]: [])
-    ] as const;
+    return stringifiedParams.length > 0
+        ? `/DM_NhanViens/${id}?${stringifiedParams}`
+        : `/DM_NhanViens/${id}`
+}
+
+export const getDMNhanViensId = async (
+    id: string,
+    params?: GetDMNhanViensIdParams,
+    options?: RequestInit
+): Promise<getDMNhanViensIdResponse> => {
+    return customSystemFetch<getDMNhanViensIdResponse>(getGetDMNhanViensIdUrl(id, params), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getGetDMNhanViensIdQueryKey = (id?: string, params?: GetDMNhanViensIdParams) => {
+    return [`/DM_NhanViens/${id}`, ...(params ? [params] : [])] as const
+}
+
+export const getGetDMNhanViensIdQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMNhanViensId>>,
+    TError = GetDMNhanViensId400 | GetDMNhanViensId401 | GetDMNhanViensId403 | void,
+>(
+    id: string,
+    params?: GetDMNhanViensIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMNhanViensId>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
     }
-
-    
-export const getGetDMNhanViensIdQueryOptions = <TData = Awaited<ReturnType<typeof getDMNhanViensId>>, TError = GetDMNhanViensId400 | GetDMNhanViensId401 | GetDMNhanViensId403 | void>(id: string,
-    params?: GetDMNhanViensIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMNhanViensId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
 ) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    const queryKey = queryOptions?.queryKey ?? getGetDMNhanViensIdQueryKey(id, params)
 
-  const queryKey =  queryOptions?.queryKey ?? getGetDMNhanViensIdQueryKey(id,params);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMNhanViensId>>> = ({ signal }) =>
+        getDMNhanViensId(id, params, { signal, ...requestOptions })
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMNhanViensId>>> = ({ signal }) => getDMNhanViensId(id,params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMNhanViensId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMNhanViensId>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetDMNhanViensIdQueryResult = NonNullable<Awaited<ReturnType<typeof getDMNhanViensId>>>
-export type GetDMNhanViensIdQueryError = GetDMNhanViensId400 | GetDMNhanViensId401 | GetDMNhanViensId403 | void
+export type GetDMNhanViensIdQueryError =
+    | GetDMNhanViensId400
+    | GetDMNhanViensId401
+    | GetDMNhanViensId403
+    | void
 
-
-export function useGetDMNhanViensId<TData = Awaited<ReturnType<typeof getDMNhanViensId>>, TError = GetDMNhanViensId400 | GetDMNhanViensId401 | GetDMNhanViensId403 | void>(
- id: string,
-    params: undefined |  GetDMNhanViensIdParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMNhanViensId>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMNhanViensId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMNhanViensId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMNhanViensId<TData = Awaited<ReturnType<typeof getDMNhanViensId>>, TError = GetDMNhanViensId400 | GetDMNhanViensId401 | GetDMNhanViensId403 | void>(
- id: string,
-    params?: GetDMNhanViensIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMNhanViensId>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMNhanViensId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMNhanViensId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMNhanViensId<TData = Awaited<ReturnType<typeof getDMNhanViensId>>, TError = GetDMNhanViensId400 | GetDMNhanViensId401 | GetDMNhanViensId403 | void>(
- id: string,
-    params?: GetDMNhanViensIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMNhanViensId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMNhanViensId<
+    TData = Awaited<ReturnType<typeof getDMNhanViensId>>,
+    TError = GetDMNhanViensId400 | GetDMNhanViensId401 | GetDMNhanViensId403 | void,
+>(
+    id: string,
+    params: undefined | GetDMNhanViensIdParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMNhanViensId>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMNhanViensId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMNhanViensId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMNhanViensId<
+    TData = Awaited<ReturnType<typeof getDMNhanViensId>>,
+    TError = GetDMNhanViensId400 | GetDMNhanViensId401 | GetDMNhanViensId403 | void,
+>(
+    id: string,
+    params?: GetDMNhanViensIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMNhanViensId>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMNhanViensId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMNhanViensId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMNhanViensId<
+    TData = Awaited<ReturnType<typeof getDMNhanViensId>>,
+    TError = GetDMNhanViensId400 | GetDMNhanViensId401 | GetDMNhanViensId403 | void,
+>(
+    id: string,
+    params?: GetDMNhanViensIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMNhanViensId>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary CB, NV - Theo Id
  */
 
-export function useGetDMNhanViensId<TData = Awaited<ReturnType<typeof getDMNhanViensId>>, TError = GetDMNhanViensId400 | GetDMNhanViensId401 | GetDMNhanViensId403 | void>(
- id: string,
-    params?: GetDMNhanViensIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMNhanViensId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMNhanViensId<
+    TData = Awaited<ReturnType<typeof getDMNhanViensId>>,
+    TError = GetDMNhanViensId400 | GetDMNhanViensId401 | GetDMNhanViensId403 | void,
+>(
+    id: string,
+    params?: GetDMNhanViensIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMNhanViensId>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMNhanViensIdQueryOptions(id, params, options)
 
-  const queryOptions = getGetDMNhanViensIdQueryOptions(id,params,options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Xóa cán bộ nhân viên
  * @summary CB, NV - Xóa
  */
 export type deleteDMNhanViensIdResponse200 = {
-  data: boolean
-  status: 200
+    data: boolean
+    status: 200
 }
 
 export type deleteDMNhanViensIdResponse400 = {
-  data: DeleteDMNhanViensId400
-  status: 400
+    data: DeleteDMNhanViensId400
+    status: 400
 }
 
 export type deleteDMNhanViensIdResponse401 = {
-  data: DeleteDMNhanViensId401
-  status: 401
+    data: DeleteDMNhanViensId401
+    status: 401
 }
 
 export type deleteDMNhanViensIdResponse403 = {
-  data: DeleteDMNhanViensId403
-  status: 403
+    data: DeleteDMNhanViensId403
+    status: 403
 }
 
 export type deleteDMNhanViensIdResponse500 = {
-  data: void
-  status: 500
-}
-    
-export type deleteDMNhanViensIdResponseSuccess = (deleteDMNhanViensIdResponse200) & {
-  headers: Headers;
-};
-export type deleteDMNhanViensIdResponseError = (deleteDMNhanViensIdResponse400 | deleteDMNhanViensIdResponse401 | deleteDMNhanViensIdResponse403 | deleteDMNhanViensIdResponse500) & {
-  headers: Headers;
-};
-
-export type deleteDMNhanViensIdResponse = (deleteDMNhanViensIdResponseSuccess | deleteDMNhanViensIdResponseError)
-
-export const getDeleteDMNhanViensIdUrl = (id: string,) => {
-
-
-  
-
-  return `/DM_NhanViens/${id}`
+    data: void
+    status: 500
 }
 
-export const deleteDMNhanViensId = async (id: string, options?: RequestInit): Promise<deleteDMNhanViensIdResponse> => {
-  
-  return customSystemFetch<deleteDMNhanViensIdResponse>(getDeleteDMNhanViensIdUrl(id),
-  {      
-    ...options,
-    method: 'DELETE'
-    
-    
-  }
-);}
+export type deleteDMNhanViensIdResponseSuccess = deleteDMNhanViensIdResponse200 & {
+    headers: Headers
+}
+export type deleteDMNhanViensIdResponseError = (
+    | deleteDMNhanViensIdResponse400
+    | deleteDMNhanViensIdResponse401
+    | deleteDMNhanViensIdResponse403
+    | deleteDMNhanViensIdResponse500
+) & {
+    headers: Headers
+}
 
+export type deleteDMNhanViensIdResponse =
+    | deleteDMNhanViensIdResponseSuccess
+    | deleteDMNhanViensIdResponseError
 
+export const getDeleteDMNhanViensIdUrl = (id: string) => {
+    return `/DM_NhanViens/${id}`
+}
 
+export const deleteDMNhanViensId = async (
+    id: string,
+    options?: RequestInit
+): Promise<deleteDMNhanViensIdResponse> => {
+    return customSystemFetch<deleteDMNhanViensIdResponse>(getDeleteDMNhanViensIdUrl(id), {
+        ...options,
+        method: 'DELETE',
+    })
+}
 
-export const getDeleteDMNhanViensIdMutationOptions = <TError = DeleteDMNhanViensId400 | DeleteDMNhanViensId401 | DeleteDMNhanViensId403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteDMNhanViensId>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof deleteDMNhanViensId>>, TError,{id: string}, TContext> => {
-
-const mutationKey = ['deleteDMNhanViensId'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteDMNhanViensId>>, {id: string}> = (props) => {
-          const {id} = props ?? {};
-
-          return  deleteDMNhanViensId(id,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type DeleteDMNhanViensIdMutationResult = NonNullable<Awaited<ReturnType<typeof deleteDMNhanViensId>>>
-    
-    export type DeleteDMNhanViensIdMutationError = DeleteDMNhanViensId400 | DeleteDMNhanViensId401 | DeleteDMNhanViensId403 | void
-
-    /**
- * @summary CB, NV - Xóa
- */
-export const useDeleteDMNhanViensId = <TError = DeleteDMNhanViensId400 | DeleteDMNhanViensId401 | DeleteDMNhanViensId403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteDMNhanViensId>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getDeleteDMNhanViensIdMutationOptions = <
+    TError = DeleteDMNhanViensId400 | DeleteDMNhanViensId401 | DeleteDMNhanViensId403 | void,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof deleteDMNhanViensId>>,
         TError,
-        {id: string},
+        { id: string },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof deleteDMNhanViensId>>,
+    TError,
+    { id: string },
+    TContext
+> => {
+    const mutationKey = ['deleteDMNhanViensId']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getDeleteDMNhanViensIdMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof deleteDMNhanViensId>>,
+        { id: string }
+    > = (props) => {
+        const { id } = props ?? {}
 
-      return useMutation(mutationOptions, queryClient);
+        return deleteDMNhanViensId(id, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type DeleteDMNhanViensIdMutationResult = NonNullable<
+    Awaited<ReturnType<typeof deleteDMNhanViensId>>
+>
+
+export type DeleteDMNhanViensIdMutationError =
+    | DeleteDMNhanViensId400
+    | DeleteDMNhanViensId401
+    | DeleteDMNhanViensId403
+    | void
+
+/**
+ * @summary CB, NV - Xóa
+ */
+export const useDeleteDMNhanViensId = <
+    TError = DeleteDMNhanViensId400 | DeleteDMNhanViensId401 | DeleteDMNhanViensId403 | void,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof deleteDMNhanViensId>>,
+            TError,
+            { id: string },
+            TContext
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof deleteDMNhanViensId>>,
+    TError,
+    { id: string },
+    TContext
+> => {
+    const mutationOptions = getDeleteDMNhanViensIdMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * Thêm mới cán bộ nhân viên
  * @summary CB, NV - Thêm mới
  */
 export type postDMNhanViensResponse200 = {
-  data: NhanVienEditDto
-  status: 200
+    data: NhanVienEditDto
+    status: 200
 }
 
 export type postDMNhanViensResponse400 = {
-  data: PostDMNhanViens400
-  status: 400
+    data: PostDMNhanViens400
+    status: 400
 }
 
 export type postDMNhanViensResponse401 = {
-  data: PostDMNhanViens401
-  status: 401
+    data: PostDMNhanViens401
+    status: 401
 }
 
 export type postDMNhanViensResponse403 = {
-  data: PostDMNhanViens403
-  status: 403
+    data: PostDMNhanViens403
+    status: 403
 }
 
 export type postDMNhanViensResponse500 = {
-  data: void
-  status: 500
+    data: void
+    status: 500
 }
-    
-export type postDMNhanViensResponseSuccess = (postDMNhanViensResponse200) & {
-  headers: Headers;
-};
-export type postDMNhanViensResponseError = (postDMNhanViensResponse400 | postDMNhanViensResponse401 | postDMNhanViensResponse403 | postDMNhanViensResponse500) & {
-  headers: Headers;
-};
 
-export type postDMNhanViensResponse = (postDMNhanViensResponseSuccess | postDMNhanViensResponseError)
+export type postDMNhanViensResponseSuccess = postDMNhanViensResponse200 & {
+    headers: Headers
+}
+export type postDMNhanViensResponseError = (
+    | postDMNhanViensResponse400
+    | postDMNhanViensResponse401
+    | postDMNhanViensResponse403
+    | postDMNhanViensResponse500
+) & {
+    headers: Headers
+}
+
+export type postDMNhanViensResponse = postDMNhanViensResponseSuccess | postDMNhanViensResponseError
 
 export const getPostDMNhanViensUrl = () => {
-
-
-  
-
-  return `/DM_NhanViens`
+    return `/DM_NhanViens`
 }
 
-export const postDMNhanViens = async (nhanVienEditDto: NhanVienEditDto, options?: RequestInit): Promise<postDMNhanViensResponse> => {
-  
-  return customSystemFetch<postDMNhanViensResponse>(getPostDMNhanViensUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
-    body: JSON.stringify(
-      nhanVienEditDto,)
-  }
-);}
+export const postDMNhanViens = async (
+    nhanVienEditDto: NhanVienEditDto,
+    options?: RequestInit
+): Promise<postDMNhanViensResponse> => {
+    return customSystemFetch<postDMNhanViensResponse>(getPostDMNhanViensUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
+        body: JSON.stringify(nhanVienEditDto),
+    })
+}
 
-
-
-
-export const getPostDMNhanViensMutationOptions = <TError = PostDMNhanViens400 | PostDMNhanViens401 | PostDMNhanViens403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMNhanViens>>, TError,{data: NhanVienEditDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof postDMNhanViens>>, TError,{data: NhanVienEditDto}, TContext> => {
-
-const mutationKey = ['postDMNhanViens'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postDMNhanViens>>, {data: NhanVienEditDto}> = (props) => {
-          const {data} = props ?? {};
-
-          return  postDMNhanViens(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PostDMNhanViensMutationResult = NonNullable<Awaited<ReturnType<typeof postDMNhanViens>>>
-    export type PostDMNhanViensMutationBody = NhanVienEditDto
-    export type PostDMNhanViensMutationError = PostDMNhanViens400 | PostDMNhanViens401 | PostDMNhanViens403 | void
-
-    /**
- * @summary CB, NV - Thêm mới
- */
-export const usePostDMNhanViens = <TError = PostDMNhanViens400 | PostDMNhanViens401 | PostDMNhanViens403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMNhanViens>>, TError,{data: NhanVienEditDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getPostDMNhanViensMutationOptions = <
+    TError = PostDMNhanViens400 | PostDMNhanViens401 | PostDMNhanViens403 | void,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postDMNhanViens>>,
         TError,
-        {data: NhanVienEditDto},
+        { data: NhanVienEditDto },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postDMNhanViens>>,
+    TError,
+    { data: NhanVienEditDto },
+    TContext
+> => {
+    const mutationKey = ['postDMNhanViens']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getPostDMNhanViensMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postDMNhanViens>>,
+        { data: NhanVienEditDto }
+    > = (props) => {
+        const { data } = props ?? {}
 
-      return useMutation(mutationOptions, queryClient);
+        return postDMNhanViens(data, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostDMNhanViensMutationResult = NonNullable<Awaited<ReturnType<typeof postDMNhanViens>>>
+export type PostDMNhanViensMutationBody = NhanVienEditDto
+export type PostDMNhanViensMutationError =
+    | PostDMNhanViens400
+    | PostDMNhanViens401
+    | PostDMNhanViens403
+    | void
+
+/**
+ * @summary CB, NV - Thêm mới
+ */
+export const usePostDMNhanViens = <
+    TError = PostDMNhanViens400 | PostDMNhanViens401 | PostDMNhanViens403 | void,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postDMNhanViens>>,
+            TError,
+            { data: NhanVienEditDto },
+            TContext
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postDMNhanViens>>,
+    TError,
+    { data: NhanVienEditDto },
+    TContext
+> => {
+    const mutationOptions = getPostDMNhanViensMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * Cập nhật cán bộ nhân viên
  * @summary CB, NV - Cập nhật
  */
 export type putDMNhanViensResponse200 = {
-  data: NhanVienEditDto
-  status: 200
+    data: NhanVienEditDto
+    status: 200
 }
 
 export type putDMNhanViensResponse400 = {
-  data: PutDMNhanViens400
-  status: 400
+    data: PutDMNhanViens400
+    status: 400
 }
 
 export type putDMNhanViensResponse401 = {
-  data: PutDMNhanViens401
-  status: 401
+    data: PutDMNhanViens401
+    status: 401
 }
 
 export type putDMNhanViensResponse403 = {
-  data: PutDMNhanViens403
-  status: 403
+    data: PutDMNhanViens403
+    status: 403
 }
 
 export type putDMNhanViensResponse500 = {
-  data: void
-  status: 500
+    data: void
+    status: 500
 }
-    
-export type putDMNhanViensResponseSuccess = (putDMNhanViensResponse200) & {
-  headers: Headers;
-};
-export type putDMNhanViensResponseError = (putDMNhanViensResponse400 | putDMNhanViensResponse401 | putDMNhanViensResponse403 | putDMNhanViensResponse500) & {
-  headers: Headers;
-};
 
-export type putDMNhanViensResponse = (putDMNhanViensResponseSuccess | putDMNhanViensResponseError)
+export type putDMNhanViensResponseSuccess = putDMNhanViensResponse200 & {
+    headers: Headers
+}
+export type putDMNhanViensResponseError = (
+    | putDMNhanViensResponse400
+    | putDMNhanViensResponse401
+    | putDMNhanViensResponse403
+    | putDMNhanViensResponse500
+) & {
+    headers: Headers
+}
+
+export type putDMNhanViensResponse = putDMNhanViensResponseSuccess | putDMNhanViensResponseError
 
 export const getPutDMNhanViensUrl = () => {
-
-
-  
-
-  return `/DM_NhanViens`
+    return `/DM_NhanViens`
 }
 
-export const putDMNhanViens = async (nhanVienEditDto: NhanVienEditDto, options?: RequestInit): Promise<putDMNhanViensResponse> => {
-  
-  return customSystemFetch<putDMNhanViensResponse>(getPutDMNhanViensUrl(),
-  {      
-    ...options,
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
-    body: JSON.stringify(
-      nhanVienEditDto,)
-  }
-);}
+export const putDMNhanViens = async (
+    nhanVienEditDto: NhanVienEditDto,
+    options?: RequestInit
+): Promise<putDMNhanViensResponse> => {
+    return customSystemFetch<putDMNhanViensResponse>(getPutDMNhanViensUrl(), {
+        ...options,
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
+        body: JSON.stringify(nhanVienEditDto),
+    })
+}
 
-
-
-
-export const getPutDMNhanViensMutationOptions = <TError = PutDMNhanViens400 | PutDMNhanViens401 | PutDMNhanViens403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putDMNhanViens>>, TError,{data: NhanVienEditDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof putDMNhanViens>>, TError,{data: NhanVienEditDto}, TContext> => {
-
-const mutationKey = ['putDMNhanViens'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof putDMNhanViens>>, {data: NhanVienEditDto}> = (props) => {
-          const {data} = props ?? {};
-
-          return  putDMNhanViens(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PutDMNhanViensMutationResult = NonNullable<Awaited<ReturnType<typeof putDMNhanViens>>>
-    export type PutDMNhanViensMutationBody = NhanVienEditDto
-    export type PutDMNhanViensMutationError = PutDMNhanViens400 | PutDMNhanViens401 | PutDMNhanViens403 | void
-
-    /**
- * @summary CB, NV - Cập nhật
- */
-export const usePutDMNhanViens = <TError = PutDMNhanViens400 | PutDMNhanViens401 | PutDMNhanViens403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putDMNhanViens>>, TError,{data: NhanVienEditDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getPutDMNhanViensMutationOptions = <
+    TError = PutDMNhanViens400 | PutDMNhanViens401 | PutDMNhanViens403 | void,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof putDMNhanViens>>,
         TError,
-        {data: NhanVienEditDto},
+        { data: NhanVienEditDto },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof putDMNhanViens>>,
+    TError,
+    { data: NhanVienEditDto },
+    TContext
+> => {
+    const mutationKey = ['putDMNhanViens']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getPutDMNhanViensMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof putDMNhanViens>>,
+        { data: NhanVienEditDto }
+    > = (props) => {
+        const { data } = props ?? {}
 
-      return useMutation(mutationOptions, queryClient);
+        return putDMNhanViens(data, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PutDMNhanViensMutationResult = NonNullable<Awaited<ReturnType<typeof putDMNhanViens>>>
+export type PutDMNhanViensMutationBody = NhanVienEditDto
+export type PutDMNhanViensMutationError =
+    | PutDMNhanViens400
+    | PutDMNhanViens401
+    | PutDMNhanViens403
+    | void
+
+/**
+ * @summary CB, NV - Cập nhật
+ */
+export const usePutDMNhanViens = <
+    TError = PutDMNhanViens400 | PutDMNhanViens401 | PutDMNhanViens403 | void,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof putDMNhanViens>>,
+            TError,
+            { data: NhanVienEditDto },
+            TContext
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof putDMNhanViens>>,
+    TError,
+    { data: NhanVienEditDto },
+    TContext
+> => {
+    const mutationOptions = getPutDMNhanViensMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * Kiểm tra tình trạng API
  * @summary Kiểm tra tình trạng API
  */
 export type getDMNhanViensHealthzResponse400 = {
-  data: GetDMNhanViensHealthz400
-  status: 400
+    data: GetDMNhanViensHealthz400
+    status: 400
 }
 
 export type getDMNhanViensHealthzResponse401 = {
-  data: GetDMNhanViensHealthz401
-  status: 401
+    data: GetDMNhanViensHealthz401
+    status: 401
 }
 
 export type getDMNhanViensHealthzResponse403 = {
-  data: GetDMNhanViensHealthz403
-  status: 403
+    data: GetDMNhanViensHealthz403
+    status: 403
 }
 
 export type getDMNhanViensHealthzResponse500 = {
-  data: GetDMNhanViensHealthz500
-  status: 500
+    data: GetDMNhanViensHealthz500
+    status: 500
 }
-    
-;
-export type getDMNhanViensHealthzResponseError = (getDMNhanViensHealthzResponse400 | getDMNhanViensHealthzResponse401 | getDMNhanViensHealthzResponse403 | getDMNhanViensHealthzResponse500) & {
-  headers: Headers;
-};
+export type getDMNhanViensHealthzResponseError = (
+    | getDMNhanViensHealthzResponse400
+    | getDMNhanViensHealthzResponse401
+    | getDMNhanViensHealthzResponse403
+    | getDMNhanViensHealthzResponse500
+) & {
+    headers: Headers
+}
 
-export type getDMNhanViensHealthzResponse = (getDMNhanViensHealthzResponseError)
+export type getDMNhanViensHealthzResponse = getDMNhanViensHealthzResponseError
 
 export const getGetDMNhanViensHealthzUrl = () => {
-
-
-  
-
-  return `/DM_NhanViens/healthz`
+    return `/DM_NhanViens/healthz`
 }
 
-export const getDMNhanViensHealthz = async ( options?: RequestInit): Promise<getDMNhanViensHealthzResponse> => {
-  
-  return customSystemFetch<getDMNhanViensHealthzResponse>(getGetDMNhanViensHealthzUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-
+export const getDMNhanViensHealthz = async (
+    options?: RequestInit
+): Promise<getDMNhanViensHealthzResponse> => {
+    return customSystemFetch<getDMNhanViensHealthzResponse>(getGetDMNhanViensHealthzUrl(), {
+        ...options,
+        method: 'GET',
+    })
+}
 
 export const getGetDMNhanViensHealthzQueryKey = () => {
-    return [
-    `/DM_NhanViens/healthz`
-    ] as const;
-    }
-
-    
-export const getGetDMNhanViensHealthzQueryOptions = <TData = Awaited<ReturnType<typeof getDMNhanViensHealthz>>, TError = GetDMNhanViensHealthz400 | GetDMNhanViensHealthz401 | GetDMNhanViensHealthz403 | GetDMNhanViensHealthz500>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMNhanViensHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetDMNhanViensHealthzQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMNhanViensHealthz>>> = ({ signal }) => getDMNhanViensHealthz({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMNhanViensHealthz>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return [`/DM_NhanViens/healthz`] as const
 }
 
-export type GetDMNhanViensHealthzQueryResult = NonNullable<Awaited<ReturnType<typeof getDMNhanViensHealthz>>>
-export type GetDMNhanViensHealthzQueryError = GetDMNhanViensHealthz400 | GetDMNhanViensHealthz401 | GetDMNhanViensHealthz403 | GetDMNhanViensHealthz500
+export const getGetDMNhanViensHealthzQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMNhanViensHealthz>>,
+    TError =
+        | GetDMNhanViensHealthz400
+        | GetDMNhanViensHealthz401
+        | GetDMNhanViensHealthz403
+        | GetDMNhanViensHealthz500,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<Awaited<ReturnType<typeof getDMNhanViensHealthz>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
+    const queryKey = queryOptions?.queryKey ?? getGetDMNhanViensHealthzQueryKey()
 
-export function useGetDMNhanViensHealthz<TData = Awaited<ReturnType<typeof getDMNhanViensHealthz>>, TError = GetDMNhanViensHealthz400 | GetDMNhanViensHealthz401 | GetDMNhanViensHealthz403 | GetDMNhanViensHealthz500>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMNhanViensHealthz>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMNhanViensHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMNhanViensHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMNhanViensHealthz<TData = Awaited<ReturnType<typeof getDMNhanViensHealthz>>, TError = GetDMNhanViensHealthz400 | GetDMNhanViensHealthz401 | GetDMNhanViensHealthz403 | GetDMNhanViensHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMNhanViensHealthz>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMNhanViensHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMNhanViensHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMNhanViensHealthz<TData = Awaited<ReturnType<typeof getDMNhanViensHealthz>>, TError = GetDMNhanViensHealthz400 | GetDMNhanViensHealthz401 | GetDMNhanViensHealthz403 | GetDMNhanViensHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMNhanViensHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMNhanViensHealthz>>> = ({
+        signal,
+    }) => getDMNhanViensHealthz({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMNhanViensHealthz>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDMNhanViensHealthzQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getDMNhanViensHealthz>>
+>
+export type GetDMNhanViensHealthzQueryError =
+    | GetDMNhanViensHealthz400
+    | GetDMNhanViensHealthz401
+    | GetDMNhanViensHealthz403
+    | GetDMNhanViensHealthz500
+
+export function useGetDMNhanViensHealthz<
+    TData = Awaited<ReturnType<typeof getDMNhanViensHealthz>>,
+    TError =
+        | GetDMNhanViensHealthz400
+        | GetDMNhanViensHealthz401
+        | GetDMNhanViensHealthz403
+        | GetDMNhanViensHealthz500,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMNhanViensHealthz>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMNhanViensHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMNhanViensHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMNhanViensHealthz<
+    TData = Awaited<ReturnType<typeof getDMNhanViensHealthz>>,
+    TError =
+        | GetDMNhanViensHealthz400
+        | GetDMNhanViensHealthz401
+        | GetDMNhanViensHealthz403
+        | GetDMNhanViensHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMNhanViensHealthz>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMNhanViensHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMNhanViensHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMNhanViensHealthz<
+    TData = Awaited<ReturnType<typeof getDMNhanViensHealthz>>,
+    TError =
+        | GetDMNhanViensHealthz400
+        | GetDMNhanViensHealthz401
+        | GetDMNhanViensHealthz403
+        | GetDMNhanViensHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMNhanViensHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Kiểm tra tình trạng API
  */
 
-export function useGetDMNhanViensHealthz<TData = Awaited<ReturnType<typeof getDMNhanViensHealthz>>, TError = GetDMNhanViensHealthz400 | GetDMNhanViensHealthz401 | GetDMNhanViensHealthz403 | GetDMNhanViensHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMNhanViensHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMNhanViensHealthz<
+    TData = Awaited<ReturnType<typeof getDMNhanViensHealthz>>,
+    TError =
+        | GetDMNhanViensHealthz400
+        | GetDMNhanViensHealthz401
+        | GetDMNhanViensHealthz403
+        | GetDMNhanViensHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMNhanViensHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMNhanViensHealthzQueryOptions(options)
 
-  const queryOptions = getGetDMNhanViensHealthzQueryOptions(options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Lấy danh sách các Nhóm Vị trí
  * @summary Nhóm Vị trí - Danh sách
  */
 export type postDMNhomViTrisListResponse200 = {
-  data: PublicApiGetAllDMNhomViTriDTO
-  status: 200
+    data: PublicApiGetAllDMNhomViTriDTO
+    status: 200
 }
 
 export type postDMNhomViTrisListResponse400 = {
-  data: PostDMNhomViTrisList400
-  status: 400
+    data: PostDMNhomViTrisList400
+    status: 400
 }
 
 export type postDMNhomViTrisListResponse401 = {
-  data: PostDMNhomViTrisList401
-  status: 401
+    data: PostDMNhomViTrisList401
+    status: 401
 }
 
 export type postDMNhomViTrisListResponse403 = {
-  data: PostDMNhomViTrisList403
-  status: 403
+    data: PostDMNhomViTrisList403
+    status: 403
 }
 
 export type postDMNhomViTrisListResponse500 = {
-  data: void
-  status: 500
+    data: void
+    status: 500
 }
-    
-export type postDMNhomViTrisListResponseSuccess = (postDMNhomViTrisListResponse200) & {
-  headers: Headers;
-};
-export type postDMNhomViTrisListResponseError = (postDMNhomViTrisListResponse400 | postDMNhomViTrisListResponse401 | postDMNhomViTrisListResponse403 | postDMNhomViTrisListResponse500) & {
-  headers: Headers;
-};
 
-export type postDMNhomViTrisListResponse = (postDMNhomViTrisListResponseSuccess | postDMNhomViTrisListResponseError)
+export type postDMNhomViTrisListResponseSuccess = postDMNhomViTrisListResponse200 & {
+    headers: Headers
+}
+export type postDMNhomViTrisListResponseError = (
+    | postDMNhomViTrisListResponse400
+    | postDMNhomViTrisListResponse401
+    | postDMNhomViTrisListResponse403
+    | postDMNhomViTrisListResponse500
+) & {
+    headers: Headers
+}
+
+export type postDMNhomViTrisListResponse =
+    | postDMNhomViTrisListResponseSuccess
+    | postDMNhomViTrisListResponseError
 
 export const getPostDMNhomViTrisListUrl = () => {
-
-
-  
-
-  return `/DM_NhomViTris/list`
+    return `/DM_NhomViTris/list`
 }
 
-export const postDMNhomViTrisList = async (publicApiPagingRequestDto: PublicApiPagingRequestDto, options?: RequestInit): Promise<postDMNhomViTrisListResponse> => {
-  
-  return customSystemFetch<postDMNhomViTrisListResponse>(getPostDMNhomViTrisListUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
-    body: JSON.stringify(
-      publicApiPagingRequestDto,)
-  }
-);}
+export const postDMNhomViTrisList = async (
+    publicApiPagingRequestDto: PublicApiPagingRequestDto,
+    options?: RequestInit
+): Promise<postDMNhomViTrisListResponse> => {
+    return customSystemFetch<postDMNhomViTrisListResponse>(getPostDMNhomViTrisListUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
+        body: JSON.stringify(publicApiPagingRequestDto),
+    })
+}
 
-
-
-
-export const getPostDMNhomViTrisListMutationOptions = <TError = PostDMNhomViTrisList400 | PostDMNhomViTrisList401 | PostDMNhomViTrisList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMNhomViTrisList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof postDMNhomViTrisList>>, TError,{data: PublicApiPagingRequestDto}, TContext> => {
-
-const mutationKey = ['postDMNhomViTrisList'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postDMNhomViTrisList>>, {data: PublicApiPagingRequestDto}> = (props) => {
-          const {data} = props ?? {};
-
-          return  postDMNhomViTrisList(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PostDMNhomViTrisListMutationResult = NonNullable<Awaited<ReturnType<typeof postDMNhomViTrisList>>>
-    export type PostDMNhomViTrisListMutationBody = PublicApiPagingRequestDto
-    export type PostDMNhomViTrisListMutationError = PostDMNhomViTrisList400 | PostDMNhomViTrisList401 | PostDMNhomViTrisList403 | void
-
-    /**
- * @summary Nhóm Vị trí - Danh sách
- */
-export const usePostDMNhomViTrisList = <TError = PostDMNhomViTrisList400 | PostDMNhomViTrisList401 | PostDMNhomViTrisList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMNhomViTrisList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getPostDMNhomViTrisListMutationOptions = <
+    TError = PostDMNhomViTrisList400 | PostDMNhomViTrisList401 | PostDMNhomViTrisList403 | void,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postDMNhomViTrisList>>,
         TError,
-        {data: PublicApiPagingRequestDto},
+        { data: PublicApiPagingRequestDto },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postDMNhomViTrisList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationKey = ['postDMNhomViTrisList']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getPostDMNhomViTrisListMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postDMNhomViTrisList>>,
+        { data: PublicApiPagingRequestDto }
+    > = (props) => {
+        const { data } = props ?? {}
 
-      return useMutation(mutationOptions, queryClient);
+        return postDMNhomViTrisList(data, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostDMNhomViTrisListMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postDMNhomViTrisList>>
+>
+export type PostDMNhomViTrisListMutationBody = PublicApiPagingRequestDto
+export type PostDMNhomViTrisListMutationError =
+    | PostDMNhomViTrisList400
+    | PostDMNhomViTrisList401
+    | PostDMNhomViTrisList403
+    | void
+
+/**
+ * @summary Nhóm Vị trí - Danh sách
+ */
+export const usePostDMNhomViTrisList = <
+    TError = PostDMNhomViTrisList400 | PostDMNhomViTrisList401 | PostDMNhomViTrisList403 | void,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postDMNhomViTrisList>>,
+            TError,
+            { data: PublicApiPagingRequestDto },
+            TContext
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postDMNhomViTrisList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationOptions = getPostDMNhomViTrisListMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * Lấy thông tin Nhóm Vị trí theo ID
  * @summary Nhóm Vị trí - Theo Id
  */
 export type getDMNhomViTrisIdResponse200 = {
-  data: PublicApiGetAllDMNhomViTriDTO
-  status: 200
+    data: PublicApiGetAllDMNhomViTriDTO
+    status: 200
 }
 
 export type getDMNhomViTrisIdResponse400 = {
-  data: GetDMNhomViTrisId400
-  status: 400
+    data: GetDMNhomViTrisId400
+    status: 400
 }
 
 export type getDMNhomViTrisIdResponse401 = {
-  data: GetDMNhomViTrisId401
-  status: 401
+    data: GetDMNhomViTrisId401
+    status: 401
 }
 
 export type getDMNhomViTrisIdResponse403 = {
-  data: GetDMNhomViTrisId403
-  status: 403
+    data: GetDMNhomViTrisId403
+    status: 403
 }
 
 export type getDMNhomViTrisIdResponse500 = {
-  data: void
-  status: 500
-}
-    
-export type getDMNhomViTrisIdResponseSuccess = (getDMNhomViTrisIdResponse200) & {
-  headers: Headers;
-};
-export type getDMNhomViTrisIdResponseError = (getDMNhomViTrisIdResponse400 | getDMNhomViTrisIdResponse401 | getDMNhomViTrisIdResponse403 | getDMNhomViTrisIdResponse500) & {
-  headers: Headers;
-};
-
-export type getDMNhomViTrisIdResponse = (getDMNhomViTrisIdResponseSuccess | getDMNhomViTrisIdResponseError)
-
-export const getGetDMNhomViTrisIdUrl = (id: string,
-    params?: GetDMNhomViTrisIdParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/DM_NhomViTris/${id}?${stringifiedParams}` : `/DM_NhomViTris/${id}`
+    data: void
+    status: 500
 }
 
-export const getDMNhomViTrisId = async (id: string,
-    params?: GetDMNhomViTrisIdParams, options?: RequestInit): Promise<getDMNhomViTrisIdResponse> => {
-  
-  return customSystemFetch<getDMNhomViTrisIdResponse>(getGetDMNhomViTrisIdUrl(id,params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type getDMNhomViTrisIdResponseSuccess = getDMNhomViTrisIdResponse200 & {
+    headers: Headers
+}
+export type getDMNhomViTrisIdResponseError = (
+    | getDMNhomViTrisIdResponse400
+    | getDMNhomViTrisIdResponse401
+    | getDMNhomViTrisIdResponse403
+    | getDMNhomViTrisIdResponse500
+) & {
+    headers: Headers
+}
 
+export type getDMNhomViTrisIdResponse =
+    | getDMNhomViTrisIdResponseSuccess
+    | getDMNhomViTrisIdResponseError
 
+export const getGetDMNhomViTrisIdUrl = (id: string, params?: GetDMNhomViTrisIdParams) => {
+    const normalizedParams = new URLSearchParams()
 
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
+    const stringifiedParams = normalizedParams.toString()
 
-export const getGetDMNhomViTrisIdQueryKey = (id?: string,
-    params?: GetDMNhomViTrisIdParams,) => {
-    return [
-    `/DM_NhomViTris/${id}`, ...(params ? [params]: [])
-    ] as const;
+    return stringifiedParams.length > 0
+        ? `/DM_NhomViTris/${id}?${stringifiedParams}`
+        : `/DM_NhomViTris/${id}`
+}
+
+export const getDMNhomViTrisId = async (
+    id: string,
+    params?: GetDMNhomViTrisIdParams,
+    options?: RequestInit
+): Promise<getDMNhomViTrisIdResponse> => {
+    return customSystemFetch<getDMNhomViTrisIdResponse>(getGetDMNhomViTrisIdUrl(id, params), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getGetDMNhomViTrisIdQueryKey = (id?: string, params?: GetDMNhomViTrisIdParams) => {
+    return [`/DM_NhomViTris/${id}`, ...(params ? [params] : [])] as const
+}
+
+export const getGetDMNhomViTrisIdQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMNhomViTrisId>>,
+    TError = GetDMNhomViTrisId400 | GetDMNhomViTrisId401 | GetDMNhomViTrisId403 | void,
+>(
+    id: string,
+    params?: GetDMNhomViTrisIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMNhomViTrisId>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
     }
-
-    
-export const getGetDMNhomViTrisIdQueryOptions = <TData = Awaited<ReturnType<typeof getDMNhomViTrisId>>, TError = GetDMNhomViTrisId400 | GetDMNhomViTrisId401 | GetDMNhomViTrisId403 | void>(id: string,
-    params?: GetDMNhomViTrisIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMNhomViTrisId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
 ) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    const queryKey = queryOptions?.queryKey ?? getGetDMNhomViTrisIdQueryKey(id, params)
 
-  const queryKey =  queryOptions?.queryKey ?? getGetDMNhomViTrisIdQueryKey(id,params);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMNhomViTrisId>>> = ({ signal }) =>
+        getDMNhomViTrisId(id, params, { signal, ...requestOptions })
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMNhomViTrisId>>> = ({ signal }) => getDMNhomViTrisId(id,params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMNhomViTrisId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMNhomViTrisId>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetDMNhomViTrisIdQueryResult = NonNullable<Awaited<ReturnType<typeof getDMNhomViTrisId>>>
-export type GetDMNhomViTrisIdQueryError = GetDMNhomViTrisId400 | GetDMNhomViTrisId401 | GetDMNhomViTrisId403 | void
+export type GetDMNhomViTrisIdQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getDMNhomViTrisId>>
+>
+export type GetDMNhomViTrisIdQueryError =
+    | GetDMNhomViTrisId400
+    | GetDMNhomViTrisId401
+    | GetDMNhomViTrisId403
+    | void
 
-
-export function useGetDMNhomViTrisId<TData = Awaited<ReturnType<typeof getDMNhomViTrisId>>, TError = GetDMNhomViTrisId400 | GetDMNhomViTrisId401 | GetDMNhomViTrisId403 | void>(
- id: string,
-    params: undefined |  GetDMNhomViTrisIdParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMNhomViTrisId>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMNhomViTrisId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMNhomViTrisId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMNhomViTrisId<TData = Awaited<ReturnType<typeof getDMNhomViTrisId>>, TError = GetDMNhomViTrisId400 | GetDMNhomViTrisId401 | GetDMNhomViTrisId403 | void>(
- id: string,
-    params?: GetDMNhomViTrisIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMNhomViTrisId>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMNhomViTrisId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMNhomViTrisId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMNhomViTrisId<TData = Awaited<ReturnType<typeof getDMNhomViTrisId>>, TError = GetDMNhomViTrisId400 | GetDMNhomViTrisId401 | GetDMNhomViTrisId403 | void>(
- id: string,
-    params?: GetDMNhomViTrisIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMNhomViTrisId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMNhomViTrisId<
+    TData = Awaited<ReturnType<typeof getDMNhomViTrisId>>,
+    TError = GetDMNhomViTrisId400 | GetDMNhomViTrisId401 | GetDMNhomViTrisId403 | void,
+>(
+    id: string,
+    params: undefined | GetDMNhomViTrisIdParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMNhomViTrisId>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMNhomViTrisId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMNhomViTrisId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMNhomViTrisId<
+    TData = Awaited<ReturnType<typeof getDMNhomViTrisId>>,
+    TError = GetDMNhomViTrisId400 | GetDMNhomViTrisId401 | GetDMNhomViTrisId403 | void,
+>(
+    id: string,
+    params?: GetDMNhomViTrisIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMNhomViTrisId>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMNhomViTrisId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMNhomViTrisId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMNhomViTrisId<
+    TData = Awaited<ReturnType<typeof getDMNhomViTrisId>>,
+    TError = GetDMNhomViTrisId400 | GetDMNhomViTrisId401 | GetDMNhomViTrisId403 | void,
+>(
+    id: string,
+    params?: GetDMNhomViTrisIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMNhomViTrisId>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Nhóm Vị trí - Theo Id
  */
 
-export function useGetDMNhomViTrisId<TData = Awaited<ReturnType<typeof getDMNhomViTrisId>>, TError = GetDMNhomViTrisId400 | GetDMNhomViTrisId401 | GetDMNhomViTrisId403 | void>(
- id: string,
-    params?: GetDMNhomViTrisIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMNhomViTrisId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMNhomViTrisId<
+    TData = Awaited<ReturnType<typeof getDMNhomViTrisId>>,
+    TError = GetDMNhomViTrisId400 | GetDMNhomViTrisId401 | GetDMNhomViTrisId403 | void,
+>(
+    id: string,
+    params?: GetDMNhomViTrisIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMNhomViTrisId>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMNhomViTrisIdQueryOptions(id, params, options)
 
-  const queryOptions = getGetDMNhomViTrisIdQueryOptions(id,params,options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Kiểm tra tình trạng API
  * @summary Kiểm tra tình trạng API
  */
 export type getDMNhomViTrisHealthzResponse400 = {
-  data: GetDMNhomViTrisHealthz400
-  status: 400
+    data: GetDMNhomViTrisHealthz400
+    status: 400
 }
 
 export type getDMNhomViTrisHealthzResponse401 = {
-  data: GetDMNhomViTrisHealthz401
-  status: 401
+    data: GetDMNhomViTrisHealthz401
+    status: 401
 }
 
 export type getDMNhomViTrisHealthzResponse403 = {
-  data: GetDMNhomViTrisHealthz403
-  status: 403
+    data: GetDMNhomViTrisHealthz403
+    status: 403
 }
 
 export type getDMNhomViTrisHealthzResponse500 = {
-  data: GetDMNhomViTrisHealthz500
-  status: 500
+    data: GetDMNhomViTrisHealthz500
+    status: 500
 }
-    
-;
-export type getDMNhomViTrisHealthzResponseError = (getDMNhomViTrisHealthzResponse400 | getDMNhomViTrisHealthzResponse401 | getDMNhomViTrisHealthzResponse403 | getDMNhomViTrisHealthzResponse500) & {
-  headers: Headers;
-};
+export type getDMNhomViTrisHealthzResponseError = (
+    | getDMNhomViTrisHealthzResponse400
+    | getDMNhomViTrisHealthzResponse401
+    | getDMNhomViTrisHealthzResponse403
+    | getDMNhomViTrisHealthzResponse500
+) & {
+    headers: Headers
+}
 
-export type getDMNhomViTrisHealthzResponse = (getDMNhomViTrisHealthzResponseError)
+export type getDMNhomViTrisHealthzResponse = getDMNhomViTrisHealthzResponseError
 
 export const getGetDMNhomViTrisHealthzUrl = () => {
-
-
-  
-
-  return `/DM_NhomViTris/healthz`
+    return `/DM_NhomViTris/healthz`
 }
 
-export const getDMNhomViTrisHealthz = async ( options?: RequestInit): Promise<getDMNhomViTrisHealthzResponse> => {
-  
-  return customSystemFetch<getDMNhomViTrisHealthzResponse>(getGetDMNhomViTrisHealthzUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-
+export const getDMNhomViTrisHealthz = async (
+    options?: RequestInit
+): Promise<getDMNhomViTrisHealthzResponse> => {
+    return customSystemFetch<getDMNhomViTrisHealthzResponse>(getGetDMNhomViTrisHealthzUrl(), {
+        ...options,
+        method: 'GET',
+    })
+}
 
 export const getGetDMNhomViTrisHealthzQueryKey = () => {
-    return [
-    `/DM_NhomViTris/healthz`
-    ] as const;
-    }
-
-    
-export const getGetDMNhomViTrisHealthzQueryOptions = <TData = Awaited<ReturnType<typeof getDMNhomViTrisHealthz>>, TError = GetDMNhomViTrisHealthz400 | GetDMNhomViTrisHealthz401 | GetDMNhomViTrisHealthz403 | GetDMNhomViTrisHealthz500>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMNhomViTrisHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetDMNhomViTrisHealthzQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMNhomViTrisHealthz>>> = ({ signal }) => getDMNhomViTrisHealthz({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMNhomViTrisHealthz>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return [`/DM_NhomViTris/healthz`] as const
 }
 
-export type GetDMNhomViTrisHealthzQueryResult = NonNullable<Awaited<ReturnType<typeof getDMNhomViTrisHealthz>>>
-export type GetDMNhomViTrisHealthzQueryError = GetDMNhomViTrisHealthz400 | GetDMNhomViTrisHealthz401 | GetDMNhomViTrisHealthz403 | GetDMNhomViTrisHealthz500
+export const getGetDMNhomViTrisHealthzQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMNhomViTrisHealthz>>,
+    TError =
+        | GetDMNhomViTrisHealthz400
+        | GetDMNhomViTrisHealthz401
+        | GetDMNhomViTrisHealthz403
+        | GetDMNhomViTrisHealthz500,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<Awaited<ReturnType<typeof getDMNhomViTrisHealthz>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
+    const queryKey = queryOptions?.queryKey ?? getGetDMNhomViTrisHealthzQueryKey()
 
-export function useGetDMNhomViTrisHealthz<TData = Awaited<ReturnType<typeof getDMNhomViTrisHealthz>>, TError = GetDMNhomViTrisHealthz400 | GetDMNhomViTrisHealthz401 | GetDMNhomViTrisHealthz403 | GetDMNhomViTrisHealthz500>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMNhomViTrisHealthz>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMNhomViTrisHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMNhomViTrisHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMNhomViTrisHealthz<TData = Awaited<ReturnType<typeof getDMNhomViTrisHealthz>>, TError = GetDMNhomViTrisHealthz400 | GetDMNhomViTrisHealthz401 | GetDMNhomViTrisHealthz403 | GetDMNhomViTrisHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMNhomViTrisHealthz>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMNhomViTrisHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMNhomViTrisHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMNhomViTrisHealthz<TData = Awaited<ReturnType<typeof getDMNhomViTrisHealthz>>, TError = GetDMNhomViTrisHealthz400 | GetDMNhomViTrisHealthz401 | GetDMNhomViTrisHealthz403 | GetDMNhomViTrisHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMNhomViTrisHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMNhomViTrisHealthz>>> = ({
+        signal,
+    }) => getDMNhomViTrisHealthz({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMNhomViTrisHealthz>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDMNhomViTrisHealthzQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getDMNhomViTrisHealthz>>
+>
+export type GetDMNhomViTrisHealthzQueryError =
+    | GetDMNhomViTrisHealthz400
+    | GetDMNhomViTrisHealthz401
+    | GetDMNhomViTrisHealthz403
+    | GetDMNhomViTrisHealthz500
+
+export function useGetDMNhomViTrisHealthz<
+    TData = Awaited<ReturnType<typeof getDMNhomViTrisHealthz>>,
+    TError =
+        | GetDMNhomViTrisHealthz400
+        | GetDMNhomViTrisHealthz401
+        | GetDMNhomViTrisHealthz403
+        | GetDMNhomViTrisHealthz500,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMNhomViTrisHealthz>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMNhomViTrisHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMNhomViTrisHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMNhomViTrisHealthz<
+    TData = Awaited<ReturnType<typeof getDMNhomViTrisHealthz>>,
+    TError =
+        | GetDMNhomViTrisHealthz400
+        | GetDMNhomViTrisHealthz401
+        | GetDMNhomViTrisHealthz403
+        | GetDMNhomViTrisHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMNhomViTrisHealthz>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMNhomViTrisHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMNhomViTrisHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMNhomViTrisHealthz<
+    TData = Awaited<ReturnType<typeof getDMNhomViTrisHealthz>>,
+    TError =
+        | GetDMNhomViTrisHealthz400
+        | GetDMNhomViTrisHealthz401
+        | GetDMNhomViTrisHealthz403
+        | GetDMNhomViTrisHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMNhomViTrisHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Kiểm tra tình trạng API
  */
 
-export function useGetDMNhomViTrisHealthz<TData = Awaited<ReturnType<typeof getDMNhomViTrisHealthz>>, TError = GetDMNhomViTrisHealthz400 | GetDMNhomViTrisHealthz401 | GetDMNhomViTrisHealthz403 | GetDMNhomViTrisHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMNhomViTrisHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMNhomViTrisHealthz<
+    TData = Awaited<ReturnType<typeof getDMNhomViTrisHealthz>>,
+    TError =
+        | GetDMNhomViTrisHealthz400
+        | GetDMNhomViTrisHealthz401
+        | GetDMNhomViTrisHealthz403
+        | GetDMNhomViTrisHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMNhomViTrisHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMNhomViTrisHealthzQueryOptions(options)
 
-  const queryOptions = getGetDMNhomViTrisHealthzQueryOptions(options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Lấy danh sách các Phân cấp Chất lượng TTB
  * @summary Phân cấp Chất lượng TTB - Danh sách
  */
 export type postDMPhanCapChatLuongTTBsListResponse200 = {
-  data: PublicApiGetAllDMPhanCapChatLuongTTBDTO
-  status: 200
+    data: PublicApiGetAllDMPhanCapChatLuongTTBDTO
+    status: 200
 }
 
 export type postDMPhanCapChatLuongTTBsListResponse400 = {
-  data: PostDMPhanCapChatLuongTTBsList400
-  status: 400
+    data: PostDMPhanCapChatLuongTTBsList400
+    status: 400
 }
 
 export type postDMPhanCapChatLuongTTBsListResponse401 = {
-  data: PostDMPhanCapChatLuongTTBsList401
-  status: 401
+    data: PostDMPhanCapChatLuongTTBsList401
+    status: 401
 }
 
 export type postDMPhanCapChatLuongTTBsListResponse403 = {
-  data: PostDMPhanCapChatLuongTTBsList403
-  status: 403
+    data: PostDMPhanCapChatLuongTTBsList403
+    status: 403
 }
 
 export type postDMPhanCapChatLuongTTBsListResponse500 = {
-  data: void
-  status: 500
+    data: void
+    status: 500
 }
-    
-export type postDMPhanCapChatLuongTTBsListResponseSuccess = (postDMPhanCapChatLuongTTBsListResponse200) & {
-  headers: Headers;
-};
-export type postDMPhanCapChatLuongTTBsListResponseError = (postDMPhanCapChatLuongTTBsListResponse400 | postDMPhanCapChatLuongTTBsListResponse401 | postDMPhanCapChatLuongTTBsListResponse403 | postDMPhanCapChatLuongTTBsListResponse500) & {
-  headers: Headers;
-};
 
-export type postDMPhanCapChatLuongTTBsListResponse = (postDMPhanCapChatLuongTTBsListResponseSuccess | postDMPhanCapChatLuongTTBsListResponseError)
+export type postDMPhanCapChatLuongTTBsListResponseSuccess =
+    postDMPhanCapChatLuongTTBsListResponse200 & {
+        headers: Headers
+    }
+export type postDMPhanCapChatLuongTTBsListResponseError = (
+    | postDMPhanCapChatLuongTTBsListResponse400
+    | postDMPhanCapChatLuongTTBsListResponse401
+    | postDMPhanCapChatLuongTTBsListResponse403
+    | postDMPhanCapChatLuongTTBsListResponse500
+) & {
+    headers: Headers
+}
+
+export type postDMPhanCapChatLuongTTBsListResponse =
+    | postDMPhanCapChatLuongTTBsListResponseSuccess
+    | postDMPhanCapChatLuongTTBsListResponseError
 
 export const getPostDMPhanCapChatLuongTTBsListUrl = () => {
-
-
-  
-
-  return `/DM_PhanCapChatLuongTTBs/list`
+    return `/DM_PhanCapChatLuongTTBs/list`
 }
 
-export const postDMPhanCapChatLuongTTBsList = async (publicApiPagingRequestDto: PublicApiPagingRequestDto, options?: RequestInit): Promise<postDMPhanCapChatLuongTTBsListResponse> => {
-  
-  return customSystemFetch<postDMPhanCapChatLuongTTBsListResponse>(getPostDMPhanCapChatLuongTTBsListUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
-    body: JSON.stringify(
-      publicApiPagingRequestDto,)
-  }
-);}
-
-
-
-
-export const getPostDMPhanCapChatLuongTTBsListMutationOptions = <TError = PostDMPhanCapChatLuongTTBsList400 | PostDMPhanCapChatLuongTTBsList401 | PostDMPhanCapChatLuongTTBsList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMPhanCapChatLuongTTBsList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof postDMPhanCapChatLuongTTBsList>>, TError,{data: PublicApiPagingRequestDto}, TContext> => {
-
-const mutationKey = ['postDMPhanCapChatLuongTTBsList'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postDMPhanCapChatLuongTTBsList>>, {data: PublicApiPagingRequestDto}> = (props) => {
-          const {data} = props ?? {};
-
-          return  postDMPhanCapChatLuongTTBsList(data,requestOptions)
+export const postDMPhanCapChatLuongTTBsList = async (
+    publicApiPagingRequestDto: PublicApiPagingRequestDto,
+    options?: RequestInit
+): Promise<postDMPhanCapChatLuongTTBsListResponse> => {
+    return customSystemFetch<postDMPhanCapChatLuongTTBsListResponse>(
+        getPostDMPhanCapChatLuongTTBsListUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
+            body: JSON.stringify(publicApiPagingRequestDto),
         }
+    )
+}
 
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PostDMPhanCapChatLuongTTBsListMutationResult = NonNullable<Awaited<ReturnType<typeof postDMPhanCapChatLuongTTBsList>>>
-    export type PostDMPhanCapChatLuongTTBsListMutationBody = PublicApiPagingRequestDto
-    export type PostDMPhanCapChatLuongTTBsListMutationError = PostDMPhanCapChatLuongTTBsList400 | PostDMPhanCapChatLuongTTBsList401 | PostDMPhanCapChatLuongTTBsList403 | void
-
-    /**
- * @summary Phân cấp Chất lượng TTB - Danh sách
- */
-export const usePostDMPhanCapChatLuongTTBsList = <TError = PostDMPhanCapChatLuongTTBsList400 | PostDMPhanCapChatLuongTTBsList401 | PostDMPhanCapChatLuongTTBsList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMPhanCapChatLuongTTBsList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getPostDMPhanCapChatLuongTTBsListMutationOptions = <
+    TError =
+        | PostDMPhanCapChatLuongTTBsList400
+        | PostDMPhanCapChatLuongTTBsList401
+        | PostDMPhanCapChatLuongTTBsList403
+        | void,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postDMPhanCapChatLuongTTBsList>>,
         TError,
-        {data: PublicApiPagingRequestDto},
+        { data: PublicApiPagingRequestDto },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postDMPhanCapChatLuongTTBsList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationKey = ['postDMPhanCapChatLuongTTBsList']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getPostDMPhanCapChatLuongTTBsListMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postDMPhanCapChatLuongTTBsList>>,
+        { data: PublicApiPagingRequestDto }
+    > = (props) => {
+        const { data } = props ?? {}
 
-      return useMutation(mutationOptions, queryClient);
+        return postDMPhanCapChatLuongTTBsList(data, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostDMPhanCapChatLuongTTBsListMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postDMPhanCapChatLuongTTBsList>>
+>
+export type PostDMPhanCapChatLuongTTBsListMutationBody = PublicApiPagingRequestDto
+export type PostDMPhanCapChatLuongTTBsListMutationError =
+    | PostDMPhanCapChatLuongTTBsList400
+    | PostDMPhanCapChatLuongTTBsList401
+    | PostDMPhanCapChatLuongTTBsList403
+    | void
+
+/**
+ * @summary Phân cấp Chất lượng TTB - Danh sách
+ */
+export const usePostDMPhanCapChatLuongTTBsList = <
+    TError =
+        | PostDMPhanCapChatLuongTTBsList400
+        | PostDMPhanCapChatLuongTTBsList401
+        | PostDMPhanCapChatLuongTTBsList403
+        | void,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postDMPhanCapChatLuongTTBsList>>,
+            TError,
+            { data: PublicApiPagingRequestDto },
+            TContext
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postDMPhanCapChatLuongTTBsList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationOptions = getPostDMPhanCapChatLuongTTBsListMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * Lấy thông tin Phân cấp Chất lượng TTB theo ID
  * @summary Phân cấp Chất lượng TTB - Theo Id
  */
 export type getDMPhanCapChatLuongTTBsIdResponse200 = {
-  data: PublicApiGetAllDMPhanCapChatLuongTTBDTO
-  status: 200
+    data: PublicApiGetAllDMPhanCapChatLuongTTBDTO
+    status: 200
 }
 
 export type getDMPhanCapChatLuongTTBsIdResponse400 = {
-  data: GetDMPhanCapChatLuongTTBsId400
-  status: 400
+    data: GetDMPhanCapChatLuongTTBsId400
+    status: 400
 }
 
 export type getDMPhanCapChatLuongTTBsIdResponse401 = {
-  data: GetDMPhanCapChatLuongTTBsId401
-  status: 401
+    data: GetDMPhanCapChatLuongTTBsId401
+    status: 401
 }
 
 export type getDMPhanCapChatLuongTTBsIdResponse403 = {
-  data: GetDMPhanCapChatLuongTTBsId403
-  status: 403
+    data: GetDMPhanCapChatLuongTTBsId403
+    status: 403
 }
 
 export type getDMPhanCapChatLuongTTBsIdResponse500 = {
-  data: void
-  status: 500
-}
-    
-export type getDMPhanCapChatLuongTTBsIdResponseSuccess = (getDMPhanCapChatLuongTTBsIdResponse200) & {
-  headers: Headers;
-};
-export type getDMPhanCapChatLuongTTBsIdResponseError = (getDMPhanCapChatLuongTTBsIdResponse400 | getDMPhanCapChatLuongTTBsIdResponse401 | getDMPhanCapChatLuongTTBsIdResponse403 | getDMPhanCapChatLuongTTBsIdResponse500) & {
-  headers: Headers;
-};
-
-export type getDMPhanCapChatLuongTTBsIdResponse = (getDMPhanCapChatLuongTTBsIdResponseSuccess | getDMPhanCapChatLuongTTBsIdResponseError)
-
-export const getGetDMPhanCapChatLuongTTBsIdUrl = (id: string,
-    params?: GetDMPhanCapChatLuongTTBsIdParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/DM_PhanCapChatLuongTTBs/${id}?${stringifiedParams}` : `/DM_PhanCapChatLuongTTBs/${id}`
+    data: void
+    status: 500
 }
 
-export const getDMPhanCapChatLuongTTBsId = async (id: string,
-    params?: GetDMPhanCapChatLuongTTBsIdParams, options?: RequestInit): Promise<getDMPhanCapChatLuongTTBsIdResponse> => {
-  
-  return customSystemFetch<getDMPhanCapChatLuongTTBsIdResponse>(getGetDMPhanCapChatLuongTTBsIdUrl(id,params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type getDMPhanCapChatLuongTTBsIdResponseSuccess = getDMPhanCapChatLuongTTBsIdResponse200 & {
+    headers: Headers
+}
+export type getDMPhanCapChatLuongTTBsIdResponseError = (
+    | getDMPhanCapChatLuongTTBsIdResponse400
+    | getDMPhanCapChatLuongTTBsIdResponse401
+    | getDMPhanCapChatLuongTTBsIdResponse403
+    | getDMPhanCapChatLuongTTBsIdResponse500
+) & {
+    headers: Headers
+}
 
+export type getDMPhanCapChatLuongTTBsIdResponse =
+    | getDMPhanCapChatLuongTTBsIdResponseSuccess
+    | getDMPhanCapChatLuongTTBsIdResponseError
 
-
-
-
-export const getGetDMPhanCapChatLuongTTBsIdQueryKey = (id?: string,
-    params?: GetDMPhanCapChatLuongTTBsIdParams,) => {
-    return [
-    `/DM_PhanCapChatLuongTTBs/${id}`, ...(params ? [params]: [])
-    ] as const;
-    }
-
-    
-export const getGetDMPhanCapChatLuongTTBsIdQueryOptions = <TData = Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsId>>, TError = GetDMPhanCapChatLuongTTBsId400 | GetDMPhanCapChatLuongTTBsId401 | GetDMPhanCapChatLuongTTBsId403 | void>(id: string,
-    params?: GetDMPhanCapChatLuongTTBsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
+export const getGetDMPhanCapChatLuongTTBsIdUrl = (
+    id: string,
+    params?: GetDMPhanCapChatLuongTTBsIdParams
 ) => {
+    const normalizedParams = new URLSearchParams()
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
-  const queryKey =  queryOptions?.queryKey ?? getGetDMPhanCapChatLuongTTBsIdQueryKey(id,params);
+    const stringifiedParams = normalizedParams.toString()
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsId>>> = ({ signal }) => getDMPhanCapChatLuongTTBsId(id,params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return stringifiedParams.length > 0
+        ? `/DM_PhanCapChatLuongTTBs/${id}?${stringifiedParams}`
+        : `/DM_PhanCapChatLuongTTBs/${id}`
 }
 
-export type GetDMPhanCapChatLuongTTBsIdQueryResult = NonNullable<Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsId>>>
-export type GetDMPhanCapChatLuongTTBsIdQueryError = GetDMPhanCapChatLuongTTBsId400 | GetDMPhanCapChatLuongTTBsId401 | GetDMPhanCapChatLuongTTBsId403 | void
+export const getDMPhanCapChatLuongTTBsId = async (
+    id: string,
+    params?: GetDMPhanCapChatLuongTTBsIdParams,
+    options?: RequestInit
+): Promise<getDMPhanCapChatLuongTTBsIdResponse> => {
+    return customSystemFetch<getDMPhanCapChatLuongTTBsIdResponse>(
+        getGetDMPhanCapChatLuongTTBsIdUrl(id, params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
 
+export const getGetDMPhanCapChatLuongTTBsIdQueryKey = (
+    id?: string,
+    params?: GetDMPhanCapChatLuongTTBsIdParams
+) => {
+    return [`/DM_PhanCapChatLuongTTBs/${id}`, ...(params ? [params] : [])] as const
+}
 
-export function useGetDMPhanCapChatLuongTTBsId<TData = Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsId>>, TError = GetDMPhanCapChatLuongTTBsId400 | GetDMPhanCapChatLuongTTBsId401 | GetDMPhanCapChatLuongTTBsId403 | void>(
- id: string,
-    params: undefined |  GetDMPhanCapChatLuongTTBsIdParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsId>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMPhanCapChatLuongTTBsId<TData = Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsId>>, TError = GetDMPhanCapChatLuongTTBsId400 | GetDMPhanCapChatLuongTTBsId401 | GetDMPhanCapChatLuongTTBsId403 | void>(
- id: string,
-    params?: GetDMPhanCapChatLuongTTBsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsId>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMPhanCapChatLuongTTBsId<TData = Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsId>>, TError = GetDMPhanCapChatLuongTTBsId400 | GetDMPhanCapChatLuongTTBsId401 | GetDMPhanCapChatLuongTTBsId403 | void>(
- id: string,
-    params?: GetDMPhanCapChatLuongTTBsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export const getGetDMPhanCapChatLuongTTBsIdQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsId>>,
+    TError =
+        | GetDMPhanCapChatLuongTTBsId400
+        | GetDMPhanCapChatLuongTTBsId401
+        | GetDMPhanCapChatLuongTTBsId403
+        | void,
+>(
+    id: string,
+    params?: GetDMPhanCapChatLuongTTBsIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsId>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetDMPhanCapChatLuongTTBsIdQueryKey(id, params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsId>>> = ({
+        signal,
+    }) => getDMPhanCapChatLuongTTBsId(id, params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsId>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDMPhanCapChatLuongTTBsIdQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsId>>
+>
+export type GetDMPhanCapChatLuongTTBsIdQueryError =
+    | GetDMPhanCapChatLuongTTBsId400
+    | GetDMPhanCapChatLuongTTBsId401
+    | GetDMPhanCapChatLuongTTBsId403
+    | void
+
+export function useGetDMPhanCapChatLuongTTBsId<
+    TData = Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsId>>,
+    TError =
+        | GetDMPhanCapChatLuongTTBsId400
+        | GetDMPhanCapChatLuongTTBsId401
+        | GetDMPhanCapChatLuongTTBsId403
+        | void,
+>(
+    id: string,
+    params: undefined | GetDMPhanCapChatLuongTTBsIdParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsId>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMPhanCapChatLuongTTBsId<
+    TData = Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsId>>,
+    TError =
+        | GetDMPhanCapChatLuongTTBsId400
+        | GetDMPhanCapChatLuongTTBsId401
+        | GetDMPhanCapChatLuongTTBsId403
+        | void,
+>(
+    id: string,
+    params?: GetDMPhanCapChatLuongTTBsIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsId>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMPhanCapChatLuongTTBsId<
+    TData = Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsId>>,
+    TError =
+        | GetDMPhanCapChatLuongTTBsId400
+        | GetDMPhanCapChatLuongTTBsId401
+        | GetDMPhanCapChatLuongTTBsId403
+        | void,
+>(
+    id: string,
+    params?: GetDMPhanCapChatLuongTTBsIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsId>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Phân cấp Chất lượng TTB - Theo Id
  */
 
-export function useGetDMPhanCapChatLuongTTBsId<TData = Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsId>>, TError = GetDMPhanCapChatLuongTTBsId400 | GetDMPhanCapChatLuongTTBsId401 | GetDMPhanCapChatLuongTTBsId403 | void>(
- id: string,
-    params?: GetDMPhanCapChatLuongTTBsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMPhanCapChatLuongTTBsId<
+    TData = Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsId>>,
+    TError =
+        | GetDMPhanCapChatLuongTTBsId400
+        | GetDMPhanCapChatLuongTTBsId401
+        | GetDMPhanCapChatLuongTTBsId403
+        | void,
+>(
+    id: string,
+    params?: GetDMPhanCapChatLuongTTBsIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsId>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMPhanCapChatLuongTTBsIdQueryOptions(id, params, options)
 
-  const queryOptions = getGetDMPhanCapChatLuongTTBsIdQueryOptions(id,params,options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Kiểm tra tình trạng API
  * @summary Kiểm tra tình trạng API
  */
 export type getDMPhanCapChatLuongTTBsHealthzResponse400 = {
-  data: GetDMPhanCapChatLuongTTBsHealthz400
-  status: 400
+    data: GetDMPhanCapChatLuongTTBsHealthz400
+    status: 400
 }
 
 export type getDMPhanCapChatLuongTTBsHealthzResponse401 = {
-  data: GetDMPhanCapChatLuongTTBsHealthz401
-  status: 401
+    data: GetDMPhanCapChatLuongTTBsHealthz401
+    status: 401
 }
 
 export type getDMPhanCapChatLuongTTBsHealthzResponse403 = {
-  data: GetDMPhanCapChatLuongTTBsHealthz403
-  status: 403
+    data: GetDMPhanCapChatLuongTTBsHealthz403
+    status: 403
 }
 
 export type getDMPhanCapChatLuongTTBsHealthzResponse500 = {
-  data: GetDMPhanCapChatLuongTTBsHealthz500
-  status: 500
+    data: GetDMPhanCapChatLuongTTBsHealthz500
+    status: 500
 }
-    
-;
-export type getDMPhanCapChatLuongTTBsHealthzResponseError = (getDMPhanCapChatLuongTTBsHealthzResponse400 | getDMPhanCapChatLuongTTBsHealthzResponse401 | getDMPhanCapChatLuongTTBsHealthzResponse403 | getDMPhanCapChatLuongTTBsHealthzResponse500) & {
-  headers: Headers;
-};
+export type getDMPhanCapChatLuongTTBsHealthzResponseError = (
+    | getDMPhanCapChatLuongTTBsHealthzResponse400
+    | getDMPhanCapChatLuongTTBsHealthzResponse401
+    | getDMPhanCapChatLuongTTBsHealthzResponse403
+    | getDMPhanCapChatLuongTTBsHealthzResponse500
+) & {
+    headers: Headers
+}
 
-export type getDMPhanCapChatLuongTTBsHealthzResponse = (getDMPhanCapChatLuongTTBsHealthzResponseError)
+export type getDMPhanCapChatLuongTTBsHealthzResponse = getDMPhanCapChatLuongTTBsHealthzResponseError
 
 export const getGetDMPhanCapChatLuongTTBsHealthzUrl = () => {
-
-
-  
-
-  return `/DM_PhanCapChatLuongTTBs/healthz`
+    return `/DM_PhanCapChatLuongTTBs/healthz`
 }
 
-export const getDMPhanCapChatLuongTTBsHealthz = async ( options?: RequestInit): Promise<getDMPhanCapChatLuongTTBsHealthzResponse> => {
-  
-  return customSystemFetch<getDMPhanCapChatLuongTTBsHealthzResponse>(getGetDMPhanCapChatLuongTTBsHealthzUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-
+export const getDMPhanCapChatLuongTTBsHealthz = async (
+    options?: RequestInit
+): Promise<getDMPhanCapChatLuongTTBsHealthzResponse> => {
+    return customSystemFetch<getDMPhanCapChatLuongTTBsHealthzResponse>(
+        getGetDMPhanCapChatLuongTTBsHealthzUrl(),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
 
 export const getGetDMPhanCapChatLuongTTBsHealthzQueryKey = () => {
-    return [
-    `/DM_PhanCapChatLuongTTBs/healthz`
-    ] as const;
-    }
-
-    
-export const getGetDMPhanCapChatLuongTTBsHealthzQueryOptions = <TData = Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsHealthz>>, TError = GetDMPhanCapChatLuongTTBsHealthz400 | GetDMPhanCapChatLuongTTBsHealthz401 | GetDMPhanCapChatLuongTTBsHealthz403 | GetDMPhanCapChatLuongTTBsHealthz500>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetDMPhanCapChatLuongTTBsHealthzQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsHealthz>>> = ({ signal }) => getDMPhanCapChatLuongTTBsHealthz({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsHealthz>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return [`/DM_PhanCapChatLuongTTBs/healthz`] as const
 }
 
-export type GetDMPhanCapChatLuongTTBsHealthzQueryResult = NonNullable<Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsHealthz>>>
-export type GetDMPhanCapChatLuongTTBsHealthzQueryError = GetDMPhanCapChatLuongTTBsHealthz400 | GetDMPhanCapChatLuongTTBsHealthz401 | GetDMPhanCapChatLuongTTBsHealthz403 | GetDMPhanCapChatLuongTTBsHealthz500
+export const getGetDMPhanCapChatLuongTTBsHealthzQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsHealthz>>,
+    TError =
+        | GetDMPhanCapChatLuongTTBsHealthz400
+        | GetDMPhanCapChatLuongTTBsHealthz401
+        | GetDMPhanCapChatLuongTTBsHealthz403
+        | GetDMPhanCapChatLuongTTBsHealthz500,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsHealthz>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
+    const queryKey = queryOptions?.queryKey ?? getGetDMPhanCapChatLuongTTBsHealthzQueryKey()
 
-export function useGetDMPhanCapChatLuongTTBsHealthz<TData = Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsHealthz>>, TError = GetDMPhanCapChatLuongTTBsHealthz400 | GetDMPhanCapChatLuongTTBsHealthz401 | GetDMPhanCapChatLuongTTBsHealthz403 | GetDMPhanCapChatLuongTTBsHealthz500>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsHealthz>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMPhanCapChatLuongTTBsHealthz<TData = Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsHealthz>>, TError = GetDMPhanCapChatLuongTTBsHealthz400 | GetDMPhanCapChatLuongTTBsHealthz401 | GetDMPhanCapChatLuongTTBsHealthz403 | GetDMPhanCapChatLuongTTBsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsHealthz>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMPhanCapChatLuongTTBsHealthz<TData = Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsHealthz>>, TError = GetDMPhanCapChatLuongTTBsHealthz400 | GetDMPhanCapChatLuongTTBsHealthz401 | GetDMPhanCapChatLuongTTBsHealthz403 | GetDMPhanCapChatLuongTTBsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsHealthz>>> = ({
+        signal,
+    }) => getDMPhanCapChatLuongTTBsHealthz({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsHealthz>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDMPhanCapChatLuongTTBsHealthzQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsHealthz>>
+>
+export type GetDMPhanCapChatLuongTTBsHealthzQueryError =
+    | GetDMPhanCapChatLuongTTBsHealthz400
+    | GetDMPhanCapChatLuongTTBsHealthz401
+    | GetDMPhanCapChatLuongTTBsHealthz403
+    | GetDMPhanCapChatLuongTTBsHealthz500
+
+export function useGetDMPhanCapChatLuongTTBsHealthz<
+    TData = Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsHealthz>>,
+    TError =
+        | GetDMPhanCapChatLuongTTBsHealthz400
+        | GetDMPhanCapChatLuongTTBsHealthz401
+        | GetDMPhanCapChatLuongTTBsHealthz403
+        | GetDMPhanCapChatLuongTTBsHealthz500,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsHealthz>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMPhanCapChatLuongTTBsHealthz<
+    TData = Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsHealthz>>,
+    TError =
+        | GetDMPhanCapChatLuongTTBsHealthz400
+        | GetDMPhanCapChatLuongTTBsHealthz401
+        | GetDMPhanCapChatLuongTTBsHealthz403
+        | GetDMPhanCapChatLuongTTBsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsHealthz>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMPhanCapChatLuongTTBsHealthz<
+    TData = Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsHealthz>>,
+    TError =
+        | GetDMPhanCapChatLuongTTBsHealthz400
+        | GetDMPhanCapChatLuongTTBsHealthz401
+        | GetDMPhanCapChatLuongTTBsHealthz403
+        | GetDMPhanCapChatLuongTTBsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsHealthz>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Kiểm tra tình trạng API
  */
 
-export function useGetDMPhanCapChatLuongTTBsHealthz<TData = Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsHealthz>>, TError = GetDMPhanCapChatLuongTTBsHealthz400 | GetDMPhanCapChatLuongTTBsHealthz401 | GetDMPhanCapChatLuongTTBsHealthz403 | GetDMPhanCapChatLuongTTBsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMPhanCapChatLuongTTBsHealthz<
+    TData = Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsHealthz>>,
+    TError =
+        | GetDMPhanCapChatLuongTTBsHealthz400
+        | GetDMPhanCapChatLuongTTBsHealthz401
+        | GetDMPhanCapChatLuongTTBsHealthz403
+        | GetDMPhanCapChatLuongTTBsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsHealthz>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMPhanCapChatLuongTTBsHealthzQueryOptions(options)
 
-  const queryOptions = getGetDMPhanCapChatLuongTTBsHealthzQueryOptions(options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Lấy danh sách các Phân loại CSKT
  * @summary Phân loại CSKT - Danh sách
  */
 export type postDMPhanLoaiCSKTsListResponse200 = {
-  data: PublicApiGetAllDMPhanLoaiCSKTDTO
-  status: 200
+    data: PublicApiGetAllDMPhanLoaiCSKTDTO
+    status: 200
 }
 
 export type postDMPhanLoaiCSKTsListResponse400 = {
-  data: PostDMPhanLoaiCSKTsList400
-  status: 400
+    data: PostDMPhanLoaiCSKTsList400
+    status: 400
 }
 
 export type postDMPhanLoaiCSKTsListResponse401 = {
-  data: PostDMPhanLoaiCSKTsList401
-  status: 401
+    data: PostDMPhanLoaiCSKTsList401
+    status: 401
 }
 
 export type postDMPhanLoaiCSKTsListResponse403 = {
-  data: PostDMPhanLoaiCSKTsList403
-  status: 403
+    data: PostDMPhanLoaiCSKTsList403
+    status: 403
 }
 
 export type postDMPhanLoaiCSKTsListResponse500 = {
-  data: void
-  status: 500
+    data: void
+    status: 500
 }
-    
-export type postDMPhanLoaiCSKTsListResponseSuccess = (postDMPhanLoaiCSKTsListResponse200) & {
-  headers: Headers;
-};
-export type postDMPhanLoaiCSKTsListResponseError = (postDMPhanLoaiCSKTsListResponse400 | postDMPhanLoaiCSKTsListResponse401 | postDMPhanLoaiCSKTsListResponse403 | postDMPhanLoaiCSKTsListResponse500) & {
-  headers: Headers;
-};
 
-export type postDMPhanLoaiCSKTsListResponse = (postDMPhanLoaiCSKTsListResponseSuccess | postDMPhanLoaiCSKTsListResponseError)
+export type postDMPhanLoaiCSKTsListResponseSuccess = postDMPhanLoaiCSKTsListResponse200 & {
+    headers: Headers
+}
+export type postDMPhanLoaiCSKTsListResponseError = (
+    | postDMPhanLoaiCSKTsListResponse400
+    | postDMPhanLoaiCSKTsListResponse401
+    | postDMPhanLoaiCSKTsListResponse403
+    | postDMPhanLoaiCSKTsListResponse500
+) & {
+    headers: Headers
+}
+
+export type postDMPhanLoaiCSKTsListResponse =
+    | postDMPhanLoaiCSKTsListResponseSuccess
+    | postDMPhanLoaiCSKTsListResponseError
 
 export const getPostDMPhanLoaiCSKTsListUrl = () => {
-
-
-  
-
-  return `/DM_PhanLoaiCSKTs/list`
+    return `/DM_PhanLoaiCSKTs/list`
 }
 
-export const postDMPhanLoaiCSKTsList = async (publicApiPagingRequestDto: PublicApiPagingRequestDto, options?: RequestInit): Promise<postDMPhanLoaiCSKTsListResponse> => {
-  
-  return customSystemFetch<postDMPhanLoaiCSKTsListResponse>(getPostDMPhanLoaiCSKTsListUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
-    body: JSON.stringify(
-      publicApiPagingRequestDto,)
-  }
-);}
+export const postDMPhanLoaiCSKTsList = async (
+    publicApiPagingRequestDto: PublicApiPagingRequestDto,
+    options?: RequestInit
+): Promise<postDMPhanLoaiCSKTsListResponse> => {
+    return customSystemFetch<postDMPhanLoaiCSKTsListResponse>(getPostDMPhanLoaiCSKTsListUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
+        body: JSON.stringify(publicApiPagingRequestDto),
+    })
+}
 
-
-
-
-export const getPostDMPhanLoaiCSKTsListMutationOptions = <TError = PostDMPhanLoaiCSKTsList400 | PostDMPhanLoaiCSKTsList401 | PostDMPhanLoaiCSKTsList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMPhanLoaiCSKTsList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof postDMPhanLoaiCSKTsList>>, TError,{data: PublicApiPagingRequestDto}, TContext> => {
-
-const mutationKey = ['postDMPhanLoaiCSKTsList'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postDMPhanLoaiCSKTsList>>, {data: PublicApiPagingRequestDto}> = (props) => {
-          const {data} = props ?? {};
-
-          return  postDMPhanLoaiCSKTsList(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PostDMPhanLoaiCSKTsListMutationResult = NonNullable<Awaited<ReturnType<typeof postDMPhanLoaiCSKTsList>>>
-    export type PostDMPhanLoaiCSKTsListMutationBody = PublicApiPagingRequestDto
-    export type PostDMPhanLoaiCSKTsListMutationError = PostDMPhanLoaiCSKTsList400 | PostDMPhanLoaiCSKTsList401 | PostDMPhanLoaiCSKTsList403 | void
-
-    /**
- * @summary Phân loại CSKT - Danh sách
- */
-export const usePostDMPhanLoaiCSKTsList = <TError = PostDMPhanLoaiCSKTsList400 | PostDMPhanLoaiCSKTsList401 | PostDMPhanLoaiCSKTsList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMPhanLoaiCSKTsList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getPostDMPhanLoaiCSKTsListMutationOptions = <
+    TError =
+        | PostDMPhanLoaiCSKTsList400
+        | PostDMPhanLoaiCSKTsList401
+        | PostDMPhanLoaiCSKTsList403
+        | void,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postDMPhanLoaiCSKTsList>>,
         TError,
-        {data: PublicApiPagingRequestDto},
+        { data: PublicApiPagingRequestDto },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postDMPhanLoaiCSKTsList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationKey = ['postDMPhanLoaiCSKTsList']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getPostDMPhanLoaiCSKTsListMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postDMPhanLoaiCSKTsList>>,
+        { data: PublicApiPagingRequestDto }
+    > = (props) => {
+        const { data } = props ?? {}
 
-      return useMutation(mutationOptions, queryClient);
+        return postDMPhanLoaiCSKTsList(data, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostDMPhanLoaiCSKTsListMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postDMPhanLoaiCSKTsList>>
+>
+export type PostDMPhanLoaiCSKTsListMutationBody = PublicApiPagingRequestDto
+export type PostDMPhanLoaiCSKTsListMutationError =
+    | PostDMPhanLoaiCSKTsList400
+    | PostDMPhanLoaiCSKTsList401
+    | PostDMPhanLoaiCSKTsList403
+    | void
+
+/**
+ * @summary Phân loại CSKT - Danh sách
+ */
+export const usePostDMPhanLoaiCSKTsList = <
+    TError =
+        | PostDMPhanLoaiCSKTsList400
+        | PostDMPhanLoaiCSKTsList401
+        | PostDMPhanLoaiCSKTsList403
+        | void,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postDMPhanLoaiCSKTsList>>,
+            TError,
+            { data: PublicApiPagingRequestDto },
+            TContext
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postDMPhanLoaiCSKTsList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationOptions = getPostDMPhanLoaiCSKTsListMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * Lấy thông tin Phân loại CSKT theo ID
  * @summary Phân loại CSKT - Theo Id
  */
 export type getDMPhanLoaiCSKTsIdResponse200 = {
-  data: PublicApiGetAllDMPhanLoaiCSKTDTO
-  status: 200
+    data: PublicApiGetAllDMPhanLoaiCSKTDTO
+    status: 200
 }
 
 export type getDMPhanLoaiCSKTsIdResponse400 = {
-  data: GetDMPhanLoaiCSKTsId400
-  status: 400
+    data: GetDMPhanLoaiCSKTsId400
+    status: 400
 }
 
 export type getDMPhanLoaiCSKTsIdResponse401 = {
-  data: GetDMPhanLoaiCSKTsId401
-  status: 401
+    data: GetDMPhanLoaiCSKTsId401
+    status: 401
 }
 
 export type getDMPhanLoaiCSKTsIdResponse403 = {
-  data: GetDMPhanLoaiCSKTsId403
-  status: 403
+    data: GetDMPhanLoaiCSKTsId403
+    status: 403
 }
 
 export type getDMPhanLoaiCSKTsIdResponse500 = {
-  data: void
-  status: 500
-}
-    
-export type getDMPhanLoaiCSKTsIdResponseSuccess = (getDMPhanLoaiCSKTsIdResponse200) & {
-  headers: Headers;
-};
-export type getDMPhanLoaiCSKTsIdResponseError = (getDMPhanLoaiCSKTsIdResponse400 | getDMPhanLoaiCSKTsIdResponse401 | getDMPhanLoaiCSKTsIdResponse403 | getDMPhanLoaiCSKTsIdResponse500) & {
-  headers: Headers;
-};
-
-export type getDMPhanLoaiCSKTsIdResponse = (getDMPhanLoaiCSKTsIdResponseSuccess | getDMPhanLoaiCSKTsIdResponseError)
-
-export const getGetDMPhanLoaiCSKTsIdUrl = (id: string,
-    params?: GetDMPhanLoaiCSKTsIdParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/DM_PhanLoaiCSKTs/${id}?${stringifiedParams}` : `/DM_PhanLoaiCSKTs/${id}`
+    data: void
+    status: 500
 }
 
-export const getDMPhanLoaiCSKTsId = async (id: string,
-    params?: GetDMPhanLoaiCSKTsIdParams, options?: RequestInit): Promise<getDMPhanLoaiCSKTsIdResponse> => {
-  
-  return customSystemFetch<getDMPhanLoaiCSKTsIdResponse>(getGetDMPhanLoaiCSKTsIdUrl(id,params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type getDMPhanLoaiCSKTsIdResponseSuccess = getDMPhanLoaiCSKTsIdResponse200 & {
+    headers: Headers
+}
+export type getDMPhanLoaiCSKTsIdResponseError = (
+    | getDMPhanLoaiCSKTsIdResponse400
+    | getDMPhanLoaiCSKTsIdResponse401
+    | getDMPhanLoaiCSKTsIdResponse403
+    | getDMPhanLoaiCSKTsIdResponse500
+) & {
+    headers: Headers
+}
 
+export type getDMPhanLoaiCSKTsIdResponse =
+    | getDMPhanLoaiCSKTsIdResponseSuccess
+    | getDMPhanLoaiCSKTsIdResponseError
 
+export const getGetDMPhanLoaiCSKTsIdUrl = (id: string, params?: GetDMPhanLoaiCSKTsIdParams) => {
+    const normalizedParams = new URLSearchParams()
 
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
+    const stringifiedParams = normalizedParams.toString()
 
-export const getGetDMPhanLoaiCSKTsIdQueryKey = (id?: string,
-    params?: GetDMPhanLoaiCSKTsIdParams,) => {
-    return [
-    `/DM_PhanLoaiCSKTs/${id}`, ...(params ? [params]: [])
-    ] as const;
-    }
+    return stringifiedParams.length > 0
+        ? `/DM_PhanLoaiCSKTs/${id}?${stringifiedParams}`
+        : `/DM_PhanLoaiCSKTs/${id}`
+}
 
-    
-export const getGetDMPhanLoaiCSKTsIdQueryOptions = <TData = Awaited<ReturnType<typeof getDMPhanLoaiCSKTsId>>, TError = GetDMPhanLoaiCSKTsId400 | GetDMPhanLoaiCSKTsId401 | GetDMPhanLoaiCSKTsId403 | void>(id: string,
-    params?: GetDMPhanLoaiCSKTsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMPhanLoaiCSKTsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
+export const getDMPhanLoaiCSKTsId = async (
+    id: string,
+    params?: GetDMPhanLoaiCSKTsIdParams,
+    options?: RequestInit
+): Promise<getDMPhanLoaiCSKTsIdResponse> => {
+    return customSystemFetch<getDMPhanLoaiCSKTsIdResponse>(getGetDMPhanLoaiCSKTsIdUrl(id, params), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getGetDMPhanLoaiCSKTsIdQueryKey = (
+    id?: string,
+    params?: GetDMPhanLoaiCSKTsIdParams
 ) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetDMPhanLoaiCSKTsIdQueryKey(id,params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMPhanLoaiCSKTsId>>> = ({ signal }) => getDMPhanLoaiCSKTsId(id,params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMPhanLoaiCSKTsId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return [`/DM_PhanLoaiCSKTs/${id}`, ...(params ? [params] : [])] as const
 }
 
-export type GetDMPhanLoaiCSKTsIdQueryResult = NonNullable<Awaited<ReturnType<typeof getDMPhanLoaiCSKTsId>>>
-export type GetDMPhanLoaiCSKTsIdQueryError = GetDMPhanLoaiCSKTsId400 | GetDMPhanLoaiCSKTsId401 | GetDMPhanLoaiCSKTsId403 | void
+export const getGetDMPhanLoaiCSKTsIdQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMPhanLoaiCSKTsId>>,
+    TError = GetDMPhanLoaiCSKTsId400 | GetDMPhanLoaiCSKTsId401 | GetDMPhanLoaiCSKTsId403 | void,
+>(
+    id: string,
+    params?: GetDMPhanLoaiCSKTsIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMPhanLoaiCSKTsId>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
+    const queryKey = queryOptions?.queryKey ?? getGetDMPhanLoaiCSKTsIdQueryKey(id, params)
 
-export function useGetDMPhanLoaiCSKTsId<TData = Awaited<ReturnType<typeof getDMPhanLoaiCSKTsId>>, TError = GetDMPhanLoaiCSKTsId400 | GetDMPhanLoaiCSKTsId401 | GetDMPhanLoaiCSKTsId403 | void>(
- id: string,
-    params: undefined |  GetDMPhanLoaiCSKTsIdParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMPhanLoaiCSKTsId>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMPhanLoaiCSKTsId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMPhanLoaiCSKTsId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMPhanLoaiCSKTsId<TData = Awaited<ReturnType<typeof getDMPhanLoaiCSKTsId>>, TError = GetDMPhanLoaiCSKTsId400 | GetDMPhanLoaiCSKTsId401 | GetDMPhanLoaiCSKTsId403 | void>(
- id: string,
-    params?: GetDMPhanLoaiCSKTsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMPhanLoaiCSKTsId>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMPhanLoaiCSKTsId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMPhanLoaiCSKTsId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMPhanLoaiCSKTsId<TData = Awaited<ReturnType<typeof getDMPhanLoaiCSKTsId>>, TError = GetDMPhanLoaiCSKTsId400 | GetDMPhanLoaiCSKTsId401 | GetDMPhanLoaiCSKTsId403 | void>(
- id: string,
-    params?: GetDMPhanLoaiCSKTsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMPhanLoaiCSKTsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMPhanLoaiCSKTsId>>> = ({ signal }) =>
+        getDMPhanLoaiCSKTsId(id, params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMPhanLoaiCSKTsId>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDMPhanLoaiCSKTsIdQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getDMPhanLoaiCSKTsId>>
+>
+export type GetDMPhanLoaiCSKTsIdQueryError =
+    | GetDMPhanLoaiCSKTsId400
+    | GetDMPhanLoaiCSKTsId401
+    | GetDMPhanLoaiCSKTsId403
+    | void
+
+export function useGetDMPhanLoaiCSKTsId<
+    TData = Awaited<ReturnType<typeof getDMPhanLoaiCSKTsId>>,
+    TError = GetDMPhanLoaiCSKTsId400 | GetDMPhanLoaiCSKTsId401 | GetDMPhanLoaiCSKTsId403 | void,
+>(
+    id: string,
+    params: undefined | GetDMPhanLoaiCSKTsIdParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMPhanLoaiCSKTsId>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMPhanLoaiCSKTsId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMPhanLoaiCSKTsId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMPhanLoaiCSKTsId<
+    TData = Awaited<ReturnType<typeof getDMPhanLoaiCSKTsId>>,
+    TError = GetDMPhanLoaiCSKTsId400 | GetDMPhanLoaiCSKTsId401 | GetDMPhanLoaiCSKTsId403 | void,
+>(
+    id: string,
+    params?: GetDMPhanLoaiCSKTsIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMPhanLoaiCSKTsId>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMPhanLoaiCSKTsId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMPhanLoaiCSKTsId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMPhanLoaiCSKTsId<
+    TData = Awaited<ReturnType<typeof getDMPhanLoaiCSKTsId>>,
+    TError = GetDMPhanLoaiCSKTsId400 | GetDMPhanLoaiCSKTsId401 | GetDMPhanLoaiCSKTsId403 | void,
+>(
+    id: string,
+    params?: GetDMPhanLoaiCSKTsIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMPhanLoaiCSKTsId>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Phân loại CSKT - Theo Id
  */
 
-export function useGetDMPhanLoaiCSKTsId<TData = Awaited<ReturnType<typeof getDMPhanLoaiCSKTsId>>, TError = GetDMPhanLoaiCSKTsId400 | GetDMPhanLoaiCSKTsId401 | GetDMPhanLoaiCSKTsId403 | void>(
- id: string,
-    params?: GetDMPhanLoaiCSKTsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMPhanLoaiCSKTsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMPhanLoaiCSKTsId<
+    TData = Awaited<ReturnType<typeof getDMPhanLoaiCSKTsId>>,
+    TError = GetDMPhanLoaiCSKTsId400 | GetDMPhanLoaiCSKTsId401 | GetDMPhanLoaiCSKTsId403 | void,
+>(
+    id: string,
+    params?: GetDMPhanLoaiCSKTsIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMPhanLoaiCSKTsId>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMPhanLoaiCSKTsIdQueryOptions(id, params, options)
 
-  const queryOptions = getGetDMPhanLoaiCSKTsIdQueryOptions(id,params,options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Kiểm tra tình trạng API
  * @summary Kiểm tra tình trạng API
  */
 export type getDMPhanLoaiCSKTsHealthzResponse400 = {
-  data: GetDMPhanLoaiCSKTsHealthz400
-  status: 400
+    data: GetDMPhanLoaiCSKTsHealthz400
+    status: 400
 }
 
 export type getDMPhanLoaiCSKTsHealthzResponse401 = {
-  data: GetDMPhanLoaiCSKTsHealthz401
-  status: 401
+    data: GetDMPhanLoaiCSKTsHealthz401
+    status: 401
 }
 
 export type getDMPhanLoaiCSKTsHealthzResponse403 = {
-  data: GetDMPhanLoaiCSKTsHealthz403
-  status: 403
+    data: GetDMPhanLoaiCSKTsHealthz403
+    status: 403
 }
 
 export type getDMPhanLoaiCSKTsHealthzResponse500 = {
-  data: GetDMPhanLoaiCSKTsHealthz500
-  status: 500
+    data: GetDMPhanLoaiCSKTsHealthz500
+    status: 500
 }
-    
-;
-export type getDMPhanLoaiCSKTsHealthzResponseError = (getDMPhanLoaiCSKTsHealthzResponse400 | getDMPhanLoaiCSKTsHealthzResponse401 | getDMPhanLoaiCSKTsHealthzResponse403 | getDMPhanLoaiCSKTsHealthzResponse500) & {
-  headers: Headers;
-};
+export type getDMPhanLoaiCSKTsHealthzResponseError = (
+    | getDMPhanLoaiCSKTsHealthzResponse400
+    | getDMPhanLoaiCSKTsHealthzResponse401
+    | getDMPhanLoaiCSKTsHealthzResponse403
+    | getDMPhanLoaiCSKTsHealthzResponse500
+) & {
+    headers: Headers
+}
 
-export type getDMPhanLoaiCSKTsHealthzResponse = (getDMPhanLoaiCSKTsHealthzResponseError)
+export type getDMPhanLoaiCSKTsHealthzResponse = getDMPhanLoaiCSKTsHealthzResponseError
 
 export const getGetDMPhanLoaiCSKTsHealthzUrl = () => {
-
-
-  
-
-  return `/DM_PhanLoaiCSKTs/healthz`
+    return `/DM_PhanLoaiCSKTs/healthz`
 }
 
-export const getDMPhanLoaiCSKTsHealthz = async ( options?: RequestInit): Promise<getDMPhanLoaiCSKTsHealthzResponse> => {
-  
-  return customSystemFetch<getDMPhanLoaiCSKTsHealthzResponse>(getGetDMPhanLoaiCSKTsHealthzUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-
+export const getDMPhanLoaiCSKTsHealthz = async (
+    options?: RequestInit
+): Promise<getDMPhanLoaiCSKTsHealthzResponse> => {
+    return customSystemFetch<getDMPhanLoaiCSKTsHealthzResponse>(getGetDMPhanLoaiCSKTsHealthzUrl(), {
+        ...options,
+        method: 'GET',
+    })
+}
 
 export const getGetDMPhanLoaiCSKTsHealthzQueryKey = () => {
-    return [
-    `/DM_PhanLoaiCSKTs/healthz`
-    ] as const;
-    }
-
-    
-export const getGetDMPhanLoaiCSKTsHealthzQueryOptions = <TData = Awaited<ReturnType<typeof getDMPhanLoaiCSKTsHealthz>>, TError = GetDMPhanLoaiCSKTsHealthz400 | GetDMPhanLoaiCSKTsHealthz401 | GetDMPhanLoaiCSKTsHealthz403 | GetDMPhanLoaiCSKTsHealthz500>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMPhanLoaiCSKTsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetDMPhanLoaiCSKTsHealthzQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMPhanLoaiCSKTsHealthz>>> = ({ signal }) => getDMPhanLoaiCSKTsHealthz({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMPhanLoaiCSKTsHealthz>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return [`/DM_PhanLoaiCSKTs/healthz`] as const
 }
 
-export type GetDMPhanLoaiCSKTsHealthzQueryResult = NonNullable<Awaited<ReturnType<typeof getDMPhanLoaiCSKTsHealthz>>>
-export type GetDMPhanLoaiCSKTsHealthzQueryError = GetDMPhanLoaiCSKTsHealthz400 | GetDMPhanLoaiCSKTsHealthz401 | GetDMPhanLoaiCSKTsHealthz403 | GetDMPhanLoaiCSKTsHealthz500
+export const getGetDMPhanLoaiCSKTsHealthzQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMPhanLoaiCSKTsHealthz>>,
+    TError =
+        | GetDMPhanLoaiCSKTsHealthz400
+        | GetDMPhanLoaiCSKTsHealthz401
+        | GetDMPhanLoaiCSKTsHealthz403
+        | GetDMPhanLoaiCSKTsHealthz500,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<Awaited<ReturnType<typeof getDMPhanLoaiCSKTsHealthz>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
+    const queryKey = queryOptions?.queryKey ?? getGetDMPhanLoaiCSKTsHealthzQueryKey()
 
-export function useGetDMPhanLoaiCSKTsHealthz<TData = Awaited<ReturnType<typeof getDMPhanLoaiCSKTsHealthz>>, TError = GetDMPhanLoaiCSKTsHealthz400 | GetDMPhanLoaiCSKTsHealthz401 | GetDMPhanLoaiCSKTsHealthz403 | GetDMPhanLoaiCSKTsHealthz500>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMPhanLoaiCSKTsHealthz>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMPhanLoaiCSKTsHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMPhanLoaiCSKTsHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMPhanLoaiCSKTsHealthz<TData = Awaited<ReturnType<typeof getDMPhanLoaiCSKTsHealthz>>, TError = GetDMPhanLoaiCSKTsHealthz400 | GetDMPhanLoaiCSKTsHealthz401 | GetDMPhanLoaiCSKTsHealthz403 | GetDMPhanLoaiCSKTsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMPhanLoaiCSKTsHealthz>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMPhanLoaiCSKTsHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMPhanLoaiCSKTsHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMPhanLoaiCSKTsHealthz<TData = Awaited<ReturnType<typeof getDMPhanLoaiCSKTsHealthz>>, TError = GetDMPhanLoaiCSKTsHealthz400 | GetDMPhanLoaiCSKTsHealthz401 | GetDMPhanLoaiCSKTsHealthz403 | GetDMPhanLoaiCSKTsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMPhanLoaiCSKTsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMPhanLoaiCSKTsHealthz>>> = ({
+        signal,
+    }) => getDMPhanLoaiCSKTsHealthz({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMPhanLoaiCSKTsHealthz>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDMPhanLoaiCSKTsHealthzQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getDMPhanLoaiCSKTsHealthz>>
+>
+export type GetDMPhanLoaiCSKTsHealthzQueryError =
+    | GetDMPhanLoaiCSKTsHealthz400
+    | GetDMPhanLoaiCSKTsHealthz401
+    | GetDMPhanLoaiCSKTsHealthz403
+    | GetDMPhanLoaiCSKTsHealthz500
+
+export function useGetDMPhanLoaiCSKTsHealthz<
+    TData = Awaited<ReturnType<typeof getDMPhanLoaiCSKTsHealthz>>,
+    TError =
+        | GetDMPhanLoaiCSKTsHealthz400
+        | GetDMPhanLoaiCSKTsHealthz401
+        | GetDMPhanLoaiCSKTsHealthz403
+        | GetDMPhanLoaiCSKTsHealthz500,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMPhanLoaiCSKTsHealthz>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMPhanLoaiCSKTsHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMPhanLoaiCSKTsHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMPhanLoaiCSKTsHealthz<
+    TData = Awaited<ReturnType<typeof getDMPhanLoaiCSKTsHealthz>>,
+    TError =
+        | GetDMPhanLoaiCSKTsHealthz400
+        | GetDMPhanLoaiCSKTsHealthz401
+        | GetDMPhanLoaiCSKTsHealthz403
+        | GetDMPhanLoaiCSKTsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMPhanLoaiCSKTsHealthz>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMPhanLoaiCSKTsHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMPhanLoaiCSKTsHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMPhanLoaiCSKTsHealthz<
+    TData = Awaited<ReturnType<typeof getDMPhanLoaiCSKTsHealthz>>,
+    TError =
+        | GetDMPhanLoaiCSKTsHealthz400
+        | GetDMPhanLoaiCSKTsHealthz401
+        | GetDMPhanLoaiCSKTsHealthz403
+        | GetDMPhanLoaiCSKTsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMPhanLoaiCSKTsHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Kiểm tra tình trạng API
  */
 
-export function useGetDMPhanLoaiCSKTsHealthz<TData = Awaited<ReturnType<typeof getDMPhanLoaiCSKTsHealthz>>, TError = GetDMPhanLoaiCSKTsHealthz400 | GetDMPhanLoaiCSKTsHealthz401 | GetDMPhanLoaiCSKTsHealthz403 | GetDMPhanLoaiCSKTsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMPhanLoaiCSKTsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMPhanLoaiCSKTsHealthz<
+    TData = Awaited<ReturnType<typeof getDMPhanLoaiCSKTsHealthz>>,
+    TError =
+        | GetDMPhanLoaiCSKTsHealthz400
+        | GetDMPhanLoaiCSKTsHealthz401
+        | GetDMPhanLoaiCSKTsHealthz403
+        | GetDMPhanLoaiCSKTsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMPhanLoaiCSKTsHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMPhanLoaiCSKTsHealthzQueryOptions(options)
 
-  const queryOptions = getGetDMPhanLoaiCSKTsHealthzQueryOptions(options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Lấy danh sách các Quận, Huyện, TX
  * @summary Quận, Huyện, TX - Danh sách
  */
 export type postDMQuanHuyensListResponse200 = {
-  data: PublicApiGetAllDMQuanHuyenDTO
-  status: 200
+    data: PublicApiGetAllDMQuanHuyenDTO
+    status: 200
 }
 
 export type postDMQuanHuyensListResponse400 = {
-  data: PostDMQuanHuyensList400
-  status: 400
+    data: PostDMQuanHuyensList400
+    status: 400
 }
 
 export type postDMQuanHuyensListResponse401 = {
-  data: PostDMQuanHuyensList401
-  status: 401
+    data: PostDMQuanHuyensList401
+    status: 401
 }
 
 export type postDMQuanHuyensListResponse403 = {
-  data: PostDMQuanHuyensList403
-  status: 403
+    data: PostDMQuanHuyensList403
+    status: 403
 }
 
 export type postDMQuanHuyensListResponse500 = {
-  data: void
-  status: 500
+    data: void
+    status: 500
 }
-    
-export type postDMQuanHuyensListResponseSuccess = (postDMQuanHuyensListResponse200) & {
-  headers: Headers;
-};
-export type postDMQuanHuyensListResponseError = (postDMQuanHuyensListResponse400 | postDMQuanHuyensListResponse401 | postDMQuanHuyensListResponse403 | postDMQuanHuyensListResponse500) & {
-  headers: Headers;
-};
 
-export type postDMQuanHuyensListResponse = (postDMQuanHuyensListResponseSuccess | postDMQuanHuyensListResponseError)
+export type postDMQuanHuyensListResponseSuccess = postDMQuanHuyensListResponse200 & {
+    headers: Headers
+}
+export type postDMQuanHuyensListResponseError = (
+    | postDMQuanHuyensListResponse400
+    | postDMQuanHuyensListResponse401
+    | postDMQuanHuyensListResponse403
+    | postDMQuanHuyensListResponse500
+) & {
+    headers: Headers
+}
+
+export type postDMQuanHuyensListResponse =
+    | postDMQuanHuyensListResponseSuccess
+    | postDMQuanHuyensListResponseError
 
 export const getPostDMQuanHuyensListUrl = () => {
-
-
-  
-
-  return `/DM_QuanHuyens/list`
+    return `/DM_QuanHuyens/list`
 }
 
-export const postDMQuanHuyensList = async (publicApiPagingRequestDto: PublicApiPagingRequestDto, options?: RequestInit): Promise<postDMQuanHuyensListResponse> => {
-  
-  return customSystemFetch<postDMQuanHuyensListResponse>(getPostDMQuanHuyensListUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
-    body: JSON.stringify(
-      publicApiPagingRequestDto,)
-  }
-);}
+export const postDMQuanHuyensList = async (
+    publicApiPagingRequestDto: PublicApiPagingRequestDto,
+    options?: RequestInit
+): Promise<postDMQuanHuyensListResponse> => {
+    return customSystemFetch<postDMQuanHuyensListResponse>(getPostDMQuanHuyensListUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
+        body: JSON.stringify(publicApiPagingRequestDto),
+    })
+}
 
-
-
-
-export const getPostDMQuanHuyensListMutationOptions = <TError = PostDMQuanHuyensList400 | PostDMQuanHuyensList401 | PostDMQuanHuyensList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMQuanHuyensList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof postDMQuanHuyensList>>, TError,{data: PublicApiPagingRequestDto}, TContext> => {
-
-const mutationKey = ['postDMQuanHuyensList'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postDMQuanHuyensList>>, {data: PublicApiPagingRequestDto}> = (props) => {
-          const {data} = props ?? {};
-
-          return  postDMQuanHuyensList(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PostDMQuanHuyensListMutationResult = NonNullable<Awaited<ReturnType<typeof postDMQuanHuyensList>>>
-    export type PostDMQuanHuyensListMutationBody = PublicApiPagingRequestDto
-    export type PostDMQuanHuyensListMutationError = PostDMQuanHuyensList400 | PostDMQuanHuyensList401 | PostDMQuanHuyensList403 | void
-
-    /**
- * @summary Quận, Huyện, TX - Danh sách
- */
-export const usePostDMQuanHuyensList = <TError = PostDMQuanHuyensList400 | PostDMQuanHuyensList401 | PostDMQuanHuyensList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMQuanHuyensList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getPostDMQuanHuyensListMutationOptions = <
+    TError = PostDMQuanHuyensList400 | PostDMQuanHuyensList401 | PostDMQuanHuyensList403 | void,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postDMQuanHuyensList>>,
         TError,
-        {data: PublicApiPagingRequestDto},
+        { data: PublicApiPagingRequestDto },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postDMQuanHuyensList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationKey = ['postDMQuanHuyensList']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getPostDMQuanHuyensListMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postDMQuanHuyensList>>,
+        { data: PublicApiPagingRequestDto }
+    > = (props) => {
+        const { data } = props ?? {}
 
-      return useMutation(mutationOptions, queryClient);
+        return postDMQuanHuyensList(data, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostDMQuanHuyensListMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postDMQuanHuyensList>>
+>
+export type PostDMQuanHuyensListMutationBody = PublicApiPagingRequestDto
+export type PostDMQuanHuyensListMutationError =
+    | PostDMQuanHuyensList400
+    | PostDMQuanHuyensList401
+    | PostDMQuanHuyensList403
+    | void
+
+/**
+ * @summary Quận, Huyện, TX - Danh sách
+ */
+export const usePostDMQuanHuyensList = <
+    TError = PostDMQuanHuyensList400 | PostDMQuanHuyensList401 | PostDMQuanHuyensList403 | void,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postDMQuanHuyensList>>,
+            TError,
+            { data: PublicApiPagingRequestDto },
+            TContext
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postDMQuanHuyensList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationOptions = getPostDMQuanHuyensListMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * Lấy thông tin Quận, Huyện, TX theo ID
  * @summary Quận, Huyện, TX - Theo Id
  */
 export type getDMQuanHuyensIdResponse200 = {
-  data: PublicApiGetAllDMQuanHuyenDTO
-  status: 200
+    data: PublicApiGetAllDMQuanHuyenDTO
+    status: 200
 }
 
 export type getDMQuanHuyensIdResponse400 = {
-  data: GetDMQuanHuyensId400
-  status: 400
+    data: GetDMQuanHuyensId400
+    status: 400
 }
 
 export type getDMQuanHuyensIdResponse401 = {
-  data: GetDMQuanHuyensId401
-  status: 401
+    data: GetDMQuanHuyensId401
+    status: 401
 }
 
 export type getDMQuanHuyensIdResponse403 = {
-  data: GetDMQuanHuyensId403
-  status: 403
+    data: GetDMQuanHuyensId403
+    status: 403
 }
 
 export type getDMQuanHuyensIdResponse500 = {
-  data: void
-  status: 500
-}
-    
-export type getDMQuanHuyensIdResponseSuccess = (getDMQuanHuyensIdResponse200) & {
-  headers: Headers;
-};
-export type getDMQuanHuyensIdResponseError = (getDMQuanHuyensIdResponse400 | getDMQuanHuyensIdResponse401 | getDMQuanHuyensIdResponse403 | getDMQuanHuyensIdResponse500) & {
-  headers: Headers;
-};
-
-export type getDMQuanHuyensIdResponse = (getDMQuanHuyensIdResponseSuccess | getDMQuanHuyensIdResponseError)
-
-export const getGetDMQuanHuyensIdUrl = (id: string,
-    params?: GetDMQuanHuyensIdParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/DM_QuanHuyens/${id}?${stringifiedParams}` : `/DM_QuanHuyens/${id}`
+    data: void
+    status: 500
 }
 
-export const getDMQuanHuyensId = async (id: string,
-    params?: GetDMQuanHuyensIdParams, options?: RequestInit): Promise<getDMQuanHuyensIdResponse> => {
-  
-  return customSystemFetch<getDMQuanHuyensIdResponse>(getGetDMQuanHuyensIdUrl(id,params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type getDMQuanHuyensIdResponseSuccess = getDMQuanHuyensIdResponse200 & {
+    headers: Headers
+}
+export type getDMQuanHuyensIdResponseError = (
+    | getDMQuanHuyensIdResponse400
+    | getDMQuanHuyensIdResponse401
+    | getDMQuanHuyensIdResponse403
+    | getDMQuanHuyensIdResponse500
+) & {
+    headers: Headers
+}
 
+export type getDMQuanHuyensIdResponse =
+    | getDMQuanHuyensIdResponseSuccess
+    | getDMQuanHuyensIdResponseError
 
+export const getGetDMQuanHuyensIdUrl = (id: string, params?: GetDMQuanHuyensIdParams) => {
+    const normalizedParams = new URLSearchParams()
 
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
+    const stringifiedParams = normalizedParams.toString()
 
-export const getGetDMQuanHuyensIdQueryKey = (id?: string,
-    params?: GetDMQuanHuyensIdParams,) => {
-    return [
-    `/DM_QuanHuyens/${id}`, ...(params ? [params]: [])
-    ] as const;
+    return stringifiedParams.length > 0
+        ? `/DM_QuanHuyens/${id}?${stringifiedParams}`
+        : `/DM_QuanHuyens/${id}`
+}
+
+export const getDMQuanHuyensId = async (
+    id: string,
+    params?: GetDMQuanHuyensIdParams,
+    options?: RequestInit
+): Promise<getDMQuanHuyensIdResponse> => {
+    return customSystemFetch<getDMQuanHuyensIdResponse>(getGetDMQuanHuyensIdUrl(id, params), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getGetDMQuanHuyensIdQueryKey = (id?: string, params?: GetDMQuanHuyensIdParams) => {
+    return [`/DM_QuanHuyens/${id}`, ...(params ? [params] : [])] as const
+}
+
+export const getGetDMQuanHuyensIdQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMQuanHuyensId>>,
+    TError = GetDMQuanHuyensId400 | GetDMQuanHuyensId401 | GetDMQuanHuyensId403 | void,
+>(
+    id: string,
+    params?: GetDMQuanHuyensIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMQuanHuyensId>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
     }
-
-    
-export const getGetDMQuanHuyensIdQueryOptions = <TData = Awaited<ReturnType<typeof getDMQuanHuyensId>>, TError = GetDMQuanHuyensId400 | GetDMQuanHuyensId401 | GetDMQuanHuyensId403 | void>(id: string,
-    params?: GetDMQuanHuyensIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMQuanHuyensId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
 ) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    const queryKey = queryOptions?.queryKey ?? getGetDMQuanHuyensIdQueryKey(id, params)
 
-  const queryKey =  queryOptions?.queryKey ?? getGetDMQuanHuyensIdQueryKey(id,params);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMQuanHuyensId>>> = ({ signal }) =>
+        getDMQuanHuyensId(id, params, { signal, ...requestOptions })
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMQuanHuyensId>>> = ({ signal }) => getDMQuanHuyensId(id,params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMQuanHuyensId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMQuanHuyensId>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetDMQuanHuyensIdQueryResult = NonNullable<Awaited<ReturnType<typeof getDMQuanHuyensId>>>
-export type GetDMQuanHuyensIdQueryError = GetDMQuanHuyensId400 | GetDMQuanHuyensId401 | GetDMQuanHuyensId403 | void
+export type GetDMQuanHuyensIdQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getDMQuanHuyensId>>
+>
+export type GetDMQuanHuyensIdQueryError =
+    | GetDMQuanHuyensId400
+    | GetDMQuanHuyensId401
+    | GetDMQuanHuyensId403
+    | void
 
-
-export function useGetDMQuanHuyensId<TData = Awaited<ReturnType<typeof getDMQuanHuyensId>>, TError = GetDMQuanHuyensId400 | GetDMQuanHuyensId401 | GetDMQuanHuyensId403 | void>(
- id: string,
-    params: undefined |  GetDMQuanHuyensIdParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMQuanHuyensId>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMQuanHuyensId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMQuanHuyensId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMQuanHuyensId<TData = Awaited<ReturnType<typeof getDMQuanHuyensId>>, TError = GetDMQuanHuyensId400 | GetDMQuanHuyensId401 | GetDMQuanHuyensId403 | void>(
- id: string,
-    params?: GetDMQuanHuyensIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMQuanHuyensId>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMQuanHuyensId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMQuanHuyensId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMQuanHuyensId<TData = Awaited<ReturnType<typeof getDMQuanHuyensId>>, TError = GetDMQuanHuyensId400 | GetDMQuanHuyensId401 | GetDMQuanHuyensId403 | void>(
- id: string,
-    params?: GetDMQuanHuyensIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMQuanHuyensId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMQuanHuyensId<
+    TData = Awaited<ReturnType<typeof getDMQuanHuyensId>>,
+    TError = GetDMQuanHuyensId400 | GetDMQuanHuyensId401 | GetDMQuanHuyensId403 | void,
+>(
+    id: string,
+    params: undefined | GetDMQuanHuyensIdParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMQuanHuyensId>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMQuanHuyensId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMQuanHuyensId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMQuanHuyensId<
+    TData = Awaited<ReturnType<typeof getDMQuanHuyensId>>,
+    TError = GetDMQuanHuyensId400 | GetDMQuanHuyensId401 | GetDMQuanHuyensId403 | void,
+>(
+    id: string,
+    params?: GetDMQuanHuyensIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMQuanHuyensId>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMQuanHuyensId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMQuanHuyensId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMQuanHuyensId<
+    TData = Awaited<ReturnType<typeof getDMQuanHuyensId>>,
+    TError = GetDMQuanHuyensId400 | GetDMQuanHuyensId401 | GetDMQuanHuyensId403 | void,
+>(
+    id: string,
+    params?: GetDMQuanHuyensIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMQuanHuyensId>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Quận, Huyện, TX - Theo Id
  */
 
-export function useGetDMQuanHuyensId<TData = Awaited<ReturnType<typeof getDMQuanHuyensId>>, TError = GetDMQuanHuyensId400 | GetDMQuanHuyensId401 | GetDMQuanHuyensId403 | void>(
- id: string,
-    params?: GetDMQuanHuyensIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMQuanHuyensId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMQuanHuyensId<
+    TData = Awaited<ReturnType<typeof getDMQuanHuyensId>>,
+    TError = GetDMQuanHuyensId400 | GetDMQuanHuyensId401 | GetDMQuanHuyensId403 | void,
+>(
+    id: string,
+    params?: GetDMQuanHuyensIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMQuanHuyensId>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMQuanHuyensIdQueryOptions(id, params, options)
 
-  const queryOptions = getGetDMQuanHuyensIdQueryOptions(id,params,options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Kiểm tra tình trạng API
  * @summary Kiểm tra tình trạng API
  */
 export type getDMQuanHuyensHealthzResponse400 = {
-  data: GetDMQuanHuyensHealthz400
-  status: 400
+    data: GetDMQuanHuyensHealthz400
+    status: 400
 }
 
 export type getDMQuanHuyensHealthzResponse401 = {
-  data: GetDMQuanHuyensHealthz401
-  status: 401
+    data: GetDMQuanHuyensHealthz401
+    status: 401
 }
 
 export type getDMQuanHuyensHealthzResponse403 = {
-  data: GetDMQuanHuyensHealthz403
-  status: 403
+    data: GetDMQuanHuyensHealthz403
+    status: 403
 }
 
 export type getDMQuanHuyensHealthzResponse500 = {
-  data: GetDMQuanHuyensHealthz500
-  status: 500
+    data: GetDMQuanHuyensHealthz500
+    status: 500
 }
-    
-;
-export type getDMQuanHuyensHealthzResponseError = (getDMQuanHuyensHealthzResponse400 | getDMQuanHuyensHealthzResponse401 | getDMQuanHuyensHealthzResponse403 | getDMQuanHuyensHealthzResponse500) & {
-  headers: Headers;
-};
+export type getDMQuanHuyensHealthzResponseError = (
+    | getDMQuanHuyensHealthzResponse400
+    | getDMQuanHuyensHealthzResponse401
+    | getDMQuanHuyensHealthzResponse403
+    | getDMQuanHuyensHealthzResponse500
+) & {
+    headers: Headers
+}
 
-export type getDMQuanHuyensHealthzResponse = (getDMQuanHuyensHealthzResponseError)
+export type getDMQuanHuyensHealthzResponse = getDMQuanHuyensHealthzResponseError
 
 export const getGetDMQuanHuyensHealthzUrl = () => {
-
-
-  
-
-  return `/DM_QuanHuyens/healthz`
+    return `/DM_QuanHuyens/healthz`
 }
 
-export const getDMQuanHuyensHealthz = async ( options?: RequestInit): Promise<getDMQuanHuyensHealthzResponse> => {
-  
-  return customSystemFetch<getDMQuanHuyensHealthzResponse>(getGetDMQuanHuyensHealthzUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-
+export const getDMQuanHuyensHealthz = async (
+    options?: RequestInit
+): Promise<getDMQuanHuyensHealthzResponse> => {
+    return customSystemFetch<getDMQuanHuyensHealthzResponse>(getGetDMQuanHuyensHealthzUrl(), {
+        ...options,
+        method: 'GET',
+    })
+}
 
 export const getGetDMQuanHuyensHealthzQueryKey = () => {
-    return [
-    `/DM_QuanHuyens/healthz`
-    ] as const;
-    }
-
-    
-export const getGetDMQuanHuyensHealthzQueryOptions = <TData = Awaited<ReturnType<typeof getDMQuanHuyensHealthz>>, TError = GetDMQuanHuyensHealthz400 | GetDMQuanHuyensHealthz401 | GetDMQuanHuyensHealthz403 | GetDMQuanHuyensHealthz500>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMQuanHuyensHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetDMQuanHuyensHealthzQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMQuanHuyensHealthz>>> = ({ signal }) => getDMQuanHuyensHealthz({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMQuanHuyensHealthz>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return [`/DM_QuanHuyens/healthz`] as const
 }
 
-export type GetDMQuanHuyensHealthzQueryResult = NonNullable<Awaited<ReturnType<typeof getDMQuanHuyensHealthz>>>
-export type GetDMQuanHuyensHealthzQueryError = GetDMQuanHuyensHealthz400 | GetDMQuanHuyensHealthz401 | GetDMQuanHuyensHealthz403 | GetDMQuanHuyensHealthz500
+export const getGetDMQuanHuyensHealthzQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMQuanHuyensHealthz>>,
+    TError =
+        | GetDMQuanHuyensHealthz400
+        | GetDMQuanHuyensHealthz401
+        | GetDMQuanHuyensHealthz403
+        | GetDMQuanHuyensHealthz500,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<Awaited<ReturnType<typeof getDMQuanHuyensHealthz>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
+    const queryKey = queryOptions?.queryKey ?? getGetDMQuanHuyensHealthzQueryKey()
 
-export function useGetDMQuanHuyensHealthz<TData = Awaited<ReturnType<typeof getDMQuanHuyensHealthz>>, TError = GetDMQuanHuyensHealthz400 | GetDMQuanHuyensHealthz401 | GetDMQuanHuyensHealthz403 | GetDMQuanHuyensHealthz500>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMQuanHuyensHealthz>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMQuanHuyensHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMQuanHuyensHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMQuanHuyensHealthz<TData = Awaited<ReturnType<typeof getDMQuanHuyensHealthz>>, TError = GetDMQuanHuyensHealthz400 | GetDMQuanHuyensHealthz401 | GetDMQuanHuyensHealthz403 | GetDMQuanHuyensHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMQuanHuyensHealthz>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMQuanHuyensHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMQuanHuyensHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMQuanHuyensHealthz<TData = Awaited<ReturnType<typeof getDMQuanHuyensHealthz>>, TError = GetDMQuanHuyensHealthz400 | GetDMQuanHuyensHealthz401 | GetDMQuanHuyensHealthz403 | GetDMQuanHuyensHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMQuanHuyensHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMQuanHuyensHealthz>>> = ({
+        signal,
+    }) => getDMQuanHuyensHealthz({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMQuanHuyensHealthz>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDMQuanHuyensHealthzQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getDMQuanHuyensHealthz>>
+>
+export type GetDMQuanHuyensHealthzQueryError =
+    | GetDMQuanHuyensHealthz400
+    | GetDMQuanHuyensHealthz401
+    | GetDMQuanHuyensHealthz403
+    | GetDMQuanHuyensHealthz500
+
+export function useGetDMQuanHuyensHealthz<
+    TData = Awaited<ReturnType<typeof getDMQuanHuyensHealthz>>,
+    TError =
+        | GetDMQuanHuyensHealthz400
+        | GetDMQuanHuyensHealthz401
+        | GetDMQuanHuyensHealthz403
+        | GetDMQuanHuyensHealthz500,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMQuanHuyensHealthz>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMQuanHuyensHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMQuanHuyensHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMQuanHuyensHealthz<
+    TData = Awaited<ReturnType<typeof getDMQuanHuyensHealthz>>,
+    TError =
+        | GetDMQuanHuyensHealthz400
+        | GetDMQuanHuyensHealthz401
+        | GetDMQuanHuyensHealthz403
+        | GetDMQuanHuyensHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMQuanHuyensHealthz>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMQuanHuyensHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMQuanHuyensHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMQuanHuyensHealthz<
+    TData = Awaited<ReturnType<typeof getDMQuanHuyensHealthz>>,
+    TError =
+        | GetDMQuanHuyensHealthz400
+        | GetDMQuanHuyensHealthz401
+        | GetDMQuanHuyensHealthz403
+        | GetDMQuanHuyensHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMQuanHuyensHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Kiểm tra tình trạng API
  */
 
-export function useGetDMQuanHuyensHealthz<TData = Awaited<ReturnType<typeof getDMQuanHuyensHealthz>>, TError = GetDMQuanHuyensHealthz400 | GetDMQuanHuyensHealthz401 | GetDMQuanHuyensHealthz403 | GetDMQuanHuyensHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMQuanHuyensHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMQuanHuyensHealthz<
+    TData = Awaited<ReturnType<typeof getDMQuanHuyensHealthz>>,
+    TError =
+        | GetDMQuanHuyensHealthz400
+        | GetDMQuanHuyensHealthz401
+        | GetDMQuanHuyensHealthz403
+        | GetDMQuanHuyensHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMQuanHuyensHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMQuanHuyensHealthzQueryOptions(options)
 
-  const queryOptions = getGetDMQuanHuyensHealthzQueryOptions(options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Lấy danh sách các Quốc gia
  * @summary Quốc gia - Danh sách
  */
 export type postDMQuocGiasListResponse200 = {
-  data: PublicApiGetAllDMQuocGiaDTO
-  status: 200
+    data: PublicApiGetAllDMQuocGiaDTO
+    status: 200
 }
 
 export type postDMQuocGiasListResponse400 = {
-  data: PostDMQuocGiasList400
-  status: 400
+    data: PostDMQuocGiasList400
+    status: 400
 }
 
 export type postDMQuocGiasListResponse401 = {
-  data: PostDMQuocGiasList401
-  status: 401
+    data: PostDMQuocGiasList401
+    status: 401
 }
 
 export type postDMQuocGiasListResponse403 = {
-  data: PostDMQuocGiasList403
-  status: 403
+    data: PostDMQuocGiasList403
+    status: 403
 }
 
 export type postDMQuocGiasListResponse500 = {
-  data: void
-  status: 500
+    data: void
+    status: 500
 }
-    
-export type postDMQuocGiasListResponseSuccess = (postDMQuocGiasListResponse200) & {
-  headers: Headers;
-};
-export type postDMQuocGiasListResponseError = (postDMQuocGiasListResponse400 | postDMQuocGiasListResponse401 | postDMQuocGiasListResponse403 | postDMQuocGiasListResponse500) & {
-  headers: Headers;
-};
 
-export type postDMQuocGiasListResponse = (postDMQuocGiasListResponseSuccess | postDMQuocGiasListResponseError)
+export type postDMQuocGiasListResponseSuccess = postDMQuocGiasListResponse200 & {
+    headers: Headers
+}
+export type postDMQuocGiasListResponseError = (
+    | postDMQuocGiasListResponse400
+    | postDMQuocGiasListResponse401
+    | postDMQuocGiasListResponse403
+    | postDMQuocGiasListResponse500
+) & {
+    headers: Headers
+}
+
+export type postDMQuocGiasListResponse =
+    | postDMQuocGiasListResponseSuccess
+    | postDMQuocGiasListResponseError
 
 export const getPostDMQuocGiasListUrl = () => {
-
-
-  
-
-  return `/DM_QuocGias/list`
+    return `/DM_QuocGias/list`
 }
 
-export const postDMQuocGiasList = async (publicApiPagingRequestDto: PublicApiPagingRequestDto, options?: RequestInit): Promise<postDMQuocGiasListResponse> => {
-  
-  return customSystemFetch<postDMQuocGiasListResponse>(getPostDMQuocGiasListUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
-    body: JSON.stringify(
-      publicApiPagingRequestDto,)
-  }
-);}
+export const postDMQuocGiasList = async (
+    publicApiPagingRequestDto: PublicApiPagingRequestDto,
+    options?: RequestInit
+): Promise<postDMQuocGiasListResponse> => {
+    return customSystemFetch<postDMQuocGiasListResponse>(getPostDMQuocGiasListUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
+        body: JSON.stringify(publicApiPagingRequestDto),
+    })
+}
 
-
-
-
-export const getPostDMQuocGiasListMutationOptions = <TError = PostDMQuocGiasList400 | PostDMQuocGiasList401 | PostDMQuocGiasList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMQuocGiasList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof postDMQuocGiasList>>, TError,{data: PublicApiPagingRequestDto}, TContext> => {
-
-const mutationKey = ['postDMQuocGiasList'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postDMQuocGiasList>>, {data: PublicApiPagingRequestDto}> = (props) => {
-          const {data} = props ?? {};
-
-          return  postDMQuocGiasList(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PostDMQuocGiasListMutationResult = NonNullable<Awaited<ReturnType<typeof postDMQuocGiasList>>>
-    export type PostDMQuocGiasListMutationBody = PublicApiPagingRequestDto
-    export type PostDMQuocGiasListMutationError = PostDMQuocGiasList400 | PostDMQuocGiasList401 | PostDMQuocGiasList403 | void
-
-    /**
- * @summary Quốc gia - Danh sách
- */
-export const usePostDMQuocGiasList = <TError = PostDMQuocGiasList400 | PostDMQuocGiasList401 | PostDMQuocGiasList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMQuocGiasList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getPostDMQuocGiasListMutationOptions = <
+    TError = PostDMQuocGiasList400 | PostDMQuocGiasList401 | PostDMQuocGiasList403 | void,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postDMQuocGiasList>>,
         TError,
-        {data: PublicApiPagingRequestDto},
+        { data: PublicApiPagingRequestDto },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postDMQuocGiasList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationKey = ['postDMQuocGiasList']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getPostDMQuocGiasListMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postDMQuocGiasList>>,
+        { data: PublicApiPagingRequestDto }
+    > = (props) => {
+        const { data } = props ?? {}
 
-      return useMutation(mutationOptions, queryClient);
+        return postDMQuocGiasList(data, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostDMQuocGiasListMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postDMQuocGiasList>>
+>
+export type PostDMQuocGiasListMutationBody = PublicApiPagingRequestDto
+export type PostDMQuocGiasListMutationError =
+    | PostDMQuocGiasList400
+    | PostDMQuocGiasList401
+    | PostDMQuocGiasList403
+    | void
+
+/**
+ * @summary Quốc gia - Danh sách
+ */
+export const usePostDMQuocGiasList = <
+    TError = PostDMQuocGiasList400 | PostDMQuocGiasList401 | PostDMQuocGiasList403 | void,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postDMQuocGiasList>>,
+            TError,
+            { data: PublicApiPagingRequestDto },
+            TContext
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postDMQuocGiasList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationOptions = getPostDMQuocGiasListMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * Lấy thông tin Quốc gia theo ID
  * @summary Quốc gia - Theo Id
  */
 export type getDMQuocGiasIdResponse200 = {
-  data: PublicApiGetAllDMQuocGiaDTO
-  status: 200
+    data: PublicApiGetAllDMQuocGiaDTO
+    status: 200
 }
 
 export type getDMQuocGiasIdResponse400 = {
-  data: GetDMQuocGiasId400
-  status: 400
+    data: GetDMQuocGiasId400
+    status: 400
 }
 
 export type getDMQuocGiasIdResponse401 = {
-  data: GetDMQuocGiasId401
-  status: 401
+    data: GetDMQuocGiasId401
+    status: 401
 }
 
 export type getDMQuocGiasIdResponse403 = {
-  data: GetDMQuocGiasId403
-  status: 403
+    data: GetDMQuocGiasId403
+    status: 403
 }
 
 export type getDMQuocGiasIdResponse500 = {
-  data: void
-  status: 500
-}
-    
-export type getDMQuocGiasIdResponseSuccess = (getDMQuocGiasIdResponse200) & {
-  headers: Headers;
-};
-export type getDMQuocGiasIdResponseError = (getDMQuocGiasIdResponse400 | getDMQuocGiasIdResponse401 | getDMQuocGiasIdResponse403 | getDMQuocGiasIdResponse500) & {
-  headers: Headers;
-};
-
-export type getDMQuocGiasIdResponse = (getDMQuocGiasIdResponseSuccess | getDMQuocGiasIdResponseError)
-
-export const getGetDMQuocGiasIdUrl = (id: string,
-    params?: GetDMQuocGiasIdParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/DM_QuocGias/${id}?${stringifiedParams}` : `/DM_QuocGias/${id}`
+    data: void
+    status: 500
 }
 
-export const getDMQuocGiasId = async (id: string,
-    params?: GetDMQuocGiasIdParams, options?: RequestInit): Promise<getDMQuocGiasIdResponse> => {
-  
-  return customSystemFetch<getDMQuocGiasIdResponse>(getGetDMQuocGiasIdUrl(id,params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type getDMQuocGiasIdResponseSuccess = getDMQuocGiasIdResponse200 & {
+    headers: Headers
+}
+export type getDMQuocGiasIdResponseError = (
+    | getDMQuocGiasIdResponse400
+    | getDMQuocGiasIdResponse401
+    | getDMQuocGiasIdResponse403
+    | getDMQuocGiasIdResponse500
+) & {
+    headers: Headers
+}
 
+export type getDMQuocGiasIdResponse = getDMQuocGiasIdResponseSuccess | getDMQuocGiasIdResponseError
 
+export const getGetDMQuocGiasIdUrl = (id: string, params?: GetDMQuocGiasIdParams) => {
+    const normalizedParams = new URLSearchParams()
 
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
+    const stringifiedParams = normalizedParams.toString()
 
-export const getGetDMQuocGiasIdQueryKey = (id?: string,
-    params?: GetDMQuocGiasIdParams,) => {
-    return [
-    `/DM_QuocGias/${id}`, ...(params ? [params]: [])
-    ] as const;
+    return stringifiedParams.length > 0
+        ? `/DM_QuocGias/${id}?${stringifiedParams}`
+        : `/DM_QuocGias/${id}`
+}
+
+export const getDMQuocGiasId = async (
+    id: string,
+    params?: GetDMQuocGiasIdParams,
+    options?: RequestInit
+): Promise<getDMQuocGiasIdResponse> => {
+    return customSystemFetch<getDMQuocGiasIdResponse>(getGetDMQuocGiasIdUrl(id, params), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getGetDMQuocGiasIdQueryKey = (id?: string, params?: GetDMQuocGiasIdParams) => {
+    return [`/DM_QuocGias/${id}`, ...(params ? [params] : [])] as const
+}
+
+export const getGetDMQuocGiasIdQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMQuocGiasId>>,
+    TError = GetDMQuocGiasId400 | GetDMQuocGiasId401 | GetDMQuocGiasId403 | void,
+>(
+    id: string,
+    params?: GetDMQuocGiasIdParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMQuocGiasId>>, TError, TData>>
+        request?: SecondParameter<typeof customSystemFetch>
     }
-
-    
-export const getGetDMQuocGiasIdQueryOptions = <TData = Awaited<ReturnType<typeof getDMQuocGiasId>>, TError = GetDMQuocGiasId400 | GetDMQuocGiasId401 | GetDMQuocGiasId403 | void>(id: string,
-    params?: GetDMQuocGiasIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMQuocGiasId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
 ) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    const queryKey = queryOptions?.queryKey ?? getGetDMQuocGiasIdQueryKey(id, params)
 
-  const queryKey =  queryOptions?.queryKey ?? getGetDMQuocGiasIdQueryKey(id,params);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMQuocGiasId>>> = ({ signal }) =>
+        getDMQuocGiasId(id, params, { signal, ...requestOptions })
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMQuocGiasId>>> = ({ signal }) => getDMQuocGiasId(id,params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMQuocGiasId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMQuocGiasId>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetDMQuocGiasIdQueryResult = NonNullable<Awaited<ReturnType<typeof getDMQuocGiasId>>>
-export type GetDMQuocGiasIdQueryError = GetDMQuocGiasId400 | GetDMQuocGiasId401 | GetDMQuocGiasId403 | void
+export type GetDMQuocGiasIdQueryError =
+    | GetDMQuocGiasId400
+    | GetDMQuocGiasId401
+    | GetDMQuocGiasId403
+    | void
 
-
-export function useGetDMQuocGiasId<TData = Awaited<ReturnType<typeof getDMQuocGiasId>>, TError = GetDMQuocGiasId400 | GetDMQuocGiasId401 | GetDMQuocGiasId403 | void>(
- id: string,
-    params: undefined |  GetDMQuocGiasIdParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMQuocGiasId>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMQuocGiasId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMQuocGiasId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMQuocGiasId<TData = Awaited<ReturnType<typeof getDMQuocGiasId>>, TError = GetDMQuocGiasId400 | GetDMQuocGiasId401 | GetDMQuocGiasId403 | void>(
- id: string,
-    params?: GetDMQuocGiasIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMQuocGiasId>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMQuocGiasId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMQuocGiasId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMQuocGiasId<TData = Awaited<ReturnType<typeof getDMQuocGiasId>>, TError = GetDMQuocGiasId400 | GetDMQuocGiasId401 | GetDMQuocGiasId403 | void>(
- id: string,
-    params?: GetDMQuocGiasIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMQuocGiasId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMQuocGiasId<
+    TData = Awaited<ReturnType<typeof getDMQuocGiasId>>,
+    TError = GetDMQuocGiasId400 | GetDMQuocGiasId401 | GetDMQuocGiasId403 | void,
+>(
+    id: string,
+    params: undefined | GetDMQuocGiasIdParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMQuocGiasId>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMQuocGiasId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMQuocGiasId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMQuocGiasId<
+    TData = Awaited<ReturnType<typeof getDMQuocGiasId>>,
+    TError = GetDMQuocGiasId400 | GetDMQuocGiasId401 | GetDMQuocGiasId403 | void,
+>(
+    id: string,
+    params?: GetDMQuocGiasIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMQuocGiasId>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMQuocGiasId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMQuocGiasId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMQuocGiasId<
+    TData = Awaited<ReturnType<typeof getDMQuocGiasId>>,
+    TError = GetDMQuocGiasId400 | GetDMQuocGiasId401 | GetDMQuocGiasId403 | void,
+>(
+    id: string,
+    params?: GetDMQuocGiasIdParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMQuocGiasId>>, TError, TData>>
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Quốc gia - Theo Id
  */
 
-export function useGetDMQuocGiasId<TData = Awaited<ReturnType<typeof getDMQuocGiasId>>, TError = GetDMQuocGiasId400 | GetDMQuocGiasId401 | GetDMQuocGiasId403 | void>(
- id: string,
-    params?: GetDMQuocGiasIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMQuocGiasId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMQuocGiasId<
+    TData = Awaited<ReturnType<typeof getDMQuocGiasId>>,
+    TError = GetDMQuocGiasId400 | GetDMQuocGiasId401 | GetDMQuocGiasId403 | void,
+>(
+    id: string,
+    params?: GetDMQuocGiasIdParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMQuocGiasId>>, TError, TData>>
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMQuocGiasIdQueryOptions(id, params, options)
 
-  const queryOptions = getGetDMQuocGiasIdQueryOptions(id,params,options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Kiểm tra tình trạng API
  * @summary Kiểm tra tình trạng API
  */
 export type getDMQuocGiasHealthzResponse400 = {
-  data: GetDMQuocGiasHealthz400
-  status: 400
+    data: GetDMQuocGiasHealthz400
+    status: 400
 }
 
 export type getDMQuocGiasHealthzResponse401 = {
-  data: GetDMQuocGiasHealthz401
-  status: 401
+    data: GetDMQuocGiasHealthz401
+    status: 401
 }
 
 export type getDMQuocGiasHealthzResponse403 = {
-  data: GetDMQuocGiasHealthz403
-  status: 403
+    data: GetDMQuocGiasHealthz403
+    status: 403
 }
 
 export type getDMQuocGiasHealthzResponse500 = {
-  data: GetDMQuocGiasHealthz500
-  status: 500
+    data: GetDMQuocGiasHealthz500
+    status: 500
 }
-    
-;
-export type getDMQuocGiasHealthzResponseError = (getDMQuocGiasHealthzResponse400 | getDMQuocGiasHealthzResponse401 | getDMQuocGiasHealthzResponse403 | getDMQuocGiasHealthzResponse500) & {
-  headers: Headers;
-};
+export type getDMQuocGiasHealthzResponseError = (
+    | getDMQuocGiasHealthzResponse400
+    | getDMQuocGiasHealthzResponse401
+    | getDMQuocGiasHealthzResponse403
+    | getDMQuocGiasHealthzResponse500
+) & {
+    headers: Headers
+}
 
-export type getDMQuocGiasHealthzResponse = (getDMQuocGiasHealthzResponseError)
+export type getDMQuocGiasHealthzResponse = getDMQuocGiasHealthzResponseError
 
 export const getGetDMQuocGiasHealthzUrl = () => {
-
-
-  
-
-  return `/DM_QuocGias/healthz`
+    return `/DM_QuocGias/healthz`
 }
 
-export const getDMQuocGiasHealthz = async ( options?: RequestInit): Promise<getDMQuocGiasHealthzResponse> => {
-  
-  return customSystemFetch<getDMQuocGiasHealthzResponse>(getGetDMQuocGiasHealthzUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-
+export const getDMQuocGiasHealthz = async (
+    options?: RequestInit
+): Promise<getDMQuocGiasHealthzResponse> => {
+    return customSystemFetch<getDMQuocGiasHealthzResponse>(getGetDMQuocGiasHealthzUrl(), {
+        ...options,
+        method: 'GET',
+    })
+}
 
 export const getGetDMQuocGiasHealthzQueryKey = () => {
-    return [
-    `/DM_QuocGias/healthz`
-    ] as const;
-    }
-
-    
-export const getGetDMQuocGiasHealthzQueryOptions = <TData = Awaited<ReturnType<typeof getDMQuocGiasHealthz>>, TError = GetDMQuocGiasHealthz400 | GetDMQuocGiasHealthz401 | GetDMQuocGiasHealthz403 | GetDMQuocGiasHealthz500>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMQuocGiasHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetDMQuocGiasHealthzQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMQuocGiasHealthz>>> = ({ signal }) => getDMQuocGiasHealthz({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMQuocGiasHealthz>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return [`/DM_QuocGias/healthz`] as const
 }
 
-export type GetDMQuocGiasHealthzQueryResult = NonNullable<Awaited<ReturnType<typeof getDMQuocGiasHealthz>>>
-export type GetDMQuocGiasHealthzQueryError = GetDMQuocGiasHealthz400 | GetDMQuocGiasHealthz401 | GetDMQuocGiasHealthz403 | GetDMQuocGiasHealthz500
+export const getGetDMQuocGiasHealthzQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMQuocGiasHealthz>>,
+    TError =
+        | GetDMQuocGiasHealthz400
+        | GetDMQuocGiasHealthz401
+        | GetDMQuocGiasHealthz403
+        | GetDMQuocGiasHealthz500,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<Awaited<ReturnType<typeof getDMQuocGiasHealthz>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
+    const queryKey = queryOptions?.queryKey ?? getGetDMQuocGiasHealthzQueryKey()
 
-export function useGetDMQuocGiasHealthz<TData = Awaited<ReturnType<typeof getDMQuocGiasHealthz>>, TError = GetDMQuocGiasHealthz400 | GetDMQuocGiasHealthz401 | GetDMQuocGiasHealthz403 | GetDMQuocGiasHealthz500>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMQuocGiasHealthz>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMQuocGiasHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMQuocGiasHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMQuocGiasHealthz<TData = Awaited<ReturnType<typeof getDMQuocGiasHealthz>>, TError = GetDMQuocGiasHealthz400 | GetDMQuocGiasHealthz401 | GetDMQuocGiasHealthz403 | GetDMQuocGiasHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMQuocGiasHealthz>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMQuocGiasHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMQuocGiasHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMQuocGiasHealthz<TData = Awaited<ReturnType<typeof getDMQuocGiasHealthz>>, TError = GetDMQuocGiasHealthz400 | GetDMQuocGiasHealthz401 | GetDMQuocGiasHealthz403 | GetDMQuocGiasHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMQuocGiasHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMQuocGiasHealthz>>> = ({ signal }) =>
+        getDMQuocGiasHealthz({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMQuocGiasHealthz>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDMQuocGiasHealthzQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getDMQuocGiasHealthz>>
+>
+export type GetDMQuocGiasHealthzQueryError =
+    | GetDMQuocGiasHealthz400
+    | GetDMQuocGiasHealthz401
+    | GetDMQuocGiasHealthz403
+    | GetDMQuocGiasHealthz500
+
+export function useGetDMQuocGiasHealthz<
+    TData = Awaited<ReturnType<typeof getDMQuocGiasHealthz>>,
+    TError =
+        | GetDMQuocGiasHealthz400
+        | GetDMQuocGiasHealthz401
+        | GetDMQuocGiasHealthz403
+        | GetDMQuocGiasHealthz500,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMQuocGiasHealthz>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMQuocGiasHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMQuocGiasHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMQuocGiasHealthz<
+    TData = Awaited<ReturnType<typeof getDMQuocGiasHealthz>>,
+    TError =
+        | GetDMQuocGiasHealthz400
+        | GetDMQuocGiasHealthz401
+        | GetDMQuocGiasHealthz403
+        | GetDMQuocGiasHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMQuocGiasHealthz>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMQuocGiasHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMQuocGiasHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMQuocGiasHealthz<
+    TData = Awaited<ReturnType<typeof getDMQuocGiasHealthz>>,
+    TError =
+        | GetDMQuocGiasHealthz400
+        | GetDMQuocGiasHealthz401
+        | GetDMQuocGiasHealthz403
+        | GetDMQuocGiasHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMQuocGiasHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Kiểm tra tình trạng API
  */
 
-export function useGetDMQuocGiasHealthz<TData = Awaited<ReturnType<typeof getDMQuocGiasHealthz>>, TError = GetDMQuocGiasHealthz400 | GetDMQuocGiasHealthz401 | GetDMQuocGiasHealthz403 | GetDMQuocGiasHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMQuocGiasHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMQuocGiasHealthz<
+    TData = Awaited<ReturnType<typeof getDMQuocGiasHealthz>>,
+    TError =
+        | GetDMQuocGiasHealthz400
+        | GetDMQuocGiasHealthz401
+        | GetDMQuocGiasHealthz403
+        | GetDMQuocGiasHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMQuocGiasHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMQuocGiasHealthzQueryOptions(options)
 
-  const queryOptions = getGetDMQuocGiasHealthzQueryOptions(options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Lấy danh sách các Tỉnh, TP
  * @summary Tỉnh, TP - Danh sách
  */
 export type postDMTinhsListResponse200 = {
-  data: PublicApiGetAllDMTinhDTO
-  status: 200
+    data: PublicApiGetAllDMTinhDTO
+    status: 200
 }
 
 export type postDMTinhsListResponse400 = {
-  data: PostDMTinhsList400
-  status: 400
+    data: PostDMTinhsList400
+    status: 400
 }
 
 export type postDMTinhsListResponse401 = {
-  data: PostDMTinhsList401
-  status: 401
+    data: PostDMTinhsList401
+    status: 401
 }
 
 export type postDMTinhsListResponse403 = {
-  data: PostDMTinhsList403
-  status: 403
+    data: PostDMTinhsList403
+    status: 403
 }
 
 export type postDMTinhsListResponse500 = {
-  data: void
-  status: 500
+    data: void
+    status: 500
 }
-    
-export type postDMTinhsListResponseSuccess = (postDMTinhsListResponse200) & {
-  headers: Headers;
-};
-export type postDMTinhsListResponseError = (postDMTinhsListResponse400 | postDMTinhsListResponse401 | postDMTinhsListResponse403 | postDMTinhsListResponse500) & {
-  headers: Headers;
-};
 
-export type postDMTinhsListResponse = (postDMTinhsListResponseSuccess | postDMTinhsListResponseError)
+export type postDMTinhsListResponseSuccess = postDMTinhsListResponse200 & {
+    headers: Headers
+}
+export type postDMTinhsListResponseError = (
+    | postDMTinhsListResponse400
+    | postDMTinhsListResponse401
+    | postDMTinhsListResponse403
+    | postDMTinhsListResponse500
+) & {
+    headers: Headers
+}
+
+export type postDMTinhsListResponse = postDMTinhsListResponseSuccess | postDMTinhsListResponseError
 
 export const getPostDMTinhsListUrl = () => {
-
-
-  
-
-  return `/DM_Tinhs/list`
+    return `/DM_Tinhs/list`
 }
 
-export const postDMTinhsList = async (publicApiPagingRequestDto: PublicApiPagingRequestDto, options?: RequestInit): Promise<postDMTinhsListResponse> => {
-  
-  return customSystemFetch<postDMTinhsListResponse>(getPostDMTinhsListUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
-    body: JSON.stringify(
-      publicApiPagingRequestDto,)
-  }
-);}
+export const postDMTinhsList = async (
+    publicApiPagingRequestDto: PublicApiPagingRequestDto,
+    options?: RequestInit
+): Promise<postDMTinhsListResponse> => {
+    return customSystemFetch<postDMTinhsListResponse>(getPostDMTinhsListUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
+        body: JSON.stringify(publicApiPagingRequestDto),
+    })
+}
 
-
-
-
-export const getPostDMTinhsListMutationOptions = <TError = PostDMTinhsList400 | PostDMTinhsList401 | PostDMTinhsList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMTinhsList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof postDMTinhsList>>, TError,{data: PublicApiPagingRequestDto}, TContext> => {
-
-const mutationKey = ['postDMTinhsList'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postDMTinhsList>>, {data: PublicApiPagingRequestDto}> = (props) => {
-          const {data} = props ?? {};
-
-          return  postDMTinhsList(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PostDMTinhsListMutationResult = NonNullable<Awaited<ReturnType<typeof postDMTinhsList>>>
-    export type PostDMTinhsListMutationBody = PublicApiPagingRequestDto
-    export type PostDMTinhsListMutationError = PostDMTinhsList400 | PostDMTinhsList401 | PostDMTinhsList403 | void
-
-    /**
- * @summary Tỉnh, TP - Danh sách
- */
-export const usePostDMTinhsList = <TError = PostDMTinhsList400 | PostDMTinhsList401 | PostDMTinhsList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMTinhsList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getPostDMTinhsListMutationOptions = <
+    TError = PostDMTinhsList400 | PostDMTinhsList401 | PostDMTinhsList403 | void,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postDMTinhsList>>,
         TError,
-        {data: PublicApiPagingRequestDto},
+        { data: PublicApiPagingRequestDto },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postDMTinhsList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationKey = ['postDMTinhsList']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getPostDMTinhsListMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postDMTinhsList>>,
+        { data: PublicApiPagingRequestDto }
+    > = (props) => {
+        const { data } = props ?? {}
 
-      return useMutation(mutationOptions, queryClient);
+        return postDMTinhsList(data, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostDMTinhsListMutationResult = NonNullable<Awaited<ReturnType<typeof postDMTinhsList>>>
+export type PostDMTinhsListMutationBody = PublicApiPagingRequestDto
+export type PostDMTinhsListMutationError =
+    | PostDMTinhsList400
+    | PostDMTinhsList401
+    | PostDMTinhsList403
+    | void
+
+/**
+ * @summary Tỉnh, TP - Danh sách
+ */
+export const usePostDMTinhsList = <
+    TError = PostDMTinhsList400 | PostDMTinhsList401 | PostDMTinhsList403 | void,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postDMTinhsList>>,
+            TError,
+            { data: PublicApiPagingRequestDto },
+            TContext
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postDMTinhsList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationOptions = getPostDMTinhsListMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * Lấy thông tin Tỉnh, TP theo ID
  * @summary Tỉnh, TP - Theo Id
  */
 export type getDMTinhsIdResponse200 = {
-  data: PublicApiGetAllDMTinhDTO
-  status: 200
+    data: PublicApiGetAllDMTinhDTO
+    status: 200
 }
 
 export type getDMTinhsIdResponse400 = {
-  data: GetDMTinhsId400
-  status: 400
+    data: GetDMTinhsId400
+    status: 400
 }
 
 export type getDMTinhsIdResponse401 = {
-  data: GetDMTinhsId401
-  status: 401
+    data: GetDMTinhsId401
+    status: 401
 }
 
 export type getDMTinhsIdResponse403 = {
-  data: GetDMTinhsId403
-  status: 403
+    data: GetDMTinhsId403
+    status: 403
 }
 
 export type getDMTinhsIdResponse500 = {
-  data: void
-  status: 500
-}
-    
-export type getDMTinhsIdResponseSuccess = (getDMTinhsIdResponse200) & {
-  headers: Headers;
-};
-export type getDMTinhsIdResponseError = (getDMTinhsIdResponse400 | getDMTinhsIdResponse401 | getDMTinhsIdResponse403 | getDMTinhsIdResponse500) & {
-  headers: Headers;
-};
-
-export type getDMTinhsIdResponse = (getDMTinhsIdResponseSuccess | getDMTinhsIdResponseError)
-
-export const getGetDMTinhsIdUrl = (id: string,
-    params?: GetDMTinhsIdParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/DM_Tinhs/${id}?${stringifiedParams}` : `/DM_Tinhs/${id}`
+    data: void
+    status: 500
 }
 
-export const getDMTinhsId = async (id: string,
-    params?: GetDMTinhsIdParams, options?: RequestInit): Promise<getDMTinhsIdResponse> => {
-  
-  return customSystemFetch<getDMTinhsIdResponse>(getGetDMTinhsIdUrl(id,params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type getDMTinhsIdResponseSuccess = getDMTinhsIdResponse200 & {
+    headers: Headers
+}
+export type getDMTinhsIdResponseError = (
+    | getDMTinhsIdResponse400
+    | getDMTinhsIdResponse401
+    | getDMTinhsIdResponse403
+    | getDMTinhsIdResponse500
+) & {
+    headers: Headers
+}
 
+export type getDMTinhsIdResponse = getDMTinhsIdResponseSuccess | getDMTinhsIdResponseError
 
+export const getGetDMTinhsIdUrl = (id: string, params?: GetDMTinhsIdParams) => {
+    const normalizedParams = new URLSearchParams()
 
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
+    const stringifiedParams = normalizedParams.toString()
 
-export const getGetDMTinhsIdQueryKey = (id?: string,
-    params?: GetDMTinhsIdParams,) => {
-    return [
-    `/DM_Tinhs/${id}`, ...(params ? [params]: [])
-    ] as const;
+    return stringifiedParams.length > 0 ? `/DM_Tinhs/${id}?${stringifiedParams}` : `/DM_Tinhs/${id}`
+}
+
+export const getDMTinhsId = async (
+    id: string,
+    params?: GetDMTinhsIdParams,
+    options?: RequestInit
+): Promise<getDMTinhsIdResponse> => {
+    return customSystemFetch<getDMTinhsIdResponse>(getGetDMTinhsIdUrl(id, params), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getGetDMTinhsIdQueryKey = (id?: string, params?: GetDMTinhsIdParams) => {
+    return [`/DM_Tinhs/${id}`, ...(params ? [params] : [])] as const
+}
+
+export const getGetDMTinhsIdQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMTinhsId>>,
+    TError = GetDMTinhsId400 | GetDMTinhsId401 | GetDMTinhsId403 | void,
+>(
+    id: string,
+    params?: GetDMTinhsIdParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTinhsId>>, TError, TData>>
+        request?: SecondParameter<typeof customSystemFetch>
     }
-
-    
-export const getGetDMTinhsIdQueryOptions = <TData = Awaited<ReturnType<typeof getDMTinhsId>>, TError = GetDMTinhsId400 | GetDMTinhsId401 | GetDMTinhsId403 | void>(id: string,
-    params?: GetDMTinhsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTinhsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
 ) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    const queryKey = queryOptions?.queryKey ?? getGetDMTinhsIdQueryKey(id, params)
 
-  const queryKey =  queryOptions?.queryKey ?? getGetDMTinhsIdQueryKey(id,params);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMTinhsId>>> = ({ signal }) =>
+        getDMTinhsId(id, params, { signal, ...requestOptions })
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMTinhsId>>> = ({ signal }) => getDMTinhsId(id,params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMTinhsId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMTinhsId>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetDMTinhsIdQueryResult = NonNullable<Awaited<ReturnType<typeof getDMTinhsId>>>
 export type GetDMTinhsIdQueryError = GetDMTinhsId400 | GetDMTinhsId401 | GetDMTinhsId403 | void
 
-
-export function useGetDMTinhsId<TData = Awaited<ReturnType<typeof getDMTinhsId>>, TError = GetDMTinhsId400 | GetDMTinhsId401 | GetDMTinhsId403 | void>(
- id: string,
-    params: undefined |  GetDMTinhsIdParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTinhsId>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMTinhsId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMTinhsId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMTinhsId<TData = Awaited<ReturnType<typeof getDMTinhsId>>, TError = GetDMTinhsId400 | GetDMTinhsId401 | GetDMTinhsId403 | void>(
- id: string,
-    params?: GetDMTinhsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTinhsId>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMTinhsId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMTinhsId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMTinhsId<TData = Awaited<ReturnType<typeof getDMTinhsId>>, TError = GetDMTinhsId400 | GetDMTinhsId401 | GetDMTinhsId403 | void>(
- id: string,
-    params?: GetDMTinhsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTinhsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMTinhsId<
+    TData = Awaited<ReturnType<typeof getDMTinhsId>>,
+    TError = GetDMTinhsId400 | GetDMTinhsId401 | GetDMTinhsId403 | void,
+>(
+    id: string,
+    params: undefined | GetDMTinhsIdParams,
+    options: {
+        query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTinhsId>>, TError, TData>> &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMTinhsId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMTinhsId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMTinhsId<
+    TData = Awaited<ReturnType<typeof getDMTinhsId>>,
+    TError = GetDMTinhsId400 | GetDMTinhsId401 | GetDMTinhsId403 | void,
+>(
+    id: string,
+    params?: GetDMTinhsIdParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTinhsId>>, TError, TData>> &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMTinhsId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMTinhsId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMTinhsId<
+    TData = Awaited<ReturnType<typeof getDMTinhsId>>,
+    TError = GetDMTinhsId400 | GetDMTinhsId401 | GetDMTinhsId403 | void,
+>(
+    id: string,
+    params?: GetDMTinhsIdParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTinhsId>>, TError, TData>>
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Tỉnh, TP - Theo Id
  */
 
-export function useGetDMTinhsId<TData = Awaited<ReturnType<typeof getDMTinhsId>>, TError = GetDMTinhsId400 | GetDMTinhsId401 | GetDMTinhsId403 | void>(
- id: string,
-    params?: GetDMTinhsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTinhsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMTinhsId<
+    TData = Awaited<ReturnType<typeof getDMTinhsId>>,
+    TError = GetDMTinhsId400 | GetDMTinhsId401 | GetDMTinhsId403 | void,
+>(
+    id: string,
+    params?: GetDMTinhsIdParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTinhsId>>, TError, TData>>
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMTinhsIdQueryOptions(id, params, options)
 
-  const queryOptions = getGetDMTinhsIdQueryOptions(id,params,options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Kiểm tra tình trạng API
  * @summary Kiểm tra tình trạng API
  */
 export type getDMTinhsHealthzResponse400 = {
-  data: GetDMTinhsHealthz400
-  status: 400
+    data: GetDMTinhsHealthz400
+    status: 400
 }
 
 export type getDMTinhsHealthzResponse401 = {
-  data: GetDMTinhsHealthz401
-  status: 401
+    data: GetDMTinhsHealthz401
+    status: 401
 }
 
 export type getDMTinhsHealthzResponse403 = {
-  data: GetDMTinhsHealthz403
-  status: 403
+    data: GetDMTinhsHealthz403
+    status: 403
 }
 
 export type getDMTinhsHealthzResponse500 = {
-  data: GetDMTinhsHealthz500
-  status: 500
+    data: GetDMTinhsHealthz500
+    status: 500
 }
-    
-;
-export type getDMTinhsHealthzResponseError = (getDMTinhsHealthzResponse400 | getDMTinhsHealthzResponse401 | getDMTinhsHealthzResponse403 | getDMTinhsHealthzResponse500) & {
-  headers: Headers;
-};
+export type getDMTinhsHealthzResponseError = (
+    | getDMTinhsHealthzResponse400
+    | getDMTinhsHealthzResponse401
+    | getDMTinhsHealthzResponse403
+    | getDMTinhsHealthzResponse500
+) & {
+    headers: Headers
+}
 
-export type getDMTinhsHealthzResponse = (getDMTinhsHealthzResponseError)
+export type getDMTinhsHealthzResponse = getDMTinhsHealthzResponseError
 
 export const getGetDMTinhsHealthzUrl = () => {
-
-
-  
-
-  return `/DM_Tinhs/healthz`
+    return `/DM_Tinhs/healthz`
 }
 
-export const getDMTinhsHealthz = async ( options?: RequestInit): Promise<getDMTinhsHealthzResponse> => {
-  
-  return customSystemFetch<getDMTinhsHealthzResponse>(getGetDMTinhsHealthzUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-
+export const getDMTinhsHealthz = async (
+    options?: RequestInit
+): Promise<getDMTinhsHealthzResponse> => {
+    return customSystemFetch<getDMTinhsHealthzResponse>(getGetDMTinhsHealthzUrl(), {
+        ...options,
+        method: 'GET',
+    })
+}
 
 export const getGetDMTinhsHealthzQueryKey = () => {
-    return [
-    `/DM_Tinhs/healthz`
-    ] as const;
-    }
-
-    
-export const getGetDMTinhsHealthzQueryOptions = <TData = Awaited<ReturnType<typeof getDMTinhsHealthz>>, TError = GetDMTinhsHealthz400 | GetDMTinhsHealthz401 | GetDMTinhsHealthz403 | GetDMTinhsHealthz500>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTinhsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetDMTinhsHealthzQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMTinhsHealthz>>> = ({ signal }) => getDMTinhsHealthz({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMTinhsHealthz>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return [`/DM_Tinhs/healthz`] as const
 }
 
-export type GetDMTinhsHealthzQueryResult = NonNullable<Awaited<ReturnType<typeof getDMTinhsHealthz>>>
-export type GetDMTinhsHealthzQueryError = GetDMTinhsHealthz400 | GetDMTinhsHealthz401 | GetDMTinhsHealthz403 | GetDMTinhsHealthz500
+export const getGetDMTinhsHealthzQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMTinhsHealthz>>,
+    TError =
+        | GetDMTinhsHealthz400
+        | GetDMTinhsHealthz401
+        | GetDMTinhsHealthz403
+        | GetDMTinhsHealthz500,
+>(options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTinhsHealthz>>, TError, TData>>
+    request?: SecondParameter<typeof customSystemFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
+    const queryKey = queryOptions?.queryKey ?? getGetDMTinhsHealthzQueryKey()
 
-export function useGetDMTinhsHealthz<TData = Awaited<ReturnType<typeof getDMTinhsHealthz>>, TError = GetDMTinhsHealthz400 | GetDMTinhsHealthz401 | GetDMTinhsHealthz403 | GetDMTinhsHealthz500>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTinhsHealthz>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMTinhsHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMTinhsHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMTinhsHealthz<TData = Awaited<ReturnType<typeof getDMTinhsHealthz>>, TError = GetDMTinhsHealthz400 | GetDMTinhsHealthz401 | GetDMTinhsHealthz403 | GetDMTinhsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTinhsHealthz>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMTinhsHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMTinhsHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMTinhsHealthz<TData = Awaited<ReturnType<typeof getDMTinhsHealthz>>, TError = GetDMTinhsHealthz400 | GetDMTinhsHealthz401 | GetDMTinhsHealthz403 | GetDMTinhsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTinhsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMTinhsHealthz>>> = ({ signal }) =>
+        getDMTinhsHealthz({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMTinhsHealthz>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDMTinhsHealthzQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getDMTinhsHealthz>>
+>
+export type GetDMTinhsHealthzQueryError =
+    | GetDMTinhsHealthz400
+    | GetDMTinhsHealthz401
+    | GetDMTinhsHealthz403
+    | GetDMTinhsHealthz500
+
+export function useGetDMTinhsHealthz<
+    TData = Awaited<ReturnType<typeof getDMTinhsHealthz>>,
+    TError =
+        | GetDMTinhsHealthz400
+        | GetDMTinhsHealthz401
+        | GetDMTinhsHealthz403
+        | GetDMTinhsHealthz500,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMTinhsHealthz>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMTinhsHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMTinhsHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMTinhsHealthz<
+    TData = Awaited<ReturnType<typeof getDMTinhsHealthz>>,
+    TError =
+        | GetDMTinhsHealthz400
+        | GetDMTinhsHealthz401
+        | GetDMTinhsHealthz403
+        | GetDMTinhsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMTinhsHealthz>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMTinhsHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMTinhsHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMTinhsHealthz<
+    TData = Awaited<ReturnType<typeof getDMTinhsHealthz>>,
+    TError =
+        | GetDMTinhsHealthz400
+        | GetDMTinhsHealthz401
+        | GetDMTinhsHealthz403
+        | GetDMTinhsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMTinhsHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Kiểm tra tình trạng API
  */
 
-export function useGetDMTinhsHealthz<TData = Awaited<ReturnType<typeof getDMTinhsHealthz>>, TError = GetDMTinhsHealthz400 | GetDMTinhsHealthz401 | GetDMTinhsHealthz403 | GetDMTinhsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTinhsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMTinhsHealthz<
+    TData = Awaited<ReturnType<typeof getDMTinhsHealthz>>,
+    TError =
+        | GetDMTinhsHealthz400
+        | GetDMTinhsHealthz401
+        | GetDMTinhsHealthz403
+        | GetDMTinhsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMTinhsHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMTinhsHealthzQueryOptions(options)
 
-  const queryOptions = getGetDMTinhsHealthzQueryOptions(options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Lấy danh sách các Tỉnh, TP mới
  * @summary Tỉnh, TP mới - Danh sách
  */
 export type postDMTinhNewsListResponse200 = {
-  data: PublicApiGetAllDMTinhNewDTO
-  status: 200
+    data: PublicApiGetAllDMTinhNewDTO
+    status: 200
 }
 
 export type postDMTinhNewsListResponse400 = {
-  data: PostDMTinhNewsList400
-  status: 400
+    data: PostDMTinhNewsList400
+    status: 400
 }
 
 export type postDMTinhNewsListResponse401 = {
-  data: PostDMTinhNewsList401
-  status: 401
+    data: PostDMTinhNewsList401
+    status: 401
 }
 
 export type postDMTinhNewsListResponse403 = {
-  data: PostDMTinhNewsList403
-  status: 403
+    data: PostDMTinhNewsList403
+    status: 403
 }
 
 export type postDMTinhNewsListResponse500 = {
-  data: void
-  status: 500
+    data: void
+    status: 500
 }
-    
-export type postDMTinhNewsListResponseSuccess = (postDMTinhNewsListResponse200) & {
-  headers: Headers;
-};
-export type postDMTinhNewsListResponseError = (postDMTinhNewsListResponse400 | postDMTinhNewsListResponse401 | postDMTinhNewsListResponse403 | postDMTinhNewsListResponse500) & {
-  headers: Headers;
-};
 
-export type postDMTinhNewsListResponse = (postDMTinhNewsListResponseSuccess | postDMTinhNewsListResponseError)
+export type postDMTinhNewsListResponseSuccess = postDMTinhNewsListResponse200 & {
+    headers: Headers
+}
+export type postDMTinhNewsListResponseError = (
+    | postDMTinhNewsListResponse400
+    | postDMTinhNewsListResponse401
+    | postDMTinhNewsListResponse403
+    | postDMTinhNewsListResponse500
+) & {
+    headers: Headers
+}
+
+export type postDMTinhNewsListResponse =
+    | postDMTinhNewsListResponseSuccess
+    | postDMTinhNewsListResponseError
 
 export const getPostDMTinhNewsListUrl = () => {
-
-
-  
-
-  return `/DM_Tinh_News/list`
+    return `/DM_Tinh_News/list`
 }
 
-export const postDMTinhNewsList = async (publicApiPagingRequestDto: PublicApiPagingRequestDto, options?: RequestInit): Promise<postDMTinhNewsListResponse> => {
-  
-  return customSystemFetch<postDMTinhNewsListResponse>(getPostDMTinhNewsListUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
-    body: JSON.stringify(
-      publicApiPagingRequestDto,)
-  }
-);}
+export const postDMTinhNewsList = async (
+    publicApiPagingRequestDto: PublicApiPagingRequestDto,
+    options?: RequestInit
+): Promise<postDMTinhNewsListResponse> => {
+    return customSystemFetch<postDMTinhNewsListResponse>(getPostDMTinhNewsListUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
+        body: JSON.stringify(publicApiPagingRequestDto),
+    })
+}
 
-
-
-
-export const getPostDMTinhNewsListMutationOptions = <TError = PostDMTinhNewsList400 | PostDMTinhNewsList401 | PostDMTinhNewsList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMTinhNewsList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof postDMTinhNewsList>>, TError,{data: PublicApiPagingRequestDto}, TContext> => {
-
-const mutationKey = ['postDMTinhNewsList'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postDMTinhNewsList>>, {data: PublicApiPagingRequestDto}> = (props) => {
-          const {data} = props ?? {};
-
-          return  postDMTinhNewsList(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PostDMTinhNewsListMutationResult = NonNullable<Awaited<ReturnType<typeof postDMTinhNewsList>>>
-    export type PostDMTinhNewsListMutationBody = PublicApiPagingRequestDto
-    export type PostDMTinhNewsListMutationError = PostDMTinhNewsList400 | PostDMTinhNewsList401 | PostDMTinhNewsList403 | void
-
-    /**
- * @summary Tỉnh, TP mới - Danh sách
- */
-export const usePostDMTinhNewsList = <TError = PostDMTinhNewsList400 | PostDMTinhNewsList401 | PostDMTinhNewsList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMTinhNewsList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getPostDMTinhNewsListMutationOptions = <
+    TError = PostDMTinhNewsList400 | PostDMTinhNewsList401 | PostDMTinhNewsList403 | void,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postDMTinhNewsList>>,
         TError,
-        {data: PublicApiPagingRequestDto},
+        { data: PublicApiPagingRequestDto },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postDMTinhNewsList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationKey = ['postDMTinhNewsList']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getPostDMTinhNewsListMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postDMTinhNewsList>>,
+        { data: PublicApiPagingRequestDto }
+    > = (props) => {
+        const { data } = props ?? {}
 
-      return useMutation(mutationOptions, queryClient);
+        return postDMTinhNewsList(data, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostDMTinhNewsListMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postDMTinhNewsList>>
+>
+export type PostDMTinhNewsListMutationBody = PublicApiPagingRequestDto
+export type PostDMTinhNewsListMutationError =
+    | PostDMTinhNewsList400
+    | PostDMTinhNewsList401
+    | PostDMTinhNewsList403
+    | void
+
+/**
+ * @summary Tỉnh, TP mới - Danh sách
+ */
+export const usePostDMTinhNewsList = <
+    TError = PostDMTinhNewsList400 | PostDMTinhNewsList401 | PostDMTinhNewsList403 | void,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postDMTinhNewsList>>,
+            TError,
+            { data: PublicApiPagingRequestDto },
+            TContext
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postDMTinhNewsList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationOptions = getPostDMTinhNewsListMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * Lấy thông tin Tỉnh, TP mới theo ID
  * @summary Tỉnh, TP mới - Theo Id
  */
 export type getDMTinhNewsIdResponse200 = {
-  data: PublicApiGetAllDMTinhNewDTO
-  status: 200
+    data: PublicApiGetAllDMTinhNewDTO
+    status: 200
 }
 
 export type getDMTinhNewsIdResponse400 = {
-  data: GetDMTinhNewsId400
-  status: 400
+    data: GetDMTinhNewsId400
+    status: 400
 }
 
 export type getDMTinhNewsIdResponse401 = {
-  data: GetDMTinhNewsId401
-  status: 401
+    data: GetDMTinhNewsId401
+    status: 401
 }
 
 export type getDMTinhNewsIdResponse403 = {
-  data: GetDMTinhNewsId403
-  status: 403
+    data: GetDMTinhNewsId403
+    status: 403
 }
 
 export type getDMTinhNewsIdResponse500 = {
-  data: void
-  status: 500
-}
-    
-export type getDMTinhNewsIdResponseSuccess = (getDMTinhNewsIdResponse200) & {
-  headers: Headers;
-};
-export type getDMTinhNewsIdResponseError = (getDMTinhNewsIdResponse400 | getDMTinhNewsIdResponse401 | getDMTinhNewsIdResponse403 | getDMTinhNewsIdResponse500) & {
-  headers: Headers;
-};
-
-export type getDMTinhNewsIdResponse = (getDMTinhNewsIdResponseSuccess | getDMTinhNewsIdResponseError)
-
-export const getGetDMTinhNewsIdUrl = (id: string,
-    params?: GetDMTinhNewsIdParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/DM_Tinh_News/${id}?${stringifiedParams}` : `/DM_Tinh_News/${id}`
+    data: void
+    status: 500
 }
 
-export const getDMTinhNewsId = async (id: string,
-    params?: GetDMTinhNewsIdParams, options?: RequestInit): Promise<getDMTinhNewsIdResponse> => {
-  
-  return customSystemFetch<getDMTinhNewsIdResponse>(getGetDMTinhNewsIdUrl(id,params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type getDMTinhNewsIdResponseSuccess = getDMTinhNewsIdResponse200 & {
+    headers: Headers
+}
+export type getDMTinhNewsIdResponseError = (
+    | getDMTinhNewsIdResponse400
+    | getDMTinhNewsIdResponse401
+    | getDMTinhNewsIdResponse403
+    | getDMTinhNewsIdResponse500
+) & {
+    headers: Headers
+}
 
+export type getDMTinhNewsIdResponse = getDMTinhNewsIdResponseSuccess | getDMTinhNewsIdResponseError
 
+export const getGetDMTinhNewsIdUrl = (id: string, params?: GetDMTinhNewsIdParams) => {
+    const normalizedParams = new URLSearchParams()
 
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
+    const stringifiedParams = normalizedParams.toString()
 
-export const getGetDMTinhNewsIdQueryKey = (id?: string,
-    params?: GetDMTinhNewsIdParams,) => {
-    return [
-    `/DM_Tinh_News/${id}`, ...(params ? [params]: [])
-    ] as const;
+    return stringifiedParams.length > 0
+        ? `/DM_Tinh_News/${id}?${stringifiedParams}`
+        : `/DM_Tinh_News/${id}`
+}
+
+export const getDMTinhNewsId = async (
+    id: string,
+    params?: GetDMTinhNewsIdParams,
+    options?: RequestInit
+): Promise<getDMTinhNewsIdResponse> => {
+    return customSystemFetch<getDMTinhNewsIdResponse>(getGetDMTinhNewsIdUrl(id, params), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getGetDMTinhNewsIdQueryKey = (id?: string, params?: GetDMTinhNewsIdParams) => {
+    return [`/DM_Tinh_News/${id}`, ...(params ? [params] : [])] as const
+}
+
+export const getGetDMTinhNewsIdQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMTinhNewsId>>,
+    TError = GetDMTinhNewsId400 | GetDMTinhNewsId401 | GetDMTinhNewsId403 | void,
+>(
+    id: string,
+    params?: GetDMTinhNewsIdParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTinhNewsId>>, TError, TData>>
+        request?: SecondParameter<typeof customSystemFetch>
     }
-
-    
-export const getGetDMTinhNewsIdQueryOptions = <TData = Awaited<ReturnType<typeof getDMTinhNewsId>>, TError = GetDMTinhNewsId400 | GetDMTinhNewsId401 | GetDMTinhNewsId403 | void>(id: string,
-    params?: GetDMTinhNewsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTinhNewsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
 ) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    const queryKey = queryOptions?.queryKey ?? getGetDMTinhNewsIdQueryKey(id, params)
 
-  const queryKey =  queryOptions?.queryKey ?? getGetDMTinhNewsIdQueryKey(id,params);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMTinhNewsId>>> = ({ signal }) =>
+        getDMTinhNewsId(id, params, { signal, ...requestOptions })
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMTinhNewsId>>> = ({ signal }) => getDMTinhNewsId(id,params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMTinhNewsId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMTinhNewsId>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetDMTinhNewsIdQueryResult = NonNullable<Awaited<ReturnType<typeof getDMTinhNewsId>>>
-export type GetDMTinhNewsIdQueryError = GetDMTinhNewsId400 | GetDMTinhNewsId401 | GetDMTinhNewsId403 | void
+export type GetDMTinhNewsIdQueryError =
+    | GetDMTinhNewsId400
+    | GetDMTinhNewsId401
+    | GetDMTinhNewsId403
+    | void
 
-
-export function useGetDMTinhNewsId<TData = Awaited<ReturnType<typeof getDMTinhNewsId>>, TError = GetDMTinhNewsId400 | GetDMTinhNewsId401 | GetDMTinhNewsId403 | void>(
- id: string,
-    params: undefined |  GetDMTinhNewsIdParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTinhNewsId>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMTinhNewsId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMTinhNewsId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMTinhNewsId<TData = Awaited<ReturnType<typeof getDMTinhNewsId>>, TError = GetDMTinhNewsId400 | GetDMTinhNewsId401 | GetDMTinhNewsId403 | void>(
- id: string,
-    params?: GetDMTinhNewsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTinhNewsId>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMTinhNewsId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMTinhNewsId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMTinhNewsId<TData = Awaited<ReturnType<typeof getDMTinhNewsId>>, TError = GetDMTinhNewsId400 | GetDMTinhNewsId401 | GetDMTinhNewsId403 | void>(
- id: string,
-    params?: GetDMTinhNewsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTinhNewsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMTinhNewsId<
+    TData = Awaited<ReturnType<typeof getDMTinhNewsId>>,
+    TError = GetDMTinhNewsId400 | GetDMTinhNewsId401 | GetDMTinhNewsId403 | void,
+>(
+    id: string,
+    params: undefined | GetDMTinhNewsIdParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMTinhNewsId>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMTinhNewsId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMTinhNewsId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMTinhNewsId<
+    TData = Awaited<ReturnType<typeof getDMTinhNewsId>>,
+    TError = GetDMTinhNewsId400 | GetDMTinhNewsId401 | GetDMTinhNewsId403 | void,
+>(
+    id: string,
+    params?: GetDMTinhNewsIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMTinhNewsId>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMTinhNewsId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMTinhNewsId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMTinhNewsId<
+    TData = Awaited<ReturnType<typeof getDMTinhNewsId>>,
+    TError = GetDMTinhNewsId400 | GetDMTinhNewsId401 | GetDMTinhNewsId403 | void,
+>(
+    id: string,
+    params?: GetDMTinhNewsIdParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTinhNewsId>>, TError, TData>>
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Tỉnh, TP mới - Theo Id
  */
 
-export function useGetDMTinhNewsId<TData = Awaited<ReturnType<typeof getDMTinhNewsId>>, TError = GetDMTinhNewsId400 | GetDMTinhNewsId401 | GetDMTinhNewsId403 | void>(
- id: string,
-    params?: GetDMTinhNewsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTinhNewsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMTinhNewsId<
+    TData = Awaited<ReturnType<typeof getDMTinhNewsId>>,
+    TError = GetDMTinhNewsId400 | GetDMTinhNewsId401 | GetDMTinhNewsId403 | void,
+>(
+    id: string,
+    params?: GetDMTinhNewsIdParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTinhNewsId>>, TError, TData>>
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMTinhNewsIdQueryOptions(id, params, options)
 
-  const queryOptions = getGetDMTinhNewsIdQueryOptions(id,params,options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Kiểm tra tình trạng API
  * @summary Kiểm tra tình trạng API
  */
 export type getDMTinhNewsHealthzResponse400 = {
-  data: GetDMTinhNewsHealthz400
-  status: 400
+    data: GetDMTinhNewsHealthz400
+    status: 400
 }
 
 export type getDMTinhNewsHealthzResponse401 = {
-  data: GetDMTinhNewsHealthz401
-  status: 401
+    data: GetDMTinhNewsHealthz401
+    status: 401
 }
 
 export type getDMTinhNewsHealthzResponse403 = {
-  data: GetDMTinhNewsHealthz403
-  status: 403
+    data: GetDMTinhNewsHealthz403
+    status: 403
 }
 
 export type getDMTinhNewsHealthzResponse500 = {
-  data: GetDMTinhNewsHealthz500
-  status: 500
+    data: GetDMTinhNewsHealthz500
+    status: 500
 }
-    
-;
-export type getDMTinhNewsHealthzResponseError = (getDMTinhNewsHealthzResponse400 | getDMTinhNewsHealthzResponse401 | getDMTinhNewsHealthzResponse403 | getDMTinhNewsHealthzResponse500) & {
-  headers: Headers;
-};
+export type getDMTinhNewsHealthzResponseError = (
+    | getDMTinhNewsHealthzResponse400
+    | getDMTinhNewsHealthzResponse401
+    | getDMTinhNewsHealthzResponse403
+    | getDMTinhNewsHealthzResponse500
+) & {
+    headers: Headers
+}
 
-export type getDMTinhNewsHealthzResponse = (getDMTinhNewsHealthzResponseError)
+export type getDMTinhNewsHealthzResponse = getDMTinhNewsHealthzResponseError
 
 export const getGetDMTinhNewsHealthzUrl = () => {
-
-
-  
-
-  return `/DM_Tinh_News/healthz`
+    return `/DM_Tinh_News/healthz`
 }
 
-export const getDMTinhNewsHealthz = async ( options?: RequestInit): Promise<getDMTinhNewsHealthzResponse> => {
-  
-  return customSystemFetch<getDMTinhNewsHealthzResponse>(getGetDMTinhNewsHealthzUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-
+export const getDMTinhNewsHealthz = async (
+    options?: RequestInit
+): Promise<getDMTinhNewsHealthzResponse> => {
+    return customSystemFetch<getDMTinhNewsHealthzResponse>(getGetDMTinhNewsHealthzUrl(), {
+        ...options,
+        method: 'GET',
+    })
+}
 
 export const getGetDMTinhNewsHealthzQueryKey = () => {
-    return [
-    `/DM_Tinh_News/healthz`
-    ] as const;
-    }
-
-    
-export const getGetDMTinhNewsHealthzQueryOptions = <TData = Awaited<ReturnType<typeof getDMTinhNewsHealthz>>, TError = GetDMTinhNewsHealthz400 | GetDMTinhNewsHealthz401 | GetDMTinhNewsHealthz403 | GetDMTinhNewsHealthz500>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTinhNewsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetDMTinhNewsHealthzQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMTinhNewsHealthz>>> = ({ signal }) => getDMTinhNewsHealthz({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMTinhNewsHealthz>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return [`/DM_Tinh_News/healthz`] as const
 }
 
-export type GetDMTinhNewsHealthzQueryResult = NonNullable<Awaited<ReturnType<typeof getDMTinhNewsHealthz>>>
-export type GetDMTinhNewsHealthzQueryError = GetDMTinhNewsHealthz400 | GetDMTinhNewsHealthz401 | GetDMTinhNewsHealthz403 | GetDMTinhNewsHealthz500
+export const getGetDMTinhNewsHealthzQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMTinhNewsHealthz>>,
+    TError =
+        | GetDMTinhNewsHealthz400
+        | GetDMTinhNewsHealthz401
+        | GetDMTinhNewsHealthz403
+        | GetDMTinhNewsHealthz500,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<Awaited<ReturnType<typeof getDMTinhNewsHealthz>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
+    const queryKey = queryOptions?.queryKey ?? getGetDMTinhNewsHealthzQueryKey()
 
-export function useGetDMTinhNewsHealthz<TData = Awaited<ReturnType<typeof getDMTinhNewsHealthz>>, TError = GetDMTinhNewsHealthz400 | GetDMTinhNewsHealthz401 | GetDMTinhNewsHealthz403 | GetDMTinhNewsHealthz500>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTinhNewsHealthz>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMTinhNewsHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMTinhNewsHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMTinhNewsHealthz<TData = Awaited<ReturnType<typeof getDMTinhNewsHealthz>>, TError = GetDMTinhNewsHealthz400 | GetDMTinhNewsHealthz401 | GetDMTinhNewsHealthz403 | GetDMTinhNewsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTinhNewsHealthz>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMTinhNewsHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMTinhNewsHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMTinhNewsHealthz<TData = Awaited<ReturnType<typeof getDMTinhNewsHealthz>>, TError = GetDMTinhNewsHealthz400 | GetDMTinhNewsHealthz401 | GetDMTinhNewsHealthz403 | GetDMTinhNewsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTinhNewsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMTinhNewsHealthz>>> = ({ signal }) =>
+        getDMTinhNewsHealthz({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMTinhNewsHealthz>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDMTinhNewsHealthzQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getDMTinhNewsHealthz>>
+>
+export type GetDMTinhNewsHealthzQueryError =
+    | GetDMTinhNewsHealthz400
+    | GetDMTinhNewsHealthz401
+    | GetDMTinhNewsHealthz403
+    | GetDMTinhNewsHealthz500
+
+export function useGetDMTinhNewsHealthz<
+    TData = Awaited<ReturnType<typeof getDMTinhNewsHealthz>>,
+    TError =
+        | GetDMTinhNewsHealthz400
+        | GetDMTinhNewsHealthz401
+        | GetDMTinhNewsHealthz403
+        | GetDMTinhNewsHealthz500,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMTinhNewsHealthz>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMTinhNewsHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMTinhNewsHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMTinhNewsHealthz<
+    TData = Awaited<ReturnType<typeof getDMTinhNewsHealthz>>,
+    TError =
+        | GetDMTinhNewsHealthz400
+        | GetDMTinhNewsHealthz401
+        | GetDMTinhNewsHealthz403
+        | GetDMTinhNewsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMTinhNewsHealthz>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMTinhNewsHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMTinhNewsHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMTinhNewsHealthz<
+    TData = Awaited<ReturnType<typeof getDMTinhNewsHealthz>>,
+    TError =
+        | GetDMTinhNewsHealthz400
+        | GetDMTinhNewsHealthz401
+        | GetDMTinhNewsHealthz403
+        | GetDMTinhNewsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMTinhNewsHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Kiểm tra tình trạng API
  */
 
-export function useGetDMTinhNewsHealthz<TData = Awaited<ReturnType<typeof getDMTinhNewsHealthz>>, TError = GetDMTinhNewsHealthz400 | GetDMTinhNewsHealthz401 | GetDMTinhNewsHealthz403 | GetDMTinhNewsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTinhNewsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMTinhNewsHealthz<
+    TData = Awaited<ReturnType<typeof getDMTinhNewsHealthz>>,
+    TError =
+        | GetDMTinhNewsHealthz400
+        | GetDMTinhNewsHealthz401
+        | GetDMTinhNewsHealthz403
+        | GetDMTinhNewsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMTinhNewsHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMTinhNewsHealthzQueryOptions(options)
 
-  const queryOptions = getGetDMTinhNewsHealthzQueryOptions(options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Lấy danh sách các Tôn giáo
  * @summary Tôn giáo - Danh sách
  */
 export type postDMTonGiaosListResponse200 = {
-  data: PublicApiGetAllDMTonGiaoDTO
-  status: 200
+    data: PublicApiGetAllDMTonGiaoDTO
+    status: 200
 }
 
 export type postDMTonGiaosListResponse400 = {
-  data: PostDMTonGiaosList400
-  status: 400
+    data: PostDMTonGiaosList400
+    status: 400
 }
 
 export type postDMTonGiaosListResponse401 = {
-  data: PostDMTonGiaosList401
-  status: 401
+    data: PostDMTonGiaosList401
+    status: 401
 }
 
 export type postDMTonGiaosListResponse403 = {
-  data: PostDMTonGiaosList403
-  status: 403
+    data: PostDMTonGiaosList403
+    status: 403
 }
 
 export type postDMTonGiaosListResponse500 = {
-  data: void
-  status: 500
+    data: void
+    status: 500
 }
-    
-export type postDMTonGiaosListResponseSuccess = (postDMTonGiaosListResponse200) & {
-  headers: Headers;
-};
-export type postDMTonGiaosListResponseError = (postDMTonGiaosListResponse400 | postDMTonGiaosListResponse401 | postDMTonGiaosListResponse403 | postDMTonGiaosListResponse500) & {
-  headers: Headers;
-};
 
-export type postDMTonGiaosListResponse = (postDMTonGiaosListResponseSuccess | postDMTonGiaosListResponseError)
+export type postDMTonGiaosListResponseSuccess = postDMTonGiaosListResponse200 & {
+    headers: Headers
+}
+export type postDMTonGiaosListResponseError = (
+    | postDMTonGiaosListResponse400
+    | postDMTonGiaosListResponse401
+    | postDMTonGiaosListResponse403
+    | postDMTonGiaosListResponse500
+) & {
+    headers: Headers
+}
+
+export type postDMTonGiaosListResponse =
+    | postDMTonGiaosListResponseSuccess
+    | postDMTonGiaosListResponseError
 
 export const getPostDMTonGiaosListUrl = () => {
-
-
-  
-
-  return `/DM_TonGiaos/list`
+    return `/DM_TonGiaos/list`
 }
 
-export const postDMTonGiaosList = async (publicApiPagingRequestDto: PublicApiPagingRequestDto, options?: RequestInit): Promise<postDMTonGiaosListResponse> => {
-  
-  return customSystemFetch<postDMTonGiaosListResponse>(getPostDMTonGiaosListUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
-    body: JSON.stringify(
-      publicApiPagingRequestDto,)
-  }
-);}
+export const postDMTonGiaosList = async (
+    publicApiPagingRequestDto: PublicApiPagingRequestDto,
+    options?: RequestInit
+): Promise<postDMTonGiaosListResponse> => {
+    return customSystemFetch<postDMTonGiaosListResponse>(getPostDMTonGiaosListUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
+        body: JSON.stringify(publicApiPagingRequestDto),
+    })
+}
 
-
-
-
-export const getPostDMTonGiaosListMutationOptions = <TError = PostDMTonGiaosList400 | PostDMTonGiaosList401 | PostDMTonGiaosList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMTonGiaosList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof postDMTonGiaosList>>, TError,{data: PublicApiPagingRequestDto}, TContext> => {
-
-const mutationKey = ['postDMTonGiaosList'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postDMTonGiaosList>>, {data: PublicApiPagingRequestDto}> = (props) => {
-          const {data} = props ?? {};
-
-          return  postDMTonGiaosList(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PostDMTonGiaosListMutationResult = NonNullable<Awaited<ReturnType<typeof postDMTonGiaosList>>>
-    export type PostDMTonGiaosListMutationBody = PublicApiPagingRequestDto
-    export type PostDMTonGiaosListMutationError = PostDMTonGiaosList400 | PostDMTonGiaosList401 | PostDMTonGiaosList403 | void
-
-    /**
- * @summary Tôn giáo - Danh sách
- */
-export const usePostDMTonGiaosList = <TError = PostDMTonGiaosList400 | PostDMTonGiaosList401 | PostDMTonGiaosList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMTonGiaosList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getPostDMTonGiaosListMutationOptions = <
+    TError = PostDMTonGiaosList400 | PostDMTonGiaosList401 | PostDMTonGiaosList403 | void,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postDMTonGiaosList>>,
         TError,
-        {data: PublicApiPagingRequestDto},
+        { data: PublicApiPagingRequestDto },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postDMTonGiaosList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationKey = ['postDMTonGiaosList']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getPostDMTonGiaosListMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postDMTonGiaosList>>,
+        { data: PublicApiPagingRequestDto }
+    > = (props) => {
+        const { data } = props ?? {}
 
-      return useMutation(mutationOptions, queryClient);
+        return postDMTonGiaosList(data, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostDMTonGiaosListMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postDMTonGiaosList>>
+>
+export type PostDMTonGiaosListMutationBody = PublicApiPagingRequestDto
+export type PostDMTonGiaosListMutationError =
+    | PostDMTonGiaosList400
+    | PostDMTonGiaosList401
+    | PostDMTonGiaosList403
+    | void
+
+/**
+ * @summary Tôn giáo - Danh sách
+ */
+export const usePostDMTonGiaosList = <
+    TError = PostDMTonGiaosList400 | PostDMTonGiaosList401 | PostDMTonGiaosList403 | void,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postDMTonGiaosList>>,
+            TError,
+            { data: PublicApiPagingRequestDto },
+            TContext
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postDMTonGiaosList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationOptions = getPostDMTonGiaosListMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * Lấy thông tin Tôn giáo theo ID
  * @summary Tôn giáo - Theo Id
  */
 export type getDMTonGiaosIdResponse200 = {
-  data: PublicApiGetAllDMTonGiaoDTO
-  status: 200
+    data: PublicApiGetAllDMTonGiaoDTO
+    status: 200
 }
 
 export type getDMTonGiaosIdResponse400 = {
-  data: GetDMTonGiaosId400
-  status: 400
+    data: GetDMTonGiaosId400
+    status: 400
 }
 
 export type getDMTonGiaosIdResponse401 = {
-  data: GetDMTonGiaosId401
-  status: 401
+    data: GetDMTonGiaosId401
+    status: 401
 }
 
 export type getDMTonGiaosIdResponse403 = {
-  data: GetDMTonGiaosId403
-  status: 403
+    data: GetDMTonGiaosId403
+    status: 403
 }
 
 export type getDMTonGiaosIdResponse500 = {
-  data: void
-  status: 500
-}
-    
-export type getDMTonGiaosIdResponseSuccess = (getDMTonGiaosIdResponse200) & {
-  headers: Headers;
-};
-export type getDMTonGiaosIdResponseError = (getDMTonGiaosIdResponse400 | getDMTonGiaosIdResponse401 | getDMTonGiaosIdResponse403 | getDMTonGiaosIdResponse500) & {
-  headers: Headers;
-};
-
-export type getDMTonGiaosIdResponse = (getDMTonGiaosIdResponseSuccess | getDMTonGiaosIdResponseError)
-
-export const getGetDMTonGiaosIdUrl = (id: string,
-    params?: GetDMTonGiaosIdParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/DM_TonGiaos/${id}?${stringifiedParams}` : `/DM_TonGiaos/${id}`
+    data: void
+    status: 500
 }
 
-export const getDMTonGiaosId = async (id: string,
-    params?: GetDMTonGiaosIdParams, options?: RequestInit): Promise<getDMTonGiaosIdResponse> => {
-  
-  return customSystemFetch<getDMTonGiaosIdResponse>(getGetDMTonGiaosIdUrl(id,params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type getDMTonGiaosIdResponseSuccess = getDMTonGiaosIdResponse200 & {
+    headers: Headers
+}
+export type getDMTonGiaosIdResponseError = (
+    | getDMTonGiaosIdResponse400
+    | getDMTonGiaosIdResponse401
+    | getDMTonGiaosIdResponse403
+    | getDMTonGiaosIdResponse500
+) & {
+    headers: Headers
+}
 
+export type getDMTonGiaosIdResponse = getDMTonGiaosIdResponseSuccess | getDMTonGiaosIdResponseError
 
+export const getGetDMTonGiaosIdUrl = (id: string, params?: GetDMTonGiaosIdParams) => {
+    const normalizedParams = new URLSearchParams()
 
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
+    const stringifiedParams = normalizedParams.toString()
 
-export const getGetDMTonGiaosIdQueryKey = (id?: string,
-    params?: GetDMTonGiaosIdParams,) => {
-    return [
-    `/DM_TonGiaos/${id}`, ...(params ? [params]: [])
-    ] as const;
+    return stringifiedParams.length > 0
+        ? `/DM_TonGiaos/${id}?${stringifiedParams}`
+        : `/DM_TonGiaos/${id}`
+}
+
+export const getDMTonGiaosId = async (
+    id: string,
+    params?: GetDMTonGiaosIdParams,
+    options?: RequestInit
+): Promise<getDMTonGiaosIdResponse> => {
+    return customSystemFetch<getDMTonGiaosIdResponse>(getGetDMTonGiaosIdUrl(id, params), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getGetDMTonGiaosIdQueryKey = (id?: string, params?: GetDMTonGiaosIdParams) => {
+    return [`/DM_TonGiaos/${id}`, ...(params ? [params] : [])] as const
+}
+
+export const getGetDMTonGiaosIdQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMTonGiaosId>>,
+    TError = GetDMTonGiaosId400 | GetDMTonGiaosId401 | GetDMTonGiaosId403 | void,
+>(
+    id: string,
+    params?: GetDMTonGiaosIdParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTonGiaosId>>, TError, TData>>
+        request?: SecondParameter<typeof customSystemFetch>
     }
-
-    
-export const getGetDMTonGiaosIdQueryOptions = <TData = Awaited<ReturnType<typeof getDMTonGiaosId>>, TError = GetDMTonGiaosId400 | GetDMTonGiaosId401 | GetDMTonGiaosId403 | void>(id: string,
-    params?: GetDMTonGiaosIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTonGiaosId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
 ) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    const queryKey = queryOptions?.queryKey ?? getGetDMTonGiaosIdQueryKey(id, params)
 
-  const queryKey =  queryOptions?.queryKey ?? getGetDMTonGiaosIdQueryKey(id,params);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMTonGiaosId>>> = ({ signal }) =>
+        getDMTonGiaosId(id, params, { signal, ...requestOptions })
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMTonGiaosId>>> = ({ signal }) => getDMTonGiaosId(id,params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMTonGiaosId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMTonGiaosId>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetDMTonGiaosIdQueryResult = NonNullable<Awaited<ReturnType<typeof getDMTonGiaosId>>>
-export type GetDMTonGiaosIdQueryError = GetDMTonGiaosId400 | GetDMTonGiaosId401 | GetDMTonGiaosId403 | void
+export type GetDMTonGiaosIdQueryError =
+    | GetDMTonGiaosId400
+    | GetDMTonGiaosId401
+    | GetDMTonGiaosId403
+    | void
 
-
-export function useGetDMTonGiaosId<TData = Awaited<ReturnType<typeof getDMTonGiaosId>>, TError = GetDMTonGiaosId400 | GetDMTonGiaosId401 | GetDMTonGiaosId403 | void>(
- id: string,
-    params: undefined |  GetDMTonGiaosIdParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTonGiaosId>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMTonGiaosId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMTonGiaosId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMTonGiaosId<TData = Awaited<ReturnType<typeof getDMTonGiaosId>>, TError = GetDMTonGiaosId400 | GetDMTonGiaosId401 | GetDMTonGiaosId403 | void>(
- id: string,
-    params?: GetDMTonGiaosIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTonGiaosId>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMTonGiaosId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMTonGiaosId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMTonGiaosId<TData = Awaited<ReturnType<typeof getDMTonGiaosId>>, TError = GetDMTonGiaosId400 | GetDMTonGiaosId401 | GetDMTonGiaosId403 | void>(
- id: string,
-    params?: GetDMTonGiaosIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTonGiaosId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMTonGiaosId<
+    TData = Awaited<ReturnType<typeof getDMTonGiaosId>>,
+    TError = GetDMTonGiaosId400 | GetDMTonGiaosId401 | GetDMTonGiaosId403 | void,
+>(
+    id: string,
+    params: undefined | GetDMTonGiaosIdParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMTonGiaosId>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMTonGiaosId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMTonGiaosId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMTonGiaosId<
+    TData = Awaited<ReturnType<typeof getDMTonGiaosId>>,
+    TError = GetDMTonGiaosId400 | GetDMTonGiaosId401 | GetDMTonGiaosId403 | void,
+>(
+    id: string,
+    params?: GetDMTonGiaosIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMTonGiaosId>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMTonGiaosId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMTonGiaosId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMTonGiaosId<
+    TData = Awaited<ReturnType<typeof getDMTonGiaosId>>,
+    TError = GetDMTonGiaosId400 | GetDMTonGiaosId401 | GetDMTonGiaosId403 | void,
+>(
+    id: string,
+    params?: GetDMTonGiaosIdParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTonGiaosId>>, TError, TData>>
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Tôn giáo - Theo Id
  */
 
-export function useGetDMTonGiaosId<TData = Awaited<ReturnType<typeof getDMTonGiaosId>>, TError = GetDMTonGiaosId400 | GetDMTonGiaosId401 | GetDMTonGiaosId403 | void>(
- id: string,
-    params?: GetDMTonGiaosIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTonGiaosId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMTonGiaosId<
+    TData = Awaited<ReturnType<typeof getDMTonGiaosId>>,
+    TError = GetDMTonGiaosId400 | GetDMTonGiaosId401 | GetDMTonGiaosId403 | void,
+>(
+    id: string,
+    params?: GetDMTonGiaosIdParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTonGiaosId>>, TError, TData>>
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMTonGiaosIdQueryOptions(id, params, options)
 
-  const queryOptions = getGetDMTonGiaosIdQueryOptions(id,params,options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Kiểm tra tình trạng API
  * @summary Kiểm tra tình trạng API
  */
 export type getDMTonGiaosHealthzResponse400 = {
-  data: GetDMTonGiaosHealthz400
-  status: 400
+    data: GetDMTonGiaosHealthz400
+    status: 400
 }
 
 export type getDMTonGiaosHealthzResponse401 = {
-  data: GetDMTonGiaosHealthz401
-  status: 401
+    data: GetDMTonGiaosHealthz401
+    status: 401
 }
 
 export type getDMTonGiaosHealthzResponse403 = {
-  data: GetDMTonGiaosHealthz403
-  status: 403
+    data: GetDMTonGiaosHealthz403
+    status: 403
 }
 
 export type getDMTonGiaosHealthzResponse500 = {
-  data: GetDMTonGiaosHealthz500
-  status: 500
+    data: GetDMTonGiaosHealthz500
+    status: 500
 }
-    
-;
-export type getDMTonGiaosHealthzResponseError = (getDMTonGiaosHealthzResponse400 | getDMTonGiaosHealthzResponse401 | getDMTonGiaosHealthzResponse403 | getDMTonGiaosHealthzResponse500) & {
-  headers: Headers;
-};
+export type getDMTonGiaosHealthzResponseError = (
+    | getDMTonGiaosHealthzResponse400
+    | getDMTonGiaosHealthzResponse401
+    | getDMTonGiaosHealthzResponse403
+    | getDMTonGiaosHealthzResponse500
+) & {
+    headers: Headers
+}
 
-export type getDMTonGiaosHealthzResponse = (getDMTonGiaosHealthzResponseError)
+export type getDMTonGiaosHealthzResponse = getDMTonGiaosHealthzResponseError
 
 export const getGetDMTonGiaosHealthzUrl = () => {
-
-
-  
-
-  return `/DM_TonGiaos/healthz`
+    return `/DM_TonGiaos/healthz`
 }
 
-export const getDMTonGiaosHealthz = async ( options?: RequestInit): Promise<getDMTonGiaosHealthzResponse> => {
-  
-  return customSystemFetch<getDMTonGiaosHealthzResponse>(getGetDMTonGiaosHealthzUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-
+export const getDMTonGiaosHealthz = async (
+    options?: RequestInit
+): Promise<getDMTonGiaosHealthzResponse> => {
+    return customSystemFetch<getDMTonGiaosHealthzResponse>(getGetDMTonGiaosHealthzUrl(), {
+        ...options,
+        method: 'GET',
+    })
+}
 
 export const getGetDMTonGiaosHealthzQueryKey = () => {
-    return [
-    `/DM_TonGiaos/healthz`
-    ] as const;
-    }
-
-    
-export const getGetDMTonGiaosHealthzQueryOptions = <TData = Awaited<ReturnType<typeof getDMTonGiaosHealthz>>, TError = GetDMTonGiaosHealthz400 | GetDMTonGiaosHealthz401 | GetDMTonGiaosHealthz403 | GetDMTonGiaosHealthz500>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTonGiaosHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetDMTonGiaosHealthzQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMTonGiaosHealthz>>> = ({ signal }) => getDMTonGiaosHealthz({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMTonGiaosHealthz>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return [`/DM_TonGiaos/healthz`] as const
 }
 
-export type GetDMTonGiaosHealthzQueryResult = NonNullable<Awaited<ReturnType<typeof getDMTonGiaosHealthz>>>
-export type GetDMTonGiaosHealthzQueryError = GetDMTonGiaosHealthz400 | GetDMTonGiaosHealthz401 | GetDMTonGiaosHealthz403 | GetDMTonGiaosHealthz500
+export const getGetDMTonGiaosHealthzQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMTonGiaosHealthz>>,
+    TError =
+        | GetDMTonGiaosHealthz400
+        | GetDMTonGiaosHealthz401
+        | GetDMTonGiaosHealthz403
+        | GetDMTonGiaosHealthz500,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<Awaited<ReturnType<typeof getDMTonGiaosHealthz>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
+    const queryKey = queryOptions?.queryKey ?? getGetDMTonGiaosHealthzQueryKey()
 
-export function useGetDMTonGiaosHealthz<TData = Awaited<ReturnType<typeof getDMTonGiaosHealthz>>, TError = GetDMTonGiaosHealthz400 | GetDMTonGiaosHealthz401 | GetDMTonGiaosHealthz403 | GetDMTonGiaosHealthz500>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTonGiaosHealthz>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMTonGiaosHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMTonGiaosHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMTonGiaosHealthz<TData = Awaited<ReturnType<typeof getDMTonGiaosHealthz>>, TError = GetDMTonGiaosHealthz400 | GetDMTonGiaosHealthz401 | GetDMTonGiaosHealthz403 | GetDMTonGiaosHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTonGiaosHealthz>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMTonGiaosHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMTonGiaosHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMTonGiaosHealthz<TData = Awaited<ReturnType<typeof getDMTonGiaosHealthz>>, TError = GetDMTonGiaosHealthz400 | GetDMTonGiaosHealthz401 | GetDMTonGiaosHealthz403 | GetDMTonGiaosHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTonGiaosHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMTonGiaosHealthz>>> = ({ signal }) =>
+        getDMTonGiaosHealthz({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMTonGiaosHealthz>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDMTonGiaosHealthzQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getDMTonGiaosHealthz>>
+>
+export type GetDMTonGiaosHealthzQueryError =
+    | GetDMTonGiaosHealthz400
+    | GetDMTonGiaosHealthz401
+    | GetDMTonGiaosHealthz403
+    | GetDMTonGiaosHealthz500
+
+export function useGetDMTonGiaosHealthz<
+    TData = Awaited<ReturnType<typeof getDMTonGiaosHealthz>>,
+    TError =
+        | GetDMTonGiaosHealthz400
+        | GetDMTonGiaosHealthz401
+        | GetDMTonGiaosHealthz403
+        | GetDMTonGiaosHealthz500,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMTonGiaosHealthz>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMTonGiaosHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMTonGiaosHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMTonGiaosHealthz<
+    TData = Awaited<ReturnType<typeof getDMTonGiaosHealthz>>,
+    TError =
+        | GetDMTonGiaosHealthz400
+        | GetDMTonGiaosHealthz401
+        | GetDMTonGiaosHealthz403
+        | GetDMTonGiaosHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMTonGiaosHealthz>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMTonGiaosHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMTonGiaosHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMTonGiaosHealthz<
+    TData = Awaited<ReturnType<typeof getDMTonGiaosHealthz>>,
+    TError =
+        | GetDMTonGiaosHealthz400
+        | GetDMTonGiaosHealthz401
+        | GetDMTonGiaosHealthz403
+        | GetDMTonGiaosHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMTonGiaosHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Kiểm tra tình trạng API
  */
 
-export function useGetDMTonGiaosHealthz<TData = Awaited<ReturnType<typeof getDMTonGiaosHealthz>>, TError = GetDMTonGiaosHealthz400 | GetDMTonGiaosHealthz401 | GetDMTonGiaosHealthz403 | GetDMTonGiaosHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTonGiaosHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMTonGiaosHealthz<
+    TData = Awaited<ReturnType<typeof getDMTonGiaosHealthz>>,
+    TError =
+        | GetDMTonGiaosHealthz400
+        | GetDMTonGiaosHealthz401
+        | GetDMTonGiaosHealthz403
+        | GetDMTonGiaosHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMTonGiaosHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMTonGiaosHealthzQueryOptions(options)
 
-  const queryOptions = getGetDMTonGiaosHealthzQueryOptions(options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Lấy danh sách các Trình độ ngoại ngữ
  * @summary Trình độ ngoại ngữ - Danh sách
  */
 export type postDMTrinhDoNgoaiNgusListResponse200 = {
-  data: PublicApiGetAllDMTrinhDoNgoaiNguDTO
-  status: 200
+    data: PublicApiGetAllDMTrinhDoNgoaiNguDTO
+    status: 200
 }
 
 export type postDMTrinhDoNgoaiNgusListResponse400 = {
-  data: PostDMTrinhDoNgoaiNgusList400
-  status: 400
+    data: PostDMTrinhDoNgoaiNgusList400
+    status: 400
 }
 
 export type postDMTrinhDoNgoaiNgusListResponse401 = {
-  data: PostDMTrinhDoNgoaiNgusList401
-  status: 401
+    data: PostDMTrinhDoNgoaiNgusList401
+    status: 401
 }
 
 export type postDMTrinhDoNgoaiNgusListResponse403 = {
-  data: PostDMTrinhDoNgoaiNgusList403
-  status: 403
+    data: PostDMTrinhDoNgoaiNgusList403
+    status: 403
 }
 
 export type postDMTrinhDoNgoaiNgusListResponse500 = {
-  data: void
-  status: 500
+    data: void
+    status: 500
 }
-    
-export type postDMTrinhDoNgoaiNgusListResponseSuccess = (postDMTrinhDoNgoaiNgusListResponse200) & {
-  headers: Headers;
-};
-export type postDMTrinhDoNgoaiNgusListResponseError = (postDMTrinhDoNgoaiNgusListResponse400 | postDMTrinhDoNgoaiNgusListResponse401 | postDMTrinhDoNgoaiNgusListResponse403 | postDMTrinhDoNgoaiNgusListResponse500) & {
-  headers: Headers;
-};
 
-export type postDMTrinhDoNgoaiNgusListResponse = (postDMTrinhDoNgoaiNgusListResponseSuccess | postDMTrinhDoNgoaiNgusListResponseError)
+export type postDMTrinhDoNgoaiNgusListResponseSuccess = postDMTrinhDoNgoaiNgusListResponse200 & {
+    headers: Headers
+}
+export type postDMTrinhDoNgoaiNgusListResponseError = (
+    | postDMTrinhDoNgoaiNgusListResponse400
+    | postDMTrinhDoNgoaiNgusListResponse401
+    | postDMTrinhDoNgoaiNgusListResponse403
+    | postDMTrinhDoNgoaiNgusListResponse500
+) & {
+    headers: Headers
+}
+
+export type postDMTrinhDoNgoaiNgusListResponse =
+    | postDMTrinhDoNgoaiNgusListResponseSuccess
+    | postDMTrinhDoNgoaiNgusListResponseError
 
 export const getPostDMTrinhDoNgoaiNgusListUrl = () => {
-
-
-  
-
-  return `/DM_TrinhDoNgoaiNgus/list`
+    return `/DM_TrinhDoNgoaiNgus/list`
 }
 
-export const postDMTrinhDoNgoaiNgusList = async (publicApiPagingRequestDto: PublicApiPagingRequestDto, options?: RequestInit): Promise<postDMTrinhDoNgoaiNgusListResponse> => {
-  
-  return customSystemFetch<postDMTrinhDoNgoaiNgusListResponse>(getPostDMTrinhDoNgoaiNgusListUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
-    body: JSON.stringify(
-      publicApiPagingRequestDto,)
-  }
-);}
-
-
-
-
-export const getPostDMTrinhDoNgoaiNgusListMutationOptions = <TError = PostDMTrinhDoNgoaiNgusList400 | PostDMTrinhDoNgoaiNgusList401 | PostDMTrinhDoNgoaiNgusList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMTrinhDoNgoaiNgusList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof postDMTrinhDoNgoaiNgusList>>, TError,{data: PublicApiPagingRequestDto}, TContext> => {
-
-const mutationKey = ['postDMTrinhDoNgoaiNgusList'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postDMTrinhDoNgoaiNgusList>>, {data: PublicApiPagingRequestDto}> = (props) => {
-          const {data} = props ?? {};
-
-          return  postDMTrinhDoNgoaiNgusList(data,requestOptions)
+export const postDMTrinhDoNgoaiNgusList = async (
+    publicApiPagingRequestDto: PublicApiPagingRequestDto,
+    options?: RequestInit
+): Promise<postDMTrinhDoNgoaiNgusListResponse> => {
+    return customSystemFetch<postDMTrinhDoNgoaiNgusListResponse>(
+        getPostDMTrinhDoNgoaiNgusListUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
+            body: JSON.stringify(publicApiPagingRequestDto),
         }
+    )
+}
 
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PostDMTrinhDoNgoaiNgusListMutationResult = NonNullable<Awaited<ReturnType<typeof postDMTrinhDoNgoaiNgusList>>>
-    export type PostDMTrinhDoNgoaiNgusListMutationBody = PublicApiPagingRequestDto
-    export type PostDMTrinhDoNgoaiNgusListMutationError = PostDMTrinhDoNgoaiNgusList400 | PostDMTrinhDoNgoaiNgusList401 | PostDMTrinhDoNgoaiNgusList403 | void
-
-    /**
- * @summary Trình độ ngoại ngữ - Danh sách
- */
-export const usePostDMTrinhDoNgoaiNgusList = <TError = PostDMTrinhDoNgoaiNgusList400 | PostDMTrinhDoNgoaiNgusList401 | PostDMTrinhDoNgoaiNgusList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMTrinhDoNgoaiNgusList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getPostDMTrinhDoNgoaiNgusListMutationOptions = <
+    TError =
+        | PostDMTrinhDoNgoaiNgusList400
+        | PostDMTrinhDoNgoaiNgusList401
+        | PostDMTrinhDoNgoaiNgusList403
+        | void,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postDMTrinhDoNgoaiNgusList>>,
         TError,
-        {data: PublicApiPagingRequestDto},
+        { data: PublicApiPagingRequestDto },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postDMTrinhDoNgoaiNgusList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationKey = ['postDMTrinhDoNgoaiNgusList']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getPostDMTrinhDoNgoaiNgusListMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postDMTrinhDoNgoaiNgusList>>,
+        { data: PublicApiPagingRequestDto }
+    > = (props) => {
+        const { data } = props ?? {}
 
-      return useMutation(mutationOptions, queryClient);
+        return postDMTrinhDoNgoaiNgusList(data, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostDMTrinhDoNgoaiNgusListMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postDMTrinhDoNgoaiNgusList>>
+>
+export type PostDMTrinhDoNgoaiNgusListMutationBody = PublicApiPagingRequestDto
+export type PostDMTrinhDoNgoaiNgusListMutationError =
+    | PostDMTrinhDoNgoaiNgusList400
+    | PostDMTrinhDoNgoaiNgusList401
+    | PostDMTrinhDoNgoaiNgusList403
+    | void
+
+/**
+ * @summary Trình độ ngoại ngữ - Danh sách
+ */
+export const usePostDMTrinhDoNgoaiNgusList = <
+    TError =
+        | PostDMTrinhDoNgoaiNgusList400
+        | PostDMTrinhDoNgoaiNgusList401
+        | PostDMTrinhDoNgoaiNgusList403
+        | void,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postDMTrinhDoNgoaiNgusList>>,
+            TError,
+            { data: PublicApiPagingRequestDto },
+            TContext
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postDMTrinhDoNgoaiNgusList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationOptions = getPostDMTrinhDoNgoaiNgusListMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * Lấy thông tin Trình độ ngoại ngữ theo ID
  * @summary Trình độ ngoại ngữ - Theo Id
  */
 export type getDMTrinhDoNgoaiNgusIdResponse200 = {
-  data: PublicApiGetAllDMTrinhDoNgoaiNguDTO
-  status: 200
+    data: PublicApiGetAllDMTrinhDoNgoaiNguDTO
+    status: 200
 }
 
 export type getDMTrinhDoNgoaiNgusIdResponse400 = {
-  data: GetDMTrinhDoNgoaiNgusId400
-  status: 400
+    data: GetDMTrinhDoNgoaiNgusId400
+    status: 400
 }
 
 export type getDMTrinhDoNgoaiNgusIdResponse401 = {
-  data: GetDMTrinhDoNgoaiNgusId401
-  status: 401
+    data: GetDMTrinhDoNgoaiNgusId401
+    status: 401
 }
 
 export type getDMTrinhDoNgoaiNgusIdResponse403 = {
-  data: GetDMTrinhDoNgoaiNgusId403
-  status: 403
+    data: GetDMTrinhDoNgoaiNgusId403
+    status: 403
 }
 
 export type getDMTrinhDoNgoaiNgusIdResponse500 = {
-  data: void
-  status: 500
-}
-    
-export type getDMTrinhDoNgoaiNgusIdResponseSuccess = (getDMTrinhDoNgoaiNgusIdResponse200) & {
-  headers: Headers;
-};
-export type getDMTrinhDoNgoaiNgusIdResponseError = (getDMTrinhDoNgoaiNgusIdResponse400 | getDMTrinhDoNgoaiNgusIdResponse401 | getDMTrinhDoNgoaiNgusIdResponse403 | getDMTrinhDoNgoaiNgusIdResponse500) & {
-  headers: Headers;
-};
-
-export type getDMTrinhDoNgoaiNgusIdResponse = (getDMTrinhDoNgoaiNgusIdResponseSuccess | getDMTrinhDoNgoaiNgusIdResponseError)
-
-export const getGetDMTrinhDoNgoaiNgusIdUrl = (id: string,
-    params?: GetDMTrinhDoNgoaiNgusIdParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/DM_TrinhDoNgoaiNgus/${id}?${stringifiedParams}` : `/DM_TrinhDoNgoaiNgus/${id}`
+    data: void
+    status: 500
 }
 
-export const getDMTrinhDoNgoaiNgusId = async (id: string,
-    params?: GetDMTrinhDoNgoaiNgusIdParams, options?: RequestInit): Promise<getDMTrinhDoNgoaiNgusIdResponse> => {
-  
-  return customSystemFetch<getDMTrinhDoNgoaiNgusIdResponse>(getGetDMTrinhDoNgoaiNgusIdUrl(id,params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type getDMTrinhDoNgoaiNgusIdResponseSuccess = getDMTrinhDoNgoaiNgusIdResponse200 & {
+    headers: Headers
+}
+export type getDMTrinhDoNgoaiNgusIdResponseError = (
+    | getDMTrinhDoNgoaiNgusIdResponse400
+    | getDMTrinhDoNgoaiNgusIdResponse401
+    | getDMTrinhDoNgoaiNgusIdResponse403
+    | getDMTrinhDoNgoaiNgusIdResponse500
+) & {
+    headers: Headers
+}
 
+export type getDMTrinhDoNgoaiNgusIdResponse =
+    | getDMTrinhDoNgoaiNgusIdResponseSuccess
+    | getDMTrinhDoNgoaiNgusIdResponseError
 
-
-
-
-export const getGetDMTrinhDoNgoaiNgusIdQueryKey = (id?: string,
-    params?: GetDMTrinhDoNgoaiNgusIdParams,) => {
-    return [
-    `/DM_TrinhDoNgoaiNgus/${id}`, ...(params ? [params]: [])
-    ] as const;
-    }
-
-    
-export const getGetDMTrinhDoNgoaiNgusIdQueryOptions = <TData = Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusId>>, TError = GetDMTrinhDoNgoaiNgusId400 | GetDMTrinhDoNgoaiNgusId401 | GetDMTrinhDoNgoaiNgusId403 | void>(id: string,
-    params?: GetDMTrinhDoNgoaiNgusIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
+export const getGetDMTrinhDoNgoaiNgusIdUrl = (
+    id: string,
+    params?: GetDMTrinhDoNgoaiNgusIdParams
 ) => {
+    const normalizedParams = new URLSearchParams()
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
-  const queryKey =  queryOptions?.queryKey ?? getGetDMTrinhDoNgoaiNgusIdQueryKey(id,params);
+    const stringifiedParams = normalizedParams.toString()
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusId>>> = ({ signal }) => getDMTrinhDoNgoaiNgusId(id,params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return stringifiedParams.length > 0
+        ? `/DM_TrinhDoNgoaiNgus/${id}?${stringifiedParams}`
+        : `/DM_TrinhDoNgoaiNgus/${id}`
 }
 
-export type GetDMTrinhDoNgoaiNgusIdQueryResult = NonNullable<Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusId>>>
-export type GetDMTrinhDoNgoaiNgusIdQueryError = GetDMTrinhDoNgoaiNgusId400 | GetDMTrinhDoNgoaiNgusId401 | GetDMTrinhDoNgoaiNgusId403 | void
+export const getDMTrinhDoNgoaiNgusId = async (
+    id: string,
+    params?: GetDMTrinhDoNgoaiNgusIdParams,
+    options?: RequestInit
+): Promise<getDMTrinhDoNgoaiNgusIdResponse> => {
+    return customSystemFetch<getDMTrinhDoNgoaiNgusIdResponse>(
+        getGetDMTrinhDoNgoaiNgusIdUrl(id, params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
 
+export const getGetDMTrinhDoNgoaiNgusIdQueryKey = (
+    id?: string,
+    params?: GetDMTrinhDoNgoaiNgusIdParams
+) => {
+    return [`/DM_TrinhDoNgoaiNgus/${id}`, ...(params ? [params] : [])] as const
+}
 
-export function useGetDMTrinhDoNgoaiNgusId<TData = Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusId>>, TError = GetDMTrinhDoNgoaiNgusId400 | GetDMTrinhDoNgoaiNgusId401 | GetDMTrinhDoNgoaiNgusId403 | void>(
- id: string,
-    params: undefined |  GetDMTrinhDoNgoaiNgusIdParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusId>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMTrinhDoNgoaiNgusId<TData = Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusId>>, TError = GetDMTrinhDoNgoaiNgusId400 | GetDMTrinhDoNgoaiNgusId401 | GetDMTrinhDoNgoaiNgusId403 | void>(
- id: string,
-    params?: GetDMTrinhDoNgoaiNgusIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusId>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMTrinhDoNgoaiNgusId<TData = Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusId>>, TError = GetDMTrinhDoNgoaiNgusId400 | GetDMTrinhDoNgoaiNgusId401 | GetDMTrinhDoNgoaiNgusId403 | void>(
- id: string,
-    params?: GetDMTrinhDoNgoaiNgusIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export const getGetDMTrinhDoNgoaiNgusIdQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusId>>,
+    TError =
+        | GetDMTrinhDoNgoaiNgusId400
+        | GetDMTrinhDoNgoaiNgusId401
+        | GetDMTrinhDoNgoaiNgusId403
+        | void,
+>(
+    id: string,
+    params?: GetDMTrinhDoNgoaiNgusIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusId>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetDMTrinhDoNgoaiNgusIdQueryKey(id, params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusId>>> = ({
+        signal,
+    }) => getDMTrinhDoNgoaiNgusId(id, params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusId>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDMTrinhDoNgoaiNgusIdQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusId>>
+>
+export type GetDMTrinhDoNgoaiNgusIdQueryError =
+    | GetDMTrinhDoNgoaiNgusId400
+    | GetDMTrinhDoNgoaiNgusId401
+    | GetDMTrinhDoNgoaiNgusId403
+    | void
+
+export function useGetDMTrinhDoNgoaiNgusId<
+    TData = Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusId>>,
+    TError =
+        | GetDMTrinhDoNgoaiNgusId400
+        | GetDMTrinhDoNgoaiNgusId401
+        | GetDMTrinhDoNgoaiNgusId403
+        | void,
+>(
+    id: string,
+    params: undefined | GetDMTrinhDoNgoaiNgusIdParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusId>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMTrinhDoNgoaiNgusId<
+    TData = Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusId>>,
+    TError =
+        | GetDMTrinhDoNgoaiNgusId400
+        | GetDMTrinhDoNgoaiNgusId401
+        | GetDMTrinhDoNgoaiNgusId403
+        | void,
+>(
+    id: string,
+    params?: GetDMTrinhDoNgoaiNgusIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusId>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMTrinhDoNgoaiNgusId<
+    TData = Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusId>>,
+    TError =
+        | GetDMTrinhDoNgoaiNgusId400
+        | GetDMTrinhDoNgoaiNgusId401
+        | GetDMTrinhDoNgoaiNgusId403
+        | void,
+>(
+    id: string,
+    params?: GetDMTrinhDoNgoaiNgusIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusId>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Trình độ ngoại ngữ - Theo Id
  */
 
-export function useGetDMTrinhDoNgoaiNgusId<TData = Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusId>>, TError = GetDMTrinhDoNgoaiNgusId400 | GetDMTrinhDoNgoaiNgusId401 | GetDMTrinhDoNgoaiNgusId403 | void>(
- id: string,
-    params?: GetDMTrinhDoNgoaiNgusIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMTrinhDoNgoaiNgusId<
+    TData = Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusId>>,
+    TError =
+        | GetDMTrinhDoNgoaiNgusId400
+        | GetDMTrinhDoNgoaiNgusId401
+        | GetDMTrinhDoNgoaiNgusId403
+        | void,
+>(
+    id: string,
+    params?: GetDMTrinhDoNgoaiNgusIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusId>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMTrinhDoNgoaiNgusIdQueryOptions(id, params, options)
 
-  const queryOptions = getGetDMTrinhDoNgoaiNgusIdQueryOptions(id,params,options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Kiểm tra tình trạng API
  * @summary Kiểm tra tình trạng API
  */
 export type getDMTrinhDoNgoaiNgusHealthzResponse400 = {
-  data: GetDMTrinhDoNgoaiNgusHealthz400
-  status: 400
+    data: GetDMTrinhDoNgoaiNgusHealthz400
+    status: 400
 }
 
 export type getDMTrinhDoNgoaiNgusHealthzResponse401 = {
-  data: GetDMTrinhDoNgoaiNgusHealthz401
-  status: 401
+    data: GetDMTrinhDoNgoaiNgusHealthz401
+    status: 401
 }
 
 export type getDMTrinhDoNgoaiNgusHealthzResponse403 = {
-  data: GetDMTrinhDoNgoaiNgusHealthz403
-  status: 403
+    data: GetDMTrinhDoNgoaiNgusHealthz403
+    status: 403
 }
 
 export type getDMTrinhDoNgoaiNgusHealthzResponse500 = {
-  data: GetDMTrinhDoNgoaiNgusHealthz500
-  status: 500
+    data: GetDMTrinhDoNgoaiNgusHealthz500
+    status: 500
 }
-    
-;
-export type getDMTrinhDoNgoaiNgusHealthzResponseError = (getDMTrinhDoNgoaiNgusHealthzResponse400 | getDMTrinhDoNgoaiNgusHealthzResponse401 | getDMTrinhDoNgoaiNgusHealthzResponse403 | getDMTrinhDoNgoaiNgusHealthzResponse500) & {
-  headers: Headers;
-};
+export type getDMTrinhDoNgoaiNgusHealthzResponseError = (
+    | getDMTrinhDoNgoaiNgusHealthzResponse400
+    | getDMTrinhDoNgoaiNgusHealthzResponse401
+    | getDMTrinhDoNgoaiNgusHealthzResponse403
+    | getDMTrinhDoNgoaiNgusHealthzResponse500
+) & {
+    headers: Headers
+}
 
-export type getDMTrinhDoNgoaiNgusHealthzResponse = (getDMTrinhDoNgoaiNgusHealthzResponseError)
+export type getDMTrinhDoNgoaiNgusHealthzResponse = getDMTrinhDoNgoaiNgusHealthzResponseError
 
 export const getGetDMTrinhDoNgoaiNgusHealthzUrl = () => {
-
-
-  
-
-  return `/DM_TrinhDoNgoaiNgus/healthz`
+    return `/DM_TrinhDoNgoaiNgus/healthz`
 }
 
-export const getDMTrinhDoNgoaiNgusHealthz = async ( options?: RequestInit): Promise<getDMTrinhDoNgoaiNgusHealthzResponse> => {
-  
-  return customSystemFetch<getDMTrinhDoNgoaiNgusHealthzResponse>(getGetDMTrinhDoNgoaiNgusHealthzUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-
+export const getDMTrinhDoNgoaiNgusHealthz = async (
+    options?: RequestInit
+): Promise<getDMTrinhDoNgoaiNgusHealthzResponse> => {
+    return customSystemFetch<getDMTrinhDoNgoaiNgusHealthzResponse>(
+        getGetDMTrinhDoNgoaiNgusHealthzUrl(),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
 
 export const getGetDMTrinhDoNgoaiNgusHealthzQueryKey = () => {
-    return [
-    `/DM_TrinhDoNgoaiNgus/healthz`
-    ] as const;
-    }
-
-    
-export const getGetDMTrinhDoNgoaiNgusHealthzQueryOptions = <TData = Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusHealthz>>, TError = GetDMTrinhDoNgoaiNgusHealthz400 | GetDMTrinhDoNgoaiNgusHealthz401 | GetDMTrinhDoNgoaiNgusHealthz403 | GetDMTrinhDoNgoaiNgusHealthz500>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetDMTrinhDoNgoaiNgusHealthzQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusHealthz>>> = ({ signal }) => getDMTrinhDoNgoaiNgusHealthz({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusHealthz>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return [`/DM_TrinhDoNgoaiNgus/healthz`] as const
 }
 
-export type GetDMTrinhDoNgoaiNgusHealthzQueryResult = NonNullable<Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusHealthz>>>
-export type GetDMTrinhDoNgoaiNgusHealthzQueryError = GetDMTrinhDoNgoaiNgusHealthz400 | GetDMTrinhDoNgoaiNgusHealthz401 | GetDMTrinhDoNgoaiNgusHealthz403 | GetDMTrinhDoNgoaiNgusHealthz500
+export const getGetDMTrinhDoNgoaiNgusHealthzQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusHealthz>>,
+    TError =
+        | GetDMTrinhDoNgoaiNgusHealthz400
+        | GetDMTrinhDoNgoaiNgusHealthz401
+        | GetDMTrinhDoNgoaiNgusHealthz403
+        | GetDMTrinhDoNgoaiNgusHealthz500,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusHealthz>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
+    const queryKey = queryOptions?.queryKey ?? getGetDMTrinhDoNgoaiNgusHealthzQueryKey()
 
-export function useGetDMTrinhDoNgoaiNgusHealthz<TData = Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusHealthz>>, TError = GetDMTrinhDoNgoaiNgusHealthz400 | GetDMTrinhDoNgoaiNgusHealthz401 | GetDMTrinhDoNgoaiNgusHealthz403 | GetDMTrinhDoNgoaiNgusHealthz500>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusHealthz>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMTrinhDoNgoaiNgusHealthz<TData = Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusHealthz>>, TError = GetDMTrinhDoNgoaiNgusHealthz400 | GetDMTrinhDoNgoaiNgusHealthz401 | GetDMTrinhDoNgoaiNgusHealthz403 | GetDMTrinhDoNgoaiNgusHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusHealthz>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMTrinhDoNgoaiNgusHealthz<TData = Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusHealthz>>, TError = GetDMTrinhDoNgoaiNgusHealthz400 | GetDMTrinhDoNgoaiNgusHealthz401 | GetDMTrinhDoNgoaiNgusHealthz403 | GetDMTrinhDoNgoaiNgusHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusHealthz>>> = ({
+        signal,
+    }) => getDMTrinhDoNgoaiNgusHealthz({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusHealthz>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDMTrinhDoNgoaiNgusHealthzQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusHealthz>>
+>
+export type GetDMTrinhDoNgoaiNgusHealthzQueryError =
+    | GetDMTrinhDoNgoaiNgusHealthz400
+    | GetDMTrinhDoNgoaiNgusHealthz401
+    | GetDMTrinhDoNgoaiNgusHealthz403
+    | GetDMTrinhDoNgoaiNgusHealthz500
+
+export function useGetDMTrinhDoNgoaiNgusHealthz<
+    TData = Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusHealthz>>,
+    TError =
+        | GetDMTrinhDoNgoaiNgusHealthz400
+        | GetDMTrinhDoNgoaiNgusHealthz401
+        | GetDMTrinhDoNgoaiNgusHealthz403
+        | GetDMTrinhDoNgoaiNgusHealthz500,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusHealthz>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMTrinhDoNgoaiNgusHealthz<
+    TData = Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusHealthz>>,
+    TError =
+        | GetDMTrinhDoNgoaiNgusHealthz400
+        | GetDMTrinhDoNgoaiNgusHealthz401
+        | GetDMTrinhDoNgoaiNgusHealthz403
+        | GetDMTrinhDoNgoaiNgusHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusHealthz>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMTrinhDoNgoaiNgusHealthz<
+    TData = Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusHealthz>>,
+    TError =
+        | GetDMTrinhDoNgoaiNgusHealthz400
+        | GetDMTrinhDoNgoaiNgusHealthz401
+        | GetDMTrinhDoNgoaiNgusHealthz403
+        | GetDMTrinhDoNgoaiNgusHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Kiểm tra tình trạng API
  */
 
-export function useGetDMTrinhDoNgoaiNgusHealthz<TData = Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusHealthz>>, TError = GetDMTrinhDoNgoaiNgusHealthz400 | GetDMTrinhDoNgoaiNgusHealthz401 | GetDMTrinhDoNgoaiNgusHealthz403 | GetDMTrinhDoNgoaiNgusHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMTrinhDoNgoaiNgusHealthz<
+    TData = Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusHealthz>>,
+    TError =
+        | GetDMTrinhDoNgoaiNgusHealthz400
+        | GetDMTrinhDoNgoaiNgusHealthz401
+        | GetDMTrinhDoNgoaiNgusHealthz403
+        | GetDMTrinhDoNgoaiNgusHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMTrinhDoNgoaiNgusHealthzQueryOptions(options)
 
-  const queryOptions = getGetDMTrinhDoNgoaiNgusHealthzQueryOptions(options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Lấy danh sách các Trình độ tin học
  * @summary Trình độ tin học - Danh sách
  */
 export type postDMTrinhDoTinHocsListResponse200 = {
-  data: PublicApiGetAllDMTrinhDoTinHocDTO
-  status: 200
+    data: PublicApiGetAllDMTrinhDoTinHocDTO
+    status: 200
 }
 
 export type postDMTrinhDoTinHocsListResponse400 = {
-  data: PostDMTrinhDoTinHocsList400
-  status: 400
+    data: PostDMTrinhDoTinHocsList400
+    status: 400
 }
 
 export type postDMTrinhDoTinHocsListResponse401 = {
-  data: PostDMTrinhDoTinHocsList401
-  status: 401
+    data: PostDMTrinhDoTinHocsList401
+    status: 401
 }
 
 export type postDMTrinhDoTinHocsListResponse403 = {
-  data: PostDMTrinhDoTinHocsList403
-  status: 403
+    data: PostDMTrinhDoTinHocsList403
+    status: 403
 }
 
 export type postDMTrinhDoTinHocsListResponse500 = {
-  data: void
-  status: 500
+    data: void
+    status: 500
 }
-    
-export type postDMTrinhDoTinHocsListResponseSuccess = (postDMTrinhDoTinHocsListResponse200) & {
-  headers: Headers;
-};
-export type postDMTrinhDoTinHocsListResponseError = (postDMTrinhDoTinHocsListResponse400 | postDMTrinhDoTinHocsListResponse401 | postDMTrinhDoTinHocsListResponse403 | postDMTrinhDoTinHocsListResponse500) & {
-  headers: Headers;
-};
 
-export type postDMTrinhDoTinHocsListResponse = (postDMTrinhDoTinHocsListResponseSuccess | postDMTrinhDoTinHocsListResponseError)
+export type postDMTrinhDoTinHocsListResponseSuccess = postDMTrinhDoTinHocsListResponse200 & {
+    headers: Headers
+}
+export type postDMTrinhDoTinHocsListResponseError = (
+    | postDMTrinhDoTinHocsListResponse400
+    | postDMTrinhDoTinHocsListResponse401
+    | postDMTrinhDoTinHocsListResponse403
+    | postDMTrinhDoTinHocsListResponse500
+) & {
+    headers: Headers
+}
+
+export type postDMTrinhDoTinHocsListResponse =
+    | postDMTrinhDoTinHocsListResponseSuccess
+    | postDMTrinhDoTinHocsListResponseError
 
 export const getPostDMTrinhDoTinHocsListUrl = () => {
-
-
-  
-
-  return `/DM_TrinhDoTinHocs/list`
+    return `/DM_TrinhDoTinHocs/list`
 }
 
-export const postDMTrinhDoTinHocsList = async (publicApiPagingRequestDto: PublicApiPagingRequestDto, options?: RequestInit): Promise<postDMTrinhDoTinHocsListResponse> => {
-  
-  return customSystemFetch<postDMTrinhDoTinHocsListResponse>(getPostDMTrinhDoTinHocsListUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
-    body: JSON.stringify(
-      publicApiPagingRequestDto,)
-  }
-);}
+export const postDMTrinhDoTinHocsList = async (
+    publicApiPagingRequestDto: PublicApiPagingRequestDto,
+    options?: RequestInit
+): Promise<postDMTrinhDoTinHocsListResponse> => {
+    return customSystemFetch<postDMTrinhDoTinHocsListResponse>(getPostDMTrinhDoTinHocsListUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
+        body: JSON.stringify(publicApiPagingRequestDto),
+    })
+}
 
-
-
-
-export const getPostDMTrinhDoTinHocsListMutationOptions = <TError = PostDMTrinhDoTinHocsList400 | PostDMTrinhDoTinHocsList401 | PostDMTrinhDoTinHocsList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMTrinhDoTinHocsList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof postDMTrinhDoTinHocsList>>, TError,{data: PublicApiPagingRequestDto}, TContext> => {
-
-const mutationKey = ['postDMTrinhDoTinHocsList'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postDMTrinhDoTinHocsList>>, {data: PublicApiPagingRequestDto}> = (props) => {
-          const {data} = props ?? {};
-
-          return  postDMTrinhDoTinHocsList(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PostDMTrinhDoTinHocsListMutationResult = NonNullable<Awaited<ReturnType<typeof postDMTrinhDoTinHocsList>>>
-    export type PostDMTrinhDoTinHocsListMutationBody = PublicApiPagingRequestDto
-    export type PostDMTrinhDoTinHocsListMutationError = PostDMTrinhDoTinHocsList400 | PostDMTrinhDoTinHocsList401 | PostDMTrinhDoTinHocsList403 | void
-
-    /**
- * @summary Trình độ tin học - Danh sách
- */
-export const usePostDMTrinhDoTinHocsList = <TError = PostDMTrinhDoTinHocsList400 | PostDMTrinhDoTinHocsList401 | PostDMTrinhDoTinHocsList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMTrinhDoTinHocsList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getPostDMTrinhDoTinHocsListMutationOptions = <
+    TError =
+        | PostDMTrinhDoTinHocsList400
+        | PostDMTrinhDoTinHocsList401
+        | PostDMTrinhDoTinHocsList403
+        | void,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postDMTrinhDoTinHocsList>>,
         TError,
-        {data: PublicApiPagingRequestDto},
+        { data: PublicApiPagingRequestDto },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postDMTrinhDoTinHocsList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationKey = ['postDMTrinhDoTinHocsList']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getPostDMTrinhDoTinHocsListMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postDMTrinhDoTinHocsList>>,
+        { data: PublicApiPagingRequestDto }
+    > = (props) => {
+        const { data } = props ?? {}
 
-      return useMutation(mutationOptions, queryClient);
+        return postDMTrinhDoTinHocsList(data, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostDMTrinhDoTinHocsListMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postDMTrinhDoTinHocsList>>
+>
+export type PostDMTrinhDoTinHocsListMutationBody = PublicApiPagingRequestDto
+export type PostDMTrinhDoTinHocsListMutationError =
+    | PostDMTrinhDoTinHocsList400
+    | PostDMTrinhDoTinHocsList401
+    | PostDMTrinhDoTinHocsList403
+    | void
+
+/**
+ * @summary Trình độ tin học - Danh sách
+ */
+export const usePostDMTrinhDoTinHocsList = <
+    TError =
+        | PostDMTrinhDoTinHocsList400
+        | PostDMTrinhDoTinHocsList401
+        | PostDMTrinhDoTinHocsList403
+        | void,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postDMTrinhDoTinHocsList>>,
+            TError,
+            { data: PublicApiPagingRequestDto },
+            TContext
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postDMTrinhDoTinHocsList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationOptions = getPostDMTrinhDoTinHocsListMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * Lấy thông tin Trình độ tin học theo ID
  * @summary Trình độ tin học - Theo Id
  */
 export type getDMTrinhDoTinHocsIdResponse200 = {
-  data: PublicApiGetAllDMTrinhDoTinHocDTO
-  status: 200
+    data: PublicApiGetAllDMTrinhDoTinHocDTO
+    status: 200
 }
 
 export type getDMTrinhDoTinHocsIdResponse400 = {
-  data: GetDMTrinhDoTinHocsId400
-  status: 400
+    data: GetDMTrinhDoTinHocsId400
+    status: 400
 }
 
 export type getDMTrinhDoTinHocsIdResponse401 = {
-  data: GetDMTrinhDoTinHocsId401
-  status: 401
+    data: GetDMTrinhDoTinHocsId401
+    status: 401
 }
 
 export type getDMTrinhDoTinHocsIdResponse403 = {
-  data: GetDMTrinhDoTinHocsId403
-  status: 403
+    data: GetDMTrinhDoTinHocsId403
+    status: 403
 }
 
 export type getDMTrinhDoTinHocsIdResponse500 = {
-  data: void
-  status: 500
-}
-    
-export type getDMTrinhDoTinHocsIdResponseSuccess = (getDMTrinhDoTinHocsIdResponse200) & {
-  headers: Headers;
-};
-export type getDMTrinhDoTinHocsIdResponseError = (getDMTrinhDoTinHocsIdResponse400 | getDMTrinhDoTinHocsIdResponse401 | getDMTrinhDoTinHocsIdResponse403 | getDMTrinhDoTinHocsIdResponse500) & {
-  headers: Headers;
-};
-
-export type getDMTrinhDoTinHocsIdResponse = (getDMTrinhDoTinHocsIdResponseSuccess | getDMTrinhDoTinHocsIdResponseError)
-
-export const getGetDMTrinhDoTinHocsIdUrl = (id: string,
-    params?: GetDMTrinhDoTinHocsIdParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/DM_TrinhDoTinHocs/${id}?${stringifiedParams}` : `/DM_TrinhDoTinHocs/${id}`
+    data: void
+    status: 500
 }
 
-export const getDMTrinhDoTinHocsId = async (id: string,
-    params?: GetDMTrinhDoTinHocsIdParams, options?: RequestInit): Promise<getDMTrinhDoTinHocsIdResponse> => {
-  
-  return customSystemFetch<getDMTrinhDoTinHocsIdResponse>(getGetDMTrinhDoTinHocsIdUrl(id,params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type getDMTrinhDoTinHocsIdResponseSuccess = getDMTrinhDoTinHocsIdResponse200 & {
+    headers: Headers
+}
+export type getDMTrinhDoTinHocsIdResponseError = (
+    | getDMTrinhDoTinHocsIdResponse400
+    | getDMTrinhDoTinHocsIdResponse401
+    | getDMTrinhDoTinHocsIdResponse403
+    | getDMTrinhDoTinHocsIdResponse500
+) & {
+    headers: Headers
+}
 
+export type getDMTrinhDoTinHocsIdResponse =
+    | getDMTrinhDoTinHocsIdResponseSuccess
+    | getDMTrinhDoTinHocsIdResponseError
 
+export const getGetDMTrinhDoTinHocsIdUrl = (id: string, params?: GetDMTrinhDoTinHocsIdParams) => {
+    const normalizedParams = new URLSearchParams()
 
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
+    const stringifiedParams = normalizedParams.toString()
 
-export const getGetDMTrinhDoTinHocsIdQueryKey = (id?: string,
-    params?: GetDMTrinhDoTinHocsIdParams,) => {
-    return [
-    `/DM_TrinhDoTinHocs/${id}`, ...(params ? [params]: [])
-    ] as const;
-    }
+    return stringifiedParams.length > 0
+        ? `/DM_TrinhDoTinHocs/${id}?${stringifiedParams}`
+        : `/DM_TrinhDoTinHocs/${id}`
+}
 
-    
-export const getGetDMTrinhDoTinHocsIdQueryOptions = <TData = Awaited<ReturnType<typeof getDMTrinhDoTinHocsId>>, TError = GetDMTrinhDoTinHocsId400 | GetDMTrinhDoTinHocsId401 | GetDMTrinhDoTinHocsId403 | void>(id: string,
-    params?: GetDMTrinhDoTinHocsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoTinHocsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
+export const getDMTrinhDoTinHocsId = async (
+    id: string,
+    params?: GetDMTrinhDoTinHocsIdParams,
+    options?: RequestInit
+): Promise<getDMTrinhDoTinHocsIdResponse> => {
+    return customSystemFetch<getDMTrinhDoTinHocsIdResponse>(
+        getGetDMTrinhDoTinHocsIdUrl(id, params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getGetDMTrinhDoTinHocsIdQueryKey = (
+    id?: string,
+    params?: GetDMTrinhDoTinHocsIdParams
 ) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetDMTrinhDoTinHocsIdQueryKey(id,params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMTrinhDoTinHocsId>>> = ({ signal }) => getDMTrinhDoTinHocsId(id,params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoTinHocsId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return [`/DM_TrinhDoTinHocs/${id}`, ...(params ? [params] : [])] as const
 }
 
-export type GetDMTrinhDoTinHocsIdQueryResult = NonNullable<Awaited<ReturnType<typeof getDMTrinhDoTinHocsId>>>
-export type GetDMTrinhDoTinHocsIdQueryError = GetDMTrinhDoTinHocsId400 | GetDMTrinhDoTinHocsId401 | GetDMTrinhDoTinHocsId403 | void
+export const getGetDMTrinhDoTinHocsIdQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMTrinhDoTinHocsId>>,
+    TError = GetDMTrinhDoTinHocsId400 | GetDMTrinhDoTinHocsId401 | GetDMTrinhDoTinHocsId403 | void,
+>(
+    id: string,
+    params?: GetDMTrinhDoTinHocsIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoTinHocsId>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
+    const queryKey = queryOptions?.queryKey ?? getGetDMTrinhDoTinHocsIdQueryKey(id, params)
 
-export function useGetDMTrinhDoTinHocsId<TData = Awaited<ReturnType<typeof getDMTrinhDoTinHocsId>>, TError = GetDMTrinhDoTinHocsId400 | GetDMTrinhDoTinHocsId401 | GetDMTrinhDoTinHocsId403 | void>(
- id: string,
-    params: undefined |  GetDMTrinhDoTinHocsIdParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoTinHocsId>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMTrinhDoTinHocsId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMTrinhDoTinHocsId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMTrinhDoTinHocsId<TData = Awaited<ReturnType<typeof getDMTrinhDoTinHocsId>>, TError = GetDMTrinhDoTinHocsId400 | GetDMTrinhDoTinHocsId401 | GetDMTrinhDoTinHocsId403 | void>(
- id: string,
-    params?: GetDMTrinhDoTinHocsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoTinHocsId>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMTrinhDoTinHocsId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMTrinhDoTinHocsId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMTrinhDoTinHocsId<TData = Awaited<ReturnType<typeof getDMTrinhDoTinHocsId>>, TError = GetDMTrinhDoTinHocsId400 | GetDMTrinhDoTinHocsId401 | GetDMTrinhDoTinHocsId403 | void>(
- id: string,
-    params?: GetDMTrinhDoTinHocsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoTinHocsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMTrinhDoTinHocsId>>> = ({
+        signal,
+    }) => getDMTrinhDoTinHocsId(id, params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMTrinhDoTinHocsId>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDMTrinhDoTinHocsIdQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getDMTrinhDoTinHocsId>>
+>
+export type GetDMTrinhDoTinHocsIdQueryError =
+    | GetDMTrinhDoTinHocsId400
+    | GetDMTrinhDoTinHocsId401
+    | GetDMTrinhDoTinHocsId403
+    | void
+
+export function useGetDMTrinhDoTinHocsId<
+    TData = Awaited<ReturnType<typeof getDMTrinhDoTinHocsId>>,
+    TError = GetDMTrinhDoTinHocsId400 | GetDMTrinhDoTinHocsId401 | GetDMTrinhDoTinHocsId403 | void,
+>(
+    id: string,
+    params: undefined | GetDMTrinhDoTinHocsIdParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoTinHocsId>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMTrinhDoTinHocsId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMTrinhDoTinHocsId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMTrinhDoTinHocsId<
+    TData = Awaited<ReturnType<typeof getDMTrinhDoTinHocsId>>,
+    TError = GetDMTrinhDoTinHocsId400 | GetDMTrinhDoTinHocsId401 | GetDMTrinhDoTinHocsId403 | void,
+>(
+    id: string,
+    params?: GetDMTrinhDoTinHocsIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoTinHocsId>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMTrinhDoTinHocsId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMTrinhDoTinHocsId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMTrinhDoTinHocsId<
+    TData = Awaited<ReturnType<typeof getDMTrinhDoTinHocsId>>,
+    TError = GetDMTrinhDoTinHocsId400 | GetDMTrinhDoTinHocsId401 | GetDMTrinhDoTinHocsId403 | void,
+>(
+    id: string,
+    params?: GetDMTrinhDoTinHocsIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoTinHocsId>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Trình độ tin học - Theo Id
  */
 
-export function useGetDMTrinhDoTinHocsId<TData = Awaited<ReturnType<typeof getDMTrinhDoTinHocsId>>, TError = GetDMTrinhDoTinHocsId400 | GetDMTrinhDoTinHocsId401 | GetDMTrinhDoTinHocsId403 | void>(
- id: string,
-    params?: GetDMTrinhDoTinHocsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoTinHocsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMTrinhDoTinHocsId<
+    TData = Awaited<ReturnType<typeof getDMTrinhDoTinHocsId>>,
+    TError = GetDMTrinhDoTinHocsId400 | GetDMTrinhDoTinHocsId401 | GetDMTrinhDoTinHocsId403 | void,
+>(
+    id: string,
+    params?: GetDMTrinhDoTinHocsIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoTinHocsId>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMTrinhDoTinHocsIdQueryOptions(id, params, options)
 
-  const queryOptions = getGetDMTrinhDoTinHocsIdQueryOptions(id,params,options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Kiểm tra tình trạng API
  * @summary Kiểm tra tình trạng API
  */
 export type getDMTrinhDoTinHocsHealthzResponse400 = {
-  data: GetDMTrinhDoTinHocsHealthz400
-  status: 400
+    data: GetDMTrinhDoTinHocsHealthz400
+    status: 400
 }
 
 export type getDMTrinhDoTinHocsHealthzResponse401 = {
-  data: GetDMTrinhDoTinHocsHealthz401
-  status: 401
+    data: GetDMTrinhDoTinHocsHealthz401
+    status: 401
 }
 
 export type getDMTrinhDoTinHocsHealthzResponse403 = {
-  data: GetDMTrinhDoTinHocsHealthz403
-  status: 403
+    data: GetDMTrinhDoTinHocsHealthz403
+    status: 403
 }
 
 export type getDMTrinhDoTinHocsHealthzResponse500 = {
-  data: GetDMTrinhDoTinHocsHealthz500
-  status: 500
+    data: GetDMTrinhDoTinHocsHealthz500
+    status: 500
 }
-    
-;
-export type getDMTrinhDoTinHocsHealthzResponseError = (getDMTrinhDoTinHocsHealthzResponse400 | getDMTrinhDoTinHocsHealthzResponse401 | getDMTrinhDoTinHocsHealthzResponse403 | getDMTrinhDoTinHocsHealthzResponse500) & {
-  headers: Headers;
-};
+export type getDMTrinhDoTinHocsHealthzResponseError = (
+    | getDMTrinhDoTinHocsHealthzResponse400
+    | getDMTrinhDoTinHocsHealthzResponse401
+    | getDMTrinhDoTinHocsHealthzResponse403
+    | getDMTrinhDoTinHocsHealthzResponse500
+) & {
+    headers: Headers
+}
 
-export type getDMTrinhDoTinHocsHealthzResponse = (getDMTrinhDoTinHocsHealthzResponseError)
+export type getDMTrinhDoTinHocsHealthzResponse = getDMTrinhDoTinHocsHealthzResponseError
 
 export const getGetDMTrinhDoTinHocsHealthzUrl = () => {
-
-
-  
-
-  return `/DM_TrinhDoTinHocs/healthz`
+    return `/DM_TrinhDoTinHocs/healthz`
 }
 
-export const getDMTrinhDoTinHocsHealthz = async ( options?: RequestInit): Promise<getDMTrinhDoTinHocsHealthzResponse> => {
-  
-  return customSystemFetch<getDMTrinhDoTinHocsHealthzResponse>(getGetDMTrinhDoTinHocsHealthzUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-
+export const getDMTrinhDoTinHocsHealthz = async (
+    options?: RequestInit
+): Promise<getDMTrinhDoTinHocsHealthzResponse> => {
+    return customSystemFetch<getDMTrinhDoTinHocsHealthzResponse>(
+        getGetDMTrinhDoTinHocsHealthzUrl(),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
 
 export const getGetDMTrinhDoTinHocsHealthzQueryKey = () => {
-    return [
-    `/DM_TrinhDoTinHocs/healthz`
-    ] as const;
-    }
-
-    
-export const getGetDMTrinhDoTinHocsHealthzQueryOptions = <TData = Awaited<ReturnType<typeof getDMTrinhDoTinHocsHealthz>>, TError = GetDMTrinhDoTinHocsHealthz400 | GetDMTrinhDoTinHocsHealthz401 | GetDMTrinhDoTinHocsHealthz403 | GetDMTrinhDoTinHocsHealthz500>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoTinHocsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetDMTrinhDoTinHocsHealthzQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMTrinhDoTinHocsHealthz>>> = ({ signal }) => getDMTrinhDoTinHocsHealthz({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoTinHocsHealthz>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return [`/DM_TrinhDoTinHocs/healthz`] as const
 }
 
-export type GetDMTrinhDoTinHocsHealthzQueryResult = NonNullable<Awaited<ReturnType<typeof getDMTrinhDoTinHocsHealthz>>>
-export type GetDMTrinhDoTinHocsHealthzQueryError = GetDMTrinhDoTinHocsHealthz400 | GetDMTrinhDoTinHocsHealthz401 | GetDMTrinhDoTinHocsHealthz403 | GetDMTrinhDoTinHocsHealthz500
+export const getGetDMTrinhDoTinHocsHealthzQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMTrinhDoTinHocsHealthz>>,
+    TError =
+        | GetDMTrinhDoTinHocsHealthz400
+        | GetDMTrinhDoTinHocsHealthz401
+        | GetDMTrinhDoTinHocsHealthz403
+        | GetDMTrinhDoTinHocsHealthz500,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoTinHocsHealthz>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
+    const queryKey = queryOptions?.queryKey ?? getGetDMTrinhDoTinHocsHealthzQueryKey()
 
-export function useGetDMTrinhDoTinHocsHealthz<TData = Awaited<ReturnType<typeof getDMTrinhDoTinHocsHealthz>>, TError = GetDMTrinhDoTinHocsHealthz400 | GetDMTrinhDoTinHocsHealthz401 | GetDMTrinhDoTinHocsHealthz403 | GetDMTrinhDoTinHocsHealthz500>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoTinHocsHealthz>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMTrinhDoTinHocsHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMTrinhDoTinHocsHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMTrinhDoTinHocsHealthz<TData = Awaited<ReturnType<typeof getDMTrinhDoTinHocsHealthz>>, TError = GetDMTrinhDoTinHocsHealthz400 | GetDMTrinhDoTinHocsHealthz401 | GetDMTrinhDoTinHocsHealthz403 | GetDMTrinhDoTinHocsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoTinHocsHealthz>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMTrinhDoTinHocsHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMTrinhDoTinHocsHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMTrinhDoTinHocsHealthz<TData = Awaited<ReturnType<typeof getDMTrinhDoTinHocsHealthz>>, TError = GetDMTrinhDoTinHocsHealthz400 | GetDMTrinhDoTinHocsHealthz401 | GetDMTrinhDoTinHocsHealthz403 | GetDMTrinhDoTinHocsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoTinHocsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMTrinhDoTinHocsHealthz>>> = ({
+        signal,
+    }) => getDMTrinhDoTinHocsHealthz({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMTrinhDoTinHocsHealthz>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDMTrinhDoTinHocsHealthzQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getDMTrinhDoTinHocsHealthz>>
+>
+export type GetDMTrinhDoTinHocsHealthzQueryError =
+    | GetDMTrinhDoTinHocsHealthz400
+    | GetDMTrinhDoTinHocsHealthz401
+    | GetDMTrinhDoTinHocsHealthz403
+    | GetDMTrinhDoTinHocsHealthz500
+
+export function useGetDMTrinhDoTinHocsHealthz<
+    TData = Awaited<ReturnType<typeof getDMTrinhDoTinHocsHealthz>>,
+    TError =
+        | GetDMTrinhDoTinHocsHealthz400
+        | GetDMTrinhDoTinHocsHealthz401
+        | GetDMTrinhDoTinHocsHealthz403
+        | GetDMTrinhDoTinHocsHealthz500,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoTinHocsHealthz>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMTrinhDoTinHocsHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMTrinhDoTinHocsHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMTrinhDoTinHocsHealthz<
+    TData = Awaited<ReturnType<typeof getDMTrinhDoTinHocsHealthz>>,
+    TError =
+        | GetDMTrinhDoTinHocsHealthz400
+        | GetDMTrinhDoTinHocsHealthz401
+        | GetDMTrinhDoTinHocsHealthz403
+        | GetDMTrinhDoTinHocsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoTinHocsHealthz>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMTrinhDoTinHocsHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMTrinhDoTinHocsHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMTrinhDoTinHocsHealthz<
+    TData = Awaited<ReturnType<typeof getDMTrinhDoTinHocsHealthz>>,
+    TError =
+        | GetDMTrinhDoTinHocsHealthz400
+        | GetDMTrinhDoTinHocsHealthz401
+        | GetDMTrinhDoTinHocsHealthz403
+        | GetDMTrinhDoTinHocsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoTinHocsHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Kiểm tra tình trạng API
  */
 
-export function useGetDMTrinhDoTinHocsHealthz<TData = Awaited<ReturnType<typeof getDMTrinhDoTinHocsHealthz>>, TError = GetDMTrinhDoTinHocsHealthz400 | GetDMTrinhDoTinHocsHealthz401 | GetDMTrinhDoTinHocsHealthz403 | GetDMTrinhDoTinHocsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoTinHocsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMTrinhDoTinHocsHealthz<
+    TData = Awaited<ReturnType<typeof getDMTrinhDoTinHocsHealthz>>,
+    TError =
+        | GetDMTrinhDoTinHocsHealthz400
+        | GetDMTrinhDoTinHocsHealthz401
+        | GetDMTrinhDoTinHocsHealthz403
+        | GetDMTrinhDoTinHocsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoTinHocsHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMTrinhDoTinHocsHealthzQueryOptions(options)
 
-  const queryOptions = getGetDMTrinhDoTinHocsHealthzQueryOptions(options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Lấy danh sách các Vị trí công việc
  * @summary Vị trí công việc - Danh sách
  */
 export type postDMViTriCongViecsListResponse200 = {
-  data: PublicApiGetAllDMViTriCongViecDTO
-  status: 200
+    data: PublicApiGetAllDMViTriCongViecDTO
+    status: 200
 }
 
 export type postDMViTriCongViecsListResponse400 = {
-  data: PostDMViTriCongViecsList400
-  status: 400
+    data: PostDMViTriCongViecsList400
+    status: 400
 }
 
 export type postDMViTriCongViecsListResponse401 = {
-  data: PostDMViTriCongViecsList401
-  status: 401
+    data: PostDMViTriCongViecsList401
+    status: 401
 }
 
 export type postDMViTriCongViecsListResponse403 = {
-  data: PostDMViTriCongViecsList403
-  status: 403
+    data: PostDMViTriCongViecsList403
+    status: 403
 }
 
 export type postDMViTriCongViecsListResponse500 = {
-  data: void
-  status: 500
+    data: void
+    status: 500
 }
-    
-export type postDMViTriCongViecsListResponseSuccess = (postDMViTriCongViecsListResponse200) & {
-  headers: Headers;
-};
-export type postDMViTriCongViecsListResponseError = (postDMViTriCongViecsListResponse400 | postDMViTriCongViecsListResponse401 | postDMViTriCongViecsListResponse403 | postDMViTriCongViecsListResponse500) & {
-  headers: Headers;
-};
 
-export type postDMViTriCongViecsListResponse = (postDMViTriCongViecsListResponseSuccess | postDMViTriCongViecsListResponseError)
+export type postDMViTriCongViecsListResponseSuccess = postDMViTriCongViecsListResponse200 & {
+    headers: Headers
+}
+export type postDMViTriCongViecsListResponseError = (
+    | postDMViTriCongViecsListResponse400
+    | postDMViTriCongViecsListResponse401
+    | postDMViTriCongViecsListResponse403
+    | postDMViTriCongViecsListResponse500
+) & {
+    headers: Headers
+}
+
+export type postDMViTriCongViecsListResponse =
+    | postDMViTriCongViecsListResponseSuccess
+    | postDMViTriCongViecsListResponseError
 
 export const getPostDMViTriCongViecsListUrl = () => {
-
-
-  
-
-  return `/DM_ViTriCongViecs/list`
+    return `/DM_ViTriCongViecs/list`
 }
 
-export const postDMViTriCongViecsList = async (publicApiPagingRequestDto: PublicApiPagingRequestDto, options?: RequestInit): Promise<postDMViTriCongViecsListResponse> => {
-  
-  return customSystemFetch<postDMViTriCongViecsListResponse>(getPostDMViTriCongViecsListUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
-    body: JSON.stringify(
-      publicApiPagingRequestDto,)
-  }
-);}
+export const postDMViTriCongViecsList = async (
+    publicApiPagingRequestDto: PublicApiPagingRequestDto,
+    options?: RequestInit
+): Promise<postDMViTriCongViecsListResponse> => {
+    return customSystemFetch<postDMViTriCongViecsListResponse>(getPostDMViTriCongViecsListUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
+        body: JSON.stringify(publicApiPagingRequestDto),
+    })
+}
 
-
-
-
-export const getPostDMViTriCongViecsListMutationOptions = <TError = PostDMViTriCongViecsList400 | PostDMViTriCongViecsList401 | PostDMViTriCongViecsList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMViTriCongViecsList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof postDMViTriCongViecsList>>, TError,{data: PublicApiPagingRequestDto}, TContext> => {
-
-const mutationKey = ['postDMViTriCongViecsList'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postDMViTriCongViecsList>>, {data: PublicApiPagingRequestDto}> = (props) => {
-          const {data} = props ?? {};
-
-          return  postDMViTriCongViecsList(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PostDMViTriCongViecsListMutationResult = NonNullable<Awaited<ReturnType<typeof postDMViTriCongViecsList>>>
-    export type PostDMViTriCongViecsListMutationBody = PublicApiPagingRequestDto
-    export type PostDMViTriCongViecsListMutationError = PostDMViTriCongViecsList400 | PostDMViTriCongViecsList401 | PostDMViTriCongViecsList403 | void
-
-    /**
- * @summary Vị trí công việc - Danh sách
- */
-export const usePostDMViTriCongViecsList = <TError = PostDMViTriCongViecsList400 | PostDMViTriCongViecsList401 | PostDMViTriCongViecsList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMViTriCongViecsList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getPostDMViTriCongViecsListMutationOptions = <
+    TError =
+        | PostDMViTriCongViecsList400
+        | PostDMViTriCongViecsList401
+        | PostDMViTriCongViecsList403
+        | void,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postDMViTriCongViecsList>>,
         TError,
-        {data: PublicApiPagingRequestDto},
+        { data: PublicApiPagingRequestDto },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postDMViTriCongViecsList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationKey = ['postDMViTriCongViecsList']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getPostDMViTriCongViecsListMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postDMViTriCongViecsList>>,
+        { data: PublicApiPagingRequestDto }
+    > = (props) => {
+        const { data } = props ?? {}
 
-      return useMutation(mutationOptions, queryClient);
+        return postDMViTriCongViecsList(data, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostDMViTriCongViecsListMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postDMViTriCongViecsList>>
+>
+export type PostDMViTriCongViecsListMutationBody = PublicApiPagingRequestDto
+export type PostDMViTriCongViecsListMutationError =
+    | PostDMViTriCongViecsList400
+    | PostDMViTriCongViecsList401
+    | PostDMViTriCongViecsList403
+    | void
+
+/**
+ * @summary Vị trí công việc - Danh sách
+ */
+export const usePostDMViTriCongViecsList = <
+    TError =
+        | PostDMViTriCongViecsList400
+        | PostDMViTriCongViecsList401
+        | PostDMViTriCongViecsList403
+        | void,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postDMViTriCongViecsList>>,
+            TError,
+            { data: PublicApiPagingRequestDto },
+            TContext
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postDMViTriCongViecsList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationOptions = getPostDMViTriCongViecsListMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * Lấy thông tin Vị trí công việc theo ID
  * @summary Vị trí công việc - Theo Id
  */
 export type getDMViTriCongViecsIdResponse200 = {
-  data: PublicApiGetAllDMViTriCongViecDTO
-  status: 200
+    data: PublicApiGetAllDMViTriCongViecDTO
+    status: 200
 }
 
 export type getDMViTriCongViecsIdResponse400 = {
-  data: GetDMViTriCongViecsId400
-  status: 400
+    data: GetDMViTriCongViecsId400
+    status: 400
 }
 
 export type getDMViTriCongViecsIdResponse401 = {
-  data: GetDMViTriCongViecsId401
-  status: 401
+    data: GetDMViTriCongViecsId401
+    status: 401
 }
 
 export type getDMViTriCongViecsIdResponse403 = {
-  data: GetDMViTriCongViecsId403
-  status: 403
+    data: GetDMViTriCongViecsId403
+    status: 403
 }
 
 export type getDMViTriCongViecsIdResponse500 = {
-  data: void
-  status: 500
-}
-    
-export type getDMViTriCongViecsIdResponseSuccess = (getDMViTriCongViecsIdResponse200) & {
-  headers: Headers;
-};
-export type getDMViTriCongViecsIdResponseError = (getDMViTriCongViecsIdResponse400 | getDMViTriCongViecsIdResponse401 | getDMViTriCongViecsIdResponse403 | getDMViTriCongViecsIdResponse500) & {
-  headers: Headers;
-};
-
-export type getDMViTriCongViecsIdResponse = (getDMViTriCongViecsIdResponseSuccess | getDMViTriCongViecsIdResponseError)
-
-export const getGetDMViTriCongViecsIdUrl = (id: string,
-    params?: GetDMViTriCongViecsIdParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/DM_ViTriCongViecs/${id}?${stringifiedParams}` : `/DM_ViTriCongViecs/${id}`
+    data: void
+    status: 500
 }
 
-export const getDMViTriCongViecsId = async (id: string,
-    params?: GetDMViTriCongViecsIdParams, options?: RequestInit): Promise<getDMViTriCongViecsIdResponse> => {
-  
-  return customSystemFetch<getDMViTriCongViecsIdResponse>(getGetDMViTriCongViecsIdUrl(id,params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type getDMViTriCongViecsIdResponseSuccess = getDMViTriCongViecsIdResponse200 & {
+    headers: Headers
+}
+export type getDMViTriCongViecsIdResponseError = (
+    | getDMViTriCongViecsIdResponse400
+    | getDMViTriCongViecsIdResponse401
+    | getDMViTriCongViecsIdResponse403
+    | getDMViTriCongViecsIdResponse500
+) & {
+    headers: Headers
+}
 
+export type getDMViTriCongViecsIdResponse =
+    | getDMViTriCongViecsIdResponseSuccess
+    | getDMViTriCongViecsIdResponseError
 
+export const getGetDMViTriCongViecsIdUrl = (id: string, params?: GetDMViTriCongViecsIdParams) => {
+    const normalizedParams = new URLSearchParams()
 
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
+    const stringifiedParams = normalizedParams.toString()
 
-export const getGetDMViTriCongViecsIdQueryKey = (id?: string,
-    params?: GetDMViTriCongViecsIdParams,) => {
-    return [
-    `/DM_ViTriCongViecs/${id}`, ...(params ? [params]: [])
-    ] as const;
-    }
+    return stringifiedParams.length > 0
+        ? `/DM_ViTriCongViecs/${id}?${stringifiedParams}`
+        : `/DM_ViTriCongViecs/${id}`
+}
 
-    
-export const getGetDMViTriCongViecsIdQueryOptions = <TData = Awaited<ReturnType<typeof getDMViTriCongViecsId>>, TError = GetDMViTriCongViecsId400 | GetDMViTriCongViecsId401 | GetDMViTriCongViecsId403 | void>(id: string,
-    params?: GetDMViTriCongViecsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMViTriCongViecsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
+export const getDMViTriCongViecsId = async (
+    id: string,
+    params?: GetDMViTriCongViecsIdParams,
+    options?: RequestInit
+): Promise<getDMViTriCongViecsIdResponse> => {
+    return customSystemFetch<getDMViTriCongViecsIdResponse>(
+        getGetDMViTriCongViecsIdUrl(id, params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getGetDMViTriCongViecsIdQueryKey = (
+    id?: string,
+    params?: GetDMViTriCongViecsIdParams
 ) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetDMViTriCongViecsIdQueryKey(id,params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMViTriCongViecsId>>> = ({ signal }) => getDMViTriCongViecsId(id,params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMViTriCongViecsId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return [`/DM_ViTriCongViecs/${id}`, ...(params ? [params] : [])] as const
 }
 
-export type GetDMViTriCongViecsIdQueryResult = NonNullable<Awaited<ReturnType<typeof getDMViTriCongViecsId>>>
-export type GetDMViTriCongViecsIdQueryError = GetDMViTriCongViecsId400 | GetDMViTriCongViecsId401 | GetDMViTriCongViecsId403 | void
+export const getGetDMViTriCongViecsIdQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMViTriCongViecsId>>,
+    TError = GetDMViTriCongViecsId400 | GetDMViTriCongViecsId401 | GetDMViTriCongViecsId403 | void,
+>(
+    id: string,
+    params?: GetDMViTriCongViecsIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMViTriCongViecsId>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
+    const queryKey = queryOptions?.queryKey ?? getGetDMViTriCongViecsIdQueryKey(id, params)
 
-export function useGetDMViTriCongViecsId<TData = Awaited<ReturnType<typeof getDMViTriCongViecsId>>, TError = GetDMViTriCongViecsId400 | GetDMViTriCongViecsId401 | GetDMViTriCongViecsId403 | void>(
- id: string,
-    params: undefined |  GetDMViTriCongViecsIdParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMViTriCongViecsId>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMViTriCongViecsId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMViTriCongViecsId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMViTriCongViecsId<TData = Awaited<ReturnType<typeof getDMViTriCongViecsId>>, TError = GetDMViTriCongViecsId400 | GetDMViTriCongViecsId401 | GetDMViTriCongViecsId403 | void>(
- id: string,
-    params?: GetDMViTriCongViecsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMViTriCongViecsId>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMViTriCongViecsId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMViTriCongViecsId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMViTriCongViecsId<TData = Awaited<ReturnType<typeof getDMViTriCongViecsId>>, TError = GetDMViTriCongViecsId400 | GetDMViTriCongViecsId401 | GetDMViTriCongViecsId403 | void>(
- id: string,
-    params?: GetDMViTriCongViecsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMViTriCongViecsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMViTriCongViecsId>>> = ({
+        signal,
+    }) => getDMViTriCongViecsId(id, params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMViTriCongViecsId>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDMViTriCongViecsIdQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getDMViTriCongViecsId>>
+>
+export type GetDMViTriCongViecsIdQueryError =
+    | GetDMViTriCongViecsId400
+    | GetDMViTriCongViecsId401
+    | GetDMViTriCongViecsId403
+    | void
+
+export function useGetDMViTriCongViecsId<
+    TData = Awaited<ReturnType<typeof getDMViTriCongViecsId>>,
+    TError = GetDMViTriCongViecsId400 | GetDMViTriCongViecsId401 | GetDMViTriCongViecsId403 | void,
+>(
+    id: string,
+    params: undefined | GetDMViTriCongViecsIdParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMViTriCongViecsId>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMViTriCongViecsId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMViTriCongViecsId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMViTriCongViecsId<
+    TData = Awaited<ReturnType<typeof getDMViTriCongViecsId>>,
+    TError = GetDMViTriCongViecsId400 | GetDMViTriCongViecsId401 | GetDMViTriCongViecsId403 | void,
+>(
+    id: string,
+    params?: GetDMViTriCongViecsIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMViTriCongViecsId>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMViTriCongViecsId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMViTriCongViecsId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMViTriCongViecsId<
+    TData = Awaited<ReturnType<typeof getDMViTriCongViecsId>>,
+    TError = GetDMViTriCongViecsId400 | GetDMViTriCongViecsId401 | GetDMViTriCongViecsId403 | void,
+>(
+    id: string,
+    params?: GetDMViTriCongViecsIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMViTriCongViecsId>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Vị trí công việc - Theo Id
  */
 
-export function useGetDMViTriCongViecsId<TData = Awaited<ReturnType<typeof getDMViTriCongViecsId>>, TError = GetDMViTriCongViecsId400 | GetDMViTriCongViecsId401 | GetDMViTriCongViecsId403 | void>(
- id: string,
-    params?: GetDMViTriCongViecsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMViTriCongViecsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMViTriCongViecsId<
+    TData = Awaited<ReturnType<typeof getDMViTriCongViecsId>>,
+    TError = GetDMViTriCongViecsId400 | GetDMViTriCongViecsId401 | GetDMViTriCongViecsId403 | void,
+>(
+    id: string,
+    params?: GetDMViTriCongViecsIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMViTriCongViecsId>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMViTriCongViecsIdQueryOptions(id, params, options)
 
-  const queryOptions = getGetDMViTriCongViecsIdQueryOptions(id,params,options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Kiểm tra tình trạng API
  * @summary Kiểm tra tình trạng API
  */
 export type getDMViTriCongViecsHealthzResponse400 = {
-  data: GetDMViTriCongViecsHealthz400
-  status: 400
+    data: GetDMViTriCongViecsHealthz400
+    status: 400
 }
 
 export type getDMViTriCongViecsHealthzResponse401 = {
-  data: GetDMViTriCongViecsHealthz401
-  status: 401
+    data: GetDMViTriCongViecsHealthz401
+    status: 401
 }
 
 export type getDMViTriCongViecsHealthzResponse403 = {
-  data: GetDMViTriCongViecsHealthz403
-  status: 403
+    data: GetDMViTriCongViecsHealthz403
+    status: 403
 }
 
 export type getDMViTriCongViecsHealthzResponse500 = {
-  data: GetDMViTriCongViecsHealthz500
-  status: 500
+    data: GetDMViTriCongViecsHealthz500
+    status: 500
 }
-    
-;
-export type getDMViTriCongViecsHealthzResponseError = (getDMViTriCongViecsHealthzResponse400 | getDMViTriCongViecsHealthzResponse401 | getDMViTriCongViecsHealthzResponse403 | getDMViTriCongViecsHealthzResponse500) & {
-  headers: Headers;
-};
+export type getDMViTriCongViecsHealthzResponseError = (
+    | getDMViTriCongViecsHealthzResponse400
+    | getDMViTriCongViecsHealthzResponse401
+    | getDMViTriCongViecsHealthzResponse403
+    | getDMViTriCongViecsHealthzResponse500
+) & {
+    headers: Headers
+}
 
-export type getDMViTriCongViecsHealthzResponse = (getDMViTriCongViecsHealthzResponseError)
+export type getDMViTriCongViecsHealthzResponse = getDMViTriCongViecsHealthzResponseError
 
 export const getGetDMViTriCongViecsHealthzUrl = () => {
-
-
-  
-
-  return `/DM_ViTriCongViecs/healthz`
+    return `/DM_ViTriCongViecs/healthz`
 }
 
-export const getDMViTriCongViecsHealthz = async ( options?: RequestInit): Promise<getDMViTriCongViecsHealthzResponse> => {
-  
-  return customSystemFetch<getDMViTriCongViecsHealthzResponse>(getGetDMViTriCongViecsHealthzUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-
+export const getDMViTriCongViecsHealthz = async (
+    options?: RequestInit
+): Promise<getDMViTriCongViecsHealthzResponse> => {
+    return customSystemFetch<getDMViTriCongViecsHealthzResponse>(
+        getGetDMViTriCongViecsHealthzUrl(),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
 
 export const getGetDMViTriCongViecsHealthzQueryKey = () => {
-    return [
-    `/DM_ViTriCongViecs/healthz`
-    ] as const;
-    }
-
-    
-export const getGetDMViTriCongViecsHealthzQueryOptions = <TData = Awaited<ReturnType<typeof getDMViTriCongViecsHealthz>>, TError = GetDMViTriCongViecsHealthz400 | GetDMViTriCongViecsHealthz401 | GetDMViTriCongViecsHealthz403 | GetDMViTriCongViecsHealthz500>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMViTriCongViecsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetDMViTriCongViecsHealthzQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMViTriCongViecsHealthz>>> = ({ signal }) => getDMViTriCongViecsHealthz({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMViTriCongViecsHealthz>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return [`/DM_ViTriCongViecs/healthz`] as const
 }
 
-export type GetDMViTriCongViecsHealthzQueryResult = NonNullable<Awaited<ReturnType<typeof getDMViTriCongViecsHealthz>>>
-export type GetDMViTriCongViecsHealthzQueryError = GetDMViTriCongViecsHealthz400 | GetDMViTriCongViecsHealthz401 | GetDMViTriCongViecsHealthz403 | GetDMViTriCongViecsHealthz500
+export const getGetDMViTriCongViecsHealthzQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMViTriCongViecsHealthz>>,
+    TError =
+        | GetDMViTriCongViecsHealthz400
+        | GetDMViTriCongViecsHealthz401
+        | GetDMViTriCongViecsHealthz403
+        | GetDMViTriCongViecsHealthz500,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<Awaited<ReturnType<typeof getDMViTriCongViecsHealthz>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
+    const queryKey = queryOptions?.queryKey ?? getGetDMViTriCongViecsHealthzQueryKey()
 
-export function useGetDMViTriCongViecsHealthz<TData = Awaited<ReturnType<typeof getDMViTriCongViecsHealthz>>, TError = GetDMViTriCongViecsHealthz400 | GetDMViTriCongViecsHealthz401 | GetDMViTriCongViecsHealthz403 | GetDMViTriCongViecsHealthz500>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMViTriCongViecsHealthz>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMViTriCongViecsHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMViTriCongViecsHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMViTriCongViecsHealthz<TData = Awaited<ReturnType<typeof getDMViTriCongViecsHealthz>>, TError = GetDMViTriCongViecsHealthz400 | GetDMViTriCongViecsHealthz401 | GetDMViTriCongViecsHealthz403 | GetDMViTriCongViecsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMViTriCongViecsHealthz>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMViTriCongViecsHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMViTriCongViecsHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMViTriCongViecsHealthz<TData = Awaited<ReturnType<typeof getDMViTriCongViecsHealthz>>, TError = GetDMViTriCongViecsHealthz400 | GetDMViTriCongViecsHealthz401 | GetDMViTriCongViecsHealthz403 | GetDMViTriCongViecsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMViTriCongViecsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMViTriCongViecsHealthz>>> = ({
+        signal,
+    }) => getDMViTriCongViecsHealthz({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMViTriCongViecsHealthz>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDMViTriCongViecsHealthzQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getDMViTriCongViecsHealthz>>
+>
+export type GetDMViTriCongViecsHealthzQueryError =
+    | GetDMViTriCongViecsHealthz400
+    | GetDMViTriCongViecsHealthz401
+    | GetDMViTriCongViecsHealthz403
+    | GetDMViTriCongViecsHealthz500
+
+export function useGetDMViTriCongViecsHealthz<
+    TData = Awaited<ReturnType<typeof getDMViTriCongViecsHealthz>>,
+    TError =
+        | GetDMViTriCongViecsHealthz400
+        | GetDMViTriCongViecsHealthz401
+        | GetDMViTriCongViecsHealthz403
+        | GetDMViTriCongViecsHealthz500,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMViTriCongViecsHealthz>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMViTriCongViecsHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMViTriCongViecsHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMViTriCongViecsHealthz<
+    TData = Awaited<ReturnType<typeof getDMViTriCongViecsHealthz>>,
+    TError =
+        | GetDMViTriCongViecsHealthz400
+        | GetDMViTriCongViecsHealthz401
+        | GetDMViTriCongViecsHealthz403
+        | GetDMViTriCongViecsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMViTriCongViecsHealthz>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMViTriCongViecsHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMViTriCongViecsHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMViTriCongViecsHealthz<
+    TData = Awaited<ReturnType<typeof getDMViTriCongViecsHealthz>>,
+    TError =
+        | GetDMViTriCongViecsHealthz400
+        | GetDMViTriCongViecsHealthz401
+        | GetDMViTriCongViecsHealthz403
+        | GetDMViTriCongViecsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMViTriCongViecsHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Kiểm tra tình trạng API
  */
 
-export function useGetDMViTriCongViecsHealthz<TData = Awaited<ReturnType<typeof getDMViTriCongViecsHealthz>>, TError = GetDMViTriCongViecsHealthz400 | GetDMViTriCongViecsHealthz401 | GetDMViTriCongViecsHealthz403 | GetDMViTriCongViecsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMViTriCongViecsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMViTriCongViecsHealthz<
+    TData = Awaited<ReturnType<typeof getDMViTriCongViecsHealthz>>,
+    TError =
+        | GetDMViTriCongViecsHealthz400
+        | GetDMViTriCongViecsHealthz401
+        | GetDMViTriCongViecsHealthz403
+        | GetDMViTriCongViecsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMViTriCongViecsHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMViTriCongViecsHealthzQueryOptions(options)
 
-  const queryOptions = getGetDMViTriCongViecsHealthzQueryOptions(options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Lấy danh sách các Xã, Phường, TT
  * @summary Xã, Phường, TT - Danh sách
  */
 export type postDMXaPhuongsListResponse200 = {
-  data: PublicApiGetAllDMXaPhuongDTO
-  status: 200
+    data: PublicApiGetAllDMXaPhuongDTO
+    status: 200
 }
 
 export type postDMXaPhuongsListResponse400 = {
-  data: PostDMXaPhuongsList400
-  status: 400
+    data: PostDMXaPhuongsList400
+    status: 400
 }
 
 export type postDMXaPhuongsListResponse401 = {
-  data: PostDMXaPhuongsList401
-  status: 401
+    data: PostDMXaPhuongsList401
+    status: 401
 }
 
 export type postDMXaPhuongsListResponse403 = {
-  data: PostDMXaPhuongsList403
-  status: 403
+    data: PostDMXaPhuongsList403
+    status: 403
 }
 
 export type postDMXaPhuongsListResponse500 = {
-  data: void
-  status: 500
+    data: void
+    status: 500
 }
-    
-export type postDMXaPhuongsListResponseSuccess = (postDMXaPhuongsListResponse200) & {
-  headers: Headers;
-};
-export type postDMXaPhuongsListResponseError = (postDMXaPhuongsListResponse400 | postDMXaPhuongsListResponse401 | postDMXaPhuongsListResponse403 | postDMXaPhuongsListResponse500) & {
-  headers: Headers;
-};
 
-export type postDMXaPhuongsListResponse = (postDMXaPhuongsListResponseSuccess | postDMXaPhuongsListResponseError)
+export type postDMXaPhuongsListResponseSuccess = postDMXaPhuongsListResponse200 & {
+    headers: Headers
+}
+export type postDMXaPhuongsListResponseError = (
+    | postDMXaPhuongsListResponse400
+    | postDMXaPhuongsListResponse401
+    | postDMXaPhuongsListResponse403
+    | postDMXaPhuongsListResponse500
+) & {
+    headers: Headers
+}
+
+export type postDMXaPhuongsListResponse =
+    | postDMXaPhuongsListResponseSuccess
+    | postDMXaPhuongsListResponseError
 
 export const getPostDMXaPhuongsListUrl = () => {
-
-
-  
-
-  return `/DM_XaPhuongs/list`
+    return `/DM_XaPhuongs/list`
 }
 
-export const postDMXaPhuongsList = async (publicApiPagingRequestDto: PublicApiPagingRequestDto, options?: RequestInit): Promise<postDMXaPhuongsListResponse> => {
-  
-  return customSystemFetch<postDMXaPhuongsListResponse>(getPostDMXaPhuongsListUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
-    body: JSON.stringify(
-      publicApiPagingRequestDto,)
-  }
-);}
+export const postDMXaPhuongsList = async (
+    publicApiPagingRequestDto: PublicApiPagingRequestDto,
+    options?: RequestInit
+): Promise<postDMXaPhuongsListResponse> => {
+    return customSystemFetch<postDMXaPhuongsListResponse>(getPostDMXaPhuongsListUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
+        body: JSON.stringify(publicApiPagingRequestDto),
+    })
+}
 
-
-
-
-export const getPostDMXaPhuongsListMutationOptions = <TError = PostDMXaPhuongsList400 | PostDMXaPhuongsList401 | PostDMXaPhuongsList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMXaPhuongsList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof postDMXaPhuongsList>>, TError,{data: PublicApiPagingRequestDto}, TContext> => {
-
-const mutationKey = ['postDMXaPhuongsList'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postDMXaPhuongsList>>, {data: PublicApiPagingRequestDto}> = (props) => {
-          const {data} = props ?? {};
-
-          return  postDMXaPhuongsList(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PostDMXaPhuongsListMutationResult = NonNullable<Awaited<ReturnType<typeof postDMXaPhuongsList>>>
-    export type PostDMXaPhuongsListMutationBody = PublicApiPagingRequestDto
-    export type PostDMXaPhuongsListMutationError = PostDMXaPhuongsList400 | PostDMXaPhuongsList401 | PostDMXaPhuongsList403 | void
-
-    /**
- * @summary Xã, Phường, TT - Danh sách
- */
-export const usePostDMXaPhuongsList = <TError = PostDMXaPhuongsList400 | PostDMXaPhuongsList401 | PostDMXaPhuongsList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMXaPhuongsList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getPostDMXaPhuongsListMutationOptions = <
+    TError = PostDMXaPhuongsList400 | PostDMXaPhuongsList401 | PostDMXaPhuongsList403 | void,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postDMXaPhuongsList>>,
         TError,
-        {data: PublicApiPagingRequestDto},
+        { data: PublicApiPagingRequestDto },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postDMXaPhuongsList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationKey = ['postDMXaPhuongsList']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getPostDMXaPhuongsListMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postDMXaPhuongsList>>,
+        { data: PublicApiPagingRequestDto }
+    > = (props) => {
+        const { data } = props ?? {}
 
-      return useMutation(mutationOptions, queryClient);
+        return postDMXaPhuongsList(data, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostDMXaPhuongsListMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postDMXaPhuongsList>>
+>
+export type PostDMXaPhuongsListMutationBody = PublicApiPagingRequestDto
+export type PostDMXaPhuongsListMutationError =
+    | PostDMXaPhuongsList400
+    | PostDMXaPhuongsList401
+    | PostDMXaPhuongsList403
+    | void
+
+/**
+ * @summary Xã, Phường, TT - Danh sách
+ */
+export const usePostDMXaPhuongsList = <
+    TError = PostDMXaPhuongsList400 | PostDMXaPhuongsList401 | PostDMXaPhuongsList403 | void,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postDMXaPhuongsList>>,
+            TError,
+            { data: PublicApiPagingRequestDto },
+            TContext
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postDMXaPhuongsList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationOptions = getPostDMXaPhuongsListMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * Lấy thông tin Xã, Phường, TT theo ID
  * @summary Xã, Phường, TT - Theo Id
  */
 export type getDMXaPhuongsIdResponse200 = {
-  data: PublicApiGetAllDMXaPhuongDTO
-  status: 200
+    data: PublicApiGetAllDMXaPhuongDTO
+    status: 200
 }
 
 export type getDMXaPhuongsIdResponse400 = {
-  data: GetDMXaPhuongsId400
-  status: 400
+    data: GetDMXaPhuongsId400
+    status: 400
 }
 
 export type getDMXaPhuongsIdResponse401 = {
-  data: GetDMXaPhuongsId401
-  status: 401
+    data: GetDMXaPhuongsId401
+    status: 401
 }
 
 export type getDMXaPhuongsIdResponse403 = {
-  data: GetDMXaPhuongsId403
-  status: 403
+    data: GetDMXaPhuongsId403
+    status: 403
 }
 
 export type getDMXaPhuongsIdResponse500 = {
-  data: void
-  status: 500
-}
-    
-export type getDMXaPhuongsIdResponseSuccess = (getDMXaPhuongsIdResponse200) & {
-  headers: Headers;
-};
-export type getDMXaPhuongsIdResponseError = (getDMXaPhuongsIdResponse400 | getDMXaPhuongsIdResponse401 | getDMXaPhuongsIdResponse403 | getDMXaPhuongsIdResponse500) & {
-  headers: Headers;
-};
-
-export type getDMXaPhuongsIdResponse = (getDMXaPhuongsIdResponseSuccess | getDMXaPhuongsIdResponseError)
-
-export const getGetDMXaPhuongsIdUrl = (id: string,
-    params?: GetDMXaPhuongsIdParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/DM_XaPhuongs/${id}?${stringifiedParams}` : `/DM_XaPhuongs/${id}`
+    data: void
+    status: 500
 }
 
-export const getDMXaPhuongsId = async (id: string,
-    params?: GetDMXaPhuongsIdParams, options?: RequestInit): Promise<getDMXaPhuongsIdResponse> => {
-  
-  return customSystemFetch<getDMXaPhuongsIdResponse>(getGetDMXaPhuongsIdUrl(id,params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type getDMXaPhuongsIdResponseSuccess = getDMXaPhuongsIdResponse200 & {
+    headers: Headers
+}
+export type getDMXaPhuongsIdResponseError = (
+    | getDMXaPhuongsIdResponse400
+    | getDMXaPhuongsIdResponse401
+    | getDMXaPhuongsIdResponse403
+    | getDMXaPhuongsIdResponse500
+) & {
+    headers: Headers
+}
 
+export type getDMXaPhuongsIdResponse =
+    | getDMXaPhuongsIdResponseSuccess
+    | getDMXaPhuongsIdResponseError
 
+export const getGetDMXaPhuongsIdUrl = (id: string, params?: GetDMXaPhuongsIdParams) => {
+    const normalizedParams = new URLSearchParams()
 
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
+    const stringifiedParams = normalizedParams.toString()
 
-export const getGetDMXaPhuongsIdQueryKey = (id?: string,
-    params?: GetDMXaPhuongsIdParams,) => {
-    return [
-    `/DM_XaPhuongs/${id}`, ...(params ? [params]: [])
-    ] as const;
+    return stringifiedParams.length > 0
+        ? `/DM_XaPhuongs/${id}?${stringifiedParams}`
+        : `/DM_XaPhuongs/${id}`
+}
+
+export const getDMXaPhuongsId = async (
+    id: string,
+    params?: GetDMXaPhuongsIdParams,
+    options?: RequestInit
+): Promise<getDMXaPhuongsIdResponse> => {
+    return customSystemFetch<getDMXaPhuongsIdResponse>(getGetDMXaPhuongsIdUrl(id, params), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getGetDMXaPhuongsIdQueryKey = (id?: string, params?: GetDMXaPhuongsIdParams) => {
+    return [`/DM_XaPhuongs/${id}`, ...(params ? [params] : [])] as const
+}
+
+export const getGetDMXaPhuongsIdQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMXaPhuongsId>>,
+    TError = GetDMXaPhuongsId400 | GetDMXaPhuongsId401 | GetDMXaPhuongsId403 | void,
+>(
+    id: string,
+    params?: GetDMXaPhuongsIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongsId>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
     }
-
-    
-export const getGetDMXaPhuongsIdQueryOptions = <TData = Awaited<ReturnType<typeof getDMXaPhuongsId>>, TError = GetDMXaPhuongsId400 | GetDMXaPhuongsId401 | GetDMXaPhuongsId403 | void>(id: string,
-    params?: GetDMXaPhuongsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
 ) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    const queryKey = queryOptions?.queryKey ?? getGetDMXaPhuongsIdQueryKey(id, params)
 
-  const queryKey =  queryOptions?.queryKey ?? getGetDMXaPhuongsIdQueryKey(id,params);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMXaPhuongsId>>> = ({ signal }) =>
+        getDMXaPhuongsId(id, params, { signal, ...requestOptions })
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMXaPhuongsId>>> = ({ signal }) => getDMXaPhuongsId(id,params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongsId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMXaPhuongsId>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetDMXaPhuongsIdQueryResult = NonNullable<Awaited<ReturnType<typeof getDMXaPhuongsId>>>
-export type GetDMXaPhuongsIdQueryError = GetDMXaPhuongsId400 | GetDMXaPhuongsId401 | GetDMXaPhuongsId403 | void
+export type GetDMXaPhuongsIdQueryError =
+    | GetDMXaPhuongsId400
+    | GetDMXaPhuongsId401
+    | GetDMXaPhuongsId403
+    | void
 
-
-export function useGetDMXaPhuongsId<TData = Awaited<ReturnType<typeof getDMXaPhuongsId>>, TError = GetDMXaPhuongsId400 | GetDMXaPhuongsId401 | GetDMXaPhuongsId403 | void>(
- id: string,
-    params: undefined |  GetDMXaPhuongsIdParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongsId>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMXaPhuongsId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMXaPhuongsId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMXaPhuongsId<TData = Awaited<ReturnType<typeof getDMXaPhuongsId>>, TError = GetDMXaPhuongsId400 | GetDMXaPhuongsId401 | GetDMXaPhuongsId403 | void>(
- id: string,
-    params?: GetDMXaPhuongsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongsId>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMXaPhuongsId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMXaPhuongsId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMXaPhuongsId<TData = Awaited<ReturnType<typeof getDMXaPhuongsId>>, TError = GetDMXaPhuongsId400 | GetDMXaPhuongsId401 | GetDMXaPhuongsId403 | void>(
- id: string,
-    params?: GetDMXaPhuongsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMXaPhuongsId<
+    TData = Awaited<ReturnType<typeof getDMXaPhuongsId>>,
+    TError = GetDMXaPhuongsId400 | GetDMXaPhuongsId401 | GetDMXaPhuongsId403 | void,
+>(
+    id: string,
+    params: undefined | GetDMXaPhuongsIdParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongsId>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMXaPhuongsId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMXaPhuongsId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMXaPhuongsId<
+    TData = Awaited<ReturnType<typeof getDMXaPhuongsId>>,
+    TError = GetDMXaPhuongsId400 | GetDMXaPhuongsId401 | GetDMXaPhuongsId403 | void,
+>(
+    id: string,
+    params?: GetDMXaPhuongsIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongsId>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMXaPhuongsId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMXaPhuongsId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMXaPhuongsId<
+    TData = Awaited<ReturnType<typeof getDMXaPhuongsId>>,
+    TError = GetDMXaPhuongsId400 | GetDMXaPhuongsId401 | GetDMXaPhuongsId403 | void,
+>(
+    id: string,
+    params?: GetDMXaPhuongsIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongsId>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Xã, Phường, TT - Theo Id
  */
 
-export function useGetDMXaPhuongsId<TData = Awaited<ReturnType<typeof getDMXaPhuongsId>>, TError = GetDMXaPhuongsId400 | GetDMXaPhuongsId401 | GetDMXaPhuongsId403 | void>(
- id: string,
-    params?: GetDMXaPhuongsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMXaPhuongsId<
+    TData = Awaited<ReturnType<typeof getDMXaPhuongsId>>,
+    TError = GetDMXaPhuongsId400 | GetDMXaPhuongsId401 | GetDMXaPhuongsId403 | void,
+>(
+    id: string,
+    params?: GetDMXaPhuongsIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongsId>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMXaPhuongsIdQueryOptions(id, params, options)
 
-  const queryOptions = getGetDMXaPhuongsIdQueryOptions(id,params,options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Kiểm tra tình trạng API
  * @summary Kiểm tra tình trạng API
  */
 export type getDMXaPhuongsHealthzResponse400 = {
-  data: GetDMXaPhuongsHealthz400
-  status: 400
+    data: GetDMXaPhuongsHealthz400
+    status: 400
 }
 
 export type getDMXaPhuongsHealthzResponse401 = {
-  data: GetDMXaPhuongsHealthz401
-  status: 401
+    data: GetDMXaPhuongsHealthz401
+    status: 401
 }
 
 export type getDMXaPhuongsHealthzResponse403 = {
-  data: GetDMXaPhuongsHealthz403
-  status: 403
+    data: GetDMXaPhuongsHealthz403
+    status: 403
 }
 
 export type getDMXaPhuongsHealthzResponse500 = {
-  data: GetDMXaPhuongsHealthz500
-  status: 500
+    data: GetDMXaPhuongsHealthz500
+    status: 500
 }
-    
-;
-export type getDMXaPhuongsHealthzResponseError = (getDMXaPhuongsHealthzResponse400 | getDMXaPhuongsHealthzResponse401 | getDMXaPhuongsHealthzResponse403 | getDMXaPhuongsHealthzResponse500) & {
-  headers: Headers;
-};
+export type getDMXaPhuongsHealthzResponseError = (
+    | getDMXaPhuongsHealthzResponse400
+    | getDMXaPhuongsHealthzResponse401
+    | getDMXaPhuongsHealthzResponse403
+    | getDMXaPhuongsHealthzResponse500
+) & {
+    headers: Headers
+}
 
-export type getDMXaPhuongsHealthzResponse = (getDMXaPhuongsHealthzResponseError)
+export type getDMXaPhuongsHealthzResponse = getDMXaPhuongsHealthzResponseError
 
 export const getGetDMXaPhuongsHealthzUrl = () => {
-
-
-  
-
-  return `/DM_XaPhuongs/healthz`
+    return `/DM_XaPhuongs/healthz`
 }
 
-export const getDMXaPhuongsHealthz = async ( options?: RequestInit): Promise<getDMXaPhuongsHealthzResponse> => {
-  
-  return customSystemFetch<getDMXaPhuongsHealthzResponse>(getGetDMXaPhuongsHealthzUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-
+export const getDMXaPhuongsHealthz = async (
+    options?: RequestInit
+): Promise<getDMXaPhuongsHealthzResponse> => {
+    return customSystemFetch<getDMXaPhuongsHealthzResponse>(getGetDMXaPhuongsHealthzUrl(), {
+        ...options,
+        method: 'GET',
+    })
+}
 
 export const getGetDMXaPhuongsHealthzQueryKey = () => {
-    return [
-    `/DM_XaPhuongs/healthz`
-    ] as const;
-    }
-
-    
-export const getGetDMXaPhuongsHealthzQueryOptions = <TData = Awaited<ReturnType<typeof getDMXaPhuongsHealthz>>, TError = GetDMXaPhuongsHealthz400 | GetDMXaPhuongsHealthz401 | GetDMXaPhuongsHealthz403 | GetDMXaPhuongsHealthz500>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetDMXaPhuongsHealthzQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMXaPhuongsHealthz>>> = ({ signal }) => getDMXaPhuongsHealthz({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongsHealthz>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return [`/DM_XaPhuongs/healthz`] as const
 }
 
-export type GetDMXaPhuongsHealthzQueryResult = NonNullable<Awaited<ReturnType<typeof getDMXaPhuongsHealthz>>>
-export type GetDMXaPhuongsHealthzQueryError = GetDMXaPhuongsHealthz400 | GetDMXaPhuongsHealthz401 | GetDMXaPhuongsHealthz403 | GetDMXaPhuongsHealthz500
+export const getGetDMXaPhuongsHealthzQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMXaPhuongsHealthz>>,
+    TError =
+        | GetDMXaPhuongsHealthz400
+        | GetDMXaPhuongsHealthz401
+        | GetDMXaPhuongsHealthz403
+        | GetDMXaPhuongsHealthz500,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongsHealthz>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
+    const queryKey = queryOptions?.queryKey ?? getGetDMXaPhuongsHealthzQueryKey()
 
-export function useGetDMXaPhuongsHealthz<TData = Awaited<ReturnType<typeof getDMXaPhuongsHealthz>>, TError = GetDMXaPhuongsHealthz400 | GetDMXaPhuongsHealthz401 | GetDMXaPhuongsHealthz403 | GetDMXaPhuongsHealthz500>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongsHealthz>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMXaPhuongsHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMXaPhuongsHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMXaPhuongsHealthz<TData = Awaited<ReturnType<typeof getDMXaPhuongsHealthz>>, TError = GetDMXaPhuongsHealthz400 | GetDMXaPhuongsHealthz401 | GetDMXaPhuongsHealthz403 | GetDMXaPhuongsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongsHealthz>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMXaPhuongsHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMXaPhuongsHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMXaPhuongsHealthz<TData = Awaited<ReturnType<typeof getDMXaPhuongsHealthz>>, TError = GetDMXaPhuongsHealthz400 | GetDMXaPhuongsHealthz401 | GetDMXaPhuongsHealthz403 | GetDMXaPhuongsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMXaPhuongsHealthz>>> = ({
+        signal,
+    }) => getDMXaPhuongsHealthz({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMXaPhuongsHealthz>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDMXaPhuongsHealthzQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getDMXaPhuongsHealthz>>
+>
+export type GetDMXaPhuongsHealthzQueryError =
+    | GetDMXaPhuongsHealthz400
+    | GetDMXaPhuongsHealthz401
+    | GetDMXaPhuongsHealthz403
+    | GetDMXaPhuongsHealthz500
+
+export function useGetDMXaPhuongsHealthz<
+    TData = Awaited<ReturnType<typeof getDMXaPhuongsHealthz>>,
+    TError =
+        | GetDMXaPhuongsHealthz400
+        | GetDMXaPhuongsHealthz401
+        | GetDMXaPhuongsHealthz403
+        | GetDMXaPhuongsHealthz500,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongsHealthz>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMXaPhuongsHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMXaPhuongsHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMXaPhuongsHealthz<
+    TData = Awaited<ReturnType<typeof getDMXaPhuongsHealthz>>,
+    TError =
+        | GetDMXaPhuongsHealthz400
+        | GetDMXaPhuongsHealthz401
+        | GetDMXaPhuongsHealthz403
+        | GetDMXaPhuongsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongsHealthz>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMXaPhuongsHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMXaPhuongsHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMXaPhuongsHealthz<
+    TData = Awaited<ReturnType<typeof getDMXaPhuongsHealthz>>,
+    TError =
+        | GetDMXaPhuongsHealthz400
+        | GetDMXaPhuongsHealthz401
+        | GetDMXaPhuongsHealthz403
+        | GetDMXaPhuongsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongsHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Kiểm tra tình trạng API
  */
 
-export function useGetDMXaPhuongsHealthz<TData = Awaited<ReturnType<typeof getDMXaPhuongsHealthz>>, TError = GetDMXaPhuongsHealthz400 | GetDMXaPhuongsHealthz401 | GetDMXaPhuongsHealthz403 | GetDMXaPhuongsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMXaPhuongsHealthz<
+    TData = Awaited<ReturnType<typeof getDMXaPhuongsHealthz>>,
+    TError =
+        | GetDMXaPhuongsHealthz400
+        | GetDMXaPhuongsHealthz401
+        | GetDMXaPhuongsHealthz403
+        | GetDMXaPhuongsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongsHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMXaPhuongsHealthzQueryOptions(options)
 
-  const queryOptions = getGetDMXaPhuongsHealthzQueryOptions(options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Lấy danh sách các Xã, Phường mới
  * @summary Xã, Phường mới - Danh sách
  */
 export type postDMXaPhuongNewsListResponse200 = {
-  data: PublicApiGetAllDMXaPhuongNewDTO
-  status: 200
+    data: PublicApiGetAllDMXaPhuongNewDTO
+    status: 200
 }
 
 export type postDMXaPhuongNewsListResponse400 = {
-  data: PostDMXaPhuongNewsList400
-  status: 400
+    data: PostDMXaPhuongNewsList400
+    status: 400
 }
 
 export type postDMXaPhuongNewsListResponse401 = {
-  data: PostDMXaPhuongNewsList401
-  status: 401
+    data: PostDMXaPhuongNewsList401
+    status: 401
 }
 
 export type postDMXaPhuongNewsListResponse403 = {
-  data: PostDMXaPhuongNewsList403
-  status: 403
+    data: PostDMXaPhuongNewsList403
+    status: 403
 }
 
 export type postDMXaPhuongNewsListResponse500 = {
-  data: void
-  status: 500
+    data: void
+    status: 500
 }
-    
-export type postDMXaPhuongNewsListResponseSuccess = (postDMXaPhuongNewsListResponse200) & {
-  headers: Headers;
-};
-export type postDMXaPhuongNewsListResponseError = (postDMXaPhuongNewsListResponse400 | postDMXaPhuongNewsListResponse401 | postDMXaPhuongNewsListResponse403 | postDMXaPhuongNewsListResponse500) & {
-  headers: Headers;
-};
 
-export type postDMXaPhuongNewsListResponse = (postDMXaPhuongNewsListResponseSuccess | postDMXaPhuongNewsListResponseError)
+export type postDMXaPhuongNewsListResponseSuccess = postDMXaPhuongNewsListResponse200 & {
+    headers: Headers
+}
+export type postDMXaPhuongNewsListResponseError = (
+    | postDMXaPhuongNewsListResponse400
+    | postDMXaPhuongNewsListResponse401
+    | postDMXaPhuongNewsListResponse403
+    | postDMXaPhuongNewsListResponse500
+) & {
+    headers: Headers
+}
+
+export type postDMXaPhuongNewsListResponse =
+    | postDMXaPhuongNewsListResponseSuccess
+    | postDMXaPhuongNewsListResponseError
 
 export const getPostDMXaPhuongNewsListUrl = () => {
-
-
-  
-
-  return `/DM_XaPhuong_News/list`
+    return `/DM_XaPhuong_News/list`
 }
 
-export const postDMXaPhuongNewsList = async (publicApiPagingRequestDto: PublicApiPagingRequestDto, options?: RequestInit): Promise<postDMXaPhuongNewsListResponse> => {
-  
-  return customSystemFetch<postDMXaPhuongNewsListResponse>(getPostDMXaPhuongNewsListUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
-    body: JSON.stringify(
-      publicApiPagingRequestDto,)
-  }
-);}
+export const postDMXaPhuongNewsList = async (
+    publicApiPagingRequestDto: PublicApiPagingRequestDto,
+    options?: RequestInit
+): Promise<postDMXaPhuongNewsListResponse> => {
+    return customSystemFetch<postDMXaPhuongNewsListResponse>(getPostDMXaPhuongNewsListUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
+        body: JSON.stringify(publicApiPagingRequestDto),
+    })
+}
 
-
-
-
-export const getPostDMXaPhuongNewsListMutationOptions = <TError = PostDMXaPhuongNewsList400 | PostDMXaPhuongNewsList401 | PostDMXaPhuongNewsList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMXaPhuongNewsList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof postDMXaPhuongNewsList>>, TError,{data: PublicApiPagingRequestDto}, TContext> => {
-
-const mutationKey = ['postDMXaPhuongNewsList'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postDMXaPhuongNewsList>>, {data: PublicApiPagingRequestDto}> = (props) => {
-          const {data} = props ?? {};
-
-          return  postDMXaPhuongNewsList(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PostDMXaPhuongNewsListMutationResult = NonNullable<Awaited<ReturnType<typeof postDMXaPhuongNewsList>>>
-    export type PostDMXaPhuongNewsListMutationBody = PublicApiPagingRequestDto
-    export type PostDMXaPhuongNewsListMutationError = PostDMXaPhuongNewsList400 | PostDMXaPhuongNewsList401 | PostDMXaPhuongNewsList403 | void
-
-    /**
- * @summary Xã, Phường mới - Danh sách
- */
-export const usePostDMXaPhuongNewsList = <TError = PostDMXaPhuongNewsList400 | PostDMXaPhuongNewsList401 | PostDMXaPhuongNewsList403 | void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMXaPhuongNewsList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getPostDMXaPhuongNewsListMutationOptions = <
+    TError =
+        | PostDMXaPhuongNewsList400
+        | PostDMXaPhuongNewsList401
+        | PostDMXaPhuongNewsList403
+        | void,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postDMXaPhuongNewsList>>,
         TError,
-        {data: PublicApiPagingRequestDto},
+        { data: PublicApiPagingRequestDto },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postDMXaPhuongNewsList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationKey = ['postDMXaPhuongNewsList']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getPostDMXaPhuongNewsListMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postDMXaPhuongNewsList>>,
+        { data: PublicApiPagingRequestDto }
+    > = (props) => {
+        const { data } = props ?? {}
 
-      return useMutation(mutationOptions, queryClient);
+        return postDMXaPhuongNewsList(data, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostDMXaPhuongNewsListMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postDMXaPhuongNewsList>>
+>
+export type PostDMXaPhuongNewsListMutationBody = PublicApiPagingRequestDto
+export type PostDMXaPhuongNewsListMutationError =
+    | PostDMXaPhuongNewsList400
+    | PostDMXaPhuongNewsList401
+    | PostDMXaPhuongNewsList403
+    | void
+
+/**
+ * @summary Xã, Phường mới - Danh sách
+ */
+export const usePostDMXaPhuongNewsList = <
+    TError =
+        | PostDMXaPhuongNewsList400
+        | PostDMXaPhuongNewsList401
+        | PostDMXaPhuongNewsList403
+        | void,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postDMXaPhuongNewsList>>,
+            TError,
+            { data: PublicApiPagingRequestDto },
+            TContext
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postDMXaPhuongNewsList>>,
+    TError,
+    { data: PublicApiPagingRequestDto },
+    TContext
+> => {
+    const mutationOptions = getPostDMXaPhuongNewsListMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * Lấy thông tin Xã, Phường mới theo ID
  * @summary Xã, Phường mới - Theo Id
  */
 export type getDMXaPhuongNewsIdResponse200 = {
-  data: PublicApiGetAllDMXaPhuongNewDTO
-  status: 200
+    data: PublicApiGetAllDMXaPhuongNewDTO
+    status: 200
 }
 
 export type getDMXaPhuongNewsIdResponse400 = {
-  data: GetDMXaPhuongNewsId400
-  status: 400
+    data: GetDMXaPhuongNewsId400
+    status: 400
 }
 
 export type getDMXaPhuongNewsIdResponse401 = {
-  data: GetDMXaPhuongNewsId401
-  status: 401
+    data: GetDMXaPhuongNewsId401
+    status: 401
 }
 
 export type getDMXaPhuongNewsIdResponse403 = {
-  data: GetDMXaPhuongNewsId403
-  status: 403
+    data: GetDMXaPhuongNewsId403
+    status: 403
 }
 
 export type getDMXaPhuongNewsIdResponse500 = {
-  data: void
-  status: 500
-}
-    
-export type getDMXaPhuongNewsIdResponseSuccess = (getDMXaPhuongNewsIdResponse200) & {
-  headers: Headers;
-};
-export type getDMXaPhuongNewsIdResponseError = (getDMXaPhuongNewsIdResponse400 | getDMXaPhuongNewsIdResponse401 | getDMXaPhuongNewsIdResponse403 | getDMXaPhuongNewsIdResponse500) & {
-  headers: Headers;
-};
-
-export type getDMXaPhuongNewsIdResponse = (getDMXaPhuongNewsIdResponseSuccess | getDMXaPhuongNewsIdResponseError)
-
-export const getGetDMXaPhuongNewsIdUrl = (id: string,
-    params?: GetDMXaPhuongNewsIdParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/DM_XaPhuong_News/${id}?${stringifiedParams}` : `/DM_XaPhuong_News/${id}`
+    data: void
+    status: 500
 }
 
-export const getDMXaPhuongNewsId = async (id: string,
-    params?: GetDMXaPhuongNewsIdParams, options?: RequestInit): Promise<getDMXaPhuongNewsIdResponse> => {
-  
-  return customSystemFetch<getDMXaPhuongNewsIdResponse>(getGetDMXaPhuongNewsIdUrl(id,params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type getDMXaPhuongNewsIdResponseSuccess = getDMXaPhuongNewsIdResponse200 & {
+    headers: Headers
+}
+export type getDMXaPhuongNewsIdResponseError = (
+    | getDMXaPhuongNewsIdResponse400
+    | getDMXaPhuongNewsIdResponse401
+    | getDMXaPhuongNewsIdResponse403
+    | getDMXaPhuongNewsIdResponse500
+) & {
+    headers: Headers
+}
 
+export type getDMXaPhuongNewsIdResponse =
+    | getDMXaPhuongNewsIdResponseSuccess
+    | getDMXaPhuongNewsIdResponseError
 
+export const getGetDMXaPhuongNewsIdUrl = (id: string, params?: GetDMXaPhuongNewsIdParams) => {
+    const normalizedParams = new URLSearchParams()
 
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
+    const stringifiedParams = normalizedParams.toString()
 
-export const getGetDMXaPhuongNewsIdQueryKey = (id?: string,
-    params?: GetDMXaPhuongNewsIdParams,) => {
-    return [
-    `/DM_XaPhuong_News/${id}`, ...(params ? [params]: [])
-    ] as const;
+    return stringifiedParams.length > 0
+        ? `/DM_XaPhuong_News/${id}?${stringifiedParams}`
+        : `/DM_XaPhuong_News/${id}`
+}
+
+export const getDMXaPhuongNewsId = async (
+    id: string,
+    params?: GetDMXaPhuongNewsIdParams,
+    options?: RequestInit
+): Promise<getDMXaPhuongNewsIdResponse> => {
+    return customSystemFetch<getDMXaPhuongNewsIdResponse>(getGetDMXaPhuongNewsIdUrl(id, params), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getGetDMXaPhuongNewsIdQueryKey = (id?: string, params?: GetDMXaPhuongNewsIdParams) => {
+    return [`/DM_XaPhuong_News/${id}`, ...(params ? [params] : [])] as const
+}
+
+export const getGetDMXaPhuongNewsIdQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMXaPhuongNewsId>>,
+    TError = GetDMXaPhuongNewsId400 | GetDMXaPhuongNewsId401 | GetDMXaPhuongNewsId403 | void,
+>(
+    id: string,
+    params?: GetDMXaPhuongNewsIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongNewsId>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
     }
-
-    
-export const getGetDMXaPhuongNewsIdQueryOptions = <TData = Awaited<ReturnType<typeof getDMXaPhuongNewsId>>, TError = GetDMXaPhuongNewsId400 | GetDMXaPhuongNewsId401 | GetDMXaPhuongNewsId403 | void>(id: string,
-    params?: GetDMXaPhuongNewsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongNewsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
 ) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    const queryKey = queryOptions?.queryKey ?? getGetDMXaPhuongNewsIdQueryKey(id, params)
 
-  const queryKey =  queryOptions?.queryKey ?? getGetDMXaPhuongNewsIdQueryKey(id,params);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMXaPhuongNewsId>>> = ({ signal }) =>
+        getDMXaPhuongNewsId(id, params, { signal, ...requestOptions })
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMXaPhuongNewsId>>> = ({ signal }) => getDMXaPhuongNewsId(id,params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongNewsId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMXaPhuongNewsId>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetDMXaPhuongNewsIdQueryResult = NonNullable<Awaited<ReturnType<typeof getDMXaPhuongNewsId>>>
-export type GetDMXaPhuongNewsIdQueryError = GetDMXaPhuongNewsId400 | GetDMXaPhuongNewsId401 | GetDMXaPhuongNewsId403 | void
+export type GetDMXaPhuongNewsIdQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getDMXaPhuongNewsId>>
+>
+export type GetDMXaPhuongNewsIdQueryError =
+    | GetDMXaPhuongNewsId400
+    | GetDMXaPhuongNewsId401
+    | GetDMXaPhuongNewsId403
+    | void
 
-
-export function useGetDMXaPhuongNewsId<TData = Awaited<ReturnType<typeof getDMXaPhuongNewsId>>, TError = GetDMXaPhuongNewsId400 | GetDMXaPhuongNewsId401 | GetDMXaPhuongNewsId403 | void>(
- id: string,
-    params: undefined |  GetDMXaPhuongNewsIdParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongNewsId>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMXaPhuongNewsId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMXaPhuongNewsId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMXaPhuongNewsId<TData = Awaited<ReturnType<typeof getDMXaPhuongNewsId>>, TError = GetDMXaPhuongNewsId400 | GetDMXaPhuongNewsId401 | GetDMXaPhuongNewsId403 | void>(
- id: string,
-    params?: GetDMXaPhuongNewsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongNewsId>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMXaPhuongNewsId>>,
-          TError,
-          Awaited<ReturnType<typeof getDMXaPhuongNewsId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMXaPhuongNewsId<TData = Awaited<ReturnType<typeof getDMXaPhuongNewsId>>, TError = GetDMXaPhuongNewsId400 | GetDMXaPhuongNewsId401 | GetDMXaPhuongNewsId403 | void>(
- id: string,
-    params?: GetDMXaPhuongNewsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongNewsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMXaPhuongNewsId<
+    TData = Awaited<ReturnType<typeof getDMXaPhuongNewsId>>,
+    TError = GetDMXaPhuongNewsId400 | GetDMXaPhuongNewsId401 | GetDMXaPhuongNewsId403 | void,
+>(
+    id: string,
+    params: undefined | GetDMXaPhuongNewsIdParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongNewsId>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMXaPhuongNewsId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMXaPhuongNewsId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMXaPhuongNewsId<
+    TData = Awaited<ReturnType<typeof getDMXaPhuongNewsId>>,
+    TError = GetDMXaPhuongNewsId400 | GetDMXaPhuongNewsId401 | GetDMXaPhuongNewsId403 | void,
+>(
+    id: string,
+    params?: GetDMXaPhuongNewsIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongNewsId>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMXaPhuongNewsId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMXaPhuongNewsId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMXaPhuongNewsId<
+    TData = Awaited<ReturnType<typeof getDMXaPhuongNewsId>>,
+    TError = GetDMXaPhuongNewsId400 | GetDMXaPhuongNewsId401 | GetDMXaPhuongNewsId403 | void,
+>(
+    id: string,
+    params?: GetDMXaPhuongNewsIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongNewsId>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Xã, Phường mới - Theo Id
  */
 
-export function useGetDMXaPhuongNewsId<TData = Awaited<ReturnType<typeof getDMXaPhuongNewsId>>, TError = GetDMXaPhuongNewsId400 | GetDMXaPhuongNewsId401 | GetDMXaPhuongNewsId403 | void>(
- id: string,
-    params?: GetDMXaPhuongNewsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongNewsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMXaPhuongNewsId<
+    TData = Awaited<ReturnType<typeof getDMXaPhuongNewsId>>,
+    TError = GetDMXaPhuongNewsId400 | GetDMXaPhuongNewsId401 | GetDMXaPhuongNewsId403 | void,
+>(
+    id: string,
+    params?: GetDMXaPhuongNewsIdParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongNewsId>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMXaPhuongNewsIdQueryOptions(id, params, options)
 
-  const queryOptions = getGetDMXaPhuongNewsIdQueryOptions(id,params,options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Kiểm tra tình trạng API
  * @summary Kiểm tra tình trạng API
  */
 export type getDMXaPhuongNewsHealthzResponse400 = {
-  data: GetDMXaPhuongNewsHealthz400
-  status: 400
+    data: GetDMXaPhuongNewsHealthz400
+    status: 400
 }
 
 export type getDMXaPhuongNewsHealthzResponse401 = {
-  data: GetDMXaPhuongNewsHealthz401
-  status: 401
+    data: GetDMXaPhuongNewsHealthz401
+    status: 401
 }
 
 export type getDMXaPhuongNewsHealthzResponse403 = {
-  data: GetDMXaPhuongNewsHealthz403
-  status: 403
+    data: GetDMXaPhuongNewsHealthz403
+    status: 403
 }
 
 export type getDMXaPhuongNewsHealthzResponse500 = {
-  data: GetDMXaPhuongNewsHealthz500
-  status: 500
+    data: GetDMXaPhuongNewsHealthz500
+    status: 500
 }
-    
-;
-export type getDMXaPhuongNewsHealthzResponseError = (getDMXaPhuongNewsHealthzResponse400 | getDMXaPhuongNewsHealthzResponse401 | getDMXaPhuongNewsHealthzResponse403 | getDMXaPhuongNewsHealthzResponse500) & {
-  headers: Headers;
-};
+export type getDMXaPhuongNewsHealthzResponseError = (
+    | getDMXaPhuongNewsHealthzResponse400
+    | getDMXaPhuongNewsHealthzResponse401
+    | getDMXaPhuongNewsHealthzResponse403
+    | getDMXaPhuongNewsHealthzResponse500
+) & {
+    headers: Headers
+}
 
-export type getDMXaPhuongNewsHealthzResponse = (getDMXaPhuongNewsHealthzResponseError)
+export type getDMXaPhuongNewsHealthzResponse = getDMXaPhuongNewsHealthzResponseError
 
 export const getGetDMXaPhuongNewsHealthzUrl = () => {
-
-
-  
-
-  return `/DM_XaPhuong_News/healthz`
+    return `/DM_XaPhuong_News/healthz`
 }
 
-export const getDMXaPhuongNewsHealthz = async ( options?: RequestInit): Promise<getDMXaPhuongNewsHealthzResponse> => {
-  
-  return customSystemFetch<getDMXaPhuongNewsHealthzResponse>(getGetDMXaPhuongNewsHealthzUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-
+export const getDMXaPhuongNewsHealthz = async (
+    options?: RequestInit
+): Promise<getDMXaPhuongNewsHealthzResponse> => {
+    return customSystemFetch<getDMXaPhuongNewsHealthzResponse>(getGetDMXaPhuongNewsHealthzUrl(), {
+        ...options,
+        method: 'GET',
+    })
+}
 
 export const getGetDMXaPhuongNewsHealthzQueryKey = () => {
-    return [
-    `/DM_XaPhuong_News/healthz`
-    ] as const;
-    }
-
-    
-export const getGetDMXaPhuongNewsHealthzQueryOptions = <TData = Awaited<ReturnType<typeof getDMXaPhuongNewsHealthz>>, TError = GetDMXaPhuongNewsHealthz400 | GetDMXaPhuongNewsHealthz401 | GetDMXaPhuongNewsHealthz403 | GetDMXaPhuongNewsHealthz500>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongNewsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetDMXaPhuongNewsHealthzQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMXaPhuongNewsHealthz>>> = ({ signal }) => getDMXaPhuongNewsHealthz({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongNewsHealthz>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return [`/DM_XaPhuong_News/healthz`] as const
 }
 
-export type GetDMXaPhuongNewsHealthzQueryResult = NonNullable<Awaited<ReturnType<typeof getDMXaPhuongNewsHealthz>>>
-export type GetDMXaPhuongNewsHealthzQueryError = GetDMXaPhuongNewsHealthz400 | GetDMXaPhuongNewsHealthz401 | GetDMXaPhuongNewsHealthz403 | GetDMXaPhuongNewsHealthz500
+export const getGetDMXaPhuongNewsHealthzQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDMXaPhuongNewsHealthz>>,
+    TError =
+        | GetDMXaPhuongNewsHealthz400
+        | GetDMXaPhuongNewsHealthz401
+        | GetDMXaPhuongNewsHealthz403
+        | GetDMXaPhuongNewsHealthz500,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongNewsHealthz>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
+    const queryKey = queryOptions?.queryKey ?? getGetDMXaPhuongNewsHealthzQueryKey()
 
-export function useGetDMXaPhuongNewsHealthz<TData = Awaited<ReturnType<typeof getDMXaPhuongNewsHealthz>>, TError = GetDMXaPhuongNewsHealthz400 | GetDMXaPhuongNewsHealthz401 | GetDMXaPhuongNewsHealthz403 | GetDMXaPhuongNewsHealthz500>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongNewsHealthz>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMXaPhuongNewsHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMXaPhuongNewsHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMXaPhuongNewsHealthz<TData = Awaited<ReturnType<typeof getDMXaPhuongNewsHealthz>>, TError = GetDMXaPhuongNewsHealthz400 | GetDMXaPhuongNewsHealthz401 | GetDMXaPhuongNewsHealthz403 | GetDMXaPhuongNewsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongNewsHealthz>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDMXaPhuongNewsHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getDMXaPhuongNewsHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDMXaPhuongNewsHealthz<TData = Awaited<ReturnType<typeof getDMXaPhuongNewsHealthz>>, TError = GetDMXaPhuongNewsHealthz400 | GetDMXaPhuongNewsHealthz401 | GetDMXaPhuongNewsHealthz403 | GetDMXaPhuongNewsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongNewsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMXaPhuongNewsHealthz>>> = ({
+        signal,
+    }) => getDMXaPhuongNewsHealthz({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDMXaPhuongNewsHealthz>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDMXaPhuongNewsHealthzQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getDMXaPhuongNewsHealthz>>
+>
+export type GetDMXaPhuongNewsHealthzQueryError =
+    | GetDMXaPhuongNewsHealthz400
+    | GetDMXaPhuongNewsHealthz401
+    | GetDMXaPhuongNewsHealthz403
+    | GetDMXaPhuongNewsHealthz500
+
+export function useGetDMXaPhuongNewsHealthz<
+    TData = Awaited<ReturnType<typeof getDMXaPhuongNewsHealthz>>,
+    TError =
+        | GetDMXaPhuongNewsHealthz400
+        | GetDMXaPhuongNewsHealthz401
+        | GetDMXaPhuongNewsHealthz403
+        | GetDMXaPhuongNewsHealthz500,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongNewsHealthz>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMXaPhuongNewsHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMXaPhuongNewsHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMXaPhuongNewsHealthz<
+    TData = Awaited<ReturnType<typeof getDMXaPhuongNewsHealthz>>,
+    TError =
+        | GetDMXaPhuongNewsHealthz400
+        | GetDMXaPhuongNewsHealthz401
+        | GetDMXaPhuongNewsHealthz403
+        | GetDMXaPhuongNewsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongNewsHealthz>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDMXaPhuongNewsHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDMXaPhuongNewsHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMXaPhuongNewsHealthz<
+    TData = Awaited<ReturnType<typeof getDMXaPhuongNewsHealthz>>,
+    TError =
+        | GetDMXaPhuongNewsHealthz400
+        | GetDMXaPhuongNewsHealthz401
+        | GetDMXaPhuongNewsHealthz403
+        | GetDMXaPhuongNewsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongNewsHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Kiểm tra tình trạng API
  */
 
-export function useGetDMXaPhuongNewsHealthz<TData = Awaited<ReturnType<typeof getDMXaPhuongNewsHealthz>>, TError = GetDMXaPhuongNewsHealthz400 | GetDMXaPhuongNewsHealthz401 | GetDMXaPhuongNewsHealthz403 | GetDMXaPhuongNewsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongNewsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDMXaPhuongNewsHealthz<
+    TData = Awaited<ReturnType<typeof getDMXaPhuongNewsHealthz>>,
+    TError =
+        | GetDMXaPhuongNewsHealthz400
+        | GetDMXaPhuongNewsHealthz401
+        | GetDMXaPhuongNewsHealthz403
+        | GetDMXaPhuongNewsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongNewsHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDMXaPhuongNewsHealthzQueryOptions(options)
 
-  const queryOptions = getGetDMXaPhuongNewsHealthzQueryOptions(options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Khi gọi API này thì thông báo sẽ hiển thị trên quả chuông của ứng dụng
  * @summary Gửi thông báo về cho ứng dụng.Trả về Id của thông báo dạng Guid
  */
 export type postNotificationsInsertResponse200 = {
-  data: string
-  status: 200
+    data: string
+    status: 200
 }
-    
-export type postNotificationsInsertResponseSuccess = (postNotificationsInsertResponse200) & {
-  headers: Headers;
-};
-;
 
-export type postNotificationsInsertResponse = (postNotificationsInsertResponseSuccess)
+export type postNotificationsInsertResponseSuccess = postNotificationsInsertResponse200 & {
+    headers: Headers
+}
+
+export type postNotificationsInsertResponse = postNotificationsInsertResponseSuccess
 
 export const getPostNotificationsInsertUrl = () => {
-
-
-  
-
-  return `/Notifications/Insert`
+    return `/Notifications/Insert`
 }
 
-export const postNotificationsInsert = async (notificationMessageRequest: NotificationMessageRequest, options?: RequestInit): Promise<postNotificationsInsertResponse> => {
-  
-  return customSystemFetch<postNotificationsInsertResponse>(getPostNotificationsInsertUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
-    body: JSON.stringify(
-      notificationMessageRequest,)
-  }
-);}
+export const postNotificationsInsert = async (
+    notificationMessageRequest: NotificationMessageRequest,
+    options?: RequestInit
+): Promise<postNotificationsInsertResponse> => {
+    return customSystemFetch<postNotificationsInsertResponse>(getPostNotificationsInsertUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
+        body: JSON.stringify(notificationMessageRequest),
+    })
+}
 
-
-
-
-export const getPostNotificationsInsertMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postNotificationsInsert>>, TError,{data: NotificationMessageRequest}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof postNotificationsInsert>>, TError,{data: NotificationMessageRequest}, TContext> => {
-
-const mutationKey = ['postNotificationsInsert'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postNotificationsInsert>>, {data: NotificationMessageRequest}> = (props) => {
-          const {data} = props ?? {};
-
-          return  postNotificationsInsert(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PostNotificationsInsertMutationResult = NonNullable<Awaited<ReturnType<typeof postNotificationsInsert>>>
-    export type PostNotificationsInsertMutationBody = NotificationMessageRequest
-    export type PostNotificationsInsertMutationError = unknown
-
-    /**
- * @summary Gửi thông báo về cho ứng dụng.Trả về Id của thông báo dạng Guid
- */
-export const usePostNotificationsInsert = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postNotificationsInsert>>, TError,{data: NotificationMessageRequest}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getPostNotificationsInsertMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postNotificationsInsert>>,
         TError,
-        {data: NotificationMessageRequest},
+        { data: NotificationMessageRequest },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postNotificationsInsert>>,
+    TError,
+    { data: NotificationMessageRequest },
+    TContext
+> => {
+    const mutationKey = ['postNotificationsInsert']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getPostNotificationsInsertMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postNotificationsInsert>>,
+        { data: NotificationMessageRequest }
+    > = (props) => {
+        const { data } = props ?? {}
 
-      return useMutation(mutationOptions, queryClient);
+        return postNotificationsInsert(data, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostNotificationsInsertMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postNotificationsInsert>>
+>
+export type PostNotificationsInsertMutationBody = NotificationMessageRequest
+export type PostNotificationsInsertMutationError = unknown
+
+/**
+ * @summary Gửi thông báo về cho ứng dụng.Trả về Id của thông báo dạng Guid
+ */
+export const usePostNotificationsInsert = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postNotificationsInsert>>,
+            TError,
+            { data: NotificationMessageRequest },
+            TContext
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postNotificationsInsert>>,
+    TError,
+    { data: NotificationMessageRequest },
+    TContext
+> => {
+    const mutationOptions = getPostNotificationsInsertMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * Kiểm tra tình trạng API
  * @summary Kiểm tra tình trạng API
  */
 export type getNotificationsHealthzResponse200 = {
-  data: void
-  status: 200
+    data: void
+    status: 200
 }
-    
-export type getNotificationsHealthzResponseSuccess = (getNotificationsHealthzResponse200) & {
-  headers: Headers;
-};
-;
 
-export type getNotificationsHealthzResponse = (getNotificationsHealthzResponseSuccess)
+export type getNotificationsHealthzResponseSuccess = getNotificationsHealthzResponse200 & {
+    headers: Headers
+}
+
+export type getNotificationsHealthzResponse = getNotificationsHealthzResponseSuccess
 
 export const getGetNotificationsHealthzUrl = () => {
-
-
-  
-
-  return `/Notifications/healthz`
+    return `/Notifications/healthz`
 }
 
-export const getNotificationsHealthz = async ( options?: RequestInit): Promise<getNotificationsHealthzResponse> => {
-  
-  return customSystemFetch<getNotificationsHealthzResponse>(getGetNotificationsHealthzUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-
+export const getNotificationsHealthz = async (
+    options?: RequestInit
+): Promise<getNotificationsHealthzResponse> => {
+    return customSystemFetch<getNotificationsHealthzResponse>(getGetNotificationsHealthzUrl(), {
+        ...options,
+        method: 'GET',
+    })
+}
 
 export const getGetNotificationsHealthzQueryKey = () => {
-    return [
-    `/Notifications/healthz`
-    ] as const;
-    }
-
-    
-export const getGetNotificationsHealthzQueryOptions = <TData = Awaited<ReturnType<typeof getNotificationsHealthz>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNotificationsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetNotificationsHealthzQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getNotificationsHealthz>>> = ({ signal }) => getNotificationsHealthz({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getNotificationsHealthz>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return [`/Notifications/healthz`] as const
 }
 
-export type GetNotificationsHealthzQueryResult = NonNullable<Awaited<ReturnType<typeof getNotificationsHealthz>>>
+export const getGetNotificationsHealthzQueryOptions = <
+    TData = Awaited<ReturnType<typeof getNotificationsHealthz>>,
+    TError = unknown,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<Awaited<ReturnType<typeof getNotificationsHealthz>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetNotificationsHealthzQueryKey()
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getNotificationsHealthz>>> = ({
+        signal,
+    }) => getNotificationsHealthz({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getNotificationsHealthz>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetNotificationsHealthzQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getNotificationsHealthz>>
+>
 export type GetNotificationsHealthzQueryError = unknown
 
-
-export function useGetNotificationsHealthz<TData = Awaited<ReturnType<typeof getNotificationsHealthz>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNotificationsHealthz>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getNotificationsHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getNotificationsHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetNotificationsHealthz<TData = Awaited<ReturnType<typeof getNotificationsHealthz>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNotificationsHealthz>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getNotificationsHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getNotificationsHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetNotificationsHealthz<TData = Awaited<ReturnType<typeof getNotificationsHealthz>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNotificationsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetNotificationsHealthz<
+    TData = Awaited<ReturnType<typeof getNotificationsHealthz>>,
+    TError = unknown,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getNotificationsHealthz>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getNotificationsHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getNotificationsHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetNotificationsHealthz<
+    TData = Awaited<ReturnType<typeof getNotificationsHealthz>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getNotificationsHealthz>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getNotificationsHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getNotificationsHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetNotificationsHealthz<
+    TData = Awaited<ReturnType<typeof getNotificationsHealthz>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getNotificationsHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Kiểm tra tình trạng API
  */
 
-export function useGetNotificationsHealthz<TData = Awaited<ReturnType<typeof getNotificationsHealthz>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNotificationsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetNotificationsHealthz<
+    TData = Awaited<ReturnType<typeof getNotificationsHealthz>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getNotificationsHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetNotificationsHealthzQueryOptions(options)
 
-  const queryOptions = getGetNotificationsHealthzQueryOptions(options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Thiết lập tham số biến môi trường
  * @summary Thông tin đơn vị - Tham số
  */
 export type getUnitInfosInfoResponse200 = {
-  data: UnitInfoEditDto
-  status: 200
+    data: UnitInfoEditDto
+    status: 200
 }
-    
-export type getUnitInfosInfoResponseSuccess = (getUnitInfosInfoResponse200) & {
-  headers: Headers;
-};
-;
 
-export type getUnitInfosInfoResponse = (getUnitInfosInfoResponseSuccess)
+export type getUnitInfosInfoResponseSuccess = getUnitInfosInfoResponse200 & {
+    headers: Headers
+}
+
+export type getUnitInfosInfoResponse = getUnitInfosInfoResponseSuccess
 
 export const getGetUnitInfosInfoUrl = () => {
-
-
-  
-
-  return `/UnitInfos/info`
+    return `/UnitInfos/info`
 }
 
-export const getUnitInfosInfo = async ( options?: RequestInit): Promise<getUnitInfosInfoResponse> => {
-  
-  return customSystemFetch<getUnitInfosInfoResponse>(getGetUnitInfosInfoUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-
+export const getUnitInfosInfo = async (
+    options?: RequestInit
+): Promise<getUnitInfosInfoResponse> => {
+    return customSystemFetch<getUnitInfosInfoResponse>(getGetUnitInfosInfoUrl(), {
+        ...options,
+        method: 'GET',
+    })
+}
 
 export const getGetUnitInfosInfoQueryKey = () => {
-    return [
-    `/UnitInfos/info`
-    ] as const;
-    }
+    return [`/UnitInfos/info`] as const
+}
 
-    
-export const getGetUnitInfosInfoQueryOptions = <TData = Awaited<ReturnType<typeof getUnitInfosInfo>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosInfo>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
-) => {
+export const getGetUnitInfosInfoQueryOptions = <
+    TData = Awaited<ReturnType<typeof getUnitInfosInfo>>,
+    TError = unknown,
+>(options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosInfo>>, TError, TData>>
+    request?: SecondParameter<typeof customSystemFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    const queryKey = queryOptions?.queryKey ?? getGetUnitInfosInfoQueryKey()
 
-  const queryKey =  queryOptions?.queryKey ?? getGetUnitInfosInfoQueryKey();
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUnitInfosInfo>>> = ({ signal }) =>
+        getUnitInfosInfo({ signal, ...requestOptions })
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUnitInfosInfo>>> = ({ signal }) => getUnitInfosInfo({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosInfo>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getUnitInfosInfo>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetUnitInfosInfoQueryResult = NonNullable<Awaited<ReturnType<typeof getUnitInfosInfo>>>
 export type GetUnitInfosInfoQueryError = unknown
 
-
-export function useGetUnitInfosInfo<TData = Awaited<ReturnType<typeof getUnitInfosInfo>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosInfo>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getUnitInfosInfo>>,
-          TError,
-          Awaited<ReturnType<typeof getUnitInfosInfo>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetUnitInfosInfo<TData = Awaited<ReturnType<typeof getUnitInfosInfo>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosInfo>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getUnitInfosInfo>>,
-          TError,
-          Awaited<ReturnType<typeof getUnitInfosInfo>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetUnitInfosInfo<TData = Awaited<ReturnType<typeof getUnitInfosInfo>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosInfo>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUnitInfosInfo<
+    TData = Awaited<ReturnType<typeof getUnitInfosInfo>>,
+    TError = unknown,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosInfo>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getUnitInfosInfo>>,
+                    TError,
+                    Awaited<ReturnType<typeof getUnitInfosInfo>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUnitInfosInfo<
+    TData = Awaited<ReturnType<typeof getUnitInfosInfo>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosInfo>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getUnitInfosInfo>>,
+                    TError,
+                    Awaited<ReturnType<typeof getUnitInfosInfo>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUnitInfosInfo<
+    TData = Awaited<ReturnType<typeof getUnitInfosInfo>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosInfo>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Thông tin đơn vị - Tham số
  */
 
-export function useGetUnitInfosInfo<TData = Awaited<ReturnType<typeof getUnitInfosInfo>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosInfo>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetUnitInfosInfo<
+    TData = Awaited<ReturnType<typeof getUnitInfosInfo>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosInfo>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetUnitInfosInfoQueryOptions(options)
 
-  const queryOptions = getGetUnitInfosInfoQueryOptions(options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Kiểm tra tình trạng API
  * @summary Kiểm tra tình trạng API
  */
 export type getUnitInfosHealthzResponse200 = {
-  data: void
-  status: 200
+    data: void
+    status: 200
 }
-    
-export type getUnitInfosHealthzResponseSuccess = (getUnitInfosHealthzResponse200) & {
-  headers: Headers;
-};
-;
 
-export type getUnitInfosHealthzResponse = (getUnitInfosHealthzResponseSuccess)
+export type getUnitInfosHealthzResponseSuccess = getUnitInfosHealthzResponse200 & {
+    headers: Headers
+}
+
+export type getUnitInfosHealthzResponse = getUnitInfosHealthzResponseSuccess
 
 export const getGetUnitInfosHealthzUrl = () => {
-
-
-  
-
-  return `/UnitInfos/healthz`
+    return `/UnitInfos/healthz`
 }
 
-export const getUnitInfosHealthz = async ( options?: RequestInit): Promise<getUnitInfosHealthzResponse> => {
-  
-  return customSystemFetch<getUnitInfosHealthzResponse>(getGetUnitInfosHealthzUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-
+export const getUnitInfosHealthz = async (
+    options?: RequestInit
+): Promise<getUnitInfosHealthzResponse> => {
+    return customSystemFetch<getUnitInfosHealthzResponse>(getGetUnitInfosHealthzUrl(), {
+        ...options,
+        method: 'GET',
+    })
+}
 
 export const getGetUnitInfosHealthzQueryKey = () => {
-    return [
-    `/UnitInfos/healthz`
-    ] as const;
-    }
-
-    
-export const getGetUnitInfosHealthzQueryOptions = <TData = Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetUnitInfosHealthzQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUnitInfosHealthz>>> = ({ signal }) => getUnitInfosHealthz({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return [`/UnitInfos/healthz`] as const
 }
 
-export type GetUnitInfosHealthzQueryResult = NonNullable<Awaited<ReturnType<typeof getUnitInfosHealthz>>>
+export const getGetUnitInfosHealthzQueryOptions = <
+    TData = Awaited<ReturnType<typeof getUnitInfosHealthz>>,
+    TError = unknown,
+>(options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError, TData>>
+    request?: SecondParameter<typeof customSystemFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetUnitInfosHealthzQueryKey()
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUnitInfosHealthz>>> = ({ signal }) =>
+        getUnitInfosHealthz({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getUnitInfosHealthz>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetUnitInfosHealthzQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getUnitInfosHealthz>>
+>
 export type GetUnitInfosHealthzQueryError = unknown
 
-
-export function useGetUnitInfosHealthz<TData = Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getUnitInfosHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getUnitInfosHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetUnitInfosHealthz<TData = Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getUnitInfosHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getUnitInfosHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetUnitInfosHealthz<TData = Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUnitInfosHealthz<
+    TData = Awaited<ReturnType<typeof getUnitInfosHealthz>>,
+    TError = unknown,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getUnitInfosHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getUnitInfosHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUnitInfosHealthz<
+    TData = Awaited<ReturnType<typeof getUnitInfosHealthz>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getUnitInfosHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getUnitInfosHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUnitInfosHealthz<
+    TData = Awaited<ReturnType<typeof getUnitInfosHealthz>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Kiểm tra tình trạng API
  */
 
-export function useGetUnitInfosHealthz<TData = Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetUnitInfosHealthz<
+    TData = Awaited<ReturnType<typeof getUnitInfosHealthz>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetUnitInfosHealthzQueryOptions(options)
 
-  const queryOptions = getGetUnitInfosHealthzQueryOptions(options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Quyền ứng dụng
  * @summary Quyền, Quyền theo chức năng ứng dụng
  */
 export type getUserPermissionsPermissionAppCodeUserIdResponse200 = {
-  data: GetUserPermissionDTO
-  status: 200
+    data: GetUserPermissionDTO
+    status: 200
 }
 
 export type getUserPermissionsPermissionAppCodeUserIdResponse400 = {
-  data: GetUserPermissionsPermissionAppCodeUserId400
-  status: 400
+    data: GetUserPermissionsPermissionAppCodeUserId400
+    status: 400
 }
 
 export type getUserPermissionsPermissionAppCodeUserIdResponse401 = {
-  data: GetUserPermissionsPermissionAppCodeUserId401
-  status: 401
+    data: GetUserPermissionsPermissionAppCodeUserId401
+    status: 401
 }
 
 export type getUserPermissionsPermissionAppCodeUserIdResponse403 = {
-  data: GetUserPermissionsPermissionAppCodeUserId403
-  status: 403
+    data: GetUserPermissionsPermissionAppCodeUserId403
+    status: 403
 }
 
 export type getUserPermissionsPermissionAppCodeUserIdResponse500 = {
-  data: GetUserPermissionsPermissionAppCodeUserId500
-  status: 500
-}
-    
-export type getUserPermissionsPermissionAppCodeUserIdResponseSuccess = (getUserPermissionsPermissionAppCodeUserIdResponse200) & {
-  headers: Headers;
-};
-export type getUserPermissionsPermissionAppCodeUserIdResponseError = (getUserPermissionsPermissionAppCodeUserIdResponse400 | getUserPermissionsPermissionAppCodeUserIdResponse401 | getUserPermissionsPermissionAppCodeUserIdResponse403 | getUserPermissionsPermissionAppCodeUserIdResponse500) & {
-  headers: Headers;
-};
-
-export type getUserPermissionsPermissionAppCodeUserIdResponse = (getUserPermissionsPermissionAppCodeUserIdResponseSuccess | getUserPermissionsPermissionAppCodeUserIdResponseError)
-
-export const getGetUserPermissionsPermissionAppCodeUserIdUrl = (appCode: string,
-    userId: string,) => {
-
-
-  
-
-  return `/UserPermissions/permission/${appCode}/${userId}`
+    data: GetUserPermissionsPermissionAppCodeUserId500
+    status: 500
 }
 
-export const getUserPermissionsPermissionAppCodeUserId = async (appCode: string,
-    userId: string, options?: RequestInit): Promise<getUserPermissionsPermissionAppCodeUserIdResponse> => {
-  
-  return customSystemFetch<getUserPermissionsPermissionAppCodeUserIdResponse>(getGetUserPermissionsPermissionAppCodeUserIdUrl(appCode,userId),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-
-
-export const getGetUserPermissionsPermissionAppCodeUserIdQueryKey = (appCode?: string,
-    userId?: string,) => {
-    return [
-    `/UserPermissions/permission/${appCode}/${userId}`
-    ] as const;
+export type getUserPermissionsPermissionAppCodeUserIdResponseSuccess =
+    getUserPermissionsPermissionAppCodeUserIdResponse200 & {
+        headers: Headers
     }
-
-    
-export const getGetUserPermissionsPermissionAppCodeUserIdQueryOptions = <TData = Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>, TError = GetUserPermissionsPermissionAppCodeUserId400 | GetUserPermissionsPermissionAppCodeUserId401 | GetUserPermissionsPermissionAppCodeUserId403 | GetUserPermissionsPermissionAppCodeUserId500>(appCode: string,
-    userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetUserPermissionsPermissionAppCodeUserIdQueryKey(appCode,userId);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>> = ({ signal }) => getUserPermissionsPermissionAppCodeUserId(appCode,userId, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(appCode && userId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+export type getUserPermissionsPermissionAppCodeUserIdResponseError = (
+    | getUserPermissionsPermissionAppCodeUserIdResponse400
+    | getUserPermissionsPermissionAppCodeUserIdResponse401
+    | getUserPermissionsPermissionAppCodeUserIdResponse403
+    | getUserPermissionsPermissionAppCodeUserIdResponse500
+) & {
+    headers: Headers
 }
 
-export type GetUserPermissionsPermissionAppCodeUserIdQueryResult = NonNullable<Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>>
-export type GetUserPermissionsPermissionAppCodeUserIdQueryError = GetUserPermissionsPermissionAppCodeUserId400 | GetUserPermissionsPermissionAppCodeUserId401 | GetUserPermissionsPermissionAppCodeUserId403 | GetUserPermissionsPermissionAppCodeUserId500
+export type getUserPermissionsPermissionAppCodeUserIdResponse =
+    | getUserPermissionsPermissionAppCodeUserIdResponseSuccess
+    | getUserPermissionsPermissionAppCodeUserIdResponseError
 
+export const getGetUserPermissionsPermissionAppCodeUserIdUrl = (
+    appCode: string,
+    userId: string
+) => {
+    return `/UserPermissions/permission/${appCode}/${userId}`
+}
 
-export function useGetUserPermissionsPermissionAppCodeUserId<TData = Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>, TError = GetUserPermissionsPermissionAppCodeUserId400 | GetUserPermissionsPermissionAppCodeUserId401 | GetUserPermissionsPermissionAppCodeUserId403 | GetUserPermissionsPermissionAppCodeUserId500>(
- appCode: string,
-    userId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>,
-          TError,
-          Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetUserPermissionsPermissionAppCodeUserId<TData = Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>, TError = GetUserPermissionsPermissionAppCodeUserId400 | GetUserPermissionsPermissionAppCodeUserId401 | GetUserPermissionsPermissionAppCodeUserId403 | GetUserPermissionsPermissionAppCodeUserId500>(
- appCode: string,
-    userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>,
-          TError,
-          Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetUserPermissionsPermissionAppCodeUserId<TData = Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>, TError = GetUserPermissionsPermissionAppCodeUserId400 | GetUserPermissionsPermissionAppCodeUserId401 | GetUserPermissionsPermissionAppCodeUserId403 | GetUserPermissionsPermissionAppCodeUserId500>(
- appCode: string,
-    userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export const getUserPermissionsPermissionAppCodeUserId = async (
+    appCode: string,
+    userId: string,
+    options?: RequestInit
+): Promise<getUserPermissionsPermissionAppCodeUserIdResponse> => {
+    return customSystemFetch<getUserPermissionsPermissionAppCodeUserIdResponse>(
+        getGetUserPermissionsPermissionAppCodeUserIdUrl(appCode, userId),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getGetUserPermissionsPermissionAppCodeUserIdQueryKey = (
+    appCode?: string,
+    userId?: string
+) => {
+    return [`/UserPermissions/permission/${appCode}/${userId}`] as const
+}
+
+export const getGetUserPermissionsPermissionAppCodeUserIdQueryOptions = <
+    TData = Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>,
+    TError =
+        | GetUserPermissionsPermissionAppCodeUserId400
+        | GetUserPermissionsPermissionAppCodeUserId401
+        | GetUserPermissionsPermissionAppCodeUserId403
+        | GetUserPermissionsPermissionAppCodeUserId500,
+>(
+    appCode: string,
+    userId: string,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey =
+        queryOptions?.queryKey ??
+        getGetUserPermissionsPermissionAppCodeUserIdQueryKey(appCode, userId)
+
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>
+    > = ({ signal }) =>
+        getUserPermissionsPermissionAppCodeUserId(appCode, userId, { signal, ...requestOptions })
+
+    return {
+        queryKey,
+        queryFn,
+        enabled: !!(appCode && userId),
+        ...queryOptions,
+    } as UseQueryOptions<
+        Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetUserPermissionsPermissionAppCodeUserIdQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>
+>
+export type GetUserPermissionsPermissionAppCodeUserIdQueryError =
+    | GetUserPermissionsPermissionAppCodeUserId400
+    | GetUserPermissionsPermissionAppCodeUserId401
+    | GetUserPermissionsPermissionAppCodeUserId403
+    | GetUserPermissionsPermissionAppCodeUserId500
+
+export function useGetUserPermissionsPermissionAppCodeUserId<
+    TData = Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>,
+    TError =
+        | GetUserPermissionsPermissionAppCodeUserId400
+        | GetUserPermissionsPermissionAppCodeUserId401
+        | GetUserPermissionsPermissionAppCodeUserId403
+        | GetUserPermissionsPermissionAppCodeUserId500,
+>(
+    appCode: string,
+    userId: string,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUserPermissionsPermissionAppCodeUserId<
+    TData = Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>,
+    TError =
+        | GetUserPermissionsPermissionAppCodeUserId400
+        | GetUserPermissionsPermissionAppCodeUserId401
+        | GetUserPermissionsPermissionAppCodeUserId403
+        | GetUserPermissionsPermissionAppCodeUserId500,
+>(
+    appCode: string,
+    userId: string,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUserPermissionsPermissionAppCodeUserId<
+    TData = Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>,
+    TError =
+        | GetUserPermissionsPermissionAppCodeUserId400
+        | GetUserPermissionsPermissionAppCodeUserId401
+        | GetUserPermissionsPermissionAppCodeUserId403
+        | GetUserPermissionsPermissionAppCodeUserId500,
+>(
+    appCode: string,
+    userId: string,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Quyền, Quyền theo chức năng ứng dụng
  */
 
-export function useGetUserPermissionsPermissionAppCodeUserId<TData = Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>, TError = GetUserPermissionsPermissionAppCodeUserId400 | GetUserPermissionsPermissionAppCodeUserId401 | GetUserPermissionsPermissionAppCodeUserId403 | GetUserPermissionsPermissionAppCodeUserId500>(
- appCode: string,
-    userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetUserPermissionsPermissionAppCodeUserId<
+    TData = Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>,
+    TError =
+        | GetUserPermissionsPermissionAppCodeUserId400
+        | GetUserPermissionsPermissionAppCodeUserId401
+        | GetUserPermissionsPermissionAppCodeUserId403
+        | GetUserPermissionsPermissionAppCodeUserId500,
+>(
+    appCode: string,
+    userId: string,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetUserPermissionsPermissionAppCodeUserIdQueryOptions(
+        appCode,
+        userId,
+        options
+    )
 
-  const queryOptions = getGetUserPermissionsPermissionAppCodeUserIdQueryOptions(appCode,userId,options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Mức truy cập dữ liệu
  * @summary Quyền, Mức truy cập dữ liệu của user
  */
 export type getUserPermissionsAccessLevelAppCodeUserIdResponse200 = {
-  data: AccessLevelDTO
-  status: 200
+    data: AccessLevelDTO
+    status: 200
 }
 
 export type getUserPermissionsAccessLevelAppCodeUserIdResponse400 = {
-  data: GetUserPermissionsAccessLevelAppCodeUserId400
-  status: 400
+    data: GetUserPermissionsAccessLevelAppCodeUserId400
+    status: 400
 }
 
 export type getUserPermissionsAccessLevelAppCodeUserIdResponse401 = {
-  data: GetUserPermissionsAccessLevelAppCodeUserId401
-  status: 401
+    data: GetUserPermissionsAccessLevelAppCodeUserId401
+    status: 401
 }
 
 export type getUserPermissionsAccessLevelAppCodeUserIdResponse403 = {
-  data: GetUserPermissionsAccessLevelAppCodeUserId403
-  status: 403
+    data: GetUserPermissionsAccessLevelAppCodeUserId403
+    status: 403
 }
 
 export type getUserPermissionsAccessLevelAppCodeUserIdResponse500 = {
-  data: GetUserPermissionsAccessLevelAppCodeUserId500
-  status: 500
-}
-    
-export type getUserPermissionsAccessLevelAppCodeUserIdResponseSuccess = (getUserPermissionsAccessLevelAppCodeUserIdResponse200) & {
-  headers: Headers;
-};
-export type getUserPermissionsAccessLevelAppCodeUserIdResponseError = (getUserPermissionsAccessLevelAppCodeUserIdResponse400 | getUserPermissionsAccessLevelAppCodeUserIdResponse401 | getUserPermissionsAccessLevelAppCodeUserIdResponse403 | getUserPermissionsAccessLevelAppCodeUserIdResponse500) & {
-  headers: Headers;
-};
-
-export type getUserPermissionsAccessLevelAppCodeUserIdResponse = (getUserPermissionsAccessLevelAppCodeUserIdResponseSuccess | getUserPermissionsAccessLevelAppCodeUserIdResponseError)
-
-export const getGetUserPermissionsAccessLevelAppCodeUserIdUrl = (appCode: string,
-    userId: string,) => {
-
-
-  
-
-  return `/UserPermissions/access-level/${appCode}/${userId}`
+    data: GetUserPermissionsAccessLevelAppCodeUserId500
+    status: 500
 }
 
-export const getUserPermissionsAccessLevelAppCodeUserId = async (appCode: string,
-    userId: string, options?: RequestInit): Promise<getUserPermissionsAccessLevelAppCodeUserIdResponse> => {
-  
-  return customSystemFetch<getUserPermissionsAccessLevelAppCodeUserIdResponse>(getGetUserPermissionsAccessLevelAppCodeUserIdUrl(appCode,userId),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-
-
-export const getGetUserPermissionsAccessLevelAppCodeUserIdQueryKey = (appCode?: string,
-    userId?: string,) => {
-    return [
-    `/UserPermissions/access-level/${appCode}/${userId}`
-    ] as const;
+export type getUserPermissionsAccessLevelAppCodeUserIdResponseSuccess =
+    getUserPermissionsAccessLevelAppCodeUserIdResponse200 & {
+        headers: Headers
     }
-
-    
-export const getGetUserPermissionsAccessLevelAppCodeUserIdQueryOptions = <TData = Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>, TError = GetUserPermissionsAccessLevelAppCodeUserId400 | GetUserPermissionsAccessLevelAppCodeUserId401 | GetUserPermissionsAccessLevelAppCodeUserId403 | GetUserPermissionsAccessLevelAppCodeUserId500>(appCode: string,
-    userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetUserPermissionsAccessLevelAppCodeUserIdQueryKey(appCode,userId);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>> = ({ signal }) => getUserPermissionsAccessLevelAppCodeUserId(appCode,userId, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(appCode && userId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+export type getUserPermissionsAccessLevelAppCodeUserIdResponseError = (
+    | getUserPermissionsAccessLevelAppCodeUserIdResponse400
+    | getUserPermissionsAccessLevelAppCodeUserIdResponse401
+    | getUserPermissionsAccessLevelAppCodeUserIdResponse403
+    | getUserPermissionsAccessLevelAppCodeUserIdResponse500
+) & {
+    headers: Headers
 }
 
-export type GetUserPermissionsAccessLevelAppCodeUserIdQueryResult = NonNullable<Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>>
-export type GetUserPermissionsAccessLevelAppCodeUserIdQueryError = GetUserPermissionsAccessLevelAppCodeUserId400 | GetUserPermissionsAccessLevelAppCodeUserId401 | GetUserPermissionsAccessLevelAppCodeUserId403 | GetUserPermissionsAccessLevelAppCodeUserId500
+export type getUserPermissionsAccessLevelAppCodeUserIdResponse =
+    | getUserPermissionsAccessLevelAppCodeUserIdResponseSuccess
+    | getUserPermissionsAccessLevelAppCodeUserIdResponseError
 
+export const getGetUserPermissionsAccessLevelAppCodeUserIdUrl = (
+    appCode: string,
+    userId: string
+) => {
+    return `/UserPermissions/access-level/${appCode}/${userId}`
+}
 
-export function useGetUserPermissionsAccessLevelAppCodeUserId<TData = Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>, TError = GetUserPermissionsAccessLevelAppCodeUserId400 | GetUserPermissionsAccessLevelAppCodeUserId401 | GetUserPermissionsAccessLevelAppCodeUserId403 | GetUserPermissionsAccessLevelAppCodeUserId500>(
- appCode: string,
-    userId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>,
-          TError,
-          Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetUserPermissionsAccessLevelAppCodeUserId<TData = Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>, TError = GetUserPermissionsAccessLevelAppCodeUserId400 | GetUserPermissionsAccessLevelAppCodeUserId401 | GetUserPermissionsAccessLevelAppCodeUserId403 | GetUserPermissionsAccessLevelAppCodeUserId500>(
- appCode: string,
-    userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>,
-          TError,
-          Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetUserPermissionsAccessLevelAppCodeUserId<TData = Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>, TError = GetUserPermissionsAccessLevelAppCodeUserId400 | GetUserPermissionsAccessLevelAppCodeUserId401 | GetUserPermissionsAccessLevelAppCodeUserId403 | GetUserPermissionsAccessLevelAppCodeUserId500>(
- appCode: string,
-    userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export const getUserPermissionsAccessLevelAppCodeUserId = async (
+    appCode: string,
+    userId: string,
+    options?: RequestInit
+): Promise<getUserPermissionsAccessLevelAppCodeUserIdResponse> => {
+    return customSystemFetch<getUserPermissionsAccessLevelAppCodeUserIdResponse>(
+        getGetUserPermissionsAccessLevelAppCodeUserIdUrl(appCode, userId),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getGetUserPermissionsAccessLevelAppCodeUserIdQueryKey = (
+    appCode?: string,
+    userId?: string
+) => {
+    return [`/UserPermissions/access-level/${appCode}/${userId}`] as const
+}
+
+export const getGetUserPermissionsAccessLevelAppCodeUserIdQueryOptions = <
+    TData = Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>,
+    TError =
+        | GetUserPermissionsAccessLevelAppCodeUserId400
+        | GetUserPermissionsAccessLevelAppCodeUserId401
+        | GetUserPermissionsAccessLevelAppCodeUserId403
+        | GetUserPermissionsAccessLevelAppCodeUserId500,
+>(
+    appCode: string,
+    userId: string,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey =
+        queryOptions?.queryKey ??
+        getGetUserPermissionsAccessLevelAppCodeUserIdQueryKey(appCode, userId)
+
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>
+    > = ({ signal }) =>
+        getUserPermissionsAccessLevelAppCodeUserId(appCode, userId, { signal, ...requestOptions })
+
+    return {
+        queryKey,
+        queryFn,
+        enabled: !!(appCode && userId),
+        ...queryOptions,
+    } as UseQueryOptions<
+        Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetUserPermissionsAccessLevelAppCodeUserIdQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>
+>
+export type GetUserPermissionsAccessLevelAppCodeUserIdQueryError =
+    | GetUserPermissionsAccessLevelAppCodeUserId400
+    | GetUserPermissionsAccessLevelAppCodeUserId401
+    | GetUserPermissionsAccessLevelAppCodeUserId403
+    | GetUserPermissionsAccessLevelAppCodeUserId500
+
+export function useGetUserPermissionsAccessLevelAppCodeUserId<
+    TData = Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>,
+    TError =
+        | GetUserPermissionsAccessLevelAppCodeUserId400
+        | GetUserPermissionsAccessLevelAppCodeUserId401
+        | GetUserPermissionsAccessLevelAppCodeUserId403
+        | GetUserPermissionsAccessLevelAppCodeUserId500,
+>(
+    appCode: string,
+    userId: string,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUserPermissionsAccessLevelAppCodeUserId<
+    TData = Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>,
+    TError =
+        | GetUserPermissionsAccessLevelAppCodeUserId400
+        | GetUserPermissionsAccessLevelAppCodeUserId401
+        | GetUserPermissionsAccessLevelAppCodeUserId403
+        | GetUserPermissionsAccessLevelAppCodeUserId500,
+>(
+    appCode: string,
+    userId: string,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUserPermissionsAccessLevelAppCodeUserId<
+    TData = Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>,
+    TError =
+        | GetUserPermissionsAccessLevelAppCodeUserId400
+        | GetUserPermissionsAccessLevelAppCodeUserId401
+        | GetUserPermissionsAccessLevelAppCodeUserId403
+        | GetUserPermissionsAccessLevelAppCodeUserId500,
+>(
+    appCode: string,
+    userId: string,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Quyền, Mức truy cập dữ liệu của user
  */
 
-export function useGetUserPermissionsAccessLevelAppCodeUserId<TData = Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>, TError = GetUserPermissionsAccessLevelAppCodeUserId400 | GetUserPermissionsAccessLevelAppCodeUserId401 | GetUserPermissionsAccessLevelAppCodeUserId403 | GetUserPermissionsAccessLevelAppCodeUserId500>(
- appCode: string,
-    userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetUserPermissionsAccessLevelAppCodeUserId<
+    TData = Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>,
+    TError =
+        | GetUserPermissionsAccessLevelAppCodeUserId400
+        | GetUserPermissionsAccessLevelAppCodeUserId401
+        | GetUserPermissionsAccessLevelAppCodeUserId403
+        | GetUserPermissionsAccessLevelAppCodeUserId500,
+>(
+    appCode: string,
+    userId: string,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetUserPermissionsAccessLevelAppCodeUserIdQueryOptions(
+        appCode,
+        userId,
+        options
+    )
 
-  const queryOptions = getGetUserPermissionsAccessLevelAppCodeUserIdQueryOptions(appCode,userId,options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Menu chức năng user có quyền
  * @summary Quyền, Danh sách nghiệp vụ mà user có quyền
  */
 export type getUserPermissionsMenusPermissionUserIdResponse200 = {
-  data: GetMenusPermissionDTO
-  status: 200
+    data: GetMenusPermissionDTO
+    status: 200
 }
 
 export type getUserPermissionsMenusPermissionUserIdResponse400 = {
-  data: GetUserPermissionsMenusPermissionUserId400
-  status: 400
+    data: GetUserPermissionsMenusPermissionUserId400
+    status: 400
 }
 
 export type getUserPermissionsMenusPermissionUserIdResponse401 = {
-  data: GetUserPermissionsMenusPermissionUserId401
-  status: 401
+    data: GetUserPermissionsMenusPermissionUserId401
+    status: 401
 }
 
 export type getUserPermissionsMenusPermissionUserIdResponse403 = {
-  data: GetUserPermissionsMenusPermissionUserId403
-  status: 403
+    data: GetUserPermissionsMenusPermissionUserId403
+    status: 403
 }
 
 export type getUserPermissionsMenusPermissionUserIdResponse500 = {
-  data: GetUserPermissionsMenusPermissionUserId500
-  status: 500
-}
-    
-export type getUserPermissionsMenusPermissionUserIdResponseSuccess = (getUserPermissionsMenusPermissionUserIdResponse200) & {
-  headers: Headers;
-};
-export type getUserPermissionsMenusPermissionUserIdResponseError = (getUserPermissionsMenusPermissionUserIdResponse400 | getUserPermissionsMenusPermissionUserIdResponse401 | getUserPermissionsMenusPermissionUserIdResponse403 | getUserPermissionsMenusPermissionUserIdResponse500) & {
-  headers: Headers;
-};
-
-export type getUserPermissionsMenusPermissionUserIdResponse = (getUserPermissionsMenusPermissionUserIdResponseSuccess | getUserPermissionsMenusPermissionUserIdResponseError)
-
-export const getGetUserPermissionsMenusPermissionUserIdUrl = (userId: string,) => {
-
-
-  
-
-  return `/UserPermissions/menus-permission/${userId}`
+    data: GetUserPermissionsMenusPermissionUserId500
+    status: 500
 }
 
-export const getUserPermissionsMenusPermissionUserId = async (userId: string, options?: RequestInit): Promise<getUserPermissionsMenusPermissionUserIdResponse> => {
-  
-  return customSystemFetch<getUserPermissionsMenusPermissionUserIdResponse>(getGetUserPermissionsMenusPermissionUserIdUrl(userId),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-
-
-export const getGetUserPermissionsMenusPermissionUserIdQueryKey = (userId?: string,) => {
-    return [
-    `/UserPermissions/menus-permission/${userId}`
-    ] as const;
+export type getUserPermissionsMenusPermissionUserIdResponseSuccess =
+    getUserPermissionsMenusPermissionUserIdResponse200 & {
+        headers: Headers
     }
-
-    
-export const getGetUserPermissionsMenusPermissionUserIdQueryOptions = <TData = Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>, TError = GetUserPermissionsMenusPermissionUserId400 | GetUserPermissionsMenusPermissionUserId401 | GetUserPermissionsMenusPermissionUserId403 | GetUserPermissionsMenusPermissionUserId500>(userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetUserPermissionsMenusPermissionUserIdQueryKey(userId);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>> = ({ signal }) => getUserPermissionsMenusPermissionUserId(userId, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(userId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+export type getUserPermissionsMenusPermissionUserIdResponseError = (
+    | getUserPermissionsMenusPermissionUserIdResponse400
+    | getUserPermissionsMenusPermissionUserIdResponse401
+    | getUserPermissionsMenusPermissionUserIdResponse403
+    | getUserPermissionsMenusPermissionUserIdResponse500
+) & {
+    headers: Headers
 }
 
-export type GetUserPermissionsMenusPermissionUserIdQueryResult = NonNullable<Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>>
-export type GetUserPermissionsMenusPermissionUserIdQueryError = GetUserPermissionsMenusPermissionUserId400 | GetUserPermissionsMenusPermissionUserId401 | GetUserPermissionsMenusPermissionUserId403 | GetUserPermissionsMenusPermissionUserId500
+export type getUserPermissionsMenusPermissionUserIdResponse =
+    | getUserPermissionsMenusPermissionUserIdResponseSuccess
+    | getUserPermissionsMenusPermissionUserIdResponseError
 
+export const getGetUserPermissionsMenusPermissionUserIdUrl = (userId: string) => {
+    return `/UserPermissions/menus-permission/${userId}`
+}
 
-export function useGetUserPermissionsMenusPermissionUserId<TData = Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>, TError = GetUserPermissionsMenusPermissionUserId400 | GetUserPermissionsMenusPermissionUserId401 | GetUserPermissionsMenusPermissionUserId403 | GetUserPermissionsMenusPermissionUserId500>(
- userId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>,
-          TError,
-          Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetUserPermissionsMenusPermissionUserId<TData = Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>, TError = GetUserPermissionsMenusPermissionUserId400 | GetUserPermissionsMenusPermissionUserId401 | GetUserPermissionsMenusPermissionUserId403 | GetUserPermissionsMenusPermissionUserId500>(
- userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>,
-          TError,
-          Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetUserPermissionsMenusPermissionUserId<TData = Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>, TError = GetUserPermissionsMenusPermissionUserId400 | GetUserPermissionsMenusPermissionUserId401 | GetUserPermissionsMenusPermissionUserId403 | GetUserPermissionsMenusPermissionUserId500>(
- userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export const getUserPermissionsMenusPermissionUserId = async (
+    userId: string,
+    options?: RequestInit
+): Promise<getUserPermissionsMenusPermissionUserIdResponse> => {
+    return customSystemFetch<getUserPermissionsMenusPermissionUserIdResponse>(
+        getGetUserPermissionsMenusPermissionUserIdUrl(userId),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getGetUserPermissionsMenusPermissionUserIdQueryKey = (userId?: string) => {
+    return [`/UserPermissions/menus-permission/${userId}`] as const
+}
+
+export const getGetUserPermissionsMenusPermissionUserIdQueryOptions = <
+    TData = Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>,
+    TError =
+        | GetUserPermissionsMenusPermissionUserId400
+        | GetUserPermissionsMenusPermissionUserId401
+        | GetUserPermissionsMenusPermissionUserId403
+        | GetUserPermissionsMenusPermissionUserId500,
+>(
+    userId: string,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey =
+        queryOptions?.queryKey ?? getGetUserPermissionsMenusPermissionUserIdQueryKey(userId)
+
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>
+    > = ({ signal }) =>
+        getUserPermissionsMenusPermissionUserId(userId, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, enabled: !!userId, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetUserPermissionsMenusPermissionUserIdQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>
+>
+export type GetUserPermissionsMenusPermissionUserIdQueryError =
+    | GetUserPermissionsMenusPermissionUserId400
+    | GetUserPermissionsMenusPermissionUserId401
+    | GetUserPermissionsMenusPermissionUserId403
+    | GetUserPermissionsMenusPermissionUserId500
+
+export function useGetUserPermissionsMenusPermissionUserId<
+    TData = Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>,
+    TError =
+        | GetUserPermissionsMenusPermissionUserId400
+        | GetUserPermissionsMenusPermissionUserId401
+        | GetUserPermissionsMenusPermissionUserId403
+        | GetUserPermissionsMenusPermissionUserId500,
+>(
+    userId: string,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUserPermissionsMenusPermissionUserId<
+    TData = Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>,
+    TError =
+        | GetUserPermissionsMenusPermissionUserId400
+        | GetUserPermissionsMenusPermissionUserId401
+        | GetUserPermissionsMenusPermissionUserId403
+        | GetUserPermissionsMenusPermissionUserId500,
+>(
+    userId: string,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUserPermissionsMenusPermissionUserId<
+    TData = Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>,
+    TError =
+        | GetUserPermissionsMenusPermissionUserId400
+        | GetUserPermissionsMenusPermissionUserId401
+        | GetUserPermissionsMenusPermissionUserId403
+        | GetUserPermissionsMenusPermissionUserId500,
+>(
+    userId: string,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Quyền, Danh sách nghiệp vụ mà user có quyền
  */
 
-export function useGetUserPermissionsMenusPermissionUserId<TData = Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>, TError = GetUserPermissionsMenusPermissionUserId400 | GetUserPermissionsMenusPermissionUserId401 | GetUserPermissionsMenusPermissionUserId403 | GetUserPermissionsMenusPermissionUserId500>(
- userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetUserPermissionsMenusPermissionUserId<
+    TData = Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>,
+    TError =
+        | GetUserPermissionsMenusPermissionUserId400
+        | GetUserPermissionsMenusPermissionUserId401
+        | GetUserPermissionsMenusPermissionUserId403
+        | GetUserPermissionsMenusPermissionUserId500,
+>(
+    userId: string,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetUserPermissionsMenusPermissionUserIdQueryOptions(userId, options)
 
-  const queryOptions = getGetUserPermissionsMenusPermissionUserIdQueryOptions(userId,options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Kiểm tra tình trạng API
  * @summary Kiểm tra tình trạng API
  */
 export type getUserPermissionsHealthzResponse400 = {
-  data: GetUserPermissionsHealthz400
-  status: 400
+    data: GetUserPermissionsHealthz400
+    status: 400
 }
 
 export type getUserPermissionsHealthzResponse401 = {
-  data: GetUserPermissionsHealthz401
-  status: 401
+    data: GetUserPermissionsHealthz401
+    status: 401
 }
 
 export type getUserPermissionsHealthzResponse403 = {
-  data: GetUserPermissionsHealthz403
-  status: 403
+    data: GetUserPermissionsHealthz403
+    status: 403
 }
 
 export type getUserPermissionsHealthzResponse500 = {
-  data: GetUserPermissionsHealthz500
-  status: 500
+    data: GetUserPermissionsHealthz500
+    status: 500
 }
-    
-;
-export type getUserPermissionsHealthzResponseError = (getUserPermissionsHealthzResponse400 | getUserPermissionsHealthzResponse401 | getUserPermissionsHealthzResponse403 | getUserPermissionsHealthzResponse500) & {
-  headers: Headers;
-};
+export type getUserPermissionsHealthzResponseError = (
+    | getUserPermissionsHealthzResponse400
+    | getUserPermissionsHealthzResponse401
+    | getUserPermissionsHealthzResponse403
+    | getUserPermissionsHealthzResponse500
+) & {
+    headers: Headers
+}
 
-export type getUserPermissionsHealthzResponse = (getUserPermissionsHealthzResponseError)
+export type getUserPermissionsHealthzResponse = getUserPermissionsHealthzResponseError
 
 export const getGetUserPermissionsHealthzUrl = () => {
-
-
-  
-
-  return `/UserPermissions/healthz`
+    return `/UserPermissions/healthz`
 }
 
-export const getUserPermissionsHealthz = async ( options?: RequestInit): Promise<getUserPermissionsHealthzResponse> => {
-  
-  return customSystemFetch<getUserPermissionsHealthzResponse>(getGetUserPermissionsHealthzUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-
+export const getUserPermissionsHealthz = async (
+    options?: RequestInit
+): Promise<getUserPermissionsHealthzResponse> => {
+    return customSystemFetch<getUserPermissionsHealthzResponse>(getGetUserPermissionsHealthzUrl(), {
+        ...options,
+        method: 'GET',
+    })
+}
 
 export const getGetUserPermissionsHealthzQueryKey = () => {
-    return [
-    `/UserPermissions/healthz`
-    ] as const;
-    }
-
-    
-export const getGetUserPermissionsHealthzQueryOptions = <TData = Awaited<ReturnType<typeof getUserPermissionsHealthz>>, TError = GetUserPermissionsHealthz400 | GetUserPermissionsHealthz401 | GetUserPermissionsHealthz403 | GetUserPermissionsHealthz500>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserPermissionsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetUserPermissionsHealthzQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUserPermissionsHealthz>>> = ({ signal }) => getUserPermissionsHealthz({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getUserPermissionsHealthz>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return [`/UserPermissions/healthz`] as const
 }
 
-export type GetUserPermissionsHealthzQueryResult = NonNullable<Awaited<ReturnType<typeof getUserPermissionsHealthz>>>
-export type GetUserPermissionsHealthzQueryError = GetUserPermissionsHealthz400 | GetUserPermissionsHealthz401 | GetUserPermissionsHealthz403 | GetUserPermissionsHealthz500
+export const getGetUserPermissionsHealthzQueryOptions = <
+    TData = Awaited<ReturnType<typeof getUserPermissionsHealthz>>,
+    TError =
+        | GetUserPermissionsHealthz400
+        | GetUserPermissionsHealthz401
+        | GetUserPermissionsHealthz403
+        | GetUserPermissionsHealthz500,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<Awaited<ReturnType<typeof getUserPermissionsHealthz>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
+    const queryKey = queryOptions?.queryKey ?? getGetUserPermissionsHealthzQueryKey()
 
-export function useGetUserPermissionsHealthz<TData = Awaited<ReturnType<typeof getUserPermissionsHealthz>>, TError = GetUserPermissionsHealthz400 | GetUserPermissionsHealthz401 | GetUserPermissionsHealthz403 | GetUserPermissionsHealthz500>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserPermissionsHealthz>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getUserPermissionsHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getUserPermissionsHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetUserPermissionsHealthz<TData = Awaited<ReturnType<typeof getUserPermissionsHealthz>>, TError = GetUserPermissionsHealthz400 | GetUserPermissionsHealthz401 | GetUserPermissionsHealthz403 | GetUserPermissionsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserPermissionsHealthz>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getUserPermissionsHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getUserPermissionsHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetUserPermissionsHealthz<TData = Awaited<ReturnType<typeof getUserPermissionsHealthz>>, TError = GetUserPermissionsHealthz400 | GetUserPermissionsHealthz401 | GetUserPermissionsHealthz403 | GetUserPermissionsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserPermissionsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUserPermissionsHealthz>>> = ({
+        signal,
+    }) => getUserPermissionsHealthz({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getUserPermissionsHealthz>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetUserPermissionsHealthzQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getUserPermissionsHealthz>>
+>
+export type GetUserPermissionsHealthzQueryError =
+    | GetUserPermissionsHealthz400
+    | GetUserPermissionsHealthz401
+    | GetUserPermissionsHealthz403
+    | GetUserPermissionsHealthz500
+
+export function useGetUserPermissionsHealthz<
+    TData = Awaited<ReturnType<typeof getUserPermissionsHealthz>>,
+    TError =
+        | GetUserPermissionsHealthz400
+        | GetUserPermissionsHealthz401
+        | GetUserPermissionsHealthz403
+        | GetUserPermissionsHealthz500,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getUserPermissionsHealthz>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getUserPermissionsHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getUserPermissionsHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUserPermissionsHealthz<
+    TData = Awaited<ReturnType<typeof getUserPermissionsHealthz>>,
+    TError =
+        | GetUserPermissionsHealthz400
+        | GetUserPermissionsHealthz401
+        | GetUserPermissionsHealthz403
+        | GetUserPermissionsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getUserPermissionsHealthz>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getUserPermissionsHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getUserPermissionsHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUserPermissionsHealthz<
+    TData = Awaited<ReturnType<typeof getUserPermissionsHealthz>>,
+    TError =
+        | GetUserPermissionsHealthz400
+        | GetUserPermissionsHealthz401
+        | GetUserPermissionsHealthz403
+        | GetUserPermissionsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getUserPermissionsHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Kiểm tra tình trạng API
  */
 
-export function useGetUserPermissionsHealthz<TData = Awaited<ReturnType<typeof getUserPermissionsHealthz>>, TError = GetUserPermissionsHealthz400 | GetUserPermissionsHealthz401 | GetUserPermissionsHealthz403 | GetUserPermissionsHealthz500>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserPermissionsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetUserPermissionsHealthz<
+    TData = Awaited<ReturnType<typeof getUserPermissionsHealthz>>,
+    TError =
+        | GetUserPermissionsHealthz400
+        | GetUserPermissionsHealthz401
+        | GetUserPermissionsHealthz403
+        | GetUserPermissionsHealthz500,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getUserPermissionsHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetUserPermissionsHealthzQueryOptions(options)
 
-  const queryOptions = getGetUserPermissionsHealthzQueryOptions(options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Lấy danh sách các phiên bản theo từng ứng dụng
  * @summary Phiên bản ứng dụng - Danh sách
  */
 export type getVersionAppsResponse200 = {
-  data: GetVersionAppDTO
-  status: 200
+    data: GetVersionAppDTO
+    status: 200
 }
-    
-export type getVersionAppsResponseSuccess = (getVersionAppsResponse200) & {
-  headers: Headers;
-};
-;
 
-export type getVersionAppsResponse = (getVersionAppsResponseSuccess)
+export type getVersionAppsResponseSuccess = getVersionAppsResponse200 & {
+    headers: Headers
+}
+
+export type getVersionAppsResponse = getVersionAppsResponseSuccess
 
 export const getGetVersionAppsUrl = () => {
-
-
-  
-
-  return `/VersionApps`
+    return `/VersionApps`
 }
 
-export const getVersionApps = async ( options?: RequestInit): Promise<getVersionAppsResponse> => {
-  
-  return customSystemFetch<getVersionAppsResponse>(getGetVersionAppsUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-
+export const getVersionApps = async (options?: RequestInit): Promise<getVersionAppsResponse> => {
+    return customSystemFetch<getVersionAppsResponse>(getGetVersionAppsUrl(), {
+        ...options,
+        method: 'GET',
+    })
+}
 
 export const getGetVersionAppsQueryKey = () => {
-    return [
-    `/VersionApps`
-    ] as const;
-    }
+    return [`/VersionApps`] as const
+}
 
-    
-export const getGetVersionAppsQueryOptions = <TData = Awaited<ReturnType<typeof getVersionApps>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersionApps>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
-) => {
+export const getGetVersionAppsQueryOptions = <
+    TData = Awaited<ReturnType<typeof getVersionApps>>,
+    TError = unknown,
+>(options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersionApps>>, TError, TData>>
+    request?: SecondParameter<typeof customSystemFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    const queryKey = queryOptions?.queryKey ?? getGetVersionAppsQueryKey()
 
-  const queryKey =  queryOptions?.queryKey ?? getGetVersionAppsQueryKey();
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getVersionApps>>> = ({ signal }) =>
+        getVersionApps({ signal, ...requestOptions })
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getVersionApps>>> = ({ signal }) => getVersionApps({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getVersionApps>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getVersionApps>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetVersionAppsQueryResult = NonNullable<Awaited<ReturnType<typeof getVersionApps>>>
 export type GetVersionAppsQueryError = unknown
 
-
-export function useGetVersionApps<TData = Awaited<ReturnType<typeof getVersionApps>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersionApps>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getVersionApps>>,
-          TError,
-          Awaited<ReturnType<typeof getVersionApps>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetVersionApps<TData = Awaited<ReturnType<typeof getVersionApps>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersionApps>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getVersionApps>>,
-          TError,
-          Awaited<ReturnType<typeof getVersionApps>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetVersionApps<TData = Awaited<ReturnType<typeof getVersionApps>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersionApps>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetVersionApps<
+    TData = Awaited<ReturnType<typeof getVersionApps>>,
+    TError = unknown,
+>(
+    options: {
+        query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersionApps>>, TError, TData>> &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getVersionApps>>,
+                    TError,
+                    Awaited<ReturnType<typeof getVersionApps>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetVersionApps<
+    TData = Awaited<ReturnType<typeof getVersionApps>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getVersionApps>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getVersionApps>>,
+                    TError,
+                    Awaited<ReturnType<typeof getVersionApps>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetVersionApps<
+    TData = Awaited<ReturnType<typeof getVersionApps>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersionApps>>, TError, TData>>
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Phiên bản ứng dụng - Danh sách
  */
 
-export function useGetVersionApps<TData = Awaited<ReturnType<typeof getVersionApps>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersionApps>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetVersionApps<
+    TData = Awaited<ReturnType<typeof getVersionApps>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersionApps>>, TError, TData>>
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetVersionAppsQueryOptions(options)
 
-  const queryOptions = getGetVersionAppsQueryOptions(options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
-
 
 /**
  * Kiểm tra tình trạng API
  * @summary Kiểm tra tình trạng API
  */
 export type getVersionAppsHealthzResponse200 = {
-  data: void
-  status: 200
+    data: void
+    status: 200
 }
-    
-export type getVersionAppsHealthzResponseSuccess = (getVersionAppsHealthzResponse200) & {
-  headers: Headers;
-};
-;
 
-export type getVersionAppsHealthzResponse = (getVersionAppsHealthzResponseSuccess)
+export type getVersionAppsHealthzResponseSuccess = getVersionAppsHealthzResponse200 & {
+    headers: Headers
+}
+
+export type getVersionAppsHealthzResponse = getVersionAppsHealthzResponseSuccess
 
 export const getGetVersionAppsHealthzUrl = () => {
-
-
-  
-
-  return `/VersionApps/healthz`
+    return `/VersionApps/healthz`
 }
 
-export const getVersionAppsHealthz = async ( options?: RequestInit): Promise<getVersionAppsHealthzResponse> => {
-  
-  return customSystemFetch<getVersionAppsHealthzResponse>(getGetVersionAppsHealthzUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-
+export const getVersionAppsHealthz = async (
+    options?: RequestInit
+): Promise<getVersionAppsHealthzResponse> => {
+    return customSystemFetch<getVersionAppsHealthzResponse>(getGetVersionAppsHealthzUrl(), {
+        ...options,
+        method: 'GET',
+    })
+}
 
 export const getGetVersionAppsHealthzQueryKey = () => {
-    return [
-    `/VersionApps/healthz`
-    ] as const;
-    }
-
-    
-export const getGetVersionAppsHealthzQueryOptions = <TData = Awaited<ReturnType<typeof getVersionAppsHealthz>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersionAppsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetVersionAppsHealthzQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getVersionAppsHealthz>>> = ({ signal }) => getVersionAppsHealthz({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getVersionAppsHealthz>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return [`/VersionApps/healthz`] as const
 }
 
-export type GetVersionAppsHealthzQueryResult = NonNullable<Awaited<ReturnType<typeof getVersionAppsHealthz>>>
+export const getGetVersionAppsHealthzQueryOptions = <
+    TData = Awaited<ReturnType<typeof getVersionAppsHealthz>>,
+    TError = unknown,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<Awaited<ReturnType<typeof getVersionAppsHealthz>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customSystemFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetVersionAppsHealthzQueryKey()
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getVersionAppsHealthz>>> = ({
+        signal,
+    }) => getVersionAppsHealthz({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getVersionAppsHealthz>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetVersionAppsHealthzQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getVersionAppsHealthz>>
+>
 export type GetVersionAppsHealthzQueryError = unknown
 
-
-export function useGetVersionAppsHealthz<TData = Awaited<ReturnType<typeof getVersionAppsHealthz>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersionAppsHealthz>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getVersionAppsHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getVersionAppsHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetVersionAppsHealthz<TData = Awaited<ReturnType<typeof getVersionAppsHealthz>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersionAppsHealthz>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getVersionAppsHealthz>>,
-          TError,
-          Awaited<ReturnType<typeof getVersionAppsHealthz>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetVersionAppsHealthz<TData = Awaited<ReturnType<typeof getVersionAppsHealthz>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersionAppsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetVersionAppsHealthz<
+    TData = Awaited<ReturnType<typeof getVersionAppsHealthz>>,
+    TError = unknown,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getVersionAppsHealthz>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getVersionAppsHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getVersionAppsHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetVersionAppsHealthz<
+    TData = Awaited<ReturnType<typeof getVersionAppsHealthz>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getVersionAppsHealthz>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getVersionAppsHealthz>>,
+                    TError,
+                    Awaited<ReturnType<typeof getVersionAppsHealthz>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetVersionAppsHealthz<
+    TData = Awaited<ReturnType<typeof getVersionAppsHealthz>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getVersionAppsHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Kiểm tra tình trạng API
  */
 
-export function useGetVersionAppsHealthz<TData = Awaited<ReturnType<typeof getVersionAppsHealthz>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersionAppsHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetVersionAppsHealthz<
+    TData = Awaited<ReturnType<typeof getVersionAppsHealthz>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getVersionAppsHealthz>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetVersionAppsHealthzQueryOptions(options)
 
-  const queryOptions = getGetVersionAppsHealthzQueryOptions(options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }

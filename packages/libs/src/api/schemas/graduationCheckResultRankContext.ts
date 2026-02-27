@@ -5,11 +5,11 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GraduationCheckResultRankContext = typeof GraduationCheckResultRankContext[keyof typeof GraduationCheckResultRankContext];
-
+export type GraduationCheckResultRankContext =
+    (typeof GraduationCheckResultRankContext)[keyof typeof GraduationCheckResultRankContext]
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GraduationCheckResultRankContext = {
-  STUDYING: 'STUDYING',
-  GRADUATION: 'GRADUATION',
-} as const;
+    STUDYING: 'STUDYING',
+    GRADUATION: 'GRADUATION',
+} as const

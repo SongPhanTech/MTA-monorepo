@@ -6,6 +6,6 @@
  */
 
 export type PostApiStatsSubjectPassFailRates200DataItem = {
-  name: string;
-  data: number[];
-};
+    name: string
+    data: number[]
+}

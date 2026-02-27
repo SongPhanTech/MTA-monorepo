@@ -6,5 +6,5 @@
  */
 
 export type PostApiStatsAverageEntryScoreByCourseBody = {
-  preview?: boolean;
-};
+    preview?: boolean
+}

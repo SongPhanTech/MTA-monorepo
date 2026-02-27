@@ -4,21 +4,21 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { OpenSubjectClassReExamStudentsResponseUserProfile } from './openSubjectClassReExamStudentsResponseUserProfile';
-import type { OpenSubjectClassReExamStudentsResponseFixedClass } from './openSubjectClassReExamStudentsResponseFixedClass';
+import type { OpenSubjectClassReExamStudentsResponseUserProfile } from './openSubjectClassReExamStudentsResponseUserProfile'
+import type { OpenSubjectClassReExamStudentsResponseFixedClass } from './openSubjectClassReExamStudentsResponseFixedClass'
 
 export interface OpenSubjectClassReExamStudentsResponse {
-  id: string;
-  code: string;
-  userProfile: OpenSubjectClassReExamStudentsResponseUserProfile;
-  fixedClass: OpenSubjectClassReExamStudentsResponseFixedClass;
-  studentId: string;
-  /** @nullable */
-  diem_cuoi: number | null;
-  withdrew: boolean;
-  mien_thi: boolean;
-  hoan_thi: boolean;
-  /** @nullable */
-  ly_do_hoan_thi: string | null;
-  truot_mon: boolean;
+    id: string
+    code: string
+    userProfile: OpenSubjectClassReExamStudentsResponseUserProfile
+    fixedClass: OpenSubjectClassReExamStudentsResponseFixedClass
+    studentId: string
+    /** @nullable */
+    diem_cuoi: number | null
+    withdrew: boolean
+    mien_thi: boolean
+    hoan_thi: boolean
+    /** @nullable */
+    ly_do_hoan_thi: string | null
+    truot_mon: boolean
 }

@@ -6,5 +6,5 @@
  */
 
 export type Room400 = {
-  message: string;
-};
+    message: string
+}

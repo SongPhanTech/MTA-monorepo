@@ -4,27 +4,27 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { OpenSubjectClassRetakeStudentsResponseUserProfile } from './openSubjectClassRetakeStudentsResponseUserProfile';
-import type { OpenSubjectClassRetakeStudentsResponseFixedClass } from './openSubjectClassRetakeStudentsResponseFixedClass';
+import type { OpenSubjectClassRetakeStudentsResponseUserProfile } from './openSubjectClassRetakeStudentsResponseUserProfile'
+import type { OpenSubjectClassRetakeStudentsResponseFixedClass } from './openSubjectClassRetakeStudentsResponseFixedClass'
 
 export interface OpenSubjectClassRetakeStudentsResponse {
-  id: string;
-  code: string;
-  userProfile: OpenSubjectClassRetakeStudentsResponseUserProfile;
-  fixedClass: OpenSubjectClassRetakeStudentsResponseFixedClass;
-  studentId: string;
-  /** @nullable */
-  diem_cuoi: number | null;
-  withdrew: boolean;
-  mien_thi: boolean;
-  hoan_thi: boolean;
-  /** @nullable */
-  ly_do_hoan_thi: string | null;
-  cam_thi: boolean;
-  /** @nullable */
-  ly_do_cam_thi: string | null;
-  dinh_chi: boolean;
-  /** @nullable */
-  ly_do_dinh_chi: string | null;
-  truot_mon: boolean;
+    id: string
+    code: string
+    userProfile: OpenSubjectClassRetakeStudentsResponseUserProfile
+    fixedClass: OpenSubjectClassRetakeStudentsResponseFixedClass
+    studentId: string
+    /** @nullable */
+    diem_cuoi: number | null
+    withdrew: boolean
+    mien_thi: boolean
+    hoan_thi: boolean
+    /** @nullable */
+    ly_do_hoan_thi: string | null
+    cam_thi: boolean
+    /** @nullable */
+    ly_do_cam_thi: string | null
+    dinh_chi: boolean
+    /** @nullable */
+    ly_do_dinh_chi: string | null
+    truot_mon: boolean
 }

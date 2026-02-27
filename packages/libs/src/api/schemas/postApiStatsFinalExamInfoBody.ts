@@ -6,5 +6,5 @@
  */
 
 export type PostApiStatsFinalExamInfoBody = {
-  preview?: boolean;
-};
+    preview?: boolean
+}

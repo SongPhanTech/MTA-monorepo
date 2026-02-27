@@ -5,4 +5,5 @@ export default function CauHinhThoiGianBaoVe() {
     return <DefenseScheduleConfigurationPage isThesis={false} />
 }
 CauHinhThoiGianBaoVe.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>}
+    return <DefaultLayout>{page}</DefaultLayout>
+}

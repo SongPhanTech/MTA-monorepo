@@ -6,7 +6,7 @@
  */
 
 export type PostApiStatsGraduationRateByCourse200DataItem = {
-  trainingCourseId: string;
-  name: string;
-  graduationRate: number;
-};
+    trainingCourseId: string
+    name: string
+    graduationRate: number
+}

@@ -6,9 +6,9 @@
  */
 
 export type PostApiStatsAdmissionStatisticsByMajor200DataItem = {
-  id: string;
-  name: string;
-  quota: number;
-  registered: number;
-  admitted: number;
-};
+    id: string
+    name: string
+    quota: number
+    registered: number
+    admitted: number
+}

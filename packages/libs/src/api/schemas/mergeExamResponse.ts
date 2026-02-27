@@ -6,6 +6,6 @@
  */
 
 export interface MergeExamResponse {
-  success: boolean;
-  message: string;
+    success: boolean
+    message: string
 }

@@ -6,5 +6,5 @@
  */
 
 export type PostApiStatsAverageExamScoreTrendBody = {
-  preview?: boolean;
-};
+    preview?: boolean
+}

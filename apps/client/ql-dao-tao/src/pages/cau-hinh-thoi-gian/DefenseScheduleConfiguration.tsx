@@ -43,7 +43,7 @@ export default function DefenseScheduleConfigurationPage({ isThesis }: { isThesi
     useEffect(() => {
         const mappedData: DefenseSessionRow[] = rawData.map((item) => ({
             id: item.id,
-            time: dayjs.utc(item.startTime), 
+            time: dayjs.utc(item.startTime),
         }))
 
         setDataSource(mappedData)
@@ -176,7 +176,7 @@ export default function DefenseScheduleConfigurationPage({ isThesis }: { isThesi
                                                     e.stopPropagation()
                                                     setEditingRow(row)
                                                     form.setFieldsValue({
-                                                        time: row.time, 
+                                                        time: row.time,
                                                     })
                                                     setIsModalOpen(true)
                                                 }}

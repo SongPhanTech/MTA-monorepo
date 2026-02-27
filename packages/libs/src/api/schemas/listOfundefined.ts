@@ -4,7 +4,7 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { PaginationQuery } from './paginationQuery';
-import type { ListOfundefinedAllOf } from './listOfundefinedAllOf';
+import type { PaginationQuery } from './paginationQuery'
+import type { ListOfundefinedAllOf } from './listOfundefinedAllOf'
 
-export type ListOfundefined = PaginationQuery & ListOfundefinedAllOf;
+export type ListOfundefined = PaginationQuery & ListOfundefinedAllOf

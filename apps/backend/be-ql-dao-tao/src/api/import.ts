@@ -313,7 +313,7 @@ app.openapi(importLecturer, async (c) => {
 
     return c.json(
         {
-            message: `Import lecturers successfully: ${data.lecturers.length}`,
+            message: `Khai báo giảng viên thành công: ${data.lecturers.length}`,
             time: Date.now() - start,
         },
         200
@@ -1079,10 +1079,7 @@ app.openapi(importInternship, async (c) => {
     const missingSubjectClasses = subjectClassCodes.filter((code) => !subjectClassMap.has(code))
 
     if (missingStudents.length > 0) {
-        return c.json(
-            { message: `Không tìm thấy sinh viên: ${missingStudents.join(', ')}` },
-            400
-        )
+        return c.json({ message: `Không tìm thấy sinh viên: ${missingStudents.join(', ')}` }, 400)
     }
 
     if (missingSubjectClasses.length > 0) {
@@ -1104,9 +1101,7 @@ app.openapi(importInternship, async (c) => {
             const subjectClassInfo = subjectClassMap.get(internship.subjectClassCode)
 
             if (!studentId || !subjectClassInfo) {
-                errors.push(
-                    `Dòng ${internship.stt}: Không tìm thấy sinh viên hoặc lớp học phần`
-                )
+                errors.push(`Dòng ${internship.stt}: Không tìm thấy sinh viên hoặc lớp học phần`)
                 errorCount++
                 continue
             }

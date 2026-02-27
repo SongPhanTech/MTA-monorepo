@@ -109,7 +109,9 @@ app.openapi(exportInternshipProfile, async (c) => {
         subjectClassCode: internship.studentSubjectScore?.subjectClass?.code || '',
         subjectClassName: internship.studentSubjectScore?.subjectClass?.name || '',
         gender: internship.studentSubjectScore?.student?.userProfile?.gender?.sTen || '',
-        institution: internship.institution || '',
+        institution: internship.institution && internship.unit
+            ? `${internship.institution}/${internship.unit}`
+            : internship.unit || internship.institution || '',
         address: internship.address || '',
         internshipContent: internship.internshipContent || '',
         supervisor: internship.supervisor?.lecturer
@@ -142,13 +144,9 @@ app.openapi(exportInternshipProfile, async (c) => {
               ]
                   .filter(Boolean)
                   .join('. '),
-        startDate: internship.startDate
-            ? dayjs(internship.startDate).format('DD/MM/YYYY')
-            : '',
+        startDate: internship.startDate ? dayjs(internship.startDate).format('DD/MM/YYYY') : '',
         endDate: internship.endDate ? dayjs(internship.endDate).format('DD/MM/YYYY') : '',
-        reportDate: internship.reportDate
-            ? dayjs(internship.reportDate).format('DD/MM/YYYY')
-            : '',
+        reportDate: internship.reportDate ? dayjs(internship.reportDate).format('DD/MM/YYYY') : '',
         finalScore: internship.studentSubjectScore?.finalScore?.toString() || '',
     }))
 
