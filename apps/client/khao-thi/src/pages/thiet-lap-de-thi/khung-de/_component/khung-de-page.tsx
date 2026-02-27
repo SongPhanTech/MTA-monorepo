@@ -21,6 +21,7 @@ import { ChevronDown, ChevronUp } from 'lucide-react'
 import { getMinioUrl } from '@workspace/libs/utils'
 import type { Prisma } from '@workspace/db/client'
 import { queryClient } from '@api/index'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 
 type ExamFrameworkType = Prisma.ExamFrameworkGetPayload<{
     include: {
@@ -49,6 +50,7 @@ export default function KhungDeList() {
         subjectVersionIdString: '',
     })
     const semesterId = useStore(store, (s) => s.semesterId)
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
     const { onOpen: onOpenExamFramework } = useDisclosure<{ id: string }>({
         tag: 'ModalTaoKhungDe',
@@ -76,6 +78,7 @@ export default function KhungDeList() {
             ...(filters.subjectVersionIdString
                 ? { subjectVersionIdString: filters.subjectVersionIdString }
                 : {}),
+            ...(trainingObjectTypeId ? { subjectVersion: { trainingObjectTypeId } } : {}),
         },
         include: {
             subjectVersion: true,

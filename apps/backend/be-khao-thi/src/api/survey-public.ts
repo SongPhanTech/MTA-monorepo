@@ -265,21 +265,22 @@ app.openapi(savePublicSurvey, async (c) => {
     if (!survey) {
         return c.json({ message: 'Đợt khảo sát không tồn tại' }, 404)
     }
+    if (survey.isPublic) {
+        if (!survey.anonymous) {
+            if (!studentCode) {
+                return c.json({ message: 'Vui lý nhập mã SV' }, 400)
+            }
 
-    if (!survey.anonymous) {
-        if (!studentCode) {
-            return c.json({ message: 'Vui lý nhập mã SV' }, 400)
+            const student = await prisma.student.findFirst({
+                where: { code: studentCode, deletedAt: null },
+            })
+            if (!student) {
+                return c.json({ message: 'Mã SV không tồn tại' }, 404)
+            }
+
+            studentId = student.id
+            profileId = student.userProfileId
         }
-
-        const student = await prisma.student.findFirst({
-            where: { code: studentCode, deletedAt: null },
-        })
-        if (!student) {
-            return c.json({ message: 'Mã SV không tồn tại' }, 404)
-        }
-
-        studentId = student.id
-        profileId = student.userProfileId
     }
 
     if (survey.startDate > new Date()) {

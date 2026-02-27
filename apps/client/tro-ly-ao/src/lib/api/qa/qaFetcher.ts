@@ -1,8 +1,5 @@
-// @ts-nocheck
-import { fetchInstance } from '..';
+import { getRuntimeEnv } from '@workspace/libs';import { fetchInstance } from '..';
 import type { QaContext } from './qaContext';
-
-const baseUrl = 'https://api.doc.chatbot.swantech.vn' // TODO add your baseUrl
 
 export type ErrorWrapper<TError> =
     | TError
@@ -56,11 +53,11 @@ export async function qaFetch<
                 .toLowerCase()
                 .includes('multipart/form-data')
         ) {
-            requestHeaders['Content-Type'] = undefined
+            delete requestHeaders['Content-Type']
         }
 
         const response = await fetchInstance(
-            `${baseUrl}${resolveUrl(url, queryParams, pathParams)}`,
+            `${getRuntimeEnv('NEXT_PUBLIC_DOC_CHAT_BOT_URL')}${resolveUrl(url, queryParams, pathParams)}`,
             {
                 signal,
                 method: method.toUpperCase(),

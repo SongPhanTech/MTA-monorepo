@@ -393,7 +393,7 @@ export default function DanhMucHoSo() {
                     id: 'Quản lý đợt rèn luyện',
                     label: 'Quản lý đợt rèn luyện',
                     icon: <ListChecks style={{ fontSize: '24px' }} />,
-                    path: ROUTER_PATH.QL_DAO_TAO.QL_REN_LUYEN,
+                    path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_REN_LUYEN,
                     description: 'Quản lý đợt rèn luyện',
                 },
                 {

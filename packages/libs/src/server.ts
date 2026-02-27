@@ -9,9 +9,17 @@ export const getTemplateBuffer = async (prisma: PrismaClient, templateCode: stri
     // if (!templateFile) {
     //     throw new HTTPException(404, { message: `template not found (${templateCode})` })
     // }
-    const url = getMinioUrl(templateFile?.path || `/mta/template/${templateCode}`)
+    const fallbackPath = templateCode.endsWith('.xlsx') 
+        ? `/mta/template/${templateCode}`
+        : `/mta/template/${templateCode}.xlsx`
+    const url = getMinioUrl(templateFile?.path || fallbackPath)
 
     const res = await fetch(url)
+    
+    if (!res.ok) {
+        throw new Error(`Failed to fetch template: ${res.status} ${res.statusText}`)
+    }
+    
     const buffer = await res.arrayBuffer()
     const nodeBuffer: Buffer<ArrayBuffer> = Buffer.from(buffer)
 

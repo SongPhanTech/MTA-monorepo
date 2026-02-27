@@ -3,6 +3,7 @@ import type { Prisma } from '@workspace/db'
 import { postDMNhanViens, putDMNhanViens } from '@workspace/libs/api/system'
 import {
     parseSheetHeQuanSu,
+    parseSheetInternship,
     parseSheetLecturer,
     parseSheetStudent,
     zParseSheetError,
@@ -997,6 +998,182 @@ app.openapi(importHeQuanSu, async (c) => {
     return c.json(
         {
             message: `Import students successfully: ${data.students.length}`,
+            time: Date.now() - start,
+        },
+        200
+    )
+})
+
+const importInternship = createRoute({
+    operationId: 'import-internship',
+    tags: ['Import'],
+    path: '/import-internship',
+    method: 'post',
+    request: {
+        body: {
+            content: {
+                'multipart/form-data': {
+                    schema: UploadExcelModel.extend({
+                        timeout: z.coerce.number().default(30),
+                    }),
+                },
+            },
+        },
+    },
+    responses: {
+        200: {
+            description: 'Import internships successfully',
+            content: {
+                'application/json': {
+                    schema: z.object({ message: z.string(), time: z.number() }),
+                },
+            },
+        },
+        400: {
+            description: 'Invalid file type',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                        errors: z.array(zParseSheetError).optional(),
+                    }),
+                },
+            },
+        },
+    },
+})
+
+app.openapi(importInternship, async (c) => {
+    const { file, timeout } = c.req.valid('form')
+    const start = Date.now()
+
+    const buf = await file.arrayBuffer()
+    const data = parseSheetInternship(buf)
+
+    if (data.errors.length) {
+        return c.json({ message: 'Lỗi khi đọc file', errors: data.errors }, 400)
+    }
+
+    // Collect all student codes and subject class codes
+    const studentCodes = [...new Set(data.internships.map((i) => i.code))]
+    const subjectClassCodes = [...new Set(data.internships.map((i) => i.subjectClassCode))]
+
+    // Fetch students
+    const students = await prisma.student.findMany({
+        where: { code: { in: studentCodes } },
+        select: { id: true, code: true },
+    })
+    const studentMap = new Map(students.map((s) => [s.code, s.id]))
+
+    // Fetch subject classes
+    const subjectClasses = await prisma.subjectClass.findMany({
+        where: { code: { in: subjectClassCodes } },
+        select: { id: true, code: true, subjectId: true },
+    })
+    const subjectClassMap = new Map(
+        subjectClasses.map((sc) => [sc.code, { id: sc.id, subjectVersionId: sc.subjectId }])
+    )
+
+    // Validate missing students or subject classes
+    const missingStudents = studentCodes.filter((code) => !studentMap.has(code))
+    const missingSubjectClasses = subjectClassCodes.filter((code) => !subjectClassMap.has(code))
+
+    if (missingStudents.length > 0) {
+        return c.json(
+            { message: `Không tìm thấy sinh viên: ${missingStudents.join(', ')}` },
+            400
+        )
+    }
+
+    if (missingSubjectClasses.length > 0) {
+        return c.json(
+            {
+                message: `Không tìm thấy lớp học phần: ${missingSubjectClasses.join(', ')}`,
+            },
+            400
+        )
+    }
+
+    let successCount = 0
+    let errorCount = 0
+    const errors: string[] = []
+
+    for (const internship of data.internships) {
+        try {
+            const studentId = studentMap.get(internship.code)
+            const subjectClassInfo = subjectClassMap.get(internship.subjectClassCode)
+
+            if (!studentId || !subjectClassInfo) {
+                errors.push(
+                    `Dòng ${internship.stt}: Không tìm thấy sinh viên hoặc lớp học phần`
+                )
+                errorCount++
+                continue
+            }
+
+            // Find or create StudentSubjectScore
+            let studentSubjectScore = await prisma.studentSubjectScore.findFirst({
+                where: {
+                    studentId,
+                    subjectClassId: subjectClassInfo.id,
+                },
+            })
+
+            if (!studentSubjectScore) {
+                studentSubjectScore = await prisma.studentSubjectScore.create({
+                    data: {
+                        studentId,
+                        subjectClassId: subjectClassInfo.id,
+                        subjectVersionId: subjectClassInfo.subjectVersionId,
+                    },
+                })
+            }
+
+            // Upsert StudentInternship
+            await prisma.studentInternship.upsert({
+                where: {
+                    studentSubjectScoreId: studentSubjectScore.id,
+                },
+                create: {
+                    studentSubjectScoreId: studentSubjectScore.id,
+                    institution: internship.institution ?? undefined,
+                    address: internship.address ?? undefined,
+                    internshipContent: internship.internshipContent ?? undefined,
+                    startDate: internship.startDate ?? undefined,
+                    endDate: internship.endDate ?? undefined,
+                    reportDate: internship.reportDate ?? undefined,
+                },
+                update: {
+                    institution: internship.institution ?? undefined,
+                    address: internship.address ?? undefined,
+                    internshipContent: internship.internshipContent ?? undefined,
+                    startDate: internship.startDate ?? undefined,
+                    endDate: internship.endDate ?? undefined,
+                    reportDate: internship.reportDate ?? undefined,
+                },
+            })
+
+            successCount++
+        } catch (error) {
+            console.error(error)
+            errors.push(`Dòng ${internship.stt}: ${error}`)
+            errorCount++
+        }
+    }
+
+    if (errorCount > 0) {
+        return c.json(
+            {
+                message: `Import hoàn tất với ${successCount} thành công và ${errorCount} lỗi`,
+                errors,
+            },
+            400
+        )
+    }
+
+    return c.json(
+        {
+            message: `Import internships successfully: ${successCount}`,
             time: Date.now() - start,
         },
         200

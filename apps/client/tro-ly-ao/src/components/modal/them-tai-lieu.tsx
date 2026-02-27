@@ -5,6 +5,7 @@ import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
 import UploadDragAndDrop, { FileUploadIcon } from '@components/commons/upload'
 import { cn, formatNiceBytes } from '@lib/utils'
+import { createId } from '@workspace/db'
 import {
     useCreateDocument,
     useCreateManyDocumentTopic,
@@ -335,7 +336,7 @@ const ThemTaiLieu = () => {
 
             const valuesWithId = values.map((item) => ({
                 ...item,
-                id: crypto.randomUUID(),
+                id: createId(),
                 body: '',
             }))
 
