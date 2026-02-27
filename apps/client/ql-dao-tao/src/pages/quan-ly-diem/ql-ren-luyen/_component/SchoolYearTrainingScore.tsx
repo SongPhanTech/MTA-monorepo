@@ -1,6 +1,6 @@
 import Table from '@components/commons/table'
 import { Button, Col, Flex, Form, InputNumber, message, Row, Tag } from 'antd'
-import { FilterProps } from '@constants/type'
+import type { FilterProps } from '@constants/type'
 import { useEffect, useMemo, useState } from 'react'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useAbility } from '@workspace/permissions/hooks'
@@ -9,7 +9,7 @@ import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useCountStudent, useFindManyStudent } from '@workspace/db/hooks'
 import { useSemesterStore } from '@workspace/ui'
 import dayjs from 'dayjs'
-import { UserProfile } from '@workspace/db'
+import type { UserProfile } from '@workspace/db'
 import {
     useStudentTrainingTypeOptions,
     useTrainingScoreStatusStatusOptions,
@@ -166,7 +166,7 @@ export default function SchoolYearTrainingScore({
                 }
             })
 
-            let listTransaction: any = []
+            const listTransaction: any = []
             if (listCreate.length > 0) {
                 listTransaction.push({
                     model: 'SchoolYearTrainingScore',
@@ -201,8 +201,9 @@ export default function SchoolYearTrainingScore({
             if (listTransaction.length > 0) {
                 const res = await sqlTransaction(listTransaction)
                 if (res?.status === 200) {
-                    message.success('Lưu điểm rèn luyện năm học thành công');
-                    refetch();
+                    message.success('Lưu điểm rèn luyện năm học thành công')
+                    refetch()
+                }
             }
 
             // message.success('Lưu điểm rèn luyện năm học thành công')
@@ -341,32 +342,28 @@ export default function SchoolYearTrainingScore({
                                         )
                                     },
                                 },
-                               {
-                                        title: 'Trạng thái',
-                                        align: 'center',
-                                        dataIndex: 'name',
-                                        width: 150,
-                                        render: (_, record) => (
-                                            <Tag
-                                                color={getTrainingScoreStatusColor(
-                                                    record.status
-                                                )}
-                                            >
-                                                {getTrainingScoreStatusLabel(record.status)}
-                                            </Tag>
-                                        ),
-                                    },
-                    ]}
-                    rowKey="id"
-                    // rowSelection={{
-                    //     selectedRowKeys,
-                    //     onChange: (selectedKeys) => setSelectedRowKeys(selectedKeys),
-                    // }}
-                    data={data}
-                    pagination={{
-                        current: currentPage,
-                        pageSize: numberOfPages,
-                        total: count,
+                                {
+                                    title: 'Trạng thái',
+                                    align: 'center',
+                                    dataIndex: 'name',
+                                    width: 150,
+                                    render: (_, record) => (
+                                        <Tag color={getTrainingScoreStatusColor(record.status)}>
+                                            {getTrainingScoreStatusLabel(record.status)}
+                                        </Tag>
+                                    ),
+                                },
+                            ]}
+                            rowKey="id"
+                            // rowSelection={{
+                            //     selectedRowKeys,
+                            //     onChange: (selectedKeys) => setSelectedRowKeys(selectedKeys),
+                            // }}
+                            data={data}
+                            pagination={{
+                                current: currentPage,
+                                pageSize: numberOfPages,
+                                total: count,
 
                                 onChange: (page, pageSize) => {
                                     if (numberOfPages === pageSize) {
