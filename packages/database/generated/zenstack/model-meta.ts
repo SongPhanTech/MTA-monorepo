@@ -9076,6 +9076,10 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'archivedCertificate',
+                }, DecisionNumber: {
+                    name: "DecisionNumber",
+                    type: "String",
+                    isOptional: true,
                 }, studentSubjectScore: {
                     name: "studentSubjectScore",
                     type: "ArchivedCertificateOnStudentSubjectScore",

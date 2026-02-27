@@ -2938,6 +2938,7 @@ model ArchivedCertificate {
   expiredDate         DateTime?
   status              ArchivedCertificateStatus                  @default(PENDING)
   documentFiles       DocumentFile[]
+  DecisionNumber      String?
   studentSubjectScore ArchivedCertificateOnStudentSubjectScore[]
 
   @@schema("ql-dao-tao")

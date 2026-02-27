@@ -22,6 +22,7 @@ const baseSchema = z.object({
     issuedDate: z.coerce.date().nullish(),
     expiredDate: z.coerce.date().nullish(),
     status: ArchivedCertificateStatusSchema,
+    DecisionNumber: z.string().nullish(),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -39,6 +40,7 @@ const baseSchemaWithoutDefaults = z.object({
     issuedDate: z.coerce.date().nullish(),
     expiredDate: z.coerce.date().nullish(),
     status: ArchivedCertificateStatusSchema,
+    DecisionNumber: z.string().nullish(),
 }
 ).strict();
 const relationSchema = z.object({
@@ -91,7 +93,8 @@ export const ArchivedCertificatePrismaUpdateSchema = z.object({
     issuedBy: z.string().nullish(),
     issuedDate: z.coerce.date().nullish(),
     expiredDate: z.coerce.date().nullish(),
-    status: ArchivedCertificateStatusSchema
+    status: ArchivedCertificateStatusSchema,
+    DecisionNumber: z.string().nullish()
 }).partial().passthrough();
 
 
