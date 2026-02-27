@@ -105,8 +105,9 @@ const DiemTrungBinhKyHoc = () => {
         {
             where,
             include: {
-                semesterTrainingScore: {
+                studentSemesterResult: {
                     where: { semesterId },
+                    include: { rank: true },
                 },
                 userProfile: {
                     select: {
@@ -120,6 +121,7 @@ const DiemTrungBinhKyHoc = () => {
                         name: true,
                     },
                 },
+
             },
             orderBy: [
                 { fixedClass: { code: 'desc' } },
