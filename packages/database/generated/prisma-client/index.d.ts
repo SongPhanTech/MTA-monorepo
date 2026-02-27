@@ -206584,7 +206584,7 @@ export namespace Prisma {
     gpaBase10: Decimal
     cumulativeGpaBase10: Decimal
     conductScore: number | null
-    studentTrainingType: $Enums.StudentTrainingType
+    studentTrainingType: $Enums.StudentTrainingType | null
     rankId: string | null
     lowestFinalScore: number
     lowestGraduationScore: number | null
@@ -206861,7 +206861,7 @@ export namespace Prisma {
       gpaBase10: Prisma.Decimal
       cumulativeGpaBase10: Prisma.Decimal
       conductScore: number | null
-      studentTrainingType: $Enums.StudentTrainingType
+      studentTrainingType: $Enums.StudentTrainingType | null
       rankId: string | null
       lowestFinalScore: number
       lowestGraduationScore: number | null
@@ -208183,7 +208183,7 @@ export namespace Prisma {
     gpaBase10: Decimal
     cumulativeGpaBase10: Decimal
     conductScore: number | null
-    studentTrainingType: $Enums.StudentTrainingType
+    studentTrainingType: $Enums.StudentTrainingType | null
     rankId: string | null
     lowestFinalScore: number | null
     lowestGraduationScore: number | null
@@ -208410,7 +208410,7 @@ export namespace Prisma {
       gpaBase10: Prisma.Decimal
       cumulativeGpaBase10: Prisma.Decimal
       conductScore: number | null
-      studentTrainingType: $Enums.StudentTrainingType
+      studentTrainingType: $Enums.StudentTrainingType | null
       rankId: string | null
       lowestFinalScore: number | null
       lowestGraduationScore: number | null
@@ -398640,7 +398640,7 @@ export namespace Prisma {
     gpaBase10?: DecimalFilter<"StudentSemesterResult"> | Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10?: DecimalFilter<"StudentSemesterResult"> | Decimal | DecimalJsLike | number | string
     conductScore?: FloatNullableFilter<"StudentSemesterResult"> | number | null
-    studentTrainingType?: EnumStudentTrainingTypeFilter<"StudentSemesterResult"> | $Enums.StudentTrainingType
+    studentTrainingType?: EnumStudentTrainingTypeNullableFilter<"StudentSemesterResult"> | $Enums.StudentTrainingType | null
     rankId?: StringNullableFilter<"StudentSemesterResult"> | string | null
     lowestFinalScore?: FloatFilter<"StudentSemesterResult"> | number
     lowestGraduationScore?: FloatNullableFilter<"StudentSemesterResult"> | number | null
@@ -398688,7 +398688,7 @@ export namespace Prisma {
     gpaBase10?: SortOrder
     cumulativeGpaBase10?: SortOrder
     conductScore?: SortOrderInput | SortOrder
-    studentTrainingType?: SortOrder
+    studentTrainingType?: SortOrderInput | SortOrder
     rankId?: SortOrderInput | SortOrder
     lowestFinalScore?: SortOrder
     lowestGraduationScore?: SortOrderInput | SortOrder
@@ -398741,7 +398741,7 @@ export namespace Prisma {
     gpaBase10?: DecimalFilter<"StudentSemesterResult"> | Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10?: DecimalFilter<"StudentSemesterResult"> | Decimal | DecimalJsLike | number | string
     conductScore?: FloatNullableFilter<"StudentSemesterResult"> | number | null
-    studentTrainingType?: EnumStudentTrainingTypeFilter<"StudentSemesterResult"> | $Enums.StudentTrainingType
+    studentTrainingType?: EnumStudentTrainingTypeNullableFilter<"StudentSemesterResult"> | $Enums.StudentTrainingType | null
     rankId?: StringNullableFilter<"StudentSemesterResult"> | string | null
     lowestFinalScore?: FloatFilter<"StudentSemesterResult"> | number
     lowestGraduationScore?: FloatNullableFilter<"StudentSemesterResult"> | number | null
@@ -398789,7 +398789,7 @@ export namespace Prisma {
     gpaBase10?: SortOrder
     cumulativeGpaBase10?: SortOrder
     conductScore?: SortOrderInput | SortOrder
-    studentTrainingType?: SortOrder
+    studentTrainingType?: SortOrderInput | SortOrder
     rankId?: SortOrderInput | SortOrder
     lowestFinalScore?: SortOrder
     lowestGraduationScore?: SortOrderInput | SortOrder
@@ -398842,7 +398842,7 @@ export namespace Prisma {
     gpaBase10?: DecimalWithAggregatesFilter<"StudentSemesterResult"> | Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10?: DecimalWithAggregatesFilter<"StudentSemesterResult"> | Decimal | DecimalJsLike | number | string
     conductScore?: FloatNullableWithAggregatesFilter<"StudentSemesterResult"> | number | null
-    studentTrainingType?: EnumStudentTrainingTypeWithAggregatesFilter<"StudentSemesterResult"> | $Enums.StudentTrainingType
+    studentTrainingType?: EnumStudentTrainingTypeNullableWithAggregatesFilter<"StudentSemesterResult"> | $Enums.StudentTrainingType | null
     rankId?: StringNullableWithAggregatesFilter<"StudentSemesterResult"> | string | null
     lowestFinalScore?: FloatWithAggregatesFilter<"StudentSemesterResult"> | number
     lowestGraduationScore?: FloatNullableWithAggregatesFilter<"StudentSemesterResult"> | number | null
@@ -398889,7 +398889,7 @@ export namespace Prisma {
     gpaBase10?: DecimalFilter<"StudentYearResult"> | Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10?: DecimalFilter<"StudentYearResult"> | Decimal | DecimalJsLike | number | string
     conductScore?: FloatNullableFilter<"StudentYearResult"> | number | null
-    studentTrainingType?: EnumStudentTrainingTypeFilter<"StudentYearResult"> | $Enums.StudentTrainingType
+    studentTrainingType?: EnumStudentTrainingTypeNullableFilter<"StudentYearResult"> | $Enums.StudentTrainingType | null
     rankId?: StringNullableFilter<"StudentYearResult"> | string | null
     lowestFinalScore?: FloatNullableFilter<"StudentYearResult"> | number | null
     lowestGraduationScore?: FloatNullableFilter<"StudentYearResult"> | number | null
@@ -398927,7 +398927,7 @@ export namespace Prisma {
     gpaBase10?: SortOrder
     cumulativeGpaBase10?: SortOrder
     conductScore?: SortOrderInput | SortOrder
-    studentTrainingType?: SortOrder
+    studentTrainingType?: SortOrderInput | SortOrder
     rankId?: SortOrderInput | SortOrder
     lowestFinalScore?: SortOrderInput | SortOrder
     lowestGraduationScore?: SortOrderInput | SortOrder
@@ -398970,7 +398970,7 @@ export namespace Prisma {
     gpaBase10?: DecimalFilter<"StudentYearResult"> | Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10?: DecimalFilter<"StudentYearResult"> | Decimal | DecimalJsLike | number | string
     conductScore?: FloatNullableFilter<"StudentYearResult"> | number | null
-    studentTrainingType?: EnumStudentTrainingTypeFilter<"StudentYearResult"> | $Enums.StudentTrainingType
+    studentTrainingType?: EnumStudentTrainingTypeNullableFilter<"StudentYearResult"> | $Enums.StudentTrainingType | null
     rankId?: StringNullableFilter<"StudentYearResult"> | string | null
     lowestFinalScore?: FloatNullableFilter<"StudentYearResult"> | number | null
     lowestGraduationScore?: FloatNullableFilter<"StudentYearResult"> | number | null
@@ -399008,7 +399008,7 @@ export namespace Prisma {
     gpaBase10?: SortOrder
     cumulativeGpaBase10?: SortOrder
     conductScore?: SortOrderInput | SortOrder
-    studentTrainingType?: SortOrder
+    studentTrainingType?: SortOrderInput | SortOrder
     rankId?: SortOrderInput | SortOrder
     lowestFinalScore?: SortOrderInput | SortOrder
     lowestGraduationScore?: SortOrderInput | SortOrder
@@ -399051,7 +399051,7 @@ export namespace Prisma {
     gpaBase10?: DecimalWithAggregatesFilter<"StudentYearResult"> | Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10?: DecimalWithAggregatesFilter<"StudentYearResult"> | Decimal | DecimalJsLike | number | string
     conductScore?: FloatNullableWithAggregatesFilter<"StudentYearResult"> | number | null
-    studentTrainingType?: EnumStudentTrainingTypeWithAggregatesFilter<"StudentYearResult"> | $Enums.StudentTrainingType
+    studentTrainingType?: EnumStudentTrainingTypeNullableWithAggregatesFilter<"StudentYearResult"> | $Enums.StudentTrainingType | null
     rankId?: StringNullableWithAggregatesFilter<"StudentYearResult"> | string | null
     lowestFinalScore?: FloatNullableWithAggregatesFilter<"StudentYearResult"> | number | null
     lowestGraduationScore?: FloatNullableWithAggregatesFilter<"StudentYearResult"> | number | null
@@ -430984,7 +430984,7 @@ export namespace Prisma {
     gpaBase10: Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10: Decimal | DecimalJsLike | number | string
     conductScore?: number | null
-    studentTrainingType: $Enums.StudentTrainingType
+    studentTrainingType?: $Enums.StudentTrainingType | null
     lowestFinalScore: number
     lowestGraduationScore?: number | null
     totalCredits: number
@@ -431031,7 +431031,7 @@ export namespace Prisma {
     gpaBase10: Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10: Decimal | DecimalJsLike | number | string
     conductScore?: number | null
-    studentTrainingType: $Enums.StudentTrainingType
+    studentTrainingType?: $Enums.StudentTrainingType | null
     rankId?: string | null
     lowestFinalScore: number
     lowestGraduationScore?: number | null
@@ -431074,7 +431074,7 @@ export namespace Prisma {
     gpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     conductScore?: NullableFloatFieldUpdateOperationsInput | number | null
-    studentTrainingType?: EnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType
+    studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
     lowestFinalScore?: FloatFieldUpdateOperationsInput | number
     lowestGraduationScore?: NullableFloatFieldUpdateOperationsInput | number | null
     totalCredits?: IntFieldUpdateOperationsInput | number
@@ -431121,7 +431121,7 @@ export namespace Prisma {
     gpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     conductScore?: NullableFloatFieldUpdateOperationsInput | number | null
-    studentTrainingType?: EnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType
+    studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
     rankId?: NullableStringFieldUpdateOperationsInput | string | null
     lowestFinalScore?: FloatFieldUpdateOperationsInput | number
     lowestGraduationScore?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -431166,7 +431166,7 @@ export namespace Prisma {
     gpaBase10: Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10: Decimal | DecimalJsLike | number | string
     conductScore?: number | null
-    studentTrainingType: $Enums.StudentTrainingType
+    studentTrainingType?: $Enums.StudentTrainingType | null
     rankId?: string | null
     lowestFinalScore: number
     lowestGraduationScore?: number | null
@@ -431209,7 +431209,7 @@ export namespace Prisma {
     gpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     conductScore?: NullableFloatFieldUpdateOperationsInput | number | null
-    studentTrainingType?: EnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType
+    studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
     lowestFinalScore?: FloatFieldUpdateOperationsInput | number
     lowestGraduationScore?: NullableFloatFieldUpdateOperationsInput | number | null
     totalCredits?: IntFieldUpdateOperationsInput | number
@@ -431253,7 +431253,7 @@ export namespace Prisma {
     gpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     conductScore?: NullableFloatFieldUpdateOperationsInput | number | null
-    studentTrainingType?: EnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType
+    studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
     rankId?: NullableStringFieldUpdateOperationsInput | string | null
     lowestFinalScore?: FloatFieldUpdateOperationsInput | number
     lowestGraduationScore?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -431295,7 +431295,7 @@ export namespace Prisma {
     gpaBase10: Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10: Decimal | DecimalJsLike | number | string
     conductScore?: number | null
-    studentTrainingType: $Enums.StudentTrainingType
+    studentTrainingType?: $Enums.StudentTrainingType | null
     lowestFinalScore?: number | null
     lowestGraduationScore?: number | null
     totalCredits: number
@@ -431332,7 +431332,7 @@ export namespace Prisma {
     gpaBase10: Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10: Decimal | DecimalJsLike | number | string
     conductScore?: number | null
-    studentTrainingType: $Enums.StudentTrainingType
+    studentTrainingType?: $Enums.StudentTrainingType | null
     rankId?: string | null
     lowestFinalScore?: number | null
     lowestGraduationScore?: number | null
@@ -431365,7 +431365,7 @@ export namespace Prisma {
     gpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     conductScore?: NullableFloatFieldUpdateOperationsInput | number | null
-    studentTrainingType?: EnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType
+    studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
     lowestFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     lowestGraduationScore?: NullableFloatFieldUpdateOperationsInput | number | null
     totalCredits?: IntFieldUpdateOperationsInput | number
@@ -431402,7 +431402,7 @@ export namespace Prisma {
     gpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     conductScore?: NullableFloatFieldUpdateOperationsInput | number | null
-    studentTrainingType?: EnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType
+    studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
     rankId?: NullableStringFieldUpdateOperationsInput | string | null
     lowestFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     lowestGraduationScore?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -431437,7 +431437,7 @@ export namespace Prisma {
     gpaBase10: Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10: Decimal | DecimalJsLike | number | string
     conductScore?: number | null
-    studentTrainingType: $Enums.StudentTrainingType
+    studentTrainingType?: $Enums.StudentTrainingType | null
     rankId?: string | null
     lowestFinalScore?: number | null
     lowestGraduationScore?: number | null
@@ -431470,7 +431470,7 @@ export namespace Prisma {
     gpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     conductScore?: NullableFloatFieldUpdateOperationsInput | number | null
-    studentTrainingType?: EnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType
+    studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
     lowestFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     lowestGraduationScore?: NullableFloatFieldUpdateOperationsInput | number | null
     totalCredits?: IntFieldUpdateOperationsInput | number
@@ -431504,7 +431504,7 @@ export namespace Prisma {
     gpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     conductScore?: NullableFloatFieldUpdateOperationsInput | number | null
-    studentTrainingType?: EnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType
+    studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
     rankId?: NullableStringFieldUpdateOperationsInput | string | null
     lowestFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     lowestGraduationScore?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -458653,11 +458653,11 @@ export namespace Prisma {
     not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
   }
 
-  export type EnumStudentTrainingTypeFilter<$PrismaModel = never> = {
-    equals?: $Enums.StudentTrainingType | EnumStudentTrainingTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.StudentTrainingType[] | ListEnumStudentTrainingTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.StudentTrainingType[] | ListEnumStudentTrainingTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumStudentTrainingTypeFilter<$PrismaModel> | $Enums.StudentTrainingType
+  export type EnumStudentTrainingTypeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.StudentTrainingType | EnumStudentTrainingTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.StudentTrainingType[] | ListEnumStudentTrainingTypeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.StudentTrainingType[] | ListEnumStudentTrainingTypeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumStudentTrainingTypeNullableFilter<$PrismaModel> | $Enums.StudentTrainingType | null
   }
 
   export type AcademicRankingConvertNullableScalarRelationFilter = {
@@ -458875,14 +458875,14 @@ export namespace Prisma {
     _max?: NestedDecimalFilter<$PrismaModel>
   }
 
-  export type EnumStudentTrainingTypeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.StudentTrainingType | EnumStudentTrainingTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.StudentTrainingType[] | ListEnumStudentTrainingTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.StudentTrainingType[] | ListEnumStudentTrainingTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumStudentTrainingTypeWithAggregatesFilter<$PrismaModel> | $Enums.StudentTrainingType
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumStudentTrainingTypeFilter<$PrismaModel>
-    _max?: NestedEnumStudentTrainingTypeFilter<$PrismaModel>
+  export type EnumStudentTrainingTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.StudentTrainingType | EnumStudentTrainingTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.StudentTrainingType[] | ListEnumStudentTrainingTypeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.StudentTrainingType[] | ListEnumStudentTrainingTypeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumStudentTrainingTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.StudentTrainingType | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumStudentTrainingTypeNullableFilter<$PrismaModel>
+    _max?: NestedEnumStudentTrainingTypeNullableFilter<$PrismaModel>
   }
 
   export type StudentYearResultOrderByRelevanceInput = {
@@ -459775,13 +459775,6 @@ export namespace Prisma {
     trainingObjectTypeId?: SortOrder
   }
 
-  export type EnumStudentTrainingTypeNullableFilter<$PrismaModel = never> = {
-    equals?: $Enums.StudentTrainingType | EnumStudentTrainingTypeFieldRefInput<$PrismaModel> | null
-    in?: $Enums.StudentTrainingType[] | ListEnumStudentTrainingTypeFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.StudentTrainingType[] | ListEnumStudentTrainingTypeFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumStudentTrainingTypeNullableFilter<$PrismaModel> | $Enums.StudentTrainingType | null
-  }
-
   export type EnumTrainingScoreStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.TrainingScoreStatus | EnumTrainingScoreStatusFieldRefInput<$PrismaModel>
     in?: $Enums.TrainingScoreStatus[] | ListEnumTrainingScoreStatusFieldRefInput<$PrismaModel>
@@ -459859,16 +459852,6 @@ export namespace Prisma {
 
   export type StudentTrainingScoreSumOrderByAggregateInput = {
     score?: SortOrder
-  }
-
-  export type EnumStudentTrainingTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.StudentTrainingType | EnumStudentTrainingTypeFieldRefInput<$PrismaModel> | null
-    in?: $Enums.StudentTrainingType[] | ListEnumStudentTrainingTypeFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.StudentTrainingType[] | ListEnumStudentTrainingTypeFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumStudentTrainingTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.StudentTrainingType | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedEnumStudentTrainingTypeNullableFilter<$PrismaModel>
-    _max?: NestedEnumStudentTrainingTypeNullableFilter<$PrismaModel>
   }
 
   export type EnumTrainingScoreStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -484856,8 +484839,8 @@ export namespace Prisma {
     divide?: Decimal | DecimalJsLike | number | string
   }
 
-  export type EnumStudentTrainingTypeFieldUpdateOperationsInput = {
-    set?: $Enums.StudentTrainingType
+  export type NullableEnumStudentTrainingTypeFieldUpdateOperationsInput = {
+    set?: $Enums.StudentTrainingType | null
   }
 
   export type StudentUpdateOneRequiredWithoutStudentSemesterResultNestedInput = {
@@ -485847,10 +485830,6 @@ export namespace Prisma {
     create?: XOR<StudentCreateWithoutStudentTrainingScoreInput, StudentUncheckedCreateWithoutStudentTrainingScoreInput>
     connectOrCreate?: StudentCreateOrConnectWithoutStudentTrainingScoreInput
     connect?: StudentWhereUniqueInput
-  }
-
-  export type NullableEnumStudentTrainingTypeFieldUpdateOperationsInput = {
-    set?: $Enums.StudentTrainingType | null
   }
 
   export type EnumTrainingScoreStatusFieldUpdateOperationsInput = {
@@ -496796,11 +496775,11 @@ export namespace Prisma {
     not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
   }
 
-  export type NestedEnumStudentTrainingTypeFilter<$PrismaModel = never> = {
-    equals?: $Enums.StudentTrainingType | EnumStudentTrainingTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.StudentTrainingType[] | ListEnumStudentTrainingTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.StudentTrainingType[] | ListEnumStudentTrainingTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumStudentTrainingTypeFilter<$PrismaModel> | $Enums.StudentTrainingType
+  export type NestedEnumStudentTrainingTypeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.StudentTrainingType | EnumStudentTrainingTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.StudentTrainingType[] | ListEnumStudentTrainingTypeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.StudentTrainingType[] | ListEnumStudentTrainingTypeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumStudentTrainingTypeNullableFilter<$PrismaModel> | $Enums.StudentTrainingType | null
   }
 
   export type NestedDecimalWithAggregatesFilter<$PrismaModel = never> = {
@@ -496819,14 +496798,14 @@ export namespace Prisma {
     _max?: NestedDecimalFilter<$PrismaModel>
   }
 
-  export type NestedEnumStudentTrainingTypeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.StudentTrainingType | EnumStudentTrainingTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.StudentTrainingType[] | ListEnumStudentTrainingTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.StudentTrainingType[] | ListEnumStudentTrainingTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumStudentTrainingTypeWithAggregatesFilter<$PrismaModel> | $Enums.StudentTrainingType
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumStudentTrainingTypeFilter<$PrismaModel>
-    _max?: NestedEnumStudentTrainingTypeFilter<$PrismaModel>
+  export type NestedEnumStudentTrainingTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.StudentTrainingType | EnumStudentTrainingTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.StudentTrainingType[] | ListEnumStudentTrainingTypeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.StudentTrainingType[] | ListEnumStudentTrainingTypeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumStudentTrainingTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.StudentTrainingType | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumStudentTrainingTypeNullableFilter<$PrismaModel>
+    _max?: NestedEnumStudentTrainingTypeNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumNotificationTypeFilter<$PrismaModel = never> = {
@@ -496958,28 +496937,11 @@ export namespace Prisma {
     _max?: NestedEnumDecisionStatusFilter<$PrismaModel>
   }
 
-  export type NestedEnumStudentTrainingTypeNullableFilter<$PrismaModel = never> = {
-    equals?: $Enums.StudentTrainingType | EnumStudentTrainingTypeFieldRefInput<$PrismaModel> | null
-    in?: $Enums.StudentTrainingType[] | ListEnumStudentTrainingTypeFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.StudentTrainingType[] | ListEnumStudentTrainingTypeFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumStudentTrainingTypeNullableFilter<$PrismaModel> | $Enums.StudentTrainingType | null
-  }
-
   export type NestedEnumTrainingScoreStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.TrainingScoreStatus | EnumTrainingScoreStatusFieldRefInput<$PrismaModel>
     in?: $Enums.TrainingScoreStatus[] | ListEnumTrainingScoreStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.TrainingScoreStatus[] | ListEnumTrainingScoreStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumTrainingScoreStatusFilter<$PrismaModel> | $Enums.TrainingScoreStatus
-  }
-
-  export type NestedEnumStudentTrainingTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.StudentTrainingType | EnumStudentTrainingTypeFieldRefInput<$PrismaModel> | null
-    in?: $Enums.StudentTrainingType[] | ListEnumStudentTrainingTypeFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.StudentTrainingType[] | ListEnumStudentTrainingTypeFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumStudentTrainingTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.StudentTrainingType | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedEnumStudentTrainingTypeNullableFilter<$PrismaModel>
-    _max?: NestedEnumStudentTrainingTypeNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumTrainingScoreStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -553352,7 +553314,7 @@ export namespace Prisma {
     gpaBase10: Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10: Decimal | DecimalJsLike | number | string
     conductScore?: number | null
-    studentTrainingType: $Enums.StudentTrainingType
+    studentTrainingType?: $Enums.StudentTrainingType | null
     lowestFinalScore?: number | null
     lowestGraduationScore?: number | null
     totalCredits: number
@@ -553387,7 +553349,7 @@ export namespace Prisma {
     gpaBase10: Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10: Decimal | DecimalJsLike | number | string
     conductScore?: number | null
-    studentTrainingType: $Enums.StudentTrainingType
+    studentTrainingType?: $Enums.StudentTrainingType | null
     rankId?: string | null
     lowestFinalScore?: number | null
     lowestGraduationScore?: number | null
@@ -553667,7 +553629,7 @@ export namespace Prisma {
     gpaBase10?: DecimalFilter<"StudentYearResult"> | Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10?: DecimalFilter<"StudentYearResult"> | Decimal | DecimalJsLike | number | string
     conductScore?: FloatNullableFilter<"StudentYearResult"> | number | null
-    studentTrainingType?: EnumStudentTrainingTypeFilter<"StudentYearResult"> | $Enums.StudentTrainingType
+    studentTrainingType?: EnumStudentTrainingTypeNullableFilter<"StudentYearResult"> | $Enums.StudentTrainingType | null
     rankId?: StringNullableFilter<"StudentYearResult"> | string | null
     lowestFinalScore?: FloatNullableFilter<"StudentYearResult"> | number | null
     lowestGraduationScore?: FloatNullableFilter<"StudentYearResult"> | number | null
@@ -554143,7 +554105,7 @@ export namespace Prisma {
     gpaBase10: Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10: Decimal | DecimalJsLike | number | string
     conductScore?: number | null
-    studentTrainingType: $Enums.StudentTrainingType
+    studentTrainingType?: $Enums.StudentTrainingType | null
     lowestFinalScore: number
     lowestGraduationScore?: number | null
     totalCredits: number
@@ -554188,7 +554150,7 @@ export namespace Prisma {
     gpaBase10: Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10: Decimal | DecimalJsLike | number | string
     conductScore?: number | null
-    studentTrainingType: $Enums.StudentTrainingType
+    studentTrainingType?: $Enums.StudentTrainingType | null
     rankId?: string | null
     lowestFinalScore: number
     lowestGraduationScore?: number | null
@@ -554919,7 +554881,7 @@ export namespace Prisma {
     gpaBase10?: DecimalFilter<"StudentSemesterResult"> | Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10?: DecimalFilter<"StudentSemesterResult"> | Decimal | DecimalJsLike | number | string
     conductScore?: FloatNullableFilter<"StudentSemesterResult"> | number | null
-    studentTrainingType?: EnumStudentTrainingTypeFilter<"StudentSemesterResult"> | $Enums.StudentTrainingType
+    studentTrainingType?: EnumStudentTrainingTypeNullableFilter<"StudentSemesterResult"> | $Enums.StudentTrainingType | null
     rankId?: StringNullableFilter<"StudentSemesterResult"> | string | null
     lowestFinalScore?: FloatFilter<"StudentSemesterResult"> | number
     lowestGraduationScore?: FloatNullableFilter<"StudentSemesterResult"> | number | null
@@ -581259,7 +581221,7 @@ export namespace Prisma {
     gpaBase10: Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10: Decimal | DecimalJsLike | number | string
     conductScore?: number | null
-    studentTrainingType: $Enums.StudentTrainingType
+    studentTrainingType?: $Enums.StudentTrainingType | null
     lowestFinalScore: number
     lowestGraduationScore?: number | null
     totalCredits: number
@@ -581304,7 +581266,7 @@ export namespace Prisma {
     gpaBase10: Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10: Decimal | DecimalJsLike | number | string
     conductScore?: number | null
-    studentTrainingType: $Enums.StudentTrainingType
+    studentTrainingType?: $Enums.StudentTrainingType | null
     rankId?: string | null
     lowestFinalScore: number
     lowestGraduationScore?: number | null
@@ -581356,7 +581318,7 @@ export namespace Prisma {
     gpaBase10: Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10: Decimal | DecimalJsLike | number | string
     conductScore?: number | null
-    studentTrainingType: $Enums.StudentTrainingType
+    studentTrainingType?: $Enums.StudentTrainingType | null
     lowestFinalScore?: number | null
     lowestGraduationScore?: number | null
     totalCredits: number
@@ -581391,7 +581353,7 @@ export namespace Prisma {
     gpaBase10: Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10: Decimal | DecimalJsLike | number | string
     conductScore?: number | null
-    studentTrainingType: $Enums.StudentTrainingType
+    studentTrainingType?: $Enums.StudentTrainingType | null
     rankId?: string | null
     lowestFinalScore?: number | null
     lowestGraduationScore?: number | null
@@ -623553,7 +623515,7 @@ export namespace Prisma {
     gpaBase10: Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10: Decimal | DecimalJsLike | number | string
     conductScore?: number | null
-    studentTrainingType: $Enums.StudentTrainingType
+    studentTrainingType?: $Enums.StudentTrainingType | null
     lowestFinalScore: number
     lowestGraduationScore?: number | null
     totalCredits: number
@@ -623599,7 +623561,7 @@ export namespace Prisma {
     gpaBase10: Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10: Decimal | DecimalJsLike | number | string
     conductScore?: number | null
-    studentTrainingType: $Enums.StudentTrainingType
+    studentTrainingType?: $Enums.StudentTrainingType | null
     lowestFinalScore: number
     lowestGraduationScore?: number | null
     totalCredits: number
@@ -623650,7 +623612,7 @@ export namespace Prisma {
     gpaBase10: Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10: Decimal | DecimalJsLike | number | string
     conductScore?: number | null
-    studentTrainingType: $Enums.StudentTrainingType
+    studentTrainingType?: $Enums.StudentTrainingType | null
     lowestFinalScore?: number | null
     lowestGraduationScore?: number | null
     totalCredits: number
@@ -623686,7 +623648,7 @@ export namespace Prisma {
     gpaBase10: Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10: Decimal | DecimalJsLike | number | string
     conductScore?: number | null
-    studentTrainingType: $Enums.StudentTrainingType
+    studentTrainingType?: $Enums.StudentTrainingType | null
     lowestFinalScore?: number | null
     lowestGraduationScore?: number | null
     totalCredits: number
@@ -662119,7 +662081,7 @@ export namespace Prisma {
     gpaBase10: Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10: Decimal | DecimalJsLike | number | string
     conductScore?: number | null
-    studentTrainingType: $Enums.StudentTrainingType
+    studentTrainingType?: $Enums.StudentTrainingType | null
     rankId?: string | null
     lowestFinalScore?: number | null
     lowestGraduationScore?: number | null
@@ -662329,7 +662291,7 @@ export namespace Prisma {
     gpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     conductScore?: NullableFloatFieldUpdateOperationsInput | number | null
-    studentTrainingType?: EnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType
+    studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
     lowestFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     lowestGraduationScore?: NullableFloatFieldUpdateOperationsInput | number | null
     totalCredits?: IntFieldUpdateOperationsInput | number
@@ -662364,7 +662326,7 @@ export namespace Prisma {
     gpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     conductScore?: NullableFloatFieldUpdateOperationsInput | number | null
-    studentTrainingType?: EnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType
+    studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
     rankId?: NullableStringFieldUpdateOperationsInput | string | null
     lowestFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     lowestGraduationScore?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -662398,7 +662360,7 @@ export namespace Prisma {
     gpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     conductScore?: NullableFloatFieldUpdateOperationsInput | number | null
-    studentTrainingType?: EnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType
+    studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
     rankId?: NullableStringFieldUpdateOperationsInput | string | null
     lowestFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     lowestGraduationScore?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -662700,7 +662662,7 @@ export namespace Prisma {
     gpaBase10: Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10: Decimal | DecimalJsLike | number | string
     conductScore?: number | null
-    studentTrainingType: $Enums.StudentTrainingType
+    studentTrainingType?: $Enums.StudentTrainingType | null
     rankId?: string | null
     lowestFinalScore: number
     lowestGraduationScore?: number | null
@@ -663257,7 +663219,7 @@ export namespace Prisma {
     gpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     conductScore?: NullableFloatFieldUpdateOperationsInput | number | null
-    studentTrainingType?: EnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType
+    studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
     lowestFinalScore?: FloatFieldUpdateOperationsInput | number
     lowestGraduationScore?: NullableFloatFieldUpdateOperationsInput | number | null
     totalCredits?: IntFieldUpdateOperationsInput | number
@@ -663302,7 +663264,7 @@ export namespace Prisma {
     gpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     conductScore?: NullableFloatFieldUpdateOperationsInput | number | null
-    studentTrainingType?: EnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType
+    studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
     rankId?: NullableStringFieldUpdateOperationsInput | string | null
     lowestFinalScore?: FloatFieldUpdateOperationsInput | number
     lowestGraduationScore?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -663346,7 +663308,7 @@ export namespace Prisma {
     gpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     conductScore?: NullableFloatFieldUpdateOperationsInput | number | null
-    studentTrainingType?: EnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType
+    studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
     rankId?: NullableStringFieldUpdateOperationsInput | string | null
     lowestFinalScore?: FloatFieldUpdateOperationsInput | number
     lowestGraduationScore?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -677078,7 +677040,7 @@ export namespace Prisma {
     gpaBase10: Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10: Decimal | DecimalJsLike | number | string
     conductScore?: number | null
-    studentTrainingType: $Enums.StudentTrainingType
+    studentTrainingType?: $Enums.StudentTrainingType | null
     rankId?: string | null
     lowestFinalScore: number
     lowestGraduationScore?: number | null
@@ -677121,7 +677083,7 @@ export namespace Prisma {
     gpaBase10: Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10: Decimal | DecimalJsLike | number | string
     conductScore?: number | null
-    studentTrainingType: $Enums.StudentTrainingType
+    studentTrainingType?: $Enums.StudentTrainingType | null
     rankId?: string | null
     lowestFinalScore?: number | null
     lowestGraduationScore?: number | null
@@ -677661,7 +677623,7 @@ export namespace Prisma {
     gpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     conductScore?: NullableFloatFieldUpdateOperationsInput | number | null
-    studentTrainingType?: EnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType
+    studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
     lowestFinalScore?: FloatFieldUpdateOperationsInput | number
     lowestGraduationScore?: NullableFloatFieldUpdateOperationsInput | number | null
     totalCredits?: IntFieldUpdateOperationsInput | number
@@ -677706,7 +677668,7 @@ export namespace Prisma {
     gpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     conductScore?: NullableFloatFieldUpdateOperationsInput | number | null
-    studentTrainingType?: EnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType
+    studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
     rankId?: NullableStringFieldUpdateOperationsInput | string | null
     lowestFinalScore?: FloatFieldUpdateOperationsInput | number
     lowestGraduationScore?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -677750,7 +677712,7 @@ export namespace Prisma {
     gpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     conductScore?: NullableFloatFieldUpdateOperationsInput | number | null
-    studentTrainingType?: EnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType
+    studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
     rankId?: NullableStringFieldUpdateOperationsInput | string | null
     lowestFinalScore?: FloatFieldUpdateOperationsInput | number
     lowestGraduationScore?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -677792,7 +677754,7 @@ export namespace Prisma {
     gpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     conductScore?: NullableFloatFieldUpdateOperationsInput | number | null
-    studentTrainingType?: EnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType
+    studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
     lowestFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     lowestGraduationScore?: NullableFloatFieldUpdateOperationsInput | number | null
     totalCredits?: IntFieldUpdateOperationsInput | number
@@ -677827,7 +677789,7 @@ export namespace Prisma {
     gpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     conductScore?: NullableFloatFieldUpdateOperationsInput | number | null
-    studentTrainingType?: EnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType
+    studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
     rankId?: NullableStringFieldUpdateOperationsInput | string | null
     lowestFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     lowestGraduationScore?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -677861,7 +677823,7 @@ export namespace Prisma {
     gpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     conductScore?: NullableFloatFieldUpdateOperationsInput | number | null
-    studentTrainingType?: EnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType
+    studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
     rankId?: NullableStringFieldUpdateOperationsInput | string | null
     lowestFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     lowestGraduationScore?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -690528,7 +690490,7 @@ export namespace Prisma {
     gpaBase10: Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10: Decimal | DecimalJsLike | number | string
     conductScore?: number | null
-    studentTrainingType: $Enums.StudentTrainingType
+    studentTrainingType?: $Enums.StudentTrainingType | null
     lowestFinalScore: number
     lowestGraduationScore?: number | null
     totalCredits: number
@@ -690571,7 +690533,7 @@ export namespace Prisma {
     gpaBase10: Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10: Decimal | DecimalJsLike | number | string
     conductScore?: number | null
-    studentTrainingType: $Enums.StudentTrainingType
+    studentTrainingType?: $Enums.StudentTrainingType | null
     lowestFinalScore?: number | null
     lowestGraduationScore?: number | null
     totalCredits: number
@@ -690924,7 +690886,7 @@ export namespace Prisma {
     gpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     conductScore?: NullableFloatFieldUpdateOperationsInput | number | null
-    studentTrainingType?: EnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType
+    studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
     lowestFinalScore?: FloatFieldUpdateOperationsInput | number
     lowestGraduationScore?: NullableFloatFieldUpdateOperationsInput | number | null
     totalCredits?: IntFieldUpdateOperationsInput | number
@@ -690970,7 +690932,7 @@ export namespace Prisma {
     gpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     conductScore?: NullableFloatFieldUpdateOperationsInput | number | null
-    studentTrainingType?: EnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType
+    studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
     lowestFinalScore?: FloatFieldUpdateOperationsInput | number
     lowestGraduationScore?: NullableFloatFieldUpdateOperationsInput | number | null
     totalCredits?: IntFieldUpdateOperationsInput | number
@@ -691014,7 +690976,7 @@ export namespace Prisma {
     gpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     conductScore?: NullableFloatFieldUpdateOperationsInput | number | null
-    studentTrainingType?: EnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType
+    studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
     lowestFinalScore?: FloatFieldUpdateOperationsInput | number
     lowestGraduationScore?: NullableFloatFieldUpdateOperationsInput | number | null
     totalCredits?: IntFieldUpdateOperationsInput | number
@@ -691055,7 +691017,7 @@ export namespace Prisma {
     gpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     conductScore?: NullableFloatFieldUpdateOperationsInput | number | null
-    studentTrainingType?: EnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType
+    studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
     lowestFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     lowestGraduationScore?: NullableFloatFieldUpdateOperationsInput | number | null
     totalCredits?: IntFieldUpdateOperationsInput | number
@@ -691091,7 +691053,7 @@ export namespace Prisma {
     gpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     conductScore?: NullableFloatFieldUpdateOperationsInput | number | null
-    studentTrainingType?: EnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType
+    studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
     lowestFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     lowestGraduationScore?: NullableFloatFieldUpdateOperationsInput | number | null
     totalCredits?: IntFieldUpdateOperationsInput | number
@@ -691125,7 +691087,7 @@ export namespace Prisma {
     gpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     cumulativeGpaBase10?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     conductScore?: NullableFloatFieldUpdateOperationsInput | number | null
-    studentTrainingType?: EnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType
+    studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
     lowestFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     lowestGraduationScore?: NullableFloatFieldUpdateOperationsInput | number | null
     totalCredits?: IntFieldUpdateOperationsInput | number

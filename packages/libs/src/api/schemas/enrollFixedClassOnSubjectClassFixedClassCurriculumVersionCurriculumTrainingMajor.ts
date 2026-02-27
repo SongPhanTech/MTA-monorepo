@@ -6,7 +6,7 @@
  */
 
 export type EnrollFixedClassOnSubjectClassFixedClassCurriculumVersionCurriculumTrainingMajor = {
-  id: string;
-  name: string;
-  code: string;
-};
+    id: string
+    name: string
+    code: string
+}

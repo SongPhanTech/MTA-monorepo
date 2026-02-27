@@ -323,9 +323,15 @@ const NAVIGATION: NavigationType = {
                     },
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN,
-                        label: 'QL điểm rèn luyện',
+                        label: 'QL điểm rèn luyện học kỳ',
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_REN_LUYEN,
-                        description: 'QL điểm rèn luyện',
+                        description: 'QL điểm rèn luyện theo học kỳ',
+                    },
+                    {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN_THEO_NAM,
+                        label: 'QL điểm rèn luyện năm học',
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_REN_LUYEN_THEO_NAM,
+                        description: 'QL điểm rèn luyện theo năm',
                     },
                 ],
             },
@@ -534,6 +540,13 @@ const NAVIGATION: NavigationType = {
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_SACH_CHUYEN_GIA,
                         description: 'Danh sách chuyên gia',
                     },
+                    {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_CAU_HINH_THOI_GIAN_BAO_VE,
+                        label: 'Thời gian bảo vệ',
+                        path: ROUTER_PATH.QL_DAO_TAO
+                            .QUAN_LY_DO_AN_CAU_HINH_THOI_GIAN_BAO_VE,
+                        description: 'Cấu hình thời gian bảo vệ đồ án',
+                    },
                     // {
                     //     id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_SACH_THANH_TOAN,
                     //     label: 'Danh sách thanh toán',
@@ -629,7 +642,7 @@ const NAVIGATION: NavigationType = {
                     },
                 ],
             },
-         
+
             {
                 id: 'quan-ly-van-bang',
                 label: 'Quản lý văn bằng',

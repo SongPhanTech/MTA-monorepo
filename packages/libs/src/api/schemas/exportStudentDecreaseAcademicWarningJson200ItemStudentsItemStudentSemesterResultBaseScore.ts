@@ -5,11 +5,12 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type ExportStudentDecreaseAcademicWarningJson200ItemStudentsItemStudentSemesterResultBaseScore = typeof ExportStudentDecreaseAcademicWarningJson200ItemStudentsItemStudentSemesterResultBaseScore[keyof typeof ExportStudentDecreaseAcademicWarningJson200ItemStudentsItemStudentSemesterResultBaseScore];
-
+export type ExportStudentDecreaseAcademicWarningJson200ItemStudentsItemStudentSemesterResultBaseScore =
+    (typeof ExportStudentDecreaseAcademicWarningJson200ItemStudentsItemStudentSemesterResultBaseScore)[keyof typeof ExportStudentDecreaseAcademicWarningJson200ItemStudentsItemStudentSemesterResultBaseScore]
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const ExportStudentDecreaseAcademicWarningJson200ItemStudentsItemStudentSemesterResultBaseScore = {
-  Base10: 'Base10',
-  Base4: 'Base4',
-} as const;
+export const ExportStudentDecreaseAcademicWarningJson200ItemStudentsItemStudentSemesterResultBaseScore =
+    {
+        Base10: 'Base10',
+        Base4: 'Base4',
+    } as const

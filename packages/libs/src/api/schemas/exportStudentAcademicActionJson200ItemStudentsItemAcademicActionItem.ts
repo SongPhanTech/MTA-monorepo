@@ -6,10 +6,10 @@
  */
 
 export type ExportStudentAcademicActionJson200ItemStudentsItemAcademicActionItem = {
-  /** ID của hành động */
-  id: string;
-  /** Tên tiêu chí học bổng */
-  name: string;
-  /** Loại hành động */
-  actionType: string;
-};
+    /** ID của hành động */
+    id: string
+    /** Tên tiêu chí học bổng */
+    name: string
+    /** Loại hành động */
+    actionType: string
+}

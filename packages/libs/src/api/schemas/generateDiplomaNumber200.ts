@@ -6,5 +6,5 @@
  */
 
 export type GenerateDiplomaNumber200 = {
-  count: number;
-};
+    count: number
+}

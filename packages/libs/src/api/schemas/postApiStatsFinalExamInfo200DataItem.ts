@@ -6,6 +6,6 @@
  */
 
 export type PostApiStatsFinalExamInfo200DataItem = {
-  name: string;
-  count: number;
-};
+    name: string
+    count: number
+}

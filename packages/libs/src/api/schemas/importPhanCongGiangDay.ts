@@ -4,15 +4,15 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { ImportPhanCongGiangDayFileType } from './importPhanCongGiangDayFileType';
-import type { ImportPhanCongGiangDayImportType } from './importPhanCongGiangDayImportType';
-import type { ImportPhanCongGiangDayType } from './importPhanCongGiangDayType';
+import type { ImportPhanCongGiangDayFileType } from './importPhanCongGiangDayFileType'
+import type { ImportPhanCongGiangDayImportType } from './importPhanCongGiangDayImportType'
+import type { ImportPhanCongGiangDayType } from './importPhanCongGiangDayType'
 
 export interface ImportPhanCongGiangDay {
-  file: Blob;
-  semesterId: string;
-  trainingObjectTypeId: string;
-  fileType?: ImportPhanCongGiangDayFileType;
-  importType?: ImportPhanCongGiangDayImportType;
-  type?: ImportPhanCongGiangDayType;
+    file: Blob
+    semesterId: string
+    trainingObjectTypeId: string
+    fileType?: ImportPhanCongGiangDayFileType
+    importType?: ImportPhanCongGiangDayImportType
+    type?: ImportPhanCongGiangDayType
 }

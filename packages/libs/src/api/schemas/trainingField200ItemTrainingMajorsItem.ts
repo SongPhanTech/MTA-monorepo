@@ -6,8 +6,8 @@
  */
 
 export type TrainingField200ItemTrainingMajorsItem = {
-  id: string;
-  /** @nullable */
-  code: string | null;
-  name: string;
-};
+    id: string
+    /** @nullable */
+    code: string | null
+    name: string
+}

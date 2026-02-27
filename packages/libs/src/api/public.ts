@@ -38,7 +38,7 @@ export type getVersionAppsResponse200 = {
 
 export type getVersionAppsResponseError = {
     data: { message: string }
-    status: number 
+    status: number
 }
 
 export type getVersionAppsResponseSuccess = getVersionAppsResponse200 & {
@@ -121,13 +121,9 @@ export function useGetVersionApps<
 
 export function useAppVersionInfo(options?: { request?: RequestInit }) {
     const query = useGetVersionApps({ request: options?.request })
-    const appCode =
-        getRuntimeEnv('NEXT_PUBLIC_APP_CODE') ||
-        process.env.NEXT_PUBLIC_APP_CODE
+    const appCode = getRuntimeEnv('NEXT_PUBLIC_APP_CODE') || process.env.NEXT_PUBLIC_APP_CODE
 
-    const versionData = Array.isArray(query.data?.data)
-        ? query.data.data[0]
-        : undefined
+    const versionData = Array.isArray(query.data?.data) ? query.data.data[0] : undefined
 
     return {
         ...query,

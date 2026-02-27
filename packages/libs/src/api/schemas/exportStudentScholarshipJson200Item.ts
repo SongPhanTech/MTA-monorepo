@@ -4,13 +4,13 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { ExportStudentScholarshipJson200ItemStudentsItem } from './exportStudentScholarshipJson200ItemStudentsItem';
+import type { ExportStudentScholarshipJson200ItemStudentsItem } from './exportStudentScholarshipJson200ItemStudentsItem'
 
 export type ExportStudentScholarshipJson200Item = {
-  /** ID khoá học */
-  courseId: string;
-  /** Tên khoá học */
-  courseName: string;
-  /** Danh sách sinh viên trong khoá học */
-  students: ExportStudentScholarshipJson200ItemStudentsItem[];
-};
+    /** ID khoá học */
+    courseId: string
+    /** Tên khoá học */
+    courseName: string
+    /** Danh sách sinh viên trong khoá học */
+    students: ExportStudentScholarshipJson200ItemStudentsItem[]
+}

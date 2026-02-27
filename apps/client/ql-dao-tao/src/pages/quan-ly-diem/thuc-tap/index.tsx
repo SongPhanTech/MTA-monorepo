@@ -1,4 +1,4 @@
-import { ExportOutlined, TableOutlined, UploadOutlined } from '@ant-design/icons'
+import { TableOutlined, UploadOutlined } from '@ant-design/icons'
 import { FileOutlined } from '@ant-design/icons'
 import DatePicker from '@components/commons/date-picker'
 import Select from '@components/commons/select'
@@ -8,7 +8,7 @@ import type { FilterProps } from '@constants/type'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgFlat, buildOrgTree } from '@lib/utils'
 import { SubjectVersionType } from '@workspace/db'
-import { type Prisma } from '@workspace/db/client'
+import type { Prisma } from '@workspace/db/client'
 import {
     useCountStudentInternship,
     useCreateManyStudentInternship,
@@ -29,8 +29,9 @@ import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import ExportTemplateInternship from '../../../components/modal/export-template-internship'
 import type React from 'react'
-import { exportInternshipProfile } from '@workspace/libs/api/training'
 import { saveAs } from 'file-saver'
+import ImportInternshipModal from '@components/modal/import-excel-internship'
+import { exportInternshipProfile } from '@workspace/libs/api/training'
 
 interface ThucTapForm {
     trainingCourseId: string
@@ -115,8 +116,11 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
                 subjectClass: {
                     subject: {
                         type: SubjectVersionType.Internship,
-                        managementOrganizationId:
-                            role === 'KHOA_BO_MON' ? { in: orgIds } : organizationId,
+                        ...(role === 'KHOA_BO_MON'
+                            ? { managementOrganizationId: { in: orgIds } }
+                            : organizationId
+                              ? { managementOrganizationId: organizationId }
+                              : {}),
                     },
                     trainingObjectTypeId,
                     semesterId,
@@ -133,9 +137,13 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
                         : {}),
                 },
                 student: {
-                    fixedClass: {
-                        trainingCourseId: trainingCourseId || undefined,
-                    },
+                    ...(trainingCourseId
+                        ? {
+                              fixedClass: {
+                                  trainingCourseId: trainingCourseId,
+                              },
+                          }
+                        : {}),
                     status: 'ENROLLED',
                     active: true,
                     deletedAt: null,
@@ -176,6 +184,7 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
         role,
         filters,
     ])
+
     const { data: studentInternshipData = [], refetch: refetchStudentInternship } =
         useFindManyStudentInternship({
             where,
@@ -478,9 +487,9 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
         }
     }
     const handleExportInternship = async () => {
-        // const { status, data } = await exportInternshipProfile({
-        //     internshipIds: selectedRowKeys as string[],
-        // })
+        const { status, data } = await exportInternshipProfile({
+            internshipIds: selectedRowKeys as string[],
+        })
 
         if (status === 200) {
             saveAs(data, 'danh_sach_TTS.xlsx')
@@ -1427,15 +1436,15 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
                         >
                             Nhập dữ liệu Excel
                         </Button>
-                        {/* <ImportLecturerModal
+                        <ImportInternshipModal
                             visible={importModalVisible}
                             onSuccess={() => {
                                 setImportModalVisible(false)
-                                refetch()
+                                refetchStudentInternship()
                                 refetchCount()
                             }}
                             onCancel={() => setImportModalVisible(false)}
-                        /> */}
+                        />
                         <ExportTemplateInternship />
                         {/* <Button onClick={handleModal} type="primary">
                                     Thêm mới

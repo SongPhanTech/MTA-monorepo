@@ -6,15 +6,15 @@
  */
 
 export interface OpenSubjectClassRetakeResponse {
-  id: string;
-  code: string;
-  name: string;
-  /** @nullable */
-  trainingObjectTypeId: string | null;
-  /** @nullable */
-  trainingMajorId: string | null;
-  /** @nullable */
-  trainingCourseId: string | null;
-  trainingBlockSubjectId: string;
-  count: number;
+    id: string
+    code: string
+    name: string
+    /** @nullable */
+    trainingObjectTypeId: string | null
+    /** @nullable */
+    trainingMajorId: string | null
+    /** @nullable */
+    trainingCourseId: string | null
+    trainingBlockSubjectId: string
+    count: number
 }

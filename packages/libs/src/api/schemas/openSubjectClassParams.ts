@@ -6,14 +6,14 @@
  */
 
 export type OpenSubjectClassParams = {
-semesterId: string;
-trainingCourseId: string;
-trainingMajorId?: string;
-search?: string;
-trainingObjectTypeId: string;
-/**
- * @nullable
- */
-nextSemester?: number | null;
-fixedClassId?: string;
-};
+    semesterId: string
+    trainingCourseId: string
+    trainingMajorId?: string
+    search?: string
+    trainingObjectTypeId: string
+    /**
+     * @nullable
+     */
+    nextSemester?: number | null
+    fixedClassId?: string
+}

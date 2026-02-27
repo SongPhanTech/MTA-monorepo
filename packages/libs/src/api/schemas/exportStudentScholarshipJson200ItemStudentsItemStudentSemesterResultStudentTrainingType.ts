@@ -5,16 +5,17 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type ExportStudentScholarshipJson200ItemStudentsItemStudentSemesterResultStudentTrainingType = typeof ExportStudentScholarshipJson200ItemStudentsItemStudentSemesterResultStudentTrainingType[keyof typeof ExportStudentScholarshipJson200ItemStudentsItemStudentSemesterResultStudentTrainingType];
-
+export type ExportStudentScholarshipJson200ItemStudentsItemStudentSemesterResultStudentTrainingType =
+    (typeof ExportStudentScholarshipJson200ItemStudentsItemStudentSemesterResultStudentTrainingType)[keyof typeof ExportStudentScholarshipJson200ItemStudentsItemStudentSemesterResultStudentTrainingType]
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const ExportStudentScholarshipJson200ItemStudentsItemStudentSemesterResultStudentTrainingType = {
-  EXCELLENT: 'EXCELLENT',
-  GOOD: 'GOOD',
-  FAIR: 'FAIR',
-  MEDIUM: 'MEDIUM',
-  AVERAGE: 'AVERAGE',
-  POOR: 'POOR',
-  VERY_POOR: 'VERY_POOR',
-} as const;
+export const ExportStudentScholarshipJson200ItemStudentsItemStudentSemesterResultStudentTrainingType =
+    {
+        EXCELLENT: 'EXCELLENT',
+        GOOD: 'GOOD',
+        FAIR: 'FAIR',
+        MEDIUM: 'MEDIUM',
+        AVERAGE: 'AVERAGE',
+        POOR: 'POOR',
+        VERY_POOR: 'VERY_POOR',
+    } as const

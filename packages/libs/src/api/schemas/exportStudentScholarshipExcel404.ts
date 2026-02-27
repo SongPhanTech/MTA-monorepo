@@ -6,5 +6,5 @@
  */
 
 export type ExportStudentScholarshipExcel404 = {
-  message: string;
-};
+    message: string
+}

@@ -390,14 +390,15 @@ const DiemTrungBinhKyHoc = () => {
                                     rank?.classification || '-',
                             },
                             {
-                                title: 'Xếp loại rèn luyện',
-                                dataIndex: ['studentYearResult', '0', 'studentTrainingType'],
-                                width: 140,
+                                title: 'Điểm rèn luyện',
+                                dataIndex: ['studentYearResult', '0', 'conductScore'],
+                                width: 120,
                                 align: 'center',
                                 render: (value) => (
-                                    <Tag color={getStudentTrainingTypeColor(value)}>
-                                        {getStudentTrainingTypeLabel(value)}
-                                    </Tag>
+                                    <div>{value}</ div>
+                                    // <Tag color={getStudentTrainingTypeColor(value)}>
+                                    //     {getStudentTrainingTypeLabel(value)}
+                                    // </Tag>
                                 ),
                             },
                             {

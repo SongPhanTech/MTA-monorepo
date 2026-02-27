@@ -6,7 +6,7 @@
  */
 
 export type ExamCodesItem = {
-  id: string;
-  /** @nullable */
-  score?: number | null;
-};
+    id: string
+    /** @nullable */
+    score?: number | null
+}

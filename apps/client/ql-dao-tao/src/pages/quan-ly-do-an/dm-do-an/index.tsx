@@ -38,7 +38,8 @@ import dayjs from 'dayjs'
 import { CircleMinus, SquarePen } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-
+import utc from 'dayjs/plugin/utc'
+dayjs.extend(utc)
 interface DoAnForm {
     subjectClassId: string
 }
@@ -931,93 +932,95 @@ export default function DanhMucDoAn() {
                             },
                         },
 
-                        {
-                            title: 'Phòng bảo vệ',
-                            width: 150,
-                            align: 'left',
-                            dataIndex: 'room',
-                            render: (_, record) => {
-                                if (editingRowKeys.includes(record?.id)) {
-                                    const currentValue = record?.roomId || ''
-                                    return (
-                                        <Select
-                                            className="w-28"
-                                            options={roomsData?.map((item) => ({
-                                                label: item.name,
-                                                value: item.id,
-                                            }))}
-                                            value={currentValue || undefined}
-                                            placeholder="Chọn phòng"
-                                            onChange={(value) =>
-                                                handleEditChange(record?.id, 'room', value)
-                                            }
-                                        />
-                                    )
-                                }
-                                return record?.room?.name || ''
-                            },
-                        },
-                        {
-                            title: 'Ngày bảo vệ',
-                            width: 150,
-                            align: 'left',
-                            dataIndex: 'defenseDate',
-                            render: (_, record) => {
-                                if (editingRowKeys.includes(record?.id)) {
-                                    const currentValue = record?.defenseDate
-                                        ? dayjs(record?.defenseDate)
-                                        : ''
-                                    return (
-                                        <DatePicker
-                                            className="w-28"
-                                            value={currentValue || undefined}
-                                            placeholder="Chọn ngày"
-                                            onChange={(value) =>
-                                                handleEditChange(record?.id, 'defenseDate', value)
-                                            }
-                                        />
-                                    )
-                                }
-                                return record?.defenseDate
-                                    ? dayjs(record?.defenseDate).format('DD/MM/YYYY')
-                                    : ''
-                            },
-                        },
-                        {
-                            title: 'Ca bảo vệ',
-                            width: 150,
-                            align: 'left',
-                            dataIndex: 'defenseSession',
-                            render: (_, record) => {
-                                if (editingRowKeys.includes(record?.id)) {
-                                    const currentValue = record?.defenseSessionId || ''
-                                    return (
-                                        <Select
-                                            className="w-28"
-                                            options={defenseSessionData?.map((item) => ({
-                                                label: item?.startTime
-                                                    ? dayjs(
-                                                          record?.defenseSession?.startTime
-                                                      ).format('HH:mm')
-                                                    : '',
-                                                value: item.id,
-                                            }))}
-                                            value={currentValue || undefined}
-                                            placeholder="Chọn ca"
-                                            onChange={(value) =>
-                                                handleEditChange(
-                                                    record?.id,
-                                                    'defenseSession',
-                                                    value
-                                                )
-                                            }
-                                        />
-                                    )
-                                }
+            {
+              title: "Phòng bảo vệ",
+              width: 150,
+              align: "left",
+              dataIndex: "room",
+              render: (_, record) => {
+                if (editingRowKeys.includes(record?.id)) {
+                  const currentValue = record?.roomId || "";
+                  return (
+                    <Select
+                      className="w-28"
+                      options={roomsData?.map((item) => ({
+                        label: item.name,
+                        value: item.id,
+                      }))}
+                      value={currentValue || undefined}
+                      placeholder="Chọn phòng"
+                      onChange={(value) =>
+                        handleEditChange(record?.id, "room", value)
+                      }
+                    />
+                  );
+                }
+                return record?.room?.name || "";
+              },
+            },
+            {
+              title: "Ngày bảo vệ",
+              width: 150,
+              align: "left",
+              dataIndex: "defenseDate",
+              render: (_, record) => {
+                if (editingRowKeys.includes(record?.id)) {
+                  const currentValue = record?.defenseDate
+                    ? dayjs(record?.defenseDate)
+                    : "";
+                  return (
+                    <DatePicker
+                      className="w-28"
+                      value={currentValue || undefined}
+                      placeholder="Chọn ngày"
+                      onChange={(value) =>
+                        handleEditChange(record?.id, "defenseDate", value)
+                      }
+                    />
+                  );
+                }
+                return record?.defenseDate
+                  ? dayjs(record?.defenseDate).format("DD/MM/YYYY")
+                  : "";
+              },
+            },
+            {
+              title: "Thời gian bảo vệ",
+              width: 150,
+              align: "left",
+              dataIndex: "defenseSession",
+              render: (_: any, record: any) => {
+                const isEditing = editingRowKeys.includes(record?.id);
+                const formatTime = (
+                  time: string | Date | null | undefined,
+                ): string => {
+                  if (!time) return "";
+                  return dayjs.utc(time).format("HH:mm");
+                };
 
-                                return record?.defenseSession?.startTime
-                                    ? dayjs(record?.defenseSession?.startTime).format('HH:mm')
-                                    : ''
+                                if (isEditing) {
+                                    const currentValue =
+                                        record?.defenseSessionId || record?.defenseSession?.id
+
+                  return (
+                    <Select
+                      className="w-full"
+                      placeholder="Chọn thời gian"
+                      value={currentValue || undefined}
+                      onChange={(value) =>
+                        handleEditChange(record?.id, "defenseSessionId", value)
+                      }
+                      options={defenseSessionData?.map((item: any) => ({
+                        label: item?.startTime
+                          ? formatTime(item.startTime)
+                          : "Không xác định",
+                        value: item.id,
+                      }))}
+                    />
+                  );
+                }
+
+                                return formatTime(record?.defenseSession?.startTime)
                             },
                         },
                         {

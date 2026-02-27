@@ -4,36 +4,36 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { ExportStudentAcademicActionJson200ItemStudentsItemStudentSemesterResult } from './exportStudentAcademicActionJson200ItemStudentsItemStudentSemesterResult';
-import type { ExportStudentAcademicActionJson200ItemStudentsItemUserProfile } from './exportStudentAcademicActionJson200ItemStudentsItemUserProfile';
-import type { ExportStudentAcademicActionJson200ItemStudentsItemFixedClass } from './exportStudentAcademicActionJson200ItemStudentsItemFixedClass';
-import type { ExportStudentAcademicActionJson200ItemStudentsItemAcademicActionItem } from './exportStudentAcademicActionJson200ItemStudentsItemAcademicActionItem';
+import type { ExportStudentAcademicActionJson200ItemStudentsItemStudentSemesterResult } from './exportStudentAcademicActionJson200ItemStudentsItemStudentSemesterResult'
+import type { ExportStudentAcademicActionJson200ItemStudentsItemUserProfile } from './exportStudentAcademicActionJson200ItemStudentsItemUserProfile'
+import type { ExportStudentAcademicActionJson200ItemStudentsItemFixedClass } from './exportStudentAcademicActionJson200ItemStudentsItemFixedClass'
+import type { ExportStudentAcademicActionJson200ItemStudentsItemAcademicActionItem } from './exportStudentAcademicActionJson200ItemStudentsItemAcademicActionItem'
 
 export type ExportStudentAcademicActionJson200ItemStudentsItem = {
-  /** ID của sinh viên */
-  id: string;
-  /** @nullable */
-  code: string | null;
-  /** Kết quả học tập của sinh viên trong học kỳ */
-  studentSemesterResult: ExportStudentAcademicActionJson200ItemStudentsItemStudentSemesterResult;
-  /** Chuyên ngành */
-  trainingMajor: string;
-  /** ID Chuyên ngành */
-  trainingMajorId: string;
-  /** Ngành */
-  trainingField: string;
-  /** ID Ngành */
-  trainingFieldId: string;
-  /**
-   * Thông tin người dùng
-   * @nullable
-   */
-  userProfile?: ExportStudentAcademicActionJson200ItemStudentsItemUserProfile;
-  /** Lý do */
-  reason: string;
-  /** Thông tin lớp học */
-  fixedClass: ExportStudentAcademicActionJson200ItemStudentsItemFixedClass;
-  hasAcademicAction: boolean;
-  /** Danh sách hành động học vụ của sinh viên */
-  academicAction: ExportStudentAcademicActionJson200ItemStudentsItemAcademicActionItem[];
-};
+    /** ID của sinh viên */
+    id: string
+    /** @nullable */
+    code: string | null
+    /** Kết quả học tập của sinh viên trong học kỳ */
+    studentSemesterResult: ExportStudentAcademicActionJson200ItemStudentsItemStudentSemesterResult
+    /** Chuyên ngành */
+    trainingMajor: string
+    /** ID Chuyên ngành */
+    trainingMajorId: string
+    /** Ngành */
+    trainingField: string
+    /** ID Ngành */
+    trainingFieldId: string
+    /**
+     * Thông tin người dùng
+     * @nullable
+     */
+    userProfile?: ExportStudentAcademicActionJson200ItemStudentsItemUserProfile
+    /** Lý do */
+    reason: string
+    /** Thông tin lớp học */
+    fixedClass: ExportStudentAcademicActionJson200ItemStudentsItemFixedClass
+    hasAcademicAction: boolean
+    /** Danh sách hành động học vụ của sinh viên */
+    academicAction: ExportStudentAcademicActionJson200ItemStudentsItemAcademicActionItem[]
+}

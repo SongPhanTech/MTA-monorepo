@@ -6,10 +6,10 @@
  */
 
 export type PostApiStatsStatisticsExamBankNotYetBody = {
-  preview?: boolean;
-  /**
-   * @minimum 1
-   * @maximum 100
-   */
-  limit?: number;
-};
+    preview?: boolean
+    /**
+     * @minimum 1
+     * @maximum 100
+     */
+    limit?: number
+}

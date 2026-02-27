@@ -8,12 +8,13 @@
 /**
  * @nullable
  */
-export type GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassSchedule = typeof GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassSchedule[keyof typeof GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassSchedule] | null;
-
+export type GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassSchedule =
+    | (typeof GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassSchedule)[keyof typeof GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassSchedule]
+    | null
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassSchedule = {
-  MORNING: 'MORNING',
-  AFTERNOON: 'AFTERNOON',
-  EVENING: 'EVENING',
-} as const;
+    MORNING: 'MORNING',
+    AFTERNOON: 'AFTERNOON',
+    EVENING: 'EVENING',
+} as const
