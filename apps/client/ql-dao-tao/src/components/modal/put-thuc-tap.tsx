@@ -194,7 +194,7 @@ const PutInternshipModal = () => {
                     </FormItem>
                 </Col>
                 <Col span={12}>
-                    <FormItem form={form} name="institution" label="Tên cơ sở" required>
+                    <FormItem form={form} name="institution" label="Tên cơ sở">
                         <TextArea
                             placeholder="Nhập tên cơ sở"
                             autoSize={{ minRows: 2, maxRows: 6 }}
@@ -307,12 +307,12 @@ const PutInternshipModal = () => {
                     </FormItem>
                 </Col>
                 <Col span={8}>
-                    <FormItem form={form} name="deadline" label="Hạn nhập chuyên đề">
+                    <FormItem form={form} name="deadline" label="Hạn nhập thực tập">
                         <DatePicker
                             disabled={input?.role !== 'P7'}
                             format={{ format: 'DD/MM/YYYY', type: 'mask' }}
                             className="w-full"
-                            placeholder="Chọn hạn nhập chuyên đề"
+                            placeholder="Chọn hạn nhập thực tập"
                         />
                     </FormItem>
                 </Col>
