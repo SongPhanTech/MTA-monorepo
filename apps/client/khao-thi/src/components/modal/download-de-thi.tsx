@@ -62,9 +62,9 @@ const PrintExamBank = () => {
     )
 
     const dataRender = useMemo(() => {
-        const listQuestionChoice =
-            data?.questions.filter((q) => q?.question?.type !== 'ESSAY') || []
-        const listQuestionEssay = data?.questions.filter((q) => q?.question?.type === 'ESSAY') || []
+        const sorted = [...(data?.questions || [])].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+        const listQuestionChoice = sorted.filter((q) => q?.question?.type !== 'ESSAY')
+        const listQuestionEssay = sorted.filter((q) => q?.question?.type === 'ESSAY')
         if (data?.isGroup) {
             return {
                 ...data,
@@ -75,6 +75,7 @@ const PrintExamBank = () => {
         }
         return {
             ...data,
+            questions: sorted,
             listQuestionChoice: listQuestionChoice,
             listQuestionEssay: listQuestionEssay,
         }
@@ -328,7 +329,7 @@ const PrintExamBank = () => {
                                     <div key={q?.id} style={{ marginBottom: '15px' }}>
                                         <div>
                                             <strong>
-                                                Câu {q?.order || qIndex + 1}(
+                                                Câu {qIndex + 1}(
                                                 {Number(q?.question?.point || 0).toFixed(1)} điểm):
                                             </strong>{' '}
                                             <span
@@ -349,8 +350,11 @@ const PrintExamBank = () => {
                                     <div key={q?.id} style={{ marginBottom: '15px' }}>
                                         <div>
                                             <strong>
-                                                Câu {q?.order || qIndex + 1}(
-                                                {Number(q?.question?.point || 0).toFixed(1)} điểm):
+                                                Câu{' '}
+                                                {(dataRender?.listQuestionChoice?.length ?? 0) +
+                                                    qIndex +
+                                                    1}
+                                                ({Number(q?.question?.point || 0).toFixed(1)} điểm):
                                             </strong>{' '}
                                             <span
                                                 dangerouslySetInnerHTML={{
@@ -368,11 +372,11 @@ const PrintExamBank = () => {
                             </div>
                         ) : (
                             <div>
-                                {data?.questions?.map((q, index: number) => (
+                                {dataRender?.questions?.map((q, index: number) => (
                                     <div key={q?.id} style={{ marginBottom: '15px' }}>
                                         <div>
                                             <strong>
-                                                Câu {q?.order || index + 1}(
+                                                Câu {index + 1}(
                                                 {Number(q?.question?.point || 0).toFixed(1)} điểm):
                                             </strong>{' '}
                                             <span
