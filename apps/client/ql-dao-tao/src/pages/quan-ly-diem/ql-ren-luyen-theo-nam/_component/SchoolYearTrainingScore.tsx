@@ -162,16 +162,16 @@ export default function SchoolYearTrainingScore({
         try {
             showSpinner()
             if (selectedRowKeys?.length === 0) return
-
-            const res = await sqlTransaction([
+             const res = await sqlTransaction([
                 {
-                    model: 'SchoolYearTrainingScore',
+                    model: 'SchoolYearTrainingScore' as const,
                     operation: 'updateMany',
                     data: {
                         where: {
-                            id: {
-                                in: selectedRowKeys as string[],
+                            studentId: {
+                                in: selectedRowKeys,
                             },
+                            schoolYearId,
                         },
                         data: {
                             status: 'APPROVED',
@@ -179,12 +179,11 @@ export default function SchoolYearTrainingScore({
                     },
                 },
             ])
-            if (res?.status !== 200) {
+            if (res?.status === 200) {
                 message.success('Lưu điểm rèn luyện thành công')
                 refetch()
             }
 
-            refetchCount()
             hideSpinner()
         } catch (error) {
             message.error('Lưu điểm rèn luyện thất bại')
@@ -359,6 +358,9 @@ export default function SchoolYearTrainingScore({
                             rowSelection={{
                                 selectedRowKeys,
                                 onChange: (selectedKeys) => setSelectedRowKeys(selectedKeys),
+                                     getCheckboxProps: (record) => ({
+                                    disabled: record.schoolYearTrainingScore?.length<=0 , // hoặc điều kiện bất kỳ
+                                }),
                             }}
                             columns={[
                                 {
@@ -437,16 +439,25 @@ export default function SchoolYearTrainingScore({
                                         )
                                     },
                                 },
-                                {
+                               {
                                     title: 'Trạng thái',
                                     align: 'center',
                                     dataIndex: 'name',
                                     width: 150,
-                                    render: (_, record) => (
-                                        <Tag color={getTrainingScoreStatusColor(record.status)}>
-                                            {getTrainingScoreStatusLabel(record.status)}
-                                        </Tag>
-                                    ),
+                                    render: (_, record) =>
+                                        record?.schoolYearTrainingScore?.length > 0 ? (
+                                            <Tag
+                                                color={getTrainingScoreStatusColor(
+                                                    record?.schoolYearTrainingScore[0]?.status
+                                                )}
+                                            >
+                                                {getTrainingScoreStatusLabel(
+                                                    record?.schoolYearTrainingScore[0]?.status
+                                                )}
+                                            </Tag>
+                                        ) : (
+                                            '--'
+                                        ),
                                 },
                             ]}
                             rowKey="id"

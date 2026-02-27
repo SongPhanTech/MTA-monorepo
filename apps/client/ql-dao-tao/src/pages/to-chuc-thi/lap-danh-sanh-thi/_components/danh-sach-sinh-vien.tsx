@@ -348,6 +348,17 @@ export default function DanhSachSinhVien() {
     }
 
     const handlePhanPhongThi = async () => {
+        if(data?.length<=0) return message.error('Không phân được phòng thi')
+        const listExamRomError= data.filter((el) => !el.examRoom?.room && el.examPapers.length > 0)
+        const listExamRoom = data.filter((el) => el.examRoom?.room)
+        if(listExamRomError?.length<=0){
+            message.error('Không phân được phòng thi')
+            return
+        }
+        if(listExamRoom?.length<=0){
+            message.error('Chưa có phòng thi')
+            return
+        }
         try {
             showSpinner()
 

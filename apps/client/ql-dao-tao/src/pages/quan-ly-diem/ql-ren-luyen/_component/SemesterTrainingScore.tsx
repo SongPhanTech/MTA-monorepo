@@ -112,7 +112,7 @@ export default function SemesterTrainingScore({
                 userProfile: true,
                 semesterTrainingScore: {
                     where: {
-                        semesterId: semesterId,
+                        semesterId,
                     },
                 },
             },
@@ -158,17 +158,19 @@ export default function SemesterTrainingScore({
     const handleApproved = async () => {
         try {
             showSpinner()
+
             if (selectedRowKeys?.length === 0) return
 
             const res = await sqlTransaction([
                 {
-                    model: 'SemesterTrainingScore',
+                    model: 'SemesterTrainingScore' as const,
                     operation: 'updateMany',
                     data: {
                         where: {
-                            id: {
-                                in: selectedRowKeys as string[],
+                            studentId: {
+                                in: selectedRowKeys,
                             },
+                            semesterId,
                         },
                         data: {
                             status: 'APPROVED',
@@ -176,12 +178,11 @@ export default function SemesterTrainingScore({
                     },
                 },
             ])
-            if (res?.status !== 200) {
+            if (res?.status === 200) {
                 message.success('Lưu điểm rèn luyện thành công')
                 refetch()
             }
 
-            refetchCount()
             hideSpinner()
         } catch (error) {
             message.error('Lưu điểm rèn luyện thất bại')
@@ -411,17 +412,29 @@ export default function SemesterTrainingScore({
                                     align: 'center',
                                     dataIndex: 'name',
                                     width: 150,
-                                    render: (_, record) => (
-                                        <Tag color={getTrainingScoreStatusColor(record.status)}>
-                                            {getTrainingScoreStatusLabel(record.status)}
-                                        </Tag>
-                                    ),
+                                    render: (_, record) =>
+                                        record?.semesterTrainingScore?.length > 0 ? (
+                                            <Tag
+                                                color={getTrainingScoreStatusColor(
+                                                    record?.semesterTrainingScore[0]?.status
+                                                )}
+                                            >
+                                                {getTrainingScoreStatusLabel(
+                                                    record?.semesterTrainingScore[0]?.status
+                                                )}
+                                            </Tag>
+                                        ) : (
+                                            '--'
+                                        ),
                                 },
                             ]}
                             rowKey="id"
                             rowSelection={{
                                 selectedRowKeys,
                                 onChange: (selectedKeys) => setSelectedRowKeys(selectedKeys),
+                                 getCheckboxProps: (record) => ({
+                                    disabled: record.semesterTrainingScore?.length<=0 , // hoặc điều kiện bất kỳ
+                                }),
                             }}
                             data={data}
                             pagination={{
