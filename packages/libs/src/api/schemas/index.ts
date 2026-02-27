@@ -127,6 +127,7 @@ export * from './deleteDMNhanViensId403';
 export * from './deleteFilesDeleteSingleStorageTypeFileNameParams';
 export * from './downloadStudentImportTemplate404';
 export * from './downloadStudentImportTemplate500';
+export * from './downloadStudentImportTemplateParams';
 export * from './enrollFixedClassOnSubjectClass';
 export * from './enrollFixedClassOnSubjectClassBody';
 export * from './enrollFixedClassOnSubjectClassFixedClass';
