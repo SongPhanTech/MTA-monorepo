@@ -9,7 +9,7 @@ dayjs.extend(customParseFormat)
 // TODO!: now depends on stt column(it need to be a integer), maybe need to change to more reliable way
 
 export const parseSheetLecturer = (file: ArrayBufferLike) => {
-    const wb = read(file)
+    const wb = read(file, { cellDates: true })
     const sheetName = 'Danh sách giảng viên'
     const errors: ParseSheetError[] = []
 
@@ -57,10 +57,17 @@ export const parseSheetLecturer = (file: ArrayBufferLike) => {
         __rowNum__: number
     })[]
 
+    const parseDateFromCell = (colName: string, rowNum: number): dayjs.Dayjs => {
+        const cell = ws[`${colName}${rowNum + 1}`]
+        if (!cell?.v) return dayjs('')
+        
+        return cell.v instanceof Date ? dayjs(cell.v) : parseDate(String(cell.v))
+    }
+
     const data = records
         .filter((row) => Number.isInteger(Number.parseFloat(row[cols.stt] || '')))
         .map((row) => {
-            const dateOfBirth = parseDate(row[cols.dateOfBirth])
+            const dateOfBirth = parseDateFromCell(cols.dateOfBirth, row.__rowNum__)
 
             if (row[cols.dateOfBirth] && !dateOfBirth.isValid()) {
                 errors.push({

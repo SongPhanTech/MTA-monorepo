@@ -11,7 +11,7 @@ dayjs.extend(customParseFormat)
 
 // DanhSachSV_Mau2
 export const parseFixedClassesAndStudents = (file: Buffer) => {
-    const wb = read(file)
+    const wb = read(file, { cellDates: true })
 
     // start: Các tham chiếu ô cố định trong sheet
     const trainingObjectTypeRef = 'D6'
@@ -71,10 +71,17 @@ export const parseFixedClassesAndStudents = (file: Buffer) => {
             __rowNum__: number
         })[]
 
+        const parseDateFromCell = (colName: string, rowNum: number): dayjs.Dayjs => {
+            const cell = ws[`${colName}${rowNum + 1}`]
+            if (!cell?.v) return dayjs('')
+            
+            return cell.v instanceof Date ? dayjs(cell.v) : parseDate(String(cell.v))
+        }
+
         const students = data
             .filter((row) => Number.isInteger(Number.parseFloat(row[cols.stt] || '')))
             .map((row) => {
-                const dateOfBirth = parseDate(row[cols.dateOfBirth])
+                const dateOfBirth = parseDateFromCell(cols.dateOfBirth, row.__rowNum__)
 
                 if (row[cols.dateOfBirth] && !dateOfBirth.isValid()) {
                     errors.push({
@@ -153,7 +160,7 @@ function findDuplicateStudentCodes(
 }
 
 export const parseSheetHeQuanSu = (file: ArrayBufferLike) => {
-    const wb = read(file)
+    const wb = read(file, { cellDates: true })
     const sheetName = 'HEQUANSU'
     const errors: ParseSheetError[] = []
 
@@ -225,10 +232,17 @@ export const parseSheetHeQuanSu = (file: ArrayBufferLike) => {
         __rowNum__: number
     })[]
 
+    const parseDateFromCell = (colName: string, rowNum: number): dayjs.Dayjs => {
+        const cell = ws[`${colName}${rowNum + 1}`]
+        if (!cell?.v) return dayjs('')
+        
+        return cell.v instanceof Date ? dayjs(cell.v) : parseDate(String(cell.v))
+    }
+
     const students = data
         .filter((row) => Number.isInteger(Number.parseFloat(row[cols.stt] || '')))
         .map((row) => {
-            const dateOfBirth = dayjs(row[cols.dateOfBirth], 'DD/MM/YYYY').startOf('day')
+            const dateOfBirth = parseDateFromCell(cols.dateOfBirth, row.__rowNum__)
 
             if (!row[cols.code]) {
                 errors.push({
@@ -309,7 +323,7 @@ export const parseSheetHeQuanSu = (file: ArrayBufferLike) => {
 }
 
 export const parseSheetStudent = (file: ArrayBufferLike) => {
-    const wb = read(file)
+    const wb = read(file, { cellDates: true })  // Tự động convert Excel date sang JS Date
     const sheetName = 'HỌC VIÊN, SINH VIÊN'
     const errors: ParseSheetError[] = []
 
@@ -401,6 +415,15 @@ export const parseSheetStudent = (file: ArrayBufferLike) => {
         __rowNum__: number
     })[]
 
+    // Helper function to parse date from Excel cell
+    const parseDateFromCell = (colName: string, rowNum: number): dayjs.Dayjs => {
+        const cell = ws[`${colName}${rowNum + 1}`]
+        if (!cell?.v) return dayjs('')
+        
+        // cellDates: true đã convert thành Date object hoặc giữ nguyên string
+        return cell.v instanceof Date ? dayjs(cell.v) : parseDate(String(cell.v))
+    }
+
     const students = data
         .filter((row) => Number.isInteger(Number.parseFloat(row[cols.stt] || '')))
         .map((row) => {
@@ -453,7 +476,7 @@ export const parseSheetStudent = (file: ArrayBufferLike) => {
                 })
             }
 
-            const dateOfBirth = parseDate(row[cols.dateOfBirth])
+            const dateOfBirth = parseDateFromCell(cols.dateOfBirth, row.__rowNum__)
             if (row[cols.dateOfBirth] && !dateOfBirth.isValid()) {
                 errors.push({
                     sheetRef: sheetName,
