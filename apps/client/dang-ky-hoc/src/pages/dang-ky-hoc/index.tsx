@@ -4,6 +4,7 @@ import Table from '@components/commons/table'
 import TableCollapse from '@components/commons/tableCollapse'
 import DefaultLayout from '@layouts/default-layout'
 import { cn } from '@lib/utils'
+import { useMutation } from '@tanstack/react-query'
 import { $Enums } from '@workspace/db'
 import {
     classRegister,
@@ -86,7 +87,7 @@ const DanhSachMonDangKy = ({
         curriculumVersions.length > 0 ? curriculumVersions[0].id : ''
     )
 
-    const [byCurriculum, setByCurriculum] = useState(1) // 1: theo chương trình đào tạo, 0: toàn khoá
+    const [byCurriculum, setByCurriculum] = useState(1)
 
     const { data: classesInfo, refetch: refetchClassesInfo } = useGetClassesInfo({
         sessionId,
@@ -94,7 +95,31 @@ const DanhSachMonDangKy = ({
         byCurriculum: byCurriculum === 1 ? 'true' : 'false',
         isRegistered: 'false',
     })
+    const { mutateAsync: classRegisterMutate, isPending: isPendingClassRegister } = useMutation({
+        mutationFn: async (subjectClassIds: string[]) => {
+            const res = await classRegister({
+                sessionId,
+                subjectClassIds,
+                curriculumVersionId,
+            })
 
+            if (res.status !== 200) {
+                throw new Error(res.data?.message || 'Đăng ký thất bại')
+            }
+
+            return res
+        },
+
+        onSuccess: () => {
+            refetchClassesInfo()
+            refetchClassesRegisteredInfo()
+            message.success('Đăng ký thành công')
+        },
+
+        onError: (error: any) => {
+            message.error(error?.message || 'Đăng ký thất bại')
+        },
+    })
     const { data: classesRegisteredInfo, refetch: refetchClassesRegisteredInfo } =
         useGetClassesInfo({
             sessionId,
@@ -102,6 +127,10 @@ const DanhSachMonDangKy = ({
             byCurriculum: 'false',
             isRegistered: 'true',
         })
+
+    const handleClassRegister = (subjectClassIds: string[]) => {
+        classRegisterMutate(subjectClassIds)
+    }
 
     return (
         <div>
@@ -247,28 +276,14 @@ const DanhSachMonDangKy = ({
                                     (record.maxStudent || 0) <=
                                     (record._count?.classRegisterLogs || 0)
                                 const isRegisteredBool = record.subjectClassStudent?.length > 0
-                                const isDisabled = isMaxed || isRegisteredBool
+                                const isDisabled = isMaxed || isRegisteredBool || isPendingClassRegister
                                 return (
                                     <Button
                                         disabled={isDisabled}
                                         type="text"
-                                        onClick={async () => {
-                                            try {
-                                                const res = await classRegister({
-                                                    sessionId,
-                                                    subjectClassIds: [record.id],
-                                                    curriculumVersionId,
-                                                })
-                                                if (res.status !== 200) {
-                                                    throw new Error(res.data.message)
-                                                }
-                                            } catch (error) {
-                                                message.error(
-                                                    (error as any)?.message || 'Đăng ký thất bại'
-                                                )
-                                            }
-                                            refetchClassesInfo()
-                                            refetchClassesRegisteredInfo()
+                                        onClick={() => {
+                                            const subjectClassIds = [record?.id]
+                                            handleClassRegister(subjectClassIds)
                                         }}
                                         className={cn(
                                             'text-primary flex justify-center items-center gap-2 cursor-pointer',
