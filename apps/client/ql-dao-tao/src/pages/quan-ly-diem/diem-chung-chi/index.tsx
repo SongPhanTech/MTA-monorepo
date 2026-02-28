@@ -20,7 +20,7 @@ import { useCertificateScore } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { Select, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Col, Flex, Modal, message, Row, Tooltip } from 'antd'
+import { Button, Col, Flex, Input, Modal, message, Row, Tooltip } from 'antd'
 import _ from 'lodash'
 import { InfoIcon } from 'lucide-react'
 import type React from 'react'
@@ -112,27 +112,6 @@ export default function ArchivedCertificate() {
 
     const { mutateAsync: updateArchivedCertificate } = useUpdateArchivedCertificate()
     const { mutateAsync: updateManyArchivedCertificate } = useUpdateManyArchivedCertificate()
-    async function handleDelete(id: string) {
-        try {
-            showSpinner()
-            await updateArchivedCertificate({
-                where: {
-                    id,
-                },
-                data: {
-                    status: 'CANCEL',
-                },
-            })
-        } catch (error: any) {
-            if (error?.info?.message) {
-                message.error(error?.info?.message)
-                return
-            }
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        } finally {
-            hideSpinner()
-        }
-    }
 
     const where = useMemo(() => {
         const conditions: any = {
@@ -458,6 +437,18 @@ export default function ArchivedCertificate() {
                                 value={filters.certificateId}
                                 allowClear
                             />
+                            <Input
+                                className="w-full"
+                                placeholder="Tìm số quyết định"
+                                value={(filters as any).decisionNumber || ''}
+                                onChange={(e) =>
+                                    setFilters({
+                                        ...filters,
+                                        decisionNumber: e.target.value || undefined,
+                                    } as any)
+                                }
+                                allowClear
+                            />
                         </Flex>
                     </Col>
                     <Col span={8}>
@@ -658,8 +649,6 @@ export default function ArchivedCertificate() {
                             title: 'Số QĐ',
                             align: 'center',
                             width: 120,
-                            dataIndex: 'decisionNumber',
-                            type: 'input',
                             render: (__, record) => record?.decisionNumber || '-',
                         },
                         {
