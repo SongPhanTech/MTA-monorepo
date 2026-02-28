@@ -95,9 +95,14 @@ const ReviewSurveyModal = () => {
             }
 
             const response = responseMap.get(question.id)
-
             if (response) {
-                groupedMap[groupId].questions.push(response)
+                groupedMap[groupId].questions.push({
+                    ...response,
+                    name: question.name,
+                    type: question.type,
+                    specificChoice: question.specificChoice,
+                    surveyChoiceId: response.surveyChoiceId,
+                })
             }
         })
 
@@ -116,14 +121,22 @@ const ReviewSurveyModal = () => {
                     ...q,
                     isParent: false,
                     index: runningIndex,
-                    isFullWidth:
-                        q?.surveyQuestion?.type === 'ESSAY' ||
-                        q?.surveyQuestion?.type === 'SINGLE_CHOICE',
+                    type: q.type,
+                    specificChoice: q.specificChoice,
                 }
                 runningIndex++
                 return row
             })
-
+            console.log(
+                'DEBUG SPECIFIC:',
+                Object.values(groupedMap).flatMap((group: any) =>
+                    group.questions.map((q: any) => ({
+                        questionId: q.surveyQuestionId,
+                        surveyChoiceId: q.surveyChoiceId,
+                        specificChoice: q.specificChoice,
+                    }))
+                )
+            )
             return [groupRow, ...questionRows]
         })
     }, [data])
@@ -243,20 +256,15 @@ const ReviewSurveyModal = () => {
                                                             )
                                                         }
 
-                                                        // ESSAY
-                                                        if (
-                                                            record?.surveyQuestion?.type === 'ESSAY'
-                                                        ) {
+
+                                                        if (record.type === 'ESSAY') {
                                                             return (
                                                                 <div>
                                                                     <div
                                                                         dangerouslySetInnerHTML={{
-                                                                            __html: record
-                                                                                ?.surveyQuestion
-                                                                                ?.name,
+                                                                            __html: record.name,
                                                                         }}
                                                                     />
-
                                                                     <Input.TextArea
                                                                         value={record.answerText}
                                                                         readOnly
@@ -266,53 +274,10 @@ const ReviewSurveyModal = () => {
                                                             )
                                                         }
 
-                                                        // specificChoice (câu 12–13)
-                                                        if (
-                                                            record?.surveyQuestion?.specificChoice
-                                                                ?.length > 0
-                                                        ) {
-                                                            return (
-                                                                <div>
-                                                                    <div
-                                                                        dangerouslySetInnerHTML={{
-                                                                            __html: record
-                                                                                ?.surveyQuestion
-                                                                                ?.name,
-                                                                        }}
-                                                                    />
-
-                                                                    <Radio.Group
-                                                                        value={
-                                                                            record.surveyChoiceId
-                                                                        }
-                                                                        disabled
-                                                                        className="flex gap-x-6 mt-3"
-                                                                    >
-                                                                        {record.surveyQuestion.specificChoice.map(
-                                                                            (choice: any) => (
-                                                                                <Radio
-                                                                                    key={choice.id}
-                                                                                    value={
-                                                                                        choice.id
-                                                                                    }
-                                                                                >
-                                                                                    {
-                                                                                        choice.description
-                                                                                    }
-                                                                                </Radio>
-                                                                            )
-                                                                        )}
-                                                                    </Radio.Group>
-                                                                </div>
-                                                            )
-                                                        }
-
-                                                        // SINGLE_CHOICE thường (chỉ hiển thị nội dung)
                                                         return (
                                                             <div
                                                                 dangerouslySetInnerHTML={{
-                                                                    __html: record?.surveyQuestion
-                                                                        ?.name,
+                                                                    __html: record.name,
                                                                 }}
                                                             />
                                                         )
@@ -344,24 +309,57 @@ const ReviewSurveyModal = () => {
                                                                 : 1,
                                                     }),
 
-                                                    render: (_, record, index) => {
+                                                    render: (_, record: any) => {
                                                         if (record.isParent) return null
-                                                        if (
-                                                            record?.surveyQuestion?.type ===
-                                                            'SINGLE_CHOICE'
-                                                        ) {
+
+                                                        if (record.specificChoice?.length > 0) {
+                                                            const selectedSurveyChoice =
+                                                                data?.survey?.surveyChoice?.find(
+                                                                    (sc: any) =>
+                                                                        sc.id ===
+                                                                        record.surveyChoiceId
+                                                                )
+
+                                                            return (
+                                                                <Radio.Group
+                                                                    value={
+                                                                        selectedSurveyChoice?.answer
+                                                                    }
+                                                                    style={{
+                                                                        pointerEvents: 'none',
+                                                                    }}
+                                                                    className="flex flex-col gap-2"
+                                                                >
+                                                                    {record.specificChoice.map(
+                                                                        (choice: any) => (
+                                                                            <Radio
+                                                                                key={choice.id}
+                                                                                value={
+                                                                                    choice.answer
+                                                                                }
+                                                                            >
+                                                                                {choice.description}
+                                                                            </Radio>
+                                                                        )
+                                                                    )}
+                                                                </Radio.Group>
+                                                            )
+                                                        }
+
+                                                        if (record.type === 'SINGLE_CHOICE') {
                                                             return (
                                                                 <Radio.Group
                                                                     value={record.surveyChoiceId}
-                                                                    className="flex gap-x-6 mt-2"
+                                                                    className="flex justify-center gap-x-3"
                                                                 >
                                                                     {data?.survey?.surveyChoice.map(
-                                                                        (i) => (
+                                                                        (i: any) => (
                                                                             <Radio.Button
-                                                                                key={i?.id}
-                                                                                value={i?.id}
+                                                                                key={i.id}
+                                                                                value={i.id}
+                                                                                className="!rounded-md !px-3 !h-8 flex items-center"
                                                                             >
-                                                                                {i?.answer}
+                                                                                {i.answer}
                                                                             </Radio.Button>
                                                                         )
                                                                     )}
@@ -419,52 +417,76 @@ const ReviewSurveyModal = () => {
             </Col>
             <style>
                 {`
-    .custom-red-table .ant-table-thead > tr > th {
-        background: #ffe5e5 !important;
-        border: 0.5px solid red !important;
-    }
-        .custom-red-table .group-row > td {
-        background: #ffe5e5 !important;
-        font-weight: 600;
-    }
+                    .custom-red-table .ant-table-thead > tr > th {
+                        background: #fff !important;
+                        border: 0.5px solid red !important;
+                    }
+                        .custom-red-table .group-row > td {
+                        background: #fff !important;
+                        font-weight: 600;
+                    }
 
-    .custom-red-table .ant-table,
-    .custom-red-table .ant-table-container,
-    .custom-red-table .ant-table-content table,
-    .custom-red-table .ant-table-cell {
-        border: 0.5px solid red !important;
-    }
+                    .custom-red-table .ant-table,
+                    .custom-red-table .ant-table-container,
+                    .custom-red-table .ant-table-content table,
+                    .custom-red-table .ant-table-cell {
+                        border: 0.5px solid red !important;
+                    }
 
-    .custom-red-table .ant-radio-button-wrapper {
-        border: 0.5px solid red !important;
-        box-shadow: none !important;
-    }
+                    .custom-red-table .ant-radio-button-wrapper {
+                        border: 0.5px solid red !important;
+                        box-shadow: none !important;
+                    }
 
-    
-    .custom-red-table .ant-radio-button-wrapper-checked {
-        background: #ff0000 !important;
-        border-color: #ff0000 !important;
-        color: #ffffff !important;
-    }
+                    
+                    .custom-red-table .ant-radio-button-wrapper-checked {
+                        background: #ff0000 !important;
+                        border-color: #ff0000 !important;
+                        color: #ffffff !important;
+                    }
 
-    .custom-red-table .ant-radio-button-wrapper-checked::before {
-        background-color: #ff0000 !important;
-    }
+                    .custom-red-table .ant-radio-button-wrapper-checked::before {
+                        background-color: #ff0000 !important;
+                    }
 
-    .custom-red-table textarea,
-    .custom-red-table .ant-input {
-        border: 0.5px solid red !important;
-        box-shadow: none !important;
-    }
+                    .custom-red-table textarea,
+                    .custom-red-table .ant-input {
+                        border: 0.5px solid red !important;
+                        box-shadow: none !important;
+                    }
 
-    .custom-red-table textarea:focus,
-    .custom-red-table .ant-input:focus,
-    .custom-red-table .ant-input-focused {
-        border: 0.5px solid red !important;
-        box-shadow: none !important;
-        outline: none !important;
-    }
-    `}
+                    .custom-red-table textarea:focus,
+                    .custom-red-table .ant-input:focus,
+                    .custom-red-table .ant-input-focused {
+                        border: 0.5px solid red !important;
+                        box-shadow: none !important;
+                        outline: none !important;
+                    }
+                    .custom-red-table .ant-radio-wrapper {
+                        color: #000 !important;
+                    }
+
+                    .custom-red-table .ant-radio-inner {
+                        border: 1px solid red !important;
+                        background: white !important;
+                    }
+
+                    .custom-red-table .ant-radio-checked .ant-radio-inner::after {
+                        background: red !important;
+                    }
+
+                    .custom-red-table .ant-radio-button-wrapper {
+                        border: 1px solid red !important;
+                        color: red !important;
+                        background: white !important;
+                    }
+
+                    .custom-red-table .ant-radio-button-wrapper-checked {
+                        background: red !important;
+                        color: white !important;
+                        border-color: red !important;
+                    }
+                `}
             </style>
         </AntdModal>
     )

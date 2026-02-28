@@ -51,7 +51,7 @@ const ModalPrintDanhSachDoiTuong = () => {
                 }
 
                 thead th {
-                    background-color: #fff;
+                    background-color: #;
                     font-weight: bold;
                 }
 
