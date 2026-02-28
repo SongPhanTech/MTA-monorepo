@@ -179,13 +179,48 @@ export default function SemesterTrainingScore({
                 },
             ])
             if (res?.status === 200) {
-                message.success('Lưu điểm rèn luyện thành công')
+                message.success('Phê duyệt điểm rèn luyện thành công')
                 refetch()
             }
 
             hideSpinner()
         } catch (error) {
-            message.error('Lưu điểm rèn luyện thất bại')
+            message.error('Phê duyệt điểm rèn luyện thất bại')
+            hideSpinner()
+        }
+    }
+
+     const handleRejected = async () => {
+        try {
+            showSpinner()
+
+            if (selectedRowKeys?.length === 0) return
+
+            const res = await sqlTransaction([
+                {
+                    model: 'SemesterTrainingScore' as const,
+                    operation: 'updateMany',
+                    data: {
+                        where: {
+                            studentId: {
+                                in: selectedRowKeys,
+                            },
+                            semesterId,
+                        },
+                        data: {
+                            status: 'REJECTED',
+                        },
+                    },
+                },
+            ])
+            if (res?.status === 200) {
+                message.success('Từ chối điểm rèn luyện thành công')
+                refetch()
+            }
+
+            hideSpinner()
+        } catch (error) {
+            message.error('Từ chối điểm rèn luyện thất bại')
             hideSpinner()
         }
     }
@@ -304,6 +339,15 @@ export default function SemesterTrainingScore({
                         QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN,
                         'XEM_TAT_CA'
                     ) && (
+                        <>
+                         <Button
+                            type="default"
+                            className="mr-3"
+                            disabled={selectedRowKeys.length === 0}
+                            onClick={handleRejected}
+                        >
+                            Từ chối
+                        </Button>   
                         <Button
                             type="primary"
                             className="mr-3"
@@ -311,7 +355,8 @@ export default function SemesterTrainingScore({
                             onClick={handleApproved}
                         >
                             Phê duyệt
-                        </Button>
+                        </Button></>
+                       
                     )}
                     {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN, 'SUA') && (
                         <Button type="primary" onClick={handleSave}>

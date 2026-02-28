@@ -180,13 +180,48 @@ export default function SchoolYearTrainingScore({
                 },
             ])
             if (res?.status === 200) {
-                message.success('Lưu điểm rèn luyện thành công')
+                message.success('Phê duyệt điểm rèn luyện thành công')
                 refetch()
             }
 
             hideSpinner()
         } catch (error) {
-            message.error('Lưu điểm rèn luyện thất bại')
+            message.error('Phê duyệt điểm rèn luyện thất bại')
+            hideSpinner()
+        }
+    }
+
+       const handleRejected = async () => {
+        try {
+            showSpinner()
+
+            if (selectedRowKeys?.length === 0) return
+
+            const res = await sqlTransaction([
+                {
+                    model: 'SchoolYearTrainingScore' as const,
+                    operation: 'updateMany',
+                    data: {
+                        where: {
+                            studentId: {
+                                in: selectedRowKeys,
+                            },
+                            schoolYearId,
+                        },
+                        data: {
+                            status: 'REJECTED',
+                        },
+                    },
+                },
+            ])
+            if (res?.status === 200) {
+                message.success('Từ chối điểm rèn luyện thành công')
+                refetch()
+            }
+
+            hideSpinner()
+        } catch (error) {
+            message.error('Từ chối điểm rèn luyện thất bại')
             hideSpinner()
         }
     }
