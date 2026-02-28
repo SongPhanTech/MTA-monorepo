@@ -1,4 +1,4 @@
-import { DownloadOutlined, FileExcelOutlined, FileWordOutlined } from '@ant-design/icons'
+import { DownloadOutlined, FileExcelOutlined, FileWordOutlined,PrinterOutlined } from '@ant-design/icons'
 import HtmlTruncate from '@components/commons/html-truncate'
 import Table from '@components/commons/table'
 import useSpinner from '@hooks/spinner'
@@ -12,6 +12,7 @@ import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const { Title } = Typography
 
@@ -31,6 +32,9 @@ type AnswerWithPercent = AnswerItem & { percent: number; total: number }
 function SurveyToFieldReport({ selectedId }: { selectedId: string }) {
     const router = useRouter()
     const { showSpinner, hideSpinner } = useSpinner()
+    const { onOpen } = useDisclosure({
+        tag: 'ModalPrintSurveyToFieldReport',
+    })
 
     const { data: dataLevel } = useGetSurveyStatisticsToField(selectedId as string)
 
@@ -481,6 +485,17 @@ function SurveyToFieldReport({ selectedId }: { selectedId: string }) {
                                 <Dropdown
                                     menu={{
                                         items: [
+                                            {
+                                                key: 'print',
+                                                label: 'In báo cáo',
+                                                icon: <PrinterOutlined />,
+                                                onClick: () =>
+                                                    onOpen({
+                                                        surveyName: dataLevel?.data?.surveyName,
+                                                        fields: dataLevel?.data?.data,
+                                                        chartOption: dataBarchart,
+                                                    }),
+                                            },
                                             {
                                                 key: 'word',
                                                 label: 'Xuất Word',

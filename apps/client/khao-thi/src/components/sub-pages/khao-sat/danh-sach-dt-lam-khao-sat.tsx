@@ -1,4 +1,4 @@
-import { DownloadOutlined } from '@ant-design/icons'
+import { DownloadOutlined, PrinterOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilter'
 import ExportObjectInSurvey from '@components/modal/export-list-object-in-survey'
@@ -38,7 +38,9 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
         isStudent: 'all',
     })
     const router = useRouter()
-
+    const { onOpen: openPrint } = useDisclosure({
+        tag: 'ModalPrintDanhSachDoiTuong',
+    })
     const { data: fixedClasses = [] } = useFindManyFixedClass({
         where: {
             trainingCourse: {
@@ -181,6 +183,16 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
                         <Dropdown
                             menu={{
                                 items: [
+                                    {
+                                        key: 'print',
+                                        label: 'In danh sách',
+                                        icon: <PrinterOutlined />,
+                                        onClick: () =>
+                                            openPrint({
+                                                surveyName: selectedId?.name,
+                                                data: data?.data,
+                                            }),
+                                    },
                                     {
                                         key: 'word',
                                         label: 'Xuất Word',
