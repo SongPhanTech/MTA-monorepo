@@ -463,13 +463,28 @@ app.openapi(classRegister, async (c) => {
     // TODO: check subjectVersionIds, prerequisiteSubjectIds, coRequisiteSubjectIds
 
     // save the register log
-    await prisma.classRegisterLogs.createMany({
-        data: subjectClassIds.map((subjectClassId) => ({
+    const existedLogs = await prisma.classRegisterLogs.findMany({
+        where: {
+            classRegisterSessionId: sessionId,
+            studentId,
+            subjectClassId: {
+                in: subjectClassIds,
+            },
+        },
+        select: {
+            subjectClassId: true,
+        },
+    })
+
+    if (existedLogs.length === 0) {
+       await prisma.classRegisterLogs.createMany({
+        data: subjectClassIds.map((subjectClassId: string) => ({
             classRegisterSessionId: sessionId,
             studentId,
             subjectClassId,
         })),
     })
+    }
 
     // now directly register here, need to implement a job queue
     await prisma.$transaction(async (tx) => {
