@@ -35,7 +35,8 @@ export type ExportStudentAcademicActionJson200ItemStudentsItemStudentSemesterRes
     cumulativeGpaBase10: unknown
     /** @nullable */
     conductScore?: number | null
-    studentTrainingType: ExportStudentAcademicActionJson200ItemStudentsItemStudentSemesterResultStudentTrainingType
+    /** @nullable */
+    studentTrainingType?: ExportStudentAcademicActionJson200ItemStudentsItemStudentSemesterResultStudentTrainingType
     lowestFinalScore: number
     /** @nullable */
     lowestGraduationScore?: number | null

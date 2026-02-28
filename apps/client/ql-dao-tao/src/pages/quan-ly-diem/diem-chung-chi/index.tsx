@@ -555,8 +555,7 @@ export default function ArchivedCertificate() {
                             width: 120,
                             dataIndex: 'phone',
                             type: 'input',
-                            render: (__, record) =>
-                                record.student?.userProfile?.phoneNumber || '',
+                            render: (__, record) => record.student?.userProfile?.phoneNumber || '',
                         },
                         {
                             title: 'Lớp',
@@ -572,9 +571,7 @@ export default function ArchivedCertificate() {
                                 const fixedClass = record?.student?.fixedClass
                                 if (!fixedClass) return '-'
                                 return (
-                                    <Tooltip title={fixedClass?.name}>
-                                        {fixedClass?.code}
-                                    </Tooltip>
+                                    <Tooltip title={fixedClass?.name}>{fixedClass?.code}</Tooltip>
                                 )
                             },
                         },
@@ -605,8 +602,8 @@ export default function ArchivedCertificate() {
                             })),
                             render: (__, record) => {
                                 return (
-                                    record?.student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
-                                        ?.trainingField?.name || '-'
+                                    record?.student?.fixedClass?.curriculumVersion?.curriculum
+                                        ?.trainingMajor?.trainingField?.name || '-'
                                 )
                             },
                         },
@@ -622,8 +619,8 @@ export default function ArchivedCertificate() {
                             })),
                             render: (__, record) => {
                                 return (
-                                    record?.student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
-                                        ?.name || '-'
+                                    record?.student?.fixedClass?.curriculumVersion?.curriculum
+                                        ?.trainingMajor?.name || '-'
                                 )
                             },
                         },
@@ -680,7 +677,10 @@ export default function ArchivedCertificate() {
                                     REJECTED: { text: 'Từ chối', color: 'red' },
                                     CANCEL: { text: 'Đã huỷ', color: 'gray' },
                                 }
-                                const s = statusMap[record?.status] || { text: record?.status, color: 'default' }
+                                const s = statusMap[record?.status] || {
+                                    text: record?.status,
+                                    color: 'default',
+                                }
                                 return <span style={{ color: s.color }}>{s.text}</span>
                             },
                         },

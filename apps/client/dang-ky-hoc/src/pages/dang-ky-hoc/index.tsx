@@ -276,7 +276,8 @@ const DanhSachMonDangKy = ({
                                     (record.maxStudent || 0) <=
                                     (record._count?.classRegisterLogs || 0)
                                 const isRegisteredBool = record.subjectClassStudent?.length > 0
-                                const isDisabled = isMaxed || isRegisteredBool || isPendingClassRegister
+                                const isDisabled =
+                                    isMaxed || isRegisteredBool || isPendingClassRegister
                                 return (
                                     <Button
                                         disabled={isDisabled}

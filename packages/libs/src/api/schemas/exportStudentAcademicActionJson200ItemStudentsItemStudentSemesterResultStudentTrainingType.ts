@@ -5,8 +5,12 @@
  * OpenAPI spec version: 1.0.0
  */
 
+/**
+ * @nullable
+ */
 export type ExportStudentAcademicActionJson200ItemStudentsItemStudentSemesterResultStudentTrainingType =
-    (typeof ExportStudentAcademicActionJson200ItemStudentsItemStudentSemesterResultStudentTrainingType)[keyof typeof ExportStudentAcademicActionJson200ItemStudentsItemStudentSemesterResultStudentTrainingType]
+    | (typeof ExportStudentAcademicActionJson200ItemStudentsItemStudentSemesterResultStudentTrainingType)[keyof typeof ExportStudentAcademicActionJson200ItemStudentsItemStudentSemesterResultStudentTrainingType]
+    | null
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ExportStudentAcademicActionJson200ItemStudentsItemStudentSemesterResultStudentTrainingType =

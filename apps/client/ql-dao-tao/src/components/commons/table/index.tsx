@@ -504,7 +504,6 @@ export const Table = <T extends AnyObject>({
                             <Tree
                                 checkable
                                 selectable={false}
-                                
                                 multiple
                                 treeData={optionsSearch}
                                 checkedKeys={

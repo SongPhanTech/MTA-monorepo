@@ -121,7 +121,6 @@ const DiemTrungBinhKyHoc = () => {
                         name: true,
                     },
                 },
-
             },
             orderBy: [
                 { fixedClass: { code: 'desc' } },

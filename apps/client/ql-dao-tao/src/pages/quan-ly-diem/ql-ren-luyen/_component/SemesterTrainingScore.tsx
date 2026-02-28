@@ -432,8 +432,8 @@ export default function SemesterTrainingScore({
                             rowSelection={{
                                 selectedRowKeys,
                                 onChange: (selectedKeys) => setSelectedRowKeys(selectedKeys),
-                                 getCheckboxProps: (record) => ({
-                                    disabled: record.semesterTrainingScore?.length<=0 , // hoặc điều kiện bất kỳ
+                                getCheckboxProps: (record) => ({
+                                    disabled: record.semesterTrainingScore?.length <= 0, // hoặc điều kiện bất kỳ
                                 }),
                             }}
                             data={data}

@@ -162,7 +162,7 @@ export default function SchoolYearTrainingScore({
         try {
             showSpinner()
             if (selectedRowKeys?.length === 0) return
-             const res = await sqlTransaction([
+            const res = await sqlTransaction([
                 {
                     model: 'SchoolYearTrainingScore' as const,
                     operation: 'updateMany',
@@ -358,8 +358,8 @@ export default function SchoolYearTrainingScore({
                             rowSelection={{
                                 selectedRowKeys,
                                 onChange: (selectedKeys) => setSelectedRowKeys(selectedKeys),
-                                     getCheckboxProps: (record) => ({
-                                    disabled: record.schoolYearTrainingScore?.length<=0 , // hoặc điều kiện bất kỳ
+                                getCheckboxProps: (record) => ({
+                                    disabled: record.schoolYearTrainingScore?.length <= 0, // hoặc điều kiện bất kỳ
                                 }),
                             }}
                             columns={[
@@ -439,7 +439,7 @@ export default function SchoolYearTrainingScore({
                                         )
                                     },
                                 },
-                               {
+                                {
                                     title: 'Trạng thái',
                                     align: 'center',
                                     dataIndex: 'name',
