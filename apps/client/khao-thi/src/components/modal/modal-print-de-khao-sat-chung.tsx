@@ -107,7 +107,7 @@ const ModalPrintExamSurvey = () => {
             }
 
             .custom-red-table .ant-table-cell {
-            border: 2px solid red !important;
+            border: 1px solid red !important;
             }
 
         }
@@ -394,12 +394,12 @@ const ModalPrintExamSurvey = () => {
             <style>
                 {`
                     .custom-red-table .ant-table-thead > tr > th {
-                        background: #ffe5e5 !important;
+                        background: #fff !important;
                         border: 0.5px solid red !important;
                     }
 
                     .custom-red-table .group-row > td {
-                        background: #ffe5e5 !important;
+                        background: #fff !important;
                         border: 0.5px solid red !important;
                         font-weight: 700;
                     }
