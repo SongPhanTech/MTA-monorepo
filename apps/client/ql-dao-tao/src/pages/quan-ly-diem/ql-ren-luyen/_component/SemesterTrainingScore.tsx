@@ -230,8 +230,13 @@ export default function SemesterTrainingScore({
             showSpinner()
             const dataSubmit = form.getFieldsValue()
             const keys = Object.keys(dataSubmit.list)
+            const error=Object.entries(dataSubmit.list).find((i:any)=>Number(i?.score)>10)
+            if(error){
+                return
+            }
             const listCreate: any = []
             const listUpdate: any = []
+
             Object.entries(dataSubmit.list).forEach(([key, value]) => {
                 const item: any = data.find((i) => i.id === key)
                 if (item?.semesterTrainingScore?.length > 0) {

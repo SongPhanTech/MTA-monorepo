@@ -231,9 +231,14 @@ export default function SchoolYearTrainingScore({
             if (!schoolYearId) {
                 return message.error('Vui lòng chọn năm học')
             }
+          
             showSpinner()
             const dataSubmit = form.getFieldsValue()
             const keys = Object.keys(dataSubmit.list)
+               const error=Object.entries(dataSubmit.list).find((i:any)=>Number(i?.score)>10)
+            if(error){
+                return
+            }
             const listCreate: any = []
             const listUpdate: any = []
             Object.entries(dataSubmit.list).forEach(([key, value]) => {
@@ -357,18 +362,28 @@ export default function SchoolYearTrainingScore({
                     </div>
                     <Flex justify="end" align="center">
                         {can(
-                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN_THEO_NAM,
-                            'XEM_TAT_CA'
-                        ) && (
-                            <Button
-                                type="primary"
-                                className="mr-3"
-                                disabled={selectedRowKeys.length === 0}
-                                onClick={handleApproved}
-                            >
-                                Phê duyệt
-                            </Button>
-                        )}
+                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN,
+                        'XEM_TAT_CA'
+                    ) && (
+                        <>
+                         <Button
+                            type="default"
+                            className="mr-3"
+                            disabled={selectedRowKeys.length === 0}
+                            onClick={handleRejected}
+                        >
+                            Từ chối
+                        </Button>   
+                        <Button
+                            type="primary"
+                            className="mr-3"
+                            disabled={selectedRowKeys.length === 0}
+                            onClick={handleApproved}
+                        >
+                            Phê duyệt
+                        </Button></>
+                       
+                    )}
                         {can(
                             QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN_THEO_NAM,
                             'SUA'
