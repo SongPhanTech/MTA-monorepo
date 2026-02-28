@@ -525,7 +525,7 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
         })
 
         if (status === 200) {
-            saveAs(data, 'danh_sach_TTS.xlsx')
+            saveAs(data, 'danh_sach_thuc_tap.xlsx')
         }
     }
     const confirmImport = (file: File) => {
@@ -1450,8 +1450,8 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
                         )} */}
                     </Flex>
                 </Form>
-                <Col span={24} className="pt-1">
-                    <Row gutter={[16, 16]} align="middle" justify="end" className="gap-1">
+                <Col span={24} className="pt-2 ml-1">
+                    <Row gutter={[16, 16]} align="middle" justify="start" className="gap-1">
                         {selectedRowKeys.length > 0 && (
                             <p>(Đang chọn {selectedRowKeys.length} TTS)</p>
                         )}
