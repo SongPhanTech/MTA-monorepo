@@ -43,6 +43,7 @@ export type PutArchivedCertificate = {
             certificateId: string
             score?: number
             issuedBy: string
+            decisionNumber?: string
             issuedDate?: dayjs.Dayjs
             expiredDate?: dayjs.Dayjs
             documentFiles?: DocumentFile[]
@@ -244,6 +245,7 @@ const PutCertificateArchivedModal = () => {
                             finalScore: 0,
                             score: studentDataForRow.score || 0,
                             issuedBy: studentDataForRow.issuedBy || '',
+                            decisionNumber: studentDataForRow.decisionNumber || null,
                             issuedDate: studentDataForRow.issuedDate?.toDate() as Date,
                             expiredDate: studentDataForRow.expiredDate?.toDate() || null,
                             status: 'PENDING',
@@ -505,6 +507,23 @@ const PutCertificateArchivedModal = () => {
                                                 variant="underlined"
                                                 className="w-full"
                                                 placeholder="Nhập nơi cấp"
+                                            />
+                                        </FormItem>
+                                    ),
+                                },
+                                {
+                                    title: 'Số quyết định',
+                                    width: 150,
+                                    align: 'center',
+                                    render: (_, record) => (
+                                        <FormItem
+                                            form={form}
+                                            name={['student', record.rowId, 'decisionNumber']}
+                                        >
+                                            <Input
+                                                variant="underlined"
+                                                className="w-full"
+                                                placeholder="Nhập số QĐ"
                                             />
                                         </FormItem>
                                     ),

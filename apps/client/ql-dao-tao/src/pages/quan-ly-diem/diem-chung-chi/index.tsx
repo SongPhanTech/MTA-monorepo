@@ -5,11 +5,11 @@ import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import type { FixedClass, TrainingCourse } from '@workspace/db/client'
 import {
-    useCountStudent,
+    useCountArchivedCertificate,
+    useFindManyArchivedCertificate,
     useFindManyCertificate,
     useFindManyCurriculumVersion,
     useFindManyFixedClass,
-    useFindManyStudent,
     useFindManyTrainingCourse,
     useFindManyTrainingField,
     useFindManyTrainingMajor,
@@ -135,10 +135,15 @@ export default function ArchivedCertificate() {
     }
 
     const where = useMemo(() => {
-        const conditions: any = {}
+        const conditions: any = {
+            deletedAt: null,
+        }
+
+        // Điều kiện lọc theo sinh viên
+        const studentCondition: any = {}
 
         if (filters.name) {
-            conditions.userProfile = {
+            studentCondition.userProfile = {
                 fullname: {
                     contains: filters.name,
                     mode: 'insensitive' as const,
@@ -147,8 +152,8 @@ export default function ArchivedCertificate() {
         }
 
         if ((filters as any).code) {
-            conditions.userProfile = {
-                ...conditions.userProfile,
+            studentCondition.userProfile = {
+                ...studentCondition.userProfile,
                 code: {
                     contains: (filters as any).code,
                     mode: 'insensitive' as const,
@@ -157,8 +162,8 @@ export default function ArchivedCertificate() {
         }
 
         if ((filters as any).phone) {
-            conditions.userProfile = {
-                ...conditions.userProfile,
+            studentCondition.userProfile = {
+                ...studentCondition.userProfile,
                 phoneNumber: {
                     contains: (filters as any).phone,
                     mode: 'insensitive' as const,
@@ -211,49 +216,64 @@ export default function ArchivedCertificate() {
 
         if (hasValue(filters.fixedClassId)) {
             if (Array.isArray(filters.fixedClassId)) {
-                conditions.fixedClassId = { in: filters.fixedClassId }
+                studentCondition.fixedClassId = { in: filters.fixedClassId }
             } else {
-                conditions.fixedClassId = filters.fixedClassId
+                studentCondition.fixedClassId = filters.fixedClassId
             }
         }
 
         if (Object.keys(fixedClassCondition).length > 0) {
-            conditions.fixedClass = fixedClassCondition
+            studentCondition.fixedClass = fixedClassCondition
         }
 
+        if (Object.keys(studentCondition).length > 0) {
+            conditions.student = studentCondition
+        }
+
+        // Lọc theo chứng chỉ (top-level)
         if (filters.certificateId) {
-            conditions.archivedCertificate = {
-                some: {
-                    certificateId: filters.certificateId,
-                    deletedAt: null,
-                },
+            conditions.certificateId = filters.certificateId
+        }
+
+        // Lọc theo số quyết định
+        if ((filters as any).decisionNumber) {
+            conditions.decisionNumber = {
+                contains: (filters as any).decisionNumber,
+                mode: 'insensitive' as const,
             }
         }
 
         return conditions
     }, [filters, trainingObjectTypeId])
 
-    // Lấy danh sách học viên có chứng chỉ
-    const { data: dataTable = [], refetch } = useFindManyStudent({
+    // Lấy danh sách ArchivedCertificate
+    const { data: dataTable = [], refetch } = useFindManyArchivedCertificate({
         where,
         include: {
-            userProfile: {
-                include: { rank: true },
-            },
-            fixedClass: {
+            certificate: true,
+            studentSubjectScore: true,
+            documentFiles: true,
+            student: {
                 include: {
-                    trainingCourse: {
-                        include: {
-                            trainingObjectType: true,
-                        },
+                    userProfile: {
+                        include: { rank: true },
                     },
-                    curriculumVersion: {
+                    fixedClass: {
                         include: {
-                            curriculum: {
+                            trainingCourse: {
                                 include: {
-                                    trainingMajor: {
+                                    trainingObjectType: true,
+                                },
+                            },
+                            curriculumVersion: {
+                                include: {
+                                    curriculum: {
                                         include: {
-                                            trainingField: true,
+                                            trainingMajor: {
+                                                include: {
+                                                    trainingField: true,
+                                                },
+                                            },
                                         },
                                     },
                                 },
@@ -262,34 +282,10 @@ export default function ArchivedCertificate() {
                     },
                 },
             },
-            curriculumVersion: {
-                include: {
-                    curriculum: {
-                        include: {
-                            trainingMajor: {
-                                include: {
-                                    trainingField: true,
-                                },
-                            },
-                        },
-                    },
-                },
-            },
-            curriculumVersionParallel: true,
-            archivedCertificate: {
-                where: {
-                    deletedAt: null,
-                },
-                include: {
-                    certificate: true,
-                    studentSubjectScore: true,
-                },
-                orderBy: {
-                    createdAt: 'desc',
-                },
-            },
         },
-        orderBy: [{ userProfile: { firstName: 'asc' } }, { userProfile: { lastName: 'asc' } }],
+        orderBy: {
+            createdAt: 'desc',
+        },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
@@ -301,15 +297,14 @@ export default function ArchivedCertificate() {
         []
     )
 
-    const { data: count } = useCountStudent({
+    const { data: count } = useCountArchivedCertificate({
         where,
     })
 
     const rowSelection = {
         selectedRowKeys,
         getCheckboxProps: (record: any) => ({
-            // Cho phép chọn tất cả học viên có chứng chỉ
-            disabled: !record.archivedCertificate || record.archivedCertificate.length === 0,
+            disabled: record.status === 'APPROVED' || record.status === 'REJECTED',
         }),
         onChange: (newSelectedRowKeys: React.Key[]) => {
             setSelectedRowKeys(newSelectedRowKeys)
@@ -343,17 +338,10 @@ export default function ArchivedCertificate() {
     const handleApprove = async (status: 'APPROVED' | 'REJECTED') => {
         try {
             if (selectedRowKeys?.length > 0) {
-                // Lấy tất cả các chứng chỉ PENDING từ các học viên được chọn
-                const certificateIds: string[] = []
-                selectedRowKeys.forEach((studentId) => {
-                    const student = dataTable.find((s: any) => s.id === studentId)
-                    if (student?.archivedCertificate) {
-                        student.archivedCertificate.forEach((cert: any) => {
-                            if (cert.status === 'PENDING') {
-                                certificateIds.push(cert.id)
-                            }
-                        })
-                    }
+                // Các row đã chọn chính là ArchivedCertificate, lọc những cái PENDING
+                const certificateIds = (selectedRowKeys as string[]).filter((certId) => {
+                    const cert = dataTable.find((c: any) => c.id === certId)
+                    return cert?.status === 'PENDING'
                 })
 
                 if (status === 'REJECTED') {
@@ -557,7 +545,7 @@ export default function ArchivedCertificate() {
                             width: 130,
                             fixed: 'left',
                             type: 'input',
-                            render: (__, record) => record?.userProfile?.code,
+                            render: (__, record) => record?.student?.userProfile?.code,
                         },
                         {
                             title: 'Họ và tên',
@@ -567,7 +555,7 @@ export default function ArchivedCertificate() {
                             fixed: 'left',
                             type: 'input',
                             render: (__, record) => {
-                                return `${record?.userProfile?.fullname || ''}`.trim()
+                                return `${record?.student?.userProfile?.fullname || ''}`.trim()
                             },
                         },
                         {
@@ -577,9 +565,7 @@ export default function ArchivedCertificate() {
                             dataIndex: 'phone',
                             type: 'input',
                             render: (__, record) =>
-                                record.userProfile?.phoneNumber
-                                    ? record.userProfile?.phoneNumber
-                                    : '',
+                                record.student?.userProfile?.phoneNumber || '',
                         },
                         {
                             title: 'Lớp',
@@ -592,10 +578,11 @@ export default function ArchivedCertificate() {
                                 value: item.id,
                             })),
                             render: (__, record) => {
-                                if (!record.fixedClass) return '-'
+                                const fixedClass = record?.student?.fixedClass
+                                if (!fixedClass) return '-'
                                 return (
-                                    <Tooltip title={record.fixedClass?.name}>
-                                        {record.fixedClass?.code}
+                                    <Tooltip title={fixedClass?.name}>
+                                        {fixedClass?.code}
                                     </Tooltip>
                                 )
                             },
@@ -611,7 +598,7 @@ export default function ArchivedCertificate() {
                                 value: item.id,
                             })),
                             render: (__, record) => {
-                                const trainingCourse = record?.fixedClass?.trainingCourse
+                                const trainingCourse = record?.student?.fixedClass?.trainingCourse
                                 return trainingCourse ? trainingCourse?.name : '-'
                             },
                         },
@@ -627,7 +614,7 @@ export default function ArchivedCertificate() {
                             })),
                             render: (__, record) => {
                                 return (
-                                    record?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
+                                    record?.student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
                                         ?.trainingField?.name || '-'
                                 )
                             },
@@ -644,57 +631,68 @@ export default function ArchivedCertificate() {
                             })),
                             render: (__, record) => {
                                 return (
-                                    record?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
+                                    record?.student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
                                         ?.name || '-'
                                 )
                             },
                         },
                         {
-                            title: 'Tổng CC',
-                            dataIndex: 'certificateCount',
+                            title: 'Chứng chỉ',
                             align: 'center',
-                            width: 90,
-                            render: (__, record) => {
-                                return record?.archivedCertificate?.length || 0
-                            },
+                            width: 160,
+                            render: (__, record) => record?.certificate?.name || '-',
                         },
                         {
-                            title: 'CC đã duyệt',
-                            dataIndex: 'approvedCount',
+                            title: 'Điểm',
+                            align: 'center',
+                            width: 80,
+                            render: (__, record) => record?.score ?? '-',
+                        },
+                        {
+                            title: 'Nơi cấp',
+                            align: 'center',
+                            width: 120,
+                            render: (__, record) => record?.issuedBy || '-',
+                        },
+                        {
+                            title: 'Số QĐ',
+                            align: 'center',
+                            width: 120,
+                            dataIndex: 'decisionNumber',
+                            type: 'input',
+                            render: (__, record) => record?.decisionNumber || '-',
+                        },
+                        {
+                            title: 'Ngày cấp',
                             align: 'center',
                             width: 110,
-                            render: (__, record) => {
-                                return (
-                                    record?.archivedCertificate?.filter(
-                                        (cert: any) => cert.status === 'APPROVED'
-                                    )?.length || 0
-                                )
-                            },
+                            render: (__, record) =>
+                                record?.issuedDate
+                                    ? new Date(record.issuedDate).toLocaleDateString('vi-VN')
+                                    : '-',
                         },
                         {
-                            title: 'CC chờ duyệt',
-                            dataIndex: 'pendingCount',
+                            title: 'Ngày hết hạn',
                             align: 'center',
                             width: 110,
-                            render: (__, record) => {
-                                return (
-                                    record?.archivedCertificate?.filter(
-                                        (cert: any) => cert.status === 'PENDING'
-                                    )?.length || 0
-                                )
-                            },
+                            render: (__, record) =>
+                                record?.expiredDate
+                                    ? new Date(record.expiredDate).toLocaleDateString('vi-VN')
+                                    : '-',
                         },
                         {
-                            title: 'CC bị từ chối',
-                            dataIndex: 'rejectedCount',
+                            title: 'Trạng thái',
                             align: 'center',
                             width: 120,
                             render: (__, record) => {
-                                return (
-                                    record?.archivedCertificate?.filter(
-                                        (cert: any) => cert.status === 'REJECTED'
-                                    )?.length || 0
-                                )
+                                const statusMap: Record<string, { text: string; color: string }> = {
+                                    PENDING: { text: 'Chờ duyệt', color: 'orange' },
+                                    APPROVED: { text: 'Đã duyệt', color: 'green' },
+                                    REJECTED: { text: 'Từ chối', color: 'red' },
+                                    CANCEL: { text: 'Đã huỷ', color: 'gray' },
+                                }
+                                const s = statusMap[record?.status] || { text: record?.status, color: 'default' }
+                                return <span style={{ color: s.color }}>{s.text}</span>
                             },
                         },
                         {
@@ -703,16 +701,15 @@ export default function ArchivedCertificate() {
                             align: 'center',
                             fixed: 'right',
                             render: (_, record) => {
-                                const studentName =
-                                    `${record?.userProfile?.lastName || ''} ${record?.userProfile?.firstName || ''}`.trim()
+                                const studentName = record?.student?.userProfile?.fullname || ''
                                 return (
                                     <Row className="justify-center gap-2">
                                         <InfoIcon
                                             onClick={() => {
                                                 onOpenCertificateList({
-                                                    studentId: record.id,
+                                                    studentId: record.studentId,
                                                     studentName,
-                                                    certificates: record?.archivedCertificate || [],
+                                                    certificates: [record],
                                                 })
                                             }}
                                             className="text-sm text-blue-700 cursor-pointer"
