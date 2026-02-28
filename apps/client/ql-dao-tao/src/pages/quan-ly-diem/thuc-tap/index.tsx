@@ -1460,7 +1460,7 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
                             onClick={handleExportInternship}
                             icon={<TableOutlined />}
                         >
-                            Xuất DS TTS
+                            Xuất DS Thực Tập
                         </Button>
                         <Button
                             type="primary"
