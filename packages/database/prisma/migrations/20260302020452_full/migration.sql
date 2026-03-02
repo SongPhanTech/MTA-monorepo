@@ -74,10 +74,13 @@ CREATE TYPE "ql-dao-tao"."SubjectClassSchedule" AS ENUM ('MORNING', 'AFTERNOON',
 CREATE TYPE "ql-dao-tao"."PeriodType" AS ENUM ('THEORY', 'PRACTICE', 'LAB', 'SEMINAR', 'EXAM', 'MAKEUP', 'REVIEW', 'CHECK', 'WEEK');
 
 -- CreateEnum
-CREATE TYPE "ql-dao-tao"."SubjectClassType" AS ENUM ('NORMAL', 'RETAKE', 'REEXAM');
+CREATE TYPE "ql-dao-tao"."SubjectClassType" AS ENUM ('NORMAL', 'LINKED', 'REEXAM', 'RETAKE', 'STAYBACK', 'TRANSFER');
 
 -- CreateEnum
 CREATE TYPE "ql-dao-tao"."SubjectClassStatus" AS ENUM ('DRAFT', 'OFFICIAL');
+
+-- CreateEnum
+CREATE TYPE "ql-dao-tao"."ScoreCorrectionStatus" AS ENUM ('INITIALIZED', 'PENDING_APPROVAL', 'APPROVED');
 
 -- CreateEnum
 CREATE TYPE "ql-dao-tao"."TrainingObjectTypes" AS ENUM ('MILITARY', 'CIVILIAN', 'INTERNATIONAL_MILITARY');
@@ -104,7 +107,7 @@ CREATE TYPE "ql-dao-tao"."AcademicActionType" AS ENUM ('REPEAT_YEAR', 'SUSPENSIO
 CREATE TYPE "ql-dao-tao"."DecisionStatus" AS ENUM ('PENDING', 'APPROVED', 'REJECTED', 'APPEALED');
 
 -- CreateEnum
-CREATE TYPE "ql-dao-tao"."TrainingScoreStatus" AS ENUM ('PENDING', 'APPROVED');
+CREATE TYPE "ql-dao-tao"."TrainingScoreStatus" AS ENUM ('PENDING', 'APPROVED', 'REJECTED');
 
 -- CreateEnum
 CREATE TYPE "ql-dao-tao"."StudentTrainingType" AS ENUM ('EXCELLENT', 'GOOD', 'FAIR', 'MEDIUM', 'AVERAGE', 'POOR', 'VERY_POOR');
@@ -186,6 +189,9 @@ CREATE TYPE "ql-dao-tao"."RankingContext" AS ENUM ('STUDYING', 'GRADUATION');
 
 -- CreateEnum
 CREATE TYPE "ql-dao-tao"."DiplomaVerificationStatus" AS ENUM ('PENDING', 'IN_PROGRESS', 'APPROVED', 'REJECTED');
+
+-- CreateEnum
+CREATE TYPE "ql-dao-tao"."ScoreLinkStatus" AS ENUM ('PENDING', 'APPROVED', 'REJECTED');
 
 -- CreateEnum
 CREATE TYPE "ql-dao-tao"."ReminderRepeatType" AS ENUM ('NONE', 'DAILY', 'WEEKLY', 'MONTHLY', 'YEARLY');
@@ -1802,7 +1808,7 @@ CREATE TABLE "ql-dao-tao"."PlanTrainingSubject" (
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "createdBy" UUID,
     "planTrainingId" TEXT NOT NULL,
-    "trainingBlockSubjectId" TEXT NOT NULL,
+    "trainingBlockSubjectId" TEXT,
     "studentCount" INTEGER NOT NULL DEFAULT 0,
     "subjectClassType" "ql-dao-tao"."SubjectClassType" NOT NULL DEFAULT 'NORMAL',
 
@@ -1924,6 +1930,31 @@ CREATE TABLE "ql-dao-tao"."StudentResearchTopic" (
 );
 
 -- CreateTable
+CREATE TABLE "ql-dao-tao"."StudentInternship" (
+    "id" TEXT NOT NULL,
+    "code" TEXT,
+    "active" BOOLEAN NOT NULL DEFAULT true,
+    "description" TEXT,
+    "deletedAt" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createdBy" UUID,
+    "studentSubjectScoreId" TEXT NOT NULL,
+    "deadline" TIMESTAMP(3),
+    "internshipContent" TEXT,
+    "institution" TEXT,
+    "unit" TEXT,
+    "address" TEXT,
+    "supervisorId" TEXT,
+    "coSupervisorId" TEXT,
+    "startDate" TIMESTAMP(3),
+    "endDate" TIMESTAMP(3),
+    "reportDate" TIMESTAMP(3),
+
+    CONSTRAINT "StudentInternship_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "ql-dao-tao"."ArchivedCertificateOnStudentSubjectScore" (
     "id" TEXT NOT NULL,
     "code" TEXT,
@@ -1951,12 +1982,13 @@ CREATE TABLE "ql-dao-tao"."ArchivedCertificate" (
     "createdBy" UUID,
     "certificateId" TEXT NOT NULL,
     "studentId" TEXT NOT NULL,
-    "finalScore" DOUBLE PRECISION NOT NULL,
-    "score" DOUBLE PRECISION NOT NULL,
-    "issuedBy" TEXT NOT NULL,
-    "issuedDate" TIMESTAMP(3) NOT NULL,
+    "finalScore" DOUBLE PRECISION NOT NULL DEFAULT 0,
+    "score" DOUBLE PRECISION,
+    "issuedBy" TEXT,
+    "issuedDate" TIMESTAMP(3),
     "expiredDate" TIMESTAMP(3),
     "status" "ql-dao-tao"."ArchivedCertificateStatus" NOT NULL DEFAULT 'PENDING',
+    "decisionNumber" TEXT,
 
     CONSTRAINT "ArchivedCertificate_pkey" PRIMARY KEY ("id")
 );
@@ -1973,6 +2005,7 @@ CREATE TABLE "ql-dao-tao"."ArchivedAwardOnStudentSubjectScore" (
     "createdBy" UUID,
     "studentSubjectScoreId" TEXT NOT NULL,
     "archivedAwardId" TEXT NOT NULL,
+    "status" "ql-dao-tao"."ArchivedCertificateStatus" NOT NULL DEFAULT 'PENDING',
 
     CONSTRAINT "ArchivedAwardOnStudentSubjectScore_pkey" PRIMARY KEY ("id")
 );
@@ -2101,6 +2134,7 @@ CREATE TABLE "ql-dao-tao"."TrainingCourse" (
     "coef_2" DOUBLE PRECISION NOT NULL DEFAULT 0.3,
     "coef_3" DOUBLE PRECISION NOT NULL DEFAULT 0.6,
     "scoreToTakeExam" DOUBLE PRECISION NOT NULL DEFAULT 5,
+    "examScoreToPass" DOUBLE PRECISION NOT NULL DEFAULT 5,
     "scoreToPass" DOUBLE PRECISION NOT NULL DEFAULT 5,
     "scoreToPassConditional" DOUBLE PRECISION NOT NULL DEFAULT 5,
     "scoreToTakeGraduation" DOUBLE PRECISION NOT NULL DEFAULT 5,
@@ -2151,6 +2185,7 @@ CREATE TABLE "ql-dao-tao"."FixedClass" (
     "lecturerManagementId" TEXT,
     "staffManagementId" TEXT,
     "curriculumVersionId" TEXT,
+    "planTrainingSubjectId" TEXT,
 
     CONSTRAINT "FixedClass_pkey" PRIMARY KEY ("id")
 );
@@ -2255,13 +2290,13 @@ CREATE TABLE "ql-dao-tao"."SubjectVersionCategory" (
 -- CreateTable
 CREATE TABLE "ql-dao-tao"."SubjectVersion" (
     "id" TEXT NOT NULL,
+    "code" TEXT,
     "active" BOOLEAN NOT NULL DEFAULT true,
     "description" TEXT,
     "deletedAt" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "createdBy" UUID,
-    "code" TEXT,
     "isLocked" BOOLEAN NOT NULL DEFAULT false,
     "name" TEXT NOT NULL,
     "codeTkb" TEXT,
@@ -2466,6 +2501,7 @@ CREATE TABLE "ql-dao-tao"."SubjectClass" (
     "lecturerId" TEXT,
     "extraLecturerId" TEXT,
     "enterGradeLecturerId" TEXT,
+    "scoreLinkSubjectVersionId" TEXT,
 
     CONSTRAINT "SubjectClass_pkey" PRIMARY KEY ("id")
 );
@@ -2538,6 +2574,49 @@ CREATE TABLE "ql-dao-tao"."ClassSchedule" (
     "cancelReason" TEXT,
 
     CONSTRAINT "ClassSchedule_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "ql-dao-tao"."ScoreCorrectionTicket" (
+    "id" TEXT NOT NULL,
+    "code" TEXT,
+    "active" BOOLEAN NOT NULL DEFAULT true,
+    "description" TEXT,
+    "deletedAt" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createdBy" UUID,
+    "trainingObjectTypeId" TEXT NOT NULL,
+    "number" INTEGER NOT NULL DEFAULT 0,
+    "proposal" TEXT,
+    "decision" TEXT,
+    "date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deadline" TIMESTAMP(3),
+    "status" "ql-dao-tao"."ScoreCorrectionStatus" NOT NULL DEFAULT 'INITIALIZED',
+
+    CONSTRAINT "ScoreCorrectionTicket_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "ql-dao-tao"."ScoreCorrectionItem" (
+    "id" TEXT NOT NULL,
+    "code" TEXT,
+    "active" BOOLEAN NOT NULL DEFAULT true,
+    "description" TEXT,
+    "deletedAt" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createdBy" UUID,
+    "ticketId" TEXT NOT NULL,
+    "studentSubjectScoreId" TEXT NOT NULL,
+    "newAttendanceScore" DOUBLE PRECISION,
+    "newMidtermScore" DOUBLE PRECISION,
+    "newExamScore" DOUBLE PRECISION,
+    "oldAttendanceScore" DOUBLE PRECISION,
+    "oldMidtermScore" DOUBLE PRECISION,
+    "oldExamScore" DOUBLE PRECISION,
+
+    CONSTRAINT "ScoreCorrectionItem_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -2814,6 +2893,7 @@ CREATE TABLE "ql-dao-tao"."Certificate" (
     "name" TEXT NOT NULL,
     "englishName" TEXT,
     "outputStandardId" TEXT,
+    "isUsingScore" BOOLEAN NOT NULL DEFAULT true,
 
     CONSTRAINT "Certificate_pkey" PRIMARY KEY ("id")
 );
@@ -2997,13 +3077,13 @@ CREATE TABLE "ql-dao-tao"."Student" (
 -- CreateTable
 CREATE TABLE "ql-dao-tao"."StudentSemesterResult" (
     "id" TEXT NOT NULL,
+    "code" TEXT,
     "active" BOOLEAN NOT NULL DEFAULT true,
     "description" TEXT,
     "deletedAt" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "createdBy" UUID,
-    "code" TEXT NOT NULL,
     "studentId" TEXT NOT NULL,
     "semesterId" TEXT NOT NULL,
     "studyYear" INTEGER NOT NULL,
@@ -3015,13 +3095,14 @@ CREATE TABLE "ql-dao-tao"."StudentSemesterResult" (
     "gpaBase10" DECIMAL(5,2) NOT NULL,
     "cumulativeGpaBase10" DECIMAL(5,2) NOT NULL,
     "conductScore" DOUBLE PRECISION,
-    "studentTrainingType" "ql-dao-tao"."StudentTrainingType" NOT NULL,
+    "studentTrainingType" "ql-dao-tao"."StudentTrainingType",
     "rankId" TEXT,
     "lowestFinalScore" DOUBLE PRECISION NOT NULL,
     "lowestGraduationScore" DOUBLE PRECISION,
     "totalCredits" INTEGER NOT NULL,
     "registeredCredits" INTEGER NOT NULL,
-    "retakingCredits" INTEGER NOT NULL,
+    "retakingCredits" INTEGER NOT NULL DEFAULT 0,
+    "reExamCredits" INTEGER NOT NULL DEFAULT 0,
     "passedCredits" INTEGER NOT NULL,
     "failedCredits" INTEGER NOT NULL,
     "accumulatedCredits" INTEGER NOT NULL,
@@ -3044,13 +3125,13 @@ CREATE TABLE "ql-dao-tao"."StudentSemesterResult" (
 -- CreateTable
 CREATE TABLE "ql-dao-tao"."StudentYearResult" (
     "id" TEXT NOT NULL,
+    "code" TEXT,
     "active" BOOLEAN NOT NULL DEFAULT true,
     "description" TEXT,
     "deletedAt" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "createdBy" UUID,
-    "code" TEXT NOT NULL,
     "studentId" TEXT NOT NULL,
     "schoolYearId" TEXT NOT NULL,
     "studyYear" INTEGER NOT NULL,
@@ -3061,9 +3142,13 @@ CREATE TABLE "ql-dao-tao"."StudentYearResult" (
     "gpaBase10" DECIMAL(5,2) NOT NULL,
     "cumulativeGpaBase10" DECIMAL(5,2) NOT NULL,
     "conductScore" DOUBLE PRECISION,
-    "studentTrainingType" "ql-dao-tao"."StudentTrainingType" NOT NULL,
+    "studentTrainingType" "ql-dao-tao"."StudentTrainingType",
     "rankId" TEXT,
+    "lowestFinalScore" DOUBLE PRECISION,
+    "lowestGraduationScore" DOUBLE PRECISION,
     "totalCredits" INTEGER NOT NULL,
+    "retakingCredits" INTEGER NOT NULL DEFAULT 0,
+    "reExamCredits" INTEGER NOT NULL DEFAULT 0,
     "failedCredits" INTEGER NOT NULL,
     "isClassMonitor" BOOLEAN NOT NULL,
     "isUnionLeader" BOOLEAN NOT NULL,
@@ -3128,6 +3213,8 @@ CREATE TABLE "ql-danh-muc"."DocumentFile" (
     "diplomaVerificationBackId" TEXT,
     "trainingFieldId" TEXT,
     "studentScoreConvertId" TEXT,
+    "scoreLinkSheetId" TEXT,
+    "examFrameworkId" TEXT,
     "noteId" TEXT,
     "evaluationPeriodId" TEXT,
     "knowledgeBlockId" TEXT,
@@ -3248,6 +3335,42 @@ CREATE TABLE "ql-dao-tao"."StudentTrainingScore" (
     "status" "ql-dao-tao"."TrainingScoreStatus" NOT NULL DEFAULT 'PENDING',
 
     CONSTRAINT "StudentTrainingScore_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "ql-dao-tao"."SemesterTrainingScore" (
+    "id" TEXT NOT NULL,
+    "code" TEXT,
+    "active" BOOLEAN NOT NULL DEFAULT true,
+    "description" TEXT,
+    "deletedAt" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createdBy" UUID,
+    "semesterId" TEXT NOT NULL,
+    "studentId" TEXT NOT NULL,
+    "score" INTEGER,
+    "status" "ql-dao-tao"."TrainingScoreStatus" NOT NULL DEFAULT 'PENDING',
+
+    CONSTRAINT "SemesterTrainingScore_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "ql-dao-tao"."SchoolYearTrainingScore" (
+    "id" TEXT NOT NULL,
+    "code" TEXT,
+    "active" BOOLEAN NOT NULL DEFAULT true,
+    "description" TEXT,
+    "deletedAt" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createdBy" UUID,
+    "schoolYearId" TEXT NOT NULL,
+    "studentId" TEXT NOT NULL,
+    "score" INTEGER,
+    "status" "ql-dao-tao"."TrainingScoreStatus" NOT NULL DEFAULT 'PENDING',
+
+    CONSTRAINT "SchoolYearTrainingScore_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -3438,12 +3561,22 @@ CREATE TABLE "ql-dao-tao"."ThesisProject" (
     "status" "ql-dao-tao"."ThesisProjectStatus" NOT NULL DEFAULT 'PROPOSED',
     "language" TEXT,
     "type" TEXT,
+    "firstCheckProgress" INTEGER,
+    "secondCheckProgress" INTEGER,
+    "isEligibleForDefense" BOOLEAN NOT NULL DEFAULT true,
     "subjectClassId" TEXT,
     "thesisSessionId" TEXT,
+    "supervisorName" TEXT,
     "supervisorId" TEXT,
     "supervisorPaymentId" TEXT,
+    "coSupervisorName" TEXT,
     "coSupervisorId" TEXT,
     "coSupervisorPaymentId" TEXT,
+    "CHUTICH" TEXT,
+    "THUKY" TEXT,
+    "PHANBIEN1" TEXT,
+    "PHANBIEN2" TEXT,
+    "UYVIEN3" TEXT,
     "organizationId" UUID,
     "maxStudents" INTEGER,
     "councilId" TEXT,
@@ -3729,6 +3862,22 @@ CREATE TABLE "khao-thi"."EvaluationPeriod" (
 );
 
 -- CreateTable
+CREATE TABLE "khao-thi"."EvaluationStandardSet" (
+    "id" TEXT NOT NULL,
+    "code" TEXT,
+    "active" BOOLEAN NOT NULL DEFAULT true,
+    "description" TEXT,
+    "deletedAt" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createdBy" UUID,
+    "name" TEXT NOT NULL,
+    "objectType" "khao-thi"."StandardCatalogType" NOT NULL,
+
+    CONSTRAINT "EvaluationStandardSet_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "khao-thi"."StandardCatalog" (
     "id" TEXT NOT NULL,
     "code" TEXT,
@@ -3740,6 +3889,7 @@ CREATE TABLE "khao-thi"."StandardCatalog" (
     "createdBy" UUID,
     "order" INTEGER NOT NULL,
     "name" TEXT NOT NULL,
+    "standardSetId" TEXT,
     "objectType" "khao-thi"."StandardCatalogType" NOT NULL,
 
     CONSTRAINT "StandardCatalog_pkey" PRIMARY KEY ("id")
@@ -3976,7 +4126,8 @@ CREATE TABLE "khao-thi"."EvaluationCouncilMember" (
     "createdBy" UUID,
     "evaluationCouncilId" TEXT NOT NULL,
     "lecturerId" TEXT NOT NULL,
-    "role" "khao-thi"."EvaluationMemberRole"[],
+    "groupName" TEXT,
+    "role" "khao-thi"."EvaluationMemberRole",
 
     CONSTRAINT "EvaluationCouncilMember_pkey" PRIMARY KEY ("id")
 );
@@ -4060,7 +4211,6 @@ CREATE TABLE "khao-thi"."ClusterSurvey" (
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "createdBy" UUID,
     "name" TEXT NOT NULL,
-    "additionalSuggestion" BOOLEAN NOT NULL,
     "startDate" TIMESTAMP(3) NOT NULL,
     "endDate" TIMESTAMP(3),
     "isPublic" BOOLEAN NOT NULL DEFAULT false,
@@ -4089,7 +4239,7 @@ CREATE TABLE "khao-thi"."Survey" (
     "subjectClassId" TEXT,
     "semesterId" TEXT,
     "surveyTopicId" TEXT NOT NULL,
-    "additionalSuggestion" BOOLEAN NOT NULL,
+    "trainingObjectTypeId" TEXT,
     "clusterSurveyId" TEXT,
 
     CONSTRAINT "Survey_pkey" PRIMARY KEY ("id")
@@ -4156,7 +4306,6 @@ CREATE TABLE "khao-thi"."SurveySession" (
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "createdBy" UUID,
     "surveyId" TEXT NOT NULL,
-    "additionalSuggestion" TEXT,
     "profileId" UUID,
     "studentId" TEXT,
     "startedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -4352,6 +4501,8 @@ CREATE TABLE "khao-thi"."ExamBank" (
     "examType" "ql-dao-tao"."ExamType",
     "examMatrixId" TEXT,
     "isLock" BOOLEAN DEFAULT false,
+    "isNote" BOOLEAN DEFAULT false,
+    "isGroup" BOOLEAN DEFAULT true,
 
     CONSTRAINT "ExamBank_pkey" PRIMARY KEY ("id")
 );
@@ -4811,6 +4962,59 @@ CREATE TABLE "ql-dao-tao"."DiplomaVerificationApplication" (
     "studentId" TEXT,
 
     CONSTRAINT "DiplomaVerificationApplication_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "ql-dao-tao"."ScoreLinkSheet" (
+    "id" TEXT NOT NULL,
+    "code" TEXT,
+    "active" BOOLEAN NOT NULL DEFAULT true,
+    "description" TEXT,
+    "deletedAt" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createdBy" UUID,
+    "trainingObjectTypeId" TEXT NOT NULL,
+    "note" TEXT,
+    "decision" TEXT,
+    "fixedClassId" TEXT NOT NULL,
+    "semesterId" TEXT NOT NULL,
+    "status" "ql-dao-tao"."ScoreLinkStatus" NOT NULL DEFAULT 'PENDING',
+
+    CONSTRAINT "ScoreLinkSheet_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "ql-dao-tao"."ScoreLinkSubjectVersion" (
+    "id" TEXT NOT NULL,
+    "code" TEXT,
+    "active" BOOLEAN NOT NULL DEFAULT true,
+    "description" TEXT,
+    "deletedAt" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createdBy" UUID,
+    "scoreLinkSheetId" TEXT NOT NULL,
+    "subjectVersionId" TEXT NOT NULL,
+
+    CONSTRAINT "ScoreLinkSubjectVersion_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "ql-dao-tao"."ScoreLinkStudent" (
+    "id" TEXT NOT NULL,
+    "code" TEXT,
+    "active" BOOLEAN NOT NULL DEFAULT true,
+    "description" TEXT,
+    "deletedAt" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createdBy" UUID,
+    "scoreLinkSubjectVersionId" TEXT NOT NULL,
+    "studentId" TEXT NOT NULL,
+    "score" DOUBLE PRECISION NOT NULL,
+
+    CONSTRAINT "ScoreLinkStudent_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -5612,6 +5816,14 @@ CREATE TABLE "ql-dao-tao"."_ExpertProfileToSubjectClass" (
 );
 
 -- CreateTable
+CREATE TABLE "khao-thi"."_EvaluationCriterionLecturerReview" (
+    "A" TEXT NOT NULL,
+    "B" TEXT NOT NULL,
+
+    CONSTRAINT "_EvaluationCriterionLecturerReview_AB_pkey" PRIMARY KEY ("A","B")
+);
+
+-- CreateTable
 CREATE TABLE "khao-thi"."_SurveyObjectTypeToTrainingField" (
     "A" TEXT NOT NULL,
     "B" TEXT NOT NULL,
@@ -5961,6 +6173,12 @@ CREATE UNIQUE INDEX "StudentResearchTopic_code_key" ON "ql-dao-tao"."StudentRese
 CREATE UNIQUE INDEX "StudentResearchTopic_studentSubjectScoreId_key" ON "ql-dao-tao"."StudentResearchTopic"("studentSubjectScoreId");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "StudentInternship_code_key" ON "ql-dao-tao"."StudentInternship"("code");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "StudentInternship_studentSubjectScoreId_key" ON "ql-dao-tao"."StudentInternship"("studentSubjectScoreId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "ArchivedCertificateOnStudentSubjectScore_code_key" ON "ql-dao-tao"."ArchivedCertificateOnStudentSubjectScore"("code");
 
 -- CreateIndex
@@ -6021,6 +6239,15 @@ CREATE UNIQUE INDEX "Subject_englishName_key" ON "ql-dao-tao"."Subject"("english
 CREATE UNIQUE INDEX "SubjectVersionCategory_code_key" ON "ql-dao-tao"."SubjectVersionCategory"("code");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "SubjectVersion_code_key" ON "ql-dao-tao"."SubjectVersion"("code");
+
+-- CreateIndex
+CREATE INDEX "SubjectVersion_name_trainingObjectTypeId_idx" ON "ql-dao-tao"."SubjectVersion"("name", "trainingObjectTypeId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "SubjectVersion_trainingObjectTypeId_name_credit_period_mana_key" ON "ql-dao-tao"."SubjectVersion"("trainingObjectTypeId", "name", "credit", "period", "managementOrganizationId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "SubjectVersionHistory_code_key" ON "ql-dao-tao"."SubjectVersionHistory"("code");
 
 -- CreateIndex
@@ -6045,6 +6272,9 @@ CREATE UNIQUE INDEX "ClassRegisterSession_code_key" ON "ql-dao-tao"."ClassRegist
 CREATE UNIQUE INDEX "ClassRegisterLogs_code_key" ON "ql-dao-tao"."ClassRegisterLogs"("code");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "SubjectClass_scoreLinkSubjectVersionId_key" ON "ql-dao-tao"."SubjectClass"("scoreLinkSubjectVersionId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "SubjectClassHistory_code_key" ON "ql-dao-tao"."SubjectClassHistory"("code");
 
 -- CreateIndex
@@ -6055,6 +6285,15 @@ CREATE UNIQUE INDEX "ClassSchedule_code_key" ON "ql-dao-tao"."ClassSchedule"("co
 
 -- CreateIndex
 CREATE UNIQUE INDEX "ClassSchedule_originalScheduleId_key" ON "ql-dao-tao"."ClassSchedule"("originalScheduleId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ScoreCorrectionTicket_code_key" ON "ql-dao-tao"."ScoreCorrectionTicket"("code");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ScoreCorrectionItem_code_key" ON "ql-dao-tao"."ScoreCorrectionItem"("code");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ScoreCorrectionItem_ticketId_studentSubjectScoreId_key" ON "ql-dao-tao"."ScoreCorrectionItem"("ticketId", "studentSubjectScoreId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "TrainingObjectType_code_key" ON "ql-dao-tao"."TrainingObjectType"("code");
@@ -6162,13 +6401,13 @@ CREATE UNIQUE INDEX "OutputStandardOnCurriculum_outputStandardId_curriculumVersi
 CREATE UNIQUE INDEX "Student_code_key" ON "ql-dao-tao"."Student"("code");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Student_registerNumber_key" ON "ql-dao-tao"."Student"("registerNumber");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Student_doctoralCode_key" ON "ql-dao-tao"."Student"("doctoralCode");
+CREATE UNIQUE INDEX "StudentSemesterResult_code_key" ON "ql-dao-tao"."StudentSemesterResult"("code");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "StudentSemesterResult_studentId_semesterId_key" ON "ql-dao-tao"."StudentSemesterResult"("studentId", "semesterId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "StudentYearResult_code_key" ON "ql-dao-tao"."StudentYearResult"("code");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "StudentYearResult_studentId_schoolYearId_key" ON "ql-dao-tao"."StudentYearResult"("studentId", "schoolYearId");
@@ -6220,6 +6459,12 @@ CREATE UNIQUE INDEX "StudentTrainingScore_code_key" ON "ql-dao-tao"."StudentTrai
 
 -- CreateIndex
 CREATE UNIQUE INDEX "StudentTrainingScore_trainingScoreSessionId_studentId_key" ON "ql-dao-tao"."StudentTrainingScore"("trainingScoreSessionId", "studentId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "SemesterTrainingScore_code_key" ON "ql-dao-tao"."SemesterTrainingScore"("code");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "SchoolYearTrainingScore_code_key" ON "ql-dao-tao"."SchoolYearTrainingScore"("code");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "LecturerType_code_key" ON "ql-danh-muc"."LecturerType"("code");
@@ -6331,6 +6576,12 @@ CREATE UNIQUE INDEX "SupervisorPaymentRecord_code_key" ON "ql-dao-tao"."Supervis
 
 -- CreateIndex
 CREATE UNIQUE INDEX "EvaluationPeriod_code_key" ON "khao-thi"."EvaluationPeriod"("code");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "EvaluationStandardSet_code_key" ON "khao-thi"."EvaluationStandardSet"("code");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "EvaluationStandardSet_name_key" ON "khao-thi"."EvaluationStandardSet"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "StandardCatalog_code_key" ON "khao-thi"."StandardCatalog"("code");
@@ -6589,6 +6840,21 @@ CREATE UNIQUE INDEX "RankingCondition_code_key" ON "ql-dao-tao"."RankingConditio
 
 -- CreateIndex
 CREATE UNIQUE INDEX "DiplomaVerificationApplication_code_key" ON "ql-dao-tao"."DiplomaVerificationApplication"("code");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ScoreLinkSheet_code_key" ON "ql-dao-tao"."ScoreLinkSheet"("code");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ScoreLinkSubjectVersion_code_key" ON "ql-dao-tao"."ScoreLinkSubjectVersion"("code");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ScoreLinkSubjectVersion_scoreLinkSheetId_subjectVersionId_key" ON "ql-dao-tao"."ScoreLinkSubjectVersion"("scoreLinkSheetId", "subjectVersionId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ScoreLinkStudent_code_key" ON "ql-dao-tao"."ScoreLinkStudent"("code");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ScoreLinkStudent_scoreLinkSubjectVersionId_studentId_key" ON "ql-dao-tao"."ScoreLinkStudent"("scoreLinkSubjectVersionId", "studentId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Note_code_key" ON "ql-dao-tao"."Note"("code");
@@ -6868,6 +7134,9 @@ CREATE INDEX "_ExpertProfileToTrainingMajor_B_index" ON "ql-dao-tao"."_ExpertPro
 
 -- CreateIndex
 CREATE INDEX "_ExpertProfileToSubjectClass_B_index" ON "ql-dao-tao"."_ExpertProfileToSubjectClass"("B");
+
+-- CreateIndex
+CREATE INDEX "_EvaluationCriterionLecturerReview_B_index" ON "khao-thi"."_EvaluationCriterionLecturerReview"("B");
 
 -- CreateIndex
 CREATE INDEX "_SurveyObjectTypeToTrainingField_B_index" ON "khao-thi"."_SurveyObjectTypeToTrainingField"("B");
@@ -7284,7 +7553,7 @@ ALTER TABLE "ql-dao-tao"."PlanTraining" ADD CONSTRAINT "PlanTraining_trainingCou
 ALTER TABLE "ql-dao-tao"."PlanTrainingSubject" ADD CONSTRAINT "PlanTrainingSubject_planTrainingId_fkey" FOREIGN KEY ("planTrainingId") REFERENCES "ql-dao-tao"."PlanTraining"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ql-dao-tao"."PlanTrainingSubject" ADD CONSTRAINT "PlanTrainingSubject_trainingBlockSubjectId_fkey" FOREIGN KEY ("trainingBlockSubjectId") REFERENCES "ql-dao-tao"."TrainingBlockSubject"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "ql-dao-tao"."PlanTrainingSubject" ADD CONSTRAINT "PlanTrainingSubject_trainingBlockSubjectId_fkey" FOREIGN KEY ("trainingBlockSubjectId") REFERENCES "ql-dao-tao"."TrainingBlockSubject"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "ql-dao-tao"."StudentScoreConvert" ADD CONSTRAINT "StudentScoreConvert_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "ql-dao-tao"."Student"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -7314,10 +7583,19 @@ ALTER TABLE "ql-dao-tao"."StudentSubjectScoreHistory" ADD CONSTRAINT "StudentSub
 ALTER TABLE "ql-dao-tao"."StudentResearchTopic" ADD CONSTRAINT "StudentResearchTopic_studentSubjectScoreId_fkey" FOREIGN KEY ("studentSubjectScoreId") REFERENCES "ql-dao-tao"."StudentSubjectScore"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ql-dao-tao"."StudentResearchTopic" ADD CONSTRAINT "StudentResearchTopic_supervisorId_fkey" FOREIGN KEY ("supervisorId") REFERENCES "ql-dao-tao"."Lecturer"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "ql-dao-tao"."StudentResearchTopic" ADD CONSTRAINT "StudentResearchTopic_supervisorId_fkey" FOREIGN KEY ("supervisorId") REFERENCES "ql-dao-tao"."ExpertProfile"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ql-dao-tao"."StudentResearchTopic" ADD CONSTRAINT "StudentResearchTopic_coSupervisorId_fkey" FOREIGN KEY ("coSupervisorId") REFERENCES "ql-dao-tao"."Lecturer"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "ql-dao-tao"."StudentResearchTopic" ADD CONSTRAINT "StudentResearchTopic_coSupervisorId_fkey" FOREIGN KEY ("coSupervisorId") REFERENCES "ql-dao-tao"."ExpertProfile"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ql-dao-tao"."StudentInternship" ADD CONSTRAINT "StudentInternship_studentSubjectScoreId_fkey" FOREIGN KEY ("studentSubjectScoreId") REFERENCES "ql-dao-tao"."StudentSubjectScore"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ql-dao-tao"."StudentInternship" ADD CONSTRAINT "StudentInternship_supervisorId_fkey" FOREIGN KEY ("supervisorId") REFERENCES "ql-dao-tao"."ExpertProfile"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ql-dao-tao"."StudentInternship" ADD CONSTRAINT "StudentInternship_coSupervisorId_fkey" FOREIGN KEY ("coSupervisorId") REFERENCES "ql-dao-tao"."ExpertProfile"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "ql-dao-tao"."ArchivedCertificateOnStudentSubjectScore" ADD CONSTRAINT "ArchivedCertificateOnStudentSubjectScore_studentSubjectSco_fkey" FOREIGN KEY ("studentSubjectScoreId") REFERENCES "ql-dao-tao"."StudentSubjectScore"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -7381,6 +7659,9 @@ ALTER TABLE "ql-dao-tao"."FixedClass" ADD CONSTRAINT "FixedClass_staffManagement
 
 -- AddForeignKey
 ALTER TABLE "ql-dao-tao"."FixedClass" ADD CONSTRAINT "FixedClass_curriculumVersionId_fkey" FOREIGN KEY ("curriculumVersionId") REFERENCES "ql-dao-tao"."CurriculumVersion"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ql-dao-tao"."FixedClass" ADD CONSTRAINT "FixedClass_planTrainingSubjectId_fkey" FOREIGN KEY ("planTrainingSubjectId") REFERENCES "ql-dao-tao"."PlanTrainingSubject"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "ql-dao-tao"."Curriculum" ADD CONSTRAINT "Curriculum_managementOrganizationId_fkey" FOREIGN KEY ("managementOrganizationId") REFERENCES "mta"."DM_DonVi"("Id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -7491,6 +7772,9 @@ ALTER TABLE "ql-dao-tao"."SubjectClass" ADD CONSTRAINT "SubjectClass_extraLectur
 ALTER TABLE "ql-dao-tao"."SubjectClass" ADD CONSTRAINT "SubjectClass_enterGradeLecturerId_fkey" FOREIGN KEY ("enterGradeLecturerId") REFERENCES "ql-dao-tao"."Lecturer"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "ql-dao-tao"."SubjectClass" ADD CONSTRAINT "SubjectClass_scoreLinkSubjectVersionId_fkey" FOREIGN KEY ("scoreLinkSubjectVersionId") REFERENCES "ql-dao-tao"."ScoreLinkSubjectVersion"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "ql-dao-tao"."SubjectClassHistory" ADD CONSTRAINT "SubjectClassHistory_subjectClassId_fkey" FOREIGN KEY ("subjectClassId") REFERENCES "ql-dao-tao"."SubjectClass"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -7513,6 +7797,15 @@ ALTER TABLE "ql-dao-tao"."ClassSchedule" ADD CONSTRAINT "ClassSchedule_extraLect
 
 -- AddForeignKey
 ALTER TABLE "ql-dao-tao"."ClassSchedule" ADD CONSTRAINT "ClassSchedule_originalScheduleId_fkey" FOREIGN KEY ("originalScheduleId") REFERENCES "ql-dao-tao"."ClassSchedule"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ql-dao-tao"."ScoreCorrectionTicket" ADD CONSTRAINT "ScoreCorrectionTicket_trainingObjectTypeId_fkey" FOREIGN KEY ("trainingObjectTypeId") REFERENCES "ql-dao-tao"."TrainingObjectType"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ql-dao-tao"."ScoreCorrectionItem" ADD CONSTRAINT "ScoreCorrectionItem_ticketId_fkey" FOREIGN KEY ("ticketId") REFERENCES "ql-dao-tao"."ScoreCorrectionTicket"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ql-dao-tao"."ScoreCorrectionItem" ADD CONSTRAINT "ScoreCorrectionItem_studentSubjectScoreId_fkey" FOREIGN KEY ("studentSubjectScoreId") REFERENCES "ql-dao-tao"."StudentSubjectScore"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "ql-dao-tao"."TrainingObjectType" ADD CONSTRAINT "TrainingObjectType_trainingFormId_fkey" FOREIGN KEY ("trainingFormId") REFERENCES "ql-dao-tao"."TrainingForm"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -7680,6 +7973,12 @@ ALTER TABLE "ql-danh-muc"."DocumentFile" ADD CONSTRAINT "DocumentFile_trainingFi
 ALTER TABLE "ql-danh-muc"."DocumentFile" ADD CONSTRAINT "DocumentFile_studentScoreConvertId_fkey" FOREIGN KEY ("studentScoreConvertId") REFERENCES "ql-dao-tao"."StudentScoreConvert"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "ql-danh-muc"."DocumentFile" ADD CONSTRAINT "DocumentFile_scoreLinkSheetId_fkey" FOREIGN KEY ("scoreLinkSheetId") REFERENCES "ql-dao-tao"."ScoreLinkSheet"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ql-danh-muc"."DocumentFile" ADD CONSTRAINT "DocumentFile_examFrameworkId_fkey" FOREIGN KEY ("examFrameworkId") REFERENCES "khao-thi"."ExamFramework"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "ql-danh-muc"."DocumentFile" ADD CONSTRAINT "DocumentFile_noteId_fkey" FOREIGN KEY ("noteId") REFERENCES "ql-dao-tao"."Note"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -7720,6 +8019,18 @@ ALTER TABLE "ql-dao-tao"."StudentTrainingScore" ADD CONSTRAINT "StudentTrainingS
 
 -- AddForeignKey
 ALTER TABLE "ql-dao-tao"."StudentTrainingScore" ADD CONSTRAINT "StudentTrainingScore_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "ql-dao-tao"."Student"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ql-dao-tao"."SemesterTrainingScore" ADD CONSTRAINT "SemesterTrainingScore_semesterId_fkey" FOREIGN KEY ("semesterId") REFERENCES "ql-dao-tao"."Semester"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ql-dao-tao"."SemesterTrainingScore" ADD CONSTRAINT "SemesterTrainingScore_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "ql-dao-tao"."Student"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ql-dao-tao"."SchoolYearTrainingScore" ADD CONSTRAINT "SchoolYearTrainingScore_schoolYearId_fkey" FOREIGN KEY ("schoolYearId") REFERENCES "ql-dao-tao"."SchoolYear"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ql-dao-tao"."SchoolYearTrainingScore" ADD CONSTRAINT "SchoolYearTrainingScore_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "ql-dao-tao"."Student"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "ql-dao-tao"."Lecturer" ADD CONSTRAINT "Lecturer_userProfileId_fkey" FOREIGN KEY ("userProfileId") REFERENCES "ql-nguoi-dung"."UserProfile"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -7833,6 +8144,9 @@ ALTER TABLE "ql-dao-tao"."PaymentRecord" ADD CONSTRAINT "PaymentRecord_councilMe
 ALTER TABLE "khao-thi"."EvaluationPeriod" ADD CONSTRAINT "EvaluationPeriod_schoolYearId_fkey" FOREIGN KEY ("schoolYearId") REFERENCES "ql-dao-tao"."SchoolYear"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "khao-thi"."StandardCatalog" ADD CONSTRAINT "StandardCatalog_standardSetId_fkey" FOREIGN KEY ("standardSetId") REFERENCES "khao-thi"."EvaluationStandardSet"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "khao-thi"."CriterionCatalog" ADD CONSTRAINT "CriterionCatalog_standardId_fkey" FOREIGN KEY ("standardId") REFERENCES "khao-thi"."StandardCatalog"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -7915,6 +8229,9 @@ ALTER TABLE "khao-thi"."Survey" ADD CONSTRAINT "Survey_semesterId_fkey" FOREIGN 
 
 -- AddForeignKey
 ALTER TABLE "khao-thi"."Survey" ADD CONSTRAINT "Survey_surveyTopicId_fkey" FOREIGN KEY ("surveyTopicId") REFERENCES "khao-thi"."SurveyTopic"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "khao-thi"."Survey" ADD CONSTRAINT "Survey_trainingObjectTypeId_fkey" FOREIGN KEY ("trainingObjectTypeId") REFERENCES "ql-dao-tao"."TrainingObjectType"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "khao-thi"."Survey" ADD CONSTRAINT "Survey_clusterSurveyId_fkey" FOREIGN KEY ("clusterSurveyId") REFERENCES "khao-thi"."ClusterSurvey"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -8127,6 +8444,27 @@ ALTER TABLE "ql-dao-tao"."RankingCondition" ADD CONSTRAINT "RankingCondition_ran
 ALTER TABLE "ql-dao-tao"."DiplomaVerificationApplication" ADD CONSTRAINT "DiplomaVerificationApplication_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "ql-dao-tao"."Student"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "ql-dao-tao"."ScoreLinkSheet" ADD CONSTRAINT "ScoreLinkSheet_trainingObjectTypeId_fkey" FOREIGN KEY ("trainingObjectTypeId") REFERENCES "ql-dao-tao"."TrainingObjectType"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ql-dao-tao"."ScoreLinkSheet" ADD CONSTRAINT "ScoreLinkSheet_fixedClassId_fkey" FOREIGN KEY ("fixedClassId") REFERENCES "ql-dao-tao"."FixedClass"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ql-dao-tao"."ScoreLinkSheet" ADD CONSTRAINT "ScoreLinkSheet_semesterId_fkey" FOREIGN KEY ("semesterId") REFERENCES "ql-dao-tao"."Semester"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ql-dao-tao"."ScoreLinkSubjectVersion" ADD CONSTRAINT "ScoreLinkSubjectVersion_scoreLinkSheetId_fkey" FOREIGN KEY ("scoreLinkSheetId") REFERENCES "ql-dao-tao"."ScoreLinkSheet"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ql-dao-tao"."ScoreLinkSubjectVersion" ADD CONSTRAINT "ScoreLinkSubjectVersion_subjectVersionId_fkey" FOREIGN KEY ("subjectVersionId") REFERENCES "ql-dao-tao"."SubjectVersion"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ql-dao-tao"."ScoreLinkStudent" ADD CONSTRAINT "ScoreLinkStudent_scoreLinkSubjectVersionId_fkey" FOREIGN KEY ("scoreLinkSubjectVersionId") REFERENCES "ql-dao-tao"."ScoreLinkSubjectVersion"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ql-dao-tao"."ScoreLinkStudent" ADD CONSTRAINT "ScoreLinkStudent_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "ql-dao-tao"."Student"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "ql-dao-tao"."Note" ADD CONSTRAINT "Note_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "ql-dao-tao"."Student"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -8266,6 +8604,12 @@ ALTER TABLE "ql-dao-tao"."_ExpertProfileToSubjectClass" ADD CONSTRAINT "_ExpertP
 
 -- AddForeignKey
 ALTER TABLE "ql-dao-tao"."_ExpertProfileToSubjectClass" ADD CONSTRAINT "_ExpertProfileToSubjectClass_B_fkey" FOREIGN KEY ("B") REFERENCES "ql-dao-tao"."SubjectClass"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "khao-thi"."_EvaluationCriterionLecturerReview" ADD CONSTRAINT "_EvaluationCriterionLecturerReview_A_fkey" FOREIGN KEY ("A") REFERENCES "khao-thi"."EvaluationCriterion"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "khao-thi"."_EvaluationCriterionLecturerReview" ADD CONSTRAINT "_EvaluationCriterionLecturerReview_B_fkey" FOREIGN KEY ("B") REFERENCES "ql-dao-tao"."Lecturer"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "khao-thi"."_SurveyObjectTypeToTrainingField" ADD CONSTRAINT "_SurveyObjectTypeToTrainingField_A_fkey" FOREIGN KEY ("A") REFERENCES "khao-thi"."SurveyObjectType"("id") ON DELETE CASCADE ON UPDATE CASCADE;

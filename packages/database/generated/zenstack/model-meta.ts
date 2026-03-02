@@ -10859,6 +10859,11 @@ const metadata: ModelMeta = {
                     type: "String",
                     isId: true,
                     attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
                 }, active: {
                     name: "active",
                     type: "Boolean",
@@ -10886,10 +10891,6 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$SubjectVersion$createdBy,
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
                 }, isLocked: {
                     name: "isLocked",
                     type: "Boolean",
@@ -11145,9 +11146,15 @@ const metadata: ModelMeta = {
                 id: {
                     name: "id",
                     fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, trainingObjectTypeId_name_credit_period_managementOrganizationId: {
+                    name: "trainingObjectTypeId_name_credit_period_managementOrganizationId",
+                    fields: ["trainingObjectTypeId", "name", "credit", "period", "managementOrganizationId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null, null, null, null] }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         subjectVersionHistory: {
             name: 'SubjectVersionHistory', fields: {

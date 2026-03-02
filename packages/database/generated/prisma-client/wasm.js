@@ -1922,13 +1922,13 @@ exports.Prisma.SubjectVersionCategoryScalarFieldEnum = {
 
 exports.Prisma.SubjectVersionScalarFieldEnum = {
   id: 'id',
+  code: 'code',
   active: 'active',
   description: 'description',
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
-  code: 'code',
   isLocked: 'isLocked',
   name: 'name',
   codeTkb: 'codeTkb',
@@ -5983,9 +5983,9 @@ exports.Prisma.SubjectVersionCategoryOrderByRelevanceFieldEnum = {
 
 exports.Prisma.SubjectVersionOrderByRelevanceFieldEnum = {
   id: 'id',
+  code: 'code',
   description: 'description',
   createdBy: 'createdBy',
-  code: 'code',
   name: 'name',
   codeTkb: 'codeTkb',
   objectives: 'objectives',
