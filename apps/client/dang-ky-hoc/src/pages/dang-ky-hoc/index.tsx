@@ -120,6 +120,29 @@ const DanhSachMonDangKy = ({
             message.error(error?.message || 'Đăng ký thất bại')
         },
     })
+    const { mutateAsync: unregisterMutate, isPending: isUnregistering } = useMutation({
+        mutationFn: async (subjectClassId: string) => {
+            const res = await classUnregister({
+                sessionId,
+                curriculumVersionId,
+                subjectClassIds: [subjectClassId],
+            })
+
+            if (res.status !== 200) {
+                throw new Error(res.data?.message || 'Huỷ đăng ký thất bại')
+            }
+
+            return res
+        },
+        onSuccess: () => {
+            message.success('Huỷ đăng ký thành công')
+            refetchClassesInfo()
+            refetchClassesRegisteredInfo()
+        },
+        onError: (error: any) => {
+            message.error(error?.message || 'Huỷ đăng ký thất bại')
+        },
+    })
     const { data: classesRegisteredInfo, refetch: refetchClassesRegisteredInfo } =
         useGetClassesInfo({
             sessionId,
@@ -238,7 +261,7 @@ const DanhSachMonDangKy = ({
                             align: 'center',
                             width: 80,
                             render: (_, record) =>
-                                `${record._count?.classRegisterLogs || 0}/${record.maxStudent}`,
+                                `${record?.subjectClassStudent?.length || 0}/${record.maxStudent}`,
                         },
                         {
                             title: 'Thời khoá biểu',
@@ -273,9 +296,9 @@ const DanhSachMonDangKy = ({
                             fixed: 'right',
                             render: (_, record) => {
                                 const isMaxed =
-                                    (record.maxStudent || 0) <=
-                                    (record._count?.classRegisterLogs || 0)
-                                const isRegisteredBool = record.subjectClassStudent?.length > 0
+                                    (record?.maxStudent || 0) <=
+                                    (record?.subjectClassStudent?.length || 0)
+                                const isRegisteredBool = record?.subjectClassStudent?.length > 0
                                 const isDisabled =
                                     isMaxed || isRegisteredBool || isPendingClassRegister
                                 return (
@@ -444,16 +467,7 @@ const DanhSachMonDangKy = ({
                                     title="Bạn có chắc chắn muốn huỷ đăng ký học phần này?"
                                     okText="Huỷ"
                                     cancelText="Đóng"
-                                    onConfirm={async () => {
-                                        try {
-                                            await classUnregister({
-                                                sessionId,
-                                                subjectClassIds: [record.id],
-                                            })
-                                        } catch (error) {}
-                                        refetchClassesInfo()
-                                        refetchClassesRegisteredInfo()
-                                    }}
+                                    onConfirm={() => unregisterMutate(record.id)}
                                     className="text-red-500 flex justify-center items-center gap-2 cursor-pointer"
                                 >
                                     <CircleXIcon />
