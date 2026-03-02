@@ -446,10 +446,10 @@ const DanhSachMonDangKy = ({
                                         ) => {
                                             return (
                                                 <p>
-                                                    {tkb.dayOfWeek === 8
+                                                    {tkb?.dayOfWeek === 8
                                                         ? 'CN'
-                                                        : `T${tkb.dayOfWeek}`}{' '}
-                                                    - {tkb.startPeriod} - {tkb.endPeriod}
+                                                        : `T${tkb?.dayOfWeek}`}{' '}
+                                                    - {tkb?.startPeriod} - {tkb?.endPeriod}
                                                 </p>
                                             )
                                         }
