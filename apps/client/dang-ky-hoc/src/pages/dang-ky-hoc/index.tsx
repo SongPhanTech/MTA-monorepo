@@ -120,6 +120,28 @@ const DanhSachMonDangKy = ({
             message.error(error?.message || 'Đăng ký thất bại')
         },
     })
+    const { mutateAsync: unregisterMutate, isPending: isUnregistering } = useMutation({
+        mutationFn: async (subjectClassId: string) => {
+            const res = await classUnregister({
+                sessionId,
+                curriculumVersionId,
+                subjectClassIds: [subjectClassId],
+            })
+
+            if (res.status !== 200) {
+                throw new Error(res.data?.message || 'Huỷ đăng ký thất bại')
+            }
+            return res
+        },
+        onSuccess: () => {
+            message.success('Huỷ đăng ký thành công')
+            refetchClassesInfo()
+            refetchClassesRegisteredInfo()
+        },
+        onError: (error: any) => {
+            message.error(error?.message || 'Huỷ đăng ký thất bại')
+        },
+    })
     const { data: classesRegisteredInfo, refetch: refetchClassesRegisteredInfo } =
         useGetClassesInfo({
             sessionId,
@@ -142,22 +164,22 @@ const DanhSachMonDangKy = ({
                 </p>
             )}
             {creditLimit.map((limit) => (
-                <p key={limit.id} className="mb-2">
+                <p key={limit?.id} className="mb-2">
                     Giới hạn tín chỉ đăng ký:
                     <span>
-                        Tối thiểu <b>{limit.minCredit}</b>{' '}
+                        Tối thiểu <b>{limit?.minCredit}</b>{' '}
                     </span>
                     <span>
-                        Tối đa <b>{limit.maxCredit}</b>
+                        Tối đa <b>{limit?.maxCredit}</b>
                     </span>
                 </p>
             ))}
             <p className="mb-4">Lưu ý: Môn học đã đăng ký sẽ được tô màu xanh lá</p>
             <div className="flex gap-2">
                 <Select
-                    options={curriculumVersions.map((cv) => ({
-                        label: `${cv.code} - ${cv.name}`,
-                        value: cv.id,
+                    options={curriculumVersions?.map((cv) => ({
+                        label: `${cv?.code} - ${cv?.name}`,
+                        value: cv?.id,
                     }))}
                     placeholder="Chọn chương trình đào tạo"
                     style={{ width: 300, marginBottom: 16 }}
@@ -211,7 +233,7 @@ const DanhSachMonDangKy = ({
                             render: (_, record) => (
                                 <Checkbox
                                     checked={
-                                        record.type === $Enums.SubjectRequirementType.Mandatory
+                                        record?.type === $Enums.SubjectRequirementType.Mandatory
                                     }
                                     disabled
                                 />
@@ -221,8 +243,8 @@ const DanhSachMonDangKy = ({
                             title: 'Giảng viên',
                             render: (_, record) =>
                                 [
-                                    record.mainLecturer?.userProfile.fullname,
-                                    record.extraLecturer?.userProfile.fullname,
+                                    record.mainLecturer?.userProfile?.fullname,
+                                    record.extraLecturer?.userProfile?.fullname,
                                 ]
                                     .filter(Boolean)
                                     .join(', '),
@@ -231,27 +253,27 @@ const DanhSachMonDangKy = ({
                             title: 'Phòng học',
                             align: 'center',
                             width: 150,
-                            render: (_, record) => record.room?.name,
+                            render: (_, record) => record?.room?.name,
                         },
                         {
                             title: 'Số lượng',
                             align: 'center',
                             width: 80,
                             render: (_, record) =>
-                                `${record._count?.classRegisterLogs || 0}/${record.maxStudent}`,
+                                `${record?.subjectClassStudent?.length || 0}/${record?.maxStudent}`,
                         },
                         {
                             title: 'Thời khoá biểu',
                             width: 150,
                             align: 'center',
                             render: (_, record) => {
-                                return record.subjectClassTimes
+                                return record?.subjectClassTimes
                                     ?.uniqueByKey?.('dayOfWeek')
                                     ?.map?.((tkb) => {
                                         return (
                                             <p>
-                                                {tkb.dayOfWeek === 8 ? 'CN' : `T${tkb.dayOfWeek}`} -{' '}
-                                                {tkb.startPeriod} - {tkb.endPeriod}
+                                                {tkb?.dayOfWeek === 8 ? 'CN' : `T${tkb?.dayOfWeek}`} -{' '}
+                                                {tkb?.startPeriod} - {tkb?.endPeriod}
                                             </p>
                                         )
                                     })
@@ -263,7 +285,7 @@ const DanhSachMonDangKy = ({
                             width: 120,
                             render: (_, record) =>
                                 tuitionPerCredit
-                                    ? `${((record.credit || 0) * tuitionPerCredit).formatVND()}`
+                                    ? `${((record?.credit || 0) * tuitionPerCredit).formatVND()}`
                                     : '-',
                         },
                         {
@@ -273,9 +295,9 @@ const DanhSachMonDangKy = ({
                             fixed: 'right',
                             render: (_, record) => {
                                 const isMaxed =
-                                    (record.maxStudent || 0) <=
-                                    (record._count?.classRegisterLogs || 0)
-                                const isRegisteredBool = record.subjectClassStudent?.length > 0
+                                    (record?.maxStudent || 0) <=
+                                    (record?.subjectClassStudent?.length || 0)
+                                const isRegisteredBool = record?.subjectClassStudent?.length > 0
                                 const isDisabled =
                                     isMaxed || isRegisteredBool || isPendingClassRegister
                                 return (
@@ -302,17 +324,17 @@ const DanhSachMonDangKy = ({
                         const r = record as unknown as GetClassesInfo200ItemSubjectClassItem
                         return {
                             className:
-                                r.classRegisterLogs?.map?.((e) => e.student.userProfileId).length >
+                                r?.classRegisterLogs?.map?.((e) => e?.student?.userProfileId).length >
                                 0
                                     ? 'bg-green-200'
                                     : '',
                         }
                     }}
                     headerTitleKey={(record) =>
-                        [record.code, record.name].filter(Boolean).join(' - ')
+                        [record?.code, record?.name].filter(Boolean).join(' - ')
                     }
                     childrenFieldName={'subjectClass'}
-                    data={classesInfo?.data.filter((cls) => cls.subjectClass.length > 0)}
+                    data={classesInfo?.data?.filter((cls) => cls?.subjectClass?.length > 0)}
                 />
             )}
 
@@ -329,13 +351,13 @@ const DanhSachMonDangKy = ({
                         <b>
                             {classesRegisteredInfo?.data
                                 ?.flatMap?.((e) => e?.subjectClass)
-                                .reduce((acc, curr) => acc + (curr.credit || 0), 0)}
+                                .reduce((acc, curr) => acc + (curr?.credit || 0), 0)}
                         </b>{' '}
                         tín chỉ, học phí{' '}
                         {(
                             classesRegisteredInfo?.data
                                 ?.flatMap?.((e) => e?.subjectClass)
-                                .reduce((acc, curr) => acc + (curr.credit || 0), 0) *
+                                .reduce((acc, curr) => acc + (curr?.credit || 0), 0) *
                             (tuitionPerCredit || 0)
                         ).formatVND()}
                     </p>
@@ -373,7 +395,7 @@ const DanhSachMonDangKy = ({
                             render: (_, record) => (
                                 <Checkbox
                                     checked={
-                                        record.type === $Enums.SubjectRequirementType.Mandatory
+                                        record?.type === $Enums.SubjectRequirementType.Mandatory
                                     }
                                     disabled
                                 />
@@ -383,8 +405,8 @@ const DanhSachMonDangKy = ({
                             title: 'Giảng viên',
                             render: (_, record) =>
                                 [
-                                    record.mainLecturer?.userProfile.fullname,
-                                    record.extraLecturer?.userProfile.fullname,
+                                    record.mainLecturer?.userProfile?.fullname,
+                                    record.extraLecturer?.userProfile?.fullname,
                                 ]
                                     .filter(Boolean)
                                     .join(', '),
@@ -393,14 +415,14 @@ const DanhSachMonDangKy = ({
                             title: 'Phòng học',
                             align: 'center',
                             width: 150,
-                            render: (_, record) => record.room?.name,
+                            render: (_, record) => record?.room?.name,
                         },
                         {
                             title: 'Số lượng',
                             align: 'center',
                             width: 80,
                             render: (_, record) =>
-                                `${record._count?.subjectClassStudent || 0}/${record.maxStudent}`,
+                                `${record?._count?.subjectClassStudent || 0}/${record?.maxStudent}`,
                         },
                         {
                             title: 'Học phí',
@@ -408,7 +430,7 @@ const DanhSachMonDangKy = ({
                             width: 120,
                             render: (_, record) =>
                                 tuitionPerCredit
-                                    ? `${((record.credit || 0) * tuitionPerCredit).formatVND()}`
+                                    ? `${((record?.credit || 0) * tuitionPerCredit).formatVND()}`
                                     : '-',
                         },
                         {
@@ -416,7 +438,7 @@ const DanhSachMonDangKy = ({
                             width: 150,
                             align: 'center',
                             render: (_, record) => {
-                                return record.subjectClassTimes
+                                return record?.subjectClassTimes
                                     ?.uniqueByKey?.('dayOfWeek')
                                     ?.map?.(
                                         (
@@ -424,10 +446,10 @@ const DanhSachMonDangKy = ({
                                         ) => {
                                             return (
                                                 <p>
-                                                    {tkb.dayOfWeek === 8
+                                                    {tkb?.dayOfWeek === 8
                                                         ? 'CN'
-                                                        : `T${tkb.dayOfWeek}`}{' '}
-                                                    - {tkb.startPeriod} - {tkb.endPeriod}
+                                                        : `T${tkb?.dayOfWeek}`}{' '}
+                                                    - {tkb?.startPeriod} - {tkb?.endPeriod}
                                                 </p>
                                             )
                                         }
@@ -444,16 +466,8 @@ const DanhSachMonDangKy = ({
                                     title="Bạn có chắc chắn muốn huỷ đăng ký học phần này?"
                                     okText="Huỷ"
                                     cancelText="Đóng"
-                                    onConfirm={async () => {
-                                        try {
-                                            await classUnregister({
-                                                sessionId,
-                                                subjectClassIds: [record.id],
-                                            })
-                                        } catch (error) {}
-                                        refetchClassesInfo()
-                                        refetchClassesRegisteredInfo()
-                                    }}
+                                    disabled={isUnregistering}
+                                    onConfirm={() => unregisterMutate(record?.id)}
                                     className="text-red-500 flex justify-center items-center gap-2 cursor-pointer"
                                 >
                                     <CircleXIcon />
@@ -465,7 +479,7 @@ const DanhSachMonDangKy = ({
                     scroll={{
                         x: 'max-content',
                     }}
-                    data={classesRegisteredInfo.data.flatMap((e) => e.subjectClass)}
+                    data={classesRegisteredInfo?.data?.flatMap((e) => e?.subjectClass)}
                 />
             )}
         </div>
