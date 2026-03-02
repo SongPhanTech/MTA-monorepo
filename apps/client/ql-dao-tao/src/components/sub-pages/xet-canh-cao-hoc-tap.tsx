@@ -385,7 +385,7 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
                                         record?.student?.fixedClass?.managementOrganization?.sTen,
                                 },
                                 {
-                                    title: 'Mức CCHĐ',
+                                    title: 'Mức CCHT',
                                     dataIndex: 'level',
                                     width: 100,
                                     align: 'center',
@@ -395,7 +395,7 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
                                     ),
                                 },
                                 {
-                                    title: 'Nâng Mức CCHĐ từ',
+                                    title: 'Nâng Mức CCHT từ',
                                     dataIndex: 'increasedFrom',
                                     width: 150,
                                     align: 'center',
