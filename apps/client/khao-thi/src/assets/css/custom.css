@@ -159,3 +159,8 @@
     width: 16px;
     height: 16px;
 }
+
+.tree-child-disabled .ant-tree-node-content-wrapper {
+  color: #e11717;
+  font-style: italic;
+}
