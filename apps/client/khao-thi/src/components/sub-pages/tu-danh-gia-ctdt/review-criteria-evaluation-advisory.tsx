@@ -228,10 +228,7 @@ const ReviewCriteriaEvaluationAdvisorySubpage = ({
                                                                     {item.evaluationCriterion &&
                                                                         criterionStatus !==
                                                                             $Enums.EvaluationStatus
-                                                                                .PENDING &&
-                                                                        criterionStatus !==
-                                                                            $Enums.EvaluationStatus
-                                                                                .APPROVED && (
+                                                                                .PENDING && (
                                                                             <Badge
                                                                                 count={
                                                                                     item

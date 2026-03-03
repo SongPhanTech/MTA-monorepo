@@ -1,13 +1,9 @@
 import { RichTextEditor } from '@components/commons/rich-text-editor'
-import { getStatusConfig } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import type { DataTabEvaluationCriterionType } from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/standar-reports'
-import { $Enums } from '@workspace/db/client'
 import { useUpdateStandardPeriod } from '@workspace/db/hooks'
-import { Button, Collapse, Form, message, Tag } from 'antd'
-import dayjs from 'dayjs'
+import { Button, Collapse, Form, message } from 'antd'
 import { useEffect } from 'react'
-import { getDeadlineStatus } from '@/utils/getDeadlineStatus'
 
 export type PutRequirementCriterion = {
     criteria: Record<string, any>
@@ -79,39 +75,8 @@ const StandarReportsSubPage = ({
         }
     }, [data, form])
 
-    const statusConfig = getStatusConfig(
-        data?.criteria?.[0]?.evaluationCriterion?.status || $Enums.EvaluationStatus.LOCK
-    )
-
-    const deadline = data?.criteria?.[0]?.evaluationCriterion?.deadline
-    const deadlineStatus = deadline ? getDeadlineStatus(deadline) : null
-
     const headerSection = (
         <div className="sticky top-0 z-10 bg-white py-2 flex flex-row justify-between items-center gap-2">
-            <div className="flex flex-row gap-4 items-center text-xs">
-                <div className="flex items-center gap-1">
-                    <span className="text-sm text-gray-500">
-                        Người viết phiếu:{' '}
-                        {data?.criteria?.[0]?.evaluationCriterion?.lecturer?.userProfile
-                            ?.fullname || 'Chưa phân công'}
-                    </span>
-                </div>
-                <div className="flex items-center gap-1">
-                    {deadline && deadlineStatus && deadlineStatus.text && (
-                        <Tag color={deadlineStatus.color}>
-                            Hạn: {dayjs(deadline).format('DD/MM/YYYY')}
-                            {deadlineStatus.text && ` (${deadlineStatus.text})`}
-                        </Tag>
-                    )}
-                </div>
-                <div className="flex items-center gap-1">
-                    <span className="text-sm text-gray-500">Trạng thái:</span>
-                    <Tag color={statusConfig.color} className="text-xs">
-                        {statusConfig.text}
-                    </Tag>
-                </div>
-            </div>
-
             <div className="flex gap-2 mr-2">
                 {
                     <Button type="primary" size="small" onClick={handleSubmit}>
