@@ -77,7 +77,7 @@ const StandarReportsSubPage = ({
 
     const headerSection = (
         <div className="sticky top-0 z-10 bg-white py-2 flex flex-row justify-between items-center gap-2">
-            <div className="flex gap-2 mr-2">
+            <div className="flex ml-auto gap-2 mr-2">
                 {
                     <Button type="primary" size="small" onClick={handleSubmit}>
                         Lưu báo cáo
