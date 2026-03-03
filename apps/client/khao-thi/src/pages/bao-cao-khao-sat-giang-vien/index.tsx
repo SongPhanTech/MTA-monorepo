@@ -269,8 +269,7 @@ export default function BaoCaoGiangVien() {
                 },
                 selectable: lecturerActive.some((i) => i.id === lec.id),
                 organizationId: lec.organizationId,
-                disabled: !lecturerActive.some((i) => i.id === lec.id),
-                className: !lecturerActive.some((i) => i.id === lec.id)?'tree-child-disabled':''
+                className: !lecturerActive.some((i) => i.id === lec.id) ? 'tree-child-disabled':''
             })),
             null
         )
