@@ -527,7 +527,7 @@ export default function SubjectList() {
                                 ],
                             },
                             {
-                                title: 'LT',
+                                title: <Tooltip title="Lý thuyết">LT</Tooltip>,
                                 dataIndex: 'numberOfTheory',
                                 width: 80,
                                 align: 'center',
@@ -544,7 +544,7 @@ export default function SubjectList() {
                                 ],
                             },
                             {
-                                title: 'BT',
+                                title: <Tooltip title="Bài tập">BT</Tooltip>,
                                 dataIndex: 'numberOfPractical',
                                 width: 80,
                                 align: 'center',
@@ -561,7 +561,7 @@ export default function SubjectList() {
                                 ],
                             },
                             {
-                                title: 'ThL',
+                                title: <Tooltip title="Thảo luận">ThL</Tooltip>,
                                 dataIndex: 'numberOfSelfStudy',
                                 width: 80,
                                 align: 'center',
@@ -578,7 +578,7 @@ export default function SubjectList() {
                                 ],
                             },
                             {
-                                title: 'TN, TH',
+                                title: <Tooltip title="Thí nghiệm, Thực hành">TN, TH</Tooltip>,
                                 dataIndex: 'numberOfPractice',
                                 width: 80,
                                 align: 'center',
@@ -612,7 +612,7 @@ export default function SubjectList() {
                                 ],
                             },
                             {
-                                title: 'KT, Thi',
+                                title: <Tooltip title="Kiểm tra, Thi">KT, Thi</Tooltip>,
                                 dataIndex: 'numberOfExam',
                                 width: 80,
                                 align: 'center',
@@ -647,7 +647,7 @@ export default function SubjectList() {
                                 render: (record) => <div className="line-clamp-2">{record}</div>,
                             },
                             {
-                                title: 'Đã mở LMH',
+                                title: <Tooltip title="Đã mở lớp môn học">Đã mở LMH</Tooltip>,
                                 align: 'center',
                                 dataIndex: 'isTeaching',
                                 width: 120,
