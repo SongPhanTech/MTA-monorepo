@@ -176,7 +176,7 @@ export default function BaoCaoGiangVien() {
                             in: [5,6,7],
                         },
                     },
-                ]
+                ],
             },
         },
         orderBy: {
@@ -267,14 +267,14 @@ export default function BaoCaoGiangVien() {
                             lec.userProfile?.firstName ?? ''
                         }`.trim() || 'Giảng viên không tên',
                 },
-                selectable: true,
+                selectable: !lecturerActive.some((i) => i.id === lec.id),
                 organizationId: lec.organizationId,
                 disabled: lecturerActive.some((i) => i.id === lec.id),
                 className: lecturerActive.some((i) => i.id === lec.id)?'tree-child-disabled':''
             })),
             null
         )
-    }, [organizations, lecturerData])
+    }, [organizations, lecturerData,lecturerActive])
 
     const hanleSearchReport = () => {}
 
