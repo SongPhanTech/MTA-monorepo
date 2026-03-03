@@ -218,10 +218,10 @@ export async function seedAcademicActionConfig() {
     console.log('Bắt đầu seed cấu hình Xử lý học tập...')
     try {
         const civilianCourses = await prisma.trainingCourse.findMany({
-            where: { trainingObjectType: { type: 'CIVILIAN' } },
+            where: { trainingObjectType: { type: 'CIVILIAN' }, academicActionConfig: { none: {} } },
         })
         const militaryCourses = await prisma.trainingCourse.findMany({
-            where: { trainingObjectType: { type: 'MILITARY' } },
+            where: { trainingObjectType: { type: 'MILITARY' }, academicActionConfig: { none: {} } },
         })
 
         // Hàm chung để xử lý seed

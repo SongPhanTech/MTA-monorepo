@@ -227,6 +227,10 @@ async function main() {
     })
 
     const trainingCourses = await prisma.trainingCourse.findMany({
+        where: {
+            scoreConverts: { none: {} },
+            academicRankingConvert: { none: {} },
+        },
         select: {
             id: true,
             baseScore: true,

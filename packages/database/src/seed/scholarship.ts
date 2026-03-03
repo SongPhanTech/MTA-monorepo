@@ -8,11 +8,11 @@ export async function seedScholarshipCriteria() {
 
     // --- Lấy ID của các khoá học Dân sự và Quân sự (giả sử đã có) ---
     const civilianCourse = await prisma.trainingCourse.findMany({
-        where: { trainingObjectType: { type: 'CIVILIAN' } },
+        where: { trainingObjectType: { type: 'CIVILIAN' }, scholarships: { none: {} } },
     })
 
     const militaryCourse = await prisma.trainingCourse.findMany({
-        where: { trainingObjectType: { type: 'MILITARY' } },
+        where: { trainingObjectType: { type: 'MILITARY' }, scholarships: { none: {} } },
     })
 
     // =================================================================

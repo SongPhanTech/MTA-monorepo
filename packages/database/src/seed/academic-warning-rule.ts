@@ -167,10 +167,10 @@ export async function seedAcademicWarningRule() {
     try {
         // Lấy tất cả các khoá học dân sự và quân sự
         const civilianCourses = await prisma.trainingCourse.findMany({
-            where: { trainingObjectType: { type: 'CIVILIAN' } },
+            where: { trainingObjectType: { type: 'CIVILIAN' }, academicWarningRule: { none: {} } },
         })
         const militaryCourses = await prisma.trainingCourse.findMany({
-            where: { trainingObjectType: { type: 'MILITARY' } },
+            where: { trainingObjectType: { type: 'MILITARY' }, academicWarningRule: { none: {} } },
         })
 
         // Chạy seed
