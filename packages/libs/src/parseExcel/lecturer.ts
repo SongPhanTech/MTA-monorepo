@@ -145,6 +145,7 @@ export const parseSheetLecturer = (file: ArrayBufferLike) => {
 
             return {
                 stt: row[cols.stt],
+                rowNum: row.__rowNum__ + 1,
                 code: row[cols.code]?.trim() as string,
                 fullname: row[cols.fullname]?.replaceAll(/\(.*\)/g, '').trim() as string,
                 dateOfBirth: dateOfBirth.isValid() ? dateOfBirth.toDate() : null,
@@ -172,6 +173,23 @@ export const parseSheetLecturer = (file: ArrayBufferLike) => {
             cellRef: '',
             message: `Mã bị trùng: ${duplicateCodes.join(', ')}`,
         })
+    }
+
+    const cccdRowMap = new Map<string, { code: string; rowNum: number }[]>()
+    for (const item of data) {
+        if (!item.idCardNumber) continue
+        const existing = cccdRowMap.get(item.idCardNumber) ?? []
+        existing.push({ code: item.code, rowNum: item.rowNum })
+        cccdRowMap.set(item.idCardNumber, existing)
+    }
+    for (const [cccd, items] of cccdRowMap) {
+        if (items.length > 1) {
+            errors.push({
+                sheetRef: sheetName,
+                cellRef: items.map((i) => `${cols.idCardNumber}${i.rowNum}`).join(', '),
+                message: `CCCD bị trùng: ${cccd}`,
+            })
+        }
     }
 
     return {
