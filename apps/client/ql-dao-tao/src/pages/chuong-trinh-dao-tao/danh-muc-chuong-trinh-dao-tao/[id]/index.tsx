@@ -827,7 +827,8 @@ export default function TrainingProgramSubjects() {
                                 type: 'tree_select',
                                 options: treeData,
                                 render: (_, record) => {
-                                    return record?.subject?.managementOrganization?.sMa
+                                    return initialValue?.curriculum?.managementOrganization
+                                        ?.sMa
                                 },
                             },
                             {
