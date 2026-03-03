@@ -324,9 +324,9 @@ export default function TrainingProgramSubjects() {
                 include: {
                     subject: {
                         include: {
-                            managementOrganization: {
+                            subject: {
                                 include: {
-                                    trainingMajors: true,
+                                    managementOrganization: true,
                                 },
                             },
                             subjectClass: {
@@ -827,8 +827,7 @@ export default function TrainingProgramSubjects() {
                                 type: 'tree_select',
                                 options: treeData,
                                 render: (_, record) => {
-                                    return initialValue?.curriculum?.managementOrganization
-                                        ?.sMa
+                                    return record?.subject?.subject?.managementOrganization?.sMa
                                 },
                             },
                             {
