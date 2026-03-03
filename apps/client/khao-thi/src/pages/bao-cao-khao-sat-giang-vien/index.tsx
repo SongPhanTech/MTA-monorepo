@@ -267,10 +267,10 @@ export default function BaoCaoGiangVien() {
                             lec.userProfile?.firstName ?? ''
                         }`.trim() || 'Giảng viên không tên',
                 },
-                selectable: !lecturerActive.some((i) => i.id === lec.id),
+                selectable: lecturerActive.some((i) => i.id === lec.id),
                 organizationId: lec.organizationId,
-                disabled: lecturerActive.some((i) => i.id === lec.id),
-                className: lecturerActive.some((i) => i.id === lec.id)?'tree-child-disabled':''
+                disabled: !lecturerActive.some((i) => i.id === lec.id),
+                className: !lecturerActive.some((i) => i.id === lec.id)?'tree-child-disabled':''
             })),
             null
         )
