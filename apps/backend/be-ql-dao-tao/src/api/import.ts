@@ -150,9 +150,23 @@ app.openapi(importLecturer, async (c) => {
     if (duplicateCode.length) {
         return c.json({ message: 'Mã giảng viên đã tồn tại', errors: duplicateCode }, 400)
     }
+    const cccdCount = new Map<string, string[]>()
+    for (const l of data.lecturers) {
+        if (!l.idCardNumber) continue
+        const codes = cccdCount.get(l.idCardNumber) ?? []
+        codes.push(l.code)
+        cccdCount.set(l.idCardNumber, codes)
+    }
+    const duplicateCCCD = [...cccdCount.entries()]
+        .filter(([, codes]) => codes.length > 1)
+        .map(([cccd, codes]) => `CCCD ${cccd} bị trùng ở mã GV: ${codes.join(', ')}`)
+    if (duplicateCCCD.length) {
+        return c.json({ message: 'Số CCCD bị trùng trong file Excel', errors: duplicateCCCD }, 400)
+    }
 
     // await prisma.$transaction(
     //     async (tx) => {
+    const importErrors: { code: string; name: string; error: string }[] = []
     for (const lecturer of data.lecturers) {
         const lecturerData: Prisma.LecturerCreateInput = {
             from: new Date(),
@@ -276,21 +290,22 @@ app.openapi(importLecturer, async (c) => {
                 console.log(
                     '[LSB create User]:',
                     res.status,
-                    res.data,
+                    JSON.stringify(res.data),
                     // @ts-expect-error
                     res.data?.extra?.data?.Master
                 )
                 if (res.status === 200) {
+                    const newProfileId = typeof res.data === 'string' && res.data ? res.data : crypto.randomUUID()
+                    console.log('[LSB create User] newProfileId:', newProfileId, '| type:', typeof res.data, '| raw res.data:', res.data)
                     await prisma.lecturer.create({
                         data: {
                             ...lecturerData,
                             userProfile: {
                                 connectOrCreate: {
                                     where: {
-                                        id: res.data as string,
-                                        // idCardNumber: lecturer.idCardNumber,
+                                        idCardNumber: lecturer.idCardNumber,
                                     },
-                                    create: { id: res.data as string, ...profileData },
+                                    create: { id: newProfileId, ...profileData },
                                 },
                             },
                         },
@@ -304,17 +319,22 @@ app.openapi(importLecturer, async (c) => {
                 }
             }
         } catch (error) {
+            const errMsg = error instanceof Error ? error.message : String(error)
+            console.error(`[IMPORT ERROR] Code: ${lecturer.code} | Name: ${lecturer.fullname} | CCCD: ${lecturer.idCardNumber}`)
             console.error(error)
+            importErrors.push({ code: lecturer.code, name: lecturer.fullname, error: errMsg })
         }
     }
     //     },
     //     { timeout: timeout * 1000 }
     // )
 
+    const successCount = data.lecturers.length - importErrors.length
     return c.json(
         {
-            message: `Khai báo giảng viên thành công: ${data.lecturers.length}`,
+            message: `Khai báo giảng viên thành công: ${successCount}/${data.lecturers.length}`,
             time: Date.now() - start,
+            ...(importErrors.length > 0 ? { failed: importErrors } : {}),
         },
         200
     )
