@@ -8,6 +8,7 @@ import DefaultLayout from '@layouts/default-layout'
 import type { ArchivedCertificate, Prisma, StudentSubjectScore } from '@workspace/db/client'
 import {
     useFindManySemester,
+    useFindManyStudentSemesterResult,
     useFindManyStudentSubjectScore,
     useFindManySubjectVersion,
     useFindUniqueStudent,
@@ -554,6 +555,45 @@ export default function StudentScoreClassPage() {
 
     const { convertScore } = useScoreConverter(student?.fixedClass?.trainingCourse.scoreConverts)
 
+    // Lấy kết quả học tập theo kỳ
+    const { data: semesterResults = [] } = useFindManyStudentSemesterResult(
+        {
+            where: { studentId },
+            include: { rank: true },
+        },
+        { enabled: !!studentId }
+    )
+
+    const semesterResultMap = useMemo(() => {
+        const map: Record<string, (typeof semesterResults)[number]> = {}
+        for (const result of semesterResults) {
+            map[result.semesterId] = result
+        }
+        return map
+    }, [semesterResults])
+
+    // Transform data: thêm summary row vào cuối mỗi học kỳ
+    const dataWithSummary = useMemo(() => {
+        return data
+            .filter((s) => !semesterId || semesterId === s.id)
+            .map((semester: any) => {
+                const result = semesterResultMap[semester.id]
+                if (!result) return semester
+                return {
+                    ...semester,
+                    subjectClasses: [
+                        ...semester.subjectClasses,
+                        {
+                            id: `summary-${semester.id}`,
+                            $isSummary: true,
+                            semesterResult: result,
+                            subjectClassStudent: [],
+                        },
+                    ],
+                }
+            })
+    }, [data, semesterId, semesterResultMap])
+
     return (
         <DefaultLayout
             breadcrumbList={[
@@ -694,8 +734,6 @@ export default function StudentScoreClassPage() {
                                     type: 'input',
                                     fixed: 'left',
                                     width: 120,
-                                    render: (_, record) =>
-                                        record?.subjectClassStudent?.[0]?.subjectVersion.code,
                                 },
                                 {
                                     title: 'Tên môn học',
@@ -708,8 +746,6 @@ export default function StudentScoreClassPage() {
                                         value: item.name,
                                     })),
                                     width: 200,
-                                    render: (_, record) =>
-                                        record?.subjectClassStudent?.[0]?.subjectVersion.name,
                                 },
                                 {
                                     title: 'Điểm TX',
@@ -717,8 +753,10 @@ export default function StudentScoreClassPage() {
                                     dataIndex: 'attendanceScoreCmp',
                                     type: 'cmp',
                                     width: 100,
-                                    render: (_, record) =>
-                                        record?.subjectClassStudent?.[0]?.attendanceScore,
+                                    render: (_, record: any) => {
+                                        if (record.$isSummary) return null
+                                        return record?.subjectClassStudent?.[0]?.attendanceScore
+                                    },
                                 },
                                 {
                                     title: 'Điểm ĐK',
@@ -726,8 +764,10 @@ export default function StudentScoreClassPage() {
                                     dataIndex: 'midtermScoreCmp',
                                     type: 'cmp',
                                     width: 100,
-                                    render: (_, record) =>
-                                        record?.subjectClassStudent?.[0]?.midtermScore,
+                                    render: (_, record: any) => {
+                                        if (record.$isSummary) return null
+                                        return record?.subjectClassStudent?.[0]?.midtermScore
+                                    },
                                 },
                                 {
                                     title: 'Điểm thi',
@@ -735,15 +775,18 @@ export default function StudentScoreClassPage() {
                                     dataIndex: 'examScoreCmp',
                                     type: 'cmp',
                                     width: 100,
-                                    render: (_, record) =>
-                                        record?.subjectClassStudent?.[0]?.examScore,
+                                    render: (_, record: any) => {
+                                        if (record.$isSummary) return null
+                                        return record?.subjectClassStudent?.[0]?.examScore
+                                    },
                                 },
                                 {
                                     title: 'Điểm cộng',
                                     align: 'center',
                                     width: 100,
-                                    render: (_, { subjectClassStudent }) => {
-                                        const totalBonus = subjectClassStudent?.[0]?.awards.reduce(
+                                    render: (_, record: any) => {
+                                        if (record.$isSummary) return null
+                                        const totalBonus = record.subjectClassStudent?.[0]?.awards.reduce(
                                             (
                                                 acc: number,
                                                 curr: { archivedAward: { bonusScore: number } }
@@ -757,21 +800,24 @@ export default function StudentScoreClassPage() {
                                     title: 'Chứng chỉ',
                                     align: 'center',
                                     width: 150,
-                                    render: (_, { id, subjectClassStudent }) =>
-                                        subjectClassStudent?.[0]?.certificates
+                                    render: (_, record: any) => {
+                                        if (record.$isSummary) return null
+                                        return record.subjectClassStudent?.[0]?.certificates
                                             .map(
                                                 (i: { archivedCertificate: ArchivedCertificate }) =>
                                                     i?.archivedCertificate?.code
                                             )
-                                            .join(', '),
+                                            .join(', ')
+                                    },
                                 },
                                 {
                                     title: <Tooltip title="Điểm tương đương">Điểm TĐ</Tooltip>,
                                     align: 'center',
                                     width: 80,
-                                    render: (__, { id, subjectClassStudent }) => {
+                                    render: (__, record: any) => {
+                                        if (record.$isSummary) return null
                                         const arr: { finalScore: number }[] =
-                                            subjectClassStudent?.[0]?.certificates.map(
+                                            record.subjectClassStudent?.[0]?.certificates.map(
                                                 (i: {
                                                     archivedCertificate: ArchivedCertificate
                                                 }) => {
@@ -795,8 +841,10 @@ export default function StudentScoreClassPage() {
                                     dataIndex: 'creditCmp',
                                     type: 'cmp',
                                     width: 100,
-                                    render: (_, record) =>
-                                        record?.subjectClassStudent?.[0]?.subjectVersion.credit,
+                                    render: (_, record: any) => {
+                                        // if (record.$isSummary) return <b>{record.semesterResult.registeredCredits}</b>
+                                        return record?.subjectClassStudent?.[0]?.subjectVersion.credit
+                                    },
                                 },
                                 {
                                     title: 'Điểm hệ 10',
@@ -804,7 +852,10 @@ export default function StudentScoreClassPage() {
                                     dataIndex: 'finalScoreCmp',
                                     type: 'cmp',
                                     width: 100,
-                                    render: (_, record) => {
+                                    render: (_, record: any) => {
+                                        // if (record.$isSummary) {
+                                        //     return <b>{Number(record.semesterResult.gpaBase10)}</b>
+                                        // }
                                         const subjectClassStudent = record?.subjectClassStudent?.[0]
                                         return (
                                             subjectClassStudent?.manualFinalScore ??
@@ -818,7 +869,10 @@ export default function StudentScoreClassPage() {
                                     align: 'center',
                                     dataIndex: 'finalScore4',
                                     width: 100,
-                                    render: (_, record) => {
+                                    render: (_, record: any) => {
+                                        // if (record.$isSummary) {
+                                        //     return <b>{Number(record.semesterResult.gpaBase4)}</b>
+                                        // }
                                         const subjectClassStudent = record?.subjectClassStudent?.[0]
                                         const score =
                                             subjectClassStudent?.manualFinalScore ||
@@ -831,7 +885,10 @@ export default function StudentScoreClassPage() {
                                     title: 'Điểm hệ chữ',
                                     align: 'center',
                                     width: 120,
-                                    render: (_, record) => {
+                                    render: (_, record: any) => {
+                                        if (record.$isSummary) {
+                                            return <b>{record.semesterResult.rank?.name || ''}</b>
+                                        }
                                         const subjectClassStudent = record?.subjectClassStudent?.[0]
 
                                         const score =
@@ -848,6 +905,13 @@ export default function StudentScoreClassPage() {
                                     align: 'center',
                                     width: 100,
                                     render: (_: any, record: any) => {
+                                        // if (record.$isSummary) {
+                                        //     return (
+                                        //         <b>
+                                        //             Đạt: {record.semesterResult.passedCredits}/{record.semesterResult.registeredCredits}
+                                        //         </b>
+                                        //     )
+                                        // }
                                         const subjectClassStudent = record.subjectClassStudent?.[0]
                                         const score =
                                             subjectClassStudent?.manualFinalScore ??
@@ -872,7 +936,15 @@ export default function StudentScoreClassPage() {
                                     align: 'center',
                                     dataIndex: ['subjectClassStudent', '0', 'description'],
                                     width: 200,
-                                    render: (value: string) => {
+                                    render: (value: string, record: any) => {
+                                        if (record.$isSummary) {
+                                            const r = record.semesterResult
+                                            return (
+                                                <span className="font-semibold text-xs">
+                                                    TL hệ 10: {Number(r.cumulativeGpaBase10)} | TL hệ 4: {Number(r.cumulativeGpaBase4)}
+                                                </span>
+                                            )
+                                        }
                                         return <span className="line-clamp-1">{value}</span>
                                     },
                                 },
@@ -881,7 +953,10 @@ export default function StudentScoreClassPage() {
                                     width: 150,
                                     align: 'center',
                                     fixed: 'right',
-                                    render: (_, { id, subjectClassStudent }) => (
+                                    render: (_, { id, subjectClassStudent }: any) => {
+                                        if (subjectClassStudent?.length === 0 && !id?.startsWith?.('summary-')) return null
+                                        if (id?.startsWith?.('summary-')) return null
+                                        return (
                                         <Row className="justify-center gap-2">
                                             {/* <Tooltip title="Cộng điểm">
                                                 <BookCheckIcon
@@ -922,10 +997,10 @@ export default function StudentScoreClassPage() {
                                                 />
                                             </Tooltip>
                                         </Row>
-                                    ),
+                                    )},
                                 },
                             ]}
-                            data={data.filter((s) => !semesterId || semesterId === s.id)}
+                            data={dataWithSummary}
                             pagination={{
                                 hideOnSinglePage: true,
                             }}

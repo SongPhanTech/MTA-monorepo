@@ -57,7 +57,7 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
                 const result = parseSheetStudent(e.target?.result as ArrayBuffer)
                 console.log('Parse result:', result)
                 const { trainingObjectType, trainingCourse, students, errors } = result
-                setPreviewData(students)
+                setPreviewData(students.slice(1))
                 console.log('students', students)
                 console.log('trainingObjectType', trainingObjectType)
                 console.log('trainingCourse', trainingCourse)
