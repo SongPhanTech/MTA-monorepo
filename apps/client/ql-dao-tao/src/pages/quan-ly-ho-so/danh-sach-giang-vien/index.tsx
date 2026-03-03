@@ -276,7 +276,7 @@ export default function UserProfilePageLecture() {
                             onClick={() => setImportModalVisible(true)}
                             icon={<UploadOutlined />}
                         >
-                            Nhập dữ liêu Excel
+                            Nhập dữ liệu Excel
                         </Button>
                         <ImportLecturerModal
                             visible={importModalVisible}
