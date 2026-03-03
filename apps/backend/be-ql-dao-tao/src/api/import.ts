@@ -142,7 +142,8 @@ app.openapi(importLecturer, async (c) => {
     const duplicateCode: string[] = []
     for (const l of data.lecturers) {
         const existingLecturer = existingLecturerMap.get(l.code)
-        if (existingLecturer && existingLecturer.idCardNumber !== l.idCardNumber) {
+        // Only block if DB has a CCCD value AND it differs → same code, different person
+        if (existingLecturer && existingLecturer.idCardNumber && existingLecturer.idCardNumber !== l.idCardNumber) {
             duplicateCode.push(l.code)
         }
     }
@@ -164,9 +165,11 @@ app.openapi(importLecturer, async (c) => {
         return c.json({ message: 'Số CCCD bị trùng trong file Excel', errors: duplicateCCCD }, 400)
     }
 
-    // await prisma.$transaction(
-    //     async (tx) => {
     const importErrors: { code: string; name: string; error: string }[] = []
+    
+    try {
+        await prisma.$transaction(
+            async (tx) => {
     for (const lecturer of data.lecturers) {
         const lecturerData: Prisma.LecturerCreateInput = {
             from: new Date(),
@@ -217,7 +220,6 @@ app.openapi(importLecturer, async (c) => {
                     sEmail: lecturer.email,
                     sDM_GioiTinhId: lecturer.gender ? genderMap.get(lecturer.gender) : null,
                 }
-                console.log(payload)
 
                 const res = await putDMNhanViens(payload, {
                     headers: {
@@ -228,10 +230,8 @@ app.openapi(importLecturer, async (c) => {
 
                 const existing = existingLecturerMap.get(lecturer.code)
                 if (existing) {
-                    // @ts-expect-error
-                    console.log('[LSB update User]:', res.status, res.data, res.data?.extra?.data)
                     if (res.status === 200) {
-                        await prisma.lecturer.update({
+                        await tx.lecturer.update({
                             where: { id: existing.id },
                             data: {
                                 ...lecturerData,
@@ -240,23 +240,35 @@ app.openapi(importLecturer, async (c) => {
                         })
                     } else {
                         const extra = res.data?.extra as ErrorExtra | undefined
-                        return c.json(
-                            { message: extra?.message || [extra?.code, extra?.data].join(' ') },
-                            400
-                        )
+                        const errMsg = extra?.message || [extra?.code, extra?.data].join(' ') || `LSB API error: ${res.status}`
+                        importErrors.push({ code: lecturer.code, name: lecturer.fullname, error: errMsg })
                     }
                 } else {
-                    await prisma.lecturer.create({
-                        data: {
-                            ...lecturerData,
-                            userProfile: {
-                                connectOrCreate: {
-                                    where: { idCardNumber: lecturer.idCardNumber },
-                                    create: { id: res.data as string, ...profileData },
+                    // Profile exists but lecturer record doesn't - need to create lecturer
+                    if (res.status === 200) {
+                        // Validate res.data is a string ID before using it
+                        if (typeof res.data !== 'string' || !res.data) {
+                            const errMsg = `LSB trả về dữ liệu không hợp lệ (mã GV: ${lecturer.code})`
+                            importErrors.push({ code: lecturer.code, name: lecturer.fullname, error: errMsg })
+                        } else {
+                        await tx.lecturer.create({
+                            data: {
+                                ...lecturerData,
+                                userProfile: {
+                                    connectOrCreate: {
+                                        where: { idCardNumber: lecturer.idCardNumber },
+                                        create: { id: res.data, ...profileData },
+                                    },
                                 },
                             },
-                        },
-                    })
+                        })
+                        }
+                    } else {
+                        const extra = res.data?.extra as ErrorExtra | undefined
+                        const errMsg = extra?.message || [extra?.code, extra?.data].join(' ') || `LSB API error: ${res.status}`
+                        console.error(`[LSB update User ERROR] Code: ${lecturer.code} | Status: ${res.status} | Error:`, errMsg)
+                        importErrors.push({ code: lecturer.code, name: lecturer.fullname, error: errMsg })
+                    }
                 }
             } else {
                 // const profileId = crypto.randomUUID()
@@ -278,7 +290,6 @@ app.openapi(importLecturer, async (c) => {
                     sEmail: lecturer.email,
                     sDM_GioiTinhId: lecturer.gender ? genderMap.get(lecturer.gender) : null,
                 }
-                console.log(payload)
 
                 const res = await postDMNhanViens(payload, {
                     headers: {
@@ -287,35 +298,31 @@ app.openapi(importLecturer, async (c) => {
                     },
                 })
 
-                console.log(
-                    '[LSB create User]:',
-                    res.status,
-                    JSON.stringify(res.data),
-                    // @ts-expect-error
-                    res.data?.extra?.data?.Master
-                )
                 if (res.status === 200) {
-                    const newProfileId = typeof res.data === 'string' && res.data ? res.data : crypto.randomUUID()
-                    console.log('[LSB create User] newProfileId:', newProfileId, '| type:', typeof res.data, '| raw res.data:', res.data)
-                    await prisma.lecturer.create({
+                    // Validate res.data is a string ID before using it
+                    if (typeof res.data !== 'string' || !res.data) {
+                        const errMsg = `LSB trả về dữ liệu không hợp lệ (mã GV: ${lecturer.code})`
+                        importErrors.push({ code: lecturer.code, name: lecturer.fullname, error: errMsg })
+                    } else {
+                    await tx.lecturer.create({
                         data: {
                             ...lecturerData,
                             userProfile: {
                                 connectOrCreate: {
                                     where: {
-                                        idCardNumber: lecturer.idCardNumber,
+                                        id: res.data,
+                                        // idCardNumber: lecturer.idCardNumber,
                                     },
-                                    create: { id: newProfileId, ...profileData },
+                                    create: { id: res.data, ...profileData },
                                 },
                             },
                         },
                     })
+                    }
                 } else {
                     const extra = res.data?.extra as ErrorExtra | undefined
-                    return c.json(
-                        { message: extra?.message || [extra?.code, extra?.data].join(' ') },
-                        400
-                    )
+                    const errMsg = extra?.message || [extra?.code, extra?.data].join(' ') || `LSB API error: ${res.status}`
+                    importErrors.push({ code: lecturer.code, name: lecturer.fullname, error: errMsg })
                 }
             }
         } catch (error) {
@@ -325,16 +332,38 @@ app.openapi(importLecturer, async (c) => {
             importErrors.push({ code: lecturer.code, name: lecturer.fullname, error: errMsg })
         }
     }
-    //     },
-    //     { timeout: timeout * 1000 }
-    // )
+    
+    // Nếu có lỗi, throw để rollback transaction
+    if (importErrors.length > 0) {
+        throw new Error(JSON.stringify(importErrors))
+    }
+        },
+        { timeout: timeout * 1000 }
+    )
+    } catch (error) {
+        // Parse errors from transaction
+        if (error instanceof Error && error.message.startsWith('[')) {
+            try {
+                const errors = JSON.parse(error.message) as { code: string; name: string; error: string }[]
+                return c.json({
+                    message: `Có lỗi xảy ra khi import - Không lưu dữ liệu nào`,
+                    failed: errors
+                }, 400)
+            } catch {
+                // If parsing fails, fall through to generic error
+            }
+        }
+        console.error('[IMPORT TRANSACTION ERROR]', error)
+        return c.json({
+            message: `Có lỗi xảy ra khi import: ${error instanceof Error ? error.message : String(error)}`,
+        }, 400)
+    }
 
-    const successCount = data.lecturers.length - importErrors.length
+    const successCount = data.lecturers.length
     return c.json(
         {
             message: `Khai báo giảng viên thành công: ${successCount}/${data.lecturers.length}`,
             time: Date.now() - start,
-            ...(importErrors.length > 0 ? { failed: importErrors } : {}),
         },
         200
     )
@@ -762,8 +791,6 @@ app.openapi(importStudent, async (c) => {
                 }
             )
 
-            // @ts-expect-error
-            console.log('[LSB update User]:', res.status, res.data, res.data?.extra?.data)
             if (existing) {
                 if (res.status === 200) {
                     await prisma.student.update({
@@ -807,8 +834,6 @@ app.openapi(importStudent, async (c) => {
                     },
                 }
             )
-            // @ts-expect-error
-            console.log('[LSB create User]:', res.status, res.data, res.data?.extra?.data?.Master)
 
             if (res.status === 200) {
                 await createStudentFn(res.data as string)

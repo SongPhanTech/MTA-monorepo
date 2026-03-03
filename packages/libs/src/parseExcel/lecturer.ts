@@ -163,16 +163,22 @@ export const parseSheetLecturer = (file: ArrayBufferLike) => {
             }
         })
 
-    const duplicateCodes = data
-        .map((item) => item.code)
-        .filter((code, index, arr) => arr.indexOf(code) !== index)
-
-    if (duplicateCodes.length) {
-        errors.push({
-            sheetRef: sheetName,
-            cellRef: '',
-            message: `Mã bị trùng: ${duplicateCodes.join(', ')}`,
-        })
+    // Check duplicate lecturer codes with row tracking
+    const codeRowMap = new Map<string, number[]>()
+    for (const item of data) {
+        if (!item.code) continue
+        const existing = codeRowMap.get(item.code) ?? []
+        existing.push(item.rowNum)
+        codeRowMap.set(item.code, existing)
+    }
+    for (const [code, rowNums] of codeRowMap) {
+        if (rowNums.length > 1) {
+            errors.push({
+                sheetRef: sheetName,
+                cellRef: rowNums.map((r) => `${cols.code}${r}`).join(', '),
+                message: `Mã giảng viên bị trùng: ${code}`,
+            })
+        }
     }
 
     const cccdRowMap = new Map<string, { code: string; rowNum: number }[]>()

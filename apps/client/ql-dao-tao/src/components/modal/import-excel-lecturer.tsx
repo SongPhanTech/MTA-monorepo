@@ -72,7 +72,20 @@ const ImportLecturerModal = ({ visible, onSuccess, onCancel }: ImportStudentModa
                 message.success(res?.data?.message || 'Nhập dữ liệu giảng viên từ file thành công')
                 onSuccess()
             } else {
-                message.error(res?.data?.message || 'Nhập dữ liệu giảng viên từ file thất bại')
+                // Handle 400 error with failed array
+                const failedData = (res?.data as any)?.failed
+                if (failedData && Array.isArray(failedData)) {
+                    // Transform failed array to error table format
+                    const importErrors = failedData.map((item: { code: string; name: string; error: string }) => ({
+                        cellRef: item.code,
+                        message: `${item.name}: ${item.error}`,
+                    }))
+                    setErrorData(importErrors)
+                    setDisabledButton(true)
+                    message.error(res?.data?.message || 'Import thất bại')
+                } else {
+                    message.error(res?.data?.message || 'Nhập dữ liệu giảng viên từ file thất bại')
+                }
             }
         } catch (error: any) {
             if (error?.info?.message) {
