@@ -2,6 +2,7 @@ import { CloseOutlined } from '@ant-design/icons'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { importLecturer } from '@workspace/libs/api/training'
+import { useFindManyLecturer } from '@workspace/db/hooks'
 import { parseSheetLecturer } from '@workspace/libs/parseExcel'
 import { Button, Col, Collapse, Empty, Modal, message, Row, Space, Table, Tag } from 'antd'
 import dayjs from 'dayjs'
@@ -24,6 +25,15 @@ const ImportLecturerModal = ({ visible, onSuccess, onCancel }: ImportStudentModa
 
     const [fileName, setFileName] = useState<string>('')
 
+    const { data: existingLecturers } = useFindManyLecturer({
+        select: {
+            code: true,
+            userProfile: {
+                select: { idCardNumber: true },
+            },
+        },
+    })
+
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
         setErrorData([])
@@ -34,13 +44,21 @@ const ImportLecturerModal = ({ visible, onSuccess, onCancel }: ImportStudentModa
 
         const reader = new FileReader()
         reader.onload = (e) => {
-            const { lecturers, errors } = parseSheetLecturer(e.target?.result as ArrayBuffer)
+            const existingLecturerMap = new Map<string, string>()
+            existingLecturers?.forEach((lec) => {
+                if (lec.code && lec.userProfile?.idCardNumber) {
+                    existingLecturerMap.set(lec.code, lec.userProfile.idCardNumber)
+                }
+            })
+            console.log('Existing lecturers from DB:', existingLecturerMap.size)
+            
+            const { lecturers, errors } = parseSheetLecturer(e.target?.result as ArrayBuffer, existingLecturerMap)
             setPreviewData(lecturers)
             if (errors.length === 0) {
                 setDisabledButton(false)
             }
             setErrorData(errors)
-            console.log(errors)
+            console.log('Parse errors:', errors)
         }
         reader.readAsArrayBuffer(file)
     }
@@ -72,19 +90,37 @@ const ImportLecturerModal = ({ visible, onSuccess, onCancel }: ImportStudentModa
                 message.success(res?.data?.message || 'Nhập dữ liệu giảng viên từ file thành công')
                 onSuccess()
             } else {
-                // Handle 400 error with failed array
-                const failedData = (res?.data as any)?.failed
-                if (failedData && Array.isArray(failedData)) {
-                    // Transform failed array to error table format
-                    const importErrors = failedData.map((item: { code: string; name: string; error: string }) => ({
-                        cellRef: item.code,
-                        message: `${item.name}: ${item.error}`,
-                    }))
+                const errorCodes = (res?.data as any)?.errors
+                if (errorCodes && Array.isArray(errorCodes) && typeof errorCodes[0] === 'string') {
+                    const importErrors = errorCodes.map((code: string) => {
+                        const matchingRows = previewData.filter((item) => item.code === code)
+                        const cellRefs = matchingRows.map((item) => `B${item.rowNum}`).join(', ')
+                        return {
+                            cellRef: cellRefs || code,
+                            message: `Mã giảng viên đã tồn tại trong hệ thống: ${code}`,
+                        }
+                    })
                     setErrorData(importErrors)
                     setDisabledButton(true)
                     message.error(res?.data?.message || 'Import thất bại')
-                } else {
-                    message.error(res?.data?.message || 'Nhập dữ liệu giảng viên từ file thất bại')
+                }
+                else {
+                    const failedData = (res?.data as any)?.failed
+                    if (failedData && Array.isArray(failedData)) {
+                        const importErrors = failedData.map((item: { code: string; name: string; error: string }) => {
+                            const matchingRow = previewData.find((p) => p.code === item.code)
+                            const cellRef = matchingRow ? `B${matchingRow.rowNum}` : item.code
+                            return {
+                                cellRef,
+                                message: `${item.name}: ${item.error}`,
+                            }
+                        })
+                        setErrorData(importErrors)
+                        setDisabledButton(true)
+                        message.error(res?.data?.message || 'Import thất bại')
+                    } else {
+                        message.error(res?.data?.message || 'Nhập dữ liệu giảng viên từ file thất bại')
+                    }
                 }
             }
         } catch (error: any) {

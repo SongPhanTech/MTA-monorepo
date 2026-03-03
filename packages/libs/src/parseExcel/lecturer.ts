@@ -8,7 +8,7 @@ dayjs.extend(customParseFormat)
 
 // TODO!: now depends on stt column(it need to be a integer), maybe need to change to more reliable way
 
-export const parseSheetLecturer = (file: ArrayBufferLike) => {
+export const parseSheetLecturer = (file: ArrayBufferLike, existingLecturerMap?: Map<string, string>) => {
     const wb = read(file, { cellDates: true })
     const sheetName = 'Danh sách giảng viên'
     const errors: ParseSheetError[] = []
@@ -176,7 +176,30 @@ export const parseSheetLecturer = (file: ArrayBufferLike) => {
             errors.push({
                 sheetRef: sheetName,
                 cellRef: rowNums.map((r) => `${cols.code}${r}`).join(', '),
-                message: `Mã giảng viên bị trùng: ${code}`,
+                message: `Mã giảng viên bị trùng trong file: ${code}`,
+            })
+        }
+    }
+
+    if (existingLecturerMap && existingLecturerMap.size > 0) {
+        const dbDuplicateMap = new Map<string, number[]>()
+
+        for (const item of data) {
+            if (!item.code) continue
+            const existingCCCD = existingLecturerMap.get(item.code)
+
+            if (existingCCCD && existingCCCD !== item.idCardNumber) {
+                const existing = dbDuplicateMap.get(item.code) ?? []
+                existing.push(item.rowNum)
+                dbDuplicateMap.set(item.code, existing)
+            }
+        }
+
+        for (const [code, rowNums] of dbDuplicateMap) {
+            errors.push({
+                sheetRef: sheetName,
+                cellRef: rowNums.map((r) => `${cols.code}${r}`).join(', '),
+                message: `Mã giảng viên đã tồn tại trong hệ thống: ${code}`,
             })
         }
     }
