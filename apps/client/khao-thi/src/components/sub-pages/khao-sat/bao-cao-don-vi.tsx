@@ -275,6 +275,27 @@ function OrganizationSurveyReport({
     }
 
     const renderTable = (dataTable: any, choices: any) => {
+            if (!dataTable?.length) return
+        let average = dataTable[0]?.answers.map((i: any) => {
+            return { ...i, total: 0, count: 0 }
+        })
+        dataTable.forEach((e: any) => {
+            average = average.map((i: any) => {
+                return {
+                    ...i,
+                    total: i.total + e.answers.find((a: any) => a.id === i.id)?.total,
+                    count: i.count + e.answers.find((a: any) => a.id === i.id)?.count,
+                }
+            })
+        })
+        const datarender = [
+            ...dataTable,
+            {
+                name: 'Trung bình',
+                answers: average,
+                id: 'average',
+            },
+        ]
         return (
             <Table
                 // onRow={(record) => {
@@ -300,8 +321,9 @@ function OrganizationSurveyReport({
                               {
                                   title: 'Đơn vị quản lý',
                                   align: 'center',
-                                  render: (_, record) => {
-                                      return `${record?.organization?.sMa || ''} - ${record?.organization?.sTen || ''}`
+                                  render: (_, record,index) => {
+                                       return index === datarender.length - 1
+                                          ? 'ĐGTB': `${record?.organization?.sMa || ''} - ${record?.organization?.sTen || ''}`
                                   },
                               },
                               // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>

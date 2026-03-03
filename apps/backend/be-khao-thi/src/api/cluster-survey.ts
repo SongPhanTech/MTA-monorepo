@@ -968,4 +968,88 @@ app.openapi(getClusterSurveyStatisticsForHocVien, async (c) => {
     return c.json(data, 200)
 })
 
+const getClusterSurveyInfo = createRoute({
+    operationId: 'get-cluster-survey-info',
+    path: '/{id}/get-cluster-survey-info',
+    method: 'get',
+    tags: ['ClusterSurvey'],
+    summary: 'Thống kê khảo sát cụm thông tin chung',
+    request: {
+        params: z.object({ id: z.string() }),
+        query: z.object({
+            organizationId: z.string(),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Thành công',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        data:z.any()
+                    }),
+                },
+            },
+        },
+        404: {
+            description: 'Không tìm thấy khảo sát.',
+            content: {
+                'application/json': {
+                    schema: z.object({ message: z.string() }),
+                },
+            },
+        },
+    },
+})
+
+app.openapi(getClusterSurveyInfo, async (c) => {
+    const { id } = c.req.valid('param')
+    const { ...q } = c.req.valid('query')
+
+
+    const survey = await prisma.survey.findMany({
+        where: { clusterSurveyId: id },
+        include:{
+            surveySessions:true,
+        }
+    })
+
+    if (!survey?.length) {
+        return c.json({ message: 'Không tìm thấy khảo sát' }, 404)
+    }
+
+    const completedSurveyCount = await prisma.survey.count({
+        where: { clusterSurveyId: id,
+            surveySessions:{
+               some: {}
+        } },
+    })
+
+    const studentCompletedSurvey = await prisma.surveySession.count({
+        where: { survey: {
+            clusterSurveyId: id
+        } },
+        // include:{
+        //     survey:{
+        //         include:{
+        //             clusterSurvey:true
+        //         }
+        //     }
+        // }
+    })
+
+
+
+    const data = {
+        data:{
+            surveyCount:survey?.length||0,
+            completedSurveyCount,
+            studentCompletedSurveyCount:studentCompletedSurvey||0,
+            
+        }
+    }
+
+    return c.json(data, 200)
+})
+
 export default app
