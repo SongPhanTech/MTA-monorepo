@@ -2047,25 +2047,43 @@ const getScholarship = async (
 
 const CheckDecreaseAcademicWarning = (
     student: StudentInfoCheck,
-    hasAcademicWarning: boolean
+    hasAcademicWarningThisTerm: boolean,
+    trainingCourse?: {
+    id: string
+    scoreToPass: number
+    baseScore: string
+    scoreConverts: ScoreConvertItem[]
+} | null
 ): boolean => {
-    console.log('Checking if academic warning can be decreased for student:', student.id)
-    console.log(
-        'Academic warning level:',
-        student.mucCanhCaoHocTap,
-        'Has academic warning:',
-        hasAcademicWarning
-    )
-    const academicWarningLevel = student.mucCanhCaoHocTap || 0
-    if (academicWarningLevel <= 0) {
-        return false // Không có cảnh cáo học tập
-    }
-    if (academicWarningLevel >= 1 && !hasAcademicWarning) {
-        return true // Giảm cảnh cáo học tập nếu không có cảnh cáo học tập
-    }
-    return false
-}
+    const academicWarningLevel = student.mucCanhCaoHocTap ?? 0
 
+    if (academicWarningLevel <= 0) return false
+
+    const baseScore = trainingCourse?.baseScore ?? 'Base10'
+    const scoreToPass = trainingCourse?.scoreToPass ?? 5.0
+
+    let isImproved = false
+
+    if (baseScore === 'Base10') {
+        isImproved =
+            typeof student.diemTrungBinh10 === 'number' &&
+            student.diemTrungBinh10 >= scoreToPass
+    } else {
+        const scoreToPassInBase4 = layGiaTriDiem4(
+            scoreToPass,
+            trainingCourse?.id ?? '',
+            trainingCourse?.scoreConverts ?? []
+        )
+
+        isImproved =
+            typeof student.diemTrungBinh4 === 'number' &&
+            student.diemTrungBinh4 >= scoreToPassInBase4
+    }
+
+    return academicWarningLevel >= 1 &&
+           !hasAcademicWarningThisTerm &&
+           isImproved
+}
 const fetchStudentSemesterResult = async (studentId: string, semesterId: string) => {
     return await prisma.studentSemesterResult.findFirst({
         where: {
