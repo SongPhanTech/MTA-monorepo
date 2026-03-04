@@ -167,7 +167,7 @@ export default function TrainingTypePage() {
                                 title: 'Tên loại hình đào tạo',
                                 dataIndex: 'name',
                                 fixed: 'left',
-                                align: 'center',
+                                align: 'left',
                                 type: 'input',
                             },
 

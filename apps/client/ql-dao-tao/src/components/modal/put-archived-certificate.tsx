@@ -136,7 +136,7 @@ const PutCertificateArchivedModal = () => {
                 },
             },
         },
-        { enabled: !!trainingObjectTypeId && !!fixedClassId }
+        { enabled: !!trainingObjectTypeId }
     )
 
     // Thêm sinh viên vào danh sách đã chọn
@@ -359,30 +359,24 @@ const PutCertificateArchivedModal = () => {
                     </div>
 
                     {/* Input chọn sinh viên */}
-                    {fixedClassId ? (
-                        <div className="mb-3">
-                            <Select
-                                showSearch
-                                style={{ width: '100%' }}
-                                placeholder="Tìm và chọn sinh viên để thêm vào danh sách..."
-                                value={undefined}
-                                onSelect={(value: string) => handleAddStudent(value)}
-                                options={studentData.map((item: any) => ({
-                                    label: `${item.userProfile?.code || ''} - ${item.userProfile?.fullname || ''}`,
-                                    value: item.id,
-                                }))}
-                                filterOption={(input, option) =>
-                                    String(option?.label ?? '')
-                                        .toLowerCase()
-                                        .includes(input.toLowerCase())
-                                }
-                            />
-                        </div>
-                    ) : (
-                        <div className="text-gray-500 text-center py-4 border rounded">
-                            Vui lòng chọn Khoá và Lớp quản lý để hiển thị danh sách sinh viên
-                        </div>
-                    )}
+                    <div className="mb-3">
+                        <Select
+                            showSearch
+                            style={{ width: '100%' }}
+                            placeholder="Tìm và chọn sinh viên để thêm vào danh sách..."
+                            value={undefined}
+                            onSelect={(value: string) => handleAddStudent(value)}
+                            options={studentData.map((item: any) => ({
+                                label: `${item.userProfile?.code || ''} - ${item.userProfile?.fullname || ''}`,
+                                value: item.id,
+                            }))}
+                            filterOption={(input, option) =>
+                                String(option?.label ?? '')
+                                    .toLowerCase()
+                                    .includes(input.toLowerCase())
+                            }
+                        />
+                    </div>
 
                     {/* Table danh sách đã chọn */}
                     {selectedStudents.length > 0 && (
