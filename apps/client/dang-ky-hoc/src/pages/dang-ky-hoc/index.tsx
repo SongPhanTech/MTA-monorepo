@@ -272,8 +272,8 @@ const DanhSachMonDangKy = ({
                                     ?.map?.((tkb) => {
                                         return (
                                             <p>
-                                                {tkb?.dayOfWeek === 8 ? 'CN' : `T${tkb?.dayOfWeek}`} -{' '}
-                                                {tkb?.startPeriod} - {tkb?.endPeriod}
+                                                {tkb?.dayOfWeek === 8 ? 'CN' : `T${tkb?.dayOfWeek}`}{' '}
+                                                - {tkb?.startPeriod} - {tkb?.endPeriod}
                                             </p>
                                         )
                                     })
@@ -324,8 +324,8 @@ const DanhSachMonDangKy = ({
                         const r = record as unknown as GetClassesInfo200ItemSubjectClassItem
                         return {
                             className:
-                                r?.classRegisterLogs?.map?.((e) => e?.student?.userProfileId).length >
-                                0
+                                r?.classRegisterLogs?.map?.((e) => e?.student?.userProfileId)
+                                    .length > 0
                                     ? 'bg-green-200'
                                     : '',
                         }

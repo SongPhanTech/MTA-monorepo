@@ -51,9 +51,9 @@ import SinhDeThuCongModal from './sinh-de-thu-cong'
 import ModalTaoKhungDe from './tao-khung-de'
 import ModalImportCDR from './modal-import-CDR'
 import AddHuongDanNganHang from './add-huong-dan-ngan-hang'
-import ModalPrintSurvey from './modal-print-survey-report';
-import ModalPrintSurveyToFieldReport from './modal-print-survey-to-fielde-report';
-import ModalPrintDanhSachDoiTuong from './modal-print-danh-sach-doi-tuong';
+import ModalPrintSurvey from './modal-print-survey-report'
+import ModalPrintSurveyToFieldReport from './modal-print-survey-to-fielde-report'
+import ModalPrintDanhSachDoiTuong from './modal-print-danh-sach-doi-tuong'
 
 export {
     ConfirmModal,

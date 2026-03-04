@@ -92,7 +92,12 @@ const ModalPrintDanhSachDoiTuong = () => {
                 >
                     <thead>
                         <tr className="font-bold  border-2 border-black text-center">
-                            <th className="border-2  border-black text-center" style={{ width: 50 }}>STT</th>
+                            <th
+                                className="border-2  border-black text-center"
+                                style={{ width: 50 }}
+                            >
+                                STT
+                            </th>
                             <th className="border-2  border-black text-center">Mã HV/GV</th>
                             <th className="border-2  border-black text-center">Họ tên</th>
                             <th className="border-2  border-black text-center">CCCD</th>
@@ -115,17 +120,21 @@ const ModalPrintDanhSachDoiTuong = () => {
                                 <td className="border-2  border-black text-center">
                                     {record?.lastName || ''} {record?.firstName || ''}
                                 </td>
-                                <td className="border-2  border-black text-center">{record?.idCardNumber || ''}</td>
-                                <td className="border-2  border-black text-center">{record?.phoneNumber || ''}</td>
-                                <td className="border-2  border-black text-center">{record?.lecturer?.organization?.sMa || ''}</td>
+                                <td className="border-2  border-black text-center">
+                                    {record?.idCardNumber || ''}
+                                </td>
+                                <td className="border-2  border-black text-center">
+                                    {record?.phoneNumber || ''}
+                                </td>
+                                <td className="border-2  border-black text-center">
+                                    {record?.lecturer?.organization?.sMa || ''}
+                                </td>
                                 <td className="border-2  border-black text-center">
                                     {record?.educationAndTraining?.[0]?.fixedClass?.code || ''}
                                 </td>
                                 <td className="border-2  border-black text-center">
-                                    {
-                                        (record?.educationAndTraining?.[0]?.fixedClass as any)
-                                            ?.trainingCourse?.name || ''
-                                    }
+                                    {(record?.educationAndTraining?.[0]?.fixedClass as any)
+                                        ?.trainingCourse?.name || ''}
                                 </td>
                                 <td className="border-2  border-black text-center">
                                     {record?.surveySession ? 'Đã làm' : 'Chưa làm'}

@@ -161,6 +161,6 @@
 }
 
 .tree-child-disabled .ant-tree-node-content-wrapper {
-  color: #e11717;
-  font-style: italic;
+    color: #e11717;
+    font-style: italic;
 }

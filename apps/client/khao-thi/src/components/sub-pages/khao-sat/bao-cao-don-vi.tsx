@@ -275,7 +275,7 @@ function OrganizationSurveyReport({
     }
 
     const renderTable = (dataTable: any, choices: any) => {
-            if (!dataTable?.length) return
+        if (!dataTable?.length) return
         let average = dataTable[0]?.answers.map((i: any) => {
             return { ...i, total: 0, count: 0 }
         })
@@ -321,9 +321,10 @@ function OrganizationSurveyReport({
                               {
                                   title: 'Đơn vị quản lý',
                                   align: 'center',
-                                  render: (_, record,index) => {
-                                       return index === datarender.length - 1
-                                          ? 'ĐGTB': `${record?.organization?.sMa || ''} - ${record?.organization?.sTen || ''}`
+                                  render: (_, record, index) => {
+                                      return index === datarender.length - 1
+                                          ? 'ĐGTB'
+                                          : `${record?.organization?.sMa || ''} - ${record?.organization?.sTen || ''}`
                                   },
                               },
                               // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>

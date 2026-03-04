@@ -256,7 +256,6 @@ const ReviewSurveyModal = () => {
                                                             )
                                                         }
 
-
                                                         if (record.type === 'ESSAY') {
                                                             return (
                                                                 <div>

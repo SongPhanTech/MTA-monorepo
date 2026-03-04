@@ -254,8 +254,7 @@ app.openapi(graduationCheck, async (c) => {
             continue
         }
 
-        const curriculumVersion =
-            student.curriculumVersion || student.fixedClass.curriculumVersion
+        const curriculumVersion = student.curriculumVersion || student.fixedClass.curriculumVersion
 
         if (!curriculumVersion) {
             results.push({
@@ -287,8 +286,7 @@ app.openapi(graduationCheck, async (c) => {
         const lackOfOutputStandard = curriculumVersion.outputStandardOnCurriculum.filter(
             (standard) =>
                 standard.outputStandard.certificates.every(
-                    (cert) =>
-                        !student.archivedCertificate.some((a) => a.certificateId === cert.id)
+                    (cert) => !student.archivedCertificate.some((a) => a.certificateId === cert.id)
                 )
         )
         if (lackOfOutputStandard.length > 0) {
@@ -299,19 +297,19 @@ app.openapi(graduationCheck, async (c) => {
             )
         }
 
-        // Lấy KQHT, bỏ qua các trường hợp theo yêu cầu 
+        // Lấy KQHT, bỏ qua các trường hợp theo yêu cầu
         // Bỏ qua ở query: hoãn thi , miễn thi , cấm thi
-        // Bỏ qua trong code: lưu ban + điểm < scoreToRetain , cải thiện , bình thường 
+        // Bỏ qua trong code: lưu ban + điểm < scoreToRetain , cải thiện , bình thường
         const rawSubjectScores = await prisma.studentSubjectScore.findMany({
             where: {
                 studentId: application.studentId,
                 deletedAt: null,
                 examPostponed: false, //Hoãn thi
-                exempted: false,      // Miễn thi
-                examBanned: false,    // Cấm thi
+                exempted: false, // Miễn thi
+                examBanned: false, // Cấm thi
             },
             include: { subjectVersion: true },
-            orderBy: { createdAt: 'asc' }, 
+            orderBy: { createdAt: 'asc' },
         })
 
         type ProcessedScore = (typeof rawSubjectScores)[number] & {
@@ -320,7 +318,7 @@ app.openapi(graduationCheck, async (c) => {
             isPass: boolean
         }
 
-        // Group theo subjectId 
+        // Group theo subjectId
         const scoresBySubject = rawSubjectScores.reduce(
             (acc, score) => {
                 const key = score.subjectVersion.subjectId
@@ -340,10 +338,9 @@ app.openapi(graduationCheck, async (c) => {
             let best: ProcessedScore | null = null
 
             for (const score of scores) {
-                const scoreBase10 =
-                    score.manualFinalScore || score.finalScore?.toNumber() || 0
+                const scoreBase10 = score.manualFinalScore || score.finalScore?.toNumber() || 0
 
-                const isRetake = score.repeated       // học lại
+                const isRetake = score.repeated // học lại
                 const isImprovement = score.isImproving //học cải thiện
 
                 //Lưu ban + điểm < scoreToRetain → bỏ qua
@@ -417,7 +414,7 @@ app.openapi(graduationCheck, async (c) => {
             },
         })
 
-        // Duyệt CTĐT 
+        // Duyệt CTĐT
         // Map subjectId → điểm dùng tính GPA
         const finalScores = new Map<string, ProcessedScore>()
         // Map subjectId → điểm môn điều kiện (chỉ ghi nhận "Đạt")
@@ -438,7 +435,7 @@ app.openapi(graduationCheck, async (c) => {
                 (s) => s.type === SubjectRequirementType.Optional
             )
 
-            // Môn bắt buộc 
+            // Môn bắt buộc
             for (const subject of mandatory) {
                 if (
                     finalScores.has(subject.subjectId) ||
@@ -537,9 +534,7 @@ app.openapi(graduationCheck, async (c) => {
                         let credits = 0
                         for (const r of sideResults) {
                             const credit = r.subject.credit
-                            total = total.add(
-                                new Decimal(r.score?.scoreBase10 || 0).mul(credit)
-                            )
+                            total = total.add(new Decimal(r.score?.scoreBase10 || 0).mul(credit))
                             credits += credit
                         }
                         return credits ? total.div(credits).toNumber() : 0
@@ -589,7 +584,7 @@ app.openapi(graduationCheck, async (c) => {
             }
         }
 
-        // Tính GPA 
+        // Tính GPA
         let totalScoreBase10 = new Decimal(0)
         let totalScoreBase4 = new Decimal(0)
         let totalPassCredit = 0
@@ -599,12 +594,8 @@ app.openapi(graduationCheck, async (c) => {
             if (!subjectInCurriculum?.useForFinalScore) continue
 
             const credit = subjectInCurriculum.subject.credit
-            totalScoreBase10 = totalScoreBase10.add(
-                new Decimal(score.scoreBase10).mul(credit)
-            )
-            totalScoreBase4 = totalScoreBase4.add(
-                new Decimal(score.scoreBase4).mul(credit)
-            )
+            totalScoreBase10 = totalScoreBase10.add(new Decimal(score.scoreBase10).mul(credit))
+            totalScoreBase4 = totalScoreBase4.add(new Decimal(score.scoreBase4).mul(credit))
             totalPassCredit += credit
 
             // Theo dõi điểm thấp nhất
@@ -680,10 +671,8 @@ app.openapi(graduationCheck, async (c) => {
             continue
         }
 
-        const semesterRegisteredCredits =
-            student.studentSemesterResult[0]?.passedCredits || 0
-        const semesterFailedCredits =
-            student.studentSemesterResult[0]?.failedCredits || 0
+        const semesterRegisteredCredits = student.studentSemesterResult[0]?.passedCredits || 0
+        const semesterFailedCredits = student.studentSemesterResult[0]?.failedCredits || 0
         let repeatYearCount = 0
         let suspensionCount = 0
         for (const decision of student.studentAcademicDecision) {
@@ -718,10 +707,9 @@ app.openapi(graduationCheck, async (c) => {
             YEAR_FAILED_CREDITS: student.studentYearResult[0]?.failedCredits || 0,
             CUMULATIVE_PASSED_CREDITS: totalPassCredit,
             CUMULATIVE_DEBT_CREDITS: totalDebtCredit,
-            CUMULATIVE_PROGRESS_PERCENT:
-                curriculumVersion.requiredCredits
-                    ? (totalPassCredit / curriculumVersion.requiredCredits) * 100
-                    : 0,
+            CUMULATIVE_PROGRESS_PERCENT: curriculumVersion.requiredCredits
+                ? (totalPassCredit / curriculumVersion.requiredCredits) * 100
+                : 0,
             CUMULATIVE_RETAKE_PERCENT: totalPassCredit
                 ? (totalDebtCredit / totalPassCredit) * 100
                 : 0,

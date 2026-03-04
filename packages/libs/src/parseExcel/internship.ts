@@ -7,7 +7,7 @@ import type { ParseSheetError } from './types'
 dayjs.extend(customParseFormat)
 
 export const parseSheetInternship = (file: ArrayBufferLike) => {
-    const wb = read(file, { cellDates: true })  // Tự động convert Excel date sang JS Date
+    const wb = read(file, { cellDates: true }) // Tự động convert Excel date sang JS Date
     const sheetName = 'Danh sách thực tập'
     const errors: ParseSheetError[] = []
 
@@ -58,7 +58,7 @@ export const parseSheetInternship = (file: ArrayBufferLike) => {
     const parseDateFromCell = (colName: string, rowNum: number): dayjs.Dayjs => {
         const cell = ws[`${colName}${rowNum + 1}`]
         if (!cell?.v) return dayjs('')
-        
+
         // cellDates: true đã convert thành Date object hoặc giữ nguyên string
         return cell.v instanceof Date ? dayjs(cell.v) : parseDate(String(cell.v))
     }
