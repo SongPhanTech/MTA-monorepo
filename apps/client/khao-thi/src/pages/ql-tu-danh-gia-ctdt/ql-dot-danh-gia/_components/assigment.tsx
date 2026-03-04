@@ -95,8 +95,6 @@ export default function AssigmentOfAssessmentTab() {
         },
     })
 
-    console.log('le', lecturers)
-
     const { data, isLoading, refetch } = useFindUniqueEvaluationPeriod(
         {
             where: { id: selectedEvaluationPeriodId },
