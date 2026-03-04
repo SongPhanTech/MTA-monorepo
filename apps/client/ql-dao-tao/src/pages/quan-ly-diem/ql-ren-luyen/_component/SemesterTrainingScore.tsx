@@ -117,8 +117,6 @@ export default function SemesterTrainingScore({
                 },
             },
             orderBy: [{ createdAt: 'desc' }],
-            take: numberOfPages,
-            skip: (currentPage - 1) * numberOfPages,
         },
         {
             enabled: !!selectedFixedClass,
@@ -239,20 +237,21 @@ export default function SemesterTrainingScore({
 
             Object.entries(dataSubmit.list).forEach(([key, value]) => {
                 const item: any = data.find((i) => i.id === key)
-                if (item?.semesterTrainingScore?.length > 0) {
+                if (item?.semesterTrainingScore?.length > 0 && value?.score) {
                     listUpdate.push({
                         ...item,
                         semesterTrainingScoreId: item.semesterTrainingScore[0].id,
                         score: value.score,
                     })
-                } else {
+                } else if(item?.semesterTrainingScore?.length === 0 && value?.score) {
                     listCreate.push({
                         ...item,
                         score: value.score,
+
                     })
                 }
             })
-
+            
             let listTransaction: any = []
             if (listCreate.length > 0) {
                 listTransaction.push({
@@ -317,11 +316,6 @@ export default function SemesterTrainingScore({
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (data?.length > 0) {
-            const list = data.map((i) => {
-                return {
-                    score: i.semesterTrainingScore[0]?.score,
-                }
-            })
             form.setFieldsValue({
                 list: data.reduce((acc, cur) => {
                     if (!acc) {
@@ -487,22 +481,7 @@ export default function SemesterTrainingScore({
                                 }),
                             }}
                             data={data}
-                            pagination={{
-                                current: currentPage,
-                                pageSize: numberOfPages,
-                                total: count,
-
-                                onChange: (page, pageSize) => {
-                                    if (numberOfPages === pageSize) {
-                                        setCurrentPage(page)
-                                    } else {
-                                        setCurrentPage(1)
-                                        setNumberOfPages(pageSize)
-                                    }
-                                },
-                                showTotal: (total, range) =>
-                                    `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
-                            }}
+                            pagination={false}
                         />
                     </Form.Item>
                 </Form>

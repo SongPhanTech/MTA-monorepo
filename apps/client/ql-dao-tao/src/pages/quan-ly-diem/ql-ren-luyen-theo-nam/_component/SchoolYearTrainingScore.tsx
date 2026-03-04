@@ -111,8 +111,8 @@ export default function SchoolYearTrainingScore({
                 },
             },
             orderBy: [{ createdAt: 'desc' }],
-            take: numberOfPages,
-            skip: (currentPage - 1) * numberOfPages,
+            // take: numberOfPages,
+            // skip: (currentPage - 1) * numberOfPages,
         },
         {
             enabled: !!selectedFixedClass && !!schoolYearId,
@@ -243,13 +243,13 @@ export default function SchoolYearTrainingScore({
             const listUpdate: any = []
             Object.entries(dataSubmit.list).forEach(([key, value]) => {
                 const item: any = data.find((i) => i.id === key)
-                if (item?.schoolYearTrainingScore?.length > 0) {
+                if (item?.schoolYearTrainingScore?.length > 0 && value?.score) {
                     listUpdate.push({
                         ...item,
                         schoolYearTrainingScoreId: item.schoolYearTrainingScore[0].id,
                         score: value.score,
                     })
-                } else {
+                } else if(item?.schoolYearTrainingScore?.length === 0 && value?.score) {
                     listCreate.push({
                         ...item,
                         score: value.score,
@@ -516,22 +516,23 @@ export default function SchoolYearTrainingScore({
                             //     onChange: (selectedKeys) => setSelectedRowKeys(selectedKeys),
                             // }}
                             data={data}
-                            pagination={{
-                                current: currentPage,
-                                pageSize: numberOfPages,
-                                total: count,
+                            pagination={false}
+                            // pagination={{
+                            //     current: currentPage,
+                            //     pageSize: numberOfPages,
+                            //     total: count,
 
-                                onChange: (page, pageSize) => {
-                                    if (numberOfPages === pageSize) {
-                                        setCurrentPage(page)
-                                    } else {
-                                        setCurrentPage(1)
-                                        setNumberOfPages(pageSize)
-                                    }
-                                },
-                                showTotal: (total, range) =>
-                                    `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
-                            }}
+                            //     onChange: (page, pageSize) => {
+                            //         if (numberOfPages === pageSize) {
+                            //             setCurrentPage(page)
+                            //         } else {
+                            //             setCurrentPage(1)
+                            //             setNumberOfPages(pageSize)
+                            //         }
+                            //     },
+                            //     showTotal: (total, range) =>
+                            //         `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
+                            // }}
                         />
                     </Form.Item>
                 </Form>
