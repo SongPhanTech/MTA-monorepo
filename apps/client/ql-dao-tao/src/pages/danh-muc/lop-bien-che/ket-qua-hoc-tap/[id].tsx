@@ -786,13 +786,14 @@ export default function StudentScoreClassPage() {
                                     width: 100,
                                     render: (_, record: any) => {
                                         if (record.$isSummary) return null
-                                        const totalBonus = record.subjectClassStudent?.[0]?.awards.reduce(
-                                            (
-                                                acc: number,
-                                                curr: { archivedAward: { bonusScore: number } }
-                                            ) => acc + (curr?.archivedAward?.bonusScore ?? 0),
-                                            0
-                                        )
+                                        const totalBonus =
+                                            record.subjectClassStudent?.[0]?.awards.reduce(
+                                                (
+                                                    acc: number,
+                                                    curr: { archivedAward: { bonusScore: number } }
+                                                ) => acc + (curr?.archivedAward?.bonusScore ?? 0),
+                                                0
+                                            )
                                         return totalBonus || 0
                                     },
                                 },
@@ -843,7 +844,8 @@ export default function StudentScoreClassPage() {
                                     width: 100,
                                     render: (_, record: any) => {
                                         // if (record.$isSummary) return <b>{record.semesterResult.registeredCredits}</b>
-                                        return record?.subjectClassStudent?.[0]?.subjectVersion.credit
+                                        return record?.subjectClassStudent?.[0]?.subjectVersion
+                                            .credit
                                     },
                                 },
                                 {
@@ -941,7 +943,8 @@ export default function StudentScoreClassPage() {
                                             const r = record.semesterResult
                                             return (
                                                 <span className="font-semibold text-xs">
-                                                    TL hệ 10: {Number(r.cumulativeGpaBase10)} | TL hệ 4: {Number(r.cumulativeGpaBase4)}
+                                                    TL hệ 10: {Number(r.cumulativeGpaBase10)} | TL
+                                                    hệ 4: {Number(r.cumulativeGpaBase4)}
                                                 </span>
                                             )
                                         }
@@ -954,11 +957,15 @@ export default function StudentScoreClassPage() {
                                     align: 'center',
                                     fixed: 'right',
                                     render: (_, { id, subjectClassStudent }: any) => {
-                                        if (subjectClassStudent?.length === 0 && !id?.startsWith?.('summary-')) return null
+                                        if (
+                                            subjectClassStudent?.length === 0 &&
+                                            !id?.startsWith?.('summary-')
+                                        )
+                                            return null
                                         if (id?.startsWith?.('summary-')) return null
                                         return (
-                                        <Row className="justify-center gap-2">
-                                            {/* <Tooltip title="Cộng điểm">
+                                            <Row className="justify-center gap-2">
+                                                {/* <Tooltip title="Cộng điểm">
                                                 <BookCheckIcon
                                                     className="cursor-pointer hover:text-blue-500"
                                                     size={16}
@@ -978,26 +985,27 @@ export default function StudentScoreClassPage() {
                                                 />
                                             </Tooltip> */}
 
-                                            <Tooltip title="Thêm chứng chỉ">
-                                                <SafetyCertificateOutlined
-                                                    className="cursor-pointer hover:text-green-500"
-                                                    onClick={() => {
-                                                        onOpenModalAddCertificate({
-                                                            id: subjectClassStudent?.[0]?.id,
-                                                            studentId: studentId,
-                                                            list:
-                                                                subjectClassStudent?.[0]?.certificates.map(
-                                                                    (i: any) =>
-                                                                        i.archivedCertificateId
-                                                                ) || [],
-                                                            subjectClassStudent:
-                                                                subjectClassStudent?.[0],
-                                                        })
-                                                    }}
-                                                />
-                                            </Tooltip>
-                                        </Row>
-                                    )},
+                                                <Tooltip title="Thêm chứng chỉ">
+                                                    <SafetyCertificateOutlined
+                                                        className="cursor-pointer hover:text-green-500"
+                                                        onClick={() => {
+                                                            onOpenModalAddCertificate({
+                                                                id: subjectClassStudent?.[0]?.id,
+                                                                studentId: studentId,
+                                                                list:
+                                                                    subjectClassStudent?.[0]?.certificates.map(
+                                                                        (i: any) =>
+                                                                            i.archivedCertificateId
+                                                                    ) || [],
+                                                                subjectClassStudent:
+                                                                    subjectClassStudent?.[0],
+                                                            })
+                                                        }}
+                                                    />
+                                                </Tooltip>
+                                            </Row>
+                                        )
+                                    },
                                 },
                             ]}
                             data={dataWithSummary}

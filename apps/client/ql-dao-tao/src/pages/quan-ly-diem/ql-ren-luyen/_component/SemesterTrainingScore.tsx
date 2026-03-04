@@ -190,7 +190,7 @@ export default function SemesterTrainingScore({
         }
     }
 
-     const handleRejected = async () => {
+    const handleRejected = async () => {
         try {
             showSpinner()
 
@@ -230,8 +230,8 @@ export default function SemesterTrainingScore({
             showSpinner()
             const dataSubmit = form.getFieldsValue()
             const keys = Object.keys(dataSubmit.list)
-            const error=Object.entries(dataSubmit.list).find((i:any)=>Number(i?.score)>10)
-            if(error){
+            const error = Object.entries(dataSubmit.list).find((i: any) => Number(i?.score) > 10)
+            if (error) {
                 return
             }
             const listCreate: any = []
@@ -345,23 +345,23 @@ export default function SemesterTrainingScore({
                         'XEM_TAT_CA'
                     ) && (
                         <>
-                         <Button
-                            type="default"
-                            className="mr-3"
-                            disabled={selectedRowKeys.length === 0}
-                            onClick={handleRejected}
-                        >
-                            Từ chối
-                        </Button>   
-                        <Button
-                            type="primary"
-                            className="mr-3"
-                            disabled={selectedRowKeys.length === 0}
-                            onClick={handleApproved}
-                        >
-                            Phê duyệt
-                        </Button></>
-                       
+                            <Button
+                                type="default"
+                                className="mr-3"
+                                disabled={selectedRowKeys.length === 0}
+                                onClick={handleRejected}
+                            >
+                                Từ chối
+                            </Button>
+                            <Button
+                                type="primary"
+                                className="mr-3"
+                                disabled={selectedRowKeys.length === 0}
+                                onClick={handleApproved}
+                            >
+                                Phê duyệt
+                            </Button>
+                        </>
                     )}
                     {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN, 'SUA') && (
                         <Button type="primary" onClick={handleSave}>

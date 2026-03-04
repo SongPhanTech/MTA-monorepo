@@ -13,7 +13,7 @@ import {
 // import ClusterSurveyReport from '@components/sub-pages/khao-sat/bao-cao-cum'
 // import LecturerSurveyReport from '@components/sub-pages/khao-sat/bao-cao-giang-vien'
 // import SurveyReport from '@components/sub-pages/khao-sat/bao-cao'
-import { useSemesterStore, useTrainingMajorStore } from '@workspace/ui'
+import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Flex, Row, Skeleton, Tree } from 'antd'
 import { useMemo, useState } from 'react'
 // import ClusterSurveyReport from '@components/sub-pages/khao-sat/bao-cao-cum';
@@ -63,7 +63,7 @@ export default function BaoCaoGiangVien() {
     const [selectedItem, setSelectedItem] = useState<any>()
 
     const { id: semesterId } = useSemesterStore()
-    const { id: trainingObjectTypeId } = useTrainingMajorStore()
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
     const { data: trainingObjectType } = useFindUniqueTrainingObjectType(
         {
@@ -123,14 +123,14 @@ export default function BaoCaoGiangVien() {
                 OR: [
                     {
                         iCapDonVi: 0,
-                        iLoaiDonVi: 0
+                        iLoaiDonVi: 0,
                     },
                     {
                         iLoaiDonVi: {
-                            in: [5,6,7],
+                            in: [5, 6, 7],
                         },
                     },
-                ]
+                ],
             },
             select: {
                 Id: true,
@@ -150,98 +150,103 @@ export default function BaoCaoGiangVien() {
         }
     )
 
-    const { data: lecturerData = [] } = useFindManyLecturer({
-        where: {
-            // ...(searchText && {
-            //     userProfile: {
-            //         OR: [
-            //             { fullName: { contains: searchText, mode: 'insensitive' } },
-            //             { code: { contains: searchText, mode: 'insensitive' } },
-            //         ],
-            //     },
-            // }),
-            mainSubjectClasses: {
-                some: {
-                    ...(!!trainingObjectTypeId && { trainingObjectTypeId }),
+    const { data: lecturerData = [] } = useFindManyLecturer(
+        {
+            where: {
+                // ...(searchText && {
+                //     userProfile: {
+                //         OR: [
+                //             { fullName: { contains: searchText, mode: 'insensitive' } },
+                //             { code: { contains: searchText, mode: 'insensitive' } },
+                //         ],
+                //     },
+                // }),
+                mainSubjectClasses: {
+                    some: {
+                        ...(!!trainingObjectTypeId && { trainingObjectTypeId }),
+                    },
+                },
+                organization: {
+                    OR: [
+                        {
+                            iCapDonVi: 0,
+                            iLoaiDonVi: 0,
+                        },
+                        {
+                            iLoaiDonVi: {
+                                in: [5, 6, 7],
+                            },
+                        },
+                    ],
                 },
             },
-            organization: {
-                 OR: [
-                    {
-                        iCapDonVi: 0,
-                        iLoaiDonVi: 0
-                    },
-                    {
-                        iLoaiDonVi: {
-                            in: [5,6,7],
-                        },
-                    },
-                ],
-            },
-        },
-        orderBy: {
-            userProfile: {
-                firstName: 'asc',
-            },
-        },
-        include: {
-            userProfile: true,
-            mainSubjectClasses: true,
-            organization: true,
-        },
-    },{
-        refetchOnWindowFocus: false,
-    })
-
-    const { data: lecturerActive = [] } = useFindManyLecturer({
-        where: {
-            // ...(searchText && {
-            //     userProfile: {
-            //         OR: [
-            //             { fullName: { contains: searchText, mode: 'insensitive' } },
-            //             { code: { contains: searchText, mode: 'insensitive' } },
-            //         ],
-            //     },
-            // }),
-            mainSubjectClasses: {
-                some: {
-                    ...(!!trainingObjectTypeId && { trainingObjectTypeId }),
+            orderBy: {
+                userProfile: {
+                    firstName: 'asc',
                 },
             },
-            clusterSurvey: {
-                some: {
-                    id:filters.clusterId
-                }
+            include: {
+                userProfile: true,
+                mainSubjectClasses: true,
+                organization: true,
             },
-            organization: {
-                 OR: [
-                    {
-                        iCapDonVi: 0,
-                        iLoaiDonVi: 0
-                    },
-                    {
-                        iLoaiDonVi: {
-                            in: [5,6,7],
-                        },
-                    },
-                ],
+        },
+        {
+            refetchOnWindowFocus: false,
+        }
+    )
 
+    const { data: lecturerActive = [] } = useFindManyLecturer(
+        {
+            where: {
+                // ...(searchText && {
+                //     userProfile: {
+                //         OR: [
+                //             { fullName: { contains: searchText, mode: 'insensitive' } },
+                //             { code: { contains: searchText, mode: 'insensitive' } },
+                //         ],
+                //     },
+                // }),
+                mainSubjectClasses: {
+                    some: {
+                        ...(!!trainingObjectTypeId && { trainingObjectTypeId }),
+                    },
+                },
+                clusterSurvey: {
+                    some: {
+                        id: filters.clusterId,
+                    },
+                },
+                organization: {
+                    OR: [
+                        {
+                            iCapDonVi: 0,
+                            iLoaiDonVi: 0,
+                        },
+                        {
+                            iLoaiDonVi: {
+                                in: [5, 6, 7],
+                            },
+                        },
+                    ],
+                },
+            },
+            orderBy: {
+                userProfile: {
+                    firstName: 'asc',
+                },
+            },
+            include: {
+                userProfile: true,
+                mainSubjectClasses: true,
+                organization: true,
             },
         },
-        orderBy: {
-            userProfile: {
-                firstName: 'asc',
-            },
-        },
-        include: {
-            userProfile: true,
-            mainSubjectClasses: true,
-            organization: true,
-        },
-    },{
-        enabled: !!filters.clusterId,
-        refetchOnWindowFocus: false,
-    })
+        {
+            enabled: !!filters.clusterId,
+            refetchOnWindowFocus: false,
+        }
+    )
 
     // Tạo treeData từ organizations và lecturers
     const treeData: any[] = useMemo(() => {
@@ -269,11 +274,13 @@ export default function BaoCaoGiangVien() {
                 },
                 selectable: lecturerActive.some((i) => i.id === lec.id),
                 organizationId: lec.organizationId,
-                className: !lecturerActive.some((i) => i.id === lec.id) ? 'tree-child-disabled':''
+                className: !lecturerActive.some((i) => i.id === lec.id)
+                    ? 'tree-child-disabled'
+                    : '',
             })),
             null
         )
-    }, [organizations, lecturerData,lecturerActive])
+    }, [organizations, lecturerData, lecturerActive])
 
     const hanleSearchReport = () => {}
 
@@ -284,18 +291,24 @@ export default function BaoCaoGiangVien() {
         if (filters?.clusterId) {
             console.log(selectedItem, '123')
 
-            if (selectedItem?.id && selectedItem?.iCapDonVi === 0&&selectedItem?.iLoaiDonVi === 0) {
+            if (
+                selectedItem?.id &&
+                selectedItem?.iCapDonVi === 0 &&
+                selectedItem?.iLoaiDonVi === 0
+            ) {
                 return (
                     <OrganizationSurveyReport
                         selectedId={filters?.clusterId}
                         surveyName={filters?.surveyName}
                         organizationId={selectedItem?.id}
                         trainingObjectTypeName={trainingObjectTypeName}
+                        semesterId={semesterId || ''}
+                        trainingObjectTypeId={trainingObjectTypeId || ''}
                     />
                 )
             }
 
-            if (selectedItem?.id && selectedItem?.iCapDonVi && selectedItem?.iLoaiDonVi ) {
+            if (selectedItem?.id && selectedItem?.iCapDonVi && selectedItem?.iLoaiDonVi) {
                 return (
                     <SurveyOrganizationReport
                         selectedId={filters.clusterId}

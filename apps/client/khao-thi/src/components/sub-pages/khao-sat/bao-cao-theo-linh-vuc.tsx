@@ -1,4 +1,9 @@
-import { DownloadOutlined, FileExcelOutlined, FileWordOutlined,PrinterOutlined } from '@ant-design/icons'
+import {
+    DownloadOutlined,
+    FileExcelOutlined,
+    FileWordOutlined,
+    PrinterOutlined,
+} from '@ant-design/icons'
 import HtmlTruncate from '@components/commons/html-truncate'
 import Table from '@components/commons/table'
 import useSpinner from '@hooks/spinner'

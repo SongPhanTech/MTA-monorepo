@@ -150,10 +150,12 @@ const ModalPrintSurveylecturer = () => {
                 </div>
 
                 {/* ===== TITLE ===== */}
-                <div className="text-center mt-6 font-bold uppercase">
-                    <div className="text-lg">TỔNG HỢP PHIẾU LẤY Ý KIẾN NGƯỜI HỌC</div>
-                    <div className="text-lg mt-1">VỀ HOẠT ĐỘNG GIẢNG DẠY</div>
-                    <div className="text-sm font-normal mt-1">
+                <div className="text-center mt-6  ">
+                    <div className="text-lg font-bold uppercase">
+                        TỔNG HỢP PHIẾU LẤY Ý KIẾN NGƯỜI HỌC
+                    </div>
+                    <div className="text-lg mt-1 font-bold uppercase">VỀ HOẠT ĐỘNG GIẢNG DẠY</div>
+                    <div className="text-sm font-normal mt-1 font-semibold uppercase">
                         {['HĐGD của GV', input.surveyName, `Hệ ${input.trainingObjectTypeName}`]
                             .filter(Boolean)
                             .join(', ')}
@@ -162,37 +164,26 @@ const ModalPrintSurveylecturer = () => {
                     {/* ===== FACULTY INFO ===== */}
                     <div className="mt-4 text-sm leading-6 text-left">
                         <div className="flex justify-between">
-                            <div>
-                                <b>1. Họ và tên giảng viên:</b> {input.lecturerName || ''}
-                            </div>
-                            <div>
-                                <b>Mã giảng viên:</b> {input.lecturerCode || ''}
-                            </div>
+                            <div>1. Họ và tên giảng viên: {input.lecturerName || ''}</div>
+                            <div>Mã giảng viên: {input.lecturerCode || ''}</div>
                         </div>
 
                         {hasDepartment && (
                             <div className="flex justify-between">
-                                <div>
-                                    <b>2. Bộ môn:</b> {input.departmentName}
-                                </div>
-                                <div>
-                                    <b>Mã bộ môn:</b> {input.departmentCode}
-                                </div>
+                                <div>2. Bộ môn: {input.departmentName}</div>
+                                <div>Mã bộ môn: {input.departmentCode}</div>
                             </div>
                         )}
 
                         <div className="flex justify-between">
                             <div>
-                                <b>{hasDepartment ? '3' : '2'}. Khoa:</b>{' '}
-                                {input.organizationName || ''}
+                                {hasDepartment ? '3' : '2'}. Khoa: {input.organizationName || ''}
                             </div>
-                            <div>
-                                <b>Mã khoa:</b> {input.organizationCode || ''}
-                            </div>
+                            <div>Mã khoa: {input.organizationCode || ''}</div>
                         </div>
 
                         <div className="mt-2">
-                            <b>A. Kết quả đánh giá theo</b> {input.questions?.length || 0} tiêu chí:
+                            A. Kết quả đánh giá theo {input.questions?.length || 0} tiêu chí:
                         </div>
                     </div>
                 </div>
@@ -204,14 +195,14 @@ const ModalPrintSurveylecturer = () => {
                 >
                     <thead>
                         <tr className="font-bold text-center">
-                            <th className="border-2 border-black" style={{ width: 50 }}>
+                            <th className="border border-black" style={{ width: 50 }}>
                                 STT
                             </th>
-                            <th className="border-2  border-black" style={{ width: 90 }}>
+                            <th className="border border-black" style={{ width: 90 }}>
                                 Câu hỏi
                             </th>
                             {input.questions[0]?.answers.map((a: any) => (
-                                <th key={a.id} className="border-2  border-black">
+                                <th key={a.id} className="border border-black">
                                     {a.description}
                                 </th>
                             ))}
@@ -226,16 +217,16 @@ const ModalPrintSurveylecturer = () => {
 
                                 return (
                                     <tr key={q.id} className={isAvg ? 'avg-row' : ''}>
-                                        <td className="text-center border-2  border-black">
+                                        <td className="text-center border border-black">
                                             {isAvg ? 'ĐGTB' : index + 1}
                                         </td>
-                                        <td className="text-center border-2  border-black">
+                                        <td className="text-center border border-black">
                                             {isAvg ? '' : `Câu ${index + 1}`}
                                         </td>
                                         {percent.map((p: any) => (
                                             <td
                                                 key={p.id}
-                                                className="text-center border-2  border-black"
+                                                className="text-center border border-black"
                                             >
                                                 {p.percent}% ({p.count}/{p.total})
                                             </td>

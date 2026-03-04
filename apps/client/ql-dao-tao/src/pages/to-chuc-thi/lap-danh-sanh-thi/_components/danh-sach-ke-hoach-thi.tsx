@@ -327,17 +327,16 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                         data: {
                             data: {
                                 examRooms: {
-                                    create: selectedRooms
-                                        .map((room) => ({
-                                            roomId: room.roomId,
-                                            capacity: room.quantity,
-                                            examList: {
-                                                create: session.map((s) => ({
-                                                    start: s.sessionNumber,
-                                                    end: s.sessionNumber,
-                                                })),
-                                            },
-                                        })),
+                                    create: selectedRooms.map((room) => ({
+                                        roomId: room.roomId,
+                                        capacity: room.quantity,
+                                        examList: {
+                                            create: session.map((s) => ({
+                                                start: s.sessionNumber,
+                                                end: s.sessionNumber,
+                                            })),
+                                        },
+                                    })),
                                 },
                                 session: session.length,
                             },

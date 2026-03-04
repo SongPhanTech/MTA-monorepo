@@ -2049,11 +2049,11 @@ const CheckDecreaseAcademicWarning = (
     student: StudentInfoCheck,
     hasAcademicWarningThisTerm: boolean,
     trainingCourse?: {
-    id: string
-    scoreToPass: number
-    baseScore: string
-    scoreConverts: ScoreConvertItem[]
-} | null
+        id: string
+        scoreToPass: number
+        baseScore: string
+        scoreConverts: ScoreConvertItem[]
+    } | null
 ): boolean => {
     const academicWarningLevel = student.mucCanhCaoHocTap ?? 0
 
@@ -2066,8 +2066,7 @@ const CheckDecreaseAcademicWarning = (
 
     if (baseScore === 'Base10') {
         isImproved =
-            typeof student.diemTrungBinh10 === 'number' &&
-            student.diemTrungBinh10 >= scoreToPass
+            typeof student.diemTrungBinh10 === 'number' && student.diemTrungBinh10 >= scoreToPass
     } else {
         const scoreToPassInBase4 = layGiaTriDiem4(
             scoreToPass,
@@ -2080,9 +2079,7 @@ const CheckDecreaseAcademicWarning = (
             student.diemTrungBinh4 >= scoreToPassInBase4
     }
 
-    return academicWarningLevel >= 1 &&
-           !hasAcademicWarningThisTerm &&
-           isImproved
+    return academicWarningLevel >= 1 && !hasAcademicWarningThisTerm && isImproved
 }
 const fetchStudentSemesterResult = async (studentId: string, semesterId: string) => {
     return await prisma.studentSemesterResult.findFirst({

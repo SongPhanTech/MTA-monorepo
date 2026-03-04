@@ -143,7 +143,11 @@ app.openapi(importLecturer, async (c) => {
     for (const l of data.lecturers) {
         const existingLecturer = existingLecturerMap.get(l.code)
         // Only block if DB has a CCCD value AND it differs → same code, different person
-        if (existingLecturer && existingLecturer.idCardNumber && existingLecturer.idCardNumber !== l.idCardNumber) {
+        if (
+            existingLecturer &&
+            existingLecturer.idCardNumber &&
+            existingLecturer.idCardNumber !== l.idCardNumber
+        ) {
             duplicateCode.push(l.code)
         }
     }
@@ -166,197 +170,254 @@ app.openapi(importLecturer, async (c) => {
     }
 
     const importErrors: { code: string; name: string; error: string }[] = []
-    
+
     try {
         await prisma.$transaction(
             async (tx) => {
-    for (const lecturer of data.lecturers) {
-        const lecturerData: Prisma.LecturerCreateInput = {
-            from: new Date(),
-            code: lecturer.code,
-            lecturerType: {
-                connect: { id: lecturerTypeMap.get(lecturer.lecturerType) },
-            },
-            organization: {
-                connect: {
-                    Id: organizationMap.get(lecturer.departmentOrganization),
-                },
-            },
-            userProfile: {},
-            description: lecturer.description,
-        }
-
-        const profileData: Prisma.UserProfileUncheckedCreateWithoutEducationAndTrainingInput = {
-            ...splitFullName(lecturer.fullname),
-            bLaGiangVien: true,
-            bLaCanBoNhanVien: true,
-            dateOfBirth: lecturer.dateOfBirth,
-            genderId: genderMap.get(lecturer.gender),
-            academicDegreeTypeId: degreeTypeMap.get(lecturer.degreeType ?? ''),
-            academicRankTypeId: degreeRankTypeMap.get(lecturer.degreeRankType ?? ''),
-            currentAddress: lecturer.currentAddress,
-            phoneNumber: lecturer.phoneNumber,
-            email: lecturer.email,
-            idCardNumber: lecturer.idCardNumber,
-        }
-
-        const existingProfileId = existingProfileMap.get(lecturer.idCardNumber)
-        try {
-            if (existingProfileId) {
-                const payload = {
-                    Id: existingProfileId,
-                    sMa: lecturer.code,
-                    bLaGiangVien: true,
-                    bLaCanBoNhanVien: true,
-                    dNgaySinh: lecturer.dateOfBirth
-                        ? new Date(lecturer.dateOfBirth)?.toISOString()
-                        : null,
-                    sCCCD: lecturer.idCardNumber,
-                    sHoVaDem: profileData.lastName,
-                    sTen: profileData.firstName,
-                    sTenDayDu: lecturer.fullname,
-                    sSDTDiDong: lecturer.phoneNumber ?? '',
-                    sDM_DonViId: organizationMap.get(lecturer.departmentOrganization),
-                    sEmail: lecturer.email,
-                    sDM_GioiTinhId: lecturer.gender ? genderMap.get(lecturer.gender) : null,
-                }
-
-                const res = await putDMNhanViens(payload, {
-                    headers: {
-                        'x-clientid': process.env.KEYCLOAK_CLIENT_ID_LMS || '',
-                        'x-clientsecret': process.env.KEYCLOAK_CLIENT_SECRET_LMS || '',
-                    },
-                })
-
-                const existing = existingLecturerMap.get(lecturer.code)
-                if (existing) {
-                    if (res.status === 200) {
-                        await tx.lecturer.update({
-                            where: { id: existing.id },
-                            data: {
-                                ...lecturerData,
-                                userProfile: { update: profileData },
-                            },
-                        })
-                    } else {
-                        const extra = res.data?.extra as ErrorExtra | undefined
-                        const errMsg = extra?.message || [extra?.code, extra?.data].join(' ') || `LSB API error: ${res.status}`
-                        importErrors.push({ code: lecturer.code, name: lecturer.fullname, error: errMsg })
-                    }
-                } else {
-                    // Profile exists but lecturer record doesn't - need to create lecturer
-                    if (res.status === 200) {
-                        // Validate res.data is a string ID before using it
-                        if (typeof res.data !== 'string' || !res.data) {
-                            const errMsg = `LSB trả về dữ liệu không hợp lệ (mã GV: ${lecturer.code})`
-                            importErrors.push({ code: lecturer.code, name: lecturer.fullname, error: errMsg })
-                        } else {
-                        await tx.lecturer.create({
-                            data: {
-                                ...lecturerData,
-                                userProfile: {
-                                    connectOrCreate: {
-                                        where: { idCardNumber: lecturer.idCardNumber },
-                                        create: { id: res.data, ...profileData },
-                                    },
-                                },
-                            },
-                        })
-                        }
-                    } else {
-                        const extra = res.data?.extra as ErrorExtra | undefined
-                        const errMsg = extra?.message || [extra?.code, extra?.data].join(' ') || `LSB API error: ${res.status}`
-                        console.error(`[LSB update User ERROR] Code: ${lecturer.code} | Status: ${res.status} | Error:`, errMsg)
-                        importErrors.push({ code: lecturer.code, name: lecturer.fullname, error: errMsg })
-                    }
-                }
-            } else {
-                // const profileId = crypto.randomUUID()
-                const payload = {
-                    // Id: profileId,
-                    sMa: lecturer.idCardNumber,
-                    bLaGiangVien: true,
-                    bLaCanBoNhanVien: true,
-                    bLaTaiKhoan: true,
-                    dNgaySinh: lecturer.dateOfBirth
-                        ? new Date(lecturer.dateOfBirth)?.toISOString()
-                        : null,
-                    sCCCD: lecturer.idCardNumber,
-                    sHoVaDem: profileData.lastName,
-                    sTen: profileData.firstName,
-                    sTenDayDu: lecturer.fullname,
-                    sSDTDiDong: lecturer.phoneNumber ?? '',
-                    sDM_DonViId: organizationMap.get(lecturer.departmentOrganization),
-                    sEmail: lecturer.email,
-                    sDM_GioiTinhId: lecturer.gender ? genderMap.get(lecturer.gender) : null,
-                }
-
-                const res = await postDMNhanViens(payload, {
-                    headers: {
-                        'x-clientid': process.env.KEYCLOAK_CLIENT_ID_LMS || '',
-                        'x-clientsecret': process.env.KEYCLOAK_CLIENT_SECRET_LMS || '',
-                    },
-                })
-
-                if (res.status === 200) {
-                    // Validate res.data is a string ID before using it
-                    if (typeof res.data !== 'string' || !res.data) {
-                        const errMsg = `LSB trả về dữ liệu không hợp lệ (mã GV: ${lecturer.code})`
-                        importErrors.push({ code: lecturer.code, name: lecturer.fullname, error: errMsg })
-                    } else {
-                    await tx.lecturer.create({
-                        data: {
-                            ...lecturerData,
-                            userProfile: {
-                                connectOrCreate: {
-                                    where: {
-                                        id: res.data,
-                                        // idCardNumber: lecturer.idCardNumber,
-                                    },
-                                    create: { id: res.data, ...profileData },
-                                },
+                for (const lecturer of data.lecturers) {
+                    const lecturerData: Prisma.LecturerCreateInput = {
+                        from: new Date(),
+                        code: lecturer.code,
+                        lecturerType: {
+                            connect: { id: lecturerTypeMap.get(lecturer.lecturerType) },
+                        },
+                        organization: {
+                            connect: {
+                                Id: organizationMap.get(lecturer.departmentOrganization),
                             },
                         },
-                    })
+                        userProfile: {},
+                        description: lecturer.description,
                     }
-                } else {
-                    const extra = res.data?.extra as ErrorExtra | undefined
-                    const errMsg = extra?.message || [extra?.code, extra?.data].join(' ') || `LSB API error: ${res.status}`
-                    importErrors.push({ code: lecturer.code, name: lecturer.fullname, error: errMsg })
+
+                    const profileData: Prisma.UserProfileUncheckedCreateWithoutEducationAndTrainingInput =
+                        {
+                            ...splitFullName(lecturer.fullname),
+                            bLaGiangVien: true,
+                            bLaCanBoNhanVien: true,
+                            dateOfBirth: lecturer.dateOfBirth,
+                            genderId: genderMap.get(lecturer.gender),
+                            academicDegreeTypeId: degreeTypeMap.get(lecturer.degreeType ?? ''),
+                            academicRankTypeId: degreeRankTypeMap.get(
+                                lecturer.degreeRankType ?? ''
+                            ),
+                            currentAddress: lecturer.currentAddress,
+                            phoneNumber: lecturer.phoneNumber,
+                            email: lecturer.email,
+                            idCardNumber: lecturer.idCardNumber,
+                        }
+
+                    const existingProfileId = existingProfileMap.get(lecturer.idCardNumber)
+                    try {
+                        if (existingProfileId) {
+                            const payload = {
+                                Id: existingProfileId,
+                                sMa: lecturer.code,
+                                bLaGiangVien: true,
+                                bLaCanBoNhanVien: true,
+                                dNgaySinh: lecturer.dateOfBirth
+                                    ? new Date(lecturer.dateOfBirth)?.toISOString()
+                                    : null,
+                                sCCCD: lecturer.idCardNumber,
+                                sHoVaDem: profileData.lastName,
+                                sTen: profileData.firstName,
+                                sTenDayDu: lecturer.fullname,
+                                sSDTDiDong: lecturer.phoneNumber ?? '',
+                                sDM_DonViId: organizationMap.get(lecturer.departmentOrganization),
+                                sEmail: lecturer.email,
+                                sDM_GioiTinhId: lecturer.gender
+                                    ? genderMap.get(lecturer.gender)
+                                    : null,
+                            }
+
+                            const res = await putDMNhanViens(payload, {
+                                headers: {
+                                    'x-clientid': process.env.KEYCLOAK_CLIENT_ID_LMS || '',
+                                    'x-clientsecret': process.env.KEYCLOAK_CLIENT_SECRET_LMS || '',
+                                },
+                            })
+
+                            const existing = existingLecturerMap.get(lecturer.code)
+                            if (existing) {
+                                if (res.status === 200) {
+                                    await tx.lecturer.update({
+                                        where: { id: existing.id },
+                                        data: {
+                                            ...lecturerData,
+                                            userProfile: { update: profileData },
+                                        },
+                                    })
+                                } else {
+                                    const extra = res.data?.extra as ErrorExtra | undefined
+                                    const errMsg =
+                                        extra?.message ||
+                                        [extra?.code, extra?.data].join(' ') ||
+                                        `LSB API error: ${res.status}`
+                                    importErrors.push({
+                                        code: lecturer.code,
+                                        name: lecturer.fullname,
+                                        error: errMsg,
+                                    })
+                                }
+                            } else {
+                                // Profile exists but lecturer record doesn't - need to create lecturer
+                                if (res.status === 200) {
+                                    // Validate res.data is a string ID before using it
+                                    if (typeof res.data !== 'string' || !res.data) {
+                                        const errMsg = `LSB trả về dữ liệu không hợp lệ (mã GV: ${lecturer.code})`
+                                        importErrors.push({
+                                            code: lecturer.code,
+                                            name: lecturer.fullname,
+                                            error: errMsg,
+                                        })
+                                    } else {
+                                        await tx.lecturer.create({
+                                            data: {
+                                                ...lecturerData,
+                                                userProfile: {
+                                                    connectOrCreate: {
+                                                        where: {
+                                                            idCardNumber: lecturer.idCardNumber,
+                                                        },
+                                                        create: { id: res.data, ...profileData },
+                                                    },
+                                                },
+                                            },
+                                        })
+                                    }
+                                } else {
+                                    const extra = res.data?.extra as ErrorExtra | undefined
+                                    const errMsg =
+                                        extra?.message ||
+                                        [extra?.code, extra?.data].join(' ') ||
+                                        `LSB API error: ${res.status}`
+                                    console.error(
+                                        `[LSB update User ERROR] Code: ${lecturer.code} | Status: ${res.status} | Error:`,
+                                        errMsg
+                                    )
+                                    importErrors.push({
+                                        code: lecturer.code,
+                                        name: lecturer.fullname,
+                                        error: errMsg,
+                                    })
+                                }
+                            }
+                        } else {
+                            // const profileId = crypto.randomUUID()
+                            const payload = {
+                                // Id: profileId,
+                                sMa: lecturer.idCardNumber,
+                                bLaGiangVien: true,
+                                bLaCanBoNhanVien: true,
+                                bLaTaiKhoan: true,
+                                dNgaySinh: lecturer.dateOfBirth
+                                    ? new Date(lecturer.dateOfBirth)?.toISOString()
+                                    : null,
+                                sCCCD: lecturer.idCardNumber,
+                                sHoVaDem: profileData.lastName,
+                                sTen: profileData.firstName,
+                                sTenDayDu: lecturer.fullname,
+                                sSDTDiDong: lecturer.phoneNumber ?? '',
+                                sDM_DonViId: organizationMap.get(lecturer.departmentOrganization),
+                                sEmail: lecturer.email,
+                                sDM_GioiTinhId: lecturer.gender
+                                    ? genderMap.get(lecturer.gender)
+                                    : null,
+                            }
+
+                            const res = await postDMNhanViens(payload, {
+                                headers: {
+                                    'x-clientid': process.env.KEYCLOAK_CLIENT_ID_LMS || '',
+                                    'x-clientsecret': process.env.KEYCLOAK_CLIENT_SECRET_LMS || '',
+                                },
+                            })
+
+                            if (res.status === 200) {
+                                // Validate res.data is a string ID before using it
+                                if (typeof res.data !== 'string' || !res.data) {
+                                    const errMsg = `LSB trả về dữ liệu không hợp lệ (mã GV: ${lecturer.code})`
+                                    importErrors.push({
+                                        code: lecturer.code,
+                                        name: lecturer.fullname,
+                                        error: errMsg,
+                                    })
+                                } else {
+                                    await tx.lecturer.create({
+                                        data: {
+                                            ...lecturerData,
+                                            userProfile: {
+                                                connectOrCreate: {
+                                                    where: {
+                                                        id: res.data,
+                                                        // idCardNumber: lecturer.idCardNumber,
+                                                    },
+                                                    create: { id: res.data, ...profileData },
+                                                },
+                                            },
+                                        },
+                                    })
+                                }
+                            } else {
+                                const extra = res.data?.extra as ErrorExtra | undefined
+                                const errMsg =
+                                    extra?.message ||
+                                    [extra?.code, extra?.data].join(' ') ||
+                                    `LSB API error: ${res.status}`
+                                importErrors.push({
+                                    code: lecturer.code,
+                                    name: lecturer.fullname,
+                                    error: errMsg,
+                                })
+                            }
+                        }
+                    } catch (error) {
+                        const errMsg = error instanceof Error ? error.message : String(error)
+                        console.error(
+                            `[IMPORT ERROR] Code: ${lecturer.code} | Name: ${lecturer.fullname} | CCCD: ${lecturer.idCardNumber}`
+                        )
+                        console.error(error)
+                        importErrors.push({
+                            code: lecturer.code,
+                            name: lecturer.fullname,
+                            error: errMsg,
+                        })
+                    }
                 }
-            }
-        } catch (error) {
-            const errMsg = error instanceof Error ? error.message : String(error)
-            console.error(`[IMPORT ERROR] Code: ${lecturer.code} | Name: ${lecturer.fullname} | CCCD: ${lecturer.idCardNumber}`)
-            console.error(error)
-            importErrors.push({ code: lecturer.code, name: lecturer.fullname, error: errMsg })
-        }
-    }
-    
-    // Nếu có lỗi, throw để rollback transaction
-    if (importErrors.length > 0) {
-        throw new Error(JSON.stringify(importErrors))
-    }
-        },
-        { timeout: timeout * 1000 }
-    )
+
+                // Nếu có lỗi, throw để rollback transaction
+                if (importErrors.length > 0) {
+                    throw new Error(JSON.stringify(importErrors))
+                }
+            },
+            { timeout: timeout * 1000 }
+        )
     } catch (error) {
         // Parse errors from transaction
         if (error instanceof Error && error.message.startsWith('[')) {
             try {
-                const errors = JSON.parse(error.message) as { code: string; name: string; error: string }[]
-                return c.json({
-                    message: `Có lỗi xảy ra khi import - Không lưu dữ liệu nào`,
-                    failed: errors
-                }, 400)
+                const errors = JSON.parse(error.message) as {
+                    code: string
+                    name: string
+                    error: string
+                }[]
+                return c.json(
+                    {
+                        message: `Có lỗi xảy ra khi import - Không lưu dữ liệu nào`,
+                        failed: errors,
+                    },
+                    400
+                )
             } catch {
                 // If parsing fails, fall through to generic error
             }
         }
         console.error('[IMPORT TRANSACTION ERROR]', error)
-        return c.json({
-            message: `Có lỗi xảy ra khi import: ${error instanceof Error ? error.message : String(error)}`,
-        }, 400)
+        return c.json(
+            {
+                message: `Có lỗi xảy ra khi import: ${error instanceof Error ? error.message : String(error)}`,
+            },
+            400
+        )
     }
 
     const successCount = data.lecturers.length

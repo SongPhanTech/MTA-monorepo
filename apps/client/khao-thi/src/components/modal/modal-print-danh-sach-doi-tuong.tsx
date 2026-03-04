@@ -87,47 +87,53 @@ const ModalPrintDanhSachDoiTuong = () => {
                 </div>
 
                 <table
-                    className="mt-4 text-sm border-collapse border-2 border-black text-center"
+                    className="mt-4 text-sm border-collapse border border-black text-center"
                     style={{ tableLayout: 'fixed', width: '100%' }}
                 >
                     <thead>
-                        <tr className="font-bold  border-2 border-black text-center">
-                            <th className="border-2  border-black text-center" style={{ width: 50 }}>STT</th>
-                            <th className="border-2  border-black text-center">Mã HV/GV</th>
-                            <th className="border-2  border-black text-center">Họ tên</th>
-                            <th className="border-2  border-black text-center">CCCD</th>
-                            <th className="border-2  border-black text-center">SĐT</th>
-                            <th className="border-2  border-black text-center">ĐVQL</th>
-                            <th className="border-2  border-black text-center">Lớp QL</th>
-                            <th className="border-2  border-black text-center">Khoá</th>
-                            <th className="border-2  border-black text-center">Trạng thái</th>
+                        <tr className="font-bold  border border-black text-center">
+                            <th className="border border-black text-center" style={{ width: 50 }}>
+                                STT
+                            </th>
+                            <th className="border border-black text-center">Mã HV/GV</th>
+                            <th className="border border-black text-center">Họ tên</th>
+                            <th className="border border-black text-center">CCCD</th>
+                            <th className="border border-black text-center">SĐT</th>
+                            <th className="border border-black text-center">ĐVQL</th>
+                            <th className="border border-black text-center">Lớp QL</th>
+                            <th className="border border-black text-center">Khoá</th>
+                            <th className="border border-black text-center">Trạng thái</th>
                         </tr>
                     </thead>
-                    <tbody className="border-2  border-black text-center">
+                    <tbody className="border border-black text-center">
                         {dataTable.map((record: any, index: number) => (
-                            <tr className="border-2  border-black text-center" key={record.id}>
-                                <td className="border-2  border-black text-center">{index + 1}</td>
-                                <td className="border-2  border-black text-center">
+                            <tr className="border border-black text-center" key={record.id}>
+                                <td className="border border-black text-center">{index + 1}</td>
+                                <td className="border border-black text-center">
                                     {record?.educationAndTraining?.[0]?.code ||
                                         record?.lecturer?.code ||
                                         ''}
                                 </td>
-                                <td className="border-2  border-black text-center">
+                                <td className="border border-black text-center">
                                     {record?.lastName || ''} {record?.firstName || ''}
                                 </td>
-                                <td className="border-2  border-black text-center">{record?.idCardNumber || ''}</td>
-                                <td className="border-2  border-black text-center">{record?.phoneNumber || ''}</td>
-                                <td className="border-2  border-black text-center">{record?.lecturer?.organization?.sMa || ''}</td>
-                                <td className="border-2  border-black text-center">
+                                <td className="border border-black text-center">
+                                    {record?.idCardNumber || ''}
+                                </td>
+                                <td className="border border-black text-center">
+                                    {record?.phoneNumber || ''}
+                                </td>
+                                <td className="border border-black text-center">
+                                    {record?.lecturer?.organization?.sMa || ''}
+                                </td>
+                                <td className="border border-black text-center">
                                     {record?.educationAndTraining?.[0]?.fixedClass?.code || ''}
                                 </td>
-                                <td className="border-2  border-black text-center">
-                                    {
-                                        (record?.educationAndTraining?.[0]?.fixedClass as any)
-                                            ?.trainingCourse?.name || ''
-                                    }
+                                <td className="border border-black text-center">
+                                    {(record?.educationAndTraining?.[0]?.fixedClass as any)
+                                        ?.trainingCourse?.name || ''}
                                 </td>
-                                <td className="border-2  border-black text-center">
+                                <td className="border border-black text-center">
                                     {record?.surveySession ? 'Đã làm' : 'Chưa làm'}
                                 </td>
                             </tr>

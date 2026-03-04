@@ -131,25 +131,19 @@ const ModalPrintSurvey = () => {
                 <div className="font-bold text-lg text-center mb-4">THỐNG KÊ THEO TỪNG CÂU HỎI</div>
 
                 <table
-                    className="mt-4 text-sm border-collapse border-2  border-black text-center"
+                    className="mt-4 text-sm border-collapse border border-black text-center"
                     style={{ tableLayout: 'fixed', width: '100%' }}
                 >
                     <thead>
-                        <tr className="font-bold text-center border-2  border-black">
-                            <th
-                                className="border-2  border-black text-center"
-                                style={{ width: 60 }}
-                            >
+                        <tr className="font-bold text-center border border-black">
+                            <th className="border border-black text-center" style={{ width: 60 }}>
                                 STT
                             </th>
-                            <th
-                                className="border-2  border-black text-center"
-                                style={{ width: 100 }}
-                            >
+                            <th className="border border-black text-center" style={{ width: 100 }}>
                                 Câu hỏi
                             </th>
                             {dataTable[0]?.answers?.map((a: any) => (
-                                <th className="border-2  border-black text-center" key={a.id}>
+                                <th className="border border-black text-center" key={a.id}>
                                     {a.description}
                                 </th>
                             ))}
@@ -161,19 +155,14 @@ const ModalPrintSurvey = () => {
 
                             return (
                                 <tr key={q.id}>
-                                    <td className="text-center border-2 border-black">
-                                        {index + 1}
-                                    </td>
+                                    <td className="text-center border border-black">{index + 1}</td>
 
-                                    <td className="text-center border-2 border-black">
+                                    <td className="text-center border border-black">
                                         {`Câu ${index + 1}`}
                                     </td>
 
                                     {percent.map((p: any) => (
-                                        <td
-                                            key={p.id}
-                                            className="text-center border-2 border-black"
-                                        >
+                                        <td key={p.id} className="text-center border border-black">
                                             {p.percent}% ({p.count}/{p.total})
                                         </td>
                                     ))}

@@ -99,9 +99,9 @@ const ModalPrintBaoCaoDonVi = () => {
                 </div>
 
                 {/* ===== TITLE ===== */}
-                <div className="text-center mt-6 font-bold uppercase">
-                    <div className="text-xl">TỔNG HỢP ĐÁNH GIÁ</div>
-                    <div className="text-sm font-normal mt-1">
+                <div className="text-center">
+                    <div className="text-xl mt-6 font-bold uppercase">TỔNG HỢP ĐÁNH GIÁ</div>
+                    <div className="text-sm font-normal mt-1 mt-6 font-semibold uppercase">
                         {[
                             'HĐGD của GV',
                             input.surveyName,
@@ -116,10 +116,10 @@ const ModalPrintBaoCaoDonVi = () => {
                 <table className="w-full mt-6 text-sm border-collapse">
                     <thead>
                         <tr className="font-bold text-center">
-                            <th className="border-2  border-black">STT</th>
-                            <th className="border-2 border-black">Đơn vị quản lý</th>
+                            <th className="border border-black">STT</th>
+                            <th className="border border-black">Đơn vị quản lý</th>
                             {input.choices.map((c: any) => (
-                                <th key={c.id} className="border-2  border-black">
+                                <th key={c.id} className="border border-black">
                                     {c.description}
                                 </th>
                             ))}
@@ -132,11 +132,9 @@ const ModalPrintBaoCaoDonVi = () => {
 
                             return (
                                 <tr key={row.organization?.Id || index}>
-                                    <td className="border-2  border-black text-center">
-                                        {index + 1}
-                                    </td>
+                                    <td className="border border-black text-center">{index + 1}</td>
 
-                                    <td className="border-2 border-black px-2">
+                                    <td className="border border-black px-2">
                                         {row.organization?.sMa || ''} -{' '}
                                         {row.organization?.sTen || ''}
                                     </td>
@@ -147,7 +145,7 @@ const ModalPrintBaoCaoDonVi = () => {
                                         return (
                                             <td
                                                 key={c.id}
-                                                className="border-2 border-black text-center"
+                                                className="border border-black text-center"
                                             >
                                                 {found
                                                     ? `${found.percent}% (${found.totalCount}/${found.total})`

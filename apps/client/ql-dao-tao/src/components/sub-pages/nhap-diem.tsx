@@ -357,14 +357,20 @@ export default function NhapDiem({
                         attendanceScore: item.attendanceScore,
                         midtermScore: item.midtermScore,
                         examScore: item.examScore,
-                        finalScore: item.finalScore,
+                        finalScore: isNullish(item.finalScore) ? null : item.finalScore,
                         description: item?.description,
-                        examPostponed: item?.examPostponed,
-                        examPostponedReason: item?.examPostponedReason,
-                        examBanned: !!item?.examBanned,
-                        examBannedReason: item?.examBannedReason,
-                        suspended: !!item?.suspended,
-                        suspendedReason: item?.suspendedReason,
+                        examPostponed: isNullish(item.examPostponed) ? null : item.examPostponed,
+                        examPostponedReason: isNullish(item.examPostponedReason)
+                            ? null
+                            : item.examPostponedReason,
+                        examBanned: isNullish(item.examBanned) ? null : item.examBanned,
+                        examBannedReason: isNullish(item.examBannedReason)
+                            ? null
+                            : item.examBannedReason,
+                        suspended: isNullish(item.suspended) ? null : item.suspended,
+                        suspendedReason: isNullish(item.suspendedReason)
+                            ? null
+                            : item.suspendedReason,
                         id: item.id,
                     }
                 })
@@ -428,6 +434,52 @@ export default function NhapDiem({
                         scoreToTakeExam !== undefined &&
                         item.midtermScore < scoreToTakeExam)
 
+                const dataForCalc = dataTable.find((i) => i.id === item.id)
+
+                const defaultCoef = {
+                    coef_1: 0.1,
+                    coef_2: 0.3,
+                    coef_3: 0.6,
+                    scoreToTakeExam: 1,
+                    scoreToPass: 4,
+                    maxReExamScore: 10,
+                    reduceReExamScore: 0,
+                    examScoreToPass: 5,
+                }
+                const finalScore = calcFinalScore(
+                    dataForCalc?.student?.fixedClass?.trainingCourse || defaultCoef,
+                    {
+                        attendanceScore: item.attendanceScore,
+                        midtermScore: item.midtermScore,
+                        examScore: item.examScore,
+                        awards:
+                            dataForCalc?.awards?.map?.((a) => ({
+                                status: a.status,
+                                archivedAward: {
+                                    bonusScore: a.archivedAward.bonusScore ?? 0,
+                                },
+                            })) || [],
+                        certificates:
+                            dataForCalc?.certificates?.map?.((c) => ({
+                                archivedCertificate: {
+                                    finalScore: c.archivedCertificate.finalScore ?? 0,
+                                },
+                            })) || [],
+                    },
+                    dataForCalc?.subjectClass?.type || 'NORMAL'
+                )?.toNumber()
+
+                const scoreConvertResult =
+                    finalScore !== null && finalScore !== undefined
+                        ? scoreConvert(
+                              finalScore,
+                              dataForCalc?.student?.fixedClass?.trainingCourse?.scoreConverts || []
+                          )
+                        : null
+
+                const finalScoreBase4 = scoreConvertResult?.base4
+                const letter = scoreConvertResult?.letter
+
                 const scoreInfo = !score
                     ? {
                           attendanceScore: item.attendanceScore,
@@ -444,11 +496,14 @@ export default function NhapDiem({
                 return [
                     item.id,
                     {
-                        ...scoreInfo,
                         isChanged:
                             listForm[item.id].attendanceScore !== item.attendanceScore ||
                             listForm[item.id].midtermScore !== item.midtermScore ||
                             listForm[item.id].examScore !== item.examScore,
+                        finalScore: isExamBanned ? 0 : finalScore,
+                        finalScoreBase4,
+                        letter,
+                        ...scoreInfo,
                         examBanned: isExamBanned,
                     },
                 ]
@@ -913,19 +968,19 @@ export default function NhapDiem({
                         const changedId = Object.keys(changedValues.list || {})?.[0]
                         if (changedId) {
                             const examScore: number | null =
-                                changedValues.list[changedId]?.examScore ??
-                                listForm[changedId].examScore ??
-                                null
+                                changedValues.list[changedId]?.examScore !== undefined
+                                    ? changedValues.list[changedId]?.examScore
+                                    : (listForm[changedId].examScore ?? null)
                             const attendanceScore: number | null = dataDetailSubjectClass?.subject
                                 .onePoint
                                 ? examScore
-                                : !isNullish(changedValues.list[changedId]?.attendanceScore)
+                                : changedValues.list[changedId]?.attendanceScore !== undefined
                                   ? changedValues.list[changedId]?.attendanceScore
                                   : (listForm[changedId].attendanceScore ?? null)
                             const midtermScore: number | null = dataDetailSubjectClass?.subject
                                 .onePoint
                                 ? examScore
-                                : !isNullish(changedValues.list[changedId]?.midtermScore)
+                                : changedValues.list[changedId]?.midtermScore !== undefined
                                   ? changedValues.list[changedId]?.midtermScore
                                   : (listForm[changedId].midtermScore ?? null)
 
@@ -989,8 +1044,6 @@ export default function NhapDiem({
                             const finalScoreBase4 = scoreConvertResult?.base4
                             const letter = scoreConvertResult?.letter
 
-                            console.log(attendanceScore, midtermScore)
-
                             form.setFieldsValue({
                                 list: {
                                     ...listForm,
@@ -1003,8 +1056,8 @@ export default function NhapDiem({
                                             ...listForm[changedId],
                                             ...changedValues.list[changedId],
                                         }),
-                                        // attendanceScore,
-                                        // midtermScore,
+                                        attendanceScore,
+                                        midtermScore,
                                         finalScore: changedValues.list[changedId]?.examBanned
                                             ? 0
                                             : finalScore,

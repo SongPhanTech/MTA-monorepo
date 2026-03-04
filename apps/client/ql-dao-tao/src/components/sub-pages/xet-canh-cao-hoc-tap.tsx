@@ -410,8 +410,8 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
                                     width: 150,
                                     align: 'center',
                                     fixed: 'right',
-                                    render: (value) => (
-                                        <span className="line-clamp-2">{value}</span>
+                                    render: (_, record) => (
+                                        <span className="line-clamp-2">{record?.description}</span>
                                     ),
                                 },
                                 {
@@ -488,6 +488,7 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
                                     dataIndex: ['code'],
                                     width: 120,
                                     align: 'center',
+                                    render: (_, record) => record?.userProfile?.code ?? '',
                                 },
                                 {
                                     title: 'Tên sinh viên',

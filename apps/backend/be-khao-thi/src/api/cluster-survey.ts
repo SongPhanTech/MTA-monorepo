@@ -510,14 +510,14 @@ app.openapi(getOrganizationSurveyStatistics, async (c) => {
             OR: [
                 {
                     iCapDonVi: 0,
-                    iLoaiDonVi: 0
+                    iLoaiDonVi: 0,
                 },
                 {
                     iLoaiDonVi: {
-                        in: [5,6,7],
+                        in: [5, 6, 7],
                     },
                 },
-            ]
+            ],
             // lecturers: {
             //     some: {
             //         survey: {
@@ -978,6 +978,8 @@ const getClusterSurveyInfo = createRoute({
         params: z.object({ id: z.string() }),
         query: z.object({
             organizationId: z.string(),
+            semesterId: z.string(),
+            trainingObjectTypeId: z.string(),
         }),
     },
     responses: {
@@ -986,7 +988,7 @@ const getClusterSurveyInfo = createRoute({
             content: {
                 'application/json': {
                     schema: z.object({
-                        data:z.any()
+                        data: z.any(),
                     }),
                 },
             },
@@ -1004,14 +1006,13 @@ const getClusterSurveyInfo = createRoute({
 
 app.openapi(getClusterSurveyInfo, async (c) => {
     const { id } = c.req.valid('param')
-    const { ...q } = c.req.valid('query')
-
+    const { semesterId, trainingObjectTypeId, ...q } = c.req.valid('query')
 
     const survey = await prisma.survey.findMany({
         where: { clusterSurveyId: id },
-        include:{
-            surveySessions:true,
-        }
+        include: {
+            surveySessions: true,
+        },
     })
 
     if (!survey?.length) {
@@ -1019,16 +1020,45 @@ app.openapi(getClusterSurveyInfo, async (c) => {
     }
 
     const completedSurveyCount = await prisma.survey.count({
-        where: { clusterSurveyId: id,
-            surveySessions:{
-               some: {}
-        } },
+        where: {
+            clusterSurveyId: id,
+            surveySessions: {
+                some: {},
+            },
+        },
+    })
+    // const lecturerIds:any = survey.filter(i=>i?.lectureId).map(i=>i?.lectureId) ;
+    // if(
+    //     !lecturerIds?.length
+    // ){
+    //     return c.json({ message: 'Không tìm thấy giảng viên' }, 404)
+    // }
+
+    let listStudentCount = 0
+
+    const listSUbsjecClass = await prisma.subjectClass.findMany({
+        where: {
+            survey: {
+                some: {
+                    clusterSurveyId: id,
+                },
+            },
+        },
+        include: {
+            mainLecturer: true,
+            subjectClassStudent: true,
+        },
+    })
+    listSUbsjecClass.forEach((i) => {
+        listStudentCount += i?.subjectClassStudent?.length
     })
 
     const studentCompletedSurvey = await prisma.surveySession.count({
-        where: { survey: {
-            clusterSurveyId: id
-        } },
+        where: {
+            survey: {
+                clusterSurveyId: id,
+            },
+        },
         // include:{
         //     survey:{
         //         include:{
@@ -1038,15 +1068,13 @@ app.openapi(getClusterSurveyInfo, async (c) => {
         // }
     })
 
-
-
     const data = {
-        data:{
-            surveyCount:survey?.length||0,
+        data: {
+            surveyCount: survey?.length || 0,
             completedSurveyCount,
-            studentCompletedSurveyCount:studentCompletedSurvey||0,
-            
-        }
+            listStudentCount,
+            studentCompletedSurveyCount: studentCompletedSurvey || 0,
+        },
     }
 
     return c.json(data, 200)

@@ -8,7 +8,10 @@ dayjs.extend(customParseFormat)
 
 // TODO!: now depends on stt column(it need to be a integer), maybe need to change to more reliable way
 
-export const parseSheetLecturer = (file: ArrayBufferLike, existingLecturerMap?: Map<string, string>) => {
+export const parseSheetLecturer = (
+    file: ArrayBufferLike,
+    existingLecturerMap?: Map<string, string>
+) => {
     const wb = read(file, { cellDates: true })
     const sheetName = 'Danh sách giảng viên'
     const errors: ParseSheetError[] = []
@@ -60,7 +63,7 @@ export const parseSheetLecturer = (file: ArrayBufferLike, existingLecturerMap?: 
     const parseDateFromCell = (colName: string, rowNum: number): dayjs.Dayjs => {
         const cell = ws[`${colName}${rowNum + 1}`]
         if (!cell?.v) return dayjs('')
-        
+
         return cell.v instanceof Date ? dayjs(cell.v) : parseDate(String(cell.v))
     }
 

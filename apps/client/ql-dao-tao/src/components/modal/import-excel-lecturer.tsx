@@ -51,8 +51,11 @@ const ImportLecturerModal = ({ visible, onSuccess, onCancel }: ImportStudentModa
                 }
             })
             console.log('Existing lecturers from DB:', existingLecturerMap.size)
-            
-            const { lecturers, errors } = parseSheetLecturer(e.target?.result as ArrayBuffer, existingLecturerMap)
+
+            const { lecturers, errors } = parseSheetLecturer(
+                e.target?.result as ArrayBuffer,
+                existingLecturerMap
+            )
             setPreviewData(lecturers)
             if (errors.length === 0) {
                 setDisabledButton(false)
@@ -103,23 +106,26 @@ const ImportLecturerModal = ({ visible, onSuccess, onCancel }: ImportStudentModa
                     setErrorData(importErrors)
                     setDisabledButton(true)
                     message.error(res?.data?.message || 'Import thất bại')
-                }
-                else {
+                } else {
                     const failedData = (res?.data as any)?.failed
                     if (failedData && Array.isArray(failedData)) {
-                        const importErrors = failedData.map((item: { code: string; name: string; error: string }) => {
-                            const matchingRow = previewData.find((p) => p.code === item.code)
-                            const cellRef = matchingRow ? `B${matchingRow.rowNum}` : item.code
-                            return {
-                                cellRef,
-                                message: `${item.name}: ${item.error}`,
+                        const importErrors = failedData.map(
+                            (item: { code: string; name: string; error: string }) => {
+                                const matchingRow = previewData.find((p) => p.code === item.code)
+                                const cellRef = matchingRow ? `B${matchingRow.rowNum}` : item.code
+                                return {
+                                    cellRef,
+                                    message: `${item.name}: ${item.error}`,
+                                }
                             }
-                        })
+                        )
                         setErrorData(importErrors)
                         setDisabledButton(true)
                         message.error(res?.data?.message || 'Import thất bại')
                     } else {
-                        message.error(res?.data?.message || 'Nhập dữ liệu giảng viên từ file thất bại')
+                        message.error(
+                            res?.data?.message || 'Nhập dữ liệu giảng viên từ file thất bại'
+                        )
                     }
                 }
             }

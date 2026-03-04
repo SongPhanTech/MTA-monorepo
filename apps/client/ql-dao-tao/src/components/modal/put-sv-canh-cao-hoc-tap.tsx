@@ -11,10 +11,9 @@ import {
 } from '@workspace/db/hooks'
 import { Col, Form, Input, InputNumber, message } from 'antd'
 import dayjs from 'dayjs'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
-import './index.css'
 import Select from '@components/commons/select'
 import { SelectTrainingCourse } from '@workspace/ui/components/select-training-course/index'
 export type PutAcademicWarning = AcademicWarning & {
@@ -36,8 +35,8 @@ const PutAcademicWarning = () => {
         onClose: form.resetFields,
     })
 
-    const [selectedCourseId, setSelectedCourseId] = useState<string | undefined>(undefined)
-    const [selectedClassId, setSelectedClassId] = useState<string | undefined>(undefined)
+    const selectedCourseId = Form.useWatch('trainingCourseId', form)
+    const selectedClassId = Form.useWatch('fixedClassId', form)
 
     const { data: fixedClasses } = useFindManyFixedClass({
         where: { trainingCourseId: selectedCourseId },
@@ -47,6 +46,7 @@ const PutAcademicWarning = () => {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { mutateAsync: createAcademicWarning } = useCreateAcademicWarning()
+
     const { mutateAsync: updateAcademicWarning } = useUpdateAcademicWarning()
     const { data: studentData = [] } = useFindManyStudent({
         where: {
@@ -117,21 +117,32 @@ const PutAcademicWarning = () => {
     const { data: initialValue } = useFindUniqueAcademicWarning(
         {
             where: { id: input?.id },
+            include: {
+                student: {
+                    include: {
+                        fixedClass: true,
+                    },
+                },
+            },
         },
         { enabled: !!input?.id }
     )
 
     useEffect(() => {
         if (initialValue) {
+            const trainingCourseId = initialValue.student?.fixedClass?.trainingCourseId
+            const fixedClassId = initialValue.student?.fixedClassId ?? undefined
             form.setFieldsValue({
                 ...initialValue,
+                trainingCourseId,
+                fixedClassId,
             })
         } else {
             form.setFieldsValue({
                 active: true,
             })
         }
-    }, [initialValue, form])
+    }, [initialValue, form.setFieldsValue])
 
     return (
         <PutFormModal
@@ -147,9 +158,8 @@ const PutAcademicWarning = () => {
                     <SelectTrainingCourse
                         placeholder="Chọn khoá"
                         allowClear
-                        onChange={(val) => {
-                            setSelectedCourseId(val)
-                            setSelectedClassId(undefined)
+                        onChange={() => {
+                            form.setFieldValue('fixedClassId', undefined)
                         }}
                     />
                 </FormItem>
@@ -160,8 +170,6 @@ const PutAcademicWarning = () => {
                         placeholder="Chọn lớp"
                         allowClear
                         disabled={!selectedCourseId}
-                        value={selectedClassId}
-                        onChange={setSelectedClassId}
                         options={fixedClasses?.map((c) => ({ label: c.name, value: c.id }))}
                     />
                 </FormItem>
