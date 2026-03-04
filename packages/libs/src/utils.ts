@@ -453,11 +453,15 @@ export const calcFinalScore = (
         examScore < coef.examScoreToPass
             ? examScore
             : Math.min(
-                  subjectScore.attendanceScore * coef.coef_1 +
-                      subjectScore.midtermScore * coef.coef_2 +
-                      examScore * coef.coef_3,
+                  new Decimal(subjectScore.attendanceScore)
+                      .mul(coef.coef_1)
+                      .add(new Decimal(subjectScore.midtermScore).mul(coef.coef_2))
+                      .add(new Decimal(examScore).mul(coef.coef_3))
+                      .toNumber(),
                   10
               )
+
+    console.log('finalScore', finalScore)
 
     if (maxCertFinalScore === null && finalScore < coef.scoreToPass) {
         return new Decimal(finalScore).toDecimalPlaces(1)
