@@ -682,7 +682,10 @@ const importFileTKBTheoLopHocPhan = async (
     trainingObjectTypeId: string,
     danhSachLopMonHoc: Array<SubjectClass>,
     importType: 'TAO_MOI' | 'CAP_NHAT' | 'XEM_TRUOC',
-    type: $Enums.SubjectClassType
+    type: $Enums.SubjectClassType,
+    error: {
+        message: string
+    }[] = []
 ) => {
     const rowData = utils.sheet_to_json<string[]>(sheet, {
         header: 1,
@@ -859,7 +862,9 @@ const importFileTKBTheoLopHocPhan = async (
                     if (gvChinh) {
                         subjectClass.gvChinh = gvChinh.id
                     } else {
-                        console.log(`Không tìm thấy giảng viên chính với tên: ${tenGVChinh}`)
+                        error.push({
+                            message: `Không tìm thấy giảng viên chính với tên: ${tenGVChinh}`,
+                        })
                     }
                     if (tenGvPhu) {
                         const gvPhu = danhSachGV.find(
@@ -869,28 +874,34 @@ const importFileTKBTheoLopHocPhan = async (
                         if (gvPhu) {
                             subjectClass.gvPhu = gvPhu.id
                         } else {
-                            console.log(`Không tìm thấy giảng viên phụ với tên: ${tenGvPhu}`)
+                            error.push({
+                                message: `Không tìm thấy giảng viên phụ với tên: ${tenGvPhu}`,
+                            })
                         }
                     }
                 }
                 if (maMon) {
                     const monHoc = danhSachMonHoc.find(
-                        (mh) => mh.code?.toLowerCase() === String(maMon).toLowerCase()
+                        (mh) => mh.codeTkb?.toLowerCase() === String(maMon).trim().toLowerCase()
                     )
                     if (monHoc) {
                         subjectClass.monHoc = monHoc.id
                     } else {
-                        console.log(`Không tìm thấy môn học với mã: ${maMon}`)
+                        error.push({
+                            message: `Không tìm thấy môn học với mã: ${maMon}`,
+                        })
                     }
                 }
                 if (maPhongHoc) {
                     const phongHoc = danhSachPhongHoc.find(
-                        (ph) => ph.code?.toLowerCase() === String(maPhongHoc).toLowerCase()
+                        (ph) => ph.code?.toLowerCase() === String(maPhongHoc).trim().toLowerCase()
                     )
                     if (phongHoc) {
                         subjectClass.phongHoc = phongHoc.id
                     } else {
-                        console.log(`Không tìm thấy phòng học với mã: ${maPhongHoc}`)
+                        error.push({
+                            message: `Không tìm thấy phòng học với mã: ${maPhongHoc}`,
+                        })
                     }
                 }
                 const existSubjectClass = await tx.subjectClass.findFirst({
@@ -1115,6 +1126,9 @@ const importFileTKBTheoLopHocPhan = async (
                     danhSachLopMonHoc.push(res)
                 }
             }
+            if (importType === 'XEM_TRUOC') {
+                throw new Error('Rollback transaction for preview')
+            }
         },
         {
             maxWait: 200000,
@@ -1187,14 +1201,35 @@ app.openapi(importPhanCongGiangDay, async (c) => {
                 )
             }
         } else if (fileType === 'TKB_THEO_LOP_HOC_PHAN') {
-            await importFileTKBTheoLopHocPhan(
-                sheet,
-                semesterId,
-                trainingObjectTypeId,
-                danhSachLopMonHoc,
-                importType,
-                type
-            )
+            if (importType === 'XEM_TRUOC') {
+                try {
+                    await importFileTKBTheoLopHocPhan(
+                        sheet,
+                        semesterId,
+                        trainingObjectTypeId,
+                        danhSachLopMonHoc,
+                        importType,
+                        type,
+                        errorImport
+                    )
+                } catch (error) {
+                    console.log('Error during preview import:', error)
+                }
+                console.log(
+                    'danhSachLopMonHoc',
+                    danhSachLopMonHoc.uniqueByKey('code').map((e) => e.code)
+                )
+            } else {
+                await importFileTKBTheoLopHocPhan(
+                    sheet,
+                    semesterId,
+                    trainingObjectTypeId,
+                    danhSachLopMonHoc,
+                    importType,
+                    type,
+                    errorImport
+                )
+            }
         } else {
             return c.json({ message: 'Loại file không hợp lệ' }, 400)
         }

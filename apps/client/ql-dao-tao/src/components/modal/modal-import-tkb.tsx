@@ -108,6 +108,8 @@ const ModalNhapTKB = () => {
     const { options, getExamTypeLabel } = useExamTypeOptions()
     const [file, setFile] = useState<File | null>(null)
     const [fileName, setFileName] = useState<string>('')
+    const [errorPagination, setErrorPagination] = useState({ current: 1, pageSize: 10 })
+    const [previewPagination, setPreviewPagination] = useState({ current: 1, pageSize: 10 })
     const { id: semesterId } = useSemesterStore()
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
@@ -131,6 +133,8 @@ const ModalNhapTKB = () => {
         if (res?.status === 200) {
             form.setFieldValue('previewData', (res.data as any)?.data || [])
             form.setFieldValue('errorData', (res.data as any)?.error || [])
+            setErrorPagination({ current: 1, pageSize: 10 })
+            setPreviewPagination({ current: 1, pageSize: 10 })
         } else {
             message.error(res?.data?.message || 'Nhập dữ liệu từ file thất bại')
         }
@@ -144,6 +148,9 @@ const ModalNhapTKB = () => {
             fileInput.value = ''
         }
         form.setFieldValue('previewData', [])
+        form.setFieldValue('errorData', [])
+        setErrorPagination({ current: 1, pageSize: 10 })
+        setPreviewPagination({ current: 1, pageSize: 10 })
     }
 
     const { mutateAsync: ImportPhanCongGiangDay } = useImportPhanCongGiangDay()
@@ -200,6 +207,9 @@ const ModalNhapTKB = () => {
             onCancel={handleCancel}
             title={'Import thời khoá biểu từ file Excel'}
             className="w-[99vw]"
+            okButtonProps={{
+                disabled: errorData.length > 0,
+            }}
             formProps={{
                 initialValues: {
                     fileType: 'THONG_KE_GIAO_VIEN_GIANG_DAY',
@@ -207,6 +217,7 @@ const ModalNhapTKB = () => {
             }}
         >
             <FormItem form={form} name="previewData" hidden />
+            <FormItem form={form} name="errorData" hidden />
             <Col span={24}>
                 <FormItem form={form} name="file" label="File Excel" required>
                     <div className="rounded-lg border-[1px] border-solid border-blue-400 bg-blue-50 p-3 mb-4">
@@ -297,7 +308,8 @@ const ModalNhapTKB = () => {
                                 title: 'TT',
                                 width: 35,
                                 align: 'center',
-                                render: (_value, _record, index) => index + 1,
+                                render: (_value, _record, index) =>
+                                    (errorPagination.current - 1) * errorPagination.pageSize + index + 1,
                             },
                             {
                                 title: 'Mô tả',
@@ -305,7 +317,10 @@ const ModalNhapTKB = () => {
                             },
                         ]}
                         pagination={{
+                            current: errorPagination.current,
+                            pageSize: errorPagination.pageSize,
                             defaultPageSize: 10,
+                            onChange: (page, pageSize) => setErrorPagination({ current: page, pageSize }),
                         }}
                     />
                 </Col>
@@ -321,7 +336,8 @@ const ModalNhapTKB = () => {
                                 title: 'TT',
                                 width: 35,
                                 align: 'center',
-                                render: (_value, _record, index) => index + 1,
+                                render: (_value, _record, index) =>
+                                    (previewPagination.current - 1) * previewPagination.pageSize + index + 1,
                             },
                             {
                                 title: 'Mã LMH',
@@ -459,7 +475,10 @@ const ModalNhapTKB = () => {
                             },
                         ]}
                         pagination={{
+                            current: previewPagination.current,
+                            pageSize: previewPagination.pageSize,
                             defaultPageSize: 10,
+                            onChange: (page, pageSize) => setPreviewPagination({ current: page, pageSize }),
                         }}
                     />
                 </Col>
