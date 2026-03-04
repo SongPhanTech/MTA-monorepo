@@ -207,22 +207,6 @@ const convertApiToCalendarEventReactBigCalendar = (
     })
 }
 
-// const getWeekBounds = (weekOffset: number) => {
-//     const today = new Date()
-//     const currentDay = today.getDay()
-//     const mondayOffset = currentDay === 0 ? -6 : 1 - currentDay
-
-//     const monday = new Date(today)
-//     monday.setDate(today.getDate() + mondayOffset + weekOffset * 7)
-//     monday.setHours(0, 0, 0, 0)
-
-//     const sunday = new Date(monday)
-//     sunday.setDate(monday.getDate() + 6)
-//     sunday.setHours(23, 59, 59, 999)
-
-//     return { weekStart: monday, weekEnd: sunday }
-// }
-
 const transformProfileDataTableCalendar = (profiles: UserProfile[]) => {
     return profiles?.map((profile: UserProfile) => ({
         id: profile.id,
@@ -240,7 +224,7 @@ export function LichCongTac({
     onlyMySchedule?: boolean
 }) {
     const { data: profile } = useSession()
-    const profileIdLogin = profile?.sDM_NhanVienId || ''
+    const profileIdLogin = profile?.sDM_NhanVienId || undefined
 
     const [currentWeekOffsetTableCalendar, setCurrentWeekOffsetTableCalendar] = useState(0)
     const [filterDate, setFilterDate] = useState<Date | undefined>()
@@ -252,11 +236,9 @@ export function LichCongTac({
         'calendar'
     )
 
-    // Shared query config
-
     const { data: eventsDataTableCalendar = [] } = useFindManyClassSchedule({
         where: {
-            ...(onlyMySchedule
+            ...(onlyMySchedule && profileIdLogin
                 ? {
                       OR: [
                           {
@@ -461,7 +443,8 @@ export function LichCongTac({
                 content: (
                     <div>
                         <p>
-                            <p>Ngày {dayjs(event.start).format('DD/MM/YYYY')}</p>
+                            <p>Ngày bắt đầu: {dayjs(event.start).format('DD/MM/YYYY')}</p>
+                            <p>Ngày kết thúc: {dayjs(event.end).format('DD/MM/YYYY')}</p>
                             <p>
                                 Từ {dayjs(event.start).format('HH:mm')} đến{' '}
                                 {dayjs(event.end).format('HH:mm')}
