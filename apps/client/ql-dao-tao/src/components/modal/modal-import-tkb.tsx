@@ -309,7 +309,9 @@ const ModalNhapTKB = () => {
                                 width: 35,
                                 align: 'center',
                                 render: (_value, _record, index) =>
-                                    (errorPagination.current - 1) * errorPagination.pageSize + index + 1,
+                                    (errorPagination.current - 1) * errorPagination.pageSize +
+                                    index +
+                                    1,
                             },
                             {
                                 title: 'Mô tả',
@@ -320,7 +322,8 @@ const ModalNhapTKB = () => {
                             current: errorPagination.current,
                             pageSize: errorPagination.pageSize,
                             defaultPageSize: 10,
-                            onChange: (page, pageSize) => setErrorPagination({ current: page, pageSize }),
+                            onChange: (page, pageSize) =>
+                                setErrorPagination({ current: page, pageSize }),
                         }}
                     />
                 </Col>
@@ -337,7 +340,9 @@ const ModalNhapTKB = () => {
                                 width: 35,
                                 align: 'center',
                                 render: (_value, _record, index) =>
-                                    (previewPagination.current - 1) * previewPagination.pageSize + index + 1,
+                                    (previewPagination.current - 1) * previewPagination.pageSize +
+                                    index +
+                                    1,
                             },
                             {
                                 title: 'Mã LMH',
@@ -478,7 +483,8 @@ const ModalNhapTKB = () => {
                             current: previewPagination.current,
                             pageSize: previewPagination.pageSize,
                             defaultPageSize: 10,
-                            onChange: (page, pageSize) => setPreviewPagination({ current: page, pageSize }),
+                            onChange: (page, pageSize) =>
+                                setPreviewPagination({ current: page, pageSize }),
                         }}
                     />
                 </Col>

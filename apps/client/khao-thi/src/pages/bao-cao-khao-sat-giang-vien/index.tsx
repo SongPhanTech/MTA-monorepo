@@ -13,7 +13,7 @@ import {
 // import ClusterSurveyReport from '@components/sub-pages/khao-sat/bao-cao-cum'
 // import LecturerSurveyReport from '@components/sub-pages/khao-sat/bao-cao-giang-vien'
 // import SurveyReport from '@components/sub-pages/khao-sat/bao-cao'
-import { useSemesterStore,useTrainingObjectTypeStore } from '@workspace/ui'
+import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Flex, Row, Skeleton, Tree } from 'antd'
 import { useMemo, useState } from 'react'
 // import ClusterSurveyReport from '@components/sub-pages/khao-sat/bao-cao-cum';
@@ -302,8 +302,8 @@ export default function BaoCaoGiangVien() {
                         surveyName={filters?.surveyName}
                         organizationId={selectedItem?.id}
                         trainingObjectTypeName={trainingObjectTypeName}
-                        semesterId={semesterId||''}
-                        trainingObjectTypeId={trainingObjectTypeId||''}
+                        semesterId={semesterId || ''}
+                        trainingObjectTypeId={trainingObjectTypeId || ''}
                     />
                 )
             }

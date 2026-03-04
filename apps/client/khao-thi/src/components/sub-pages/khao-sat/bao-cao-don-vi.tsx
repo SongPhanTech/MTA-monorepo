@@ -56,28 +56,32 @@ function OrganizationSurveyReport({
     const { data } = useGetClusterSurveyInfo(selectedId as string, {
         organizationId,
         semesterId,
-        trainingObjectTypeId
+        trainingObjectTypeId,
     })
 
-     const dataInfo = useMemo(() => {
-        if (data?.status === 200 ) {
-            console.log(data?.data?.data,123);
-            
+    const dataInfo = useMemo(() => {
+        if (data?.status === 200) {
+            console.log(data?.data?.data, 123)
+
             return {
                 xAxis: {
                     type: 'category',
-                    data: ['Tổng số GV', 'Số phiếu xuất', 'Số phiếu thu']
+                    data: ['Tổng số GV', 'Số phiếu xuất', 'Số phiếu thu'],
                 },
                 yAxis: {
-                    type: 'value'
+                    type: 'value',
                 },
                 series: [
                     {
-                    data: [data?.data?.data?.surveyCount, data?.data?.data?.listStudentCount, data?.data?.data?.studentCompletedSurveyCount],
-                    type: 'bar'
-                    }
-                ]
-                }
+                        data: [
+                            data?.data?.data?.surveyCount,
+                            data?.data?.data?.listStudentCount,
+                            data?.data?.data?.studentCompletedSurveyCount,
+                        ],
+                        type: 'bar',
+                    },
+                ],
+            }
             // return {
             //     title: {
             //         text: 'World Population',
@@ -348,17 +352,17 @@ function OrganizationSurveyReport({
 
     const renderTable = (dataTable: any, choices: any) => {
         if (!dataTable?.length) return
-        
+
         let average = choices.map((i: any) => {
             return { ...i, total: 0, totalCount: 0 }
         })
         dataTable.forEach((e: any) => {
-            
-        average = average.map((i: any) => {
+            average = average.map((i: any) => {
                 return {
                     ...i,
                     total: i.total + e.average.find((a: any) => a.id === i.id)?.total,
-                    totalCount: i.totalCount + e.average.find((a: any) => a.id === i.id)?.totalCount,
+                    totalCount:
+                        i.totalCount + e.average.find((a: any) => a.id === i.id)?.totalCount,
                 }
             })
         })

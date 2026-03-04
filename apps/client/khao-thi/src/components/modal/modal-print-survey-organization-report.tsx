@@ -145,7 +145,9 @@ const ModalPrintSurveyOrganization = () => {
 
                 {/* ===== TITLE ===== */}
                 <div className="text-center mt-6  ">
-                    <div className="text-lg font-bold uppercase">TỔNG HỢP PHIẾU LẤY Ý KIẾN NGƯỜI HỌC</div>
+                    <div className="text-lg font-bold uppercase">
+                        TỔNG HỢP PHIẾU LẤY Ý KIẾN NGƯỜI HỌC
+                    </div>
                     <div className="text-lg mt-1 font-bold uppercase">VỀ HOẠT ĐỘNG GIẢNG DẠY</div>
                     <div className="text-sm font-normal mt-1 font-semibold uppercase">
                         <span>HĐGD của GV, </span>
@@ -171,11 +173,9 @@ const ModalPrintSurveyOrganization = () => {
 
                         <div className="flex justify-between">
                             <div>
-                               {hasDepartment ? '2.' : '1.'} Khoa (Viện): {input.organizationName}
+                                {hasDepartment ? '2.' : '1.'} Khoa (Viện): {input.organizationName}
                             </div>
-                            <div>
-                                Mã khoa (Viện): {input.organizationCode}
-                            </div>
+                            <div>Mã khoa (Viện): {input.organizationCode}</div>
                         </div>
 
                         <div className="mt-2">

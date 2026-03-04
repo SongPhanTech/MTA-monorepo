@@ -136,16 +136,10 @@ const ModalPrintSurvey = () => {
                 >
                     <thead>
                         <tr className="font-bold text-center border border-black">
-                            <th
-                                className="border border-black text-center"
-                                style={{ width: 60 }}
-                            >
+                            <th className="border border-black text-center" style={{ width: 60 }}>
                                 STT
                             </th>
-                            <th
-                                className="border border-black text-center"
-                                style={{ width: 100 }}
-                            >
+                            <th className="border border-black text-center" style={{ width: 100 }}>
                                 Câu hỏi
                             </th>
                             {dataTable[0]?.answers?.map((a: any) => (
@@ -161,19 +155,14 @@ const ModalPrintSurvey = () => {
 
                             return (
                                 <tr key={q.id}>
-                                    <td className="text-center border border-black">
-                                        {index + 1}
-                                    </td>
+                                    <td className="text-center border border-black">{index + 1}</td>
 
                                     <td className="text-center border border-black">
                                         {`Câu ${index + 1}`}
                                     </td>
 
                                     {percent.map((p: any) => (
-                                        <td
-                                            key={p.id}
-                                            className="text-center border border-black"
-                                        >
+                                        <td key={p.id} className="text-center border border-black">
                                             {p.percent}% ({p.count}/{p.total})
                                         </td>
                                     ))}

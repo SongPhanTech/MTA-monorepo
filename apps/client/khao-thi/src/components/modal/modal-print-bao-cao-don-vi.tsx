@@ -132,9 +132,7 @@ const ModalPrintBaoCaoDonVi = () => {
 
                             return (
                                 <tr key={row.organization?.Id || index}>
-                                    <td className="border border-black text-center">
-                                        {index + 1}
-                                    </td>
+                                    <td className="border border-black text-center">{index + 1}</td>
 
                                     <td className="border border-black px-2">
                                         {row.organization?.sMa || ''} -{' '}

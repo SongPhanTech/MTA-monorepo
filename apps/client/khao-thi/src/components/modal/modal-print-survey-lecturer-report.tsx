@@ -151,7 +151,9 @@ const ModalPrintSurveylecturer = () => {
 
                 {/* ===== TITLE ===== */}
                 <div className="text-center mt-6  ">
-                    <div className="text-lg font-bold uppercase">TỔNG HỢP PHIẾU LẤY Ý KIẾN NGƯỜI HỌC</div>
+                    <div className="text-lg font-bold uppercase">
+                        TỔNG HỢP PHIẾU LẤY Ý KIẾN NGƯỜI HỌC
+                    </div>
                     <div className="text-lg mt-1 font-bold uppercase">VỀ HOẠT ĐỘNG GIẢNG DẠY</div>
                     <div className="text-sm font-normal mt-1 font-semibold uppercase">
                         {['HĐGD của GV', input.surveyName, `Hệ ${input.trainingObjectTypeName}`]
@@ -162,33 +164,22 @@ const ModalPrintSurveylecturer = () => {
                     {/* ===== FACULTY INFO ===== */}
                     <div className="mt-4 text-sm leading-6 text-left">
                         <div className="flex justify-between">
-                            <div>
-                                1. Họ và tên giảng viên: {input.lecturerName || ''}
-                            </div>
-                            <div>
-                                Mã giảng viên: {input.lecturerCode || ''}
-                            </div>
+                            <div>1. Họ và tên giảng viên: {input.lecturerName || ''}</div>
+                            <div>Mã giảng viên: {input.lecturerCode || ''}</div>
                         </div>
 
                         {hasDepartment && (
                             <div className="flex justify-between">
-                                <div>
-                                    2. Bộ môn: {input.departmentName}
-                                </div>
-                                <div>
-                                    Mã bộ môn: {input.departmentCode}
-                                </div>
+                                <div>2. Bộ môn: {input.departmentName}</div>
+                                <div>Mã bộ môn: {input.departmentCode}</div>
                             </div>
                         )}
 
                         <div className="flex justify-between">
                             <div>
-                                {hasDepartment ? '3' : '2'}. Khoa:{' '}
-                                {input.organizationName || ''}
+                                {hasDepartment ? '3' : '2'}. Khoa: {input.organizationName || ''}
                             </div>
-                            <div>
-                                Mã khoa: {input.organizationCode || ''}
-                            </div>
+                            <div>Mã khoa: {input.organizationCode || ''}</div>
                         </div>
 
                         <div className="mt-2">

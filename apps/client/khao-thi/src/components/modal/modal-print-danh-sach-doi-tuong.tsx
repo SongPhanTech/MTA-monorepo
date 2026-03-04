@@ -92,10 +92,7 @@ const ModalPrintDanhSachDoiTuong = () => {
                 >
                     <thead>
                         <tr className="font-bold  border border-black text-center">
-                            <th
-                                className="border border-black text-center"
-                                style={{ width: 50 }}
-                            >
+                            <th className="border border-black text-center" style={{ width: 50 }}>
                                 STT
                             </th>
                             <th className="border border-black text-center">Mã HV/GV</th>
