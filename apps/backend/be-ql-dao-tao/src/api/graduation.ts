@@ -187,19 +187,13 @@ app.openapi(graduationCheck, async (c) => {
         requiredCredits: true,
         electiveCredits: true,
         diplomaType: true,
-        trainingBlocks: {
-            include: {
-                subjects: { include: { subject: true } },
-                trainingBlock: true,
-            },
-        },
+        trainingBlocks: { include: { subjects: { include: { subject: true } } } },
         curriculum: { include: { trainingMajor: true } },
         outputStandardOnCurriculum: {
             include: { outputStandard: { include: { certificates: true } } },
             where: { deletedAt: null, active: true, isRequired: true },
         },
     }
-
     for (const [idx, application] of session.applications.entries()) {
         const student = await prisma.student.findFirstOrThrow({
             where: { id: application.studentId },
@@ -254,8 +248,7 @@ app.openapi(graduationCheck, async (c) => {
             continue
         }
 
-        const curriculumVersion =
-            student.curriculumVersion || student.fixedClass.curriculumVersion
+        const curriculumVersion = student.curriculumVersion || student.fixedClass.curriculumVersion
 
         if (!curriculumVersion) {
             results.push({
@@ -270,6 +263,30 @@ app.openapi(graduationCheck, async (c) => {
 
         const reasons: string[] = []
 
+        const lackOfOutputStandard = curriculumVersion.outputStandardOnCurriculum.filter(
+            (standard) => {
+                const notCompleted = standard.outputStandard.certificates.every((cert) => {
+                    const archived = student.archivedCertificate.find(
+                        (archived) => archived.certificateId === cert.id
+                    )
+                    return !archived
+                })
+                return notCompleted
+            }
+        )
+
+        if (lackOfOutputStandard.length > 0) {
+            reasons.push(
+                `Chưa đạt chuẩn đầu ra: ${lackOfOutputStandard
+                    .map((standard) => standard.outputStandard.name)
+                    .join(', ')}`
+            )
+        }
+
+        const curriculumSubjects = curriculumVersion.trainingBlocks.flatMap(
+            ({ subjects }) => subjects
+        )
+
         const {
             scoreToPass,
             scoreToPassConditional,
@@ -279,125 +296,112 @@ app.openapi(graduationCheck, async (c) => {
             scoreConverts,
         } = student.fixedClass.trainingCourse
 
-        const curriculumSubjects = curriculumVersion.trainingBlocks.flatMap(
-            ({ subjects }) => subjects
-        )
-
-        // ===== Chuẩn đầu ra =====
-        const lackOfOutputStandard = curriculumVersion.outputStandardOnCurriculum.filter(
-            (standard) =>
-                standard.outputStandard.certificates.every(
-                    (cert) =>
-                        !student.archivedCertificate.some((a) => a.certificateId === cert.id)
-                )
-        )
-        if (lackOfOutputStandard.length > 0) {
-            reasons.push(
-                `Chưa đạt chuẩn đầu ra: ${lackOfOutputStandard
-                    .map((s) => s.outputStandard.name)
-                    .join(', ')}`
-            )
-        }
-
-        // Lấy KQHT, bỏ qua các trường hợp theo yêu cầu 
-        // Bỏ qua ở query: hoãn thi , miễn thi , cấm thi
-        // Bỏ qua trong code: lưu ban + điểm < scoreToRetain , cải thiện , bình thường 
-        const rawSubjectScores = await prisma.studentSubjectScore.findMany({
+        // Query các môn học có lỗi (hoãn thi, cấm thi, đình chỉ, học lại)
+        const subjectScoresWithIssues = await prisma.studentSubjectScore.findMany({
             where: {
                 studentId: application.studentId,
                 deletedAt: null,
-                examPostponed: false, //Hoãn thi
-                exempted: false,      // Miễn thi
-                examBanned: false,    // Cấm thi
+                OR: [
+                    { examPostponed: true },
+                    { examBanned: true },
+                    { suspended: true },
+                    { repeated: true },
+                ],
             },
             include: { subjectVersion: true },
-            orderBy: { createdAt: 'asc' }, 
         })
 
-        type ProcessedScore = (typeof rawSubjectScores)[number] & {
-            scoreBase10: number
-            scoreBase4: number
-            isPass: boolean
+        for (const score of subjectScoresWithIssues) {
+            if (score.examPostponed && score.examPostponedReason) {
+                reasons.push(`Môn ${score.subjectVersion.name}: ${score.examPostponedReason}`)
+            }
+            if (score.examBanned && score.examBannedReason) {
+                reasons.push(`Môn ${score.subjectVersion.name}: ${score.examBannedReason}`)
+            }
+            if (score.suspended && score.suspendedReason) {
+                reasons.push(`Môn ${score.subjectVersion.name}: ${score.suspendedReason}`)
+            }
+            if (score.repeated && score.repeatedReason) {
+                reasons.push(`Môn ${score.subjectVersion.name}: ${score.repeatedReason}`)
+            }
         }
 
-        // Group theo subjectId 
-        const scoresBySubject = rawSubjectScores.reduce(
-            (acc, score) => {
-                const key = score.subjectVersion.subjectId
-                if (!acc[key]) acc[key] = []
-                acc[key].push(score)
-                return acc
+        // include failed subjects for count
+        const rawSubjectScores = await prisma.studentSubjectScore.findMany({
+            where: {
+                OR: [
+                    { studentId: application.studentId },
+                    {
+                        studentId: application.studentId,
+                        subjectClass: { cancelled: false },
+                    },
+                ],
+                deletedAt: null,
+                examPostponed: false,
+                exempted: false,
+                withdrew: false,
+                suspended: false,
             },
-            {} as Record<string, typeof rawSubjectScores>
-        )
+            include: { subjectVersion: true },
+            orderBy: { createdAt: 'asc' },
+        })
 
-        // Map subjectId
-        const processedScores = new Map<string, ProcessedScore>()
         let totalDebtCredit = 0
 
-        for (const [subjectId, scores] of Object.entries(scoresBySubject)) {
-            // scores đã sort asc theo createdAt
-            let best: ProcessedScore | null = null
+        // kết quả những môn đạt với điểm cao nhất
+        const subjectScoresMap = new Map<
+            string,
+            (typeof rawSubjectScores)[number] & {
+                scoreBase10: number
+                scoreBase4: number
+                canImprove: boolean
+            }
+        >()
 
-            for (const score of scores) {
-                const scoreBase10 =
-                    score.manualFinalScore || score.finalScore?.toNumber() || 0
+        for (const subjectScore of rawSubjectScores) {
+            // actual final score
+            const scoreBase10 = subjectScore.manualFinalScore || subjectScore.finalScore?.toNumber()
 
-                const isRetake = score.repeated       // học lại
-                const isImprovement = score.isImproving //học cải thiện
-
-                //Lưu ban + điểm < scoreToRetain → bỏ qua
-                if (isRetake && scoreBase10 < (scoreToRetain ?? 6.5)) continue
-
-                const subjectInCurriculum = curriculumSubjects.find(
-                    (s) => s.subjectId === subjectId
-                )
-
-                const isPass =
-                    (subjectInCurriculum?.graduation && scoreBase10 >= scoreToPassGraduation) ||
-                    (subjectInCurriculum?.useForFinalScore &&
-                        scoreBase10 >= scoreToPassConditional) ||
-                    scoreBase10 >= scoreToPass
-
-                const scoreConvert = scoreConverts.find(
-                    (s) => s.base10Min <= scoreBase10 && s.base10Max >= scoreBase10
-                )
-
-                const processed: ProcessedScore = {
-                    ...score,
-                    scoreBase10,
-                    scoreBase4: scoreConvert?.base4 || 0,
-                    isPass,
-                }
-
-                if (!best) {
-                    best = processed
-                    // Không phải học lại, không phải cải thiện
-                    //  chỉ giữ KQ đầu tiên
-                    if (!isRetake && !isImprovement) break
-                    continue
-                }
-
-                //Học cải thiện → giữ KQ cao hơn
-                if (isImprovement) {
-                    if (scoreBase10 > best.scoreBase10) best = processed
-                    continue
-                }
-
-                // Học lại → giữ KQ cao hơn
-                if (isRetake) {
-                    if (scoreBase10 > best.scoreBase10) best = processed
-                    continue
-                }
+            if (!scoreBase10 || (subjectScore.repeated && scoreBase10 < scoreToRetain)) {
+                continue
             }
 
-            if (!best) continue
+            const scoreConvert = scoreConverts.find(
+                (s) => s.base10Min <= scoreBase10 && s.base10Max >= scoreBase10
+            )
+            const scoreBase4 = scoreConvert?.base4 || 0
 
-            processedScores.set(subjectId, best)
+            const subjectInCurriculum = curriculumSubjects.find(
+                (subject) => subject.subjectId === subjectScore.subjectVersionId
+            )
 
-            // Đếm TC trượt
-            const subjectInCurriculum = curriculumSubjects.find((s) => s.subjectId === subjectId)
-            if (subjectInCurriculum && !best.isPass) {
+            // lưu kết quả môn đạt
+            if (
+                (subjectInCurriculum?.graduation && scoreBase10 >= scoreToPassGraduation) ||
+                (subjectInCurriculum?.useForFinalScore && scoreBase10 >= scoreToPassConditional) ||
+                scoreBase10 >= scoreToPass
+            ) {
+                const entry = subjectScoresMap.get(subjectScore.subjectVersionId)
+                if (entry && (!entry.canImprove || entry.scoreBase10 > scoreBase10)) {
+                    continue
+                }
+
+                subjectScoresMap.set(subjectScore.subjectVersionId, {
+                    ...subjectScore,
+                    scoreBase10,
+                    scoreBase4,
+                    canImprove: scoreConvert?.improvementRegister || false,
+                })
+            }
+
+            const entry = subjectScoresMap.get(subjectScore.subjectVersionId)
+            // tín chỉ trượt
+            if (
+                !entry && // đã đạt thì bỏ qua
+                subjectInCurriculum?.useForFinalScore &&
+                ((subjectInCurriculum.graduation && scoreBase10 < scoreToPassGraduation) ||
+                    scoreBase10 < scoreToPass)
+            ) {
                 totalDebtCredit += subjectInCurriculum.subject.credit
             }
         }
@@ -408,237 +412,183 @@ app.openapi(graduationCheck, async (c) => {
                 active: true,
                 subjects: {
                     some: {
-                        subjectId: { in: curriculumSubjects.map((s) => s.subjectId) },
+                        subjectId: {
+                            in: curriculumSubjects.map(({ subjectId }) => subjectId),
+                        },
                     },
                 },
             },
-            include: {
-                subjects: { include: { subject: { select: { credit: true } } } },
-            },
+            include: { subjects: { include: { subject: { select: { credit: true } } } } },
         })
 
-        // Duyệt CTĐT 
-        // Map subjectId → điểm dùng tính GPA
-        const finalScores = new Map<string, ProcessedScore>()
-        // Map subjectId → điểm môn điều kiện (chỉ ghi nhận "Đạt")
-        const markDoneScores = new Map<string, ProcessedScore>()
-
-        const processedSubjects = new Set<string>()
-        const processedEquivalencyGroups = new Set<string>()
-
-        // Theo dõi điểm thấp nhất để tính downgrade
-        let courseGradeLowest = Number.POSITIVE_INFINITY
-        let graduationCourseGradeLowest = Number.POSITIVE_INFINITY
-
-        for (const block of curriculumVersion.trainingBlocks) {
-            const mandatory = block.subjects.filter(
-                (s) => s.type === SubjectRequirementType.Mandatory
-            )
-            const optional = block.subjects.filter(
-                (s) => s.type === SubjectRequirementType.Optional
-            )
-
-            // Môn bắt buộc 
-            for (const subject of mandatory) {
-                if (
-                    finalScores.has(subject.subjectId) ||
-                    markDoneScores.has(subject.subjectId) ||
-                    processedSubjects.has(subject.subjectId)
-                ) {
-                    continue
-                }
-
-                const score = processedScores.get(subject.subjectId)
-
-                // Môn điều kiện: không dùng tính điểm tích luỹ
-                if (!subject.useForFinalScore) {
-                    if (score?.isPass) {
-                        markDoneScores.set(subject.subjectId, score)
-                    } else {
-                        // Kiểm tra môn tương đương cho môn điều kiện
-                        const equivGroups = equivalencyGroups.filter(({ subjects }) =>
-                            subjects.some((s) => s.subjectId === subject.subjectId)
-                        )
-                        const equivPassed = equivGroups.some((g) =>
-                            g.subjects.every((s) => {
-                                const eq = processedScores.get(s.subjectId)
-                                return eq?.isPass
-                            })
-                        )
-                        if (!equivPassed) {
-                            reasons.push(`Chưa đạt môn bắt buộc (${subject.subject.name})`)
-                        }
-                    }
-                    continue
-                }
-
-                // Môn bắt buộc tính điểm
-                if (score?.isPass) {
-                    finalScores.set(subject.subjectId, score)
-                    continue
-                }
-
-                // Kiểm tra môn tương đương
-                const equivGroups = equivalencyGroups
-                    .filter(({ subjects }) =>
-                        subjects.some((s) => s.subjectId === subject.subjectId)
-                    )
-                    .filter(({ id }) => !processedEquivalencyGroups.has(id))
-
-                if (!equivGroups.length) {
-                    reasons.push(`Chưa đạt môn bắt buộc (${subject.subject.name})`)
-                    continue
-                }
-
-                let resolvedByEquiv = false
-                for (const equivGroup of equivGroups) {
-                    processedEquivalencyGroups.add(equivGroup.id)
-
-                    const equivalencyGroupSubject = equivGroup.subjects.find(
-                        (s) => s.subjectId === subject.subjectId
-                    )
-                    if (!equivalencyGroupSubject) continue
-
-                    const side = equivalencyGroupSubject.side
-                    const curriculumSide = equivGroup.subjects.filter((s) => s.side === side)
-                    const otherSide = equivGroup.subjects.filter((s) => s.side !== side)
-
-                    type ScoreResult = (typeof curriculumSide)[number] & {
-                        score: ProcessedScore | undefined
-                    }
-
-                    const curriculumSideResult: ScoreResult[] = curriculumSide.map((s) => ({
-                        ...s,
-                        score: processedScores.get(s.subjectId),
-                    }))
-                    const otherSideResult: ScoreResult[] = otherSide.map((s) => ({
-                        ...s,
-                        score: processedScores.get(s.subjectId),
-                    }))
-
-                    // Tất cả môn tương đương phải đạt
-                    if (otherSideResult.some((r) => !r.score?.isPass)) continue
-
-                    // Nếu có môn CTĐT chưa đạt → dùng kết quả môn tương đương
-                    if (curriculumSideResult.some((r) => !r.score?.isPass)) {
-                        resolvedByEquiv = true
-                        for (const r of curriculumSideResult) {
-                            processedSubjects.add(r.subjectId)
-                        }
-                        for (const r of otherSideResult) {
-                            if (r.score) finalScores.set(r.subjectId, r.score)
-                        }
-                        break
-                    }
-
-                    // Nếu cả 2 bên đều đạt → so sánh điểm trung bình, lấy bên cao hơn
-                    const calcAvg = (sideResults: ScoreResult[]) => {
-                        let total = new Decimal(0)
-                        let credits = 0
-                        for (const r of sideResults) {
-                            const credit = r.subject.credit
-                            total = total.add(
-                                new Decimal(r.score?.scoreBase10 || 0).mul(credit)
-                            )
-                            credits += credit
-                        }
-                        return credits ? total.div(credits).toNumber() : 0
-                    }
-
-                    if (calcAvg(otherSideResult) >= calcAvg(curriculumSideResult)) {
-                        resolvedByEquiv = true
-                        for (const r of otherSideResult) {
-                            if (r.score) finalScores.set(r.subjectId, r.score)
-                        }
-                    }
-
-                    if (resolvedByEquiv) break
-                }
-
-                if (!resolvedByEquiv) {
-                    reasons.push(`Chưa đạt môn bắt buộc (${subject.subject.name})`)
-                }
-            }
-
-            // Môn tự chọn
-            // Lấy các môn tự chọn đã pass, sort theo điểm × tín chỉ giảm dần
-            // Gom cho đủ số TC tự chọn yêu cầu của khối
-            const electiveCreditsRequired = block.electiveCreditsRequired ?? 0
-            if (electiveCreditsRequired > 0) {
-                let creditSum = 0
-                const passedOptionals = optional
-                    .map((s) => ({ subject: s, score: processedScores.get(s.subjectId) }))
-                    .filter((i) => i.score?.isPass)
-                    .sort(
-                        (a, b) =>
-                            b.score!.scoreBase10 * b.subject.subject.credit -
-                            a.score!.scoreBase10 * a.subject.subject.credit
-                    )
-
-                for (const item of passedOptionals) {
-                    if (creditSum >= electiveCreditsRequired) break
-                    finalScores.set(item.subject.subjectId, item.score!)
-                    creditSum += item.subject.subject.credit
-                }
-
-                if (creditSum < electiveCreditsRequired) {
-                    reasons.push(
-                        `Chưa hoàn thành môn tự chọn khối kiến thức ${block.trainingBlock.name}`
-                    )
-                }
-            }
+        type SubjectScore = (typeof rawSubjectScores)[number] & {
+            scoreBase10: number
+            scoreBase4: number
+            canImprove: boolean
         }
 
-        // Tính GPA 
+        // kết quả những môn sẽ dùng để tính điểm tích luỹ
+        const finalScores = new Map<string, SubjectScore>()
+
+        // kết quả những môn bổ sung kiến thức (chỉ ghi nhận "Đạt")
+        const markDoneScores = new Map<string, SubjectScore>()
+
+        // những môn trong CTĐT chưa đạt nhưng đã được xử lý bởi nhóm tương đương
+        const processedSubjects = new Set<string>()
+        const processedEquivalencyGroups = new Set<string>()
+        for (const subject of curriculumSubjects) {
+            if (
+                finalScores.has(subject.subjectId) ||
+                markDoneScores.has(subject.subjectId) ||
+                processedSubjects.has(subject.subjectId)
+            ) {
+                continue
+            }
+
+            const subjectScore = subjectScoresMap.get(subject.subjectId)
+            if (subjectScore) {
+                finalScores.set(subject.subjectId, subjectScore)
+                continue
+            }
+
+            const equivGroups = equivalencyGroups
+                .filter(({ subjects }) =>
+                    subjects.some(({ subjectId }) => subjectId === subject.subjectId)
+                )
+                .filter(({ id }) => !processedEquivalencyGroups.has(id))
+
+            if (!subjectScore && !equivGroups.length) {
+                reasons.push(`Chưa đạt môn bắt buộc (${subject.subject.name})`)
+                continue
+            }
+
+            let hasEquivalencyGroup = false
+            for (const equivGroup of equivGroups) {
+                processedEquivalencyGroups.add(equivGroup.id)
+
+                const equivalencyGroupSubject = equivGroup.subjects.find(
+                    ({ subjectId }) => subject.subjectId === subjectId
+                )
+                if (!equivalencyGroupSubject) continue
+
+                const side = equivalencyGroupSubject.side
+
+                const curriculumSide = equivGroup.subjects.filter((s) => s.side === side)
+                const otherSide = equivGroup.subjects.filter((s) => s.side !== side)
+
+                type ScoreResult = (typeof curriculumSide)[number] & {
+                    score: SubjectScore | undefined
+                }
+
+                // kết quả những môn trong CTĐT
+                const curriculumSideResult: ScoreResult[] = curriculumSide.map((s) => ({
+                    ...s,
+                    score: subjectScoresMap.get(s.subjectId),
+                }))
+
+                // kết quả những môn tương đương
+                const otherSideResult: ScoreResult[] = otherSide
+                    .map((s) => ({
+                        ...s,
+                        score: subjectScoresMap.get(s.subjectId),
+                    }))
+                    .filter((r) => r.score)
+                if (otherSideResult.length < otherSide.length) {
+                    // không đạt môn tương đương
+                    continue
+                }
+
+                // nếu môn CTĐT chưa đạt => lấy kết quả môn tương đương
+                if (curriculumSideResult.some((r) => !r.score)) {
+                    hasEquivalencyGroup = true
+                    for (const result of curriculumSideResult) {
+                        if (result.score) {
+                            // đánh dấu môn bổ sung kiến thức
+                            finalScores.delete(result.subjectId)
+                        } else {
+                            // đánh dấu môn CTĐT chưa đạt nhưng được xử lý bởi nhóm tương đương
+                            processedSubjects.add(result.subjectId)
+                        }
+                    }
+                    for (const result of otherSideResult) {
+                        if (!result.score) continue
+                        finalScores.set(result.subjectId, result.score)
+                    }
+                    break
+                }
+
+                const calcScore = (scoreResults: ScoreResult[]) => {
+                    let totalScore = new Decimal(0)
+                    let totalCredit = 0
+                    for (const scoreResult of scoreResults) {
+                        const credit = scoreResult.subject.credit
+                        totalScore = totalScore.add(
+                            new Decimal(scoreResult.score?.scoreBase10 || 0).mul(credit)
+                        )
+                        totalCredit += credit
+                    }
+                    return totalScore.div(totalCredit).toNumber()
+                }
+
+                const curriculumSideScore = calcScore(curriculumSideResult)
+                const otherSideScore = calcScore(otherSideResult)
+
+                if (curriculumSideScore <= otherSideScore) {
+                    hasEquivalencyGroup = true
+                    for (const result of otherSideResult) {
+                        if (!result.score) continue
+                        finalScores.set(result.subjectId, result.score)
+                    }
+                }
+
+                if (hasEquivalencyGroup) break
+            }
+
+            if (
+                !hasEquivalencyGroup &&
+                subject.useForFinalScore &&
+                subject.type === SubjectRequirementType.Mandatory
+            ) {
+                reasons.push(`Chưa đạt môn bắt buộc (${subject.subject.name})`)
+            }
+        }
         let totalScoreBase10 = new Decimal(0)
         let totalScoreBase4 = new Decimal(0)
         let totalPassCredit = 0
+        const courseGradeLowest = Number.POSITIVE_INFINITY
+        const graduationCourseGradeLowest = Number.POSITIVE_INFINITY
 
         for (const [subjectId, score] of finalScores) {
-            const subjectInCurriculum = curriculumSubjects.find((s) => s.subjectId === subjectId)
-            if (!subjectInCurriculum?.useForFinalScore) continue
-
-            const credit = subjectInCurriculum.subject.credit
-            totalScoreBase10 = totalScoreBase10.add(
-                new Decimal(score.scoreBase10).mul(credit)
-            )
-            totalScoreBase4 = totalScoreBase4.add(
-                new Decimal(score.scoreBase4).mul(credit)
-            )
+            const credit = score.subjectVersion.credit
+            totalScoreBase10 = totalScoreBase10.add(new Decimal(score.scoreBase10).mul(credit))
+            totalScoreBase4 = totalScoreBase4.add(new Decimal(score.scoreBase4).mul(credit))
             totalPassCredit += credit
-
-            // Theo dõi điểm thấp nhất
-            courseGradeLowest = Math.min(courseGradeLowest, score.scoreBase10)
-            if (subjectInCurriculum.graduation) {
-                graduationCourseGradeLowest = Math.min(
-                    graduationCourseGradeLowest,
-                    score.scoreBase10
-                )
-            }
         }
 
-        // ===== BƯỚC 4: Kiểm tra tổng TC =====
+        await prisma.studentGraduationApplication.update({
+            where: { id: application.id },
+            data: {
+                gpaScore: {
+                    set: Array.from(finalScores.values()).map((score) => ({
+                        id: score.id,
+                    })),
+                },
+                supplementaryScore: {
+                    set: Array.from(markDoneScores.values()).map((score) => ({
+                        id: score.id,
+                    })),
+                },
+            },
+        })
+
         if (
             curriculumVersion.requiredCredits &&
             totalPassCredit < curriculumVersion.requiredCredits
         ) {
             reasons.push(
-                `Chưa hoàn thành đủ số tín chỉ (${totalPassCredit}/${curriculumVersion.requiredCredits})`
+                `Chưa đạt số tín chỉ (${totalPassCredit} < ${curriculumVersion.requiredCredits})`
             )
         }
-
-        // Lưu danh sách điểm GPA và bổ sung
-        await prisma.studentGraduationApplication.update({
-            where: { id: application.id },
-            data: {
-                gpaScore: {
-                    set: Array.from(finalScores.values()).map((s) => ({ id: s.id })),
-                },
-                supplementaryScore: {
-                    set: Array.from(markDoneScores.values()).map((s) => ({ id: s.id })),
-                },
-            },
-        })
 
         const cumulativeBase10 = totalPassCredit
             ? totalScoreBase10.div(totalPassCredit).toNumber()
@@ -647,48 +597,26 @@ app.openapi(graduationCheck, async (c) => {
             ? totalScoreBase4.div(totalPassCredit).toNumber()
             : 0
 
+        const rankLevels = student.fixedClass?.trainingCourse.academicRankingConvert
+        if (!rankLevels?.length) {
+            reasons.push('Không có hạng xếp loại')
+        }
+
         const CUMULATIVE_GPA = Number(
             (baseScore === 'Base10' ? cumulativeBase10 : cumulativeBase4).toFixed(2)
         )
 
-        // Nếu đã có lý do  → không cần xét xếp loại
-        if (reasons.length > 0) {
-            results.push({
-                applicationId: application.id,
-                graduation: false,
-                gpa: CUMULATIVE_GPA,
-                rank: null,
-                reason: reasons.join('\n'),
-                trainingMajor: curriculumVersion.curriculum.trainingMajor,
-                diplomaType: curriculumVersion.diplomaType,
-            })
-            continue
-        }
-
-        //  Xếp loại
-        const rankLevels = student.fixedClass.trainingCourse.academicRankingConvert
-        if (!rankLevels?.length) {
-            results.push({
-                applicationId: application.id,
-                graduation: false,
-                gpa: CUMULATIVE_GPA,
-                rank: null,
-                reason: 'Không có hạng xếp loại',
-                trainingMajor: curriculumVersion.curriculum.trainingMajor,
-                diplomaType: curriculumVersion.diplomaType,
-            })
-            continue
-        }
-
-        const semesterRegisteredCredits =
-            student.studentSemesterResult[0]?.passedCredits || 0
-        const semesterFailedCredits =
-            student.studentSemesterResult[0]?.failedCredits || 0
+        const semesterRegisteredCredits = student.studentSemesterResult[0]?.passedCredits || 0
+        const semesterFailedCredits = student.studentSemesterResult[0]?.failedCredits || 0
         let repeatYearCount = 0
         let suspensionCount = 0
         for (const decision of student.studentAcademicDecision) {
-            if (decision.actionTaken === AcademicActionType.REPEAT_YEAR) repeatYearCount++
-            if (decision.actionTaken === AcademicActionType.SUSPENSION) suspensionCount++
+            if (decision.actionTaken === AcademicActionType.REPEAT_YEAR) {
+                repeatYearCount++
+            }
+            if (decision.actionTaken === AcademicActionType.SUSPENSION) {
+                suspensionCount++
+            }
         }
 
         const studentDataContext: StudentDataContext = {
@@ -702,12 +630,8 @@ app.openapi(graduationCheck, async (c) => {
                     : student.studentYearResult[0]?.gpaBase4.toNumber() || 0,
             CUMULATIVE_GPA,
             ENTRY_SCORE: student.entryScore || 0,
-            COURSE_GRADE_LOWEST:
-                courseGradeLowest === Number.POSITIVE_INFINITY ? 0 : courseGradeLowest,
-            GRADUATION_COURSE_GRADE_LOWEST:
-                graduationCourseGradeLowest === Number.POSITIVE_INFINITY
-                    ? 0
-                    : graduationCourseGradeLowest,
+            COURSE_GRADE_LOWEST: courseGradeLowest,
+            GRADUATION_COURSE_GRADE_LOWEST: graduationCourseGradeLowest,
 
             SEMESTER_REGISTERED_CREDITS: semesterRegisteredCredits,
             SEMESTER_PASSED_CREDITS: student.studentSemesterResult[0]?.passedCredits || 0,
@@ -718,13 +642,8 @@ app.openapi(graduationCheck, async (c) => {
             YEAR_FAILED_CREDITS: student.studentYearResult[0]?.failedCredits || 0,
             CUMULATIVE_PASSED_CREDITS: totalPassCredit,
             CUMULATIVE_DEBT_CREDITS: totalDebtCredit,
-            CUMULATIVE_PROGRESS_PERCENT:
-                curriculumVersion.requiredCredits
-                    ? (totalPassCredit / curriculumVersion.requiredCredits) * 100
-                    : 0,
-            CUMULATIVE_RETAKE_PERCENT: totalPassCredit
-                ? (totalDebtCredit / totalPassCredit) * 100
-                : 0,
+            CUMULATIVE_PROGRESS_PERCENT: (totalPassCredit / totalPassCredit) * 100,
+            CUMULATIVE_RETAKE_PERCENT: (totalDebtCredit / totalPassCredit) * 100,
 
             ACADEMIC_WARNING_LEVEL: student.academicWarningLevel,
             DISCIPLINARY_WARNING_LEVEL: student.disciplinaryWarningLevel,
@@ -741,71 +660,83 @@ app.openapi(graduationCheck, async (c) => {
             HAS_IMPROVEMENT_REGISTRATION: false,
         }
 
-        // So sánh GPA với từng bậc xếp loại (đã sort theo rankOrder asc)
-        let ranked = false
-        for (const [rankIdx, rank] of rankLevels.entries()) {
-            // Kiểm tra điểm nằm trong khoảng của bậc
-            const isCorrectScore =
-                rank.baseScore === 'Base10'
-                    ? cumulativeBase10 >= (rank.base10Min ?? 0) &&
-                      cumulativeBase10 <= (rank.base10Max ?? 0)
-                    : cumulativeBase4 >= (rank.base4Min ?? 0) &&
-                      cumulativeBase4 <= (rank.base4Max ?? 0)
+        if (reasons.length > 0) {
+            results.push({
+                applicationId: application.id,
+                graduation: false,
+                gpa: CUMULATIVE_GPA,
+                rank: null,
+                reason: reasons.join('\n'),
+                trainingMajor: curriculumVersion.curriculum.trainingMajor,
+                diplomaType: curriculumVersion.diplomaType,
+            })
+            continue
+        }
 
-            if (!isCorrectScore) continue
-
-            // Kiểm tra các điều kiện xếp loại
-            const conditionResults = await Promise.all(
-                rank.rankingCondition.map(async (rule) => {
-                    const passed = evaluateCondition(studentDataContext, rule)
-                    const actualValue = Number(studentDataContext[rule.field])
-                    await prisma.applicationCheckResult
-                        .upsert({
-                            where: {
-                                studentGraduationApplicationId_rankingConditionId: {
-                                    studentGraduationApplicationId: application.id,
-                                    rankingConditionId: rule.id,
-                                },
-                            },
-                            create: {
+        for (const [
+            rankIdx,
+            rank,
+        ] of student.fixedClass.trainingCourse.academicRankingConvert.entries()) {
+            const isEligible = rank.rankingCondition.every(async (rule) => {
+                const passed = evaluateCondition(studentDataContext, rule)
+                const actualValue = Number(studentDataContext[rule.field])
+                await prisma.applicationCheckResult
+                    .upsert({
+                        where: {
+                            studentGraduationApplicationId_rankingConditionId: {
                                 studentGraduationApplicationId: application.id,
                                 rankingConditionId: rule.id,
-                                passed,
-                                actualValue,
                             },
-                            update: { passed, actualValue },
-                        })
-                        .catch(console.log)
-                    return passed
-                })
-            )
+                        },
+                        create: {
+                            studentGraduationApplicationId: application.id,
+                            rankingConditionId: rule.id,
+                            passed,
+                            actualValue,
+                        },
+                        update: { passed, actualValue },
+                    })
+                    .catch((e) => {
+                        console.log(e)
+                    })
 
-            const isEligible = conditionResults.every(Boolean)
-            if (!isEligible) continue
+                return passed
+            })
 
-            // Bậc phù hợp → kiểm tra hạ bằng
-            const downgrade = rank.downgradeRules.find(({ conditions }) =>
-                conditions.every((rule) => evaluateCondition(studentDataContext, rule))
-            )
+            const isCorrectScore =
+                rank.baseScore === 'Base10'
+                    ? cumulativeBase10 >= (rank.base10Min || 0) &&
+                      cumulativeBase10 <= (rank.base10Max || 0)
+                    : cumulativeBase4 >= (rank.base4Min || 0) &&
+                      cumulativeBase4 <= (rank.base4Max || 0)
 
-            if (downgrade) {
-                // Bị hạ bằng → lấy bậc tiếp theo
-                const rankDowngrade = rankLevels[rankIdx + 1] || null
-                results.push({
-                    applicationId: application.id,
-                    graduation: !!rankDowngrade,
-                    gpa: CUMULATIVE_GPA,
-                    rank: rankDowngrade,
-                    reason: '',
-                    trainingMajor: curriculumVersion.curriculum.trainingMajor,
-                    diplomaType: curriculumVersion.diplomaType,
-                    downgraded: {
-                        from: rank,
-                        conditions: downgrade.conditions,
-                    },
-                })
-            } else {
-                // Không bị hạ bằng
+            const eligibleRank = isEligible && isCorrectScore ? rank : null
+
+            if (eligibleRank) {
+                const downgrade = eligibleRank.downgradeRules.find(({ conditions }) =>
+                    conditions.every((rule) => evaluateCondition(studentDataContext, rule))
+                )
+
+                const rankDowngrade =
+                    student.fixedClass.trainingCourse.academicRankingConvert[rankIdx + 1] || null
+
+                if (downgrade) {
+                    results.push({
+                        applicationId: application.id,
+                        graduation: !!rankDowngrade,
+                        gpa: CUMULATIVE_GPA,
+                        rank: rankDowngrade || null,
+                        reason: '',
+                        trainingMajor: curriculumVersion.curriculum.trainingMajor,
+                        diplomaType: curriculumVersion.diplomaType,
+                        downgraded: {
+                            from: rank,
+                            conditions: downgrade.conditions,
+                        },
+                    })
+                    break
+                }
+
                 results.push({
                     applicationId: application.id,
                     graduation: true,
@@ -815,14 +746,11 @@ app.openapi(graduationCheck, async (c) => {
                     trainingMajor: curriculumVersion.curriculum.trainingMajor,
                     diplomaType: curriculumVersion.diplomaType,
                 })
+                break
             }
-
-            ranked = true
-            break
         }
 
-        //Không có bậc nào thoả mãn
-        if (!ranked) {
+        if (!results[idx]) {
             results.push({
                 applicationId: application.id,
                 graduation: false,
