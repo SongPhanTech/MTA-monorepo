@@ -33,6 +33,7 @@ import type { TableRowSelection } from 'antd/lib/table/interface'
 import _ from 'lodash'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { keHoachThiStore } from '..'
+import { queryClient } from '@api/index'
 
 interface Props {
     setActiveKey: (key: string) => void
@@ -350,6 +351,9 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                     throw new Error('Lưu kế hoạch thi thất bại')
                 }
                 message.success('Lưu kế hoạch thi thành công')
+                queryClient.invalidateQueries({
+                    queryKey: ['zenstack', 'Exam'],
+                })
                 refetchExams()
                 formButton.resetFields()
                 setOpen(false)
@@ -378,6 +382,9 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                     return
                 }
                 message.success('Tạo kế hoạch thi thành công')
+                queryClient.invalidateQueries({
+                    queryKey: ['zenstack', 'Exam'],
+                })
                 formButton.resetFields()
                 setOpen(false)
                 refetchExams()
@@ -592,7 +599,8 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                             //     )
                             // },
                             className: cn(
-                                selectedExamId === record.id && 'bg-orange-100',
+                                selectedExamId === record.id &&
+                                    'bg-orange-100 [&>td]:bg-orange-100 [&>td]:hover:bg-orange-100',
                                 record.subjectClass?.[0]?.subjectId !== selectedSubjectId &&
                                     selectedSubjectId !== undefined &&
                                     'bg-gray-400',
@@ -800,7 +808,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                             {
                                 title: 'Danh sách phòng',
                                 align: 'center',
-                                width: 240,
+                                width: 350,
                                 render: (_, record) => {
                                     return (
                                         <>

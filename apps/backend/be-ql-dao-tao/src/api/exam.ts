@@ -132,6 +132,12 @@ app.openapi(createNewExamList, async (c) => {
                                   create: {
                                       roomId,
                                       capacity: count,
+                                      examList: {
+                                          create: {
+                                              start: 1,
+                                              end: 1,
+                                          },
+                                      },
                                   },
                               },
                           }
