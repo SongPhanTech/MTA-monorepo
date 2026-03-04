@@ -201,7 +201,7 @@ const PutVersionSubjectModal = () => {
                 const tabFieldLabels: { [key: string]: string } = {
                     objectives: 'Mục tiêu',
                     learningOutcome: 'Chuẩn đầu ra',
-                    structure: 'Cấu trúc chương trình đào tạo',
+                    structure: 'Cấu trúc học phần',
                     guild: 'Kế hoạch và phương pháp dạy học',
                     academicResults: 'Đánh giá kết quả học tập',
                     materials: 'Cơ sở vật chất, học liệu',
@@ -762,7 +762,7 @@ const PutVersionSubjectModal = () => {
                             },
                             {
                                 key: '3',
-                                label: 'Cấu trúc chương trình đào',
+                                label: 'Cấu trúc học phần',
                                 children: (
                                     <FormItem form={form} name="structure">
                                         <RichTextEditor editable={!input?.isLocked} />

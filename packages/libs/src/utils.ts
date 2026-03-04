@@ -461,8 +461,6 @@ export const calcFinalScore = (
                   10
               )
 
-    console.log('finalScore', finalScore)
-
     if (maxCertFinalScore === null && finalScore < coef.scoreToPass) {
         return new Decimal(finalScore).toDecimalPlaces(1)
     }
