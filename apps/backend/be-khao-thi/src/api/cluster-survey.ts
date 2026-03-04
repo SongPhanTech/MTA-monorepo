@@ -978,6 +978,8 @@ const getClusterSurveyInfo = createRoute({
         params: z.object({ id: z.string() }),
         query: z.object({
             organizationId: z.string(),
+            semesterId: z.string(),
+            trainingObjectTypeId: z.string(),
         }),
     },
     responses: {
@@ -1004,7 +1006,7 @@ const getClusterSurveyInfo = createRoute({
 
 app.openapi(getClusterSurveyInfo, async (c) => {
     const { id } = c.req.valid('param')
-    const { ...q } = c.req.valid('query')
+    const {semesterId,trainingObjectTypeId, ...q } = c.req.valid('query')
 
     const survey = await prisma.survey.findMany({
         where: { clusterSurveyId: id },
@@ -1024,6 +1026,31 @@ app.openapi(getClusterSurveyInfo, async (c) => {
                 some: {},
             },
         },
+    })
+    // const lecturerIds:any = survey.filter(i=>i?.lectureId).map(i=>i?.lectureId) ;
+    // if(
+    //     !lecturerIds?.length
+    // ){
+    //     return c.json({ message: 'Không tìm thấy giảng viên' }, 404)
+    // }
+
+    let listStudentCount = 0
+
+    const listSUbsjecClass= await prisma.subjectClass.findMany({
+        where: {
+            survey: {
+                some: {
+                    clusterSurveyId: id,
+                },
+            }
+        },
+        include: {
+            mainLecturer: true,
+            subjectClassStudent: true
+        },
+    })
+    listSUbsjecClass.forEach((i) => {
+        listStudentCount += i?.subjectClassStudent?.length
     })
 
     const studentCompletedSurvey = await prisma.surveySession.count({
@@ -1045,6 +1072,7 @@ app.openapi(getClusterSurveyInfo, async (c) => {
         data: {
             surveyCount: survey?.length || 0,
             completedSurveyCount,
+            listStudentCount,
             studentCompletedSurveyCount: studentCompletedSurvey || 0,
         },
     }
