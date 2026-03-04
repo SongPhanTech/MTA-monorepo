@@ -191,6 +191,7 @@ const PutStudentScoreConvertModal = () => {
                         subjectVersionId: row.subjectVersionId,
                         finalScore: Number(row.score),
                         manualFinalScore: Number(row.score),
+                        description: 'Điểm sinh viên chuyển trường',
                     }))
                 const listSqlTransaction: any[] = [
                     {
