@@ -968,9 +968,9 @@ export default function NhapDiem({
                         const changedId = Object.keys(changedValues.list || {})?.[0]
                         if (changedId) {
                             const examScore: number | null =
-                                changedValues.list[changedId]?.examScore ??
-                                listForm[changedId].examScore ??
-                                null
+                                changedValues.list[changedId]?.examScore !== undefined
+                                    ? changedValues.list[changedId]?.examScore
+                                    : (listForm[changedId].examScore ?? null)
                             const attendanceScore: number | null = dataDetailSubjectClass?.subject
                                 .onePoint
                                 ? examScore
