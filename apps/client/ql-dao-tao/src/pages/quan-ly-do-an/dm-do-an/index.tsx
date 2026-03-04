@@ -39,6 +39,8 @@ import { CircleMinus, SquarePen } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import utc from 'dayjs/plugin/utc'
+import { useAbility } from '@workspace/permissions'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 dayjs.extend(utc)
 interface DoAnForm {
     subjectClassId: string
@@ -59,9 +61,13 @@ export default function DanhMucDoAn() {
     const [editingValues, setEditingValues] = useState<Record<string, Record<string, any>>>({})
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
 
+    const { can } = useAbility()
+
     const { id: semesterId } = useSemesterStore()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const subjectClassId = Form.useWatch('subjectClassId', form)
+
+    const isProjectLecturer = can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DM_DO_AN, 'DUYET')
 
     const { data: subjectClassData = [] } = useFindManySubjectClass(
         {
@@ -510,32 +516,38 @@ export default function DanhMucDoAn() {
                                             Chỉnh sửa
                                         </Button>
                                     )}
-                                    <Button
-                                        onClick={() =>
-                                            openUpdateProgress({
-                                                selectedRowKeys: selectedRowKeys as string[],
-                                                type: 'FIRST',
-                                                onSuccess: () => refetchThesisProjectData(),
-                                            })
-                                        }
-                                        type="primary"
-                                        disabled={selectedRowKeys.length === 0}
-                                    >
-                                        Cập nhật tiến độ 1
-                                    </Button>
-                                    <Button
-                                        onClick={() =>
-                                            openUpdateProgress({
-                                                selectedRowKeys: selectedRowKeys as string[],
-                                                type: 'SECOND',
-                                                onSuccess: () => refetchThesisProjectData(),
-                                            })
-                                        }
-                                        type="primary"
-                                        disabled={selectedRowKeys.length === 0}
-                                    >
-                                        Cập nhật tiến độ 2
-                                    </Button>
+                                    {isProjectLecturer && (
+                                        <>
+                                            <Button
+                                                onClick={() =>
+                                                    openUpdateProgress({
+                                                        selectedRowKeys:
+                                                            selectedRowKeys as string[],
+                                                        type: 'FIRST',
+                                                        onSuccess: () => refetchThesisProjectData(),
+                                                    })
+                                                }
+                                                type="primary"
+                                                disabled={selectedRowKeys.length === 0}
+                                            >
+                                                Cập nhật tiến độ 1
+                                            </Button>
+                                            <Button
+                                                onClick={() =>
+                                                    openUpdateProgress({
+                                                        selectedRowKeys:
+                                                            selectedRowKeys as string[],
+                                                        type: 'SECOND',
+                                                        onSuccess: () => refetchThesisProjectData(),
+                                                    })
+                                                }
+                                                type="primary"
+                                                disabled={selectedRowKeys.length === 0}
+                                            >
+                                                Cập nhật tiến độ 2
+                                            </Button>
+                                        </>
+                                    )}
                                 </div>
                             </Form.Item>
                         </Form>
@@ -1143,7 +1155,7 @@ export default function DanhMucDoAn() {
                         },
                     ]}
                     data={thesisProjectData}
-                    rowSelection={rowSelection}
+                    rowSelection={isProjectLecturer ? rowSelection : undefined}
                     pagination={{
                         current: currentPage,
                         pageSize: numberOfPages,
