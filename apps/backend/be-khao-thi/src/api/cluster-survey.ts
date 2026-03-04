@@ -1006,7 +1006,7 @@ const getClusterSurveyInfo = createRoute({
 
 app.openapi(getClusterSurveyInfo, async (c) => {
     const { id } = c.req.valid('param')
-    const {semesterId,trainingObjectTypeId, ...q } = c.req.valid('query')
+    const { semesterId, trainingObjectTypeId, ...q } = c.req.valid('query')
 
     const survey = await prisma.survey.findMany({
         where: { clusterSurveyId: id },
@@ -1036,17 +1036,17 @@ app.openapi(getClusterSurveyInfo, async (c) => {
 
     let listStudentCount = 0
 
-    const listSUbsjecClass= await prisma.subjectClass.findMany({
+    const listSUbsjecClass = await prisma.subjectClass.findMany({
         where: {
             survey: {
                 some: {
                     clusterSurveyId: id,
                 },
-            }
+            },
         },
         include: {
             mainLecturer: true,
-            subjectClassStudent: true
+            subjectClassStudent: true,
         },
     })
     listSUbsjecClass.forEach((i) => {

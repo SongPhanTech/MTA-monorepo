@@ -120,22 +120,22 @@ const ModalPrintSurveyToFieldReport = () => {
                 </div>
 
                 <table
-                    className="mt-4 text-sm border-collapse border-2 border-black text-center"
+                    className="mt-4 text-sm border-collapse border border-black text-center"
                     style={{ tableLayout: 'fixed', width: '100%' }}
                 >
                     <thead>
-                        <tr className="font-bold bg-white border-2 border-black text-center">
-                            <th className="border-2 border-black" style={{ width: 60 }}>
+                        <tr className="font-bold bg-white border border-black text-center">
+                            <th className="border border-black" style={{ width: 60 }}>
                                 STT
                             </th>
-                            <th className="border-2 border-black" style={{ width: 120 }}>
+                            <th className="border border-black" style={{ width: 120 }}>
                                 Lĩnh vực
                             </th>
-                            <th className="border-2 border-black" style={{ width: 250 }}>
+                            <th className="border border-black" style={{ width: 250 }}>
                                 Nội dung Lĩnh vực
                             </th>
                             {dataTable[0]?.answers?.map((a: any) => (
-                                <th className="border-2 border-black" key={a.id}>
+                                <th className="border border-black" key={a.id}>
                                     {a.description}
                                 </th>
                             ))}
@@ -149,23 +149,23 @@ const ModalPrintSurveyToFieldReport = () => {
                             return (
                                 <tr key={f.id} className={isAvg ? 'font-bold bg-gray-100' : ''}>
                                     {/* STT */}
-                                    <td className="border-2 border-black">
+                                    <td className="border border-black">
                                         {isAvg ? 'ĐGTB' : index + 1}
                                     </td>
 
                                     {/* Lĩnh vực */}
-                                    <td className="border-2 border-black">
+                                    <td className="border border-black">
                                         {isAvg ? '' : `Lĩnh vực ${index + 1}`}
                                     </td>
 
                                     {/* Nội dung Lĩnh vực */}
-                                    <td className="border-2 border-black text-left px-2">
+                                    <td className="border border-black text-left px-2">
                                         {isAvg ? '' : f.groupName}
                                     </td>
 
                                     {/* Cột đáp án */}
                                     {percent.map((p: any) => (
-                                        <td className="border-2 border-black" key={p.id}>
+                                        <td className="border border-black" key={p.id}>
                                             {p.percent}% ({p.count}/{p.total})
                                         </td>
                                     ))}

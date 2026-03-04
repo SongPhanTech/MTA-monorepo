@@ -1,6 +1,9 @@
 import { DownOutlined, FileExcelOutlined, PrinterOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
-import { useGetOrganizationSurveyStatistics } from '@workspace/libs/api/exam'
+import {
+    useGetClusterSurveyInfo,
+    useGetOrganizationSurveyStatistics,
+} from '@workspace/libs/api/exam'
 import { Button, Col, Dropdown, Empty, Flex, message, Row, Typography } from 'antd'
 import ReactECharts from 'echarts-for-react'
 import ExcelJS from 'exceljs'
@@ -32,6 +35,8 @@ function OrganizationSurveyReport({
     surveyName,
     organizationId,
     trainingObjectTypeName,
+    trainingObjectTypeId,
+    semesterId,
     // organizationSelected,
     // setOrganizationSelected,
 }: {
@@ -39,6 +44,8 @@ function OrganizationSurveyReport({
     surveyName: string
     organizationId: string
     trainingObjectTypeName?: string
+    trainingObjectTypeId: string
+    semesterId: string
     // organizationSelected: string
     // setOrganizationSelected: (value: string) => void
 }) {
@@ -46,7 +53,72 @@ function OrganizationSurveyReport({
     const { onOpen } = useDisclosure({
         tag: 'ModalPrintBaoCaoDonVi',
     })
+    const { data } = useGetClusterSurveyInfo(selectedId as string, {
+        organizationId,
+        semesterId,
+        trainingObjectTypeId
+    })
 
+     const dataInfo = useMemo(() => {
+        if (data?.status === 200 ) {
+            console.log(data?.data?.data,123);
+            
+            return {
+                xAxis: {
+                    type: 'category',
+                    data: ['Tổng số GV', 'Số phiếu xuất', 'Số phiếu thu']
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [
+                    {
+                    data: [data?.data?.data?.surveyCount, data?.data?.data?.listStudentCount, data?.data?.data?.studentCompletedSurveyCount],
+                    type: 'bar'
+                    }
+                ]
+                }
+            // return {
+            //     title: {
+            //         text: 'World Population',
+            //         show: false,
+            //     },
+            //     tooltip: {
+            //         trigger: 'axis',
+            //         axisPointer: {
+            //             type: 'shadow',
+            //         },
+            //     },
+            //     legend: {},
+            //     xAxis: {
+            //         type: 'value',
+            //         boundaryGap: [0, 0.01],
+            //     },
+            //     yAxis: {
+            //         type: 'category',
+            //         data: data?.data.map((i) => i.name),
+            //     },
+            //     series: [
+            //         {
+            //             name: 'Tổng số GV',
+            //             type: 'bar',
+            //             data: [data?.data?.surveyCount],
+            //         },
+            //         {
+            //             name: 'Số phiếu xuất',
+            //             type: 'bar',
+            //             data:[data?.data?.listStudentCount],
+            //         },
+            //         {
+            //             name: 'Số phiếu thu',
+            //             type: 'bar',
+            //             data:[data?.data?.studentCompletedSurveyCount],
+            //         }
+            //     ],
+            // }
+        }
+        return {}
+    }, [data])
     const { data: dataLevel } = useGetOrganizationSurveyStatistics(selectedId as string, {
         organizationId,
     })
@@ -276,15 +348,17 @@ function OrganizationSurveyReport({
 
     const renderTable = (dataTable: any, choices: any) => {
         if (!dataTable?.length) return
-        let average = dataTable[0]?.answers.map((i: any) => {
-            return { ...i, total: 0, count: 0 }
+        
+        let average = choices.map((i: any) => {
+            return { ...i, total: 0, totalCount: 0 }
         })
         dataTable.forEach((e: any) => {
-            average = average.map((i: any) => {
+            
+        average = average.map((i: any) => {
                 return {
                     ...i,
-                    total: i.total + e.answers.find((a: any) => a.id === i.id)?.total,
-                    count: i.count + e.answers.find((a: any) => a.id === i.id)?.count,
+                    total: i.total + e.average.find((a: any) => a.id === i.id)?.total,
+                    totalCount: i.totalCount + e.average.find((a: any) => a.id === i.id)?.totalCount,
                 }
             })
         })
@@ -292,7 +366,7 @@ function OrganizationSurveyReport({
             ...dataTable,
             {
                 name: 'Trung bình',
-                answers: average,
+                average: average,
                 id: 'average',
             },
         ]
@@ -361,7 +435,7 @@ function OrganizationSurveyReport({
                               },
                           ]
                 }
-                dataSource={dataTable}
+                dataSource={datarender}
                 pagination={false}
             />
         )
@@ -380,6 +454,45 @@ function OrganizationSurveyReport({
     return (
         <div>
             <Row gutter={[16, 4]}>
+                {data?.status === 200 && (
+                    <Col span={24}>
+                        <div className="bg-white h-full flex flex-col">
+                            <div className="px-4 pb-4 flex justify-between">
+                                <Title level={4}>Thống kê chung</Title>
+                            </div>
+                            <div className="flex-1">
+                                <ReactECharts option={dataInfo} className="w-full min-h-[400px]" />
+                                {/* <Table
+                                    columns={[
+                                        {
+                                            title: 'STT',
+                                            width: 60,
+                                            align: 'center',
+                                            fixed: 'left',
+                                            render: (_, __, index) => index + 1,
+                                        },
+                                        {
+                                            title: 'Đối tượng',
+                                            render: (_, record, index) => {
+                                                return record?.name
+                                            },
+                                        },
+                                        {
+                                            title: 'Trạng thái',
+                                            align: 'center',
+                                            width: 200,
+                                            render: (_, record, index) => {
+                                                return `${record?.taken || 0}/${record?.total || 0}`
+                                            },
+                                        },
+                                    ]}
+                                    dataSource={data?.data}
+                                    pagination={false}
+                                /> */}
+                            </div>
+                        </div>
+                    </Col>
+                )}
                 <Col span={24}>
                     {dataLevel?.status === 200 && (
                         <div className="bg-white h-full flex flex-col">
@@ -436,7 +549,7 @@ function OrganizationSurveyReport({
                                     </Dropdown>
                                 </Flex>
                             </div>
-                            <div className="flex-1">
+                            <div className="flex-1 pb-4">
                                 {dataLevel?.status === 200 && dataLevel?.data ? (
                                     <div style={{ width: '100%', height: '100%' }}>
                                         <ReactECharts

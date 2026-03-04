@@ -173,16 +173,16 @@ export const ModalPrintExamBank = () => {
 
                     <span className="flex w-full justify-end italic">{formattedDate}</span>
 
-                    <table className="w-full border-2 border-black border-double border-collapse text-center align-middle">
+                    <table className="w-full border border-black border-double border-collapse text-center align-middle">
                         <tbody>
                             <tr>
                                 {/* Cột trái */}
-                                <td className="w-1/5 border-2 border-black border-double p-2 align-top">
+                                <td className="w-1/5 border border-black border-double p-2 align-top">
                                     <span className="font-bold">Giảng viên ra đề</span>
                                 </td>
 
                                 {/* Cột giữa */}
-                                <td className="w-3/5 border-2 border-black border-double p-2 align-middle">
+                                <td className="w-3/5 border border-black border-double p-2 align-middle">
                                     <div>
                                         <div>
                                             <span className="font-bold">
@@ -203,7 +203,7 @@ export const ModalPrintExamBank = () => {
                                 </td>
 
                                 {/* Cột phải */}
-                                <td className="w-1/5 border-2 border-black border-double p-2">
+                                <td className="w-1/5 border border-black border-double p-2">
                                     <div className="flex flex-col justify-between h-[80px]">
                                         <div className="font-bold">
                                             Phòng khảo thí <br />

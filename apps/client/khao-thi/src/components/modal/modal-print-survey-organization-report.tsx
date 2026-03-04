@@ -144,13 +144,16 @@ const ModalPrintSurveyOrganization = () => {
                 </div>
 
                 {/* ===== TITLE ===== */}
-                <div className="text-center mt-6 font-bold uppercase">
-                    <div className="text-lg">TỔNG HỢP PHIẾU LẤY Ý KIẾN NGƯỜI HỌC</div>
-                    <div className="text-lg mt-1">VỀ HOẠT ĐỘNG GIẢNG DẠY</div>
-                    <div className="text-sm font-normal mt-1">
-                        {['HĐGD của GV', input.surveyName, `Hệ ${input.trainingObjectTypeName}`]
+                <div className="text-center mt-6  ">
+                    <div className="text-lg font-bold uppercase">TỔNG HỢP PHIẾU LẤY Ý KIẾN NGƯỜI HỌC</div>
+                    <div className="text-lg mt-1 font-bold uppercase">VỀ HOẠT ĐỘNG GIẢNG DẠY</div>
+                    <div className="text-sm font-normal mt-1 font-semibold uppercase">
+                        <span>HĐGD của GV, </span>
+                        <span>{input.surveyName}</span>
+                        <span> - {input.trainingObjectTypeName}</span>
+                        {/* {['HĐGD của GV', input.surveyName, `Hệ ${input.trainingObjectTypeName}`]
                             .filter(Boolean)
-                            .join(', ')}
+                            .join(', ')} */}
                     </div>
 
                     {/* ===== FACULTY INFO ===== */}
@@ -168,15 +171,15 @@ const ModalPrintSurveyOrganization = () => {
 
                         <div className="flex justify-between">
                             <div>
-                                <b>{hasDepartment ? '2.' : '1.'} Khoa:</b> {input.organizationName}
+                               {hasDepartment ? '2.' : '1.'} Khoa (Viện): {input.organizationName}
                             </div>
                             <div>
-                                <b>Mã khoa:</b> {input.organizationCode}
+                                Mã khoa (Viện): {input.organizationCode}
                             </div>
                         </div>
 
                         <div className="mt-2">
-                            <b>A. Kết quả đánh giá theo</b> {input.questions?.length || 0} tiêu chí:
+                            A. Kết quả đánh giá theo {input.questions?.length || 0} tiêu chí:
                         </div>
                     </div>
                 </div>
@@ -188,14 +191,14 @@ const ModalPrintSurveyOrganization = () => {
                 >
                     <thead>
                         <tr className="font-bold text-center">
-                            <th className="border-2 border-black" style={{ width: 50 }}>
+                            <th className="border border-black" style={{ width: 50 }}>
                                 STT
                             </th>
-                            <th className="border-2 border-black" style={{ width: 90 }}>
+                            <th className="border border-black" style={{ width: 90 }}>
                                 Câu hỏi
                             </th>
                             {input.questions[0]?.answers.map((a: any) => (
-                                <th key={a.id} className="border-2 border-black">
+                                <th key={a.id} className="border border-black">
                                     {a.description}
                                 </th>
                             ))}
@@ -210,16 +213,16 @@ const ModalPrintSurveyOrganization = () => {
 
                                 return (
                                     <tr key={q.id} className={isAvg ? 'avg-row' : ''}>
-                                        <td className="text-center border-2 border-black">
+                                        <td className="text-center border border-black">
                                             {isAvg ? 'ĐGTB' : index + 1}
                                         </td>
-                                        <td className="text-center border-2 border-black">
+                                        <td className="text-center border border-black">
                                             {isAvg ? '' : `Câu ${index + 1}`}
                                         </td>
                                         {percent.map((p: any) => (
                                             <td
                                                 key={p.id}
-                                                className="text-center border-2 border-black"
+                                                className="text-center border border-black"
                                             >
                                                 {p.percent}% ({p.count}/{p.total})
                                             </td>
