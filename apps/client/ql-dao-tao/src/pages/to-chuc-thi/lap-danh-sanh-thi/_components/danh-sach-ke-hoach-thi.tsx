@@ -190,10 +190,6 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                             rooms:
                                 exam.examRooms
                                     .filter((er) => !!er.roomId)
-                                    .filter((er) => {
-                                        const roomInfo = rooms.find((r) => r.id === er.roomId)
-                                        return roomInfo?.trainingRoom
-                                    })
                                     ?.map((er) => ({
                                         roomId: er.roomId ?? '',
                                         quantity: er.capacity,
@@ -332,12 +328,6 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                             data: {
                                 examRooms: {
                                     create: selectedRooms
-                                        .filter((r) => {
-                                            const roomInfo = rooms.find(
-                                                (room) => room.id === r.roomId
-                                            )
-                                            return roomInfo?.trainingRoom
-                                        })
                                         .map((room) => ({
                                             roomId: room.roomId,
                                             capacity: room.quantity,

@@ -788,17 +788,6 @@ export default function DanhSachSinhVien() {
                                     {record.examRoom?.capacity
                                         ? ` : ${record.examRoom?.capacity}`
                                         : ''}
-                                    {/* <Tag>
-                                        {
-                                            record.firstSupervisor?.userProfile?.hocHam?.[0]
-                                                ?.academicRankType?.sTen
-                                        }
-                                        {
-                                            record.firstSupervisor?.userProfile?.hocVi?.[0]
-                                                ?.academicDegreeType?.sTen
-                                        }
-                                        {record.firstSupervisor?.userProfile.fullname}
-                                    </Tag> */}
                                 </span>
                             ) : (
                                 'Chưa phân phòng thi'
