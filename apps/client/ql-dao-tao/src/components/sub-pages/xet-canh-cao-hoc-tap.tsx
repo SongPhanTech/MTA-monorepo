@@ -22,13 +22,12 @@ import {
     type TrainingCourse,
 } from '@workspace/db/client'
 import {
+    useCreateAcademicWarning,
     useDeleteAcademicWarning,
     useFindManyAcademicWarning,
     useFindManyDM_DonVi,
     useFindManyFixedClass,
     useFindManyTrainingCourse,
-    useUpdateManyAcademicWarning,
-    useUpsertAcademicWarning,
 } from '@workspace/db/hooks'
 import { useExportStudentAcademicWarningJson } from '@workspace/libs/api/training'
 import { whereOrganization } from '@workspace/libs/constants'
@@ -96,8 +95,7 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
         [filters, isFiltering]
     )
     const { showSpinner, hideSpinner } = useSpinner()
-    const { mutateAsync: upsertAcademicWarning } = useUpsertAcademicWarning()
-    const { mutateAsync: updateManyAcademicWarning } = useUpdateManyAcademicWarning()
+    const { mutateAsync: createAcademicWarning } = useCreateAcademicWarning()
     const { mutateAsync: deleteAcademicWarning } = useDeleteAcademicWarning()
     const { data: students = [] } = useExportStudentAcademicWarningJson<any[] | { data: any[] }>(
         { semesterId: semesterId, trainingObjectTypeId },
@@ -211,50 +209,28 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
                 try {
                     showSpinner()
                     const createAcademicWarningPromises = selectedRecords
-                        .filter(
-                            (record) =>
-                                record.studentSemesterResult.id &&
-                                record.studentSemesterResult.semesterId
-                        )
+                        .filter((record) => !!record.studentSemesterResult)
                         .map((record) => {
-                            const data: Prisma.AcademicWarningCreateInput = {
-                                student: {
-                                    connect: { id: record.studentSemesterResult.student.id },
-                                },
-                                semester: {
-                                    connect: { id: record.studentSemesterResult.semesterId },
-                                },
-                                level:
-                                    Number.parseInt(
-                                        record.studentSemesterResult.academicWarningLevel,
-                                        10
-                                    ) + Number.parseInt(record.academicWarningSeverity, 10),
-                                increasedFrom: record.studentSemesterResult.academicWarningLevel,
-                            }
+                            const currentLevel =
+                                record.studentSemesterResult.academicWarningLevel ?? 0
+                            const severity =
+                                record.academicWarningRule?.length > 0
+                                    ? Math.max(
+                                          ...record.academicWarningRule.map((r: any) => r.severity)
+                                      )
+                                    : 1
 
-                            return upsertAcademicWarning({
-                                where: {
-                                    studentId: record.studentSemesterResult.student.id,
-                                    semesterId: record.studentSemesterResult.semesterId,
-                                    level:
-                                        Number.parseInt(
-                                            record.studentSemesterResult.academicWarningLevel,
-                                            10
-                                        ) + Number.parseInt(record.academicWarningSeverity, 10),
-                                    code: '',
-                                    increasedFrom:
-                                        record.studentSemesterResult.academicWarningLevel,
+                            return createAcademicWarning({
+                                data: {
+                                    student: { connect: { id: record.id } },
+                                    semester: { connect: { id: semesterId } },
+                                    level: currentLevel + severity,
+                                    increasedFrom: currentLevel,
                                 },
-                                create: data,
-                                update: data,
                             })
                         })
 
                     await Promise.all(createAcademicWarningPromises)
-                    await updateManyAcademicWarning({
-                        where: { id: { in: selectedRowKeys } },
-                        data: {},
-                    })
                     await refetch()
                     setSelectedRowKeys([])
                     message.success('Duyệt thành công')
