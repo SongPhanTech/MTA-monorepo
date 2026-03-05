@@ -25,7 +25,7 @@ import {
     buildNationalityMapOrThrow,
     buildOrgNameMapOrThrow,
     buildPositionMapOrThrow,
-    buildProvinceMapOrThrow,
+    buildNewProvinceMapOrThrow,
     buildRankMapOrThrow,
 } from '../utils'
 
@@ -402,7 +402,7 @@ app.openapi(importLecturer, async (c) => {
                 }[]
                 return c.json(
                     {
-                        message: `Có lỗi xảy ra khi import - Không lưu dữ liệu nào`,
+                        message: 'Có lỗi xảy ra khi import - Không lưu dữ liệu nào',
                         failed: errors,
                     },
                     400
@@ -527,7 +527,7 @@ app.openapi(importStudent, async (c) => {
         data.students.map((student) => student.nationality)
     )
 
-    const provinceMap = await buildProvinceMapOrThrow(
+    const provinceMap = await buildNewProvinceMapOrThrow(
         prisma,
         data.students.map((student) => student.provinceHometown)
     )
@@ -767,6 +767,7 @@ app.openapi(importStudent, async (c) => {
             priorityReason: student.priorityReason,
             description: student.description,
         }
+
         const profileData: Prisma.UserProfileUncheckedCreateWithoutEducationAndTrainingInput = {
             ...splitFullName(student.fullname),
             code: student.idCardNumber,
@@ -779,7 +780,7 @@ app.openapi(importStudent, async (c) => {
             genderId: student.gender ? genderMap.get(student.gender) : null,
             ethnicityId: ethnicityMap.get(student.ethnicity ?? '') || null,
             nationalityId: nationalityMap.get(student.nationality ?? '') || null,
-            provinceHometownId: provinceMap.get(student.provinceHometown ?? '') || null,
+            newProvinceHometownId: provinceMap.get(student.provinceHometown ?? '') || null,
             phoneNumber: student.phoneNumber,
             officerNumber: student.officerNumber,
             rankId: rankMap.get(student.rank ?? '') || null,
@@ -1005,7 +1006,7 @@ app.openapi(importHeQuanSu, async (c) => {
         data.students.map((student) => student.nationality)
     )
 
-    const provinceMap = await buildProvinceMapOrThrow(
+    const provinceMap = await buildNewProvinceMapOrThrow(
         prisma,
         data.students.map((student) => student.provinceHometown)
     )
@@ -1071,7 +1072,8 @@ app.openapi(importHeQuanSu, async (c) => {
                         genderId: student.gender ? genderMap.get('Nữ') : null,
                         ethnicityId: ethnicityMap.get(student.ethnicity ?? '') || null,
                         nationalityId: nationalityMap.get(student.nationality ?? '') || null,
-                        provinceHometownId: provinceMap.get(student.provinceHometown ?? '') || null,
+                        newProvinceHometownId:
+                            provinceMap.get(student.provinceHometown ?? '') || null,
                     }
 
                 const existingId = existingStudentMap.get(student.code)

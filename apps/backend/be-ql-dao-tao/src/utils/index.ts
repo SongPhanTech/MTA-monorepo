@@ -99,7 +99,7 @@ export const buildNationalityMapOrThrow = async (
     return new Map(existing.map(({ sTen, Id }) => [sTen, Id]))
 }
 
-export const buildProvinceMapOrThrow = async (
+export const buildNewProvinceMapOrThrow = async (
     prisma: PrismaClient,
     names: (string | undefined)[]
 ) => {
