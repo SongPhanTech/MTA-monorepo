@@ -456,7 +456,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
     }
 
     return (
-        <Row gutter={[8, 0]}>
+        <Row gutter={[8, 0]} className="w-full">
             <Col span={24}>
                 <Flex justify="space-between" align="center">
                     <Flex gap={8}>
@@ -574,7 +574,6 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                             type: 'checkbox',
                             ...rowSelection,
                         }}
-                        scrollable
                         maxHeight={'calc(100vh - 350px)'}
                         onRow={(record) => ({
                             // onClick: () => {
@@ -604,7 +603,8 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                                 record.subjectClass?.[0]?.subjectId !== selectedSubjectId &&
                                     selectedSubjectId !== undefined &&
                                     'bg-gray-400',
-                                listChanges?.[record.id]?.isChanged && 'bg-yellow-100'
+                                listChanges?.[record.id]?.isChanged && 'bg-yellow-100',
+                                
                             ),
                             onClick: (e) => {
                                 const target = e.target as HTMLElement
