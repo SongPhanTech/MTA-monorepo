@@ -1,11 +1,18 @@
 import Select from '@components/commons/select'
+import Table from '@components/commons/table'
 import TableCollapse from '@components/commons/tableCollapse'
 import type { FilterProps } from '@constants/type'
 import { useScoreConverter } from '@hooks/scoreConverter'
 import DefaultLayout from '@layouts/default-layout'
 import { useSession } from '@workspace/auth/react'
-import type { ArchivedAward, ArchivedCertificate, Prisma } from '@workspace/db/client'
 import {
+    $Enums,
+    type ArchivedAward,
+    type ArchivedCertificate,
+    type Prisma,
+} from '@workspace/db/client'
+import {
+    useFindManyArchivedCertificate,
     useFindManySemester,
     useFindManyStudentSubjectScore,
     useFindManySubjectVersion,
@@ -59,6 +66,43 @@ export default function StudentScoreClassPage() {
             },
         },
     })
+
+    const { data: manualScoreData = [] } = useFindManyStudentSubjectScore(
+        {
+            where: {
+                student: {
+                    userProfileId: id,
+                },
+                manualFinalScore: {
+                    gt: 0,
+                },
+            },
+            include: {
+                subjectVersion: true,
+            },
+        },
+        {
+            enabled: !!id,
+        }
+    )
+
+    const { data: archivedCertificates = [] } = useFindManyArchivedCertificate(
+        {
+            where: {
+                student: {
+                    userProfileId: id,
+                },
+                status: $Enums.ArchivedCertificateStatus.APPROVED,
+                deletedAt: null,
+            },
+            include: {
+                certificate: true,
+            },
+        },
+        {
+            enabled: !!id,
+        }
+    )
 
     const studentId = userProfile?.educationAndTraining?.[0]?.id
 
@@ -357,17 +401,6 @@ export default function StudentScoreClassPage() {
         }
     )
 
-    const { data: manualScoreData = [] } = useFindManyStudentSubjectScore(
-        {
-            where: {
-                studentId: studentId,
-                manualFinalScore: { gt: 0 },
-            },
-            include: { subjectVersion: true },
-        },
-        { enabled: !!studentId }
-    )
-
     const { data: trainingSubjectVersions = [] } = useFindManySubjectVersion(
         {
             where: {
@@ -596,6 +629,7 @@ export default function StudentScoreClassPage() {
                     </Row>
                 </Col>
                 <Col span={24}>
+                    <h3 className="text-lg font-bold">Kết quả học tập theo kỳ</h3>
                     <TableCollapse
                         rowKey="key"
                         currentPage={1}
@@ -616,15 +650,8 @@ export default function StudentScoreClassPage() {
                                         {[name, schoolYear?.name].filter(Boolean).join(' - ')}
                                     </p>
                                 ),
-                                colSpan: 15,
+                                colSpan: 13,
                             },
-                            // {
-                            //     render: (_, { code, name, schoolYear }) => (
-                            //         // TODO: kết quả học kỳ của SV: điểm TBC, học bổng, cảnh cáo,...
-                            //         <Button>Chi tiết</Button>
-                            //     ),
-                            //     colSpan: 1,
-                            // },
                         ]}
                         filters={filters}
                         setFilters={(value) => {
@@ -680,28 +707,6 @@ export default function StudentScoreClassPage() {
                                 width: 100,
                                 render: (_, record) => record?.subjectClassStudent?.[0]?.examScore,
                             },
-                            // {
-                            //     title: <Tooltip title="Điểm tương đương">Điểm TĐ</Tooltip>,
-                            //     align: 'center',
-                            //     width: 80,
-                            //     render: (__, { id, subjectClassStudent }) => {
-                            //         const arr: { finalScore: number }[] =
-                            //             subjectClassStudent?.[0]?.certificates.map(
-                            //                 (i: { archivedCertificate: ArchivedCertificate }) => {
-                            //                     return {
-                            //                         ...i,
-                            //                         finalScore:
-                            //                             Number(
-                            //                                 i?.archivedCertificate?.finalScore
-                            //                             ) || 0,
-                            //                     }
-                            //                 }
-                            //             )
-                            //         return arr?.length > 0
-                            //             ? _.maxBy(arr, 'finalScore')?.finalScore
-                            //             : ''
-                            //     },
-                            // },
                             {
                                 title: <Tooltip title="Số tín chỉ">STC</Tooltip>,
                                 align: 'center',
@@ -764,10 +769,10 @@ export default function StudentScoreClassPage() {
                                     const subjectClassStudent = record.subjectClassStudent?.[0]
                                     const score =
                                         subjectClassStudent?.manualFinalScore ??
-                                        subjectClassStudent?.finalScore
+                                        subjectClassStudent?.finalScore?.toNumber()
 
                                     if (score === undefined || score === null) return null
-                                    const result = convertScore(score.toNumber())
+                                    const result = convertScore(score)
 
                                     return (
                                         <div className="flex items-center justify-center">
@@ -821,6 +826,101 @@ export default function StudentScoreClassPage() {
                         pagination={{
                             hideOnSinglePage: true,
                         }}
+                    />
+                </Col>
+                <Col span={24}>
+                    <h3 className="text-lg font-bold">Danh sách điểm điểm chứng chỉ</h3>
+                    <Table
+                        columns={[
+                            {
+                                title: 'STT',
+                                width: 50,
+                                align: 'center',
+                                render: (_, __, index) => index + 1,
+                            },
+                            {
+                                title: 'Chứng chỉ',
+                                width: 150,
+                                align: 'center',
+                                render: (_, record) => record?.certificate?.name || '',
+                            },
+                            {
+                                title: 'Điểm',
+                                align: 'center',
+                                width: 80,
+                                render: (__, record) => record?.score ?? '',
+                            },
+                            {
+                                title: 'Nơi cấp',
+                                align: 'center',
+                                width: 120,
+                                render: (__, record) => record?.issuedBy || '',
+                            },
+                            {
+                                title: 'Số QĐ',
+                                align: 'center',
+                                width: 120,
+                                render: (__, record) => record?.decisionNumber || '',
+                            },
+                            {
+                                title: 'Ngày cấp',
+                                align: 'center',
+                                width: 110,
+                                render: (__, record) =>
+                                    record?.issuedDate
+                                        ? dayjs(record.issuedDate).format('DD/MM/YYYY')
+                                        : '',
+                            },
+                            {
+                                title: 'Ngày hết hạn',
+                                align: 'center',
+                                width: 110,
+                                render: (__, record) =>
+                                    record?.expiredDate
+                                        ? dayjs(record.expiredDate).format('DD/MM/YYYY')
+                                        : '',
+                            },
+                        ]}
+                        data={archivedCertificates}
+                        pagination={false}
+                    />
+                </Col>
+                <Col span={24}>
+                    <h3 className="text-lg font-bold">Danh sách điểm phiên</h3>
+                    <Table
+                        columns={[
+                            {
+                                title: 'STT',
+                                width: 50,
+                                align: 'center',
+                                render: (_, __, index) => index + 1,
+                            },
+                            {
+                                title: 'Mã môn học',
+                                width: 150,
+                                align: 'center',
+                                render: (_, record) => record?.subjectVersion?.code,
+                            },
+                            {
+                                title: 'Tên môn học',
+                                align: 'center',
+                                render: (_, record) => record?.subjectVersion?.name,
+                            },
+                            {
+                                title: 'Điểm',
+                                dataIndex: 'manualFinalScore',
+                                align: 'center',
+                                width: 150,
+                            },
+                            {
+                                title: 'Ghi chú',
+                                dataIndex: 'description',
+                                align: 'center',
+                                width: 250,
+                            },
+                        ]}
+                        data={manualScoreData}
+                        pagination={false}
                     />
                 </Col>
             </Row>
