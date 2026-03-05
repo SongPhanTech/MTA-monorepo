@@ -2071,10 +2071,12 @@ export default function PhanCongGiangDay({
                                                                     ?.trainingLocationId
                                                     )
                                                     .map((e) => ({
+                                                        title: e.name,
                                                         label: e.name,
                                                         value: e.id,
                                                         selectable: false,
                                                         children: e.rooms.map((room) => ({
+                                                            title: room.name,
                                                             label: (
                                                                 <p className="text-primary">
                                                                     {room.name}
