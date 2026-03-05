@@ -55,12 +55,7 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
         reader.onload = (e) => {
             try {
                 const result = parseSheetStudent(e.target?.result as ArrayBuffer)
-                console.log('Parse result:', result)
                 const { trainingObjectType, trainingCourse, students, errors } = result
-                setPreviewData(students.slice(1))
-                console.log('students', students)
-                console.log('trainingObjectType', trainingObjectType)
-                console.log('trainingCourse', trainingCourse)
 
                 setData({ trainingObjectType, trainingCourse })
                 if (errors.length === 0 && students.length > 0) {
