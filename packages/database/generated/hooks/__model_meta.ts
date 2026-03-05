@@ -16965,6 +16965,10 @@ const metadata: ModelMeta = {
                     name: "type",
                     type: "String",
                     isOptional: true,
+                }, isLock: {
+                    name: "isLock",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, firstCheckProgress: {
                     name: "firstCheckProgress",
                     type: "Int",

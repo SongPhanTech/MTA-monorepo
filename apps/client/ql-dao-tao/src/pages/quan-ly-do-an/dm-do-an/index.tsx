@@ -18,6 +18,7 @@ import {
     useFindManyRoom,
     useFindManySubjectClass,
     useFindManyThesisProject,
+    useUpdateThesisProject,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
@@ -30,17 +31,20 @@ import {
     InputNumber,
     Modal,
     message,
+    Popconfirm,
     Row,
     Tabs,
     Tag,
 } from 'antd'
 import dayjs from 'dayjs'
+import { LockOutlined, UnlockOutlined } from '@ant-design/icons'
 import { CircleMinus, SquarePen } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import utc from 'dayjs/plugin/utc'
 import { useAbility } from '@workspace/permissions'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
+import { queryClient } from '@api/index'
 dayjs.extend(utc)
 interface DoAnForm {
     subjectClassId: string
@@ -67,7 +71,7 @@ export default function DanhMucDoAn() {
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const subjectClassId = Form.useWatch('subjectClassId', form)
 
-    const isProjectLecturer = can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DM_DO_AN, 'DUYET')
+    const isProjectLecturer = can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DM_DO_AN, 'SUA')
 
     const { data: subjectClassData = [] } = useFindManySubjectClass(
         {
@@ -179,6 +183,7 @@ export default function DanhMucDoAn() {
         skip: (currentPage - 1) * numberOfPages,
     })
     const { data: defenseSessionData = [] } = useFindManyDefenseSession()
+    const { mutateAsync: updateThesisProject } = useUpdateThesisProject()
     const { data: roomsData = [] } = useFindManyRoom()
     const { data: expertProfiles = [] } = useFindManyExpertProfile({
         where: {
@@ -291,9 +296,9 @@ export default function DanhMucDoAn() {
             message.info('Không có dữ liệu đồ án để chỉnh sửa.')
             return
         }
-        const newEditingRowKeys = thesisProjectData.map((s) => s.id)
+        const newEditingRowKeys = thesisProjectData.filter((s) => !s.isLock).map((s) => s.id)
         const initialEditingValues: Record<string, Record<string, any>> = {}
-        thesisProjectData.forEach((record) => {
+        thesisProjectData.filter((s) => !s.isLock).forEach((record) => {
             initialEditingValues[record.id] = {
                 title: record.title || '',
                 supervisor: record.supervisor?.id || '',
@@ -467,6 +472,45 @@ export default function DanhMucDoAn() {
         }
     }
 
+    const handleSingleToggleLock = async (id: string, isLocking: boolean) => {
+        try {
+            showSpinner()
+            await updateThesisProject({
+                where: { id },
+                data: { isLock: isLocking },
+            })
+            message.success(isLocking ? 'Đã khóa đề tài!' : 'Đã mở khóa đề tài')
+        } catch (error) {
+            message.error('Có lỗi xảy ra. Vui lòng thử lại.')
+        } finally {
+            hideSpinner()
+        }
+    }
+
+    const handleBulkToggleLock = async (isLocking: boolean) => {
+        try {
+            showSpinner()
+            const transactions = selectedRowKeys.map((id) => ({
+                model: 'ThesisProject' as const,
+                operation: 'update' as const,
+                data: {
+                    where: { id },
+                    data: { isLock: isLocking },
+                },
+            }))
+            await sqlTransaction(transactions)
+            queryClient.invalidateQueries({
+                queryKey: ['zenstack', 'ThesisProject'],
+            })
+            setSelectedRowKeys([])
+            message.success(isLocking ? 'Đã khóa đề tài!' : 'Đã mở khóa các đề tài')
+        } catch (error) {
+            message.error('Có lỗi xảy ra. Vui lòng thử lại.')
+        } finally {
+            hideSpinner()
+        }
+    }
+
     return (
         <Row gutter={[16, 0]}>
             <Col span={24}>
@@ -484,6 +528,7 @@ export default function DanhMucDoAn() {
                             >
                                 <Select
                                     className="w-86"
+                                    popupMatchSelectWidth={false}
                                     options={subjectClassData?.map((item) => ({
                                         label: `${item.code} - ${item.name}`,
                                         value: item.id,
@@ -501,9 +546,6 @@ export default function DanhMucDoAn() {
                                     >
                                         Tạo dữ liệu mẫu
                                     </Button>
-                                    {/* <Button type="primary" onClick={handleSearch}>
-                                        Xem kết quả
-                                    </Button> */}
                                     {editingRowKeys.length > 0 ? (
                                         <>
                                             <Button
@@ -566,6 +608,26 @@ export default function DanhMucDoAn() {
                                             >
                                                 Cập nhật tiến độ 2
                                             </Button>
+                                            {can(
+                                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DM_DO_AN,
+                                                'DUYET'
+                                            ) && (
+                                                <Popconfirm
+                                                    title="Xác nhận khóa các đề tài đã chọn?"
+                                                    description="Các đề tài đã chọn sẽ bị khóa và không thể chỉnh sửa."
+                                                    okText="Xác nhận"
+                                                    cancelText="Hủy"
+                                                    onConfirm={() => handleBulkToggleLock(true)}
+                                                    disabled={selectedRowKeys.length === 0}
+                                                >
+                                                    <Button
+                                                        disabled={selectedRowKeys.length === 0}
+                                                        danger
+                                                    >
+                                                        Khóa đề tài đã chọn
+                                                    </Button>
+                                                </Popconfirm>
+                                            )}
                                         </>
                                     )}
                                 </div>
@@ -1159,18 +1221,50 @@ export default function DanhMucDoAn() {
                         },
                         {
                             title: 'Cài đặt',
-                            width: 80,
+                            width: 100,
                             fixed: 'right',
                             align: 'center',
                             render: (_, record) => (
-                                <Button
-                                    type="text"
-                                    icon={<SquarePen size={18} />}
-                                    onClick={() => {
-                                        setCurrentProject(record)
-                                        setIsMemberModalOpen(true)
-                                    }}
-                                />
+                                <div className="flex items-center justify-center gap-1">
+                                    <Button
+                                        type="text"
+                                        icon={<SquarePen size={18} />}
+                                        disabled={record?.isLock}
+                                        onClick={() => {
+                                            setCurrentProject(record)
+                                            setIsMemberModalOpen(true)
+                                        }}
+                                    />
+                                    {can(
+                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DM_DO_AN,
+                                        'DUYET'
+                                    ) && (
+                                        <Popconfirm
+                                            title={
+                                                record?.isLock
+                                                    ? 'Xác nhận mở khóa đề tài?'
+                                                    : 'Xác nhận khóa đề tài?'
+                                            }
+                                            okText="Xác nhận"
+                                            cancelText="Hủy"
+                                            onConfirm={() =>
+                                                handleSingleToggleLock(record.id, !record?.isLock)
+                                            }
+                                        >
+                                            <Button
+                                                type="text"
+                                                danger={!record?.isLock}
+                                                icon={
+                                                    record?.isLock ? (
+                                                        <LockOutlined style={{ fontSize: 18 }} />
+                                                    ) : (
+                                                        <UnlockOutlined style={{ fontSize: 18 }} />
+                                                    )
+                                                }
+                                            />
+                                        </Popconfirm>
+                                    )}
+                                </div>
                             ),
                         },
                     ]}

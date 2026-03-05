@@ -5154,6 +5154,7 @@ model ThesisProject {
   status                ThesisProjectStatus         @default(PROPOSED)
   language              String?                     @db.Text()
   type                  String?                     @db.Text()
+  isLock                Boolean                     @default(false)
   firstCheckProgress    Int?
   secondCheckProgress   Int?
   isEligibleForDefense  Boolean                     @default(true)

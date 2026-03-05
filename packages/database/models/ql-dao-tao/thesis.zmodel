@@ -76,6 +76,7 @@ model ThesisProject extends Base {
   status                ThesisProjectStatus         @default(PROPOSED)
   language              String?                     @db.Text() // Ngôn ngữ
   type                  String?                     @db.Text() // Loại luận văn (Luận văn/Đề án)
+  isLock                Boolean                     @default(false) //Khóa đồ án
 
   // Tiến độ kiểm tra
   firstCheckProgress    Int?                        // Tiến độ kiểm tra lần 1 % (0-100)

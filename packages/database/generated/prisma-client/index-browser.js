@@ -3019,6 +3019,7 @@ exports.Prisma.ThesisProjectScalarFieldEnum = {
   status: 'status',
   language: 'language',
   type: 'type',
+  isLock: 'isLock',
   firstCheckProgress: 'firstCheckProgress',
   secondCheckProgress: 'secondCheckProgress',
   isEligibleForDefense: 'isEligibleForDefense',
