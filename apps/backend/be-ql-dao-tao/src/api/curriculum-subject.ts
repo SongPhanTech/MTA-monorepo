@@ -150,11 +150,11 @@ app.openapi(importCurriculumVersion, async (c) => {
             }))
 
     const trainingBlockSubjects: Prisma.TrainingBlockSubjectCreateManyInput[] = data.subjects
-        .map(({ name, trainingBlockName, semester, type, useForFinalScore, graduation }) => {
+        .map(({ code, trainingBlockName, semester, type, useForFinalScore, graduation }) => {
             const trainingBlockOnCurriculumVersionId = curriculumTrainingBlock.get(
                 trainingBlockName
             )?.id as string
-            const subjectId = subjectMap.get(name) as string
+            const subjectId = subjectMap.get(code) as string
 
             if (existingTBSSet.has(`${trainingBlockOnCurriculumVersionId}-${subjectId}`)) {
                 return null

@@ -354,7 +354,7 @@ export const buildTrainingBlockMapOrThrow = async (
 type SubjectData = {
     trainingObjectTypeId: string
     name: string
-    code?: string
+    code: string
     organizationCode?: string
     credit: number
     examType: $Enums.ExamType
@@ -378,22 +378,80 @@ export const buildSubjectMapOrThrow = async (
     const subjectSet = new Set<string>(subjects.map((s) => JSON.stringify(s)))
     const uniqueSubject = Array.from(subjectSet).map((s) => JSON.parse(s) as SubjectData)
 
+    const orgMap = await buildOrgCodeMapOrThrow(
+        prisma,
+        subjects.map((s) => s.organizationCode || null)
+    )
+
+    const existingCode = await prisma.subjectVersion.findMany({
+        where: {
+            code: { in: uniqueSubject.map((s) => s.code).filter((c): c is string => Boolean(c)) },
+        },
+    })
+
+    const codeConflicts = uniqueSubject.filter((s) => {
+        if (!s.code) return false
+        const existing = existingCode.find((e) => e.code === s.code)
+        if (!existing) return false
+        return (
+            existing.trainingObjectTypeId !== s.trainingObjectTypeId ||
+            existing.name !== s.name ||
+            existing.credit !== s.credit ||
+            existing.period !== s.period ||
+            existing.managementOrganizationId !== orgMap.get(s.organizationCode || null)
+        )
+    })
+
+    if (codeConflicts.length > 0) {
+        throw new HTTPException(400, {
+            message: `Mã học phần đã tồn tại với thông tin khác: ${Array.from(
+                new Set(codeConflicts.map((s) => s.code))
+            ).join(', ')}`,
+        })
+    }
+
+    const existingCombination = await prisma.subjectVersion.findMany({
+        where: {
+            OR: uniqueSubject.map((s) => ({
+                trainingObjectTypeId: s.trainingObjectTypeId,
+                name: s.name,
+                credit: s.credit,
+                period: s.period,
+                managementOrganizationId: orgMap.get(s.organizationCode || null),
+            })),
+        },
+    })
+
+    const combinationConflicts = uniqueSubject.filter((s) => {
+        const existing = existingCombination.find(
+            (e) =>
+                e.trainingObjectTypeId === s.trainingObjectTypeId &&
+                e.name === s.name &&
+                e.credit === s.credit &&
+                e.period === s.period &&
+                e.managementOrganizationId === orgMap.get(s.organizationCode || null)
+        )
+        if (!existing) return false
+        return existing.code && s.code && existing.code !== s.code
+    })
+
+    if (combinationConflicts.length > 0) {
+        throw new HTTPException(400, {
+            message: `Học phần đã tồn tại với mã khác: ${Array.from(
+                new Set(combinationConflicts.map((s) => s.name))
+            ).join(', ')}`,
+        })
+    }
+
     const existing = await prisma.subjectVersion.findMany({
         where: {
             OR: uniqueSubject.map((s) => ({
                 name: s.name,
                 trainingObjectTypeId: s.trainingObjectTypeId,
                 ...(s.code ? { code: s.code } : {}),
-                // TODO: check it
-                // ...(s.organizationCode
-                //     ? {
-                //           subject: {
-                //               managementOrganization: {
-                //                   sMa: s.organizationCode,
-                //               },
-                //           },
-                //       }
-                //     : {}),
+                ...(orgMap.get(s.organizationCode || null)
+                    ? { managementOrganizationId: orgMap.get(s.organizationCode || null) }
+                    : {}),
                 credit: s.credit,
                 examType: s.examType,
                 type: s.type,
@@ -407,19 +465,14 @@ export const buildSubjectMapOrThrow = async (
                 ...(s.numberOfExam ? { numberOfExam: s.numberOfExam } : {}),
             })),
         },
-        select: { id: true, name: true },
+        select: { id: true, code: true },
     })
 
     const missing = uniqueSubject.filter(
-        ({ name }) => !existing.some((version) => version.name === name)
+        ({ code }) => !existing.some((version) => version.code === code)
     )
 
     if (missing.length && createNewSubject) {
-        const orgMap = await buildOrgCodeMapOrThrow(
-            prisma,
-            subjects.map((s) => s.organizationCode || null)
-        )
-
         const newSubjects = await prisma.$transaction(async (tx) => {
             await tx.subject.createMany({
                 data: missing.map((s) => ({
@@ -462,11 +515,11 @@ export const buildSubjectMapOrThrow = async (
                         : {}),
                     subjectId: groupMap.get(subject.name) as string,
                 })),
-                select: { id: true, name: true },
+                select: { id: true, code: true },
             })
         })
 
-        return new Map([...existing, ...newSubjects].map(({ name, id }) => [name, id]))
+        return new Map([...existing, ...newSubjects].map(({ code, id }) => [code, id]))
     }
 
     if (missing.length && !createNewSubject) {
@@ -480,7 +533,7 @@ export const buildSubjectMapOrThrow = async (
         })
     }
 
-    return new Map(existing.map(({ name, id }) => [name, id]))
+    return new Map(existing.map(({ code, id }) => [code, id]))
 }
 
 export const buildOrgCodeMapOrThrow = async (prisma: PrismaClient, codes: (string | null)[]) => {

@@ -5,7 +5,7 @@ import type { ParseSheetError } from './types'
 export type SubjectResult = {
     name: string
     trainingBlockName: string
-    code?: string
+    code: string
     organizationCode: string | undefined
     credit: number
     period: number
@@ -109,6 +109,17 @@ export const parseSheetSubject = (file: ArrayBufferLike): ParseSubjectResult => 
                 sheetRef: sheetName,
                 cellRef: `${cols.name}${rowNumber}`,
                 message: 'Tên khối kiến thức không được để trống',
+            })
+            continue
+        }
+
+        // Validate mã học phần (bắt buộc)
+        const code = row[cols.code]?.trim()
+        if (!code) {
+            errors.push({
+                sheetRef: sheetName,
+                cellRef: `${cols.code}${rowNumber}`,
+                message: 'Mã môn học không được để trống',
             })
             continue
         }
@@ -223,14 +234,14 @@ export const parseSheetSubject = (file: ArrayBufferLike): ParseSubjectResult => 
         const useForFinalScore = !row[cols.conditional]?.trim()
 
         // Lấy mã học phần và mã khoa/viện
-        const code = row[cols.code]?.trim() || undefined
+        // const code = row[cols.code]?.trim() || undefined
         const organizationCode = row[cols.orgCode]?.trim() || undefined
 
         // Thêm môn học vào khối kiến thức hiện tại
         subjects.push({
             name,
             trainingBlockName: knowledgeBlock,
-            code,
+            code: code as string,
             organizationCode,
             credit,
             period,
