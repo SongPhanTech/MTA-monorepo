@@ -580,157 +580,166 @@ export default function KeHoachGhepLopMonHoc() {
     }
 
     return (
-        <div>
-            <Row gutter={[0, 0]}>
-                <Form
-                    className="w-full"
-                    form={form}
-                    onValuesChange={(filter: OpenSubjectClassForm) => {
-                        if (!filter.subjectVersions) {
-                            debouncedRefetch()
-                        } else {
-                            const subjectVersionId = Object.keys(filter.subjectVersions || {})?.[0]
-                            if (subjectVersionId)
-                                form.setFieldValue('subjectVersions', {
-                                    ...subjectVersions,
-                                    [subjectVersionId]: {
-                                        ...subjectVersions[subjectVersionId],
-                                        ...filter.subjectVersions[subjectVersionId],
-                                        isEdit: true,
-                                    },
-                                })
-                        }
-                    }}
-                >
-                    <Row gutter={[0, 0]}>
-                        <Col span={12}>
-                            <Flex gap={4}>
-                                <Col span={8}>
-                                    <Form.Item className="m-0" name="searchText">
-                                        <Input id="search" placeholder="Tìm kiếm" allowClear />
-                                    </Form.Item>
-                                </Col>
-                            </Flex>
-                        </Col>
-                        <Col span={12}>
-                            <Flex justify="end" gap={4}>
-                                <Popconfirm
-                                    onConfirm={onSaveLayering}
-                                    title="Xác nhận lưu kế hoạch ghép lớp?"
-                                    okText="Xác nhận"
-                                    cancelText="Hủy"
-                                >
-                                    <Button type="primary">Lưu ghép lớp</Button>
-                                </Popconfirm>
-                            </Flex>
-                        </Col>
-                    </Row>
-                    <Form.Item name="subjectVersions" hidden />
-                    <Col span={24}>
-                        {isFetching ? (
-                            <Skeleton />
-                        ) : (
-                            <Table
-                                rowKey="subjectVersionId"
-                                data={data}
-                                scrollable
-                                maxHeight={'calc(100vh - 380px)'}
-                                onRow={(record) => {
-                                    return {
-                                        className: cn(
-                                            Object.keys(
-                                                subjectVersions?.[record.id]?.subjectClasses || {}
-                                            ).length === 0 && 'bg-red-100',
-                                            subjectVersions?.[record.id]?.isEdit && 'bg-yellow-100'
-                                        ),
-                                    }
-                                }}
-                                columns={[
-                                    {
-                                        title: 'TT',
-                                        width: 35,
-                                        align: 'center',
-                                        render: (_, __, index) =>
-                                            index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
-                                    },
-                                    {
-                                        title: 'Mã MH',
-                                        align: 'center',
-                                        width: 100,
-                                        render: (_, record) => record?.code,
-                                    },
-                                    {
-                                        title: 'Tên môn học',
-                                        align: 'center',
-                                        width: 300,
-                                        render: (_, record) => {
-                                            return (
-                                                <div className="text-left">
-                                                    {`${record?.name} (${record?.credit})`}
-                                                </div>
-                                            )
+        <DndProvider backend={HTML5Backend}>
+            <div>
+                <Row gutter={[0, 0]}>
+                    <Form
+                        className="w-full"
+                        form={form}
+                        onValuesChange={(filter: OpenSubjectClassForm) => {
+                            if (!filter.subjectVersions) {
+                                debouncedRefetch()
+                            } else {
+                                const subjectVersionId = Object.keys(
+                                    filter.subjectVersions || {}
+                                )?.[0]
+                                if (subjectVersionId)
+                                    form.setFieldValue('subjectVersions', {
+                                        ...subjectVersions,
+                                        [subjectVersionId]: {
+                                            ...subjectVersions[subjectVersionId],
+                                            ...filter.subjectVersions[subjectVersionId],
+                                            isEdit: true,
                                         },
-                                    },
-                                    {
-                                        title: 'Ghép lớp',
-                                        align: 'center',
-                                        render: (_, record) => {
-                                            return (
-                                                <DndProvider backend={HTML5Backend}>
-                                                    <div className="flex flex-col items-center justify-center m-2">
-                                                        <div className="flex h-fit gap-4 items-center">
-                                                            {subjectVersions?.[record.id]
-                                                                ?.subjectClasses &&
-                                                                Object.entries(
-                                                                    subjectVersions?.[record.id]
-                                                                        ?.subjectClasses || {}
-                                                                ).map(
-                                                                    ([
-                                                                        subjectClassId,
-                                                                        subjectClass,
-                                                                    ]) => (
-                                                                        <SubjectClassDropItem
-                                                                            subjectVersionId={
+                                    })
+                            }
+                        }}
+                    >
+                        <Row gutter={[0, 0]}>
+                            <Col span={12}>
+                                <Flex gap={4}>
+                                    <Col span={8}>
+                                        <Form.Item className="m-0" name="searchText">
+                                            <Input id="search" placeholder="Tìm kiếm" allowClear />
+                                        </Form.Item>
+                                    </Col>
+                                </Flex>
+                            </Col>
+                            <Col span={12}>
+                                <Flex justify="end" gap={4}>
+                                    <Popconfirm
+                                        onConfirm={onSaveLayering}
+                                        title="Xác nhận lưu kế hoạch ghép lớp?"
+                                        okText="Xác nhận"
+                                        cancelText="Hủy"
+                                    >
+                                        <Button type="primary">Lưu ghép lớp</Button>
+                                    </Popconfirm>
+                                </Flex>
+                            </Col>
+                        </Row>
+                        <Form.Item name="subjectVersions" hidden />
+                        <Col span={24}>
+                            {isFetching ? (
+                                <Skeleton />
+                            ) : (
+                                <Table
+                                    rowKey="subjectVersionId"
+                                    data={data}
+                                    scrollable
+                                    maxHeight={'calc(100vh - 380px)'}
+                                    onRow={(record) => {
+                                        return {
+                                            className: cn(
+                                                Object.keys(
+                                                    subjectVersions?.[record.id]?.subjectClasses ||
+                                                        {}
+                                                ).length === 0 && 'bg-red-100',
+                                                subjectVersions?.[record.id]?.isEdit &&
+                                                    'bg-yellow-100'
+                                            ),
+                                        }
+                                    }}
+                                    columns={[
+                                        {
+                                            title: 'TT',
+                                            width: 35,
+                                            align: 'center',
+                                            render: (_, __, index) =>
+                                                index +
+                                                1 +
+                                                (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                        },
+                                        {
+                                            title: 'Mã MH',
+                                            align: 'center',
+                                            width: 100,
+                                            render: (_, record) => record?.code,
+                                        },
+                                        {
+                                            title: 'Tên môn học',
+                                            align: 'center',
+                                            width: 300,
+                                            render: (_, record) => {
+                                                return (
+                                                    <div className="text-left">
+                                                        {`${record?.name} (${record?.credit})`}
+                                                    </div>
+                                                )
+                                            },
+                                        },
+                                        {
+                                            title: 'Ghép lớp',
+                                            align: 'center',
+                                            render: (_, record) => {
+                                                return (
+                                                    // <DndProvider backend={HTML5Backend}>
+                                                        <div className="flex flex-col items-center justify-center m-2">
+                                                            <div className="flex h-fit gap-4 items-center">
+                                                                {subjectVersions?.[record.id]
+                                                                    ?.subjectClasses &&
+                                                                    Object.entries(
+                                                                        subjectVersions?.[record.id]
+                                                                            ?.subjectClasses || {}
+                                                                    ).map(
+                                                                        ([
+                                                                            subjectClassId,
+                                                                            subjectClass,
+                                                                        ]) => (
+                                                                            <SubjectClassDropItem
+                                                                                subjectVersionId={
+                                                                                    record.id
+                                                                                }
+                                                                                item={subjectClass}
+                                                                                key={subjectClassId}
+                                                                            />
+                                                                        )
+                                                                    )}
+                                                                <Tooltip
+                                                                    title="Thêm lớp MH"
+                                                                    className="select-none cursor-pointer"
+                                                                >
+                                                                    <PlusCircle
+                                                                        onClick={() =>
+                                                                            onAddSubjectClass(
                                                                                 record.id
-                                                                            }
-                                                                            item={subjectClass}
-                                                                            key={subjectClassId}
-                                                                        />
-                                                                    )
-                                                                )}
-                                                            <Tooltip
-                                                                title="Thêm lớp MH"
-                                                                className="select-none cursor-pointer"
-                                                            >
-                                                                <PlusCircle
-                                                                    onClick={() =>
-                                                                        onAddSubjectClass(record.id)
+                                                                            )
+                                                                        }
+                                                                        size={16}
+                                                                    />
+                                                                </Tooltip>
+                                                            </div>
+                                                            <div className="flex h-fit">
+                                                                {record?.trainingBlocks?.map(
+                                                                    // @ts-expect-error
+                                                                    (block) => {
+                                                                        const fixedClass =
+                                                                            block
+                                                                                .trainingBlockOnCurriculumVersion
+                                                                                ?.curriculumVersion
+                                                                                ?.fixedClass
+                                                                        return (
+                                                                            <FixedClassDragItem
+                                                                                subjectVersionId={
+                                                                                    record.id
+                                                                                }
+                                                                                item={fixedClass}
+                                                                                key={fixedClass?.id}
+                                                                            />
+                                                                        )
                                                                     }
-                                                                    size={16}
-                                                                />
-                                                            </Tooltip>
-                                                        </div>
-                                                        <div className="flex h-fit">
-                                                            {record?.trainingBlocks?.map(
-                                                                // @ts-expect-error
-                                                                (block) => {
-                                                                    const fixedClass =
-                                                                        block
-                                                                            .trainingBlockOnCurriculumVersion
-                                                                            ?.curriculumVersion
-                                                                            ?.fixedClass
-                                                                    return (
-                                                                        <FixedClassDragItem
-                                                                            subjectVersionId={
-                                                                                record.id
-                                                                            }
-                                                                            item={fixedClass}
-                                                                            key={fixedClass?.id}
-                                                                        />
-                                                                    )
-                                                                }
-                                                            )}
-                                                            {/* {record?.trainingBlocks?.[0]?.trainingBlockOnCurriculumVersion?.curriculumVersion?.fixedClasses?.map?.(
+                                                                )}
+                                                                {/* {record?.trainingBlocks?.[0]?.trainingBlockOnCurriculumVersion?.curriculumVersion?.fixedClasses?.map?.(
                                                                 (e: FixedClass) => (
                                                                     <FixedClassDragItem
                                                                         subjectVersionId={record.id}
@@ -739,59 +748,60 @@ export default function KeHoachGhepLopMonHoc() {
                                                                     />
                                                                 )
                                                             )} */}
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </DndProvider>
-                                            )
+                                                    // </DndProvider>
+                                                )
+                                            },
                                         },
-                                    },
-                                    {
-                                        title: 'Tổng SV',
-                                        width: 80,
-                                        align: 'center',
-                                        render: (_: any, record: any) => {
-                                            const fixedClasses = record?.trainingBlocks.map(
-                                                // @ts-expect-error
-                                                (block) =>
-                                                    block.trainingBlockOnCurriculumVersion
-                                                        .curriculumVersion.fixedClass
-                                            )
-                                            return (
-                                                fixedClasses?.reduce(
-                                                    (sum: number, fc: any) =>
-                                                        sum + (fc?._count?.students ?? 0),
-                                                    0
-                                                ) || 0
-                                            )
+                                        {
+                                            title: 'Tổng SV',
+                                            width: 80,
+                                            align: 'center',
+                                            render: (_: any, record: any) => {
+                                                const fixedClasses = record?.trainingBlocks.map(
+                                                    // @ts-expect-error
+                                                    (block) =>
+                                                        block.trainingBlockOnCurriculumVersion
+                                                            .curriculumVersion.fixedClass
+                                                )
+                                                return (
+                                                    fixedClasses?.reduce(
+                                                        (sum: number, fc: any) =>
+                                                            sum + (fc?._count?.students ?? 0),
+                                                        0
+                                                    ) || 0
+                                                )
+                                            },
                                         },
-                                    },
-                                    {
-                                        title: 'Đơn vị phụ trách',
-                                        width: 150,
-                                        align: 'center',
-                                        render: (_, record) =>
-                                            record?.managementOrganization?.sMa || '',
-                                    },
-                                ]}
-                                pagination={{
-                                    current: currentPage,
-                                    pageSize: numberOfPages,
-                                    // total: res?._count?.planTrainingSubjects ?? 0,
-                                    onChange: (page, pageSize) => {
-                                        if (numberOfPages === pageSize) {
-                                            setCurrentPage(page)
-                                        } else {
-                                            setCurrentPage(1)
-                                            setNumberOfPages(pageSize)
-                                        }
-                                    },
-                                }}
-                            />
-                        )}
-                    </Col>
-                </Form>
-            </Row>
-        </div>
+                                        {
+                                            title: 'Đơn vị phụ trách',
+                                            width: 150,
+                                            align: 'center',
+                                            render: (_, record) =>
+                                                record?.managementOrganization?.sMa || '',
+                                        },
+                                    ]}
+                                    pagination={{
+                                        current: currentPage,
+                                        pageSize: numberOfPages,
+                                        // total: res?._count?.planTrainingSubjects ?? 0,
+                                        onChange: (page, pageSize) => {
+                                            if (numberOfPages === pageSize) {
+                                                setCurrentPage(page)
+                                            } else {
+                                                setCurrentPage(1)
+                                                setNumberOfPages(pageSize)
+                                            }
+                                        },
+                                    }}
+                                />
+                            )}
+                        </Col>
+                    </Form>
+                </Row>
+            </div>
+        </DndProvider>
     )
 }
 
