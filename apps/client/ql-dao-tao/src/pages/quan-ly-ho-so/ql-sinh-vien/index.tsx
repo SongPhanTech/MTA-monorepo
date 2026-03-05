@@ -33,7 +33,7 @@ import {
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Col, Flex, Form, message, Row, Tag, Tooltip } from 'antd'
+import { Button, Col, Flex, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { saveAs } from 'file-saver'
 import { BookCheckIcon, InfoIcon } from 'lucide-react'
@@ -44,10 +44,9 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 dayjs.locale('vi')
 export default function UserProfilePageDs() {
     const router = useRouter()
-    const { can, canSome } = useAbility()
+    const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [student, setStudent] = useState<any>(null)
     const [filters, setFilters] = useState<FilterProps>({
         code: '',
         name: '',
@@ -64,8 +63,6 @@ export default function UserProfilePageDs() {
         phone: undefined,
         curriculumVersionParallel: undefined,
     })
-
-    const form = Form.useForm<{ trainingCourseId: string }>()
 
     const [importModalVisible, setImportModalVisible] = useState(false)
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
@@ -364,7 +361,7 @@ export default function UserProfilePageDs() {
         orderBy: { name: 'asc' },
     })
 
-    const { onOpen, onClose } = useDisclosure<{
+    const { onOpen } = useDisclosure<{
         tag?: string
         preSelectedValues?: {
             trainingObjectTypeId?: string
@@ -721,19 +718,6 @@ export default function UserProfilePageDs() {
                                                 className="text-green-600 cursor-pointer"
                                             />
                                         </Tooltip>
-                                        {/* <Tooltip title="Phụ lục văn bằng" placement="top">
-                                            <BookCheckIcon
-                                                onClick={(e) => {
-                                                    e.stopPropagation()
-                                                    setStudent(record)
-                                                    onOpenPhuLucVanBang({
-                                                        dataStudent: record,
-                                                        dataTable,
-                                                    })
-                                                }}
-                                                size={16}
-                                            />
-                                        </Tooltip> */}
                                         <Tooltip title="Kết quả học tập" placement="top">
                                             <BookCheckIcon
                                                 onClick={(e) => {
@@ -775,10 +759,6 @@ export default function UserProfilePageDs() {
                             },
                         ]}
                         rowKey="id"
-                        // rowSelection={{
-                        //     selectedRowKeys,
-                        //     onChange: (selectedKeys) => setSelectedRowKeys(selectedKeys),
-                        // }}
                         data={data}
                         pagination={{
                             current: currentPage,
