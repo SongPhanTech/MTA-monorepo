@@ -86,7 +86,7 @@ app.openapi(genExamListCode, async (c) => {
                                         // midtermScore: {
                                         //     not: null,
                                         // },
-                                        OR:[
+                                        OR: [
                                             {
                                                 attendanceScore: {
                                                     not: null,
@@ -95,15 +95,15 @@ app.openapi(genExamListCode, async (c) => {
                                                     not: null,
                                                 },
                                                 subjectVersion: {
-                                                    onePoint: false
-                                                }
+                                                    onePoint: false,
+                                                },
                                             },
                                             {
                                                 subjectVersion: {
-                                                    onePoint: true
-                                                }
-                                            }
-                                        ]
+                                                    onePoint: true,
+                                                },
+                                            },
+                                        ],
                                     },
                                 },
                             },
