@@ -18,12 +18,12 @@ dayjs.locale('vi')
 
 export enum EnumInPhieuDiem {
     PHIEU_DIEM_NHAP = 0, // In phiếu điểm nháp
-    PHIEU_DIEM_KHOA = 1, // In phiếu điểm và khoá
+    PHIEU_DIEM_KHOA = 1, // Khoá và in phiếu điểm
 }
 
 type ModalPrintToKQHTInput = {
     dataTable: DataTable[]
-    type?: EnumInPhieuDiem // 1: In phiếu điểm và khoá, 0: In phiếu điểm nháp
+    type?: EnumInPhieuDiem // 1: Khoá và in phiếu điểm, 0: In phiếu điểm nháp
 }
 
 export type DataTable = Prisma.StudentSubjectScoreGetPayload<{
@@ -293,7 +293,7 @@ const ModalPrintStudentSubjectScore = () => {
                     <span>
                         {input?.type === EnumInPhieuDiem.PHIEU_DIEM_NHAP
                             ? 'In phiếu điểm nháp'
-                            : 'In phiếu điểm và khoá'}
+                            : 'Khoá và in phiếu điểm'}
                     </span>
                     <Button
                         icon={<PrinterOutlined />}

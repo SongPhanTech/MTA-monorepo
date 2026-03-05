@@ -683,7 +683,7 @@ export default function NhapDiem({
 
     const { onOpen: openStudentSubjectScore } = useDisclosure<{
         dataTable: DataTable[]
-        type: number // 1: In phiếu điểm và khoá, 0: In phiếu điểm nháp
+        type: number // 1: Khoá và in phiếu điểm, 0: In phiếu điểm nháp
     }>({
         tag: 'ModalPrintStudentSubjectScore',
     })
@@ -931,7 +931,7 @@ export default function NhapDiem({
                                     onClick={() => handlePrint()}
                                 >
                                     <Printer />
-                                    In phiếu điểm và khoá
+                                    Khoá và in phiếu điểm
                                 </Button>
                                 <Button
                                     disabled={!selectedSubjectClassId}

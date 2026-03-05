@@ -13,6 +13,7 @@ import { GripVertical } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { DndProvider, useDrag, useDrop } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 export type PutTrainingBlockOnCurriculumVersion = TrainingBlockOnCurriculumVersion & {
     trainingBlockIds: string[]
     trainingBlockElectiveCreditsRequired: Record<string, number>
@@ -29,6 +30,7 @@ type TrainingBlockOnCurriculumVersionInput = {
     curriculumVersionId: string
 }
 const PutTrainingBlockOnCurriculumVersion = () => {
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const [form] = Form.useForm<PutTrainingBlockOnCurriculumVersion>()
     const { isOpen, onClose, input } = useDisclosure<TrainingBlockOnCurriculumVersionInput>({
         tag: 'PutTrainingBlockOnCurriculumVersion',
@@ -56,7 +58,10 @@ const PutTrainingBlockOnCurriculumVersion = () => {
         { enabled: !!input?.curriculumVersionId }
     )
 
-    const { data: trainingBlockData = [] } = useFindManyTrainingBlock()
+    const { data: trainingBlockData = [] } = useFindManyTrainingBlock(
+        { where: { trainingObjectTypeId } },
+        { enabled: !!trainingObjectTypeId }
+    )
 
     useEffect(() => {
         if (initialValue) {
