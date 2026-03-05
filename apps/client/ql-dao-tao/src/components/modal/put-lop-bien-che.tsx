@@ -85,6 +85,13 @@ const PutFixedClassModal = () => {
                         {
                             fixedClass: { id: id ?? undefined },
                         },
+                        {
+                            fixedClass: {
+                                deletedAt:{
+                                    not: null
+                                }
+                            }
+                        }
                     ],
                 },
             },
@@ -104,6 +111,13 @@ const PutFixedClassModal = () => {
                                 id: id ?? undefined,
                             },
                         },
+                        {
+                            fixedClass: {
+                                deletedAt:{
+                                    not: null
+                                }
+                            }
+                        }
                     ],
                 },
             },
