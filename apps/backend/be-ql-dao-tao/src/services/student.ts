@@ -4,7 +4,11 @@ import dayjs from 'dayjs'
 import ExcelJS from 'exceljs'
 import XlsxTemplate from 'xlsx-template'
 import { prisma } from '..'
-import { listStudentResultInfo, resultCourseStudentScholarship } from './student-result.service'
+import {
+    listStudentResultInfo,
+    resultCourseStudentScholarship,
+    resultCourseStudentAcademicWarning,
+} from './student-result.service'
 
 export async function exportStudentProfile({ trainingCourseId }: { trainingCourseId: string }) {
     const trainingCourse = await prisma.trainingCourse.findUniqueOrThrow({
@@ -224,6 +228,88 @@ export const exportStudentScholarship = async ({
         { header: 'ĐTB Học kỳ', key: 'gpaSemester', width: 15 },
         { header: 'ĐRL', key: 'trainingPoint', width: 10 },
         { header: 'Xếp loại HT', key: 'academicClassification', width: 15 },
+    ]
+
+    // Style header
+    worksheet.getRow(1).font = { bold: true }
+
+    worksheet.addRows(rows)
+
+    const buffer = await workbook.xlsx.writeBuffer()
+    return buffer
+}
+
+export const exportStudentAcademicWarning = async ({
+    semesterId,
+    trainingObjectTypeId,
+}: {
+    semesterId: string
+    trainingObjectTypeId: string
+}) => {
+    const students = await listStudentResultInfo(semesterId, trainingObjectTypeId)
+
+    if (!students || students.length === 0) {
+        throw new Error('Không có sinh viên nào trong danh sách')
+    }
+
+    const filteredCourseStudents = await resultCourseStudentAcademicWarning(students, semesterId)
+
+    // Flatten data
+    const rows = []
+    for (const courseItem of filteredCourseStudents) {
+        for (const student of courseItem.students) {
+            // Get general student info
+            const studentName =
+                (student.userProfile as any)?.fullname ||
+                (student.studentSemesterResult as any)?.studentName ||
+                ''
+            const dob = (student.userProfile as any)?.dateOfBirth
+                ? dayjs((student.userProfile as any).dateOfBirth).format('DD/MM/YYYY')
+                : ''
+            const studentCode = student.code || ''
+            const className = student.fixedClass?.name || ''
+            const courseName = courseItem.courseName
+
+            // Semester Result info
+            const result: any = student.studentSemesterResult
+            const gpaSemester = result?.gpaBase10 || 0
+            const trainingPoint = result?.conductScore || 0
+            const academicClassification = result?.academicClassification || ''
+
+            // Reason for warning
+            const reason = student.reason || ''
+
+            rows.push({
+                studentCode,
+                studentName,
+                dob,
+                className,
+                courseName,
+                gpaSemester,
+                trainingPoint,
+                academicClassification,
+                reason,
+            })
+        }
+    }
+
+    if (rows.length === 0) {
+        throw new Error('Không có dữ liệu cảnh cáo học tập để xuất')
+    }
+
+    const workbook = new ExcelJS.Workbook()
+    const worksheet = workbook.addWorksheet('Danh sách cảnh cáo học tập')
+
+    worksheet.columns = [
+        { header: 'Mã SV', key: 'studentCode', width: 15 },
+        { header: 'Họ và tên', key: 'studentName', width: 25 },
+        { header: 'Ngày sinh', key: 'dob', width: 15 },
+        { header: 'Lớp', key: 'className', width: 15 },
+        { header: 'Khoá', key: 'courseName', width: 15 },
+        { header: 'ĐTB Học kỳ', key: 'gpaSemester', width: 15 },
+        { header: 'ĐRL', key: 'trainingPoint', width: 10 },
+        { header: 'Xếp loại HT', key: 'academicClassification', width: 15 },
+        { header: 'Lý do', key: 'reason', width: 40 },
     ]
 
     // Style header

@@ -14,6 +14,7 @@ import {
     exportStudentProfile,
     generateStudentImportTemplate,
     exportStudentScholarship,
+    exportStudentAcademicWarning,
 } from '../services/student'
 import {
     calculateStudentSemesterResult,
@@ -206,6 +207,57 @@ app.openapi(exportScholarshipExcel, async (c) => {
     return c.body(buffer, 200, {
         'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         'Content-Disposition': `attachment; filename="Danh_sach_hoc_bong.xlsx"`,
+    })
+})
+
+const exportAcademicWarningExcel = createRoute({
+    operationId: 'exportStudentAcademicWarningExcel',
+    path: '/export-excel-list-student-academic-warning',
+    tags: ['Student'],
+    summary: 'Xuất Excel danh sách cảnh cáo học tập của học viên',
+    description:
+        'Xuất danh sách học viên bị cảnh cáo học tập dưới dạng file Excel (dữ liệu đã được làm phẳng)',
+    method: 'get',
+    request: {
+        query: z.object({
+            semesterId: z.string().openapi('semesterId', {
+                description: 'ID của kỳ học',
+            }),
+            trainingObjectTypeId: z
+                .string()
+                .openapi('trainingObjectTypeId', { description: 'ID loại đối tượng đào tạo' }),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Export list of student academic warning as Excel',
+            content: {
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': {
+                    schema: z.string().openapi({ type: 'string', format: 'binary' }),
+                },
+            },
+        },
+        404: {
+            description: 'Not found',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                    }),
+                },
+            },
+        },
+    },
+})
+
+app.openapi(exportAcademicWarningExcel, async (c) => {
+    const { semesterId, trainingObjectTypeId } = c.req.valid('query')
+
+    const buffer = await exportStudentAcademicWarning({ semesterId, trainingObjectTypeId })
+
+    return c.body(buffer, 200, {
+        'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'Content-Disposition': `attachment; filename="Danh_sach_canh_cao_hoc_tap.xlsx"`,
     })
 })
 
@@ -929,7 +981,8 @@ const exportStudentProfiles = createRoute({
 })
 
 app.openapi(downloadStudentImportTemplate, async (c) => {
-    const result = await generateStudentImportTemplate()
+    const { trainingObjectTypeId } = c.req.valid('query')
+    const result = await generateStudentImportTemplate(trainingObjectTypeId)
     const fileName = 'MauImportDSHV.xlsx'
     const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
     return c.body(result, 200, {

@@ -1,6 +1,8 @@
 import { Button, Col, Flex, Modal, message, Row, Tag, Tooltip } from 'antd'
+import { DownloadOutlined } from '@ant-design/icons'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
+import { saveAs } from 'file-saver'
 import { queryClient } from '@api/index'
 import Table from '@components/commons/table'
 import TableCollapse from '@components/commons/tableCollapse'
@@ -30,7 +32,10 @@ import {
     useUpdateManyAcademicWarning,
     useUpsertAcademicWarning,
 } from '@workspace/db/hooks'
-import { useExportStudentAcademicWarningJson } from '@workspace/libs/api/training'
+import {
+    useExportStudentAcademicWarningJson,
+    // exportStudentAcademicWarningExcel,
+} from '@workspace/libs/api/training'
 import { whereOrganization } from '@workspace/libs/constants'
 import { BookPlus } from 'lucide-react'
 import { useMemo, useState } from 'react'
@@ -287,6 +292,28 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
         }
     }
 
+    const handleExportExcel = async () => {
+        // try {
+        //     showSpinner()
+        //     const res = await exportStudentAcademicWarningExcel({
+        //         semesterId,
+        //         trainingObjectTypeId,
+        //     })
+
+        //     if (res.status === 200) {
+        //         saveAs(res.data, 'Danh_sach_canh_cao_hoc_tap.xlsx')
+        //         message.success('Xuất Excel thành công')
+        //     } else {
+        //         message.error('Đã xảy ra lỗi khi xuất Excel')
+        //     }
+        // } catch (error) {
+        //     console.error('Lỗi khi xuất Excel:', error)
+        //     message.error('Đã xảy ra lỗi khi xuất Excel')
+        // } finally {
+        //     hideSpinner()
+        // }
+    }
+
     return (
         <div>
             <div className="bg-white rounded-lg shadow-sm p-4 mt-4">
@@ -465,7 +492,11 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
                     <Col span={24}>
                         <Row gutter={[16, 16]} align="top" justify="space-between">
                             <Col span={24}>
-                                <Flex justify="end">
+                                <Flex justify="end" gap={8}>
+                                    <Button type="primary" onClick={handleExportExcel}>
+                                        <DownloadOutlined />
+                                        Xuất Excel
+                                    </Button>
                                     <Button type="primary" onClick={handleApproved}>
                                         <BookPlus />
                                         Duyệt
@@ -544,7 +575,10 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
                             pagination={{
                                 current: currentPage,
                                 pageSize: numberOfPages,
-                                total: studentData.length,
+                                total: studentData.reduce(
+                                    (acc, course) => acc + (course.students?.length || 0),
+                                    0
+                                ),
                                 onChange: (page, pageSize) => {
                                     if (numberOfPages === pageSize) {
                                         setCurrentPage(page)
