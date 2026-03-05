@@ -829,7 +829,7 @@ export default function StudentScoreClassPage() {
                     />
                 </Col>
                 <Col span={24}>
-                    <h3 className="text-lg font-bold">Danh sách điểm điểm chứng chỉ</h3>
+                    <h3 className="text-lg font-bold">Danh sách điểm chứng chỉ</h3>
                     <Table
                         columns={[
                             {
