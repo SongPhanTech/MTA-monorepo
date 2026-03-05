@@ -319,6 +319,7 @@ export default function DanhMucDoAn() {
                 status: record.status || '',
                 defenseRecordComments: record.defenseRecord?.comments || '',
                 defenseRecordFinalScore: record.defenseRecord?.finalScore || null,
+                subjectClassId: record.subjectClassId || '',
             }
         })
         setEditingRowKeys(newEditingRowKeys)
@@ -435,7 +436,24 @@ export default function DanhMucDoAn() {
                     },
                 })
             }
-
+            const enteredExamScore= Object.values(editingValues).filter(i=>i?.defenseRecordFinalScore)
+            const subjectClassIds = [...new Set(enteredExamScore.map(i => i.subjectClassId))]
+            console.log(subjectClassIds,enteredExamScore);
+            if(subjectClassIds.length>0){
+                subjectClassIds.forEach(i=>{
+                     transactions.push({
+                    model: 'SubjectClass' as const,
+                    operation: 'update' as const,
+                    data: {
+                        where: { id:  i?.subjectClassId },
+                        data: {
+                            enteredScore: true,
+                            enteredExamScore: true
+                        }
+                    }
+                })
+                })
+            }
             await sqlTransaction(transactions)
             await refetchThesisProjectData()
             message.success('Đã lưu thay đổi đồ án và cập nhật bảng điểm sinh viên!')
