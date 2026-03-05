@@ -246,6 +246,7 @@ export default function FixedClassPage() {
                 },
                 data: {
                     deletedAt: new Date(),
+                    curriculumVersionId: null,
                 },
             })
         } catch (error: any) {
