@@ -183,7 +183,11 @@ export const exportStudentScholarship = async ({
                     (student.studentSemesterResult as any)?.studentName ||
                     ''
                 const studentCode = student.code || ''
+                const dob = (student.userProfile as any)?.dateOfBirth
+                    ? dayjs((student.userProfile as any).dateOfBirth).format('DD/MM/YYYY')
+                    : ''
                 const courseName = courseItem.courseName
+                const className = student.fixedClass?.name || ''
                 
                 const trainingMajor = 
                     (student.fixedClass as any)?.curriculumVersion?.curriculum?.trainingMajor?.name ||
@@ -197,14 +201,17 @@ export const exportStudentScholarship = async ({
                 for (const scholarship of student.scholarship) {
                     rows.push({
                         stt: stt++,
-                        studentName,
                         studentCode,
+                        studentName,
+                        dob,
                         trainingMajor,
                         courseName,
+                        className,
                         semesterRegistration: '',
                         gpaSemester,
                         academicClassification,
-                        note: scholarship.name,
+                        scholarshipName: scholarship.name,
+                        note: '',
                     })
                 }
             }
@@ -220,13 +227,16 @@ export const exportStudentScholarship = async ({
 
     worksheet.columns = [
         { header: 'STT', key: 'stt', width: 10 },
-        { header: 'Tên học viên', key: 'studentName', width: 25 },
         { header: 'Mã học viên', key: 'studentCode', width: 15 },
+        { header: 'Tên học viên', key: 'studentName', width: 25 },
+        { header: 'Ngày sinh', key: 'dob', width: 15 },
         { header: 'Chuyên ngành', key: 'trainingMajor', width: 25 },
         { header: 'Khóa', key: 'courseName', width: 15 },
+        { header: 'Lớp', key: 'className', width: 15 },
         { header: 'Kỳ đang học', key: 'semesterRegistration', width: 15 },
-        { header: 'Điểm tổng kết', key: 'gpaSemester', width: 15 },
+        { header: 'Trung bình học kỳ', key: 'gpaSemester', width: 18 },
         { header: 'Xếp loại học tập', key: 'academicClassification', width: 20 },
+        { header: 'Học bổng', key: 'scholarshipName', width: 25 },
         { header: 'Ghi chú', key: 'note', width: 30 },
     ]
 
