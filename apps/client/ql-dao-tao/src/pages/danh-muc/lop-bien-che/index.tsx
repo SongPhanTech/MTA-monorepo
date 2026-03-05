@@ -196,7 +196,6 @@ export default function FixedClassPage() {
     }
 
     const downloadStatsFile = async () => {
-        console.log('filters.trainingCourseId', filters.trainingCourseId)
         if (!trainingObjectTypeId) {
             message.error('Vui lòng chọn ĐTĐT')
             return

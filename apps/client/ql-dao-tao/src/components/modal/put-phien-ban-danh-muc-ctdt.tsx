@@ -87,10 +87,12 @@ const PutCurriculumVersion = () => {
         })
 
     useEffect(() => {
-        if (previewInput?.previewData) {
-            setFilteredSubjects(previewInput.previewData)
+        if (!input?.versionId && trainingObjectTypeSelected) {
+            form.setFieldsValue({
+                trainingLevelId: trainingObjectTypeSelected.trainingLevelId,
+            })
         }
-    }, [previewInput?.previewData])
+    }, [trainingObjectTypeSelected, input?.versionId])
 
     const { showSpinner, hideSpinner } = useSpinner()
 
@@ -220,7 +222,8 @@ const PutCurriculumVersion = () => {
                 yearCreation: output.yearCreation,
                 yearApplication: output.yearApplication,
                 trainingObjectTypeId: output.trainingObjectTypeId,
-                trainingLevelId: output.trainingLevelId,
+                trainingLevelId:
+                    output.trainingLevelId || trainingObjectTypeSelected?.trainingLevelId,
                 trainingTypeId: output.trainingTypeId,
                 trainingTimeId: output.trainingTimeId,
                 diplomaTypeId: output.diplomaTypeId,
