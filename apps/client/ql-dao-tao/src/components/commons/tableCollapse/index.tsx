@@ -238,7 +238,7 @@ const TableCollapse = <
         <>
             <Table
                 id={id}
-                rowKey={rowKey}
+                rowKey="key"
                 className="mt-2"
                 scrollable={scrollable}
                 maxHeight={maxHeight}
