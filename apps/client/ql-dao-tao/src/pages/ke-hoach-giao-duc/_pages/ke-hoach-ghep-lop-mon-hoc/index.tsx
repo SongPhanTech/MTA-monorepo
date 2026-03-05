@@ -683,7 +683,7 @@ export default function KeHoachGhepLopMonHoc() {
                                             align: 'center',
                                             render: (_, record) => {
                                                 return (
-                                                    <DndProvider backend={HTML5Backend}>
+                                                    // <DndProvider backend={HTML5Backend}>
                                                         <div className="flex flex-col items-center justify-center m-2">
                                                             <div className="flex h-fit gap-4 items-center">
                                                                 {subjectVersions?.[record.id]
@@ -750,7 +750,7 @@ export default function KeHoachGhepLopMonHoc() {
                                                             )} */}
                                                             </div>
                                                         </div>
-                                                    </DndProvider>
+                                                    // </DndProvider>
                                                 )
                                             },
                                         },
