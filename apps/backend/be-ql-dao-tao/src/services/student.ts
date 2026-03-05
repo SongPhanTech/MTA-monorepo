@@ -195,7 +195,7 @@ export const exportStudentScholarship = async ({
                 const result: any = student.studentSemesterResult
                 const semester = result?.semesterIndexInCourse || ''
                 const gpaSemester = result?.gpaBase10 || 0
-                const academicClassification = result?.rank?.classification || ''
+                // const academicClassification = result?.rank?.classification || ''
 
                 const note = student.reason || ''
 
@@ -210,7 +210,7 @@ export const exportStudentScholarship = async ({
                         classCode,
                         semester,
                         gpaSemester,
-                        academicClassification,
+                        // academicClassification,
                         scholarshipName: scholarship.name,
                         note,
                     })
@@ -236,7 +236,7 @@ export const exportStudentScholarship = async ({
         { header: 'Lớp', key: 'classCode', width: 15 },
         { header: 'Kỳ đang học', key: 'semester', width: 15 },
         { header: 'Trung bình học kỳ', key: 'gpaSemester', width: 18 },
-        { header: 'Xếp loại học tập', key: 'academicClassification', width: 20 },
+        // { header: 'Xếp loại học tập', key: 'academicClassification', width: 20 },
         { header: 'Học bổng', key: 'scholarshipName', width: 25 },
         { header: 'Ghi chú', key: 'note', width: 30 },
     ]
