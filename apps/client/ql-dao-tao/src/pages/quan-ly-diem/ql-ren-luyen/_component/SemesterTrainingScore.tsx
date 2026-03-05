@@ -243,15 +243,14 @@ export default function SemesterTrainingScore({
                         semesterTrainingScoreId: item.semesterTrainingScore[0].id,
                         score: value.score,
                     })
-                } else if(item?.semesterTrainingScore?.length === 0 && value?.score) {
+                } else if (item?.semesterTrainingScore?.length === 0 && value?.score) {
                     listCreate.push({
                         ...item,
                         score: value.score,
-
                     })
                 }
             })
-            
+
             let listTransaction: any = []
             if (listCreate.length > 0) {
                 listTransaction.push({

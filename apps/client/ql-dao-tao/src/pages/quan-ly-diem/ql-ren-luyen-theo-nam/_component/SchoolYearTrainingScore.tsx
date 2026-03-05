@@ -249,7 +249,7 @@ export default function SchoolYearTrainingScore({
                         schoolYearTrainingScoreId: item.schoolYearTrainingScore[0].id,
                         score: value.score,
                     })
-                } else if(item?.schoolYearTrainingScore?.length === 0 && value?.score) {
+                } else if (item?.schoolYearTrainingScore?.length === 0 && value?.score) {
                     listCreate.push({
                         ...item,
                         score: value.score,

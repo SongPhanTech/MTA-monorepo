@@ -22,11 +22,11 @@ import {
     useExportStudentScholarshipJson,
     exportStudentScholarshipExcel,
 } from '@workspace/libs/api/training'
-import { BookPlus} from 'lucide-react'
+import { BookPlus } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { saveAs } from 'file-saver'
-import { DownloadOutlined } from '@ant-design/icons/lib/icons';
+import { DownloadOutlined } from '@ant-design/icons/lib/icons'
 
 dayjs.locale('vi')
 
@@ -773,7 +773,8 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
                                             current: currentPage,
                                             pageSize: numberOfPages,
                                             total: studentData.reduce(
-                                                (acc, course) => acc + (course.students?.length || 0),
+                                                (acc, course) =>
+                                                    acc + (course.students?.length || 0),
                                                 0
                                             ),
                                             onChange: (page, pageSize) => {

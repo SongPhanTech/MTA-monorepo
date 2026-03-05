@@ -275,7 +275,6 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
         //         semesterId,
         //         trainingObjectTypeId,
         //     })
-
         //     if (res.status === 200) {
         //         saveAs(res.data, 'Danh_sach_canh_cao_hoc_tap.xlsx')
         //         message.success('Xuất Excel thành công')

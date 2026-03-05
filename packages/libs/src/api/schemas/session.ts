@@ -4,12 +4,32 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
+import type { SessionRealmAccess } from './sessionRealmAccess'
+import type { SessionResourceAccess } from './sessionResourceAccess'
 
 export interface Session {
-    userId: string
-    username: string
-    fullName: string
-    organizationId: string
+    exp: number
+    iat: number
+    auth_time: number
+    jti: string
+    iss: string
+    aud: string[]
+    sub: string
+    typ: string
+    azp: string
+    sid: string
+    acr: string
+    'allowed-origins': string[]
+    realm_access: SessionRealmAccess
+    resource_access: SessionResourceAccess
+    scope: string
     sDM_NhanVienId: string
+    email_verified: boolean
     sDM_DonViId: string
+    name: string
+    preferred_username: string
+    given_name: string
+    family_name: string
+    email: string
+    access_token: string
 }

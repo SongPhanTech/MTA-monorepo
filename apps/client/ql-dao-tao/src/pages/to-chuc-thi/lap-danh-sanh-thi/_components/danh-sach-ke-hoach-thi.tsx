@@ -603,8 +603,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                                 record.subjectClass?.[0]?.subjectId !== selectedSubjectId &&
                                     selectedSubjectId !== undefined &&
                                     'bg-gray-400',
-                                listChanges?.[record.id]?.isChanged && 'bg-yellow-100',
-                                
+                                listChanges?.[record.id]?.isChanged && 'bg-yellow-100'
                             ),
                             onClick: (e) => {
                                 const target = e.target as HTMLElement

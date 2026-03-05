@@ -64,6 +64,8 @@ import type {
     ExportStudentAcademicActionJson200Item,
     ExportStudentAcademicActionJson404,
     ExportStudentAcademicActionJsonParams,
+    ExportStudentAcademicWarningExcel404,
+    ExportStudentAcademicWarningExcelParams,
     ExportStudentAcademicWarningJson200Item,
     ExportStudentAcademicWarningJson404,
     ExportStudentAcademicWarningJsonParams,
@@ -2749,6 +2751,208 @@ export function useExportStudentScholarshipExcel<
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
     const queryOptions = getExportStudentScholarshipExcelQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+/**
+ * Xuất danh sách học viên bị cảnh cáo học tập dưới dạng file Excel (dữ liệu đã được làm phẳng)
+ * @summary Xuất Excel danh sách cảnh cáo học tập của học viên
+ */
+export type exportStudentAcademicWarningExcelResponse200 = {
+    data: Blob
+    status: 200
+}
+
+export type exportStudentAcademicWarningExcelResponse404 = {
+    data: ExportStudentAcademicWarningExcel404
+    status: 404
+}
+
+export type exportStudentAcademicWarningExcelResponseSuccess =
+    exportStudentAcademicWarningExcelResponse200 & {
+        headers: Headers
+    }
+export type exportStudentAcademicWarningExcelResponseError =
+    exportStudentAcademicWarningExcelResponse404 & {
+        headers: Headers
+    }
+
+export type exportStudentAcademicWarningExcelResponse =
+    | exportStudentAcademicWarningExcelResponseSuccess
+    | exportStudentAcademicWarningExcelResponseError
+
+export const getExportStudentAcademicWarningExcelUrl = (
+    params: ExportStudentAcademicWarningExcelParams
+) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/student/export-excel-list-student-academic-warning?${stringifiedParams}`
+        : `/api/student/export-excel-list-student-academic-warning`
+}
+
+export const exportStudentAcademicWarningExcel = async (
+    params: ExportStudentAcademicWarningExcelParams,
+    options?: RequestInit
+): Promise<exportStudentAcademicWarningExcelResponse> => {
+    return customTrainingFetch<exportStudentAcademicWarningExcelResponse>(
+        getExportStudentAcademicWarningExcelUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getExportStudentAcademicWarningExcelQueryKey = (
+    params?: ExportStudentAcademicWarningExcelParams
+) => {
+    return [
+        `/api/student/export-excel-list-student-academic-warning`,
+        ...(params ? [params] : []),
+    ] as const
+}
+
+export const getExportStudentAcademicWarningExcelQueryOptions = <
+    TData = Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
+    TError = ExportStudentAcademicWarningExcel404,
+>(
+    params: ExportStudentAcademicWarningExcelParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getExportStudentAcademicWarningExcelQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>> = ({
+        signal,
+    }) => exportStudentAcademicWarningExcel(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ExportStudentAcademicWarningExcelQueryResult = NonNullable<
+    Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>
+>
+export type ExportStudentAcademicWarningExcelQueryError = ExportStudentAcademicWarningExcel404
+
+export function useExportStudentAcademicWarningExcel<
+    TData = Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
+    TError = ExportStudentAcademicWarningExcel404,
+>(
+    params: ExportStudentAcademicWarningExcelParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentAcademicWarningExcel<
+    TData = Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
+    TError = ExportStudentAcademicWarningExcel404,
+>(
+    params: ExportStudentAcademicWarningExcelParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentAcademicWarningExcel<
+    TData = Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
+    TError = ExportStudentAcademicWarningExcel404,
+>(
+    params: ExportStudentAcademicWarningExcelParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Xuất Excel danh sách cảnh cáo học tập của học viên
+ */
+
+export function useExportStudentAcademicWarningExcel<
+    TData = Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
+    TError = ExportStudentAcademicWarningExcel404,
+>(
+    params: ExportStudentAcademicWarningExcelParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getExportStudentAcademicWarningExcelQueryOptions(params, options)
 
     const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
         queryKey: DataTag<QueryKey, TData, TError>

@@ -436,22 +436,24 @@ export default function DanhMucDoAn() {
                     },
                 })
             }
-            const enteredExamScore= Object.values(editingValues).filter(i=>i?.defenseRecordFinalScore)
-            const subjectClassIds = [...new Set(enteredExamScore.map(i => i.subjectClassId))]
-            console.log(subjectClassIds,enteredExamScore);
-            if(subjectClassIds.length>0){
-                subjectClassIds.forEach(i=>{
-                     transactions.push({
-                    model: 'SubjectClass' as const,
-                    operation: 'update' as const,
-                    data: {
-                        where: { id:  i?.subjectClassId },
+            const enteredExamScore = Object.values(editingValues).filter(
+                (i) => i?.defenseRecordFinalScore
+            )
+            const subjectClassIds = [...new Set(enteredExamScore.map((i) => i.subjectClassId))]
+            console.log(subjectClassIds, enteredExamScore)
+            if (subjectClassIds.length > 0) {
+                subjectClassIds.forEach((i) => {
+                    transactions.push({
+                        model: 'SubjectClass' as const,
+                        operation: 'update' as const,
                         data: {
-                            enteredScore: true,
-                            enteredExamScore: true
-                        }
-                    }
-                })
+                            where: { id: i?.subjectClassId },
+                            data: {
+                                enteredScore: true,
+                                enteredExamScore: true,
+                            },
+                        },
+                    })
                 })
             }
             await sqlTransaction(transactions)
