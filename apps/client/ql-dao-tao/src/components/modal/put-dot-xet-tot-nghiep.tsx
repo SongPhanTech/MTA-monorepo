@@ -15,13 +15,14 @@ import 'dayjs/locale/vi'
 import DatePicker from '@components/commons/date-picker'
 import Select from '@components/commons/select'
 import { useGraduationSessionStatusOptions } from '@hooks/graduationSessionStatus'
-import { useFindManyTrainingObjectTypePermission } from '@workspace/ui'
+import { useFindManyTrainingObjectTypePermission, useTrainingObjectTypeStore } from '@workspace/ui'
 import { useEffect } from 'react'
 export type PutGraduationSession = GraduationSession
 dayjs.locale('vi')
 
 const PutGraduationSession = () => {
     const { graduationSessionStatusOptions } = useGraduationSessionStatusOptions()
+    const { id: selectedTrainingObjectTypeId } = useTrainingObjectTypeStore()
     const [form] = Form.useForm<PutGraduationSession>()
     const {
         isOpen,
@@ -58,9 +59,10 @@ const PutGraduationSession = () => {
         } else {
             form.setFieldsValue({
                 status: GraduationSessionStatus.PLANNING,
+                trainingObjectTypeId: selectedTrainingObjectTypeId,
             })
         }
-    }, [graduationSession, form])
+    }, [graduationSession, form, selectedTrainingObjectTypeId])
 
     const { data: trainingObjectTypes = [] } = useFindManyTrainingObjectTypePermission()
 
@@ -136,6 +138,7 @@ const PutGraduationSession = () => {
                             label: item.name,
                             value: item.id,
                         }))}
+                        disabled
                     />
                 </FormItem>
             </Col>
