@@ -30,6 +30,7 @@ import {
     InputNumber,
     Modal,
     message,
+    Popconfirm,
     Row,
     Tabs,
     Tag,
@@ -67,7 +68,7 @@ export default function DanhMucDoAn() {
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const subjectClassId = Form.useWatch('subjectClassId', form)
 
-    const isProjectLecturer = can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DM_DO_AN, 'DUYET')
+    const isProjectLecturer = can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DM_DO_AN, 'SUA')
 
     const { data: subjectClassData = [] } = useFindManySubjectClass(
         {
@@ -110,6 +111,9 @@ export default function DanhMucDoAn() {
         onChange: (newSelectedRowKeys: React.Key[]) => {
             setSelectedRowKeys(newSelectedRowKeys)
         },
+        getCheckboxProps: (record: any) => ({
+            disabled: record.isLock,
+        }),
     }
     const where = useMemo(() => {
         return {
@@ -178,6 +182,8 @@ export default function DanhMucDoAn() {
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
+    const hasLockedThesis = thesisProjectData.some((p) => p.isLock)
+    const allLocked = thesisProjectData.length > 0 && thesisProjectData.every((p) => p.isLock)
     const { data: defenseSessionData = [] } = useFindManyDefenseSession()
     const { data: roomsData = [] } = useFindManyRoom()
     const { data: expertProfiles = [] } = useFindManyExpertProfile({
@@ -467,6 +473,27 @@ export default function DanhMucDoAn() {
         }
     }
 
+    const handleBulkToggleLock = async (isLocking: boolean) => {
+        try {
+            showSpinner()
+            const transactions = thesisProjectData.map((p) => ({
+                model: 'ThesisProject' as const,
+                operation: 'update' as const,
+                data: {
+                    where: { id: p.id },
+                    data: { isLock: isLocking },
+                },
+            }))
+            await sqlTransaction(transactions)
+            await refetchThesisProjectData()
+            message.success(isLocking ? 'Đã khóa tất cả đề tài!' : 'Đã mở khóa tất cả đề tài!')
+        } catch (error) {
+            message.error('Có lỗi xảy ra. Vui lòng thử lại.')
+        } finally {
+            hideSpinner()
+        }
+    }
+
     return (
         <Row gutter={[16, 0]}>
             <Col span={24}>
@@ -484,6 +511,7 @@ export default function DanhMucDoAn() {
                             >
                                 <Select
                                     className="w-86"
+                                    popupMatchSelectWidth={false}
                                     options={subjectClassData?.map((item) => ({
                                         label: `${item.code} - ${item.name}`,
                                         value: item.id,
@@ -497,6 +525,7 @@ export default function DanhMucDoAn() {
                                     <Button
                                         type="primary"
                                         loading={isPending}
+                                        disabled={hasLockedThesis}
                                         onClick={async () => await handleGenerateMockData()}
                                     >
                                         Tạo dữ liệu mẫu
@@ -531,6 +560,7 @@ export default function DanhMucDoAn() {
                                         <Button
                                             type="default"
                                             className="ml-2"
+                                            disabled={hasLockedThesis}
                                             onClick={handleActivateEdit}
                                         >
                                             Chỉnh sửa
@@ -566,6 +596,38 @@ export default function DanhMucDoAn() {
                                             >
                                                 Cập nhật tiến độ 2
                                             </Button>
+                                            {can(
+                                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DM_DO_AN,
+                                                'DUYET'
+                                            ) && (
+                                                <Popconfirm
+                                                    title={
+                                                        allLocked
+                                                            ? 'Xác nhận mở khóa tất cả?'
+                                                            : 'Xác nhận khóa tất cả?'
+                                                    }
+                                                    description={
+                                                        allLocked
+                                                            ? 'Tất cả đề tài sẽ được mở khóa.'
+                                                            : 'Tất cả đề tài sẽ bị khóa.'
+                                                    }
+                                                    okText="Xác nhận"
+                                                    cancelText="Hủy"
+                                                    onConfirm={() =>
+                                                        handleBulkToggleLock(!allLocked)
+                                                    }
+                                                    disabled={thesisProjectData.length === 0}
+                                                >
+                                                    <Button
+                                                        disabled={thesisProjectData.length === 0}
+                                                        danger={!allLocked}
+                                                    >
+                                                        {allLocked
+                                                            ? 'Mở khóa đề tài'
+                                                            : 'Khóa đề tài'}
+                                                    </Button>
+                                                </Popconfirm>
+                                            )}
                                         </>
                                     )}
                                 </div>
@@ -1159,13 +1221,14 @@ export default function DanhMucDoAn() {
                         },
                         {
                             title: 'Cài đặt',
-                            width: 80,
+                            width: 60,
                             fixed: 'right',
                             align: 'center',
                             render: (_, record) => (
                                 <Button
                                     type="text"
                                     icon={<SquarePen size={18} />}
+                                    disabled={record?.isLock}
                                     onClick={() => {
                                         setCurrentProject(record)
                                         setIsMemberModalOpen(true)

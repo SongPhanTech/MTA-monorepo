@@ -5,29 +5,38 @@ import { Popconfirm, type PopconfirmProps, Tooltip } from 'antd'
 type LockIconProps = {
     popConfirm?: Partial<PopconfirmProps>
     isLocked?: boolean
+    title?: string
+    description?: string
 } & Omit<AntdIconProps, 'ref'> &
     React.RefAttributes<HTMLSpanElement>
 
-const LockPlusIcon = ({ popConfirm, isLocked, ...props }: LockIconProps) => {
+const LockPlusIcon = ({
+    popConfirm,
+    isLocked,
+    title,
+    description,
+    className,
+    ...props
+}: LockIconProps) => {
     const Icon = isLocked ? LockOutlined : UnlockOutlined
-    const title = isLocked ? 'Mở khoá' : 'Khoá'
+    const defaultTitle = isLocked ? 'Mở khoá' : 'Khoá'
     const confirmTitle = isLocked ? 'Xác nhận mở khoá?' : 'Xác nhận khoá?'
-    const description = isLocked
+    const defaultDescription = isLocked
         ? 'CTĐT toàn khoá này sẽ được mở khoá'
         : 'CTĐT toàn khoá này sẽ bị khoá'
 
     return (
-        <Tooltip title={title} placement="top">
+        <Tooltip title={title ?? defaultTitle} placement="top">
             <Popconfirm
                 placement="topLeft"
                 title={confirmTitle}
-                description={description}
+                description={description ?? defaultDescription}
                 okText="Xác nhận"
                 cancelText="Hủy"
                 {...popConfirm}
             >
                 <Icon
-                    className={`text-sm cursor-pointer ${isLocked ? 'text-red-600' : 'text-green-600'}`}
+                    className={`cursor-pointer ${isLocked ? 'text-red-600' : 'text-green-600'} ${className ?? 'text-sm'}`}
                     {...props}
                 />
             </Popconfirm>
