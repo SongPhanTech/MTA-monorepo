@@ -18,10 +18,15 @@ import {
     useFindManyTrainingCourse,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
-import { useExportStudentScholarshipJson } from '@workspace/libs/api/training'
-import { BookPlus } from 'lucide-react'
+import {
+    useExportStudentScholarshipJson,
+    exportStudentScholarshipExcel,
+} from '@workspace/libs/api/training'
+import { BookPlus} from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { saveAs } from 'file-saver'
+import { DownloadOutlined } from '@ant-design/icons/lib/icons';
 
 dayjs.locale('vi')
 
@@ -418,6 +423,28 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
         }
     }
 
+    const handleExportExcel = async () => {
+        try {
+            showSpinner()
+            const res = await exportStudentScholarshipExcel({
+                semesterId,
+                trainingObjectTypeId,
+            })
+
+            if (res.status === 200) {
+                saveAs(res.data, 'Danh_sach_hoc_bong.xlsx')
+                message.success('Xuất Excel thành công')
+            } else {
+                message.error('Đã xảy ra lỗi khi xuất Excel')
+            }
+        } catch (error) {
+            console.error('Lỗi khi xuất Excel:', error)
+            message.error('Đã xảy ra lỗi khi xuất Excel')
+        } finally {
+            hideSpinner()
+        }
+    }
+
     return (
         <Row gutter={[16, 0]} className="mt-4">
             <Col span={24} className="!p-0">
@@ -582,15 +609,25 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
                                                 <div className="text-xl font-bold">
                                                     Danh sách sinh viên thoả mãn học bổng
                                                 </div>
-                                                <Button
-                                                    type="primary"
-                                                    className="h-[32px] px-4"
-                                                    onClick={handleTransferData}
-                                                    disabled={transferDataDisabled}
-                                                >
-                                                    <BookPlus />
-                                                    Chuyển dữ liệu
-                                                </Button>
+                                                <Flex gap={8}>
+                                                    <Button
+                                                        type="primary"
+                                                        className="h-[32px] px-4"
+                                                        onClick={handleExportExcel}
+                                                    >
+                                                        <DownloadOutlined />
+                                                        Xuất Excel
+                                                    </Button>
+                                                    <Button
+                                                        type="primary"
+                                                        className="h-[32px] px-4"
+                                                        onClick={handleTransferData}
+                                                        disabled={transferDataDisabled}
+                                                    >
+                                                        <BookPlus />
+                                                        Chuyển dữ liệu
+                                                    </Button>
+                                                </Flex>
                                             </Flex>
                                         </Col>
                                     </Row>
@@ -735,7 +772,10 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
                                         pagination={{
                                             current: currentPage,
                                             pageSize: numberOfPages,
-                                            total: studentData.length,
+                                            total: studentData.reduce(
+                                                (acc, course) => acc + (course.students?.length || 0),
+                                                0
+                                            ),
                                             onChange: (page, pageSize) => {
                                                 if (numberOfPages === pageSize) {
                                                     setCurrentPage(page)
