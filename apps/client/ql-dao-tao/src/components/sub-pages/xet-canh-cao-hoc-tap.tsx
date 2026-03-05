@@ -33,7 +33,7 @@ import {
 } from '@workspace/db/hooks'
 import {
     useExportStudentAcademicWarningJson,
-    // exportStudentAcademicWarningExcel,
+    exportStudentAcademicWarningExcel,
 } from '@workspace/libs/api/training'
 import { whereOrganization } from '@workspace/libs/constants'
 import { BookPlus } from 'lucide-react'
@@ -269,24 +269,24 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
     }
 
     const handleExportExcel = async () => {
-        // try {
-        //     showSpinner()
-        //     const res = await exportStudentAcademicWarningExcel({
-        //         semesterId,
-        //         trainingObjectTypeId,
-        //     })
-        //     if (res.status === 200) {
-        //         saveAs(res.data, 'Danh_sach_canh_cao_hoc_tap.xlsx')
-        //         message.success('Xuất Excel thành công')
-        //     } else {
-        //         message.error('Đã xảy ra lỗi khi xuất Excel')
-        //     }
-        // } catch (error) {
-        //     console.error('Lỗi khi xuất Excel:', error)
-        //     message.error('Đã xảy ra lỗi khi xuất Excel')
-        // } finally {
-        //     hideSpinner()
-        // }
+        try {
+            showSpinner()
+            const res = await exportStudentAcademicWarningExcel({
+                semesterId,
+                trainingObjectTypeId,
+            })
+            if (res.status === 200) {
+                saveAs(res.data, 'Danh_sach_canh_cao_hoc_tap.xlsx')
+                message.success('Xuất Excel thành công')
+            } else {
+                message.error('Đã xảy ra lỗi khi xuất Excel')
+            }
+        } catch (error) {
+            console.error('Lỗi khi xuất Excel:', error)
+            message.error('Đã xảy ra lỗi khi xuất Excel')
+        } finally {
+            hideSpinner()
+        }
     }
 
     return (

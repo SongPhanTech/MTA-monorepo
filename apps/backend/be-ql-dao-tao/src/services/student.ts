@@ -172,6 +172,7 @@ export const exportStudentScholarship = async ({
 
     // Flatten data
     const rows = []
+    let stt = 1
     for (const courseItem of filteredCourseStudents) {
         for (const student of courseItem.students) {
             // Check if student has scholarships
@@ -181,30 +182,36 @@ export const exportStudentScholarship = async ({
                     (student.userProfile as any)?.fullname ||
                     (student.studentSemesterResult as any)?.studentName ||
                     ''
+                const studentCode = student.code || ''
                 const dob = (student.userProfile as any)?.dateOfBirth
                     ? dayjs((student.userProfile as any).dateOfBirth).format('DD/MM/YYYY')
                     : ''
-                const studentCode = student.code || ''
-                const className = student.fixedClass?.name || ''
                 const courseName = courseItem.courseName
+                const className = student.fixedClass?.name || ''
+                
+                const trainingMajor = 
+                    (student.fixedClass as any)?.curriculumVersion?.curriculum?.trainingMajor?.name ||
+                    ''
 
                 // Semester Result info
                 const result: any = student.studentSemesterResult
                 const gpaSemester = result?.gpaBase10 || 0
-                const trainingPoint = result?.conductScore || 0
                 const academicClassification = result?.academicClassification || ''
 
                 for (const scholarship of student.scholarship) {
                     rows.push({
+                        stt: stt++,
                         studentCode,
                         studentName,
                         dob,
-                        className,
+                        trainingMajor,
                         courseName,
-                        scholarshipName: scholarship.name,
+                        className,
+                        semesterRegistration: '',
                         gpaSemester,
-                        trainingPoint,
                         academicClassification,
+                        scholarshipName: scholarship.name,
+                        note: '',
                     })
                 }
             }
@@ -219,15 +226,18 @@ export const exportStudentScholarship = async ({
     const worksheet = workbook.addWorksheet('Danh sách học bổng')
 
     worksheet.columns = [
-        { header: 'Mã SV', key: 'studentCode', width: 15 },
-        { header: 'Họ và tên', key: 'studentName', width: 25 },
+        { header: 'STT', key: 'stt', width: 10 },
+        { header: 'Mã học viên', key: 'studentCode', width: 15 },
+        { header: 'Tên học viên', key: 'studentName', width: 25 },
         { header: 'Ngày sinh', key: 'dob', width: 15 },
+        { header: 'Chuyên ngành', key: 'trainingMajor', width: 25 },
+        { header: 'Khóa', key: 'courseName', width: 15 },
         { header: 'Lớp', key: 'className', width: 15 },
-        { header: 'Khoá', key: 'courseName', width: 15 },
-        { header: 'Học bổng', key: 'scholarshipName', width: 30 },
-        { header: 'ĐTB Học kỳ', key: 'gpaSemester', width: 15 },
-        { header: 'ĐRL', key: 'trainingPoint', width: 10 },
-        { header: 'Xếp loại HT', key: 'academicClassification', width: 15 },
+        { header: 'Kỳ đang học', key: 'semesterRegistration', width: 15 },
+        { header: 'Trung bình học kỳ', key: 'gpaSemester', width: 18 },
+        { header: 'Xếp loại học tập', key: 'academicClassification', width: 20 },
+        { header: 'Học bổng', key: 'scholarshipName', width: 25 },
+        { header: 'Ghi chú', key: 'note', width: 30 },
     ]
 
     // Style header
