@@ -80,12 +80,30 @@ app.openapi(genExamListCode, async (c) => {
                                         suspended: false,
                                         examBanned: false,
                                         examPostponed: false,
-                                        attendanceScore: {
-                                            not: null,
-                                        },
-                                        midtermScore: {
-                                            not: null,
-                                        },
+                                        // attendanceScore: {
+                                        //     not: null,
+                                        // },
+                                        // midtermScore: {
+                                        //     not: null,
+                                        // },
+                                        OR:[
+                                            {
+                                                attendanceScore: {
+                                                    not: null,
+                                                },
+                                                midtermScore: {
+                                                    not: null,
+                                                },
+                                                subjectVersion: {
+                                                    onePoint: false
+                                                }
+                                            },
+                                            {
+                                                subjectVersion: {
+                                                    onePoint: true
+                                                }
+                                            }
+                                        ]
                                     },
                                 },
                             },
