@@ -684,62 +684,60 @@ export default function KeHoachGhepLopMonHoc() {
                                             render: (_, record) => {
                                                 return (
                                                     // <DndProvider backend={HTML5Backend}>
-                                                        <div className="flex flex-col items-center justify-center m-2">
-                                                            <div className="flex h-fit gap-4 items-center">
-                                                                {subjectVersions?.[record.id]
-                                                                    ?.subjectClasses &&
-                                                                    Object.entries(
-                                                                        subjectVersions?.[record.id]
-                                                                            ?.subjectClasses || {}
-                                                                    ).map(
-                                                                        ([
-                                                                            subjectClassId,
-                                                                            subjectClass,
-                                                                        ]) => (
-                                                                            <SubjectClassDropItem
-                                                                                subjectVersionId={
-                                                                                    record.id
-                                                                                }
-                                                                                item={subjectClass}
-                                                                                key={subjectClassId}
-                                                                            />
-                                                                        )
-                                                                    )}
-                                                                <Tooltip
-                                                                    title="Thêm lớp MH"
-                                                                    className="select-none cursor-pointer"
-                                                                >
-                                                                    <PlusCircle
-                                                                        onClick={() =>
-                                                                            onAddSubjectClass(
+                                                    <div className="flex flex-col items-center justify-center m-2">
+                                                        <div className="flex h-fit gap-4 items-center">
+                                                            {subjectVersions?.[record.id]
+                                                                ?.subjectClasses &&
+                                                                Object.entries(
+                                                                    subjectVersions?.[record.id]
+                                                                        ?.subjectClasses || {}
+                                                                ).map(
+                                                                    ([
+                                                                        subjectClassId,
+                                                                        subjectClass,
+                                                                    ]) => (
+                                                                        <SubjectClassDropItem
+                                                                            subjectVersionId={
                                                                                 record.id
-                                                                            )
-                                                                        }
-                                                                        size={16}
-                                                                    />
-                                                                </Tooltip>
-                                                            </div>
-                                                            <div className="flex h-fit">
-                                                                {record?.trainingBlocks?.map(
-                                                                    // @ts-expect-error
-                                                                    (block) => {
-                                                                        const fixedClass =
-                                                                            block
-                                                                                .trainingBlockOnCurriculumVersion
-                                                                                ?.curriculumVersion
-                                                                                ?.fixedClass
-                                                                        return (
-                                                                            <FixedClassDragItem
-                                                                                subjectVersionId={
-                                                                                    record.id
-                                                                                }
-                                                                                item={fixedClass}
-                                                                                key={fixedClass?.id}
-                                                                            />
-                                                                        )
-                                                                    }
+                                                                            }
+                                                                            item={subjectClass}
+                                                                            key={subjectClassId}
+                                                                        />
+                                                                    )
                                                                 )}
-                                                                {/* {record?.trainingBlocks?.[0]?.trainingBlockOnCurriculumVersion?.curriculumVersion?.fixedClasses?.map?.(
+                                                            <Tooltip
+                                                                title="Thêm lớp MH"
+                                                                className="select-none cursor-pointer"
+                                                            >
+                                                                <PlusCircle
+                                                                    onClick={() =>
+                                                                        onAddSubjectClass(record.id)
+                                                                    }
+                                                                    size={16}
+                                                                />
+                                                            </Tooltip>
+                                                        </div>
+                                                        <div className="flex h-fit">
+                                                            {record?.trainingBlocks?.map(
+                                                                // @ts-expect-error
+                                                                (block) => {
+                                                                    const fixedClass =
+                                                                        block
+                                                                            .trainingBlockOnCurriculumVersion
+                                                                            ?.curriculumVersion
+                                                                            ?.fixedClass
+                                                                    return (
+                                                                        <FixedClassDragItem
+                                                                            subjectVersionId={
+                                                                                record.id
+                                                                            }
+                                                                            item={fixedClass}
+                                                                            key={fixedClass?.id}
+                                                                        />
+                                                                    )
+                                                                }
+                                                            )}
+                                                            {/* {record?.trainingBlocks?.[0]?.trainingBlockOnCurriculumVersion?.curriculumVersion?.fixedClasses?.map?.(
                                                                 (e: FixedClass) => (
                                                                     <FixedClassDragItem
                                                                         subjectVersionId={record.id}
@@ -748,8 +746,8 @@ export default function KeHoachGhepLopMonHoc() {
                                                                     />
                                                                 )
                                                             )} */}
-                                                            </div>
                                                         </div>
+                                                    </div>
                                                     // </DndProvider>
                                                 )
                                             },

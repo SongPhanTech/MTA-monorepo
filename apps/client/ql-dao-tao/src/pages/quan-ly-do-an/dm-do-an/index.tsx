@@ -298,35 +298,37 @@ export default function DanhMucDoAn() {
         }
         const newEditingRowKeys = thesisProjectData.filter((s) => !s.isLock).map((s) => s.id)
         const initialEditingValues: Record<string, Record<string, any>> = {}
-        thesisProjectData.filter((s) => !s.isLock).forEach((record) => {
-            initialEditingValues[record.id] = {
-                title: record.title || '',
-                supervisor: record.supervisor?.id || '',
-                coSupervisor: record.coSupervisor?.id || '',
-                defenseDate: record.defenseDate || '',
-                defenseSession: record.defenseSession?.id || '',
-                room: record.room?.id || '',
-                chairman:
-                    record.council?.members.find((x: any) => x.role === CouncilRole.CHAIRMAN)
-                        ?.expert?.id || '',
-                secretary:
-                    record.council?.members.find((x: any) => x.role === CouncilRole.SECRETARY)
-                        ?.expert?.id || '',
-                reviewer1:
-                    record.council?.members.find((x: any) => x.role === CouncilRole.REVIEWER_1)
-                        ?.expert?.id || '',
-                reviewer2:
-                    record.council?.members.find((x: any) => x.role === CouncilRole.REVIEWER_2)
-                        ?.expert?.id || '',
-                councilMember:
-                    record.council?.members.find((x: any) => x.role === CouncilRole.MEMBER)?.expert
-                        ?.id || '',
-                status: record.status || '',
-                defenseRecordComments: record.defenseRecord?.comments || '',
-                defenseRecordFinalScore: record.defenseRecord?.finalScore || null,
-                subjectClassId: record.subjectClassId || '',
-            }
-        })
+        thesisProjectData
+            .filter((s) => !s.isLock)
+            .forEach((record) => {
+                initialEditingValues[record.id] = {
+                    title: record.title || '',
+                    supervisor: record.supervisor?.id || '',
+                    coSupervisor: record.coSupervisor?.id || '',
+                    defenseDate: record.defenseDate || '',
+                    defenseSession: record.defenseSession?.id || '',
+                    room: record.room?.id || '',
+                    chairman:
+                        record.council?.members.find((x: any) => x.role === CouncilRole.CHAIRMAN)
+                            ?.expert?.id || '',
+                    secretary:
+                        record.council?.members.find((x: any) => x.role === CouncilRole.SECRETARY)
+                            ?.expert?.id || '',
+                    reviewer1:
+                        record.council?.members.find((x: any) => x.role === CouncilRole.REVIEWER_1)
+                            ?.expert?.id || '',
+                    reviewer2:
+                        record.council?.members.find((x: any) => x.role === CouncilRole.REVIEWER_2)
+                            ?.expert?.id || '',
+                    councilMember:
+                        record.council?.members.find((x: any) => x.role === CouncilRole.MEMBER)
+                            ?.expert?.id || '',
+                    status: record.status || '',
+                    defenseRecordComments: record.defenseRecord?.comments || '',
+                    defenseRecordFinalScore: record.defenseRecord?.finalScore || null,
+                    subjectClassId: record.subjectClassId || '',
+                }
+            })
         setEditingRowKeys(newEditingRowKeys)
         setEditingValues(initialEditingValues)
     }

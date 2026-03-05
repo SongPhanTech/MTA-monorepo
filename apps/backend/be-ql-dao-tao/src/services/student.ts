@@ -189,7 +189,7 @@ export const exportStudentScholarship = async ({
                 const courseName = courseItem.courseName
                 const classCode = student.fixedClass?.code || ''
 
-                const trainingMajor = student.trainingMajor 
+                const trainingMajor = student.trainingMajor
 
                 // Semester Result info
                 const result: any = student.studentSemesterResult
