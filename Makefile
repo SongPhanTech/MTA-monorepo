@@ -151,7 +151,7 @@ deploy-%:
 
 
 # Pattern rule: all-<name> = build + push + deploy
-all-%: build-%
+all-%: 
 	@if echo "$(BE_PKGS)" | tr ' ' '\n' | grep -Fxq "$*"; then \
 		$(DOCKER) push $(REGISTRY)/$(IMG_PREFIX)$*:$(DEV_TAG); \
 		ssh $(SERVER) "cd mta-be && $(COMPOSE_CMD) $(IMG_PREFIX)$* -d"; \

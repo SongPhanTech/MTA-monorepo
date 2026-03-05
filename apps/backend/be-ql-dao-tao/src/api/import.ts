@@ -423,7 +423,7 @@ app.openapi(importLecturer, async (c) => {
     const successCount = data.lecturers.length
     return c.json(
         {
-            message: `Khai báo giảng viên thành công: ${successCount}/${data.lecturers.length}`,
+            message: `Nhập giảng viên thành công: ${successCount}/${data.lecturers.length}`,
             time: Date.now() - start,
         },
         200
@@ -914,7 +914,7 @@ app.openapi(importStudent, async (c) => {
 
     return c.json(
         {
-            message: `Import students successfully: ${data.students.length}`,
+            message: `Nhập học viên thành công: ${data.students.length}`,
             time: Date.now() - start,
         },
         200
@@ -1105,7 +1105,7 @@ app.openapi(importHeQuanSu, async (c) => {
 
     return c.json(
         {
-            message: `Import students successfully: ${data.students.length}`,
+            message: `Nhập học viên thành công: ${data.students.length}`,
             time: Date.now() - start,
         },
         200
