@@ -434,6 +434,11 @@ export default function NhapDiem({
                         scoreToTakeExam !== undefined &&
                         item.midtermScore < scoreToTakeExam)
 
+                if (dataDetailSubjectClass?.subject.onePoint) {
+                    item.attendanceScore = item.examScore
+                    item.midtermScore = item.examScore
+                }
+
                 const dataForCalc = dataTable.find((i) => i.id === item.id)
 
                 const defaultCoef = {
