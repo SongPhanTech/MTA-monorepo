@@ -185,7 +185,6 @@ export const exportStudentScholarship = async ({
                 const studentCode = student.code || ''
                 const courseName = courseItem.courseName
                 
-                // Get training major (chuyên ngành)
                 const trainingMajor = 
                     (student.fixedClass as any)?.curriculumVersion?.curriculum?.trainingMajor?.name ||
                     ''
@@ -202,11 +201,10 @@ export const exportStudentScholarship = async ({
                         studentCode,
                         trainingMajor,
                         courseName,
+                        semesterRegistration: '',
                         gpaSemester,
                         academicClassification,
-                        semesterRegistration: '', // Kỳ đăng học - để trống
-                        foreignLanguage: '', // Đạt trình độ ngoại ngữ - để trống
-                        note: scholarship.name, // Ghi chú - đưa tên học bổng vào đây
+                        note: scholarship.name,
                     })
                 }
             }
@@ -226,10 +224,9 @@ export const exportStudentScholarship = async ({
         { header: 'Mã học viên', key: 'studentCode', width: 15 },
         { header: 'Chuyên ngành', key: 'trainingMajor', width: 25 },
         { header: 'Khóa', key: 'courseName', width: 15 },
+        { header: 'Kỳ đang học', key: 'semesterRegistration', width: 15 },
         { header: 'Điểm tổng kết', key: 'gpaSemester', width: 15 },
         { header: 'Xếp loại học tập', key: 'academicClassification', width: 20 },
-        { header: 'Kỳ đang học', key: 'semesterRegistration', width: 15 },
-        { header: 'Đạt trình độ ngoại ngữ', key: 'foreignLanguage', width: 25 },
         { header: 'Ghi chú', key: 'note', width: 30 },
     ]
 
