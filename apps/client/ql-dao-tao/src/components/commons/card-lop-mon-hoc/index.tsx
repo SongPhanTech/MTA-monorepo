@@ -1,45 +1,32 @@
-import { CalendarOutlined, CopyOutlined, ReadOutlined } from '@ant-design/icons'
-import { Card, Col, Row, Tag, Tooltip, Typography } from 'antd'
+import { $Enums } from '@workspace/db/client'
+import { Card, Tag, Typography } from 'antd'
 import dayjs from 'dayjs'
 
 const { Text } = Typography
 
 interface SubjectClassCardProps {
     index: number
-    code?: string | null
-    name?: string | null
     subjectName?: string | null
     subjectCode?: string | null
     semesterName?: string | null
     maxStudent?: number | null
-    currentStudent?: number | null
     startDate?: string | Date | null
     endDate?: string | Date | null
-    status?: 'DRAFT' | 'OFFICIAL' | string | null
-    totalSessions?: number | null
-    completedSessions?: number | null
+    status?: $Enums.SubjectClassStatus | string | null
     onClick?: () => void
 }
 
 export const CardLopMonHoc = ({
     index,
-    code,
-    name,
     subjectName,
     subjectCode,
     semesterName,
     maxStudent,
-    currentStudent,
     startDate,
     endDate,
     status,
-    totalSessions,
-    completedSessions,
     onClick,
 }: SubjectClassCardProps) => {
-    const completed = completedSessions ?? 0
-    const total = totalSessions ?? maxStudent ?? 0
-
     return (
         <Card
             hoverable
@@ -47,7 +34,6 @@ export const CardLopMonHoc = ({
             onClick={onClick}
             className="h-full"
             style={{
-                borderTop: '3px solid #ff4d4f',
                 borderRadius: 8,
                 background: 'linear-gradient(135deg, #fff5f5 0%, #ffffff 50%)',
             }}
@@ -72,59 +58,39 @@ export const CardLopMonHoc = ({
                             {String(index).padStart(2, '0')}
                         </Tag>
                         <Text type="secondary" style={{ fontSize: 13 }}>
-                            {subjectCode || code}
+                            {subjectCode}
+                            {subjectName ? ` - ${subjectName}` : ''}
                         </Text>
-                        <Tooltip title="Sao chép mã lớp">
-                            <CopyOutlined
-                                style={{ color: '#999', cursor: 'pointer', fontSize: 13 }}
-                                onClick={(e) => {
-                                    e.stopPropagation()
-                                    navigator.clipboard.writeText(code || '')
-                                }}
-                            />
-                        </Tooltip>
                     </div>
                     {status && (
                         <Tag
-                            color={status === 'OFFICIAL' ? 'green' : 'default'}
+                            color={
+                                status === $Enums.SubjectClassStatus.OFFICIAL ? 'green' : 'default'
+                            }
                             style={{ fontSize: 11 }}
                         >
-                            {status === 'OFFICIAL' ? 'Chính thức' : 'Nháp'}
+                            {status === $Enums.SubjectClassStatus.OFFICIAL ? 'Chính thức' : 'Nháp'}
                         </Tag>
                     )}
                 </div>
 
-                <Tooltip title={name || subjectName}>
-                    <Text strong style={{ fontSize: 15 }} ellipsis>
-                        {name || subjectName || '-'}
-                    </Text>
-                </Tooltip>
+                <Text strong style={{ fontSize: 15 }} ellipsis>
+                    {subjectName || ''}
+                </Text>
 
-                <Row gutter={8}>
-                    <Col>
-                        <Tooltip title="Buổi học">
-                            <CalendarOutlined style={{ marginRight: 4, color: '#666' }} />
-                            <Text type="secondary" style={{ fontSize: 12 }}>
-                                {completed} / {total}
-                            </Text>
-                        </Tooltip>
-                    </Col>
-                    <Col>
-                        <Tooltip title="Sĩ số">
-                            <ReadOutlined style={{ marginRight: 4, color: '#666' }} />
-                            <Text type="secondary" style={{ fontSize: 12 }}>
-                                {currentStudent ?? 0}
-                            </Text>
-                        </Tooltip>
-                    </Col>
-                </Row>
-
-                {/* Semester */}
-                {semesterName && (
-                    <Text type="secondary" style={{ fontSize: 12 }}>
-                        Học kỳ: {semesterName}
-                    </Text>
-                )}
+                {/* Semester & Student count */}
+                <div className="flex items-center gap-3">
+                    {semesterName && (
+                        <Text type="secondary" style={{ fontSize: 12 }}>
+                            Học kỳ: {semesterName}
+                        </Text>
+                    )}
+                    {maxStudent != null && (
+                        <Text type="secondary" style={{ fontSize: 12 }}>
+                            Sĩ số: {maxStudent}
+                        </Text>
+                    )}
+                </div>
 
                 {/* Date range */}
                 {(startDate || endDate) && (
