@@ -393,3 +393,132 @@ export async function generateStudentImportTemplate(
 
     return template.generate({ type: 'arraybuffer' }) as Promise<ArrayBuffer>
 }
+
+export const exportArchivedCertificate = async ({
+    trainingObjectTypeId,
+    trainingCourseId,
+    fixedClassId,
+    certificateId,
+}: {
+    trainingObjectTypeId: string
+    trainingCourseId?: string
+    fixedClassId?: string
+    certificateId?: string
+}) => {
+    const where: any = {
+        deletedAt: null,
+        student: {
+            fixedClass: {
+                trainingCourse: {
+                    trainingObjectTypeId,
+                    deletedAt: null,
+                    active: true,
+                },
+            },
+        },
+    }
+
+    if (trainingCourseId) {
+        where.student.fixedClass.trainingCourseId = trainingCourseId
+    }
+
+    if (fixedClassId) {
+        where.student.fixedClassId = fixedClassId
+    }
+
+    if (certificateId) {
+        where.certificateId = certificateId
+    }
+
+    const archivedCertificates = await prisma.archivedCertificate.findMany({
+        where,
+        include: {
+            certificate: true,
+            student: {
+                include: {
+                    userProfile: true,
+                    fixedClass: {
+                        include: {
+                            trainingCourse: true,
+                            curriculumVersion: {
+                                include: {
+                                    curriculum: {
+                                        include: {
+                                            trainingMajor: {
+                                                include: {
+                                                    trainingField: true,
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        orderBy: {
+            createdAt: 'desc',
+        },
+    })
+
+    if (!archivedCertificates || archivedCertificates.length === 0) {
+        throw new Error('Không có dữ liệu điểm chứng chỉ để xuất')
+    }
+
+    // Map status
+    const statusMap: Record<string, string> = {
+        PENDING: 'Chờ duyệt',
+        APPROVED: 'Đã duyệt',
+        REJECTED: 'Từ chối',
+        CANCEL: 'Đã huỷ',
+    }
+
+    // Flatten data
+    const data = archivedCertificates.map((item, idx) => {
+        const student = item.student
+        const userProfile = student?.userProfile
+        const fixedClass = student?.fixedClass
+        // const trainingCourse = fixedClass?.trainingCourse
+        const curriculum = fixedClass?.curriculumVersion?.curriculum
+        const trainingMajor = curriculum?.trainingMajor
+        // const trainingField = trainingMajor?.trainingField
+
+        return {
+            no: idx + 1,
+            // studentCode: userProfile?.code || '',
+            studentName: userProfile?.fullname || '',
+            // phoneNumber: userProfile?.phoneNumber || '',
+            dateOfBirth: userProfile?.dateOfBirth
+                ? `'${dayjs(userProfile.dateOfBirth).format('DD/MM/YYYY')}`
+                : '',
+            // fixedClassName: fixedClass?.name || '',
+            // fixedClassCode: fixedClass?.code || '',
+            // trainingCourseName: trainingCourse?.name || '',
+            // trainingFieldName: trainingField?.name || '',
+            trainingMajorName: trainingMajor?.name || '',
+            certificateName: item.certificate?.name || '',
+            score: item.score ?? '',
+            // decisionNumber: item.decisionNumber || '',
+            issuedDate: item.issuedDate
+                ? `'${dayjs(item.issuedDate).format('DD/MM/YYYY')}`
+                : '',
+            issuedBy: item.issuedBy || '',
+            // expiredDate: item.expiredDate
+            //     ? `'${dayjs(item.expiredDate).format('DD/MM/YYYY')}`
+            //     : '',
+            // status: statusMap[item.status] || item.status,
+        }
+    })
+
+    const buffer = await getTemplateBuffer(prisma, 'DIEM_CHUNG_CHI.xlsx')
+    const template = new XlsxTemplate(buffer)
+
+    template.substitute(1, {
+        data,
+    })
+
+    const result = (await template.generate({ type: 'arraybuffer' })) as ArrayBuffer
+    return result
+}
