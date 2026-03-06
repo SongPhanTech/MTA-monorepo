@@ -216,6 +216,7 @@ export default function DanhMucDoAn() {
             },
         }))
     }
+
     const handleSearch = () => {
         const values = form.getFieldsValue()
         setSearchParams(values)
@@ -306,6 +307,7 @@ export default function DanhMucDoAn() {
                     supervisor: record.supervisor?.id || '',
                     coSupervisor: record.coSupervisor?.id || '',
                     defenseDate: record.defenseDate || '',
+                    editProject: record.editProject || '',
                     defenseSession: record.defenseSession?.id || '',
                     room: record.room?.id || '',
                     chairman:
@@ -402,6 +404,7 @@ export default function DanhMucDoAn() {
                     title: values.title || '',
                     status: values.status || 'PROPOSED',
                     defenseDate: values.defenseDate ? dayjs(values.defenseDate).toDate() : null,
+                    editProject: values.editProject ?? null,
                     supervisor: relation(values.supervisor),
                     coSupervisor: relation(values.coSupervisor),
                     room: relation(values.room),
@@ -454,7 +457,7 @@ export default function DanhMucDoAn() {
                         model: 'SubjectClass' as const,
                         operation: 'update' as const,
                         data: {
-                            where: { id: i?.subjectClassId },
+                            where: { id: i },
                             data: {
                                 enteredScore: true,
                                 enteredExamScore: true,
@@ -1161,6 +1164,35 @@ export default function DanhMucDoAn() {
                                 }
 
                                 return Number(scoreValue).toFixedSmart(2)
+                            },
+                        },
+                        {
+                            title: 'Chỉnh sửa đồ án',
+                            width: 200,
+                            align: 'left',
+                            render: (_, record) => {
+                                if (editingRowKeys.includes(record?.id)) {
+                                    const currentValue =
+                                        editingValues[record.id]?.editProject ??
+                                        record?.editProject ??
+                                        ''
+                                    return (
+                                        <div onClick={(e) => e.stopPropagation()}>
+                                            <TextArea
+                                                rows={2}
+                                                value={currentValue}
+                                                onChange={(e) =>
+                                                    handleEditChange(
+                                                        record?.id,
+                                                        'editProject',
+                                                        e.target.value
+                                                    )
+                                                }
+                                            />
+                                        </div>
+                                    )
+                                }
+                                return record?.editProject || ''
                             },
                         },
                         {
