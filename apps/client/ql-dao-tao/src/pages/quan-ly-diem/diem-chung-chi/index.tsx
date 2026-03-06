@@ -16,7 +16,7 @@ import {
     useUpdateArchivedCertificate,
     useUpdateManyArchivedCertificate,
 } from '@workspace/db/hooks'
-import { useCertificateScore } from '@workspace/libs/api/training'
+import { useCertificateScore, exportArchivedCertificateExcel } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { Select, useTrainingObjectTypeStore } from '@workspace/ui'
@@ -374,13 +374,11 @@ export default function ArchivedCertificate() {
 
         try {
             showSpinner()
-            // @ts-ignore - API will be available after running Orval generation
-            const { exportArchivedCertificateExcel } = await import('@workspace/libs/api/training')
             const res = await exportArchivedCertificateExcel({
                 trainingObjectTypeId,
-                trainingCourseId: filters.trainingCourseId,
-                fixedClassId: filters.fixedClassId,
-                certificateId: filters.certificateId,
+                trainingCourseId: filters.trainingCourseId || undefined,
+                fixedClassId: filters.fixedClassId || undefined,
+                certificateId: filters.certificateId || undefined,
             })
             if (res.status === 200) {
                 saveAs(res.data, 'Danh_sach_diem_chung_chi.xlsx')
