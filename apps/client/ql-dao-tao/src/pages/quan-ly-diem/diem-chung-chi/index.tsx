@@ -21,6 +21,8 @@ import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { Select, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Input, Modal, message, Row, Tooltip } from 'antd'
+import { DownloadOutlined } from '@ant-design/icons'
+import { saveAs } from 'file-saver'
 import _ from 'lodash'
 import { InfoIcon } from 'lucide-react'
 import type React from 'react'
@@ -364,6 +366,41 @@ export default function ArchivedCertificate() {
         }
     }
 
+    const handleExportExcel = async () => {
+        if (!trainingObjectTypeId) {
+            message.warning('Vui lòng chọn đối tượng đào tạo')
+            return
+        }
+
+        try {
+            showSpinner()
+            // @ts-ignore - API will be available after running Orval generation
+            const { exportArchivedCertificateExcel } = await import(
+                '@workspace/libs/api/training'
+            )
+            const res = await exportArchivedCertificateExcel({
+                trainingObjectTypeId,
+                trainingCourseId: filters.trainingCourseId,
+                fixedClassId: filters.fixedClassId,
+                certificateId: filters.certificateId,
+            })
+            if (res.status === 200) {
+                saveAs(res.data, 'Danh_sach_diem_chung_chi.xlsx')
+                message.success('Xuất Excel thành công')
+            } else {
+                message.error('Xuất Excel thất bại')
+            }
+        } catch (error: any) {
+            if (error?.response?.data?.message) {
+                message.error(error.response.data.message)
+            } else {
+                message.error('Đã xảy ra lỗi khi xuất Excel')
+            }
+        } finally {
+            hideSpinner()
+        }
+    }
+
     return (
         <Row gutter={[16, 0]}>
             <Col span={24}>
@@ -459,6 +496,14 @@ export default function ArchivedCertificate() {
                             ) && (
                                 <>
                                     <Button
+                                        onClick={handleExportExcel}
+                                        icon={<DownloadOutlined />}
+                                        type="primary"
+                                    >
+                                        Xuất Excel
+                                    </Button>
+                                    <Button
+                                        className="ml-3"
                                         onClick={handleOpenReject}
                                         disabled={!selectedRowKeys.length}
                                         type="default"

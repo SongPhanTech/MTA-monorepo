@@ -6,6 +6,7 @@ import {
     getStatsArchivedAward,
     StatsArchivedResponseSchema,
 } from '../services/stats-archived'
+import { exportArchivedCertificate } from '../services/student'
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -547,6 +548,78 @@ app.openapi(exportStatsArchivedAwardRoute, async (c) => {
         'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         'Content-Disposition': disposition,
     })
+})
+
+const exportArchivedCertificateExcel = createRoute({
+    operationId: 'exportArchivedCertificateExcel',
+    path: '/export-archived-certificate-excel',
+    tags: ['ArchivedScore'],
+    summary: 'Xuất Excel danh sách điểm chứng chỉ',
+    description: 'Xuất danh sách điểm chứng chỉ của học viên dưới dạng file Excel',
+    method: 'get',
+    request: {
+        query: z.object({
+            trainingObjectTypeId: z
+                .string()
+                .openapi('trainingObjectTypeId', { description: 'ID loại đối tượng đào tạo' }),
+            trainingCourseId: z
+                .string()
+                .optional()
+                .openapi('trainingCourseId', { description: 'ID khóa học' }),
+            fixedClassId: z
+                .string()
+                .optional()
+                .openapi('fixedClassId', { description: 'ID lớp quản lý' }),
+            certificateId: z
+                .string()
+                .optional()
+                .openapi('certificateId', { description: 'ID chứng chỉ' }),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Export danh sách điểm chứng chỉ thành công',
+            content: {
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': {
+                    schema: z.string().openapi({ type: 'string', format: 'binary' }),
+                },
+            },
+        },
+        404: {
+            description: 'Không tìm thấy dữ liệu',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                    }),
+                },
+            },
+        },
+    },
+})
+
+app.openapi(exportArchivedCertificateExcel, async (c) => {
+    const { trainingObjectTypeId, trainingCourseId, fixedClassId, certificateId } =
+        c.req.valid('query')
+
+    try {
+        const buffer = await exportArchivedCertificate({
+            trainingObjectTypeId,
+            trainingCourseId,
+            fixedClassId,
+            certificateId,
+        })
+
+        const fileName = 'Danh_sach_diem_chung_chi.xlsx'
+        const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
+
+        return c.body(buffer, 200, {
+            'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'Content-Disposition': disposition,
+        })
+    } catch (error: any) {
+        return c.json({ message: error.message || 'Đã xảy ra lỗi khi xuất Excel' }, 404)
+    }
 })
 
 export default app
