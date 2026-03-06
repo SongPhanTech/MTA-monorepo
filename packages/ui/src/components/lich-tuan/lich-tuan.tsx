@@ -218,11 +218,13 @@ const transformProfileDataTableCalendar = (profiles: UserProfile[]) => {
 
 export function LichCongTac({
     hiddenCalendarFilter = false,
-    onlyMySchedule = false,
+    onlyMySchedule,
 }: {
     hiddenCalendarFilter?: boolean
     onlyMySchedule?: boolean
 }) {
+    console.log('onlyMySchedule', onlyMySchedule);
+    
     const { data: profile } = useSession()
     const profileIdLogin = profile?.sDM_NhanVienId || undefined
 
@@ -238,42 +240,42 @@ export function LichCongTac({
 
     const { data: eventsDataTableCalendar = [] } = useFindManyClassSchedule({
         where: {
-            ...(!!onlyMySchedule && !!profileIdLogin
-                ? {
-                      OR: [
-                          {
-                              subjectClass: {
-                                  subjectClassStudent: {
-                                      some: {
-                                          student: {
-                                              userProfileId: profileIdLogin,
-                                          },
-                                      },
-                                  },
-                              },
-                          },
-                          {
-                              lecturer: {
-                                  userProfileId: profileIdLogin,
-                              },
-                          },
-                          {
-                              subjectClass: {
-                                  mainLecturer: {
-                                      userProfileId: profileIdLogin,
-                                  },
-                              },
-                          },
-                          {
-                              subjectClass: {
-                                  extraLecturer: {
-                                      userProfileId: profileIdLogin,
-                                  },
-                              },
-                          },
-                      ],
-                  }
-                : {}),
+            // ...(!onlyMySchedule && profileIdLogin
+            //     ? {
+            //           OR: [
+            //               {
+            //                   subjectClass: {
+            //                       subjectClassStudent: {
+            //                           some: {
+            //                               student: {
+            //                                   userProfileId: profileIdLogin,
+            //                               },
+            //                           },
+            //                       },
+            //                   },
+            //               },
+            //               {
+            //                   lecturer: {
+            //                       userProfileId: profileIdLogin,
+            //                   },
+            //               },
+            //               {
+            //                   subjectClass: {
+            //                       mainLecturer: {
+            //                           userProfileId: profileIdLogin,
+            //                       },
+            //                   },
+            //               },
+            //               {
+            //                   subjectClass: {
+            //                       extraLecturer: {
+            //                           userProfileId: profileIdLogin,
+            //                       },
+            //                   },
+            //               },
+            //           ],
+            //       }
+            //     : {}),
             periodType: {
                 in: selectedColors
                     .map((color) => {
@@ -336,6 +338,8 @@ export function LichCongTac({
                 },
             },
         },
+    }, {
+        enabled: !!onlyMySchedule
     })
 
     // Convert events data to calendar filter format
