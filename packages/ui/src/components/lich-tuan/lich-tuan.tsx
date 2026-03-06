@@ -238,7 +238,7 @@ export function LichCongTac({
 
     const { data: eventsDataTableCalendar = [] } = useFindManyClassSchedule({
         where: {
-            ...(onlyMySchedule && profileIdLogin
+            ...(!!onlyMySchedule && !!profileIdLogin
                 ? {
                       OR: [
                           {

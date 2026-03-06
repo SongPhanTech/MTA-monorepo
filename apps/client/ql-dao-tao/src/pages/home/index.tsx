@@ -169,7 +169,7 @@ function Page() {
                         <div className="flex-1 px-2">
                             <LichCongTac
                                 onlyMySchedule={can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CC_TX,
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_LICH_TUAN_THANG,
                                     'XEM'
                                 )}
                             />
