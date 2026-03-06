@@ -17896,6 +17896,11 @@ const metadata: ModelMeta = {
                     name: "isLock",
                     type: "Boolean",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, editProject: {
+                    name: "editProject",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
                 }, firstCheckProgress: {
                     name: "firstCheckProgress",
                     type: "Int",

@@ -9089,6 +9089,7 @@ export namespace Prisma {
         language: 'language',
         type: 'type',
         isLock: 'isLock',
+        editProject: 'editProject',
         firstCheckProgress: 'firstCheckProgress',
         secondCheckProgress: 'secondCheckProgress',
         isEligibleForDefense: 'isEligibleForDefense',
@@ -12417,6 +12418,7 @@ export namespace Prisma {
         technologies: 'technologies',
         language: 'language',
         type: 'type',
+        editProject: 'editProject',
         subjectClassId: 'subjectClassId',
         thesisSessionId: 'thesisSessionId',
         supervisorName: 'supervisorName',
@@ -73325,6 +73327,7 @@ export namespace Prisma {
         readonly language: FieldRef<"ThesisProject", 'String'>;
         readonly type: FieldRef<"ThesisProject", 'String'>;
         readonly isLock: FieldRef<"ThesisProject", 'Boolean'>;
+        readonly editProject: FieldRef<"ThesisProject", 'String'>;
         readonly firstCheckProgress: FieldRef<"ThesisProject", 'Int'>;
         readonly secondCheckProgress: FieldRef<"ThesisProject", 'Int'>;
         readonly isEligibleForDefense: FieldRef<"ThesisProject", 'Boolean'>;
@@ -269355,6 +269358,7 @@ export namespace Prisma {
         language: string | null
         type: string | null
         isLock: boolean | null
+        editProject: string | null
         firstCheckProgress: number | null
         secondCheckProgress: number | null
         isEligibleForDefense: boolean | null
@@ -269405,6 +269409,7 @@ export namespace Prisma {
         language: string | null
         type: string | null
         isLock: boolean | null
+        editProject: string | null
         firstCheckProgress: number | null
         secondCheckProgress: number | null
         isEligibleForDefense: boolean | null
@@ -269455,6 +269460,7 @@ export namespace Prisma {
         language: number
         type: number
         isLock: number
+        editProject: number
         firstCheckProgress: number
         secondCheckProgress: number
         isEligibleForDefense: number
@@ -269516,6 +269522,7 @@ export namespace Prisma {
         language?: true
         type?: true
         isLock?: true
+        editProject?: true
         firstCheckProgress?: true
         secondCheckProgress?: true
         isEligibleForDefense?: true
@@ -269566,6 +269573,7 @@ export namespace Prisma {
         language?: true
         type?: true
         isLock?: true
+        editProject?: true
         firstCheckProgress?: true
         secondCheckProgress?: true
         isEligibleForDefense?: true
@@ -269616,6 +269624,7 @@ export namespace Prisma {
         language?: true
         type?: true
         isLock?: true
+        editProject?: true
         firstCheckProgress?: true
         secondCheckProgress?: true
         isEligibleForDefense?: true
@@ -269747,6 +269756,7 @@ export namespace Prisma {
         language: string | null
         type: string | null
         isLock: boolean
+        editProject: string | null
         firstCheckProgress: number | null
         secondCheckProgress: number | null
         isEligibleForDefense: boolean
@@ -269814,6 +269824,7 @@ export namespace Prisma {
         language?: boolean
         type?: boolean
         isLock?: boolean
+        editProject?: boolean
         firstCheckProgress?: boolean
         secondCheckProgress?: boolean
         isEligibleForDefense?: boolean
@@ -269879,6 +269890,7 @@ export namespace Prisma {
         language?: boolean
         type?: boolean
         isLock?: boolean
+        editProject?: boolean
         firstCheckProgress?: boolean
         secondCheckProgress?: boolean
         isEligibleForDefense?: boolean
@@ -269939,6 +269951,7 @@ export namespace Prisma {
         language?: boolean
         type?: boolean
         isLock?: boolean
+        editProject?: boolean
         firstCheckProgress?: boolean
         secondCheckProgress?: boolean
         isEligibleForDefense?: boolean
@@ -269999,6 +270012,7 @@ export namespace Prisma {
         language?: boolean
         type?: boolean
         isLock?: boolean
+        editProject?: boolean
         firstCheckProgress?: boolean
         secondCheckProgress?: boolean
         isEligibleForDefense?: boolean
@@ -270026,7 +270040,7 @@ export namespace Prisma {
         projectStart?: boolean
         projectEnd?: boolean
     };
-    export type ThesisProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "title" | "titleEN" | "summary" | "objectives" | "scope" | "methodology" | "expectedResults" | "requirements" | "technologies" | "thesisType" | "status" | "language" | "type" | "isLock" | "firstCheckProgress" | "secondCheckProgress" | "isEligibleForDefense" | "subjectClassId" | "thesisSessionId" | "supervisorName" | "supervisorId" | "supervisorPaymentId" | "coSupervisorName" | "coSupervisorId" | "coSupervisorPaymentId" | "CHUTICH" | "THUKY" | "PHANBIEN1" | "PHANBIEN2" | "UYVIEN3" | "organizationId" | "maxStudents" | "councilId" | "roomId" | "defenseDate" | "defenseSessionId" | "registrationStart" | "registrationEnd" | "projectStart" | "projectEnd", ExtArgs["result"]["thesisProject"]>;
+    export type ThesisProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "title" | "titleEN" | "summary" | "objectives" | "scope" | "methodology" | "expectedResults" | "requirements" | "technologies" | "thesisType" | "status" | "language" | "type" | "isLock" | "editProject" | "firstCheckProgress" | "secondCheckProgress" | "isEligibleForDefense" | "subjectClassId" | "thesisSessionId" | "supervisorName" | "supervisorId" | "supervisorPaymentId" | "coSupervisorName" | "coSupervisorId" | "coSupervisorPaymentId" | "CHUTICH" | "THUKY" | "PHANBIEN1" | "PHANBIEN2" | "UYVIEN3" | "organizationId" | "maxStudents" | "councilId" | "roomId" | "defenseDate" | "defenseSessionId" | "registrationStart" | "registrationEnd" | "projectStart" | "projectEnd", ExtArgs["result"]["thesisProject"]>;
     export type ThesisProjectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         subjectClass?: boolean | ThesisProject$subjectClassArgs<ExtArgs>
         thesisSession?: boolean | ThesisProject$thesisSessionArgs<ExtArgs>
@@ -270124,6 +270138,7 @@ export namespace Prisma {
             language: string | null
             type: string | null
             isLock: boolean
+            editProject: string | null
             firstCheckProgress: number | null
             secondCheckProgress: number | null
             isEligibleForDefense: boolean
@@ -373096,6 +373111,7 @@ export namespace Prisma {
         language?: StringNullableFilter<"ThesisProject"> | string | null
         type?: StringNullableFilter<"ThesisProject"> | string | null
         isLock?: BoolFilter<"ThesisProject"> | boolean
+        editProject?: StringNullableFilter<"ThesisProject"> | string | null
         firstCheckProgress?: IntNullableFilter<"ThesisProject"> | number | null
         secondCheckProgress?: IntNullableFilter<"ThesisProject"> | number | null
         isEligibleForDefense?: BoolFilter<"ThesisProject"> | boolean
@@ -373160,6 +373176,7 @@ export namespace Prisma {
         language?: SortOrderInput | SortOrder
         type?: SortOrderInput | SortOrder
         isLock?: SortOrder
+        editProject?: SortOrderInput | SortOrder
         firstCheckProgress?: SortOrderInput | SortOrder
         secondCheckProgress?: SortOrderInput | SortOrder
         isEligibleForDefense?: SortOrder
@@ -373228,6 +373245,7 @@ export namespace Prisma {
         language?: StringNullableFilter<"ThesisProject"> | string | null
         type?: StringNullableFilter<"ThesisProject"> | string | null
         isLock?: BoolFilter<"ThesisProject"> | boolean
+        editProject?: StringNullableFilter<"ThesisProject"> | string | null
         firstCheckProgress?: IntNullableFilter<"ThesisProject"> | number | null
         secondCheckProgress?: IntNullableFilter<"ThesisProject"> | number | null
         isEligibleForDefense?: BoolFilter<"ThesisProject"> | boolean
@@ -373292,6 +373310,7 @@ export namespace Prisma {
         language?: SortOrderInput | SortOrder
         type?: SortOrderInput | SortOrder
         isLock?: SortOrder
+        editProject?: SortOrderInput | SortOrder
         firstCheckProgress?: SortOrderInput | SortOrder
         secondCheckProgress?: SortOrderInput | SortOrder
         isEligibleForDefense?: SortOrder
@@ -373350,6 +373369,7 @@ export namespace Prisma {
         language?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
         type?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
         isLock?: BoolWithAggregatesFilter<"ThesisProject"> | boolean
+        editProject?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
         firstCheckProgress?: IntNullableWithAggregatesFilter<"ThesisProject"> | number | null
         secondCheckProgress?: IntNullableWithAggregatesFilter<"ThesisProject"> | number | null
         isEligibleForDefense?: BoolWithAggregatesFilter<"ThesisProject"> | boolean
@@ -404141,6 +404161,7 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         isLock?: boolean
+        editProject?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -404195,6 +404216,7 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         isLock?: boolean
+        editProject?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -404249,6 +404271,7 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -404303,6 +404326,7 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -404357,6 +404381,7 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         isLock?: boolean
+        editProject?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -404407,6 +404432,7 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -404447,6 +404473,7 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -428778,6 +428805,7 @@ export namespace Prisma {
         language?: SortOrder
         type?: SortOrder
         isLock?: SortOrder
+        editProject?: SortOrder
         firstCheckProgress?: SortOrder
         secondCheckProgress?: SortOrder
         isEligibleForDefense?: SortOrder
@@ -428833,6 +428861,7 @@ export namespace Prisma {
         language?: SortOrder
         type?: SortOrder
         isLock?: SortOrder
+        editProject?: SortOrder
         firstCheckProgress?: SortOrder
         secondCheckProgress?: SortOrder
         isEligibleForDefense?: SortOrder
@@ -428883,6 +428912,7 @@ export namespace Prisma {
         language?: SortOrder
         type?: SortOrder
         isLock?: SortOrder
+        editProject?: SortOrder
         firstCheckProgress?: SortOrder
         secondCheckProgress?: SortOrder
         isEligibleForDefense?: SortOrder
@@ -499261,6 +499291,7 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         isLock?: boolean
+        editProject?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -499314,6 +499345,7 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         isLock?: boolean
+        editProject?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -499815,6 +499847,7 @@ export namespace Prisma {
         language?: StringNullableFilter<"ThesisProject"> | string | null
         type?: StringNullableFilter<"ThesisProject"> | string | null
         isLock?: BoolFilter<"ThesisProject"> | boolean
+        editProject?: StringNullableFilter<"ThesisProject"> | string | null
         firstCheckProgress?: IntNullableFilter<"ThesisProject"> | number | null
         secondCheckProgress?: IntNullableFilter<"ThesisProject"> | number | null
         isEligibleForDefense?: BoolFilter<"ThesisProject"> | boolean
@@ -529267,6 +529300,7 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         isLock?: boolean
+        editProject?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -529320,6 +529354,7 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         isLock?: boolean
+        editProject?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -536384,6 +536419,7 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         isLock?: boolean
+        editProject?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -536437,6 +536473,7 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         isLock?: boolean
+        editProject?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -555596,6 +555633,7 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         isLock?: boolean
+        editProject?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -555649,6 +555687,7 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         isLock?: boolean
+        editProject?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -557363,6 +557402,7 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         isLock?: boolean
+        editProject?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -557416,6 +557456,7 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         isLock?: boolean
+        editProject?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -557718,6 +557759,7 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         isLock?: boolean
+        editProject?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -557771,6 +557813,7 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         isLock?: boolean
+        editProject?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -558177,6 +558220,7 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -558230,6 +558274,7 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -558519,6 +558564,7 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         isLock?: boolean
+        editProject?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -558572,6 +558618,7 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         isLock?: boolean
+        editProject?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -558633,6 +558680,7 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         isLock?: boolean
+        editProject?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -558686,6 +558734,7 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         isLock?: boolean
+        editProject?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -559405,6 +559454,7 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         isLock?: boolean
+        editProject?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -559458,6 +559508,7 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         isLock?: boolean
+        editProject?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -559537,6 +559588,7 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -559590,6 +559642,7 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -559758,6 +559811,7 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         isLock?: boolean
+        editProject?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -559811,6 +559865,7 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         isLock?: boolean
+        editProject?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -560333,6 +560388,7 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         isLock?: boolean
+        editProject?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -560386,6 +560442,7 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         isLock?: boolean
+        editProject?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -560532,6 +560589,7 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -560585,6 +560643,7 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -560651,6 +560710,7 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         isLock?: boolean
+        editProject?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -560704,6 +560764,7 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         isLock?: boolean
+        editProject?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -560850,6 +560911,7 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -560903,6 +560965,7 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -561038,6 +561101,7 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         isLock?: boolean
+        editProject?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -561091,6 +561155,7 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         isLock?: boolean
+        editProject?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -561152,6 +561217,7 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         isLock?: boolean
+        editProject?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -561205,6 +561271,7 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         isLock?: boolean
+        editProject?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -602172,6 +602239,7 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         isLock?: boolean
+        editProject?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -603086,6 +603154,7 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -603139,6 +603208,7 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -603192,6 +603262,7 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -626406,6 +626477,7 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         isLock?: boolean
+        editProject?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -626793,6 +626865,7 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -626846,6 +626919,7 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -626899,6 +626973,7 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -630809,6 +630884,7 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         isLock?: boolean
+        editProject?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -631201,6 +631277,7 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -631254,6 +631331,7 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -631307,6 +631385,7 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -638543,6 +638622,7 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         isLock?: boolean
+        editProject?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -638592,6 +638672,7 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -638645,6 +638726,7 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -638698,6 +638780,7 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -638879,6 +638962,7 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         isLock?: boolean
+        editProject?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -638928,6 +639012,7 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -638981,6 +639066,7 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -639034,6 +639120,7 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -639083,6 +639170,7 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         isLock?: boolean
+        editProject?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -639132,6 +639220,7 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         isLock?: boolean
+        editProject?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -639335,6 +639424,7 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -639388,6 +639478,7 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -639441,6 +639532,7 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -639490,6 +639582,7 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -639543,6 +639636,7 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -639596,6 +639690,7 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -640199,6 +640294,7 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         isLock?: boolean
+        editProject?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -640260,6 +640356,7 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -640313,6 +640410,7 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -640366,6 +640464,7 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -640743,6 +640842,7 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         isLock?: boolean
+        editProject?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -640792,6 +640892,7 @@ export namespace Prisma {
         language?: string | null
         type?: string | null
         isLock?: boolean
+        editProject?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -640841,6 +640942,7 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -640894,6 +640996,7 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -640947,6 +641050,7 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -640996,6 +641100,7 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -641049,6 +641154,7 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -641102,6 +641208,7 @@ export namespace Prisma {
         language?: NullableStringFieldUpdateOperationsInput | string | null
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean

@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const ThesisProjectOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "title", "titleEN", "summary", "objectives", "scope", "methodology", "expectedResults", "requirements", "technologies", "language", "type", "subjectClassId", "thesisSessionId", "supervisorName", "supervisorId", "supervisorPaymentId", "coSupervisorName", "coSupervisorId", "coSupervisorPaymentId", "CHUTICH", "THUKY", "PHANBIEN1", "PHANBIEN2", "UYVIEN3", "organizationId", "councilId", "roomId", "defenseSessionId"])
+export const ThesisProjectOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "title", "titleEN", "summary", "objectives", "scope", "methodology", "expectedResults", "requirements", "technologies", "language", "type", "editProject", "subjectClassId", "thesisSessionId", "supervisorName", "supervisorId", "supervisorPaymentId", "coSupervisorName", "coSupervisorId", "coSupervisorPaymentId", "CHUTICH", "THUKY", "PHANBIEN1", "PHANBIEN2", "UYVIEN3", "organizationId", "councilId", "roomId", "defenseSessionId"])

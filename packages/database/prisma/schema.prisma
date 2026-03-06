@@ -4676,6 +4676,7 @@ model ThesisProject {
   language              String?                     @db.Text()
   type                  String?                     @db.Text()
   isLock                Boolean                     @default(false)
+  editProject           String?                     @db.Text()
   firstCheckProgress    Int?
   secondCheckProgress   Int?
   isEligibleForDefense  Boolean                     @default(true)

@@ -77,6 +77,7 @@ model ThesisProject extends Base {
   language              String?                     @db.Text() // Ngôn ngữ
   type                  String?                     @db.Text() // Loại luận văn (Luận văn/Đề án)
   isLock                Boolean                     @default(false) //Khóa đồ án
+  editProject           String?                     @db.Text() // Chỉnh sửa đồ án (Thư ký tổng hợp nhập)
 
   // Tiến độ kiểm tra
   firstCheckProgress    Int?                        // Tiến độ kiểm tra lần 1 % (0-100)
