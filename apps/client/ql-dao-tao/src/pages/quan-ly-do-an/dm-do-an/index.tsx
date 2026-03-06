@@ -13,6 +13,7 @@ import {
 } from '@workspace/db'
 import {
     useCountThesisProject,
+    useFindFirstLecturer,
     useFindManyDefenseSession,
     useFindManyExpertProfile,
     useFindManyRoom,
@@ -20,6 +21,7 @@ import {
     useFindManyThesisProject,
     useUpdateThesisProject,
 } from '@workspace/db/hooks'
+import { useSession } from '@workspace/auth/react'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import {
@@ -35,6 +37,7 @@ import {
     Row,
     Tabs,
     Tag,
+    Tooltip,
 } from 'antd'
 import dayjs from 'dayjs'
 import { LockOutlined, UnlockOutlined } from '@ant-design/icons'
@@ -67,9 +70,15 @@ export default function DanhMucDoAn() {
 
     const { can } = useAbility()
 
+    const { data: me } = useSession()
     const { id: semesterId } = useSemesterStore()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const subjectClassId = Form.useWatch('subjectClassId', form)
+
+    const { data: currentLecturer } = useFindFirstLecturer(
+        { where: { userProfileId: me?.sDM_NhanVienId } },
+        { enabled: !!me?.sDM_NhanVienId }
+    )
 
     const isProjectLecturer = can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DM_DO_AN, 'SUA')
 
@@ -125,8 +134,16 @@ export default function DanhMucDoAn() {
                           in: subjectClassData.map((c) => c.id),
                       },
                   }),
+            ...(currentLecturer
+                ? {
+                      OR: [
+                          { supervisor: { lecturerId: currentLecturer.id } },
+                          { coSupervisor: { lecturerId: currentLecturer.id } },
+                      ],
+                  }
+                : {}),
         }
-    }, [subjectClassId, subjectClassData])
+    }, [subjectClassId, subjectClassData, currentLecturer])
 
     const {
         data: thesisProjectData = [],
@@ -408,7 +425,7 @@ export default function DanhMucDoAn() {
                     supervisor: relation(values.supervisor),
                     coSupervisor: relation(values.coSupervisor),
                     room: relation(values.room),
-                    defenseSession: relation(values.defenseSession),
+                    defenseSession: relation(values.defenseSessionId),
                     defenseRecord: {
                         upsert: {
                             create: {
@@ -484,6 +501,15 @@ export default function DanhMucDoAn() {
                 where: { id },
                 data: { isLock: isLocking },
             })
+            if (isLocking) {
+                setEditingRowKeys((prev) => prev.filter((key) => key !== id))
+                setEditingValues((prev) => {
+                    const next = { ...prev }
+                    delete next[id]
+                    return next
+                })
+            }
+            await refetchThesisProjectData()
             message.success(isLocking ? 'Đã khóa đề tài!' : 'Đã mở khóa đề tài')
         } catch (error) {
             message.error('Có lỗi xảy ra. Vui lòng thử lại.')
@@ -1260,43 +1286,55 @@ export default function DanhMucDoAn() {
                             align: 'center',
                             render: (_, record) => (
                                 <div className="flex items-center justify-center gap-1">
-                                    <Button
-                                        type="text"
-                                        icon={<SquarePen size={18} />}
-                                        disabled={record?.isLock}
-                                        onClick={() => {
-                                            setCurrentProject(record)
-                                            setIsMemberModalOpen(true)
-                                        }}
-                                    />
+                                    <Tooltip title="Chỉnh sửa">
+                                        <Button
+                                            type="text"
+                                            icon={<SquarePen size={18} />}
+                                            disabled={record?.isLock}
+                                            onClick={() => {
+                                                setCurrentProject(record)
+                                                setIsMemberModalOpen(true)
+                                            }}
+                                        />
+                                    </Tooltip>
+
                                     {can(
                                         QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DM_DO_AN,
                                         'DUYET'
                                     ) && (
-                                        <Popconfirm
-                                            title={
-                                                record?.isLock
-                                                    ? 'Xác nhận mở khóa đề tài?'
-                                                    : 'Xác nhận khóa đề tài?'
-                                            }
-                                            okText="Xác nhận"
-                                            cancelText="Hủy"
-                                            onConfirm={() =>
-                                                handleSingleToggleLock(record.id, !record?.isLock)
-                                            }
-                                        >
-                                            <Button
-                                                type="text"
-                                                danger={!record?.isLock}
-                                                icon={
-                                                    record?.isLock ? (
-                                                        <LockOutlined style={{ fontSize: 18 }} />
-                                                    ) : (
-                                                        <UnlockOutlined style={{ fontSize: 18 }} />
+                                        <Tooltip title={record?.isLock ? 'Mở khoá' : 'Khoá'}>
+                                            <Popconfirm
+                                                title={
+                                                    record?.isLock
+                                                        ? 'Xác nhận mở khóa đề tài?'
+                                                        : 'Xác nhận khóa đề tài?'
+                                                }
+                                                okText="Xác nhận"
+                                                cancelText="Hủy"
+                                                onConfirm={() =>
+                                                    handleSingleToggleLock(
+                                                        record.id,
+                                                        !record?.isLock
                                                     )
                                                 }
-                                            />
-                                        </Popconfirm>
+                                            >
+                                                <Button
+                                                    type="text"
+                                                    danger={!record?.isLock}
+                                                    icon={
+                                                        record?.isLock ? (
+                                                            <LockOutlined
+                                                                style={{ fontSize: 18 }}
+                                                            />
+                                                        ) : (
+                                                            <UnlockOutlined
+                                                                style={{ fontSize: 18 }}
+                                                            />
+                                                        )
+                                                    }
+                                                />
+                                            </Popconfirm>
+                                        </Tooltip>
                                     )}
                                 </div>
                             ),
