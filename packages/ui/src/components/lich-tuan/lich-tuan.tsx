@@ -223,8 +223,8 @@ export function LichCongTac({
     hiddenCalendarFilter?: boolean
     onlyMySchedule?: boolean
 }) {
-    console.log('onlyMySchedule', onlyMySchedule);
-    
+    console.log('onlyMySchedule', onlyMySchedule)
+
     const { data: profile } = useSession()
     const profileIdLogin = profile?.sDM_NhanVienId || undefined
 
@@ -238,97 +238,99 @@ export function LichCongTac({
         'calendar'
     )
 
-    const { data: eventsDataTableCalendar = [] } = useFindManyClassSchedule({
-        where: {
-            // ...(!onlyMySchedule && profileIdLogin
-            //     ? {
-            //           OR: [
-            //               {
-            //                   subjectClass: {
-            //                       subjectClassStudent: {
-            //                           some: {
-            //                               student: {
-            //                                   userProfileId: profileIdLogin,
-            //                               },
-            //                           },
-            //                       },
-            //                   },
-            //               },
-            //               {
-            //                   lecturer: {
-            //                       userProfileId: profileIdLogin,
-            //                   },
-            //               },
-            //               {
-            //                   subjectClass: {
-            //                       mainLecturer: {
-            //                           userProfileId: profileIdLogin,
-            //                       },
-            //                   },
-            //               },
-            //               {
-            //                   subjectClass: {
-            //                       extraLecturer: {
-            //                           userProfileId: profileIdLogin,
-            //                       },
-            //                   },
-            //               },
-            //           ],
-            //       }
-            //     : {}),
-            periodType: {
-                in: selectedColors
-                    .map((color) => {
-                        const type = TYPE_WORK_SCHEDULE_COLOR_OPTIONS.find(
-                            (opt) => opt.value === color
-                        )?.type
-                        return type
-                    })
-                    .filter(Boolean) as PeriodType[],
+    const { data: eventsDataTableCalendar = [] } = useFindManyClassSchedule(
+        {
+            where: {
+                // ...(!onlyMySchedule && profileIdLogin
+                //     ? {
+                //           OR: [
+                //               {
+                //                   subjectClass: {
+                //                       subjectClassStudent: {
+                //                           some: {
+                //                               student: {
+                //                                   userProfileId: profileIdLogin,
+                //                               },
+                //                           },
+                //                       },
+                //                   },
+                //               },
+                //               {
+                //                   lecturer: {
+                //                       userProfileId: profileIdLogin,
+                //                   },
+                //               },
+                //               {
+                //                   subjectClass: {
+                //                       mainLecturer: {
+                //                           userProfileId: profileIdLogin,
+                //                       },
+                //                   },
+                //               },
+                //               {
+                //                   subjectClass: {
+                //                       extraLecturer: {
+                //                           userProfileId: profileIdLogin,
+                //                       },
+                //                   },
+                //               },
+                //           ],
+                //       }
+                //     : {}),
+                periodType: {
+                    in: selectedColors
+                        .map((color) => {
+                            const type = TYPE_WORK_SCHEDULE_COLOR_OPTIONS.find(
+                                (opt) => opt.value === color
+                            )?.type
+                            return type
+                        })
+                        .filter(Boolean) as PeriodType[],
+                },
             },
-        },
-        include: {
-            subjectClass: {
-                select: {
-                    id: true,
-                    name: true,
-                    code: true,
-                    room: true,
-                    mainLecturer: {
-                        select: {
-                            userProfile: {
-                                select: {
-                                    id: true,
-                                    fullname: true,
-                                    firstName: true,
-                                    lastName: true,
+            include: {
+                subjectClass: {
+                    select: {
+                        id: true,
+                        name: true,
+                        code: true,
+                        room: true,
+                        mainLecturer: {
+                            select: {
+                                userProfile: {
+                                    select: {
+                                        id: true,
+                                        fullname: true,
+                                        firstName: true,
+                                        lastName: true,
+                                    },
                                 },
                             },
                         },
-                    },
-                    extraLecturer: {
-                        select: {
-                            userProfile: {
-                                select: {
-                                    id: true,
-                                    fullname: true,
-                                    firstName: true,
-                                    lastName: true,
+                        extraLecturer: {
+                            select: {
+                                userProfile: {
+                                    select: {
+                                        id: true,
+                                        fullname: true,
+                                        firstName: true,
+                                        lastName: true,
+                                    },
                                 },
                             },
                         },
-                    },
-                    subjectClassStudent: {
-                        select: {
-                            student: {
-                                select: {
-                                    id: true,
-                                    userProfile: {
-                                        select: {
-                                            id: true,
-                                            fullname: true,
-                                            firstName: true,
-                                            lastName: true,
+                        subjectClassStudent: {
+                            select: {
+                                student: {
+                                    select: {
+                                        id: true,
+                                        userProfile: {
+                                            select: {
+                                                id: true,
+                                                fullname: true,
+                                                firstName: true,
+                                                lastName: true,
+                                            },
                                         },
                                     },
                                 },
@@ -338,9 +340,10 @@ export function LichCongTac({
                 },
             },
         },
-    }, {
-        enabled: !!onlyMySchedule
-    })
+        {
+            enabled: !!onlyMySchedule,
+        }
+    )
 
     // Convert events data to calendar filter format
     const calendarEvents = useMemo(() => {

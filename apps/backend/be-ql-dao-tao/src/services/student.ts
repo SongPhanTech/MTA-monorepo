@@ -501,9 +501,7 @@ export const exportArchivedCertificate = async ({
             certificateName: item.certificate?.name || '',
             score: item.score ?? '',
             // decisionNumber: item.decisionNumber || '',
-            issuedDate: item.issuedDate
-                ? `'${dayjs(item.issuedDate).format('DD/MM/YYYY')}`
-                : '',
+            issuedDate: item.issuedDate ? `'${dayjs(item.issuedDate).format('DD/MM/YYYY')}` : '',
             issuedBy: item.issuedBy || '',
             // expiredDate: item.expiredDate
             //     ? `'${dayjs(item.expiredDate).format('DD/MM/YYYY')}`

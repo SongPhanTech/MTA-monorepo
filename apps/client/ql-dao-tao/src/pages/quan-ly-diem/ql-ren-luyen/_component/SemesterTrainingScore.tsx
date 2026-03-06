@@ -228,9 +228,11 @@ export default function SemesterTrainingScore({
             showSpinner()
             const dataSubmit = form.getFieldsValue()
             const keys = Object.keys(dataSubmit.list)
-            console.log(Object.values(dataSubmit.list));
-            
-            const error = Object.values(dataSubmit.list).find((i: any) => Number(i?.score) > 10 || Number(i?.score) < 0)
+            console.log(Object.values(dataSubmit.list))
+
+            const error = Object.values(dataSubmit.list).find(
+                (i: any) => Number(i?.score) > 10 || Number(i?.score) < 0
+            )
             if (error) {
                 message.error('Vui lòng nhập điểm từ 0 đến 10')
                 return

@@ -53,6 +53,8 @@ import type {
     DownloadStudentImportTemplateParams,
     EnrollFixedClassOnSubjectClassBody,
     ExamCodes,
+    ExportArchivedCertificateExcel404,
+    ExportArchivedCertificateExcelParams,
     ExportDiplomaVerification400,
     ExportDiplomaVerificationParams,
     ExportGraduationDecisionPptx400,
@@ -12409,6 +12411,208 @@ export const useExportStatsArchivedAward = <TError = unknown, TContext = unknown
     const mutationOptions = getExportStatsArchivedAwardMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * Xuất danh sách điểm chứng chỉ của học viên dưới dạng file Excel
+ * @summary Xuất Excel danh sách điểm chứng chỉ
+ */
+export type exportArchivedCertificateExcelResponse200 = {
+    data: Blob
+    status: 200
+}
+
+export type exportArchivedCertificateExcelResponse404 = {
+    data: ExportArchivedCertificateExcel404
+    status: 404
+}
+
+export type exportArchivedCertificateExcelResponseSuccess =
+    exportArchivedCertificateExcelResponse200 & {
+        headers: Headers
+    }
+export type exportArchivedCertificateExcelResponseError =
+    exportArchivedCertificateExcelResponse404 & {
+        headers: Headers
+    }
+
+export type exportArchivedCertificateExcelResponse =
+    | exportArchivedCertificateExcelResponseSuccess
+    | exportArchivedCertificateExcelResponseError
+
+export const getExportArchivedCertificateExcelUrl = (
+    params: ExportArchivedCertificateExcelParams
+) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/archived-score/export-archived-certificate-excel?${stringifiedParams}`
+        : `/api/archived-score/export-archived-certificate-excel`
+}
+
+export const exportArchivedCertificateExcel = async (
+    params: ExportArchivedCertificateExcelParams,
+    options?: RequestInit
+): Promise<exportArchivedCertificateExcelResponse> => {
+    return customTrainingFetch<exportArchivedCertificateExcelResponse>(
+        getExportArchivedCertificateExcelUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getExportArchivedCertificateExcelQueryKey = (
+    params?: ExportArchivedCertificateExcelParams
+) => {
+    return [
+        `/api/archived-score/export-archived-certificate-excel`,
+        ...(params ? [params] : []),
+    ] as const
+}
+
+export const getExportArchivedCertificateExcelQueryOptions = <
+    TData = Awaited<ReturnType<typeof exportArchivedCertificateExcel>>,
+    TError = ExportArchivedCertificateExcel404,
+>(
+    params: ExportArchivedCertificateExcelParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportArchivedCertificateExcel>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getExportArchivedCertificateExcelQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportArchivedCertificateExcel>>> = ({
+        signal,
+    }) => exportArchivedCertificateExcel(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof exportArchivedCertificateExcel>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ExportArchivedCertificateExcelQueryResult = NonNullable<
+    Awaited<ReturnType<typeof exportArchivedCertificateExcel>>
+>
+export type ExportArchivedCertificateExcelQueryError = ExportArchivedCertificateExcel404
+
+export function useExportArchivedCertificateExcel<
+    TData = Awaited<ReturnType<typeof exportArchivedCertificateExcel>>,
+    TError = ExportArchivedCertificateExcel404,
+>(
+    params: ExportArchivedCertificateExcelParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportArchivedCertificateExcel>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportArchivedCertificateExcel>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportArchivedCertificateExcel>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportArchivedCertificateExcel<
+    TData = Awaited<ReturnType<typeof exportArchivedCertificateExcel>>,
+    TError = ExportArchivedCertificateExcel404,
+>(
+    params: ExportArchivedCertificateExcelParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportArchivedCertificateExcel>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportArchivedCertificateExcel>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportArchivedCertificateExcel>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportArchivedCertificateExcel<
+    TData = Awaited<ReturnType<typeof exportArchivedCertificateExcel>>,
+    TError = ExportArchivedCertificateExcel404,
+>(
+    params: ExportArchivedCertificateExcelParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportArchivedCertificateExcel>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Xuất Excel danh sách điểm chứng chỉ
+ */
+
+export function useExportArchivedCertificateExcel<
+    TData = Awaited<ReturnType<typeof exportArchivedCertificateExcel>>,
+    TError = ExportArchivedCertificateExcel404,
+>(
+    params: ExportArchivedCertificateExcelParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportArchivedCertificateExcel>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getExportArchivedCertificateExcelQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
 }
 
 export type createExamsResponse200 = {

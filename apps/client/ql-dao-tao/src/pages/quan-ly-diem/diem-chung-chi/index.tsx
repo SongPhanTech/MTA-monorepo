@@ -375,9 +375,7 @@ export default function ArchivedCertificate() {
         try {
             showSpinner()
             // @ts-ignore - API will be available after running Orval generation
-            const { exportArchivedCertificateExcel } = await import(
-                '@workspace/libs/api/training'
-            )
+            const { exportArchivedCertificateExcel } = await import('@workspace/libs/api/training')
             const res = await exportArchivedCertificateExcel({
                 trainingObjectTypeId,
                 trainingCourseId: filters.trainingCourseId,
