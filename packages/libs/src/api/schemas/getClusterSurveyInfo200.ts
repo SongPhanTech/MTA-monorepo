@@ -4,9 +4,10 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetClusterSurveyInfo200Data } from './getClusterSurveyInfo200Data'
 
 export type GetClusterSurveyInfo200 = {
-    /** @nullable */
-    data?: GetClusterSurveyInfo200Data
+    surveyCount: number
+    completedSurveyCount: number
+    listStudentCount: number
+    studentCompletedSurveyCount: number
 }

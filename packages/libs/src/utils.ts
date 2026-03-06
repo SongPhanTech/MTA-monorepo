@@ -62,7 +62,7 @@ export const getRuntimeEnv = (name: ConfigKeys): string => {
     const config = window?.[name] || env[name] || ''
 
     if (!config) {
-        console.error('Runtime config not found on window')
+        console.warn('Runtime config not found on window', name)
         return ''
     }
 

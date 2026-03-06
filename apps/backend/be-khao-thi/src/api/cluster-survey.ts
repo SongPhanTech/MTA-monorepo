@@ -988,7 +988,10 @@ const getClusterSurveyInfo = createRoute({
             content: {
                 'application/json': {
                     schema: z.object({
-                        data: z.any(),
+                        surveyCount: z.number(),
+                        completedSurveyCount: z.number(),
+                        listStudentCount: z.number(),
+                        studentCompletedSurveyCount: z.number(),
                     }),
                 },
             },
@@ -1069,12 +1072,10 @@ app.openapi(getClusterSurveyInfo, async (c) => {
     })
 
     const data = {
-        data: {
-            surveyCount: survey?.length || 0,
-            completedSurveyCount,
-            listStudentCount,
-            studentCompletedSurveyCount: studentCompletedSurvey || 0,
-        },
+        surveyCount: survey?.length || 0,
+        completedSurveyCount,
+        listStudentCount,
+        studentCompletedSurveyCount: studentCompletedSurvey || 0,
     }
 
     return c.json(data, 200)

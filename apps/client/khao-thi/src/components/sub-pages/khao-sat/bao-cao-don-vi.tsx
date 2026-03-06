@@ -53,16 +53,14 @@ function OrganizationSurveyReport({
     const { onOpen } = useDisclosure({
         tag: 'ModalPrintBaoCaoDonVi',
     })
-    const { data } = useGetClusterSurveyInfo(selectedId as string, {
+    const { data: res } = useGetClusterSurveyInfo(selectedId as string, {
         organizationId,
         semesterId,
         trainingObjectTypeId,
     })
 
     const dataInfo = useMemo(() => {
-        if (data?.status === 200) {
-            console.log(data?.data?.data, 123)
-
+        if (res?.status === 200) {
             return {
                 xAxis: {
                     type: 'category',
@@ -74,9 +72,9 @@ function OrganizationSurveyReport({
                 series: [
                     {
                         data: [
-                            data?.data?.data?.surveyCount,
-                            data?.data?.data?.listStudentCount,
-                            data?.data?.data?.studentCompletedSurveyCount,
+                            res?.data?.surveyCount,
+                            res?.data?.listStudentCount,
+                            res?.data?.studentCompletedSurveyCount,
                         ],
                         type: 'bar',
                     },
@@ -122,7 +120,7 @@ function OrganizationSurveyReport({
             // }
         }
         return {}
-    }, [data])
+    }, [res])
     const { data: dataLevel } = useGetOrganizationSurveyStatistics(selectedId as string, {
         organizationId,
     })
@@ -405,8 +403,7 @@ function OrganizationSurveyReport({
                                           : `${record?.organization?.sMa || ''} - ${record?.organization?.sTen || ''}`
                                   },
                               },
-                              // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
-                              ...choices?.map((i: any, index: number) => ({
+                              ...(choices?.map((i: any) => ({
                                   title: i?.description,
                                   id: i?.id,
                                   dataIndex: i?.id,
@@ -415,12 +412,9 @@ function OrganizationSurveyReport({
                                       const count = calculatePercent(record?.average).find(
                                           (a) => a.id === i?.id
                                       )
-                                      return (
-                                          `${count?.percent || 0}% (${count?.totalCount || 0}/${count?.total})` ||
-                                          '0'
-                                      )
+                                      return `${count?.percent || 0}% (${count?.totalCount || 0}/${count?.total})`
                                   },
-                              })),
+                              })) || []),
                           ]
                         : [
                               {
@@ -458,7 +452,7 @@ function OrganizationSurveyReport({
     return (
         <div>
             <Row gutter={[16, 4]}>
-                {data?.status === 200 && (
+                {res?.status === 200 && (
                     <Col span={24}>
                         <div className="bg-white h-full flex flex-col">
                             <div className="px-4 pb-4 flex justify-between">

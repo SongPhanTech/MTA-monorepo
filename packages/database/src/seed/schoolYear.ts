@@ -50,6 +50,7 @@ const semesters = year.flatMap((year) => [
         startDate: year.startDate,
         endDate: new Date(year.startDate.setMonth(year.startDate.getMonth() + 6)),
         schoolYearId: year.id,
+        semesterType: 'FIRST' as const,
     },
     {
         id: createId(),
@@ -58,6 +59,7 @@ const semesters = year.flatMap((year) => [
         startDate: new Date(year.startDate.setMonth(year.startDate.getMonth() + 6)),
         endDate: year.endDate,
         schoolYearId: year.id,
+        semesterType: 'SECOND' as const,
     },
 ])
 
