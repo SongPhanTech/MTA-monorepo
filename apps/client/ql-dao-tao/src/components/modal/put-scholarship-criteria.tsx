@@ -52,7 +52,7 @@ const PutScholarshipCriteria = () => {
                 code: output?.code,
                 scholarshipId: input.scholarshipId,
                 field: output?.field,
-                invert: output?.invert,
+                // invert: output?.invert,
                 operator: output?.operator,
                 value: output?.value,
                 // tuple: output?.tuple,
@@ -102,12 +102,12 @@ const PutScholarshipCriteria = () => {
         if (initialValue) {
             form.setFieldsValue({
                 ...initialValue,
-                invert: initialValue.invert,
+                // invert: initialValue.invert,
             })
         } else {
             form.setFieldsValue({
                 active: true,
-                invert: false,
+                // invert: false,
             })
         }
     }, [initialValue])
@@ -134,7 +134,7 @@ const PutScholarshipCriteria = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={12}>
+            {/* <Col span={12}>
                 <FormItem
                     form={form}
                     name="invert"
@@ -144,7 +144,7 @@ const PutScholarshipCriteria = () => {
                 >
                     <Checkbox />
                 </FormItem>
-            </Col>
+            </Col> */}
             <Col span={12}>
                 <FormItem form={form} label="So sánh" name="operator" required>
                     <Select
