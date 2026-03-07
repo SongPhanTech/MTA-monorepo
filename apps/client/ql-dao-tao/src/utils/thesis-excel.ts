@@ -838,48 +838,52 @@ export const exportSaoQDHDLV = async ({
     const thangQD = presentDay.split('/')[1]
     const namQD = presentDay.split('/')[2]
     try {
-        const allSheetOptions = allStudentsInClasses?.map((student) => {
-            const supervisor = student?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.name
-            if (!supervisor) {
-                return null
-            }
-            const coSupervisor =
-                student?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.name
-            const data = {
-                ngayQD: ngayQD,
-                thangQD: thangQD,
-                namQD: namQD,
-                type:
-                    student?.thesisRegistrations?.[0]?.thesisProject?.description
-                        ?.split('-')[1]
-                        .trim()
-                        .split(':')[1] || '',
-                khoa: student?.fixedClass?.trainingCourse?.name || '',
-                chuyennganh:
-                    student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || '',
-                nganh:
-                    student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField
-                        ?.name || '',
-                detai: student?.thesisRegistrations?.[0]?.thesisProject?.title || '',
-                hoten: student?.userProfile?.fullname,
-                canbohuongdan1: supervisor ? `1. ${supervisor}` : '',
-                canbohuongdan2: coSupervisor ? `2. ${coSupervisor}` : '',
-                khoaquanli:
-                    student?.thesisRegistrations?.[0]?.thesisProject?.organization?.sTen || '',
-                ngay: ngayQD,
-                thang: thangQD,
-                nam: namQD,
-            }
-            const gapRow: TableRow = {
-                cells: [{ value: null, colSpan: 18, border: false }],
-            }
-            return {
-                sheet: `${student.userProfile?.code} `,
-                data: data,
-                tableStartCell: { row: 40, col: 1 },
-                rows: [gapRow],
-            }
-        })
+        const allSheetOptions = allStudentsInClasses
+            ?.filter((s) => s?.thesisRegistrations?.[0]?.thesisProject)
+            .map((student) => {
+                const supervisor =
+                    student?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.name
+                // if (!supervisor) {
+                //     return null
+                // }
+                const coSupervisor =
+                    student?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.name
+                const data = {
+                    ngayQD: ngayQD,
+                    thangQD: thangQD,
+                    namQD: namQD,
+                    type:
+                        student?.thesisRegistrations?.[0]?.thesisProject?.description
+                            ?.split('-')[1]
+                            .trim()
+                            .split(':')[1] || '',
+                    khoa: student?.fixedClass?.trainingCourse?.name || '',
+                    chuyennganh:
+                        student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name ||
+                        '',
+                    nganh:
+                        student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
+                            ?.trainingField?.name || '',
+                    detai: student?.thesisRegistrations?.[0]?.thesisProject?.title || '',
+                    hoten: student?.userProfile?.fullname,
+                    canbohuongdan1: supervisor ? `1. ${supervisor}` : '',
+                    canbohuongdan2: coSupervisor ? `2. ${coSupervisor}` : '',
+                    khoaquanli:
+                        student?.thesisRegistrations?.[0]?.thesisProject?.organization?.sTen || '',
+                    ngay: ngayQD,
+                    thang: thangQD,
+                    nam: namQD,
+                }
+                const gapRow: TableRow = {
+                    cells: [{ value: null, colSpan: 18, border: false }],
+                }
+                return {
+                    sheet: `${student.userProfile?.code}`,
+                    data: data,
+                    tableStartCell: { row: 40, col: 1 },
+                    rows: [gapRow],
+                }
+            })
         await exportFromTemplate({
             templateUrl: getMinioUrl('mta/template/BanSaoQDHuongDanLuanVan.xlsx'),
             sheets: allSheetOptions?.filter((item) => item !== null) ?? [],
