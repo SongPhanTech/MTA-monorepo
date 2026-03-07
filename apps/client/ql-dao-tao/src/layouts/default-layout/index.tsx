@@ -3,7 +3,6 @@ import SidebarMenuLayout from '@components/layouts/sider'
 import { useMenuList } from '@hooks/menu-list'
 import { cn } from '@lib/utils'
 import { CONFIG_KEY } from '@workspace/constant'
-import { useAppVersionInfo } from '@workspace/libs/api/public'
 import { useFindUniqueConfig } from '@workspace/db/hooks'
 import { getDynamicBreadcrumb } from '@workspace/permissions/hooks'
 import { SelectTrainingObjectType, TreeSelectSemester } from '@workspace/ui'
@@ -34,10 +33,8 @@ const DefaultLayout = ({
     unLayout?: boolean
 }) => {
     const router = useRouter()
-    const { version, isLoading: isLoadingVersion } = useAppVersionInfo()
     const currentPath = router.pathname
     const breadcrumb = getDynamicBreadcrumb('QL_DAO_TAO', currentPath)
-
     const listBreadcrumb = useMemo(() => {
         return breadcrumb?.length > 0
             ? [
@@ -140,7 +137,7 @@ const DefaultLayout = ({
                         Học viện Kỹ thuật Quân sự - Địa chỉ: Số 236, Hoàng Quốc Việt, Cầu Giấy, Hà
                         Nội
                     </div>
-                    <div className="ml-auto">Phiên bản: {isLoadingVersion ? '...' : version}</div>
+                    <div className="ml-auto">Phiên bản: </div>
                 </Footer>
             </Layout>
         </IdleTimerProvider>

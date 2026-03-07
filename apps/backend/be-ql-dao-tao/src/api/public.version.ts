@@ -1,7 +1,7 @@
 import { createRoute, OpenAPIHono } from "@hono/zod-openapi"
 import { z } from "zod"
 import { getVersionApps } from "../services/version.service"
-import { APP_SECRET_MAP } from "../services/mta.config"
+import { APP_SECRET_MAP } from "../config/mta.config"
 
 const app = new OpenAPIHono()
 
@@ -41,12 +41,8 @@ const getVersionRoute = createRoute({
 })
 
 app.openapi(getVersionRoute, async (c) => {
-
   const { appCode } = c.req.valid("param")
-
   const secret = APP_SECRET_MAP[appCode]
-  console.log("appCode:", appCode)
-  console.log("secret:", secret)
  if (!secret || !secret.clientId || !secret.secretKey) {
   return c.json({ message: "Invalid appCode or missing secret" }, 400)
 }

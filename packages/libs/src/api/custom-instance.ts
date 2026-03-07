@@ -86,30 +86,6 @@ export const customPortalFetch = async <T>(url: string, options: RequestInit): P
     return { status: response.status, data, headers: response.headers } as T
 }
 
-export const customPublicFetch = async <T>(url: string, options: RequestInit): Promise<T> => {
-    const requestUrl = getUrl(
-        getRuntimeEnv('NEXT_PUBLIC_API_PUBLIC_BASE_URL') ||
-            'https://mta.swantech.vn/api/system/public',
-        url
-    )
-
-    const clientId =
-        getRuntimeEnv('NEXT_PUBLIC_CLIENT_ID') || process.env.NEXT_PUBLIC_CLIENT_ID || ''
-    const clientSecret =
-        getRuntimeEnv('NEXT_PUBLIC_CLIENT_SECRET') || process.env.NEXT_PUBLIC_CLIENT_SECRET || ''
-
-    const response = await fetchInstance(requestUrl, {
-        ...options,
-        headers: {
-            'x-clientid': clientId,
-            'x-clientsecret': clientSecret,
-            ...options?.headers,
-        },
-    })
-    const data = await getBody<T>(response)
-
-    return { status: response.status, data, headers: response.headers } as T
-}
 export const customSystemFetch = async <T>(url: string, options: RequestInit): Promise<T> => {
     const requestUrl = getUrl(
         process.env.SYSTEM_BASE_URL
