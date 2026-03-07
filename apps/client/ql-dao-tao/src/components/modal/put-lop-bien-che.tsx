@@ -13,7 +13,7 @@ import {
     useCreateFixedClass,
     useFindManyCurriculum,
     useFindManyDM_DonVi,
-    useFindManyStaff,
+    useFindManyLecturer,
     useFindManyTrainingCourse,
     useFindManyTrainingMajor,
     useFindUniqueCurriculumVersion,
@@ -111,11 +111,21 @@ const PutFixedClassModal = () => {
         orderBy: { name: 'asc' },
     })
 
-    const { data: staffData = [] } = useFindManyStaff({
-        include: { userProfile: true },
-        orderBy: { userProfile: { firstName: 'asc' } },
+    // const { data: staffData = [] } = useFindManyStaff({
+    //     include: { userProfile: true },
+    //     orderBy: { userProfile: { firstName: 'asc' } },
+    // })
+    // console.log(staffData)
+    const { data: lecturerData = [] } = useFindManyLecturer({
+        include: {
+            userProfile: true,
+        },
+        orderBy: {
+            userProfile: {
+                firstName: 'asc',
+            },
+        },
     })
-
     const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectTypePermission({
         where: {
             curriculumVersion: curriculumVersionIdForm
@@ -294,7 +304,7 @@ const PutFixedClassModal = () => {
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (oldFixedClass) {
-            form.setFieldsValue({ ...oldFixedClass })
+            form.setFieldsValue({                 ...oldFixedClass             })
         } else {
             form.setFieldsValue({
                 graduated: false,
@@ -407,7 +417,7 @@ const PutFixedClassModal = () => {
                 <FormItem form={form} name="staffManagementId" label="CBQL">
                     <Select
                         placeholder="Chọn cán bộ quản lý"
-                        options={staffData.map((i) => {
+                        options={lecturerData.map((i) => {
                             return {
                                 value: i?.id,
                                 label: `${i.code} - ${i?.userProfile?.fullname ? i?.userProfile?.fullname : `${i?.userProfile?.firstName} ${i?.userProfile?.lastName}`}`,
