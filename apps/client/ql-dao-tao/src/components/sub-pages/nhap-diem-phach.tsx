@@ -26,12 +26,24 @@ export default function NhapDiemPhach() {
                     suspended: false,
                     examBanned: false,
                     examPostponed: false,
-                    attendanceScore: {
-                        not: null,
-                    },
-                    midtermScore: {
-                        not: null,
-                    },
+                    OR: [
+                        {
+                            attendanceScore: {
+                                not: null,
+                            },
+                            midtermScore: {
+                                not: null,
+                            },
+                            subjectVersion: {
+                                onePoint: false,
+                            },
+                        },
+                        {
+                            subjectVersion: {
+                                onePoint: true,
+                            },
+                        },
+                    ],
                 },
             },
             include: {
@@ -185,7 +197,6 @@ export default function NhapDiemPhach() {
                                 },
                                 {
                                     title: 'Điểm',
-                                    width: 150,
                                     align: 'center',
                                     fixed: 'left',
                                     render: (_, record) => {
