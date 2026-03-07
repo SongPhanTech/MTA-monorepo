@@ -32,6 +32,20 @@ const ModalPrintToKQHT = () => {
                 id: input?.dataStudent?.curriculumVersionId,
             },
             include: {
+                trainingLanguage: true,
+                trainingTime: true,
+                trainingLevel: true,
+                trainingType: true,
+
+                curriculum: {
+                    include: {
+                        trainingMajor: {
+                            include: {
+                                trainingField: true,
+                            },
+                        },
+                    },
+                },
                 fixedClass: {
                     where: {
                         id: input?.dataStudent?.fixedClassId,
@@ -75,7 +89,6 @@ const ModalPrintToKQHT = () => {
         subjectScoreData?.fixedClass?.trainingCourse?.academicRankingConvert,
         subjectScoreData?.fixedClass?.trainingCourse?.baseScore
     )
-
     const handlePrint = useReactToPrint({
         contentRef: printRef,
         pageStyle: `
@@ -112,29 +125,18 @@ const ModalPrintToKQHT = () => {
         },
         {
             title: 'Ngôn ngữ đào tạo:',
-            value: <span>{input?.dataStudent?.curriculumVersion?.trainingLanguage?.name}</span>,
+            value: <span>{subjectScoreData?.trainingLanguage?.name}</span>,
         },
         {
             title: 'Ngành đào tạo:',
-            value: (
-                <span>
-                    {
-                        input?.dataStudent?.curriculumVersion?.curriculum?.trainingMajor
-                            ?.trainingField?.name
-                    }
-                </span>
-            ),
+            value: <span>{subjectScoreData?.curriculum?.trainingMajor?.trainingField?.name}</span>,
         },
         {
             title: 'Chuyên ngành:',
-            value: (
-                <span>
-                    {input?.dataStudent?.curriculumVersion?.curriculum?.trainingMajor?.name}
-                </span>
-            ),
+            value: <span>{subjectScoreData?.curriculum?.trainingMajor?.name}</span>,
         },
     ]
-
+    
     const basicInfoCol2 = [
         {
             title: 'Ngày sinh:',
@@ -151,23 +153,15 @@ const ModalPrintToKQHT = () => {
         },
         {
             title: 'Thời gian đào tạo:',
-            value: (
-                <span
-                    dangerouslySetInnerHTML={{
-                        __html: input?.dataStudent?.curriculumVersion?.time
-                            ? `${input?.dataStudent?.curriculumVersion?.time} năm`
-                            : '',
-                    }}
-                />
-            ),
+            value: <span>{subjectScoreData?.trainingTime?.name}</span>,
         },
         {
             title: 'Bậc đào tạo:',
-            value: <span>{input?.dataStudent?.curriculumVersion?.trainingLevel?.name}</span>,
+            value: <span>{subjectScoreData?.trainingLevel?.name}</span>,
         },
         {
             title: 'Hình thức đào tạo:',
-            value: <span>{input?.dataStudent?.trainingForm?.name}</span>,
+            value: <span>{subjectScoreData?.trainingType?.name}</span>,
         },
     ]
 
@@ -470,7 +464,7 @@ const ModalPrintToKQHT = () => {
                         <div className="flex">
                             <div className="min-w-32">Xếp hạng:</div>
                             <span className="font-bold">
-                                {convertAcademicRanking(gpaScore).classification}
+                                {convertAcademicRanking(gpaScore)?.classification}
                             </span>
                         </div>
                     </div>
