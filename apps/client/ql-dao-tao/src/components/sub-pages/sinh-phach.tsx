@@ -65,7 +65,7 @@ export default function SinhPhach() {
                 studentSubjectScore: {
                     examBanned: false,
                     examPostponed: false,
-                     OR: [
+                    OR: [
                         {
                             attendanceScore: {
                                 not: null,

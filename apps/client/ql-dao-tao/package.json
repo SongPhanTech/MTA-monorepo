@@ -1,6 +1,6 @@
 {
 	"name": "@client/ql-dao-tao",
-	"version": "R2.260225.1",
+	"version": "R3.070325.1",
 	"private": true,
 	"scripts": {
 		"dev": "cross-env NODE_OPTIONS='--inspect --max_old_space_size=8096' next dev --turbopack",
