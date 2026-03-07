@@ -409,7 +409,7 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
                                 },
                                 {
                                     title: 'Ghi chú lý do',
-                                    dataIndex: 'reason',
+                                    dataIndex: 'description',
                                     width: 150,
                                     align: 'center',
                                     fixed: 'right',
