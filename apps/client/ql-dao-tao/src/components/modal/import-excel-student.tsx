@@ -49,7 +49,7 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
         if (!file) return
 
         setFile(file)
-        setFileName(`Dữ liệu sinh viên.${file.name.split('.')[1]}`)
+        setFileName(file.name)
 
         const reader = new FileReader()
         reader.onload = (e) => {
@@ -58,6 +58,7 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
                 const { trainingObjectType, trainingCourse, students, errors } = result
 
                 setData({ trainingObjectType, trainingCourse })
+                setPreviewData(students)
                 if (errors.length === 0 && students.length > 0) {
                     setDisabledButton(false)
                 } else {
@@ -88,10 +89,14 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
         reader.readAsArrayBuffer(file)
     }
 
-    const handleRemoveFile = () => {
+    const resetState = () => {
         setFile(null)
         setFileName('')
         setPreviewData([])
+        setErrorData([])
+        setData({ trainingObjectType: '', trainingCourse: '' })
+        setDisabledButton(true)
+        setCreateCurriculumVersion(false)
         // Reset input file để có thể chọn lại file cùng tên
         const fileInput = document.getElementById('file-upload') as HTMLInputElement
         if (fileInput) {
@@ -99,8 +104,12 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
         }
     }
 
+    const handleRemoveFile = () => {
+        resetState()
+    }
+
     const handleCancel = () => {
-        handleRemoveFile()
+        resetState()
         onCancel()
     }
     const { showSpinner, hideSpinner } = useSpinner()
@@ -112,6 +121,7 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
             const res = await importStudent({ file, createCurriculumVersion, timeout: 30 })
             if (res?.status === 200) {
                 message.success('Nhập dữ liệu sinh viên từ file thành công')
+                resetState()
                 onCancel()
             } else {
                 message.error(res?.data?.message || 'Nhập dữ liệu sinh viên từ file thất bại')
