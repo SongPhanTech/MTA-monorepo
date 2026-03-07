@@ -75,7 +75,7 @@ const SubjectClassDropItem: React.FC<{
                 return !!item?.subjectVersionId && item.subjectVersionId === subjectVersionId
             },
         }),
-        []
+        [subjectVersionId, item]
     )
 
     const onRemoveFixedClass = (fixedClassId: string) => {
@@ -190,7 +190,7 @@ const FixedClassDragItem: React.FC<{
                 opacity: monitor.isDragging() ? 0.4 : 1,
             }),
         }),
-        [subjectVersionsForm]
+        [item.id, subjectVersionId, subjectVersionsForm]
     )
 
     drag(ref)
@@ -578,6 +578,10 @@ export default function KeHoachGhepLopMonHoc() {
         }
         hideSpinner()
     }
+    const paginatedData = data?.slice(
+        (currentPage - 1) * numberOfPages,
+        currentPage * numberOfPages
+    )
 
     return (
         <DndProvider backend={HTML5Backend}>
@@ -634,8 +638,8 @@ export default function KeHoachGhepLopMonHoc() {
                                 <Skeleton />
                             ) : (
                                 <Table
-                                    rowKey="subjectVersionId"
-                                    data={data}
+                                    rowKey="id"
+                                    data={paginatedData}
                                     scrollable
                                     maxHeight={'calc(100vh - 380px)'}
                                     onRow={(record) => {
@@ -783,6 +787,7 @@ export default function KeHoachGhepLopMonHoc() {
                                     pagination={{
                                         current: currentPage,
                                         pageSize: numberOfPages,
+                                        total: data?.length || 0,
                                         // total: res?._count?.planTrainingSubjects ?? 0,
                                         onChange: (page, pageSize) => {
                                             if (numberOfPages === pageSize) {
