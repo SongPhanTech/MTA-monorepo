@@ -239,7 +239,6 @@ export default function NhapDiemPhach() {
                                 },
                             ]}
                             maxHeight={'calc(100vh - 390px)'}
-                            scrollable
                             data={examPapers}
                             pagination={false}
                         />
