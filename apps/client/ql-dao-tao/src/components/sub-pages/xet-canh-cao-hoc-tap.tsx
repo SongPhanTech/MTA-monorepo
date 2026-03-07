@@ -215,7 +215,7 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
                     showSpinner()
                     const createAcademicWarningPromises = selectedRecords
                         .filter((record) => !!record.studentSemesterResult)
-                        .map((record) => {
+                        .map((record: any) => {
                             const currentLevel =
                                 record.studentSemesterResult.academicWarningLevel ?? 0
                             const severity =
@@ -231,6 +231,7 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
                                     semester: { connect: { id: semesterId } },
                                     level: currentLevel + severity,
                                     increasedFrom: currentLevel,
+                                    description: record.reason,
                                 },
                             })
                         })
