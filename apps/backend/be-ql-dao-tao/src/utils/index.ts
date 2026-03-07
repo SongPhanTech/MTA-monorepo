@@ -783,3 +783,18 @@ export const fetchBuffer = async (url: string): Promise<Buffer> => {
     const arrayBuffer = await response.arrayBuffer()
     return Buffer.from(arrayBuffer)
 }
+
+export const formatLSBError = (errorData: any): string => {
+  if (!errorData) return 'Lỗi không xác định từ hệ thống đồng bộ';
+
+  if (errorData.Master && Array.isArray(errorData.Master)) {
+    const fields = errorData.Master.flatMap((item: any) => item.fields || []);
+    if (fields.length > 0) {
+      return `Thiếu hoặc sai định dạng các cột: ${fields.join(', ')}`;
+    }
+  }
+
+  if (typeof errorData === 'string') return errorData;
+  
+  return JSON.stringify(errorData);
+};

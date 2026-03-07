@@ -227,18 +227,3 @@ export const validateScore = (score: number | null | undefined, isOnePoint: bool
 //             children: buildOrgTree(list, item.id),
 //         }))
 // }
-
-export const formatLSBError = (errorData: any): string => {
-  if (!errorData) return 'Lỗi không xác định từ hệ thống đồng bộ';
-
-  if (errorData.Master && Array.isArray(errorData.Master)) {
-    const fields = errorData.Master.flatMap((item: any) => item.fields || []);
-    if (fields.length > 0) {
-      return `Thiếu hoặc sai định dạng các cột: ${fields.join(', ')}`;
-    }
-  }
-
-  if (typeof errorData === 'string') return errorData;
-  
-  return JSON.stringify(errorData);
-};

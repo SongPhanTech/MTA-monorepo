@@ -27,8 +27,8 @@ import {
     buildPositionMapOrThrow,
     buildNewProvinceMapOrThrow,
     buildRankMapOrThrow,
+    formatLSBError
 } from '../utils'
-import { formatLSBError } from '../../../../client/ql-dao-tao/src/lib/utils'
 
 const app = new OpenAPIHono({ strict: false })
 
