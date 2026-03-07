@@ -136,7 +136,7 @@ const ModalPrintToKQHT = () => {
             value: <span>{subjectScoreData?.curriculum?.trainingMajor?.name}</span>,
         },
     ]
-    
+
     const basicInfoCol2 = [
         {
             title: 'Ngày sinh:',
