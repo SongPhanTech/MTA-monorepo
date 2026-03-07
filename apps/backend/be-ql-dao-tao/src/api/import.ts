@@ -28,6 +28,7 @@ import {
     buildNewProvinceMapOrThrow,
     buildRankMapOrThrow,
 } from '../utils'
+import { formatLSBError } from '../../../../client/ql-dao-tao/src/lib/utils'
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -138,11 +139,37 @@ app.openapi(importLecturer, async (c) => {
         ])
     )
 
+    const existingLecturerByCCCD = await prisma.lecturer.findMany({
+        where: {
+            userProfile: {
+                idCardNumber: {
+                    in: data.lecturers.map((lecturer) => lecturer.idCardNumber),
+                },
+            },
+        },
+        select: {
+            id: true,
+            code: true,
+            userProfileId: true,
+            userProfile: {
+                select: { idCardNumber: true },
+            },
+        },
+    })
+
+    const existingLecturerByCCCDMap = new Map(
+        existingLecturerByCCCD
+            .filter(({ userProfile }) => userProfile.idCardNumber)
+            .map(({ code, id, userProfileId, userProfile }) => [
+                userProfile.idCardNumber,
+                { id, code, userProfileId },
+            ])
+    )
+
     // validate duplicate lecturer.code identify by lecturer.userProfile.idCardNumber
     const duplicateCode: string[] = []
     for (const l of data.lecturers) {
         const existingLecturer = existingLecturerMap.get(l.code)
-        // Only block if DB has a CCCD value AND it differs → same code, different person
         if (
             existingLecturer &&
             existingLecturer.idCardNumber &&
@@ -210,6 +237,50 @@ app.openapi(importLecturer, async (c) => {
                     const existingProfileId = existingProfileMap.get(lecturer.idCardNumber)
                     try {
                         if (existingProfileId) {
+                            const existing = existingLecturerMap.get(lecturer.code)
+                            if (existing) {
+                                const existingLecturerData = await tx.lecturer.findUnique({
+                                    where: { id: existing.id },
+                                    include: { userProfile: true },
+                                })
+
+                                if (existingLecturerData) {
+                                    const validationErrors: string[] = []
+
+                                    const existingProfile = existingLecturerData.userProfile
+                                    if (
+                                        existingProfile.firstName &&
+                                        profileData.firstName !== existingProfile.firstName
+                                    ) {
+                                        validationErrors.push(
+                                            `Không được đổi Tên (hiện tại: "${existingProfile.firstName}")`
+                                        )
+                                    }
+                                    if (
+                                        existingProfile.lastName &&
+                                        profileData.lastName !== existingProfile.lastName
+                                    ) {
+                                        validationErrors.push(
+                                            `Không được đổi Họ và đệm (hiện tại: "${existingProfile.lastName}")`
+                                        )
+                                    }
+                                    if (existingProfile.phoneNumber && profileData.phoneNumber !== existingProfile.phoneNumber) {
+                                        validationErrors.push(
+                                            `Không được đổi Số điện thoại (hiện tại: "${existingProfile.phoneNumber}")`
+                                        )
+                                    }
+
+                                    if (validationErrors.length > 0) {
+                                        importErrors.push({
+                                            code: lecturer.code,
+                                            name: lecturer.fullname,
+                                            error: validationErrors.join('; '),
+                                        })
+                                        continue
+                                    }
+                                }
+                            }
+
                             const payload = {
                                 Id: existingProfileId,
                                 sMa: lecturer.code,
@@ -237,7 +308,6 @@ app.openapi(importLecturer, async (c) => {
                                 },
                             })
 
-                            const existing = existingLecturerMap.get(lecturer.code)
                             if (existing) {
                                 if (res.status === 200) {
                                     await tx.lecturer.update({
@@ -249,20 +319,26 @@ app.openapi(importLecturer, async (c) => {
                                     })
                                 } else {
                                     const extra = res.data?.extra as ErrorExtra | undefined
-                                    const errMsg =
-                                        extra?.message ||
-                                        [extra?.code, extra?.data].join(' ') ||
-                                        `LSB API error: ${res.status}`
+                                    const friendlyError = extra?.message || formatLSBError(extra?.data) || `Lỗi hệ thống (${res.status})`;
                                     importErrors.push({
                                         code: lecturer.code,
                                         name: lecturer.fullname,
-                                        error: errMsg,
+                                        error: friendlyError,
                                     })
                                 }
                             } else {
-                                // Profile exists but lecturer record doesn't - need to create lecturer
+                                const lecturerByCCCD = existingLecturerByCCCDMap.get(lecturer.idCardNumber)
+                                
+                                if (lecturerByCCCD) {
+                                    importErrors.push({
+                                        code: lecturer.code,
+                                        name: lecturer.fullname,
+                                        error: `CCCD "${lecturer.idCardNumber}" đã liên kết với giảng viên mã "${lecturerByCCCD.code}". Không thể tạo giảng viên mới hoặc đổi mã GV với CCCD này.`,
+                                    })
+                                    continue
+                                }
+                                
                                 if (res.status === 200) {
-                                    // Validate res.data is a string ID before using it
                                     if (typeof res.data !== 'string' || !res.data) {
                                         const errMsg = `LSB trả về dữ liệu không hợp lệ (mã GV: ${lecturer.code})`
                                         importErrors.push({
@@ -287,18 +363,11 @@ app.openapi(importLecturer, async (c) => {
                                     }
                                 } else {
                                     const extra = res.data?.extra as ErrorExtra | undefined
-                                    const errMsg =
-                                        extra?.message ||
-                                        [extra?.code, extra?.data].join(' ') ||
-                                        `LSB API error: ${res.status}`
-                                    console.error(
-                                        `[LSB update User ERROR] Code: ${lecturer.code} | Status: ${res.status} | Error:`,
-                                        errMsg
-                                    )
+                                    const friendlyError = extra?.message || formatLSBError(extra?.data) || `Lỗi hệ thống (${res.status})`;
                                     importErrors.push({
                                         code: lecturer.code,
                                         name: lecturer.fullname,
-                                        error: errMsg,
+                                        error: friendlyError,
                                     })
                                 }
                             }
@@ -359,23 +428,17 @@ app.openapi(importLecturer, async (c) => {
                                 }
                             } else {
                                 const extra = res.data?.extra as ErrorExtra | undefined
-                                const errMsg =
-                                    extra?.message ||
-                                    [extra?.code, extra?.data].join(' ') ||
-                                    `LSB API error: ${res.status}`
+                                const friendlyError = extra?.message || formatLSBError(extra?.data) || `Lỗi hệ thống (${res.status})`;
                                 importErrors.push({
                                     code: lecturer.code,
                                     name: lecturer.fullname,
-                                    error: errMsg,
+                                    error: friendlyError,
                                 })
                             }
                         }
                     } catch (error) {
                         const errMsg = error instanceof Error ? error.message : String(error)
-                        console.error(
-                            `[IMPORT ERROR] Code: ${lecturer.code} | Name: ${lecturer.fullname} | CCCD: ${lecturer.idCardNumber}`
-                        )
-                        console.error(error)
+                       
                         importErrors.push({
                             code: lecturer.code,
                             name: lecturer.fullname,
