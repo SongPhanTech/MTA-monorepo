@@ -35,7 +35,7 @@ import TrainingScoreApp from './api/training-score'
 import UserProfileApp from './api/user-profile'
 import { checkIp } from './middlewares/check-ip'
 import { setupOpenApi } from './utils/openapi'
-
+import VersionApp from './api/public.version'
 dayjs.extend(utc)
 dayjs.extend(timezone)
 
@@ -107,7 +107,7 @@ app.route('/api/exam', ExamApp)
 app.route('/api/exam-score', ExamScoreApp)
 app.route('/api/student-result', ExportStudentSemesterResultApp)
 app.route('/api/student-result', ExportStudentYearResultApp)
-
+app.route('/api/version', VersionApp)
 const nv = await prisma.userProfile.findFirstOrThrow()
 
 app.use(
