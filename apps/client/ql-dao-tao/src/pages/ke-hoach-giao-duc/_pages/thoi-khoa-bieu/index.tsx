@@ -668,10 +668,10 @@ export default function ThoiKhoaBieu({
                                     width: 150,
                                     type: 'select',
                                     options: options,
-                                    render: (__, record) =>
-                                        !!record.submitLecturerAssignmentAt &&
-                                        record.examType &&
-                                        getExamTypeLabel(record.examType),
+                                    render: (__, record) => {
+                                        const examType = getExamTypeLabel(record?.examType);
+                                        return <div>{examType}</div>
+                                    }
                                 },
                                 {
                                     title: 'Khu vực',
@@ -687,7 +687,7 @@ export default function ThoiKhoaBieu({
                                     title: 'Phòng học',
                                     align: 'center',
                                     width: 200,
-                                    render: (_, record) => record?.room?.name || '',
+                                    render: (_, record) => <div>{record?.room?.name || ''}</div>,
                                 },
                                 {
                                     title: 'Ngày thi',

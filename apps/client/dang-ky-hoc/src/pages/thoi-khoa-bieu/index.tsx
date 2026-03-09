@@ -387,10 +387,10 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
                                 width: 150,
                                 type: 'select',
                                 options: options,
-                                render: (__, record) =>
-                                    !!record.submitLecturerAssignmentAt &&
-                                    record.examType &&
-                                    getExamTypeLabel(record.examType),
+                                render: (__, record) =>{
+                                    const examType = getExamTypeLabel(record?.examType)
+                                    return <div>{examType}</div>
+                                }
                             },
                             {
                                 title: 'Khu vực',
