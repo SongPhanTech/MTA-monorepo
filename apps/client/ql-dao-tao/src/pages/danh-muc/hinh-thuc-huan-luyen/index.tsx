@@ -137,14 +137,14 @@ export default function TrainingFormPage({ trainingCourse }: { trainingCourse?: 
                             },
                             {
                                 title: 'Mã hình thức huấn luyện',
-                                align: 'center',
+                                align: 'left',
                                 width: 250,
                                 dataIndex: 'code',
                                 type: 'input',
                             },
                             {
                                 title: 'Tên hình thức huấn luyện',
-                                align: 'center',
+                                align: 'left',
                                 dataIndex: 'name',
                                 type: 'input',
                             },

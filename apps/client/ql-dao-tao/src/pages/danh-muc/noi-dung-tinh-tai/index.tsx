@@ -138,25 +138,25 @@ export default function NoiDungTinhTaiPage() {
                             {
                                 title: 'Tên nội dung tính tải',
                                 dataIndex: 'name',
-                                align: 'center',
+                                align: 'left',
                                 type: 'input',
                             },
                             {
                                 title: 'Loại nội dung tính tải',
                                 dataIndex: 'category',
-                                align: 'center',
+                                align: 'left',
                                 type: 'input',
                             },
                             {
                                 title: 'Đơn vị tính tải',
                                 dataIndex: 'unit',
-                                align: 'center',
+                                align: 'left',
                                 type: 'input',
                             },
                             {
                                 title: 'Số quy giờ chuẩn',
                                 dataIndex: 'standardHours',
-                                align: 'center',
+                                align: 'right',
                                 type: 'input',
                             },
                             {

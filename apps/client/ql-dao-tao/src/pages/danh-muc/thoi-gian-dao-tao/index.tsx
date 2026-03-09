@@ -136,14 +136,14 @@ export default function TrainingTimePage() {
                             },
                             {
                                 title: 'Mã thời gian đào tạo',
-                                align: 'center',
+                                align: 'left',
                                 width: 250,
                                 dataIndex: 'code',
                                 type: 'input',
                             },
                             {
                                 title: 'Tên thời gian đào tạo',
-                                align: 'center',
+                                align: 'left',
                                 dataIndex: 'name',
                                 type: 'input',
                             },

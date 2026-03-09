@@ -130,14 +130,14 @@ export default function TrainingLanguage() {
                             },
                             {
                                 title: 'Mã',
-                                align: 'center',
+                                align: 'left',
                                 width: 250,
                                 dataIndex: 'code',
                                 type: 'input',
                             },
                             {
                                 title: 'Tên',
-                                align: 'center',
+                                align: 'left',
                                 dataIndex: 'name',
                                 type: 'input',
                             },
