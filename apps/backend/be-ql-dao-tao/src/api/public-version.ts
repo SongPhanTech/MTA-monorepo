@@ -18,7 +18,6 @@ const getVersionRoute = createRoute({
                     name: 'appCode',
                     in: 'path',
                 },
-                example: 'mta',
             }),
         }),
     },
@@ -49,6 +48,8 @@ const getVersionRoute = createRoute({
 app.openapi(getVersionRoute, async (c) => {
     const { appCode } = c.req.valid('param')
     const secret = APP_SECRET_MAP[appCode]
+    console.log('Received request for version with appCode:', appCode)
+    console.log('Retrieved secret for appCode:', secret ? 'Found' : 'Not found')
     if (!secret || !secret.clientId || !secret.secretKey) {
         return c.json({ message: 'Invalid appCode or missing secret' }, 400)
     }

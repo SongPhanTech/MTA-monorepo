@@ -14,13 +14,19 @@ import { type ReactNode, useMemo } from 'react'
 import { IdleTimerProvider } from 'react-idle-timer'
 import HeaderApp from '@/components/header'
 //import packageInfo from '../../../package.json'
-
+import {useGetVersion} from '@workspace/libs/api/training'
 const { Header, Content, Footer } = Layout
 interface BreadcrumbListProps {
     title: string
     href?: string
 }
-
+type Version = {
+  Id: string
+  sTenVersion: string
+  sDescription: string
+  dNgayPhatHanh: string
+}
+const APP_CODE = "lms"
 const DefaultLayout = ({
     children,
     className,
@@ -64,7 +70,10 @@ const DefaultLayout = ({
                 ]
               : []
     }, [breadcrumb, breadcrumbList])
-
+        const { data: versionData } = useGetVersion(APP_CODE)
+    const version = Array.isArray(versionData)
+  ? versionData[0]?.sTenVersion
+  : undefined
     const menus = useMenuList()
 
     const menusFlat = menus.flatten('children')
@@ -137,7 +146,7 @@ const DefaultLayout = ({
                         Học viện Kỹ thuật Quân sự - Địa chỉ: Số 236, Hoàng Quốc Việt, Cầu Giấy, Hà
                         Nội
                     </div>
-                    <div className="ml-auto">Phiên bản: </div>
+                    <div className="ml-auto">Phiên bản: {version ?? '...'}</div>
                 </Footer>
             </Layout>
         </IdleTimerProvider>
