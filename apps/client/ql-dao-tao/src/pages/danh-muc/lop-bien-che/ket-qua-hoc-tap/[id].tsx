@@ -524,7 +524,7 @@ export default function StudentScoreClassPage() {
                     },
                 },
                 include: {
-                    subject:true,
+                    subject: true,
                     subjectClassStudent: {
                         where: subjectScoreWhere,
                         include: {
@@ -736,7 +736,7 @@ export default function StudentScoreClassPage() {
                                     width: 120,
                                     render: (_, record: any) => {
                                         return record?.subject?.code || ''
-                                    }
+                                    },
                                 },
                                 {
                                     title: 'Tên môn học',

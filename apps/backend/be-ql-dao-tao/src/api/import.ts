@@ -263,7 +263,8 @@ app.openapi(importLecturer, async (c) => {
                                             `Không được đổi Họ và đệm (hiện tại: "${existingProfile.lastName}")`
                                         )
                                     }
-                                    if (existingProfile.phoneNumber &&
+                                    if (
+                                        existingProfile.phoneNumber &&
                                         profileData.phoneNumber !== existingProfile.phoneNumber
                                     ) {
                                         validationErrors.push(
@@ -330,8 +331,10 @@ app.openapi(importLecturer, async (c) => {
                                     })
                                 }
                             } else {
-                                const lecturerByCCCD = existingLecturerByCCCDMap.get(lecturer.idCardNumber)
-                                
+                                const lecturerByCCCD = existingLecturerByCCCDMap.get(
+                                    lecturer.idCardNumber
+                                )
+
                                 if (lecturerByCCCD) {
                                     importErrors.push({
                                         code: lecturer.code,
@@ -340,7 +343,7 @@ app.openapi(importLecturer, async (c) => {
                                     })
                                     continue
                                 }
-                                
+
                                 if (res.status === 200) {
                                     if (typeof res.data !== 'string' || !res.data) {
                                         const errMsg = `LSB trả về dữ liệu không hợp lệ (mã GV: ${lecturer.code})`

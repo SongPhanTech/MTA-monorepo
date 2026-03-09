@@ -9,9 +9,19 @@ function getEnv(name: string): string {
 }
 
 export const env = {
-    MTA_API_URL: getEnv('MTA_API_URL'),
-    LMS_CLIENT_ID: getEnv('LMS_CLIENT_ID'),
-    LMS_SECRET_KEY: getEnv('LMS_SECRET_KEY'),
-    HRM_CLIENT_ID: getEnv('HRM_CLIENT_ID'),
-    HRM_CLIENT_SECRET: getEnv('HRM_CLIENT_SECRET'),
+    get MTA_API_URL() {
+        return getEnv('MTA_API_URL')
+    },
+    get LMS_CLIENT_ID() {
+        return getEnv('LMS_CLIENT_ID')
+    },
+    get LMS_SECRET_KEY() {
+        return getEnv('LMS_SECRET_KEY')
+    },
+    get HRM_CLIENT_ID() {
+        return getEnv('HRM_CLIENT_ID')
+    },
+    get HRM_CLIENT_SECRET() {
+        return getEnv('HRM_CLIENT_SECRET')
+    },
 }

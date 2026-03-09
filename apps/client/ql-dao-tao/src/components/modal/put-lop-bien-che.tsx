@@ -304,7 +304,7 @@ const PutFixedClassModal = () => {
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (oldFixedClass) {
-            form.setFieldsValue({                 ...oldFixedClass             })
+            form.setFieldsValue({ ...oldFixedClass })
         } else {
             form.setFieldsValue({
                 graduated: false,

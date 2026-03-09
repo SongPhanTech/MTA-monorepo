@@ -315,11 +315,7 @@ const PutCertificateArchivedModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={
-                id
-                    ? 'Chỉnh sửa điểm rèn luyện'
-                    : 'Thêm mới điểm rèn luyện'
-            }
+            title={id ? 'Chỉnh sửa điểm rèn luyện' : 'Thêm mới điểm rèn luyện'}
             className="w-[95vw]"
         >
             <Col span={12} className="mb-4">
