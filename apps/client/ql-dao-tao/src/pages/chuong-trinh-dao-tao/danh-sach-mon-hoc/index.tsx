@@ -24,8 +24,10 @@ import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Form, Input, message, Popconfirm, Row, Tooltip, Typography } from 'antd'
 import _ from 'lodash'
-import { BookPlus, History, LockKeyhole, LockKeyholeOpen, Search } from 'lucide-react'
+import { BookPlus, Download, History, LockKeyhole, LockKeyholeOpen, Search } from 'lucide-react'
 import type React from 'react'
+import * as XLSX from 'xlsx'
+import { saveAs } from 'file-saver'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export default function SubjectList() {
@@ -332,7 +334,53 @@ export default function SubjectList() {
             hideSpinner()
         }
     }
+    const handleExportExcel = () => {
+        if (!SubjectData?.length) {
+            message.warning('Không có dữ liệu để xuất')
+            return
+        }
 
+        const dataExport: any[] = []
+
+        SubjectData.forEach((subject: any) => {
+            subject.subjectVersion?.forEach((version: any) => {
+                dataExport.push({
+                    'Nhóm môn': subject.name,
+                    'Đơn vị quản lý': subject.managementOrganization?.sTen || '',
+                    'Mã môn học': version.code,
+                    'Tên môn học': version.name,
+                    'Mã TKB': version.codeTkb,
+                    'Số tín chỉ': version.credit,
+                    'Số tiết': version.period,
+                    'Lý thuyết': version.numberOfTheory,
+                    'Bài tập': version.numberOfPractical,
+                    'Thảo luận': version.numberOfSelfStudy,
+                    'Thực hành': version.numberOfPractice,
+                    Ôn: version.numberOfReview,
+                    Thi: version.numberOfExam,
+                    'Hình thức thi': getExamTypeLabel(version.examType),
+                    'Mô tả': version.description,
+                    'Đã mở LMH': version.subjectClass?.length ? 'Có' : 'Chưa',
+                })
+            })
+        })
+
+        const worksheet = XLSX.utils.json_to_sheet(dataExport)
+
+        const workbook = XLSX.utils.book_new()
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'DanhSachMonHoc')
+
+        const excelBuffer = XLSX.write(workbook, {
+            bookType: 'xlsx',
+            type: 'array',
+        })
+
+        const blob = new Blob([excelBuffer], {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8',
+        })
+
+        saveAs(blob, 'DanhSachMonHoc.xlsx')
+    }
     const handleFilterChange = (key: string, value: string | ExamType[] | boolean) => {
         setFilters((prev) => {
             const newFilters = { ...prev, [key]: value }
@@ -411,6 +459,10 @@ export default function SubjectList() {
                             <Flex justify="end" gap={4}>
                                 <Button onClick={() => setExpandAll(!expandAll)}>
                                     {expandAll ? 'Thu gọn' : 'Mở rộng'}
+                                </Button>
+                                <Button type="primary" onClick={handleExportExcel}>
+                                    <Download />
+                                    Xuất DS môn học
                                 </Button>
                                 {can(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_QL_MON_HOC,
