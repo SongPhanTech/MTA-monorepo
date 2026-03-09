@@ -13469,36 +13469,42 @@ export type getVersionResponseError = getVersionResponse400 & {
 
 export type getVersionResponse = getVersionResponseSuccess | getVersionResponseError
 
-export const getGetVersionUrl = () => {
-    return `/api/version/:appCode`
+export const getGetVersionUrl = (appCode: string) => {
+    return `/api/version/${appCode}`
 }
 
-export const getVersion = async (options?: RequestInit): Promise<getVersionResponse> => {
-    return customTrainingFetch<getVersionResponse>(getGetVersionUrl(), {
+export const getVersion = async (
+    appCode: string,
+    options?: RequestInit
+): Promise<getVersionResponse> => {
+    return customTrainingFetch<getVersionResponse>(getGetVersionUrl(appCode), {
         ...options,
         method: 'GET',
     })
 }
 
-export const getGetVersionQueryKey = () => {
-    return [`/api/version/:appCode`] as const
+export const getGetVersionQueryKey = (appCode?: string) => {
+    return [`/api/version/${appCode}`] as const
 }
 
 export const getGetVersionQueryOptions = <
     TData = Awaited<ReturnType<typeof getVersion>>,
     TError = GetVersion400,
->(options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersion>>, TError, TData>>
-    request?: SecondParameter<typeof customTrainingFetch>
-}) => {
+>(
+    appCode: string,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersion>>, TError, TData>>
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
     const { query: queryOptions, request: requestOptions } = options ?? {}
 
-    const queryKey = queryOptions?.queryKey ?? getGetVersionQueryKey()
+    const queryKey = queryOptions?.queryKey ?? getGetVersionQueryKey(appCode)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getVersion>>> = ({ signal }) =>
-        getVersion({ signal, ...requestOptions })
+        getVersion(appCode, { signal, ...requestOptions })
 
-    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    return { queryKey, queryFn, enabled: !!appCode, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getVersion>>,
         TError,
         TData
@@ -13512,6 +13518,7 @@ export function useGetVersion<
     TData = Awaited<ReturnType<typeof getVersion>>,
     TError = GetVersion400,
 >(
+    appCode: string,
     options: {
         query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersion>>, TError, TData>> &
             Pick<
@@ -13530,6 +13537,7 @@ export function useGetVersion<
     TData = Awaited<ReturnType<typeof getVersion>>,
     TError = GetVersion400,
 >(
+    appCode: string,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersion>>, TError, TData>> &
             Pick<
@@ -13548,6 +13556,7 @@ export function useGetVersion<
     TData = Awaited<ReturnType<typeof getVersion>>,
     TError = GetVersion400,
 >(
+    appCode: string,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersion>>, TError, TData>>
         request?: SecondParameter<typeof customTrainingFetch>
@@ -13559,13 +13568,14 @@ export function useGetVersion<
     TData = Awaited<ReturnType<typeof getVersion>>,
     TError = GetVersion400,
 >(
+    appCode: string,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersion>>, TError, TData>>
         request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getGetVersionQueryOptions(options)
+    const queryOptions = getGetVersionQueryOptions(appCode, options)
 
     const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
         queryKey: DataTag<QueryKey, TData, TError>

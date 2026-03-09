@@ -2078,7 +2078,8 @@ const CheckDecreaseAcademicWarning = (
 
     if (baseScore === 'Base10') {
         isImproved =
-            typeof student.diemTrungBinh10 === 'number' && student.diemTrungBinh10 >= scoreToImprove10
+            typeof student.diemTrungBinh10 === 'number' &&
+            student.diemTrungBinh10 >= scoreToImprove10
     } else {
         isImproved =
             typeof student.diemTrungBinh4 === 'number' && student.diemTrungBinh4 >= scoreToImprove4
@@ -2255,7 +2256,7 @@ export const resultCourseStudentAcademicWarning = async (
             active: true,
         },
     })
-    
+
     await Promise.all(
         students.map(async (student) => {
             const courseId = student.khoaId
