@@ -687,7 +687,7 @@ export default function ThoiKhoaBieu({
                                     title: 'Phòng học',
                                     align: 'center',
                                     width: 200,
-                                    render: (_, record) => record?.room?.name || '',
+                                    render: (_, record) => <div>{record?.room?.name || ''}</div>,
                                 },
                                 {
                                     title: 'Ngày thi',
