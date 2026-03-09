@@ -290,7 +290,7 @@ export const exportStudentAcademicWarning = async ({
             const result: any = student.studentSemesterResult
             const gpaSemester = result?.gpaBase10 || 0
             const trainingPoint = result?.conductScore || 0
-            const academicClassification = result?.academicClassification || ''
+            // const academicClassification = result?.academicClassification || ''
 
             // Reason for warning
             const reason = student.reason || ''
@@ -303,7 +303,7 @@ export const exportStudentAcademicWarning = async ({
                 courseName,
                 gpaSemester,
                 trainingPoint,
-                academicClassification,
+                // academicClassification,
                 reason,
             })
         }
@@ -324,7 +324,7 @@ export const exportStudentAcademicWarning = async ({
         { header: 'Khoá', key: 'courseName', width: 15 },
         { header: 'ĐTB Học kỳ', key: 'gpaSemester', width: 15 },
         { header: 'ĐRL', key: 'trainingPoint', width: 10 },
-        { header: 'Xếp loại HT', key: 'academicClassification', width: 15 },
+        // { header: 'Xếp loại HT', key: 'academicClassification', width: 15 },
         { header: 'Lý do', key: 'reason', width: 40 },
     ]
 

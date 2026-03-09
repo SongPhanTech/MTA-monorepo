@@ -551,7 +551,7 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
                             pagination={{
                                 current: currentPage,
                                 pageSize: numberOfPages,
-                                total: studentData.reduce(
+                                total: filteredStudentData.reduce(
                                     (acc, course) => acc + (course.students?.length || 0),
                                     0
                                 ),
