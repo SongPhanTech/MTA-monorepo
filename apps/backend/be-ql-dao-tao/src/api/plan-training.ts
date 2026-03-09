@@ -434,7 +434,7 @@ const importFileGiaoVienCoGioGiay = async (
                                 scheduleInfo.ngayHoc && scheduleInfo.tietHoc
                                     ? {
                                           create: {
-                                              roomId: existSubjectClass.roomId,
+                                              roomId: subjectClass.phongHoc ?? existSubjectClass.roomId,
                                               classDate: scheduleInfo.ngayHoc,
                                               startPeriod: scheduleInfo.tietHoc[0]
                                                   ? Number(scheduleInfo.tietHoc[0])
