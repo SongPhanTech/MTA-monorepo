@@ -9,7 +9,7 @@ import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
-import { $Enums, type StudentSemesterResult } from '@workspace/db'
+// import { $Enums, type StudentSemesterResult } from '@workspace/db'
 import type { ScholarshipAward } from '@workspace/db/client'
 import {
     useCountTrainingCourse,
@@ -136,6 +136,16 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
                             student: {
                                 include: {
                                     userProfile: true,
+                                    studentSemesterResult: {
+                                        where: { semesterId },
+                                        take: 1,
+                                    },
+                                    fixedClass: {
+                                        select: {
+                                            code: true,
+                                            name: true,
+                                        },
+                                    },
                                 },
                             },
                             scholarship: true,
@@ -205,7 +215,7 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
         if (students.data && Array.isArray(students.data)) return students.data
         return []
     }, [students])
-
+    console.log('studentData:', studentData)
     const transformedTrainingCourses = useMemo(() => {
         if (!studentDataAward || !Array.isArray(studentDataAward)) return []
 
@@ -234,6 +244,7 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
             }
         })
     }, [studentDataAward])
+    console.log('transformedTrainingCourses:', transformedTrainingCourses)
 
     const { data: count } = useCountTrainingCourse({
         where: {
@@ -515,11 +526,46 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
                                                         : ''
                                                 },
                                             },
+                                            // {
+                                            //     title: 'GPA',
+                                            //     dataIndex: ['gpaAtAward'],
+                                            //     width: 120,
+                                            //     align: 'center',
+                                            // },
                                             {
-                                                title: 'GPA',
-                                                dataIndex: ['gpaAtAward'],
+                                                title: 'Điểm hệ 4',
+                                                width: 80,
+                                                align: 'center',
+                                                render: (_, record) =>
+                                                    record?.student?.studentSemesterResult?.[0]
+                                                        ?.gpaBase4
+                                                        ? Number(
+                                                              record.student
+                                                                  .studentSemesterResult[0].gpaBase4
+                                                          ).toFixed(2)
+                                                        : '-',
+                                            },
+                                            {
+                                                title: 'Điểm hệ 10',
+                                                width: 80,
+                                                align: 'center',
+                                                render: (_, record) =>
+                                                    record?.student?.studentSemesterResult?.[0]
+                                                        ?.gpaBase10
+                                                        ? Number(
+                                                              record.student
+                                                                  .studentSemesterResult[0]
+                                                                  .gpaBase10
+                                                          ).toFixed(2)
+                                                        : '-',
+                                            },
+                                            {
+                                                title: 'Điểm rèn luyện',
                                                 width: 120,
                                                 align: 'center',
+                                                render: (_, record) =>
+                                                    record?.student?.studentSemesterResult?.[0]
+                                                        ?.conductScore ?? '-',
                                             },
                                             {
                                                 title: 'Số tiền học bổng',
@@ -691,16 +737,46 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
                                                 align: 'center',
                                             },
                                             {
-                                                title: 'TBHK',
-                                                dataIndex: ['studentSemesterResult'],
-                                                width: 40,
+                                                title: 'Điểm hệ 4',
+                                                width: 80,
                                                 align: 'center',
-                                                render: (result?: StudentSemesterResult) =>
-                                                    result?.baseScore ===
-                                                    $Enums.AcademicRankingBaseType.Base10
-                                                        ? Number(result.gpaBase10)
-                                                        : Number(result?.gpaBase4 || 0),
+                                                render: (_, record) =>
+                                                    record?.studentSemesterResult?.gpaBase4
+                                                        ? Number(
+                                                              record.studentSemesterResult.gpaBase4
+                                                          ).toFixed(2)
+                                                        : '-',
                                             },
+                                            {
+                                                title: 'Điểm hệ 10',
+                                                width: 80,
+                                                align: 'center',
+                                                render: (_, record) =>
+                                                    record?.studentSemesterResult?.gpaBase10
+                                                        ? Number(
+                                                              record.studentSemesterResult.gpaBase10
+                                                          ).toFixed(2)
+                                                        : '-',
+                                            },
+                                            {
+                                                title: 'Điểm rèn luyện',
+                                                width: 120,
+                                                align: 'center',
+                                                render: (_, record) =>
+                                                    record?.studentSemesterResult?.conductScore ??
+                                                    '-',
+                                            },
+                                            // {
+                                            //     title: 'TBHK',
+                                            //     dataIndex: ['studentSemesterResult'],
+                                            //     width: 40,
+                                            //     align: 'center',
+                                            //     render: (result?: StudentSemesterResult) =>
+                                            //         result?.baseScore ===
+                                            //         $Enums.AcademicRankingBaseType.Base10
+                                            //             ? Number(result.gpaBase10)
+                                            //             : Number(result?.gpaBase4 || 0),
+                                            // },
                                             // {
                                             //     title: 'Xếp loại rèn luyện',
                                             //     dataIndex: [
