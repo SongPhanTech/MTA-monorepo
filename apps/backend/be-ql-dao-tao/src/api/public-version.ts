@@ -1,6 +1,6 @@
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
 import { z } from 'zod'
-import { getVersionApps } from '../services/version.service'
+import { getVersionApps } from '../services/version-service'
 import { APP_SECRET_MAP } from '../config/mta.config'
 
 const app = new OpenAPIHono()
