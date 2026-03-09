@@ -15,7 +15,7 @@ export const useThesisProjectStatusOptions = () => {
             color: 'cyan',
         },
         { value: ThesisProjectStatus.ASSIGNED, label: 'Đã giao cho SV', color: 'purple' },
-        { value: ThesisProjectStatus.IN_PROGRESS, label: 'Đang thực hiện', color: 'orange' },
+        { value: ThesisProjectStatus.IN_PROGRESS, label: 'Kiểm tra tiến độ', color: 'orange' },
         {
             value: ThesisProjectStatus.DEFENSE_ELIGIBLE,
             label: 'Đủ điều kiện bảo vệ',
