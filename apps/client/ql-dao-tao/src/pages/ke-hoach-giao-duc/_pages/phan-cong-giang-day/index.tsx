@@ -1388,7 +1388,8 @@ export default function PhanCongGiangDay({
                                                         templateUrl: getMinioUrl(
                                                             '/mta/template/ke-hoach-dao-tao/bao-day.xlsx'
                                                         ),
-                                                        fileName: `Bao_day_${dayjs().format('DD_MM_YYYY')}.xlsx`,
+                                                        extension: "xls",
+                                                        fileName: `Bao_day_${dayjs().format('DD_MM_YYYY')}.xls`,
                                                         fontFamily: 'Tahoma',
                                                         fontSize: 9,
                                                         sheets: Object.entries(groupedPayload).map(
