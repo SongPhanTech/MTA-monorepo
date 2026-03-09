@@ -317,8 +317,8 @@ const PutCertificateArchivedModal = () => {
             maskClosable={true}
             title={
                 id
-                    ? 'Chỉnh sửa đơn phiên điểm chứng chỉ cho môn học'
-                    : 'Thêm mới đơn phiên điểm chứng chỉ cho môn học'
+                    ? 'Chỉnh sửa điểm rèn luyện'
+                    : 'Thêm mới điểm rèn luyện'
             }
             className="w-[95vw]"
         >

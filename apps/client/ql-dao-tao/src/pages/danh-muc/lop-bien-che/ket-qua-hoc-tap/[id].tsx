@@ -524,6 +524,7 @@ export default function StudentScoreClassPage() {
                     },
                 },
                 include: {
+                    subject:true,
                     subjectClassStudent: {
                         where: subjectScoreWhere,
                         include: {
@@ -729,11 +730,13 @@ export default function StudentScoreClassPage() {
                                 {
                                     title: 'Mã môn học',
                                     align: 'center',
-
                                     dataIndex: 'code',
                                     type: 'input',
                                     fixed: 'left',
                                     width: 120,
+                                    render: (_, record: any) => {
+                                        return record?.subject?.code || ''
+                                    }
                                 },
                                 {
                                     title: 'Tên môn học',
