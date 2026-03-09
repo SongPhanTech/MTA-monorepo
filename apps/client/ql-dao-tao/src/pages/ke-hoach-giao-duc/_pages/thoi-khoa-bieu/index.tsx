@@ -669,9 +669,9 @@ export default function ThoiKhoaBieu({
                                     type: 'select',
                                     options: options,
                                     render: (__, record) => {
-                                        const examType = getExamTypeLabel(record?.examType);
+                                        const examType = getExamTypeLabel(record?.examType)
                                         return <div>{examType}</div>
-                                    }
+                                    },
                                 },
                                 {
                                     title: 'Khu vực',
