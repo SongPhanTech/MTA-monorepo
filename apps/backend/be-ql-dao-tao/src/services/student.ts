@@ -270,10 +270,25 @@ export const exportStudentAcademicWarning = async ({
 
     const filteredCourseStudents = await resultCourseStudentAcademicWarning(students, semesterId)
 
-    // Flatten data
+    const approvedWarnings = await prisma.academicWarning.findMany({
+        where: {
+            semesterId: semesterId,
+        },
+        select: {
+            studentId: true,
+        },
+    })
+
+    const approvedStudentIds = new Set(approvedWarnings.map(w => w.studentId))
+
     const rows = []
     for (const courseItem of filteredCourseStudents) {
         for (const student of courseItem.students) {
+            
+            if (approvedStudentIds.has(student.id)) {
+                continue
+            }
+
             // Get general student info
             const studentName =
                 (student.userProfile as any)?.fullname ||
@@ -290,7 +305,6 @@ export const exportStudentAcademicWarning = async ({
             const result: any = student.studentSemesterResult
             const gpaSemester = result?.gpaBase10 || 0
             const trainingPoint = result?.conductScore || 0
-            // const academicClassification = result?.academicClassification || ''
 
             // Reason for warning
             const reason = student.reason || ''
@@ -303,7 +317,6 @@ export const exportStudentAcademicWarning = async ({
                 courseName,
                 gpaSemester,
                 trainingPoint,
-                // academicClassification,
                 reason,
             })
         }
