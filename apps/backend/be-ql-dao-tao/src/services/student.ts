@@ -1,6 +1,8 @@
 import { TrainingObjectTypes } from '@workspace/db'
 import { getTemplateBuffer } from '@workspace/libs/server'
 import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+import timezone from 'dayjs/plugin/timezone'
 import ExcelJS from 'exceljs'
 import XlsxTemplate from 'xlsx-template'
 import { prisma } from '..'
@@ -9,6 +11,9 @@ import {
     resultCourseStudentScholarship,
     resultCourseStudentAcademicWarning,
 } from './student-result.service'
+
+dayjs.extend(utc)
+dayjs.extend(timezone)
 
 export async function exportStudentProfile({ trainingCourseId }: { trainingCourseId: string }) {
     const trainingCourse = await prisma.trainingCourse.findUniqueOrThrow({
@@ -491,7 +496,7 @@ export const exportArchivedCertificate = async ({
             studentName: userProfile?.fullname || '',
             // phoneNumber: userProfile?.phoneNumber || '',
             dateOfBirth: userProfile?.dateOfBirth
-                ? `'${dayjs(userProfile.dateOfBirth).format('DD/MM/YYYY')}`
+                ? `'${dayjs.utc(userProfile.dateOfBirth).local().format('DD/MM/YYYY')}`
                 : '',
             // fixedClassName: fixedClass?.name || '',
             // fixedClassCode: fixedClass?.code || '',
@@ -501,7 +506,9 @@ export const exportArchivedCertificate = async ({
             certificateName: item.certificate?.name || '',
             score: item.score ?? '',
             // decisionNumber: item.decisionNumber || '',
-            issuedDate: item.issuedDate ? `'${dayjs(item.issuedDate).format('DD/MM/YYYY')}` : '',
+            issuedDate: item.issuedDate 
+                ? `'${dayjs.utc(item.issuedDate).local().format('DD/MM/YYYY')}` 
+                : '',
             issuedBy: item.issuedBy || '',
             // expiredDate: item.expiredDate
             //     ? `'${dayjs(item.expiredDate).format('DD/MM/YYYY')}`
