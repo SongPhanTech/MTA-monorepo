@@ -35,7 +35,7 @@ import TrainingScoreApp from './api/training-score'
 import UserProfileApp from './api/user-profile'
 import { checkIp } from './middlewares/check-ip'
 import { setupOpenApi } from './utils/openapi'
-import VersionApp from './api/public.version'
+import VersionApp from './api/public-version'
 dayjs.extend(utc)
 dayjs.extend(timezone)
 
