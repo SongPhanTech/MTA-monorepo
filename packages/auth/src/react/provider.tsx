@@ -31,7 +31,7 @@ const SessionProvider: React.FC<{
             localStorage.setItem('lastPage', url)
         }
     }, [pathname, searchParams])
-
+    // console.log('SessionProvider rendered with session:', sessionState, 'and status:', status)
     return (
         <SessionContext.Provider
             value={{

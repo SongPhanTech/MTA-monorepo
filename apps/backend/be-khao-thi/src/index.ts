@@ -64,7 +64,6 @@ setupOpenApi(app)
 app.route('/api/exam', examApp)
 app.route('/api/survey', surveyApp)
 app.route('/api/cluster-survey', clusterSurveyApp)
-
 const nv = await prisma.userProfile.findFirstOrThrow()
 
 app.use(

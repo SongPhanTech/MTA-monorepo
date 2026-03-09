@@ -232,13 +232,13 @@ export default function TrainingObjectTypePage() {
                                 title: 'Tên đối tượng đào tạo',
                                 dataIndex: 'name',
                                 fixed: 'left',
-                                align: 'center',
+                                align: 'left',
                                 type: 'input',
                             },
                             {
                                 title: 'Loại',
                                 dataIndex: 'type',
-                                align: 'center',
+                                align: 'left',
                                 width: 200,
                                 type: 'select',
                                 options: Object.keys(TRAINING_OBJECT_TYPE).map((key) => {
@@ -261,7 +261,7 @@ export default function TrainingObjectTypePage() {
                                 title: 'Hình thức đào tạo',
                                 dataIndex: 'trainingFormId',
                                 fixed: 'left',
-                                align: 'center',
+                                align: 'left',
                                 type: 'select',
                                 options: mapFormData(),
                                 render: (__, record) => {
@@ -272,7 +272,7 @@ export default function TrainingObjectTypePage() {
                                 title: 'Bậc đào tạo',
                                 dataIndex: 'trainingLevelId',
                                 fixed: 'left',
-                                align: 'center',
+                                align: 'left',
                                 type: 'select',
                                 options: mapLevelData(),
                                 render: (__, record) => {

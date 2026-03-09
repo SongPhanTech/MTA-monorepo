@@ -165,14 +165,14 @@ export default function MilestonePage() {
                             },
                             {
                                 title: 'Nội dung',
-                                align: 'center',
+                                align: 'left',
                                 dataIndex: 'name',
                                 type: 'input',
                                 width: 150,
                             },
                             {
                                 title: 'Tiết bắt đầu',
-                                align: 'center',
+                                align: 'left',
                                 dataIndex: 'order',
                                 width: 100,
                                 type: 'order',
@@ -180,13 +180,13 @@ export default function MilestonePage() {
                             },
                             {
                                 title: 'Số tiết',
-                                align: 'center',
+                                align: 'right',
                                 dataIndex: 'period',
                                 width: 100,
                             },
                             {
                                 title: 'Năm học',
-                                align: 'center',
+                                align: 'left',
                                 dataIndex: 'schoolYearId',
                                 type: 'select',
                                 options: dataSchoolYear?.map(({ id, name }) => ({
@@ -199,7 +199,7 @@ export default function MilestonePage() {
                             },
                             {
                                 title: 'Ngày bắt đầu',
-                                align: 'center',
+                                align: 'left',
                                 width: 120,
                                 dataIndex: 'startDate',
                                 type: 'date',
@@ -210,7 +210,7 @@ export default function MilestonePage() {
                             },
                             {
                                 title: 'Ngày kết thúc',
-                                align: 'center',
+                                align: 'left',
                                 width: 120,
                                 dataIndex: 'endDate',
                                 type: 'date',
@@ -221,7 +221,7 @@ export default function MilestonePage() {
                             },
                             {
                                 title: 'Mô tả',
-                                align: 'center',
+                                align: 'left',
                                 dataIndex: 'description',
                                 width: 150,
                             },
