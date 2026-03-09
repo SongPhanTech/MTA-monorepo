@@ -7,15 +7,21 @@ const app = new OpenAPIHono()
 
 const getVersionRoute = createRoute({
     operationId: 'getVersion',
-    tags: ['Version'],
-    path: '/:appCode',
-    method: 'get',
+  tags: ['Version'],
+  method: 'get',
+  path: '/{appCode}',
 
-    request: {
-        params: z.object({
-            appCode: z.string(),
-        }),
-    },
+  request: {
+    params: z.object({
+      appCode: z.string().openapi({
+        param: {
+          name: 'appCode',
+          in: 'path',
+        },
+        example: 'mta',
+      }),
+    }),
+  },
 
     responses: {
         200: {
