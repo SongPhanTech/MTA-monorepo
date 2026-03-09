@@ -1,5 +1,5 @@
 import { PrinterOutlined } from '@ant-design/icons'
-import { GENDER_MEAN } from '@constants/constants'
+// import { GENDER_MEAN } from '@constants/constants'
 import type { DM_DonVi, FixedClass, Student, TrainingCourse } from '@workspace/db/client'
 import { Button, Modal } from 'antd'
 import dayjs from 'dayjs'
@@ -33,6 +33,9 @@ const ModalPrintToDSHV = () => {
             margin: 1cm;
         }
         @media print {
+            * {
+                color: black !important;
+            }
             .page-break {
                 page-break-after: always;
             }
@@ -186,12 +189,7 @@ const ModalPrintToDSHV = () => {
                                             : ''}
                                     </td>
                                     <td className="border border-black px-1 py-1 text-center">
-                                        {item?.userProfile?.gender
-                                            ? GENDER_MEAN[
-                                                  item?.userProfile
-                                                      ?.gender as keyof typeof GENDER_MEAN
-                                              ]
-                                            : ''}
+                                        {item?.userProfile?.gender?.sTen || ''}
                                     </td>
                                     <td className="border border-black px-1 py-1 text-center">
                                         {item?.fixedClass?.curriculumVersion?.curriculum
