@@ -760,7 +760,7 @@ export const calculateStudentSemesterResult = async (
                     student.id,
                     student.curriculumVersionId || student.fixedClass?.curriculumVersionId || '',
                     trainingCourseId,
-                    hocKyDauVao?.startDate || new Date() // Sử dụng ngày bắt đầu của học kỳ check
+                    hocKyDauVao?.endDate || new Date() 
                 )
 
                 if (!thongTinTichLuy) {
