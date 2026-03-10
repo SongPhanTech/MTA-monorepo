@@ -130,7 +130,7 @@ const PutAcademicWarningRule = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={12}>
+            {/* <Col span={12}>
                 <FormItem
                     form={form}
                     name="invert"
@@ -140,7 +140,7 @@ const PutAcademicWarningRule = () => {
                 >
                     <Checkbox />
                 </FormItem>
-            </Col>
+            </Col> */}
             <Col span={12}>
                 <FormItem form={form} label="So sánh" name="operator" required>
                     <Select

@@ -51,7 +51,7 @@ const PutRankingCondition = () => {
                 code: output?.code,
                 rankingId: input.rankingId,
                 field: output?.field,
-                invert: output?.invert,
+                // invert: output?.invert,
                 operator: output?.operator,
                 value: output?.value,
                 description: output?.description,
@@ -94,12 +94,12 @@ const PutRankingCondition = () => {
         if (initialValue) {
             form.setFieldsValue({
                 ...initialValue,
-                invert: initialValue.invert,
+                // invert: initialValue.invert,
             })
         } else {
             form.setFieldsValue({
                 active: true,
-                invert: false,
+                // invert: false,
             })
         }
     }, [initialValue, form])
@@ -126,7 +126,7 @@ const PutRankingCondition = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={12}>
+            {/* <Col span={12}>
                 <FormItem
                     form={form}
                     name="invert"
@@ -136,7 +136,7 @@ const PutRankingCondition = () => {
                 >
                     <Checkbox />
                 </FormItem>
-            </Col>
+            </Col> */}
             <Col span={12}>
                 <FormItem form={form} label="So sánh" name="operator" required>
                     <Select

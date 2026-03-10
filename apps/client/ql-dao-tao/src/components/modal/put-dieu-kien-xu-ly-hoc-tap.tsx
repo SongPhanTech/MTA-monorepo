@@ -82,11 +82,11 @@ const PutAcademicActionCondition = () => {
         if (initialValue) {
             form.setFieldsValue({
                 ...initialValue,
-                invert: initialValue.invert,
+                // invert: initialValue.invert,
                 isPriorityStudent: initialValue.isPriorityStudent,
             })
         } else {
-            form.setFieldsValue({ active: true, invert: false, isPriorityStudent: false })
+            form.setFieldsValue({ active: true, /* invert: false, */ isPriorityStudent: false })
         }
     }, [initialValue])
 
@@ -113,7 +113,7 @@ const PutAcademicActionCondition = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={8}>
+            {/* <Col span={8}>
                 <FormItem
                     form={form}
                     name="invert"
@@ -123,7 +123,7 @@ const PutAcademicActionCondition = () => {
                 >
                     <Checkbox />
                 </FormItem>
-            </Col>
+            </Col> */}
             <Col span={8}>
                 <FormItem form={form} label="So sánh" name="operator" required>
                     <Select

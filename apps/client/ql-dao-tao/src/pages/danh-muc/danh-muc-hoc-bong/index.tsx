@@ -252,19 +252,19 @@ export default function Scholarship() {
                                 options: criteriaFieldOptions,
                                 render: (value) => getCriteriaFieldLabel(value),
                             },
-                            // {
-                            //     title: 'Đảo ngược so sánh',
-                            //     dataIndex: 'invert',
-                            //     align: 'center',
-                            //     width: 80,
-                            //     render: (value) => {
-                            //         return (
-                            //             <div className="flex items-center justify-center">
-                            //                 <Checkbox checked={value} disabled />
-                            //             </div>
-                            //         )
-                            //     },
-                            // },
+                            /* {
+                                title: 'Đảo ngược so sánh',
+                                dataIndex: 'invert',
+                                align: 'center',
+                                width: 80,
+                                render: (value) => {
+                                    return (
+                                        <div className="flex items-center justify-center">
+                                            <Checkbox checked={value} disabled />
+                                        </div>
+                                    )
+                                },
+                            }, */
                             {
                                 title: 'So sánh',
                                 dataIndex: 'operator',

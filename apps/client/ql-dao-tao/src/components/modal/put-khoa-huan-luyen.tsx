@@ -332,7 +332,7 @@ const PutTrainingCourseModal = () => {
                                             create: dr.conditions.map((c) => ({
                                                 field: c.field,
                                                 operator: c.operator,
-                                                invert: c.invert,
+                                                // invert: c.invert,
                                                 value: c.value,
                                                 tuple: c.tuple,
                                             })),
@@ -343,7 +343,7 @@ const PutTrainingCourseModal = () => {
                                     create: e.rankingCondition.map((rc) => ({
                                         field: rc.field,
                                         operator: rc.operator,
-                                        invert: rc.invert,
+                                        // invert: rc.invert,
                                         value: rc.value,
                                         tuple: rc.tuple,
                                     })),
@@ -374,7 +374,7 @@ const PutTrainingCourseModal = () => {
                             create: selectedTrainingCourse?.academicWarningRule.map((awr) => ({
                                 field: awr.field,
                                 operator: awr.operator,
-                                invert: awr.invert,
+                                // invert: awr.invert,
                                 threshold: awr.threshold,
                                 tuple: awr.tuple,
                                 severity: awr.severity,
@@ -394,7 +394,7 @@ const PutTrainingCourseModal = () => {
                                             create: rs.conditions.map((c) => ({
                                                 field: c.field,
                                                 operator: c.operator,
-                                                invert: c.invert,
+                                                // invert: c.invert,
                                                 value: c.value,
                                                 tuple: c.tuple,
                                                 yearCondition: c.yearCondition,
