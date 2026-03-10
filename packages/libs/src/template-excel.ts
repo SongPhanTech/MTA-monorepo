@@ -29,6 +29,7 @@ export interface SheetExportOptions {
 
 export interface ExportOptions {
     templateUrl: string
+    extension?: string
     sheets: SheetExportOptions[]
     fileName: string
     fontFamily?: string
@@ -89,8 +90,8 @@ function cloneWorksheet(
 
 /** ──────────────── Main ──────────────── */
 export async function exportFromTemplate(options: ExportOptions) {
-    const { templateUrl, sheets, fileName } = options
-    const ext = templateUrl.split('.').pop()?.toLowerCase()
+    const { templateUrl, sheets, fileName, extension } = options
+    const ext = extension ?? templateUrl.split('.').pop()?.toLowerCase()
 
     if (ext === 'xlsx') {
         await handleExcelJSExport(templateUrl, sheets, fileName, options)
