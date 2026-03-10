@@ -723,6 +723,8 @@ export default function PhanCongGiangDay({
         }
         return []
     }, [dmDonViData])
+    console.log('dataWithRowSpan', dataWithRowSpan);
+    
 
     const resetForm = useCallback(() => {
         form.setFieldsValue({
@@ -1603,6 +1605,7 @@ export default function PhanCongGiangDay({
                                             }}
                                             type="primary"
                                             className="bg-blue-500"
+                                            disabled={!dataWithRowSpan?.length}
                                         >
                                             3. Xuất PCGD
                                         </Button>
@@ -1688,7 +1691,6 @@ export default function PhanCongGiangDay({
                             setFilters={(value) => {
                                 setFilters(value)
                                 setCurrentPage(1)
-                                console.log('12312')
                             }}
                             rowSelection={{
                                 type: 'checkbox',

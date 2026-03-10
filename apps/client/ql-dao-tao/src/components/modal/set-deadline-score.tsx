@@ -36,8 +36,10 @@ const PutDeadlineScoreModal = () => {
     const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
 
     async function onOk(output?: PutUpdateTime) {
-        if (!output) return
-        console.log(111, output.time)
+        if (!output) {
+            message.error('Vui lòng nhập thời gian')
+            return }
+      
 
         try {
             showSpinner()
