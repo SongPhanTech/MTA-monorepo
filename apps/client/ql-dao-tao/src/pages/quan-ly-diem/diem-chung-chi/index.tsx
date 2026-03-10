@@ -401,9 +401,9 @@ export default function ArchivedCertificate() {
         <Row gutter={[16, 0]}>
             <Col span={24}>
                 <Row gutter={[16, 16]} align="top" justify="space-between">
-                    <Col span={16}>
+                    <Col span={4}>
                         <Flex gap={8}>
-                            <Select
+                            {/* <Select
                                 className="w-full"
                                 placeholder="Chọn khóa học"
                                 options={trainingCourseData
@@ -469,7 +469,7 @@ export default function ArchivedCertificate() {
                                 }
                                 value={filters.certificateId}
                                 allowClear
-                            />
+                            /> */}
                             <Input
                                 className="w-full"
                                 placeholder="Tìm số quyết định"
