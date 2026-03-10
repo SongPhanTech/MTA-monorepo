@@ -26,7 +26,7 @@ import { getMinioUrl } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { cn } from '@workspace/ui/lib/utils'
-import { Button, Col, Divider, Flex, message, Row, Tooltip } from 'antd'
+import { Button, Col, Divider, Flex, message, Row, Tag, Tooltip } from 'antd'
 import { BookPlus, CopyPlus, Download, FileUp } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
@@ -34,7 +34,7 @@ import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import CreateIcon from '../../../../components/icons/create'
 export default function TrainingProgramSubjects() {
-    const { can, canSome } = useAbility()
+    const { can } = useAbility()
     const router = useRouter()
     const id = router.query.id as string
     const [importModalVisible, setImportModalVisible] = useState(false)
@@ -79,6 +79,8 @@ export default function TrainingProgramSubjects() {
         { enabled: !!id }
     )
     const { options, getExamTypeLabel } = useExamTypeOptions()
+
+    const isLocked = initialValue?.isLock ?? false
 
     const isFiltering = useMemo(() => {
         return Object.values(filters).some((value) => !!value)
@@ -442,15 +444,27 @@ export default function TrainingProgramSubjects() {
     return (
         <div>
             <Divider orientation="left" orientationMargin={0} className="m-0 p-0">
-                CTĐT toàn khoá:{' '}
-                {[
-                    initialValue?.code,
-                    initialValue?.name,
-                    initialValue?.curriculum?.trainingMajor?.name,
-                    initialValue?.curriculum?.managementOrganization?.sTen,
-                ]
-                    .filter(Boolean)
-                    .join(' - ')}
+                <span className="flex items-center gap-2">
+                    CTĐT toàn khoá:{' '}
+                    {[
+                        initialValue?.code,
+                        initialValue?.name,
+                        initialValue?.curriculum?.trainingMajor?.name,
+                        initialValue?.curriculum?.managementOrganization?.sTen,
+                    ]
+                        .filter(Boolean)
+                        .join(' - ')}
+                    {isLocked && (
+                        <Tag
+                            color="error"
+                            style={{
+                                fontSize: '14',
+                            }}
+                        >
+                            Đã khoá CTĐT
+                        </Tag>
+                    )}
+                </span>
             </Divider>
             <Row gutter={[0, 0]}>
                 <Col span={24}>
@@ -465,13 +479,15 @@ export default function TrainingProgramSubjects() {
                                         <Button
                                             href={getMinioUrl('mta/template/MAU-NHAP_CTDT.xlsx')}
                                             className="text-primary border-primary mr-2"
+                                            disabled={isLocked}
                                         >
                                             <Download />
                                             Mẫu nhập CTĐT
                                         </Button>
                                         <Button
-                                            onClick={() => setImportModalVisible(true)}
+                                            onClick={() => !isLocked && setImportModalVisible(true)}
                                             className="text-primary border-primary mr-2"
+                                            disabled={isLocked}
                                         >
                                             <FileUp />
                                             Nhập dữ liệu bằng excel
@@ -499,7 +515,7 @@ export default function TrainingProgramSubjects() {
                                                 handleCloneCurriculumVersion(initialValue.id)
                                             }
                                             className="text-primary border-primary mr-2"
-                                            disabled={!initialValue}
+                                            disabled={!initialValue || isLocked}
                                         >
                                             <CopyPlus />
                                             Sao chép
@@ -519,6 +535,7 @@ export default function TrainingProgramSubjects() {
                                                 })
                                             }
                                             type="primary"
+                                            disabled={isLocked}
                                         >
                                             <BookPlus />
                                             Sửa KKT
@@ -695,6 +712,7 @@ export default function TrainingProgramSubjects() {
                                             'SUA'
                                         ) && (
                                             <EditIcon
+                                                disabled={isLocked}
                                                 onClick={() =>
                                                     onOpenTrainingBlock({
                                                         curriculumVersionId:
@@ -709,6 +727,7 @@ export default function TrainingProgramSubjects() {
                                         ) && (
                                             <CreateIcon
                                                 title={'Thêm môn học'}
+                                                disabled={isLocked}
                                                 onClick={(e) => {
                                                     e.stopPropagation()
                                                     onOpenTrainingBlockSubject({
@@ -724,6 +743,7 @@ export default function TrainingProgramSubjects() {
                                             'XOA'
                                         ) && (
                                             <DeleteIcon
+                                                disabled={isLocked}
                                                 popConfirm={{
                                                     onConfirm: () =>
                                                         handleDeleteTrainingBlockOnCurriculumVersion(
@@ -990,28 +1010,6 @@ export default function TrainingProgramSubjects() {
                                 render: (__, record: { subject?: SubjectVersion }) =>
                                     getExamTypeLabel(record?.subject?.examType),
                             },
-                            // {
-                            //     title: 'Tính điểm TBC',
-                            //     align: 'center',
-                            //     fixed: 'right',
-                            //     dataIndex: 'useForFinalScore',
-                            //     width: 120,
-                            //     render: (value: boolean) => {
-                            //         return <Checkbox checked={!!value} />
-                            //     },
-                            // },
-                            // {
-                            //     title: 'Trạng thái',
-                            //     align: 'center',
-                            //     width: 120,
-                            //     render: (record) => {
-                            //         return !record?.active ? (
-                            //             <Tag color="error">Ngừng đào tạo</Tag>
-                            //         ) : (
-                            //             <Tag color="success">Đang hoạt động</Tag>
-                            //         )
-                            //     },
-                            // },
                             {
                                 title: 'Thao tác',
                                 width: 100,
@@ -1029,6 +1027,7 @@ export default function TrainingProgramSubjects() {
                                                     'XEM'
                                                 ) && (
                                                     <ViewIcon
+                                                        disabled={isLocked}
                                                         onClick={() =>
                                                             handleModalSubjectVersion(
                                                                 '',
@@ -1044,6 +1043,7 @@ export default function TrainingProgramSubjects() {
                                                 )}
 
                                                 <EditIcon
+                                                    disabled={isLocked}
                                                     onClick={(_e) => {
                                                         onOpenTrainingBlockSubject({
                                                             trainingBlockOnCurriculumVersionId:
@@ -1057,81 +1057,77 @@ export default function TrainingProgramSubjects() {
                                                 {can(
                                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC,
                                                     'XOA'
-                                                ) && (
-                                                    <>
-                                                        {hasSubjectClass ? (
-                                                            <Tooltip title="Môn học đã được đưa vào giảng dạy (đã mở lớp), không thể xóa.">
-                                                                <span className="opacity-40">
-                                                                    <DeleteIcon disabled />
-                                                                </span>
-                                                            </Tooltip>
-                                                        ) : (
-                                                            <DeleteIcon
-                                                                popConfirm={{
-                                                                    title: 'Xóa môn học khỏi CTĐT',
-                                                                    description: (
-                                                                        <div>
-                                                                            <p>
-                                                                                <strong>
-                                                                                    Bạn có chắc chắn
-                                                                                    muốn xóa môn học
-                                                                                    này khỏi chương
-                                                                                    trình đào tạo?
-                                                                                </strong>
-                                                                            </p>
-                                                                            <br />
-                                                                            <p>
-                                                                                <strong>
-                                                                                    Lưu ý:
-                                                                                </strong>
-                                                                            </p>
-                                                                            <ul
-                                                                                style={{
-                                                                                    paddingInline:
-                                                                                        '10px',
-                                                                                    marginTop:
-                                                                                        '8px',
-                                                                                }}
-                                                                            >
-                                                                                <li>
-                                                                                    Môn học chỉ bị
-                                                                                    xóa khỏi CTĐT
-                                                                                    này, không ảnh
-                                                                                    hưởng đến CTĐT
-                                                                                    khác
-                                                                                </li>
-                                                                                <li>
-                                                                                    Nếu môn học đã
-                                                                                    được đưa vào kế
-                                                                                    hoạch đào tạo
-                                                                                    hoặc đã có lớp
-                                                                                    học, việc xóa có
-                                                                                    thể gây ảnh
-                                                                                    hưởng
-                                                                                </li>
-                                                                                <li>
-                                                                                    Nếu sinh viên đã
-                                                                                    đăng ký và có
-                                                                                    điểm, cần xem
-                                                                                    xét kỹ trước khi
-                                                                                    xóa
-                                                                                </li>
-                                                                            </ul>
-                                                                        </div>
+                                                ) &&
+                                                    (hasSubjectClass || isLocked ? (
+                                                        <Tooltip
+                                                            title={
+                                                                isLocked
+                                                                    ? undefined
+                                                                    : 'Môn học đã được đưa vào giảng dạy (đã mở lớp), không thể xóa.'
+                                                            }
+                                                        >
+                                                            <span className="opacity-40">
+                                                                <DeleteIcon disabled />
+                                                            </span>
+                                                        </Tooltip>
+                                                    ) : (
+                                                        <DeleteIcon
+                                                            popConfirm={{
+                                                                title: 'Xóa môn học khỏi CTĐT',
+                                                                description: (
+                                                                    <div>
+                                                                        <p>
+                                                                            <strong>
+                                                                                Bạn có chắc chắn
+                                                                                muốn xóa môn học này
+                                                                                khỏi chương trình
+                                                                                đào tạo?
+                                                                            </strong>
+                                                                        </p>
+                                                                        <br />
+                                                                        <p>
+                                                                            <strong>Lưu ý:</strong>
+                                                                        </p>
+                                                                        <ul
+                                                                            style={{
+                                                                                paddingInline:
+                                                                                    '10px',
+                                                                                marginTop: '8px',
+                                                                            }}
+                                                                        >
+                                                                            <li>
+                                                                                Môn học chỉ bị xóa
+                                                                                khỏi CTĐT này, không
+                                                                                ảnh hưởng đến CTĐT
+                                                                                khác
+                                                                            </li>
+                                                                            <li>
+                                                                                Nếu môn học đã được
+                                                                                đưa vào kế hoạch đào
+                                                                                tạo hoặc đã có lớp
+                                                                                học, việc xóa có thể
+                                                                                gây ảnh hưởng
+                                                                            </li>
+                                                                            <li>
+                                                                                Nếu sinh viên đã
+                                                                                đăng ký và có điểm,
+                                                                                cần xem xét kỹ trước
+                                                                                khi xóa
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                ),
+                                                                okText: 'Xác nhận xóa',
+                                                                cancelText: 'Hủy',
+                                                                okType: 'danger',
+                                                                onConfirm: () =>
+                                                                    handleDeleteTrainingBlockSubject(
+                                                                        record.id
                                                                     ),
-                                                                    okText: 'Xác nhận xóa',
-                                                                    cancelText: 'Hủy',
-                                                                    okType: 'danger',
-                                                                    onConfirm: () =>
-                                                                        handleDeleteTrainingBlockSubject(
-                                                                            record.id
-                                                                        ),
-                                                                }}
-                                                                onClick={(e) => e.stopPropagation()}
-                                                            />
-                                                        )}
-                                                    </>
-                                                )}
+                                                            }}
+                                                            onClick={(e) => e.stopPropagation()}
+                                                        />
+                                                    ))}
                                             </Row>
                                         )
                                     }
