@@ -769,7 +769,7 @@ export default function ClassSubject() {
                                     <div
                                     // className={`${dayjs().isBefore(record?.scoreDeadline) ? '' : 'text-red-500'}`}
                                     >
-                                        {record.scoreDeadline
+                                        {record?.scoreDeadline
                                             ? dayjs(record.scoreDeadline).format('DD/MM/YYYY')
                                             : ''}
                                     </div>
@@ -781,10 +781,11 @@ export default function ClassSubject() {
                                 align: 'center',
                                 render: (__, record) => {
                                     const today = dayjs()
-                                    const scoreDeadline = dayjs(record?.scoreDeadline)
-                                    if (!scoreDeadline) {
+                                     if (!record?.scoreDeadline) {
                                         return '-'
                                     }
+                                    const scoreDeadline = dayjs(record?.scoreDeadline)
+                                   
                                     let daysRemaining: number
 
                                     if (today?.isBefore(scoreDeadline)) {
@@ -819,7 +820,7 @@ export default function ClassSubject() {
                                         <div
                                         // className={`${dayjs().isBefore(record?.examScoreDeadline) ? '' : 'text-red-500'}`}
                                         >
-                                            {record.examScoreDeadline
+                                            {record?.examScoreDeadline
                                                 ? dayjs(record.examScoreDeadline).format(
                                                       'DD/MM/YYYY'
                                                   )
@@ -835,11 +836,10 @@ export default function ClassSubject() {
                                 align: 'center',
                                 render: (__, record) => {
                                     const today = dayjs()
-                                    const examScoreDeadline = dayjs(record?.examScoreDeadline)
-
-                                    if (!examScoreDeadline) {
+                                      if (!record.examScoreDeadline) {
                                         return '-'
                                     }
+                                    const examScoreDeadline = dayjs(record?.examScoreDeadline)
 
                                     let daysRemaining: number
 

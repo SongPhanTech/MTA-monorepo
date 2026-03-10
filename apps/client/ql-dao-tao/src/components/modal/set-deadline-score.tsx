@@ -36,19 +36,16 @@ const PutDeadlineScoreModal = () => {
     const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
 
     async function onOk(output?: PutUpdateTime) {
-        if (!output) {
-            message.error('Vui lòng nhập thời gian')
-            return
-        }
+      
 
         try {
             showSpinner()
             await updateSubjectClass({
                 where: { id },
                 data: {
-                    scoreDeadLineStart: output?.time[0]?.toISOString(),
-                    scoreDeadline: output?.time[1]?.toISOString(),
-                    examScoreDeadline: output?.examScoreDeadline?.toISOString(),
+                    scoreDeadLineStart:!!output?.time ? output?.time[0]?.toISOString():null,
+                    scoreDeadline:!!output?.time? output?.time[1]?.toISOString():null,
+                    examScoreDeadline:output?.examScoreDeadline? output?.examScoreDeadline?.toISOString():null,
                 },
                 select: { id: true },
             })
