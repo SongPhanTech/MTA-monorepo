@@ -11,7 +11,7 @@ import { createId, type Difficult, QuestionType } from '@workspace/db'
 import { useCreateQuestion, useFindManyKnowledgeBlock } from '@workspace/db/hooks'
 import { generatePresignedUrl, sqlTransaction } from '@workspace/libs/api/model'
 import { env } from '@workspace/libs/utils'
-import { Button, Col, Form, Modal, message, Radio, Row, Select } from 'antd'
+import { Button, Col, Form, Modal, Table as AntTable, message, Radio, Row, Select } from 'antd'
 import { XMLParser } from 'fast-xml-parser'
 import PizZip from 'pizzip'
 import type React from 'react'
@@ -32,6 +32,7 @@ const WordImportModal: React.FC = () => {
     const [storageType, setStorageType] = useState<'khung' | 'kho'>('khung')
     const [form] = Form.useForm()
     const [isAllSelected, setIsAllSelected] = useState(false)
+    const [importErrors, setImportErrors] = useState<{ rowIndex: number; message: string }[]>([])
     const [currentPage, setCurrentPage] = useState(1)
     const [pageSize, setPageSize] = useState(10)
     const [filters, setFilters] = useState<FilterProps>({
@@ -131,6 +132,7 @@ const WordImportModal: React.FC = () => {
 
             setQuestions([])
             setSelectedRowKeys([])
+            setImportErrors([])
         },
     })
 
@@ -139,28 +141,52 @@ const WordImportModal: React.FC = () => {
     const parser = new XMLParser({
         ignoreAttributes: false,
         attributeNamePrefix: '@_',
+        parseTagValue: false,
     })
     const extractRawTextFromCell = (cell: any): string => {
         if (!cell) return ''
 
-        const paragraphs = Array.isArray(cell['w:p']) ? cell['w:p'] : [cell['w:p']]
-        let text = ''
+        const getText = (node: any): string => {
+            if (!node) return ''
+            let t = ''
 
-        for (const p of paragraphs) {
-            const runs = Array.isArray(p?.['w:r']) ? p['w:r'] : [p?.['w:r']]
+            // w:t text node
+            const wt = node['w:t']
+            if (typeof wt === 'string') t += wt
+            else if (typeof wt === 'object' && wt?.['#text']) t += wt['#text']
 
-            for (const r of runs) {
-                const t = r?.['w:t']
+            // runs
+            if (node['w:r']) {
+                const runs = Array.isArray(node['w:r']) ? node['w:r'] : [node['w:r']]
+                for (const r of runs) t += getText(r)
+            }
 
-                if (typeof t === 'string') {
-                    text += t
-                } else if (typeof t === 'object' && t?.['#text']) {
-                    text += t['#text']
+            // paragraphs
+            if (node['w:p']) {
+                const paras = Array.isArray(node['w:p']) ? node['w:p'] : [node['w:p']]
+                for (const p of paras) t += getText(p)
+            }
+
+            // content controls (w:sdt) – thường gặp trong cell có form field
+            if (node['w:sdt']) {
+                const sdts = Array.isArray(node['w:sdt']) ? node['w:sdt'] : [node['w:sdt']]
+                for (const sdt of sdts) {
+                    if (sdt['w:sdtContent']) t += getText(sdt['w:sdtContent'])
                 }
             }
+
+            // hyperlinks
+            if (node['w:hyperlink']) {
+                const links = Array.isArray(node['w:hyperlink'])
+                    ? node['w:hyperlink']
+                    : [node['w:hyperlink']]
+                for (const link of links) t += getText(link)
+            }
+
+            return t
         }
 
-        return text
+        return getText(cell)
     }
 
     const cleanQuestionText = (text: string) => text
@@ -281,7 +307,6 @@ const WordImportModal: React.FC = () => {
         const value = Number(match[0])
         if (Number.isNaN(value)) return {}
 
-        console.log('RAW POINT:', rawText, '=>', value)
         return { value }
     }
 
@@ -388,6 +413,7 @@ const WordImportModal: React.FC = () => {
 
     const handleImport = async (file: File) => {
         setLoading(true)
+        setImportErrors([])
         try {
             const arrayBuffer = await file.arrayBuffer()
             const zip = new PizZip(arrayBuffer)
@@ -424,6 +450,7 @@ const WordImportModal: React.FC = () => {
             }
 
             const extractedQuestions: any[] = []
+            const errors: { rowIndex: number; message: string }[] = []
 
             for (const tbl of tables) {
                 const rows = Array.isArray(tbl['w:tr']) ? tbl['w:tr'] : [tbl['w:tr']]
@@ -452,17 +479,19 @@ const WordImportModal: React.FC = () => {
                     const difficult = mapDifficultFromText(difficultText)
 
                     if (!type || !difficult) {
-                        message.warning(
-                            'Có câu hỏi thiếu hoặc sai mã Loại câu hỏi/Độ khó (TL, TN, TNM, DK, SX | NB, TH, VD, VDC)'
-                        )
+                        errors.push({
+                            rowIndex: i,
+                            message:
+                                'Thiếu hoặc sai mã Loại câu hỏi/Độ khó (TL, TN, TNM, DK, SX | NB, TH, VD, VDC)',
+                        })
                         continue
                     }
 
                     const pointRaw = extractPointFromCell(cells[4])
                     const pointCheck = checkQuestionPoint(pointRaw.value)
 
-                    if (pointCheck.isInvalid) {
-                        message.warning(pointCheck.warning)
+                    if (pointCheck.isInvalid && pointCheck.warning) {
+                        errors.push({ rowIndex: i, message: pointCheck.warning })
                     }
 
                     const question: any = {
@@ -563,6 +592,7 @@ const WordImportModal: React.FC = () => {
 
             setQuestions(questionsWithKey)
             setSelectedRowKeys(questionsWithKey.map((q) => q.key))
+            setImportErrors(errors)
 
             message.success(`Đã import ${extractedQuestions.length} câu hỏi`)
         } catch (error) {
@@ -587,6 +617,13 @@ const WordImportModal: React.FC = () => {
 
     const columns = [
         {
+            title: 'STT',
+            dataIndex: 'key',
+            width: 55,
+            align: 'center' as const,
+            render: (_: any, __: any, index: number) => (currentPage - 1) * pageSize + index + 1,
+        },
+        {
             title: 'Câu hỏi',
             dataIndex: 'content',
             width: 350,
@@ -608,7 +645,6 @@ const WordImportModal: React.FC = () => {
                 )
             },
         },
-
         {
             title: 'Loại câu hỏi',
             dataIndex: 'type',
@@ -996,6 +1032,34 @@ const WordImportModal: React.FC = () => {
                 </Row>
             </Form>
 
+            {importErrors.length > 0 && (
+                <div style={{ marginBottom: 12 }}>
+                    <AntTable
+                        size="small"
+                        dataSource={importErrors.map((e, idx) => ({ ...e, key: idx }))}
+                        pagination={false}
+                        scroll={{ y: 120 }}
+                        columns={[
+                            {
+                                title: 'Dòng',
+                                dataIndex: 'rowIndex',
+                                width: 70,
+                                align: 'center' as const,
+                                render: (v: number) => `#${v}`,
+                            },
+                            {
+                                title: `${importErrors.length} câu hỏi bị lỗi`,
+                                dataIndex: 'message',
+                                render: (v: string) => (
+                                    <span style={{ color: '#faad14' }}>{v}</span>
+                                ),
+                            },
+                        ]}
+                        style={{ border: '1px solid #faad14', borderRadius: 6 }}
+                    />
+                </div>
+            )}
+
             {questions.length > 0 && (
                 <div>
                     <Table
@@ -1010,7 +1074,9 @@ const WordImportModal: React.FC = () => {
                         rowSelection={rowSelection}
                         scroll={{
                             x: '100%',
-                            y: 'calc(60vh - 130px)',
+                            y: importErrors.length > 0
+                                ? 'calc(60vh - 300px)'
+                                : 'calc(60vh - 130px)',
                         }}
                         sticky={{
                             offsetHeader: 0,
