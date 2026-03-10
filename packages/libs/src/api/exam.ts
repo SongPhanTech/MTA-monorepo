@@ -29,6 +29,7 @@ import type {
     CreateClusterSurvey400,
     CreateClusterSurvey404,
     CreateClusterSurveyRequest,
+    ExamBankQuestionsResult,
     ExportClusterSurveyStatistics404,
     ExportClusterSurveyStatisticsParams,
     ExportReportSurvey,
@@ -56,6 +57,8 @@ import type {
     GetClusterSurveyStatisticsForOrganization404,
     GetClusterSurveyStatisticsForOrganizationParams,
     GetClusterSurveyStatisticsParams,
+    GetExamBankWithGrouping,
+    GetExamBankWithGrouping404,
     GetLectureSurveyStatistics200,
     GetLectureSurveyStatistics404,
     GetLectureSurveyStatisticsParams,
@@ -811,6 +814,114 @@ export const useGenExamBank = <TError = GenExamBank400 | GenExamBank404, TContex
     TContext
 > => {
     const mutationOptions = getGenExamBankMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * Truyền isGroup=true để nhóm câu hỏi trắc nghiệm và tự luận riêng, false để lấy tuần tự theo order
+ * @summary Lấy câu hỏi của đề thi có nhóm theo loại
+ */
+export type getExamBankWithGroupingResponse200 = {
+    data: ExamBankQuestionsResult
+    status: 200
+}
+
+export type getExamBankWithGroupingResponse404 = {
+    data: GetExamBankWithGrouping404
+    status: 404
+}
+
+export type getExamBankWithGroupingResponseSuccess = getExamBankWithGroupingResponse200 & {
+    headers: Headers
+}
+export type getExamBankWithGroupingResponseError = getExamBankWithGroupingResponse404 & {
+    headers: Headers
+}
+
+export type getExamBankWithGroupingResponse =
+    | getExamBankWithGroupingResponseSuccess
+    | getExamBankWithGroupingResponseError
+
+export const getGetExamBankWithGroupingUrl = () => {
+    return `/api/exam/exam-bank/questions`
+}
+
+export const getExamBankWithGrouping = async (
+    getExamBankWithGrouping: GetExamBankWithGrouping,
+    options?: RequestInit
+): Promise<getExamBankWithGroupingResponse> => {
+    return customExamFetch<getExamBankWithGroupingResponse>(getGetExamBankWithGroupingUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(getExamBankWithGrouping),
+    })
+}
+
+export const getGetExamBankWithGroupingMutationOptions = <
+    TError = GetExamBankWithGrouping404,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof getExamBankWithGrouping>>,
+        TError,
+        { data: GetExamBankWithGrouping },
+        TContext
+    >
+    request?: SecondParameter<typeof customExamFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof getExamBankWithGrouping>>,
+    TError,
+    { data: GetExamBankWithGrouping },
+    TContext
+> => {
+    const mutationKey = ['getExamBankWithGrouping']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof getExamBankWithGrouping>>,
+        { data: GetExamBankWithGrouping }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return getExamBankWithGrouping(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type GetExamBankWithGroupingMutationResult = NonNullable<
+    Awaited<ReturnType<typeof getExamBankWithGrouping>>
+>
+export type GetExamBankWithGroupingMutationBody = GetExamBankWithGrouping
+export type GetExamBankWithGroupingMutationError = GetExamBankWithGrouping404
+
+/**
+ * @summary Lấy câu hỏi của đề thi có nhóm theo loại
+ */
+export const useGetExamBankWithGrouping = <TError = GetExamBankWithGrouping404, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof getExamBankWithGrouping>>,
+            TError,
+            { data: GetExamBankWithGrouping },
+            TContext
+        >
+        request?: SecondParameter<typeof customExamFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof getExamBankWithGrouping>>,
+    TError,
+    { data: GetExamBankWithGrouping },
+    TContext
+> => {
+    const mutationOptions = getGetExamBankWithGroupingMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }

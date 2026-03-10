@@ -176,8 +176,6 @@ export default function DanhSachKeHoachThi() {
         }
     )
 
-    console.log('Exams: ', exams)
-
     const formatDate = (date?: string | Date) => {
         if (!date) return ''
         const d = new Date(date)

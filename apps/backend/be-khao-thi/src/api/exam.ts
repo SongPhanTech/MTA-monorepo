@@ -1,5 +1,5 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
-import { createId, type Prisma } from '@workspace/db'
+import { $Enums, createId, type Prisma } from '@workspace/db'
 import { getRandomQuestionIDs } from '@workspace/db/sql'
 import { questionTypeLabels } from '@workspace/libs/constants'
 import { prisma } from '..'
@@ -169,6 +169,88 @@ app.openapi(genRandomExamQuestionByRule, async (c) => {
     })
 
     return c.json({ success: true, message: 'Success' }, 200)
+})
+
+const getExamBankWithGrouping = createRoute({
+    operationId: 'get-exam-bank-with-grouping',
+    path: '/exam-bank/questions',
+    tags: ['Exam'],
+    summary: 'Lấy câu hỏi của đề thi có nhóm theo loại',
+    description:
+        'Truyền isGroup=true để nhóm câu hỏi trắc nghiệm và tự luận riêng, false để lấy tuần tự theo order',
+    method: 'post',
+    request: {
+        body: {
+            content: {
+                'application/json': {
+                    schema: z
+                        .object({
+                            id: z.string().openapi('id', { description: 'ID của ExamBank' }),
+                            isGroup: z.boolean().openapi('isGroup', {
+                                description:
+                                    'true: nhóm trắc nghiệm / tự luận | false: theo thứ tự',
+                            }),
+                        })
+                        .openapi('get-exam-bank-with-grouping'),
+                },
+            },
+        },
+    },
+    responses: {
+        200: {
+            description: 'Dữ liệu đề thi với câu hỏi đã xử lý',
+            content: {
+                'application/json': {
+                    schema: z
+                        .object({
+                            isGroup: z.boolean(),
+                            questions: z.array(z.any()).optional(),
+                            listQuestionChoice: z.array(z.any()).optional(),
+                            listQuestionEssay: z.array(z.any()).optional(),
+                        })
+                        .openapi('exam-bank-questions-result'),
+                },
+            },
+        },
+        404: {
+            description: 'Không tìm thấy ExamBank',
+            content: {
+                'application/json': {
+                    schema: z.object({ message: z.string() }),
+                },
+            },
+        },
+    },
+})
+
+app.openapi(getExamBankWithGrouping, async (c) => {
+    const { id, isGroup } = c.req.valid('json')
+
+    const examBank = await prisma.examBank.findUnique({
+        where: { id },
+        include: {
+            questions: {
+                include: { question: true },
+                orderBy: { order: 'asc' },
+            },
+        },
+    })
+
+    if (!examBank) {
+        return c.json({ message: 'Đề thi không tồn tại' }, 404)
+    }
+
+    if (isGroup) {
+        const listQuestionChoice = examBank.questions.filter(
+            (q) => q.question?.type !== $Enums.QuestionType.ESSAY
+        )
+        const listQuestionEssay = examBank.questions.filter(
+            (q) => q.question?.type === $Enums.QuestionType.ESSAY
+        )
+        return c.json({ isGroup, listQuestionChoice, listQuestionEssay }, 200)
+    }
+
+    return c.json({ isGroup, questions: examBank.questions }, 200)
 })
 
 export default app

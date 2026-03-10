@@ -357,7 +357,6 @@ export default function ExamListPage() {
             </>
         )
     }
-    console.log(exams)
 
     return (
         <div>
