@@ -86,7 +86,7 @@ const persistState = (filters: FilterProps, page: number) => {
 }
 
 export default function TrainingProgramCatalog() {
-    const { can, canSome } = useAbility()
+    const { can } = useAbility()
     const [expandAll, setExpandAll] = useState(false)
     const router = useRouter()
 
@@ -102,6 +102,11 @@ export default function TrainingProgramCatalog() {
 
         return () => clearTimeout(t)
     }, [filters, currentPage])
+
+    const isApprove = can(
+        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
+        'DUYET'
+    )
 
     const where = useMemo(() => {
         const curriculumVersionFilter = {
@@ -830,22 +835,24 @@ export default function TrainingProgramCatalog() {
                                                     />
                                                 )}
                                                 {/* TODO: CẦN THÊM MỘT QUYỀN ĐỂ LOCK/UNLOCK*/}
-                                                <LockPlusIcon
-                                                    isLocked={isLocked}
-                                                    popConfirm={{
-                                                        onConfirm: (e) => {
-                                                            handleToggleLock(
-                                                                record?.id,
-                                                                record?.isLock || false
-                                                            )
-                                                            e?.stopPropagation()
-                                                        },
-                                                        onCancel: (e) => {
-                                                            e?.stopPropagation()
-                                                        },
-                                                    }}
-                                                    onClick={(e) => e.stopPropagation()}
-                                                />
+                                                {isApprove && (
+                                                    <LockPlusIcon
+                                                        isLocked={isLocked}
+                                                        popConfirm={{
+                                                            onConfirm: (e) => {
+                                                                handleToggleLock(
+                                                                    record?.id,
+                                                                    record?.isLock || false
+                                                                )
+                                                                e?.stopPropagation()
+                                                            },
+                                                            onCancel: (e) => {
+                                                                e?.stopPropagation()
+                                                            },
+                                                        }}
+                                                        onClick={(e) => e.stopPropagation()}
+                                                    />
+                                                )}
                                                 {can(
                                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
                                                     'XOA'
