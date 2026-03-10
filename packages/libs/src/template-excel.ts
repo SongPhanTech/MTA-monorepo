@@ -271,7 +271,6 @@ async function handleSheetJSExport(
     fileName: string,
     options: ExportOptions
 ) {
-
     const response = await fetch(templateUrl)
     const buffer = await response.arrayBuffer()
 
