@@ -35,7 +35,15 @@ const PutOlympicScoreModal = () => {
 
     const { mutateAsync: createAward } = useCreateAward()
     const { mutateAsync: updateAward } = useUpdateAward()
-    const { data: subjectData = [] } = useFindManySubject()
+    const { data: subjectData = [] } = useFindManySubject({
+        include: {
+            subjectVersion: {
+                where: { active: true },
+                orderBy: { createdAt: 'desc' },
+                take: 1,
+            },
+        },
+    })
     async function onOk({ subjects, ...rest }: PutAward) {
         try {
             showSpinner()
@@ -131,7 +139,7 @@ const PutOlympicScoreModal = () => {
                         style={{ width: '100%' }}
                         placeholder="Chọn môn học"
                         options={subjectData.map((item) => ({
-                            label: item.name,
+                            label: item.code + ' - ' + item.name + (item.subjectVersion?.[0]?.credit ? ' - ' + item.subjectVersion[0].credit + ' tín chỉ' : ''),
                             value: item.id,
                         }))}
                     />
