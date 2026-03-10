@@ -253,101 +253,144 @@ async function handleExcelJSDefault(
 }
 
 /** ──────────────── XLS: SheetJS ──────────────── */
+function cloneCellStyle(source: ExcelJS.Cell, target: ExcelJS.Cell) {
+    if (source.font) target.font = { ...source.font }
+
+    if (source.alignment) target.alignment = JSON.parse(JSON.stringify(source.alignment))
+
+    if (source.border) target.border = JSON.parse(JSON.stringify(source.border))
+
+    if (source.fill) target.fill = JSON.parse(JSON.stringify(source.fill))
+
+    if (source.numFmt) target.numFmt = source.numFmt
+}
+
 async function handleSheetJSExport(
     templateUrl: string,
     sheets: SheetExportOptions[],
     fileName: string,
     options: ExportOptions
 ) {
+
     const response = await fetch(templateUrl)
     const buffer = await response.arrayBuffer()
-    const wb = XLSX.read(buffer, { type: 'array' })
+
+    const workbook = new ExcelJS.Workbook()
+    await workbook.xlsx.load(buffer)
+
+    const firstSheet = workbook.worksheets[0]
+
+    if (!firstSheet) {
+        throw new Error('Template is empty')
+    }
 
     for (const sheetOption of sheets) {
         const { sheet, data = {}, rows, tableStartCell } = sheetOption
-        let sheetName: string
 
-        if (typeof sheet === 'number') {
-            sheetName = wb.SheetNames[sheet - 1] || `${sheet}`
-            if (!wb.Sheets[sheetName]) {
-                wb.SheetNames.push(sheetName)
-                wb.Sheets[sheetName] = XLSX.utils.aoa_to_sheet([])
-            }
-        } else if (typeof sheet === 'string') {
-            sheetName = sheet
-            if (!wb.Sheets[sheetName]) {
-                wb.SheetNames.push(sheetName)
-                wb.Sheets[sheetName] = XLSX.utils.aoa_to_sheet([])
+        let worksheet: ExcelJS.Worksheet | undefined
+
+        if (typeof sheet === 'string' || typeof sheet === 'number') {
+            worksheet = workbook.getWorksheet(sheet)
+
+            if (!worksheet) {
+                worksheet = cloneWorksheet(workbook, firstSheet, String(sheet))
             }
         } else {
-            sheetName = wb.SheetNames[0] || 'Sheet1'
-            if (!wb.Sheets[sheetName]) {
-                wb.SheetNames.push(sheetName)
-                wb.Sheets[sheetName] = XLSX.utils.aoa_to_sheet([])
-            }
+            worksheet = workbook.worksheets[0]
         }
-        const ws = wb.Sheets[sheetName]
-        if (!ws) {
-            console.log('Cannot find or create sheet:', sheetName)
-            continue
+
+        if (!worksheet) continue
+
+        if (sheetOption.hiddenColumns?.length) {
+            sheetOption.hiddenColumns.forEach((colName) => {
+                worksheet!.getColumn(colName).hidden = true
+            })
         }
-        // 1️⃣ Replace placeholder {{...}}
-        const range = XLSX.utils.decode_range(ws['!ref'] || 'A1')
-        for (let R = range.s.r; R <= range.e.r; ++R) {
-            for (let C = range.s.c; C <= range.e.c; ++C) {
-                const addr = XLSX.utils.encode_cell({ r: R, c: C })
-                const cell = ws[addr]
-                if (cell && typeof cell.v === 'string') {
-                    let text = cell.v
+        worksheet.eachRow((row) => {
+            row.eachCell((cell) => {
+                if (typeof cell.value === 'string') {
+                    let text = cell.value
+
                     for (const key in data) {
                         text = text.replace(
                             new RegExp(`{{\\s*${key}\\s*}}`, 'g'),
                             String(data[key] ?? '')
                         )
                     }
-                    cell.v = text
-                }
-            }
-        }
 
-        // 2️⃣ Render bảng + merge cell cơ bản
+                    cell.value = text
+                }
+            })
+        })
+
         if (rows && tableStartCell) {
-            let currentRow = tableStartCell.row - 1
-            const merges: XLSX.Range[] = ws['!merges'] || []
+            let currentRow = tableStartCell.row
+
+            const templateRow = worksheet.getRow(tableStartCell.row)
+
+            if (rows.length > 1) {
+                worksheet.spliceRows(tableStartCell.row + 1, 0, ...Array(rows.length - 1).fill([]))
+            }
 
             for (const rowData of rows) {
-                let currentCol = tableStartCell.col - 1
+                let currentCol = tableStartCell.col
+
+                const excelRow = worksheet.getRow(currentRow)
+
+                excelRow.height = templateRow.height
+
                 for (const cellData of rowData.cells) {
-                    const addr = XLSX.utils.encode_cell({ r: currentRow, c: currentCol })
-                    ws[addr] = {
-                        t: typeof cellData.value === 'number' ? 'n' : 's',
-                        v: cellData.value ?? '',
-                    }
+                    const cell = excelRow.getCell(currentCol)
+                    const templateCell = templateRow.getCell(currentCol)
+
+                    cloneCellStyle(templateCell, cell)
+
+                    cell.value = cellData.value
 
                     const colSpan = cellData.colSpan ?? 1
                     const rowSpan = cellData.rowSpan ?? 1
+
                     if (colSpan > 1 || rowSpan > 1) {
-                        merges.push({
-                            s: { r: currentRow, c: currentCol },
-                            e: { r: currentRow + rowSpan - 1, c: currentCol + colSpan - 1 },
-                        })
+                        worksheet.mergeCells(
+                            currentRow,
+                            currentCol,
+                            currentRow + rowSpan - 1,
+                            currentCol + colSpan - 1
+                        )
                     }
+
                     currentCol += colSpan
                 }
+
+                excelRow.commit()
                 currentRow++
             }
-
-            ws['!merges'] = merges
-            ws['!ref'] = XLSX.utils.encode_range({
-                s: { r: range.s.r, c: range.s.c },
-                e: { r: Math.max(range.e.r, currentRow - 1), c: range.e.c },
-            })
         }
     }
 
-    const out = XLSX.write(wb, { bookType: 'xls', type: 'array' })
+    workbook.removeWorksheet(firstSheet.id)
+
+    const xlsxBuffer = await workbook.xlsx.writeBuffer()
+
+    const wb = XLSX.read(xlsxBuffer, {
+        type: 'array',
+        cellStyles: true,
+        cellNF: true,
+        cellHTML: false,
+        cellText: false,
+    })
+
+    const xlsBuffer = XLSX.write(wb, {
+        bookType: 'xls',
+        type: 'array',
+        cellStyles: true,
+        compression: false,
+    })
+
     saveAs(
-        new Blob([out], { type: 'application/vnd.ms-excel' }),
+        new Blob([xlsBuffer], {
+            type: 'application/vnd.ms-excel',
+        }),
         fileName.endsWith('.xls') ? fileName : `${fileName}.xls`
     )
 }
