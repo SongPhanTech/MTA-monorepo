@@ -790,13 +790,17 @@ export const calculateStudentSemesterResult = async (
                     return
                 }
 
-                 const academicWarningForSemester = await prisma.academicWarning.findFirst({
+                const academicWarningForSemester = await prisma.academicWarning.findFirst({
                     where: {
                         studentId: student.id,
                         semesterId,
                         deletedAt: null,
                         active: true,
                     },
+                    orderBy: { createdAt: 'desc' },
+                })
+                const disciplinaryWarning = await prisma.disciplinaryWarning.findFirst({
+                    where: { studentId: student.id, semesterId, deletedAt: null, active: true },
                     orderBy: { createdAt: 'desc' },
                 })
 
@@ -842,7 +846,7 @@ export const calculateStudentSemesterResult = async (
                     isUnionLeader: student.id === student.fixedClass?.unionLeaderId, // là bí thư nếu id trùng unionLeaderId)
                     entryScore: student.entryScore, // Điểm đầu vào
                     academicWarningLevel: academicWarningForSemester?.level ?? 0, // mức cảnh cáo học tập
-                    disciplinaryWarningLevel: student.disciplinaryWarningLevel, // mức cảnh cáo học đường
+                    disciplinaryWarningLevel: disciplinaryWarning?.level ?? 0, // mức cảnh cáo học đường
                     suspended: student.suspended, // đình chỉ học
                     expelled: student.expelled, // đuổi học
                     retakingCredits: thongTinDiemHocKy.retakingCredits, // Số tín chỉ phải thi lại (hiện tại chưa có thông tin này)
