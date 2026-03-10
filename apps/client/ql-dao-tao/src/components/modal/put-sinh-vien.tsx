@@ -11,9 +11,11 @@ import {
     useFindUniqueUserProfile,
     useUpdateStudent,
 } from '@workspace/db/hooks'
+import { sqlTransaction } from '@workspace/libs/api/model'
 import { Button, Col, Form, Input, message, Row } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
+import DatePicker from '@components/commons/date-picker'
 import { ExportOutlined } from '@ant-design/icons'
 import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
@@ -190,31 +192,48 @@ const PutStudentModal = () => {
 
     async function onOk(output: PutStudentProfile) {
         if (!output || !cccdUserProfileData?.id) return
+
+        showSpinner()
+
         try {
-            showSpinner()
+            const userProfileUpdate = {
+                model: 'UserProfile',
+                operation: 'update',
+                data: {
+                    where: { id: cccdUserProfileData.id },
+                    data: {
+                        firstName: output.firstName,
+                        lastName: output.lastName,
+                        dateOfBirth: output.dateOfBirth,
+                    },
+                },
+            } as const
+
+            const queries: Parameters<typeof sqlTransaction>[0] = [userProfileUpdate]
 
             if (id) {
-                await updateStudent({
+                queries.push({
+                    model: 'Student',
+                    operation: 'update',
                     data: {
-                        userProfileId: cccdUserProfileData?.id,
-                        fixedClassId: output.fixedClassId || null,
-                        registrationAreaId: output.registrationAreaId,
-                        status: output.status,
-                        curriculumVersionId: output.curriculumVersionId || null,
-                        curriculumVersionParallelId: output.curriculumVersionParallelId || null,
-                        note: output.note,
-                        code: output.code,
-                    },
-                    where: {
-                        id,
+                        where: { id },
+                        data: {
+                            fixedClassId: output.fixedClassId ?? null,
+                            registrationAreaId: output.registrationAreaId,
+                            status: output.status,
+                            curriculumVersionId: output.curriculumVersionId ?? null,
+                            curriculumVersionParallelId: output.curriculumVersionParallelId ?? null,
+                            note: output.note,
+                            code: output.code,
+                        },
                     },
                 })
-
-                message.success('Cập nhật sinh viên, học viên thành công')
             } else {
-                await createStudent({
+                queries.push({
+                    model: 'Student',
+                    operation: 'create',
                     data: {
-                        userProfileId: cccdUserProfileData?.id,
+                        userProfileId: cccdUserProfileData.id,
                         fixedClassId: output.fixedClassId,
                         registrationAreaId: output.registrationAreaId,
                         status: output.status,
@@ -224,16 +243,13 @@ const PutStudentModal = () => {
                         code: output.code,
                     },
                 })
-                message.success('Thêm mới sinh viên, học viên thành công')
             }
-
-            // refetch() lại danh sách level
-            queryClient.invalidateQueries({
-                queryKey: ['Student'],
-            })
+            await sqlTransaction(queries)
+            message.success(id ? 'Cập nhật sinh viên thành công' : 'Thêm mới sinh viên thành công')
+            queryClient.refetchQueries()
             onClose()
         } catch (error) {
-            console.log('Error updating student:', error)
+            console.error('Error updating student:', error)
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()
@@ -249,6 +265,7 @@ const PutStudentModal = () => {
                 firstName: userData.firstName,
                 lastName: userData.lastName,
                 userProfileId: userData.id,
+                dateOfBirth: userData.dateOfBirth ? dayjs(userData.dateOfBirth) : undefined,
             })
         },
         [form]
@@ -267,6 +284,9 @@ const PutStudentModal = () => {
                 // UserProfile fields với ID
                 firstName: studentData.userProfile?.firstName,
                 lastName: studentData.userProfile?.lastName,
+                dateOfBirth: studentData.userProfile?.dateOfBirth
+                    ? dayjs(studentData.userProfile.dateOfBirth)
+                    : undefined,
 
                 idCardNumber: studentData.userProfile?.idCardNumber,
             })
@@ -319,12 +339,23 @@ const PutStudentModal = () => {
                     </Col>
                     <Col sm={12} lg={12}>
                         <FormItem form={form} name="lastName" label="Họ và tên đệm" required>
-                            <Input disabled placeholder="Nhập họ và tên đệm" />
+                            <Input placeholder="Nhập họ và tên đệm" />
                         </FormItem>
                     </Col>
                     <Col sm={12} lg={12}>
                         <FormItem form={form} name="firstName" label="Tên" required>
-                            <Input disabled placeholder="Nhập tên" />
+                            <Input placeholder="Nhập tên" />
+                        </FormItem>
+                    </Col>
+                    <Col span={12}>
+                        <FormItem form={form} name="dateOfBirth" label="Ngày sinh">
+                            <DatePicker
+                                format={{
+                                    format: 'DD/MM/YYYY',
+                                    type: 'mask',
+                                }}
+                                className="w-full"
+                            />
                         </FormItem>
                     </Col>
                     <Col span={12}>
