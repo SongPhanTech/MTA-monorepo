@@ -315,9 +315,9 @@ const DiemTrungBinhKyHoc = () => {
                                 title: 'Ngày sinh',
                                 width: 150,
                                 align: 'center',
-                                render: (__, record) =>
-                                    record?.userProfile?.birthday
-                                        ? dayjs(record?.userProfile?.birthday).format('DD/MM/YYYY')
+                                render: (_, record) =>
+                                    record?.userProfile?.dateOfBirth
+                                        ? dayjs(record.userProfile.dateOfBirth).format('DD/MM/YYYY')
                                         : '',
                             },
 

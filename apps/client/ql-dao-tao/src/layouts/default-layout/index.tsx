@@ -10,11 +10,12 @@ import { Breadcrumb, Divider, Layout, Tooltip, theme } from 'antd'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { type ReactNode, useMemo } from 'react'
+import { type ReactNode, useMemo, useState } from 'react'
 import { IdleTimerProvider } from 'react-idle-timer'
 import HeaderApp from '@/components/header'
 //import packageInfo from '../../../package.json'
-import { useGetVersion } from '@workspace/libs/api/training'
+import { getVersion } from '@workspace/libs/api/training'
+import { useEffect } from 'react'
 const { Header, Content, Footer } = Layout
 interface BreadcrumbListProps {
     title: string
@@ -38,6 +39,7 @@ const DefaultLayout = ({
     breadcrumbList?: BreadcrumbListProps[]
     unLayout?: boolean
 }) => {
+    const [version, setVersion] = useState<string>()
     const router = useRouter()
     const currentPath = router.pathname
     const breadcrumb = getDynamicBreadcrumb('QL_DAO_TAO', currentPath)
@@ -70,8 +72,15 @@ const DefaultLayout = ({
                 ]
               : []
     }, [breadcrumb, breadcrumbList])
-    const { data: versionData } = useGetVersion(APP_CODE)
-    const version = Array.isArray(versionData) ? versionData[0]?.sTenVersion : undefined
+    useEffect(() => {
+        const fetchVersion = async () => {
+            const res = await getVersion(APP_CODE)
+            if (res.status === 200) {
+                setVersion((res.data as Version).sTenVersion)
+            }
+        }
+        fetchVersion()
+    }, [])
     const menus = useMenuList()
 
     const menusFlat = menus.flatten('children')
