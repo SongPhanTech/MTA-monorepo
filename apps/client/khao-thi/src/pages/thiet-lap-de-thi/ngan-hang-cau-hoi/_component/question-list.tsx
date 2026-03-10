@@ -396,53 +396,6 @@ export default function QuestionList({ questionBankId }: QuestionListProps) {
                                     return record?.knowledgeBlock?.name || ''
                                 },
                             },
-                            // {
-                            //   title: "Đáp án",
-                            //   dataIndex: "explanation",
-                            //   width: 280,
-                            //   type: "input",
-                            //   render: (__, record) => {
-                            //     return record.type === QuestionType.MULTIPLE_CHOICE ||
-                            //       record.type === QuestionType.SINGLE_CHOICE ? (
-                            //       <div className="space-y-1">
-                            //         {record?.multipleChoiceOptions
-                            //           .sort(
-                            //             (a: MultipleChoiceOption, b: MultipleChoiceOption) =>
-                            //               (a.order || 0) - (b.order || 0)
-                            //           )
-                            //           .map((option: MultipleChoiceOption) => (
-                            //             <div
-                            //               key={option.id}
-                            //               className={`text-xs ${
-                            //                 option.isCorrect
-                            //                   ? "text-green-600 font-semibold"
-                            //                   : "text-gray-600"
-                            //               }`}
-                            //             >
-                            //               {option.isCorrect && "✓ "}
-                            //               <span
-                            //                 dangerouslySetInnerHTML={{
-                            //                   __html: option.content
-                            //                     ? renderWithMath(option.content)
-                            //                     : "",
-                            //                 }}
-                            //               />
-                            //             </div>
-                            //           ))}
-                            //       </div>
-                            //     ) : (
-                            //       <HtmlTruncate>
-                            //         <div
-                            //           dangerouslySetInnerHTML={{
-                            //             __html: record.explanation
-                            //               ? renderWithMath(record.explanation)
-                            //               : "<i>Chưa có nội dung</i>",
-                            //           }}
-                            //         />
-                            //       </HtmlTruncate>
-                            //     );
-                            //   },
-                            // },
                             {
                                 title: 'Thao tác',
                                 width: 90,

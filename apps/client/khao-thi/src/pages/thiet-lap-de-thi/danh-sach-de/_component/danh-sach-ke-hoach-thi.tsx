@@ -119,6 +119,16 @@ export default function DanhSachKeHoachThi() {
                     include: {
                         subject: true,
                         managementOrganization: true,
+                        examFramework: {
+                            include: {
+                                examMatrixs: true,
+                            },
+                        },
+                        trainingObjectType: {
+                            select: {
+                                name: true,
+                            },
+                        },
                     },
                 },
                 semester: true,
@@ -129,6 +139,11 @@ export default function DanhSachKeHoachThi() {
                             select: {
                                 name: true,
                                 examCapacity: true,
+                                building: {
+                                    select: {
+                                        name: true,
+                                    },
+                                },
                             },
                         },
                     },
@@ -142,7 +157,6 @@ export default function DanhSachKeHoachThi() {
                         },
                     },
                 },
-
                 subjectClass: {
                     select: {
                         name: true,
@@ -161,7 +175,7 @@ export default function DanhSachKeHoachThi() {
             enabled: !!semesterId,
         }
     )
-    console.log('EXAMS:', exams)
+
     const formatDate = (date?: string | Date) => {
         if (!date) return ''
         const d = new Date(date)
@@ -297,7 +311,7 @@ export default function DanhSachKeHoachThi() {
                         {
                             title: 'Môn thi',
                             align: 'center',
-                            width: 350,
+                            width: 300,
                             dataIndex: 'searchText',
                             type: 'input',
                             render: (_, record) => {
@@ -326,7 +340,7 @@ export default function DanhSachKeHoachThi() {
                         {
                             title: 'Số SV',
                             align: 'center',
-                            width: 60,
+                            width: 50,
                             render: (_, record) => {
                                 let total = 0
                                 record?.examRooms?.forEach((item: any) => {
@@ -338,7 +352,7 @@ export default function DanhSachKeHoachThi() {
                         {
                             title: 'Khóa DTS',
                             align: 'center',
-                            width: 100,
+                            width: 60,
                             render: (_, record) => {
                                 const lockExamSessions = record.lockExamSessions
                                 return <Checkbox checked={lockExamSessions} />
@@ -347,8 +361,6 @@ export default function DanhSachKeHoachThi() {
                         {
                             title: 'Phòng thi',
                             align: 'center',
-                            // dataIndex: 'examRoom',
-                            // type: 'input',
                             width: 100,
                             render: (_, record) => {
                                 if (!record?.examRooms || record.examRooms?.length === 0) {
@@ -391,35 +403,75 @@ export default function DanhSachKeHoachThi() {
                                 )
                             },
                         },
-                        // {
-                        //     title: 'Số phòng thi',
-                        //     align: 'center',
-                        //     width: 60,
-                        //     render: (_, record) => {
-                        //         return record?.examRooms?.length
-                        //     },
-                        // },
-                        // {
-                        //     title: 'Số ca thi',
-                        //     align: 'center',
-                        //     width: 100,
-                        //     render: (_, record) => {
-                        //         return record?.session
-                        //     },
-                        // },
+                        {
+                            title: 'Giảng đường',
+                            align: 'center',
+                            width: 100,
+                            render: (_, record) => {
+                                if (!record?.examRooms || record.examRooms?.length === 0) {
+                                    return null
+                                }
+
+                                const displayLimit = 3
+                                const displayRooms = record.examRooms.slice(0, displayLimit)
+                                const remainingCount = record.examRooms.length - displayLimit
+
+                                const fullContent = (
+                                    <div className="max-h-60 overflow-y-auto">
+                                        {record.examRooms.map((examRoom: any) => (
+                                            <div key={examRoom.id} className="py-1">
+                                                {examRoom.room?.building?.name || ''}
+                                            </div>
+                                        ))}
+                                    </div>
+                                )
+
+                                return (
+                                    <div className="text-center">
+                                        {displayRooms.map((examRoom: any) => (
+                                            <div key={examRoom.id}>
+                                                {examRoom.room?.building?.name || ''}
+                                            </div>
+                                        ))}
+                                        {remainingCount > 0 && (
+                                            <Popover
+                                                content={fullContent}
+                                                title="Tất cả giảng đường"
+                                            >
+                                                <span className="text-blue-600 cursor-pointer hover:underline">
+                                                    + {remainingCount} khác
+                                                </span>
+                                            </Popover>
+                                        )}
+                                    </div>
+                                )
+                            },
+                        },
                         {
                             title: 'Lớp môn học',
                             align: 'center',
                             width: 150,
                             render: (_, record) => {
-                                return record?.subjectClass.length > 0
-                                    ? record?.subjectClass
-                                          .map(
-                                              (i: SubjectClass) =>
-                                                  `${i?.code || ''}-${i?.name || ''}`
-                                          )
-                                          .join(', ')
-                                    : ''
+                                return record?.subjectClass.length > 0 ? (
+                                    <span>
+                                        {record?.subjectClass
+                                            .map(
+                                                (i: SubjectClass) =>
+                                                    `${i?.code || ''}-${i?.name || ''}`
+                                            )
+                                            .join(', ')}
+                                    </span>
+                                ) : (
+                                    ''
+                                )
+                            },
+                        },
+                        {
+                            title: 'Đối tượng đào tạo',
+                            align: 'center',
+                            width: 100,
+                            render: (_, record) => {
+                                return record.subjectVersion?.trainingObjectType?.name || ''
                             },
                         },
                         {
@@ -470,12 +522,12 @@ export default function DanhSachKeHoachThi() {
                             align: 'center',
                             width: 100,
                             render: (_, record) => {
-                                const hasMatrix = record?.examBank?.some(
-                                    (b: any) => !!b.examMatrixId
-                                )
+                                const examFramework = record?.subjectVersion?.examFramework ?? []
 
-                                const hasFramework = record?.examBank?.some(
-                                    (b: any) => !!b.examMatrix?.examFrameworkId
+                                const hasFramework = examFramework.length > 0
+
+                                const hasMatrix = examFramework.some(
+                                    (f: any) => f.examMatrixs?.length > 0
                                 )
 
                                 return (

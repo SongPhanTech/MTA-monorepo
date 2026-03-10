@@ -51,7 +51,7 @@ export default function QuestionBankLite({
               }
             : undefined,
         {
-            enabled: Boolean(examFrameworkId),
+            enabled: !!examFrameworkId,
         }
     )
 

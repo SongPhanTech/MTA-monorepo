@@ -1,10 +1,11 @@
 import { queryClient } from '@api/index'
 import { renderWithMath } from '@components/commons/rich-text-editor/renderWithMath'
 import { useFindUniqueExamBank, useUpdateExamBank } from '@workspace/db/hooks'
+import { useGetExamBankWithGrouping } from '@workspace/libs/api/exam'
 import { getMinioUrl } from '@workspace/libs/utils'
 import { Button, Flex, Input, Modal } from 'antd'
 import { TemplateHandler } from 'easy-template-x'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useReactToPrint } from 'react-to-print'
 import { convertHtmlBreaks, saveFile } from '@/utils/saveFile'
@@ -34,11 +35,6 @@ const PrintExamBank = () => {
                         subjectVersion: true,
                     },
                 },
-                questions: {
-                    include: {
-                        question: true,
-                    },
-                },
                 subjectClass: {
                     select: {
                         id: true,
@@ -61,25 +57,15 @@ const PrintExamBank = () => {
         }
     )
 
-    const dataRender = useMemo(() => {
-        const sorted = [...(data?.questions || [])].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
-        const listQuestionChoice = sorted.filter((q) => q?.question?.type !== 'ESSAY')
-        const listQuestionEssay = sorted.filter((q) => q?.question?.type === 'ESSAY')
-        if (data?.isGroup) {
-            return {
-                ...data,
-                questions: [...listQuestionChoice, ...listQuestionEssay],
-                listQuestionChoice: listQuestionChoice,
-                listQuestionEssay: listQuestionEssay,
-            }
+    const { mutateAsync: fetchGroupedQuestions, data: groupedResponse } =
+        useGetExamBankWithGrouping()
+    const groupedData = groupedResponse?.status === 200 ? groupedResponse.data : undefined
+
+    useEffect(() => {
+        if (input?.id && data?.isGroup != null) {
+            fetchGroupedQuestions({ data: { id: input.id, isGroup: data.isGroup ?? false } })
         }
-        return {
-            ...data,
-            questions: sorted,
-            listQuestionChoice: listQuestionChoice,
-            listQuestionEssay: listQuestionEssay,
-        }
-    }, [data])
+    }, [input?.id, data?.isGroup, fetchGroupedQuestions])
 
     const subjectClassName = data?.subjectClass?.name || ''
 
@@ -103,11 +89,20 @@ const PrintExamBank = () => {
     const year = examDate.getFullYear()
 
     const handleDownload = async () => {
-        if (!data) return
-        const res = await fetch(getMinioUrl('mta/template/template-de-thi-bk.docx'))
+        if (!data || !groupedData) return
+        const templateUrl = groupedData.isGroup
+            ? getMinioUrl('mta/template/template-de-thi-tieu-de.docx')
+            : getMinioUrl('mta/template/template-de-thi-bk.docx')
+        const res = await fetch(templateUrl)
         const templateFile = await res.blob()
 
-        const templateData = {
+        const mapQuestion = (q: any, index: number) => ({
+            order: String(q?.order || index + 1),
+            point: Number(q?.question?.point || 0).toFixed(1),
+            content: convertHtmlBreaks(q?.question?.content) || '',
+        })
+
+        const baseTemplateData = {
             examCode: data.examCode || '',
             subjectName: data.exam?.subjectVersion?.name || '',
             semesterName: data.exam?.semester?.name || '',
@@ -123,13 +118,21 @@ const PrintExamBank = () => {
             month: String(month),
             year: String(year),
             teacherName: name,
-            questions:
-                data.questions?.map((q, index) => ({
-                    order: String(q?.order || index + 1),
-                    point: Number(q?.question?.point || 0).toFixed(1),
-                    content: convertHtmlBreaks(q?.question?.content) || '',
-                })) || [],
         }
+
+        const templateData = groupedData.isGroup
+            ? {
+                  ...baseTemplateData,
+                  listQuestionChoice: (groupedData.listQuestionChoice ?? []).map(mapQuestion),
+                  listQuestionEssay: (groupedData.listQuestionEssay ?? []).map(
+                      (q: any, i: number) =>
+                          mapQuestion(q, (groupedData.listQuestionChoice?.length ?? 0) + i)
+                  ),
+              }
+            : {
+                  ...baseTemplateData,
+                  questions: (groupedData.questions ?? []).map(mapQuestion),
+              }
 
         const handler = new TemplateHandler()
         const doc = await handler.process(templateFile, templateData)
@@ -322,10 +325,10 @@ const PrintExamBank = () => {
 
                     {/* Questions */}
                     <div style={{ marginBottom: '30px' }}>
-                        {dataRender.isGroup ? (
+                        {groupedData?.isGroup ? (
                             <div>
                                 <div className="font-semibold mb-2">I. Phần trắc nghiệm</div>
-                                {dataRender?.listQuestionChoice?.map((q: any, qIndex: number) => (
+                                {groupedData.listQuestionChoice?.map((q: any, qIndex: number) => (
                                     <div key={q?.id} style={{ marginBottom: '15px' }}>
                                         <div>
                                             <strong>
@@ -346,12 +349,12 @@ const PrintExamBank = () => {
                                     </div>
                                 ))}
                                 <div className="font-semibold mb-2">II. Phần tự luận</div>
-                                {dataRender?.listQuestionEssay?.map((q: any, qIndex: number) => (
+                                {groupedData.listQuestionEssay?.map((q: any, qIndex: number) => (
                                     <div key={q?.id} style={{ marginBottom: '15px' }}>
                                         <div>
                                             <strong>
                                                 Câu{' '}
-                                                {(dataRender?.listQuestionChoice?.length ?? 0) +
+                                                {(groupedData.listQuestionChoice?.length ?? 0) +
                                                     qIndex +
                                                     1}
                                                 ({Number(q?.question?.point || 0).toFixed(1)} điểm):
@@ -372,7 +375,7 @@ const PrintExamBank = () => {
                             </div>
                         ) : (
                             <div>
-                                {dataRender?.questions?.map((q, index: number) => (
+                                {groupedData?.questions?.map((q: any, index: number) => (
                                     <div key={q?.id} style={{ marginBottom: '15px' }}>
                                         <div>
                                             <strong>

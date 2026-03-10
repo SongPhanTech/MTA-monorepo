@@ -2,10 +2,12 @@ import { queryClient } from '@api/index'
 import { renderWithMath } from '@components/commons/rich-text-editor/renderWithMath'
 import type { Prisma } from '@workspace/db/client'
 import { useFindManyExamBank, useUpdateExamBank } from '@workspace/db/hooks'
+import { getExamBankWithGrouping } from '@workspace/libs/api/exam'
+import type { ExamBankQuestionsResult } from '@workspace/libs/api/schemas/examBankQuestionsResult'
 import { getMinioUrl } from '@workspace/libs/utils'
 import { Button, Divider, Flex, Input, Modal } from 'antd'
 import { TemplateHandler } from 'easy-template-x'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useReactToPrint } from 'react-to-print'
 import { convertHtmlBreaks, saveFile } from '@/utils/saveFile'
@@ -16,11 +18,6 @@ export type ExamBankType = Prisma.ExamBankGetPayload<{
             include: {
                 semester: true
                 subjectVersion: true
-            }
-        }
-        questions: {
-            include: {
-                question: true
             }
         }
         subjectClass: {
@@ -52,6 +49,9 @@ const PrintBatchExamBank = () => {
     })
 
     const [hasDownloaded, setHasDownloaded] = useState(false)
+    const [groupedExamsData, setGroupedExamsData] = useState<Map<string, ExamBankQuestionsResult>>(
+        new Map()
+    )
     const printRef = useRef<HTMLDivElement>(null)
 
     const { data: exams = [] } = useFindManyExamBank(
@@ -66,11 +66,6 @@ const PrintBatchExamBank = () => {
                     include: {
                         semester: true,
                         subjectVersion: true,
-                    },
-                },
-                questions: {
-                    include: {
-                        question: true,
                     },
                 },
                 subjectClass: {
@@ -99,29 +94,24 @@ const PrintBatchExamBank = () => {
         }
     )
 
-    const dataRender = useMemo(() => {
-        if (exams?.length <= 0) return []
-        const result = exams.map((i) => {
-            const sorted = [...(i?.questions || [])].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
-            const listQuestionChoice = sorted.filter((q) => q?.question?.type !== 'ESSAY')
-            const listQuestionEssay = sorted.filter((q) => q?.question?.type === 'ESSAY')
-            if (i?.isGroup) {
-                return {
-                    ...i,
-                    questions: [...listQuestionChoice, ...listQuestionEssay],
-                    listQuestionChoice: listQuestionChoice,
-                    listQuestionEssay: listQuestionEssay,
+    useEffect(() => {
+        if (exams.length === 0) return
+        Promise.all(
+            exams.map((exam) =>
+                getExamBankWithGrouping({ id: exam.id, isGroup: exam.isGroup ?? false })
+            )
+        ).then((results) => {
+            const map = new Map<string, ExamBankQuestionsResult>()
+            exams.forEach((exam, i) => {
+                const result = results[i]
+                if (result.status === 200) {
+                    map.set(exam.id, result.data)
                 }
-            }
-            return {
-                ...i,
-                questions: sorted,
-                listQuestionChoice: listQuestionChoice,
-                listQuestionEssay: listQuestionEssay,
-            }
+            })
+            setGroupedExamsData(map)
         })
-        return result
     }, [exams])
+
     // Tự động fill thời gian từ examFramework của exam đầu tiên
     useEffect(() => {
         if (exams.length > 0 && exams[0]?.examMatrix?.examFramework?.time) {
@@ -138,13 +128,28 @@ const PrintBatchExamBank = () => {
 
     // Download file
     const handleDownload = async () => {
-        if (!exams) return
+        if (!exams || groupedExamsData.size === 0) return
         const res = await fetch(getMinioUrl('mta/template/template-de-thi-hang-loat.docx'))
         const templateFile = await res.blob()
 
+        const mapQuestion = (q: any, index: number) => ({
+            order: index + 1,
+            point: Number(q?.question?.point || 0).toFixed(1),
+            content: convertHtmlBreaks(q?.question?.content || ''),
+        })
+
         const templateData = {
-            exams: dataRender.map((exam, index) => {
+            exams: exams.map((exam, index) => {
                 const examDate = exam?.examDay ? new Date(exam.examDay) : new Date()
+                const grouped = groupedExamsData.get(exam.id)
+
+                const allQuestions = grouped?.isGroup
+                    ? [
+                          ...(grouped.listQuestionChoice ?? []),
+                          ...(grouped.listQuestionEssay ?? []),
+                      ]
+                    : (grouped?.questions ?? [])
+
                 return {
                     semester: exam?.exam?.semester?.name || '',
                     className: exam?.subjectClass?.name || '',
@@ -164,20 +169,15 @@ const PrintBatchExamBank = () => {
                         exam?.isNote === true
                             ? `Được sử dụng tài liệu${exam?.explain ? ` ${exam.explain}` : ''}`
                             : `Không được sử dụng tài liệu${exam?.explain ? ` ${exam.explain}` : ''}`,
-                    questions:
-                        exam?.questions?.map((q: any, qIndex: number) => ({
-                            order: qIndex + 1,
-                            point: Number(q?.question?.point || 0).toFixed(1),
-                            content: convertHtmlBreaks(q?.question?.content || ''),
-                        })) || [],
-                    isLastExam: index === dataRender.length - 1,
+                    questions: allQuestions.map(mapQuestion),
+                    isLastExam: index === exams.length - 1,
                 }
             }),
         }
 
         const handler = new TemplateHandler()
         const doc = await handler.process(templateFile, templateData)
-        saveFile(`De-Thi-Hang-Loat-${dataRender[0]?.exam?.subjectVersion?.name}.docx`, doc)
+        saveFile(`De-Thi-Hang-Loat-${exams[0]?.exam?.subjectVersion?.name}.docx`, doc)
         setHasDownloaded(true)
     }
 
@@ -199,14 +199,12 @@ const PrintBatchExamBank = () => {
         onClose()
     }
 
-    const renderExamPreview = (
-        exam: ExamBankType & { listQuestionEssay: any; listQuestionChoice: any },
-        index: number
-    ) => {
+    const renderExamPreview = (exam: ExamBankType, index: number) => {
         const examDate = exam?.examDay ? new Date(exam.examDay) : new Date()
         const day = examDate.getDate()
         const month = examDate.getMonth() + 1
         const year = examDate.getFullYear()
+        const grouped = groupedExamsData.get(exam.id)
 
         return (
             <div key={exam.id}>
@@ -345,10 +343,10 @@ const PrintBatchExamBank = () => {
 
                     {/* Questions */}
                     <div style={{ marginBottom: '30px' }}>
-                        {exam.isGroup ? (
+                        {grouped?.isGroup ? (
                             <div>
                                 <div className="font-semibold mb-2">I. Phần trắc nghiệm</div>
-                                {exam?.listQuestionChoice?.map((q: any, qIndex: number) => (
+                                {grouped.listQuestionChoice?.map((q: any, qIndex: number) => (
                                     <div key={q?.id} style={{ marginBottom: '15px' }}>
                                         <div>
                                             <strong>
@@ -369,12 +367,12 @@ const PrintBatchExamBank = () => {
                                     </div>
                                 ))}
                                 <div className="font-semibold mb-2">II. Phần tự luận</div>
-                                {exam?.listQuestionEssay?.map((q: any, qIndex: number) => (
+                                {grouped.listQuestionEssay?.map((q: any, qIndex: number) => (
                                     <div key={q?.id} style={{ marginBottom: '15px' }}>
                                         <div>
                                             <strong>
                                                 Câu{' '}
-                                                {(exam?.listQuestionChoice?.length ?? 0) +
+                                                {(grouped.listQuestionChoice?.length ?? 0) +
                                                     qIndex +
                                                     1}
                                                 ({Number(q?.question?.point || 0).toFixed(1)} điểm):
@@ -395,7 +393,7 @@ const PrintBatchExamBank = () => {
                             </div>
                         ) : (
                             <div>
-                                {exam?.questions?.map((q: any, qIndex: number) => (
+                                {grouped?.questions?.map((q: any, qIndex: number) => (
                                     <div key={q?.id} style={{ marginBottom: '15px' }}>
                                         <div>
                                             <strong>
@@ -497,8 +495,8 @@ const PrintBatchExamBank = () => {
                 }}
             >
                 <div ref={printRef}>
-                    {dataRender.length > 0 ? (
-                        dataRender.map((exam, index) => renderExamPreview(exam, index))
+                    {exams.length > 0 ? (
+                        exams.map((exam, index) => renderExamPreview(exam, index))
                     ) : (
                         <div style={{ textAlign: 'center', padding: '40px' }}>
                             Không có đề thi nào được chọn

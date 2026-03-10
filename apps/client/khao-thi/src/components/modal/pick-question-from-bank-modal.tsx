@@ -28,7 +28,7 @@ const PickQuestionFromBankModal = () => {
     const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([])
     const [selectedQuestions, setSelectedQuestions] = useState<any[]>([])
     const [questionBankId, setQuestionBankId] = useState<string | undefined>(undefined)
-    const [keepOld, setKeepOld] = useState(false)
+    const [keepOld, setKeepOld] = useState(true)
     const [currentPage, setCurrentPage] = useState(1)
     const [pageSize, setPageSize] = useState(10)
     const [isAllSelected, setIsAllSelected] = useState(false)
@@ -50,7 +50,7 @@ const PickQuestionFromBankModal = () => {
             setSelectedRowKeys([])
             setSelectedQuestions([])
             setQuestionBankId(undefined)
-            setKeepOld(false)
+            setKeepOld(true)
             setCurrentPage(1)
         },
     })
@@ -99,7 +99,7 @@ const PickQuestionFromBankModal = () => {
         () => ({
             deletedAt: null,
             questionBankId,
-            knowledgeBlockId: knowledgeBlockId,
+            knowledgeBlockId: null,
             ...(filters.questionType && filters.questionType.length > 0
                 ? {
                       type: { in: filters.questionType },
@@ -133,7 +133,6 @@ const PickQuestionFromBankModal = () => {
             filters.content,
             filters.difficult,
             filters.knowledgeBlockId,
-            knowledgeBlockId,
         ]
     )
     const { data: questions = [] } = useFindManyQuestion(
@@ -245,8 +244,6 @@ const PickQuestionFromBankModal = () => {
                 return
             }
 
-            // const { knowledgeBlockId } = form.getFieldsValue();
-
             if (!knowledgeBlockId) {
                 message.error('Vui lòng chọn chuẩn đầu ra')
                 return
@@ -265,7 +262,6 @@ const PickQuestionFromBankModal = () => {
                                 isAutoGraded: q.isAutoGraded ?? false,
                                 knowledgeBlockId,
                                 questionBankId: q.questionBankId,
-
                                 multipleChoiceOptions:
                                     q.multipleChoiceOptions?.length > 0
                                         ? {
@@ -596,59 +592,6 @@ const PickQuestionFromBankModal = () => {
                                 render: (_: unknown, record: any) =>
                                     record?.knowledgeBlock?.name || '',
                             },
-
-                            // {
-                            //   title: "Đáp án",
-                            //   dataIndex: "explanation",
-                            //   width: 280,
-                            //   render: (_: unknown, record: any) => {
-                            //     if (
-                            //       record.type === QuestionType.MULTIPLE_CHOICE ||
-                            //       record.type === QuestionType.SINGLE_CHOICE
-                            //     ) {
-                            //       return (
-                            //         <div className="space-y-1">
-                            //           {record?.multipleChoiceOptions
-                            //             ?.sort(
-                            //               (a: any, b: any) => (a.order || 0) - (b.order || 0)
-                            //             )
-                            //             .map((option: any) => (
-                            //               <div
-                            //                 key={option.id}
-                            //                 className={`text-xs ${
-                            //                   option.isCorrect
-                            //                     ? "text-green-600 font-semibold"
-                            //                     : "text-gray-600"
-                            //                 }`}
-                            //               >
-                            //                 {option.isCorrect && "✓ "}
-                            //                 <span
-                            //                   dangerouslySetInnerHTML={{
-                            //                     __html: option.content
-                            //                       ? renderWithMath(option.content)
-                            //                       : "",
-                            //                   }}
-                            //                 />
-                            //               </div>
-                            //             ))}
-                            //         </div>
-                            //       );
-                            //     }
-
-                            //     // Tự luận / vấn đáp / khác
-                            //     return (
-                            //       <HtmlTruncate>
-                            //         <div
-                            //           dangerouslySetInnerHTML={{
-                            //             __html: record.explanation
-                            //               ? renderWithMath(record.explanation)
-                            //               : "<i>Chưa có nội dung</i>",
-                            //           }}
-                            //         />
-                            //       </HtmlTruncate>
-                            //     );
-                            //   },
-                            // },
                         ]}
                     />
                 </Col>
