@@ -1030,13 +1030,6 @@ app.openapi(getClusterSurveyInfo, async (c) => {
             },
         },
     })
-    // const lecturerIds:any = survey.filter(i=>i?.lectureId).map(i=>i?.lectureId) ;
-    // if(
-    //     !lecturerIds?.length
-    // ){
-    //     return c.json({ message: 'Không tìm thấy giảng viên' }, 404)
-    // }
-
     let listStudentCount = 0
 
     const listSUbsjecClass = await prisma.subjectClass.findMany({
@@ -1076,6 +1069,113 @@ app.openapi(getClusterSurveyInfo, async (c) => {
         completedSurveyCount,
         listStudentCount,
         studentCompletedSurveyCount: studentCompletedSurvey || 0,
+    }
+
+    return c.json(data, 200)
+})
+
+const getClusterSurveyInfoDepartment = createRoute({
+    operationId: 'get-cluster-survey-info-department',
+    path: '/{id}/get-cluster-survey-info-department',
+    method: 'get',
+    tags: ['ClusterSurvey'],
+    summary: 'Thống kê khảo sát cụm thông tin chung theo khoa',
+    request: {
+        params: z.object({ id: z.string() }),
+        query: z.object({
+            organizationId: z.string(),
+            semesterId: z.string(),
+            trainingObjectTypeId: z.string(),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Thành công',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        data: z.any(),
+                    }),
+                },
+            },
+        },
+        404: {
+            description: 'Không tìm thấy khảo sát.',
+            content: {
+                'application/json': {
+                    schema: z.object({ message: z.string() }),
+                },
+            },
+        },
+    },
+})
+app.openapi(getClusterSurveyInfoDepartment, async (c) => {
+    const { id } = c.req.valid('param')
+    const { semesterId, trainingObjectTypeId, organizationId, ...q } = c.req.valid('query')
+
+    const survey = await prisma.survey.findMany({
+        where: { clusterSurveyId: id, lecture: { organizationId } },
+        include: {
+            surveySessions: true,
+        },
+    })
+
+    if (!survey?.length) {
+        return c.json({ message: 'Không tìm thấy khảo sát' }, 404)
+    }
+
+    const completedSurveyCount = await prisma.survey.count({
+        where: {
+            clusterSurveyId: id,
+            surveySessions: {
+                some: {},
+            },
+            lecture: { organizationId },
+        },
+    })
+    let listStudentCount = 0
+
+    const listSUbsjecClass = await prisma.subjectClass.findMany({
+        where: {
+            survey: {
+                some: {
+                    clusterSurveyId: id,
+                    lecture: { organizationId },
+                },
+            },
+        },
+        include: {
+            mainLecturer: true,
+            subjectClassStudent: true,
+        },
+    })
+    listSUbsjecClass.forEach((i) => {
+        listStudentCount += i?.subjectClassStudent?.length
+    })
+
+    const studentCompletedSurvey = await prisma.surveySession.count({
+        where: {
+            survey: {
+                clusterSurveyId: id,
+                lecture: { organizationId },
+            },
+        },
+        // include:{
+        //     survey:{
+        //         include:{
+        //             clusterSurvey:true
+        //         }
+        //     }
+        // }
+    })
+
+    const data = {
+        data: {
+            surveyCount: survey?.length || 0,
+            completedSurveyCount,
+            listStudentCount,
+            studentCompletedSurveyCount: studentCompletedSurvey || 0,
+        },
     }
 
     return c.json(data, 200)

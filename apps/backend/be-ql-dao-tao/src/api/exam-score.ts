@@ -229,7 +229,7 @@ const saveExamScore = createRoute({
 app.openapi(saveExamScore, async (c) => {
     const payload = c.req.valid('json')
     const map = new Map(payload.map((u) => [u.id, u.score]))
-
+    
     const examPapers = await prisma.examPaper.findMany({
         where: {
             id: { in: payload.map((u) => u.id) },
@@ -331,8 +331,8 @@ app.openapi(saveExamScore, async (c) => {
     }
 
     const updates = examPapers.map((p) => {
-        const examScore = map.get(p.id) || null
-
+        const examScore = Number(map.get(p.id))>=0?Number(map.get(p.id)):null
+         
         const finalScore = calcFinalScore(
             p.studentSubjectScore.student.fixedClass?.trainingCourse || defaultCoef,
             { ...p.studentSubjectScore, examScore },
