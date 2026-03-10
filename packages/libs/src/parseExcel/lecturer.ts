@@ -94,6 +94,16 @@ export const parseSheetLecturer = (
                     cellRef: `${cols.fullname}${row.__rowNum__ + 1}`,
                     message: 'Họ và tên không được để trống',
                 })
+            } else {
+                const fullname = row[cols.fullname]?.trim()
+                const parts = fullname ? fullname.split(/\s+/) : []
+                if (parts.length < 2) {
+                    errors.push({
+                        sheetRef: sheetName,
+                        cellRef: `${cols.fullname}${row.__rowNum__ + 1}`,
+                        message: 'Họ và tên phải có ít nhất 2 từ (Họ và Tên)',
+                    })
+                }
             }
 
             if (!row[cols.gender]) {
