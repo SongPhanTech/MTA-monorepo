@@ -8,10 +8,10 @@ import type { FilterProps } from '@components/commons/typeFilter'
 import { DIFFICULT_LABELS, QUESTION_TYPE_LABELS } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { createId, type Difficult, QuestionType } from '@workspace/db'
-import { useCreateQuestion, useFindManyKnowledgeBlock } from '@workspace/db/hooks'
+import { useFindManyKnowledgeBlock } from '@workspace/db/hooks'
 import { generatePresignedUrl, sqlTransaction } from '@workspace/libs/api/model'
 import { env } from '@workspace/libs/utils'
-import { Button, Col, Form, Modal, Table as AntTable, message, Radio, Row, Select } from 'antd'
+import { Button, Col, Form, Modal, message, Radio, Row, Select } from 'antd'
 import { XMLParser } from 'fast-xml-parser'
 import PizZip from 'pizzip'
 import type React from 'react'
@@ -601,7 +601,6 @@ const WordImportModal: React.FC = () => {
         } finally {
             setLoading(false)
         }
-        console.log('questions:', questions)
     }
 
     const renderContentWithImagePlaceholders = (text: string, images: any[]) => {
@@ -703,7 +702,6 @@ const WordImportModal: React.FC = () => {
         },
     ]
 
-    const { mutateAsync: createQuestion } = useCreateQuestion()
     const { data: knowledgeBlockData } = useFindManyKnowledgeBlock({
         where: {
             deletedAt: null,
@@ -943,7 +941,7 @@ const WordImportModal: React.FC = () => {
                 <Button
                     key="submit"
                     type="primary"
-                    disabled={selectedRowKeys.length === 0}
+                    disabled={selectedRowKeys.length === 0 || importErrors.length > 0}
                     onClick={onOk}
                 >
                     Lưu Câu Hỏi
@@ -1034,11 +1032,9 @@ const WordImportModal: React.FC = () => {
 
             {importErrors.length > 0 && (
                 <div style={{ marginBottom: 12 }}>
-                    <AntTable
-                        size="small"
+                    <Table
                         dataSource={importErrors.map((e, idx) => ({ ...e, key: idx }))}
                         pagination={false}
-                        scroll={{ y: 120 }}
                         columns={[
                             {
                                 title: 'Dòng',
@@ -1055,7 +1051,6 @@ const WordImportModal: React.FC = () => {
                                 ),
                             },
                         ]}
-                        style={{ border: '1px solid #faad14', borderRadius: 6 }}
                     />
                 </div>
             )}
@@ -1074,9 +1069,10 @@ const WordImportModal: React.FC = () => {
                         rowSelection={rowSelection}
                         scroll={{
                             x: '100%',
-                            y: importErrors.length > 0
-                                ? 'calc(60vh - 300px)'
-                                : 'calc(60vh - 130px)',
+                            y:
+                                importErrors.length > 0
+                                    ? 'calc(60vh - 100px)'
+                                    : 'calc(60vh - 130px)',
                         }}
                         sticky={{
                             offsetHeader: 0,
