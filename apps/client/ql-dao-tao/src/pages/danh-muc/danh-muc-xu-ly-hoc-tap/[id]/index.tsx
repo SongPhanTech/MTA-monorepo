@@ -259,7 +259,7 @@ export default function AcademicActionCondition() {
                                 fixed: 'left',
                                 render: (value) => getCriteriaFieldLabel(value),
                             },
-                            {
+                            /* {
                                 title: 'Đảo ngược so sánh',
                                 dataIndex: 'invert',
                                 align: 'center',
@@ -271,7 +271,7 @@ export default function AcademicActionCondition() {
                                         </div>
                                     )
                                 },
-                            },
+                            }, */
                             {
                                 title: 'So sánh',
                                 dataIndex: 'operator',

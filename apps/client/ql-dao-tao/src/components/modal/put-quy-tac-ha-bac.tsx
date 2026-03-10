@@ -52,7 +52,7 @@ const PutRankDowngradeCondition = () => {
             const data = {
                 code: output?.code,
                 field: output?.field,
-                invert: output?.invert,
+                // invert: output?.invert,
                 operator: output?.operator,
                 value: output?.value,
                 description: output?.description,
@@ -95,12 +95,12 @@ const PutRankDowngradeCondition = () => {
         if (initialValue) {
             form.setFieldsValue({
                 ...initialValue,
-                invert: initialValue.invert,
+                // invert: initialValue.invert,
             })
         } else {
             form.setFieldsValue({
                 active: true,
-                invert: false,
+                // invert: false,
             })
         }
     }, [initialValue, form])
@@ -127,7 +127,7 @@ const PutRankDowngradeCondition = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={12}>
+            {/* <Col span={12}>
                 <FormItem
                     form={form}
                     name="invert"
@@ -137,7 +137,7 @@ const PutRankDowngradeCondition = () => {
                 >
                     <Checkbox />
                 </FormItem>
-            </Col>
+            </Col> */}
             <Col span={12}>
                 <FormItem form={form} label="So sánh" name="operator" required>
                     <Select

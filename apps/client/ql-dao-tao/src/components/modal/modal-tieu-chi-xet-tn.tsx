@@ -202,7 +202,7 @@ const ModalGraduationCriteria = () => {
                                 fixed: 'left',
                                 render: (record) => getCriteriaFieldLabel(record),
                             },
-                            {
+                            /* {
                                 title: 'Đảo ngược so sánh',
                                 dataIndex: 'invert',
                                 align: 'center',
@@ -214,7 +214,7 @@ const ModalGraduationCriteria = () => {
                                         </div>
                                     )
                                 },
-                            },
+                            }, */
                             {
                                 title: 'So sánh',
                                 dataIndex: 'operator',
@@ -312,7 +312,7 @@ const ModalGraduationCriteria = () => {
                             fixed: 'left',
                             render: (record) => getCriteriaFieldLabel(record),
                         },
-                        {
+                        /* {
                             title: 'Đảo ngược so sánh',
                             dataIndex: 'invert',
                             align: 'center',
@@ -324,7 +324,7 @@ const ModalGraduationCriteria = () => {
                                     </div>
                                 )
                             },
-                        },
+                        }, */
                         {
                             title: 'So sánh',
                             dataIndex: 'operator',
