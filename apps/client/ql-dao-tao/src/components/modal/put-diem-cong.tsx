@@ -9,6 +9,7 @@ import {
     useFindUniqueAward,
     useUpdateAward,
 } from '@workspace/db/hooks'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Form, Input, InputNumber, message } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
@@ -21,6 +22,7 @@ export type PutAward = Award & {
 }
 dayjs.locale('vi')
 const PutOlympicScoreModal = () => {
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const [form] = Form.useForm<PutAward>()
     const [_targetDisabled, setTargetDisabled] = useState(true)
     const {
@@ -36,9 +38,24 @@ const PutOlympicScoreModal = () => {
     const { mutateAsync: createAward } = useCreateAward()
     const { mutateAsync: updateAward } = useUpdateAward()
     const { data: subjectData = [] } = useFindManySubject({
+        where: {
+            subjectVersion: {
+                some: {
+                    trainingObjectTypeId,
+                    // type: 'Graduation',
+                    type: 'Normal',
+                    active: true,
+                },
+            },
+        },
         include: {
             subjectVersion: {
-                where: { active: true },
+                where: { 
+                    active: true,
+                    trainingObjectTypeId,
+                    // type: 'Graduation',
+                    type: 'Normal',
+                },
                 orderBy: { createdAt: 'desc' },
                 take: 1,
             },
@@ -111,7 +128,7 @@ const PutOlympicScoreModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Chỉnh sửa điểm oplympic' : 'Thêm mới điểm oplympic'}
+            title={id ? 'Chỉnh sửa điểm olympic' : 'Thêm mới điểm olympic'}
             className="w-[500px]"
         >
             <Col span={24} className="mb-4">
@@ -139,7 +156,11 @@ const PutOlympicScoreModal = () => {
                         style={{ width: '100%' }}
                         placeholder="Chọn môn học"
                         options={subjectData.map((item) => ({
-                            label: item.code + ' - ' + item.name + (item.subjectVersion?.[0]?.credit ? ' - ' + item.subjectVersion[0].credit + ' tín chỉ' : ''),
+                            label: [
+                                item.subjectVersion?.[0]?.code,
+                                item.name,
+                                item.subjectVersion?.[0]?.credit ? `${item.subjectVersion[0].credit} tín chỉ` : null
+                            ].filter(Boolean).join(' - '),
                             value: item.id,
                         }))}
                     />
