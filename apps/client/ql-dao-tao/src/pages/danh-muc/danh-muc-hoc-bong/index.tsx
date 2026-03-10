@@ -19,7 +19,7 @@ import {
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Checkbox, Col, Flex, message, Row, Tooltip } from 'antd'
+import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
 import _ from 'lodash'
 import { BookPlus } from 'lucide-react'
 import type React from 'react'

@@ -113,38 +113,38 @@ package-cdn:
 	@zip -r -q cdn.zip cdn
 
 deploy-cdn:
-	sshpass -p "Bancntt@2025" scp -O cdn.zip app@192.168.3.9:~/Documents/app/
-	sshpass -p "Bancntt@2025" ssh app@192.168.3.9 "cd Documents/app/ && \
-	docker compose -f dao-tao.yml down; \
+	scp -O cdn.zip app2:~/app/fe/
+	ssh app2 "cd app/fe/ && \
+ 	docker compose down; \
 	rm -rf dang-ky-hoc-cdn/ lms-cdn/ ems-cdn/ hrm-cdn/ chatbot-cdn/; \
 	unzip -q cdn.zip && \
 	mv cdn/* . && \
-	docker compose -f dao-tao.yml up -d"
+	docker compose up -d"
 
 deploy-all-be:
 	@rm -rf docker-images.zip
 	@zip -r docker-images.zip docker-images
-	sshpass -p "Bancntt@2025" scp -O docker-images.zip app@192.168.3.9:~/Documents/docker-compose/
-	sshpass -p "Bancntt@2025" ssh app@192.168.3.9 "cd Documents/docker-compose/ && \
+	scp -O docker-images.zip app2:~/mta-deploy
+	ssh app2 "cd mta-deploy && \
 	unzip -o docker-images.zip && \
 	cd docker-images && ls *.tar.gz | xargs -I {} docker load -i {} && \
-	cd .. && \
+	cd ~/app/be && \
 	docker rm -f mta-be-exchange mta-be-khao-thi mta-be-model mta-be-portal mta-be-ql-dao-tao mta-be-ql-dao-tao-shared && \
 	docker compose up -d"
 
 # deploy-be-%: build-%
 # 	@mkdir -p docker-images
 # 	$(DOCKER) save $(REGISTRY)/$(IMG_PREFIX)$*:$(DEV_TAG) | gzip > docker-images/$(IMG_PREFIX)$*.tar.gz
-# 	sshpass -p "Bancntt@2025" scp -O docker-images/$(IMG_PREFIX)$*.tar.gz app@192.168.3.9:~/Documents/docker-compose/
-# 	sshpass -p "Bancntt@2025" ssh app@192.168.3.9 "cd Documents/docker-compose/ && \
+# 	sshpass -p "Bancntt@2025" scp -O docker-images/$(IMG_PREFIX)$*.tar.gz app2:~/Documents/docker-compose/
+# 	sshpass -p "Bancntt@2025" ssh app2 "cd Documents/docker-compose/ && \
 # 	docker load -i $(IMG_PREFIX)$*.tar.gz && \
 # 	docker rm -f $(IMG_PREFIX)$* && \
 # 	docker compose up $(IMG_PREFIX)$* -d"
 
 deploy-%:
 	$(DOCKER) save $(REGISTRY)/$(IMG_PREFIX)$*:$(DEV_TAG) | gzip > docker-images/$(IMG_PREFIX)$*.tar.gz
-	sshpass -p "Bancntt@2025" scp -O docker-images/$(IMG_PREFIX)$*.tar.gz app@192.168.3.9:~/Documents/docker-compose/
-	sshpass -p "Bancntt@2025" ssh app@192.168.3.9 "cd Documents/docker-compose/ && \
+	sshpass -p "Bancntt@2025" scp -O docker-images/$(IMG_PREFIX)$*.tar.gz app2:~/Documents/docker-compose/
+	sshpass -p "Bancntt@2025" ssh app2 "cd Documents/docker-compose/ && \
 	docker load -i $(IMG_PREFIX)$*.tar.gz && \
 	docker rm -f $(IMG_PREFIX)$* && \
 	docker compose up $(IMG_PREFIX)$* -d"

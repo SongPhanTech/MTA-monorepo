@@ -27,8 +27,8 @@ import {
     Form,
     Input,
     InputNumber,
-    message,
     Modal,
+    message,
     Radio,
     Row,
     Switch,
@@ -72,7 +72,11 @@ const PutTrainingCourseModal = () => {
 
     const { data: trainingCourses = [] } = useFindManyTrainingCourse({
         where: { trainingObjectTypeId },
-        orderBy: { createdAt: 'desc' },
+        orderBy: {
+            semesterStart: {
+                startDate: 'desc',
+            },
+        },
     })
 
     const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectTypePermission({

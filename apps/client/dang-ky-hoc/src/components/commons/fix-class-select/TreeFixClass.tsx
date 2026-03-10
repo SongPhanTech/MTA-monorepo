@@ -10,7 +10,11 @@ const TreeFixClass: React.FC<TreeFixClassProps> = ({ onChangeSelected }) => {
     // Lấy danh sách Training Courses
     const { data: trainingCourses = [], isLoading: trainingCoursesLoading } =
         useFindManyTrainingCourse({
-            orderBy: { name: 'asc' },
+            orderBy: {
+                semesterStart: {
+                    startDate: 'desc',
+                },
+            },
         })
 
     // Lấy danh sách Fixed Classes
@@ -19,6 +23,9 @@ const TreeFixClass: React.FC<TreeFixClassProps> = ({ onChangeSelected }) => {
             trainingCourseId: {
                 in: trainingCourses.map((course) => course.id),
             },
+        },
+        orderBy: {
+            name: 'asc',
         },
     })
 

@@ -66,7 +66,11 @@ const PutFixedClassModal = () => {
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         where: trainingObjectTypeId ? { trainingObjectTypeId } : {},
-        orderBy: { name: 'asc' },
+        orderBy: {
+            semesterStart: {
+                startDate: 'desc',
+            },
+        },
         include: {
             semesterStart: { include: { schoolYear: true } },
         },

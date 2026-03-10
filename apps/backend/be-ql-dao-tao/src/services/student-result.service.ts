@@ -2517,6 +2517,11 @@ export const resultCourseStudentDecreaseAcademicWarning = async (
                 },
             },
         },
+        orderBy: {
+            semesterStart: {
+                startDate: 'desc',
+            },
+        },
     })
 
     await Promise.all(
@@ -2669,6 +2674,11 @@ const SaveStudentRepeatGrade = async (
                 },
                 deletedAt: null,
                 active: true,
+            },
+            orderBy: {
+                semesterStart: {
+                    startDate: 'desc',
+                },
             },
         })
 

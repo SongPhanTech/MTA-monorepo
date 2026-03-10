@@ -66,7 +66,13 @@ const PutThesisSession = () => {
     const { data: trainingCourses = [] } = useFindManyTrainingCourse(
         {
             where: { trainingObjectTypeId: trainingObjectId ?? ('' as string) },
+            orderBy: {
+                semesterStart: {
+                    startDate: 'desc',
+                },
+            },
         },
+
         { enabled: !!trainingObjectId }
     )
     const { mutateAsync: createThesisSession } = useCreateThesisSession()

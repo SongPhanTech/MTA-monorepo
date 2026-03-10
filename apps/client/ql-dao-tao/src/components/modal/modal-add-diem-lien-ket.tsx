@@ -155,6 +155,11 @@ const PutScoreLinkSheetModal = () => {
     })
     const { data: trainingCourses } = useFindManyTrainingCourse({
         where: { active: true, trainingObjectTypeId },
+        orderBy: {
+            semesterStart: {
+                startDate: 'desc',
+            },
+        },
     })
     const selectedTrainingCourseId = Form.useWatch('trainingCourseId', form)
     const { data: fixedClasses = [], isLoading: isLoadingFixedClasses } = useFindManyFixedClass({

@@ -17,11 +17,11 @@ import type { DataNode } from 'antd/es/tree'
 import dayjs from 'dayjs'
 import TreeSelect from '@/components/commons/tree-select'
 import 'dayjs/locale/vi'
+import type { Subject, SubjectVersion } from '@workspace/db'
 import type { $Enums, PlanTraining, Prisma } from '@workspace/db/client'
 import { Trash2Icon } from 'lucide-react'
-import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useCallback } from 'react'
-import type { Subject, SubjectVersion } from '@workspace/db'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const PAGE_SIZE = 10
 
@@ -255,6 +255,11 @@ const KhoiTaoMon = () => {
                         },
                     },
                 },
+            },
+        },
+        orderBy: {
+            semesterStart: {
+                startDate: 'desc',
             },
         },
     })

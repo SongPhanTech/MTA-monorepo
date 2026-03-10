@@ -54,7 +54,11 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
             where: {
                 trainingObjectTypeId,
             },
-            orderBy: { name: 'asc' },
+            orderBy: {
+                semesterStart: {
+                    startDate: 'desc',
+                },
+            },
         })
 
     const { data: res } = useGetSurveyObjects({

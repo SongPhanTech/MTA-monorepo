@@ -32,14 +32,10 @@ export default function MonTheoKeHoachDuKien() {
     const subjectSelected = Form.useWatch('subjectSelected', form) || []
     const { onOpen: onOpenDetailSubject } = useDisclosure<{
         subjectVersionId?: string
-    }>({
-        tag: 'ModalChiTietMonHoc',
-    })
+    }>({ tag: 'ModalChiTietMonHoc' })
     const { onOpen: onOpenDetailFixedClass } = useDisclosure<{
         fixedClassId: string
-    }>({
-        tag: 'ModalChiTietLopBienChe',
-    })
+    }>({ tag: 'ModalChiTietLopBienChe' })
 
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { id: trainingCourseId } = useTrainingCourseStore()
@@ -90,6 +86,13 @@ export default function MonTheoKeHoachDuKien() {
             })
         return result
     }, [subjects])
+
+    const subjectSelectedCount = useMemo(() => {
+        const subjectVersionIds = data
+            .filter((item) => subjectSelected.includes(item.trainingBlockSubjectId))
+            .map((item) => item.subjectVersionId)
+        return new Set(subjectVersionIds).size
+    }, [subjectSelected, data])
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -194,9 +197,11 @@ export default function MonTheoKeHoachDuKien() {
                             <Button
                                 onClick={onSubmit}
                                 type="primary"
-                                disabled={subjectSelected.length === 0}
+                                disabled={subjectSelectedCount === 0}
                             >
-                                Đưa {subjectSelected.length || ''} môn vào KHDK
+                                Đưa {subjectSelectedCount || ''} môn{' '}
+                                {subjectSelected.length ? `(${subjectSelected.length} lớp)` : ''}{' '}
+                                vào KHDK
                             </Button>
                         </Flex>
                     </Flex>
@@ -275,8 +280,7 @@ export default function MonTheoKeHoachDuKien() {
                                                 }}
                                                 className="text-left hover:text-primary cursor-pointer"
                                             >
-                                                {`${record?.subjectVersionName} (${record?.subjectVersionCredit})` ||
-                                                    ''}
+                                                {`${record?.subjectVersionName} (${record?.subjectVersionCredit})`}
                                             </div>
                                         )
                                     },

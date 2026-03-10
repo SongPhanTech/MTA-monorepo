@@ -8,7 +8,7 @@ import {
     useFindUniqueAcademicActionCondition,
     useUpdateAcademicActionCondition,
 } from '@workspace/db/hooks'
-import { Checkbox, Col, Form, Input, InputNumber, message, Radio, Select } from 'antd'
+import { Col, Form, Input, InputNumber, message, Radio, Select } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -99,12 +99,7 @@ const PutAcademicActionCondition = () => {
             maskClosable={true}
             title={input?.id ? 'Chỉnh sửa điều kiện' : 'Thêm mới điều kiện'}
         >
-            <Col span={12}>
-                <FormItem form={form} name="code" label="Mã điều kiện">
-                    <Input placeholder="Nhập mã điều kiện" />
-                </FormItem>
-            </Col>
-            <Col span={12}>
+            <Col span={24}>
                 <FormItem form={form} label="Trường dữ liệu để kiểm tra" name="field" required>
                     <Select
                         placeholder="Chọn trường dữ liệu để kiểm tra"
@@ -144,7 +139,7 @@ const PutAcademicActionCondition = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={12}>
+            <Col span={8}>
                 <FormItem
                     form={form}
                     name="yearCondition"
@@ -161,7 +156,7 @@ const PutAcademicActionCondition = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
+                {/* <FormItem
                     form={form}
                     name="isPriorityStudent"
                     valuePropName="checked"
@@ -169,7 +164,7 @@ const PutAcademicActionCondition = () => {
                     label="Áp dụng cho đối tượng ưu tiên"
                 >
                     <Checkbox />
-                </FormItem>
+                </FormItem> */}
             </Col>
             <Col span={24}>
                 <FormItem form={form} name="description" label="Mô tả">

@@ -16,10 +16,10 @@ import { $Enums, type TrainingBlockSubject } from '@workspace/db/client'
 import {
     useDeleteManyTrainingBlockSubject,
     useDeleteTrainingBlockOnCurriculumVersion,
+    useDeleteTrainingBlockSubject,
     useFindManyDM_DonVi,
     useFindManyTrainingBlockOnCurriculumVersion,
     useFindUniqueCurriculumVersion,
-    useUpdateTrainingBlockSubject,
 } from '@workspace/db/hooks'
 import { whereOrganization } from '@workspace/libs/constants'
 import { getMinioUrl } from '@workspace/libs/utils'
@@ -324,6 +324,7 @@ export default function TrainingProgramSubjects() {
                         : {}),
                 },
                 include: {
+                    planTrainingSubjects: { select: { id: true } },
                     subject: {
                         include: {
                             subject: {
@@ -413,17 +414,12 @@ export default function TrainingProgramSubjects() {
         }
     }
 
-    const { mutateAsync: updateTrainingBlockSubject } = useUpdateTrainingBlockSubject()
+    const { mutateAsync: deleteTrainingBlockSubject } = useDeleteTrainingBlockSubject()
     async function handleDeleteTrainingBlockSubject(id: string) {
         try {
             showSpinner()
-            await updateTrainingBlockSubject({
-                where: {
-                    id,
-                },
-                data: {
-                    deletedAt: new Date(),
-                },
+            await deleteTrainingBlockSubject({
+                where: { id },
             })
             message.success('Xóa thành công')
         } catch (error: any) {
@@ -705,56 +701,62 @@ export default function TrainingProgramSubjects() {
                             },
                             {
                                 colSpan: 1,
-                                render: (_, record) => (
-                                    <div className="flex gap-2.5 justify-center items-center">
-                                        {can(
-                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
-                                            'SUA'
-                                        ) && (
-                                            <EditIcon
-                                                disabled={isLocked}
-                                                onClick={() =>
-                                                    onOpenTrainingBlock({
-                                                        curriculumVersionId:
-                                                            initialValue?.id as string,
-                                                    })
-                                                }
-                                            />
-                                        )}
-                                        {can(
-                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
-                                            'THEM'
-                                        ) && (
-                                            <CreateIcon
-                                                title={'Thêm môn học'}
-                                                disabled={isLocked}
-                                                onClick={(e) => {
-                                                    e.stopPropagation()
-                                                    onOpenTrainingBlockSubject({
-                                                        trainingBlockOnCurriculumVersionId:
-                                                            record.id,
-                                                        trainingBlockSubjectId: '',
-                                                    })
-                                                }}
-                                            />
-                                        )}
-                                        {can(
-                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
-                                            'XOA'
-                                        ) && (
-                                            <DeleteIcon
-                                                disabled={isLocked}
-                                                popConfirm={{
-                                                    onConfirm: () =>
-                                                        handleDeleteTrainingBlockOnCurriculumVersion(
-                                                            id
-                                                        ),
-                                                }}
-                                                onClick={(e) => e.stopPropagation()}
-                                            />
-                                        )}
-                                    </div>
-                                ),
+                                render: (_, record) => {
+                                    const hasPlanTraining = !!record?.subjects.some(
+                                        (s) => !!s?.planTrainingSubjects?.length
+                                    )
+                                    return (
+                                        <div className="flex gap-2.5 justify-center items-center">
+                                            {can(
+                                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
+                                                'SUA'
+                                            ) && (
+                                                <EditIcon
+                                                    disabled={isLocked}
+                                                    onClick={() =>
+                                                        onOpenTrainingBlock({
+                                                            curriculumVersionId:
+                                                                initialValue?.id as string,
+                                                        })
+                                                    }
+                                                />
+                                            )}
+                                            {can(
+                                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
+                                                'THEM'
+                                            ) && (
+                                                <CreateIcon
+                                                    title={'Thêm môn học'}
+                                                    disabled={isLocked}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        onOpenTrainingBlockSubject({
+                                                            trainingBlockOnCurriculumVersionId:
+                                                                record.id,
+                                                            trainingBlockSubjectId: '',
+                                                        })
+                                                    }}
+                                                />
+                                            )}
+
+                                            {can(
+                                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
+                                                'XOA'
+                                            ) && (
+                                                <DeleteIcon
+                                                    disabled={isLocked || hasPlanTraining}
+                                                    popConfirm={{
+                                                        onConfirm: () =>
+                                                            handleDeleteTrainingBlockOnCurriculumVersion(
+                                                                id
+                                                            ),
+                                                    }}
+                                                    onClick={(e) => e.stopPropagation()}
+                                                />
+                                            )}
+                                        </div>
+                                    )
+                                },
                             },
                         ]}
                         childrenFieldName="subjects"
@@ -1015,9 +1017,7 @@ export default function TrainingProgramSubjects() {
                                 width: 100,
                                 align: 'center',
                                 render: (_, record) => {
-                                    const hasSubjectClass =
-                                        record?.subject?.subjectClass?.length &&
-                                        record?.subject?.subjectClass?.length > 0
+                                    const hasPlanTraining = !!record?.planTrainingSubjects?.length
 
                                     if (record.trainingBlockOnCurriculumVersionId) {
                                         return (
@@ -1058,12 +1058,12 @@ export default function TrainingProgramSubjects() {
                                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC,
                                                     'XOA'
                                                 ) &&
-                                                    (hasSubjectClass || isLocked ? (
+                                                    (hasPlanTraining || isLocked ? (
                                                         <Tooltip
                                                             title={
                                                                 isLocked
                                                                     ? undefined
-                                                                    : 'Môn học đã được đưa vào giảng dạy (đã mở lớp), không thể xóa.'
+                                                                    : 'Môn học đã được đưa vào kế hoạch giảng dạy, không thể xóa.'
                                                             }
                                                         >
                                                             <span className="opacity-40">

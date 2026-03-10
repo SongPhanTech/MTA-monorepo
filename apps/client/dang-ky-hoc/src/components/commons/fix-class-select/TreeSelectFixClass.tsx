@@ -42,7 +42,11 @@ const TreeSelectFixClass: React.FC<CustomTreeSelectProps> = ({
     // Lấy danh sách TrainingCourse
     const { data: trainingCourses = [], isLoading: trainingCoursesLoading } =
         useFindManyTrainingCourse({
-            orderBy: { name: 'asc' },
+            orderBy: {
+                semesterStart: {
+                    startDate: 'desc',
+                },
+            },
         })
 
     // Lấy danh sách FixedClass
@@ -52,7 +56,9 @@ const TreeSelectFixClass: React.FC<CustomTreeSelectProps> = ({
                 in: trainingCourses.map((course) => course.id),
             },
         },
-        // skip: trainingCourses.length ? 0 : 1,
+        orderBy: {
+            name: 'asc',
+        },
     })
 
     // Tạo treeData từ trainingCourses và fixedClasses

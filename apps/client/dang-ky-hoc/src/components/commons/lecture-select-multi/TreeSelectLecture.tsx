@@ -63,22 +63,12 @@ const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
     } = useFindManyDM_DonVi({
         where: {
             OR: [
-                {
-                    // TODO: fix
-                    iLoaiDonVi: 0,
-                },
-                {
-                    iLoaiDonVi: 6,
-                },
-                {
-                    iLoaiDonVi: 7,
-                },
-                {
-                    iLoaiDonVi: 2,
-                },
-                {
-                    sParentId: null,
-                },
+                { iLoaiDonVi: 0 }, // TODO: fix
+                { iLoaiDonVi: 2 }, // Trung tâm
+                { iLoaiDonVi: 5 }, // Khoa
+                { iLoaiDonVi: 6 }, // Viện
+                { iLoaiDonVi: 7 }, // Bộ môn
+                { sParentId: null },
             ],
         },
     })

@@ -75,7 +75,11 @@ const PutStudentModal = () => {
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         where: { active: true, trainingObjectTypeId },
-        orderBy: { name: 'asc' },
+        orderBy: {
+            semesterStart: {
+                startDate: 'desc',
+            },
+        },
     })
 
     const selectedTrainingCourseId = Form.useWatch('trainingCourseId', form)

@@ -119,7 +119,7 @@ export default function AcademicRankingConvertPage() {
                           }
                         : {}),
                 },
-                orderBy: [{ trainingCourse: { createdAt: 'desc' } }, { base10Max: 'desc' }],
+                orderBy: [{ rankOrder: 'asc' }, { base10Max: 'desc' }],
             },
         },
         orderBy: {

@@ -13,7 +13,11 @@ const TreeFixClass: React.FC<TreeFixClassProps> = ({ onChangeSelected }) => {
 
     const { data: trainingCourses = [], isLoading: trainingCoursesLoading } =
         useFindManyTrainingCourse({
-            orderBy: { name: 'asc' },
+            orderBy: {
+                semesterStart: {
+                    startDate: 'desc',
+                },
+            },
             where: {
                 trainingObjectTypeId,
             },

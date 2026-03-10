@@ -18,9 +18,9 @@ import {
     useUpdateAcademicActionRuleSet,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import { Button, Checkbox, Col, Divider, Flex, Input, message, Row, Tag, Tooltip } from 'antd'
+import { Button, Col, Divider, Flex, message, Row, Tag, Tooltip } from 'antd'
 import _ from 'lodash'
-import { BookPlus, Search } from 'lucide-react'
+import { BookPlus } from 'lucide-react'
 import { useRouter } from 'next/router'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -199,32 +199,14 @@ export default function AcademicActionCondition() {
             </Divider>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
-                    <Flex justify="space-between">
-                        <Input
-                            id="search"
-                            onChange={(e) => handleFilterChange('searchText', e.target.value)}
-                            style={{ width: '290px', height: 32 }}
-                            prefix={
-                                <Search
-                                    size={15}
-                                    style={{
-                                        color: 'rgba(0, 0, 0, 0.25)',
-                                    }}
-                                />
-                            }
-                            placeholder="Tìm kiếm mã điều kiện"
-                            allowClear
-                        />
-
-                        <Flex justify="end">
-                            <Button
-                                onClick={() => handleCreateAcademicActionRuleSet(configId)}
-                                type="primary"
-                            >
-                                <BookPlus />
-                                Thêm bộ quy tắc mới
-                            </Button>
-                        </Flex>
+                    <Flex justify="end">
+                        <Button
+                            onClick={() => handleCreateAcademicActionRuleSet(configId)}
+                            type="primary"
+                        >
+                            <BookPlus />
+                            Thêm bộ quy tắc mới
+                        </Button>
                     </Flex>
                 </Col>
                 <Col span={24}>
@@ -244,13 +226,6 @@ export default function AcademicActionCondition() {
                         defaultExpandAll
                         currentPage={currentPage}
                         columns={[
-                            {
-                                title: 'Mã điều kiện',
-                                dataIndex: 'code',
-                                align: 'center',
-                                width: 150,
-                                fixed: 'left',
-                            },
                             {
                                 title: 'Trường được đánh giá',
                                 dataIndex: 'field',
@@ -291,19 +266,19 @@ export default function AcademicActionCondition() {
                                 align: 'center',
                                 width: 140,
                             },
-                            {
-                                title: 'Áp dụng cho đối tượng ưu tiên',
-                                dataIndex: 'isPriorityStudent',
-                                align: 'center',
-                                width: 120,
-                                render: (value) => {
-                                    return (
-                                        <div className="flex items-center justify-center">
-                                            <Checkbox checked={value} disabled />
-                                        </div>
-                                    )
-                                },
-                            },
+                            // {
+                            //     title: 'Áp dụng cho đối tượng ưu tiên',
+                            //     dataIndex: 'isPriorityStudent',
+                            //     align: 'center',
+                            //     width: 120,
+                            //     render: (value) => {
+                            //         return (
+                            //             <div className="flex items-center justify-center">
+                            //                 <Checkbox checked={value} disabled />
+                            //             </div>
+                            //         )
+                            //     },
+                            // },
                             {
                                 title: 'Mô tả',
                                 width: 150,

@@ -23,8 +23,6 @@ import {
     useFindManyTrainingCourse,
     useFindManyTrainingField,
     useFindManyTrainingMajor,
-    // useFindManyTrainingField,
-    // useFindManyTrainingMajor,
     useUpdateSurveyObjectType,
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
@@ -74,10 +72,12 @@ function TabDoiTuongKhaoSat() {
     })
 
     const { data: trainingCourses = [] } = useFindManyTrainingCourse({
-        where: {
-            trainingObjectTypeId,
+        where: { trainingObjectTypeId },
+        orderBy: {
+            semesterStart: {
+                startDate: 'desc',
+            },
         },
-        orderBy: { name: 'asc' },
     })
 
     const { data: fixedClasses = [] } = useFindManyFixedClass({
@@ -103,7 +103,7 @@ function TabDoiTuongKhaoSat() {
     const where = useMemo(
         () => ({
             trainingObjectTypeId,
-            ...(filters.code && filters.code !== ''
+            ...(filters.code
                 ? {
                       code: {
                           contains: filters.code,
@@ -111,7 +111,7 @@ function TabDoiTuongKhaoSat() {
                       },
                   }
                 : {}),
-            ...(filters.name && filters.name !== ''
+            ...(filters.name
                 ? {
                       name: {
                           contains: filters.name,

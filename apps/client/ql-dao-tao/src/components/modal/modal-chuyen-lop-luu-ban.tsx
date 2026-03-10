@@ -72,6 +72,11 @@ const ModalChuyenLopLuuBan = () => {
             deletedAt: null,
             trainingObjectTypeId,
         },
+        orderBy: {
+            semesterStart: {
+                startDate: 'desc',
+            },
+        },
     })
 
     const { data: fixedClasses = [] } = useFindManyFixedClass({

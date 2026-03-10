@@ -34,7 +34,11 @@ const PutHocBong = () => {
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         where: { active: true, trainingObjectTypeId, deletedAt: null },
-        orderBy: { name: 'asc' },
+        orderBy: {
+            semesterStart: {
+                startDate: 'desc',
+            },
+        },
     })
 
     const { mutateAsync: createScholarship } = useCreateScholarship()
@@ -111,11 +115,6 @@ const PutHocBong = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="code" label="Mã học bổng">
-                    <Input placeholder="Nhập mã học bổng" />
-                </FormItem>
-            </Col>
-            <Col span={12}>
                 <FormItem form={form} name="name" label="Tên học bổng" required>
                     <Input placeholder="Nhập tên học bổng" />
                 </FormItem>
@@ -132,7 +131,7 @@ const PutHocBong = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="baseAmount" label="Số tiền cơ bản" required>
+                <FormItem form={form} name="baseAmount" label="Số tiền cơ bản">
                     <InputNumber
                         type="number"
                         placeholder="Nhập số tiền"
@@ -145,7 +144,7 @@ const PutHocBong = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={12}>
+            {/* <Col span={12}>
                 <FormItem form={form} name="multiplier" label="Hệ số" required>
                     <InputNumber
                         type="number"
@@ -156,9 +155,9 @@ const PutHocBong = () => {
                         step={0.1}
                     />
                 </FormItem>
-            </Col>
+            </Col> */}
             <Col span={12}>
-                <FormItem form={form} name="effectiveFrom" label="Hiệu lực từ ngày" required>
+                <FormItem form={form} name="effectiveFrom" label="Hiệu lực từ ngày">
                     <DatePicker
                         format={{
                             format: 'DD/MM/YYYY',

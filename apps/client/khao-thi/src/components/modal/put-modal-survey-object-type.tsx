@@ -256,7 +256,11 @@ const PutSurveyObjectTypeModal = () => {
     })
 
     const { data: trainingCourses = [] } = useFindManyTrainingCourse({
-        orderBy: { name: 'asc' },
+        orderBy: {
+            semesterStart: {
+                startDate: 'desc',
+            },
+        },
         where: { trainingObjectTypeId },
     })
 

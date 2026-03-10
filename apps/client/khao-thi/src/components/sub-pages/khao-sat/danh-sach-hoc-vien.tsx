@@ -48,7 +48,11 @@ function DanhSachHocVien({
     })
     const { data: trainingCourses = [], isLoading: trainingCoursesLoading } =
         useFindManyTrainingCourse({
-            orderBy: { name: 'asc' },
+            orderBy: {
+                semesterStart: {
+                    startDate: 'desc',
+                },
+            },
         })
 
     const where = useMemo(() => {

@@ -207,6 +207,11 @@ export default function StudentGraduationApplication() {
                     },
                 },
             },
+            orderBy: {
+                semesterStart: {
+                    startDate: 'desc',
+                },
+            },
         },
         {
             enabled: !!graduationSessionId,

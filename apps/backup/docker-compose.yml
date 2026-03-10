@@ -1,0 +1,9 @@
+services:
+    backup:
+        command: ./dist/app
+        image: mta-backup:main
+        container_name: mta-backup
+        ports:
+            - "8085:8085"
+        env_file:
+            - .env

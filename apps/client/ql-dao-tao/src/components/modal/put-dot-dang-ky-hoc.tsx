@@ -82,7 +82,11 @@ const PutClassRegisterSession = () => {
                 },
             },
         },
-        orderBy: { createdAt: 'desc' },
+        orderBy: {
+            semesterStart: {
+                startDate: 'desc',
+            },
+        },
     })
 
     const tableData = trainingCourses

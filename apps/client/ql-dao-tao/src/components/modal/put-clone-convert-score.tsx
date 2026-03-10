@@ -32,7 +32,11 @@ const PutCloneConvertScore = () => {
             },
             trainingObjectTypeId,
         },
-        orderBy: { name: 'asc' },
+        orderBy: {
+            semesterStart: {
+                startDate: 'desc',
+            },
+        },
     })
 
     async function onOk(output?: PutCloneConvertScoreFormType) {

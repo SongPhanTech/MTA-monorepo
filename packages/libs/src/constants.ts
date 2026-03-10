@@ -114,19 +114,11 @@ export const questionTypeOptions: QuestionTypeOption[] = Object.entries(question
 )
 export const whereOrganization: Prisma.DM_DonViWhereInput = {
     OR: [
-        {
-            // TODO: fix
-            iLoaiDonVi: 0,
-        },
-        {
-            iLoaiDonVi: 6,
-        },
-        {
-            iLoaiDonVi: 7,
-        },
-        {
-            iLoaiDonVi: 2,
-        },
+        { iLoaiDonVi: 0 }, // TODO: fix
+        { iLoaiDonVi: 2 }, // Trung tâm
+        { iLoaiDonVi: 5 }, // Khoa
+        { iLoaiDonVi: 6 }, // Viện
+        { iLoaiDonVi: 7 }, // Bộ môn
         {
             sParentId: null,
         },

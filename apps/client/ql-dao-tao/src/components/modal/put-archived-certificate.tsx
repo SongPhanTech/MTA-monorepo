@@ -1,3 +1,4 @@
+import { DeleteOutlined } from '@ant-design/icons'
 import { queryClient } from '@api/index'
 import DatePicker from '@components/commons/date-picker'
 import DocumentPaths from '@components/commons/documentPaths'
@@ -8,7 +9,6 @@ import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import useSpinner from '@hooks/spinner'
 import type { DocumentFile } from '@workspace/db'
-import { DeleteOutlined } from '@ant-design/icons'
 import {
     useCreateArchivedCertificate,
     useFindManyCertificate,
@@ -21,7 +21,7 @@ import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Form, Input, InputNumber, message, Typography } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
-import { useEffect, useMemo, useCallback, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 // Mỗi dòng trong table có rowId duy nhất (cho phép 1 SV chọn nhiều lần)
@@ -87,10 +87,12 @@ const PutCertificateArchivedModal = () => {
     })
     const { data: trainingCourses = [] } = useFindManyTrainingCourse(
         {
-            where: {
-                trainingObjectTypeId,
+            where: { trainingObjectTypeId },
+            orderBy: {
+                semesterStart: {
+                    startDate: 'desc',
+                },
             },
-            orderBy: { name: 'asc' },
         },
         { enabled: !!trainingObjectTypeId }
     )

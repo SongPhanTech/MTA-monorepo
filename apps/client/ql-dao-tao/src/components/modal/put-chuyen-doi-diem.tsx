@@ -35,7 +35,11 @@ const PutConvertScore = () => {
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: trainingCourses } = useFindManyTrainingCourse({
         where: { active: true, trainingObjectTypeId },
-        orderBy: { name: 'asc' },
+        orderBy: {
+            semesterStart: {
+                startDate: 'desc',
+            },
+        },
     })
 
     async function onOk(output?: PutConvertScoreFormType) {

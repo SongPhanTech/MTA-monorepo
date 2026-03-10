@@ -26,6 +26,11 @@ const getTrainingCourse = createRoute({
 app.openapi(getTrainingCourse, async (c) => {
     const data = await prisma.trainingCourse.findMany({
         where: { deletedAt: null },
+        orderBy: {
+            semesterStart: {
+                startDate: 'desc',
+            },
+        },
     })
 
     return c.json(data, 200)

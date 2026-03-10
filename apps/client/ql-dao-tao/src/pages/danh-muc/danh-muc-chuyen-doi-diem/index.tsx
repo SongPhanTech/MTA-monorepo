@@ -1,4 +1,3 @@
-import Select from '@components/commons/select'
 import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
@@ -14,24 +13,18 @@ import {
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
+import { SelectTrainingCourse, useTrainingObjectTypeStore } from '@workspace/ui'
+import { Button, Col, Flex, Form, message, Row, Tooltip } from 'antd'
 import _ from 'lodash'
-import { Copy, Search } from 'lucide-react'
+import { Copy } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface FilterProps {
-    searchText: string | undefined
+    trainingCourseId: string | undefined
     active: string | undefined
 }
-
-const DataActive = [
-    { value: 'true', name: 'Đang áp dụng' },
-    { value: 'false', name: 'Không áp dụng' },
-    { value: 'all', name: 'Tất cả' },
-]
 
 export default function TrainingFieldPage() {
     const { can, canSome } = useAbility()
@@ -39,93 +32,43 @@ export default function TrainingFieldPage() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
-        searchText: '',
+        trainingCourseId: '',
         active: 'true',
     })
-    const isFiltering = useMemo(() => {
-        return Object.values(filters).some((value) => !!value)
-    }, [filters])
+
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
     const where: Prisma.TrainingCourseWhereInput = useMemo(
         () =>
-            Object.assign(
-                isFiltering
-                    ? {
-                          scoreConverts: {
-                              some: {
-                                  active:
-                                      filters.active === 'true'
-                                          ? true
-                                          : filters.active === 'false'
-                                            ? false
-                                            : undefined,
-                                  ...(filters.searchText && filters.searchText.trim() !== ''
-                                      ? {
-                                            AND: [
-                                                {
-                                                    base10Min: {
-                                                        lte: Number(filters.searchText),
-                                                    },
-                                                },
-                                                {
-                                                    base10Max: {
-                                                        gte: Number(filters.searchText),
-                                                    },
-                                                },
-                                            ],
-                                        }
-                                      : {}),
-                              },
-                          },
-                      }
-                    : {},
-                {
-                    trainingObjectTypeId,
-                    deletedAt: null,
-                    active: true,
-                }
-            ),
-        [filters, isFiltering, trainingObjectTypeId]
+            filters.trainingCourseId
+                ? {
+                      id: filters.trainingCourseId,
+                      trainingObjectTypeId,
+                      deletedAt: null,
+                      active: true,
+                  }
+                : {
+                      trainingObjectTypeId,
+                      deletedAt: null,
+                      active: true,
+                  },
+        [filters, trainingObjectTypeId]
     )
     const { data = [], refetch } = useFindManyTrainingCourse({
-        where: {
-            ...where,
-        },
+        where,
         include: {
             scoreConverts: {
                 orderBy: [{ trainingCourse: { createdAt: 'desc' } }, { base10Max: 'desc' }],
-                where: {
-                    ...(filters.searchText && filters.searchText.trim() !== ''
-                        ? {
-                              AND: [
-                                  {
-                                      base10Min: {
-                                          lte: Number(filters.searchText),
-                                      },
-                                  },
-                                  {
-                                      base10Max: {
-                                          gte: Number(filters.searchText),
-                                      },
-                                  },
-                              ],
-                          }
-                        : {}),
-                },
             },
         },
         orderBy: {
-            name: 'asc',
+            semesterStart: {
+                startDate: 'desc',
+            },
         },
     })
 
-    const { data: count } = useCountTrainingCourse({
-        where: {
-            ...where,
-            deletedAt: null,
-        },
-    })
+    const { data: count } = useCountTrainingCourse({ where })
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -203,46 +146,13 @@ export default function TrainingFieldPage() {
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={12}>
                             <Flex>
-                                <Form.Item name="searchText">
-                                    <Input
-                                        id="search"
-                                        type="number"
-                                        min={0}
-                                        max={10}
-                                        step={0.5}
-                                        onChange={(e) =>
-                                            handleFilterChange('searchText', e.target.value)
-                                        }
-                                        placeholder="Tìm kiếm điểm"
-                                        style={{
-                                            width: 300,
-                                            marginRight: 8,
-                                            height: 32,
-                                        }}
-                                        prefix={
-                                            <Search
-                                                size={16}
-                                                style={{
-                                                    color: 'rgba(0, 0, 0, 0.25)',
-                                                }}
-                                            />
-                                        }
+                                <Form.Item name="trainingCourseId" label="Khoá học">
+                                    <SelectTrainingCourse
+                                        placeholder="Chọn khoá"
                                         allowClear
-                                    />
-                                </Form.Item>
-                                <Form.Item name="active" initialValue="true">
-                                    <Select
-                                        id="active"
-                                        placeholder="Chọn trạng thái"
-                                        style={{ width: 200 }}
-                                        options={DataActive.map((item) => ({
-                                            label: item.name,
-                                            value:
-                                                item.value === undefined
-                                                    ? undefined
-                                                    : item.value.toString(),
-                                        }))}
-                                        onChange={(value) => handleFilterChange('active', value)}
+                                        onChange={(val) => {
+                                            handleFilterChange('trainingCourseId', val)
+                                        }}
                                     />
                                 </Form.Item>
                             </Flex>
@@ -318,17 +228,17 @@ export default function TrainingFieldPage() {
                                 align: 'center',
                                 dataIndex: 'letter',
                             },
-                            {
-                                title: 'Trạng thái',
-                                align: 'center',
-                                render: (value, record) => {
-                                    return !record?.active ? (
-                                        <Tag color="error">Không áp dụng</Tag>
-                                    ) : (
-                                        <Tag color="success">Đang áp dụng</Tag>
-                                    )
-                                },
-                            },
+                            // {
+                            //     title: 'Trạng thái',
+                            //     align: 'center',
+                            //     render: (value, record) => {
+                            //         return !record?.active ? (
+                            //             <Tag color="error">Không áp dụng</Tag>
+                            //         ) : (
+                            //             <Tag color="success">Đang áp dụng</Tag>
+                            //         )
+                            //     },
+                            // },
                             {
                                 title: 'Thao tác',
                                 width: 100,
