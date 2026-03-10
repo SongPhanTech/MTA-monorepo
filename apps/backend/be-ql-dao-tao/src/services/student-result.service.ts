@@ -760,7 +760,7 @@ export const calculateStudentSemesterResult = async (
                     student.id,
                     student.curriculumVersionId || student.fixedClass?.curriculumVersionId || '',
                     trainingCourseId,
-                    hocKyDauVao?.endDate || new Date() 
+                    hocKyDauVao?.endDate || new Date()
                 )
 
                 if (!thongTinTichLuy) {

@@ -274,12 +274,11 @@ export const exportStudentAcademicWarning = async ({
         },
     })
 
-    const approvedStudentIds = new Set(approvedWarnings.map(w => w.studentId))
+    const approvedStudentIds = new Set(approvedWarnings.map((w) => w.studentId))
 
     const rows = []
     for (const courseItem of filteredCourseStudents) {
         for (const student of courseItem.students) {
-            
             if (approvedStudentIds.has(student.id)) {
                 continue
             }

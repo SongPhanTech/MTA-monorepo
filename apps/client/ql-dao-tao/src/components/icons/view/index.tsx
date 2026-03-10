@@ -12,11 +12,7 @@ const ViewIcon = ({ title, disabled = false, ...props }: ViewIconProps) => {
         return (
             <span className="inline-flex items-center">
                 <Tooltip title={undefined}>
-                    <Eye
-                        size={16}
-                        strokeWidth={1.5}
-                        className="text-gray-300 cursor-not-allowed"
-                    />
+                    <Eye size={16} strokeWidth={1.5} className="text-gray-300 cursor-not-allowed" />
                 </Tooltip>
             </span>
         )
