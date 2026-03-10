@@ -30,6 +30,7 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { useSession } from '@workspace/auth/react';
 
 const SESSION_KEYS = {
     FILTERS: 'curriculum-filters',
@@ -89,12 +90,14 @@ export default function TrainingProgramCatalog() {
     const { can } = useAbility()
     const [expandAll, setExpandAll] = useState(false)
     const router = useRouter()
-
+const { data: me } = useSession()
+    const userProfileId = me?.sDM_NhanVienId || ''
     const [currentPage, setCurrentPage] = useState(() => getStoredPage())
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>(() => getStoredFilters())
 
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+
     useEffect(() => {
         const t = setTimeout(() => {
             persistState(filters, currentPage)
@@ -107,9 +110,22 @@ export default function TrainingProgramCatalog() {
         QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
         'DUYET'
     )
+     const isViewAll = can(
+        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
+        'XEM_TAT_CA'
+    )
 
     const where = useMemo(() => {
         const curriculumVersionFilter = {
+            ...(!isViewAll && {
+                managementOrganization: {
+                    lecturers: {
+                        some:{
+                            userProfileId
+                        }
+                    }
+                }
+            }),
             ...(filters.name && {
                 name: { contains: filters.name, mode: 'insensitive' as const },
             }),
@@ -206,16 +222,7 @@ export default function TrainingProgramCatalog() {
         }
     }, [
         trainingObjectTypeId,
-        filters.searchText,
-        filters.name,
-        filters.trainingTime,
-        filters.trainingCourses,
-        filters.code,
-        filters.managementOrganizationId,
-        filters.trainingMajorId,
-        filters.requiredCredits,
-        filters.electiveCredits,
-        filters.numberOfSemesters,
+        filters
     ])
 
     const { data = [] } = useFindManyCurriculum({
