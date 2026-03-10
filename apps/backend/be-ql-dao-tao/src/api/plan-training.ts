@@ -148,7 +148,7 @@ const importFileGiaoVienCoGioGiay = async (
             danhSachMaPhongHoc.add(maPhongHoc.trim())
         }
     }
-    
+
     const danhSachGV = await prisma.lecturer.findMany({
         where: {
             userProfile: {
@@ -396,7 +396,6 @@ const importFileGiaoVienCoGioGiay = async (
                     if (phongHoc) {
                         subjectClass.phongHoc = phongHoc.id
                         subjectClass.khuVuc = phongHoc?.building?.trainingLocationId
-
                     } else {
                         error.push({
                             message: `Không tìm thấy phòng học với mã: ${maPhongHoc}`,
@@ -420,7 +419,8 @@ const importFileGiaoVienCoGioGiay = async (
                             id: existSubjectClass.id,
                         },
                         data: {
-                            trainingLocationId: subjectClass?.khuVuc ?? existSubjectClass?.trainingLocationId,
+                            trainingLocationId:
+                                subjectClass?.khuVuc ?? existSubjectClass?.trainingLocationId,
                             maxStudent: subjectClass.quanSo,
                             lecturerId: subjectClass.gvChinh ?? existSubjectClass.lecturerId,
                             extraLecturerId:
@@ -441,7 +441,8 @@ const importFileGiaoVienCoGioGiay = async (
                                     ? {
                                           create: {
                                               roomId:
-                                                  subjectClass?.phongHoc ?? existSubjectClass.roomId,
+                                                  subjectClass?.phongHoc ??
+                                                  existSubjectClass.roomId,
                                               classDate: scheduleInfo.ngayHoc,
                                               startPeriod: scheduleInfo.tietHoc[0]
                                                   ? Number(scheduleInfo.tietHoc[0])

@@ -38,8 +38,8 @@ const PutDeadlineScoreModal = () => {
     async function onOk(output?: PutUpdateTime) {
         if (!output) {
             message.error('Vui lòng nhập thời gian')
-            return }
-      
+            return
+        }
 
         try {
             showSpinner()
