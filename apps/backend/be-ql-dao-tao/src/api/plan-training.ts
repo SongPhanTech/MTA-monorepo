@@ -148,6 +148,7 @@ const importFileGiaoVienCoGioGiay = async (
             danhSachMaPhongHoc.add(maPhongHoc.trim())
         }
     }
+    
     const danhSachGV = await prisma.lecturer.findMany({
         where: {
             userProfile: {
@@ -199,6 +200,7 @@ const importFileGiaoVienCoGioGiay = async (
         select: {
             id: true,
             code: true,
+            building: true,
         },
     })
 
@@ -276,6 +278,7 @@ const importFileGiaoVienCoGioGiay = async (
                     phongHoc: null as string | null,
                     ngayBatDau: ngayHoc ? dayjs(ngayHoc, 'DD/MM/YYYY').toDate() : null,
                     ngayKetThuc: null as Date | null,
+                    khuVuc: null as string | null | undefined,
                     ngayThi:
                         hinhThucHoc === 'Thi'
                             ? ngayHoc
@@ -392,6 +395,8 @@ const importFileGiaoVienCoGioGiay = async (
                     )
                     if (phongHoc) {
                         subjectClass.phongHoc = phongHoc.id
+                        subjectClass.khuVuc = phongHoc?.building?.trainingLocationId
+
                     } else {
                         error.push({
                             message: `Không tìm thấy phòng học với mã: ${maPhongHoc}`,
@@ -415,6 +420,7 @@ const importFileGiaoVienCoGioGiay = async (
                             id: existSubjectClass.id,
                         },
                         data: {
+                            trainingLocationId: subjectClass?.khuVuc ?? existSubjectClass?.trainingLocationId,
                             maxStudent: subjectClass.quanSo,
                             lecturerId: subjectClass.gvChinh ?? existSubjectClass.lecturerId,
                             extraLecturerId:
@@ -435,7 +441,7 @@ const importFileGiaoVienCoGioGiay = async (
                                     ? {
                                           create: {
                                               roomId:
-                                                  subjectClass.phongHoc ?? existSubjectClass.roomId,
+                                                  subjectClass?.phongHoc ?? existSubjectClass.roomId,
                                               classDate: scheduleInfo.ngayHoc,
                                               startPeriod: scheduleInfo.tietHoc[0]
                                                   ? Number(scheduleInfo.tietHoc[0])
@@ -941,7 +947,7 @@ const importFileTKBTheoLopHocPhan = async (
                             schedule: scheduleOfSubjectClass,
                             startDate: ngayBatDau ?? existSubjectClass.startDate,
                             endDate: ngayKetThuc ?? existSubjectClass.endDate,
-                            roomId: subjectClass.phongHoc ?? existSubjectClass.roomId,
+                            roomId: subjectClass?.phongHoc ?? existSubjectClass.roomId,
                             subjectClassTimes:
                                 thuTrongTuan && String(thuTrongTuan).trim()
                                     ? {
@@ -1147,7 +1153,6 @@ app.openapi(importPhanCongGiangDay, async (c) => {
         importType,
         type = $Enums.SubjectClassType.NORMAL,
     } = c.req.valid('form')
-
     const errorImport: {
         message: string
     }[] = []
@@ -1161,7 +1166,6 @@ app.openapi(importPhanCongGiangDay, async (c) => {
     const workbook = read(arrayBuffer, { type: 'array' })
 
     const ListSheetNames = workbook.SheetNames
-    console.log('Danh sách sheet:', ListSheetNames)
     const startTime = Date.now()
     const danhSachLopMonHoc = [] as SubjectClass[]
 

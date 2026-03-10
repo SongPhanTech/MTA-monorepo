@@ -1688,7 +1688,6 @@ export default function PhanCongGiangDay({
                             setFilters={(value) => {
                                 setFilters(value)
                                 setCurrentPage(1)
-                                console.log('12312')
                             }}
                             rowSelection={{
                                 type: 'checkbox',
