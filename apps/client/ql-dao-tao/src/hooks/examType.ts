@@ -7,7 +7,7 @@ export type ExamTypeOption = {
 }
 
 export enum ExamTypeExportPCGD {
-  ORAL = "VD",
+    ORAL = 'VD',
 }
 
 export const useExamTypeOptions = () => {

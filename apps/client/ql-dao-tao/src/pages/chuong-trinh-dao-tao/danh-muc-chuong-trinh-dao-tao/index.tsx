@@ -30,7 +30,7 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { useSession } from '@workspace/auth/react';
+import { useSession } from '@workspace/auth/react'
 
 const SESSION_KEYS = {
     FILTERS: 'curriculum-filters',
@@ -90,7 +90,7 @@ export default function TrainingProgramCatalog() {
     const { can } = useAbility()
     const [expandAll, setExpandAll] = useState(false)
     const router = useRouter()
-const { data: me } = useSession()
+    const { data: me } = useSession()
     const userProfileId = me?.sDM_NhanVienId || ''
     const [currentPage, setCurrentPage] = useState(() => getStoredPage())
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -110,7 +110,7 @@ const { data: me } = useSession()
         QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
         'DUYET'
     )
-     const isViewAll = can(
+    const isViewAll = can(
         QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
         'XEM_TAT_CA'
     )
@@ -120,11 +120,11 @@ const { data: me } = useSession()
             ...(!isViewAll && {
                 managementOrganization: {
                     lecturers: {
-                        some:{
-                            userProfileId
-                        }
-                    }
-                }
+                        some: {
+                            userProfileId,
+                        },
+                    },
+                },
             }),
             ...(filters.name && {
                 name: { contains: filters.name, mode: 'insensitive' as const },
@@ -220,10 +220,7 @@ const { data: me } = useSession()
                 curriculumVersion: { some: curriculumVersionFilter },
             }),
         }
-    }, [
-        trainingObjectTypeId,
-        filters
-    ])
+    }, [trainingObjectTypeId, filters])
 
     const { data = [] } = useFindManyCurriculum({
         where,

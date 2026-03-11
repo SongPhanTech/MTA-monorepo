@@ -2,12 +2,7 @@ import DanhSachLopGiangVien from '@components/sub-pages/danh-sach-lop-giang-vien
 import DefaultLayout from '@layouts/default-layout'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import {
-    DanhSachThongBao,
-    LichCongTac,
-    ThongKeDonVi,
-    ThongKeTotNghiep,
-} from '@workspace/ui'
+import { DanhSachThongBao, LichCongTac, ThongKeDonVi, ThongKeTotNghiep } from '@workspace/ui'
 import { Col, Row, Typography } from 'antd'
 
 const { Title } = Typography

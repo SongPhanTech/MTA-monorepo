@@ -369,7 +369,7 @@ export default function TrainingCoursePage() {
                             {
                                 title: 'Chỉ tiêu tuyển sinh',
                                 align: 'center',
-                                dataIndex: 'admissionQuota',             
+                                dataIndex: 'admissionQuota',
                                 width: 150,
                                 type: 'order',
                             },
