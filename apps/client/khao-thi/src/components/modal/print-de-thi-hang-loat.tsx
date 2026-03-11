@@ -144,10 +144,7 @@ const PrintBatchExamBank = () => {
                 const grouped = groupedExamsData.get(exam.id)
 
                 const allQuestions = grouped?.isGroup
-                    ? [
-                          ...(grouped.listQuestionChoice ?? []),
-                          ...(grouped.listQuestionEssay ?? []),
-                      ]
+                    ? [...(grouped.listQuestionChoice ?? []), ...(grouped.listQuestionEssay ?? [])]
                     : (grouped?.questions ?? [])
 
                 return {
