@@ -429,8 +429,9 @@ const PutStudentModal = () => {
                             />
                         </FormItem>
                     </Col>
+                    <Col span={12} />
                     <Col span={12}>
-                        <div className="h-full flex align-bottom">
+                        <div className="h-full flex items-end pt-2">
                             <Button
                                 className="mt-auto"
                                 loading={isPending || !studentData}
