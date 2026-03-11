@@ -203,6 +203,23 @@ export default function SubjectList() {
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
+    const { data: allSubjects } = useFindManySubject({
+        where,
+        include: {
+            subjectVersion: {
+                where: subjectVersionWhere,
+                include: {
+                    subjectClass: {
+                        where: { deletedAt: null },
+                        select: { id: true },
+                        take: 1,
+                    },
+                    trainingObjectType: true, 
+                },
+            },
+            managementOrganization: true,
+        },
+    })
 
     const { data: count } = useCountSubject({
         where: {
@@ -335,14 +352,14 @@ export default function SubjectList() {
         }
     }
     const handleExportExcel = () => {
-        if (!SubjectData?.length) {
+        if (!allSubjects?.length) {
             message.warning('Không có dữ liệu để xuất')
             return
         }
 
         const dataExport: any[] = []
 
-        SubjectData.forEach((subject: any) => {
+        allSubjects.forEach((subject: any) => {
             subject.subjectVersion?.forEach((version: any) => {
                 dataExport.push({
                     'Nhóm môn': subject.name,
@@ -378,8 +395,12 @@ export default function SubjectList() {
         const blob = new Blob([excelBuffer], {
             type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8',
         })
-
-        saveAs(blob, 'DanhSachMonHoc.xlsx')
+        const trainingObjectTypeName =
+            allSubjects
+                ?.flatMap((s: any) => s.subjectVersion || [])
+                ?.find((v: any) => v.trainingObjectType?.id === trainingObjectTypeId)
+                ?.trainingObjectType?.name || ''
+        saveAs(blob, `DanhSachMonHoc${trainingObjectTypeName}.xlsx`)
     }
     const handleFilterChange = (key: string, value: string | ExamType[] | boolean) => {
         setFilters((prev) => {
