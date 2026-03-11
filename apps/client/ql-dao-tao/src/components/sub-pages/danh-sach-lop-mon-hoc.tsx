@@ -22,7 +22,7 @@ import { Checkbox, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'an
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
-import { type Key, useCallback, useEffect, useMemo, useState } from 'react'
+import { type Key, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function DanhSachLopMonHoc({
@@ -53,7 +53,12 @@ export default function DanhSachLopMonHoc({
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { id: semesterId } = useSemesterStore()
 
+    const isFirstRender = useRef(true)
     useEffect(() => {
+        if (isFirstRender.current) {
+            isFirstRender.current = false
+            return
+        }
         diemLopMonHocStore.setState({ selectedSubjectClassId: undefined })
     }, [trainingObjectTypeId, semesterId])
 
