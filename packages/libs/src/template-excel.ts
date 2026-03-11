@@ -388,7 +388,7 @@ async function handleSheetJSExport(
 
     saveAs(
         new Blob([xlsBuffer], {
-            type: 'application/vnd.ms-excel',
+            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         }),
         fileName.endsWith('.xls') ? fileName : `${fileName}.xls`
     )

@@ -1583,7 +1583,10 @@ export default function PhanCongGiangDay({
                                                                                             {
                                                                                                 value: item.examType
                                                                                                     ? getExamTypeLabel(
-                                                                                                          item.examType
+                                                                                                          item?.examType,
+                                                                                                          {
+                                                                                                              exportPCGD: true,
+                                                                                                          }
                                                                                                       )
                                                                                                     : '',
                                                                                             },
