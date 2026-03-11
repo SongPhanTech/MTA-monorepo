@@ -4597,13 +4597,13 @@ app.openapi(
         },
     }),
     async (c) => {
-        const { preview, labels, includeEmpty } = c.req.valid('json')
+        const { preview, includeEmpty } = c.req.valid('json')
         if (preview) {
             const data = [
                 {
                     year: '2023',
                     trainingLevel: 'Đại học',
-                    quota: 1000,
+                    target: 1000,
                     admitted: 950,
                     enrolled: 920,
                     rate: 92,
@@ -4622,7 +4622,7 @@ app.openapi(
                 year: string
                 object_type: string
                 training_level: string
-                quota: bigint | null
+                target: bigint | null
                 admitted: bigint | null
                 enrolled: bigint | null
             }>
@@ -4631,7 +4631,7 @@ app.openapi(
                         sy."name"  AS year,
                         tot."type" AS object_type,
                         tl."code"  AS training_level,
-                        COALESCE(SUM(tc."admissionQuota"), 0)  AS quota,
+                        COALESCE(SUM(tc."admissionQuota"), 0)  AS target,
                         COALESCE(SUM(tc."admittedStudent"), 0) AS admitted,
                         COALESCE(SUM(tc."enrolledStudent"), 0) AS enrolled
                         FROM "ql-dao-tao"."TrainingCourse" tc
@@ -4660,7 +4660,7 @@ app.openapi(
         const normalize = (v: bigint | null) => Number(v ?? 0)
 
         const computed = rows.map((r) => {
-            const target = normalize(r.quota)
+            const target = normalize(r.target)
             const enrolled = normalize(r.enrolled)
 
             return {
@@ -4678,17 +4678,14 @@ app.openapi(
             : computed.filter((r) => r.target > 0 || r.admitted > 0 || r.enrolled > 0)
 
         const data = filtered.map((row) => {
-            const base: any = {
+            return {
                 year: row.year,
                 objectType: row.objectType,
                 trainingLevel: row.trainingLevel,
+                target: row.target,
+                admitted: row.admitted,
+                enrolled: row.enrolled,
             }
-
-            if (labels.includes('target')) base.target = row.target
-            if (labels.includes('admitted')) base.admitted = row.admitted
-            if (labels.includes('enrolled')) base.enrolled = row.enrolled
-
-            return base
         })
 
         return c.json({
