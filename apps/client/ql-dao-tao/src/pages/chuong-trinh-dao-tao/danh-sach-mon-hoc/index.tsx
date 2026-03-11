@@ -203,23 +203,28 @@ export default function SubjectList() {
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
-    const { data: allSubjects } = useFindManySubject({
-        where,
-        include: {
-            subjectVersion: {
-                where: subjectVersionWhere,
-                include: {
-                    subjectClass: {
-                        where: { deletedAt: null },
-                        select: { id: true },
-                        take: 1,
+    const { refetch: refetchSubjectsForExport } = useFindManySubject(
+        {
+            where,
+            include: {
+                subjectVersion: {
+                    where: subjectVersionWhere,
+                    include: {
+                        subjectClass: {
+                            where: { deletedAt: null },
+                            select: { id: true },
+                            take: 1,
+                        },
+                        trainingObjectType: true,
                     },
-                    trainingObjectType: true, 
                 },
+                managementOrganization: true,
             },
-            managementOrganization: true,
         },
-    })
+        {
+            enabled: false,
+        }
+    )
 
     const { data: count } = useCountSubject({
         where: {
@@ -351,15 +356,18 @@ export default function SubjectList() {
             hideSpinner()
         }
     }
-    const handleExportExcel = () => {
-        if (!allSubjects?.length) {
+    const handleExportExcel = async () => {
+        const res = await refetchSubjectsForExport()
+        const subjects = res.data
+
+        if (!subjects?.length) {
             message.warning('Không có dữ liệu để xuất')
             return
         }
 
         const dataExport: any[] = []
 
-        allSubjects.forEach((subject: any) => {
+        subjects.forEach((subject: any) => {
             subject.subjectVersion?.forEach((version: any) => {
                 dataExport.push({
                     'Nhóm môn': subject.name,
@@ -396,7 +404,7 @@ export default function SubjectList() {
             type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8',
         })
         const trainingObjectTypeName =
-            allSubjects
+            subjects
                 ?.flatMap((s: any) => s.subjectVersion || [])
                 ?.find((v: any) => v.trainingObjectType?.id === trainingObjectTypeId)
                 ?.trainingObjectType?.name || ''
