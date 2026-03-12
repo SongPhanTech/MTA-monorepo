@@ -6,6 +6,7 @@ import {
     UnorderedListOutlined,
 } from '@ant-design/icons'
 import { ROUTER_PATH } from '@workspace/router'
+import { useAbility } from '@workspace/permissions/hooks'
 import { Button, Layout, Typography } from 'antd'
 import { usePathname } from 'next/navigation'
 import { useRouter } from 'next/router'
@@ -33,6 +34,7 @@ const ChatHeader = ({
 }: ChatHeaderProps) => {
     const pathname = usePathname()
     const router = useRouter()
+    const { can } = useAbility()
     const { onOpen: openAppSwitcher } = useDisclosure({
         tag: 'AppSwitcherModal',
     })
@@ -80,8 +82,8 @@ const ChatHeader = ({
                     </Title>
                 )}
 
-                {/* Nút Quản trị - chỉ hiện khi đã đăng nhập SSO */}
-                {isSSOAuthenticated && (
+                {/* Nút Quản trị - chỉ hiện khi đã đăng nhập SSO và có quyền QUAN_TRI */}
+                {isSSOAuthenticated && can('QUAN_TRI' as any, 'XEM') && (
                     <Button
                         type="link"
                         onClick={handleNavigateToAdmin}

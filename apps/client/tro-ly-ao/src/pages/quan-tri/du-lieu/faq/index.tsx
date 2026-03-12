@@ -5,6 +5,8 @@ import DefaultLayout from '@layouts/default-layout'
 import { formatDateReadable } from '@lib/utils'
 import { $Enums } from '@workspace/db'
 import { useCountFAQ, useDeleteFAQ, useFindManyFAQ } from '@workspace/db/hooks'
+import { useAbility } from '@workspace/permissions/hooks'
+import { TRO_LY_AO_PERMISSION } from '@workspace/router'
 import { Button, Input, message, Select, Tabs, Tag, Tooltip } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -12,6 +14,7 @@ import { deleteVectorRecordFAQ } from '@/api/chunking_and_vectorize'
 import { useTopics } from '@/hooks/useTopics'
 
 function Page() {
+    const { can } = useAbility()
     const [faqParams, setFaqParams] = useState({
         pagination: { current: 1, pageSize: 10, total: 10 },
     })
@@ -104,9 +107,11 @@ function Page() {
                                 Câu hỏi thường gặp
                             </span>
                         </div>
-                        <Button onClick={() => openPutCauHoi()} type="primary">
-                            Thêm mới
-                        </Button>
+                        {can(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DU_LIEU_FAQ, 'THEM') && (
+                            <Button onClick={() => openPutCauHoi()} type="primary">
+                                Thêm mới
+                            </Button>
+                        )}
                     </div>
                     <Tabs
                         activeKey={faqFilter.status}
@@ -258,28 +263,33 @@ function Page() {
                                 fixed: 'right',
                                 render: (_, record) => (
                                     <div className="flex items-center justify-center gap-2">
-                                        {(record.status === $Enums.DocumentStatus.PENDING ||
-                                            record.status === $Enums.DocumentStatus.DENY) && (
-                                            <Tooltip title="Phê duyệt" placement="top">
-                                                <AuditOutlined
-                                                    onClick={() =>
-                                                        openPheDuyetCauHoiThuongGap(record.id)
-                                                    }
-                                                    className="text-green-600 cursor-pointer text-lg"
+                                        {can(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DU_LIEU_FAQ, 'DUYET') &&
+                                            (record.status === $Enums.DocumentStatus.PENDING ||
+                                                record.status === $Enums.DocumentStatus.DENY) && (
+                                                <Tooltip title="Phê duyệt" placement="top">
+                                                    <AuditOutlined
+                                                        onClick={() =>
+                                                            openPheDuyetCauHoiThuongGap(record.id)
+                                                        }
+                                                        className="text-green-600 cursor-pointer text-lg"
+                                                    />
+                                                </Tooltip>
+                                            )}
+                                        {can(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DU_LIEU_FAQ, 'SUA') && (
+                                            <Tooltip title="Xem chi tiết" placement="leftTop">
+                                                <EyeOutlined
+                                                    onClick={() => openPutCauHoi(record.id)}
+                                                    className="text-blue-700 cursor-pointer text-lg"
                                                 />
                                             </Tooltip>
                                         )}
-                                        <Tooltip title="Xem chi tiết" placement="leftTop">
-                                            <EyeOutlined
-                                                onClick={() => openPutCauHoi(record.id)}
-                                                className="text-blue-700 cursor-pointer text-lg"
+                                        {can(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DU_LIEU_FAQ, 'XOA') && (
+                                            <DeleteIcon
+                                                popConfirm={{
+                                                    onConfirm: () => handleDeleteFAQ(record.id),
+                                                }}
                                             />
-                                        </Tooltip>
-                                        <DeleteIcon
-                                            popConfirm={{
-                                                onConfirm: () => handleDeleteFAQ(record.id),
-                                            }}
-                                        />
+                                        )}
                                     </div>
                                 ),
                             },

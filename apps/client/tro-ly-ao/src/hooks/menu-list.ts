@@ -1,13 +1,14 @@
 import { useStoreActions, useStoreState } from '@redux/hook'
 import ability from '@workspace/permissions/ability'
-import { usePermissions } from '@workspace/permissions/hooks'
-import NAVIGATION from '@workspace/router'
+import { useAbility, usePermissions } from '@workspace/permissions/hooks'
+import NAVIGATION, { type TRO_LY_AO_PERMISSION } from '@workspace/router'
 import { useEffect, useMemo } from 'react'
 
 const useMenuList = () => {
     const isUpdateAbility = useStoreState((actions) => actions.appState.isUpdateAbility)
     const setIsUpdateAbility = useStoreActions((actions) => actions.appState.setIsUpdateAbility)
     const permissions = usePermissions()
+    const { can } = useAbility()
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
@@ -22,22 +23,13 @@ const useMenuList = () => {
     }, [permissions])
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <needed>
-    const menus = useMemo(() => {
-        console.log('TRO_LY_AO permissions:', permissions)
-        console.log('TRO_LY_AO original menus:', NAVIGATION.TRO_LY_AO.menus)
-
-        // todo: Tạm thời bypass permissions để test menu
-        return NAVIGATION.TRO_LY_AO.menus || []
-
-        /* Original permission-based filtering:
-            return NAVIGATION.TRO_LY_AO.menus
+    const menus = useMemo(
+        () =>
+            NAVIGATION.TRO_LY_AO.menus
                 .map((menu) => {
                     if (menu.children) {
                         const filteredChildren = menu.children.filter((child) => {
-                            return (
-                                (Number(ability.actionsFor(child.id).pop()) & PERMISSIONS.XEM) ===
-                                PERMISSIONS.XEM
-                            )
+                            return can(child.id as TRO_LY_AO_PERMISSION, 'XEM')
                         })
                         return filteredChildren.length > 0
                             ? {
@@ -46,14 +38,11 @@ const useMenuList = () => {
                               }
                             : null
                     }
-                    return (Number(ability.actionsFor(menu.id).pop()) & PERMISSIONS.XEM) ===
-                        PERMISSIONS.XEM
-                        ? menu
-                        : null
+                    return can(menu.id as TRO_LY_AO_PERMISSION, 'XEM') ? menu : null
                 })
-                .filter((menu) => menu !== null)
-            */
-    }, [isUpdateAbility, permissions, ability])
+                .filter((menu) => menu !== null),
+        [isUpdateAbility, permissions, ability]
+    )
 
     return menus
 }

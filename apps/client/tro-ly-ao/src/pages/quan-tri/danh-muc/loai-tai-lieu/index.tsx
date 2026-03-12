@@ -7,11 +7,14 @@ import {
     useDeleteDocumentClassification,
     useFindManyDocumentClassification,
 } from '@workspace/db/hooks'
+import { useAbility } from '@workspace/permissions/hooks'
+import { TRO_LY_AO_PERMISSION } from '@workspace/router'
 import { Button, Input, message } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 function Page() {
+    const { can } = useAbility()
     const [filters, setFilters] = useState<{
         search: string
     }>({
@@ -73,9 +76,11 @@ function Page() {
                                 Quản lý loại tài liệu
                             </span>
                         </div>
-                        <Button onClick={() => openPutClassification()} type="primary">
-                            Thêm mới
-                        </Button>
+                        {can(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DANH_MUC_LOAI_TAI_LIEU, 'THEM') && (
+                            <Button onClick={() => openPutClassification()} type="primary">
+                                Thêm mới
+                            </Button>
+                        )}
                     </div>
                     <div className="flex items-center gap-2 mb-4">
                         <Input
@@ -131,18 +136,22 @@ function Page() {
                                 fixed: 'right',
                                 render: (_, record) => (
                                     <div className="flex items-center justify-center gap-2">
-                                        <EditOutlined
-                                            onClick={() => openPutClassification(record.id)}
-                                            className="text-blue-700 cursor-pointer text-lg"
-                                        />
-                                        <DeleteIcon
-                                            popConfirm={{
-                                                title: 'Xác nhận xoá loại tài liệu?',
-                                                description: 'Hành động này sẽ không thể hoàn tác.',
-                                                onConfirm: () =>
-                                                    handleDeleteClassification(record.id),
-                                            }}
-                                        />
+                                        {can(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DANH_MUC_LOAI_TAI_LIEU, 'SUA') && (
+                                            <EditOutlined
+                                                onClick={() => openPutClassification(record.id)}
+                                                className="text-blue-700 cursor-pointer text-lg"
+                                            />
+                                        )}
+                                        {can(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DANH_MUC_LOAI_TAI_LIEU, 'XOA') && (
+                                            <DeleteIcon
+                                                popConfirm={{
+                                                    title: 'Xác nhận xoá loại tài liệu?',
+                                                    description: 'Hành động này sẽ không thể hoàn tác.',
+                                                    onConfirm: () =>
+                                                        handleDeleteClassification(record.id),
+                                                }}
+                                            />
+                                        )}
                                     </div>
                                 ),
                             },
