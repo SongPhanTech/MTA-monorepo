@@ -5,6 +5,8 @@ import {
     useFindManyChatBotConfig,
     useUpdateChatBotConfig,
 } from '@workspace/db/hooks'
+import { useAbility } from '@workspace/permissions/hooks'
+import { TRO_LY_AO_PERMISSION } from '@workspace/router'
 import { Alert, Button, Col, Form, InputNumber, message, Row, Typography } from 'antd'
 import { useEffect, useState } from 'react'
 
@@ -20,6 +22,7 @@ type ParamsType = {
 }
 
 function Page() {
+    const { can } = useAbility()
     const [form] = Form.useForm<ParamsType>()
     const { data: chatbotConfig = [] } = useFindManyChatBotConfig({})
     const [isEditing, setIsEditing] = useState(false)
@@ -225,22 +228,24 @@ function Page() {
                     </Col>
                 </Row>
                 <div className="flex justify-end gap-2 mt-4">
-                    {isEditing ? (
-                        <>
-                            <Button
-                                onClick={() => {
-                                    form.setFieldsValue(initialValues || {})
-                                    setIsEditing(false)
-                                }}
-                            >
-                                Huỷ
-                            </Button>
-                            <Button type="primary" htmlType="submit">
-                                Lưu
-                            </Button>
-                        </>
-                    ) : (
-                        <Button onClick={() => setIsEditing(true)}>Sửa</Button>
+                    {can(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_CAU_HINH_THAM_SO, 'SUA') && (
+                        isEditing ? (
+                            <>
+                                <Button
+                                    onClick={() => {
+                                        form.setFieldsValue(initialValues || {})
+                                        setIsEditing(false)
+                                    }}
+                                >
+                                    Huỷ
+                                </Button>
+                                <Button type="primary" htmlType="submit">
+                                    Lưu
+                                </Button>
+                            </>
+                        ) : (
+                            <Button onClick={() => setIsEditing(true)}>Sửa</Button>
+                        )
                     )}
                 </div>
             </Form>

@@ -1,6 +1,8 @@
 import { EditOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DefaultLayout from '@layouts/default-layout'
+import { useAbility } from '@workspace/permissions/hooks'
+import { TRO_LY_AO_PERMISSION } from '@workspace/router'
 import { Input, Tag, Tooltip } from 'antd'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -23,6 +25,7 @@ type PromptRecord = {
 }
 
 function Page() {
+    const { can } = useAbility()
     const [searchText, setSearchText] = useState('')
 
     const { onOpen: openPutPromptHoiDap } = useDisclosure<PutPromptHoiDapInput>({
@@ -146,12 +149,14 @@ function Page() {
                                 width: 80,
                                 fixed: 'right',
                                 render: (_, record: any) => (
-                                    <Tooltip title="Chỉnh sửa" placement="top">
-                                        <EditOutlined
-                                            onClick={() => handleEdit(record)}
-                                            className="text-blue-700 cursor-pointer text-lg hover:text-blue-500"
-                                        />
-                                    </Tooltip>
+                                    can(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_CAU_HINH_PROMPT_HOI_DAP, 'SUA') ? (
+                                        <Tooltip title="Chỉnh sửa" placement="top">
+                                            <EditOutlined
+                                                onClick={() => handleEdit(record)}
+                                                className="text-blue-700 cursor-pointer text-lg hover:text-blue-500"
+                                            />
+                                        </Tooltip>
+                                    ) : null
                                 ),
                             },
                         ]}

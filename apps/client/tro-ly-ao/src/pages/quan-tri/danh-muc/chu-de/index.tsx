@@ -10,12 +10,15 @@ import {
     useDeleteTopic,
     useFindManyTopic,
 } from '@workspace/db/hooks'
+import { useAbility } from '@workspace/permissions/hooks'
+import { TRO_LY_AO_PERMISSION } from '@workspace/router'
 import { Button, Input, message, Select, Tooltip } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useTopics } from '@/hooks/useTopics'
 
 function Page() {
+    const { can } = useAbility()
     const { isSystemTopic } = useTopics()
     const [filters, setFilters] = useState<{
         search: string
@@ -120,9 +123,11 @@ function Page() {
                                 Quản lý chủ đề
                             </span>
                         </div>
-                        <Button onClick={() => openPutTopic()} type="primary">
-                            Thêm mới
-                        </Button>
+                        {can(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DANH_MUC_CHU_DE, 'THEM') && (
+                            <Button onClick={() => openPutTopic()} type="primary">
+                                Thêm mới
+                            </Button>
+                        )}
                     </div>
                     <div className="flex items-center gap-2 mb-4">
                         <Input
@@ -217,21 +222,25 @@ function Page() {
                                     <div className="flex items-center justify-center gap-2">
                                         {!isSystemTopic(record.type) && (
                                             <>
-                                                <Tooltip title="Chỉnh sửa" placement="leftTop">
-                                                    <EditOutlined
-                                                        onClick={() => openPutTopic(record.id)}
-                                                        className="text-blue-700 cursor-pointer text-lg"
+                                                {can(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DANH_MUC_CHU_DE, 'SUA') && (
+                                                    <Tooltip title="Chỉnh sửa" placement="leftTop">
+                                                        <EditOutlined
+                                                            onClick={() => openPutTopic(record.id)}
+                                                            className="text-blue-700 cursor-pointer text-lg"
+                                                        />
+                                                    </Tooltip>
+                                                )}
+                                                {can(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DANH_MUC_CHU_DE, 'XOA') && (
+                                                    <DeleteIcon
+                                                        popConfirm={{
+                                                            title: 'Xác nhận xoá chủ đề?',
+                                                            description:
+                                                                'Hành động này sẽ không thể hoàn tác.',
+                                                            onConfirm: () =>
+                                                                handleDeleteTopic(record.id),
+                                                        }}
                                                     />
-                                                </Tooltip>
-                                                <DeleteIcon
-                                                    popConfirm={{
-                                                        title: 'Xác nhận xoá chủ đề?',
-                                                        description:
-                                                            'Hành động này sẽ không thể hoàn tác.',
-                                                        onConfirm: () =>
-                                                            handleDeleteTopic(record.id),
-                                                    }}
-                                                />
+                                                )}
                                             </>
                                         )}
                                         {isSystemTopic(record.type) && (

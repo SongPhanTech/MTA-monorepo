@@ -3,6 +3,8 @@ import FormItem from '@components/commons/form-item'
 import DefaultLayout from '@layouts/default-layout'
 import { $Enums } from '@workspace/db'
 import { useCreateManyPrompt, useFindFirstPrompt, useUpdateManyPrompt } from '@workspace/db/hooks'
+import { useAbility } from '@workspace/permissions/hooks'
+import { TRO_LY_AO_PERMISSION } from '@workspace/router'
 import { Input as AntdInput, Button, Col, Form, Input, message, Row } from 'antd'
 import { useEffect, useRef, useState } from 'react'
 import { useTopics } from '@/hooks/useTopics'
@@ -150,6 +152,7 @@ const PromptQuestionAnswer = ({
 }
 
 function Page() {
+    const { can } = useAbility()
     const { topicOptions, topics, isSystemTopic } = useTopics()
     const [searchKeyword, setSearchKeyword] = useState('')
     const [isSystemCollapsed, setIsSystemCollapsed] = useState(true)
@@ -201,6 +204,7 @@ function Page() {
                                             topicId={item.id}
                                             topicType={item.type}
                                             label={item.name}
+                                            hideEditButton={!can(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_CAU_HINH_PROMT, 'SUA')}
                                         />
                                     </Col>
                                 )

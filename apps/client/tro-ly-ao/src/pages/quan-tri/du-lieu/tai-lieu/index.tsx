@@ -21,6 +21,8 @@ import {
     useFindManyDocument,
     useFindManyDocumentClassification,
 } from '@workspace/db/hooks'
+import { useAbility } from '@workspace/permissions/hooks'
+import { TRO_LY_AO_PERMISSION } from '@workspace/router'
 import { Button, Input, message, Select, Tabs, Tag, Tooltip } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -29,6 +31,7 @@ import { useTopics } from '@/hooks/useTopics'
 import { fetchPresignedGetObject } from '@/lib/api/common/commonComponents'
 
 function Page() {
+    const { can } = useAbility()
     const [filters, setFilters] = useState<{
         title: string
         status: $Enums.DocumentStatus
@@ -233,9 +236,11 @@ function Page() {
                             >
                                 Làm mới
                             </Button>
-                            <Button onClick={openAddTaiLieu} type="primary">
-                                Thêm mới
-                            </Button>
+                            {can(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DU_LIEU_TAI_LIEU, 'THEM') && (
+                                <Button onClick={openAddTaiLieu} type="primary">
+                                    Thêm mới
+                                </Button>
+                            )}
                         </div>
                     </div>
                     <Tabs
@@ -439,34 +444,38 @@ function Page() {
                                 fixed: 'right',
                                 render: (_, record) => (
                                     <div className="flex items-center justify-center gap-2">
-                                        {(record.status === $Enums.DocumentStatus.PENDING ||
-                                            record.status === $Enums.DocumentStatus.DENY) && (
-                                            <Tooltip title="Phê duyệt" placement="top">
-                                                <AuditOutlined
-                                                    onClick={() => openPheDuyetTaiLieu(record.id)}
-                                                    className="text-green-600 cursor-pointer text-lg"
+                                        {can(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DU_LIEU_TAI_LIEU, 'DUYET') &&
+                                            (record.status === $Enums.DocumentStatus.PENDING ||
+                                                record.status === $Enums.DocumentStatus.DENY) && (
+                                                <Tooltip title="Phê duyệt" placement="top">
+                                                    <AuditOutlined
+                                                        onClick={() => openPheDuyetTaiLieu(record.id)}
+                                                        className="text-green-600 cursor-pointer text-lg"
+                                                    />
+                                                </Tooltip>
+                                            )}
+                                        {can(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DU_LIEU_TAI_LIEU, 'TAI_TEP') &&
+                                            record.uri && (
+                                                <Tooltip title="Tải xuống" placement="top">
+                                                    <DownloadOutlined
+                                                        onClick={() =>
+                                                            onDownload(
+                                                                record.uri!,
+                                                                record.title || record.id
+                                                            )
+                                                        }
+                                                        className="text-cyan-600 cursor-pointer text-lg"
+                                                    />
+                                                </Tooltip>
+                                            )}
+                                        {can(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DU_LIEU_TAI_LIEU, 'SUA') && (
+                                            <Tooltip title="Chỉnh sửa" placement="top">
+                                                <EditOutlined
+                                                    onClick={() => openSuaTaiLieu(record.id)}
+                                                    className="text-orange-600 cursor-pointer text-lg"
                                                 />
                                             </Tooltip>
                                         )}
-                                        {record.uri && (
-                                            <Tooltip title="Tải xuống" placement="top">
-                                                <DownloadOutlined
-                                                    onClick={() =>
-                                                        onDownload(
-                                                            record.uri!,
-                                                            record.title || record.id
-                                                        )
-                                                    }
-                                                    className="text-cyan-600 cursor-pointer text-lg"
-                                                />
-                                            </Tooltip>
-                                        )}
-                                        <Tooltip title="Chỉnh sửa" placement="top">
-                                            <EditOutlined
-                                                onClick={() => openSuaTaiLieu(record.id)}
-                                                className="text-orange-600 cursor-pointer text-lg"
-                                            />
-                                        </Tooltip>
                                         <Tooltip title="Xem chi tiết" placement="top">
                                             <EyeOutlined
                                                 onClick={() => {
@@ -475,11 +484,13 @@ function Page() {
                                                 className="text-blue-700 cursor-pointer text-lg"
                                             />
                                         </Tooltip>
-                                        <DeleteIcon
-                                            popConfirm={{
-                                                onConfirm: () => handleDeleteDocument(record.id),
-                                            }}
-                                        />
+                                        {can(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DU_LIEU_TAI_LIEU, 'XOA') && (
+                                            <DeleteIcon
+                                                popConfirm={{
+                                                    onConfirm: () => handleDeleteDocument(record.id),
+                                                }}
+                                            />
+                                        )}
                                     </div>
                                 ),
                             },
