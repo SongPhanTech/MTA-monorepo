@@ -746,7 +746,7 @@ export const calculateStudentSemesterResult = async (
             },
         })
 
-        pMap(
+      await  pMap(
             studentsIDs,
             async (student) => {
                 // lấy khoá học
@@ -819,7 +819,7 @@ export const calculateStudentSemesterResult = async (
                     studentId: student.id,
                     conductScore: conductScore?.score || 10,
                     semesterId,
-                    studyYear: Math.floor(thongTinTichLuy.kyDangHoc / 2) || 1, // năm học thứ mấy
+                    studyYear: Math.floor((thongTinTichLuy.kyDangHoc + 1) / 2), // năm học thứ mấy
                     semesterIndexInCourse: thongTinTichLuy.kyDangHoc, // Kỳ đang học
                     isLastSemester: thongTinTichLuy.kyCuoi, // Kỳ cuối hay không
 
