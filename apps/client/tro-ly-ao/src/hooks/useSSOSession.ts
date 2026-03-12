@@ -64,6 +64,19 @@ const checkSSORedirect = (): boolean => {
     return false
 }
 
+/**
+ * Set window.contextData từ session data để usePermissions có thể đọc userId
+ * Phải set TRƯỚC khi trigger re-render để React Query hook có enabled: true
+ */
+const setWindowContextData = (session: SSOSession | null) => {
+    if (typeof window === 'undefined' || !session) return
+    window.contextData = {
+        userId: session.userId,
+        userName: session.username,
+        organizationId: session.organizationId || '',
+    }
+}
+
 let globalCache: CacheEntry | null = null
 if (typeof window !== 'undefined') {
     const fromSSO = checkSSORedirect()
@@ -78,6 +91,8 @@ if (typeof window !== 'undefined') {
                 const parsed = JSON.parse(stored) as CacheEntry
                 if (Date.now() - parsed.timestamp < CACHE_TIME) {
                     globalCache = parsed
+                    // Set window.contextData từ cache để usePermissions có userId ngay
+                    setWindowContextData(parsed.session)
                 } else {
                     localStorage.removeItem(CACHE_KEY)
                 }
@@ -131,6 +146,9 @@ export const useSSOSession = () => {
 
             const newStatus: SSOSessionStatus = response.ok ? 'authenticated' : 'unauthenticated'
             const newSession = response.ok ? await response.json() : null
+
+            // Set window.contextData TRƯỚC khi setState để usePermissions có userId khi re-render
+            setWindowContextData(newSession)
 
             // Update global cache
             globalCache = {
