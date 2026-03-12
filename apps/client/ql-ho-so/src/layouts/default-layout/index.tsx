@@ -13,15 +13,20 @@ import { useRouter } from 'next/router'
 import { type ReactNode, useEffect, useMemo, useState } from 'react'
 import { IdleTimerProvider } from 'react-idle-timer'
 import HeaderApp from '@/components/header'
-import { useAppVersionInfo } from '@workspace/libs/api/public'
 import { Footer } from 'antd/es/layout/layout'
-
+import { getVersion } from '@workspace/libs/api/training'
 const { Header, Content } = Layout
 interface breadcrumListProps {
     title: string
     href?: string
 }
-
+type Version = {
+    Id: string
+    sTenVersion: string
+    sDescription: string
+    dNgayPhatHanh: string
+}
+const APP_CODE = 'hrm'
 const DefaultLayout = ({
     children,
     className,
@@ -33,11 +38,20 @@ const DefaultLayout = ({
     breadcrumbList?: breadcrumListProps[]
     unLayout?: boolean
 }) => {
+    const [version, setVersion] = useState<string>()
     const router = useRouter()
     const currentPath = router.pathname
     const breadcrumb = getDynamicBreadcrumb('QL_HO_SO', currentPath)
-
-    const { version, isLoading: isLoadingVersion } = useAppVersionInfo()
+    useEffect(() => {
+        const fetchVersion = async () => {
+            const res = await getVersion(APP_CODE)
+            if (res.status === 200) {
+                const versionData = res.data as Version[]
+                setVersion(versionData?.[0]?.sTenVersion)
+            }
+        }
+        fetchVersion()
+    }, [])
 
     const [collapsed, setCollapsed] = useState(() => {
         return typeof window !== 'undefined' && localStorage.getItem('collapsed') === 'true'
@@ -185,7 +199,7 @@ const DefaultLayout = ({
                 <div>
                     Học viện Kỹ thuật Quân sự - Địa chỉ: Số 236, Hoàng Quốc Việt, Cầu Giấy, Hà Nội
                 </div>
-                <div className="ml-auto">Phiên bản: {isLoadingVersion ? '...' : version}</div>
+                <div className="ml-auto">Phiên bản: {version ?? '...'}</div>
             </Footer>
         </IdleTimerProvider>
     )
