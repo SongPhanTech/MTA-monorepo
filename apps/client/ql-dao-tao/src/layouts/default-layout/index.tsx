@@ -76,7 +76,8 @@ const DefaultLayout = ({
         const fetchVersion = async () => {
             const res = await getVersion(APP_CODE)
             if (res.status === 200) {
-                setVersion((res.data as Version).sTenVersion)
+                const versionData = res.data as Version[]
+                setVersion(versionData?.[0]?.sTenVersion)
             }
         }
         fetchVersion()
