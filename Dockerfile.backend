@@ -5,21 +5,14 @@ ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable pnpm
 
-FROM base AS pruner
+FROM base AS builder
 ARG PACKAGE
 ENV PACKAGE="${PACKAGE}"
 WORKDIR /app
-RUN pnpm add -g turbo
-RUN turbo telemetry disable
-COPY . .
-RUN turbo prune @backend/${PACKAGE} --docker
-
-FROM base AS builder
-WORKDIR /app
-COPY --from=pruner /app/out/json/ .
+COPY out/json/ .
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
-COPY --from=pruner /app/out/full/ .
+COPY out/full/ .
 ENV NODE_OPTIONS="--max-old-space-size=6144"
 # RUN echo "DATABASE_URL=postgres://root:SwanT3chDB@swantech.luanbt.com:5432/mta" > packages/database/.env
 # RUN pnpm generate

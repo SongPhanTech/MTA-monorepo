@@ -119,9 +119,8 @@ export const whereOrganization: Prisma.DM_DonViWhereInput = {
         { iLoaiDonVi: 5 }, // Khoa
         { iLoaiDonVi: 6 }, // Viện
         { iLoaiDonVi: 7 }, // Bộ môn
-        {
-            sParentId: null,
-        },
+        { sParentId: null },
+        { lecturers: { some: { active: true } } },
     ],
     bActive: true,
 }

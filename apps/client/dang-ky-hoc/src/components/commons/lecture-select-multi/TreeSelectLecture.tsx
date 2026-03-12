@@ -69,6 +69,7 @@ const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
                 { iLoaiDonVi: 6 }, // Viện
                 { iLoaiDonVi: 7 }, // Bộ môn
                 { sParentId: null },
+                { lecturers: { some: { active: true } } },
             ],
         },
     })
