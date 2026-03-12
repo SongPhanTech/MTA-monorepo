@@ -248,6 +248,22 @@ ${missing
 
     if (missing.length && createMissing) {
         await prisma.$transaction(async (tx) => {
+
+            const course = await tx.trainingCourse.findFirst({
+                where: {
+                    name: trainingCourseName,
+                    trainingObjectTypeId,
+                    active: true,
+                    deletedAt: null,
+                },
+            })
+
+            if (!course) {
+                throw new HTTPException(400, {
+                    message: `Khoá đào tạo không tồn tại: ${trainingCourseName}`,
+                })
+            }
+
             for (const item of missing) {
                 const curriculumName = `${item.trainingMajor} - ${trainingCourseName}`
                 let curriculum = await tx.curriculum.findFirst({
@@ -277,9 +293,16 @@ ${missing
                         })
                     }
 
+                    const curriculumCode = item.trainingMajor
+                        .split(' ')
+                        .map((w) => w[0])
+                        .join('')
+                        .toUpperCase()
+
                     curriculum = await tx.curriculum.create({
                         data: {
                             name: curriculumName,
+                            code: curriculumCode,
                             trainingMajorId: major.id,
                             trainingObjectTypeId,
                             managementOrganizationId: major.organizationId,
@@ -287,13 +310,29 @@ ${missing
                     })
                 }
 
+                const versionCode = item.curriculum
+                    .split(' ')
+                    .map((w) => w[0])
+                    .join('')
+                    .toUpperCase()
+
                 const created = await tx.curriculumVersion.create({
                     data: {
                         name: item.curriculum,
+                        code: versionCode,
                         curriculumId: curriculum.id,
                         trainingObjectTypeId,
                     },
-                    select: { id: true, name: true }, // Select minimal fields
+                    select: { id: true, name: true },
+                })
+
+                await tx.fixedClass.create({
+                    data: {
+                        name: `Lớp ${item.curriculum}`,
+                        trainingCourseId: course.id,
+                        curriculumVersionId: created.id,
+                        managementOrganizationId: curriculum.managementOrganizationId,
+                    },
                 })
 
                 createdItems.push(created)
