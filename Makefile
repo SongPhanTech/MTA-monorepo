@@ -161,10 +161,12 @@ all-%: build-%
 
 # Internal backend build
 _build-be:
+	pnpm turbo prune @backend/${PACKAGE} --docker
 	$(DOCKER) build -f Dockerfile.backend --platform linux/amd64 \
 		-t $(REGISTRY)/$(IMG_PREFIX)${PACKAGE}:$(DEV_TAG) \
 		--build-arg PACKAGE=${PACKAGE} \
 		. --output type=docker
+	rm -rf out
 
 # Internal frontend build
 _build-fe:

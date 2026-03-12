@@ -25,6 +25,8 @@ coverage
 # Build Outputs
 .next/
 out/
+!out/json/
+!out/full/
 build
 dist
 

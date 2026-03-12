@@ -4,18 +4,18 @@ import { useMenuList } from '@hooks/menu-list'
 import { cn } from '@lib/utils'
 import { CONFIG_KEY } from '@workspace/constant'
 import { useFindUniqueConfig } from '@workspace/db/hooks'
+//import packageInfo from '../../../package.json'
+import { getVersion } from '@workspace/libs/api/training'
 import { getDynamicBreadcrumb } from '@workspace/permissions/hooks'
 import { SelectTrainingObjectType, TreeSelectSemester } from '@workspace/ui'
 import { Breadcrumb, Divider, Layout, Tooltip, theme } from 'antd'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { type ReactNode, useMemo, useState } from 'react'
+import { type ReactNode, useEffect, useMemo, useState } from 'react'
 import { IdleTimerProvider } from 'react-idle-timer'
 import HeaderApp from '@/components/header'
-//import packageInfo from '../../../package.json'
-import { getVersion } from '@workspace/libs/api/training'
-import { useEffect } from 'react'
+
 const { Header, Content, Footer } = Layout
 interface BreadcrumbListProps {
     title: string

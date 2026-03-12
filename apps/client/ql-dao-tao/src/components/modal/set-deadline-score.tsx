@@ -41,8 +41,8 @@ const PutDeadlineScoreModal = () => {
             await updateSubjectClass({
                 where: { id },
                 data: {
-                    scoreDeadLineStart: !!output?.time ? output?.time[0]?.toISOString() : null,
-                    scoreDeadline: !!output?.time ? output?.time[1]?.toISOString() : null,
+                    scoreDeadLineStart: output?.time ? output?.time[0]?.toISOString() : null,
+                    scoreDeadline: output?.time ? output?.time[1]?.toISOString() : null,
                     examScoreDeadline: output?.examScoreDeadline
                         ? output?.examScoreDeadline?.toISOString()
                         : null,

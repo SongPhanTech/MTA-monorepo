@@ -96,17 +96,17 @@ const PutAcademicActionConfig = () => {
             title={input?.id ? 'Chỉnh sửa cấu hình xử lý' : 'Thêm mới cấu hình xử lý'}
         >
             <Col span={12}>
-                <FormItem form={form} name="name" label="Tên cấu hình" required>
-                    <Input placeholder="Nhập tên cấu hình" />
-                </FormItem>
-            </Col>
-            <Col span={12}>
                 <FormItem form={form} label="Loại hành động xử lý" name="actionType" required>
                     <Select
                         placeholder="Chọn trường được đánh giá"
                         options={academicActionTypeOptions}
                         allowClear
                     />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="name" label="Tên cấu hình" required>
+                    <Input placeholder="Nhập tên cấu hình" />
                 </FormItem>
             </Col>
             <Col span={24}>
