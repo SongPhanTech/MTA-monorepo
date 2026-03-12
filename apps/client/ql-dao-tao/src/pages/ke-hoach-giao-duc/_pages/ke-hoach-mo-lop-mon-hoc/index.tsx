@@ -593,8 +593,8 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                                                 block.trainingBlockOnCurriculumVersion
                                                     .curriculumVersion.fixedClass
                                         )
-                                        console.log(fixedClasses);
-                                        
+                                        console.log(fixedClasses)
+
                                         return (
                                             <TextTruncate
                                                 arr={fixedClasses.map((i: any) => {

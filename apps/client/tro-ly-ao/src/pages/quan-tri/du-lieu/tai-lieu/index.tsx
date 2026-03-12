@@ -236,7 +236,10 @@ function Page() {
                             >
                                 Làm mới
                             </Button>
-                            {can(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DU_LIEU_TAI_LIEU, 'THEM') && (
+                            {can(
+                                TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DU_LIEU_TAI_LIEU,
+                                'THEM'
+                            ) && (
                                 <Button onClick={openAddTaiLieu} type="primary">
                                     Thêm mới
                                 </Button>
@@ -444,17 +447,25 @@ function Page() {
                                 fixed: 'right',
                                 render: (_, record) => (
                                     <div className="flex items-center justify-center gap-2">
-                                        {can(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DU_LIEU_TAI_LIEU, 'DUYET') &&
+                                        {can(
+                                            TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DU_LIEU_TAI_LIEU,
+                                            'DUYET'
+                                        ) &&
                                             (record.status === $Enums.DocumentStatus.PENDING ||
                                                 record.status === $Enums.DocumentStatus.DENY) && (
                                                 <Tooltip title="Phê duyệt" placement="top">
                                                     <AuditOutlined
-                                                        onClick={() => openPheDuyetTaiLieu(record.id)}
+                                                        onClick={() =>
+                                                            openPheDuyetTaiLieu(record.id)
+                                                        }
                                                         className="text-green-600 cursor-pointer text-lg"
                                                     />
                                                 </Tooltip>
                                             )}
-                                        {can(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DU_LIEU_TAI_LIEU, 'TAI_TEP') &&
+                                        {can(
+                                            TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DU_LIEU_TAI_LIEU,
+                                            'TAI_TEP'
+                                        ) &&
                                             record.uri && (
                                                 <Tooltip title="Tải xuống" placement="top">
                                                     <DownloadOutlined
@@ -468,7 +479,10 @@ function Page() {
                                                     />
                                                 </Tooltip>
                                             )}
-                                        {can(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DU_LIEU_TAI_LIEU, 'SUA') && (
+                                        {can(
+                                            TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DU_LIEU_TAI_LIEU,
+                                            'SUA'
+                                        ) && (
                                             <Tooltip title="Chỉnh sửa" placement="top">
                                                 <EditOutlined
                                                     onClick={() => openSuaTaiLieu(record.id)}
@@ -484,10 +498,14 @@ function Page() {
                                                 className="text-blue-700 cursor-pointer text-lg"
                                             />
                                         </Tooltip>
-                                        {can(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DU_LIEU_TAI_LIEU, 'XOA') && (
+                                        {can(
+                                            TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DU_LIEU_TAI_LIEU,
+                                            'XOA'
+                                        ) && (
                                             <DeleteIcon
                                                 popConfirm={{
-                                                    onConfirm: () => handleDeleteDocument(record.id),
+                                                    onConfirm: () =>
+                                                        handleDeleteDocument(record.id),
                                                 }}
                                             />
                                         )}

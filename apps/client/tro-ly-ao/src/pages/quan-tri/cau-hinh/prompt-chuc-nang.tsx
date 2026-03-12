@@ -179,16 +179,18 @@ function Page() {
                                 width: 80,
                                 align: 'center',
                                 fixed: 'right',
-                                render: (_, record) => (
-                                    can(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_CAU_HINH_PROMPT_CHUC_NANG, 'SUA') ? (
+                                render: (_, record) =>
+                                    can(
+                                        TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_CAU_HINH_PROMPT_CHUC_NANG,
+                                        'SUA'
+                                    ) ? (
                                         <Tooltip title="Chỉnh sửa" placement="top">
                                             <EditOutlined
                                                 className="text-blue-700 cursor-pointer text-lg hover:text-blue-500"
                                                 onClick={() => handleEdit(record)}
                                             />
                                         </Tooltip>
-                                    ) : null
-                                ),
+                                    ) : null,
                             },
                         ]}
                     />

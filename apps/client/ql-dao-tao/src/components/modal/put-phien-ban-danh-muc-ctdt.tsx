@@ -82,10 +82,9 @@ const PutCurriculumVersion = () => {
         onClose: form.resetFields,
     })
 
-    const { onOpen: openPreviewModal } =
-        useDisclosure<ModalPreviewUploadInput>({
-            tag: 'ModalPreviewUpload',
-        })
+    const { onOpen: openPreviewModal } = useDisclosure<ModalPreviewUploadInput>({
+        tag: 'ModalPreviewUpload',
+    })
 
     useEffect(() => {
         if (!input?.versionId && trainingObjectTypeSelected) {
@@ -763,7 +762,7 @@ const PutCurriculumVersion = () => {
                         label: 'Chuẩn đầu ra',
                         children: (
                             <FormItem form={form} name="learningOutcome" label="Chuẩn đầu ra">
-                                <RichTextEditor/>
+                                <RichTextEditor />
                                 {/* <Input.TextArea placeholder="Nhập chuẩn đầu ra" /> */}
                             </FormItem>
                         ),
