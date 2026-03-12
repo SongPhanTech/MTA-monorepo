@@ -14,13 +14,21 @@ import { type ReactNode, useEffect, useMemo, useState } from 'react'
 import { IdleTimerProvider } from 'react-idle-timer'
 import HeaderApp from '@/components/header'
 import { Footer } from 'antd/es/layout/layout'
-import { useAppVersionInfo } from '@workspace/libs/api/public'
+import { getVersion } from '@workspace/libs/api/training'
 
 const { Header, Content } = Layout
 interface breadcrumListProps {
     title: string
     href?: string
 }
+
+type Version = {
+    Id: string
+    sTenVersion: string
+    sDescription: string
+    dNgayPhatHanh: string
+}
+const APP_CODE = 'hrm'
 
 const CreateLayout = ({
     children,
@@ -33,14 +41,13 @@ const CreateLayout = ({
     breadcrumbList?: breadcrumListProps[]
     unLayout?: boolean
 }) => {
+    const [version, setVersion] = useState<string>()
     const router = useRouter()
     const currentPath = router.pathname
     const breadcrumb = getDynamicBreadcrumb('QL_HO_SO', currentPath)
     const [collapsed, setCollapsed] = useState(() => {
         return typeof window !== 'undefined' && localStorage.getItem('collapsed') === 'true'
     })
-
-    const { version, isLoading: isLoadingVersion } = useAppVersionInfo()
 
     const listBreadcrumb = useMemo(() => {
         return breadcrumb?.length > 0
@@ -120,6 +127,17 @@ const CreateLayout = ({
         handleCollapsed()
     }, [])
 
+    useEffect(() => {
+        const fetchVersion = async () => {
+            const res = await getVersion(APP_CODE)
+            if (res.status === 200) {
+                const versionData = res.data as Version[]
+                setVersion(versionData?.[0]?.sTenVersion)
+            }
+        }
+        fetchVersion()
+    }, [])
+
     return (
         <IdleTimerProvider
             timeout={Number.parseFloat(userSessionTimeout?.value || '15') * 60 * 1000}
@@ -176,7 +194,7 @@ const CreateLayout = ({
                 <div>
                     Học viện Kỹ thuật Quân sự - Địa chỉ: Số 236, Hoàng Quốc Việt, Cầu Giấy, Hà Nội
                 </div>
-                <div className="ml-auto">Phiên bản: {isLoadingVersion ? '...' : version}</div>
+                <div className="ml-auto">Phiên bản: {version ?? '...'}</div>
             </Footer>
         </IdleTimerProvider>
     )

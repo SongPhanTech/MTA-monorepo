@@ -38,11 +38,11 @@ const DefaultLayout = ({
     breadcrumbList?: breadcrumListProps[]
     unLayout?: boolean
 }) => {
-      const [version, setVersion] = useState<string>()
+    const [version, setVersion] = useState<string>()
     const router = useRouter()
     const currentPath = router.pathname
     const breadcrumb = getDynamicBreadcrumb('QL_HO_SO', currentPath)
-   useEffect(() => {
+    useEffect(() => {
         const fetchVersion = async () => {
             const res = await getVersion(APP_CODE)
             if (res.status === 200) {
