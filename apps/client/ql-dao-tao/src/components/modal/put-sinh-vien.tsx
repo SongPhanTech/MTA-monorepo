@@ -144,7 +144,6 @@ const PutStudentModal = () => {
     const { mutateAsync: createStudent } = useCreateStudent()
     const { mutateAsync: updateStudent } = useUpdateStudent()
     const { data = [] } = useFindManyUserProfile({
-        where: { bLaHocVien: true },
         select: {
             firstName: true,
             lastName: true,
@@ -190,12 +189,29 @@ const PutStudentModal = () => {
         }))
     }, [data])
 
+    useEffect(() => {
+        if (!id && cccdUserProfileData?.educationAndTraining) {
+            form.setFields([
+                {
+                    name: 'idCardNumber',
+                    errors: ['Người dùng này đã là sinh viên/học viên.'],
+                },
+            ])
+        } else if (form.getFieldError('idCardNumber').length > 0) {
+            form.setFields([{ name: 'idCardNumber', errors: [] }])
+        }
+    }, [cccdUserProfileData, id, form])
+
     async function onOk(output: PutStudentProfile) {
         if (!output || !cccdUserProfileData?.id) return
 
         showSpinner()
 
         try {
+            if (cccdUserProfileData?.educationAndTraining && !id) {
+                message.error('Không thể thêm mới. Người dùng này đã là sinh viên/học viên.')
+                return
+            }
             const userProfileUpdate = {
                 model: 'UserProfile',
                 operation: 'update',
