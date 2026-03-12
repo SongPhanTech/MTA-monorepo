@@ -228,8 +228,8 @@ function Page() {
                     </Col>
                 </Row>
                 <div className="flex justify-end gap-2 mt-4">
-                    {can(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_CAU_HINH_THAM_SO, 'SUA') && (
-                        isEditing ? (
+                    {can(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_CAU_HINH_THAM_SO, 'SUA') &&
+                        (isEditing ? (
                             <>
                                 <Button
                                     onClick={() => {
@@ -245,8 +245,7 @@ function Page() {
                             </>
                         ) : (
                             <Button onClick={() => setIsEditing(true)}>Sửa</Button>
-                        )
-                    )}
+                        ))}
                 </div>
             </Form>
         </div>

@@ -222,7 +222,10 @@ function Page() {
                                     <div className="flex items-center justify-center gap-2">
                                         {!isSystemTopic(record.type) && (
                                             <>
-                                                {can(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DANH_MUC_CHU_DE, 'SUA') && (
+                                                {can(
+                                                    TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DANH_MUC_CHU_DE,
+                                                    'SUA'
+                                                ) && (
                                                     <Tooltip title="Chỉnh sửa" placement="leftTop">
                                                         <EditOutlined
                                                             onClick={() => openPutTopic(record.id)}
@@ -230,7 +233,10 @@ function Page() {
                                                         />
                                                     </Tooltip>
                                                 )}
-                                                {can(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DANH_MUC_CHU_DE, 'XOA') && (
+                                                {can(
+                                                    TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DANH_MUC_CHU_DE,
+                                                    'XOA'
+                                                ) && (
                                                     <DeleteIcon
                                                         popConfirm={{
                                                             title: 'Xác nhận xoá chủ đề?',

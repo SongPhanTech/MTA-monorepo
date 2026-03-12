@@ -148,16 +148,18 @@ function Page() {
                                 align: 'center',
                                 width: 80,
                                 fixed: 'right',
-                                render: (_, record: any) => (
-                                    can(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_CAU_HINH_PROMPT_HOI_DAP, 'SUA') ? (
+                                render: (_, record: any) =>
+                                    can(
+                                        TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_CAU_HINH_PROMPT_HOI_DAP,
+                                        'SUA'
+                                    ) ? (
                                         <Tooltip title="Chỉnh sửa" placement="top">
                                             <EditOutlined
                                                 onClick={() => handleEdit(record)}
                                                 className="text-blue-700 cursor-pointer text-lg hover:text-blue-500"
                                             />
                                         </Tooltip>
-                                    ) : null
-                                ),
+                                    ) : null,
                             },
                         ]}
                         loading={isLoading}
