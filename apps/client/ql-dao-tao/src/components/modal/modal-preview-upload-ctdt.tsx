@@ -39,6 +39,7 @@ const mapSubjectVersionType = (type: $Enums.SubjectVersionType): string => {
 type ModalPreviewUploadInput = {
     previewData: SubjectResult[]
     errorData: any[]
+    onConfirm?: (subjects: SubjectResult[]) => void
 }
 
 type SubjectData = {
@@ -61,7 +62,7 @@ type SubjectData = {
 }
 
 const ModalPreviewUpload = () => {
-    const { isOpen, onClose, input, updateInput } = useDisclosure<ModalPreviewUploadInput>({
+    const { isOpen, onClose, input } = useDisclosure<ModalPreviewUploadInput>({
         tag: 'ModalPreviewUpload',
     })
 
@@ -140,10 +141,7 @@ const ModalPreviewUpload = () => {
     const allErrors = [...errorData, ...duplicateErrors]
 
     const handleConfirmImport = () => {
-        updateInput({
-            previewData: filteredData,
-            errorData: allErrors,
-        })
+        input?.onConfirm?.(filteredData)
         onClose()
     }
 

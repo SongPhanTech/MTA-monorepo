@@ -38,7 +38,6 @@ import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import './index.css'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { getMinioUrl } from '@workspace/libs/utils'
 import { Download } from 'lucide-react'
@@ -57,6 +56,7 @@ type CurriculumVersionInput = {
 export type ModalPreviewUploadInput = {
     previewData: SubjectResult[]
     errorData: any[]
+    onConfirm?: (subjects: SubjectResult[]) => void
 }
 
 const PutCurriculumVersion = () => {
@@ -73,6 +73,7 @@ const PutCurriculumVersion = () => {
         },
         {
             enabled: !!trainingObjectTypeId,
+            refetchOnWindowFocus: false,
         }
     )
 
@@ -81,7 +82,7 @@ const PutCurriculumVersion = () => {
         onClose: form.resetFields,
     })
 
-    const { onOpen: openPreviewModal, input: previewInput } =
+    const { onOpen: openPreviewModal } =
         useDisclosure<ModalPreviewUploadInput>({
             tag: 'ModalPreviewUpload',
         })
@@ -125,6 +126,7 @@ const PutCurriculumVersion = () => {
             openPreviewModal({
                 previewData: subjects,
                 errorData: errors,
+                onConfirm: setFilteredSubjects,
             })
         }
         fileInput.click()
@@ -387,7 +389,10 @@ const PutCurriculumVersion = () => {
                 documentFiles: true,
             },
         },
-        { enabled: !!input?.versionId }
+        {
+            enabled: !!input?.versionId,
+            refetchOnWindowFocus: false,
+        }
     )
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
@@ -695,6 +700,7 @@ const PutCurriculumVersion = () => {
                                                             openPreviewModal({
                                                                 previewData: subjects,
                                                                 errorData: errors,
+                                                                onConfirm: setFilteredSubjects,
                                                             })
                                                         }}
                                                     >
@@ -757,7 +763,7 @@ const PutCurriculumVersion = () => {
                         label: 'Chuẩn đầu ra',
                         children: (
                             <FormItem form={form} name="learningOutcome" label="Chuẩn đầu ra">
-                                <RichTextEditor />
+                                <RichTextEditor/>
                                 {/* <Input.TextArea placeholder="Nhập chuẩn đầu ra" /> */}
                             </FormItem>
                         ),
