@@ -35,7 +35,11 @@ const PutOlympicScoreModal = () => {
 
     const { mutateAsync: createAward } = useCreateAward()
     const { mutateAsync: updateAward } = useUpdateAward()
-    const { data: subjectData = [] } = useFindManySubject()
+    const { data: subjectData = [] } = useFindManySubject({
+        include: {
+            managementOrganization: true,
+        },
+    })
     async function onOk({ subjects, ...rest }: PutAward) {
         try {
             showSpinner()
@@ -124,14 +128,14 @@ const PutOlympicScoreModal = () => {
                 </FormItem>
             </Col>
             <Col span={24} className="mb-4">
-                <FormItem form={form} name="subjects" label="Môn được cộng điểm" required>
+                <FormItem form={form} name="subjects" label="Nhóm môn được cộng điểm" required>
                     <Select
                         mode="multiple"
                         allowClear
                         style={{ width: '100%' }}
                         placeholder="Chọn môn học"
                         options={subjectData.map((item) => ({
-                            label: item.name,
+                            label: item.name + ' - ' + (item.managementOrganization?.sTen || 'Không có đơn vị'),
                             value: item.id,
                         }))}
                     />
