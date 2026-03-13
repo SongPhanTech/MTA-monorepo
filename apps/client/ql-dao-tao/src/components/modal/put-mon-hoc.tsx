@@ -104,6 +104,7 @@ const PutSubjectModal = () => {
     }, [level])
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({
         where: whereOrganization,
+        orderBy: [{ iSTT: 'asc' }, { sTen: 'asc' }],
     })
     const treeData = buildOrgTree(manageOrgData)
     const { data: subjectGroupData = [], refetch: refetchSGroup } = useFindManySubject()

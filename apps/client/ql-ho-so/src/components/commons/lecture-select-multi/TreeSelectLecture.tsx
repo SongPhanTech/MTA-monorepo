@@ -60,7 +60,9 @@ const TreeSelect: React.FC<CustomTreeSelectProps> = ({
         data: organizations = [],
         isLoading: organizationsLoading,
         error: organizationsError,
-    } = useFindManyDM_DonVi()
+    } = useFindManyDM_DonVi({
+        orderBy: [{ iSTT: 'asc' }, { sTen: 'asc' }],
+    })
 
     // Lấy danh sách Lecturer
     const {
