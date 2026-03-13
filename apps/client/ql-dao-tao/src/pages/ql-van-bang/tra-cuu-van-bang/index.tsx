@@ -264,7 +264,7 @@ export default function GraduationDecisionDiploma() {
     })
     const { data: diplomaTypeData = [] } = useFindManyDiplomaType()
     const { data: organization = [] } = useFindManyDM_DonVi({
-         orderBy: { iSTT: 'desc' },
+        orderBy: [{ iSTT: 'asc' }, { sTen: 'asc' }],
         where: whereOrganization,
     })
     const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectTypePermission({

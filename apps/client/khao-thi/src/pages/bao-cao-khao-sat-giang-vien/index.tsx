@@ -143,7 +143,7 @@ export default function BaoCaoGiangVien() {
                 iNhomDonVi: true,
                 sParentId: true,
             },
-             orderBy: { iSTT: 'desc' }
+            orderBy: [{ iSTT: 'asc' }, { sTen: 'asc' }],
         },
 
         {

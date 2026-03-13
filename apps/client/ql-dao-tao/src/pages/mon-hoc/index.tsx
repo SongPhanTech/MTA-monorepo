@@ -108,7 +108,7 @@ export default function SubjectVersionPage({ subjectInfo }: any) {
     }, [dataSchoolYear])
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({
         where: whereOrganization,
-         orderBy: { iSTT: 'desc' }
+        orderBy: [{ iSTT: 'asc' }, { sTen: 'asc' }],
     })
     const treeData = buildOrgTree(manageOrgData)
     const debouncedRefetch = useCallback(

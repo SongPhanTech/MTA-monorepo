@@ -63,7 +63,7 @@ export default function ThesisProject() {
     const { mutateAsync: createManyInvitation } = useCreateManyInvitation()
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({
         where: whereOrganization,
-         orderBy: { iSTT: 'desc' }
+        orderBy: [{ iSTT: 'asc' }, { sTen: 'asc' }],
     })
     const treeData = buildOrgTree(manageOrgData)
     const ALLOWED_STATUSES: ThesisProjectStatus[] = [

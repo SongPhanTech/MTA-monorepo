@@ -1,8 +1,7 @@
-import { Button, Col, Flex, Modal, message, Row, Tag, Tooltip } from 'antd'
 import { DownloadOutlined } from '@ant-design/icons'
+import { Button, Col, Flex, Modal, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
-import { saveAs } from 'file-saver'
 import { queryClient } from '@api/index'
 import Table from '@components/commons/table'
 import TableCollapse from '@components/commons/tableCollapse'
@@ -32,10 +31,11 @@ import {
     useFindManyTrainingCourse,
 } from '@workspace/db/hooks'
 import {
-    useExportStudentAcademicWarningJson,
     exportStudentAcademicWarningExcel,
+    useExportStudentAcademicWarningJson,
 } from '@workspace/libs/api/training'
 import { whereOrganization } from '@workspace/libs/constants'
+import { saveAs } from 'file-saver'
 import { BookPlus } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -167,7 +167,7 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
 
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({
         where: whereOrganization,
-        orderBy: { iSTT: 'desc' }
+        orderBy: [{ iSTT: 'asc' }, { sTen: 'asc' }],
     })
 
     const treeData = buildOrgTree(manageOrgData)

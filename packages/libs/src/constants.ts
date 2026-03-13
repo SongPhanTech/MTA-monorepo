@@ -113,6 +113,7 @@ export const questionTypeOptions: QuestionTypeOption[] = Object.entries(question
     })
 )
 export const whereOrganization: Prisma.DM_DonViWhereInput = {
+    bDeleted: { not: true },
     OR: [
         { iLoaiDonVi: 0 }, // TODO: fix
         { iLoaiDonVi: 2 }, // Trung tâm

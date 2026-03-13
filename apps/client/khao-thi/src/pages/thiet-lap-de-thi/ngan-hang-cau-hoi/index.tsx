@@ -45,7 +45,7 @@ export default function QuestionBank() {
                 },
             },
         },
-         orderBy: { iSTT: 'desc' }
+        orderBy: [{ iSTT: 'asc' }, { sTen: 'asc' }],
     })
 
     const { onOpen: onOpenPutQuestionBank } = useDisclosure<PutQuestionBankInput>({

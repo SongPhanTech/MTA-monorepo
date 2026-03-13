@@ -64,7 +64,7 @@ export default function ChuyenDeNghienCuu({ role = 'P7' }: { role: 'P7' | 'KHOA_
         where: {
             ...whereOrganization,
         },
-         orderBy: { iSTT: 'desc' }
+        orderBy: [{ iSTT: 'asc' }, { sTen: 'asc' }],
     })
     const orgId = window.contextData?.organizationId
     const orgIds = [

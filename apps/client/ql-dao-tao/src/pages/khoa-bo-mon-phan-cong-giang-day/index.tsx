@@ -31,7 +31,7 @@ export default function KhaoBoMonPhanCongGiangDay() {
         {
             select: { Id: true },
             where: whereOrganization,
-             orderBy: { iSTT: 'desc' }
+            orderBy: [{ iSTT: 'asc' }, { sTen: 'asc' }],
         },
         {
             refetchOnWindowFocus: false,
@@ -90,7 +90,7 @@ export default function KhaoBoMonPhanCongGiangDay() {
                     },
                     ...whereOrganization,
                 },
-                 orderBy: { iSTT: 'desc' }
+                orderBy: [{ iSTT: 'asc' }, { sTen: 'asc' }],
             },
             {
                 enabled: !!semesterId && !!trainingObjectTypeId,
@@ -132,7 +132,7 @@ export default function KhaoBoMonPhanCongGiangDay() {
                     },
                     ...whereOrganization,
                 },
-                 orderBy: { iSTT: 'desc' }
+                orderBy: [{ iSTT: 'asc' }, { sTen: 'asc' }],
             },
             {
                 enabled: !!semesterId && !!trainingObjectTypeId,
@@ -174,7 +174,7 @@ export default function KhaoBoMonPhanCongGiangDay() {
                     },
                     ...whereOrganization,
                 },
-                 orderBy: { iSTT: 'desc' }
+                orderBy: [{ iSTT: 'asc' }, { sTen: 'asc' }],
             },
             {
                 enabled: !!semesterId && !!trainingObjectTypeId,

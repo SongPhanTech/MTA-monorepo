@@ -43,7 +43,7 @@ const PutCurriculum = () => {
 
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({
         where: whereOrganization,
-         orderBy: { iSTT: 'desc' }
+        orderBy: [{ iSTT: 'asc' }, { sTen: 'asc' }],
     })
 
     const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectTypePermission({

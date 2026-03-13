@@ -32,7 +32,7 @@ export default function ThongTinLienHe({ expland, setExpland }: DomProps) {
     const { data: bloodType = [] } = useFindManyDM_NhomMau()
     const { data: trinhDoHocVan = [] } = useFindManyDM_TrinhDoHocVan()
     const { data: organizations = [] } = useFindManyDM_DonVi({
-         orderBy: { iSTT: 'desc' }
+        orderBy: [{ iSTT: 'asc' }, { sTen: 'asc' }],
     })
 
     const treeData = buildOrgTree(organizations)

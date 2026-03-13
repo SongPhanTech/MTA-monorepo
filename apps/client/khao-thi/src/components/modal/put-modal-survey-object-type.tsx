@@ -227,7 +227,7 @@ const PutSurveyObjectTypeModal = () => {
     }
 
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({
-         orderBy: { iSTT: 'desc' }
+        orderBy: [{ iSTT: 'asc' }, { sTen: 'asc' }],
     })
 
     const { data: trainingFieldData = [] } = useFindManyTrainingField({

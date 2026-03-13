@@ -38,7 +38,7 @@ function ClusterSurveyReport({
 
     const { data: dataLevel } = useGetLectureSurveyStatistics(selectedId as string)
     const { data: organizations = [] } = useFindManyDM_DonVi({
-         orderBy: { iSTT: 'desc' }
+        orderBy: [{ iSTT: 'asc' }, { sTen: 'asc' }],
     })
     const treeData = buildOrgTree(organizations)
 

@@ -24,7 +24,7 @@ const ThongKeDonVi: React.FC<LectureByOrgProps> = ({ className, showTable = true
                 },
             },
         },
-         orderBy: { iSTT: 'desc' }
+        orderBy: [{ iSTT: 'asc' }, { sTen: 'asc' }],
     })
 
     const data = donViData

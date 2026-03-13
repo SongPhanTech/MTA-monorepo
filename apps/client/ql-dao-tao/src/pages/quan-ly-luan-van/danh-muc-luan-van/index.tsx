@@ -263,7 +263,7 @@ export default function PostgraduateProject({
     })
     // hàm xử lý lấy ra danh sách đơn vị
     const { data: sDm_Donvi = [] } = useFindManyDM_DonVi({
-         orderBy: { iSTT: 'desc' }
+        orderBy: [{ iSTT: 'asc' }, { sTen: 'asc' }],
     })
     // hàm xử lý lấy ra danh sách phòng bảo vệ
     const { data: roomData } = useFindManyRoom()

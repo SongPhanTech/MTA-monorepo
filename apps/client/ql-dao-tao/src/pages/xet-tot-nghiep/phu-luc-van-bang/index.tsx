@@ -78,7 +78,7 @@ export default function StudentGradeSystem() {
     const { data: thesisSessionData = [] } = useFindManyThesisSession()
     const { data: dm_DonVi = [] } = useFindManyDM_DonVi({
         where: whereOrganization,
-         orderBy: { iSTT: 'desc' }
+        orderBy: [{ iSTT: 'asc' }, { sTen: 'asc' }],
     })
     const treeData = buildOrgTree(dm_DonVi)
     return (
