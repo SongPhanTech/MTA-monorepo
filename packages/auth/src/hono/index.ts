@@ -41,7 +41,7 @@ export const jwtAuth = (appCode: string): MiddlewareHandler => {
                     method: 'GET',
                     credentials: 'include',
                     headers: {
-                        Cookie: appCode === "lms" ? cookieWithToken : cookie,
+                        Cookie: appCode === 'lms' ? cookieWithToken : cookie,
                         'K-AppCode': appCode,
                         'K-TenantCode': 'dev',
                     },

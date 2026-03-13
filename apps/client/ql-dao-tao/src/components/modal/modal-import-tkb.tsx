@@ -272,7 +272,7 @@ const ModalNhapTKB = () => {
                         optionType="button"
                         buttonStyle="solid"
                         className="flex gap-2"
-                        size = "middle"
+                        size="middle"
                     />
                 </FormItem>
                 <p className="text-sm text-gray-500">
