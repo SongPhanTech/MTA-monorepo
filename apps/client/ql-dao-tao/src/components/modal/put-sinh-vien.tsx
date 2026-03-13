@@ -9,9 +9,9 @@ import {
     useFindManyUserProfile,
     useFindUniqueStudent,
     useFindUniqueUserProfile,
+    useUpdateUserProfile,
     useUpdateStudent,
 } from '@workspace/db/hooks'
-import { sqlTransaction } from '@workspace/libs/api/model'
 import { Button, Col, Form, Input, message, Row } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
@@ -143,6 +143,7 @@ const PutStudentModal = () => {
 
     const { mutateAsync: createStudent } = useCreateStudent()
     const { mutateAsync: updateStudent } = useUpdateStudent()
+    const { mutateAsync: updateUserProfile } = useUpdateUserProfile()
     const { data = [] } = useFindManyUserProfile({
         select: {
             firstName: true,
@@ -189,67 +190,54 @@ const PutStudentModal = () => {
         }))
     }, [data])
 
-    useEffect(() => {
-        if (!id && cccdUserProfileData?.educationAndTraining) {
-            form.setFields([
-                {
-                    name: 'idCardNumber',
-                    errors: ['Người dùng này đã là sinh viên/học viên.'],
-                },
-            ])
-        } else if (form.getFieldError('idCardNumber').length > 0) {
-            form.setFields([{ name: 'idCardNumber', errors: [] }])
-        }
-    }, [cccdUserProfileData, id, form])
-
     async function onOk(output: PutStudentProfile) {
         if (!output || !cccdUserProfileData?.id) return
 
-        showSpinner()
-
         try {
-            if (cccdUserProfileData?.educationAndTraining && !id) {
-                message.error('Không thể thêm mới. Người dùng này đã là sinh viên/học viên.')
-                return
-            }
-            const userProfileUpdate = {
-                model: 'UserProfile',
-                operation: 'update',
-                data: {
-                    where: { id: cccdUserProfileData.id },
+            showSpinner()
+
+            if (id) {
+                await updateUserProfile({
                     data: {
                         firstName: output.firstName,
                         lastName: output.lastName,
                         dateOfBirth: output.dateOfBirth,
                     },
-                },
-            } as const
-
-            const queries: Parameters<typeof sqlTransaction>[0] = [userProfileUpdate]
-
-            if (id) {
-                queries.push({
-                    model: 'Student',
-                    operation: 'update',
-                    data: {
-                        where: { id },
-                        data: {
-                            fixedClassId: output.fixedClassId ?? null,
-                            registrationAreaId: output.registrationAreaId,
-                            status: output.status,
-                            curriculumVersionId: output.curriculumVersionId ?? null,
-                            curriculumVersionParallelId: output.curriculumVersionParallelId ?? null,
-                            note: output.note,
-                            code: output.code,
-                        },
+                    where: {
+                        // The userProfileId is taken from the cccdUserProfileData
+                        // which is fetched based on the idCardNumber in the form.
+                        id: cccdUserProfileData.id,
                     },
                 })
-            } else {
-                queries.push({
-                    model: 'Student',
-                    operation: 'create',
+                await updateStudent({
                     data: {
-                        userProfileId: cccdUserProfileData.id,
+                        userProfileId: cccdUserProfileData?.id,
+                        fixedClassId: output.fixedClassId || null,
+                        registrationAreaId: output.registrationAreaId,
+                        status: output.status,
+                        curriculumVersionId: output.curriculumVersionId || null,
+                        curriculumVersionParallelId: output.curriculumVersionParallelId || null,
+                        note: output.note,
+                        code: output.code,
+                    },
+                    where: {
+                        id,
+                    },
+                })
+
+                message.success('Cập nhật sinh viên, học viên thành công')
+            } else {
+                if (cccdUserProfileData.educationAndTraining?.length > 0) {
+                    message.error(
+                        'Hồ sơ này đã được sử dụng cho một sinh viên khác. Vui lòng chọn hồ sơ khác.'
+                    )
+                    hideSpinner()
+                    return
+                }
+
+                await createStudent({
+                    data: {
+                        userProfileId: cccdUserProfileData?.id,
                         fixedClassId: output.fixedClassId,
                         registrationAreaId: output.registrationAreaId,
                         status: output.status,
@@ -259,13 +247,16 @@ const PutStudentModal = () => {
                         code: output.code,
                     },
                 })
+                message.success('Thêm mới sinh viên, học viên thành công')
             }
-            await sqlTransaction(queries)
-            message.success(id ? 'Cập nhật sinh viên thành công' : 'Thêm mới sinh viên thành công')
-            queryClient.refetchQueries()
+
+            // refetch() lại danh sách level
+            queryClient.invalidateQueries({
+                queryKey: ['Student'],
+            })
             onClose()
         } catch (error) {
-            console.error('Error updating student:', error)
+            console.log('Error updating student:', error)
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()
@@ -280,12 +271,37 @@ const PutStudentModal = () => {
             form.setFieldsValue({
                 firstName: userData.firstName,
                 lastName: userData.lastName,
-                userProfileId: userData.id,
                 dateOfBirth: userData.dateOfBirth ? dayjs(userData.dateOfBirth) : undefined,
             })
         },
         [form]
     )
+    useEffect(() => {
+        if (studentData) {
+            form.setFieldsValue({
+                // Student fields với ID
+                code: studentData.code,
+                fixedClassId: studentData.fixedClassId ?? undefined,
+                trainingCourseId: studentData.fixedClass?.trainingCourse?.id ?? undefined,
+                status: studentData.status,
+                curriculumVersionId: studentData.curriculumVersionId ?? undefined,
+                curriculumVersionParallelId: studentData.curriculumVersionParallelId ?? undefined,
+
+                // UserProfile fields với ID
+                firstName: studentData.userProfile?.firstName,
+                lastName: studentData.userProfile?.lastName,
+
+                idCardNumber: studentData.userProfile?.idCardNumber,
+            })
+        }
+    }, [studentData, form])
+
+    // Effect để fill thông tin khi có dữ liệu từ API
+    useEffect(() => {
+        if (cccdUserProfileData && !id) {
+            fillUserInfo(cccdUserProfileData)
+        }
+    }, [cccdUserProfileData, id, fillUserInfo])
     useEffect(() => {
         if (studentData) {
             form.setFieldsValue({
