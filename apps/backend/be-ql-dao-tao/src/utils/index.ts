@@ -320,6 +320,7 @@ ${missing
                             message: `Chuyên ngành không tồn tại: ${item.trainingMajor}`,
                         })
                     }
+
                     const curriculumCode = item.trainingMajor
                         .split(' ')
                         .map((w) => w[0])
@@ -329,7 +330,6 @@ ${missing
                     curriculum = await tx.curriculum.create({
                         data: {
                             name: curriculumName,
-                            // code: generateUniqueCode(curriculumName),
                             code: curriculumCode,
                             trainingMajorId: major.id,
                             trainingObjectTypeId,
@@ -348,7 +348,6 @@ ${missing
                     data: {
                         name: item.curriculum,
                         code: generateUniqueCode(item.curriculum),
-                        // code: versionCode,
                         curriculumId: curriculum.id,
                         trainingObjectTypeId,
                     },
