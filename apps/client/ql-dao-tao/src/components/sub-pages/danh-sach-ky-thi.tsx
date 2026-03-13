@@ -140,7 +140,6 @@ export default function KyThi({ setActiveKey }: { setActiveKey: (key: string) =>
                             }
                         }}
                         maxHeight={'calc(100vh - 390px)'}
-                        scrollable
                         columns={[
                             {
                                 title: 'TT',
