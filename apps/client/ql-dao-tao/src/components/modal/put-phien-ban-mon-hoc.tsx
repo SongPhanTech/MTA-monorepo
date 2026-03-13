@@ -69,7 +69,7 @@ const PutVersionSubjectModal = () => {
                 subject: true,
             },
         },
-        { enabled: !!subjectVersionId }
+        { enabled: !!subjectVersionId, refetchOnWindowFocus: false }
     )
 
     const subjectId = input?.subjectId || subjectVersion?.subjectId || ''
@@ -85,7 +85,7 @@ const PutVersionSubjectModal = () => {
 
     const { data: subject } = useFindUniqueSubject(
         { where: { id: subjectId } },
-        { enabled: !!subjectId }
+        { enabled: !!subjectId, refetchOnWindowFocus: false }
     )
 
     const { data: subjectData = [] } = useFindManySubject({
@@ -98,11 +98,14 @@ const PutVersionSubjectModal = () => {
                 },
             },
         },
-    })
+    }, { refetchOnWindowFocus: false })
 
-    const { data: trainingObjectType = [] } = useFindManyTrainingObjectTypePermission({
-        select: { id: true, name: true },
-    })
+    const { data: trainingObjectType = [] } = useFindManyTrainingObjectTypePermission(
+        {
+            select: { id: true, name: true },
+        },
+        { refetchOnWindowFocus: false }
+    )
 
     const treeData =
         subjectData
