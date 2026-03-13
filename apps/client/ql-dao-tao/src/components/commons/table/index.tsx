@@ -482,7 +482,7 @@ export const Table = <T extends AnyObject>({
                         }
                     }
                     return (
-                        <div className="p-4 w-full min-w-[200px] max-w-[300px]">
+                        <div className="p-4 w-full min-w-[200px] max-w-[250px]">
                             <div className="mb-2">Tìm kiếm</div>
                             <Input
                                 placeholder="Nhập từ khoá cần tìm kiếm"
