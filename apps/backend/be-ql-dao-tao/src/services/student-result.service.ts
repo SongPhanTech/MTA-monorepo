@@ -746,7 +746,7 @@ export const calculateStudentSemesterResult = async (
             },
         })
 
-      await  pMap(
+        await pMap(
             studentsIDs,
             async (student) => {
                 // lấy khoá học

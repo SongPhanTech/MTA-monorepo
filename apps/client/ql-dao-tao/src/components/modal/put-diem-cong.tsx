@@ -135,7 +135,10 @@ const PutOlympicScoreModal = () => {
                         style={{ width: '100%' }}
                         placeholder="Chọn môn học"
                         options={subjectData.map((item) => ({
-                            label: item.name + ' - ' + (item.managementOrganization?.sTen || 'Không có đơn vị'),
+                            label:
+                                item.name +
+                                ' - ' +
+                                (item.managementOrganization?.sTen || 'Không có đơn vị'),
                             value: item.id,
                         }))}
                     />

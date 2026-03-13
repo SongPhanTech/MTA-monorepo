@@ -88,17 +88,20 @@ const PutVersionSubjectModal = () => {
         { enabled: !!subjectId, refetchOnWindowFocus: false }
     )
 
-    const { data: subjectData = [] } = useFindManySubject({
-        include: {
-            subjectVersion: {
-                where: {
-                    id: {
-                        not: subjectVersionId,
+    const { data: subjectData = [] } = useFindManySubject(
+        {
+            include: {
+                subjectVersion: {
+                    where: {
+                        id: {
+                            not: subjectVersionId,
+                        },
                     },
                 },
             },
         },
-    }, { refetchOnWindowFocus: false })
+        { refetchOnWindowFocus: false }
+    )
 
     const { data: trainingObjectType = [] } = useFindManyTrainingObjectTypePermission(
         {

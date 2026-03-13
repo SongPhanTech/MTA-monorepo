@@ -23,13 +23,13 @@ import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Form, Input, message, Popconfirm, Row, Tooltip, Typography } from 'antd'
+import { saveAs } from 'file-saver'
 import _ from 'lodash'
 import { BookPlus, Download, History, LockKeyhole, LockKeyholeOpen, Search } from 'lucide-react'
 import type React from 'react'
-import * as XLSX from 'xlsx'
-import { saveAs } from 'file-saver'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import * as XLSX from 'xlsx'
 export default function SubjectList() {
     const { can, canSome } = useAbility()
     const [expandAll, setExpandAll] = useState(false)
@@ -800,6 +800,19 @@ export default function SubjectList() {
 
                                     return (
                                         <Row className="justify-center gap-2">
+                                            {can(
+                                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC,
+                                                'XEM'
+                                            ) && (
+                                                <ViewIcon
+                                                    onClick={() =>
+                                                        onOpenDetailSubject({
+                                                            subjectVersionId,
+                                                        })
+                                                    }
+                                                    className="text-sm text-blue-700 cursor-pointer"
+                                                />
+                                            )}
                                             {can(
                                                 QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC,
                                                 'SUA'

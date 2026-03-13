@@ -367,7 +367,9 @@ const PutArchivedAwardModal = () => {
                             unCheckedChildren="Tất cả môn"
                         />
                         <span className="ml-2 text-gray-500">
-                            {filterByAward ? 'Chỉ hiển thị môn thuộc giải olympic' : 'Hiển thị tất cả môn học'}
+                            {filterByAward
+                                ? 'Chỉ hiển thị môn thuộc giải olympic'
+                                : 'Hiển thị tất cả môn học'}
                         </span>
                     </div>
                     <Select
@@ -377,10 +379,14 @@ const PutArchivedAwardModal = () => {
                         options={studentSubjectScores
                             .filter((item) => {
                                 if (!filterByAward || !awardId) return true
-                                const selectedAward = awardData.find((award) => award.id === awardId)
+                                const selectedAward = awardData.find(
+                                    (award) => award.id === awardId
+                                )
                                 if (!selectedAward) return true
                                 const allowedSubjectIds = selectedAward.subjects.map((s) => s.id)
-                                return allowedSubjectIds.includes(item.subjectVersion.subjectId || '')
+                                return allowedSubjectIds.includes(
+                                    item.subjectVersion.subjectId || ''
+                                )
                             })
                             .map((item) => {
                                 const score = item.finalScore

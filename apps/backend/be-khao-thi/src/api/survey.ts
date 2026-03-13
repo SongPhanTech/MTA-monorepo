@@ -352,8 +352,6 @@ app.openapi(getSurveyStatisticsToField, async (c) => {
     }
 
     const questionIds = survey.surveyQuestion.map((q) => q.id)
- 
-    
 
     const answerCounts = await prisma.surveyResponse.groupBy({
         by: ['surveyQuestionId', 'surveyChoiceId'],
@@ -423,21 +421,20 @@ app.openapi(getSurveyStatisticsToField, async (c) => {
         return answers.reduce((total, item) => total + item.count, 0)
     }
     function calcGroupAnswerTotals(groups: any[]) {
-        
         return groups.map((group) => {
             const answers = group.questions[0].answers.map((i: any) => {
                 return { ...i }
             })
             // answers.forEach((answer: any, index: number) => {
             //     answers[index].count= group.questions[0].answers.reduce((sum:any, item:any) => sum + item.count, 0)
-                
+
             // })
             // group.questions.forEach((question: any) => {
             //     question.answers.forEach((answer: any, index: number) => {
             //         answers[index].count += answer.count
             //     })
             // })
-            
+
             const totalCount = calcTotalCount(answers)
 
             return {

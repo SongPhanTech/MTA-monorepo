@@ -17,11 +17,7 @@ export default function NhapDiemPhach() {
     const { data: examPapers = [], refetch } = useFindManyExamPaper(
         {
             where: {
-                examList: {
-                    examRoom: {
-                        examId,
-                    },
-                },
+                examList: { examRoom: { examId } },
                 studentSubjectScore: {
                     suspended: false,
                     examBanned: false,
