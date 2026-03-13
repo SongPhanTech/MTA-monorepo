@@ -176,6 +176,8 @@ export const buildCurriculumMapOrThrow = async (
     trainingCourseId: string,
     createMissing = false
 ) => {
+    const normalize = (value?: string) => value?.trim() ?? ''
+
     const categorySet = new Set<string>(
         students.map((s) =>
             JSON.stringify({
@@ -188,6 +190,40 @@ export const buildCurriculumMapOrThrow = async (
     )
 
     const uniqueTuples = Array.from(categorySet).map((s) => JSON.parse(s) as CurriculumData)
+
+    const majorNames = Array.from(
+        new Set(
+            uniqueTuples
+                .map(({ trainingMajor }) => normalize(trainingMajor))
+                .filter((name): name is string => Boolean(name))
+        )
+    )
+
+    if (majorNames.length) {
+        const validMajors = await prisma.trainingMajor.findMany({
+            where: {
+                OR: majorNames.map((majorName) => ({
+                    name: { equals: majorName, mode: 'insensitive' },
+                    trainingObjectTypes: { some: { trainingObjectTypeId } },
+                })),
+            },
+            select: { name: true },
+        })
+
+        const validMajorSet = new Set(
+            validMajors.map(({ name }) => normalize(name).toLowerCase())
+        )
+
+        const invalidMajors = majorNames.filter(
+            (majorName) => !validMajorSet.has(majorName.toLowerCase())
+        )
+
+        if (invalidMajors.length) {
+            throw new HTTPException(400, {
+                message: `Chuyên ngành không thuộc đối tượng đào tạo: ${invalidMajors.join(', ')}`,
+            })
+        }
+    }
 
     const managementOrganizationMap = await buildOrgNameMapOrThrow(
         prisma,
@@ -312,7 +348,10 @@ ${missing
                     }
 
                     const major = await tx.trainingMajor.findFirst({
-                        where: { name: item.trainingMajor },
+                        where: {
+                            name: { equals: normalize(item.trainingMajor), mode: 'insensitive' },
+                            trainingObjectTypes: { some: { trainingObjectTypeId } },
+                        },
                     })
 
                     if (!major) {
