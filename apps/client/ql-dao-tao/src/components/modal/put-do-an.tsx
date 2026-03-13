@@ -49,6 +49,7 @@ const PutThesisProject = () => {
                 : {}),
             ...whereOrganization,
         },
+         orderBy: { iSTT: 'desc' }
     })
 
     const treeData = buildOrgTree(organization)

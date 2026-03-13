@@ -25,6 +25,7 @@ const TreeSelectDepartment: React.FC<TreeSelectDepartmentProps> = ({
             bActive: true,
             ...whereOrganization,
         },
+         orderBy: { iSTT: 'desc' }
     })
     // Tạo treeData từ schoolYears và semesters
     const treeData = buildOrgTree(organizationData, rootId)

@@ -354,7 +354,7 @@ export default function TrainingProgramSubjects() {
         where: {
             ...whereOrganization,
         },
-        orderBy: { sTen: 'asc' },
+         orderBy: { iSTT: 'desc' }
     })
 
     const { onOpen: openChiTietMonHoc } = useDisclosure<{

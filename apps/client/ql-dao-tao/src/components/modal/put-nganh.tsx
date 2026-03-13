@@ -41,6 +41,7 @@ const PutTrainingFieldModal = () => {
     const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectTypePermission()
     const { data: organizations = [] } = useFindManyDM_DonVi({
         where: whereOrganization,
+         orderBy: { iSTT: 'desc' }
     })
     const treeData = buildOrgTree(organizations)
     const { mutateAsync: createTrainingField } = useCreateTrainingField()

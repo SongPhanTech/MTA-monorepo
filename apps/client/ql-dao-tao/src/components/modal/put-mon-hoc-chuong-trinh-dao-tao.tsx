@@ -92,6 +92,7 @@ const PutTrainingBlockSubject = () => {
     )
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({
         where: whereOrganization,
+         orderBy: { iSTT: 'desc' }
     })
 
     const treeData = useMemo(() => buildOrgTree(manageOrgData), [manageOrgData])

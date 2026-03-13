@@ -226,7 +226,9 @@ const PutSurveyObjectTypeModal = () => {
         return Promise.resolve()
     }
 
-    const { data: manageOrgData = [] } = useFindManyDM_DonVi()
+    const { data: manageOrgData = [] } = useFindManyDM_DonVi({
+         orderBy: { iSTT: 'desc' }
+    })
 
     const { data: trainingFieldData = [] } = useFindManyTrainingField({
         where: {

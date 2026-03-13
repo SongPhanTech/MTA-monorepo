@@ -108,6 +108,7 @@ const PutEvaluationCouncilMember = () => {
                 },
             },
         },
+         orderBy: { iSTT: 'desc' }
     })
 
     const orgLecturerTree = useMemo(

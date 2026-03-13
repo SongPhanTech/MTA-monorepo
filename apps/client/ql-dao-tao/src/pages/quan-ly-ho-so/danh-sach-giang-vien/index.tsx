@@ -61,6 +61,7 @@ export default function UserProfilePageLecture() {
         {
             select: { Id: true },
             where: whereOrganization,
+             orderBy: { iSTT: 'desc' }
         },
         {
             refetchOnWindowFocus: false,
@@ -226,7 +227,7 @@ export default function UserProfilePageLecture() {
     const { data: lecturerTypeData = [] } = useFindManyLecturerType()
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({
         where: whereOrganization,
-        orderBy: { sTen: 'asc' },
+         orderBy: { iSTT: 'desc' },
     })
     const treeData = buildOrgTree(manageOrgData, canXemTatCa ? '0' : orgId || '0')
     const { onOpen: onOpenModalAdd } = useDisclosure({

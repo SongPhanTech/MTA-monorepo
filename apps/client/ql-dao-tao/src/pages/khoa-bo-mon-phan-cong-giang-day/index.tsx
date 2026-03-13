@@ -31,6 +31,7 @@ export default function KhaoBoMonPhanCongGiangDay() {
         {
             select: { Id: true },
             where: whereOrganization,
+             orderBy: { iSTT: 'desc' }
         },
         {
             refetchOnWindowFocus: false,
@@ -89,6 +90,7 @@ export default function KhaoBoMonPhanCongGiangDay() {
                     },
                     ...whereOrganization,
                 },
+                 orderBy: { iSTT: 'desc' }
             },
             {
                 enabled: !!semesterId && !!trainingObjectTypeId,
@@ -130,6 +132,7 @@ export default function KhaoBoMonPhanCongGiangDay() {
                     },
                     ...whereOrganization,
                 },
+                 orderBy: { iSTT: 'desc' }
             },
             {
                 enabled: !!semesterId && !!trainingObjectTypeId,
@@ -171,6 +174,7 @@ export default function KhaoBoMonPhanCongGiangDay() {
                     },
                     ...whereOrganization,
                 },
+                 orderBy: { iSTT: 'desc' }
             },
             {
                 enabled: !!semesterId && !!trainingObjectTypeId,

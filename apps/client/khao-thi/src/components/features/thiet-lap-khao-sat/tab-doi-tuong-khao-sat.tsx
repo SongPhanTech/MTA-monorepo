@@ -48,7 +48,7 @@ function TabDoiTuongKhaoSat() {
         subjectClass: undefined,
     })
 
-    const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
+    const { data: manageOrgData = [] } = useFindManyDM_DonVi({  orderBy: { iSTT: 'desc' }})
     const treeData = buildOrgTree(manageOrgData)
     const { data: trainingFieldData = [] } = useFindManyTrainingField({
         where: {

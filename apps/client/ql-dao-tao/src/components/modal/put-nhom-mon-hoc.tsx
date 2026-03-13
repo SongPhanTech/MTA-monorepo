@@ -86,6 +86,7 @@ const PutSubjectModal = () => {
     }, [level])
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({
         where: whereOrganization,
+         orderBy: { iSTT: 'desc' }
     })
     const treeData = buildOrgTree(manageOrgData)
 

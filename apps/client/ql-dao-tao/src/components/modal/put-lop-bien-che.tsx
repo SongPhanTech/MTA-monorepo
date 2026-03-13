@@ -51,6 +51,7 @@ const PutFixedClassModal = () => {
     const [dataOutput, setDataOutput] = useState<PutFixedClass>()
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({
         where: whereOrganization,
+         orderBy: { iSTT: 'desc' }
     })
     const { onOpen: onOpenModalConfirm } = useDisclosure<string>({
         tag: 'ConfirmModal',

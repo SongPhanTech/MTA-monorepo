@@ -220,6 +220,7 @@ export default function ThoiKhoaBieu({
         {
             select: { Id: true },
             where: whereOrganization,
+             orderBy: { iSTT: 'desc' }
         },
         {
             refetchOnWindowFocus: false,
@@ -340,6 +341,7 @@ export default function ThoiKhoaBieu({
                 ...whereOrganization,
                 // sParentId: !khoaBoMon ? undefined : orgId,
             },
+             orderBy: { iSTT: 'desc' }
         },
         {
             enabled: !!semesterId && !!trainingObjectTypeId,

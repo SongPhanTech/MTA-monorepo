@@ -167,7 +167,7 @@ export default function FixedClassPage() {
 
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({
         where: whereOrganization,
-        orderBy: { sTen: 'asc' },
+         orderBy: { iSTT: 'desc' }
     })
     const treeData = buildOrgTree(manageOrgData)
 

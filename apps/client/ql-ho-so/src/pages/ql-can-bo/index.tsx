@@ -225,7 +225,7 @@ export default function StaffManagement() {
     })
 
     const { data: staffTypeData = [] } = useFindManyStaffType()
-    const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
+    const { data: manageOrgData = [] } = useFindManyDM_DonVi({  orderBy: { iSTT: 'desc' } })
     const treeData = buildOrgTree(manageOrgData)
 
     const { data: rankTypeData = [] } = useFindManyDM_CapBac()

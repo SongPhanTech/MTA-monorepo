@@ -77,6 +77,7 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
         where: {
             ...whereOrganization,
         },
+         orderBy: { iSTT: 'desc' }
     })
     const orgId = window.contextData?.organizationId
     const orgIds = [

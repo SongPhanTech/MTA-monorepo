@@ -138,7 +138,7 @@ export default function UserProfilePageDs() {
     })
 
     const { data: genderData = [] } = useFindManyDM_GioiTinh()
-    const { data: organizations = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
+    const { data: organizations = [] } = useFindManyDM_DonVi({  orderBy: { iSTT: 'desc' } })
     const treeData = buildOrgTree(organizations)
     const { showSpinner, hideSpinner } = useSpinner()
     // const treeData = buildOrgTree(organizations)
