@@ -251,9 +251,11 @@ app.openapi(getClassesInfo, async (c) => {
             ...(byCurriculumBool
                 ? { id: { in: curriculumSubjects.map((item) => item.subjectId) } }
                 : {}),
+
             subjectClass: {
                 some: {
                     semesterId: registerSession.semesterId,
+
                     ...(isRegisteredBool
                         ? {
                               classRegisterLogs: {
@@ -265,9 +267,22 @@ app.openapi(getClassesInfo, async (c) => {
                               },
                           }
                         : {}),
+
+                    ...(isRegistered && {
+                        fixedClasses: {
+                            some: {
+                                students: {
+                                    some: {
+                                        userProfileId: session.id,
+                                    },
+                                },
+                            },
+                        },
+                    }),
                 },
             },
         },
+
         include: {
             prerequisiteSubject: {
                 select: {
@@ -275,14 +290,41 @@ app.openapi(getClassesInfo, async (c) => {
                     name: true,
                 },
             },
+
             subjectClass: {
                 where: {
                     active: true,
                     deletedAt: null,
                     cancelled: false,
                     semesterId: registerSession.semesterId,
+
+                    ...(isRegistered && {
+                        fixedClasses: {
+                            some: {
+                                students: {
+                                    some: {
+                                        userProfileId: session.id,
+                                    },
+                                },
+                            },
+                        },
+                        
+                    }),
                 },
+
                 include: {
+                    ...(isRegistered && {
+                        fixedClasses: {
+                            select: {
+                                students: {
+                                    where: {
+                                        userProfileId: session.id,
+                                    },
+                                },
+                            },
+                        },
+                    }),
+
                     classRegisterLogs: {
                         select: {
                             student: {
@@ -297,6 +339,7 @@ app.openapi(getClassesInfo, async (c) => {
                             },
                         },
                     },
+
                     subjectClassTimes: {
                         select: {
                             dayOfWeek: true,
@@ -304,6 +347,7 @@ app.openapi(getClassesInfo, async (c) => {
                             endPeriod: true,
                         },
                     },
+
                     mainLecturer: {
                         select: {
                             userProfile: {
@@ -316,6 +360,7 @@ app.openapi(getClassesInfo, async (c) => {
                             },
                         },
                     },
+
                     extraLecturer: {
                         select: {
                             userProfile: {
@@ -328,6 +373,7 @@ app.openapi(getClassesInfo, async (c) => {
                             },
                         },
                     },
+
                     room: {
                         select: {
                             name: true,
@@ -343,6 +389,7 @@ app.openapi(getClassesInfo, async (c) => {
                             },
                         },
                     },
+
                     _count: {
                         select: {
                             classRegisterLogs: true,
