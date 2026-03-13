@@ -15,9 +15,23 @@ declare module 'hono' {
 
 export const jwtAuth = (appCode: string): MiddlewareHandler => {
     return async (c, next) => {
+        console.log(`[jwtAuth] Checking authentication for appCode: ${appCode}`)
         const token = getCookie(c, `x-token-${appCode}`)
-        const cookie = c.req.header('Cookie')
-        if (!token) {
+
+        const env = process.env.ENVI_1 || 'production'
+        console.log(`[jwtAuth] Retrieved environment : ${env}`)
+        const tokenGialap = process.env.TOKEN_GIALAP
+        console.log(`[jwtAuth] Retrieved token: ${token}, env: ${env}, tokenGialap: ${tokenGialap}`)
+
+        const isDevelopEnv = env === 'develop' || env === 'development'
+        const tokenToUse = token || (isDevelopEnv ? tokenGialap : undefined)
+        const cookie = c.req.header('Cookie') || ''
+        const cookieWithToken =
+            isDevelopEnv && tokenGialap
+                ? `${cookie}${cookie ? '; ' : ''}x-token-${appCode}=${tokenGialap}`
+                : cookie
+
+        if (!tokenToUse) {
             return c.text('Unauthorized: No token provided', 401)
         }
         try {
@@ -27,7 +41,7 @@ export const jwtAuth = (appCode: string): MiddlewareHandler => {
                     method: 'GET',
                     credentials: 'include',
                     headers: {
-                        Cookie: cookie || '',
+                        Cookie: appCode === "lms" ? cookieWithToken : cookie,
                         'K-AppCode': appCode,
                         'K-TenantCode': 'dev',
                     },
