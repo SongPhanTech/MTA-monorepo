@@ -3,7 +3,6 @@ import { getRuntimeEnv } from '../utils'
 
 const getTokenHeaders = (): Record<string, string> => {
     const headerEnvPairs: Array<{ header: string; value: string }> = [
-    
         // {
         //     header: 'Authorization',
         //     value: process.env.X_TOKEN_LMS || 'Bearer 048E1562746A83519236440B013D6B9C386CED9E758C4A6BBC2F38A2E72131D3',

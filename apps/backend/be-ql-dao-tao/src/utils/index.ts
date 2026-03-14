@@ -306,7 +306,6 @@ ${missing
 
     if (missing.length && createMissing) {
         await prisma.$transaction(async (tx) => {
-
             const course = await tx.trainingCourse.findFirst({
                 where: {
                     id: trainingCourseId,
@@ -333,13 +332,17 @@ ${missing
                             : {}),
                     },
                 })
-                
+
                 const generateUniqueCode = (text: string) => {
-                    const initials = text.split(' ').map(w => w[0]).join('').toUpperCase();
-                    const year = new Date().getFullYear().toString().slice(-2);
-                    const random = Math.random().toString(36).substring(2, 5).toUpperCase();
-                    return `${initials}${year}_${random}`;
-                };
+                    const initials = text
+                        .split(' ')
+                        .map((w) => w[0])
+                        .join('')
+                        .toUpperCase()
+                    const year = new Date().getFullYear().toString().slice(-2)
+                    const random = Math.random().toString(36).substring(2, 5).toUpperCase()
+                    return `${initials}${year}_${random}`
+                }
 
                 if (!curriculum) {
                     if (!item.trainingMajor) {

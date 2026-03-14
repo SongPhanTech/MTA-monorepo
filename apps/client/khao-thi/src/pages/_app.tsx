@@ -26,7 +26,7 @@ import { ReactHookModalProvider } from 'react-hook-disclosure-modal'
 import LoadingBar from 'react-top-loading-bar'
 import '@assets/css/custom.css'
 import { getRuntimeEnv } from '@workspace/libs/utils'
-import { fetchInstance } from '@workspace/libs/api/custom-instance';
+import { fetchInstance } from '@workspace/libs/api/custom-instance'
 
 dayjs.locale('vi')
 dayjs.extend(weekOfYear)

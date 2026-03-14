@@ -27,7 +27,7 @@ import '@assets/css/custom.css'
 import { getRuntimeEnv } from '@workspace/libs/utils'
 import { lightThemeCustom, WidgetChatbot } from '@workspace/ui'
 import '@workspace/libs'
-import { fetchInstance } from '@workspace/libs/api/custom-instance';
+import { fetchInstance } from '@workspace/libs/api/custom-instance'
 dayjs.locale('vi')
 dayjs.extend(weekOfYear)
 dayjs.extend(isoWeeksInYear)
