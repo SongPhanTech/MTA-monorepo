@@ -573,7 +573,12 @@ const PutVersionSubjectModal = () => {
                     </FormItem>
                 </Col>
                 <Col span={8}>
-                    <FormItem form={form} name="credit" label="Số tín chỉ" required>
+                    <FormItem
+                        form={form}
+                        name="credit"
+                        label={`Số tín chỉ ${isScored ? ' (Đã mở lớp - không được sửa)' : ''}`}
+                        required
+                    >
                         <InputNumber
                             min={0}
                             disabled={isScored}

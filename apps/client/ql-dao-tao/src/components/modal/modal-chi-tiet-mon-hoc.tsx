@@ -31,13 +31,9 @@ export default function ModalChiTietMonHoc() {
     const { data: subjectVersionData } = useFindUniqueSubjectVersion(
         {
             where: { id: subjectVersionId },
-            include: {
-                subject: true,
-            },
+            include: { subject: true, subjectClass: { select: { id: true } } },
         },
-        {
-            enabled: !!subjectVersionId && isOpen,
-        }
+        { enabled: !!subjectVersionId && isOpen }
     )
 
     const subjectId = subjectVersionData?.subject?.id
