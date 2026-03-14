@@ -826,7 +826,8 @@ export default function SubjectList() {
                                                             isLocked,
                                                         })
                                                     }}
-                                                    className={`text-sm ${isUsed ? 'text-gray-400 cursor-not-allowed' : 'text-blue-700 cursor-pointer'}`}
+                                                    // className={`text-sm ${isUsed ? 'text-gray-400 cursor-not-allowed' : 'text-blue-700 cursor-pointer'}`}
+                                                    className="text-blue-700 cursor-pointer"
                                                 />
                                             )}
                                             {can(

@@ -394761,6 +394761,7 @@ export namespace Prisma {
   export type TrainingBlockSubjectWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     code?: string
+    subjectId_trainingBlockOnCurriculumVersionId?: TrainingBlockSubjectSubjectIdTrainingBlockOnCurriculumVersionIdCompoundUniqueInput
     AND?: TrainingBlockSubjectWhereInput | TrainingBlockSubjectWhereInput[]
     OR?: TrainingBlockSubjectWhereInput[]
     NOT?: TrainingBlockSubjectWhereInput | TrainingBlockSubjectWhereInput[]
@@ -394779,7 +394780,7 @@ export namespace Prisma {
     subject?: XOR<SubjectVersionScalarRelationFilter, SubjectVersionWhereInput>
     trainingBlockOnCurriculumVersion?: XOR<TrainingBlockOnCurriculumVersionScalarRelationFilter, TrainingBlockOnCurriculumVersionWhereInput>
     planTrainingSubjects?: PlanTrainingSubjectListRelationFilter
-  }, "id" | "code">
+  }, "id" | "code" | "subjectId_trainingBlockOnCurriculumVersionId">
 
   export type TrainingBlockSubjectOrderByWithAggregationInput = {
     id?: SortOrder
@@ -440782,7 +440783,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     rankOrder: number
-    baseAmount: Decimal | DecimalJsLike | number | string
+    baseAmount?: Decimal | DecimalJsLike | number | string
     multiplier?: number
     effectiveFrom?: Date | string | null
     effectiveTo?: Date | string | null
@@ -440802,7 +440803,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     rankOrder: number
-    baseAmount: Decimal | DecimalJsLike | number | string
+    baseAmount?: Decimal | DecimalJsLike | number | string
     multiplier?: number
     effectiveFrom?: Date | string | null
     effectiveTo?: Date | string | null
@@ -440862,7 +440863,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     rankOrder: number
-    baseAmount: Decimal | DecimalJsLike | number | string
+    baseAmount?: Decimal | DecimalJsLike | number | string
     multiplier?: number
     effectiveFrom?: Date | string | null
     effectiveTo?: Date | string | null
@@ -455979,6 +455980,11 @@ export namespace Prisma {
     fields: TrainingBlockSubjectOrderByRelevanceFieldEnum | TrainingBlockSubjectOrderByRelevanceFieldEnum[]
     sort: SortOrder
     search: string
+  }
+
+  export type TrainingBlockSubjectSubjectIdTrainingBlockOnCurriculumVersionIdCompoundUniqueInput = {
+    subjectId: string
+    trainingBlockOnCurriculumVersionId: string
   }
 
   export type TrainingBlockSubjectCountOrderByAggregateInput = {
@@ -556191,7 +556197,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     rankOrder: number
-    baseAmount: Decimal | DecimalJsLike | number | string
+    baseAmount?: Decimal | DecimalJsLike | number | string
     multiplier?: number
     effectiveFrom?: Date | string | null
     effectiveTo?: Date | string | null
@@ -556210,7 +556216,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     rankOrder: number
-    baseAmount: Decimal | DecimalJsLike | number | string
+    baseAmount?: Decimal | DecimalJsLike | number | string
     multiplier?: number
     effectiveFrom?: Date | string | null
     effectiveTo?: Date | string | null
@@ -618998,7 +619004,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     rankOrder: number
-    baseAmount: Decimal | DecimalJsLike | number | string
+    baseAmount?: Decimal | DecimalJsLike | number | string
     multiplier?: number
     effectiveFrom?: Date | string | null
     effectiveTo?: Date | string | null
@@ -619017,7 +619023,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     rankOrder: number
-    baseAmount: Decimal | DecimalJsLike | number | string
+    baseAmount?: Decimal | DecimalJsLike | number | string
     multiplier?: number
     effectiveFrom?: Date | string | null
     effectiveTo?: Date | string | null
@@ -619306,7 +619312,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     rankOrder: number
-    baseAmount: Decimal | DecimalJsLike | number | string
+    baseAmount?: Decimal | DecimalJsLike | number | string
     multiplier?: number
     effectiveFrom?: Date | string | null
     effectiveTo?: Date | string | null
@@ -619325,7 +619331,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     rankOrder: number
-    baseAmount: Decimal | DecimalJsLike | number | string
+    baseAmount?: Decimal | DecimalJsLike | number | string
     multiplier?: number
     effectiveFrom?: Date | string | null
     effectiveTo?: Date | string | null
@@ -664479,7 +664485,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     rankOrder: number
-    baseAmount: Decimal | DecimalJsLike | number | string
+    baseAmount?: Decimal | DecimalJsLike | number | string
     multiplier?: number
     effectiveFrom?: Date | string | null
     effectiveTo?: Date | string | null

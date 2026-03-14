@@ -828,6 +828,8 @@ model TrainingBlockSubject extends Base {
   graduation                         Boolean
 
   planTrainingSubjects               PlanTrainingSubject[]
+
+  @@unique([subjectId, trainingBlockOnCurriculumVersionId])
   @@schema("ql-dao-tao")
 }
 

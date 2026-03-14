@@ -10898,6 +10898,9 @@ const metadata: ModelMeta = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
+                }, subjectId_trainingBlockOnCurriculumVersionId: {
+                    name: "subjectId_trainingBlockOnCurriculumVersionId",
+                    fields: ["subjectId", "trainingBlockOnCurriculumVersionId"]
                 },
             },
         },
@@ -22402,6 +22405,7 @@ const metadata: ModelMeta = {
                 }, baseAmount: {
                     name: "baseAmount",
                     type: "Decimal",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, multiplier: {
                     name: "multiplier",
                     type: "Float",

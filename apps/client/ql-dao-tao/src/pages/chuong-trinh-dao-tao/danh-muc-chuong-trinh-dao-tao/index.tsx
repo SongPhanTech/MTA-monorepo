@@ -759,7 +759,6 @@ export default function TrainingProgramCatalog() {
                                                     'THEM'
                                                 ) && (
                                                     <CopyPlusIcon
-                                                        disabled={isLocked}
                                                         onClick={(e) => {
                                                             e.stopPropagation()
                                                             handleCloneCurriculumVersion(record.id)

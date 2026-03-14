@@ -3228,6 +3228,7 @@ model TrainingBlockSubject {
   graduation                         Boolean
   planTrainingSubjects               PlanTrainingSubject[]
 
+  @@unique([subjectId, trainingBlockOnCurriculumVersionId])
   @@schema("ql-dao-tao")
 }
 
@@ -5986,7 +5987,7 @@ model Scholarship {
   createdBy        String?               @db.Uuid()
   name             String
   rankOrder        Int
-  baseAmount       Decimal
+  baseAmount       Decimal               @default(0)
   multiplier       Float                 @default(1)
   effectiveFrom    DateTime?
   effectiveTo      DateTime?
