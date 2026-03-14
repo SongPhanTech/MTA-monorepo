@@ -441,6 +441,14 @@ export const calcFinalScore = (
         return new Decimal(0)
     }
 
+    // 3.5 Check exam score
+    if (
+        subjectScore.examScore < coef.scoreToTakeExam ||
+        subjectScore.examScore < coef.scoreToPass
+    ) {
+        return new Decimal(subjectScore.examScore).toDecimalPlaces(1)
+    }
+
     const examScore =
         subjectClassType === SubjectClassType.REEXAM
             ? subjectScore.examScore - coef.reduceReExamScore
