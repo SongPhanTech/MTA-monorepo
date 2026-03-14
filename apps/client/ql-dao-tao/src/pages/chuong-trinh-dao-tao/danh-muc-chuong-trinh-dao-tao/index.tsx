@@ -89,6 +89,7 @@ const persistState = (filters: FilterProps, page: number) => {
 export default function TrainingProgramCatalog() {
     const { can } = useAbility()
     const [expandAll, setExpandAll] = useState(false)
+    const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([])
     const router = useRouter()
     const { data: me } = useSession()
     const userProfileId = me?.sDM_NhanVienId || ''
@@ -492,7 +493,16 @@ export default function TrainingProgramCatalog() {
                         </Col>
                         <Col span={6}>
                             <Flex justify="end" className="gap-2">
-                                <Button onClick={() => setExpandAll(!expandAll)}>
+                                <Button
+                                    onClick={() => {
+                                        if (expandAll) {
+                                            setExpandedKeys([])
+                                        } else {
+                                            setExpandedKeys(data.map((d) => d.id))
+                                        }
+                                        setExpandAll(!expandAll)
+                                    }}
+                                >
                                     {expandAll ? 'Thu gọn' : 'Mở rộng'}
                                 </Button>
                                 {can(
@@ -568,7 +578,16 @@ export default function TrainingProgramCatalog() {
                         }}
                         childrenFieldName="curriculumVersion"
                         currentPage={currentPage}
-                        defaultExpandAll={expandAll}
+                        expandable={{
+                            expandedRowKeys: expandedKeys,
+                            onExpand: (expanded, record) => {
+                                setExpandedKeys((prev) =>
+                                    expanded
+                                        ? [...prev, record.id]
+                                        : prev.filter((k) => k !== record.id)
+                                )
+                            },
+                        }}
                         onRowClick={(record) => handleRowClick(record)}
                         filters={filters}
                         setFilters={(value) => {
@@ -642,33 +661,6 @@ export default function TrainingProgramCatalog() {
                                 type: 'cmp',
                                 distinctFilters: ['requiredCredits'],
                                 width: 90,
-                                // render: ({ trainingBlocks = [] }) => {
-                                //     const totalCredit = trainingBlocks.reduce(
-                                //         (
-                                //             total: number,
-                                //             block: {
-                                //                 subjects?: {
-                                //                     type: SubjectRequirementType
-                                //                     subject: { credit?: number }
-                                //                 }[]
-                                //             }
-                                //         ) => {
-                                //             const blockCredit =
-                                //                 block?.subjects?.reduce(
-                                //                     (sum, { subject, type }) =>
-                                //                         sum +
-                                //                         (type ===
-                                //                         $Enums.SubjectRequirementType.Mandatory
-                                //                             ? subject?.credit || 0
-                                //                             : 0),
-                                //                     0
-                                //                 ) || 0
-                                //             return total + blockCredit
-                                //         },
-                                //         0
-                                //     )
-                                //     return totalCredit
-                                // },
                             },
                             {
                                 title: <Tooltip title="Số tín chỉ tự chọn">Số TCTC</Tooltip>,
@@ -677,33 +669,6 @@ export default function TrainingProgramCatalog() {
                                 width: 90,
                                 dataIndex: 'electiveCredits',
                                 distinctFilters: ['electiveCredits'],
-                                // render: ({ trainingBlocks = [] }) => {
-                                //     const totalCredit = trainingBlocks.reduce(
-                                //         (
-                                //             total: number,
-                                //             block: {
-                                //                 subjects?: {
-                                //                     type: SubjectRequirementType
-                                //                     subject: { credit?: number }
-                                //                 }[]
-                                //             }
-                                //         ) => {
-                                //             const blockCredit =
-                                //                 block?.subjects?.reduce(
-                                //                     (sum, { subject, type }) =>
-                                //                         sum +
-                                //                         (type ===
-                                //                         $Enums.SubjectRequirementType.Optional
-                                //                             ? subject?.credit || 0
-                                //                             : 0),
-                                //                     0
-                                //                 ) || 0
-                                //             return total + blockCredit
-                                //         },
-                                //         0
-                                //     )
-                                //     return totalCredit
-                                // },
                             },
                             {
                                 title: <Tooltip title="Số học kỳ">Số HK</Tooltip>,
@@ -712,22 +677,6 @@ export default function TrainingProgramCatalog() {
                                 type: 'cmp',
                                 distinctFilters: ['numberOfSemesters'],
                                 width: 90,
-                                // render: ({ trainingBlocks = [] }) => {
-                                //     const allSemester = trainingBlocks.flatMap(
-                                //         (block: {
-                                //             subjects?: {
-                                //                 semester: number
-                                //             }[]
-                                //         }) => {
-                                //             return (
-                                //                 block.subjects
-                                //                     ?.map((e) => e?.semester)
-                                //                     ?.filter?.(Boolean) || []
-                                //             )
-                                //         }
-                                //     )
-                                //     return allSemester?.length > 0 ? Math.max(...allSemester) : ''
-                                // },
                             },
                             {
                                 title: <Tooltip title="Thời gian đào tạo">TGĐT</Tooltip>,
@@ -810,11 +759,9 @@ export default function TrainingProgramCatalog() {
                                                     'THEM'
                                                 ) && (
                                                     <CopyPlusIcon
+                                                        disabled={isLocked}
                                                         onClick={(e) => {
                                                             e.stopPropagation()
-                                                            if (isLocked) {
-                                                                return
-                                                            }
                                                             handleCloneCurriculumVersion(record.id)
                                                         }}
                                                     />
@@ -825,11 +772,9 @@ export default function TrainingProgramCatalog() {
                                                 ) && (
                                                     <EditIcon
                                                         title="Sửa thông tin chung"
+                                                        disabled={isLocked}
                                                         onClick={(e) => {
                                                             e.stopPropagation()
-                                                            if (isLocked) {
-                                                                return
-                                                            }
                                                             onOpenCurriculumVersion({
                                                                 curriculumId: record.curriculumId,
                                                                 versionId: record?.id,
@@ -862,12 +807,9 @@ export default function TrainingProgramCatalog() {
                                                     'XOA'
                                                 ) && (
                                                     <DeleteIcon
+                                                        disabled={isLocked}
                                                         popConfirm={{
                                                             onConfirm: (e) => {
-                                                                if (isLocked) {
-                                                                    e?.stopPropagation()
-                                                                    return
-                                                                }
                                                                 handleDeleteCurriculumVersion(
                                                                     record?.id
                                                                 )
@@ -875,9 +817,6 @@ export default function TrainingProgramCatalog() {
                                                             },
                                                             onCancel: (e) => {
                                                                 e?.stopPropagation()
-                                                            },
-                                                            okButtonProps: {
-                                                                disabled: isLocked,
                                                             },
                                                         }}
                                                         onClick={(e) => e.stopPropagation()}

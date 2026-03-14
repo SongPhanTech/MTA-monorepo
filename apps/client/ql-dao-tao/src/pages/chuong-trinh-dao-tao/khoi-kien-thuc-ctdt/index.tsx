@@ -2,16 +2,13 @@ import {
     NestedCollapsibleTable,
     type NestedColumn,
 } from '@components/commons/nested-collapsible-table'
-// import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import type { Prisma } from '@workspace/db/client'
 import {
-    useCountTrainingBlock,
     useFindManyTrainingBlock,
     useFindManyTrainingBlockOnCurriculumVersion,
     useUpdateTrainingBlock,
@@ -20,25 +17,12 @@ import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, message, Row, Tag, Tooltip } from 'antd'
-import _ from 'lodash'
 import { BookPlus } from 'lucide-react'
 import type React from 'react'
-import { useCallback, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import ViewIcon from '@components/icons/view'
 
-interface TreeNode {
-    id: string
-    code: string
-    name: string
-    active: boolean
-    description: string | null
-    priority: number
-    parentId: string | null
-    children?: TreeNode[]
-    createdAt?: string
-    updatedAt?: string
-}
 type TrainingBlockType = Prisma.TrainingBlockGetPayload<{}> & {
     children?: TrainingBlockType[]
 }
@@ -46,15 +30,13 @@ type TrainingBlockType = Prisma.TrainingBlockGetPayload<{}> & {
 export default function TrainingBlock() {
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { can, canSome } = useAbility()
-    const [currentPage, setCurrentPage] = useState(1)
-    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
         code: undefined,
         name: undefined,
         active: undefined,
     })
 
-    const { data: trainingBlockData, refetch } = useFindManyTrainingBlock(
+    const { data: trainingBlockData = [] } = useFindManyTrainingBlock(
         {
             where: {
                 ...(filters.code ? { code: { contains: filters.code, mode: 'insensitive' } } : {}),
@@ -63,26 +45,11 @@ export default function TrainingBlock() {
                 trainingObjectTypeId,
             },
             orderBy: { priority: 'asc' },
-            // take: numberOfPages,
-            // skip: (currentPage - 1) * numberOfPages,
         },
         {
             enabled: !!trainingObjectTypeId,
         }
     )
-
-    const { data: count, refetch: refetchCount } = useCountTrainingBlock({
-        where: {
-            ...(filters.code ? { code: { contains: filters.code, mode: 'insensitive' } } : {}),
-            ...(filters.name ? { name: { contains: filters.name, mode: 'insensitive' } } : {}),
-            ...(filters.active?.length === 1
-                ? filters.active.length === 1
-                    ? { active: filters.active[0] }
-                    : {}
-                : {}),
-            deletedAt: null,
-        },
-    })
 
     const { data: trainingBlockOnCurriculumData = [] } =
         useFindManyTrainingBlockOnCurriculumVersion(
@@ -122,12 +89,16 @@ export default function TrainingBlock() {
         return countMap
     }, [trainingBlockOnCurriculumData])
 
-    const debouncedRefetch = useCallback(
-        _.debounce(() => {
-            refetch()
-        }, 500),
-        []
-    )
+    const lockedTrainingBlockIds = useMemo(() => {
+        const lockedIds = new Set<string>()
+        trainingBlockOnCurriculumData.forEach((item) => {
+            if (item.trainingBlockId && (item.curriculumVersion as any)?.isLock) {
+                lockedIds.add(item.trainingBlockId)
+            }
+        })
+        return lockedIds
+    }, [trainingBlockOnCurriculumData])
+
     const { onOpen } = useDisclosure<string>({
         tag: 'PutTrainingBlock',
     })
@@ -230,6 +201,7 @@ export default function TrainingBlock() {
             render: (_: any, record: TrainingBlockType) => {
                 if (record?.id) {
                     const hasChildren = record?.children && record.children.length > 0
+                    const isBlockLocked = lockedTrainingBlockIds.has(record.id)
 
                     return (
                         <Row className="justify-center gap-2">
@@ -243,10 +215,16 @@ export default function TrainingBlock() {
                                 QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_KHOI_KIEN_THUC_CTDT,
                                 'SUA'
                             ) && (
-                                <EditIcon
-                                    onClick={onOpen.bind(null, record?.id)}
-                                    className="text-sm text-blue-700 cursor-pointer"
-                                />
+                                <Tooltip
+                                    title={isBlockLocked ? 'Không thể sửa vì đang được dùng trong CTĐT đã khoá' : ''}
+                                    placement="top"
+                                >
+                                    <EditIcon
+                                        disabled={isBlockLocked}
+                                        onClick={onOpen.bind(null, record?.id)}
+                                        className="text-sm text-blue-700 cursor-pointer"
+                                    />
+                                </Tooltip>
                             )}
                             {can(
                                 QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_KHOI_KIEN_THUC_CTDT,
@@ -256,7 +234,9 @@ export default function TrainingBlock() {
                                     title={
                                         hasChildren
                                             ? 'Không thể xóa vì có khối kiến thức con'
-                                            : 'Xóa'
+                                            : isBlockLocked
+                                              ? 'Không thể xóa vì đang được dùng trong CTĐT đã khoá'
+                                              : 'Xóa'
                                     }
                                     placement="top"
                                 >
@@ -264,7 +244,7 @@ export default function TrainingBlock() {
                                         popConfirm={{
                                             onConfirm: () => handleDelete(record?.id),
                                         }}
-                                        disabled={hasChildren}
+                                        disabled={hasChildren || isBlockLocked}
                                     />
                                 </Tooltip>
                             )}
