@@ -28,7 +28,7 @@ export const jwtAuth = (appCode: string): MiddlewareHandler => {
         const cookie = headerToken ? `x-tenantcode=dev; x-token-${appCode}=${token}` : reqCookie
         try {
             const response = await fetch(
-                `${process.env.SYSTEM_ENDPOINT}/api/system/share/users/user-info`,
+                `${process.env.SYSTEM_BASE_URL}/api/system/share/users/user-info`,
                 {
                     method: 'GET',
                     credentials: 'include',
