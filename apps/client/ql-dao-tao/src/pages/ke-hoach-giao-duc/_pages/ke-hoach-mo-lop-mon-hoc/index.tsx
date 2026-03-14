@@ -591,7 +591,7 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                                             // @ts-expect-error
                                             (block) =>
                                                 block.trainingBlockOnCurriculumVersion
-                                                    .curriculumVersion.fixedClass
+                                                    .curriculumVersion?.fixedClass
                                         )
                                         console.log(fixedClasses)
 

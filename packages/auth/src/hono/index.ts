@@ -16,32 +16,24 @@ declare module 'hono' {
 export const jwtAuth = (appCode: string): MiddlewareHandler => {
     return async (c, next) => {
         console.log(`[jwtAuth] Checking authentication for appCode: ${appCode}`)
-        const token = getCookie(c, `x-token-${appCode}`)
 
-        const env = process.env.ENVI_1 || 'production'
-        console.log(`[jwtAuth] Retrieved environment : ${env}`)
-        const tokenGialap = process.env.TOKEN_GIALAP
-        console.log(`[jwtAuth] Retrieved token: ${token}, env: ${env}, tokenGialap: ${tokenGialap}`)
+        const headerToken = c.req.header('Authorization')?.split(' ')[1]
+        const token = headerToken || getCookie(c, `x-token-${appCode}`)
 
-        const isDevelopEnv = env === 'develop' || env === 'development'
-        const tokenToUse = token || (isDevelopEnv ? tokenGialap : undefined)
-        const cookie = c.req.header('Cookie') || ''
-        const cookieWithToken =
-            isDevelopEnv && tokenGialap
-                ? `${cookie}${cookie ? '; ' : ''}x-token-${appCode}=${tokenGialap}`
-                : cookie
+        const reqCookie = c.req.header('Cookie') || ''
 
-        if (!tokenToUse) {
+        if (!token) {
             return c.text('Unauthorized: No token provided', 401)
         }
+        const cookie = headerToken ? `x-tenantcode=dev; x-token-${appCode}=${token}` : reqCookie
         try {
             const response = await fetch(
-                'https://mta.swantech.vn/api/system/share/users/user-info',
+                `${process.env.SYSTEM_ENDPOINT}/api/system/share/users/user-info`,
                 {
                     method: 'GET',
                     credentials: 'include',
                     headers: {
-                        Cookie: appCode === 'lms' ? cookieWithToken : cookie,
+                        Cookie: cookie,
                         'K-AppCode': appCode,
                         'K-TenantCode': 'dev',
                     },
