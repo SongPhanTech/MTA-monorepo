@@ -215,16 +215,10 @@ export default function TrainingBlock() {
                                 QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_KHOI_KIEN_THUC_CTDT,
                                 'SUA'
                             ) && (
-                                <Tooltip
-                                    title={isBlockLocked ? 'Không thể sửa vì đang được dùng trong CTĐT đã khoá' : ''}
-                                    placement="top"
-                                >
-                                    <EditIcon
-                                        disabled={isBlockLocked}
-                                        onClick={onOpen.bind(null, record?.id)}
-                                        className="text-sm text-blue-700 cursor-pointer"
-                                    />
-                                </Tooltip>
+                                <EditIcon
+                                    onClick={onOpen.bind(null, record?.id)}
+                                    className="text-sm text-blue-700 cursor-pointer"
+                                />
                             )}
                             {can(
                                 QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_KHOI_KIEN_THUC_CTDT,

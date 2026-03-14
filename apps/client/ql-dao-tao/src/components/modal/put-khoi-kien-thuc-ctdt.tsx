@@ -32,7 +32,9 @@ const PutTrainingBlock = () => {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { data: trainingBlock } = useFindUniqueTrainingBlock({ where: { id } }, { enabled: !!id })
-    const { data: parentTrainingBlock } = useFindManyTrainingBlock({ where: { id: { not: id } } })
+    const { data: parentTrainingBlock } = useFindManyTrainingBlock({
+        where: { id: { not: id }, trainingObjectTypeId },
+    })
     useEffect(() => {
         if (trainingBlock) {
             form.setFieldsValue({
