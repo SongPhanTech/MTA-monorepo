@@ -3,32 +3,12 @@ import { getRuntimeEnv } from '../utils'
 
 const getTokenHeaders = (): Record<string, string> => {
     const headerEnvPairs: Array<{ header: string; value: string }> = [
-        {
-            header: 'x-refreshToken-executive',
-            value: getRuntimeEnv('X_TOKEN_EXECUTIVE') || process.env.X_TOKEN
-        },
-        {
-            header: 'x-refreshToken-lms',
-            value: ''
-        },
-        {
-            header: 'x-refreshToken-sso_portal',
-            value: ''
-        },
-        {
-            header: 'x-refreshToken-system',
-            value: ''
-        },
-        {
-            header: 'x-token-executive',
-            value: ''
-        },
-        {
-            header: 'x-token-sso_portal',
-            value: ''
-        },
+    
+        // {
+        //     header: 'Authorization',
+        //     value: process.env.X_TOKEN_LMS || 'Bearer 048E1562746A83519236440B013D6B9C386CED9E758C4A6BBC2F38A2E72131D3',
+        // }
     ]
-    console.log("headers >> ", headerEnvPairs)``
 
     return headerEnvPairs.reduce<Record<string, string>>((acc, item) => {
         if (item.value) {
@@ -41,6 +21,7 @@ const getTokenHeaders = (): Record<string, string> => {
 export const fetchInstance = async (url: string, options?: RequestInit): Promise<Response> => {
     const accessToken = BROWSER ? localStorage.getItem('ACCESS_TOKEN') : ''
     const tokenHeaders = getTokenHeaders()
+    console.log('Token headers:', tokenHeaders)
 
     const payload: RequestInit = {
         ...options,
