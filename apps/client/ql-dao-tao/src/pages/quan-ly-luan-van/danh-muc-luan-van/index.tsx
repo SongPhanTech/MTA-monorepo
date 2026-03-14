@@ -262,7 +262,9 @@ export default function PostgraduateProject({
         tag: 'ModalCauHinhLuanVan',
     })
     // hàm xử lý lấy ra danh sách đơn vị
-    const { data: sDm_Donvi = [] } = useFindManyDM_DonVi()
+    const { data: sDm_Donvi = [] } = useFindManyDM_DonVi({
+        orderBy: [{ iSTT: 'asc' }, { sTen: 'asc' }],
+    })
     // hàm xử lý lấy ra danh sách phòng bảo vệ
     const { data: roomData } = useFindManyRoom()
     // hàm xử lý lấy ra danh sách ca bảo vệ

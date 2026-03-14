@@ -296,6 +296,7 @@ export default function PhanCongGiangDay({
         {
             select: { Id: true, sParentId: true },
             where: whereOrganization,
+            orderBy: [{ iSTT: 'asc' }, { sTen: 'asc' }],
         },
         { refetchOnWindowFocus: false }
     )
@@ -376,6 +377,7 @@ export default function PhanCongGiangDay({
             },
             take: numberOfPages,
             skip: (currentPage - 1) * numberOfPages,
+            orderBy: [{ iSTT: 'asc' }, { sTen: 'asc' }],
             where: {
                 bActive: true,
                 subjectVersions: {
@@ -513,6 +515,7 @@ export default function PhanCongGiangDay({
 
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({
         where: whereOrganization,
+        orderBy: [{ iSTT: 'asc' }, { sTen: 'asc' }],
     })
     const treeData = buildOrgTree(manageOrgData, !khoaBoMon ? '0' : orgId)
 

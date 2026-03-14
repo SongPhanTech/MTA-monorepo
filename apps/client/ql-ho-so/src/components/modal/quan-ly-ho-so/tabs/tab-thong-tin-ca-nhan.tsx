@@ -59,7 +59,12 @@ export default function ThongTinCaNhanTab({
 
     const { data: staffTypeData = [] } = useFindManyStaffType({}, { enabled: type === 'STAFF' })
 
-    const { data: manageOrgData = [] } = useFindManyDM_DonVi({}, { enabled: type === 'LECTURER' })
+    const { data: manageOrgData = [] } = useFindManyDM_DonVi(
+        {
+            orderBy: [{ iSTT: 'asc' }, { sTen: 'asc' }],
+        },
+        { enabled: type === 'LECTURER' }
+    )
 
     const { data: lecturerTypeData = [] } = useFindManyLecturerType(
         {},

@@ -351,10 +351,8 @@ export default function TrainingProgramSubjects() {
     })
 
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({
-        where: {
-            ...whereOrganization,
-        },
-        orderBy: { sTen: 'asc' },
+        where: whereOrganization,
+        orderBy: [{ iSTT: 'asc' }, { sTen: 'asc' }],
     })
 
     const { onOpen: openChiTietMonHoc } = useDisclosure<{

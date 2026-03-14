@@ -176,7 +176,7 @@ const FixedClassDragItem: React.FC<{
                                     ...(subjectClasses?.subjectClasses?.[dropResult?.item?.id]
                                         ?.fixedClasses || []),
                                     {
-                                        id: item.id,
+                                        id: item?.id,
                                         code: item?.code,
                                         count: item?._count?.students || 0,
                                     },
@@ -190,13 +190,13 @@ const FixedClassDragItem: React.FC<{
                 opacity: monitor.isDragging() ? 0.4 : 1,
             }),
         }),
-        [item.id, subjectVersionId, subjectVersionsForm]
+        [item?.id, subjectVersionId, subjectVersionsForm]
     )
 
     drag(ref)
 
     const isAlreadyAdded = !!Object.values(subjectClasses.subjectClasses || {}).find((e) =>
-        e.fixedClasses?.some((fc) => fc.id === item.id)
+        e.fixedClasses?.some((fc) => fc.id === item?.id)
     )
 
     return (
@@ -764,8 +764,8 @@ export default function KeHoachGhepLopMonHoc() {
                                                 const fixedClasses = record?.trainingBlocks.map(
                                                     // @ts-expect-error
                                                     (block) =>
-                                                        block.trainingBlockOnCurriculumVersion
-                                                            .curriculumVersion.fixedClass
+                                                        block?.trainingBlockOnCurriculumVersion
+                                                            ?.curriculumVersion?.fixedClass
                                                 )
                                                 return (
                                                     fixedClasses?.reduce(

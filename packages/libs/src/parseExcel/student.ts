@@ -367,24 +367,25 @@ export const parseSheetStudent = (file: ArrayBufferLike) => {
         trainingField: 'R', // Ngành đào tạo
         trainingMajor: 'S', // Chuyên ngành đào tạo
         curriculum: 'T', // Chương trình đào tạo
-        objectType: 'U', // Quân sự/Dân sự
-        officerNumber: 'V', // Số hiệu SQ/QNCN
-        rank: 'W', // Cấp bậc
-        position: 'X', // Chức vụ
-        department: 'Y', // Cơ quan, đơn vị
-        departmentAddress: 'Z', // Địa chỉ cơ quan, đơn vị
-        careerYear: 'AA', // Năm bắt đầu vào nghề/Năm nghiệp vụ
+        managementOrganization: 'U', // Đơn vị quản lý
+        objectType: 'V', // Quân sự/Dân sự
+        officerNumber: 'W', // Số hiệu SQ/QNCN
+        rank: 'X', // Cấp bậc
+        position: 'Y', // Chức vụ
+        department: 'Z', // Cơ quan, đơn vị
+        departmentAddress: 'AA', // Địa chỉ cơ quan, đơn vị
+        careerYear: 'AB', // Năm bắt đầu vào nghề/Năm nghiệp vụ
         // Thông tin tốt nghiệp đại học (Phục vụ cao học)
-        universitySchool: 'AB', // Trường ĐH
-        universityTrainingType: 'AC', // Hệ đào tạo
-        universityGraduationYear: 'AD', // Năm tốt nghiệp
-        universityMajor: 'AE', // Ngành, Chuyên ngành tốt nghiệp
-        universityRank: 'AF', // Loại/Bậc tốt nghiệp
-        basic: 'AG', // Cơ bản
-        facility: 'AH', // Cơ sở
-        foreignLanguage: 'AI', // Ngoại ngữ
-        priorityReason: 'AJ', // Lý do ưu tiên
-        description: 'AK', // Mô tả (Ghi chú)
+        universitySchool: 'AC', // Trường ĐH
+        universityTrainingType: 'AD', // Hệ đào tạo
+        universityGraduationYear: 'AE', // Năm tốt nghiệp
+        universityMajor: 'AF', // Ngành, Chuyên ngành tốt nghiệp
+        universityRank: 'AG', // Loại/Bậc tốt nghiệp
+        basic: 'AH', // Cơ bản
+        facility: 'AI', // Cơ sở
+        foreignLanguage: 'AJ', // Ngoại ngữ
+        priorityReason: 'AK', // Lý do ưu tiên
+        description: 'AL', // Mô tả (Ghi chú)
     }
     // end: Các tham chiếu ô cố định trong sheet
 
@@ -476,6 +477,15 @@ export const parseSheetStudent = (file: ArrayBufferLike) => {
                 })
             }
 
+            const managementOrganization = row[cols.managementOrganization]?.trim()
+            if (!managementOrganization) {
+                errors.push({
+                    sheetRef: sheetName,
+                    cellRef: `${cols.managementOrganization}${row.__rowNum__ + 1}`,
+                    message: 'Đơn vị quản lý không được để trống',
+                })
+            }
+
             const dateOfBirth = parseDateFromCell(cols.dateOfBirth, row.__rowNum__)
             if (row[cols.dateOfBirth] && !dateOfBirth.isValid()) {
                 errors.push({
@@ -515,6 +525,7 @@ export const parseSheetStudent = (file: ArrayBufferLike) => {
                 trainingField: row[cols.trainingField]?.trim(),
                 trainingMajor: row[cols.trainingMajor]?.trim(),
                 curriculum: row[cols.curriculum]?.trim() as string,
+                managementOrganization: managementOrganization as string,
                 objectType: row[cols.objectType]?.trim(),
                 officerNumber: row[cols.officerNumber]?.trim(),
                 rank: row[cols.rank]?.trim(),

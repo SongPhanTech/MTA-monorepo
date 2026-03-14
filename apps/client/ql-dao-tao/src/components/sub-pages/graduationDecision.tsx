@@ -774,9 +774,9 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                                         : '',
                             },
                             {
-                                title: 'GPA',
+                                title: 'ĐTBTL',
                                 align: 'center',
-                                width: 60,
+                                width: 80,
                                 dataIndex: 'finalGpa',
                                 type: 'order',
                                 render: (_, record) => record?.finalGpa?.toNumber(),
