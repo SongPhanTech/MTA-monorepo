@@ -830,7 +830,7 @@ export default function StudentGraduationApplication() {
                                                 // Cột chứng chỉ động
                                                 ...certificateColumns,
                                                 {
-                                                    title: 'Kết quả xét',
+                                                    title: 'Kết quả',
                                                     width: 90,
                                                     align: 'center',
                                                     dataIndex: 'graduation',
@@ -931,8 +931,8 @@ export default function StudentGraduationApplication() {
                                                     },
                                                 },
                                                 {
-                                                    title: 'GPA',
-                                                    width: 60,
+                                                    title: 'ĐTBTL',
+                                                    width: 80,
                                                     align: 'center',
                                                     dataIndex: 'gpaCmp',
                                                     type: 'cmp',
