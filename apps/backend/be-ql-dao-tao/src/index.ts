@@ -83,7 +83,7 @@ const audience = config.keycloak.clientId
 app.route('/api/training-field', TrainingFieldApp)
 app.route('/api/room', RoomApp)
 // TODO!: remove `/check`
-app.use('/api/*', jwtAuth('lms'))
+app.use('/api/check/*', jwtAuth('lms'))
 
 setupOpenApi(app)
 
