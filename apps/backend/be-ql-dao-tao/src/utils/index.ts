@@ -165,6 +165,7 @@ export const buildWardMapOrThrow = async (prisma: PrismaClient, names: (string |
 type CurriculumData = {
     curriculum: string
     trainingMajor?: string
+    trainingMajorId?: string
     trainingField?: string
     managementOrganization?: string
 }
@@ -183,6 +184,7 @@ export const buildCurriculumMapOrThrow = async (
             JSON.stringify({
                 curriculum: s.curriculum,
                 trainingMajor: s.trainingMajor,
+                trainingMajorId: s.trainingMajorId,
                 trainingField: s.trainingField,
                 managementOrganization: s.managementOrganization,
             })
@@ -191,36 +193,49 @@ export const buildCurriculumMapOrThrow = async (
 
     const uniqueTuples = Array.from(categorySet).map((s) => JSON.parse(s) as CurriculumData)
 
-    const majorNames = Array.from(
+    const majorIds = Array.from(
         new Set(
             uniqueTuples
-                .map(({ trainingMajor }) => normalize(trainingMajor))
-                .filter((name): name is string => Boolean(name))
+                .map(({ trainingMajorId }) => normalize(trainingMajorId))
+                .filter((majorId): majorId is string => Boolean(majorId))
         )
     )
 
-    if (majorNames.length) {
+    if (majorIds.length) {
         const validMajors = await prisma.trainingMajor.findMany({
             where: {
-                OR: majorNames.map((majorName) => ({
-                    name: { equals: majorName, mode: 'insensitive' },
-                    trainingObjectTypes: { some: { trainingObjectTypeId } },
-                })),
+                id: { in: majorIds },
+                trainingObjectTypes: { some: { trainingObjectTypeId } },
             },
-            select: { name: true },
+            select: { id: true, name: true },
         })
 
-        const validMajorSet = new Set(
-            validMajors.map(({ name }) => normalize(name).toLowerCase())
-        )
+        const validMajorIdSet = new Set(validMajors.map(({ id }) => id))
 
-        const invalidMajors = majorNames.filter(
-            (majorName) => !validMajorSet.has(majorName.toLowerCase())
-        )
+        const invalidMajorIds = majorIds.filter((majorId) => !validMajorIdSet.has(majorId))
 
-        if (invalidMajors.length) {
+        if (invalidMajorIds.length) {
+            const majorNameById = new Map(
+                uniqueTuples
+                    .filter(({ trainingMajorId }) => Boolean(trainingMajorId))
+                    .map(({ trainingMajorId, trainingMajor }) => [
+                        trainingMajorId as string,
+                        trainingMajor,
+                    ])
+            )
+
+            const invalidMajorLabels = invalidMajorIds.map((majorId) => {
+                const majorName = majorNameById.get(majorId)
+                return majorName ? `${majorName} (${majorId})` : majorId
+            })
+
+            const friendlyInvalidMajors =
+                invalidMajorLabels.length <= 5
+                    ? invalidMajorLabels.join(', ')
+                    : `${invalidMajorLabels.slice(0, 5).join(', ')} và ${invalidMajorLabels.length - 5} chuyên ngành khác`
+
             throw new HTTPException(400, {
-                message: `Chuyên ngành không thuộc đối tượng đào tạo: ${invalidMajors.join(', ')}`,
+                message: `Chuyên ngành không hợp lệ hoặc không thuộc đối tượng đào tạo: ${friendlyInvalidMajors}`,
             })
         }
     }
