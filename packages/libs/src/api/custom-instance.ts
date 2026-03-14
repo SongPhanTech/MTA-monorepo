@@ -1,8 +1,27 @@
 import { BROWSER } from 'esm-env'
 import { getRuntimeEnv } from '../utils'
 
+const getTokenHeaders = (): Record<string, string> => {
+    const headerEnvPairs: Array<{ header: string; value: string }> = [
+    
+        // {
+        //     header: 'Authorization',
+        //     value: process.env.X_TOKEN_LMS || 'Bearer 048E1562746A83519236440B013D6B9C386CED9E758C4A6BBC2F38A2E72131D3',
+        // }
+    ]
+
+    return headerEnvPairs.reduce<Record<string, string>>((acc, item) => {
+        if (item.value) {
+            acc[item.header] = item.value
+        }
+        return acc
+    }, {})
+}
+
 export const fetchInstance = async (url: string, options?: RequestInit): Promise<Response> => {
     const accessToken = BROWSER ? localStorage.getItem('ACCESS_TOKEN') : ''
+    const tokenHeaders = getTokenHeaders()
+    console.log('Token headers:', tokenHeaders)
 
     const payload: RequestInit = {
         ...options,
@@ -10,9 +29,22 @@ export const fetchInstance = async (url: string, options?: RequestInit): Promise
         headers: {
             ...options?.headers,
             ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+            ...tokenHeaders,
         },
     }
-    return await fetch(url, payload)
+    return await fetch(url, payload).then((res) => {
+        if (res.status === 401) {
+            if (typeof window !== 'undefined') {
+                const event = new CustomEvent('mta-session-expired', {
+                    detail: {
+                        message: 'Phiên đăng nhập hết hạn',
+                    },
+                })
+                window.dispatchEvent(event)
+            }
+        }
+        return res
+    })
 }
 
 const getBody = <T>(c: Response | Request): Promise<T> => {

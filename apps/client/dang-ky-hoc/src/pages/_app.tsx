@@ -1,4 +1,4 @@
-import { fetchInstance, queryClient } from '@api/index'
+import { queryClient } from '@api/index'
 import { Spinner } from '@components/commons/spinner'
 import { colors } from '@constants/colors'
 import store from '@redux/store'
@@ -27,6 +27,7 @@ import '@assets/css/custom.css'
 import { getRuntimeEnv } from '@workspace/libs/utils'
 import { lightThemeCustom, WidgetChatbot } from '@workspace/ui'
 import '@workspace/libs'
+import { fetchInstance } from '@workspace/libs/api/custom-instance';
 dayjs.locale('vi')
 dayjs.extend(weekOfYear)
 dayjs.extend(isoWeeksInYear)
