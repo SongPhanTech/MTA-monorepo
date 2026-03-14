@@ -1,8 +1,46 @@
 import { BROWSER } from 'esm-env'
 import { getRuntimeEnv } from '../utils'
 
+const getTokenHeaders = (): Record<string, string> => {
+    const headerEnvPairs: Array<{ header: string; value: string }> = [
+        {
+            header: 'x-refreshToken-executive',
+            value: getRuntimeEnv('X_TOKEN_EXECUTIVE') || process.env.X_TOKEN
+        },
+        {
+            header: 'x-refreshToken-lms',
+            value: ''
+        },
+        {
+            header: 'x-refreshToken-sso_portal',
+            value: ''
+        },
+        {
+            header: 'x-refreshToken-system',
+            value: ''
+        },
+        {
+            header: 'x-token-executive',
+            value: ''
+        },
+        {
+            header: 'x-token-sso_portal',
+            value: ''
+        },
+    ]
+    console.log("headers >> ", headerEnvPairs)``
+
+    return headerEnvPairs.reduce<Record<string, string>>((acc, item) => {
+        if (item.value) {
+            acc[item.header] = item.value
+        }
+        return acc
+    }, {})
+}
+
 export const fetchInstance = async (url: string, options?: RequestInit): Promise<Response> => {
     const accessToken = BROWSER ? localStorage.getItem('ACCESS_TOKEN') : ''
+    const tokenHeaders = getTokenHeaders()
 
     const payload: RequestInit = {
         ...options,
@@ -10,9 +48,22 @@ export const fetchInstance = async (url: string, options?: RequestInit): Promise
         headers: {
             ...options?.headers,
             ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+            ...tokenHeaders,
         },
     }
-    return await fetch(url, payload)
+    return await fetch(url, payload).then((res) => {
+        if (res.status === 401) {
+            if (typeof window !== 'undefined') {
+                const event = new CustomEvent('mta-session-expired', {
+                    detail: {
+                        message: 'Phiên đăng nhập hết hạn',
+                    },
+                })
+                window.dispatchEvent(event)
+            }
+        }
+        return res
+    })
 }
 
 const getBody = <T>(c: Response | Request): Promise<T> => {

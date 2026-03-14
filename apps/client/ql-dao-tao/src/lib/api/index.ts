@@ -14,12 +14,20 @@ const fetchInstance = async (url: string, options?: RequestInit) => {
         ...options,
         credentials: 'include',
     })
-    .then((res) => {
-        // if (res.status === 401) {
-        //     removeStorage('ACCESS_TOKEN')
-        //     signOutAction()
-        // }
-        return res
-    })
+        .then((res) => {
+            console.log(111111111, res)
+            if (res.status === 401) {
+                if (typeof window !== 'undefined') {
+                    const event = new CustomEvent('mta-session-expired', {
+                        detail: {
+                            message: 'Phiên đăng nhập hết hạn',
+                        },
+                    })
+                    window.dispatchEvent(event)
+                }
+                console.log('code come here 401')
+            }
+            return res
+        })
 }
 export { fetchInstance, queryClient }
