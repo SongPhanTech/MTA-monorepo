@@ -230,7 +230,7 @@ export default function DetailSurveyPage({
                                     dataIndex: 'name',
                                     type: 'input',
                                     render: (__, record) => {
-                                        return `${record?.code} - ${record?.userProfile?.lastName} ${record?.userProfile?.firstName}`
+                                        return `${record?.code} - ${record?.userProfile?.fullname}`
                                     },
                                 },
                                 {
