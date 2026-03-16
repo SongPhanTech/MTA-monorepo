@@ -43,7 +43,6 @@ const PERMISSIONS = {
     IN_PHIEU_DIEM: 1 << 11,
     IN_DS_THI: 1 << 12,
     XOA: 1 << 13,
-    LUU_HOAN_THI: 1 << 14,
 } as const
 
 function combine(perms: (keyof typeof PERMISSIONS)[]): number {
