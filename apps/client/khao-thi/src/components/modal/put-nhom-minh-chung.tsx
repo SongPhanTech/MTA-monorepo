@@ -32,7 +32,6 @@ const PutEvidenceCategory = () => {
             showSpinner()
             const data = {
                 name: output.name.trim(),
-                description: output.description,
                 code: output.code,
             }
             if (id) {
@@ -98,12 +97,6 @@ const PutEvidenceCategory = () => {
             <Col span={24}>
                 <FormItem form={form} name="name" label="Tên nhóm minh chứng" required>
                     <Input placeholder="Nhập tên nhóm minh chứng" />
-                </FormItem>
-            </Col>
-
-            <Col span={24}>
-                <FormItem form={form} name="description" label="Mô tả">
-                    <Input.TextArea placeholder="Nhập mô tả" />
                 </FormItem>
             </Col>
         </PutFormModal>
