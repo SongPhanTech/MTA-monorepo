@@ -166,7 +166,7 @@ model StudentSubjectScore extends Base {
   studentSubjectScoreHistory   StudentSubjectScoreHistory[]
   scoreCorrectionItem          ScoreCorrectionItem[]
 
-  @@unique([subjectClassId, studentId ])
+  @@unique([subjectClassId, studentId])
   @@schema("ql-dao-tao")
 }
 
@@ -829,7 +829,7 @@ model TrainingBlockSubject extends Base {
 
   planTrainingSubjects               PlanTrainingSubject[]
 
-  @@unique([subjectId, trainingBlockOnCurriculumVersionId])
+  // @@unique([subjectId, trainingBlockOnCurriculumVersionId])
   @@schema("ql-dao-tao")
 }
 

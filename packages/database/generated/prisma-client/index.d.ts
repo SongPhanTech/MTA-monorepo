@@ -394761,7 +394761,6 @@ export namespace Prisma {
   export type TrainingBlockSubjectWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     code?: string
-    subjectId_trainingBlockOnCurriculumVersionId?: TrainingBlockSubjectSubjectIdTrainingBlockOnCurriculumVersionIdCompoundUniqueInput
     AND?: TrainingBlockSubjectWhereInput | TrainingBlockSubjectWhereInput[]
     OR?: TrainingBlockSubjectWhereInput[]
     NOT?: TrainingBlockSubjectWhereInput | TrainingBlockSubjectWhereInput[]
@@ -394780,7 +394779,7 @@ export namespace Prisma {
     subject?: XOR<SubjectVersionScalarRelationFilter, SubjectVersionWhereInput>
     trainingBlockOnCurriculumVersion?: XOR<TrainingBlockOnCurriculumVersionScalarRelationFilter, TrainingBlockOnCurriculumVersionWhereInput>
     planTrainingSubjects?: PlanTrainingSubjectListRelationFilter
-  }, "id" | "code" | "subjectId_trainingBlockOnCurriculumVersionId">
+  }, "id" | "code">
 
   export type TrainingBlockSubjectOrderByWithAggregationInput = {
     id?: SortOrder
@@ -455980,11 +455979,6 @@ export namespace Prisma {
     fields: TrainingBlockSubjectOrderByRelevanceFieldEnum | TrainingBlockSubjectOrderByRelevanceFieldEnum[]
     sort: SortOrder
     search: string
-  }
-
-  export type TrainingBlockSubjectSubjectIdTrainingBlockOnCurriculumVersionIdCompoundUniqueInput = {
-    subjectId: string
-    trainingBlockOnCurriculumVersionId: string
   }
 
   export type TrainingBlockSubjectCountOrderByAggregateInput = {

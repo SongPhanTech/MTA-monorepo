@@ -10898,9 +10898,6 @@ const metadata: ModelMeta = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                }, subjectId_trainingBlockOnCurriculumVersionId: {
-                    name: "subjectId_trainingBlockOnCurriculumVersionId",
-                    fields: ["subjectId", "trainingBlockOnCurriculumVersionId"]
                 },
             },
         },
