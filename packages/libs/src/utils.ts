@@ -442,30 +442,28 @@ export const calcFinalScore = (
     }
 
     // 3.5 Check exam score
-    if (
-        subjectScore.examScore < coef.scoreToTakeExam ||
-        subjectScore.examScore < coef.scoreToPass
-    ) {
+    if (subjectScore.examScore < coef.examScoreToPass) {
         return new Decimal(subjectScore.examScore).toDecimalPlaces(1)
     }
 
-    const examScore =
-        subjectClassType === SubjectClassType.REEXAM
-            ? subjectScore.examScore - coef.reduceReExamScore
-            : subjectScore.examScore
-
     // 4. Calculate final score
-    const finalScore =
-        examScore < coef.examScoreToPass
-            ? examScore
-            : Math.min(
-                  new Decimal(subjectScore.attendanceScore)
-                      .mul(coef.coef_1)
-                      .add(new Decimal(subjectScore.midtermScore).mul(coef.coef_2))
-                      .add(new Decimal(examScore).mul(coef.coef_3))
-                      .toNumber(),
-                  10
-              )
+    let finalScore = Math.min(
+        new Decimal(subjectScore.attendanceScore)
+            .mul(coef.coef_1)
+            .add(new Decimal(subjectScore.midtermScore).mul(coef.coef_2))
+            .add(new Decimal(subjectScore.examScore).mul(coef.coef_3))
+            .toNumber(),
+        10
+    )
+
+    // 4.5 Check reexam score
+    if (subjectClassType === SubjectClassType.REEXAM) {
+        if (finalScore <= coef.scoreToPass + coef.reduceReExamScore) {
+            finalScore = coef.scoreToPass
+        } else {
+            finalScore = Math.min(finalScore - coef.reduceReExamScore, coef.maxReExamScore)
+        }
+    }
 
     if (maxCertFinalScore === null && finalScore < coef.scoreToPass) {
         return new Decimal(finalScore).toDecimalPlaces(1)
