@@ -491,7 +491,7 @@ export default function NhapDiem({
                           midtermScore: item.midtermScore,
                           examScore: item.examScore,
                       }
-                    : score === 'CC/TX'
+                    : score === 'TX/ĐK'
                       ? {
                             attendanceScore: item.attendanceScore,
                             midtermScore: item.midtermScore,
@@ -648,7 +648,7 @@ export default function NhapDiem({
     }
 
     const disabledForm: boolean = useMemo(() => {
-        if (score === 'CC/TX') {
+        if (score === 'TX/ĐK') {
             return !(
                 can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CC_TX, 'NHAP_DIEM') &&
                 dataDetailSubjectClass?.scoreDeadLineStart &&
@@ -799,7 +799,7 @@ export default function NhapDiem({
     return (
         <Row gutter={[8, 8]}>
             <Col span={8}>
-                {score === 'CC/TX' && (
+                {score === 'TX/ĐK' && (
                     <Tag color={enteredScore ? 'green' : 'yellow'}>
                         {enteredScore ? 'Đã hoàn thiện' : 'Chưa hoàn thiện'}
                     </Tag>
@@ -862,7 +862,7 @@ export default function NhapDiem({
                             type={score}
                         />
                     )}
-                    {score !== 'CC/TX' &&
+                    {score !== 'TX/ĐK' &&
                         (can(
                             QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC_P13,
                             'IN_DS_THI'
@@ -907,7 +907,7 @@ export default function NhapDiem({
                                 Danh sách thi
                             </Button>
                         )}
-                    {score !== 'CC/TX' &&
+                    {score !== 'TX/ĐK' &&
                         (can(
                             QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC_P13,
                             'IN_PHIEU_DIEM'
@@ -1270,7 +1270,7 @@ export default function NhapDiem({
                                         !subjectClass?.subject?.onePoint
                                     if (
                                         role !== 'GV' ||
-                                        score === 'CC/TX' ||
+                                        score === 'TX/ĐK' ||
                                         !!examBanned ||
                                         isMissingScore
                                     ) {
@@ -1518,7 +1518,7 @@ export default function NhapDiem({
                                                     (dataDetailSubjectClass?.examType ===
                                                         'OfflineWritten' &&
                                                         role !== 'P13') ||
-                                                    score === 'CC/TX' ||
+                                                    score === 'TX/ĐK' ||
                                                     disabledForm
                                                 }
                                                 onChange={(e) => {

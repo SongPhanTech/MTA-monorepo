@@ -2781,7 +2781,7 @@ model StudentSubjectScoreHistory {
   createdBy             String?             @default("") @db.Uuid()
   studentSubjectScore   StudentSubjectScore @relation(fields: [studentSubjectScoreId], references: [id])
   studentSubjectScoreId String
-  /// điểm chuyên cần
+  /// điểm thường xuyên
   /// @gte(0, 'Điểm tối thiểu là 0')
   /// @lte(10, 'Điểm tối đa là 10')
   attendanceScore       Float?
@@ -3657,16 +3657,16 @@ model SubjectClass {
   examType                    ExamType?
   exam                        Exam?                    @relation(fields: [examId], references: [id])
   examId                      String?
-  /// ngày bắt đầu nhập điểm CC/TX
+  /// ngày bắt đầu nhập điểm TX/ĐK
   scoreDeadLineStart          DateTime?
-  /// ngày kết thúc nhập điểm CC/TX
+  /// ngày kết thúc nhập điểm TX/ĐK
   scoreDeadline               DateTime?
   /// hạn nhập điểm thi
   examScoreDeadline           DateTime?
   enteredScore                Boolean                  @default(false)
   enteredExamScore            Boolean                  @default(false)
   issuedScoreAt               DateTime?
-  /// khoá điểm CC/TX
+  /// khoá điểm TX/ĐK
   isLockScore                 Boolean                  @default(false)
   /// khoá điểm thi
   isLockExamScore             Boolean                  @default(false)

@@ -311,7 +311,7 @@ const ExportScoreTemplate = ({
 
         // Xuất file
         const buffer = await workbook.xlsx.writeBuffer()
-        const name = type === 'CC/TX' ? 'CC/TX' : 'THI'
+        const name = type === 'TX/ĐK' ? 'TX/ĐK' : 'THI'
         saveAs(new Blob([buffer]), `Mau_nhap_diem_${name}_${subjectClass?.code || 'unknown'}.xlsx`)
     }
 

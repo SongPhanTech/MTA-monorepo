@@ -22,9 +22,9 @@ import dayjs from 'dayjs'
 import TreeSelect from '@/components/commons/tree-select'
 import 'dayjs/locale/vi'
 import { subjectVersionTypeOptions } from '@workspace/libs/constants'
+import { BadgeHelpIcon } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { BadgeHelpIcon } from 'lucide-react'
 
 export type PutSubjectVersion = SubjectVersion & {
     documentFiles?: DocumentFile[]
@@ -576,7 +576,7 @@ const PutVersionSubjectModal = () => {
                     <FormItem
                         form={form}
                         name="credit"
-                        label={`Số tín chỉ ${isScored ? ' (Đã mở lớp - không được sửa)' : ''}`}
+                        label={`Số tín chỉ ${isScored ? ' (Đã đăng ký học - không được sửa)' : ''}`}
                         required
                     >
                         <InputNumber

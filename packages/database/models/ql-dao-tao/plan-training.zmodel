@@ -173,7 +173,7 @@ model StudentSubjectScore extends Base {
 model StudentSubjectScoreHistory extends Base {
   studentSubjectScore   StudentSubjectScore @relation(fields: [studentSubjectScoreId], references: [id])
   studentSubjectScoreId String
-  /// điểm chuyên cần
+  /// điểm thường xuyên
   attendanceScore       Float?              @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10')
   /// điểm giữa kỳ
   midtermScore          Float?              @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10')
@@ -956,9 +956,9 @@ model SubjectClass extends BaseNoCode {
   exam                        Exam?                    @relation(fields: [examId], references: [id])
   examId                      String?
 
-  /// ngày bắt đầu nhập điểm CC/TX
+  /// ngày bắt đầu nhập điểm TX/ĐK
   scoreDeadLineStart          DateTime? // default 20 ngày trước ngày thi
-  /// ngày kết thúc nhập điểm CC/TX
+  /// ngày kết thúc nhập điểm TX/ĐK
   scoreDeadline               DateTime? // default 10 ngày trước ngày thi
   /// hạn nhập điểm thi
   examScoreDeadline           DateTime? // : default 10 ngày sau ngày thi
@@ -970,7 +970,7 @@ model SubjectClass extends BaseNoCode {
   issuedScoreAt               DateTime? // ngày xuất phiếu điểm
 
   // khoá khi xuất phiếu điểm, lên DS thi. (P13 có thể mở khoá)
-  /// khoá điểm CC/TX
+  /// khoá điểm TX/ĐK
   isLockScore                 Boolean                  @default(false)
   // khoá khi xuất phiếu điểm. (P13 có thể mở khoá)
   /// khoá điểm thi

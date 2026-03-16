@@ -816,7 +816,7 @@ const PutTrainingCourseModal = () => {
                 </Col>
             </Row>
 
-            <Row gutter={16} className="px-6">
+            <Row gutter={[10, 10]} className="px-6">
                 <Col
                     span={24}
                     className="flex items-center justify-between text-base font-semibold mb-1 "
@@ -838,7 +838,7 @@ const PutTrainingCourseModal = () => {
                                     </span>
                                     <Tooltip
                                         placement="topLeft"
-                                        title="Sao chép tài liệu đính kèm, tham số bổ sung, bảng chuyển đổi điểm, xếp loại học tập, học bổng, cảnh cáo học tập, xử lý học tập từ khoá đã chọn sang khoá hiện tại"
+                                        title="Sao chép tài liệu đính kèm, tham số bổ sung, bảng chuyển đổi điểm, xếp loại học tập, học bổng, cảnh cáo học tập, xử lý học tập từ Khoá đã chọn sang Khoá hiện tại"
                                     >
                                         <BadgeHelpIcon size={16} style={{ margin: '0 0 -1px' }} />
                                     </Tooltip>
@@ -867,9 +867,9 @@ const PutTrainingCourseModal = () => {
                     </Col>
                 )}
                 <Col span={8}>
-                    <FormItem form={form} name="baseScore" label="Hệ số điểm" required>
+                    <FormItem form={form} name="baseScore" label="Hệ điểm" required>
                         <Select
-                            placeholder="Chọn đối tượng đào tạo"
+                            placeholder="Chọn hệ điểm"
                             options={[
                                 {
                                     label: 'Hệ 10',
@@ -895,7 +895,17 @@ const PutTrainingCourseModal = () => {
                     <FormItem
                         form={form}
                         name="scoreToTakeExam"
-                        label="Điểm tối thiểu được thi"
+                        label={
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                Điểm TX/ĐK tối thiểu
+                                <Tooltip
+                                    placement="topLeft"
+                                    title="Điểm thường xuyên, định kỳ tối thiểu để được thi kết thúc học phần. Thấp hơn điểm này sẽ bị cấm thi"
+                                >
+                                    <BadgeHelpIcon size={16} style={{ margin: '0 0 -1px' }} />
+                                </Tooltip>
+                            </div>
+                        }
                         required
                         rules={[
                             {
@@ -910,7 +920,7 @@ const PutTrainingCourseModal = () => {
                                     const numValue = Number.parseFloat(value)
                                     if (Number.isNaN(numValue) || numValue < 0) {
                                         return Promise.reject(
-                                            new Error('Điểm tối thiểu được thi phải lớn hơn 0')
+                                            new Error('Điểm tối thiểu phải lớn hơn 0')
                                         )
                                     }
 
@@ -931,45 +941,8 @@ const PutTrainingCourseModal = () => {
                 <Col span={8}>
                     <FormItem
                         form={form}
-                        name="scoreToPass"
-                        label="Điểm tối thiểu để qua"
-                        required
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Vui lòng nhập điểm tối thiểu để qua',
-                            },
-                            {
-                                validator: (_: any, value: any) => {
-                                    if (value === undefined || value === null) {
-                                        return Promise.resolve()
-                                    }
-                                    const numValue = Number.parseFloat(value)
-                                    if (Number.isNaN(numValue) || numValue < 0) {
-                                        return Promise.reject(
-                                            new Error('Điểm tối thiểu để qua phải lớn hơn 0')
-                                        )
-                                    }
-
-                                    return Promise.resolve()
-                                },
-                            },
-                        ]}
-                    >
-                        <InputNumber
-                            // min={0}
-                            type="number"
-                            placeholder="Nhập điểm tối thiểu để qua"
-                            className="w-full"
-                            readOnly={isScoreConfigLocked}
-                        />
-                    </FormItem>
-                </Col>
-                <Col span={8}>
-                    <FormItem
-                        form={form}
                         name="examScoreToPass"
-                        label="Điểm thi tối thiểu để qua"
+                        label="Điểm thi tối thiểu"
                         required
                         rules={[
                             {
@@ -1005,8 +978,45 @@ const PutTrainingCourseModal = () => {
                 <Col span={8}>
                     <FormItem
                         form={form}
+                        name="scoreToPass"
+                        label="Điểm học phần tối thiểu để qua môn"
+                        required
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Vui lòng nhập điểm tối thiểu để qua',
+                            },
+                            {
+                                validator: (_: any, value: any) => {
+                                    if (value === undefined || value === null) {
+                                        return Promise.resolve()
+                                    }
+                                    const numValue = Number.parseFloat(value)
+                                    if (Number.isNaN(numValue) || numValue < 0) {
+                                        return Promise.reject(
+                                            new Error('Điểm tối thiểu để qua phải lớn hơn 0')
+                                        )
+                                    }
+
+                                    return Promise.resolve()
+                                },
+                            },
+                        ]}
+                    >
+                        <InputNumber
+                            // min={0}
+                            type="number"
+                            placeholder="Nhập điểm tối thiểu để qua"
+                            className="w-full"
+                            readOnly={isScoreConfigLocked}
+                        />
+                    </FormItem>
+                </Col>
+                <Col span={8}>
+                    <FormItem
+                        form={form}
                         name="scoreToPassConditional"
-                        label="Điểm tối thiểu để qua môn điều kiện"
+                        label="Điểm HP tối thiểu để qua môn điều kiện"
                         rules={[
                             {
                                 required: true,
@@ -1040,7 +1050,7 @@ const PutTrainingCourseModal = () => {
                         />
                     </FormItem>
                 </Col>
-                <Col span={8}>
+                {/* <Col span={8}>
                     <FormItem
                         form={form}
                         name="scoreToTakeGraduation"
@@ -1075,12 +1085,12 @@ const PutTrainingCourseModal = () => {
                             readOnly={isScoreConfigLocked}
                         />
                     </FormItem>
-                </Col>
+                </Col> */}
                 <Col span={8}>
                     <FormItem
                         form={form}
                         name="scoreToPassGraduation"
-                        label="Điểm để qua môn tốt nghiệp"
+                        label="Điểm HP tối thiểu để qua môn tốt nghiệp"
                         rules={[
                             {
                                 required: true,
@@ -1191,7 +1201,11 @@ const PutTrainingCourseModal = () => {
                     </FormItem>
                 </Col>
                 <Col span={8}>
-                    <FormItem form={form} name="maxReExamScore" label="Điểm tối đa khi thi lại">
+                    <FormItem
+                        form={form}
+                        name="maxReExamScore"
+                        label="Điểm học phần tối đa khi thi lại"
+                    >
                         <InputNumber
                             min={0}
                             type="number"
@@ -1202,7 +1216,27 @@ const PutTrainingCourseModal = () => {
                     </FormItem>
                 </Col>
                 <Col span={8}>
-                    <FormItem form={form} name="reduceReExamScore" label="Trừ điểm khi thi lại">
+                    <FormItem
+                        form={form}
+                        name="reduceReExamScore"
+                        label={
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                Trừ điểm khi thi lại
+                                <Tooltip
+                                    placement="topLeft"
+                                    title={
+                                        <span>
+                                            Điểm học phần sẽ bị hạ [x] điểm.
+                                            <br />
+                                            Cận dưới=Điểm học phần tối thiểu để qua môn
+                                        </span>
+                                    }
+                                >
+                                    <BadgeHelpIcon size={16} style={{ margin: '0 0 -1px' }} />
+                                </Tooltip>
+                            </div>
+                        }
+                    >
                         <InputNumber
                             min={0}
                             type="number"
@@ -1216,7 +1250,17 @@ const PutTrainingCourseModal = () => {
                     <FormItem
                         form={form}
                         name="scoreToRetain"
-                        label="Điểm giữ lại khi lưu ban"
+                        label={
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                Điểm giữ lại khi lưu ban
+                                <Tooltip
+                                    placement="topLeft"
+                                    title="Những học phần mà năm học trước đã đạt điểm [x] trở lên sẽ được bảo lưu"
+                                >
+                                    <BadgeHelpIcon size={16} style={{ margin: '0 0 -1px' }} />
+                                </Tooltip>
+                            </div>
+                        }
                         rules={[
                             {
                                 required: true,

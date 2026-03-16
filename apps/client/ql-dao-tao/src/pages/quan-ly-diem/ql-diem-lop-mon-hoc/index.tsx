@@ -16,7 +16,7 @@ import DanhSachLopMonHoc from '@/components/sub-pages/danh-sach-lop-mon-hoc'
 
 export type DiemLopMonHocProps = {
     role?: 'GV' | 'P2/P7' | 'P13'
-    score?: 'CC/TX' | 'THI'
+    score?: 'TX/ĐK' | 'THI'
     setActiveKey?: (key: string) => void
 }
 type SubmitFormType = {
@@ -34,7 +34,7 @@ export const diemLopMonHocStore = new Store<DiemLopMonHocStoreState>({
 
 export default function QuanLyDiemLopMonHoc({
     role = 'P2/P7',
-    score = 'CC/TX',
+    score = 'TX/ĐK',
 }: DiemLopMonHocProps) {
     const [form] = Form.useForm<SubmitFormType>()
     const [activeKey, setActiveKey] = useState('1')
@@ -185,14 +185,14 @@ export default function QuanLyDiemLopMonHoc({
         ]
 
         if (role === 'GV') {
-            if (score === 'CC/TX') {
+            if (score === 'TX/ĐK') {
                 baseMenu = [
                     ...baseMenu,
                     {
                         label: 'Nhập điểm quá trình',
                         key: '2',
                         children: (
-                            <NhapDiem role={role} loadData={activeKey !== '1'} score={'CC/TX'} />
+                            <NhapDiem role={role} loadData={activeKey !== '1'} score={'TX/ĐK'} />
                         ),
                         disabled: !data,
                     },
@@ -227,7 +227,7 @@ export default function QuanLyDiemLopMonHoc({
     }, [data, role, score, activeKey])
 
     const reasonDate = useCallback(() => {
-        if (score === 'CC/TX' && (data?.scoreDeadLineStart || data?.scoreDeadline)) {
+        if (score === 'TX/ĐK' && (data?.scoreDeadLineStart || data?.scoreDeadline)) {
             if (dayjs()?.isAfter(data?.scoreDeadline)) {
                 return (
                     <Input

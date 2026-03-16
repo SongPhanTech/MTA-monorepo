@@ -205648,7 +205648,7 @@ export namespace Prisma {
             createdBy: string | null
             studentSubjectScoreId: string
             /**
-             * điểm chuyên cần
+             * điểm thường xuyên
              * @gte(0, 'Điểm tối thiểu là 0')
              * @lte(10, 'Điểm tối đa là 10')
              */
@@ -228234,11 +228234,11 @@ export namespace Prisma {
             examType: $Enums.ExamType | null
             examId: string | null
             /**
-             * ngày bắt đầu nhập điểm CC/TX
+             * ngày bắt đầu nhập điểm TX/ĐK
              */
             scoreDeadLineStart: Date | null
             /**
-             * ngày kết thúc nhập điểm CC/TX
+             * ngày kết thúc nhập điểm TX/ĐK
              */
             scoreDeadline: Date | null
             /**
@@ -228249,7 +228249,7 @@ export namespace Prisma {
             enteredExamScore: boolean
             issuedScoreAt: Date | null
             /**
-             * khoá điểm CC/TX
+             * khoá điểm TX/ĐK
              */
             isLockScore: boolean
             /**
