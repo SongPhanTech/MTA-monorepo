@@ -435,8 +435,7 @@ export const calcFinalScore = (
     // 3. Check if not enough to take exam
     if (
         subjectScore.attendanceScore < coef.scoreToTakeExam ||
-        subjectScore.midtermScore < coef.scoreToTakeExam ||
-        subjectScore.examScore < coef.scoreToTakeExam
+        subjectScore.midtermScore < coef.scoreToTakeExam
     ) {
         return new Decimal(0)
     }

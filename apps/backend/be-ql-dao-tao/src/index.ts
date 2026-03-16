@@ -146,7 +146,7 @@ app.onError((err, c) => {
 showRoutes(app, { verbose: true })
 
 export default {
-    timeout: 30,
+    timeout: 60,
     fetch: app.fetch,
     hostname: '0.0.0.0',
     port: process.env.PORT || 3000,
