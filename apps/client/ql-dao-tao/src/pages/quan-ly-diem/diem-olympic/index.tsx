@@ -288,14 +288,19 @@ export default function ArchivedAward() {
                                     >
                                         Từ chối
                                     </Button>
-                                    <Button
-                                        className="ml-3"
-                                        onClick={handleOpenAprove}
-                                        disabled={!selectedRowKeys.length}
-                                        type="primary"
-                                    >
-                                        Phê duyệt
-                                    </Button>
+                                    {can(
+                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_OLYMPIC,
+                                        'DUYET'
+                                    ) && (
+                                        <Button
+                                            className="ml-3"
+                                            onClick={handleOpenAprove}
+                                            disabled={!selectedRowKeys.length}
+                                            type="primary"
+                                        >
+                                            Phê duyệt
+                                        </Button>
+                                    )}
                                 </>
                             )}
                             {can(
