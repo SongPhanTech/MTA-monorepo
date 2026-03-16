@@ -11,7 +11,7 @@ import type { ExamList, Prisma, SubjectClass } from '@workspace/db/client'
 import { useCountExam, useFindManyExam } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Checkbox, Col, Flex, Input, Row } from 'antd'
+import { Checkbox, Col, Flex, Input, Row,Tag } from 'antd'
 import _ from 'lodash'
 import { useCallback, useMemo, useState } from 'react'
 
@@ -20,7 +20,22 @@ export default function KyThi({ setActiveKey }: { setActiveKey: (key: string) =>
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const { options: examTypeOptions, getExamTypeLabel } = useExamTypeOptions()
-
+    const examTypeColor: Record<string, string> = {
+        OfflineWritten: '#1677ff',
+        OnlineWritten: '#722ed1',
+        Oral: '#fa8c16',
+        Practice: '#52c41a',
+        Project: '#13c2c2',
+        Other: '#8c8c8c',
+    }
+    const examTypeLabel: Record<string, string> = {
+        OfflineWritten: 'Thi viết',
+        OnlineWritten: 'Thi viết online',
+        Oral: 'Vấn đáp',
+        Practice: 'Thực hành',
+        Project: 'Đồ án',
+        Other: 'Khác',
+    }
     const { id: semesterId } = useSemesterStore()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const [filters, setFilters] = useState<FilterProps>({
@@ -173,8 +188,25 @@ export default function KyThi({ setActiveKey }: { setActiveKey: (key: string) =>
                                 type: 'input',
                                 align: 'center',
                                 render: (_, record) => {
+                                    const examType = record?.subjectClass?.[0]?.examType
+                                    if (!examType) return ''
+
+                                    const color = examTypeColor[examType] || '#999'
+                                    const label = examTypeLabel[examType] || examType
+
                                     return (
-                                        getExamTypeLabel(record?.subjectClass?.[0]?.examType) || ''
+                                        <Tag
+                                            style={{
+                                                color,
+                                                borderColor: color,
+                                                background: 'transparent',
+                                                borderRadius: 12,
+                                                padding: '0 10px',
+                                                fontWeight: 500,
+                                            }}
+                                        >
+                                            {label}
+                                        </Tag>
                                     )
                                 },
                             },
