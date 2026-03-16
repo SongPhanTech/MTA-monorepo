@@ -1447,7 +1447,9 @@ export default function NhapDiem({
                                             valuePropName="checked"
                                         >
                                             <Checkbox
-                                                disabled={score === 'THI' || disabledForm}
+                                                disabled={
+                                                    role === 'GV' || score === 'THI' || disabledForm
+                                                }
                                                 onChange={(e) => {
                                                     if (!e.target.checked) {
                                                         form.setFieldValue(
