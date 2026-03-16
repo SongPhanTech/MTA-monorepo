@@ -1,7 +1,7 @@
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import TextTruncate from '@components/commons/text-truncate'
-import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { DEFAULT_PAGINATE_SIZE,EXAMTYPECOLOR } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useExamTypeOptions } from '@hooks/examType'
 import { cn, formatDate } from '@lib/utils'
@@ -11,7 +11,7 @@ import type { ExamList, Prisma, SubjectClass } from '@workspace/db/client'
 import { useCountExam, useFindManyExam } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Checkbox, Col, Flex, Input, Row,Tag } from 'antd'
+import { Checkbox, Col, Flex, Input, Row, Tag } from 'antd'
 import _ from 'lodash'
 import { useCallback, useMemo, useState } from 'react'
 
@@ -20,22 +20,6 @@ export default function KyThi({ setActiveKey }: { setActiveKey: (key: string) =>
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const { options: examTypeOptions, getExamTypeLabel } = useExamTypeOptions()
-    const examTypeColor: Record<string, string> = {
-        OfflineWritten: '#1677ff',
-        OnlineWritten: '#722ed1',
-        Oral: '#fa8c16',
-        Practice: '#52c41a',
-        Project: '#13c2c2',
-        Other: '#8c8c8c',
-    }
-    const examTypeLabel: Record<string, string> = {
-        OfflineWritten: 'Thi viết',
-        OnlineWritten: 'Thi viết online',
-        Oral: 'Vấn đáp',
-        Practice: 'Thực hành',
-        Project: 'Đồ án',
-        Other: 'Khác',
-    }
     const { id: semesterId } = useSemesterStore()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const [filters, setFilters] = useState<FilterProps>({
@@ -190,9 +174,12 @@ export default function KyThi({ setActiveKey }: { setActiveKey: (key: string) =>
                                 render: (_, record) => {
                                     const examType = record?.subjectClass?.[0]?.examType
                                     if (!examType) return ''
+                                    const color =
+                                        EXAMTYPECOLOR[
+                                            examType as keyof typeof EXAMTYPECOLOR
+                                        ]
 
-                                    const color = examTypeColor[examType] || '#999'
-                                    const label = examTypeLabel[examType] || examType
+                                    const label = getExamTypeLabel(examType)
 
                                     return (
                                         <Tag

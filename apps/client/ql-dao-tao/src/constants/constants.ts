@@ -177,6 +177,15 @@ const SCORE_LINK_STATUS = {
     REJECTED: 'Không được duyệt',
 }
 
+const EXAMTYPECOLOR: Record<$Enums.ExamType, string> = {
+    [$Enums.ExamType.OfflineWritten]: '#1677ff',
+    [$Enums.ExamType.OnlineWritten]: '#722ed1',
+    [$Enums.ExamType.Oral]: '#fa8c16',
+    [$Enums.ExamType.Practice]: '#52c41a',
+    [$Enums.ExamType.Project]: '#13c2c2',
+    [$Enums.ExamType.Other]: '#8c8c8c',
+}
+
 export {
     DEFAULT_PAGINATE_SIZE,
     MAX_INPUT_LENGTH,
@@ -195,6 +204,7 @@ export {
     TRAINING_OBJECT_TYPE,
     SCORE_CONVERT_STATUS,
     SCORE_LINK_STATUS,
+    EXAMTYPECOLOR,
 }
 
 export const examBanReason = [
