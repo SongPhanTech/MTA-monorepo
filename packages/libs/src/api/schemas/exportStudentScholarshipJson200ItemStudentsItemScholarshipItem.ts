@@ -22,7 +22,7 @@ export type ExportStudentScholarshipJson200ItemStudentsItemScholarshipItem = {
     createdBy?: string | null
     name: string
     rankOrder: number
-    baseAmount: unknown
+    baseAmount?: unknown
     multiplier?: number
     /** @nullable */
     effectiveFrom?: string | null

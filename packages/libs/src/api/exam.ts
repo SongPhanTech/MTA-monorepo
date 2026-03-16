@@ -25,6 +25,9 @@ import type {
     AutomaticTopicGeneration400,
     AutomaticTopicGeneration404,
     AutomaticTopicGenerationBody,
+    CalcEvidenceTags,
+    CalcEvidenceTags200,
+    CalcEvidenceTags404,
     CreateClusterSurvey200,
     CreateClusterSurvey400,
     CreateClusterSurvey404,
@@ -4278,4 +4281,111 @@ export function useGetClusterSurveyInfoDepartment<
     query.queryKey = queryOptions.queryKey
 
     return query
+}
+
+/**
+ * @summary Đánh tag minh chứng cho đợt đánh giá
+ */
+export type calcEvidenceTagsResponse200 = {
+    data: CalcEvidenceTags200
+    status: 200
+}
+
+export type calcEvidenceTagsResponse404 = {
+    data: CalcEvidenceTags404
+    status: 404
+}
+
+export type calcEvidenceTagsResponseSuccess = calcEvidenceTagsResponse200 & {
+    headers: Headers
+}
+export type calcEvidenceTagsResponseError = calcEvidenceTagsResponse404 & {
+    headers: Headers
+}
+
+export type calcEvidenceTagsResponse =
+    | calcEvidenceTagsResponseSuccess
+    | calcEvidenceTagsResponseError
+
+export const getCalcEvidenceTagsUrl = () => {
+    return `/api/evaluate/calc-evidence-tags`
+}
+
+export const calcEvidenceTags = async (
+    calcEvidenceTags: CalcEvidenceTags,
+    options?: RequestInit
+): Promise<calcEvidenceTagsResponse> => {
+    return customExamFetch<calcEvidenceTagsResponse>(getCalcEvidenceTagsUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(calcEvidenceTags),
+    })
+}
+
+export const getCalcEvidenceTagsMutationOptions = <
+    TError = CalcEvidenceTags404,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof calcEvidenceTags>>,
+        TError,
+        { data: CalcEvidenceTags },
+        TContext
+    >
+    request?: SecondParameter<typeof customExamFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof calcEvidenceTags>>,
+    TError,
+    { data: CalcEvidenceTags },
+    TContext
+> => {
+    const mutationKey = ['calcEvidenceTags']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof calcEvidenceTags>>,
+        { data: CalcEvidenceTags }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return calcEvidenceTags(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type CalcEvidenceTagsMutationResult = NonNullable<
+    Awaited<ReturnType<typeof calcEvidenceTags>>
+>
+export type CalcEvidenceTagsMutationBody = CalcEvidenceTags
+export type CalcEvidenceTagsMutationError = CalcEvidenceTags404
+
+/**
+ * @summary Đánh tag minh chứng cho đợt đánh giá
+ */
+export const useCalcEvidenceTags = <TError = CalcEvidenceTags404, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof calcEvidenceTags>>,
+            TError,
+            { data: CalcEvidenceTags },
+            TContext
+        >
+        request?: SecondParameter<typeof customExamFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof calcEvidenceTags>>,
+    TError,
+    { data: CalcEvidenceTags },
+    TContext
+> => {
+    const mutationOptions = getCalcEvidenceTagsMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
 }

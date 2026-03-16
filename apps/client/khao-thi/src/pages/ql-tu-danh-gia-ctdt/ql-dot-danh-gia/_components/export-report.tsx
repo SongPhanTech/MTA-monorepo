@@ -1,3 +1,4 @@
+import { calcEvidenceTags as calcEvidenceTagsApi } from '@workspace/libs/api/exam'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { message, Tooltip } from 'antd'
 import {
@@ -401,65 +402,6 @@ export default function ExportReport({ id }: { id: string }) {
         return doc.body.innerHTML
     }
 
-    const CalcevidenceTags = (dataMap: any) => {
-        const map = new Map<string, string>()
-        const result: any = []
-        // 1) Kiểm tra dataMap có phải array không
-        if (!Array.isArray(dataMap)) {
-            console.warn('❌ dataMap không phải array:', dataMap)
-            return map
-        }
-
-        for (const [o1, standard] of dataMap.entries()) {
-            const criteriaList = standard?.criteria
-            if (!Array.isArray(criteriaList)) {
-                console.warn('❌ standard.criteria không phải array:', criteriaList)
-                continue
-            }
-
-            for (const [o2, criteria] of criteriaList.entries()) {
-                const analysis = criteria?.analysisCriterions
-
-                // analysisCriterions có thể là object → không loop được
-                if (!analysis || typeof analysis !== 'object') {
-                    console.warn('❌ criteria.analysisCriterions không hợp lệ:', analysis)
-                    continue
-                }
-
-                const reqList = analysis.requirementCriterions
-
-                if (!Array.isArray(reqList)) {
-                    console.warn('❌ analysis.requirementCriterions không phải array:', reqList)
-                    continue
-                }
-
-                let evidenceCount = 0
-
-                for (const req of reqList) {
-                    const evidencesList = req?.evidences
-
-                    if (!Array.isArray(evidencesList)) {
-                        console.warn('❌ req.evidences không phải array:', evidencesList)
-                        continue
-                    }
-
-                    for (const evidences of evidencesList) {
-                        if (map.has(evidences.evidenceId)) continue
-
-                        evidenceCount++
-
-                        const tag = [o1 + 1, o2 + 1, evidenceCount]
-                            .map((t) => t.toString().padStart(2, '0'))
-                            .join('.')
-                        result.push({ ...evidences, tag })
-                        map.set(evidences.evidenceId, `[PM.${tag}]`)
-                    }
-                }
-            }
-        }
-
-        return { evidenceTags: map, result }
-    }
     const exportToWord = async () => {
         try {
             const res = await sqlTransaction([
@@ -521,7 +463,15 @@ export default function ExportReport({ id }: { id: string }) {
             if (res?.status === 200) {
                 const data: any = res?.data[0]
                 if (!data) return
-                const { evidenceTags, result }: any = CalcevidenceTags(data?.standards)
+                const calcRes = await calcEvidenceTagsApi({ id })
+                if (!calcRes?.status || calcRes.status !== 200) {
+                    message.error('Không thể tính tag minh chứng')
+                    return
+                }
+                const evidenceTags = new Map<string, string>(
+                    Object.entries(calcRes.data.evidenceTags)
+                )
+                const result = calcRes.data.result
 
                 // ==== Phần Ⅰ. KHÁI QUÁT ====
                 const overviewChildren: any[] = []

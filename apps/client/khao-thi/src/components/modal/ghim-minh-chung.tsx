@@ -3,6 +3,7 @@ import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
+import { useSession } from '@workspace/auth/react'
 import { useFindManyEvidence } from '@workspace/db/hooks'
 import type { ItemProps } from '@workspace/libs/utils'
 import { Col, Form, message } from 'antd'
@@ -25,6 +26,8 @@ const PinEvidenceToPeriod = () => {
     const { showSpinner, hideSpinner } = useSpinner()
     const [items, setItems] = useState<ItemProps>({ value: '', label: '' })
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
+    const { data: me } = useSession()
+    const idProfile = me?.sDM_NhanVienId
     async function onOk(output?: PutEvidenceType) {
         if (!output) return
         try {
@@ -50,6 +53,11 @@ const PinEvidenceToPeriod = () => {
                 some: {
                     requirementCriterion: {
                         analysisCriterion: {
+                            lecturer: {
+                                userProfile: {
+                                    id: idProfile,
+                                },
+                            },
                             criterionPeriod: {
                                 evaluationStandard: {
                                     periodId: selectedEvaluationPeriodId,
