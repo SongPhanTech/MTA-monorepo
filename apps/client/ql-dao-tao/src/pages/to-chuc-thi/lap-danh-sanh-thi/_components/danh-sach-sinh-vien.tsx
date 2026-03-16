@@ -703,7 +703,7 @@ export default function DanhSachSinhVien() {
                                     isCreatedExamCode ||
                                     !can(
                                         QL_DAO_TAO_PERMISSION.QL_DAO_TAO_TO_CHUC_THI_LAP_DANH_SANH_THI,
-                                        'SUA'
+                                        'DUYET'
                                     )
                                 }
                                 onClick={handleSaveExamDecision}
