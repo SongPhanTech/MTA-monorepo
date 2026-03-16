@@ -862,7 +862,7 @@ export default function NhapDiem({
                             type={score}
                         />
                     )}
-                    {score !== 'TX/ĐK' &&
+                    {score !== 'THI' &&
                         (can(
                             QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC_P13,
                             'IN_DS_THI'
@@ -872,7 +872,7 @@ export default function NhapDiem({
                                 'IN_DS_THI'
                             ) ||
                             can(
-                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_THI,
+                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CC_TX,
                                 'IN_DS_THI'
                             )) && (
                             // <ExportTemplateExam
