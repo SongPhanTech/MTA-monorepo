@@ -10,7 +10,7 @@ CREATE TABLE "ql-dao-tao"."SubjectClassAttendance" (
     "createdBy" UUID,
     "time" TIMESTAMP(3) NOT NULL,
     "subjectClassId" TEXT NOT NULL,
-    "profileId" TEXT,
+    "profileId" UUID,
 
     CONSTRAINT "SubjectClassAttendance_pkey" PRIMARY KEY ("id")
 );
