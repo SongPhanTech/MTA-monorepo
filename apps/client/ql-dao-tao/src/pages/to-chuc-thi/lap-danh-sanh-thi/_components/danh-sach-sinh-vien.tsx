@@ -731,7 +731,7 @@ export default function DanhSachSinhVien() {
                             </Checkbox>
                             <Button
                                 type="primary"
-                                disabled={examData?.lockExamSessions || isCreatedExamCode}
+                                disabled={examData?.lockExamSessions || isCreatedExamCode || !examData?.subjectClass.every((sc) => sc.isLockScore)}
                                 onClick={handlePhanPhongThi}
                             >
                                 3. Phân phòng thi
