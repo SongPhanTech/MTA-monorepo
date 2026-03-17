@@ -206,28 +206,30 @@ export default function StudentGradeSystem() {
         },
     })
     const treeData = buildOrgTree(dm_DonVi)
+
+    const where = {
+        active: true,
+        fixedClass: {
+            ...(fixedClassIds?.length > 0 && {
+                id: {
+                    in: fixedClassIds,
+                },
+            }),
+            ...(trainingCourseIds?.length > 0 && {
+                trainingCourseId: {
+                    in: trainingCourseIds,
+                },
+            }),
+            ...(managementOrganizationIds?.length > 0 && {
+                managementOrganizationId: {
+                    in: managementOrganizationIds,
+                },
+            }),
+        },
+    }
     const { data: count } = useCountStudent(
         {
-            where: {
-                active: true,
-                fixedClass: {
-                    ...(fixedClassIds?.length > 0 && {
-                        id: {
-                            in: fixedClassIds,
-                        },
-                    }),
-                    ...(trainingCourseIds?.length > 0 && {
-                        trainingCourseId: {
-                            in: trainingCourseIds,
-                        },
-                    }),
-                    ...(managementOrganizationIds?.length > 0 && {
-                        managementOrganizationId: {
-                            in: managementOrganizationIds,
-                        },
-                    }),
-                },
-            },
+            where: { ...where },
         },
         {
             enabled: viewResult,
@@ -235,31 +237,11 @@ export default function StudentGradeSystem() {
     )
     const {
         data: students,
-        refetch: getStudents,
         isLoading: isLoadingStudents,
         isFetching: isFetchingStudents,
     } = useFindManyStudent(
         {
-            where: {
-                active: true,
-                fixedClass: {
-                    ...(fixedClassIds?.length > 0 && {
-                        id: {
-                            in: fixedClassIds,
-                        },
-                    }),
-                    ...(trainingCourseIds?.length > 0 && {
-                        trainingCourseId: {
-                            in: trainingCourseIds,
-                        },
-                    }),
-                    ...(managementOrganizationIds?.length > 0 && {
-                        managementOrganizationId: {
-                            in: managementOrganizationIds,
-                        },
-                    }),
-                },
-            },
+            where: { ...where },
             take: pageSize,
             skip: (page - 1) * pageSize,
             include: {
