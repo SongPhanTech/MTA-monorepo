@@ -1087,7 +1087,12 @@ export default function NhapDiem({
                         filters={filterTable}
                         setFilters={setFilterTable}
                         onRow={(record) => ({
-                            className: cn(!!listForm?.[record.id]?.isChanged && 'bg-yellow-100'),
+                            className: cn(
+                                !!listForm?.[record.id]?.isChanged && 'bg-yellow-100',
+                                listForm?.[record.id]?.examBanned ||
+                                listForm?.[record.id]?.examPostponed ||
+                                listForm?.[record.id]?.suspended ? '!bg-red-200' : '',
+                            )
                         })}
                         scrollable
                         maxHeight={'calc(100vh - 460px)'}
@@ -1198,6 +1203,7 @@ export default function NhapDiem({
                                                         dataTable
                                                     )
                                                 }
+                                                className='bg-transparent'
                                             />
                                         </Form.Item>
                                     )
@@ -1231,7 +1237,6 @@ export default function NhapDiem({
                                                         ),
                                                 },
                                             ]}
-                                        
                                         >
                                             <InputNumber
                                                 readOnly={readOnly}
@@ -1250,7 +1255,7 @@ export default function NhapDiem({
                                                         dataTable
                                                     )
                                                 }
-                                                
+                                                className='bg-transparent'
                                             />
                                         </Form.Item>
                                     )
@@ -1419,6 +1424,7 @@ export default function NhapDiem({
                                                     readOnly
                                                     autoSize
                                                     variant="underlined"
+                                                    className='bg-transparent'
                                                 />
                                             ) : (
                                                 <AutoComplete
@@ -1434,6 +1440,7 @@ export default function NhapDiem({
                                                         readOnly
                                                         autoSize
                                                         variant="underlined"
+                                                        className='bg-transparent'
                                                     />
                                                 </AutoComplete>
                                             )}
@@ -1486,6 +1493,7 @@ export default function NhapDiem({
                                                     readOnly
                                                     autoSize
                                                     variant="underlined"
+                                                    className='bg-transparent'
                                                 />
                                             ) : (
                                                 <AutoComplete
@@ -1501,6 +1509,7 @@ export default function NhapDiem({
                                                         readOnly
                                                         autoSize
                                                         variant="underlined"
+                                                        className='bg-transparent'
                                                     />
                                                 </AutoComplete>
                                             )}
@@ -1559,6 +1568,7 @@ export default function NhapDiem({
                                                     readOnly
                                                     autoSize
                                                     variant="underlined"
+                                                    className='bg-transparent'
                                                 />
                                             ) : (
                                                 <AutoComplete
@@ -1576,6 +1586,7 @@ export default function NhapDiem({
                                                         readOnly
                                                         autoSize
                                                         variant="underlined"
+                                                        className='bg-transparent'
                                                     />
                                                 </AutoComplete>
                                             )}
