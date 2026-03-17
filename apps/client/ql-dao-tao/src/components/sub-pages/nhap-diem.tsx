@@ -1237,7 +1237,6 @@ export default function NhapDiem({
                                                         ),
                                                 },
                                             ]}
-                                        
                                         >
                                             <InputNumber
                                                 readOnly={readOnly}
