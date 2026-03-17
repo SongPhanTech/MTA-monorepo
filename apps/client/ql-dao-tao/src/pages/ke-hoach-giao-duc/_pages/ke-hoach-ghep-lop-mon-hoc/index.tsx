@@ -334,11 +334,15 @@ export default function KeHoachGhepLopMonHoc() {
                         },
                     },
                 },
-                managementOrganization: {
+                 subject: {
                     select: {
-                        sMa: true,
-                    },
-                },
+                     managementOrganization: {
+                            select: {
+                                 sMa: true,
+                        },
+            }
+            },
+        }
             },
         },
         {
@@ -780,8 +784,7 @@ export default function KeHoachGhepLopMonHoc() {
                                             title: 'Đơn vị phụ trách',
                                             width: 150,
                                             align: 'center',
-                                            render: (_, record) =>
-                                                record?.managementOrganization?.sMa || '',
+                                           render: (_, record) => record?.subject?.managementOrganization?.sMa || '',
                                         },
                                     ]}
                                     pagination={{

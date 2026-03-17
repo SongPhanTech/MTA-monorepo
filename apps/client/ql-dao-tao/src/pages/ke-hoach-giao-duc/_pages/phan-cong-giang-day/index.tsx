@@ -213,8 +213,10 @@ export default function PhanCongGiangDay({
                 subject: {
                     ...(filters.organization && filters.organization.length > 0
                         ? {
-                              managementOrganizationId: {
-                                  in: filters.organization,
+                              subject: {
+                                  managementOrganizationId: {
+                                      in: filters.organization,
+                                  },
                               },
                           }
                         : {}),
@@ -317,60 +319,68 @@ export default function PhanCongGiangDay({
     const { data: dmDonViData = [], refetch } = useFindManyDM_DonVi(
         {
             include: {
-                subjectVersions: {
-                    select: {
-                        subjectClass: {
-                            where,
+                subjects: {
+                    include: {
+                        subjectVersion: {
                             include: {
-                                semester: true,
-                                mainLecturer: { include: { userProfile: true } },
-                                subject: { include: { managementOrganization: true } },
-                                extraLecturer: { include: { userProfile: true } },
-                                enterGradeLecturer: { include: { userProfile: true } },
-                                room: true,
-                                trainingLocation: true,
-                                subjectClassStudent: true,
-                                subjectClassTimes: true,
-                                fixedClasses: {
-                                    select: {
-                                        code: true,
-                                        _count: {
+                                subjectClass: {
+                                    where,
+                                    include: {
+                                        semester: true,
+                                        mainLecturer: { include: { userProfile: true } },
+                                        subject: {
+                                            include: {
+                                                subject: { include: { managementOrganization: true } },
+                                            },
+                                        },
+                                        extraLecturer: { include: { userProfile: true } },
+                                        enterGradeLecturer: { include: { userProfile: true } },
+                                        room: true,
+                                        trainingLocation: true,
+                                        subjectClassStudent: true,
+                                        subjectClassTimes: true,
+                                        fixedClasses: {
                                             select: {
-                                                students: {
-                                                    where: {
-                                                        deletedAt: null,
-                                                        active: true,
-                                                        status: 'ENROLLED',
+                                                code: true,
+                                                _count: {
+                                                    select: {
+                                                        students: {
+                                                            where: {
+                                                                deletedAt: null,
+                                                                active: true,
+                                                                status: 'ENROLLED',
+                                                            },
+                                                        },
                                                     },
                                                 },
                                             },
                                         },
                                     },
+                                    orderBy: [
+                                        ...emptyObjectIf(
+                                            [
+                                                {
+                                                    maxStudent: filters.maxStudent,
+                                                },
+                                            ],
+                                            !!filters.maxStudent
+                                        ),
+                                        ...emptyObjectIf(
+                                            [
+                                                {
+                                                    subjectClassStudent: {
+                                                        _count: filters.subjectClassStudent,
+                                                    },
+                                                },
+                                            ],
+                                            !!filters.subjectClassStudent
+                                        ),
+                                        {
+                                            code: 'asc',
+                                        },
+                                    ],
                                 },
                             },
-                            orderBy: [
-                                ...emptyObjectIf(
-                                    [
-                                        {
-                                            maxStudent: filters.maxStudent,
-                                        },
-                                    ],
-                                    !!filters.maxStudent
-                                ),
-                                ...emptyObjectIf(
-                                    [
-                                        {
-                                            subjectClassStudent: {
-                                                _count: filters.subjectClassStudent,
-                                            },
-                                        },
-                                    ],
-                                    !!filters.subjectClassStudent
-                                ),
-                                {
-                                    code: 'asc',
-                                },
-                            ],
                         },
                     },
                 },
@@ -380,11 +390,15 @@ export default function PhanCongGiangDay({
             orderBy: [{ iSTT: 'asc' }, { sTen: 'asc' }],
             where: {
                 bActive: true,
-                subjectVersions: {
+                subjects: {
                     some: {
-                        subjectClass: {
+                        subjectVersion: {
                             some: {
-                                ...where,
+                                subjectClass: {
+                                    some: {
+                                        ...where,
+                                    },
+                                },
                             },
                         },
                     },
@@ -448,11 +462,15 @@ export default function PhanCongGiangDay({
     const { data: count } = useCountDM_DonVi({
         where: {
             bActive: true,
-            subjectVersions: {
+            subjects: {
                 some: {
-                    subjectClass: {
+                    subjectVersion: {
                         some: {
-                            ...where,
+                            subjectClass: {
+                                some: {
+                                    ...where,
+                                },
+                            },
                         },
                     },
                 },
@@ -700,10 +718,12 @@ export default function PhanCongGiangDay({
         if (dmDonViData) {
             const countSubjectClassBySubjectId: Record<string, number> = {}
             dmDonViData.forEach((dmDonVi) => {
-                dmDonVi.subjectVersions.forEach((sv) => {
-                    sv.subjectClass.forEach((subjectClass) => {
-                        countSubjectClassBySubjectId[subjectClass.subjectId] =
-                            (countSubjectClassBySubjectId[subjectClass.subjectId] || 0) + 1
+                dmDonVi.subjects.forEach((subject) => {
+                    subject.subjectVersion.forEach((sv) => {
+                        sv.subjectClass.forEach((subjectClass) => {
+                            countSubjectClassBySubjectId[subjectClass.subjectId] =
+                                (countSubjectClassBySubjectId[subjectClass.subjectId] || 0) + 1
+                        })
                     })
                 })
             })
@@ -711,15 +731,17 @@ export default function PhanCongGiangDay({
             const mapWithCount = dmDonViData.map((dmDonVi) => ({
                 ...dmDonVi,
                 id: dmDonVi.Id,
-                children: dmDonVi.subjectVersions.flatMap((sv) =>
-                    sv.subjectClass.map((subjectClass) => {
-                        const cloneCount = countSubjectClassBySubjectId[subjectClass.subjectId]
-                        countSubjectClassBySubjectId[subjectClass.subjectId] = 0
-                        return {
-                            ...subjectClass,
-                            rowSpan: cloneCount,
-                        }
-                    })
+                children: dmDonVi.subjects.flatMap((subject) =>
+                    subject.subjectVersion.flatMap((sv) =>
+                        sv.subjectClass.map((subjectClass) => {
+                            const cloneCount = countSubjectClassBySubjectId[subjectClass.subjectId]
+                            countSubjectClassBySubjectId[subjectClass.subjectId] = 0
+                            return {
+                                ...subjectClass,
+                                rowSpan: cloneCount,
+                            }
+                        })
+                    )
                 ),
             }))
             return mapWithCount
@@ -1213,14 +1235,18 @@ export default function PhanCongGiangDay({
                                                                             name: true,
                                                                             credit: true,
                                                                             period: true,
-                                                                            managementOrganization:
-                                                                                {
-                                                                                    select: {
-                                                                                        sTen: true,
-                                                                                        sMa: true,
-                                                                                        sParentId: true,
-                                                                                    },
+                                                                            subject: {
+                                                                                select: {
+                                                                                    managementOrganization:
+                                                                                        {
+                                                                                            select: {
+                                                                                                sTen: true,
+                                                                                                sMa: true,
+                                                                                                sParentId: true,
+                                                                                            },
+                                                                                        },
                                                                                 },
+                                                                            },
                                                                         },
                                                                     },
                                                                     extraLecturer: {
@@ -1308,10 +1334,12 @@ export default function PhanCongGiangDay({
                                                             name: string
                                                             credit: number
                                                             period: number
-                                                            managementOrganization: {
-                                                                sTen: string
-                                                                sMa: string
-                                                                sParentId: any
+                                                            subject: {
+                                                                managementOrganization: {
+                                                                    sTen: string
+                                                                    sMa: string
+                                                                    sParentId: any
+                                                                }
                                                             }
                                                         }
                                                         submitLecturerAssignmentAt: Date | null
@@ -1385,7 +1413,7 @@ export default function PhanCongGiangDay({
                                                     const groupedPayload = Object.groupBy(
                                                         payload,
                                                         (item) =>
-                                                            item?.subject?.managementOrganization
+                                                            item?.subject?.subject?.managementOrganization
                                                                 ?.sMa || 'MTA'
                                                     )
                                                     exportFromTemplate({
@@ -2175,8 +2203,7 @@ export default function PhanCongGiangDay({
                                     // type: 'tree_select',
                                     // options: treeData,
                                     // dataIndex: 'managementOrganizationId',
-                                    render: (_, record) =>
-                                        record.subject?.managementOrganization?.sMa || '',
+                                    render: (_, record) => record?.subject?.subject?.managementOrganization?.sMa || '',
                                 },
                                 // {
                                 //     title: 'Điểm bằng nhau',
