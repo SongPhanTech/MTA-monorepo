@@ -1,95 +1,375 @@
 import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
+import TableCollapse from '@components/commons/tableCollapse'
+import { ExportDiplomaAppendix } from '@components/ui/export-button'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
+import type { Semester, Student } from '@workspace/db'
+import type {
+    FixedClass,
+    ScoreConvert,
+    StudentSubjectScore,
+    SubjectClass,
+    SubjectVersion,
+    TrainingCourse,
+    UserProfile,
+} from '@workspace/db/client'
 import {
+    useCountStudent,
     useFindManyDM_DonVi,
     useFindManyFixedClass,
+    useFindManyStudent,
     useFindManyThesisSession,
     useFindManyTrainingCourse,
+    useFindManyTrainingObjectType,
 } from '@workspace/db/hooks'
 import { whereOrganization } from '@workspace/libs/constants'
 import { fuzzyMatch } from '@workspace/libs/utils'
-import { useFindManyTrainingObjectTypePermission } from '@workspace/ui'
-import { Button, DatePicker, Form, Input, TreeSelect, Upload } from 'antd'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
+import { Button, DatePicker, Form, Input, TreeSelect } from 'antd'
+import { useWatch } from 'antd/es/form/Form'
 import dayjs from 'dayjs'
 import type React from 'react'
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+
+type TSubjectItem = StudentSubjectScore & {
+    subjectVersion: SubjectVersion
+    subjectClass:
+        | (SubjectClass & {
+              semester: Semester
+          })
+        | null
+}
+
+type TTrainingCourse = TrainingCourse & {
+    scoreConverts: ScoreConvert[]
+}
+
+type TFixedClass = {
+    fixedClass: FixedClass & {
+        trainingCourse: TTrainingCourse
+    }
+}
+
+type TUserProfile = {
+    userProfile: UserProfile
+}
+
+export interface ISemesterGroup {
+    id: string
+    name: string
+    subjects: TSubjectItem[]
+}
+
+export type TStudentWithSubjects = Student &
+    TFixedClass &
+    TUserProfile & {
+        subjectClassStudent: (StudentSubjectScore & {
+            subjectVersion: SubjectVersion
+            subjectClass?: SubjectClass & {
+                semester?: Semester
+            }
+        })[]
+    }
+
+const subjects: {
+    daiHoc: { id: number; name: string }[]
+    nganHan: { id: number; name: string }[]
+    caoHoc: { id: number; name: string }[]
+} = {
+    daiHoc: [
+        { id: 1, name: 'Phụ lục VB (1 cột)' },
+        { id: 2, name: 'Phụ lục VB (2 cột)' },
+        { id: 3, name: 'Phụ lục VB (2 cột - 1 trang)' },
+        { id: 4, name: 'Bảng điểm Ngân hạn (P2)' },
+    ],
+    nganHan: [
+        { id: 5, name: 'Bảng điểm ngắn hạn SDH' },
+        { id: 6, name: 'In phôi bảng ngắn hạn SDH (Anh)' },
+        { id: 7, name: 'In phôi bảng ngắn/DÀI hạn SDH (Mỹ)' },
+        { id: 8, name: 'In quyết định tốt nghiệp ngắn hạn (ĐẠI HÀN) SDH' },
+        { id: 9, name: 'Bảng điểm ĐẠI HÀN SDH (2 cột)' },
+        { id: 10, name: 'Bảng điểm ĐẠI HÀN SDH (1 cột)' },
+        { id: 12, name: 'Danh sách đề nghị TN - ĐẠI HÀN' },
+    ],
+    caoHoc: [
+        { id: 14, name: 'PL Đề nghị công nhận tốt nghiệp' },
+        { id: 15, name: 'Xác nhận thông tin HV làm văn bằng' },
+        { id: 16, name: 'PL Quyết định tốt nghiệp CAO HỌC' },
+        { id: 17, name: 'Quyết định công nhận tốt nghiệp' },
+        { id: 18, name: 'In PL văn bằng CAO HỌC (2 cột)' },
+        { id: 19, name: 'In PL văn bằng CAO HỌC (1 cột)' },
+        { id: 20, name: 'In phôi bảng CAO HỌC' },
+        { id: 21, name: 'Sổ gốc cấp phát văn bằng' },
+        { id: 22, name: 'Thống kê KQ đào tạo' },
+        { id: 23, name: 'Thống kê kết quả bảo vệ luận văn' },
+        { id: 24, name: 'In Danh sách trình chiếu CAO HỌC' },
+        { id: 25, name: 'Trình chiếu tốt nghiệp (WORD)' },
+        { id: 26, name: 'Trình chiếu tốt nghiệp (PDF)' },
+    ],
+}
+
+const formItemLayout = {
+    labelCol: { flex: '0 0 100px' },
+    wrapperCol: { flex: '1' },
+}
+
+const initialPagination = {
+    page: 1,
+    pageSize: 10,
+}
 
 export type StudentGradeSystemForm = {
     trainingObjectTypeId: string[]
-    classId: string[]
-    thesisSessionId: string[]
-    trainingCourseId: string[]
-    managementOrganizationId: string[]
+    fixedClassIds: string[]
+    thesisSessionIds: string[]
+    trainingCourseIds: string[]
+    managementOrganizationIds: string[]
     recordsPerPage: string
     date: string
     signer: string
     imageUrl: string
 }
+
 export default function StudentGradeSystem() {
     const [form] = Form.useForm<StudentGradeSystemForm>()
-    const formItemLayout = {
-        labelCol: { flex: '0 0 100px' },
-        wrapperCol: { flex: '1' },
-    }
-    const [recordsPerPage, setRecordsPerPage] = useState('1500')
-    const subjects: {
-        daiHoc: { id: number; name: string }[]
-        nganHan: { id: number; name: string }[]
-        caoHoc: { id: number; name: string }[]
-    } = {
-        daiHoc: [
-            { id: 1, name: 'Phụ lục VB (1 cột)' },
-            { id: 2, name: 'Phụ lục VB (2 cột)' },
-            { id: 3, name: 'Phụ lục VB (2 cột - 1 trang)' },
-            { id: 4, name: 'Bảng điểm Ngân hạn (P2)' },
-        ],
-        nganHan: [
-            { id: 5, name: 'Bảng điểm ngắn hạn SDH' },
-            { id: 6, name: 'In phôi bảng ngắn hạn SDH (Anh)' },
-            { id: 7, name: 'In phôi bảng ngắn/DÀI hạn SDH (Mỹ)' },
-            { id: 8, name: 'In quyết định tốt nghiệp ngắn hạn (ĐẠI HÀN) SDH' },
-            { id: 9, name: 'Bảng điểm ĐẠI HÀN SDH (2 cột)' },
-            { id: 10, name: 'Bảng điểm ĐẠI HÀN SDH (1 cột)' },
-            { id: 12, name: 'Danh sách đề nghị TN - ĐẠI HÀN' },
-        ],
-        caoHoc: [
-            { id: 14, name: 'PL Đề nghị công nhận tốt nghiệp' },
-            { id: 15, name: 'Xác nhận thông tin HV làm văn bằng' },
-            { id: 16, name: 'PL Quyết định tốt nghiệp CAO HỌC' },
-            { id: 17, name: 'Quyết định công nhận tốt nghiệp' },
-            { id: 18, name: 'In PL văn bằng CAO HỌC (2 cột)' },
-            { id: 19, name: 'In PL văn bằng CAO HỌC (1 cột)' },
-            { id: 20, name: 'In phôi bảng CAO HỌC' },
-            { id: 21, name: 'Sổ gốc cấp phát văn bằng' },
-            { id: 22, name: 'Thống kê KQ đào tạo' },
-            { id: 23, name: 'Thống kê kết quả bảo vệ luận văn' },
-            { id: 24, name: 'In Danh sách trình chiếu CAO HỌC' },
-            { id: 25, name: 'Trình chiếu tốt nghiệp (WORD)' },
-            { id: 26, name: 'Trình chiếu tốt nghiệp (PDF)' },
-        ],
-    }
-
-    const { data: trainingObjectTypes = [] } = useFindManyTrainingObjectTypePermission()
-    const { data: fixedClasses = [] } = useFindManyFixedClass()
-    const { data: trainingCourseData = [] } = useFindManyTrainingCourse()
-    const { data: thesisSessionData = [] } = useFindManyThesisSession()
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+    const trainingCourseIds: string[] = useWatch('trainingCourseIds', form)
+    const fixedClassIds: string[] = useWatch('fixedClassIds', form)
+    const managementOrganizationIds: string[] = useWatch('managementOrganizationIds', form)
+    const [page, setPage] = useState(initialPagination.page)
+    const [pageSize, setPageSize] = useState(initialPagination.pageSize)
+    const [viewResult, setViewResult] = useState(false);
+    const [selectedStudent, setSelectedStudent] = useState<TStudentWithSubjects | null>(null)
+    const { data: trainingObjectTypes = [] } = useFindManyTrainingObjectType({
+        where: { active: true },
+    })
+    const { data: trainingCourseData = [] } = useFindManyTrainingCourse(
+        {
+            where: {
+                active: true,
+                deletedAt: null,
+                ...(trainingObjectTypeId && {
+                    trainingObjectTypeId,
+                }),
+            },
+        },
+        {
+            enabled: !!trainingObjectTypeId || trainingObjectTypes?.length > 0,
+        }
+    )
+    const { data: fixedClasses = [] } = useFindManyFixedClass(
+        {
+            where: {
+                active: true,
+                deletedAt: null,
+                ...(trainingCourseIds?.length && {
+                    trainingCourseId: {
+                        in: trainingCourseIds,
+                    },
+                }),
+            },
+        },
+        {
+            enabled: trainingCourseIds?.length > 0,
+        }
+    )
+    const { data: thesisSessionData = [] } = useFindManyThesisSession(
+        {
+            where: {
+                active: true,
+                trainingObjectTypeId,
+                ...(trainingCourseIds?.length && {
+                    trainingCourseId: {
+                        in: trainingCourseIds,
+                    },
+                }),
+            },
+        },
+        {
+            enabled: !!trainingObjectTypeId || trainingCourseData?.length > 0,
+        }
+    )
     const { data: dm_DonVi = [] } = useFindManyDM_DonVi({
-        where: whereOrganization,
+        where: {
+            ...whereOrganization,
+            ...(fixedClassIds?.length && {
+                fixedClass: {
+                    some: {
+                        id: {
+                            in: fixedClassIds,
+                        },
+                    },
+                },
+            }),
+        },
     })
     const treeData = buildOrgTree(dm_DonVi)
+    const { data: count } = useCountStudent({
+        where: {
+            active: true,
+            fixedClass: {
+                ...(fixedClassIds?.length > 0 && {
+                    id: {
+                        in: fixedClassIds,
+                    },
+                }),
+                ...(trainingCourseIds?.length > 0 && {
+                    trainingCourseId: {
+                        in: trainingCourseIds,
+                    },
+                }),
+                ...(managementOrganizationIds?.length > 0 && {
+                    managementOrganizationId: {
+                        in: managementOrganizationIds,
+                    },
+                }),
+            },
+        },
+    }, {
+        enabled: viewResult
+    })
+    const {
+        data: students,
+        refetch: getStudents,
+        isLoading: isLoadingStudents,
+        isFetching: isFetchingStudents,
+    } = useFindManyStudent(
+        {
+            where: {
+                active: true,
+                fixedClass: {
+                    ...(fixedClassIds?.length > 0 && {
+                        id: {
+                            in: fixedClassIds,
+                        },
+                    }),
+                    ...(trainingCourseIds?.length > 0 && {
+                        trainingCourseId: {
+                            in: trainingCourseIds,
+                        },
+                    }),
+                    ...(managementOrganizationIds?.length > 0 && {
+                        managementOrganizationId: {
+                            in: managementOrganizationIds,
+                        },
+                    }),
+                },
+            },
+            take: pageSize,
+            skip: (page - 1) * pageSize,
+            include: {
+                userProfile: true,
+                fixedClass: {
+                    include: {
+                        trainingCourse: {
+                            include: {
+                                scoreConverts: true,
+                            },
+                        },
+                    },
+                },
+                subjectClassStudent: {
+                    include: {
+                        subjectVersion: true,
+                        subjectClass: {
+                            include: {
+                                semester: true,
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        {
+            enabled: viewResult,
+        }
+    )
+    const studentTableData = useMemo(() => {
+        return (students || []).map((student, index) => ({
+            key: student.id,
+            stt: index + 1,
+            maSinhVien: student.code,
+            hoTen: student.userProfile?.fullname || '',
+            lop: student.fixedClass?.name || '',
+            khoa: student.fixedClass?.trainingCourse?.name || '',
+        }))
+    }, [students])
+
+    const selectedStudentGradeData = useMemo(() => {
+        if (!selectedStudent) return []
+
+        const semesterMap = new Map()
+        const { scoreConverts } = selectedStudent.fixedClass.trainingCourse
+        selectedStudent.subjectClassStudent?.forEach((item) => {
+            const semester = item.subjectClass?.semester
+            if (!semester) return
+
+            if (!semesterMap.has(semester.id)) {
+                semesterMap.set(semester.id, {
+                    id: semester.id,
+                    key: semester.id,
+                    tenHocPhan: semester.name,
+                    $type: 'parent' as const,
+                    subjects: [],
+                })
+            }
+            const semesterGroup = semesterMap.get(semester.id)
+
+            const scoreConvert = scoreConverts.find(
+                (s) =>
+                    s.base10Min <= Number(item.finalScore) && s.base10Max >= Number(item.finalScore)
+            )
+
+            semesterGroup.subjects.push({
+                id: item.id,
+                key: item.id,
+                stt: semesterGroup.subjects.length + 1,
+                tenHocPhan: item.subjectVersion?.name || '',
+                soTinChi: item.subjectVersion?.credit || '',
+                thangDiem10: item?.finalScore ? Number(item?.finalScore).toFixed(2) : '-',
+                thangDiem4: scoreConvert?.base4 || '',
+                thangDiemChu: scoreConvert?.letter,
+                $type: 'child' as const,
+            })
+        })
+
+        return Array.from(semesterMap.values())
+    }, [selectedStudent])
+
+    useEffect(() => {
+        if (!form) return
+
+        form.resetFields()
+        form.setFieldValue('trainingObjectTypeId', trainingObjectTypeId)
+    }, [form, trainingObjectTypeId])
+
     return (
         <div className="flex h-screen bg-gray-50">
-            {/* Left Sidebar */}
             <div className="w-68 bg-white border-r border-gray-200 p-4 overflow-y-auto">
                 <div className="mb-6">
-                    <h2 className="text-base font-bold color text-primary mb-4  p-2 rounded">
+                    <h2 className="text-base font-bold color text-primary mb-4 p-2 rounded">
                         Bảng điểm học viên
                     </h2>
 
-                    <div className="space-y-4">
+                    <Form
+                        form={form}
+                        onValuesChange={(changed) => {
+                            if ('trainingCourseIds' in changed) {
+                                form.setFieldsValue({
+                                    fixedClassIds: [],
+                                    managementOrganizationIds: [],
+                                })
+                            }
+
+                            if ('fixedClassIds' in changed) {
+                                form.setFieldValue('managementOrganizationIds', [])
+                            }
+                        }}
+                        className="space-y-4"
+                        initialValues={{ trainingObjectTypeId: trainingObjectTypeId }}
+                    >
                         <div className="flex items-center">
                             <FormItem
                                 form={form}
@@ -99,24 +379,20 @@ export default function StudentGradeSystem() {
                                 {...formItemLayout}
                             >
                                 <Select
-                                    mode="multiple"
                                     className="flex-1 w-64"
                                     placeholder="Chọn ĐTĐT"
-                                    maxTagCount={2}
-                                    maxTagPlaceholder={(omittedValues) =>
-                                        `+${omittedValues.length}`
-                                    }
                                     options={trainingObjectTypes?.map((e) => ({
                                         label: e.name,
                                         value: e.id,
                                     }))}
+                                    disabled
                                 />
                             </FormItem>
                         </div>
                         <div className="flex items-center">
                             <FormItem
                                 form={form}
-                                name="trainingCourseId"
+                                name="trainingCourseIds"
                                 labelAlign="left"
                                 label="Khoá"
                                 {...formItemLayout}
@@ -127,12 +403,13 @@ export default function StudentGradeSystem() {
                                     placeholder="Chọn Khoá"
                                     maxTagCount={2}
                                     maxTagPlaceholder={(omittedValues) =>
-                                        `+${omittedValues.length}`
+                                        `+${omittedValues?.length}`
                                     }
                                     options={trainingCourseData?.map((e) => ({
                                         label: e.name,
                                         value: e.id,
                                     }))}
+                                    disabled={!trainingObjectTypeId || !trainingObjectTypes.length}
                                 />
                             </FormItem>
                         </div>
@@ -140,7 +417,7 @@ export default function StudentGradeSystem() {
                         <div className="flex items-center">
                             <FormItem
                                 form={form}
-                                name="classId"
+                                name="fixedClassIds"
                                 label="Lớp"
                                 labelAlign="left"
                                 {...formItemLayout}
@@ -150,22 +427,22 @@ export default function StudentGradeSystem() {
                                     className="flex-1 w-64"
                                     maxTagCount={2}
                                     maxTagPlaceholder={(omittedValues) =>
-                                        `+${omittedValues.length}`
+                                        `+${omittedValues?.length}`
                                     }
                                     placeholder="Chọn lớp quản lí"
                                     options={fixedClasses?.map((e) => ({
                                         label: e.name,
                                         value: e.id,
                                     }))}
+                                    disabled={!trainingCourseIds?.length}
                                 />
                             </FormItem>
                         </div>
 
-                        {/* Hàng 4: Đợt xét */}
                         <div className="flex items-center">
                             <FormItem
                                 form={form}
-                                name="thesisSessionId"
+                                name="thesisSessionIds"
                                 label="Đợt xét"
                                 labelAlign="left"
                                 {...formItemLayout}
@@ -182,15 +459,15 @@ export default function StudentGradeSystem() {
                                         label: e.name,
                                         value: e.id,
                                     }))}
+                                    disabled={!trainingCourseIds?.length || !trainingObjectTypeId}
                                 />
                             </FormItem>
                         </div>
 
-                        {/* Hàng 5: Khoa quản lý */}
                         <div className="flex items-center">
                             <FormItem
                                 form={form}
-                                name="managementOrganizationId"
+                                name="managementOrganizationIds"
                                 label="Khoa quản lý"
                                 labelAlign="left"
                                 {...formItemLayout}
@@ -206,6 +483,7 @@ export default function StudentGradeSystem() {
                                     placeholder="Chọn khoa quản lý"
                                     allowClear
                                     showSearch
+                                    disabled={!fixedClassIds?.length}
                                     treeDefaultExpandAll
                                     filterTreeNode={(input, treeNode) =>
                                         fuzzyMatch(input, treeNode.label?.toString() || '')
@@ -214,105 +492,71 @@ export default function StudentGradeSystem() {
                             </FormItem>
                         </div>
 
-                        <Button type="primary" className="w-full h-8 text-xs text-white">
+                        <Button
+                            type="primary"
+                            onClick={() => {
+                                setSelectedStudent(null)
+                                setViewResult(!viewResult)
+                            }}
+                            className="w-full h-8 text-xs text-white"
+                        >
                             Xem kết quả
                         </Button>
 
-                        <div className="flex items-center gap-2">
-                            <FormItem
-                                form={form}
-                                name="recordsPerPage"
-                                label="Số ký tự trang "
-                                labelAlign="left"
-                                {...formItemLayout}
-                            >
-                                <Input
-                                    type="number"
-                                    placeholder="Nhập số ký tự trang"
-                                    className="h-8 text-xs flex-1"
-                                />
-                            </FormItem>
-                        </div>
-
-                        <div className="flex items-center">
+                        <div className="flex items-center w-full">
                             <FormItem
                                 form={form}
                                 name="date"
                                 label="Ngày in"
                                 labelAlign="left"
+                                className="w-full"
                                 {...formItemLayout}
                             >
                                 <DatePicker
                                     format="DD/MM/YYYY"
                                     placeholder={`${dayjs().format('DD/MM/YYYY')}`}
-                                    className="h-8 text-xs flex-1"
+                                    className="h-8 text-xs flex-1 w-full"
                                 />
                             </FormItem>
                         </div>
 
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center w-full gap-2">
                             <FormItem
                                 form={form}
                                 name="signer"
+                                className="w-full"
                                 label="Người ký"
                                 labelAlign="left"
                                 {...formItemLayout}
                             >
                                 <Input
                                     type="text"
-                                    className="h-8 text-xs flex-1"
+                                    className="h-8 text-xs flex-1 w-full"
                                     placeholder="Nhập người ký"
                                 />
-                                <div className="flex gap-2 flex-1 mt-2">
-                                    <Input type="text" className="h-8 text-xs  " />
-                                    <Button className="h-8 text-xs px-2 bg-transparent">
-                                        Đường dẫn...
-                                    </Button>
-                                </div>
                             </FormItem>
                         </div>
-
-                        <div className="flex items-center">
-                            <FormItem
-                                form={form}
-                                name="imageUrl"
-                                label="Import ảnh"
-                                labelAlign="left"
-                                {...formItemLayout}
-                            >
-                                <Button className="h-8 text-xs bg-transparent flex-1">
-                                    Tải lên
-                                </Button>
-                                <Upload
-                                    accept="image/*"
-                                    onChange={(info) => {
-                                        console.log(info)
-                                    }}
-                                />
-                            </FormItem>
-                        </div>
-                    </div>
+                    </Form>
                 </div>
             </div>
 
             <div className="flex-1 p-6 overflow-y-auto">
-                {/* Section I: ĐẠI HỌC */}
                 <div className="mb-6">
                     <h3 className="text-sm font-bold color text-primary mb-3">I. Đại học</h3>
                     <div className="grid grid-cols-4 gap-3">
-                        {subjects.daiHoc.map((subject, index) => (
-                            <Button
-                                key={subject.id}
-                                type="primary"
-                                className="h-auto py-2 px-3 text-xs justify-start text-white"
-                            >
-                                {index + 1}. {subject.name}
-                            </Button>
-                        ))}
+                        {subjects.daiHoc.map((subject, index) => {
+                            return (
+                                <ExportDiplomaAppendix
+                                    key={subject?.id}
+                                    title={`${index + 1}. ${subject.name}`}
+                                    type="primary"
+                                    className="h-auto px-3 text-xs justify-start text-white"
+                                />
+                            )
+                        })}
                     </div>
                 </div>
 
-                {/* Section II: NGÂN HẠN - ĐÀI HAN SAU ĐẠI HỌC */}
                 <div className="mb-6">
                     <h3 className="text-sm font-bold color text-primary mb-3">
                         II. Ngắn hạn - Dài hạn sau đại học
@@ -330,7 +574,6 @@ export default function StudentGradeSystem() {
                     </div>
                 </div>
 
-                {/* Section III: CAO HỌC */}
                 <div className="mb-6">
                     <h3 className="text-sm font-bold color text-primary mb-3">III. Cao học</h3>
                     <div className="grid grid-cols-4 gap-3">
@@ -346,43 +589,115 @@ export default function StudentGradeSystem() {
                     </div>
                 </div>
 
-                <div className="overflow-hidden">
+                <div className="mb-4">
+                    <h3 className="text-md font-semibold mb-2">Danh sách sinh viên</h3>
                     <Table
+                        loading={isLoadingStudents || isFetchingStudents}
                         columns={[
                             {
-                                title: 'TT',
-                                dataIndex: 'tt',
-                                key: 'tt',
+                                title: 'STT',
+                                dataIndex: 'stt',
+                                key: 'stt',
+                                width: 60,
                             },
                             {
-                                title: 'Tên học phần',
-                                dataIndex: 'tenHocPhan',
-                                key: 'tenHocPhan',
+                                title: 'Mã sinh viên',
+                                dataIndex: 'maSinhVien',
+                                key: 'maSinhVien',
+                                width: 60,
                             },
                             {
-                                title: 'Số tín chỉ',
-                                dataIndex: 'soTinChi',
-                                key: 'soTinChi',
+                                title: 'Họ tên',
+                                dataIndex: 'hoTen',
+                                key: 'hoTen',
+                                width: 120,
                             },
                             {
-                                title: 'Thang điểm 10',
-                                dataIndex: 'thangDiem10',
-                                key: 'thangDiem10',
+                                title: 'Lớp',
+                                dataIndex: 'lop',
+                                key: 'lop',
+                                width: 150,
                             },
                             {
-                                title: 'Thang điểm 4',
-                                dataIndex: 'thangDiem4',
-                                key: 'thangDiem4',
-                            },
-                            {
-                                title: 'Thang điểm chữ',
-                                dataIndex: 'thangDiemChu',
-                                key: 'thangDiemChu',
+                                title: 'Khóa',
+                                dataIndex: 'khoa',
+                                key: 'khoa',
+                                width: 100,
                             },
                         ]}
-                        data={[]}
+                        data={studentTableData}
+                        pagination={{
+                            pageSize,
+                            total: count,
+                            onChange(page, pageSize) {
+                                setPage(page)
+                                setPageSize(pageSize)
+                            },
+                        }}
+                        onRow={(record) => ({
+                            onClick: () => {
+                                const student = students?.find((s) => s.id === record.key)
+                                setSelectedStudent((student as TStudentWithSubjects) || null)
+                            },
+                            className:
+                                selectedStudent?.id === record.key
+                                    ? 'bg-blue-100 cursor-pointer'
+                                    : 'cursor-pointer',
+                        })}
+                        bordered
                     />
                 </div>
+
+                {selectedStudent && (
+                    <div>
+                        <h3 className="text-md font-semibold mb-2">
+                            Bảng điểm: {selectedStudent.userProfile?.fullname} -{' '}
+                            {selectedStudent.code}
+                        </h3>
+                        <TableCollapse
+                            data={selectedStudentGradeData}
+                            columns={[
+                                {
+                                    title: 'Tên học phần',
+                                    dataIndex: 'tenHocPhan',
+                                    key: 'tenHocPhan',
+                                },
+                                {
+                                    title: 'Số tín chỉ',
+                                    dataIndex: 'soTinChi',
+                                    key: 'soTinChi',
+                                    width: 100,
+                                },
+                                {
+                                    title: 'Thang điểm 10',
+                                    dataIndex: 'thangDiem10',
+                                    key: 'thangDiem10',
+                                    width: 120,
+                                    render: (value: string) => value || '-',
+                                },
+                                {
+                                    title: 'Thang điểm 4',
+                                    dataIndex: 'thangDiem4',
+                                    key: 'thangDiem4',
+                                    width: 120,
+                                },
+                                {
+                                    title: 'Thang điểm chữ',
+                                    dataIndex: 'thangDiemChu',
+                                    key: 'thangDiemChu',
+                                    width: 120,
+                                },
+                            ]}
+                            headerTitleKey="tenHocPhan"
+                            childrenFieldName="subjects"
+                            bordered
+                            pagination={{
+                                pageSize: initialPagination.pageSize,
+                            }}
+                            rowKey="id"
+                        />
+                    </div>
+                )}
             </div>
         </div>
     )
