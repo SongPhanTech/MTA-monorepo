@@ -15,7 +15,6 @@ const fetchInstance = async (url: string, options?: RequestInit) => {
         credentials: 'include',
     })
         .then((res) => {
-            console.log(111111111, res)
             if (res.status === 401) {
                 if (typeof window !== 'undefined') {
                     const event = new CustomEvent('mta-session-expired', {
