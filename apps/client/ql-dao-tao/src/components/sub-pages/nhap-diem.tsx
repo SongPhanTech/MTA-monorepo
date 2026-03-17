@@ -585,6 +585,11 @@ export default function NhapDiem({
                 },
                 examDate: true,
                 examType: true,
+                exam: {
+                    select: {
+                        lockExamSessions: true,
+                    }
+                }
             },
         },
         {
@@ -667,7 +672,8 @@ export default function NhapDiem({
             dataDetailSubjectClass?.examScoreDeadline &&
             dayjs().isBefore(dataDetailSubjectClass?.examScoreDeadline) &&
             !dataDetailSubjectClass?.isLockExamScore &&
-            !dataDetailSubjectClass?.scoreSubmitted
+            !dataDetailSubjectClass?.scoreSubmitted && 
+            dataDetailSubjectClass?.exam?.lockExamSessions
         )
     }, [dataDetailSubjectClass, can, score])
 
@@ -1231,6 +1237,7 @@ export default function NhapDiem({
                                                         ),
                                                 },
                                             ]}
+                                        
                                         >
                                             <InputNumber
                                                 readOnly={readOnly}
