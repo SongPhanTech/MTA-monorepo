@@ -165,27 +165,85 @@ export const buildWardMapOrThrow = async (prisma: PrismaClient, names: (string |
 type CurriculumData = {
     curriculum: string
     trainingMajor?: string
+    trainingMajorId?: string
     trainingField?: string
+    managementOrganization?: string
 }
 
 export const buildCurriculumMapOrThrow = async (
     prisma: PrismaClient,
     students: CurriculumData[],
     trainingObjectTypeId: string,
-    trainingCourseName: string,
+    trainingCourseId: string,
     createMissing = false
 ) => {
+    const normalize = (value?: string) => value?.trim() ?? ''
+
     const categorySet = new Set<string>(
         students.map((s) =>
             JSON.stringify({
                 curriculum: s.curriculum,
                 trainingMajor: s.trainingMajor,
+                trainingMajorId: s.trainingMajorId,
                 trainingField: s.trainingField,
+                managementOrganization: s.managementOrganization,
             })
         )
     )
 
     const uniqueTuples = Array.from(categorySet).map((s) => JSON.parse(s) as CurriculumData)
+
+    const majorIds = Array.from(
+        new Set(
+            uniqueTuples
+                .map(({ trainingMajorId }) => normalize(trainingMajorId))
+                .filter((majorId): majorId is string => Boolean(majorId))
+        )
+    )
+
+    if (majorIds.length) {
+        const validMajors = await prisma.trainingMajor.findMany({
+            where: {
+                id: { in: majorIds },
+                trainingObjectTypes: { some: { trainingObjectTypeId } },
+            },
+            select: { id: true, name: true },
+        })
+
+        const validMajorIdSet = new Set(validMajors.map(({ id }) => id))
+
+        const invalidMajorIds = majorIds.filter((majorId) => !validMajorIdSet.has(majorId))
+
+        if (invalidMajorIds.length) {
+            const majorNameById = new Map(
+                uniqueTuples
+                    .filter(({ trainingMajorId }) => Boolean(trainingMajorId))
+                    .map(({ trainingMajorId, trainingMajor }) => [
+                        trainingMajorId as string,
+                        trainingMajor,
+                    ])
+            )
+
+            const invalidMajorLabels = invalidMajorIds.map((majorId) => {
+                const majorName = majorNameById.get(majorId)
+                return majorName ? `${majorName} (${majorId})` : majorId
+            })
+
+            const friendlyInvalidMajors =
+                invalidMajorLabels.length <= 5
+                    ? invalidMajorLabels.join(', ')
+                    : `${invalidMajorLabels.slice(0, 5).join(', ')} và ${invalidMajorLabels.length - 5} chuyên ngành khác`
+
+            throw new HTTPException(400, {
+                message: `Chuyên ngành không hợp lệ hoặc không thuộc đối tượng đào tạo: ${friendlyInvalidMajors}`,
+            })
+        }
+    }
+
+    const managementOrganizationMap = await buildOrgNameMapOrThrow(
+        prisma,
+        uniqueTuples.map((s) => s.managementOrganization)
+    )
 
     const existing = await prisma.curriculumVersion.findMany({
         where: {
@@ -248,8 +306,23 @@ ${missing
 
     if (missing.length && createMissing) {
         await prisma.$transaction(async (tx) => {
+            const course = await tx.trainingCourse.findFirst({
+                where: {
+                    id: trainingCourseId,
+                    trainingObjectTypeId,
+                    active: true,
+                    deletedAt: null,
+                },
+            })
+
+            if (!course) {
+                throw new HTTPException(400, {
+                    message: `Khoá đào tạo không tồn tại: ${trainingCourseId}`,
+                })
+            }
+
             for (const item of missing) {
-                const curriculumName = `${item.trainingMajor} - ${trainingCourseName}`
+                const curriculumName = `${item.trainingMajor} - ${course.name}`
                 let curriculum = await tx.curriculum.findFirst({
                     where: {
                         name: curriculumName,
@@ -260,6 +333,17 @@ ${missing
                     },
                 })
 
+                const generateUniqueCode = (text: string) => {
+                    const initials = text
+                        .split(' ')
+                        .map((w) => w[0])
+                        .join('')
+                        .toUpperCase()
+                    const year = new Date().getFullYear().toString().slice(-2)
+                    const random = Math.random().toString(36).substring(2, 5).toUpperCase()
+                    return `${initials}${year}_${random}`
+                }
+
                 if (!curriculum) {
                     if (!item.trainingMajor) {
                         throw new HTTPException(400, {
@@ -267,8 +351,25 @@ ${missing
                         })
                     }
 
+                    if (!item.managementOrganization) {
+                        throw new HTTPException(400, {
+                            message: `Không thể tạo CTĐT ${item.curriculum} vì thiếu thông tin Đơn vị quản lý`,
+                        })
+                    }
+
+                    const targetOrgId = managementOrganizationMap.get(item.managementOrganization)
+
+                    if (!targetOrgId) {
+                        throw new HTTPException(400, {
+                            message: `Đơn vị quản lý không tồn tại: ${item.managementOrganization}`,
+                        })
+                    }
+
                     const major = await tx.trainingMajor.findFirst({
-                        where: { name: item.trainingMajor },
+                        where: {
+                            name: { equals: normalize(item.trainingMajor), mode: 'insensitive' },
+                            trainingObjectTypes: { some: { trainingObjectTypeId } },
+                        },
                     })
 
                     if (!major) {
@@ -277,23 +378,37 @@ ${missing
                         })
                     }
 
+                    const curriculumCode = item.trainingMajor
+                        .split(' ')
+                        .map((w) => w[0])
+                        .join('')
+                        .toUpperCase()
+
                     curriculum = await tx.curriculum.create({
                         data: {
                             name: curriculumName,
+                            code: curriculumCode,
                             trainingMajorId: major.id,
                             trainingObjectTypeId,
-                            managementOrganizationId: major.organizationId,
+                            managementOrganizationId: targetOrgId,
                         },
                     })
                 }
 
+                const versionCode = item.curriculum
+                    .split(' ')
+                    .map((w) => w[0])
+                    .join('')
+                    .toUpperCase()
+
                 const created = await tx.curriculumVersion.create({
                     data: {
                         name: item.curriculum,
+                        code: generateUniqueCode(item.curriculum),
                         curriculumId: curriculum.id,
                         trainingObjectTypeId,
                     },
-                    select: { id: true, name: true }, // Select minimal fields
+                    select: { id: true, name: true },
                 })
 
                 createdItems.push(created)

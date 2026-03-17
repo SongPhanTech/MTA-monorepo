@@ -10,7 +10,7 @@ ARG PACKAGE
 ENV PACKAGE="${PACKAGE}"
 WORKDIR /app
 COPY out/json/ .
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm i
 
 COPY out/full/ .
 ENV NODE_OPTIONS="--max-old-space-size=6144"

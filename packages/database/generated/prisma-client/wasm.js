@@ -2112,6 +2112,34 @@ exports.Prisma.SubjectClassScalarFieldEnum = {
   scoreLinkSubjectVersionId: 'scoreLinkSubjectVersionId'
 };
 
+exports.Prisma.SubjectClassAttendanceScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  time: 'time',
+  subjectClassId: 'subjectClassId',
+  profileId: 'profileId'
+};
+
+exports.Prisma.SubjectClassAttendanceStudentScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  subjectClassAttendanceId: 'subjectClassAttendanceId',
+  studentId: 'studentId',
+  attendanceStatus: 'attendanceStatus'
+};
+
 exports.Prisma.SubjectClassHistoryScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -6085,6 +6113,24 @@ exports.Prisma.SubjectClassOrderByRelevanceFieldEnum = {
   scoreLinkSubjectVersionId: 'scoreLinkSubjectVersionId'
 };
 
+exports.Prisma.SubjectClassAttendanceOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  subjectClassId: 'subjectClassId',
+  profileId: 'profileId'
+};
+
+exports.Prisma.SubjectClassAttendanceStudentOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  subjectClassAttendanceId: 'subjectClassAttendanceId',
+  studentId: 'studentId'
+};
+
 exports.Prisma.SubjectClassHistoryOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -8290,6 +8336,8 @@ exports.Prisma.ModelName = {
   ClassRegisterSession: 'ClassRegisterSession',
   ClassRegisterLogs: 'ClassRegisterLogs',
   SubjectClass: 'SubjectClass',
+  SubjectClassAttendance: 'SubjectClassAttendance',
+  SubjectClassAttendanceStudent: 'SubjectClassAttendanceStudent',
   SubjectClassHistory: 'SubjectClassHistory',
   SubjectClassTime: 'SubjectClassTime',
   ClassSchedule: 'ClassSchedule',

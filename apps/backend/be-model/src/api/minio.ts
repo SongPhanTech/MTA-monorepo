@@ -128,13 +128,17 @@ app.openapi(
 
         const requestOptions = {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: raw,
         }
 
         const res = await fetch(`${process?.env?.ONLY_OFFICE_ENDPOINT}/converter`, requestOptions)
+
+        console.log('Convert Document:', res.status)
+        if (res.status !== 200) {
+            const text = await res.text()
+            console.log('Convert Document:', text)
+        }
 
         const resJson = (await res.json()) as {
             fileUrl: string
@@ -143,12 +147,7 @@ app.openapi(
             endConvert: boolean
         }
 
-        return c.json(
-            {
-                fileUrl: resJson.fileUrl,
-            },
-            200
-        )
+        return c.json({ fileUrl: resJson.fileUrl }, 200)
     }
 )
 

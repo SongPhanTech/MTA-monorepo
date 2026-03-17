@@ -31,7 +31,9 @@ export default function ExportExcelModal() {
         tag: 'ExportExcelModal',
     })
 
-    const { data: donVis = [] } = useFindManyDM_DonVi()
+    const { data: donVis = [] } = useFindManyDM_DonVi({
+        orderBy: [{ iSTT: 'asc' }, { sTen: 'asc' }],
+    })
     const { data: subjects = [] } = useFindManySubject()
     const { data: subjectVersions = [] } = useFindManySubjectVersion()
     const { data: schoolYears = [] } = useFindManySchoolYear()

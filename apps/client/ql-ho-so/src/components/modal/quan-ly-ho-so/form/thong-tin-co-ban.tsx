@@ -135,7 +135,9 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
     //     {},
     //     { enabled: !!bLaCanBoNhanVien }
     // )
-    const { data: organizations = [] } = useFindManyDM_DonVi()
+    const { data: organizations = [] } = useFindManyDM_DonVi({
+        orderBy: [{ iSTT: 'asc' }, { sTen: 'asc' }],
+    })
     const treeData = buildOrgTree(organizations)
     const renderContent = () => {
         return (

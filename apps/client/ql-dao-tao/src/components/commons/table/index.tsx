@@ -20,7 +20,7 @@ import type { ColumnGroupType, ColumnType, TablePaginationConfig } from 'antd/es
 import type { FilterDropdownProps, TableRowSelection } from 'antd/es/table/interface'
 import dayjs from 'dayjs'
 import { Search } from 'lucide-react'
-import { useCallback, useState } from 'react'
+import { Key, useCallback, useState } from 'react'
 import FilterSelect from './filter-select'
 
 dayjs.locale('vi')
@@ -481,7 +481,7 @@ export const Table = <T extends AnyObject>({
                         }
                     }
                     return (
-                        <div className="p-4 w-full min-w-[200px] max-w-[300px]">
+                        <div className="p-4 w-full min-w-[200px] max-w-[250px]">
                             <div className="mb-2">Tìm kiếm</div>
                             <Input
                                 placeholder="Nhập từ khoá cần tìm kiếm"
@@ -514,17 +514,81 @@ export const Table = <T extends AnyObject>({
                                 expandedKeys={expandedKeys}
                                 onExpand={(keys) => setExpandedKeys(keys as string[])}
                                 onCheck={(checkedKeys) => {
-                                    const value = Array.isArray(checkedKeys)
+                                    const checked = Array.isArray(checkedKeys)
                                         ? checkedKeys
                                         : checkedKeys.checked
 
-                                    setFiltersTable((prev) => ({
-                                        ...prev,
-                                        [item.dataIndex as keyof FilterProps]: value,
-                                    }))
+                                    const prevChecked =
+                                        (filtersTable[
+                                            item.dataIndex as keyof FilterProps
+                                        ] as string[]) || []
+
+                                    /** node đang hiển thị khi search */
+                                    const visibleKeys: string[] = []
+
+                                    const collectVisible = (nodes: any[]) => {
+                                        nodes.forEach((n) => {
+                                            visibleKeys.push(n.value)
+                                            if (n.children?.length) collectVisible(n.children)
+                                        })
+                                    }
+
+                                    collectVisible(optionsSearch)
+
+                                    /** giữ node không nằm trong search */
+                                    const remain = prevChecked.filter(
+                                        (k) => !visibleKeys.includes(k)
+                                    )
+
+                                    let final: Key[] = [...new Set([...remain, ...checked])]
+
+                                    /**
+                                     * DUYỆT LẠI TOÀN BỘ TREE (allData = item.options)
+                                     * để tính trạng thái cha
+                                     */
+                                    const walk = (nodes: any[]) => {
+                                        nodes.forEach((node) => {
+                                            if (!node.children?.length) return
+
+                                            const childrenKeys: string[] = node.children.map(
+                                                (c: any) => c.value
+                                            )
+
+                                            const checkedChildren = childrenKeys.filter((k) =>
+                                                final.includes(k)
+                                            )
+
+                                            /**
+                                             * chỉ một phần con được check
+                                             * → cha phải indeterminate
+                                             */
+                                            if (
+                                                checkedChildren.length > 0 &&
+                                                checkedChildren.length < childrenKeys.length
+                                            ) {
+                                                final = final.filter((k) => k !== node.value)
+                                            }
+
+                                            /**
+                                             * tất cả con được check
+                                             * → cha được check
+                                             */
+                                            if (checkedChildren.length === childrenKeys.length) {
+                                                final.push(node.value)
+                                            }
+
+                                            walk(node.children)
+                                        })
+                                    }
+
+                                    walk(item.options || [])
+
+                                    setFiltersTable({
+                                        ...filtersTable,
+                                        [item.dataIndex as keyof FilterProps]: [...new Set(final)],
+                                    })
                                 }}
                                 autoExpandParent
-                                checkStrictly={!!input}
                                 fieldNames={{
                                     title: 'label',
                                     key: 'value',

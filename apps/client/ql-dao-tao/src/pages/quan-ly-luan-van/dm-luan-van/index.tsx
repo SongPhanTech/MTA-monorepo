@@ -108,7 +108,7 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
     })
     const { data: sDm_Donvi = [] } = useFindManyDM_DonVi({
         where: whereOrganization,
-        orderBy: { sTen: 'asc' },
+        orderBy: [{ iSTT: 'asc' }, { sTen: 'asc' }],
     })
     const { data: roomData } = useFindManyRoom()
     const { data: defenseSessionData } = useFindManyDefenseSession()

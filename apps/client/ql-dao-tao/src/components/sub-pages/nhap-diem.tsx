@@ -491,7 +491,7 @@ export default function NhapDiem({
                           midtermScore: item.midtermScore,
                           examScore: item.examScore,
                       }
-                    : score === 'CC/TX'
+                    : score === 'TX/ĐK'
                       ? {
                             attendanceScore: item.attendanceScore,
                             midtermScore: item.midtermScore,
@@ -585,6 +585,11 @@ export default function NhapDiem({
                 },
                 examDate: true,
                 examType: true,
+                exam: {
+                    select: {
+                        lockExamSessions: true,
+                    }
+                }
             },
         },
         {
@@ -648,7 +653,7 @@ export default function NhapDiem({
     }
 
     const disabledForm: boolean = useMemo(() => {
-        if (score === 'CC/TX') {
+        if (score === 'TX/ĐK') {
             return !(
                 can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CC_TX, 'NHAP_DIEM') &&
                 dataDetailSubjectClass?.scoreDeadLineStart &&
@@ -667,7 +672,8 @@ export default function NhapDiem({
             dataDetailSubjectClass?.examScoreDeadline &&
             dayjs().isBefore(dataDetailSubjectClass?.examScoreDeadline) &&
             !dataDetailSubjectClass?.isLockExamScore &&
-            !dataDetailSubjectClass?.scoreSubmitted
+            !dataDetailSubjectClass?.scoreSubmitted && 
+            dataDetailSubjectClass?.exam?.lockExamSessions
         )
     }, [dataDetailSubjectClass, can, score])
 
@@ -799,7 +805,7 @@ export default function NhapDiem({
     return (
         <Row gutter={[8, 8]}>
             <Col span={8}>
-                {score === 'CC/TX' && (
+                {score === 'TX/ĐK' && (
                     <Tag color={enteredScore ? 'green' : 'yellow'}>
                         {enteredScore ? 'Đã hoàn thiện' : 'Chưa hoàn thiện'}
                     </Tag>
@@ -862,7 +868,7 @@ export default function NhapDiem({
                             type={score}
                         />
                     )}
-                    {score !== 'CC/TX' &&
+                    {score !== 'THI' &&
                         (can(
                             QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC_P13,
                             'IN_DS_THI'
@@ -872,7 +878,7 @@ export default function NhapDiem({
                                 'IN_DS_THI'
                             ) ||
                             can(
-                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_THI,
+                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CC_TX,
                                 'IN_DS_THI'
                             )) && (
                             // <ExportTemplateExam
@@ -907,7 +913,7 @@ export default function NhapDiem({
                                 Danh sách thi
                             </Button>
                         )}
-                    {score !== 'CC/TX' &&
+                    {score !== 'TX/ĐK' &&
                         (can(
                             QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC_P13,
                             'IN_PHIEU_DIEM'
@@ -1081,7 +1087,12 @@ export default function NhapDiem({
                         filters={filterTable}
                         setFilters={setFilterTable}
                         onRow={(record) => ({
-                            className: cn(!!listForm?.[record.id]?.isChanged && 'bg-yellow-100'),
+                            className: cn(
+                                !!listForm?.[record.id]?.isChanged && 'bg-yellow-100',
+                                listForm?.[record.id]?.examBanned ||
+                                listForm?.[record.id]?.examPostponed ||
+                                listForm?.[record.id]?.suspended ? '!bg-red-200' : '',
+                            )
                         })}
                         scrollable
                         maxHeight={'calc(100vh - 460px)'}
@@ -1192,6 +1203,7 @@ export default function NhapDiem({
                                                         dataTable
                                                     )
                                                 }
+                                                className='bg-transparent'
                                             />
                                         </Form.Item>
                                     )
@@ -1243,6 +1255,7 @@ export default function NhapDiem({
                                                         dataTable
                                                     )
                                                 }
+                                                className='bg-transparent'
                                             />
                                         </Form.Item>
                                     )
@@ -1270,7 +1283,7 @@ export default function NhapDiem({
                                         !subjectClass?.subject?.onePoint
                                     if (
                                         role !== 'GV' ||
-                                        score === 'CC/TX' ||
+                                        score === 'TX/ĐK' ||
                                         !!examBanned ||
                                         isMissingScore
                                     ) {
@@ -1411,6 +1424,7 @@ export default function NhapDiem({
                                                     readOnly
                                                     autoSize
                                                     variant="underlined"
+                                                    className='bg-transparent'
                                                 />
                                             ) : (
                                                 <AutoComplete
@@ -1426,6 +1440,7 @@ export default function NhapDiem({
                                                         readOnly
                                                         autoSize
                                                         variant="underlined"
+                                                        className='bg-transparent'
                                                     />
                                                 </AutoComplete>
                                             )}
@@ -1478,6 +1493,7 @@ export default function NhapDiem({
                                                     readOnly
                                                     autoSize
                                                     variant="underlined"
+                                                    className='bg-transparent'
                                                 />
                                             ) : (
                                                 <AutoComplete
@@ -1493,6 +1509,7 @@ export default function NhapDiem({
                                                         readOnly
                                                         autoSize
                                                         variant="underlined"
+                                                        className='bg-transparent'
                                                     />
                                                 </AutoComplete>
                                             )}
@@ -1518,7 +1535,7 @@ export default function NhapDiem({
                                                     (dataDetailSubjectClass?.examType ===
                                                         'OfflineWritten' &&
                                                         role !== 'P13') ||
-                                                    score === 'CC/TX' ||
+                                                    score === 'TX/ĐK' ||
                                                     disabledForm
                                                 }
                                                 onChange={(e) => {
@@ -1551,6 +1568,7 @@ export default function NhapDiem({
                                                     readOnly
                                                     autoSize
                                                     variant="underlined"
+                                                    className='bg-transparent'
                                                 />
                                             ) : (
                                                 <AutoComplete
@@ -1568,6 +1586,7 @@ export default function NhapDiem({
                                                         readOnly
                                                         autoSize
                                                         variant="underlined"
+                                                        className='bg-transparent'
                                                     />
                                                 </AutoComplete>
                                             )}

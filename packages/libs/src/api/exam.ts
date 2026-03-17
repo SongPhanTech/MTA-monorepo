@@ -25,6 +25,9 @@ import type {
     AutomaticTopicGeneration400,
     AutomaticTopicGeneration404,
     AutomaticTopicGenerationBody,
+    CalcEvidenceTags,
+    CalcEvidenceTags200,
+    CalcEvidenceTags404,
     CreateClusterSurvey200,
     CreateClusterSurvey400,
     CreateClusterSurvey404,
@@ -44,6 +47,9 @@ import type {
     GenExamBankResult,
     GetClusterSurveyInfo200,
     GetClusterSurveyInfo404,
+    GetClusterSurveyInfoDepartment200,
+    GetClusterSurveyInfoDepartment404,
+    GetClusterSurveyInfoDepartmentParams,
     GetClusterSurveyInfoParams,
     GetClusterSurveyStatistics200,
     GetClusterSurveyStatistics404,
@@ -4066,4 +4072,320 @@ export function useGetClusterSurveyInfo<
     query.queryKey = queryOptions.queryKey
 
     return query
+}
+
+/**
+ * @summary Thống kê khảo sát cụm thông tin chung theo khoa
+ */
+export type getClusterSurveyInfoDepartmentResponse200 = {
+    data: GetClusterSurveyInfoDepartment200
+    status: 200
+}
+
+export type getClusterSurveyInfoDepartmentResponse404 = {
+    data: GetClusterSurveyInfoDepartment404
+    status: 404
+}
+
+export type getClusterSurveyInfoDepartmentResponseSuccess =
+    getClusterSurveyInfoDepartmentResponse200 & {
+        headers: Headers
+    }
+export type getClusterSurveyInfoDepartmentResponseError =
+    getClusterSurveyInfoDepartmentResponse404 & {
+        headers: Headers
+    }
+
+export type getClusterSurveyInfoDepartmentResponse =
+    | getClusterSurveyInfoDepartmentResponseSuccess
+    | getClusterSurveyInfoDepartmentResponseError
+
+export const getGetClusterSurveyInfoDepartmentUrl = (
+    id: string,
+    params: GetClusterSurveyInfoDepartmentParams
+) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/cluster-survey/${id}/get-cluster-survey-info-department?${stringifiedParams}`
+        : `/api/cluster-survey/${id}/get-cluster-survey-info-department`
+}
+
+export const getClusterSurveyInfoDepartment = async (
+    id: string,
+    params: GetClusterSurveyInfoDepartmentParams,
+    options?: RequestInit
+): Promise<getClusterSurveyInfoDepartmentResponse> => {
+    return customExamFetch<getClusterSurveyInfoDepartmentResponse>(
+        getGetClusterSurveyInfoDepartmentUrl(id, params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getGetClusterSurveyInfoDepartmentQueryKey = (
+    id?: string,
+    params?: GetClusterSurveyInfoDepartmentParams
+) => {
+    return [
+        `/api/cluster-survey/${id}/get-cluster-survey-info-department`,
+        ...(params ? [params] : []),
+    ] as const
+}
+
+export const getGetClusterSurveyInfoDepartmentQueryOptions = <
+    TData = Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>,
+    TError = GetClusterSurveyInfoDepartment404,
+>(
+    id: string,
+    params: GetClusterSurveyInfoDepartmentParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customExamFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetClusterSurveyInfoDepartmentQueryKey(id, params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>> = ({
+        signal,
+    }) => getClusterSurveyInfoDepartment(id, params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetClusterSurveyInfoDepartmentQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>
+>
+export type GetClusterSurveyInfoDepartmentQueryError = GetClusterSurveyInfoDepartment404
+
+export function useGetClusterSurveyInfoDepartment<
+    TData = Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>,
+    TError = GetClusterSurveyInfoDepartment404,
+>(
+    id: string,
+    params: GetClusterSurveyInfoDepartmentParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>,
+                    TError,
+                    Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customExamFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetClusterSurveyInfoDepartment<
+    TData = Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>,
+    TError = GetClusterSurveyInfoDepartment404,
+>(
+    id: string,
+    params: GetClusterSurveyInfoDepartmentParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>,
+                    TError,
+                    Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customExamFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetClusterSurveyInfoDepartment<
+    TData = Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>,
+    TError = GetClusterSurveyInfoDepartment404,
+>(
+    id: string,
+    params: GetClusterSurveyInfoDepartmentParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customExamFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Thống kê khảo sát cụm thông tin chung theo khoa
+ */
+
+export function useGetClusterSurveyInfoDepartment<
+    TData = Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>,
+    TError = GetClusterSurveyInfoDepartment404,
+>(
+    id: string,
+    params: GetClusterSurveyInfoDepartmentParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customExamFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetClusterSurveyInfoDepartmentQueryOptions(id, params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+/**
+ * @summary Đánh tag minh chứng cho đợt đánh giá
+ */
+export type calcEvidenceTagsResponse200 = {
+    data: CalcEvidenceTags200
+    status: 200
+}
+
+export type calcEvidenceTagsResponse404 = {
+    data: CalcEvidenceTags404
+    status: 404
+}
+
+export type calcEvidenceTagsResponseSuccess = calcEvidenceTagsResponse200 & {
+    headers: Headers
+}
+export type calcEvidenceTagsResponseError = calcEvidenceTagsResponse404 & {
+    headers: Headers
+}
+
+export type calcEvidenceTagsResponse =
+    | calcEvidenceTagsResponseSuccess
+    | calcEvidenceTagsResponseError
+
+export const getCalcEvidenceTagsUrl = () => {
+    return `/api/evaluate/calc-evidence-tags`
+}
+
+export const calcEvidenceTags = async (
+    calcEvidenceTags: CalcEvidenceTags,
+    options?: RequestInit
+): Promise<calcEvidenceTagsResponse> => {
+    return customExamFetch<calcEvidenceTagsResponse>(getCalcEvidenceTagsUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(calcEvidenceTags),
+    })
+}
+
+export const getCalcEvidenceTagsMutationOptions = <
+    TError = CalcEvidenceTags404,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof calcEvidenceTags>>,
+        TError,
+        { data: CalcEvidenceTags },
+        TContext
+    >
+    request?: SecondParameter<typeof customExamFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof calcEvidenceTags>>,
+    TError,
+    { data: CalcEvidenceTags },
+    TContext
+> => {
+    const mutationKey = ['calcEvidenceTags']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof calcEvidenceTags>>,
+        { data: CalcEvidenceTags }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return calcEvidenceTags(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type CalcEvidenceTagsMutationResult = NonNullable<
+    Awaited<ReturnType<typeof calcEvidenceTags>>
+>
+export type CalcEvidenceTagsMutationBody = CalcEvidenceTags
+export type CalcEvidenceTagsMutationError = CalcEvidenceTags404
+
+/**
+ * @summary Đánh tag minh chứng cho đợt đánh giá
+ */
+export const useCalcEvidenceTags = <TError = CalcEvidenceTags404, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof calcEvidenceTags>>,
+            TError,
+            { data: CalcEvidenceTags },
+            TContext
+        >
+        request?: SecondParameter<typeof customExamFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof calcEvidenceTags>>,
+    TError,
+    { data: CalcEvidenceTags },
+    TContext
+> => {
+    const mutationOptions = getCalcEvidenceTagsMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
 }

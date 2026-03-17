@@ -1,4 +1,4 @@
-import { fetchInstance, queryClient } from '@api/index'
+import { queryClient } from '@api/index'
 import { Spinner } from '@components/commons/spinner'
 import { colors } from '@constants/colors'
 import store from '@redux/store'
@@ -26,6 +26,7 @@ import { ReactHookModalProvider } from 'react-hook-disclosure-modal'
 import LoadingBar from 'react-top-loading-bar'
 import '@assets/css/custom.css'
 import { getRuntimeEnv } from '@workspace/libs/utils'
+import { fetchInstance } from '@workspace/libs/api/custom-instance'
 
 dayjs.locale('vi')
 dayjs.extend(weekOfYear)

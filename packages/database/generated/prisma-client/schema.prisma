@@ -899,6 +899,7 @@ model UserProfile {
   surveySession                        SurveySession[]
   evaluationCriterionComments          EvaluationCriterionComment[]
   classSchedules                       ClassSchedule[]
+  subjectClassAttendance               SubjectClassAttendance[]
 
   @@schema("ql-nguoi-dung")
 }
@@ -2542,7 +2543,7 @@ model StudentSubjectScoreHistory {
   createdBy             String?             @db.Uuid()
   studentSubjectScore   StudentSubjectScore @relation(fields: [studentSubjectScoreId], references: [id])
   studentSubjectScoreId String
-  /// điểm chuyên cần
+  /// điểm thường xuyên
   attendanceScore       Float?
   /// điểm giữa kỳ
   midtermScore          Float?
@@ -3329,16 +3330,16 @@ model SubjectClass {
   examType                    ExamType?
   exam                        Exam?                    @relation(fields: [examId], references: [id])
   examId                      String?
-  /// ngày bắt đầu nhập điểm CC/TX
+  /// ngày bắt đầu nhập điểm TX/ĐK
   scoreDeadLineStart          DateTime?
-  /// ngày kết thúc nhập điểm CC/TX
+  /// ngày kết thúc nhập điểm TX/ĐK
   scoreDeadline               DateTime?
   /// hạn nhập điểm thi
   examScoreDeadline           DateTime?
   enteredScore                Boolean                  @default(false)
   enteredExamScore            Boolean                  @default(false)
   issuedScoreAt               DateTime?
-  /// khoá điểm CC/TX
+  /// khoá điểm TX/ĐK
   isLockScore                 Boolean                  @default(false)
   /// khoá điểm thi
   isLockExamScore             Boolean                  @default(false)
@@ -3368,6 +3369,44 @@ model SubjectClass {
   survey                      Survey[]
   subjectClassHistory         SubjectClassHistory[]
   examBank                    ExamBank[]
+  subjectClassAttendances     SubjectClassAttendance[]
+
+  @@schema("ql-dao-tao")
+}
+
+model SubjectClassAttendance {
+  id                            String                          @id() @default(cuid())
+  code                          String?                         @unique()
+  active                        Boolean                         @default(true)
+  description                   String?                         @db.Text()
+  deletedAt                     DateTime?
+  createdAt                     DateTime                        @default(now())
+  updatedAt                     DateTime                        @default(now()) @updatedAt()
+  createdBy                     String?                         @db.Uuid()
+  time                          DateTime
+  subjectClass                  SubjectClass                    @relation(fields: [subjectClassId], references: [id])
+  subjectClassId                String
+  profile                       UserProfile?                    @relation(fields: [profileId], references: [id])
+  profileId                     String?                         @db.Uuid()
+  subjectClassAttendanceStudent SubjectClassAttendanceStudent[]
+
+  @@schema("ql-dao-tao")
+}
+
+model SubjectClassAttendanceStudent {
+  id                       String                 @id() @default(cuid())
+  code                     String?                @unique()
+  active                   Boolean                @default(true)
+  description              String?                @db.Text()
+  deletedAt                DateTime?
+  createdAt                DateTime               @default(now())
+  updatedAt                DateTime               @default(now()) @updatedAt()
+  createdBy                String?                @db.Uuid()
+  subjectClassAttendance   SubjectClassAttendance @relation(fields: [subjectClassAttendanceId], references: [id])
+  subjectClassAttendanceId String
+  student                  Student                @relation(fields: [studentId], references: [id])
+  studentId                String
+  attendanceStatus         Boolean                @default(true)
 
   @@schema("ql-dao-tao")
 }
@@ -4091,6 +4130,7 @@ model Student {
   noteFolders                    NoteFolder[]
   semesterTrainingScore          SemesterTrainingScore[]
   schoolYearTrainingScore        SchoolYearTrainingScore[]
+  subjectClassAttendanceStudent  SubjectClassAttendanceStudent[]
 
   @@schema("ql-dao-tao")
 }
@@ -5986,7 +6026,7 @@ model Scholarship {
   createdBy        String?               @db.Uuid()
   name             String
   rankOrder        Int
-  baseAmount       Decimal
+  baseAmount       Decimal               @default(0)
   multiplier       Float                 @default(1)
   effectiveFrom    DateTime?
   effectiveTo      DateTime?

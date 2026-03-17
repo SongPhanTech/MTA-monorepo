@@ -114,17 +114,17 @@ export function NestedCollapsibleTable<T extends Record<string, any>>({
         const map: Record<string, number> = {}
         const roots: T[] = []
 
-        items.forEach((item, index) => {
-            map[item[key]] = index // Lưu vị trí của item trong mảng gốc
-            // @ts-expect-error
-            items[index].children = [] as T[]
+        // Tạo bản sao để tránh mutate dữ liệu gốc từ React Query cache
+        const clonedItems: T[] = items.map((item) => ({ ...item, children: [] as T[] }))
+
+        clonedItems.forEach((item, index) => {
+            map[item[key]] = index
         })
 
-        items.forEach((node) => {
+        clonedItems.forEach((node) => {
             const parentId = node[parentKey]
-            // Nếu có parentId và cha tồn tại trong map
-            if (parentId !== null && map[parentId] !== undefined) {
-                items[map[parentId]].children.push(node)
+            if (parentId !== null && parentId !== undefined && map[parentId] !== undefined) {
+                clonedItems[map[parentId]].children.push(node)
             } else {
                 roots.push(node)
             }

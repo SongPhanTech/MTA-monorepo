@@ -811,7 +811,7 @@ export default function ClassSubject() {
                                     record ? dayjs(record).format('DD/MM/YYYY') : '',
                             },
                             {
-                                title: 'Hạn ĐT',
+                                title: 'Hạn NĐT',
                                 width: 120,
                                 align: 'center',
                                 type: 'date',

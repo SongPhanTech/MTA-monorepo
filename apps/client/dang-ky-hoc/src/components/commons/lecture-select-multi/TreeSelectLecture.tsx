@@ -72,6 +72,7 @@ const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
                 { lecturers: { some: { active: true } } },
             ],
         },
+        orderBy: [{ iSTT: 'asc' }, { sTen: 'asc' }],
     })
 
     // Lấy danh sách Lecturer

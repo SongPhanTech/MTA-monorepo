@@ -13,7 +13,7 @@ import {
     useFindUniqueArchivedAward,
     useUpdateArchivedAward,
 } from '@workspace/db/hooks'
-import { Col, Form, InputNumber, message } from 'antd'
+import { Col, Form, InputNumber, message, Switch } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -32,11 +32,13 @@ export type PutArchivedAward = ArchivedAward & {
 dayjs.locale('vi')
 const PutArchivedAwardModal = () => {
     const [document, setDocument] = useState<DocumentFile[]>([])
+    const [filterByAward, setFilterByAward] = useState(false)
     const [form] = Form.useForm<PutArchivedAward>()
 
     const fixedClassId = Form.useWatch('fixedClassesId', form)
     const trainingCoursesId = Form.useWatch('trainingCoursesId', form)
     const studentId = Form.useWatch('studentId', form)
+    const awardId = Form.useWatch('awardId', form)
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const {
         isOpen,
@@ -50,7 +52,11 @@ const PutArchivedAwardModal = () => {
 
     const { mutateAsync: createArchivedAward } = useCreateArchivedAward()
     const { mutateAsync: updateArchivedAward } = useUpdateArchivedAward()
-    const { data: awardData = [] } = useFindManyAward()
+    const { data: awardData = [] } = useFindManyAward({
+        include: {
+            subjects: true,
+        },
+    })
     const { data: trainingCourses = [] } = useFindManyTrainingCourse(
         {
             where: { trainingObjectTypeId },
@@ -107,7 +113,7 @@ const PutArchivedAwardModal = () => {
             select: {
                 id: true,
                 finalScore: true,
-                subjectVersion: { select: { name: true } },
+                subjectVersion: { select: { name: true, subjectId: true } },
                 subjectClass: {
                     select: { semester: { select: { code: true } } },
                 },
@@ -353,25 +359,50 @@ const PutArchivedAwardModal = () => {
             </Col>
             <Col span={24} className="mb-4">
                 <FormItem form={form} name="studentSubjectScoreId" label="Cộng điểm học phần">
+                    <div className="mb-2">
+                        <Switch
+                            checked={filterByAward}
+                            onChange={setFilterByAward}
+                            checkedChildren="Lọc theo giải"
+                            unCheckedChildren="Tất cả môn"
+                        />
+                        <span className="ml-2 text-gray-500">
+                            {filterByAward
+                                ? 'Chỉ hiển thị môn thuộc giải olympic'
+                                : 'Hiển thị tất cả môn học'}
+                        </span>
+                    </div>
                     <Select
                         showSearch
                         style={{ width: '100%' }}
                         placeholder="Chọn điểm học phần"
-                        options={studentSubjectScores.map((item) => {
-                            const score = item.finalScore
-                                ? `Điểm: ${item.finalScore}`
-                                : 'Điểm: chưa có'
-                            return {
-                                label: [
-                                    item.subjectVersion.name,
-                                    score,
-                                    item.subjectClass?.semester?.code,
-                                ]
-                                    .filter(Boolean)
-                                    .join(' - '),
-                                value: item.id,
-                            }
-                        })}
+                        options={studentSubjectScores
+                            .filter((item) => {
+                                if (!filterByAward || !awardId) return true
+                                const selectedAward = awardData.find(
+                                    (award) => award.id === awardId
+                                )
+                                if (!selectedAward) return true
+                                const allowedSubjectIds = selectedAward.subjects.map((s) => s.id)
+                                return allowedSubjectIds.includes(
+                                    item.subjectVersion.subjectId || ''
+                                )
+                            })
+                            .map((item) => {
+                                const score = item.finalScore
+                                    ? `Điểm: ${item.finalScore}`
+                                    : 'Điểm: chưa có'
+                                return {
+                                    label: [
+                                        item.subjectVersion.name,
+                                        score,
+                                        item.subjectClass?.semester?.code,
+                                    ]
+                                        .filter(Boolean)
+                                        .join(' - '),
+                                    value: item.id,
+                                }
+                            })}
                     />
                 </FormItem>
             </Col>

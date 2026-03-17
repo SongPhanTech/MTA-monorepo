@@ -22,9 +22,9 @@ import dayjs from 'dayjs'
 import TreeSelect from '@/components/commons/tree-select'
 import 'dayjs/locale/vi'
 import { subjectVersionTypeOptions } from '@workspace/libs/constants'
+import { BadgeHelpIcon } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { BadgeHelpIcon } from 'lucide-react'
 
 export type PutSubjectVersion = SubjectVersion & {
     documentFiles?: DocumentFile[]
@@ -69,7 +69,7 @@ const PutVersionSubjectModal = () => {
                 subject: true,
             },
         },
-        { enabled: !!subjectVersionId }
+        { enabled: !!subjectVersionId, refetchOnWindowFocus: false }
     )
 
     const subjectId = input?.subjectId || subjectVersion?.subjectId || ''
@@ -85,24 +85,30 @@ const PutVersionSubjectModal = () => {
 
     const { data: subject } = useFindUniqueSubject(
         { where: { id: subjectId } },
-        { enabled: !!subjectId }
+        { enabled: !!subjectId, refetchOnWindowFocus: false }
     )
 
-    const { data: subjectData = [] } = useFindManySubject({
-        include: {
-            subjectVersion: {
-                where: {
-                    id: {
-                        not: subjectVersionId,
+    const { data: subjectData = [] } = useFindManySubject(
+        {
+            include: {
+                subjectVersion: {
+                    where: {
+                        id: {
+                            not: subjectVersionId,
+                        },
                     },
                 },
             },
         },
-    })
+        { refetchOnWindowFocus: false }
+    )
 
-    const { data: trainingObjectType = [] } = useFindManyTrainingObjectTypePermission({
-        select: { id: true, name: true },
-    })
+    const { data: trainingObjectType = [] } = useFindManyTrainingObjectTypePermission(
+        {
+            select: { id: true, name: true },
+        },
+        { refetchOnWindowFocus: false }
+    )
 
     const treeData =
         subjectData
@@ -567,7 +573,12 @@ const PutVersionSubjectModal = () => {
                     </FormItem>
                 </Col>
                 <Col span={8}>
-                    <FormItem form={form} name="credit" label="Số tín chỉ" required>
+                    <FormItem
+                        form={form}
+                        name="credit"
+                        label={`Số tín chỉ ${isScored ? ' (Đã đăng ký học - không được sửa)' : ''}`}
+                        required
+                    >
                         <InputNumber
                             min={0}
                             disabled={isScored}

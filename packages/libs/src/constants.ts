@@ -6,7 +6,8 @@ export const subjectVersionTypes: Record<string, $Enums.SubjectVersionType> = {
     'Thí nghiệm/Thực hành': $Enums.SubjectVersionType.Practice,
     'Thực tập': $Enums.SubjectVersionType.Internship,
     'Chuyên đề nghiên cứu': $Enums.SubjectVersionType.Research,
-    'Đồ án/Đề án': $Enums.SubjectVersionType.Project,
+    'Đồ án': $Enums.SubjectVersionType.Project,
+    'Luận văn/đề án': $Enums.SubjectVersionType.Thesis,
     'Thi tốt nghiệp': $Enums.SubjectVersionType.Graduation,
 }
 
@@ -113,6 +114,7 @@ export const questionTypeOptions: QuestionTypeOption[] = Object.entries(question
     })
 )
 export const whereOrganization: Prisma.DM_DonViWhereInput = {
+    bDeleted: { not: true },
     OR: [
         { iLoaiDonVi: 0 }, // TODO: fix
         { iLoaiDonVi: 2 }, // Trung tâm

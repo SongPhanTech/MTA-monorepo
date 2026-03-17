@@ -8,7 +8,6 @@ import DefaultLayout from '@layouts/default-layout'
 import { $Enums, type Prisma } from '@workspace/db/client'
 import { useFindManySubjectVersion } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
-import { useAbility } from '@workspace/permissions/hooks'
 import { useSemesterStore, useTrainingCourseStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { cn } from '@workspace/ui/lib/utils'
 import { Button, Col, Flex, Form, Input, InputNumber, message, Popover, Row, Switch } from 'antd'
@@ -39,7 +38,6 @@ type MoLMHNhanhForm = {
 }
 
 export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClassType }) {
-    const { canSome } = useAbility()
     const [form] = Form.useForm<OpenSubjectClassForm>()
     const [formMoLMHNhanh] = Form.useForm<MoLMHNhanhForm>()
     const [currentPage, setCurrentPage] = useState(1)
@@ -48,7 +46,6 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
 
     const searchText = Form.useWatch('searchText', form)
     const { id: trainingCourseId } = useTrainingCourseStore()
-    const trainingMajorId = Form.useWatch('trainingMajorId', form)
     const subjectVersions = Form.useWatch('subjectVersions', form) || {}
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: subjects, refetch } = useFindManySubjectVersion({
@@ -139,11 +136,15 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                     maxStudent: true,
                 },
             },
-            managementOrganization: {
+            subject: {
                 select: {
-                    sMa: true,
-                },
+                     managementOrganization: {
+                            select: {
+                                 sMa: true,
+                        },
+            }
             },
+        }
         },
     })
 
@@ -168,8 +169,8 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                         name: cur.name,
                         code: cur?.code,
                         maxStudent:
-                            cur.trainingBlocks?.[0]?.planTrainingSubjects?.[0]?.studentCount ??
-                            cur.subjectClass?.[0]?.maxStudent,
+                            cur.subjectClass?.[0]?.maxStudent ??
+                            cur.trainingBlocks?.[0]?.planTrainingSubjects?.[0]?.studentCount,
                         isEdit: false,
                     }
                     return acc
@@ -558,29 +559,6 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                                         )
                                     },
                                 },
-                                // {
-                                //     title: 'Danh sách lớp MH',
-                                //     dataIndex: 'subjectClass',
-                                //     align: 'center',
-                                //     hidden: hocLai,
-                                //     render: (__, record) => {
-                                //         return record.trainingBlocks?.subjectClass?.length ? (
-                                //             <TextTruncate
-                                //                 arr={record?.subjectVersion?.subjectClass.map(
-                                //                     (i: any) => {
-                                //                         return {
-                                //                             key: i?.id,
-                                //                             label: `${i?.code}`,
-                                //                         }
-                                //                     }
-                                //                 )}
-                                //                 key="subjectClass"
-                                //             />
-                                //         ) : (
-                                //             ''
-                                //         )
-                                //     },
-                                // },
                                 {
                                     title: 'Danh sách lớp quản lý',
                                     dataIndex: 'fixedClass',
@@ -590,11 +568,10 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                                         const fixedClasses = record?.trainingBlocks?.map(
                                             // @ts-expect-error
                                             (block) =>
-                                                block.trainingBlockOnCurriculumVersion
-                                                    .curriculumVersion.fixedClass
+                                                block?.trainingBlockOnCurriculumVersion
+                                                    ?.curriculumVersion?.fixedClass
                                         )
-                                        console.log(fixedClasses);
-                                        
+
                                         return (
                                             <TextTruncate
                                                 arr={fixedClasses.map((i: any) => {
@@ -618,8 +595,8 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                                                   const fixedClasses = record?.trainingBlocks.map(
                                                       // @ts-expect-error
                                                       (block) =>
-                                                          block.trainingBlockOnCurriculumVersion
-                                                              .curriculumVersion.fixedClass
+                                                          block?.trainingBlockOnCurriculumVersion
+                                                              ?.curriculumVersion?.fixedClass
                                                   )
                                                   return (
                                                       fixedClasses?.reduce(
@@ -636,8 +613,7 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                                     title: 'Đơn vị phụ trách',
                                     width: 150,
                                     align: 'center',
-                                    render: (_, record) =>
-                                        record?.managementOrganization?.sMa || '',
+                                    render: (_, record) => record?.subject?.managementOrganization?.sMa || '',
                                 },
                                 {
                                     title: 'Số LMH',

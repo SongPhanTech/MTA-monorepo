@@ -223,7 +223,7 @@ export default function EvidenceCategory() {
                                 title: 'Nơi ban hành',
                                 type: 'input',
                                 dataIndex: 'issuer',
-                                width: 100,
+                                width: 120,
                                 align: 'left',
                                 render: (_, record) => (record?.issuer ? record.issuer : ''),
                             },

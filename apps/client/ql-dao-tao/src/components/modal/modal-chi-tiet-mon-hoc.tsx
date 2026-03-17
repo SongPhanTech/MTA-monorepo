@@ -31,13 +31,9 @@ export default function ModalChiTietMonHoc() {
     const { data: subjectVersionData } = useFindUniqueSubjectVersion(
         {
             where: { id: subjectVersionId },
-            include: {
-                subject: true,
-            },
+            include: { subject: true, subjectClass: { select: { id: true } } },
         },
-        {
-            enabled: !!subjectVersionId && isOpen,
-        }
+        { enabled: !!subjectVersionId && isOpen }
     )
 
     const subjectId = subjectVersionData?.subject?.id
@@ -598,14 +594,14 @@ export default function ModalChiTietMonHoc() {
                             render: (_: any, record: any) => record.exam?.code,
                         },
                         {
-                            title: 'Bắt đầu nhập CC/TX',
+                            title: 'Bắt đầu nhập TX/ĐK',
                             dataIndex: 'scoreDeadLineStart',
                             width: 140,
                             render: (value) =>
                                 value ? dayjs(value).format('DD/MM/YYYY HH:mm') : '',
                         },
                         {
-                            title: 'Hạn nhập CC/TX',
+                            title: 'Hạn nhập TX/ĐK',
                             dataIndex: 'scoreDeadline',
                             width: 140,
                             render: (value) =>
@@ -619,7 +615,7 @@ export default function ModalChiTietMonHoc() {
                                 value ? dayjs(value).format('DD/MM/YYYY HH:mm') : '',
                         },
                         {
-                            title: 'Khóa CC/TX',
+                            title: 'Khóa TX/ĐK',
                             dataIndex: 'isLockScore',
                             width: 100,
                             align: 'center' as const,
@@ -633,7 +629,7 @@ export default function ModalChiTietMonHoc() {
                             render: (value: boolean) => (value ? 'Có' : 'Không'),
                         },
                         {
-                            title: 'Đã nhập CC/TX',
+                            title: 'Đã nhập TX/ĐK',
                             dataIndex: 'enteredScore',
                             width: 120,
                             align: 'center' as const,

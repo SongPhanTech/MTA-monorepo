@@ -423,14 +423,18 @@ app.openapi(getSurveyStatisticsToField, async (c) => {
     function calcGroupAnswerTotals(groups: any[]) {
         return groups.map((group) => {
             const answers = group.questions[0].answers.map((i: any) => {
-                return { ...i, count: 0 }
+                return { ...i }
             })
+            // answers.forEach((answer: any, index: number) => {
+            //     answers[index].count= group.questions[0].answers.reduce((sum:any, item:any) => sum + item.count, 0)
 
-            group.questions.forEach((question: any) => {
-                question.answers.forEach((answer: any, index: number) => {
-                    answers[index].count += answer.count
-                })
-            })
+            // })
+            // group.questions.forEach((question: any) => {
+            //     question.answers.forEach((answer: any, index: number) => {
+            //         answers[index].count += answer.count
+            //     })
+            // })
+
             const totalCount = calcTotalCount(answers)
 
             return {

@@ -43,9 +43,7 @@ export default function DiemTheoPhach({ type = 'NHAP_DIEM_THEO_PHACH' }: DiemThe
     const { selectedExamListId } = useStore(diemPhongThiStore)
     const { data } = useFindFirstSubjectClass(
         {
-            where: {
-                examId: examId,
-            },
+            where: { examId },
             include: {
                 mainLecturer: {
                     include: {

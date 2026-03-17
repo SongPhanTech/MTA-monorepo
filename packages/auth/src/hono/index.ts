@@ -15,19 +15,25 @@ declare module 'hono' {
 
 export const jwtAuth = (appCode: string): MiddlewareHandler => {
     return async (c, next) => {
-        const token = getCookie(c, `x-token-${appCode}`)
-        const cookie = c.req.header('Cookie')
+        console.log(`[jwtAuth] Checking authentication for appCode: ${appCode}`)
+
+        const headerToken = c.req.header('Authorization')?.split(' ')[1]
+        const token = headerToken || getCookie(c, `x-token-${appCode}`)
+
+        const reqCookie = c.req.header('Cookie') || ''
+
         if (!token) {
             return c.text('Unauthorized: No token provided', 401)
         }
+        const cookie = headerToken ? `x-tenantcode=dev; x-token-${appCode}=${token}` : reqCookie
         try {
             const response = await fetch(
-                'https://mta.swantech.vn/api/system/share/users/user-info',
+                `${process.env.SYSTEM_BASE_URL}/api/system/share/users/user-info`,
                 {
                     method: 'GET',
                     credentials: 'include',
                     headers: {
-                        Cookie: cookie || '',
+                        Cookie: cookie,
                         'K-AppCode': appCode,
                         'K-TenantCode': 'dev',
                     },

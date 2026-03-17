@@ -103,6 +103,7 @@ const relationSchema = z.object({
     survey: z.array(z.unknown()).optional(),
     subjectClassHistory: z.array(z.unknown()).optional(),
     examBank: z.array(z.unknown()).optional(),
+    subjectClassAttendances: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

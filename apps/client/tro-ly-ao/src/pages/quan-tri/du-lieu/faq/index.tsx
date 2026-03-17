@@ -263,7 +263,10 @@ function Page() {
                                 fixed: 'right',
                                 render: (_, record) => (
                                     <div className="flex items-center justify-center gap-2">
-                                        {can(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DU_LIEU_FAQ, 'DUYET') &&
+                                        {can(
+                                            TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DU_LIEU_FAQ,
+                                            'DUYET'
+                                        ) &&
                                             (record.status === $Enums.DocumentStatus.PENDING ||
                                                 record.status === $Enums.DocumentStatus.DENY) && (
                                                 <Tooltip title="Phê duyệt" placement="top">
@@ -275,7 +278,10 @@ function Page() {
                                                     />
                                                 </Tooltip>
                                             )}
-                                        {can(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DU_LIEU_FAQ, 'SUA') && (
+                                        {can(
+                                            TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DU_LIEU_FAQ,
+                                            'SUA'
+                                        ) && (
                                             <Tooltip title="Xem chi tiết" placement="leftTop">
                                                 <EyeOutlined
                                                     onClick={() => openPutCauHoi(record.id)}
@@ -283,7 +289,10 @@ function Page() {
                                                 />
                                             </Tooltip>
                                         )}
-                                        {can(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DU_LIEU_FAQ, 'XOA') && (
+                                        {can(
+                                            TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DU_LIEU_FAQ,
+                                            'XOA'
+                                        ) && (
                                             <DeleteIcon
                                                 popConfirm={{
                                                     onConfirm: () => handleDeleteFAQ(record.id),

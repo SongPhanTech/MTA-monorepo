@@ -166,14 +166,14 @@ model StudentSubjectScore extends Base {
   studentSubjectScoreHistory   StudentSubjectScoreHistory[]
   scoreCorrectionItem          ScoreCorrectionItem[]
 
-  @@unique([subjectClassId, studentId ])
+  @@unique([subjectClassId, studentId])
   @@schema("ql-dao-tao")
 }
 
 model StudentSubjectScoreHistory extends Base {
   studentSubjectScore   StudentSubjectScore @relation(fields: [studentSubjectScoreId], references: [id])
   studentSubjectScoreId String
-  /// điểm chuyên cần
+  /// điểm thường xuyên
   attendanceScore       Float?              @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10')
   /// điểm giữa kỳ
   midtermScore          Float?              @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10')
@@ -828,6 +828,8 @@ model TrainingBlockSubject extends Base {
   graduation                         Boolean
 
   planTrainingSubjects               PlanTrainingSubject[]
+
+  // @@unique([subjectId, trainingBlockOnCurriculumVersionId])
   @@schema("ql-dao-tao")
 }
 
@@ -954,9 +956,9 @@ model SubjectClass extends BaseNoCode {
   exam                        Exam?                    @relation(fields: [examId], references: [id])
   examId                      String?
 
-  /// ngày bắt đầu nhập điểm CC/TX
+  /// ngày bắt đầu nhập điểm TX/ĐK
   scoreDeadLineStart          DateTime? // default 20 ngày trước ngày thi
-  /// ngày kết thúc nhập điểm CC/TX
+  /// ngày kết thúc nhập điểm TX/ĐK
   scoreDeadline               DateTime? // default 10 ngày trước ngày thi
   /// hạn nhập điểm thi
   examScoreDeadline           DateTime? // : default 10 ngày sau ngày thi
@@ -968,7 +970,7 @@ model SubjectClass extends BaseNoCode {
   issuedScoreAt               DateTime? // ngày xuất phiếu điểm
 
   // khoá khi xuất phiếu điểm, lên DS thi. (P13 có thể mở khoá)
-  /// khoá điểm CC/TX
+  /// khoá điểm TX/ĐK
   isLockScore                 Boolean                  @default(false)
   // khoá khi xuất phiếu điểm. (P13 có thể mở khoá)
   /// khoá điểm thi
@@ -1014,9 +1016,36 @@ model SubjectClass extends BaseNoCode {
 
   subjectClassHistory         SubjectClassHistory[]
   examBank                    ExamBank[]
-
+  subjectClassAttendances      SubjectClassAttendance[]
   @@schema("ql-dao-tao")
 }
+
+// Điểm danh
+model SubjectClassAttendance extends Base {
+  time                   DateTime
+	subjectClass           SubjectClass @relation(fields: [subjectClassId], references: [id])
+	subjectClassId         String
+  // Người điểm danh
+  profile           UserProfile?  @relation(fields: [profileId], references: [id])
+  profileId         String?       @db.Uuid
+  subjectClassAttendanceStudent   SubjectClassAttendanceStudent[]
+   @@schema("ql-dao-tao")
+}
+
+// Danh sách điểm danh
+model SubjectClassAttendanceStudent extends Base {
+  subjectClassAttendance SubjectClassAttendance @relation(fields: [subjectClassAttendanceId], references: [id])
+	subjectClassAttendanceId String
+
+  student       Student @relation(fields: [studentId], references: [id])
+	studentId     String
+  //Trạng thái điểm danh
+  attendanceStatus Boolean @default(true)
+
+   @@schema("ql-dao-tao")
+}
+
+
 
 model SubjectClassHistory extends Base {
   subjectClass       SubjectClass @relation(fields: [subjectClassId], references: [id])

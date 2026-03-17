@@ -616,7 +616,15 @@ app.openapi(importStudent, async (c) => {
         data.students.map((student) => student.position)
     )
 
-    const classConsistencyMap = new Map<string, { className: string; curriculum: string }>()
+    const managementOrganizationMap = await buildOrgNameMapOrThrow(
+        prisma,
+        data.students.map((student) => student.managementOrganization)
+    )
+
+    const classConsistencyMap = new Map<
+        string,
+        { className: string; curriculum: string; managementOrganization: string }
+    >()
     const inconsistentClassCodes = new Set<string>()
 
     for (const student of data.students) {
@@ -626,7 +634,8 @@ app.openapi(importStudent, async (c) => {
         if (existing) {
             if (
                 existing.className !== student.fixedClass ||
-                existing.curriculum !== student.curriculum
+                existing.curriculum !== student.curriculum ||
+                existing.managementOrganization !== student.managementOrganization
             ) {
                 inconsistentClassCodes.add(student.fixedClassCode)
             }
@@ -634,6 +643,7 @@ app.openapi(importStudent, async (c) => {
             classConsistencyMap.set(student.fixedClassCode, {
                 className: student.fixedClass,
                 curriculum: student.curriculum,
+                managementOrganization: student.managementOrganization,
             })
         }
     }
@@ -641,7 +651,7 @@ app.openapi(importStudent, async (c) => {
     if (inconsistentClassCodes.size > 0) {
         return c.json(
             {
-                message: `Thông tin lớp không nhất quán (Tên lớp hoặc CTĐT khác nhau cho cùng mã lớp): ${Array.from(
+                message: `Thông tin lớp không nhất quán (Tên lớp, CTĐT hoặc đơn vị quản lý khác nhau cho cùng mã lớp): ${Array.from(
                     inconsistentClassCodes
                 ).join(', ')}`,
             },
@@ -735,7 +745,7 @@ app.openapi(importStudent, async (c) => {
         prisma,
         data.students,
         trainingObjectType.id,
-        trainingCourse.name,
+        trainingCourse.id,
         createCurriculumVersion
     )
 
@@ -800,13 +810,16 @@ app.openapi(importStudent, async (c) => {
     //     async (tx) => {
     await prisma.fixedClass.createMany({
         skipDuplicates: true,
-        data: data.students.map(({ fixedClass, fixedClassCode, curriculum }) => ({
-            name: fixedClass,
-            code: fixedClassCode,
-            trainingCourseId: trainingCourse.id,
-            curriculumVersionId: curriculumVersionMap.get(curriculum),
-            startYear: new Date().getFullYear(),
-        })),
+        data: data.students.map(
+            ({ fixedClass, fixedClassCode, curriculum, managementOrganization }) => ({
+                name: fixedClass,
+                code: fixedClassCode,
+                trainingCourseId: trainingCourse.id,
+                curriculumVersionId: curriculumVersionMap.get(curriculum),
+                managementOrganizationId: managementOrganizationMap.get(managementOrganization),
+                startYear: new Date().getFullYear(),
+            })
+        ),
     })
 
     const fixedClass = await prisma.fixedClass.findMany({
@@ -1089,7 +1102,7 @@ app.openapi(importHeQuanSu, async (c) => {
         prisma,
         data.students,
         trainingObjectType.id,
-        trainingCourse.name
+        trainingCourse.id
     )
 
     const existingStudent = await prisma.student.findMany({

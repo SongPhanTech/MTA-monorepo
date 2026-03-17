@@ -4,7 +4,6 @@ import { useMenuList } from '@hooks/menu-list'
 import { cn } from '@lib/utils'
 import { CONFIG_KEY } from '@workspace/constant'
 import { useFindUniqueConfig } from '@workspace/db/hooks'
-//import packageInfo from '../../../package.json'
 import { getVersion } from '@workspace/libs/api/training'
 import { getDynamicBreadcrumb } from '@workspace/permissions/hooks'
 import { SelectTrainingObjectType, TreeSelectSemester } from '@workspace/ui'
@@ -15,6 +14,7 @@ import { useRouter } from 'next/router'
 import { type ReactNode, useEffect, useMemo, useState } from 'react'
 import { IdleTimerProvider } from 'react-idle-timer'
 import HeaderApp from '@/components/header'
+import packageInfo from '../../../package.json'
 
 const { Header, Content, Footer } = Layout
 interface BreadcrumbListProps {
@@ -154,7 +154,9 @@ const DefaultLayout = ({
                         Học viện Kỹ thuật Quân sự - Địa chỉ: Số 236, Hoàng Quốc Việt, Cầu Giấy, Hà
                         Nội
                     </div>
-                    <div className="ml-auto">Phiên bản: {version ?? '...'}</div>
+                    <div className="ml-auto">
+                        Phiên bản: {(version || packageInfo.version) ?? '...'}
+                    </div>
                 </Footer>
             </Layout>
         </IdleTimerProvider>

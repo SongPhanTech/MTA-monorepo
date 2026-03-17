@@ -19,7 +19,7 @@ import {
 import { useCertificateScore, exportArchivedCertificateExcel } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import {  useTrainingObjectTypeStore } from '@workspace/ui'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Input, Modal, message, Row, Tooltip } from 'antd'
 import { DownloadOutlined } from '@ant-design/icons'
 import { saveAs } from 'file-saver'

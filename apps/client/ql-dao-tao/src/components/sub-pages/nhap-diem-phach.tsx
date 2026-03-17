@@ -17,11 +17,7 @@ export default function NhapDiemPhach() {
     const { data: examPapers = [], refetch } = useFindManyExamPaper(
         {
             where: {
-                examList: {
-                    examRoom: {
-                        examId,
-                    },
-                },
+                examList: { examRoom: { examId } },
                 studentSubjectScore: {
                     suspended: false,
                     examBanned: false,
@@ -160,6 +156,7 @@ export default function NhapDiemPhach() {
                                 convertTo: 'pdf',
                             })
                         }}
+                        className="mr-2"
                     >
                         <Printer />
                         In phiếu điểm kèm phách

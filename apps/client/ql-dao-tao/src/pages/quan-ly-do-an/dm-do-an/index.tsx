@@ -1,9 +1,12 @@
+import { LockOutlined, UnlockOutlined } from '@ant-design/icons'
+import { queryClient } from '@api/index'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { useThesisProjectStatusOptions } from '@hooks/thesisProjectStatus'
 import DefaultLayout from '@layouts/default-layout'
+import { useSession } from '@workspace/auth/react'
 import {
     CouncilRole,
     StudentThesisRegistrationStatus,
@@ -21,8 +24,9 @@ import {
     useFindManyThesisProject,
     useUpdateThesisProject,
 } from '@workspace/db/hooks'
-import { useSession } from '@workspace/auth/react'
 import { sqlTransaction } from '@workspace/libs/api/model'
+import { useAbility } from '@workspace/permissions'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import {
     Button,
@@ -40,14 +44,11 @@ import {
     Tooltip,
 } from 'antd'
 import dayjs from 'dayjs'
-import { LockOutlined, UnlockOutlined } from '@ant-design/icons'
+import utc from 'dayjs/plugin/utc'
 import { CircleMinus, SquarePen } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import utc from 'dayjs/plugin/utc'
-import { useAbility } from '@workspace/permissions'
-import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import { queryClient } from '@api/index'
+
 dayjs.extend(utc)
 interface DoAnForm {
     subjectClassId: string
@@ -129,12 +130,9 @@ export default function DanhMucDoAn() {
             thesisType: ThesisType.PROJECT,
             ...(subjectClassId
                 ? { subjectClassId }
-                : {
-                      subjectClassId: {
-                          in: subjectClassData.map((c) => c.id),
-                      },
-                  }),
-            ...(currentLecturer
+                : { subjectClassId: { in: subjectClassData.map((c) => c.id) } }),
+            ...(!can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DM_DO_AN, 'XEM_TAT_CA') &&
+            currentLecturer
                 ? {
                       OR: [
                           { supervisor: { lecturerId: currentLecturer.id } },
@@ -552,31 +550,41 @@ export default function DanhMucDoAn() {
                             layout="horizontal"
                             className="w-full mb-4 flex flex-wrap items-end gap-4"
                         >
-                            <Form.Item
-                                name="subjectClassId"
-                                label="Lớp môn học"
-                                className="mb-0 w-86"
-                            >
-                                <Select
-                                    className="w-86"
-                                    popupMatchSelectWidth={false}
-                                    options={subjectClassData?.map((item) => ({
-                                        label: `${item.code} - ${item.name}`,
-                                        value: item.id,
-                                    }))}
-                                    placeholder="Chọn lớp môn học"
-                                />
-                            </Form.Item>
+                            {can(
+                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DM_DO_AN,
+                                'THEM'
+                            ) && (
+                                <Form.Item
+                                    name="subjectClassId"
+                                    label="Lớp môn học"
+                                    className="mb-0 w-86"
+                                >
+                                    <Select
+                                        className="w-86"
+                                        popupMatchSelectWidth={false}
+                                        options={subjectClassData?.map((item) => ({
+                                            label: `${item.code} - ${item.name}`,
+                                            value: item.id,
+                                        }))}
+                                        placeholder="Chọn lớp môn học"
+                                    />
+                                </Form.Item>
+                            )}
 
                             <Form.Item className="mb-0">
                                 <div className="flex gap-2">
-                                    <Button
-                                        type="primary"
-                                        loading={isPending}
-                                        onClick={async () => await handleGenerateMockData()}
-                                    >
-                                        Tạo dữ liệu mẫu
-                                    </Button>
+                                    {can(
+                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DM_DO_AN,
+                                        'THEM'
+                                    ) && (
+                                        <Button
+                                            type="primary"
+                                            loading={isPending}
+                                            onClick={async () => await handleGenerateMockData()}
+                                        >
+                                            Tạo dữ liệu mẫu
+                                        </Button>
+                                    )}
                                     {editingRowKeys.length > 0 ? (
                                         <>
                                             <Button
@@ -601,13 +609,18 @@ export default function DanhMucDoAn() {
                                             </Button>
                                         </>
                                     ) : (
-                                        <Button
-                                            type="default"
-                                            className="ml-2"
-                                            onClick={handleActivateEdit}
-                                        >
-                                            Chỉnh sửa
-                                        </Button>
+                                        can(
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DM_DO_AN,
+                                            'SUA'
+                                        ) && (
+                                            <Button
+                                                type="default"
+                                                className="ml-2"
+                                                onClick={handleActivateEdit}
+                                            >
+                                                Chỉnh sửa
+                                            </Button>
+                                        )
                                     )}
                                     {isProjectLecturer && (
                                         <>

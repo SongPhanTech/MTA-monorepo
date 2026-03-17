@@ -1,9 +1,9 @@
-import { TableOutlined, UploadOutlined } from '@ant-design/icons'
-import { FileOutlined } from '@ant-design/icons'
+import { FileOutlined, TableOutlined, UploadOutlined } from '@ant-design/icons'
 import DatePicker from '@components/commons/date-picker'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import TreeSelect from '@components/commons/tree-select'
+import ImportInternshipModal from '@components/modal/import-excel-internship'
 import type { FilterProps } from '@constants/type'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgFlat, buildOrgTree } from '@lib/utils'
@@ -18,20 +18,19 @@ import {
     useFindManyTrainingCourse,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
+import { exportInternshipProfile } from '@workspace/libs/api/training'
 import { whereOrganization } from '@workspace/libs/constants'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { cn } from '@workspace/ui/lib/utils'
 import { Button, Col, Flex, Form, Modal, message, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import ExcelJS from 'exceljs'
+import { saveAs } from 'file-saver'
 import { SquarePen } from 'lucide-react'
+import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import ExportTemplateInternship from '../../../components/modal/export-template-internship'
-import type React from 'react'
-import { saveAs } from 'file-saver'
-import ImportInternshipModal from '@components/modal/import-excel-internship'
-import { exportInternshipProfile } from '@workspace/libs/api/training'
 
 interface ThucTapForm {
     trainingCourseId: string
@@ -77,6 +76,7 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
         where: {
             ...whereOrganization,
         },
+        orderBy: [{ iSTT: 'asc' }, { sTen: 'asc' }],
     })
     const orgId = window.contextData?.organizationId
     const orgIds = [

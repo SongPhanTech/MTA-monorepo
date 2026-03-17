@@ -76,7 +76,10 @@ function Page() {
                                 Quản lý loại tài liệu
                             </span>
                         </div>
-                        {can(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DANH_MUC_LOAI_TAI_LIEU, 'THEM') && (
+                        {can(
+                            TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DANH_MUC_LOAI_TAI_LIEU,
+                            'THEM'
+                        ) && (
                             <Button onClick={() => openPutClassification()} type="primary">
                                 Thêm mới
                             </Button>
@@ -136,17 +139,24 @@ function Page() {
                                 fixed: 'right',
                                 render: (_, record) => (
                                     <div className="flex items-center justify-center gap-2">
-                                        {can(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DANH_MUC_LOAI_TAI_LIEU, 'SUA') && (
+                                        {can(
+                                            TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DANH_MUC_LOAI_TAI_LIEU,
+                                            'SUA'
+                                        ) && (
                                             <EditOutlined
                                                 onClick={() => openPutClassification(record.id)}
                                                 className="text-blue-700 cursor-pointer text-lg"
                                             />
                                         )}
-                                        {can(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DANH_MUC_LOAI_TAI_LIEU, 'XOA') && (
+                                        {can(
+                                            TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DANH_MUC_LOAI_TAI_LIEU,
+                                            'XOA'
+                                        ) && (
                                             <DeleteIcon
                                                 popConfirm={{
                                                     title: 'Xác nhận xoá loại tài liệu?',
-                                                    description: 'Hành động này sẽ không thể hoàn tác.',
+                                                    description:
+                                                        'Hành động này sẽ không thể hoàn tác.',
                                                     onConfirm: () =>
                                                         handleDeleteClassification(record.id),
                                                 }}

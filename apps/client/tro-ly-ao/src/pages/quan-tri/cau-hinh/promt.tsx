@@ -204,7 +204,12 @@ function Page() {
                                             topicId={item.id}
                                             topicType={item.type}
                                             label={item.name}
-                                            hideEditButton={!can(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_CAU_HINH_PROMT, 'SUA')}
+                                            hideEditButton={
+                                                !can(
+                                                    TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_CAU_HINH_PROMT,
+                                                    'SUA'
+                                                )
+                                            }
                                         />
                                     </Col>
                                 )

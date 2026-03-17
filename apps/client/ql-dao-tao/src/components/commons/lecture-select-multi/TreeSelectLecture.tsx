@@ -57,6 +57,7 @@ const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
         error: organizationsError,
     } = useFindManyDM_DonVi({
         where: {},
+        orderBy: [{ iSTT: 'asc' }, { sTen: 'asc' }],
     })
 
     // Lấy danh sách Lecturer

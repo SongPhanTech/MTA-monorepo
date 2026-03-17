@@ -260,15 +260,19 @@ const ModalNhapTKB = () => {
                             {
                                 label: 'Mẫu 1: Thống kê các giảng viên đang có giờ dạy (Quân sự)',
                                 value: 'THONG_KE_GIAO_VIEN_GIANG_DAY',
+                                className: 'px-3',
                             },
                             {
                                 label: 'Mẫu 2: TKB dự kiến theo lớp học phần (Dân sự)',
                                 value: 'TKB_THEO_LOP_HOC_PHAN',
+                                className: 'px-3',
                             },
                         ]}
                         defaultValue={'THONG_KE_GIAO_VIEN_GIANG_DAY'}
                         optionType="button"
                         buttonStyle="solid"
+                        className="flex gap-2"
+                        size="middle"
                     />
                 </FormItem>
                 <p className="text-sm text-gray-500">

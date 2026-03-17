@@ -18,7 +18,7 @@ const baseSchema = z.object({
     createdBy: z.string().uuid().nullish(),
     name: z.string(),
     rankOrder: z.number(),
-    baseAmount: DecimalSchema,
+    baseAmount: DecimalSchema.default(0),
     multiplier: z.number().default(1),
     effectiveFrom: z.coerce.date().nullish(),
     effectiveTo: z.coerce.date().nullish(),
@@ -97,7 +97,7 @@ export const ScholarshipPrismaUpdateSchema = z.object({
  * `Scholarship` schema for create operations excluding foreign keys and relations.
  */
 export const ScholarshipCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, multiplier: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, baseAmount: true, multiplier: true
 });
 
 
