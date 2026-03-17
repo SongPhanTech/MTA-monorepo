@@ -127,6 +127,7 @@ model Student extends Base {
   noteFolders                    NoteFolder[]
   semesterTrainingScore          SemesterTrainingScore[]
 	schoolYearTrainingScore        SchoolYearTrainingScore[]
+  subjectClassAttendanceStudent  SubjectClassAttendanceStudent[]
 
   @@schema("ql-dao-tao")
 

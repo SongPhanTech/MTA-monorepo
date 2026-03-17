@@ -107,6 +107,8 @@ export * from './ClassRegisterSessionCredit.schema';
 export * from './ClassRegisterSession.schema';
 export * from './ClassRegisterLogs.schema';
 export * from './SubjectClass.schema';
+export * from './SubjectClassAttendance.schema';
+export * from './SubjectClassAttendanceStudent.schema';
 export * from './SubjectClassHistory.schema';
 export * from './SubjectClassTime.schema';
 export * from './ClassSchedule.schema';

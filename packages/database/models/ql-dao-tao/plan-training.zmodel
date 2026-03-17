@@ -1016,9 +1016,36 @@ model SubjectClass extends BaseNoCode {
 
   subjectClassHistory         SubjectClassHistory[]
   examBank                    ExamBank[]
-
+  subjectClassAttendances      SubjectClassAttendance[]
   @@schema("ql-dao-tao")
 }
+
+// Điểm danh
+model SubjectClassAttendance extends Base {
+  time                   DateTime
+	subjectClass           SubjectClass @relation(fields: [subjectClassId], references: [id])
+	subjectClassId         String
+  // Người điểm danh
+  profile           UserProfile?  @relation(fields: [profileId], references: [id])
+  profileId         String?       @db.Uuid
+  subjectClassAttendanceStudent   SubjectClassAttendanceStudent[]
+   @@schema("ql-dao-tao")
+}
+
+// Danh sách điểm danh
+model SubjectClassAttendanceStudent extends Base {
+  subjectClassAttendance SubjectClassAttendance @relation(fields: [subjectClassAttendanceId], references: [id])
+	subjectClassAttendanceId String
+
+  student       Student @relation(fields: [studentId], references: [id])
+	studentId     String
+  //Trạng thái điểm danh
+  attendanceStatus Boolean @default(true)
+
+   @@schema("ql-dao-tao")
+}
+
+
 
 model SubjectClassHistory extends Base {
   subjectClass       SubjectClass @relation(fields: [subjectClassId], references: [id])

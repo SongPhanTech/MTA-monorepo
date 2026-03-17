@@ -300,9 +300,13 @@ model UserProfile extends BaseUuid {
   surveySession                        SurveySession[]
   evaluationCriterionComments          EvaluationCriterionComment[]
   classSchedules                       ClassSchedule[]
+  subjectClassAttendance               SubjectClassAttendance[]
 
+  
   @@auth()
   @@schema("ql-nguoi-dung")
+
+	
 }
 
 model HocHam extends Base {
