@@ -2,6 +2,8 @@ import Table from '@components/commons/table'
 import type { $Enums } from '@workspace/db/client'
 import { useFindManySubjectVersion } from '@workspace/db/hooks'
 import type { SubjectResult } from '@workspace/libs/parseExcel'
+import { examTypes, subjectVersionTypes } from '@workspace/libs'
+
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Checkbox, Collapse, Modal, Tooltip } from 'antd'
 import { useMemo, useState } from 'react'
@@ -9,29 +11,10 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const { Panel } = Collapse
 
-const mapExamType = (examType: $Enums.ExamType): string => {
-    const examTypeMap: Partial<Record<$Enums.ExamType, string>> = {
-        OfflineWritten: 'Thi viết',
-        Oral: 'Thi vấn đáp',
-        Other: 'Khác',
-    }
-    return examTypeMap[examType] || examType
-}
-
 const mapSubjectRequirementType = (type: $Enums.SubjectRequirementType): string => {
     const typeMap: Partial<Record<$Enums.SubjectRequirementType, string>> = {
         Mandatory: 'Bắt buộc',
         Optional: 'Tự chọn',
-    }
-    return typeMap[type] || type
-}
-
-const mapSubjectVersionType = (type: $Enums.SubjectVersionType): string => {
-    const typeMap: Partial<Record<$Enums.SubjectVersionType, string>> = {
-        Normal: 'Thường',
-        Internship: 'Thực tập',
-        Research: 'Chuyên đề nghiên cứu',
-        Project: 'Luận văn/đề án',
     }
     return typeMap[type] || type
 }
@@ -107,6 +90,12 @@ const ModalPreviewUpload = () => {
         },
     })
 
+    const mapSubjectVersionType = (value: string) =>
+        Object.entries(subjectVersionTypes).find(([, v]) => v === value)?.[0] ?? value
+
+    const mapExamType = (value: string) =>
+        Object.entries(examTypes).find(([, v]) => v === value)?.[0] ?? value
+
     const rawPreviewData = input?.previewData || []
     const errorData = input?.errorData || []
 
@@ -181,14 +170,14 @@ const ModalPreviewUpload = () => {
                                     },
                                     {
                                         title: 'Sheet',
-                                        dataIndex: 'sheet',
-                                        key: 'sheet',
+                                        dataIndex: 'sheetRef',
+                                        key: 'sheetRef',
                                         width: 120,
                                     },
                                     {
                                         title: 'Vị trí',
-                                        dataIndex: 'cell',
-                                        key: 'cell',
+                                        dataIndex: 'cellRef',
+                                        key: 'cellRef',
                                         width: 100,
                                     },
                                     {

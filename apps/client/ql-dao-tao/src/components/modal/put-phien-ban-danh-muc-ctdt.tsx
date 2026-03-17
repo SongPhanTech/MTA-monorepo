@@ -92,7 +92,7 @@ const PutCurriculumVersion = () => {
                 trainingLevelId: trainingObjectTypeSelected.trainingLevelId,
             })
         }
-    }, [trainingObjectTypeSelected, input?.versionId])
+    }, [trainingObjectTypeSelected, input?.versionId, form.setFieldsValue])
 
     const { showSpinner, hideSpinner } = useSpinner()
 

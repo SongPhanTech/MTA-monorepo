@@ -177,7 +177,7 @@ export const parseSheetSubject = (file: ArrayBufferLike): ParseSubjectResult => 
             errors.push({
                 sheetRef: sheetName,
                 cellRef: `${cols.subjectVersionType}${rowNumber}`,
-                message: `Loại môn học không tồn tại [${Object.keys(subjectRequirementTypes).join(', ')}]`,
+                message: `Loại học phần không tồn tại [${Object.keys(subjectRequirementTypes).join(', ')}]`,
             })
             continue
         }
@@ -208,7 +208,7 @@ export const parseSheetSubject = (file: ArrayBufferLike): ParseSubjectResult => 
             errors.push({
                 sheetRef: sheetName,
                 cellRef: `${cols.subjectVersionType}${rowNumber}`,
-                message: 'Loại môn học không được để trống',
+                message: 'Loại học phần không được để trống',
             })
             continue
         }
@@ -218,7 +218,7 @@ export const parseSheetSubject = (file: ArrayBufferLike): ParseSubjectResult => 
             errors.push({
                 sheetRef: sheetName,
                 cellRef: `${cols.subjectVersionType}${rowNumber}`,
-                message: `Loại môn học không tồn tại [${Object.keys(subjectVersionTypes).join(', ')}]`,
+                message: `Loại học phần không tồn tại [${Object.keys(subjectVersionTypes).join(', ')}]`,
             })
             continue
         }

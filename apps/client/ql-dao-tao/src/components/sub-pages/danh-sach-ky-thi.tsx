@@ -1,7 +1,7 @@
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import TextTruncate from '@components/commons/text-truncate'
-import { DEFAULT_PAGINATE_SIZE,EXAMTYPECOLOR } from '@constants/constants'
+import { DEFAULT_PAGINATE_SIZE, EXAMTYPECOLOR } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useExamTypeOptions } from '@hooks/examType'
 import { cn, formatDate } from '@lib/utils'
@@ -175,9 +175,7 @@ export default function KyThi({ setActiveKey }: { setActiveKey: (key: string) =>
                                     const examType = record?.subjectClass?.[0]?.examType
                                     if (!examType) return ''
                                     const color =
-                                        EXAMTYPECOLOR[
-                                            examType as keyof typeof EXAMTYPECOLOR
-                                        ]
+                                        EXAMTYPECOLOR[examType as keyof typeof EXAMTYPECOLOR]
 
                                     const label = getExamTypeLabel(examType)
 
