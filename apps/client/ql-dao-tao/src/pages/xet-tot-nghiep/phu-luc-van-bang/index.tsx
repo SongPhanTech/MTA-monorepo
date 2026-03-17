@@ -140,7 +140,7 @@ export default function StudentGradeSystem() {
     const managementOrganizationIds: string[] = useWatch('managementOrganizationIds', form)
     const [page, setPage] = useState(initialPagination.page)
     const [pageSize, setPageSize] = useState(initialPagination.pageSize)
-    const [viewResult, setViewResult] = useState(false);
+    const [viewResult, setViewResult] = useState(false)
     const [selectedStudent, setSelectedStudent] = useState<TStudentWithSubjects | null>(null)
     const { data: trainingObjectTypes = [] } = useFindManyTrainingObjectType({
         where: { active: true },
@@ -206,30 +206,33 @@ export default function StudentGradeSystem() {
         },
     })
     const treeData = buildOrgTree(dm_DonVi)
-    const { data: count } = useCountStudent({
-        where: {
-            active: true,
-            fixedClass: {
-                ...(fixedClassIds?.length > 0 && {
-                    id: {
-                        in: fixedClassIds,
-                    },
-                }),
-                ...(trainingCourseIds?.length > 0 && {
-                    trainingCourseId: {
-                        in: trainingCourseIds,
-                    },
-                }),
-                ...(managementOrganizationIds?.length > 0 && {
-                    managementOrganizationId: {
-                        in: managementOrganizationIds,
-                    },
-                }),
+    const { data: count } = useCountStudent(
+        {
+            where: {
+                active: true,
+                fixedClass: {
+                    ...(fixedClassIds?.length > 0 && {
+                        id: {
+                            in: fixedClassIds,
+                        },
+                    }),
+                    ...(trainingCourseIds?.length > 0 && {
+                        trainingCourseId: {
+                            in: trainingCourseIds,
+                        },
+                    }),
+                    ...(managementOrganizationIds?.length > 0 && {
+                        managementOrganizationId: {
+                            in: managementOrganizationIds,
+                        },
+                    }),
+                },
             },
         },
-    }, {
-        enabled: viewResult
-    })
+        {
+            enabled: viewResult,
+        }
+    )
     const {
         data: students,
         refetch: getStudents,
@@ -289,7 +292,7 @@ export default function StudentGradeSystem() {
     const studentTableData = useMemo(() => {
         return (students || []).map((student, index) => ({
             key: student.id,
-            stt: index + 1,
+            stt: (page - 1) * pageSize + index + 1,
             maSinhVien: student.code,
             hoTen: student.userProfile?.fullname || '',
             lop: student.fixedClass?.name || '',
