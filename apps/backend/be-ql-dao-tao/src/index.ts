@@ -82,6 +82,8 @@ const jwksUri = `${issuer}/protocol/openid-connect/certs`
 const audience = config.keycloak.clientId
 app.route('/api/training-field', TrainingFieldApp)
 app.route('/api/room', RoomApp)
+app.route('/api/stats', Stats)
+
 // TODO!: remove `/check`
 app.use('/api/check/*', jwtAuth('lms'))
 
@@ -99,7 +101,6 @@ app.route('/api/curriculum-subject', CurriculumSubjectApp)
 app.route('/api/graduation', GraduationApp)
 app.route('/api/internship', InternshipApp)
 app.route('/api/plan-training', PlanTraining)
-app.route('/api/stats', Stats)
 app.route('/api/import', ImportApp)
 app.route('/api/score-correction', ScoreCorrectionApp)
 app.route('/api/archived-score', ArchivedScoreApp)

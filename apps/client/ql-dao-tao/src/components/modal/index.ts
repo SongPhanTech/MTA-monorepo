@@ -113,6 +113,7 @@ import ThongTinBaoCaoModal from './thong-tin-bao-cao'
 import PutInternshipModal from './put-thuc-tap'
 import ModalCurriculumVersionByTrainingBlock from './modal-ctdt-theo-kkt'
 import ModalPreviewReason from './modal-preview-reason'
+import ModalChuyenCTDT from './modal-chuyen-ctdt'
 export {
     ExportStatsArchivedAwardModal,
     ModalChiTietLopBienChe,
@@ -231,6 +232,7 @@ export {
     ModalChuyenDiemLopMonHoc,
     ModalCurriculumVersionByTrainingBlock,
     ModalPreviewReason,
+    ModalChuyenCTDT,
 }
 export * from './ke-hoach-dao-tao'
 export * from './thong-bao'
