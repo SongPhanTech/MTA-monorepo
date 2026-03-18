@@ -149,6 +149,7 @@ export type FilterProps = {
     difficult?: Difficult[]
     subjectVersionIdString?: string
     organizationName?: string
+    lecturerName?: string
 }
 
 export type ColumnTypeProps = ColumnsType & {
