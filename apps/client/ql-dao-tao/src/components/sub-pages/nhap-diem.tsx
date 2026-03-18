@@ -1102,9 +1102,12 @@ export default function NhapDiem({
                         setFilters={setFilterTable}
                         onRow={(record) => ({
                             className: cn(
-                                !!listForm?.[record.id]?.isChanged && 'bg-yellow-100',
-                                !!listForm?.[record.id]?.examBanned && '!bg-red-100',
+                                (!!listForm?.[record.id]?.isChanged && 
+                                !listForm?.[record.id]?.examBanned && 
+                                !listForm?.[record.id]?.examPostponed) && 'bg-yellow-50',
+
                                 !!listForm?.[record.id]?.examPostponed && '!bg-yellow-100',
+                                !!listForm?.[record.id]?.examBanned && '!bg-red-100',
                             )
                         })}
                         scrollable
@@ -1626,6 +1629,7 @@ export default function NhapDiem({
                                                 style={{
                                                     width: '100%',
                                                 }}
+                                                className='bg-transparent'
                                             />
                                         </Form.Item>
                                     )
