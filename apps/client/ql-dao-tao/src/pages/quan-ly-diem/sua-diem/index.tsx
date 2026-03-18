@@ -2,7 +2,8 @@ import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import DefaultLayout from '@layouts/default-layout'
-import type { ScoreCorrectionStatus } from '@workspace/db'
+import { validateExamScore, validateScore } from '@lib/utils'
+import type { ScoreCorrectionStatus, ScoreCorrectionTicket } from '@workspace/db'
 import {
     useCountScoreCorrectionTicket, // Add this
     useCreateScoreCorrectionItem,
@@ -42,7 +43,6 @@ import {
 } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
-import { validateExamScore, validateScore } from '@lib/utils'
 
 const SCORE_CORRECTION_STATUS_MAP = {
     INITIALIZED: { text: 'Khởi tạo', color: 'default' },
@@ -200,9 +200,17 @@ function TicketList() {
                         width: 200,
                         render: (_: any, record: any) => (
                             <Space>
-                                <Button type="link" onClick={() => setSelectedTicketId(record.id)}>
-                                    Chi tiết
-                                </Button>
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_SUA_DIEM,
+                                    'XEM_CHI_TIET'
+                                ) && (
+                                    <Button
+                                        type="link"
+                                        onClick={() => setSelectedTicketId(record.id)}
+                                    >
+                                        Chi tiết
+                                    </Button>
+                                )}
                                 {record.status === 'PENDING_APPROVAL' &&
                                     can(
                                         QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_SUA_DIEM,
@@ -285,7 +293,7 @@ function TicketList() {
                     showTotal: (total, range) => `${range[0]}-${range[1]} của ${total} mục`,
                 }}
             />
-            <CreateTicketModal
+            <TicketModal
                 open={isCreateModalOpen}
                 onCancel={() => setIsCreateModalOpen(false)}
                 onSuccess={() => {
@@ -304,135 +312,111 @@ function TicketList() {
     )
 }
 
-function UpdateTicketModal({
+function TicketModal({
     open,
     ticket,
     onCancel,
     onSuccess,
 }: {
     open: boolean
-    ticket: any
+    ticket?: ScoreCorrectionTicket | undefined
     onCancel: () => void
     onSuccess: () => void
 }) {
-    const [form] = Form.useForm()
-    const { mutateAsync: updateTicket } = useUpdateScoreCorrectionTicket()
+    const isUpdate = !!ticket
 
-    useEffect(() => {
-        if (ticket) {
-            form.setFieldsValue({
-                ...ticket,
-                date: ticket.date ? dayjs(ticket.date) : undefined,
-                deadline: ticket.deadline ? dayjs(ticket.deadline) : undefined,
-            })
-        }
-    }, [ticket, open])
-
-    const onFinish = async (values: any) => {
-        try {
-            await updateTicket({
-                where: { id: ticket.id },
-                data: {
-                    ...values,
-                    date: values.date ? values.date.toISOString() : undefined,
-                    deadline: values.deadline ? values.deadline.toISOString() : undefined,
-                },
-            })
-            message.success('Cập nhật phiếu thành công')
-            onSuccess()
-        } catch (error) {
-            message.error('Có lỗi xảy ra')
-        }
-    }
-
-    return (
-        <Modal
-            title="Cập nhật phiếu sửa điểm"
-            open={open}
-            onCancel={onCancel}
-            onOk={() => form.submit()}
-        >
-            <Form form={form} layout="vertical" onFinish={onFinish}>
-                <Form.Item name="number" label="Số lượng (dự kiến)">
-                    <InputNumber min={0} className="w-full" />
-                </Form.Item>
-                <Form.Item name="proposal" label="Tờ trình">
-                    <Input />
-                </Form.Item>
-                <Form.Item name="decision" label="Số quyết định">
-                    <Input />
-                </Form.Item>
-                <Form.Item name="date" label="Ngày">
-                    <DatePicker className="w-full" format="DD/MM/YYYY" />
-                </Form.Item>
-                <Form.Item name="deadline" label="Hạn nhập">
-                    <DatePicker className="w-full" format="DD/MM/YYYY HH:mm" showTime />
-                </Form.Item>
-            </Form>
-        </Modal>
-    )
-}
-
-function CreateTicketModal({
-    open,
-    onCancel,
-    onSuccess,
-}: {
-    open: boolean
-    onCancel: () => void
-    onSuccess: () => void
-}) {
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
     const [form] = Form.useForm()
     const { mutateAsync: createTicket } = useCreateScoreCorrectionTicket()
+    const { mutateAsync: updateTicket } = useUpdateScoreCorrectionTicket()
     const { data: trainingObjectTypes } = useFindManyTrainingObjectType({})
+
+    useEffect(() => {
+        if (open) {
+            if (isUpdate && ticket) {
+                form.setFieldsValue({
+                    ...ticket,
+                    date: ticket.date ? dayjs(ticket.date) : undefined,
+                    deadline: ticket.deadline ? dayjs(ticket.deadline) : undefined,
+                })
+            } else {
+                form.resetFields()
+                form.setFieldsValue({
+                    trainingObjectTypeId,
+                    date: dayjs(),
+                })
+            }
+        }
+    }, [ticket, open, trainingObjectTypeId, form, isUpdate])
 
     const onFinish = async (values: any) => {
         try {
-            await createTicket({
-                data: {
-                    ...values,
-                    date: values.date ? values.date.toISOString() : new Date().toISOString(),
-                    deadline: values.deadline ? values.deadline.toISOString() : undefined,
-                    status: 'INITIALIZED',
-                },
-            })
-            message.success('Tạo phiếu thành công')
+            if (isUpdate) {
+                await updateTicket({
+                    where: { id: ticket?.id },
+                    data: {
+                        ...values,
+                        date: values.date ? values.date.toISOString() : undefined,
+                        deadline: values.deadline ? values.deadline.toISOString() : undefined,
+                    },
+                })
+                message.success('Cập nhật phiếu thành công')
+            } else {
+                await createTicket({
+                    data: {
+                        ...values,
+                        date: values.date ? values.date.toISOString() : new Date().toISOString(),
+                        deadline: values.deadline ? values.deadline.toISOString() : undefined,
+                        status: 'INITIALIZED',
+                    },
+                })
+                message.success('Tạo phiếu thành công')
+            }
             onSuccess()
         } catch (error) {
             message.error('Có lỗi xảy ra')
         }
     }
 
-    useEffect(() => {
-        form.setFieldsValue({ trainingObjectTypeId })
-    }, [trainingObjectTypeId])
-
     return (
         <Modal
-            title="Tạo phiếu sửa điểm"
+            title={isUpdate ? 'Cập nhật phiếu sửa điểm' : 'Tạo phiếu sửa điểm'}
             open={open}
             onCancel={onCancel}
             onOk={() => form.submit()}
         >
-            <Form form={form} layout="vertical" onFinish={onFinish}>
-                <Form.Item
-                    name="trainingObjectTypeId"
-                    label="Đối tượng đào tạo"
-                    rules={[{ required: true, message: 'Vui lòng chọn đối tượng đào tạo' }]}
-                >
-                    <Select
-                        placeholder="Chọn đối tượng đào tạo"
-                        disabled
-                        options={trainingObjectTypes?.map((type) => ({
-                            label: type.name,
-                            value: type.id,
-                        }))}
+            <Form
+                form={form}
+                layout="vertical"
+                onFinish={onFinish}
+                disabled={isUpdate && ticket?.status === 'APPROVED'}
+            >
+                {!isUpdate && (
+                    <Form.Item
+                        name="trainingObjectTypeId"
+                        label="Đối tượng đào tạo"
+                        rules={[{ required: true, message: 'Vui lòng chọn đối tượng đào tạo' }]}
+                    >
+                        <Select
+                            placeholder="Chọn đối tượng đào tạo"
+                            disabled
+                            options={trainingObjectTypes?.map((type) => ({
+                                label: type.name,
+                                value: type.id,
+                            }))}
+                        />
+                    </Form.Item>
+                )}
+                <Form.Item name="number" label="Số lượng (dự kiến)" required>
+                    <InputNumber
+                        min={1}
+                        className="w-full"
+                        disabled={isUpdate && ticket?.status !== 'INITIALIZED'}
                     />
                 </Form.Item>
-                <Form.Item name="number" label="Số lượng (dự kiến)">
-                    <InputNumber min={0} className="w-full" />
+                <Form.Item name="deadline" label="Hạn nhập" required>
+                    <DatePicker className="w-full" format="DD/MM/YYYY" />
                 </Form.Item>
                 <Form.Item name="proposal" label="Tờ trình">
                     <Input />
@@ -440,11 +424,8 @@ function CreateTicketModal({
                 <Form.Item name="decision" label="Số quyết định">
                     <Input />
                 </Form.Item>
-                <Form.Item name="date" label="Ngày" initialValue={dayjs()}>
+                <Form.Item name="date" label="Ngày" initialValue={!isUpdate ? dayjs() : undefined}>
                     <DatePicker className="w-full" format="DD/MM/YYYY" />
-                </Form.Item>
-                <Form.Item name="deadline" label="Hạn nhập">
-                    <DatePicker className="w-full" format="DD/MM/YYYY HH:mm" showTime />
                 </Form.Item>
             </Form>
         </Modal>
@@ -505,6 +486,9 @@ function TicketDetailDrawer({
     const [isUpdateTicketModalOpen, setIsUpdateTicketModalOpen] = useState(false) // Added
     const [editingItem, setEditingItem] = useState<any>(null)
 
+    const isDeadlinePassed = ticket?.deadline ? dayjs().isAfter(dayjs(ticket.deadline)) : false
+    const isFull = ticket?.number ? items.length >= ticket.number : false
+
     const handleStatusChange = async (newStatus: ScoreCorrectionStatus) => {
         console.log('newStatus', newStatus)
         console.log('items', items)
@@ -561,16 +545,15 @@ function TicketDetailDrawer({
             onClose={onClose}
             extra={
                 <Space>
-                    {ticket?.status === 'INITIALIZED' && (
-                        <Button
-                            disabled={
-                                !can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_SUA_DIEM, 'SUA')
-                            }
-                            onClick={() => handleStatusChange('PENDING_APPROVAL')}
-                        >
-                            Gửi duyệt
-                        </Button>
-                    )}
+                    {ticket?.status === 'INITIALIZED' &&
+                        can(
+                            'QL_DAO_TAO_QUAN_LY_DIEM_SUA_DIEM_CHI_TIET',
+                            'SUA'
+                        )(
+                            <Button onClick={() => handleStatusChange('PENDING_APPROVAL')}>
+                                Gửi duyệt
+                            </Button>
+                        )}
                     {(ticket?.status === 'INITIALIZED' || ticket?.status === 'PENDING_APPROVAL') &&
                         can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_SUA_DIEM, 'SUA') && (
                             <Button onClick={() => setIsUpdateTicketModalOpen(true)}>
@@ -601,8 +584,21 @@ function TicketDetailDrawer({
 
             <div className="mb-4 flex justify-end">
                 {(ticket?.status === 'INITIALIZED' || ticket?.status === 'PENDING_APPROVAL') &&
-                    can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_SUA_DIEM, 'THEM') && (
-                        <Button type="primary" onClick={() => setIsAddStudentModalOpen(true)}>
+                    can('QL_DAO_TAO_QUAN_LY_DIEM_SUA_DIEM_CHI_TIET', 'THEM') && (
+                        <Button
+                            type="primary"
+                            onClick={() => {
+                                if (isDeadlinePassed) {
+                                    message.warning('Đã quá hạn nhập phiếu')
+                                    return
+                                }
+                                if (isFull) {
+                                    message.warning('Đã đủ số lượng sinh viên dự kiến')
+                                    return
+                                }
+                                setIsAddStudentModalOpen(true)
+                            }}
+                        >
                             Thêm sinh viên
                         </Button>
                     )}
@@ -681,22 +677,22 @@ function TicketDetailDrawer({
                             ticket?.status === 'INITIALIZED' ||
                             ticket?.status === 'PENDING_APPROVAL' ? (
                                 <Space>
-                                    {can(
-                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_SUA_DIEM,
-                                        'SUA'
-                                    ) && (
+                                    {can('QL_DAO_TAO_QUAN_LY_DIEM_SUA_DIEM_CHI_TIET', 'SUA') && (
                                         <Button
                                             type="link"
                                             size="small"
-                                            onClick={() => setEditingItem(record)}
+                                            onClick={() => {
+                                                if (isDeadlinePassed) {
+                                                    message.warning('Đã quá hạn sửa điểm')
+                                                    return
+                                                }
+                                                setEditingItem(record)
+                                            }}
                                         >
                                             Sửa điểm
                                         </Button>
                                     )}
-                                    {can(
-                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_SUA_DIEM,
-                                        'XOA'
-                                    ) && (
+                                    {can('QL_DAO_TAO_QUAN_LY_DIEM_SUA_DIEM_CHI_TIET', 'XOA') && (
                                         <Popconfirm
                                             title="Xoá sinh viên này khỏi phiếu?"
                                             onConfirm={async () => {
@@ -738,7 +734,7 @@ function TicketDetailDrawer({
                     setEditingItem(null)
                 }}
             />
-            <UpdateTicketModal
+            <TicketModal
                 open={isUpdateTicketModalOpen}
                 ticket={ticket}
                 onCancel={() => setIsUpdateTicketModalOpen(false)}

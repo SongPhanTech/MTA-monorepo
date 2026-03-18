@@ -544,7 +544,7 @@ const NAVIGATION: NavigationType = {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_CAU_HINH_THOI_GIAN_BAO_VE,
                         label: 'Thời gian bảo vệ',
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_CAU_HINH_THOI_GIAN_BAO_VE,
-                        description: 'Cấu hình thời gian bảo vệ đồ án',
+                        description: 'Cấu hình thời gian bảo vệ',
                     },
                     // {
                     //     id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_SACH_THANH_TOAN,
@@ -574,7 +574,7 @@ const NAVIGATION: NavigationType = {
             },
             {
                 id: 'ql-luan-van-de-an',
-                label: 'Quản lý luận văn/đề án',
+                label: 'Luận văn/đề án',
                 icon: FileCheck2,
                 children: [
                     {
@@ -584,7 +584,7 @@ const NAVIGATION: NavigationType = {
                         description: 'Đợt xét luận văn',
                     },
                     {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_MUC_DO_AN,
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_LUAN_VAN_DANH_MUC_LUAN_VAN_KHOA,
                         label: 'Quản lý luận văn/đề án',
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_LUAN_VAN_DANH_MUC_LUAN_VAN_KHOA,
                         description: 'Quản lý luận văn/đề án',
