@@ -1,20 +1,28 @@
 import {
     useCountSubjectClassAttendance,
     useFindManySubjectClassAttendance,
+    useUpdateSubjectClassAttendance,
 } from '@workspace/db/hooks'
 import { useMemo, useState } from 'react'
 import { useAbility } from '@workspace/permissions'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import { Button, Col, Flex, Row } from 'antd'
+import { Button, Col, Flex, message, Row } from 'antd'
 import Table from '@components/commons/table'
 import { FilterProps } from '@constants/type'
 import { formatDate } from '@lib/utils'
+
+import { useDisclosure } from 'react-hook-disclosure-modal'
+import EditIcon from '@components/icons/edit'
+import DeleteIcon from '@components/icons/delete'
+import useSpinner from '@hooks/spinner'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
+import { Flag } from 'lucide-react'
 
 export default function DiemDanhList({ selectedSubjectClassId, setSelectedSubjectClassId }: any) {
-    const { can } = useAbility()
+    const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const { showSpinner, hideSpinner } = useSpinner()
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
         code: '',
@@ -45,14 +53,43 @@ export default function DiemDanhList({ selectedSubjectClassId, setSelectedSubjec
         skip: (currentPage - 1) * numberOfPages,
     })
     const { data: count } = useCountSubjectClassAttendance({ where })
+    const { mutateAsync: updateSubjectClassAttendance } = useUpdateSubjectClassAttendance()
+    const { onOpen } = useDisclosure<{ id?: string; subjectClassId: string }>({
+        tag: 'AddSubjectClassAttendance',
+    })
+
+    async function handleDelete(id: string) {
+        try {
+            showSpinner()
+            await updateSubjectClassAttendance({
+                where: {
+                    id,
+                },
+                data: {
+                    deletedAt: new Date(),
+                },
+            })
+            refetch()
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
+    }
     return (
         <div>
             <Row gutter={[0, 0]}>
                 <Col span={24} className="flex justify-end">
                     <Flex gap={4}>
-                        {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_THI, 'THEM') && (
+                        {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_DANH, 'THEM') && (
                             <Button
-                                onClick={() => {}}
+                                onClick={() => {
+                                    onOpen({ subjectClassId: selectedSubjectClassId })
+                                }}
                                 type="primary"
                                 className="w-full flex justify-start"
                             >
@@ -96,6 +133,42 @@ export default function DiemDanhList({ selectedSubjectClassId, setSelectedSubjec
                                 render: (_, record) => {
                                     return record?.profile?.fullname || ''
                                 },
+                            },
+                            {
+                                title: 'Thao tác',
+                                width: 100,
+                                align: 'center',
+                                hidden: !canSome(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_DANH,
+                                    'SUA',
+                                    'XOA'
+                                ),
+                                render: (_, { id }) => (
+                                    <Row className="justify-center gap-2">
+                                        {can(
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_DANH,
+                                            'SUA'
+                                        ) && (
+                                            <Flex>
+                                                <Flag />
+                                                <EditIcon
+                                                    onClick={onOpen.bind(null, id)}
+                                                    className="text-sm text-blue-700 cursor-pointer"
+                                                />
+                                            </Flex>
+                                        )}
+                                        {can(
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_DANH,
+                                            'XOA'
+                                        ) && (
+                                            <DeleteIcon
+                                                popConfirm={{
+                                                    onConfirm: () => handleDelete(id),
+                                                }}
+                                            />
+                                        )}
+                                    </Row>
+                                ),
                             },
                         ]}
                         data={dataTable}

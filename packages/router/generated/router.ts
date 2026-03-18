@@ -91,6 +91,7 @@ export default {
     "QUAN_LY_DIEM_CHUYEN_DE_NGHIEN_CUU": "/quan-ly-diem/chuyen-de-nghien-cuu",
     "QUAN_LY_DIEM_DANH_PHACH": "/quan-ly-diem/danh-phach",
     "QUAN_LY_DIEM_DIEM_CHUNG_CHI": "/quan-ly-diem/diem-chung-chi",
+    "QUAN_LY_DIEM_DIEM_DANH": "/quan-ly-diem/diem-danh",
     "QUAN_LY_DIEM_DIEM_LIEN_KET": "/quan-ly-diem/diem-lien-ket",
     "QUAN_LY_DIEM_DIEM_OLYMPIC": "/quan-ly-diem/diem-olympic",
     "QUAN_LY_DIEM_DS_LOP_MON_HOC": "/quan-ly-diem/ds-lop-mon-hoc",
