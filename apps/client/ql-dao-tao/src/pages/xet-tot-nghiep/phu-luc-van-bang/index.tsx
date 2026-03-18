@@ -375,12 +375,6 @@ export default function StudentGradeSystem() {
         form.setFieldValue('trainingObjectTypeId', trainingObjectTypeId)
     }, [form, trainingObjectTypeId])
 
-    useEffect(() => {
-        if (viewResult) {
-            setPage(1)
-        }
-    }, [viewResult])
-
     return (
         <div className="flex h-screen bg-gray-50">
             <div className="w-68 bg-white border-r border-gray-200 p-4 overflow-y-auto">
@@ -533,6 +527,7 @@ export default function StudentGradeSystem() {
                             onClick={() => {
                                 setSelectedStudent(null)
                                 setViewResult(true)
+                                setPage(initialPagination.page)
                             }}
                             className="w-full h-8 text-xs text-white"
                         >
@@ -665,8 +660,13 @@ export default function StudentGradeSystem() {
                         pagination={{
                             pageSize,
                             total: count,
-                            onChange(page, pageSize) {
-                                setPage(page)
+                            onChange(newPage, newPageSize) {
+                                if (newPageSize !== pageSize) {
+                                    setPage(initialPagination.page)
+                                    setPageSize(pageSize)
+                                    return
+                                }
+                                setPage(newPage)
                                 setPageSize(pageSize)
                             },
                         }}
