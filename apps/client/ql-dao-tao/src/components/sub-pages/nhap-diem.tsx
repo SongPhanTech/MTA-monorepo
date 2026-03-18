@@ -588,8 +588,8 @@ export default function NhapDiem({
                 exam: {
                     select: {
                         lockExamSessions: true,
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -672,7 +672,7 @@ export default function NhapDiem({
             dataDetailSubjectClass?.examScoreDeadline &&
             dayjs().isBefore(dataDetailSubjectClass?.examScoreDeadline) &&
             !dataDetailSubjectClass?.isLockExamScore &&
-            !dataDetailSubjectClass?.scoreSubmitted && 
+            !dataDetailSubjectClass?.scoreSubmitted &&
             dataDetailSubjectClass?.exam?.lockExamSessions
         )
     }, [dataDetailSubjectClass, can, score])
@@ -806,12 +806,18 @@ export default function NhapDiem({
         <Row gutter={[8, 8]}>
             <Col span={8} className="flex items-center gap-1">
                 {score === 'TX/ĐK' && (
-                    <Tag color={enteredScore ? 'green' : 'yellow'} className="w-fit border-none px-2 py-1 text-[12px]">
+                    <Tag
+                        color={enteredScore ? 'green' : 'yellow'}
+                        className="w-fit border-none px-2 py-1 text-[12px]"
+                    >
                         {enteredScore ? 'Đã hoàn thiện' : 'Chưa hoàn thiện'}
                     </Tag>
                 )}
                 {score === 'THI' && (
-                    <Tag color={enteredExamScore ? 'green' : 'yellow'} className="w-fit border-none px-2 py-1 text-[12px]">
+                    <Tag
+                        color={enteredExamScore ? 'green' : 'yellow'}
+                        className="w-fit border-none px-2 py-1 text-[12px]"
+                    >
                         {enteredExamScore ? 'Đã hoàn thiện' : 'Chưa hoàn thiện'}
                     </Tag>
                 )}
@@ -825,13 +831,10 @@ export default function NhapDiem({
                         Lớp học phần thi lại
                     </Tag>
                 )}
-                <Tag className=" w-fit border-none px-2 py-1 text-[12px] bg-red-100">
-                        Cấm thi
-                </Tag>
+                <Tag className=" w-fit border-none px-2 py-1 text-[12px] bg-red-100">Cấm thi</Tag>
                 <Tag className=" w-fit border-none px-2 py-1 text-[12px] bg-yellow-100">
-                        Hoãn thi
+                    Hoãn thi
                 </Tag>
-
             </Col>
             <Col span={16} className="flex justify-end">
                 <Flex gap={4}>
@@ -1104,8 +1107,8 @@ export default function NhapDiem({
                             className: cn(
                                 !!listForm?.[record.id]?.isChanged && 'bg-yellow-100',
                                 !!listForm?.[record.id]?.examBanned && '!bg-red-100',
-                                !!listForm?.[record.id]?.examPostponed && '!bg-yellow-100',
-                            )
+                                !!listForm?.[record.id]?.examPostponed && '!bg-yellow-100'
+                            ),
                         })}
                         scrollable
                         maxHeight={'calc(100vh - 460px)'}
@@ -1216,7 +1219,7 @@ export default function NhapDiem({
                                                         dataTable
                                                     )
                                                 }
-                                                className='bg-transparent'
+                                                className="bg-transparent"
                                             />
                                         </Form.Item>
                                     )
@@ -1268,7 +1271,7 @@ export default function NhapDiem({
                                                         dataTable
                                                     )
                                                 }
-                                                className='bg-transparent'
+                                                className="bg-transparent"
                                             />
                                         </Form.Item>
                                     )
@@ -1437,7 +1440,7 @@ export default function NhapDiem({
                                                     readOnly
                                                     autoSize
                                                     variant="underlined"
-                                                    className='bg-transparent'
+                                                    className="bg-transparent"
                                                 />
                                             ) : (
                                                 <AutoComplete
@@ -1453,7 +1456,7 @@ export default function NhapDiem({
                                                         readOnly
                                                         autoSize
                                                         variant="underlined"
-                                                        className='bg-transparent'
+                                                        className="bg-transparent"
                                                     />
                                                 </AutoComplete>
                                             )}
@@ -1506,7 +1509,7 @@ export default function NhapDiem({
                                                     readOnly
                                                     autoSize
                                                     variant="underlined"
-                                                    className='bg-transparent'
+                                                    className="bg-transparent"
                                                 />
                                             ) : (
                                                 <AutoComplete
@@ -1522,7 +1525,7 @@ export default function NhapDiem({
                                                         readOnly
                                                         autoSize
                                                         variant="underlined"
-                                                        className='bg-transparent'
+                                                        className="bg-transparent"
                                                     />
                                                 </AutoComplete>
                                             )}
@@ -1581,7 +1584,7 @@ export default function NhapDiem({
                                                     readOnly
                                                     autoSize
                                                     variant="underlined"
-                                                    className='bg-transparent'
+                                                    className="bg-transparent"
                                                 />
                                             ) : (
                                                 <AutoComplete
@@ -1599,7 +1602,7 @@ export default function NhapDiem({
                                                         readOnly
                                                         autoSize
                                                         variant="underlined"
-                                                        className='bg-transparent'
+                                                        className="bg-transparent"
                                                     />
                                                 </AutoComplete>
                                             )}

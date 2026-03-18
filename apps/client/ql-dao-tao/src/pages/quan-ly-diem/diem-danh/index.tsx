@@ -1,14 +1,11 @@
 import DefaultLayout from '@layouts/default-layout'
-import { Col,
-Row, 
-Tabs} from 'antd';
-import { useMemo,
-useState } from 'react';
-import { TabsProps } from 'antd/lib';
-import DanhSachLopMonHoc from './_component/DanhSachLopMonHoc';
-import DiemDanhList from './_component/DiemDanhList';
+import { Col, Row, Tabs } from 'antd'
+import { useMemo, useState } from 'react'
+import { TabsProps } from 'antd/lib'
+import DanhSachLopMonHoc from './_component/DanhSachLopMonHoc'
+import DiemDanhList from './_component/DiemDanhList'
 export default function DiemDanh() {
-     const [activeKey, setActiveKey] = useState('1')
+    const [activeKey, setActiveKey] = useState('1')
     const [selectedSubjectClassId, setSelectedSubjectClassId] = useState('')
     const items = useMemo(() => {
         const baseMenu: TabsProps['items'] = [
@@ -16,20 +13,27 @@ export default function DiemDanh() {
                 label: 'Danh sách lớp môn học',
                 key: '1',
                 children: (
-                    <DanhSachLopMonHoc selectedSubjectClassId={selectedSubjectClassId} setSelectedSubjectClassId={(value:any)=>setSelectedSubjectClassId(value)} />
+                    <DanhSachLopMonHoc
+                        selectedSubjectClassId={selectedSubjectClassId}
+                        setSelectedSubjectClassId={(value: any) => setSelectedSubjectClassId(value)}
+                    />
                 ),
             },
             {
                 label: 'Điểm danh',
                 key: '2',
                 children: (
-                    <DiemDanhList selectedSubjectClassId={selectedSubjectClassId} setSelectedSubjectClassId={(value:any)=>setSelectedSubjectClassId(value)} />
+                    <DiemDanhList
+                        selectedSubjectClassId={selectedSubjectClassId}
+                        setSelectedSubjectClassId={(value: any) => setSelectedSubjectClassId(value)}
+                    />
                 ),
-            }
+            },
         ]
         return baseMenu
-    }, [activeKey,selectedSubjectClassId])
-    return  <Row gutter={[8, 4]}>
+    }, [activeKey, selectedSubjectClassId])
+    return (
+        <Row gutter={[8, 4]}>
             <Col span={24}>
                 <Tabs
                     className="-mt-3"
@@ -38,7 +42,8 @@ export default function DiemDanh() {
                     items={items}
                 />
             </Col>
-    </Row>
+        </Row>
+    )
 }
 
 DiemDanh.getLayout = function getLayout(page: React.ReactElement) {

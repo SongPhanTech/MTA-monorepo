@@ -1,20 +1,17 @@
-import { useCountSubjectClassAttendance, useFindManySubjectClassAttendance } from "@workspace/db/hooks";
-import { useMemo,useState } from "react";
-import { useAbility } from "@workspace/permissions";
-import { DEFAULT_PAGINATE_SIZE } from "@constants/constants";
-import { Button,
-Col,
-Flex,
-Row } from "antd";
-import Table from "@components/commons/table";
-import { FilterProps } from "@constants/type";
-import { formatDate } from "@lib/utils";
-import { QL_DAO_TAO_PERMISSION } from "@workspace/router";
+import {
+    useCountSubjectClassAttendance,
+    useFindManySubjectClassAttendance,
+} from '@workspace/db/hooks'
+import { useMemo, useState } from 'react'
+import { useAbility } from '@workspace/permissions'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { Button, Col, Flex, Row } from 'antd'
+import Table from '@components/commons/table'
+import { FilterProps } from '@constants/type'
+import { formatDate } from '@lib/utils'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 
-export default function DiemDanhList({
-    selectedSubjectClassId,
-    setSelectedSubjectClassId,
-}: any) {
+export default function DiemDanhList({ selectedSubjectClassId, setSelectedSubjectClassId }: any) {
     const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -33,45 +30,37 @@ export default function DiemDanhList({
         enterGradeLecturer: undefined,
         fixedClassId: undefined,
     })
-  const where = useMemo(() => {
-    return {
-      subjectClassId: selectedSubjectClassId
-    }
-  }, [selectedSubjectClassId])
-  const { data: dataTable = [], refetch } = useFindManySubjectClassAttendance({
-    where,
-    include: {
-      subjectClassAttendanceStudent:true,
-      profile: true
-    },
-    take: numberOfPages,
-    skip: (currentPage - 1) * numberOfPages,
-  })
-  const { data: count } = useCountSubjectClassAttendance({ where })
-  return (
-     <div>
+    const where = useMemo(() => {
+        return {
+            subjectClassId: selectedSubjectClassId,
+        }
+    }, [selectedSubjectClassId])
+    const { data: dataTable = [], refetch } = useFindManySubjectClassAttendance({
+        where,
+        include: {
+            subjectClassAttendanceStudent: true,
+            profile: true,
+        },
+        take: numberOfPages,
+        skip: (currentPage - 1) * numberOfPages,
+    })
+    const { data: count } = useCountSubjectClassAttendance({ where })
+    return (
+        <div>
             <Row gutter={[0, 0]}>
-            
-            <Col span={24} className="flex justify-end">
-              <Flex gap={4}>
-                         {(
-                        can(
-                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_THI,
-                            'THEM'
-                        )) && (
+                <Col span={24} className="flex justify-end">
+                    <Flex gap={4}>
+                        {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_THI, 'THEM') && (
                             <Button
-                                onClick={() => {
-
-                                }}
+                                onClick={() => {}}
                                 type="primary"
                                 className="w-full flex justify-start"
                             >
                                 Điểm danh
                             </Button>
-                    )}
-              </Flex>
-                
-            </Col>
+                        )}
+                    </Flex>
+                </Col>
 
                 <Col span={24} className="mt-2">
                     <Table
@@ -87,29 +76,27 @@ export default function DiemDanhList({
                                 render: (_, __, index) =>
                                     index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
-                               {
+                            {
                                 title: 'Thời gian học',
                                 align: 'center',
-                                render: (_, record) =>{
-                                  return record?.time ? formatDate(record?.time):''
-                                }
+                                render: (_, record) => {
+                                    return record?.time ? formatDate(record?.time) : ''
+                                },
                             },
-                               {
+                            {
                                 title: 'Điểm danh',
                                 align: 'center',
-                                render: (_, record) =>{
-                                    return `${record?.subjectClassAttendanceStudent.filter((i:any)=>i?.attendanceStatus===true)?.length||0}/${record?.subjectClassAttendanceStudent?.length ||0}`
-                                }
+                                render: (_, record) => {
+                                    return `${record?.subjectClassAttendanceStudent.filter((i: any) => i?.attendanceStatus === true)?.length || 0}/${record?.subjectClassAttendanceStudent?.length || 0}`
+                                },
                             },
-                                {
+                            {
                                 title: ' Người điểm danh',
                                 align: 'center',
-                                render: (_,record) =>{
-                                  return record?.profile?.fullname ||''
-                                }
-                                    
+                                render: (_, record) => {
+                                    return record?.profile?.fullname || ''
+                                },
                             },
-                            
                         ]}
                         data={dataTable}
                         pagination={{
@@ -132,5 +119,5 @@ export default function DiemDanhList({
                 </Col>
             </Row>
         </div>
-  )
+    )
 }
