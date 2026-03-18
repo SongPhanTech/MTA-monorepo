@@ -434,7 +434,6 @@ model TrainingCourse extends Base {
   /// Số lượng nhập học
   enrolledStudent            Int?
   /// Ngày nhập học
-  
   admissionStartDate         DateTime?
   /// Ngày kết thúc
   admissionEndDate           DateTime?
@@ -1016,33 +1015,33 @@ model SubjectClass extends BaseNoCode {
 
   subjectClassHistory         SubjectClassHistory[]
   examBank                    ExamBank[]
-  subjectClassAttendances      SubjectClassAttendance[]
+  subjectClassAttendances     SubjectClassAttendance[]
   @@schema("ql-dao-tao")
 }
 
 // Điểm danh
 model SubjectClassAttendance extends Base {
-  time                   DateTime
-	subjectClass           SubjectClass @relation(fields: [subjectClassId], references: [id])
-	subjectClassId         String
+  time                          DateTime
+  subjectClass                  SubjectClass                    @relation(fields: [subjectClassId], references: [id])
+  subjectClassId                String
   // Người điểm danh
-  profile           UserProfile?  @relation(fields: [profileId], references: [id])
-  profileId         String?       @db.Uuid
-  subjectClassAttendanceStudent   SubjectClassAttendanceStudent[]
-   @@schema("ql-dao-tao")
+  profile                       UserProfile?                    @relation(fields: [profileId], references: [id])
+  profileId                     String?                         @db.Uuid
+  subjectClassAttendanceStudent SubjectClassAttendanceStudent[]
+  @@schema("ql-dao-tao")
 }
 
 // Danh sách điểm danh
 model SubjectClassAttendanceStudent extends Base {
-  subjectClassAttendance SubjectClassAttendance @relation(fields: [subjectClassAttendanceId], references: [id])
-	subjectClassAttendanceId String
+  subjectClassAttendance   SubjectClassAttendance @relation(fields: [subjectClassAttendanceId], references: [id])
+  subjectClassAttendanceId String
 
-  student       Student @relation(fields: [studentId], references: [id])
-	studentId     String
+  student                  Student                @relation(fields: [studentId], references: [id])
+  studentId                String
   //Trạng thái điểm danh
-  attendanceStatus Boolean @default(true)
+  attendanceStatus         Boolean                @default(true)
 
-   @@schema("ql-dao-tao")
+  @@schema("ql-dao-tao")
 }
 
 
