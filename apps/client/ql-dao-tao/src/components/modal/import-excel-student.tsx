@@ -442,6 +442,16 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
                         ),
                     },
                     {
+                        title: 'Đơn vị quản lý',
+                        dataIndex: 'managementOrganization',
+                        key: 'managementOrganization',
+                        align: 'center',
+                        width: 200,
+                        render: (value: string) => (
+                            <div className={!value ? 'td-error' : ''}>{value}</div>
+                        ),
+                    },
+                    {
                         title: 'Loại HV',
                         dataIndex: 'objectType',
                         key: 'objectType',
