@@ -73,6 +73,23 @@ export type TStudentWithSubjects = Student &
         })[]
     }
 
+export type TStudentWithSemesters = TStudentWithSubjects & {
+    semesters: Array<{
+        id: string
+        name: string
+        subjects: Array<{
+            id: string
+            key: string
+            stt: number
+            tenHocPhan: string
+            soTinChi: string
+            thangDiem10: string
+            thangDiem4: string
+            thangDiemChu: string | null
+        }>
+    }>
+}
+
 const subjects: {
     daiHoc: { id: number; name: string }[]
     nganHan: { id: number; name: string }[]
@@ -141,10 +158,12 @@ export default function StudentGradeSystem() {
     const [page, setPage] = useState(initialPagination.page)
     const [pageSize, setPageSize] = useState(initialPagination.pageSize)
     const [viewResult, setViewResult] = useState(false)
-    const [selectedStudent, setSelectedStudent] = useState<TStudentWithSubjects | null>(null)
+    const [selectedStudent, setSelectedStudent] = useState<TStudentWithSemesters | null>(null)
+
     const { data: trainingObjectTypes = [] } = useFindManyTrainingObjectType({
         where: { active: true },
     })
+
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse(
         {
             where: {
@@ -159,6 +178,7 @@ export default function StudentGradeSystem() {
             enabled: !!trainingObjectTypeId || trainingObjectTypes?.length > 0,
         }
     )
+
     const { data: fixedClasses = [] } = useFindManyFixedClass(
         {
             where: {
@@ -175,6 +195,7 @@ export default function StudentGradeSystem() {
             enabled: trainingCourseIds?.length > 0,
         }
     )
+
     const { data: thesisSessionData = [] } = useFindManyThesisSession(
         {
             where: {
@@ -191,6 +212,7 @@ export default function StudentGradeSystem() {
             enabled: !!trainingObjectTypeId || trainingCourseData?.length > 0,
         }
     )
+
     const { data: dm_DonVi = [] } = useFindManyDM_DonVi({
         where: {
             ...whereOrganization,
@@ -205,6 +227,7 @@ export default function StudentGradeSystem() {
             }),
         },
     })
+
     const treeData = buildOrgTree(dm_DonVi)
 
     const where = {
@@ -227,6 +250,7 @@ export default function StudentGradeSystem() {
             }),
         },
     }
+
     const { data: count } = useCountStudent(
         {
             where: { ...where },
@@ -235,6 +259,7 @@ export default function StudentGradeSystem() {
             enabled: viewResult,
         }
     )
+
     const {
         data: students,
         isLoading: isLoadingStudents,
@@ -271,56 +296,76 @@ export default function StudentGradeSystem() {
             enabled: viewResult,
         }
     )
+
+    const studentsWithSemesters = useMemo(() => {
+        return (students || []).map((student) => {
+            const { scoreConverts } = student?.fixedClass?.trainingCourse || {}
+            const semesterMap = new Map()
+
+            student.subjectClassStudent?.forEach((item) => {
+                const semester = item.subjectClass?.semester
+                if (!semester) return
+
+                if (!semesterMap.has(semester.id)) {
+                    semesterMap.set(semester.id, {
+                        id: semester.id,
+                        name: semester.name,
+                        subjects: [],
+                    })
+                }
+                const semesterGroup = semesterMap.get(semester.id)
+
+                const scoreConvert = scoreConverts?.find(
+                    (s) =>
+                        s.base10Min <= Number(item.finalScore) &&
+                        s.base10Max >= Number(item.finalScore)
+                )
+
+                semesterGroup.subjects.push({
+                    id: item.id,
+                    key: item.id,
+                    stt: semesterGroup.subjects.length + 1,
+                    tenHocPhan: item.subjectVersion?.name || '',
+                    soTinChi: item.subjectVersion?.credit || '',
+                    thangDiem10: item?.finalScore ? Number(item?.finalScore).toFixed(2) : '-',
+                    thangDiem4: scoreConvert?.base4 || '',
+                    thangDiemChu: scoreConvert?.letter,
+                })
+            })
+
+            return {
+                ...student,
+                semesters: Array.from(semesterMap.values()),
+            }
+        }) as TStudentWithSemesters[]
+    }, [students])
+
     const studentTableData = useMemo(() => {
-        return (students || []).map((student, index) => ({
+        return (studentsWithSemesters || []).map((student, index) => ({
             key: student.id,
             stt: (page - 1) * pageSize + index + 1,
             maSinhVien: student.code,
             hoTen: student.userProfile?.fullname || '',
             lop: student.fixedClass?.name || '',
             khoa: student.fixedClass?.trainingCourse?.name || '',
+            semesters: student.semesters,
         }))
-    }, [students])
+    }, [studentsWithSemesters, page, pageSize])
 
     const selectedStudentGradeData = useMemo(() => {
         if (!selectedStudent) return []
 
-        const semesterMap = new Map()
-        const { scoreConverts } = selectedStudent.fixedClass.trainingCourse
-        selectedStudent.subjectClassStudent?.forEach((item) => {
-            const semester = item.subjectClass?.semester
-            if (!semester) return
-
-            if (!semesterMap.has(semester.id)) {
-                semesterMap.set(semester.id, {
-                    id: semester.id,
-                    key: semester.id,
-                    tenHocPhan: semester.name,
-                    $type: 'parent' as const,
-                    subjects: [],
-                })
-            }
-            const semesterGroup = semesterMap.get(semester.id)
-
-            const scoreConvert = scoreConverts.find(
-                (s) =>
-                    s.base10Min <= Number(item.finalScore) && s.base10Max >= Number(item.finalScore)
-            )
-
-            semesterGroup.subjects.push({
-                id: item.id,
-                key: item.id,
-                stt: semesterGroup.subjects.length + 1,
-                tenHocPhan: item.subjectVersion?.name || '',
-                soTinChi: item.subjectVersion?.credit || '',
-                thangDiem10: item?.finalScore ? Number(item?.finalScore).toFixed(2) : '-',
-                thangDiem4: scoreConvert?.base4 || '',
-                thangDiemChu: scoreConvert?.letter,
+        return (selectedStudent.semesters || []).map((semester) => ({
+            id: semester.id,
+            key: semester.id,
+            tenHocPhan: semester.name,
+            $type: 'parent' as const,
+            subjects: semester.subjects.map((subject, index) => ({
+                ...subject,
+                stt: index + 1,
                 $type: 'child' as const,
-            })
-        })
-
-        return Array.from(semesterMap.values())
+            })),
+        }))
     }, [selectedStudent])
 
     useEffect(() => {
@@ -329,6 +374,12 @@ export default function StudentGradeSystem() {
         form.resetFields()
         form.setFieldValue('trainingObjectTypeId', trainingObjectTypeId)
     }, [form, trainingObjectTypeId])
+
+    useEffect(() => {
+        if (viewResult) {
+            setPage(1)
+        }
+    }, [viewResult])
 
     return (
         <div className="flex h-screen bg-gray-50">
@@ -481,7 +532,7 @@ export default function StudentGradeSystem() {
                             type="primary"
                             onClick={() => {
                                 setSelectedStudent(null)
-                                setViewResult(!viewResult)
+                                setViewResult(true)
                             }}
                             className="w-full h-8 text-xs text-white"
                         >
@@ -621,8 +672,10 @@ export default function StudentGradeSystem() {
                         }}
                         onRow={(record) => ({
                             onClick: () => {
-                                const student = students?.find((s) => s.id === record.key)
-                                setSelectedStudent((student as TStudentWithSubjects) || null)
+                                const student = studentsWithSemesters?.find(
+                                    (s) => s.id === record.key
+                                )
+                                setSelectedStudent(student || null)
                             },
                             className:
                                 selectedStudent?.id === record.key
