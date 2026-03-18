@@ -243,79 +243,83 @@ export default function ThoiKhoaBieu({
     const { data: dmDonViData = [], refetch } = useFindManyDM_DonVi(
         {
             include: {
-                subjectVersions: {
-                    select: {
-                        subjectClass: {
-                            where: {
-                                ...where,
-                            },
+                subjects: {
+                    include: {
+                        subjectVersion: {
                             include: {
-                                semester: true,
-                                mainLecturer: {
-                                    include: {
-                                        userProfile: true,
+                                subjectClass: {
+                                    where: {
+                                        ...where,
                                     },
-                                },
-                                subject: {
                                     include: {
-                                        managementOrganization: true,
-                                    },
-                                },
-                                extraLecturer: {
-                                    include: {
-                                        userProfile: true,
-                                    },
-                                },
-                                enterGradeLecturer: {
-                                    include: {
-                                        userProfile: true,
-                                    },
-                                },
-                                room: true,
-                                trainingLocation: true,
-                                subjectClassStudent: true,
-                                subjectClassTimes: true,
-                                fixedClasses: {
-                                    select: {
-                                        id: true,
-                                        code: true,
-                                        _count: {
+                                        semester: true,
+                                        mainLecturer: {
+                                            include: {
+                                                userProfile: true,
+                                            },
+                                        },
+                                        subject: {
+                                            include: {
+                                                managementOrganization: true,
+                                            },
+                                        },
+                                        extraLecturer: {
+                                            include: {
+                                                userProfile: true,
+                                            },
+                                        },
+                                        enterGradeLecturer: {
+                                            include: {
+                                                userProfile: true,
+                                            },
+                                        },
+                                        room: true,
+                                        trainingLocation: true,
+                                        subjectClassStudent: true,
+                                        subjectClassTimes: true,
+                                        fixedClasses: {
                                             select: {
-                                                students: {
-                                                    where: {
-                                                        deletedAt: null,
-                                                        active: true,
-                                                        status: 'ENROLLED',
+                                                id: true,
+                                                code: true,
+                                                _count: {
+                                                    select: {
+                                                        students: {
+                                                            where: {
+                                                                deletedAt: null,
+                                                                active: true,
+                                                                status: 'ENROLLED',
+                                                            },
+                                                        },
                                                     },
                                                 },
                                             },
                                         },
                                     },
+                                    orderBy: [
+                                        ...emptyObjectIf(
+                                            [
+                                                {
+                                                    maxStudent: filters.maxStudent,
+                                                },
+                                            ],
+                                            !!filters.maxStudent
+                                        ),
+                                        ...emptyObjectIf(
+                                            [
+                                                {
+                                                    subjectClassStudent: {
+                                                        _count: filters.subjectClassStudent,
+                                                    },
+                                                },
+                                            ],
+                                            !!filters.subjectClassStudent
+                                        ),
+                                        {
+                                            code: 'asc',
+                                        },
+                                    ],
                                 },
                             },
-                            orderBy: [
-                                ...emptyObjectIf(
-                                    [
-                                        {
-                                            maxStudent: filters.maxStudent,
-                                        },
-                                    ],
-                                    !!filters.maxStudent
-                                ),
-                                ...emptyObjectIf(
-                                    [
-                                        {
-                                            subjectClassStudent: {
-                                                _count: filters.subjectClassStudent,
-                                            },
-                                        },
-                                    ],
-                                    !!filters.subjectClassStudent
-                                ),
-                                {
-                                    code: 'asc',
-                                },
-                            ],
                         },
                     },
                 },
@@ -324,11 +328,15 @@ export default function ThoiKhoaBieu({
             skip: (currentPage - 1) * numberOfPages,
             where: {
                 bActive: true,
-                subjectVersions: {
+                subjects: {
                     some: {
-                        subjectClass: {
+                        subjectVersion: {
                             some: {
-                                ...where,
+                                subjectClass: {
+                                    some: {
+                                        ...where,
+                                    },
+                                },
                             },
                         },
                     },
@@ -352,11 +360,15 @@ export default function ThoiKhoaBieu({
     const { data: count } = useCountDM_DonVi({
         where: {
             bActive: true,
-            subjectVersions: {
+            subjects: {
                 some: {
-                    subjectClass: {
+                    subjectVersion: {
                         some: {
-                            ...where,
+                            subjectClass: {
+                                some: {
+                                    ...where,
+                                },
+                            },
                         },
                     },
                 },
@@ -433,10 +445,12 @@ export default function ThoiKhoaBieu({
         if (dmDonViData) {
             const countSubjectClassBySubjectId: Record<string, number> = {}
             dmDonViData.forEach((dmDonVi) => {
-                dmDonVi.subjectVersions.forEach((sv) => {
-                    sv.subjectClass.forEach((subjectClass) => {
-                        countSubjectClassBySubjectId[subjectClass.subjectId] =
-                            (countSubjectClassBySubjectId[subjectClass.subjectId] || 0) + 1
+                dmDonVi.subjects.forEach((subject) => {
+                    subject.subjectVersion.forEach((sv) => {
+                        sv.subjectClass.forEach((subjectClass) => {
+                            countSubjectClassBySubjectId[subjectClass.subjectId] =
+                                (countSubjectClassBySubjectId[subjectClass.subjectId] || 0) + 1
+                        })
                     })
                 })
             })
@@ -444,15 +458,17 @@ export default function ThoiKhoaBieu({
             const mapWithCount = dmDonViData.map((dmDonVi) => ({
                 ...dmDonVi,
                 id: dmDonVi.Id,
-                children: dmDonVi.subjectVersions.flatMap((sv) =>
-                    sv.subjectClass.map((subjectClass) => {
-                        const cloneCount = countSubjectClassBySubjectId[subjectClass.subjectId]
-                        countSubjectClassBySubjectId[subjectClass.subjectId] = 0
-                        return {
-                            ...subjectClass,
-                            rowSpan: cloneCount,
-                        }
-                    })
+                children: dmDonVi.subjects.flatMap((subject) =>
+                    subject.subjectVersion.flatMap((sv) =>
+                        sv.subjectClass.map((subjectClass) => {
+                            const cloneCount = countSubjectClassBySubjectId[subjectClass.subjectId]
+                            countSubjectClassBySubjectId[subjectClass.subjectId] = 0
+                            return {
+                                ...subjectClass,
+                                rowSpan: cloneCount,
+                            }
+                        })
+                    )
                 ),
             }))
             return mapWithCount

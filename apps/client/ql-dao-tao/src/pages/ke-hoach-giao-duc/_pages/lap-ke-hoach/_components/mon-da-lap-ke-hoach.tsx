@@ -10,12 +10,11 @@ import {
 } from '@workspace/db/hooks'
 import { exportFromTemplate } from '@workspace/libs/template-excel'
 import { getMinioUrl } from '@workspace/libs/utils'
-import { useAbility } from '@workspace/permissions/hooks'
 import { useSemesterStore, useTrainingCourseStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Form, Input, message, Popconfirm, Row } from 'antd'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 type MonDaLapKeHoachForm = {
@@ -24,7 +23,6 @@ type MonDaLapKeHoachForm = {
 }
 
 export default function MonDaLapKeHoach({ type }: { type?: $Enums.SubjectClassType }) {
-    const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(100)
     const { id: semesterId } = useSemesterStore()
@@ -170,6 +168,24 @@ export default function MonDaLapKeHoach({ type }: { type?: $Enums.SubjectClassTy
         }, 500),
         []
     )
+
+    const processedData = useMemo(() => {
+        const rawData = planTraining?.planTrainingSubjects ?? []
+        const grouped = new Map<string, typeof rawData>()
+        rawData.forEach((item) => {
+            const key = item.trainingBlockSubject?.subject?.id || item.trainingBlockSubjectId || ''
+            if (!grouped.has(key)) grouped.set(key, [])
+            const group = grouped.get(key)
+            if (group) group.push(item)
+        })
+        const result: Array<(typeof rawData)[number] & { rowSpan: number }> = []
+        grouped.forEach((items) => {
+            items.forEach((item, index) => {
+                result.push({ ...item, rowSpan: index === 0 ? items.length : 0 })
+            })
+        })
+        return result
+    }, [planTraining?.planTrainingSubjects])
 
     return (
         <Form
@@ -345,7 +361,7 @@ export default function MonDaLapKeHoach({ type }: { type?: $Enums.SubjectClassTy
                         },
                         type: 'checkbox',
                         checkStrictly: true,
-                        columnWidth: 15,
+                        columnWidth: 35,
                     }}
                     onRow={(record) => {
                         return {
@@ -369,11 +385,11 @@ export default function MonDaLapKeHoach({ type }: { type?: $Enums.SubjectClassTy
                             },
                         }
                     }}
-                    data={planTraining?.planTrainingSubjects ?? []}
+                    data={processedData}
                     columns={[
                         {
                             title: 'TT',
-                            width: 35,
+                            width: 80,
                             align: 'center',
                             render: (_, __, index) =>
                                 index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
@@ -382,12 +398,14 @@ export default function MonDaLapKeHoach({ type }: { type?: $Enums.SubjectClassTy
                             title: 'Mã MH',
                             align: 'center',
                             width: 80,
+                            onCell: (record) => ({ rowSpan: record.rowSpan }),
                             render: (_, record) => record?.trainingBlockSubject?.subject?.code,
                         },
                         {
                             title: 'Tên môn',
                             width: 120,
                             align: 'center',
+                            onCell: (record) => ({ rowSpan: record.rowSpan }),
                             render: (_, record) => (
                                 <div
                                     onClick={(e) => {

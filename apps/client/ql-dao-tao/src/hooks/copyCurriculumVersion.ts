@@ -11,7 +11,7 @@ export const useCloneCurriculumVersion = () => {
     const { showSpinner, hideSpinner } = useSpinner()
     const router = useRouter()
 
-    const handleCloneCurriculumVersion = async (id: string) => {
+    const handleCloneCurriculumVersion = async (id: string, targetCurriculumId?: string) => {
         try {
             showSpinner()
             const res = await sqlTransaction([
@@ -60,7 +60,7 @@ export const useCloneCurriculumVersion = () => {
                 code: originalVersion.code
                     ? `${originalVersion.code}-COPY-${shortSuffix}`
                     : `COPY-${Date.now()}`,
-                curriculum: { connect: { id: originalVersion?.curriculumId } },
+                curriculum: { connect: { id: targetCurriculumId ?? originalVersion?.curriculumId } },
                 trainingObjectType: { connect: { id: originalVersion.trainingObjectTypeId } },
                 ...(originalVersion.trainingLevelId
                     ? { trainingLevel: { connect: { id: originalVersion.trainingLevelId ?? '' } } }

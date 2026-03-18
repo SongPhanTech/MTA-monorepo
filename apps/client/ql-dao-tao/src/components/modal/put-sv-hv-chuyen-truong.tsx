@@ -82,7 +82,7 @@ const PutStudentScoreConvertModal = () => {
             ],
         },
         include: { userProfile: true },
-        // take: 20,
+        take: 20,
     })
     const selectedStudentId = Form.useWatch('studentId', form)
     const { data: selectedStudent } = useFindUniqueStudent(

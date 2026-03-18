@@ -7,7 +7,6 @@ import EditIcon from '@components/icons/edit'
 import LockPlusIcon from '@components/icons/lockPlus'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
-import { useCloneCurriculumVersion } from '@hooks/copyCurriculumVersion'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import type { Prisma, TrainingMajor, TrainingTime } from '@workspace/db/client'
@@ -414,7 +413,9 @@ export default function TrainingProgramCatalog() {
         }
     }
 
-    const { handleCloneCurriculumVersion } = useCloneCurriculumVersion()
+    const { onOpen: onOpenChuyenCTDT } = useDisclosure<{ id: string }>({
+        tag: 'ModalChuyenCTDT',
+    })
 
     return (
         <div>
@@ -761,7 +762,7 @@ export default function TrainingProgramCatalog() {
                                                     <CopyPlusIcon
                                                         onClick={(e) => {
                                                             e.stopPropagation()
-                                                            handleCloneCurriculumVersion(record.id)
+                                                            onOpenChuyenCTDT({ id: record.id })
                                                         }}
                                                     />
                                                 )}
