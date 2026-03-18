@@ -385,6 +385,10 @@ export default function UserProfilePageDs() {
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
+    const goToStudentDetail = (id: string) => {
+        router.push(ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_QL_SINH_VIEN_ID.replace('[id]', id))
+    }
+
     const handleModal = () => {
         onOpen({
             preSelectedValues: {},
@@ -758,6 +762,10 @@ export default function UserProfilePageDs() {
                                 ),
                             },
                         ]}
+                        onRow={(record) => ({
+                            onClick: () => goToStudentDetail(record.id),
+                            className: 'cursor-pointer',
+                        })}
                         rowKey="id"
                         data={data}
                         pagination={{
