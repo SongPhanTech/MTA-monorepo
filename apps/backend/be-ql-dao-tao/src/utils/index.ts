@@ -500,7 +500,7 @@ export const buildSubjectMapOrThrow = async (
 
     const existingCode = await prisma.subjectVersion.findMany({
         where: {
-            code: { in: uniqueSubject.map((s) => s.code).filter((c): c is string => Boolean(c)) },
+            code: { in: subjects.map((s) => s.code).filter((c): c is string => Boolean(c)) },
         },
     })
 
@@ -568,16 +568,17 @@ export const buildSubjectMapOrThrow = async (
                     ? { managementOrganizationId: orgMap.get(s.organizationCode || null) }
                     : {}),
                 credit: s.credit,
-                examType: s.examType,
-                type: s.type,
-                period: s.period,
-                schedulePeriod: s.schedulePeriod,
-                ...(s.numberOfTheory ? { numberOfTheory: s.numberOfTheory } : {}),
-                ...(s.numberOfPractical ? { numberOfPractical: s.numberOfPractical } : {}),
-                ...(s.numberOfSelfStudy ? { numberOfSelfStudy: s.numberOfSelfStudy } : {}),
-                ...(s.numberOfPractice ? { numberOfPractice: s.numberOfPractice } : {}),
-                ...(s.numberOfReview ? { numberOfReview: s.numberOfReview } : {}),
-                ...(s.numberOfExam ? { numberOfExam: s.numberOfExam } : {}),
+                OR: [{ period: s.period }, { period: null }],
+                // TODO: correct this
+                // examType: s.examType,
+                // type: s.type,
+                // schedulePeriod: s.schedulePeriod,
+                // ...(s.numberOfTheory ? { numberOfTheory: s.numberOfTheory } : {}),
+                // ...(s.numberOfPractical ? { numberOfPractical: s.numberOfPractical } : {}),
+                // ...(s.numberOfSelfStudy ? { numberOfSelfStudy: s.numberOfSelfStudy } : {}),
+                // ...(s.numberOfPractice ? { numberOfPractice: s.numberOfPractice } : {}),
+                // ...(s.numberOfReview ? { numberOfReview: s.numberOfReview } : {}),
+                // ...(s.numberOfExam ? { numberOfExam: s.numberOfExam } : {}),
             })),
         },
         select: { id: true, code: true },
@@ -610,6 +611,7 @@ export const buildSubjectMapOrThrow = async (
                     trainingObjectTypeId: subject.trainingObjectTypeId,
                     credit: subject.credit,
                     code: subject.code,
+                    codeTkb: subject.code,
                     examType: subject.examType,
                     type: subject.type,
                     onePoint: subject.onePoint,

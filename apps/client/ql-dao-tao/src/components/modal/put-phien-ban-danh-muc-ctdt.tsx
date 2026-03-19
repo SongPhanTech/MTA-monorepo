@@ -33,14 +33,14 @@ import { importPhienBanCTDTSubject } from '@workspace/libs/api/training'
 import type { SubjectResult } from '@workspace/libs/parseExcel'
 import { parseSheetSubject } from '@workspace/libs/parseExcel'
 import { useFindManyTrainingObjectTypePermission, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Col, Form, Input, InputNumber, message, Modal, Radio, Row } from 'antd'
+import { Button, Col, Form, Input, InputNumber, Modal, message, Radio, Row } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
-import { useEffect, useState } from 'react'
-import { useDisclosure } from 'react-hook-disclosure-modal'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { getMinioUrl } from '@workspace/libs/utils'
 import { Download } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export type PutCurriculumVersion = CurriculumVersion & {
     documentFiles?: DocumentFile[]
@@ -302,7 +302,9 @@ const PutCurriculumVersion = () => {
                         createNewSubjects: false,
                     })
                     if (res.status !== 200) {
-                        throw new Error(res.data?.message || 'Lỗi khi nhập dữ liệu từ file')
+                        throw new Error(res.data?.message || 'Lỗi khi nhập dữ liệu từ file', {
+                            cause: res.data.errors,
+                        })
                     }
                 }
                 await updateDynamicFields(input.versionId)
@@ -358,7 +360,15 @@ const PutCurriculumVersion = () => {
             if (error?.info?.message || error?.message) {
                 Modal.error({
                     title: 'Lỗi',
-                    content: error?.info?.message || error?.message,
+                    content: (
+                        <div>
+                            {error?.info?.message || error?.message}
+                            <br />
+                            {error.cause?.map((e: any) => (
+                                <div>{`sheet: ${e?.sheetRef} - cell: ${e?.cellRef} - ${e?.message}`}</div>
+                            ))}
+                        </div>
+                    ),
                     width: 500,
                     okText: 'Đóng',
                     okButtonProps: {

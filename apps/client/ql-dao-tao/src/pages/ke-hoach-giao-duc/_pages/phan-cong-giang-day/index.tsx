@@ -330,7 +330,9 @@ export default function PhanCongGiangDay({
                                         mainLecturer: { include: { userProfile: true } },
                                         subject: {
                                             include: {
-                                                subject: { include: { managementOrganization: true } },
+                                                subject: {
+                                                    include: { managementOrganization: true },
+                                                },
                                             },
                                         },
                                         extraLecturer: { include: { userProfile: true } },
@@ -1413,8 +1415,9 @@ export default function PhanCongGiangDay({
                                                     const groupedPayload = Object.groupBy(
                                                         payload,
                                                         (item) =>
-                                                            item?.subject?.subject?.managementOrganization
-                                                                ?.sMa || 'MTA'
+                                                            item?.subject?.subject
+                                                                ?.managementOrganization?.sMa ||
+                                                            'MTA'
                                                     )
                                                     exportFromTemplate({
                                                         templateUrl: getMinioUrl(
@@ -2203,7 +2206,8 @@ export default function PhanCongGiangDay({
                                     // type: 'tree_select',
                                     // options: treeData,
                                     // dataIndex: 'managementOrganizationId',
-                                    render: (_, record) => record?.subject?.subject?.managementOrganization?.sMa || '',
+                                    render: (_, record) =>
+                                        record?.subject?.subject?.managementOrganization?.sMa || '',
                                 },
                                 // {
                                 //     title: 'Điểm bằng nhau',

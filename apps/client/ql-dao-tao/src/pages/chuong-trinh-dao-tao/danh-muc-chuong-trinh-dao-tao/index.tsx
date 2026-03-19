@@ -7,7 +7,6 @@ import EditIcon from '@components/icons/edit'
 import LockPlusIcon from '@components/icons/lockPlus'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
-import { useCloneCurriculumVersion } from '@hooks/copyCurriculumVersion'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import type { Prisma, TrainingMajor, TrainingTime } from '@workspace/db/client'
@@ -92,7 +91,7 @@ export default function TrainingProgramCatalog() {
     const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([])
     const router = useRouter()
     const { data: me } = useSession()
-    const userProfileId = me?.sDM_NhanVienId || ''
+    const donViId = me?.sDM_DonViId || ''
     const [currentPage, setCurrentPage] = useState(() => getStoredPage())
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>(() => getStoredFilters())
@@ -119,13 +118,7 @@ export default function TrainingProgramCatalog() {
     const where = useMemo(() => {
         const curriculumVersionFilter = {
             ...(!isViewAll && {
-                managementOrganization: {
-                    lecturers: {
-                        some: {
-                            userProfileId,
-                        },
-                    },
-                },
+                organizationId: donViId,
             }),
             ...(filters.name && {
                 name: { contains: filters.name, mode: 'insensitive' as const },
@@ -414,7 +407,9 @@ export default function TrainingProgramCatalog() {
         }
     }
 
-    const { handleCloneCurriculumVersion } = useCloneCurriculumVersion()
+    const { onOpen: onOpenChuyenCTDT } = useDisclosure<{ id: string }>({
+        tag: 'ModalChuyenCTDT',
+    })
 
     return (
         <div>
@@ -761,7 +756,7 @@ export default function TrainingProgramCatalog() {
                                                     <CopyPlusIcon
                                                         onClick={(e) => {
                                                             e.stopPropagation()
-                                                            handleCloneCurriculumVersion(record.id)
+                                                            onOpenChuyenCTDT({ id: record.id })
                                                         }}
                                                     />
                                                 )}

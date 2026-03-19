@@ -6,8 +6,8 @@ import XlsxTemplate from 'xlsx-template'
 import { prisma } from '..'
 import {
     listStudentResultInfo,
-    resultCourseStudentScholarship,
     resultCourseStudentAcademicWarning,
+    resultCourseStudentScholarship,
 } from './student-result.service'
 
 export async function exportStudentProfile({ trainingCourseId }: { trainingCourseId: string }) {
@@ -53,11 +53,17 @@ export async function exportStudentProfile({ trainingCourseId }: { trainingCours
                     curriculumVersion: {
                         select: {
                             name: true,
+
                             curriculum: {
                                 select: {
                                     trainingMajor: {
                                         include: {
                                             trainingField: true,
+                                        },
+                                    },
+                                    managementOrganization: {
+                                        select: {
+                                            sTen: true,
                                         },
                                     },
                                 },
@@ -74,6 +80,11 @@ export async function exportStudentProfile({ trainingCourseId }: { trainingCours
                             trainingMajor: {
                                 include: {
                                     trainingField: true,
+                                },
+                            },
+                            managementOrganization: {
+                                select: {
+                                    sTen: true,
                                 },
                             },
                         },
@@ -126,6 +137,7 @@ export async function exportStudentProfile({ trainingCourseId }: { trainingCours
             trainingField: curriculumVersion?.curriculum.trainingMajor?.trainingField?.name,
             trainingMajor: curriculumVersion?.curriculum.trainingMajor?.name,
             curriculum: curriculumVersion?.name,
+            curriculumOrg: curriculumVersion?.curriculum.managementOrganization.sTen,
             trainingObjectType:
                 TrainingObjectType[
                     trainingCourse.trainingObjectType.type || TrainingObjectTypes.MILITARY

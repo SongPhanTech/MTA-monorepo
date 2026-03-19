@@ -7,6 +7,7 @@ import {
     useCreateSubject,
     useFindManyDM_DonVi,
     useFindUniqueSubject,
+    useUpdateManySubjectVersion,
     useUpdateSubject,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, message, Radio } from 'antd'
@@ -45,6 +46,7 @@ const PutSubjectListModal = () => {
             .replace(/[\u0300-\u036f]/g, '')
     const { mutateAsync: createSubject } = useCreateSubject()
     const { mutateAsync: updateSubject } = useUpdateSubject()
+    const { mutateAsync: updateManySubjectVersion } = useUpdateManySubjectVersion()
     async function onOk(output?: PutSubject) {
         if (!output) return
         try {
@@ -56,6 +58,11 @@ const PutSubjectListModal = () => {
                 await updateSubject({
                     data,
                     where: { id: input.id },
+                })
+
+                await updateManySubjectVersion({
+                    data: { managementOrganizationId: data.managementOrganizationId },
+                    where: { subjectId: input.id },
                 })
                 message.success('Cập nhật thành công')
             } else {

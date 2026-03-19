@@ -138,13 +138,13 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
             },
             subject: {
                 select: {
-                     managementOrganization: {
-                            select: {
-                                 sMa: true,
+                    managementOrganization: {
+                        select: {
+                            sMa: true,
                         },
-            }
+                    },
+                },
             },
-        }
         },
     })
 
@@ -613,7 +613,8 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                                     title: 'Đơn vị phụ trách',
                                     width: 150,
                                     align: 'center',
-                                    render: (_, record) => record?.subject?.managementOrganization?.sMa || '',
+                                    render: (_, record) =>
+                                        record?.subject?.managementOrganization?.sMa || '',
                                 },
                                 {
                                     title: 'Số LMH',

@@ -350,7 +350,6 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
         const dataToTransfer = selectedStudents.filter((s) => s.isSelected)
         setRightPanelData(dataToTransfer)
         setIsModalVisible(true)
-        message.success(`Đã chuyển ${dataToTransfer.length} sinh viên`)
     }
 
     const handleSaveScholarshipAward = async () => {
@@ -868,7 +867,8 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
                     </Col>
                 </Flex>
             </Col>
-            <Modal
+            { !!isModalVisible&&
+      <Modal
                 title="Danh sách sinh viên được chọn"
                 open={isModalVisible}
                 onOk={handleSaveScholarshipAward}
@@ -940,6 +940,8 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
                     <div className="text-gray-400 text-center py-8">Chưa có dữ liệu được chọn</div>
                 )}
             </Modal>
+            }
+      
         </Row>
     )
 }

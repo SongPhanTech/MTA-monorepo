@@ -1202,7 +1202,7 @@ app.openapi(getSurveysByProfile, async (c) => {
         ...(semesterId && { semesterId }),
         ...(q.lecturerName
             ? {
-                  lecturer: {
+                  lecture: {
                       userProfile: { fullname: { contains: q.lecturerName, mode: 'insensitive' } },
                   },
               }
