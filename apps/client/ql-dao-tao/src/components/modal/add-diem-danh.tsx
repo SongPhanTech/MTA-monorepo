@@ -9,6 +9,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import dayjs from 'dayjs'
 import { sqlTransaction } from '@workspace/libs/api/model';
 import { useSession } from '@workspace/auth/react';
+import { queryClient } from '@api/index';
 export type PutSubjectClassAttendance = {
     time: Date | null
     list:any[]
@@ -74,6 +75,9 @@ const AddSubjectClassAttendance = () => {
                 })
                 if(res){
                     message.success('Cập nhật thành công')
+                       queryClient.invalidateQueries({
+                        queryKey: ['SubjectClassAttendance'],
+                    })
                     onClose()
                     return
                 }

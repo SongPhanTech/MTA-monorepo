@@ -10,6 +10,7 @@ import dayjs from 'dayjs'
 import { sqlTransaction } from '@workspace/libs/api/model';
 import { useSession } from '@workspace/auth/react';
 import { Table } from '@components/commons/table';
+import { queryClient } from '@api/index';
 export type PutSubjectClassAttendance = {
     list:any[]
 }
@@ -84,6 +85,9 @@ const AddSubjectClassAttendanceStudent = () => {
             let res = await sqlTransaction(listTransacyion)
             if(res.status===200){
                 message.success('Điểm danh thành công')
+                   queryClient.invalidateQueries({
+                        queryKey: ['zenstack','SubjectClassAttendance'],
+                    })
                 onClose()
 
             }
