@@ -262,6 +262,7 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
                                         a.href = fileUrl
                                         a.download = item.name
                                         a.target = '_blank'
+                                        a.rel = 'noopener noreferrer'
                                         document.body.appendChild(a)
                                         a.click()
                                         document.body.removeChild(a)
