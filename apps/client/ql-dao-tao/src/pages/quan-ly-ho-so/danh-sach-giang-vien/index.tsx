@@ -88,104 +88,104 @@ export default function UserProfilePageLecture() {
             deletedAt: null,
             ...(filters.code
                 ? {
-                      code: {
-                          contains: filters.code,
-                          mode: 'insensitive' as const,
-                      },
-                  }
+                    code: {
+                        contains: filters.code,
+                        mode: 'insensitive' as const,
+                    },
+                }
                 : {}),
             ...(filters.name
                 ? {
-                      userProfile: {
-                          fullname: {
-                              contains: filters.name,
-                              mode: 'insensitive' as const,
-                          },
-                      },
-                  }
+                    userProfile: {
+                        fullname: {
+                            contains: filters.name,
+                            mode: 'insensitive' as const,
+                        },
+                    },
+                }
                 : {}),
             ...(filters.idCardNumber
                 ? {
-                      userProfile: {
-                          idCardNumber: {
-                              contains: filters.idCardNumber,
-                              mode: 'insensitive' as const,
-                          },
-                      },
-                  }
+                    userProfile: {
+                        idCardNumber: {
+                            contains: filters.idCardNumber,
+                            mode: 'insensitive' as const,
+                        },
+                    },
+                }
                 : {}),
             ...(filters.gender
                 ? {
-                      userProfile: {
-                          genderId: {
-                              in: filters.gender,
-                          },
-                      },
-                  }
+                    userProfile: {
+                        genderId: {
+                            in: filters.gender,
+                        },
+                    },
+                }
                 : {}),
             ...(filters.dateOfBirth?.length === 2
                 ? {
-                      userProfile: {
-                          dateOfBirth: {
-                              gte: dayjs(filters.dateOfBirth?.[0], 'DD/MM/YYYY').toDate(),
-                              lte: dayjs(filters.dateOfBirth?.[1], 'DD/MM/YYYY').toDate(),
-                          },
-                      },
-                  }
+                    userProfile: {
+                        dateOfBirth: {
+                            gte: dayjs(filters.dateOfBirth?.[0], 'DD/MM/YYYY').toDate(),
+                            lte: dayjs(filters.dateOfBirth?.[1], 'DD/MM/YYYY').toDate(),
+                        },
+                    },
+                }
                 : {}),
             ...(filters.officerNumber
                 ? {
-                      userProfile: {
-                          officerNumber: {
-                              contains: filters.officerNumber,
-                              mode: 'insensitive' as const,
-                          },
-                      },
-                  }
+                    userProfile: {
+                        officerNumber: {
+                            contains: filters.officerNumber,
+                            mode: 'insensitive' as const,
+                        },
+                    },
+                }
                 : {}),
             ...(filters.academicRankType
                 ? {
-                      userProfile: {
-                          academicRankTypeId: {
-                              in: filters.academicRankType,
-                          },
-                      },
-                  }
+                    userProfile: {
+                        academicRankTypeId: {
+                            in: filters.academicRankType,
+                        },
+                    },
+                }
                 : {}),
             ...(filters.academicDegreeType
                 ? {
-                      userProfile: {
-                          academicDegreeTypeId: {
-                              in: filters.academicDegreeType,
-                          },
-                      },
-                  }
+                    userProfile: {
+                        academicDegreeTypeId: {
+                            in: filters.academicDegreeType,
+                        },
+                    },
+                }
                 : {}),
             ...(filters.rankId
                 ? {
-                      userProfile: {
-                          rankId: {
-                              in: filters.rankId,
-                          },
-                      },
-                  }
+                    userProfile: {
+                        rankId: {
+                            in: filters.rankId,
+                        },
+                    },
+                }
                 : {}),
             ...(filters.lecturerType
                 ? {
-                      lecturerTypeId: {
-                          in: filters.lecturerType,
-                      },
-                  }
+                    lecturerTypeId: {
+                        in: filters.lecturerType,
+                    },
+                }
                 : {}),
             ...(filters.organization
                 ? {
-                      organizationId: {
-                          in: (filters?.organization as any)?.checked || [],
-                      },
-                  }
+                    organizationId: {
+                        in: (filters?.organization as any)?.checked || [],
+                    },
+                }
                 : !canXemTatCa
-                  ? { organizationId: { in: orgIds } }
-                  : {}),
+                    ? { organizationId: { in: orgIds } }
+                    : {}),
         }),
         [filters, canXemTatCa, orgIds]
     )
@@ -480,29 +480,31 @@ export default function UserProfilePageLecture() {
                                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_DANH_SACH_GIANG_VIEN,
                                                     'XEM_CHI_TIET'
                                                 ) && (
-                                                    <Tooltip title="Xem chi tiết" placement="top">
-                                                        <InfoIcon
-                                                            onClick={() => handleRowClick({ id })}
-                                                            size={16}
-                                                            strokeWidth={1.5}
-                                                            className="text-green-600 cursor-pointer"
-                                                        />
-                                                    </Tooltip>
-                                                )}
+                                                        <Tooltip title="Xem chi tiết" placement="top">
+                                                            <InfoIcon
+                                                                onClick={() => handleRowClick({ id })}
+                                                                size={16}
+                                                                strokeWidth={1.5}
+                                                                className="text-green-600 cursor-pointer"
+                                                            />
+                                                        </Tooltip>
+                                                    )}
                                                 {can(
                                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_DANH_SACH_GIANG_VIEN,
                                                     'SUA'
                                                 ) && (
-                                                    <Tooltip title="Sửa" placement="top">
-                                                        <Button
-                                                            target="_blank"
-                                                            href={`/hrm/${ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO}/${userProfileId}`}
-                                                            className="text-green-600 border-none"
-                                                        >
-                                                            <ExportOutlined />
-                                                        </Button>
-                                                    </Tooltip>
-                                                )}
+                                                        <Tooltip title="Sửa" placement="top">
+                                                            <Button
+                                                                type="link" 
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                href={`/hrm/${ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO}/${userProfileId}`}
+                                                                className="text-green-600 border-none"
+                                                            >
+                                                                <ExportOutlined />
+                                                            </Button>
+                                                        </Tooltip>
+                                                    )}
                                             </Row>
                                         )
                                     }

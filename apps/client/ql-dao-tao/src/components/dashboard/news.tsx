@@ -64,7 +64,7 @@ function News() {
                     fakeData?.map((item: any) => {
                         // <Link to={`/quanlythongtindieuhanh/thongbao/${item?.id}`}>
                         return type !== 'card' ? (
-                            <Link key={item.id} target="_blank" href={item?.link}>
+                            <Link key={item.id} target="_blank" rel="noopener noreferrer" href={item?.link}>
                                 <Alert
                                     showIcon
                                     icon={<NotificationOutlined />}
