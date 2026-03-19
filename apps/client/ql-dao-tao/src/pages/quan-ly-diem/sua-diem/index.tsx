@@ -441,7 +441,7 @@ function TicketDetailDrawer({
     ticketId: string
     open: boolean
     onClose: () => void
-    can: any
+    can: (...arg: any) => boolean
 }) {
     const { data: ticket } = useFindUniqueScoreCorrectionTicket({
         where: { id: ticketId },
@@ -546,10 +546,7 @@ function TicketDetailDrawer({
             extra={
                 <Space>
                     {ticket?.status === 'INITIALIZED' &&
-                        can(
-                            'QL_DAO_TAO_QUAN_LY_DIEM_SUA_DIEM_CHI_TIET',
-                            'SUA'
-                        )(
+                        can('QL_DAO_TAO_QUAN_LY_DIEM_SUA_DIEM_CHI_TIET', 'SUA') && (
                             <Button onClick={() => handleStatusChange('PENDING_APPROVAL')}>
                                 Gửi duyệt
                             </Button>
