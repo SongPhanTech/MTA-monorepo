@@ -544,10 +544,11 @@ export const buildSubjectMapOrThrow = async (
                 e.name === s.name &&
                 e.credit === s.credit &&
                 e.period === s.period &&
-                e.managementOrganizationId === orgMap.get(s.organizationCode || null)
+                e.managementOrganizationId === orgMap.get(s.organizationCode || null) &&
+                e.code !== null &&
+                e.code !== s.code
         )
-        if (!existing) return false
-        return existing.code && s.code && existing.code !== s.code
+        return !!existing
     })
 
     if (combinationConflicts.length > 0) {
