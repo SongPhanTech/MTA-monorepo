@@ -441,16 +441,16 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
                             <div className={!value ? 'td-error' : ''}>{value}</div>
                         ),
                     },
-                    {
-                        title: 'Đơn vị quản lý',
-                        dataIndex: 'managementOrganization',
-                        key: 'managementOrganization',
-                        align: 'center',
-                        width: 200,
-                        render: (value: string) => (
-                            <div className={!value ? 'td-error' : ''}>{value}</div>
-                        ),
-                    },
+                    // {
+                    //     title: 'Đối tượng đào tạo',
+                    //     dataIndex: 'trainingObjectType',
+                    //     key: 'trainingObjectType',
+                    //     align: 'center',
+                    //     width: 200,
+                    //     render: (value: string) => (
+                    //         <div className={!value ? 'td-error' : ''}>{value}</div>
+                    //     ),
+                    // },
                     {
                         title: 'Loại HV',
                         dataIndex: 'objectType',

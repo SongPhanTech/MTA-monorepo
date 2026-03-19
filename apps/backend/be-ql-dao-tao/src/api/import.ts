@@ -616,10 +616,10 @@ app.openapi(importStudent, async (c) => {
         data.students.map((student) => student.position)
     )
 
-    const managementOrganizationMap = await buildOrgNameMapOrThrow(
-        prisma,
-        data.students.map((student) => student.managementOrganization)
-    )
+    // const managementOrganizationMap = await buildOrgNameMapOrThrow(
+    //     prisma,
+    //     data.students.map((student) => student.managementOrganization)
+    // )
 
     const classConsistencyMap = new Map<
         string,
@@ -816,7 +816,7 @@ app.openapi(importStudent, async (c) => {
                 code: fixedClassCode,
                 trainingCourseId: trainingCourse.id,
                 curriculumVersionId: curriculumVersionMap.get(curriculum),
-                managementOrganizationId: managementOrganizationMap.get(managementOrganization),
+               // managementOrganizationId: managementOrganizationMap.get(managementOrganization),
                 startYear: new Date().getFullYear(),
             })
         ),
