@@ -506,9 +506,6 @@ function TicketDetailDrawer({
     const [editingItem, setEditingItem] = useState<any>(null)
 
     const handleStatusChange = async (newStatus: ScoreCorrectionStatus) => {
-        console.log('newStatus', newStatus)
-        console.log('items', items)
-        console.log('ticket', ticket)
 
         if (newStatus === 'PENDING_APPROVAL') {
             if (items?.length !== ticket?.number) {

@@ -244,7 +244,6 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
             }
         })
     }, [studentDataAward])
-    console.log('transformedTrainingCourses:', transformedTrainingCourses)
 
     const { data: count } = useCountTrainingCourse({
         where: {
