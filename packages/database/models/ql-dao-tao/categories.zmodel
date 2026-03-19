@@ -50,6 +50,7 @@ model TrainingObjectType extends Base {
   survey                Survey[]
   scoreCorrectionTicket ScoreCorrectionTicket[]
   scoreLinkSheet        ScoreLinkSheet[]
+  availableTrainingTime AvailableTrainingTime[]
 
   @@schema("ql-dao-tao")
 }
@@ -249,6 +250,16 @@ model TrainingTime extends Base {
   name              String
 
   curriculumVersion CurriculumVersion[]
+  @@schema("ql-dao-tao")
+}
+
+// quỹ thời gian có thể dào tạo
+model AvailableTrainingTime extends Base {
+  duration         Float                 // số lượng đơn vị thời gian tính theo ngày
+	trainingObjectType TrainingObjectType? @relation(fields: [trainingObjectTypeId], references: [id])
+	trainingObjectTypeId String?
+	semester          Semester? @relation(fields: [semesterId], references: [id])
+	semesterId        String?
   @@schema("ql-dao-tao")
 }
 

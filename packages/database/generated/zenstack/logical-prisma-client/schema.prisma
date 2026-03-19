@@ -3055,6 +3055,7 @@ model Semester {
   exam                    Exam[]
   scoreLinkSheets         ScoreLinkSheet[]
   semesterTrainingScore   SemesterTrainingScore[]
+  availableTrainingTime   AvailableTrainingTime[]
 
   @@schema("ql-dao-tao")
 }
@@ -3920,6 +3921,7 @@ model TrainingObjectType {
   survey                Survey[]
   scoreCorrectionTicket ScoreCorrectionTicket[]
   scoreLinkSheet        ScoreLinkSheet[]
+  availableTrainingTime AvailableTrainingTime[]
 
   @@schema("ql-dao-tao")
 }
@@ -4254,6 +4256,27 @@ model TrainingTime {
   createdBy         String?             @default("") @db.Uuid()
   name              String
   curriculumVersion CurriculumVersion[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model AvailableTrainingTime {
+  id                   String              @id() @default(cuid())
+  code                 String?             @unique()
+  active               Boolean             @default(true)
+  description          String?             @db.Text()
+  deletedAt            DateTime?
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @default(now()) @updatedAt()
+  createdBy            String?             @default("") @db.Uuid()
+  duration             Float
+  trainingObjectType   TrainingObjectType? @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId String?
+  semester             Semester?           @relation(fields: [semesterId], references: [id])
+  semesterId           String?
 
   @@schema("ql-dao-tao")
 }
