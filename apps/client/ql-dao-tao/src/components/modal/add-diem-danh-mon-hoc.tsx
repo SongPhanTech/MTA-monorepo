@@ -71,11 +71,14 @@ const AddSubjectClassAttendanceStudent = () => {
             dataStudent.forEach((opt,index)=>{
                 listTransacyion.push({
                     model: 'SubjectClassAttendanceStudent',
-                    action:'update',
-                    where:{id:opt.id},
+                    operation:'update',
                     data:{
-                        attendanceStatus: output.list[index].attendanceStatus
+                           where:{id:opt.id},
+                            data:{
+                                attendanceStatus: output.list[index].attendanceStatus
+                            }
                     }
+                 
                 })
             })
             let res = await sqlTransaction(listTransacyion)
