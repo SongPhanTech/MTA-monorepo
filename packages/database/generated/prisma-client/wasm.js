@@ -2454,6 +2454,20 @@ exports.Prisma.TrainingTimeScalarFieldEnum = {
   name: 'name'
 };
 
+exports.Prisma.AvailableTrainingTimeScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  duration: 'duration',
+  trainingObjectTypeId: 'trainingObjectTypeId',
+  semesterId: 'semesterId'
+};
+
 exports.Prisma.CertificateScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -6323,6 +6337,15 @@ exports.Prisma.TrainingTimeOrderByRelevanceFieldEnum = {
   name: 'name'
 };
 
+exports.Prisma.AvailableTrainingTimeOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  trainingObjectTypeId: 'trainingObjectTypeId',
+  semesterId: 'semesterId'
+};
+
 exports.Prisma.CertificateOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -8358,6 +8381,7 @@ exports.Prisma.ModelName = {
   TrainingBlock: 'TrainingBlock',
   TrainingBlockOnCurriculumVersion: 'TrainingBlockOnCurriculumVersion',
   TrainingTime: 'TrainingTime',
+  AvailableTrainingTime: 'AvailableTrainingTime',
   Certificate: 'Certificate',
   CertificateOnSubject: 'CertificateOnSubject',
   Award: 'Award',

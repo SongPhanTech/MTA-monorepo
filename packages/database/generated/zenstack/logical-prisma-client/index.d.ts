@@ -1291,6 +1291,16 @@ export type TrainingBlockOnCurriculumVersion = $Result.DefaultSelection<Prisma.$
  */
 export type TrainingTime = $Result.DefaultSelection<Prisma.$TrainingTimePayload>;
 /**
+ * Model AvailableTrainingTime
+ * @
+ * @allow ('all', auth() != null)
+ * @
+ * @deny ('read', deletedAt != null)
+ * @
+ * @allow ('read', auth() != null)
+ */
+export type AvailableTrainingTime = $Result.DefaultSelection<Prisma.$AvailableTrainingTimePayload>;
+/**
  * Model Certificate
  * Chứng chỉ
  * @
@@ -4030,6 +4040,15 @@ export class PrismaClient<ClientOptions extends Prisma.PrismaClientOptions = Pri
      */
     get trainingTime(): Prisma.TrainingTimeDelegate<ExtArgs, ClientOptions>;
     /**
+     * `prisma.availableTrainingTime`: Exposes CRUD operations for the **AvailableTrainingTime** model.
+     * Example usage:
+     * ```ts
+     * // Fetch zero or more AvailableTrainingTimes
+     * const availableTrainingTimes = await prisma.availableTrainingTime.findMany()
+     * ```
+     */
+    get availableTrainingTime(): Prisma.AvailableTrainingTimeDelegate<ExtArgs, ClientOptions>;
+    /**
      * `prisma.certificate`: Exposes CRUD operations for the **Certificate** model.
      * Example usage:
      * ```ts
@@ -6226,6 +6245,7 @@ export namespace Prisma {
         TrainingBlock: 'TrainingBlock',
         TrainingBlockOnCurriculumVersion: 'TrainingBlockOnCurriculumVersion',
         TrainingTime: 'TrainingTime',
+        AvailableTrainingTime: 'AvailableTrainingTime',
         Certificate: 'Certificate',
         CertificateOnSubject: 'CertificateOnSubject',
         Award: 'Award',
@@ -8589,6 +8609,19 @@ export namespace Prisma {
         updatedAt: 'updatedAt',
         createdBy: 'createdBy',
         name: 'name'
+    };
+    export const AvailableTrainingTimeScalarFieldEnum: {
+        id: 'id',
+        code: 'code',
+        active: 'active',
+        description: 'description',
+        deletedAt: 'deletedAt',
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt',
+        createdBy: 'createdBy',
+        duration: 'duration',
+        trainingObjectTypeId: 'trainingObjectTypeId',
+        semesterId: 'semesterId'
     };
     export const CertificateScalarFieldEnum: {
         id: 'id',
@@ -12184,6 +12217,14 @@ export namespace Prisma {
         description: 'description',
         createdBy: 'createdBy',
         name: 'name'
+    };
+    export const AvailableTrainingTimeOrderByRelevanceFieldEnum: {
+        id: 'id',
+        code: 'code',
+        description: 'description',
+        createdBy: 'createdBy',
+        trainingObjectTypeId: 'trainingObjectTypeId',
+        semesterId: 'semesterId'
     };
     export const CertificateOrderByRelevanceFieldEnum: {
         id: 'id',
@@ -46701,6 +46742,7 @@ export namespace Prisma {
         exam<T extends Semester$examArgs<ExtArgs> = {}>(args?: Subset<T, Semester$examArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExamPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         scoreLinkSheets<T extends Semester$scoreLinkSheetsArgs<ExtArgs> = {}>(args?: Subset<T, Semester$scoreLinkSheetsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScoreLinkSheetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         semesterTrainingScore<T extends Semester$semesterTrainingScoreArgs<ExtArgs> = {}>(args?: Subset<T, Semester$semesterTrainingScoreArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SemesterTrainingScorePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        availableTrainingTime<T extends Semester$availableTrainingTimeArgs<ExtArgs> = {}>(args?: Subset<T, Semester$availableTrainingTimeArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AvailableTrainingTimePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -56953,6 +56995,7 @@ export namespace Prisma {
         survey<T extends TrainingObjectType$surveyArgs<ExtArgs> = {}>(args?: Subset<T, TrainingObjectType$surveyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SurveyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         scoreCorrectionTicket<T extends TrainingObjectType$scoreCorrectionTicketArgs<ExtArgs> = {}>(args?: Subset<T, TrainingObjectType$scoreCorrectionTicketArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScoreCorrectionTicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         scoreLinkSheet<T extends TrainingObjectType$scoreLinkSheetArgs<ExtArgs> = {}>(args?: Subset<T, TrainingObjectType$scoreLinkSheetArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScoreLinkSheetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        availableTrainingTime<T extends TrainingObjectType$availableTrainingTimeArgs<ExtArgs> = {}>(args?: Subset<T, TrainingObjectType$availableTrainingTimeArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AvailableTrainingTimePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -62389,6 +62432,390 @@ export namespace Prisma {
         readonly updatedAt: FieldRef<"TrainingTime", 'DateTime'>;
         readonly createdBy: FieldRef<"TrainingTime", 'String'>;
         readonly name: FieldRef<"TrainingTime", 'String'>;
+    }
+
+    export interface AvailableTrainingTimeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+        [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AvailableTrainingTime'], meta: { name: 'AvailableTrainingTime' } };
+        /**
+         * Fields of the AvailableTrainingTime model
+         */
+        readonly fields: AvailableTrainingTimeFieldRefs;
+        /**
+         * Find zero or one AvailableTrainingTime that matches the filter.
+         * @param {AvailableTrainingTimeFindUniqueArgs} args - Arguments to find a AvailableTrainingTime
+         * @example
+         * // Get one AvailableTrainingTime
+         * const availableTrainingTime = await prisma.availableTrainingTime.findUnique({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUnique<T extends AvailableTrainingTimeFindUniqueArgs>(args: SelectSubset<T, AvailableTrainingTimeFindUniqueArgs<ExtArgs>>): Prisma__AvailableTrainingTimeClient<$Result.GetResult<Prisma.$AvailableTrainingTimePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find one AvailableTrainingTime that matches the filter or throw an error with `error.code='P2025'`
+         * if no matches were found.
+         * @param {AvailableTrainingTimeFindUniqueOrThrowArgs} args - Arguments to find a AvailableTrainingTime
+         * @example
+         * // Get one AvailableTrainingTime
+         * const availableTrainingTime = await prisma.availableTrainingTime.findUniqueOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUniqueOrThrow<T extends AvailableTrainingTimeFindUniqueOrThrowArgs>(args: SelectSubset<T, AvailableTrainingTimeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AvailableTrainingTimeClient<$Result.GetResult<Prisma.$AvailableTrainingTimePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first AvailableTrainingTime that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {AvailableTrainingTimeFindFirstArgs} args - Arguments to find a AvailableTrainingTime
+         * @example
+         * // Get one AvailableTrainingTime
+         * const availableTrainingTime = await prisma.availableTrainingTime.findFirst({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirst<T extends AvailableTrainingTimeFindFirstArgs>(args?: SelectSubset<T, AvailableTrainingTimeFindFirstArgs<ExtArgs>>): Prisma__AvailableTrainingTimeClient<$Result.GetResult<Prisma.$AvailableTrainingTimePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first AvailableTrainingTime that matches the filter or
+         * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {AvailableTrainingTimeFindFirstOrThrowArgs} args - Arguments to find a AvailableTrainingTime
+         * @example
+         * // Get one AvailableTrainingTime
+         * const availableTrainingTime = await prisma.availableTrainingTime.findFirstOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirstOrThrow<T extends AvailableTrainingTimeFindFirstOrThrowArgs>(args?: SelectSubset<T, AvailableTrainingTimeFindFirstOrThrowArgs<ExtArgs>>): Prisma__AvailableTrainingTimeClient<$Result.GetResult<Prisma.$AvailableTrainingTimePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find zero or more AvailableTrainingTimes that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {AvailableTrainingTimeFindManyArgs} args - Arguments to filter and select certain fields only.
+         * @example
+         * // Get all AvailableTrainingTimes
+         * const availableTrainingTimes = await prisma.availableTrainingTime.findMany()
+         *
+         * // Get first 10 AvailableTrainingTimes
+         * const availableTrainingTimes = await prisma.availableTrainingTime.findMany({ take: 10 })
+         *
+         * // Only select the `id`
+         * const availableTrainingTimeWithIdOnly = await prisma.availableTrainingTime.findMany({ select: { id: true } })
+         */
+        findMany<T extends AvailableTrainingTimeFindManyArgs>(args?: SelectSubset<T, AvailableTrainingTimeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AvailableTrainingTimePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+        /**
+         * Create a AvailableTrainingTime.
+         * @param {AvailableTrainingTimeCreateArgs} args - Arguments to create a AvailableTrainingTime.
+         * @example
+         * // Create one AvailableTrainingTime
+         * const AvailableTrainingTime = await prisma.availableTrainingTime.create({
+         *   data: {
+         *     // ... data to create a AvailableTrainingTime
+         *   }
+         * })
+         */
+        create<T extends AvailableTrainingTimeCreateArgs>(args: SelectSubset<T, AvailableTrainingTimeCreateArgs<ExtArgs>>): Prisma__AvailableTrainingTimeClient<$Result.GetResult<Prisma.$AvailableTrainingTimePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Create many AvailableTrainingTimes.
+         * @param {AvailableTrainingTimeCreateManyArgs} args - Arguments to create many AvailableTrainingTimes.
+         * @example
+         * // Create many AvailableTrainingTimes
+         * const availableTrainingTime = await prisma.availableTrainingTime.createMany({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         */
+        createMany<T extends AvailableTrainingTimeCreateManyArgs>(args?: SelectSubset<T, AvailableTrainingTimeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Create many AvailableTrainingTimes and returns the data saved in the database.
+         * @param {AvailableTrainingTimeCreateManyAndReturnArgs} args - Arguments to create many AvailableTrainingTimes.
+         * @example
+         * // Create many AvailableTrainingTimes
+         * const availableTrainingTime = await prisma.availableTrainingTime.createManyAndReturn({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Create many AvailableTrainingTimes and only return the `id`
+         * const availableTrainingTimeWithIdOnly = await prisma.availableTrainingTime.createManyAndReturn({
+         *   select: { id: true },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        createManyAndReturn<T extends AvailableTrainingTimeCreateManyAndReturnArgs>(args?: SelectSubset<T, AvailableTrainingTimeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AvailableTrainingTimePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Delete a AvailableTrainingTime.
+         * @param {AvailableTrainingTimeDeleteArgs} args - Arguments to delete one AvailableTrainingTime.
+         * @example
+         * // Delete one AvailableTrainingTime
+         * const AvailableTrainingTime = await prisma.availableTrainingTime.delete({
+         *   where: {
+         *     // ... filter to delete one AvailableTrainingTime
+         *   }
+         * })
+         */
+        delete<T extends AvailableTrainingTimeDeleteArgs>(args: SelectSubset<T, AvailableTrainingTimeDeleteArgs<ExtArgs>>): Prisma__AvailableTrainingTimeClient<$Result.GetResult<Prisma.$AvailableTrainingTimePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Update one AvailableTrainingTime.
+         * @param {AvailableTrainingTimeUpdateArgs} args - Arguments to update one AvailableTrainingTime.
+         * @example
+         * // Update one AvailableTrainingTime
+         * const availableTrainingTime = await prisma.availableTrainingTime.update({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        update<T extends AvailableTrainingTimeUpdateArgs>(args: SelectSubset<T, AvailableTrainingTimeUpdateArgs<ExtArgs>>): Prisma__AvailableTrainingTimeClient<$Result.GetResult<Prisma.$AvailableTrainingTimePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Delete zero or more AvailableTrainingTimes.
+         * @param {AvailableTrainingTimeDeleteManyArgs} args - Arguments to filter AvailableTrainingTimes to delete.
+         * @example
+         * // Delete a few AvailableTrainingTimes
+         * const { count } = await prisma.availableTrainingTime.deleteMany({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        deleteMany<T extends AvailableTrainingTimeDeleteManyArgs>(args?: SelectSubset<T, AvailableTrainingTimeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more AvailableTrainingTimes.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {AvailableTrainingTimeUpdateManyArgs} args - Arguments to update one or more rows.
+         * @example
+         * // Update many AvailableTrainingTimes
+         * const availableTrainingTime = await prisma.availableTrainingTime.updateMany({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        updateMany<T extends AvailableTrainingTimeUpdateManyArgs>(args: SelectSubset<T, AvailableTrainingTimeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more AvailableTrainingTimes and returns the data updated in the database.
+         * @param {AvailableTrainingTimeUpdateManyAndReturnArgs} args - Arguments to update many AvailableTrainingTimes.
+         * @example
+         * // Update many AvailableTrainingTimes
+         * const availableTrainingTime = await prisma.availableTrainingTime.updateManyAndReturn({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Update zero or more AvailableTrainingTimes and only return the `id`
+         * const availableTrainingTimeWithIdOnly = await prisma.availableTrainingTime.updateManyAndReturn({
+         *   select: { id: true },
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        updateManyAndReturn<T extends AvailableTrainingTimeUpdateManyAndReturnArgs>(args: SelectSubset<T, AvailableTrainingTimeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AvailableTrainingTimePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Create or update one AvailableTrainingTime.
+         * @param {AvailableTrainingTimeUpsertArgs} args - Arguments to update or create a AvailableTrainingTime.
+         * @example
+         * // Update or create a AvailableTrainingTime
+         * const availableTrainingTime = await prisma.availableTrainingTime.upsert({
+         *   create: {
+         *     // ... data to create a AvailableTrainingTime
+         *   },
+         *   update: {
+         *     // ... in case it already exists, update
+         *   },
+         *   where: {
+         *     // ... the filter for the AvailableTrainingTime we want to update
+         *   }
+         * })
+         */
+        upsert<T extends AvailableTrainingTimeUpsertArgs>(args: SelectSubset<T, AvailableTrainingTimeUpsertArgs<ExtArgs>>): Prisma__AvailableTrainingTimeClient<$Result.GetResult<Prisma.$AvailableTrainingTimePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Count the number of AvailableTrainingTimes.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {AvailableTrainingTimeCountArgs} args - Arguments to filter AvailableTrainingTimes to count.
+         * @example
+         * // Count the number of AvailableTrainingTimes
+         * const count = await prisma.availableTrainingTime.count({
+         *   where: {
+         *     // ... the filter for the AvailableTrainingTimes we want to count
+         *   }
+         * })
+         */
+        count<T extends AvailableTrainingTimeCountArgs>(args?: Subset<T, AvailableTrainingTimeCountArgs>): Prisma.PrismaPromise<
+            T extends $Utils.Record<'select', any>
+            ? T['select'] extends true
+            ? number
+            : GetScalarType<T['select'], AvailableTrainingTimeCountAggregateOutputType>
+            : number
+        >;
+        /**
+         * Allows you to perform aggregations operations on a AvailableTrainingTime.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {AvailableTrainingTimeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+         * @example
+         * // Ordered by age ascending
+         * // Where email contains prisma.io
+         * // Limited to the 10 users
+         * const aggregations = await prisma.user.aggregate({
+         *   _avg: {
+         *     age: true,
+         *   },
+         *   where: {
+         *     email: {
+         *       contains: "prisma.io",
+         *     },
+         *   },
+         *   orderBy: {
+         *     age: "asc",
+         *   },
+         *   take: 10,
+         * })
+         */
+        aggregate<T extends AvailableTrainingTimeAggregateArgs>(args: Subset<T, AvailableTrainingTimeAggregateArgs>): Prisma.PrismaPromise<GetAvailableTrainingTimeAggregateType<T>>;
+        /**
+         * Group by AvailableTrainingTime.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {AvailableTrainingTimeGroupByArgs} args - Group by arguments.
+         * @example
+         * // Group by city, order by createdAt, get count
+         * const result = await prisma.user.groupBy({
+         *   by: ['city', 'createdAt'],
+         *   orderBy: {
+         *     createdAt: true
+         *   },
+         *   _count: {
+         *     _all: true
+         *   },
+         * })
+         */
+        groupBy<T extends AvailableTrainingTimeGroupByArgs, HasSelectOrTake extends Or<
+            Extends<'skip', Keys<T>>,
+            Extends<'take', Keys<T>>
+        >, OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AvailableTrainingTimeGroupByArgs['orderBy'] }
+        : { orderBy?: AvailableTrainingTimeGroupByArgs['orderBy'] }, OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>, ByFields extends MaybeTupleToUnion<T['by']>, ByValid extends Has<ByFields, OrderFields>, HavingFields extends GetHavingFields<T['having']>, HavingValid extends Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? True : False, InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+        ? {
+            [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+            ]
+        }[HavingFields]
+        : 'take' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+        : 'skip' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+        : ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]>(args: SubsetIntersection<T, AvailableTrainingTimeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAvailableTrainingTimeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    }
+
+    /**
+     * The delegate class that acts as a "Promise-like" for AvailableTrainingTime.
+     * Why is this prefixed with `Prisma__`?
+     * Because we want to prevent naming conflicts as mentioned in
+     * https://github.com/prisma/prisma-client-js/issues/707
+     */
+    export interface Prisma__AvailableTrainingTimeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+        readonly [Symbol.toStringTag]: "PrismaPromise";
+        trainingObjectType<T extends AvailableTrainingTime$trainingObjectTypeArgs<ExtArgs> = {}>(args?: Subset<T, AvailableTrainingTime$trainingObjectTypeArgs<ExtArgs>>): Prisma__TrainingObjectTypeClient<$Result.GetResult<Prisma.$TrainingObjectTypePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        semester<T extends AvailableTrainingTime$semesterArgs<ExtArgs> = {}>(args?: Subset<T, AvailableTrainingTime$semesterArgs<ExtArgs>>): Prisma__SemesterClient<$Result.GetResult<Prisma.$SemesterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Attaches callbacks for the resolution and/or rejection of the Promise.
+         * @param onfulfilled The callback to execute when the Promise is resolved.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of which ever callback is executed.
+         */
+        then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+        /**
+         * Attaches a callback for only the rejection of the Promise.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of the callback.
+         */
+        catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+        /**
+         * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+         * resolved value cannot be modified from the callback.
+         * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+         * @returns A Promise for the completion of the callback.
+         */
+        finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+    }
+
+    /**
+     * Fields of the AvailableTrainingTime model
+     */
+    interface AvailableTrainingTimeFieldRefs {
+        readonly id: FieldRef<"AvailableTrainingTime", 'String'>;
+        readonly code: FieldRef<"AvailableTrainingTime", 'String'>;
+        readonly active: FieldRef<"AvailableTrainingTime", 'Boolean'>;
+        readonly description: FieldRef<"AvailableTrainingTime", 'String'>;
+        readonly deletedAt: FieldRef<"AvailableTrainingTime", 'DateTime'>;
+        readonly createdAt: FieldRef<"AvailableTrainingTime", 'DateTime'>;
+        readonly updatedAt: FieldRef<"AvailableTrainingTime", 'DateTime'>;
+        readonly createdBy: FieldRef<"AvailableTrainingTime", 'String'>;
+        readonly duration: FieldRef<"AvailableTrainingTime", 'Float'>;
+        readonly trainingObjectTypeId: FieldRef<"AvailableTrainingTime", 'String'>;
+        readonly semesterId: FieldRef<"AvailableTrainingTime", 'String'>;
     }
 
     export interface CertificateDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -118432,7 +118859,7 @@ export namespace Prisma {
             omit: GlobalOmitOptions
         }
         meta: {
-            modelProps: "config" | "suggestion" | "changeLog" | "userProfile" | "hocHam" | "chucVuChinhQuyen" | "chucVuDang" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTraining" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "studentResearchTopic" | "studentInternship" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassAttendance" | "subjectClassAttendanceStudent" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "scoreCorrectionTicket" | "scoreCorrectionItem" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "certificate" | "certificateOnSubject" | "award" | "diplomaType" | "scoreConvert" | "loadCategory" | "outputStandard" | "outputStandardOnCurriculum" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "semesterTrainingScore" | "schoolYearTrainingScore" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisSession" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "defaultSupervisorPayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "evaluationPeriod" | "evaluationStandardSet" | "standardCatalog" | "criterionCatalog" | "evidenceCategory" | "evidence" | "evaluationCriterionComment" | "requirementCriterionCatalog" | "standardPeriod" | "criterionPeriod" | "analysisCriterion" | "evaluationCriterion" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "specificChoice" | "surveyChoice" | "surveySession" | "surveyResponse" | "questionBank" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "examList" | "examBank" | "examBankQuestion" | "examPaper" | "examFramework" | "examMatrix" | "knowledgeBlock" | "configExam" | "staff" | "staffHistory" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationDowngraded" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "scoreLinkSheet" | "scoreLinkSubjectVersion" | "scoreLinkStudent" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_QuanHeThanNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiTinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
+            modelProps: "config" | "suggestion" | "changeLog" | "userProfile" | "hocHam" | "chucVuChinhQuyen" | "chucVuDang" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTraining" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "studentResearchTopic" | "studentInternship" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassAttendance" | "subjectClassAttendanceStudent" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "scoreCorrectionTicket" | "scoreCorrectionItem" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "availableTrainingTime" | "certificate" | "certificateOnSubject" | "award" | "diplomaType" | "scoreConvert" | "loadCategory" | "outputStandard" | "outputStandardOnCurriculum" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "semesterTrainingScore" | "schoolYearTrainingScore" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisSession" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "defaultSupervisorPayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "evaluationPeriod" | "evaluationStandardSet" | "standardCatalog" | "criterionCatalog" | "evidenceCategory" | "evidence" | "evaluationCriterionComment" | "requirementCriterionCatalog" | "standardPeriod" | "criterionPeriod" | "analysisCriterion" | "evaluationCriterion" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "specificChoice" | "surveyChoice" | "surveySession" | "surveyResponse" | "questionBank" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "examList" | "examBank" | "examBankQuestion" | "examPaper" | "examFramework" | "examMatrix" | "knowledgeBlock" | "configExam" | "staff" | "staffHistory" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationDowngraded" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "scoreLinkSheet" | "scoreLinkSubjectVersion" | "scoreLinkStudent" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_QuanHeThanNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiTinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
             txIsolationLevel: Prisma.TransactionIsolationLevel
         }
         model: {
@@ -127683,6 +128110,80 @@ export namespace Prisma {
                     count: {
                         args: Prisma.TrainingTimeCountArgs<ExtArgs>
                         result: $Utils.Optional<TrainingTimeCountAggregateOutputType> | number
+                    }
+                }
+            }
+            AvailableTrainingTime: {
+                payload: Prisma.$AvailableTrainingTimePayload<ExtArgs>
+                fields: Prisma.AvailableTrainingTimeFieldRefs
+                operations: {
+                    findUnique: {
+                        args: Prisma.AvailableTrainingTimeFindUniqueArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AvailableTrainingTimePayload> | null
+                    }
+                    findUniqueOrThrow: {
+                        args: Prisma.AvailableTrainingTimeFindUniqueOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AvailableTrainingTimePayload>
+                    }
+                    findFirst: {
+                        args: Prisma.AvailableTrainingTimeFindFirstArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AvailableTrainingTimePayload> | null
+                    }
+                    findFirstOrThrow: {
+                        args: Prisma.AvailableTrainingTimeFindFirstOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AvailableTrainingTimePayload>
+                    }
+                    findMany: {
+                        args: Prisma.AvailableTrainingTimeFindManyArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AvailableTrainingTimePayload>[]
+                    }
+                    create: {
+                        args: Prisma.AvailableTrainingTimeCreateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AvailableTrainingTimePayload>
+                    }
+                    createMany: {
+                        args: Prisma.AvailableTrainingTimeCreateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    createManyAndReturn: {
+                        args: Prisma.AvailableTrainingTimeCreateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AvailableTrainingTimePayload>[]
+                    }
+                    delete: {
+                        args: Prisma.AvailableTrainingTimeDeleteArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AvailableTrainingTimePayload>
+                    }
+                    update: {
+                        args: Prisma.AvailableTrainingTimeUpdateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AvailableTrainingTimePayload>
+                    }
+                    deleteMany: {
+                        args: Prisma.AvailableTrainingTimeDeleteManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateMany: {
+                        args: Prisma.AvailableTrainingTimeUpdateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateManyAndReturn: {
+                        args: Prisma.AvailableTrainingTimeUpdateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AvailableTrainingTimePayload>[]
+                    }
+                    upsert: {
+                        args: Prisma.AvailableTrainingTimeUpsertArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AvailableTrainingTimePayload>
+                    }
+                    aggregate: {
+                        args: Prisma.AvailableTrainingTimeAggregateArgs<ExtArgs>
+                        result: $Utils.Optional<AggregateAvailableTrainingTime>
+                    }
+                    groupBy: {
+                        args: Prisma.AvailableTrainingTimeGroupByArgs<ExtArgs>
+                        result: $Utils.Optional<AvailableTrainingTimeGroupByOutputType>[]
+                    }
+                    count: {
+                        args: Prisma.AvailableTrainingTimeCountArgs<ExtArgs>
+                        result: $Utils.Optional<AvailableTrainingTimeCountAggregateOutputType> | number
                     }
                 }
             }
@@ -138498,6 +138999,7 @@ export namespace Prisma {
         trainingBlock?: TrainingBlockOmit
         trainingBlockOnCurriculumVersion?: TrainingBlockOnCurriculumVersionOmit
         trainingTime?: TrainingTimeOmit
+        availableTrainingTime?: AvailableTrainingTimeOmit
         certificate?: CertificateOmit
         certificateOnSubject?: CertificateOnSubjectOmit
         award?: AwardOmit
@@ -140450,6 +140952,7 @@ export namespace Prisma {
         exam: number
         scoreLinkSheets: number
         semesterTrainingScore: number
+        availableTrainingTime: number
     };
     export type SemesterCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         subjectClasses?: boolean | SemesterCountOutputTypeCountSubjectClassesArgs
@@ -140466,6 +140969,7 @@ export namespace Prisma {
         exam?: boolean | SemesterCountOutputTypeCountExamArgs
         scoreLinkSheets?: boolean | SemesterCountOutputTypeCountScoreLinkSheetsArgs
         semesterTrainingScore?: boolean | SemesterCountOutputTypeCountSemesterTrainingScoreArgs
+        availableTrainingTime?: boolean | SemesterCountOutputTypeCountAvailableTrainingTimeArgs
     };
     /**
      * SemesterCountOutputType without action
@@ -140559,6 +141063,12 @@ export namespace Prisma {
      */
     export type SemesterCountOutputTypeCountSemesterTrainingScoreArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: SemesterTrainingScoreWhereInput
+    };
+    /**
+     * SemesterCountOutputType without action
+     */
+    export type SemesterCountOutputTypeCountAvailableTrainingTimeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: AvailableTrainingTimeWhereInput
     };
     /**
      * Count Type TrainingLanguageCountOutputType
@@ -141380,6 +141890,7 @@ export namespace Prisma {
         survey: number
         scoreCorrectionTicket: number
         scoreLinkSheet: number
+        availableTrainingTime: number
     };
     export type TrainingObjectTypeCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         trainingCourse?: boolean | TrainingObjectTypeCountOutputTypeCountTrainingCourseArgs
@@ -141398,6 +141909,7 @@ export namespace Prisma {
         survey?: boolean | TrainingObjectTypeCountOutputTypeCountSurveyArgs
         scoreCorrectionTicket?: boolean | TrainingObjectTypeCountOutputTypeCountScoreCorrectionTicketArgs
         scoreLinkSheet?: boolean | TrainingObjectTypeCountOutputTypeCountScoreLinkSheetArgs
+        availableTrainingTime?: boolean | TrainingObjectTypeCountOutputTypeCountAvailableTrainingTimeArgs
     };
     /**
      * TrainingObjectTypeCountOutputType without action
@@ -141503,6 +142015,12 @@ export namespace Prisma {
      */
     export type TrainingObjectTypeCountOutputTypeCountScoreLinkSheetArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: ScoreLinkSheetWhereInput
+    };
+    /**
+     * TrainingObjectTypeCountOutputType without action
+     */
+    export type TrainingObjectTypeCountOutputTypeCountAvailableTrainingTimeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: AvailableTrainingTimeWhereInput
     };
     /**
      * Count Type PriorityObjectCountOutputType
@@ -212813,6 +213331,7 @@ export namespace Prisma {
         exam?: boolean | Semester$examArgs<ExtArgs>
         scoreLinkSheets?: boolean | Semester$scoreLinkSheetsArgs<ExtArgs>
         semesterTrainingScore?: boolean | Semester$semesterTrainingScoreArgs<ExtArgs>
+        availableTrainingTime?: boolean | Semester$availableTrainingTimeArgs<ExtArgs>
         _count?: boolean | SemesterCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["semester"]>;
     export type SemesterSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -212882,6 +213401,7 @@ export namespace Prisma {
         exam?: boolean | Semester$examArgs<ExtArgs>
         scoreLinkSheets?: boolean | Semester$scoreLinkSheetsArgs<ExtArgs>
         semesterTrainingScore?: boolean | Semester$semesterTrainingScoreArgs<ExtArgs>
+        availableTrainingTime?: boolean | Semester$availableTrainingTimeArgs<ExtArgs>
         _count?: boolean | SemesterCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type SemesterIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -212908,6 +213428,7 @@ export namespace Prisma {
             exam: Prisma.$ExamPayload<ExtArgs>[]
             scoreLinkSheets: Prisma.$ScoreLinkSheetPayload<ExtArgs>[]
             semesterTrainingScore: Prisma.$SemesterTrainingScorePayload<ExtArgs>[]
+            availableTrainingTime: Prisma.$AvailableTrainingTimePayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -213629,6 +214150,29 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: SemesterTrainingScoreScalarFieldEnum | SemesterTrainingScoreScalarFieldEnum[]
+    };
+    /**
+     * Semester.availableTrainingTime
+     */
+    export type Semester$availableTrainingTimeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the AvailableTrainingTime
+         */
+        select?: AvailableTrainingTimeSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the AvailableTrainingTime
+         */
+        omit?: AvailableTrainingTimeOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AvailableTrainingTimeInclude<ExtArgs> | null
+        where?: AvailableTrainingTimeWhereInput
+        orderBy?: AvailableTrainingTimeOrderByWithRelationInput | AvailableTrainingTimeOrderByWithRelationInput[]
+        cursor?: AvailableTrainingTimeWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: AvailableTrainingTimeScalarFieldEnum | AvailableTrainingTimeScalarFieldEnum[]
     };
     /**
      * Semester without action
@@ -235825,6 +236369,7 @@ export namespace Prisma {
         survey?: boolean | TrainingObjectType$surveyArgs<ExtArgs>
         scoreCorrectionTicket?: boolean | TrainingObjectType$scoreCorrectionTicketArgs<ExtArgs>
         scoreLinkSheet?: boolean | TrainingObjectType$scoreLinkSheetArgs<ExtArgs>
+        availableTrainingTime?: boolean | TrainingObjectType$availableTrainingTimeArgs<ExtArgs>
         _count?: boolean | TrainingObjectTypeCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["trainingObjectType"]>;
     export type TrainingObjectTypeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -235896,6 +236441,7 @@ export namespace Prisma {
         survey?: boolean | TrainingObjectType$surveyArgs<ExtArgs>
         scoreCorrectionTicket?: boolean | TrainingObjectType$scoreCorrectionTicketArgs<ExtArgs>
         scoreLinkSheet?: boolean | TrainingObjectType$scoreLinkSheetArgs<ExtArgs>
+        availableTrainingTime?: boolean | TrainingObjectType$availableTrainingTimeArgs<ExtArgs>
         _count?: boolean | TrainingObjectTypeCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type TrainingObjectTypeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -235927,6 +236473,7 @@ export namespace Prisma {
             survey: Prisma.$SurveyPayload<ExtArgs>[]
             scoreCorrectionTicket: Prisma.$ScoreCorrectionTicketPayload<ExtArgs>[]
             scoreLinkSheet: Prisma.$ScoreLinkSheetPayload<ExtArgs>[]
+            availableTrainingTime: Prisma.$AvailableTrainingTimePayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -236729,6 +237276,29 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: ScoreLinkSheetScalarFieldEnum | ScoreLinkSheetScalarFieldEnum[]
+    };
+    /**
+     * TrainingObjectType.availableTrainingTime
+     */
+    export type TrainingObjectType$availableTrainingTimeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the AvailableTrainingTime
+         */
+        select?: AvailableTrainingTimeSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the AvailableTrainingTime
+         */
+        omit?: AvailableTrainingTimeOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AvailableTrainingTimeInclude<ExtArgs> | null
+        where?: AvailableTrainingTimeWhereInput
+        orderBy?: AvailableTrainingTimeOrderByWithRelationInput | AvailableTrainingTimeOrderByWithRelationInput[]
+        cursor?: AvailableTrainingTimeWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: AvailableTrainingTimeScalarFieldEnum | AvailableTrainingTimeScalarFieldEnum[]
     };
     /**
      * TrainingObjectType without action
@@ -247155,6 +247725,744 @@ export namespace Prisma {
          * Choose, which related nodes to fetch as well
          */
         include?: TrainingTimeInclude<ExtArgs> | null
+    };
+    /**
+     * Model AvailableTrainingTime
+     */
+    export type AggregateAvailableTrainingTime = {
+        _count: AvailableTrainingTimeCountAggregateOutputType | null
+        _avg: AvailableTrainingTimeAvgAggregateOutputType | null
+        _sum: AvailableTrainingTimeSumAggregateOutputType | null
+        _min: AvailableTrainingTimeMinAggregateOutputType | null
+        _max: AvailableTrainingTimeMaxAggregateOutputType | null
+    };
+    export type AvailableTrainingTimeAvgAggregateOutputType = {
+        duration: number | null
+    };
+    export type AvailableTrainingTimeSumAggregateOutputType = {
+        duration: number | null
+    };
+    export type AvailableTrainingTimeMinAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        createdBy: string | null
+        duration: number | null
+        trainingObjectTypeId: string | null
+        semesterId: string | null
+    };
+    export type AvailableTrainingTimeMaxAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        createdBy: string | null
+        duration: number | null
+        trainingObjectTypeId: string | null
+        semesterId: string | null
+    };
+    export type AvailableTrainingTimeCountAggregateOutputType = {
+        id: number
+        code: number
+        active: number
+        description: number
+        deletedAt: number
+        createdAt: number
+        updatedAt: number
+        createdBy: number
+        duration: number
+        trainingObjectTypeId: number
+        semesterId: number
+        _all: number
+    };
+    export type AvailableTrainingTimeAvgAggregateInputType = {
+        duration?: true
+    };
+    export type AvailableTrainingTimeSumAggregateInputType = {
+        duration?: true
+    };
+    export type AvailableTrainingTimeMinAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        duration?: true
+        trainingObjectTypeId?: true
+        semesterId?: true
+    };
+    export type AvailableTrainingTimeMaxAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        duration?: true
+        trainingObjectTypeId?: true
+        semesterId?: true
+    };
+    export type AvailableTrainingTimeCountAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        duration?: true
+        trainingObjectTypeId?: true
+        semesterId?: true
+        _all?: true
+    };
+    export type AvailableTrainingTimeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which AvailableTrainingTime to aggregate.
+         */
+        where?: AvailableTrainingTimeWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of AvailableTrainingTimes to fetch.
+         */
+        orderBy?: AvailableTrainingTimeOrderByWithRelationInput | AvailableTrainingTimeOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the start position
+         */
+        cursor?: AvailableTrainingTimeWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` AvailableTrainingTimes from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` AvailableTrainingTimes.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Count returned AvailableTrainingTimes
+        **/
+        _count?: true | AvailableTrainingTimeCountAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to average
+        **/
+        _avg?: AvailableTrainingTimeAvgAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to sum
+        **/
+        _sum?: AvailableTrainingTimeSumAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the minimum value
+        **/
+        _min?: AvailableTrainingTimeMinAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the maximum value
+        **/
+        _max?: AvailableTrainingTimeMaxAggregateInputType
+    };
+    export type GetAvailableTrainingTimeAggregateType<T extends AvailableTrainingTimeAggregateArgs> = {
+        [P in keyof T & keyof AggregateAvailableTrainingTime]: P extends '_count' | 'count'
+        ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAvailableTrainingTime[P]>
+        : GetScalarType<T[P], AggregateAvailableTrainingTime[P]>
+    };
+    export type AvailableTrainingTimeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: AvailableTrainingTimeWhereInput
+        orderBy?: AvailableTrainingTimeOrderByWithAggregationInput | AvailableTrainingTimeOrderByWithAggregationInput[]
+        by: AvailableTrainingTimeScalarFieldEnum[] | AvailableTrainingTimeScalarFieldEnum
+        having?: AvailableTrainingTimeScalarWhereWithAggregatesInput
+        take?: number
+        skip?: number
+        _count?: AvailableTrainingTimeCountAggregateInputType | true
+        _avg?: AvailableTrainingTimeAvgAggregateInputType
+        _sum?: AvailableTrainingTimeSumAggregateInputType
+        _min?: AvailableTrainingTimeMinAggregateInputType
+        _max?: AvailableTrainingTimeMaxAggregateInputType
+    };
+    export type AvailableTrainingTimeGroupByOutputType = {
+        id: string
+        code: string | null
+        active: boolean
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date
+        updatedAt: Date
+        createdBy: string | null
+        duration: number
+        trainingObjectTypeId: string | null
+        semesterId: string | null
+        _count: AvailableTrainingTimeCountAggregateOutputType | null
+        _avg: AvailableTrainingTimeAvgAggregateOutputType | null
+        _sum: AvailableTrainingTimeSumAggregateOutputType | null
+        _min: AvailableTrainingTimeMinAggregateOutputType | null
+        _max: AvailableTrainingTimeMaxAggregateOutputType | null
+    };
+    type GetAvailableTrainingTimeGroupByPayload<T extends AvailableTrainingTimeGroupByArgs> = Prisma.PrismaPromise<
+        Array<
+            PickEnumerable<AvailableTrainingTimeGroupByOutputType, T['by']> &
+            {
+                [P in ((keyof T) & (keyof AvailableTrainingTimeGroupByOutputType))]: P extends '_count'
+                ? T[P] extends boolean
+                ? number
+                : GetScalarType<T[P], AvailableTrainingTimeGroupByOutputType[P]>
+                : GetScalarType<T[P], AvailableTrainingTimeGroupByOutputType[P]>
+            }
+        >
+    >;
+    export type AvailableTrainingTimeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        duration?: boolean
+        trainingObjectTypeId?: boolean
+        semesterId?: boolean
+        trainingObjectType?: boolean | AvailableTrainingTime$trainingObjectTypeArgs<ExtArgs>
+        semester?: boolean | AvailableTrainingTime$semesterArgs<ExtArgs>
+    }, ExtArgs["result"]["availableTrainingTime"]>;
+    export type AvailableTrainingTimeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        duration?: boolean
+        trainingObjectTypeId?: boolean
+        semesterId?: boolean
+        trainingObjectType?: boolean | AvailableTrainingTime$trainingObjectTypeArgs<ExtArgs>
+        semester?: boolean | AvailableTrainingTime$semesterArgs<ExtArgs>
+    }, ExtArgs["result"]["availableTrainingTime"]>;
+    export type AvailableTrainingTimeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        duration?: boolean
+        trainingObjectTypeId?: boolean
+        semesterId?: boolean
+        trainingObjectType?: boolean | AvailableTrainingTime$trainingObjectTypeArgs<ExtArgs>
+        semester?: boolean | AvailableTrainingTime$semesterArgs<ExtArgs>
+    }, ExtArgs["result"]["availableTrainingTime"]>;
+    export type AvailableTrainingTimeSelectScalar = {
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        duration?: boolean
+        trainingObjectTypeId?: boolean
+        semesterId?: boolean
+    };
+    export type AvailableTrainingTimeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "duration" | "trainingObjectTypeId" | "semesterId", ExtArgs["result"]["availableTrainingTime"]>;
+    export type AvailableTrainingTimeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        trainingObjectType?: boolean | AvailableTrainingTime$trainingObjectTypeArgs<ExtArgs>
+        semester?: boolean | AvailableTrainingTime$semesterArgs<ExtArgs>
+    };
+    export type AvailableTrainingTimeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        trainingObjectType?: boolean | AvailableTrainingTime$trainingObjectTypeArgs<ExtArgs>
+        semester?: boolean | AvailableTrainingTime$semesterArgs<ExtArgs>
+    };
+    export type AvailableTrainingTimeIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        trainingObjectType?: boolean | AvailableTrainingTime$trainingObjectTypeArgs<ExtArgs>
+        semester?: boolean | AvailableTrainingTime$semesterArgs<ExtArgs>
+    };
+    export type $AvailableTrainingTimePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        name: "AvailableTrainingTime"
+        objects: {
+            trainingObjectType: Prisma.$TrainingObjectTypePayload<ExtArgs> | null
+            semester: Prisma.$SemesterPayload<ExtArgs> | null
+        }
+        scalars: $Extensions.GetPayloadResult<{
+            id: string
+            code: string | null
+            active: boolean
+            description: string | null
+            deletedAt: Date | null
+            createdAt: Date
+            updatedAt: Date
+            createdBy: string | null
+            duration: number
+            trainingObjectTypeId: string | null
+            semesterId: string | null
+        }, ExtArgs["result"]["availableTrainingTime"]>
+        composites: {}
+    };
+    type AvailableTrainingTimeGetPayload<S extends boolean | null | undefined | AvailableTrainingTimeDefaultArgs> = $Result.GetResult<Prisma.$AvailableTrainingTimePayload, S>;
+    type AvailableTrainingTimeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Omit<AvailableTrainingTimeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+        select?: AvailableTrainingTimeCountAggregateInputType | true
+    };
+    /**
+     * AvailableTrainingTime findUnique
+     */
+    export type AvailableTrainingTimeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the AvailableTrainingTime
+         */
+        select?: AvailableTrainingTimeSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the AvailableTrainingTime
+         */
+        omit?: AvailableTrainingTimeOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AvailableTrainingTimeInclude<ExtArgs> | null
+        /**
+         * Filter, which AvailableTrainingTime to fetch.
+         */
+        where: AvailableTrainingTimeWhereUniqueInput
+    };
+    /**
+     * AvailableTrainingTime findUniqueOrThrow
+     */
+    export type AvailableTrainingTimeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the AvailableTrainingTime
+         */
+        select?: AvailableTrainingTimeSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the AvailableTrainingTime
+         */
+        omit?: AvailableTrainingTimeOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AvailableTrainingTimeInclude<ExtArgs> | null
+        /**
+         * Filter, which AvailableTrainingTime to fetch.
+         */
+        where: AvailableTrainingTimeWhereUniqueInput
+    };
+    /**
+     * AvailableTrainingTime findFirst
+     */
+    export type AvailableTrainingTimeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the AvailableTrainingTime
+         */
+        select?: AvailableTrainingTimeSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the AvailableTrainingTime
+         */
+        omit?: AvailableTrainingTimeOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AvailableTrainingTimeInclude<ExtArgs> | null
+        /**
+         * Filter, which AvailableTrainingTime to fetch.
+         */
+        where?: AvailableTrainingTimeWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of AvailableTrainingTimes to fetch.
+         */
+        orderBy?: AvailableTrainingTimeOrderByWithRelationInput | AvailableTrainingTimeOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for AvailableTrainingTimes.
+         */
+        cursor?: AvailableTrainingTimeWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` AvailableTrainingTimes from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` AvailableTrainingTimes.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of AvailableTrainingTimes.
+         */
+        distinct?: AvailableTrainingTimeScalarFieldEnum | AvailableTrainingTimeScalarFieldEnum[]
+    };
+    /**
+     * AvailableTrainingTime findFirstOrThrow
+     */
+    export type AvailableTrainingTimeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the AvailableTrainingTime
+         */
+        select?: AvailableTrainingTimeSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the AvailableTrainingTime
+         */
+        omit?: AvailableTrainingTimeOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AvailableTrainingTimeInclude<ExtArgs> | null
+        /**
+         * Filter, which AvailableTrainingTime to fetch.
+         */
+        where?: AvailableTrainingTimeWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of AvailableTrainingTimes to fetch.
+         */
+        orderBy?: AvailableTrainingTimeOrderByWithRelationInput | AvailableTrainingTimeOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for AvailableTrainingTimes.
+         */
+        cursor?: AvailableTrainingTimeWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` AvailableTrainingTimes from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` AvailableTrainingTimes.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of AvailableTrainingTimes.
+         */
+        distinct?: AvailableTrainingTimeScalarFieldEnum | AvailableTrainingTimeScalarFieldEnum[]
+    };
+    /**
+     * AvailableTrainingTime findMany
+     */
+    export type AvailableTrainingTimeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the AvailableTrainingTime
+         */
+        select?: AvailableTrainingTimeSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the AvailableTrainingTime
+         */
+        omit?: AvailableTrainingTimeOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AvailableTrainingTimeInclude<ExtArgs> | null
+        /**
+         * Filter, which AvailableTrainingTimes to fetch.
+         */
+        where?: AvailableTrainingTimeWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of AvailableTrainingTimes to fetch.
+         */
+        orderBy?: AvailableTrainingTimeOrderByWithRelationInput | AvailableTrainingTimeOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for listing AvailableTrainingTimes.
+         */
+        cursor?: AvailableTrainingTimeWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` AvailableTrainingTimes from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` AvailableTrainingTimes.
+         */
+        skip?: number
+        distinct?: AvailableTrainingTimeScalarFieldEnum | AvailableTrainingTimeScalarFieldEnum[]
+    };
+    /**
+     * AvailableTrainingTime create
+     */
+    export type AvailableTrainingTimeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the AvailableTrainingTime
+         */
+        select?: AvailableTrainingTimeSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the AvailableTrainingTime
+         */
+        omit?: AvailableTrainingTimeOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AvailableTrainingTimeInclude<ExtArgs> | null
+        /**
+         * The data needed to create a AvailableTrainingTime.
+         */
+        data: XOR<AvailableTrainingTimeCreateInput, AvailableTrainingTimeUncheckedCreateInput>
+    };
+    /**
+     * AvailableTrainingTime createMany
+     */
+    export type AvailableTrainingTimeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to create many AvailableTrainingTimes.
+         */
+        data: AvailableTrainingTimeCreateManyInput | AvailableTrainingTimeCreateManyInput[]
+        skipDuplicates?: boolean
+    };
+    /**
+     * AvailableTrainingTime createManyAndReturn
+     */
+    export type AvailableTrainingTimeCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the AvailableTrainingTime
+         */
+        select?: AvailableTrainingTimeSelectCreateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the AvailableTrainingTime
+         */
+        omit?: AvailableTrainingTimeOmit<ExtArgs> | null
+        /**
+         * The data used to create many AvailableTrainingTimes.
+         */
+        data: AvailableTrainingTimeCreateManyInput | AvailableTrainingTimeCreateManyInput[]
+        skipDuplicates?: boolean
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AvailableTrainingTimeIncludeCreateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * AvailableTrainingTime update
+     */
+    export type AvailableTrainingTimeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the AvailableTrainingTime
+         */
+        select?: AvailableTrainingTimeSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the AvailableTrainingTime
+         */
+        omit?: AvailableTrainingTimeOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AvailableTrainingTimeInclude<ExtArgs> | null
+        /**
+         * The data needed to update a AvailableTrainingTime.
+         */
+        data: XOR<AvailableTrainingTimeUpdateInput, AvailableTrainingTimeUncheckedUpdateInput>
+        /**
+         * Choose, which AvailableTrainingTime to update.
+         */
+        where: AvailableTrainingTimeWhereUniqueInput
+    };
+    /**
+     * AvailableTrainingTime updateMany
+     */
+    export type AvailableTrainingTimeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to update AvailableTrainingTimes.
+         */
+        data: XOR<AvailableTrainingTimeUpdateManyMutationInput, AvailableTrainingTimeUncheckedUpdateManyInput>
+        /**
+         * Filter which AvailableTrainingTimes to update
+         */
+        where?: AvailableTrainingTimeWhereInput
+        /**
+         * Limit how many AvailableTrainingTimes to update.
+         */
+        limit?: number
+    };
+    /**
+     * AvailableTrainingTime updateManyAndReturn
+     */
+    export type AvailableTrainingTimeUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the AvailableTrainingTime
+         */
+        select?: AvailableTrainingTimeSelectUpdateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the AvailableTrainingTime
+         */
+        omit?: AvailableTrainingTimeOmit<ExtArgs> | null
+        /**
+         * The data used to update AvailableTrainingTimes.
+         */
+        data: XOR<AvailableTrainingTimeUpdateManyMutationInput, AvailableTrainingTimeUncheckedUpdateManyInput>
+        /**
+         * Filter which AvailableTrainingTimes to update
+         */
+        where?: AvailableTrainingTimeWhereInput
+        /**
+         * Limit how many AvailableTrainingTimes to update.
+         */
+        limit?: number
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AvailableTrainingTimeIncludeUpdateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * AvailableTrainingTime upsert
+     */
+    export type AvailableTrainingTimeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the AvailableTrainingTime
+         */
+        select?: AvailableTrainingTimeSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the AvailableTrainingTime
+         */
+        omit?: AvailableTrainingTimeOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AvailableTrainingTimeInclude<ExtArgs> | null
+        /**
+         * The filter to search for the AvailableTrainingTime to update in case it exists.
+         */
+        where: AvailableTrainingTimeWhereUniqueInput
+        /**
+         * In case the AvailableTrainingTime found by the `where` argument doesn't exist, create a new AvailableTrainingTime with this data.
+         */
+        create: XOR<AvailableTrainingTimeCreateInput, AvailableTrainingTimeUncheckedCreateInput>
+        /**
+         * In case the AvailableTrainingTime was found with the provided `where` argument, update it with this data.
+         */
+        update: XOR<AvailableTrainingTimeUpdateInput, AvailableTrainingTimeUncheckedUpdateInput>
+    };
+    /**
+     * AvailableTrainingTime delete
+     */
+    export type AvailableTrainingTimeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the AvailableTrainingTime
+         */
+        select?: AvailableTrainingTimeSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the AvailableTrainingTime
+         */
+        omit?: AvailableTrainingTimeOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AvailableTrainingTimeInclude<ExtArgs> | null
+        /**
+         * Filter which AvailableTrainingTime to delete.
+         */
+        where: AvailableTrainingTimeWhereUniqueInput
+    };
+    /**
+     * AvailableTrainingTime deleteMany
+     */
+    export type AvailableTrainingTimeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which AvailableTrainingTimes to delete
+         */
+        where?: AvailableTrainingTimeWhereInput
+        /**
+         * Limit how many AvailableTrainingTimes to delete.
+         */
+        limit?: number
+    };
+    /**
+     * AvailableTrainingTime.trainingObjectType
+     */
+    export type AvailableTrainingTime$trainingObjectTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the TrainingObjectType
+         */
+        select?: TrainingObjectTypeSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the TrainingObjectType
+         */
+        omit?: TrainingObjectTypeOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: TrainingObjectTypeInclude<ExtArgs> | null
+        where?: TrainingObjectTypeWhereInput
+    };
+    /**
+     * AvailableTrainingTime.semester
+     */
+    export type AvailableTrainingTime$semesterArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Semester
+         */
+        select?: SemesterSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Semester
+         */
+        omit?: SemesterOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: SemesterInclude<ExtArgs> | null
+        where?: SemesterWhereInput
+    };
+    /**
+     * AvailableTrainingTime without action
+     */
+    export type AvailableTrainingTimeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the AvailableTrainingTime
+         */
+        select?: AvailableTrainingTimeSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the AvailableTrainingTime
+         */
+        omit?: AvailableTrainingTimeOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AvailableTrainingTimeInclude<ExtArgs> | null
     };
     /**
      * Model Certificate
@@ -356970,6 +358278,7 @@ export namespace Prisma {
     export type TrainingBlockScalarFieldEnum = (typeof TrainingBlockScalarFieldEnum)[keyof typeof TrainingBlockScalarFieldEnum];
     export type TrainingBlockOnCurriculumVersionScalarFieldEnum = (typeof TrainingBlockOnCurriculumVersionScalarFieldEnum)[keyof typeof TrainingBlockOnCurriculumVersionScalarFieldEnum];
     export type TrainingTimeScalarFieldEnum = (typeof TrainingTimeScalarFieldEnum)[keyof typeof TrainingTimeScalarFieldEnum];
+    export type AvailableTrainingTimeScalarFieldEnum = (typeof AvailableTrainingTimeScalarFieldEnum)[keyof typeof AvailableTrainingTimeScalarFieldEnum];
     export type CertificateScalarFieldEnum = (typeof CertificateScalarFieldEnum)[keyof typeof CertificateScalarFieldEnum];
     export type CertificateOnSubjectScalarFieldEnum = (typeof CertificateOnSubjectScalarFieldEnum)[keyof typeof CertificateOnSubjectScalarFieldEnum];
     export type AwardScalarFieldEnum = (typeof AwardScalarFieldEnum)[keyof typeof AwardScalarFieldEnum];
@@ -357244,6 +358553,7 @@ export namespace Prisma {
     export type TrainingBlockOrderByRelevanceFieldEnum = (typeof TrainingBlockOrderByRelevanceFieldEnum)[keyof typeof TrainingBlockOrderByRelevanceFieldEnum];
     export type TrainingBlockOnCurriculumVersionOrderByRelevanceFieldEnum = (typeof TrainingBlockOnCurriculumVersionOrderByRelevanceFieldEnum)[keyof typeof TrainingBlockOnCurriculumVersionOrderByRelevanceFieldEnum];
     export type TrainingTimeOrderByRelevanceFieldEnum = (typeof TrainingTimeOrderByRelevanceFieldEnum)[keyof typeof TrainingTimeOrderByRelevanceFieldEnum];
+    export type AvailableTrainingTimeOrderByRelevanceFieldEnum = (typeof AvailableTrainingTimeOrderByRelevanceFieldEnum)[keyof typeof AvailableTrainingTimeOrderByRelevanceFieldEnum];
     export type CertificateOrderByRelevanceFieldEnum = (typeof CertificateOrderByRelevanceFieldEnum)[keyof typeof CertificateOrderByRelevanceFieldEnum];
     export type CertificateOnSubjectOrderByRelevanceFieldEnum = (typeof CertificateOnSubjectOrderByRelevanceFieldEnum)[keyof typeof CertificateOnSubjectOrderByRelevanceFieldEnum];
     export type AwardOrderByRelevanceFieldEnum = (typeof AwardOrderByRelevanceFieldEnum)[keyof typeof AwardOrderByRelevanceFieldEnum];
@@ -367530,6 +368840,7 @@ export namespace Prisma {
         exam?: ExamListRelationFilter
         scoreLinkSheets?: ScoreLinkSheetListRelationFilter
         semesterTrainingScore?: SemesterTrainingScoreListRelationFilter
+        availableTrainingTime?: AvailableTrainingTimeListRelationFilter
     };
     export type SemesterOrderByWithRelationInput = {
         id?: SortOrder
@@ -367561,6 +368872,7 @@ export namespace Prisma {
         exam?: ExamOrderByRelationAggregateInput
         scoreLinkSheets?: ScoreLinkSheetOrderByRelationAggregateInput
         semesterTrainingScore?: SemesterTrainingScoreOrderByRelationAggregateInput
+        availableTrainingTime?: AvailableTrainingTimeOrderByRelationAggregateInput
         _relevance?: SemesterOrderByRelevanceInput
     };
     export type SemesterWhereUniqueInput = Prisma.AtLeast<{
@@ -367596,6 +368908,7 @@ export namespace Prisma {
         exam?: ExamListRelationFilter
         scoreLinkSheets?: ScoreLinkSheetListRelationFilter
         semesterTrainingScore?: SemesterTrainingScoreListRelationFilter
+        availableTrainingTime?: AvailableTrainingTimeListRelationFilter
     }, "id" | "code">;
     export type SemesterOrderByWithAggregationInput = {
         id?: SortOrder
@@ -370873,6 +372186,7 @@ export namespace Prisma {
         survey?: SurveyListRelationFilter
         scoreCorrectionTicket?: ScoreCorrectionTicketListRelationFilter
         scoreLinkSheet?: ScoreLinkSheetListRelationFilter
+        availableTrainingTime?: AvailableTrainingTimeListRelationFilter
     };
     export type TrainingObjectTypeOrderByWithRelationInput = {
         id?: SortOrder
@@ -370906,6 +372220,7 @@ export namespace Prisma {
         survey?: SurveyOrderByRelationAggregateInput
         scoreCorrectionTicket?: ScoreCorrectionTicketOrderByRelationAggregateInput
         scoreLinkSheet?: ScoreLinkSheetOrderByRelationAggregateInput
+        availableTrainingTime?: AvailableTrainingTimeOrderByRelationAggregateInput
         _relevance?: TrainingObjectTypeOrderByRelevanceInput
     };
     export type TrainingObjectTypeWhereUniqueInput = Prisma.AtLeast<{
@@ -370943,6 +372258,7 @@ export namespace Prisma {
         survey?: SurveyListRelationFilter
         scoreCorrectionTicket?: ScoreCorrectionTicketListRelationFilter
         scoreLinkSheet?: ScoreLinkSheetListRelationFilter
+        availableTrainingTime?: AvailableTrainingTimeListRelationFilter
     }, "id" | "code" | "name">;
     export type TrainingObjectTypeOrderByWithAggregationInput = {
         id?: SortOrder
@@ -372240,6 +373556,92 @@ export namespace Prisma {
         updatedAt?: DateTimeWithAggregatesFilter<"TrainingTime"> | Date | string
         createdBy?: UuidNullableWithAggregatesFilter<"TrainingTime"> | string | null
         name?: StringWithAggregatesFilter<"TrainingTime"> | string
+    };
+    export type AvailableTrainingTimeWhereInput = {
+        AND?: AvailableTrainingTimeWhereInput | AvailableTrainingTimeWhereInput[]
+        OR?: AvailableTrainingTimeWhereInput[]
+        NOT?: AvailableTrainingTimeWhereInput | AvailableTrainingTimeWhereInput[]
+        id?: StringFilter<"AvailableTrainingTime"> | string
+        code?: StringNullableFilter<"AvailableTrainingTime"> | string | null
+        active?: BoolFilter<"AvailableTrainingTime"> | boolean
+        description?: StringNullableFilter<"AvailableTrainingTime"> | string | null
+        deletedAt?: DateTimeNullableFilter<"AvailableTrainingTime"> | Date | string | null
+        createdAt?: DateTimeFilter<"AvailableTrainingTime"> | Date | string
+        updatedAt?: DateTimeFilter<"AvailableTrainingTime"> | Date | string
+        createdBy?: UuidNullableFilter<"AvailableTrainingTime"> | string | null
+        duration?: FloatFilter<"AvailableTrainingTime"> | number
+        trainingObjectTypeId?: StringNullableFilter<"AvailableTrainingTime"> | string | null
+        semesterId?: StringNullableFilter<"AvailableTrainingTime"> | string | null
+        trainingObjectType?: XOR<TrainingObjectTypeNullableScalarRelationFilter, TrainingObjectTypeWhereInput> | null
+        semester?: XOR<SemesterNullableScalarRelationFilter, SemesterWhereInput> | null
+    };
+    export type AvailableTrainingTimeOrderByWithRelationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrderInput | SortOrder
+        duration?: SortOrder
+        trainingObjectTypeId?: SortOrderInput | SortOrder
+        semesterId?: SortOrderInput | SortOrder
+        trainingObjectType?: TrainingObjectTypeOrderByWithRelationInput
+        semester?: SemesterOrderByWithRelationInput
+        _relevance?: AvailableTrainingTimeOrderByRelevanceInput
+    };
+    export type AvailableTrainingTimeWhereUniqueInput = Prisma.AtLeast<{
+        id?: string
+        code?: string
+        AND?: AvailableTrainingTimeWhereInput | AvailableTrainingTimeWhereInput[]
+        OR?: AvailableTrainingTimeWhereInput[]
+        NOT?: AvailableTrainingTimeWhereInput | AvailableTrainingTimeWhereInput[]
+        active?: BoolFilter<"AvailableTrainingTime"> | boolean
+        description?: StringNullableFilter<"AvailableTrainingTime"> | string | null
+        deletedAt?: DateTimeNullableFilter<"AvailableTrainingTime"> | Date | string | null
+        createdAt?: DateTimeFilter<"AvailableTrainingTime"> | Date | string
+        updatedAt?: DateTimeFilter<"AvailableTrainingTime"> | Date | string
+        createdBy?: UuidNullableFilter<"AvailableTrainingTime"> | string | null
+        duration?: FloatFilter<"AvailableTrainingTime"> | number
+        trainingObjectTypeId?: StringNullableFilter<"AvailableTrainingTime"> | string | null
+        semesterId?: StringNullableFilter<"AvailableTrainingTime"> | string | null
+        trainingObjectType?: XOR<TrainingObjectTypeNullableScalarRelationFilter, TrainingObjectTypeWhereInput> | null
+        semester?: XOR<SemesterNullableScalarRelationFilter, SemesterWhereInput> | null
+    }, "id" | "code">;
+    export type AvailableTrainingTimeOrderByWithAggregationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrderInput | SortOrder
+        duration?: SortOrder
+        trainingObjectTypeId?: SortOrderInput | SortOrder
+        semesterId?: SortOrderInput | SortOrder
+        _count?: AvailableTrainingTimeCountOrderByAggregateInput
+        _avg?: AvailableTrainingTimeAvgOrderByAggregateInput
+        _max?: AvailableTrainingTimeMaxOrderByAggregateInput
+        _min?: AvailableTrainingTimeMinOrderByAggregateInput
+        _sum?: AvailableTrainingTimeSumOrderByAggregateInput
+    };
+    export type AvailableTrainingTimeScalarWhereWithAggregatesInput = {
+        AND?: AvailableTrainingTimeScalarWhereWithAggregatesInput | AvailableTrainingTimeScalarWhereWithAggregatesInput[]
+        OR?: AvailableTrainingTimeScalarWhereWithAggregatesInput[]
+        NOT?: AvailableTrainingTimeScalarWhereWithAggregatesInput | AvailableTrainingTimeScalarWhereWithAggregatesInput[]
+        id?: StringWithAggregatesFilter<"AvailableTrainingTime"> | string
+        code?: StringNullableWithAggregatesFilter<"AvailableTrainingTime"> | string | null
+        active?: BoolWithAggregatesFilter<"AvailableTrainingTime"> | boolean
+        description?: StringNullableWithAggregatesFilter<"AvailableTrainingTime"> | string | null
+        deletedAt?: DateTimeNullableWithAggregatesFilter<"AvailableTrainingTime"> | Date | string | null
+        createdAt?: DateTimeWithAggregatesFilter<"AvailableTrainingTime"> | Date | string
+        updatedAt?: DateTimeWithAggregatesFilter<"AvailableTrainingTime"> | Date | string
+        createdBy?: UuidNullableWithAggregatesFilter<"AvailableTrainingTime"> | string | null
+        duration?: FloatWithAggregatesFilter<"AvailableTrainingTime"> | number
+        trainingObjectTypeId?: StringNullableWithAggregatesFilter<"AvailableTrainingTime"> | string | null
+        semesterId?: StringNullableWithAggregatesFilter<"AvailableTrainingTime"> | string | null
     };
     export type CertificateWhereInput = {
         AND?: CertificateWhereInput | CertificateWhereInput[]
@@ -397685,6 +399087,7 @@ export namespace Prisma {
         exam?: ExamCreateNestedManyWithoutSemesterInput
         scoreLinkSheets?: ScoreLinkSheetCreateNestedManyWithoutSemesterInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutSemesterInput
+        availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutSemesterInput
     };
     export type SemesterUncheckedCreateInput = {
         id?: string
@@ -397715,6 +399118,7 @@ export namespace Prisma {
         exam?: ExamUncheckedCreateNestedManyWithoutSemesterInput
         scoreLinkSheets?: ScoreLinkSheetUncheckedCreateNestedManyWithoutSemesterInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutSemesterInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutSemesterInput
     };
     export type SemesterUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -397745,6 +399149,7 @@ export namespace Prisma {
         exam?: ExamUpdateManyWithoutSemesterNestedInput
         scoreLinkSheets?: ScoreLinkSheetUpdateManyWithoutSemesterNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutSemesterNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutSemesterNestedInput
     };
     export type SemesterUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -397775,6 +399180,7 @@ export namespace Prisma {
         exam?: ExamUncheckedUpdateManyWithoutSemesterNestedInput
         scoreLinkSheets?: ScoreLinkSheetUncheckedUpdateManyWithoutSemesterNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutSemesterNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutSemesterNestedInput
     };
     export type SemesterCreateManyInput = {
         id?: string
@@ -401485,6 +402891,7 @@ export namespace Prisma {
         survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
         scoreCorrectionTicket?: ScoreCorrectionTicketCreateNestedManyWithoutTrainingObjectTypeInput
         scoreLinkSheet?: ScoreLinkSheetCreateNestedManyWithoutTrainingObjectTypeInput
+        availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateInput = {
         id?: string
@@ -401516,6 +402923,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         scoreLinkSheet?: ScoreLinkSheetUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -401547,6 +402955,7 @@ export namespace Prisma {
         survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreLinkSheet?: ScoreLinkSheetUpdateManyWithoutTrainingObjectTypeNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -401578,6 +402987,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreLinkSheet?: ScoreLinkSheetUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeCreateManyInput = {
         id?: string
@@ -403018,6 +404428,95 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
+    };
+    export type AvailableTrainingTimeCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        duration: number
+        trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutAvailableTrainingTimeInput
+        semester?: SemesterCreateNestedOneWithoutAvailableTrainingTimeInput
+    };
+    export type AvailableTrainingTimeUncheckedCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        duration: number
+        trainingObjectTypeId?: string | null
+        semesterId?: string | null
+    };
+    export type AvailableTrainingTimeUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        duration?: FloatFieldUpdateOperationsInput | number
+        trainingObjectType?: TrainingObjectTypeUpdateOneWithoutAvailableTrainingTimeNestedInput
+        semester?: SemesterUpdateOneWithoutAvailableTrainingTimeNestedInput
+    };
+    export type AvailableTrainingTimeUncheckedUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        duration?: FloatFieldUpdateOperationsInput | number
+        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        semesterId?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type AvailableTrainingTimeCreateManyInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        duration: number
+        trainingObjectTypeId?: string | null
+        semesterId?: string | null
+    };
+    export type AvailableTrainingTimeUpdateManyMutationInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        duration?: FloatFieldUpdateOperationsInput | number
+    };
+    export type AvailableTrainingTimeUncheckedUpdateManyInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        duration?: FloatFieldUpdateOperationsInput | number
+        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        semesterId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type CertificateCreateInput = {
         id?: string
@@ -426047,6 +427546,11 @@ export namespace Prisma {
         some?: SemesterTrainingScoreWhereInput
         none?: SemesterTrainingScoreWhereInput
     };
+    export type AvailableTrainingTimeListRelationFilter = {
+        every?: AvailableTrainingTimeWhereInput
+        some?: AvailableTrainingTimeWhereInput
+        none?: AvailableTrainingTimeWhereInput
+    };
     export type SubjectClassOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
@@ -426084,6 +427588,9 @@ export namespace Prisma {
         _count?: SortOrder
     };
     export type SemesterTrainingScoreOrderByRelationAggregateInput = {
+        _count?: SortOrder
+    };
+    export type AvailableTrainingTimeOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
     export type SemesterOrderByRelevanceInput = {
@@ -429274,6 +430781,64 @@ export namespace Prisma {
         createdBy?: SortOrder
         name?: SortOrder
     };
+    export type TrainingObjectTypeNullableScalarRelationFilter = {
+        is?: TrainingObjectTypeWhereInput | null
+        isNot?: TrainingObjectTypeWhereInput | null
+    };
+    export type SemesterNullableScalarRelationFilter = {
+        is?: SemesterWhereInput | null
+        isNot?: SemesterWhereInput | null
+    };
+    export type AvailableTrainingTimeOrderByRelevanceInput = {
+        fields: AvailableTrainingTimeOrderByRelevanceFieldEnum | AvailableTrainingTimeOrderByRelevanceFieldEnum[]
+        sort: SortOrder
+        search: string
+    };
+    export type AvailableTrainingTimeCountOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        duration?: SortOrder
+        trainingObjectTypeId?: SortOrder
+        semesterId?: SortOrder
+    };
+    export type AvailableTrainingTimeAvgOrderByAggregateInput = {
+        duration?: SortOrder
+    };
+    export type AvailableTrainingTimeMaxOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        duration?: SortOrder
+        trainingObjectTypeId?: SortOrder
+        semesterId?: SortOrder
+    };
+    export type AvailableTrainingTimeMinOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        duration?: SortOrder
+        trainingObjectTypeId?: SortOrder
+        semesterId?: SortOrder
+    };
+    export type AvailableTrainingTimeSumOrderByAggregateInput = {
+        duration?: SortOrder
+    };
     export type OutputStandardNullableScalarRelationFilter = {
         is?: OutputStandardWhereInput | null
         isNot?: OutputStandardWhereInput | null
@@ -430889,10 +432454,6 @@ export namespace Prisma {
         in?: $Enums.DecisionStatus[] | ListEnumDecisionStatusFieldRefInput<$PrismaModel>
         notIn?: $Enums.DecisionStatus[] | ListEnumDecisionStatusFieldRefInput<$PrismaModel>
         not?: NestedEnumDecisionStatusFilter<$PrismaModel> | $Enums.DecisionStatus
-    };
-    export type SemesterNullableScalarRelationFilter = {
-        is?: SemesterWhereInput | null
-        isNot?: SemesterWhereInput | null
     };
     export type SchoolYearNullableScalarRelationFilter = {
         is?: SchoolYearWhereInput | null
@@ -433904,10 +435465,6 @@ export namespace Prisma {
         every?: DM_DonViWhereInput
         some?: DM_DonViWhereInput
         none?: DM_DonViWhereInput
-    };
-    export type TrainingObjectTypeNullableScalarRelationFilter = {
-        is?: TrainingObjectTypeWhereInput | null
-        isNot?: TrainingObjectTypeWhereInput | null
     };
     export type DM_DonViOrderByRelationAggregateInput = {
         _count?: SortOrder
@@ -446236,6 +447793,12 @@ export namespace Prisma {
         createMany?: SemesterTrainingScoreCreateManySemesterInputEnvelope
         connect?: SemesterTrainingScoreWhereUniqueInput | SemesterTrainingScoreWhereUniqueInput[]
     };
+    export type AvailableTrainingTimeCreateNestedManyWithoutSemesterInput = {
+        create?: XOR<AvailableTrainingTimeCreateWithoutSemesterInput, AvailableTrainingTimeUncheckedCreateWithoutSemesterInput> | AvailableTrainingTimeCreateWithoutSemesterInput[] | AvailableTrainingTimeUncheckedCreateWithoutSemesterInput[]
+        connectOrCreate?: AvailableTrainingTimeCreateOrConnectWithoutSemesterInput | AvailableTrainingTimeCreateOrConnectWithoutSemesterInput[]
+        createMany?: AvailableTrainingTimeCreateManySemesterInputEnvelope
+        connect?: AvailableTrainingTimeWhereUniqueInput | AvailableTrainingTimeWhereUniqueInput[]
+    };
     export type SubjectClassUncheckedCreateNestedManyWithoutSemesterInput = {
         create?: XOR<SubjectClassCreateWithoutSemesterInput, SubjectClassUncheckedCreateWithoutSemesterInput> | SubjectClassCreateWithoutSemesterInput[] | SubjectClassUncheckedCreateWithoutSemesterInput[]
         connectOrCreate?: SubjectClassCreateOrConnectWithoutSemesterInput | SubjectClassCreateOrConnectWithoutSemesterInput[]
@@ -446319,6 +447882,12 @@ export namespace Prisma {
         connectOrCreate?: SemesterTrainingScoreCreateOrConnectWithoutSemesterInput | SemesterTrainingScoreCreateOrConnectWithoutSemesterInput[]
         createMany?: SemesterTrainingScoreCreateManySemesterInputEnvelope
         connect?: SemesterTrainingScoreWhereUniqueInput | SemesterTrainingScoreWhereUniqueInput[]
+    };
+    export type AvailableTrainingTimeUncheckedCreateNestedManyWithoutSemesterInput = {
+        create?: XOR<AvailableTrainingTimeCreateWithoutSemesterInput, AvailableTrainingTimeUncheckedCreateWithoutSemesterInput> | AvailableTrainingTimeCreateWithoutSemesterInput[] | AvailableTrainingTimeUncheckedCreateWithoutSemesterInput[]
+        connectOrCreate?: AvailableTrainingTimeCreateOrConnectWithoutSemesterInput | AvailableTrainingTimeCreateOrConnectWithoutSemesterInput[]
+        createMany?: AvailableTrainingTimeCreateManySemesterInputEnvelope
+        connect?: AvailableTrainingTimeWhereUniqueInput | AvailableTrainingTimeWhereUniqueInput[]
     };
     export type NullableEnumSemesterTypeFieldUpdateOperationsInput = {
         set?: $Enums.SemesterType | null
@@ -446512,6 +448081,19 @@ export namespace Prisma {
         updateMany?: SemesterTrainingScoreUpdateManyWithWhereWithoutSemesterInput | SemesterTrainingScoreUpdateManyWithWhereWithoutSemesterInput[]
         deleteMany?: SemesterTrainingScoreScalarWhereInput | SemesterTrainingScoreScalarWhereInput[]
     };
+    export type AvailableTrainingTimeUpdateManyWithoutSemesterNestedInput = {
+        create?: XOR<AvailableTrainingTimeCreateWithoutSemesterInput, AvailableTrainingTimeUncheckedCreateWithoutSemesterInput> | AvailableTrainingTimeCreateWithoutSemesterInput[] | AvailableTrainingTimeUncheckedCreateWithoutSemesterInput[]
+        connectOrCreate?: AvailableTrainingTimeCreateOrConnectWithoutSemesterInput | AvailableTrainingTimeCreateOrConnectWithoutSemesterInput[]
+        upsert?: AvailableTrainingTimeUpsertWithWhereUniqueWithoutSemesterInput | AvailableTrainingTimeUpsertWithWhereUniqueWithoutSemesterInput[]
+        createMany?: AvailableTrainingTimeCreateManySemesterInputEnvelope
+        set?: AvailableTrainingTimeWhereUniqueInput | AvailableTrainingTimeWhereUniqueInput[]
+        disconnect?: AvailableTrainingTimeWhereUniqueInput | AvailableTrainingTimeWhereUniqueInput[]
+        delete?: AvailableTrainingTimeWhereUniqueInput | AvailableTrainingTimeWhereUniqueInput[]
+        connect?: AvailableTrainingTimeWhereUniqueInput | AvailableTrainingTimeWhereUniqueInput[]
+        update?: AvailableTrainingTimeUpdateWithWhereUniqueWithoutSemesterInput | AvailableTrainingTimeUpdateWithWhereUniqueWithoutSemesterInput[]
+        updateMany?: AvailableTrainingTimeUpdateManyWithWhereWithoutSemesterInput | AvailableTrainingTimeUpdateManyWithWhereWithoutSemesterInput[]
+        deleteMany?: AvailableTrainingTimeScalarWhereInput | AvailableTrainingTimeScalarWhereInput[]
+    };
     export type SubjectClassUncheckedUpdateManyWithoutSemesterNestedInput = {
         create?: XOR<SubjectClassCreateWithoutSemesterInput, SubjectClassUncheckedCreateWithoutSemesterInput> | SubjectClassCreateWithoutSemesterInput[] | SubjectClassUncheckedCreateWithoutSemesterInput[]
         connectOrCreate?: SubjectClassCreateOrConnectWithoutSemesterInput | SubjectClassCreateOrConnectWithoutSemesterInput[]
@@ -446693,6 +448275,19 @@ export namespace Prisma {
         update?: SemesterTrainingScoreUpdateWithWhereUniqueWithoutSemesterInput | SemesterTrainingScoreUpdateWithWhereUniqueWithoutSemesterInput[]
         updateMany?: SemesterTrainingScoreUpdateManyWithWhereWithoutSemesterInput | SemesterTrainingScoreUpdateManyWithWhereWithoutSemesterInput[]
         deleteMany?: SemesterTrainingScoreScalarWhereInput | SemesterTrainingScoreScalarWhereInput[]
+    };
+    export type AvailableTrainingTimeUncheckedUpdateManyWithoutSemesterNestedInput = {
+        create?: XOR<AvailableTrainingTimeCreateWithoutSemesterInput, AvailableTrainingTimeUncheckedCreateWithoutSemesterInput> | AvailableTrainingTimeCreateWithoutSemesterInput[] | AvailableTrainingTimeUncheckedCreateWithoutSemesterInput[]
+        connectOrCreate?: AvailableTrainingTimeCreateOrConnectWithoutSemesterInput | AvailableTrainingTimeCreateOrConnectWithoutSemesterInput[]
+        upsert?: AvailableTrainingTimeUpsertWithWhereUniqueWithoutSemesterInput | AvailableTrainingTimeUpsertWithWhereUniqueWithoutSemesterInput[]
+        createMany?: AvailableTrainingTimeCreateManySemesterInputEnvelope
+        set?: AvailableTrainingTimeWhereUniqueInput | AvailableTrainingTimeWhereUniqueInput[]
+        disconnect?: AvailableTrainingTimeWhereUniqueInput | AvailableTrainingTimeWhereUniqueInput[]
+        delete?: AvailableTrainingTimeWhereUniqueInput | AvailableTrainingTimeWhereUniqueInput[]
+        connect?: AvailableTrainingTimeWhereUniqueInput | AvailableTrainingTimeWhereUniqueInput[]
+        update?: AvailableTrainingTimeUpdateWithWhereUniqueWithoutSemesterInput | AvailableTrainingTimeUpdateWithWhereUniqueWithoutSemesterInput[]
+        updateMany?: AvailableTrainingTimeUpdateManyWithWhereWithoutSemesterInput | AvailableTrainingTimeUpdateManyWithWhereWithoutSemesterInput[]
+        deleteMany?: AvailableTrainingTimeScalarWhereInput | AvailableTrainingTimeScalarWhereInput[]
     };
     export type SchoolYearCreateNestedOneWithoutMilestoneInput = {
         create?: XOR<SchoolYearCreateWithoutMilestoneInput, SchoolYearUncheckedCreateWithoutMilestoneInput>
@@ -450329,6 +451924,12 @@ export namespace Prisma {
         createMany?: ScoreLinkSheetCreateManyTrainingObjectTypeInputEnvelope
         connect?: ScoreLinkSheetWhereUniqueInput | ScoreLinkSheetWhereUniqueInput[]
     };
+    export type AvailableTrainingTimeCreateNestedManyWithoutTrainingObjectTypeInput = {
+        create?: XOR<AvailableTrainingTimeCreateWithoutTrainingObjectTypeInput, AvailableTrainingTimeUncheckedCreateWithoutTrainingObjectTypeInput> | AvailableTrainingTimeCreateWithoutTrainingObjectTypeInput[] | AvailableTrainingTimeUncheckedCreateWithoutTrainingObjectTypeInput[]
+        connectOrCreate?: AvailableTrainingTimeCreateOrConnectWithoutTrainingObjectTypeInput | AvailableTrainingTimeCreateOrConnectWithoutTrainingObjectTypeInput[]
+        createMany?: AvailableTrainingTimeCreateManyTrainingObjectTypeInputEnvelope
+        connect?: AvailableTrainingTimeWhereUniqueInput | AvailableTrainingTimeWhereUniqueInput[]
+    };
     export type TrainingCourseUncheckedCreateNestedManyWithoutTrainingObjectTypeInput = {
         create?: XOR<TrainingCourseCreateWithoutTrainingObjectTypeInput, TrainingCourseUncheckedCreateWithoutTrainingObjectTypeInput> | TrainingCourseCreateWithoutTrainingObjectTypeInput[] | TrainingCourseUncheckedCreateWithoutTrainingObjectTypeInput[]
         connectOrCreate?: TrainingCourseCreateOrConnectWithoutTrainingObjectTypeInput | TrainingCourseCreateOrConnectWithoutTrainingObjectTypeInput[]
@@ -450424,6 +452025,12 @@ export namespace Prisma {
         connectOrCreate?: ScoreLinkSheetCreateOrConnectWithoutTrainingObjectTypeInput | ScoreLinkSheetCreateOrConnectWithoutTrainingObjectTypeInput[]
         createMany?: ScoreLinkSheetCreateManyTrainingObjectTypeInputEnvelope
         connect?: ScoreLinkSheetWhereUniqueInput | ScoreLinkSheetWhereUniqueInput[]
+    };
+    export type AvailableTrainingTimeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput = {
+        create?: XOR<AvailableTrainingTimeCreateWithoutTrainingObjectTypeInput, AvailableTrainingTimeUncheckedCreateWithoutTrainingObjectTypeInput> | AvailableTrainingTimeCreateWithoutTrainingObjectTypeInput[] | AvailableTrainingTimeUncheckedCreateWithoutTrainingObjectTypeInput[]
+        connectOrCreate?: AvailableTrainingTimeCreateOrConnectWithoutTrainingObjectTypeInput | AvailableTrainingTimeCreateOrConnectWithoutTrainingObjectTypeInput[]
+        createMany?: AvailableTrainingTimeCreateManyTrainingObjectTypeInputEnvelope
+        connect?: AvailableTrainingTimeWhereUniqueInput | AvailableTrainingTimeWhereUniqueInput[]
     };
     export type EnumTrainingObjectTypesFieldUpdateOperationsInput = {
         set?: $Enums.TrainingObjectTypes
@@ -450658,6 +452265,19 @@ export namespace Prisma {
         updateMany?: ScoreLinkSheetUpdateManyWithWhereWithoutTrainingObjectTypeInput | ScoreLinkSheetUpdateManyWithWhereWithoutTrainingObjectTypeInput[]
         deleteMany?: ScoreLinkSheetScalarWhereInput | ScoreLinkSheetScalarWhereInput[]
     };
+    export type AvailableTrainingTimeUpdateManyWithoutTrainingObjectTypeNestedInput = {
+        create?: XOR<AvailableTrainingTimeCreateWithoutTrainingObjectTypeInput, AvailableTrainingTimeUncheckedCreateWithoutTrainingObjectTypeInput> | AvailableTrainingTimeCreateWithoutTrainingObjectTypeInput[] | AvailableTrainingTimeUncheckedCreateWithoutTrainingObjectTypeInput[]
+        connectOrCreate?: AvailableTrainingTimeCreateOrConnectWithoutTrainingObjectTypeInput | AvailableTrainingTimeCreateOrConnectWithoutTrainingObjectTypeInput[]
+        upsert?: AvailableTrainingTimeUpsertWithWhereUniqueWithoutTrainingObjectTypeInput | AvailableTrainingTimeUpsertWithWhereUniqueWithoutTrainingObjectTypeInput[]
+        createMany?: AvailableTrainingTimeCreateManyTrainingObjectTypeInputEnvelope
+        set?: AvailableTrainingTimeWhereUniqueInput | AvailableTrainingTimeWhereUniqueInput[]
+        disconnect?: AvailableTrainingTimeWhereUniqueInput | AvailableTrainingTimeWhereUniqueInput[]
+        delete?: AvailableTrainingTimeWhereUniqueInput | AvailableTrainingTimeWhereUniqueInput[]
+        connect?: AvailableTrainingTimeWhereUniqueInput | AvailableTrainingTimeWhereUniqueInput[]
+        update?: AvailableTrainingTimeUpdateWithWhereUniqueWithoutTrainingObjectTypeInput | AvailableTrainingTimeUpdateWithWhereUniqueWithoutTrainingObjectTypeInput[]
+        updateMany?: AvailableTrainingTimeUpdateManyWithWhereWithoutTrainingObjectTypeInput | AvailableTrainingTimeUpdateManyWithWhereWithoutTrainingObjectTypeInput[]
+        deleteMany?: AvailableTrainingTimeScalarWhereInput | AvailableTrainingTimeScalarWhereInput[]
+    };
     export type TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput = {
         create?: XOR<TrainingCourseCreateWithoutTrainingObjectTypeInput, TrainingCourseUncheckedCreateWithoutTrainingObjectTypeInput> | TrainingCourseCreateWithoutTrainingObjectTypeInput[] | TrainingCourseUncheckedCreateWithoutTrainingObjectTypeInput[]
         connectOrCreate?: TrainingCourseCreateOrConnectWithoutTrainingObjectTypeInput | TrainingCourseCreateOrConnectWithoutTrainingObjectTypeInput[]
@@ -450865,6 +452485,19 @@ export namespace Prisma {
         update?: ScoreLinkSheetUpdateWithWhereUniqueWithoutTrainingObjectTypeInput | ScoreLinkSheetUpdateWithWhereUniqueWithoutTrainingObjectTypeInput[]
         updateMany?: ScoreLinkSheetUpdateManyWithWhereWithoutTrainingObjectTypeInput | ScoreLinkSheetUpdateManyWithWhereWithoutTrainingObjectTypeInput[]
         deleteMany?: ScoreLinkSheetScalarWhereInput | ScoreLinkSheetScalarWhereInput[]
+    };
+    export type AvailableTrainingTimeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput = {
+        create?: XOR<AvailableTrainingTimeCreateWithoutTrainingObjectTypeInput, AvailableTrainingTimeUncheckedCreateWithoutTrainingObjectTypeInput> | AvailableTrainingTimeCreateWithoutTrainingObjectTypeInput[] | AvailableTrainingTimeUncheckedCreateWithoutTrainingObjectTypeInput[]
+        connectOrCreate?: AvailableTrainingTimeCreateOrConnectWithoutTrainingObjectTypeInput | AvailableTrainingTimeCreateOrConnectWithoutTrainingObjectTypeInput[]
+        upsert?: AvailableTrainingTimeUpsertWithWhereUniqueWithoutTrainingObjectTypeInput | AvailableTrainingTimeUpsertWithWhereUniqueWithoutTrainingObjectTypeInput[]
+        createMany?: AvailableTrainingTimeCreateManyTrainingObjectTypeInputEnvelope
+        set?: AvailableTrainingTimeWhereUniqueInput | AvailableTrainingTimeWhereUniqueInput[]
+        disconnect?: AvailableTrainingTimeWhereUniqueInput | AvailableTrainingTimeWhereUniqueInput[]
+        delete?: AvailableTrainingTimeWhereUniqueInput | AvailableTrainingTimeWhereUniqueInput[]
+        connect?: AvailableTrainingTimeWhereUniqueInput | AvailableTrainingTimeWhereUniqueInput[]
+        update?: AvailableTrainingTimeUpdateWithWhereUniqueWithoutTrainingObjectTypeInput | AvailableTrainingTimeUpdateWithWhereUniqueWithoutTrainingObjectTypeInput[]
+        updateMany?: AvailableTrainingTimeUpdateManyWithWhereWithoutTrainingObjectTypeInput | AvailableTrainingTimeUpdateManyWithWhereWithoutTrainingObjectTypeInput[]
+        deleteMany?: AvailableTrainingTimeScalarWhereInput | AvailableTrainingTimeScalarWhereInput[]
     };
     export type StudentCreateNestedManyWithoutPriorityObjectInput = {
         create?: XOR<StudentCreateWithoutPriorityObjectInput, StudentUncheckedCreateWithoutPriorityObjectInput> | StudentCreateWithoutPriorityObjectInput[] | StudentUncheckedCreateWithoutPriorityObjectInput[]
@@ -452129,6 +453762,34 @@ export namespace Prisma {
         update?: CurriculumVersionUpdateWithWhereUniqueWithoutTrainingTimeInput | CurriculumVersionUpdateWithWhereUniqueWithoutTrainingTimeInput[]
         updateMany?: CurriculumVersionUpdateManyWithWhereWithoutTrainingTimeInput | CurriculumVersionUpdateManyWithWhereWithoutTrainingTimeInput[]
         deleteMany?: CurriculumVersionScalarWhereInput | CurriculumVersionScalarWhereInput[]
+    };
+    export type TrainingObjectTypeCreateNestedOneWithoutAvailableTrainingTimeInput = {
+        create?: XOR<TrainingObjectTypeCreateWithoutAvailableTrainingTimeInput, TrainingObjectTypeUncheckedCreateWithoutAvailableTrainingTimeInput>
+        connectOrCreate?: TrainingObjectTypeCreateOrConnectWithoutAvailableTrainingTimeInput
+        connect?: TrainingObjectTypeWhereUniqueInput
+    };
+    export type SemesterCreateNestedOneWithoutAvailableTrainingTimeInput = {
+        create?: XOR<SemesterCreateWithoutAvailableTrainingTimeInput, SemesterUncheckedCreateWithoutAvailableTrainingTimeInput>
+        connectOrCreate?: SemesterCreateOrConnectWithoutAvailableTrainingTimeInput
+        connect?: SemesterWhereUniqueInput
+    };
+    export type TrainingObjectTypeUpdateOneWithoutAvailableTrainingTimeNestedInput = {
+        create?: XOR<TrainingObjectTypeCreateWithoutAvailableTrainingTimeInput, TrainingObjectTypeUncheckedCreateWithoutAvailableTrainingTimeInput>
+        connectOrCreate?: TrainingObjectTypeCreateOrConnectWithoutAvailableTrainingTimeInput
+        upsert?: TrainingObjectTypeUpsertWithoutAvailableTrainingTimeInput
+        disconnect?: TrainingObjectTypeWhereInput | boolean
+        delete?: TrainingObjectTypeWhereInput | boolean
+        connect?: TrainingObjectTypeWhereUniqueInput
+        update?: XOR<XOR<TrainingObjectTypeUpdateToOneWithWhereWithoutAvailableTrainingTimeInput, TrainingObjectTypeUpdateWithoutAvailableTrainingTimeInput>, TrainingObjectTypeUncheckedUpdateWithoutAvailableTrainingTimeInput>
+    };
+    export type SemesterUpdateOneWithoutAvailableTrainingTimeNestedInput = {
+        create?: XOR<SemesterCreateWithoutAvailableTrainingTimeInput, SemesterUncheckedCreateWithoutAvailableTrainingTimeInput>
+        connectOrCreate?: SemesterCreateOrConnectWithoutAvailableTrainingTimeInput
+        upsert?: SemesterUpsertWithoutAvailableTrainingTimeInput
+        disconnect?: SemesterWhereInput | boolean
+        delete?: SemesterWhereInput | boolean
+        connect?: SemesterWhereUniqueInput
+        update?: XOR<XOR<SemesterUpdateToOneWithWhereWithoutAvailableTrainingTimeInput, SemesterUpdateWithoutAvailableTrainingTimeInput>, SemesterUncheckedUpdateWithoutAvailableTrainingTimeInput>
     };
     export type OutputStandardCreateNestedOneWithoutCertificatesInput = {
         create?: XOR<OutputStandardCreateWithoutCertificatesInput, OutputStandardUncheckedCreateWithoutCertificatesInput>
@@ -512462,6 +514123,7 @@ export namespace Prisma {
         survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
         scoreCorrectionTicket?: ScoreCorrectionTicketCreateNestedManyWithoutTrainingObjectTypeInput
         scoreLinkSheet?: ScoreLinkSheetCreateNestedManyWithoutTrainingObjectTypeInput
+        availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutPlanTrainingInput = {
         id?: string
@@ -512492,6 +514154,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         scoreLinkSheet?: ScoreLinkSheetUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutPlanTrainingInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -512525,6 +514188,7 @@ export namespace Prisma {
         exam?: ExamCreateNestedManyWithoutSemesterInput
         scoreLinkSheets?: ScoreLinkSheetCreateNestedManyWithoutSemesterInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutSemesterInput
+        availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutSemesterInput
     };
     export type SemesterUncheckedCreateWithoutPlanTrainingInput = {
         id?: string
@@ -512554,6 +514218,7 @@ export namespace Prisma {
         exam?: ExamUncheckedCreateNestedManyWithoutSemesterInput
         scoreLinkSheets?: ScoreLinkSheetUncheckedCreateNestedManyWithoutSemesterInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutSemesterInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutSemesterInput
     };
     export type SemesterCreateOrConnectWithoutPlanTrainingInput = {
         where: SemesterWhereUniqueInput
@@ -512747,6 +514412,7 @@ export namespace Prisma {
         survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreLinkSheet?: ScoreLinkSheetUpdateManyWithoutTrainingObjectTypeNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutPlanTrainingInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -512777,6 +514443,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreLinkSheet?: ScoreLinkSheetUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type SemesterUpsertWithoutPlanTrainingInput = {
         update: XOR<SemesterUpdateWithoutPlanTrainingInput, SemesterUncheckedUpdateWithoutPlanTrainingInput>
@@ -512815,6 +514482,7 @@ export namespace Prisma {
         exam?: ExamUpdateManyWithoutSemesterNestedInput
         scoreLinkSheets?: ScoreLinkSheetUpdateManyWithoutSemesterNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutSemesterNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutSemesterNestedInput
     };
     export type SemesterUncheckedUpdateWithoutPlanTrainingInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -512844,6 +514512,7 @@ export namespace Prisma {
         exam?: ExamUncheckedUpdateManyWithoutSemesterNestedInput
         scoreLinkSheets?: ScoreLinkSheetUncheckedUpdateManyWithoutSemesterNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutSemesterNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutSemesterNestedInput
     };
     export type TrainingCourseUpsertWithoutPlanTrainingsInput = {
         update: XOR<TrainingCourseUpdateWithoutPlanTrainingsInput, TrainingCourseUncheckedUpdateWithoutPlanTrainingsInput>
@@ -518937,6 +520606,7 @@ export namespace Prisma {
         exam?: ExamCreateNestedManyWithoutSemesterInput
         scoreLinkSheets?: ScoreLinkSheetCreateNestedManyWithoutSemesterInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutSemesterInput
+        availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutSemesterInput
     };
     export type SemesterUncheckedCreateWithoutSchoolYearInput = {
         id?: string
@@ -518966,6 +520636,7 @@ export namespace Prisma {
         exam?: ExamUncheckedCreateNestedManyWithoutSemesterInput
         scoreLinkSheets?: ScoreLinkSheetUncheckedCreateNestedManyWithoutSemesterInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutSemesterInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutSemesterInput
     };
     export type SemesterCreateOrConnectWithoutSchoolYearInput = {
         where: SemesterWhereUniqueInput
@@ -520252,6 +521923,38 @@ export namespace Prisma {
         data: SemesterTrainingScoreCreateManySemesterInput | SemesterTrainingScoreCreateManySemesterInput[]
         skipDuplicates?: boolean
     };
+    export type AvailableTrainingTimeCreateWithoutSemesterInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        duration: number
+        trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutAvailableTrainingTimeInput
+    };
+    export type AvailableTrainingTimeUncheckedCreateWithoutSemesterInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        duration: number
+        trainingObjectTypeId?: string | null
+    };
+    export type AvailableTrainingTimeCreateOrConnectWithoutSemesterInput = {
+        where: AvailableTrainingTimeWhereUniqueInput
+        create: XOR<AvailableTrainingTimeCreateWithoutSemesterInput, AvailableTrainingTimeUncheckedCreateWithoutSemesterInput>
+    };
+    export type AvailableTrainingTimeCreateManySemesterInputEnvelope = {
+        data: AvailableTrainingTimeCreateManySemesterInput | AvailableTrainingTimeCreateManySemesterInput[]
+        skipDuplicates?: boolean
+    };
     export type SchoolYearUpsertWithoutSemestersInput = {
         update: XOR<SchoolYearUpdateWithoutSemestersInput, SchoolYearUncheckedUpdateWithoutSemestersInput>
         create: XOR<SchoolYearCreateWithoutSemestersInput, SchoolYearUncheckedCreateWithoutSemestersInput>
@@ -520800,6 +522503,35 @@ export namespace Prisma {
         score?: IntNullableFilter<"SemesterTrainingScore"> | number | null
         status?: EnumTrainingScoreStatusFilter<"SemesterTrainingScore"> | $Enums.TrainingScoreStatus
     };
+    export type AvailableTrainingTimeUpsertWithWhereUniqueWithoutSemesterInput = {
+        where: AvailableTrainingTimeWhereUniqueInput
+        update: XOR<AvailableTrainingTimeUpdateWithoutSemesterInput, AvailableTrainingTimeUncheckedUpdateWithoutSemesterInput>
+        create: XOR<AvailableTrainingTimeCreateWithoutSemesterInput, AvailableTrainingTimeUncheckedCreateWithoutSemesterInput>
+    };
+    export type AvailableTrainingTimeUpdateWithWhereUniqueWithoutSemesterInput = {
+        where: AvailableTrainingTimeWhereUniqueInput
+        data: XOR<AvailableTrainingTimeUpdateWithoutSemesterInput, AvailableTrainingTimeUncheckedUpdateWithoutSemesterInput>
+    };
+    export type AvailableTrainingTimeUpdateManyWithWhereWithoutSemesterInput = {
+        where: AvailableTrainingTimeScalarWhereInput
+        data: XOR<AvailableTrainingTimeUpdateManyMutationInput, AvailableTrainingTimeUncheckedUpdateManyWithoutSemesterInput>
+    };
+    export type AvailableTrainingTimeScalarWhereInput = {
+        AND?: AvailableTrainingTimeScalarWhereInput | AvailableTrainingTimeScalarWhereInput[]
+        OR?: AvailableTrainingTimeScalarWhereInput[]
+        NOT?: AvailableTrainingTimeScalarWhereInput | AvailableTrainingTimeScalarWhereInput[]
+        id?: StringFilter<"AvailableTrainingTime"> | string
+        code?: StringNullableFilter<"AvailableTrainingTime"> | string | null
+        active?: BoolFilter<"AvailableTrainingTime"> | boolean
+        description?: StringNullableFilter<"AvailableTrainingTime"> | string | null
+        deletedAt?: DateTimeNullableFilter<"AvailableTrainingTime"> | Date | string | null
+        createdAt?: DateTimeFilter<"AvailableTrainingTime"> | Date | string
+        updatedAt?: DateTimeFilter<"AvailableTrainingTime"> | Date | string
+        createdBy?: UuidNullableFilter<"AvailableTrainingTime"> | string | null
+        duration?: FloatFilter<"AvailableTrainingTime"> | number
+        trainingObjectTypeId?: StringNullableFilter<"AvailableTrainingTime"> | string | null
+        semesterId?: StringNullableFilter<"AvailableTrainingTime"> | string | null
+    };
     export type SchoolYearCreateWithoutMilestoneInput = {
         id?: string
         code?: string | null
@@ -521197,6 +522929,7 @@ export namespace Prisma {
         exam?: ExamCreateNestedManyWithoutSemesterInput
         scoreLinkSheets?: ScoreLinkSheetCreateNestedManyWithoutSemesterInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutSemesterInput
+        availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutSemesterInput
     };
     export type SemesterUncheckedCreateWithoutTrainingCoursesStartInput = {
         id?: string
@@ -521226,6 +522959,7 @@ export namespace Prisma {
         exam?: ExamUncheckedCreateNestedManyWithoutSemesterInput
         scoreLinkSheets?: ScoreLinkSheetUncheckedCreateNestedManyWithoutSemesterInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutSemesterInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutSemesterInput
     };
     export type SemesterCreateOrConnectWithoutTrainingCoursesStartInput = {
         where: SemesterWhereUniqueInput
@@ -521288,6 +523022,7 @@ export namespace Prisma {
         survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
         scoreCorrectionTicket?: ScoreCorrectionTicketCreateNestedManyWithoutTrainingObjectTypeInput
         scoreLinkSheet?: ScoreLinkSheetCreateNestedManyWithoutTrainingObjectTypeInput
+        availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutTrainingCourseInput = {
         id?: string
@@ -521318,6 +523053,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         scoreLinkSheet?: ScoreLinkSheetUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutTrainingCourseInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -522148,6 +523884,7 @@ export namespace Prisma {
         exam?: ExamUpdateManyWithoutSemesterNestedInput
         scoreLinkSheets?: ScoreLinkSheetUpdateManyWithoutSemesterNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutSemesterNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutSemesterNestedInput
     };
     export type SemesterUncheckedUpdateWithoutTrainingCoursesStartInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -522177,6 +523914,7 @@ export namespace Prisma {
         exam?: ExamUncheckedUpdateManyWithoutSemesterNestedInput
         scoreLinkSheets?: ScoreLinkSheetUncheckedUpdateManyWithoutSemesterNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutSemesterNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutSemesterNestedInput
     };
     export type TrainingLanguageUpsertWithoutTrainingCoursesInput = {
         update: XOR<TrainingLanguageUpdateWithoutTrainingCoursesInput, TrainingLanguageUncheckedUpdateWithoutTrainingCoursesInput>
@@ -522249,6 +523987,7 @@ export namespace Prisma {
         survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreLinkSheet?: ScoreLinkSheetUpdateManyWithoutTrainingObjectTypeNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutTrainingCourseInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -522279,6 +524018,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreLinkSheet?: ScoreLinkSheetUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingCourseRegulationUpsertWithWhereUniqueWithoutTrainingCourseInput = {
         where: TrainingCourseRegulationWhereUniqueInput
@@ -525039,6 +526779,7 @@ export namespace Prisma {
         survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
         scoreCorrectionTicket?: ScoreCorrectionTicketCreateNestedManyWithoutTrainingObjectTypeInput
         scoreLinkSheet?: ScoreLinkSheetCreateNestedManyWithoutTrainingObjectTypeInput
+        availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutCurriculumInput = {
         id?: string
@@ -525069,6 +526810,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         scoreLinkSheet?: ScoreLinkSheetUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutCurriculumInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -525436,6 +527178,7 @@ export namespace Prisma {
         survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreLinkSheet?: ScoreLinkSheetUpdateManyWithoutTrainingObjectTypeNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutCurriculumInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -525466,6 +527209,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreLinkSheet?: ScoreLinkSheetUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type DocumentFileUpsertWithWhereUniqueWithoutCurriculumInput = {
         where: DocumentFileWhereUniqueInput
@@ -525590,6 +527334,7 @@ export namespace Prisma {
         survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
         scoreCorrectionTicket?: ScoreCorrectionTicketCreateNestedManyWithoutTrainingObjectTypeInput
         scoreLinkSheet?: ScoreLinkSheetCreateNestedManyWithoutTrainingObjectTypeInput
+        availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutCurriculumVersionInput = {
         id?: string
@@ -525620,6 +527365,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         scoreLinkSheet?: ScoreLinkSheetUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutCurriculumVersionInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -526485,6 +528231,7 @@ export namespace Prisma {
         survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreLinkSheet?: ScoreLinkSheetUpdateManyWithoutTrainingObjectTypeNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutCurriculumVersionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -526515,6 +528262,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreLinkSheet?: ScoreLinkSheetUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingCourseUpsertWithoutCurriculumVersionInput = {
         update: XOR<TrainingCourseUpdateWithoutCurriculumVersionInput, TrainingCourseUncheckedUpdateWithoutCurriculumVersionInput>
@@ -527629,6 +529377,7 @@ export namespace Prisma {
         survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
         scoreCorrectionTicket?: ScoreCorrectionTicketCreateNestedManyWithoutTrainingObjectTypeInput
         scoreLinkSheet?: ScoreLinkSheetCreateNestedManyWithoutTrainingObjectTypeInput
+        availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutSubjectVersionInput = {
         id?: string
@@ -527659,6 +529408,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         scoreLinkSheet?: ScoreLinkSheetUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutSubjectVersionInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -528904,6 +530654,7 @@ export namespace Prisma {
         survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreLinkSheet?: ScoreLinkSheetUpdateManyWithoutTrainingObjectTypeNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutSubjectVersionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -528934,6 +530685,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreLinkSheet?: ScoreLinkSheetUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type SubjectVersionCategoryUpsertWithoutSubjectVersionsInput = {
         update: XOR<SubjectVersionCategoryUpdateWithoutSubjectVersionsInput, SubjectVersionCategoryUncheckedUpdateWithoutSubjectVersionsInput>
@@ -531006,6 +532758,7 @@ export namespace Prisma {
         exam?: ExamCreateNestedManyWithoutSemesterInput
         scoreLinkSheets?: ScoreLinkSheetCreateNestedManyWithoutSemesterInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutSemesterInput
+        availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutSemesterInput
     };
     export type SemesterUncheckedCreateWithoutClassRegisterSessionInput = {
         id?: string
@@ -531035,6 +532788,7 @@ export namespace Prisma {
         exam?: ExamUncheckedCreateNestedManyWithoutSemesterInput
         scoreLinkSheets?: ScoreLinkSheetUncheckedCreateNestedManyWithoutSemesterInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutSemesterInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutSemesterInput
     };
     export type SemesterCreateOrConnectWithoutClassRegisterSessionInput = {
         where: SemesterWhereUniqueInput
@@ -531271,6 +533025,7 @@ export namespace Prisma {
         exam?: ExamUpdateManyWithoutSemesterNestedInput
         scoreLinkSheets?: ScoreLinkSheetUpdateManyWithoutSemesterNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutSemesterNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutSemesterNestedInput
     };
     export type SemesterUncheckedUpdateWithoutClassRegisterSessionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -531300,6 +533055,7 @@ export namespace Prisma {
         exam?: ExamUncheckedUpdateManyWithoutSemesterNestedInput
         scoreLinkSheets?: ScoreLinkSheetUncheckedUpdateManyWithoutSemesterNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutSemesterNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutSemesterNestedInput
     };
     export type ClassRegisterSessionCreditUpsertWithWhereUniqueWithoutClassRegisterSessionInput = {
         where: ClassRegisterSessionCreditWhereUniqueInput
@@ -532141,6 +533897,7 @@ export namespace Prisma {
         survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
         scoreCorrectionTicket?: ScoreCorrectionTicketCreateNestedManyWithoutTrainingObjectTypeInput
         scoreLinkSheet?: ScoreLinkSheetCreateNestedManyWithoutTrainingObjectTypeInput
+        availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutSubjectClassInput = {
         id?: string
@@ -532171,6 +533928,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         scoreLinkSheet?: ScoreLinkSheetUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutSubjectClassInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -532204,6 +533962,7 @@ export namespace Prisma {
         exam?: ExamCreateNestedManyWithoutSemesterInput
         scoreLinkSheets?: ScoreLinkSheetCreateNestedManyWithoutSemesterInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutSemesterInput
+        availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutSemesterInput
     };
     export type SemesterUncheckedCreateWithoutSubjectClassesInput = {
         id?: string
@@ -532233,6 +533992,7 @@ export namespace Prisma {
         exam?: ExamUncheckedCreateNestedManyWithoutSemesterInput
         scoreLinkSheets?: ScoreLinkSheetUncheckedCreateNestedManyWithoutSemesterInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutSemesterInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutSemesterInput
     };
     export type SemesterCreateOrConnectWithoutSubjectClassesInput = {
         where: SemesterWhereUniqueInput
@@ -533485,6 +535245,7 @@ export namespace Prisma {
         survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreLinkSheet?: ScoreLinkSheetUpdateManyWithoutTrainingObjectTypeNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutSubjectClassInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -533515,6 +535276,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreLinkSheet?: ScoreLinkSheetUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type SemesterUpsertWithoutSubjectClassesInput = {
         update: XOR<SemesterUpdateWithoutSubjectClassesInput, SemesterUncheckedUpdateWithoutSubjectClassesInput>
@@ -533553,6 +535315,7 @@ export namespace Prisma {
         exam?: ExamUpdateManyWithoutSemesterNestedInput
         scoreLinkSheets?: ScoreLinkSheetUpdateManyWithoutSemesterNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutSemesterNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutSemesterNestedInput
     };
     export type SemesterUncheckedUpdateWithoutSubjectClassesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -533582,6 +535345,7 @@ export namespace Prisma {
         exam?: ExamUncheckedUpdateManyWithoutSemesterNestedInput
         scoreLinkSheets?: ScoreLinkSheetUncheckedUpdateManyWithoutSemesterNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutSemesterNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutSemesterNestedInput
     };
     export type ExamUpsertWithoutSubjectClassInput = {
         update: XOR<ExamUpdateWithoutSubjectClassInput, ExamUncheckedUpdateWithoutSubjectClassInput>
@@ -538043,6 +539807,7 @@ export namespace Prisma {
         surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
         survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
         scoreLinkSheet?: ScoreLinkSheetCreateNestedManyWithoutTrainingObjectTypeInput
+        availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutScoreCorrectionTicketInput = {
         id?: string
@@ -538073,6 +539838,7 @@ export namespace Prisma {
         surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         scoreLinkSheet?: ScoreLinkSheetUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutScoreCorrectionTicketInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -538158,6 +539924,7 @@ export namespace Prisma {
         surveyObjectType?: SurveyObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
         survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreLinkSheet?: ScoreLinkSheetUpdateManyWithoutTrainingObjectTypeNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutScoreCorrectionTicketInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -538188,6 +539955,7 @@ export namespace Prisma {
         surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreLinkSheet?: ScoreLinkSheetUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type ScoreCorrectionItemUpsertWithWhereUniqueWithoutTicketInput = {
         where: ScoreCorrectionItemWhereUniqueInput
@@ -539482,6 +541250,38 @@ export namespace Prisma {
         data: ScoreLinkSheetCreateManyTrainingObjectTypeInput | ScoreLinkSheetCreateManyTrainingObjectTypeInput[]
         skipDuplicates?: boolean
     };
+    export type AvailableTrainingTimeCreateWithoutTrainingObjectTypeInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        duration: number
+        semester?: SemesterCreateNestedOneWithoutAvailableTrainingTimeInput
+    };
+    export type AvailableTrainingTimeUncheckedCreateWithoutTrainingObjectTypeInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        duration: number
+        semesterId?: string | null
+    };
+    export type AvailableTrainingTimeCreateOrConnectWithoutTrainingObjectTypeInput = {
+        where: AvailableTrainingTimeWhereUniqueInput
+        create: XOR<AvailableTrainingTimeCreateWithoutTrainingObjectTypeInput, AvailableTrainingTimeUncheckedCreateWithoutTrainingObjectTypeInput>
+    };
+    export type AvailableTrainingTimeCreateManyTrainingObjectTypeInputEnvelope = {
+        data: AvailableTrainingTimeCreateManyTrainingObjectTypeInput | AvailableTrainingTimeCreateManyTrainingObjectTypeInput[]
+        skipDuplicates?: boolean
+    };
     export type TrainingFormUpsertWithoutTrainingObjectTypeInput = {
         update: XOR<TrainingFormUpdateWithoutTrainingObjectTypeInput, TrainingFormUncheckedUpdateWithoutTrainingObjectTypeInput>
         create: XOR<TrainingFormCreateWithoutTrainingObjectTypeInput, TrainingFormUncheckedCreateWithoutTrainingObjectTypeInput>
@@ -539820,6 +541620,19 @@ export namespace Prisma {
     export type ScoreLinkSheetUpdateManyWithWhereWithoutTrainingObjectTypeInput = {
         where: ScoreLinkSheetScalarWhereInput
         data: XOR<ScoreLinkSheetUpdateManyMutationInput, ScoreLinkSheetUncheckedUpdateManyWithoutTrainingObjectTypeInput>
+    };
+    export type AvailableTrainingTimeUpsertWithWhereUniqueWithoutTrainingObjectTypeInput = {
+        where: AvailableTrainingTimeWhereUniqueInput
+        update: XOR<AvailableTrainingTimeUpdateWithoutTrainingObjectTypeInput, AvailableTrainingTimeUncheckedUpdateWithoutTrainingObjectTypeInput>
+        create: XOR<AvailableTrainingTimeCreateWithoutTrainingObjectTypeInput, AvailableTrainingTimeUncheckedCreateWithoutTrainingObjectTypeInput>
+    };
+    export type AvailableTrainingTimeUpdateWithWhereUniqueWithoutTrainingObjectTypeInput = {
+        where: AvailableTrainingTimeWhereUniqueInput
+        data: XOR<AvailableTrainingTimeUpdateWithoutTrainingObjectTypeInput, AvailableTrainingTimeUncheckedUpdateWithoutTrainingObjectTypeInput>
+    };
+    export type AvailableTrainingTimeUpdateManyWithWhereWithoutTrainingObjectTypeInput = {
+        where: AvailableTrainingTimeScalarWhereInput
+        data: XOR<AvailableTrainingTimeUpdateManyMutationInput, AvailableTrainingTimeUncheckedUpdateManyWithoutTrainingObjectTypeInput>
     };
     export type StudentCreateWithoutPriorityObjectInput = {
         id?: string
@@ -540218,6 +542031,7 @@ export namespace Prisma {
         survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
         scoreCorrectionTicket?: ScoreCorrectionTicketCreateNestedManyWithoutTrainingObjectTypeInput
         scoreLinkSheet?: ScoreLinkSheetCreateNestedManyWithoutTrainingObjectTypeInput
+        availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutTrainingLevelInput = {
         id?: string
@@ -540248,6 +542062,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         scoreLinkSheet?: ScoreLinkSheetUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutTrainingLevelInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -540330,6 +542145,7 @@ export namespace Prisma {
         survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
         scoreCorrectionTicket?: ScoreCorrectionTicketCreateNestedManyWithoutTrainingObjectTypeInput
         scoreLinkSheet?: ScoreLinkSheetCreateNestedManyWithoutTrainingObjectTypeInput
+        availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutTrainingFormInput = {
         id?: string
@@ -540360,6 +542176,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         scoreLinkSheet?: ScoreLinkSheetUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutTrainingFormInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -542201,6 +544018,7 @@ export namespace Prisma {
         survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
         scoreCorrectionTicket?: ScoreCorrectionTicketCreateNestedManyWithoutTrainingObjectTypeInput
         scoreLinkSheet?: ScoreLinkSheetCreateNestedManyWithoutTrainingObjectTypeInput
+        availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutTrainingFieldsInput = {
         id?: string
@@ -542231,6 +544049,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         scoreLinkSheet?: ScoreLinkSheetUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutTrainingFieldsInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -542319,6 +544138,7 @@ export namespace Prisma {
         survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreLinkSheet?: ScoreLinkSheetUpdateManyWithoutTrainingObjectTypeNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutTrainingFieldsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -542349,6 +544169,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreLinkSheet?: ScoreLinkSheetUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type DM_DonViCreateWithoutTrainingMajorsInput = {
         Id?: string
@@ -543480,6 +545301,7 @@ export namespace Prisma {
         survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
         scoreCorrectionTicket?: ScoreCorrectionTicketCreateNestedManyWithoutTrainingObjectTypeInput
         scoreLinkSheet?: ScoreLinkSheetCreateNestedManyWithoutTrainingObjectTypeInput
+        availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutTrainingMajorsInput = {
         id?: string
@@ -543510,6 +545332,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         scoreLinkSheet?: ScoreLinkSheetUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutTrainingMajorsInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -543612,6 +545435,7 @@ export namespace Prisma {
         survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreLinkSheet?: ScoreLinkSheetUpdateManyWithoutTrainingObjectTypeNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutTrainingMajorsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -543642,6 +545466,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreLinkSheet?: ScoreLinkSheetUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeCreateWithoutTrainingBlocksInput = {
         id?: string
@@ -543672,6 +545497,7 @@ export namespace Prisma {
         survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
         scoreCorrectionTicket?: ScoreCorrectionTicketCreateNestedManyWithoutTrainingObjectTypeInput
         scoreLinkSheet?: ScoreLinkSheetCreateNestedManyWithoutTrainingObjectTypeInput
+        availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutTrainingBlocksInput = {
         id?: string
@@ -543702,6 +545528,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         scoreLinkSheet?: ScoreLinkSheetUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutTrainingBlocksInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -543853,6 +545680,7 @@ export namespace Prisma {
         survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreLinkSheet?: ScoreLinkSheetUpdateManyWithoutTrainingObjectTypeNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutTrainingBlocksInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -543883,6 +545711,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreLinkSheet?: ScoreLinkSheetUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingBlockUpsertWithoutChildrenInput = {
         update: XOR<TrainingBlockUpdateWithoutChildrenInput, TrainingBlockUncheckedUpdateWithoutChildrenInput>
@@ -544372,6 +546201,276 @@ export namespace Prisma {
     export type CurriculumVersionUpdateManyWithWhereWithoutTrainingTimeInput = {
         where: CurriculumVersionScalarWhereInput
         data: XOR<CurriculumVersionUpdateManyMutationInput, CurriculumVersionUncheckedUpdateManyWithoutTrainingTimeInput>
+    };
+    export type TrainingObjectTypeCreateWithoutAvailableTrainingTimeInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        type: $Enums.TrainingObjectTypes
+        vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
+        trainingForm?: TrainingFormCreateNestedOneWithoutTrainingObjectTypeInput
+        trainingLevel?: TrainingLevelCreateNestedOneWithoutTrainingObjectTypeInput
+        trainingCourse?: TrainingCourseCreateNestedManyWithoutTrainingObjectTypeInput
+        curriculum?: CurriculumCreateNestedManyWithoutTrainingObjectTypeInput
+        curriculumVersion?: CurriculumVersionCreateNestedManyWithoutTrainingObjectTypeInput
+        trainingMajors?: TrainingMajorOnTrainingObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
+        trainingFields?: TrainingFieldOnTrainingObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
+        trainingScoreSession?: TrainingScoreSessionCreateNestedManyWithoutTrainingObjectTypeInput
+        subjectClass?: SubjectClassCreateNestedManyWithoutTrainingObjectTypeInput
+        graduationSession?: GraduationSessionCreateNestedManyWithoutTrainingObjectTypeInput
+        subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
+        planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
+        thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
+        trainingBlocks?: TrainingBlockCreateNestedManyWithoutTrainingObjectTypeInput
+        surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
+        survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketCreateNestedManyWithoutTrainingObjectTypeInput
+        scoreLinkSheet?: ScoreLinkSheetCreateNestedManyWithoutTrainingObjectTypeInput
+    };
+    export type TrainingObjectTypeUncheckedCreateWithoutAvailableTrainingTimeInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        type: $Enums.TrainingObjectTypes
+        trainingFormId?: string | null
+        trainingLevelId?: string | null
+        vaiTro?: TrainingObjectTypeCreatevaiTroInput | string[]
+        trainingCourse?: TrainingCourseUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        trainingFields?: TrainingFieldOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        trainingScoreSession?: TrainingScoreSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        graduationSession?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        trainingBlocks?: TrainingBlockUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        scoreLinkSheet?: ScoreLinkSheetUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    };
+    export type TrainingObjectTypeCreateOrConnectWithoutAvailableTrainingTimeInput = {
+        where: TrainingObjectTypeWhereUniqueInput
+        create: XOR<TrainingObjectTypeCreateWithoutAvailableTrainingTimeInput, TrainingObjectTypeUncheckedCreateWithoutAvailableTrainingTimeInput>
+    };
+    export type SemesterCreateWithoutAvailableTrainingTimeInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        shortName?: string | null
+        semesterType?: $Enums.SemesterType | null
+        startDate: Date | string
+        endDate: Date | string
+        schoolYear: SchoolYearCreateNestedOneWithoutSemestersInput
+        subjectClasses?: SubjectClassCreateNestedManyWithoutSemesterInput
+        trainingCoursesStart?: TrainingCourseCreateNestedManyWithoutSemesterStartInput
+        trainingScoreSession?: TrainingScoreSessionCreateNestedManyWithoutSemesterInput
+        studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutSemesterInput
+        scholarshipAward?: ScholarshipAwardCreateNestedManyWithoutSemesterInput
+        academicWarning?: AcademicWarningCreateNestedManyWithoutSemesterInput
+        disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutSemesterInput
+        studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutSemesterInput
+        classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutSemesterInput
+        planTraining?: PlanTrainingCreateNestedManyWithoutSemesterInput
+        survey?: SurveyCreateNestedManyWithoutSemesterInput
+        exam?: ExamCreateNestedManyWithoutSemesterInput
+        scoreLinkSheets?: ScoreLinkSheetCreateNestedManyWithoutSemesterInput
+        semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutSemesterInput
+    };
+    export type SemesterUncheckedCreateWithoutAvailableTrainingTimeInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        shortName?: string | null
+        semesterType?: $Enums.SemesterType | null
+        schoolYearId: string
+        startDate: Date | string
+        endDate: Date | string
+        subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutSemesterInput
+        trainingCoursesStart?: TrainingCourseUncheckedCreateNestedManyWithoutSemesterStartInput
+        trainingScoreSession?: TrainingScoreSessionUncheckedCreateNestedManyWithoutSemesterInput
+        studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutSemesterInput
+        scholarshipAward?: ScholarshipAwardUncheckedCreateNestedManyWithoutSemesterInput
+        academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutSemesterInput
+        disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutSemesterInput
+        studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutSemesterInput
+        classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutSemesterInput
+        planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutSemesterInput
+        survey?: SurveyUncheckedCreateNestedManyWithoutSemesterInput
+        exam?: ExamUncheckedCreateNestedManyWithoutSemesterInput
+        scoreLinkSheets?: ScoreLinkSheetUncheckedCreateNestedManyWithoutSemesterInput
+        semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutSemesterInput
+    };
+    export type SemesterCreateOrConnectWithoutAvailableTrainingTimeInput = {
+        where: SemesterWhereUniqueInput
+        create: XOR<SemesterCreateWithoutAvailableTrainingTimeInput, SemesterUncheckedCreateWithoutAvailableTrainingTimeInput>
+    };
+    export type TrainingObjectTypeUpsertWithoutAvailableTrainingTimeInput = {
+        update: XOR<TrainingObjectTypeUpdateWithoutAvailableTrainingTimeInput, TrainingObjectTypeUncheckedUpdateWithoutAvailableTrainingTimeInput>
+        create: XOR<TrainingObjectTypeCreateWithoutAvailableTrainingTimeInput, TrainingObjectTypeUncheckedCreateWithoutAvailableTrainingTimeInput>
+        where?: TrainingObjectTypeWhereInput
+    };
+    export type TrainingObjectTypeUpdateToOneWithWhereWithoutAvailableTrainingTimeInput = {
+        where?: TrainingObjectTypeWhereInput
+        data: XOR<TrainingObjectTypeUpdateWithoutAvailableTrainingTimeInput, TrainingObjectTypeUncheckedUpdateWithoutAvailableTrainingTimeInput>
+    };
+    export type TrainingObjectTypeUpdateWithoutAvailableTrainingTimeInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
+        vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
+        trainingForm?: TrainingFormUpdateOneWithoutTrainingObjectTypeNestedInput
+        trainingLevel?: TrainingLevelUpdateOneWithoutTrainingObjectTypeNestedInput
+        trainingCourse?: TrainingCourseUpdateManyWithoutTrainingObjectTypeNestedInput
+        curriculum?: CurriculumUpdateManyWithoutTrainingObjectTypeNestedInput
+        curriculumVersion?: CurriculumVersionUpdateManyWithoutTrainingObjectTypeNestedInput
+        trainingMajors?: TrainingMajorOnTrainingObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
+        trainingFields?: TrainingFieldOnTrainingObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
+        trainingScoreSession?: TrainingScoreSessionUpdateManyWithoutTrainingObjectTypeNestedInput
+        subjectClass?: SubjectClassUpdateManyWithoutTrainingObjectTypeNestedInput
+        graduationSession?: GraduationSessionUpdateManyWithoutTrainingObjectTypeNestedInput
+        subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
+        planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
+        thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
+        trainingBlocks?: TrainingBlockUpdateManyWithoutTrainingObjectTypeNestedInput
+        surveyObjectType?: SurveyObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
+        survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUpdateManyWithoutTrainingObjectTypeNestedInput
+        scoreLinkSheet?: ScoreLinkSheetUpdateManyWithoutTrainingObjectTypeNestedInput
+    };
+    export type TrainingObjectTypeUncheckedUpdateWithoutAvailableTrainingTimeInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
+        trainingFormId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+        vaiTro?: TrainingObjectTypeUpdatevaiTroInput | string[]
+        trainingCourse?: TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        trainingFields?: TrainingFieldOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        trainingScoreSession?: TrainingScoreSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        subjectClass?: SubjectClassUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        graduationSession?: GraduationSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        trainingBlocks?: TrainingBlockUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        scoreLinkSheet?: ScoreLinkSheetUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    };
+    export type SemesterUpsertWithoutAvailableTrainingTimeInput = {
+        update: XOR<SemesterUpdateWithoutAvailableTrainingTimeInput, SemesterUncheckedUpdateWithoutAvailableTrainingTimeInput>
+        create: XOR<SemesterCreateWithoutAvailableTrainingTimeInput, SemesterUncheckedCreateWithoutAvailableTrainingTimeInput>
+        where?: SemesterWhereInput
+    };
+    export type SemesterUpdateToOneWithWhereWithoutAvailableTrainingTimeInput = {
+        where?: SemesterWhereInput
+        data: XOR<SemesterUpdateWithoutAvailableTrainingTimeInput, SemesterUncheckedUpdateWithoutAvailableTrainingTimeInput>
+    };
+    export type SemesterUpdateWithoutAvailableTrainingTimeInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        shortName?: NullableStringFieldUpdateOperationsInput | string | null
+        semesterType?: NullableEnumSemesterTypeFieldUpdateOperationsInput | $Enums.SemesterType | null
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        schoolYear?: SchoolYearUpdateOneRequiredWithoutSemestersNestedInput
+        subjectClasses?: SubjectClassUpdateManyWithoutSemesterNestedInput
+        trainingCoursesStart?: TrainingCourseUpdateManyWithoutSemesterStartNestedInput
+        trainingScoreSession?: TrainingScoreSessionUpdateManyWithoutSemesterNestedInput
+        studentSemesterResult?: StudentSemesterResultUpdateManyWithoutSemesterNestedInput
+        scholarshipAward?: ScholarshipAwardUpdateManyWithoutSemesterNestedInput
+        academicWarning?: AcademicWarningUpdateManyWithoutSemesterNestedInput
+        disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutSemesterNestedInput
+        studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutSemesterNestedInput
+        classRegisterSession?: ClassRegisterSessionUpdateManyWithoutSemesterNestedInput
+        planTraining?: PlanTrainingUpdateManyWithoutSemesterNestedInput
+        survey?: SurveyUpdateManyWithoutSemesterNestedInput
+        exam?: ExamUpdateManyWithoutSemesterNestedInput
+        scoreLinkSheets?: ScoreLinkSheetUpdateManyWithoutSemesterNestedInput
+        semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutSemesterNestedInput
+    };
+    export type SemesterUncheckedUpdateWithoutAvailableTrainingTimeInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        shortName?: NullableStringFieldUpdateOperationsInput | string | null
+        semesterType?: NullableEnumSemesterTypeFieldUpdateOperationsInput | $Enums.SemesterType | null
+        schoolYearId?: StringFieldUpdateOperationsInput | string
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        subjectClasses?: SubjectClassUncheckedUpdateManyWithoutSemesterNestedInput
+        trainingCoursesStart?: TrainingCourseUncheckedUpdateManyWithoutSemesterStartNestedInput
+        trainingScoreSession?: TrainingScoreSessionUncheckedUpdateManyWithoutSemesterNestedInput
+        studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutSemesterNestedInput
+        scholarshipAward?: ScholarshipAwardUncheckedUpdateManyWithoutSemesterNestedInput
+        academicWarning?: AcademicWarningUncheckedUpdateManyWithoutSemesterNestedInput
+        disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutSemesterNestedInput
+        studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutSemesterNestedInput
+        classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutSemesterNestedInput
+        planTraining?: PlanTrainingUncheckedUpdateManyWithoutSemesterNestedInput
+        survey?: SurveyUncheckedUpdateManyWithoutSemesterNestedInput
+        exam?: ExamUncheckedUpdateManyWithoutSemesterNestedInput
+        scoreLinkSheets?: ScoreLinkSheetUncheckedUpdateManyWithoutSemesterNestedInput
+        semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutSemesterNestedInput
     };
     export type OutputStandardCreateWithoutCertificatesInput = {
         id?: string
@@ -549343,6 +551442,7 @@ export namespace Prisma {
         exam?: ExamCreateNestedManyWithoutSemesterInput
         scoreLinkSheets?: ScoreLinkSheetCreateNestedManyWithoutSemesterInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutSemesterInput
+        availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutSemesterInput
     };
     export type SemesterUncheckedCreateWithoutStudentSemesterResultInput = {
         id?: string
@@ -549372,6 +551472,7 @@ export namespace Prisma {
         exam?: ExamUncheckedCreateNestedManyWithoutSemesterInput
         scoreLinkSheets?: ScoreLinkSheetUncheckedCreateNestedManyWithoutSemesterInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutSemesterInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutSemesterInput
     };
     export type SemesterCreateOrConnectWithoutStudentSemesterResultInput = {
         where: SemesterWhereUniqueInput
@@ -549627,6 +551728,7 @@ export namespace Prisma {
         exam?: ExamUpdateManyWithoutSemesterNestedInput
         scoreLinkSheets?: ScoreLinkSheetUpdateManyWithoutSemesterNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutSemesterNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutSemesterNestedInput
     };
     export type SemesterUncheckedUpdateWithoutStudentSemesterResultInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -549656,6 +551758,7 @@ export namespace Prisma {
         exam?: ExamUncheckedUpdateManyWithoutSemesterNestedInput
         scoreLinkSheets?: ScoreLinkSheetUncheckedUpdateManyWithoutSemesterNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutSemesterNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutSemesterNestedInput
     };
     export type AcademicRankingConvertUpsertWithoutStudentSemesterResultInput = {
         update: XOR<AcademicRankingConvertUpdateWithoutStudentSemesterResultInput, AcademicRankingConvertUncheckedUpdateWithoutStudentSemesterResultInput>
@@ -553863,6 +555966,7 @@ export namespace Prisma {
         exam?: ExamCreateNestedManyWithoutSemesterInput
         scoreLinkSheets?: ScoreLinkSheetCreateNestedManyWithoutSemesterInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutSemesterInput
+        availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutSemesterInput
     };
     export type SemesterUncheckedCreateWithoutStudentAcademicDecisionInput = {
         id?: string
@@ -553892,6 +555996,7 @@ export namespace Prisma {
         exam?: ExamUncheckedCreateNestedManyWithoutSemesterInput
         scoreLinkSheets?: ScoreLinkSheetUncheckedCreateNestedManyWithoutSemesterInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutSemesterInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutSemesterInput
     };
     export type SemesterCreateOrConnectWithoutStudentAcademicDecisionInput = {
         where: SemesterWhereUniqueInput
@@ -554241,6 +556346,7 @@ export namespace Prisma {
         exam?: ExamUpdateManyWithoutSemesterNestedInput
         scoreLinkSheets?: ScoreLinkSheetUpdateManyWithoutSemesterNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutSemesterNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutSemesterNestedInput
     };
     export type SemesterUncheckedUpdateWithoutStudentAcademicDecisionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -554270,6 +556376,7 @@ export namespace Prisma {
         exam?: ExamUncheckedUpdateManyWithoutSemesterNestedInput
         scoreLinkSheets?: ScoreLinkSheetUncheckedUpdateManyWithoutSemesterNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutSemesterNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutSemesterNestedInput
     };
     export type SchoolYearUpsertWithoutStudentAcademicDecisionInput = {
         update: XOR<SchoolYearUpdateWithoutStudentAcademicDecisionInput, SchoolYearUncheckedUpdateWithoutStudentAcademicDecisionInput>
@@ -554394,6 +556501,7 @@ export namespace Prisma {
         exam?: ExamCreateNestedManyWithoutSemesterInput
         scoreLinkSheets?: ScoreLinkSheetCreateNestedManyWithoutSemesterInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutSemesterInput
+        availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutSemesterInput
     };
     export type SemesterUncheckedCreateWithoutTrainingScoreSessionInput = {
         id?: string
@@ -554423,6 +556531,7 @@ export namespace Prisma {
         exam?: ExamUncheckedCreateNestedManyWithoutSemesterInput
         scoreLinkSheets?: ScoreLinkSheetUncheckedCreateNestedManyWithoutSemesterInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutSemesterInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutSemesterInput
     };
     export type SemesterCreateOrConnectWithoutTrainingScoreSessionInput = {
         where: SemesterWhereUniqueInput
@@ -554457,6 +556566,7 @@ export namespace Prisma {
         survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
         scoreCorrectionTicket?: ScoreCorrectionTicketCreateNestedManyWithoutTrainingObjectTypeInput
         scoreLinkSheet?: ScoreLinkSheetCreateNestedManyWithoutTrainingObjectTypeInput
+        availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutTrainingScoreSessionInput = {
         id?: string
@@ -554487,6 +556597,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         scoreLinkSheet?: ScoreLinkSheetUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutTrainingScoreSessionInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -554565,6 +556676,7 @@ export namespace Prisma {
         exam?: ExamUpdateManyWithoutSemesterNestedInput
         scoreLinkSheets?: ScoreLinkSheetUpdateManyWithoutSemesterNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutSemesterNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutSemesterNestedInput
     };
     export type SemesterUncheckedUpdateWithoutTrainingScoreSessionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -554594,6 +556706,7 @@ export namespace Prisma {
         exam?: ExamUncheckedUpdateManyWithoutSemesterNestedInput
         scoreLinkSheets?: ScoreLinkSheetUncheckedUpdateManyWithoutSemesterNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutSemesterNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutSemesterNestedInput
     };
     export type TrainingObjectTypeUpsertWithoutTrainingScoreSessionInput = {
         update: XOR<TrainingObjectTypeUpdateWithoutTrainingScoreSessionInput, TrainingObjectTypeUncheckedUpdateWithoutTrainingScoreSessionInput>
@@ -554633,6 +556746,7 @@ export namespace Prisma {
         survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreLinkSheet?: ScoreLinkSheetUpdateManyWithoutTrainingObjectTypeNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutTrainingScoreSessionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -554663,6 +556777,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreLinkSheet?: ScoreLinkSheetUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type StudentTrainingScoreUpsertWithWhereUniqueWithoutTrainingScoreSessionInput = {
         where: StudentTrainingScoreWhereUniqueInput
@@ -555079,6 +557194,7 @@ export namespace Prisma {
         survey?: SurveyCreateNestedManyWithoutSemesterInput
         exam?: ExamCreateNestedManyWithoutSemesterInput
         scoreLinkSheets?: ScoreLinkSheetCreateNestedManyWithoutSemesterInput
+        availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutSemesterInput
     };
     export type SemesterUncheckedCreateWithoutSemesterTrainingScoreInput = {
         id?: string
@@ -555108,6 +557224,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedCreateNestedManyWithoutSemesterInput
         exam?: ExamUncheckedCreateNestedManyWithoutSemesterInput
         scoreLinkSheets?: ScoreLinkSheetUncheckedCreateNestedManyWithoutSemesterInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutSemesterInput
     };
     export type SemesterCreateOrConnectWithoutSemesterTrainingScoreInput = {
         where: SemesterWhereUniqueInput
@@ -555300,6 +557417,7 @@ export namespace Prisma {
         survey?: SurveyUpdateManyWithoutSemesterNestedInput
         exam?: ExamUpdateManyWithoutSemesterNestedInput
         scoreLinkSheets?: ScoreLinkSheetUpdateManyWithoutSemesterNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutSemesterNestedInput
     };
     export type SemesterUncheckedUpdateWithoutSemesterTrainingScoreInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -555329,6 +557447,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedUpdateManyWithoutSemesterNestedInput
         exam?: ExamUncheckedUpdateManyWithoutSemesterNestedInput
         scoreLinkSheets?: ScoreLinkSheetUncheckedUpdateManyWithoutSemesterNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutSemesterNestedInput
     };
     export type StudentUpsertWithoutSemesterTrainingScoreInput = {
         update: XOR<StudentUpdateWithoutSemesterTrainingScoreInput, StudentUncheckedUpdateWithoutSemesterTrainingScoreInput>
@@ -560523,6 +562642,7 @@ export namespace Prisma {
         survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
         scoreCorrectionTicket?: ScoreCorrectionTicketCreateNestedManyWithoutTrainingObjectTypeInput
         scoreLinkSheet?: ScoreLinkSheetCreateNestedManyWithoutTrainingObjectTypeInput
+        availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutThesisSessionInput = {
         id?: string
@@ -560553,6 +562673,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         scoreLinkSheet?: ScoreLinkSheetUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutThesisSessionInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -560828,6 +562949,7 @@ export namespace Prisma {
         survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreLinkSheet?: ScoreLinkSheetUpdateManyWithoutTrainingObjectTypeNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutThesisSessionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -560858,6 +562980,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreLinkSheet?: ScoreLinkSheetUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingCourseUpsertWithoutThesisSessionInput = {
         update: XOR<TrainingCourseUpdateWithoutThesisSessionInput, TrainingCourseUncheckedUpdateWithoutThesisSessionInput>
@@ -571613,6 +573736,7 @@ export namespace Prisma {
         survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
         scoreCorrectionTicket?: ScoreCorrectionTicketCreateNestedManyWithoutTrainingObjectTypeInput
         scoreLinkSheet?: ScoreLinkSheetCreateNestedManyWithoutTrainingObjectTypeInput
+        availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutSurveyObjectTypeInput = {
         id?: string
@@ -571643,6 +573767,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         scoreLinkSheet?: ScoreLinkSheetUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutSurveyObjectTypeInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -571832,6 +573957,7 @@ export namespace Prisma {
         survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreLinkSheet?: ScoreLinkSheetUpdateManyWithoutTrainingObjectTypeNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutSurveyObjectTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -571862,6 +573988,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreLinkSheet?: ScoreLinkSheetUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type ClusterSurveyCreateWithoutSurveyTopicInput = {
         id?: string
@@ -572831,6 +574958,7 @@ export namespace Prisma {
         exam?: ExamCreateNestedManyWithoutSemesterInput
         scoreLinkSheets?: ScoreLinkSheetCreateNestedManyWithoutSemesterInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutSemesterInput
+        availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutSemesterInput
     };
     export type SemesterUncheckedCreateWithoutSurveyInput = {
         id?: string
@@ -572860,6 +574988,7 @@ export namespace Prisma {
         exam?: ExamUncheckedCreateNestedManyWithoutSemesterInput
         scoreLinkSheets?: ScoreLinkSheetUncheckedCreateNestedManyWithoutSemesterInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutSemesterInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutSemesterInput
     };
     export type SemesterCreateOrConnectWithoutSurveyInput = {
         where: SemesterWhereUniqueInput
@@ -572926,6 +575055,7 @@ export namespace Prisma {
         surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
         scoreCorrectionTicket?: ScoreCorrectionTicketCreateNestedManyWithoutTrainingObjectTypeInput
         scoreLinkSheet?: ScoreLinkSheetCreateNestedManyWithoutTrainingObjectTypeInput
+        availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutSurveyInput = {
         id?: string
@@ -572956,6 +575086,7 @@ export namespace Prisma {
         surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         scoreLinkSheet?: ScoreLinkSheetUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutSurveyInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -573361,6 +575492,7 @@ export namespace Prisma {
         exam?: ExamUpdateManyWithoutSemesterNestedInput
         scoreLinkSheets?: ScoreLinkSheetUpdateManyWithoutSemesterNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutSemesterNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutSemesterNestedInput
     };
     export type SemesterUncheckedUpdateWithoutSurveyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -573390,6 +575522,7 @@ export namespace Prisma {
         exam?: ExamUncheckedUpdateManyWithoutSemesterNestedInput
         scoreLinkSheets?: ScoreLinkSheetUncheckedUpdateManyWithoutSemesterNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutSemesterNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutSemesterNestedInput
     };
     export type SurveyTopicUpsertWithoutSurveyInput = {
         update: XOR<SurveyTopicUpdateWithoutSurveyInput, SurveyTopicUncheckedUpdateWithoutSurveyInput>
@@ -573466,6 +575599,7 @@ export namespace Prisma {
         surveyObjectType?: SurveyObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreLinkSheet?: ScoreLinkSheetUpdateManyWithoutTrainingObjectTypeNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutSurveyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -573496,6 +575630,7 @@ export namespace Prisma {
         surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreLinkSheet?: ScoreLinkSheetUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type SurveyChoiceUpsertWithWhereUniqueWithoutSurveyInput = {
         where: SurveyChoiceWhereUniqueInput
@@ -576795,6 +578930,7 @@ export namespace Prisma {
         survey?: SurveyCreateNestedManyWithoutSemesterInput
         scoreLinkSheets?: ScoreLinkSheetCreateNestedManyWithoutSemesterInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutSemesterInput
+        availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutSemesterInput
     };
     export type SemesterUncheckedCreateWithoutExamInput = {
         id?: string
@@ -576824,6 +578960,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedCreateNestedManyWithoutSemesterInput
         scoreLinkSheets?: ScoreLinkSheetUncheckedCreateNestedManyWithoutSemesterInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutSemesterInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutSemesterInput
     };
     export type SemesterCreateOrConnectWithoutExamInput = {
         where: SemesterWhereUniqueInput
@@ -577183,6 +579320,7 @@ export namespace Prisma {
         survey?: SurveyUpdateManyWithoutSemesterNestedInput
         scoreLinkSheets?: ScoreLinkSheetUpdateManyWithoutSemesterNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutSemesterNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutSemesterNestedInput
     };
     export type SemesterUncheckedUpdateWithoutExamInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -577212,6 +579350,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedUpdateManyWithoutSemesterNestedInput
         scoreLinkSheets?: ScoreLinkSheetUncheckedUpdateManyWithoutSemesterNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutSemesterNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutSemesterNestedInput
     };
     export type SubjectClassUpsertWithWhereUniqueWithoutExamInput = {
         where: SubjectClassWhereUniqueInput
@@ -582624,6 +584763,7 @@ export namespace Prisma {
         exam?: ExamCreateNestedManyWithoutSemesterInput
         scoreLinkSheets?: ScoreLinkSheetCreateNestedManyWithoutSemesterInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutSemesterInput
+        availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutSemesterInput
     };
     export type SemesterUncheckedCreateWithoutScholarshipAwardInput = {
         id?: string
@@ -582653,6 +584793,7 @@ export namespace Prisma {
         exam?: ExamUncheckedCreateNestedManyWithoutSemesterInput
         scoreLinkSheets?: ScoreLinkSheetUncheckedCreateNestedManyWithoutSemesterInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutSemesterInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutSemesterInput
     };
     export type SemesterCreateOrConnectWithoutScholarshipAwardInput = {
         where: SemesterWhereUniqueInput
@@ -582890,6 +585031,7 @@ export namespace Prisma {
         exam?: ExamUpdateManyWithoutSemesterNestedInput
         scoreLinkSheets?: ScoreLinkSheetUpdateManyWithoutSemesterNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutSemesterNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutSemesterNestedInput
     };
     export type SemesterUncheckedUpdateWithoutScholarshipAwardInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -582919,6 +585061,7 @@ export namespace Prisma {
         exam?: ExamUncheckedUpdateManyWithoutSemesterNestedInput
         scoreLinkSheets?: ScoreLinkSheetUncheckedUpdateManyWithoutSemesterNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutSemesterNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutSemesterNestedInput
     };
     export type ScholarshipUpsertWithoutAwardsInput = {
         update: XOR<ScholarshipUpdateWithoutAwardsInput, ScholarshipUncheckedUpdateWithoutAwardsInput>
@@ -582994,6 +585137,7 @@ export namespace Prisma {
         survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
         scoreCorrectionTicket?: ScoreCorrectionTicketCreateNestedManyWithoutTrainingObjectTypeInput
         scoreLinkSheet?: ScoreLinkSheetCreateNestedManyWithoutTrainingObjectTypeInput
+        availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutGraduationSessionInput = {
         id?: string
@@ -583024,6 +585168,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         scoreLinkSheet?: ScoreLinkSheetUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutGraduationSessionInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -583307,6 +585452,7 @@ export namespace Prisma {
         survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreLinkSheet?: ScoreLinkSheetUpdateManyWithoutTrainingObjectTypeNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutGraduationSessionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -583337,6 +585483,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreLinkSheet?: ScoreLinkSheetUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type StudentGraduationApplicationUpsertWithWhereUniqueWithoutSessionInput = {
         where: StudentGraduationApplicationWhereUniqueInput
@@ -588402,6 +590549,7 @@ export namespace Prisma {
         surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
         survey?: SurveyCreateNestedManyWithoutTrainingObjectTypeInput
         scoreCorrectionTicket?: ScoreCorrectionTicketCreateNestedManyWithoutTrainingObjectTypeInput
+        availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutScoreLinkSheetInput = {
         id?: string
@@ -588432,6 +590580,7 @@ export namespace Prisma {
         surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         survey?: SurveyUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutScoreLinkSheetInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -588521,6 +590670,7 @@ export namespace Prisma {
         survey?: SurveyCreateNestedManyWithoutSemesterInput
         exam?: ExamCreateNestedManyWithoutSemesterInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutSemesterInput
+        availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutSemesterInput
     };
     export type SemesterUncheckedCreateWithoutScoreLinkSheetsInput = {
         id?: string
@@ -588550,6 +590700,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedCreateNestedManyWithoutSemesterInput
         exam?: ExamUncheckedCreateNestedManyWithoutSemesterInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutSemesterInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutSemesterInput
     };
     export type SemesterCreateOrConnectWithoutScoreLinkSheetsInput = {
         where: SemesterWhereUniqueInput
@@ -588707,6 +590858,7 @@ export namespace Prisma {
         surveyObjectType?: SurveyObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
         survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUpdateManyWithoutTrainingObjectTypeNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutScoreLinkSheetInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -588737,6 +590889,7 @@ export namespace Prisma {
         surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type FixedClassUpsertWithoutScoreLinkSheetsInput = {
         update: XOR<FixedClassUpdateWithoutScoreLinkSheetsInput, FixedClassUncheckedUpdateWithoutScoreLinkSheetsInput>
@@ -588836,6 +590989,7 @@ export namespace Prisma {
         survey?: SurveyUpdateManyWithoutSemesterNestedInput
         exam?: ExamUpdateManyWithoutSemesterNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutSemesterNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutSemesterNestedInput
     };
     export type SemesterUncheckedUpdateWithoutScoreLinkSheetsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -588865,6 +591019,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedUpdateManyWithoutSemesterNestedInput
         exam?: ExamUncheckedUpdateManyWithoutSemesterNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutSemesterNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutSemesterNestedInput
     };
     export type ScoreLinkSubjectVersionUpsertWithWhereUniqueWithoutScoreLinkSheetInput = {
         where: ScoreLinkSubjectVersionWhereUniqueInput
@@ -591530,6 +593685,7 @@ export namespace Prisma {
         exam?: ExamCreateNestedManyWithoutSemesterInput
         scoreLinkSheets?: ScoreLinkSheetCreateNestedManyWithoutSemesterInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutSemesterInput
+        availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutSemesterInput
     };
     export type SemesterUncheckedCreateWithoutAcademicWarningInput = {
         id?: string
@@ -591559,6 +593715,7 @@ export namespace Prisma {
         exam?: ExamUncheckedCreateNestedManyWithoutSemesterInput
         scoreLinkSheets?: ScoreLinkSheetUncheckedCreateNestedManyWithoutSemesterInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutSemesterInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutSemesterInput
     };
     export type SemesterCreateOrConnectWithoutAcademicWarningInput = {
         where: SemesterWhereUniqueInput
@@ -591798,6 +593955,7 @@ export namespace Prisma {
         exam?: ExamUpdateManyWithoutSemesterNestedInput
         scoreLinkSheets?: ScoreLinkSheetUpdateManyWithoutSemesterNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutSemesterNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutSemesterNestedInput
     };
     export type SemesterUncheckedUpdateWithoutAcademicWarningInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -591827,6 +593985,7 @@ export namespace Prisma {
         exam?: ExamUncheckedUpdateManyWithoutSemesterNestedInput
         scoreLinkSheets?: ScoreLinkSheetUncheckedUpdateManyWithoutSemesterNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutSemesterNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutSemesterNestedInput
     };
     export type AcademicWarningRuleUpsertWithWhereUniqueWithoutAcademicWarningInput = {
         where: AcademicWarningRuleWhereUniqueInput
@@ -592019,6 +594178,7 @@ export namespace Prisma {
         exam?: ExamCreateNestedManyWithoutSemesterInput
         scoreLinkSheets?: ScoreLinkSheetCreateNestedManyWithoutSemesterInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutSemesterInput
+        availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutSemesterInput
     };
     export type SemesterUncheckedCreateWithoutDisciplinaryWarningInput = {
         id?: string
@@ -592048,6 +594208,7 @@ export namespace Prisma {
         exam?: ExamUncheckedCreateNestedManyWithoutSemesterInput
         scoreLinkSheets?: ScoreLinkSheetUncheckedCreateNestedManyWithoutSemesterInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutSemesterInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutSemesterInput
     };
     export type SemesterCreateOrConnectWithoutDisciplinaryWarningInput = {
         where: SemesterWhereUniqueInput
@@ -592273,6 +594434,7 @@ export namespace Prisma {
         exam?: ExamUpdateManyWithoutSemesterNestedInput
         scoreLinkSheets?: ScoreLinkSheetUpdateManyWithoutSemesterNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutSemesterNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutSemesterNestedInput
     };
     export type SemesterUncheckedUpdateWithoutDisciplinaryWarningInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -592302,6 +594464,7 @@ export namespace Prisma {
         exam?: ExamUncheckedUpdateManyWithoutSemesterNestedInput
         scoreLinkSheets?: ScoreLinkSheetUncheckedUpdateManyWithoutSemesterNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutSemesterNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutSemesterNestedInput
     };
     export type DisciplinaryWarningReasonUpsertWithWhereUniqueWithoutWarningInput = {
         where: DisciplinaryWarningReasonWhereUniqueInput
@@ -624575,6 +626738,7 @@ export namespace Prisma {
         exam?: ExamUpdateManyWithoutSemesterNestedInput
         scoreLinkSheets?: ScoreLinkSheetUpdateManyWithoutSemesterNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutSemesterNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutSemesterNestedInput
     };
     export type SemesterUncheckedUpdateWithoutSchoolYearInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -624604,6 +626768,7 @@ export namespace Prisma {
         exam?: ExamUncheckedUpdateManyWithoutSemesterNestedInput
         scoreLinkSheets?: ScoreLinkSheetUncheckedUpdateManyWithoutSemesterNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutSemesterNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutSemesterNestedInput
     };
     export type SemesterUncheckedUpdateManyWithoutSchoolYearInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -625209,6 +627374,18 @@ export namespace Prisma {
         studentId: string
         score?: number | null
         status?: $Enums.TrainingScoreStatus
+    };
+    export type AvailableTrainingTimeCreateManySemesterInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        duration: number
+        trainingObjectTypeId?: string | null
     };
     export type SubjectClassUpdateWithoutSemesterInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -626163,6 +628340,42 @@ export namespace Prisma {
         studentId?: StringFieldUpdateOperationsInput | string
         score?: NullableIntFieldUpdateOperationsInput | number | null
         status?: EnumTrainingScoreStatusFieldUpdateOperationsInput | $Enums.TrainingScoreStatus
+    };
+    export type AvailableTrainingTimeUpdateWithoutSemesterInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        duration?: FloatFieldUpdateOperationsInput | number
+        trainingObjectType?: TrainingObjectTypeUpdateOneWithoutAvailableTrainingTimeNestedInput
+    };
+    export type AvailableTrainingTimeUncheckedUpdateWithoutSemesterInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        duration?: FloatFieldUpdateOperationsInput | number
+        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type AvailableTrainingTimeUncheckedUpdateManyWithoutSemesterInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        duration?: FloatFieldUpdateOperationsInput | number
+        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type TrainingCourseCreateManyTrainingLanguageInput = {
         id?: string
@@ -633769,6 +635982,18 @@ export namespace Prisma {
         semesterId: string
         status?: $Enums.ScoreLinkStatus
     };
+    export type AvailableTrainingTimeCreateManyTrainingObjectTypeInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        duration: number
+        semesterId?: string | null
+    };
     export type TrainingCourseUpdateWithoutTrainingObjectTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -634972,6 +637197,42 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         status?: EnumScoreLinkStatusFieldUpdateOperationsInput | $Enums.ScoreLinkStatus
     };
+    export type AvailableTrainingTimeUpdateWithoutTrainingObjectTypeInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        duration?: FloatFieldUpdateOperationsInput | number
+        semester?: SemesterUpdateOneWithoutAvailableTrainingTimeNestedInput
+    };
+    export type AvailableTrainingTimeUncheckedUpdateWithoutTrainingObjectTypeInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        duration?: FloatFieldUpdateOperationsInput | number
+        semesterId?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type AvailableTrainingTimeUncheckedUpdateManyWithoutTrainingObjectTypeInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        duration?: FloatFieldUpdateOperationsInput | number
+        semesterId?: NullableStringFieldUpdateOperationsInput | string | null
+    };
     export type StudentUpdateWithoutPriorityObjectInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -635535,6 +637796,7 @@ export namespace Prisma {
         survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreLinkSheet?: ScoreLinkSheetUpdateManyWithoutTrainingObjectTypeNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutTrainingLevelInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -635565,6 +637827,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreLinkSheet?: ScoreLinkSheetUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateManyWithoutTrainingLevelInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -635623,6 +637886,7 @@ export namespace Prisma {
         survey?: SurveyUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreLinkSheet?: ScoreLinkSheetUpdateManyWithoutTrainingObjectTypeNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutTrainingFormInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -635653,6 +637917,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreCorrectionTicket?: ScoreCorrectionTicketUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         scoreLinkSheet?: ScoreLinkSheetUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateManyWithoutTrainingFormInput = {
         id?: StringFieldUpdateOperationsInput | string

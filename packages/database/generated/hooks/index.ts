@@ -129,6 +129,7 @@ export * from './training-major-on-training-object-type';
 export * from './training-block';
 export * from './training-block-on-curriculum-version';
 export * from './training-time';
+export * from './available-training-time';
 export * from './certificate';
 export * from './certificate-on-subject';
 export * from './award';

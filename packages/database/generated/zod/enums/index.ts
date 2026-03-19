@@ -130,6 +130,7 @@ export * from './TrainingMajorOnTrainingObjectTypeScalarFieldEnum.schema';
 export * from './TrainingBlockScalarFieldEnum.schema';
 export * from './TrainingBlockOnCurriculumVersionScalarFieldEnum.schema';
 export * from './TrainingTimeScalarFieldEnum.schema';
+export * from './AvailableTrainingTimeScalarFieldEnum.schema';
 export * from './CertificateScalarFieldEnum.schema';
 export * from './CertificateOnSubjectScalarFieldEnum.schema';
 export * from './AwardScalarFieldEnum.schema';
@@ -404,6 +405,7 @@ export * from './TrainingMajorOnTrainingObjectTypeOrderByRelevanceFieldEnum.sche
 export * from './TrainingBlockOrderByRelevanceFieldEnum.schema';
 export * from './TrainingBlockOnCurriculumVersionOrderByRelevanceFieldEnum.schema';
 export * from './TrainingTimeOrderByRelevanceFieldEnum.schema';
+export * from './AvailableTrainingTimeOrderByRelevanceFieldEnum.schema';
 export * from './CertificateOrderByRelevanceFieldEnum.schema';
 export * from './CertificateOnSubjectOrderByRelevanceFieldEnum.schema';
 export * from './AwardOrderByRelevanceFieldEnum.schema';

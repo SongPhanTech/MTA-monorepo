@@ -392,6 +392,7 @@ model Semester extends Base {
   exam                    Exam[]
   scoreLinkSheets         ScoreLinkSheet[]
   semesterTrainingScore   SemesterTrainingScore[]
+  availableTrainingTime   AvailableTrainingTime[]
 
   @@schema("ql-dao-tao")
 }
