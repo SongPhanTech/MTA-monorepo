@@ -1,6 +1,8 @@
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import { useFindUniqueSubjectClassAttendance,useUpdateSubjectClassAttendance } from '@workspace/db/hooks'
+import { useCreateSubjectClassAttendance,
+useFindManyStudent,
+useFindUniqueSubjectClassAttendance,useUpdateSubjectClassAttendance } from '@workspace/db/hooks'
 import { Col, DatePicker, Form,message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -9,6 +11,7 @@ import { sqlTransaction } from '@workspace/libs/api/model';
 import { useSession } from '@workspace/auth/react';
 export type PutSubjectClassAttendance = {
     time: Date | null
+    list:any[]
 }
 
 const AddSubjectClassAttendance = () => {
@@ -41,8 +44,19 @@ const AddSubjectClassAttendance = () => {
             enabled: !!input?.id,
         }
     )
+
+       const { data: dataListStudent=[] } = useFindManyStudent(
+        {
+            where: { subjectClassStudent: { some: { subjectClassId: input?.subjectClassId } } },
+        },
+        {
+            refetchOnWindowFocus: false,
+            enabled: !!input?.subjectClassId,
+        }
+    )
     const { showSpinner, hideSpinner } = useSpinner()
     const { mutateAsync: updateSubjectClassAttendance } = useUpdateSubjectClassAttendance()
+    const { mutateAsync: createSubjectClassAttendance } = useCreateSubjectClassAttendance()
     async function onOk(output?: PutSubjectClassAttendance) {
         if (!output ||!input?.subjectClassId) return
        
@@ -64,29 +78,42 @@ const AddSubjectClassAttendance = () => {
                     return
                 }
             }else {
-                 if(!initialValue?.subjectClass?.subjectClassStudent||(initialValue?.subjectClass?.subjectClassStudent&&initialValue?.subjectClass?.subjectClassStudent?.length<=0)){
-                    message.error('Chưa có học viên')
-                    return
-                }
-                let listTransaction:any=[]
-                initialValue?.subjectClass?.subjectClassStudent?.forEach((item)=>{
-                    listTransaction.push({
-                        model: 'subjectClassAttendanceStudent',
-                        operation: 'create',
-                        data:{
-                            data:{
-                                time: output.time ? output.time : new Date(),
-                                subjectClassId:input?.subjectClassId,
-                                studentId:item.studentId,
-                                profileId:id
-                            }
-                        }
-                    })
+                let res= await createSubjectClassAttendance({
+                    data: {
+                        time: output.time ? output.time : new Date(),
+                        subjectClassId: input?.subjectClassId,
+                         profileId:id,
+                         subjectClassAttendanceStudent: dataListStudent?.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: dataListStudent.map((opt, index) => ({
+                                                  studentId: opt.id,
+                                                  attendanceStatus:true
+                                              })),
+                                          },
+                                      }
+                                    : undefined,
+
+                    },
                 })
-                let res= await sqlTransaction(listTransaction)
+                // initialValue?.subjectClass?.subjectClassStudent?.forEach((item)=>{
+                //     listTransaction.push({
+                //         model: 'subjectClassAttendanceStudent',
+                //         operation: 'create',
+                //         data:{
+                //             data:{
+                //                 time: output.time ? output.time : new Date(),
+                //                 subjectClassId:input?.subjectClassId,
+                //                 studentId:item.studentId,
+                //                 profileId:id
+                //             }
+                //         }
+                //     })
+                // })
+                // let res= await sqlTransaction(listTransaction)
                 
                 if(res){
-                     message.success('Tạo thành công')
+                    message.success('Tạo thành công')
                     onClose()
                     return
                 }
@@ -97,6 +124,7 @@ const AddSubjectClassAttendance = () => {
             hideSpinner()
         }
     }
+
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
