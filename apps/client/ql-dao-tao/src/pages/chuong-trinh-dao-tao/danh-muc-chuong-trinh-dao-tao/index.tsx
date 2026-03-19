@@ -91,7 +91,7 @@ export default function TrainingProgramCatalog() {
     const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([])
     const router = useRouter()
     const { data: me } = useSession()
-    const userProfileId = me?.sDM_NhanVienId || ''
+    const donViId = me?.sDM_DonViId || ''
     const [currentPage, setCurrentPage] = useState(() => getStoredPage())
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>(() => getStoredFilters())
@@ -118,13 +118,7 @@ export default function TrainingProgramCatalog() {
     const where = useMemo(() => {
         const curriculumVersionFilter = {
             ...(!isViewAll && {
-                managementOrganization: {
-                    lecturers: {
-                        some: {
-                            userProfileId,
-                        },
-                    },
-                },
+                organizationId: donViId,
             }),
             ...(filters.name && {
                 name: { contains: filters.name, mode: 'insensitive' as const },
