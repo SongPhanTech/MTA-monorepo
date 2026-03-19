@@ -347,6 +347,7 @@ export default function TrainingProgramSubjects() {
             priority: 'asc',
         },
     })
+    console.log('data table', data)
 
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({
         where: whereOrganization,
@@ -472,6 +473,14 @@ export default function TrainingProgramSubjects() {
                                     'NHAP_EXCEL'
                                 ) && (
                                     <>
+                                        <Button
+                                            href={getMinioUrl('mta/template/MAU-NHAP_CTDT.xlsx')}
+                                            className="text-primary border-primary mr-2"
+                                            disabled={isLocked}
+                                        >
+                                            <Download />
+                                            Xuất file
+                                        </Button>
                                         <Button
                                             href={getMinioUrl('mta/template/MAU-NHAP_CTDT.xlsx')}
                                             className="text-primary border-primary mr-2"
