@@ -3386,13 +3386,13 @@ model SubjectVersionCategory {
 /// @@allow('read', auth() != null)
 model SubjectVersion {
   id                       String                    @id() @default(cuid())
-  code                     String?                   @unique()
   active                   Boolean                   @default(true)
   description              String?                   @db.Text()
   deletedAt                DateTime?
   createdAt                DateTime                  @default(now())
   updatedAt                DateTime                  @default(now()) @updatedAt()
   createdBy                String?                   @default("") @db.Uuid()
+  code                     String
   isLocked                 Boolean                   @default(false)
   name                     String
   codeTkb                  String?

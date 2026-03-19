@@ -500,7 +500,7 @@ export const buildSubjectMapOrThrow = async (
 
     const existingCode = await prisma.subjectVersion.findMany({
         where: {
-            code: { in: uniqueSubject.map((s) => s.code).filter((c): c is string => Boolean(c)) },
+            code: { in: subjects.map((s) => s.code).filter((c): c is string => Boolean(c)) },
         },
     })
 

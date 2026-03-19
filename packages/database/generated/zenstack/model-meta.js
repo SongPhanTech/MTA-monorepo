@@ -10862,11 +10862,6 @@ const metadata = {
                     type: "String",
                     isId: true,
                     attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
                 }, active: {
                     name: "active",
                     type: "Boolean",
@@ -10894,6 +10889,9 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$SubjectVersion$createdBy,
+                }, code: {
+                    name: "code",
+                    type: "String",
                 }, isLocked: {
                     name: "isLocked",
                     type: "Boolean",
@@ -11149,9 +11147,6 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
                 }, trainingObjectTypeId_name_credit_period_managementOrganizationId: {
                     name: "trainingObjectTypeId_name_credit_period_managementOrganizationId",
                     fields: ["trainingObjectTypeId", "name", "credit", "period", "managementOrganizationId"]

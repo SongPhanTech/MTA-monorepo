@@ -156458,13 +156458,13 @@ export namespace Prisma {
 
   export type SubjectVersionMinAggregateOutputType = {
     id: string | null
-    code: string | null
     active: boolean | null
     description: string | null
     deletedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
     createdBy: string | null
+    code: string | null
     isLocked: boolean | null
     name: string | null
     codeTkb: string | null
@@ -156497,13 +156497,13 @@ export namespace Prisma {
 
   export type SubjectVersionMaxAggregateOutputType = {
     id: string | null
-    code: string | null
     active: boolean | null
     description: string | null
     deletedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
     createdBy: string | null
+    code: string | null
     isLocked: boolean | null
     name: string | null
     codeTkb: string | null
@@ -156536,13 +156536,13 @@ export namespace Prisma {
 
   export type SubjectVersionCountAggregateOutputType = {
     id: number
-    code: number
     active: number
     description: number
     deletedAt: number
     createdAt: number
     updatedAt: number
     createdBy: number
+    code: number
     isLocked: number
     name: number
     codeTkb: number
@@ -156605,13 +156605,13 @@ export namespace Prisma {
 
   export type SubjectVersionMinAggregateInputType = {
     id?: true
-    code?: true
     active?: true
     description?: true
     deletedAt?: true
     createdAt?: true
     updatedAt?: true
     createdBy?: true
+    code?: true
     isLocked?: true
     name?: true
     codeTkb?: true
@@ -156644,13 +156644,13 @@ export namespace Prisma {
 
   export type SubjectVersionMaxAggregateInputType = {
     id?: true
-    code?: true
     active?: true
     description?: true
     deletedAt?: true
     createdAt?: true
     updatedAt?: true
     createdBy?: true
+    code?: true
     isLocked?: true
     name?: true
     codeTkb?: true
@@ -156683,13 +156683,13 @@ export namespace Prisma {
 
   export type SubjectVersionCountAggregateInputType = {
     id?: true
-    code?: true
     active?: true
     description?: true
     deletedAt?: true
     createdAt?: true
     updatedAt?: true
     createdBy?: true
+    code?: true
     isLocked?: true
     name?: true
     codeTkb?: true
@@ -156809,13 +156809,13 @@ export namespace Prisma {
 
   export type SubjectVersionGroupByOutputType = {
     id: string
-    code: string | null
     active: boolean
     description: string | null
     deletedAt: Date | null
     createdAt: Date
     updatedAt: Date
     createdBy: string | null
+    code: string
     isLocked: boolean
     name: string
     codeTkb: string | null
@@ -156867,13 +156867,13 @@ export namespace Prisma {
 
   export type SubjectVersionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    code?: boolean
     active?: boolean
     description?: boolean
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     createdBy?: boolean
+    code?: boolean
     isLocked?: boolean
     name?: boolean
     codeTkb?: boolean
@@ -156927,13 +156927,13 @@ export namespace Prisma {
 
   export type SubjectVersionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    code?: boolean
     active?: boolean
     description?: boolean
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     createdBy?: boolean
+    code?: boolean
     isLocked?: boolean
     name?: boolean
     codeTkb?: boolean
@@ -156970,13 +156970,13 @@ export namespace Prisma {
 
   export type SubjectVersionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    code?: boolean
     active?: boolean
     description?: boolean
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     createdBy?: boolean
+    code?: boolean
     isLocked?: boolean
     name?: boolean
     codeTkb?: boolean
@@ -157013,13 +157013,13 @@ export namespace Prisma {
 
   export type SubjectVersionSelectScalar = {
     id?: boolean
-    code?: boolean
     active?: boolean
     description?: boolean
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     createdBy?: boolean
+    code?: boolean
     isLocked?: boolean
     name?: boolean
     codeTkb?: boolean
@@ -157050,7 +157050,7 @@ export namespace Prisma {
     subjectVersionCategoryId?: boolean
   }
 
-  export type SubjectVersionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "isLocked" | "name" | "codeTkb" | "examType" | "type" | "onePoint" | "credit" | "week" | "period" | "schedulePeriod" | "numberOfTheory" | "numberOfPractical" | "numberOfSelfStudy" | "numberOfPractice" | "numberOfReview" | "numberOfExam" | "numberOfOther" | "objectives" | "learningOutcome" | "structure" | "guild" | "academicResults" | "materials" | "rules" | "managementOrganizationId" | "subjectId" | "trainingObjectTypeId" | "subjectVersionCategoryId", ExtArgs["result"]["subjectVersion"]>
+  export type SubjectVersionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "code" | "isLocked" | "name" | "codeTkb" | "examType" | "type" | "onePoint" | "credit" | "week" | "period" | "schedulePeriod" | "numberOfTheory" | "numberOfPractical" | "numberOfSelfStudy" | "numberOfPractice" | "numberOfReview" | "numberOfExam" | "numberOfOther" | "objectives" | "learningOutcome" | "structure" | "guild" | "academicResults" | "materials" | "rules" | "managementOrganizationId" | "subjectId" | "trainingObjectTypeId" | "subjectVersionCategoryId", ExtArgs["result"]["subjectVersion"]>
   export type SubjectVersionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     managementOrganization?: boolean | SubjectVersion$managementOrganizationArgs<ExtArgs>
     subject?: boolean | SubjectDefaultArgs<ExtArgs>
@@ -157119,13 +157119,13 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      code: string | null
       active: boolean
       description: string | null
       deletedAt: Date | null
       createdAt: Date
       updatedAt: Date
       createdBy: string | null
+      code: string
       isLocked: boolean
       name: string
       codeTkb: string | null
@@ -157610,13 +157610,13 @@ export namespace Prisma {
    */
   interface SubjectVersionFieldRefs {
     readonly id: FieldRef<"SubjectVersion", 'String'>
-    readonly code: FieldRef<"SubjectVersion", 'String'>
     readonly active: FieldRef<"SubjectVersion", 'Boolean'>
     readonly description: FieldRef<"SubjectVersion", 'String'>
     readonly deletedAt: FieldRef<"SubjectVersion", 'DateTime'>
     readonly createdAt: FieldRef<"SubjectVersion", 'DateTime'>
     readonly updatedAt: FieldRef<"SubjectVersion", 'DateTime'>
     readonly createdBy: FieldRef<"SubjectVersion", 'String'>
+    readonly code: FieldRef<"SubjectVersion", 'String'>
     readonly isLocked: FieldRef<"SubjectVersion", 'Boolean'>
     readonly name: FieldRef<"SubjectVersion", 'String'>
     readonly codeTkb: FieldRef<"SubjectVersion", 'String'>
@@ -377367,13 +377367,13 @@ export namespace Prisma {
 
   export const SubjectVersionScalarFieldEnum: {
     id: 'id',
-    code: 'code',
     active: 'active',
     description: 'description',
     deletedAt: 'deletedAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     createdBy: 'createdBy',
+    code: 'code',
     isLocked: 'isLocked',
     name: 'name',
     codeTkb: 'codeTkb',
@@ -382280,9 +382280,9 @@ export namespace Prisma {
 
   export const SubjectVersionOrderByRelevanceFieldEnum: {
     id: 'id',
-    code: 'code',
     description: 'description',
     createdBy: 'createdBy',
+    code: 'code',
     name: 'name',
     codeTkb: 'codeTkb',
     objectives: 'objectives',
@@ -396915,13 +396915,13 @@ export namespace Prisma {
     OR?: SubjectVersionWhereInput[]
     NOT?: SubjectVersionWhereInput | SubjectVersionWhereInput[]
     id?: StringFilter<"SubjectVersion"> | string
-    code?: StringNullableFilter<"SubjectVersion"> | string | null
     active?: BoolFilter<"SubjectVersion"> | boolean
     description?: StringNullableFilter<"SubjectVersion"> | string | null
     deletedAt?: DateTimeNullableFilter<"SubjectVersion"> | Date | string | null
     createdAt?: DateTimeFilter<"SubjectVersion"> | Date | string
     updatedAt?: DateTimeFilter<"SubjectVersion"> | Date | string
     createdBy?: UuidNullableFilter<"SubjectVersion"> | string | null
+    code?: StringFilter<"SubjectVersion"> | string
     isLocked?: BoolFilter<"SubjectVersion"> | boolean
     name?: StringFilter<"SubjectVersion"> | string
     codeTkb?: StringNullableFilter<"SubjectVersion"> | string | null
@@ -396974,13 +396974,13 @@ export namespace Prisma {
 
   export type SubjectVersionOrderByWithRelationInput = {
     id?: SortOrder
-    code?: SortOrderInput | SortOrder
     active?: SortOrder
     description?: SortOrderInput | SortOrder
     deletedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdBy?: SortOrderInput | SortOrder
+    code?: SortOrder
     isLocked?: SortOrder
     name?: SortOrder
     codeTkb?: SortOrderInput | SortOrder
@@ -397034,7 +397034,6 @@ export namespace Prisma {
 
   export type SubjectVersionWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    code?: string
     trainingObjectTypeId_name_credit_period_managementOrganizationId?: SubjectVersionTrainingObjectTypeIdNameCreditPeriodManagementOrganizationIdCompoundUniqueInput
     AND?: SubjectVersionWhereInput | SubjectVersionWhereInput[]
     OR?: SubjectVersionWhereInput[]
@@ -397045,6 +397044,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"SubjectVersion"> | Date | string
     updatedAt?: DateTimeFilter<"SubjectVersion"> | Date | string
     createdBy?: UuidNullableFilter<"SubjectVersion"> | string | null
+    code?: StringFilter<"SubjectVersion"> | string
     isLocked?: BoolFilter<"SubjectVersion"> | boolean
     name?: StringFilter<"SubjectVersion"> | string
     codeTkb?: StringNullableFilter<"SubjectVersion"> | string | null
@@ -397093,17 +397093,17 @@ export namespace Prisma {
     exams?: ExamListRelationFilter
     examFramework?: ExamFrameworkListRelationFilter
     scoreLinkSubjectVersion?: ScoreLinkSubjectVersionListRelationFilter
-  }, "id" | "code" | "trainingObjectTypeId_name_credit_period_managementOrganizationId">
+  }, "id" | "trainingObjectTypeId_name_credit_period_managementOrganizationId">
 
   export type SubjectVersionOrderByWithAggregationInput = {
     id?: SortOrder
-    code?: SortOrderInput | SortOrder
     active?: SortOrder
     description?: SortOrderInput | SortOrder
     deletedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdBy?: SortOrderInput | SortOrder
+    code?: SortOrder
     isLocked?: SortOrder
     name?: SortOrder
     codeTkb?: SortOrderInput | SortOrder
@@ -397144,13 +397144,13 @@ export namespace Prisma {
     OR?: SubjectVersionScalarWhereWithAggregatesInput[]
     NOT?: SubjectVersionScalarWhereWithAggregatesInput | SubjectVersionScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"SubjectVersion"> | string
-    code?: StringNullableWithAggregatesFilter<"SubjectVersion"> | string | null
     active?: BoolWithAggregatesFilter<"SubjectVersion"> | boolean
     description?: StringNullableWithAggregatesFilter<"SubjectVersion"> | string | null
     deletedAt?: DateTimeNullableWithAggregatesFilter<"SubjectVersion"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"SubjectVersion"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"SubjectVersion"> | Date | string
     createdBy?: UuidNullableWithAggregatesFilter<"SubjectVersion"> | string | null
+    code?: StringWithAggregatesFilter<"SubjectVersion"> | string
     isLocked?: BoolWithAggregatesFilter<"SubjectVersion"> | boolean
     name?: StringWithAggregatesFilter<"SubjectVersion"> | string
     codeTkb?: StringNullableWithAggregatesFilter<"SubjectVersion"> | string | null
@@ -428809,13 +428809,13 @@ export namespace Prisma {
 
   export type SubjectVersionCreateInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -428864,13 +428864,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedCreateInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -428919,13 +428919,13 @@ export namespace Prisma {
 
   export type SubjectVersionUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -428974,13 +428974,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -429029,13 +429029,13 @@ export namespace Prisma {
 
   export type SubjectVersionCreateManyInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -429068,13 +429068,13 @@ export namespace Prisma {
 
   export type SubjectVersionUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -429103,13 +429103,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -458762,13 +458762,13 @@ export namespace Prisma {
 
   export type SubjectVersionCountOrderByAggregateInput = {
     id?: SortOrder
-    code?: SortOrder
     active?: SortOrder
     description?: SortOrder
     deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdBy?: SortOrder
+    code?: SortOrder
     isLocked?: SortOrder
     name?: SortOrder
     codeTkb?: SortOrder
@@ -458815,13 +458815,13 @@ export namespace Prisma {
 
   export type SubjectVersionMaxOrderByAggregateInput = {
     id?: SortOrder
-    code?: SortOrder
     active?: SortOrder
     description?: SortOrder
     deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdBy?: SortOrder
+    code?: SortOrder
     isLocked?: SortOrder
     name?: SortOrder
     codeTkb?: SortOrder
@@ -458854,13 +458854,13 @@ export namespace Prisma {
 
   export type SubjectVersionMinOrderByAggregateInput = {
     id?: SortOrder
-    code?: SortOrder
     active?: SortOrder
     description?: SortOrder
     deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdBy?: SortOrder
+    code?: SortOrder
     isLocked?: SortOrder
     name?: SortOrder
     codeTkb?: SortOrder
@@ -539715,13 +539715,13 @@ export namespace Prisma {
 
   export type SubjectVersionCreateWithoutManagementOrganizationInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -539769,13 +539769,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedCreateWithoutManagementOrganizationInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -540543,13 +540543,13 @@ export namespace Prisma {
     OR?: SubjectVersionScalarWhereInput[]
     NOT?: SubjectVersionScalarWhereInput | SubjectVersionScalarWhereInput[]
     id?: StringFilter<"SubjectVersion"> | string
-    code?: StringNullableFilter<"SubjectVersion"> | string | null
     active?: BoolFilter<"SubjectVersion"> | boolean
     description?: StringNullableFilter<"SubjectVersion"> | string | null
     deletedAt?: DateTimeNullableFilter<"SubjectVersion"> | Date | string | null
     createdAt?: DateTimeFilter<"SubjectVersion"> | Date | string
     updatedAt?: DateTimeFilter<"SubjectVersion"> | Date | string
     createdBy?: UuidNullableFilter<"SubjectVersion"> | string | null
+    code?: StringFilter<"SubjectVersion"> | string
     isLocked?: BoolFilter<"SubjectVersion"> | boolean
     name?: StringFilter<"SubjectVersion"> | string
     codeTkb?: StringNullableFilter<"SubjectVersion"> | string | null
@@ -551596,13 +551596,13 @@ export namespace Prisma {
 
   export type SubjectVersionCreateWithoutSubjectScoreConvertInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -551650,13 +551650,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedCreateWithoutSubjectScoreConvertInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -551757,13 +551757,13 @@ export namespace Prisma {
 
   export type SubjectVersionUpdateWithoutSubjectScoreConvertInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -551811,13 +551811,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedUpdateWithoutSubjectScoreConvertInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -551984,13 +551984,13 @@ export namespace Prisma {
 
   export type SubjectVersionCreateWithoutStudentSubjectScoreInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -552038,13 +552038,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedCreateWithoutStudentSubjectScoreInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -552915,13 +552915,13 @@ export namespace Prisma {
 
   export type SubjectVersionUpdateWithoutStudentSubjectScoreInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -552969,13 +552969,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedUpdateWithoutStudentSubjectScoreInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -565673,13 +565673,13 @@ export namespace Prisma {
 
   export type SubjectVersionCreateWithoutSubjectInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -565727,13 +565727,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedCreateWithoutSubjectInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -566037,13 +566037,13 @@ export namespace Prisma {
 
   export type SubjectVersionCreateWithoutSubjectVersionCategoryInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -566091,13 +566091,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedCreateWithoutSubjectVersionCategoryInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -566437,13 +566437,13 @@ export namespace Prisma {
 
   export type SubjectVersionCreateWithoutDependentSubjectInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -566491,13 +566491,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedCreateWithoutDependentSubjectInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -566550,13 +566550,13 @@ export namespace Prisma {
 
   export type SubjectVersionCreateWithoutPrerequisiteSubjectInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -566604,13 +566604,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedCreateWithoutPrerequisiteSubjectInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -566663,13 +566663,13 @@ export namespace Prisma {
 
   export type SubjectVersionCreateWithoutDepCoRequisiteSubjectInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -566717,13 +566717,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedCreateWithoutDepCoRequisiteSubjectInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -566776,13 +566776,13 @@ export namespace Prisma {
 
   export type SubjectVersionCreateWithoutCoRequisiteSubjectInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -566830,13 +566830,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedCreateWithoutCoRequisiteSubjectInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -568137,13 +568137,13 @@ export namespace Prisma {
 
   export type SubjectVersionCreateWithoutSubjectVersionHistoryInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -568191,13 +568191,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedCreateWithoutSubjectVersionHistoryInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -568614,13 +568614,13 @@ export namespace Prisma {
 
   export type SubjectVersionUpdateWithoutSubjectVersionHistoryInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -568668,13 +568668,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedUpdateWithoutSubjectVersionHistoryInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -569133,13 +569133,13 @@ export namespace Prisma {
 
   export type SubjectVersionCreateWithoutEquivalencyGroupsInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -569187,13 +569187,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedCreateWithoutEquivalencyGroupsInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -569284,13 +569284,13 @@ export namespace Prisma {
 
   export type SubjectVersionUpdateWithoutEquivalencyGroupsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -569338,13 +569338,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedUpdateWithoutEquivalencyGroupsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -569425,13 +569425,13 @@ export namespace Prisma {
 
   export type SubjectVersionCreateWithoutTrainingBlocksInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -569479,13 +569479,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedCreateWithoutTrainingBlocksInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -569622,13 +569622,13 @@ export namespace Prisma {
 
   export type SubjectVersionUpdateWithoutTrainingBlocksInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -569676,13 +569676,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedUpdateWithoutTrainingBlocksInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -570949,13 +570949,13 @@ export namespace Prisma {
 
   export type SubjectVersionCreateWithoutSubjectClassInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -571003,13 +571003,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedCreateWithoutSubjectClassInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -572368,13 +572368,13 @@ export namespace Prisma {
 
   export type SubjectVersionUpdateWithoutSubjectClassInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -572422,13 +572422,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedUpdateWithoutSubjectClassInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -578335,13 +578335,13 @@ export namespace Prisma {
 
   export type SubjectVersionCreateWithoutTrainingObjectTypeInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -578389,13 +578389,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedCreateWithoutTrainingObjectTypeInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -591137,13 +591137,13 @@ export namespace Prisma {
 
   export type SubjectVersionCreateWithoutDocumentFilesInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -591191,13 +591191,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedCreateWithoutDocumentFilesInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -592411,13 +592411,13 @@ export namespace Prisma {
 
   export type SubjectVersionUpdateWithoutDocumentFilesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -592465,13 +592465,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedUpdateWithoutDocumentFilesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -617334,13 +617334,13 @@ export namespace Prisma {
 
   export type SubjectVersionCreateWithoutQuestionBanksInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -617388,13 +617388,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedCreateWithoutQuestionBanksInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -617512,13 +617512,13 @@ export namespace Prisma {
 
   export type SubjectVersionUpdateWithoutQuestionBanksInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -617566,13 +617566,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedUpdateWithoutQuestionBanksInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -618397,13 +618397,13 @@ export namespace Prisma {
 
   export type SubjectVersionCreateWithoutExamsInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -618451,13 +618451,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedCreateWithoutExamsInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -618800,13 +618800,13 @@ export namespace Prisma {
 
   export type SubjectVersionUpdateWithoutExamsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -618854,13 +618854,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedUpdateWithoutExamsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -620654,13 +620654,13 @@ export namespace Prisma {
 
   export type SubjectVersionCreateWithoutExamFrameworkInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -620708,13 +620708,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedCreateWithoutExamFrameworkInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -620902,13 +620902,13 @@ export namespace Prisma {
 
   export type SubjectVersionUpdateWithoutExamFrameworkInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -620956,13 +620956,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedUpdateWithoutExamFrameworkInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -621474,13 +621474,13 @@ export namespace Prisma {
 
   export type SubjectVersionCreateWithoutKnowledgeBlocksInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -621528,13 +621528,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedCreateWithoutKnowledgeBlocksInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -621706,13 +621706,13 @@ export namespace Prisma {
 
   export type SubjectVersionUpdateWithoutKnowledgeBlocksInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -621760,13 +621760,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedUpdateWithoutKnowledgeBlocksInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -631357,13 +631357,13 @@ export namespace Prisma {
 
   export type SubjectVersionCreateWithoutScoreLinkSubjectVersionInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -631411,13 +631411,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedCreateWithoutScoreLinkSubjectVersionInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -631683,13 +631683,13 @@ export namespace Prisma {
 
   export type SubjectVersionUpdateWithoutScoreLinkSubjectVersionInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -631737,13 +631737,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedUpdateWithoutScoreLinkSubjectVersionInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -650435,13 +650435,13 @@ export namespace Prisma {
 
   export type SubjectVersionCreateManyManagementOrganizationInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -651002,13 +651002,13 @@ export namespace Prisma {
 
   export type SubjectVersionUpdateWithoutManagementOrganizationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -651056,13 +651056,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedUpdateWithoutManagementOrganizationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -651110,13 +651110,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedUpdateManyWithoutManagementOrganizationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -672904,13 +672904,13 @@ export namespace Prisma {
 
   export type SubjectVersionCreateManySubjectInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -672955,13 +672955,13 @@ export namespace Prisma {
 
   export type SubjectVersionUpdateWithoutSubjectInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -673009,13 +673009,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedUpdateWithoutSubjectInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -673063,13 +673063,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedUpdateManyWithoutSubjectInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -673184,13 +673184,13 @@ export namespace Prisma {
 
   export type SubjectVersionCreateManySubjectVersionCategoryInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -673222,13 +673222,13 @@ export namespace Prisma {
 
   export type SubjectVersionUpdateWithoutSubjectVersionCategoryInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -673276,13 +673276,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedUpdateWithoutSubjectVersionCategoryInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -673330,13 +673330,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedUpdateManyWithoutSubjectVersionCategoryInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -673650,13 +673650,13 @@ export namespace Prisma {
 
   export type SubjectVersionUpdateWithoutDependentSubjectInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -673704,13 +673704,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedUpdateWithoutDependentSubjectInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -673758,13 +673758,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedUpdateManyWithoutDependentSubjectInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -673797,13 +673797,13 @@ export namespace Prisma {
 
   export type SubjectVersionUpdateWithoutPrerequisiteSubjectInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -673851,13 +673851,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedUpdateWithoutPrerequisiteSubjectInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -673905,13 +673905,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedUpdateManyWithoutPrerequisiteSubjectInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -673944,13 +673944,13 @@ export namespace Prisma {
 
   export type SubjectVersionUpdateWithoutDepCoRequisiteSubjectInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -673998,13 +673998,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedUpdateWithoutDepCoRequisiteSubjectInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -674052,13 +674052,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedUpdateManyWithoutDepCoRequisiteSubjectInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -674091,13 +674091,13 @@ export namespace Prisma {
 
   export type SubjectVersionUpdateWithoutCoRequisiteSubjectInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -674145,13 +674145,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedUpdateWithoutCoRequisiteSubjectInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -674199,13 +674199,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedUpdateManyWithoutCoRequisiteSubjectInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -677334,13 +677334,13 @@ export namespace Prisma {
 
   export type SubjectVersionCreateManyTrainingObjectTypeInput = {
     id?: string
-    code?: string | null
     active?: boolean
     description?: string | null
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    code: string
     isLocked?: boolean
     name: string
     codeTkb?: string | null
@@ -678207,13 +678207,13 @@ export namespace Prisma {
 
   export type SubjectVersionUpdateWithoutTrainingObjectTypeInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -678261,13 +678261,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedUpdateWithoutTrainingObjectTypeInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
@@ -678315,13 +678315,13 @@ export namespace Prisma {
 
   export type SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeInput = {
     id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
