@@ -156,6 +156,7 @@ export default function NhapDiemPhach() {
                                 convertTo: 'pdf',
                             })
                         }}
+                        className="mr-2"
                     >
                         <Printer />
                         In phiếu điểm kèm phách

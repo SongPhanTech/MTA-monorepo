@@ -24,8 +24,8 @@ export default function DetailSurveyPage() {
     const [filters, setFilters] = useState<FilterProps>({
         code: '',
         name: '',
-        // subjectClassName: '',
-        // lecturerName: '',
+        subjectClassName: '',
+        lecturerName: '',
     })
     // const where = useMemo(
     //     () => ({
@@ -96,6 +96,8 @@ export default function DetailSurveyPage() {
         limit: numberOfPages,
         name: filters.name,
         code: filters.code,
+        subjectClassName: filters.subjectClassName,
+        lecturerName: filters.lecturerName,
         semesterId,
     })
 
@@ -140,7 +142,7 @@ export default function DetailSurveyPage() {
                         },
                         {
                             title: 'Đối tượng được khảo sát',
-                            dataIndex: 'name',
+                            dataIndex: 'lecturerName',
                             type: 'input',
                             render: (__, record) => {
                                 return record?.lecture
@@ -150,7 +152,7 @@ export default function DetailSurveyPage() {
                         },
                         {
                             title: 'Lớp môn học',
-                            dataIndex: 'name',
+                            dataIndex: 'subjectClassName',
                             type: 'input',
                             render: (__, record) => {
                                 return record?.lecture ? (

@@ -1922,13 +1922,13 @@ exports.Prisma.SubjectVersionCategoryScalarFieldEnum = {
 
 exports.Prisma.SubjectVersionScalarFieldEnum = {
   id: 'id',
-  code: 'code',
   active: 'active',
   description: 'description',
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  code: 'code',
   isLocked: 'isLocked',
   name: 'name',
   codeTkb: 'codeTkb',
@@ -2110,6 +2110,34 @@ exports.Prisma.SubjectClassScalarFieldEnum = {
   extraLecturerId: 'extraLecturerId',
   enterGradeLecturerId: 'enterGradeLecturerId',
   scoreLinkSubjectVersionId: 'scoreLinkSubjectVersionId'
+};
+
+exports.Prisma.SubjectClassAttendanceScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  time: 'time',
+  subjectClassId: 'subjectClassId',
+  profileId: 'profileId'
+};
+
+exports.Prisma.SubjectClassAttendanceStudentScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  subjectClassAttendanceId: 'subjectClassAttendanceId',
+  studentId: 'studentId',
+  attendanceStatus: 'attendanceStatus'
 };
 
 exports.Prisma.SubjectClassHistoryScalarFieldEnum = {
@@ -2424,6 +2452,20 @@ exports.Prisma.TrainingTimeScalarFieldEnum = {
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
   name: 'name'
+};
+
+exports.Prisma.AvailableTrainingTimeScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  duration: 'duration',
+  trainingObjectTypeId: 'trainingObjectTypeId',
+  semesterId: 'semesterId'
 };
 
 exports.Prisma.CertificateScalarFieldEnum = {
@@ -5985,9 +6027,9 @@ exports.Prisma.SubjectVersionCategoryOrderByRelevanceFieldEnum = {
 
 exports.Prisma.SubjectVersionOrderByRelevanceFieldEnum = {
   id: 'id',
-  code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  code: 'code',
   name: 'name',
   codeTkb: 'codeTkb',
   objectives: 'objectives',
@@ -6083,6 +6125,24 @@ exports.Prisma.SubjectClassOrderByRelevanceFieldEnum = {
   extraLecturerId: 'extraLecturerId',
   enterGradeLecturerId: 'enterGradeLecturerId',
   scoreLinkSubjectVersionId: 'scoreLinkSubjectVersionId'
+};
+
+exports.Prisma.SubjectClassAttendanceOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  subjectClassId: 'subjectClassId',
+  profileId: 'profileId'
+};
+
+exports.Prisma.SubjectClassAttendanceStudentOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  subjectClassAttendanceId: 'subjectClassAttendanceId',
+  studentId: 'studentId'
 };
 
 exports.Prisma.SubjectClassHistoryOrderByRelevanceFieldEnum = {
@@ -6275,6 +6335,15 @@ exports.Prisma.TrainingTimeOrderByRelevanceFieldEnum = {
   description: 'description',
   createdBy: 'createdBy',
   name: 'name'
+};
+
+exports.Prisma.AvailableTrainingTimeOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  trainingObjectTypeId: 'trainingObjectTypeId',
+  semesterId: 'semesterId'
 };
 
 exports.Prisma.CertificateOrderByRelevanceFieldEnum = {
@@ -8290,6 +8359,8 @@ exports.Prisma.ModelName = {
   ClassRegisterSession: 'ClassRegisterSession',
   ClassRegisterLogs: 'ClassRegisterLogs',
   SubjectClass: 'SubjectClass',
+  SubjectClassAttendance: 'SubjectClassAttendance',
+  SubjectClassAttendanceStudent: 'SubjectClassAttendanceStudent',
   SubjectClassHistory: 'SubjectClassHistory',
   SubjectClassTime: 'SubjectClassTime',
   ClassSchedule: 'ClassSchedule',
@@ -8310,6 +8381,7 @@ exports.Prisma.ModelName = {
   TrainingBlock: 'TrainingBlock',
   TrainingBlockOnCurriculumVersion: 'TrainingBlockOnCurriculumVersion',
   TrainingTime: 'TrainingTime',
+  AvailableTrainingTime: 'AvailableTrainingTime',
   Certificate: 'Certificate',
   CertificateOnSubject: 'CertificateOnSubject',
   Award: 'Award',

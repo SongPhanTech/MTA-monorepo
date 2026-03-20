@@ -118,9 +118,7 @@ export default function GraduationRankingPage() {
         try {
             showSpinner()
             await deleteAcademicRanking({
-                where: {
-                    id,
-                },
+                where: { id },
             })
         } catch (error: any) {
             if (error?.info?.message) {

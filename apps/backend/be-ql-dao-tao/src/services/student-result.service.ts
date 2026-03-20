@@ -394,7 +394,7 @@ const layGiaTriDiem4 = (
     scoreConvert: ScoreConvertItem[]
 ): number => {
     if (!scoreConvert?.length || typeof diemHe10 !== 'number' || Number.isNaN(diemHe10)) {
-        console.error('Invalid inputs:', { diemHe10, scoreConvert })
+        console.error('Lỗi logic: Dữ liệu tính toán điểm không hợp lệ hoặc bảng quy đổi trống');
         return 0
     }
 

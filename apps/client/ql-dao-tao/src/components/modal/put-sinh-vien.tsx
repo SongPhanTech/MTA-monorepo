@@ -342,8 +342,8 @@ const PutStudentModal = () => {
             title={id ? 'Chỉnh sửa sinh viên, học viên' : 'Thêm sinh viên, học viên'}
             className="w-[1000px]"
             layout="vertical"
-            // labelCol={{ span: 8 }} // label chiếm 6 cột (trên 24)
-            // wrapperCol={{ span: 16 }} // input chiếm 18 cột
+        // labelCol={{ span: 8 }} // label chiếm 6 cột (trên 24)
+        // wrapperCol={{ span: 16 }} // input chiếm 18 cột
         >
             <Col span={24}>
                 <Row gutter={16}>
@@ -355,11 +355,11 @@ const PutStudentModal = () => {
                                 options={idCardOptions}
                                 {...(id
                                     ? {
-                                          showSearch: false,
-                                          allowClear: false,
-                                          showArrow: false,
-                                          open: false,
-                                      }
+                                        showSearch: false,
+                                        allowClear: false,
+                                        showArrow: false,
+                                        open: false,
+                                    }
                                     : {})}
                             />
                         </FormItem>
@@ -466,6 +466,8 @@ const PutStudentModal = () => {
                         <div className="h-full flex items-end pt-2">
                             <Button
                                 className="mt-auto"
+                                type="link"
+                                rel="noopener noreferrer"
                                 loading={isPending || !studentData}
                                 target="_blank"
                                 href={`/hrm/${ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO}/${studentData?.userProfileId}`}

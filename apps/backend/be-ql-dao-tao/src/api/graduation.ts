@@ -382,7 +382,7 @@ app.openapi(graduationCheck, async (c) => {
                 scoreBase10 >= scoreToPass
             ) {
                 const entry = subjectScoresMap.get(subjectScore.subjectVersionId)
-                if (entry && (!entry.canImprove || entry.scoreBase10 > scoreBase10)) {
+                if (entry && entry.scoreBase10 >= scoreBase10) {
                     continue
                 }
 
@@ -677,31 +677,33 @@ app.openapi(graduationCheck, async (c) => {
             rankIdx,
             rank,
         ] of student.fixedClass.trainingCourse.academicRankingConvert.entries()) {
-            const isEligible = rank.rankingCondition.every(async (rule) => {
-                const passed = evaluateCondition(studentDataContext, rule)
-                const actualValue = Number(studentDataContext[rule.field])
-                await prisma.applicationCheckResult
-                    .upsert({
-                        where: {
-                            studentGraduationApplicationId_rankingConditionId: {
+            const eligibilityResults = await Promise.all(
+                rank.rankingCondition.map(async (rule) => {
+                    const passed = evaluateCondition(studentDataContext, rule)
+                    const actualValue = Number(studentDataContext[rule.field])
+                    try {
+                        await prisma.applicationCheckResult.upsert({
+                            where: {
+                                studentGraduationApplicationId_rankingConditionId: {
+                                    studentGraduationApplicationId: application.id,
+                                    rankingConditionId: rule.id,
+                                },
+                            },
+                            create: {
                                 studentGraduationApplicationId: application.id,
                                 rankingConditionId: rule.id,
+                                passed,
+                                actualValue,
                             },
-                        },
-                        create: {
-                            studentGraduationApplicationId: application.id,
-                            rankingConditionId: rule.id,
-                            passed,
-                            actualValue,
-                        },
-                        update: { passed, actualValue },
-                    })
-                    .catch((e) => {
+                            update: { passed, actualValue },
+                        })
+                    } catch (e) {
                         console.log(e)
-                    })
-
-                return passed
-            })
+                    }
+                    return passed
+                })
+            )
+            const isEligible = eligibilityResults.every((p) => p)
 
             const isCorrectScore =
                 rank.baseScore === 'Base10'

@@ -590,6 +590,11 @@ export default function NhapDiem({
                 },
                 examDate: true,
                 examType: true,
+                exam: {
+                    select: {
+                        lockExamSessions: true,
+                    },
+                },
             },
         },
         {
@@ -672,7 +677,8 @@ export default function NhapDiem({
             dataDetailSubjectClass?.examScoreDeadline &&
             dayjs().isBefore(dataDetailSubjectClass?.examScoreDeadline) &&
             !dataDetailSubjectClass?.isLockExamScore &&
-            !dataDetailSubjectClass?.scoreSubmitted
+            !dataDetailSubjectClass?.scoreSubmitted &&
+            dataDetailSubjectClass?.exam?.lockExamSessions
         )
     }, [dataDetailSubjectClass, can, score])
 
@@ -803,20 +809,37 @@ export default function NhapDiem({
 
     return (
         <Row gutter={[8, 8]}>
-            <Col span={8}>
+            <Col span={8} className="flex items-center gap-1">
                 {score === 'TX/ĐK' && (
-                    <Tag color={enteredScore ? 'green' : 'yellow'}>
+                    <Tag
+                        color={enteredScore ? 'green' : 'yellow'}
+                        className="w-fit border-none px-2 py-1 text-[12px]"
+                    >
                         {enteredScore ? 'Đã hoàn thiện' : 'Chưa hoàn thiện'}
                     </Tag>
                 )}
                 {score === 'THI' && (
-                    <Tag color={enteredExamScore ? 'green' : 'yellow'}>
+                    <Tag
+                        color={enteredExamScore ? 'green' : 'yellow'}
+                        className="w-fit border-none px-2 py-1 text-[12px]"
+                    >
                         {enteredExamScore ? 'Đã hoàn thiện' : 'Chưa hoàn thiện'}
                     </Tag>
                 )}
                 {!!dataDetailSubjectClass?.subject?.onePoint && (
-                    <Tag color={'green'}>Ba đầu điểm bằng nhau. Chỉ nhập điểm thi.</Tag>
+                    <Tag color={'green'} className="w-fit border-none px-2 py-1 text-[12px]">
+                        Ba đầu điểm bằng nhau. Chỉ nhập điểm thi.
+                    </Tag>
                 )}
+                {dataDetailSubjectClass?.type === $Enums.SubjectClassType.REEXAM && (
+                    <Tag color={'red'} className="w-fit border-none px-2 py-1 text-[12px]">
+                        Lớp học phần thi lại
+                    </Tag>
+                )}
+                <Tag className=" w-fit border-none px-2 py-1 text-[12px] bg-red-100">Cấm thi</Tag>
+                <Tag className=" w-fit border-none px-2 py-1 text-[12px] bg-yellow-100">
+                    Hoãn thi
+                </Tag>
             </Col>
             <Col span={16} className="flex justify-end">
                 <Flex gap={4}>
@@ -1086,7 +1109,11 @@ export default function NhapDiem({
                         filters={filterTable}
                         setFilters={setFilterTable}
                         onRow={(record) => ({
-                            className: cn(!!listForm?.[record.id]?.isChanged && 'bg-yellow-100'),
+                            className: cn(
+                                !!listForm?.[record.id]?.isChanged && 'bg-yellow-100',
+                                !!listForm?.[record.id]?.examBanned && '!bg-red-100',
+                                !!listForm?.[record.id]?.examPostponed && '!bg-yellow-100'
+                            ),
                         })}
                         scrollable
                         maxHeight={'calc(100vh - 460px)'}
@@ -1455,6 +1482,7 @@ export default function NhapDiem({
                                                     readOnly
                                                     autoSize
                                                     variant="underlined"
+                                                    className="bg-transparent"
                                                 />
                                             ) : (
                                                 <AutoComplete
@@ -1470,6 +1498,7 @@ export default function NhapDiem({
                                                         readOnly
                                                         autoSize
                                                         variant="underlined"
+                                                        className="bg-transparent"
                                                     />
                                                 </AutoComplete>
                                             )}
@@ -1522,6 +1551,7 @@ export default function NhapDiem({
                                                     readOnly
                                                     autoSize
                                                     variant="underlined"
+                                                    className="bg-transparent"
                                                 />
                                             ) : (
                                                 <AutoComplete
@@ -1537,6 +1567,7 @@ export default function NhapDiem({
                                                         readOnly
                                                         autoSize
                                                         variant="underlined"
+                                                        className="bg-transparent"
                                                     />
                                                 </AutoComplete>
                                             )}
@@ -1595,6 +1626,7 @@ export default function NhapDiem({
                                                     readOnly
                                                     autoSize
                                                     variant="underlined"
+                                                    className="bg-transparent"
                                                 />
                                             ) : (
                                                 <AutoComplete
@@ -1612,6 +1644,7 @@ export default function NhapDiem({
                                                         readOnly
                                                         autoSize
                                                         variant="underlined"
+                                                        className="bg-transparent"
                                                     />
                                                 </AutoComplete>
                                             )}

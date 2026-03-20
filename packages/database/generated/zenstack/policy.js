@@ -1344,6 +1344,32 @@ const policy = {
                 update: {},
             },
         },
+        subjectClassAttendance: {
+            modelLevel: {
+                read: { guard: SubjectClassAttendance_read, },
+                create: { guard: SubjectClassAttendance_create, inputChecker: SubjectClassAttendance_create_input, },
+                update: { guard: SubjectClassAttendance_update, },
+                postUpdate: { guard: SubjectClassAttendance_postUpdate, },
+                delete: { guard: SubjectClassAttendance_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        subjectClassAttendanceStudent: {
+            modelLevel: {
+                read: { guard: SubjectClassAttendanceStudent_read, },
+                create: { guard: SubjectClassAttendanceStudent_create, inputChecker: SubjectClassAttendanceStudent_create_input, },
+                update: { guard: SubjectClassAttendanceStudent_update, },
+                postUpdate: { guard: SubjectClassAttendanceStudent_postUpdate, },
+                delete: { guard: SubjectClassAttendanceStudent_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
         subjectClassHistory: {
             modelLevel: {
                 read: { guard: SubjectClassHistory_read, },
@@ -1598,6 +1624,19 @@ const policy = {
                 update: { guard: TrainingTime_update, },
                 postUpdate: { guard: TrainingTime_postUpdate, },
                 delete: { guard: TrainingTime_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        availableTrainingTime: {
+            modelLevel: {
+                read: { guard: AvailableTrainingTime_read, },
+                create: { guard: AvailableTrainingTime_create, inputChecker: AvailableTrainingTime_create_input, },
+                update: { guard: AvailableTrainingTime_update, },
+                postUpdate: { guard: AvailableTrainingTime_postUpdate, },
+                delete: { guard: AvailableTrainingTime_delete, }
             },
             fieldLevel: {
                 read: {},
@@ -3581,6 +3620,8 @@ const policy = {
         classRegisterSession: { hasValidation: false },
         classRegisterLogs: { hasValidation: false },
         subjectClass: { hasValidation: false },
+        subjectClassAttendance: { hasValidation: false },
+        subjectClassAttendanceStudent: { hasValidation: false },
         subjectClassHistory: { hasValidation: false },
         subjectClassTime: { hasValidation: false },
         classSchedule: { hasValidation: false },
@@ -3601,6 +3642,7 @@ const policy = {
         trainingBlock: { hasValidation: false },
         trainingBlockOnCurriculumVersion: { hasValidation: false },
         trainingTime: { hasValidation: false },
+        availableTrainingTime: { hasValidation: false },
         certificate: { hasValidation: false },
         certificateOnSubject: { hasValidation: true },
         award: { hasValidation: false },
@@ -11736,6 +11778,162 @@ function $check_SubjectClass_delete(input, context) {
     }
     return false;
 }
+function SubjectClassAttendance_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_SubjectClassAttendance_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function SubjectClassAttendance_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_SubjectClassAttendance_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function SubjectClassAttendance_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function SubjectClassAttendance_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_SubjectClassAttendance_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function SubjectClassAttendance_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_SubjectClassAttendance_postUpdate(input, context) {
+    return true;
+}
+function SubjectClassAttendance_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_SubjectClassAttendance_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function SubjectClassAttendanceStudent_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_SubjectClassAttendanceStudent_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function SubjectClassAttendanceStudent_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_SubjectClassAttendanceStudent_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function SubjectClassAttendanceStudent_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function SubjectClassAttendanceStudent_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_SubjectClassAttendanceStudent_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function SubjectClassAttendanceStudent_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_SubjectClassAttendanceStudent_postUpdate(input, context) {
+    return true;
+}
+function SubjectClassAttendanceStudent_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_SubjectClassAttendanceStudent_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
 function SubjectClassHistory_read(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
@@ -13289,6 +13487,84 @@ function TrainingTime_delete(context, db) {
     return { OR: [] };
 }
 function $check_TrainingTime_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function AvailableTrainingTime_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_AvailableTrainingTime_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function AvailableTrainingTime_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_AvailableTrainingTime_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function AvailableTrainingTime_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function AvailableTrainingTime_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_AvailableTrainingTime_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function AvailableTrainingTime_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_AvailableTrainingTime_postUpdate(input, context) {
+    return true;
+}
+function AvailableTrainingTime_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_AvailableTrainingTime_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {

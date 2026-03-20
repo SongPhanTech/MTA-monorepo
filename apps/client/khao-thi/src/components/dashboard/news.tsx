@@ -64,7 +64,7 @@ function News() {
                     fakeData?.map((item: any) => {
                         // <Link to={`/quanlythongtindieuhanh/thongbao/${item?.id}`}>
                         return type !== 'card' ? (
-                            <Link key={item.id} target="_blank" href={item?.link}>
+                            <Link key={item.id} target="_blank" rel="noopener noreferrer" href={item?.link}>
                                 <Alert
                                     showIcon
                                     icon={<NotificationOutlined />}
@@ -119,7 +119,7 @@ function News() {
                                             {dayjs(item?.date).format('HH:mm DD/MM/YYYY')}
                                         </span>
                                         <br />
-                                        <a href={item?.link} target="_blank" rel="noreferrer">
+                                        <a href={item?.link} target="_blank" rel="noopener noreferrer">
                                             Xem thêm
                                         </a>
                                     </div>
