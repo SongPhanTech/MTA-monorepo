@@ -53,6 +53,7 @@ app.use(
     cors({
         origin: [
             'http://localhost:3000',
+            'http://localhost:3001',
             'https://user.mta.swantech.vn',
             'https://mta.swantech.vn',
             'https://daotao.mta.swantech.vn',
