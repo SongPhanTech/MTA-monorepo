@@ -33,9 +33,6 @@ const ChatIframeHeader = ({
     const handleExpandToNewTab = () => {
         if (typeof window !== 'undefined' && pathname) {
             window.open(window.location.href, '_blank')
-            if (newWindow) {
-                newWindow.opener = null;
-            }
             onExpand?.()
         }
     }
