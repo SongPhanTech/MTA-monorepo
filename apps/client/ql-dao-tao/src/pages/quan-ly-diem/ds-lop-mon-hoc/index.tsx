@@ -556,7 +556,7 @@ export default function ClassSubject() {
                                             open={open}
                                             onOpenChange={setOpen}
                                         >
-                                            <Button type="primary">Đặt hạn nhập điểm ĐK/CC</Button>
+                                            <Button type="primary">Đặt hạn nhập điểm TX/ĐK</Button>
                                         </Popover>
                                         <Popover
                                             content={
