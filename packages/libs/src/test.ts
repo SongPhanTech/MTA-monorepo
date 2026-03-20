@@ -30,6 +30,3 @@ const finalScore = calcFinalScore(
     'NORMAL'
 )
 
-console.log({ n, d })
-
-console.log(finalScore)

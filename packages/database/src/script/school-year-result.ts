@@ -283,4 +283,3 @@ const result = await calcStudentYearResult({
     studentId: 'cmhlhx381000ds301llwk7gu0',
     schoolYearId: 'cmhldvbga0002p001o6c9u2t9',
 })
-console.log(result)
