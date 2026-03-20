@@ -12,7 +12,6 @@ const profiles = await prisma.userProfile.findMany({
     },
 })
 
-
 for (const profileData of profiles) {
     const res = await postDMNhanViens(
         {

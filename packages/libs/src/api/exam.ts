@@ -80,6 +80,8 @@ import type {
     GetPublicSurveys400,
     GetPublicSurveys404,
     GetPublicSurveysResult,
+    GetPublicSurveysV2Params,
+    GetPublicSurveysV2Result,
     GetSurveyObjectCount200Item,
     GetSurveyObjectCount404,
     GetSurveyObjectCountParams,
@@ -705,6 +707,165 @@ export function useValidateUserSurvey<
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
     const queryOptions = getValidateUserSurveyQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+/**
+ * Danh sách đợt khảo sát công khai, lọc theo học kỳ và loại đối tượng đào tạo
+ * @summary Danh sách đợt khảo sát công khai (v2)
+ */
+export type getPublicSurveysV2Response200 = {
+    data: GetPublicSurveysV2Result
+    status: 200
+}
+
+export type getPublicSurveysV2ResponseSuccess = getPublicSurveysV2Response200 & {
+    headers: Headers
+}
+
+export type getPublicSurveysV2Response = getPublicSurveysV2ResponseSuccess
+
+export const getGetPublicSurveysV2Url = (params?: GetPublicSurveysV2Params) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/survey/get-public-surveys-v2?${stringifiedParams}`
+        : `/api/survey/get-public-surveys-v2`
+}
+
+export const getPublicSurveysV2 = async (
+    params?: GetPublicSurveysV2Params,
+    options?: RequestInit
+): Promise<getPublicSurveysV2Response> => {
+    return customExamFetch<getPublicSurveysV2Response>(getGetPublicSurveysV2Url(params), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getGetPublicSurveysV2QueryKey = (params?: GetPublicSurveysV2Params) => {
+    return [`/api/survey/get-public-surveys-v2`, ...(params ? [params] : [])] as const
+}
+
+export const getGetPublicSurveysV2QueryOptions = <
+    TData = Awaited<ReturnType<typeof getPublicSurveysV2>>,
+    TError = unknown,
+>(
+    params?: GetPublicSurveysV2Params,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getPublicSurveysV2>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customExamFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetPublicSurveysV2QueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPublicSurveysV2>>> = ({ signal }) =>
+        getPublicSurveysV2(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getPublicSurveysV2>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetPublicSurveysV2QueryResult = NonNullable<
+    Awaited<ReturnType<typeof getPublicSurveysV2>>
+>
+export type GetPublicSurveysV2QueryError = unknown
+
+export function useGetPublicSurveysV2<
+    TData = Awaited<ReturnType<typeof getPublicSurveysV2>>,
+    TError = unknown,
+>(
+    params: undefined | GetPublicSurveysV2Params,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getPublicSurveysV2>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getPublicSurveysV2>>,
+                    TError,
+                    Awaited<ReturnType<typeof getPublicSurveysV2>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customExamFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetPublicSurveysV2<
+    TData = Awaited<ReturnType<typeof getPublicSurveysV2>>,
+    TError = unknown,
+>(
+    params?: GetPublicSurveysV2Params,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getPublicSurveysV2>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getPublicSurveysV2>>,
+                    TError,
+                    Awaited<ReturnType<typeof getPublicSurveysV2>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customExamFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetPublicSurveysV2<
+    TData = Awaited<ReturnType<typeof getPublicSurveysV2>>,
+    TError = unknown,
+>(
+    params?: GetPublicSurveysV2Params,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getPublicSurveysV2>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customExamFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Danh sách đợt khảo sát công khai (v2)
+ */
+
+export function useGetPublicSurveysV2<
+    TData = Awaited<ReturnType<typeof getPublicSurveysV2>>,
+    TError = unknown,
+>(
+    params?: GetPublicSurveysV2Params,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getPublicSurveysV2>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customExamFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetPublicSurveysV2QueryOptions(params, options)
 
     const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
         queryKey: DataTag<QueryKey, TData, TError>

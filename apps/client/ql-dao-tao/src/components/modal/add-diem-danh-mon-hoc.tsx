@@ -143,7 +143,7 @@ const AddSubjectClassAttendanceStudent = () => {
                                     ]}
                                     valuePropName="checked"
                                 >
-                                    <Checkbox className="w-full flex justify-center"/>
+                                    <Checkbox className="w-full flex justify-center" />
                                 </Form.Item>
                             )
                         },

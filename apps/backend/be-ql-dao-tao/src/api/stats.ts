@@ -3240,7 +3240,7 @@ app.openapi(
                             data: z.array(
                                 z.object({
                                     id: z.string(),
-                                    name: z.string(), 
+                                    name: z.string(),
                                     quota: z.number(),
                                     registered: z.number(),
                                     admitted: z.number(),
@@ -3257,7 +3257,7 @@ app.openapi(
 
         let data: {
             id: string
-            name: string 
+            name: string
             quota: number
             registered: number
             admitted: number
@@ -3286,13 +3286,16 @@ app.openapi(
                 admitted: 180 + i * 45,
             }))
         }
-        return c.json({
-            data,
-            count: data.length,
-            summary: {},
-            preview: !!preview,
-            labels,
-        }, 200)
+        return c.json(
+            {
+                data,
+                count: data.length,
+                summary: {},
+                preview: !!preview,
+                labels,
+            },
+            200
+        )
     }
 )
 

@@ -209,7 +209,7 @@ const UploadDragAndDrop = ({
                                     e.stopPropagation()
                                     window.open(getUrl(value || ''), '_blank')
                                     if (newWindow) {
-                                        newWindow.opener = null;
+                                        newWindow.opener = null
                                     }
                                 }
                             }}

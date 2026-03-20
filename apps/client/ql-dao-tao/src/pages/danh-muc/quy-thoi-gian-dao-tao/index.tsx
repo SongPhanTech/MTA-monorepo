@@ -12,7 +12,7 @@ import {
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import { useSemesterStore,useTrainingObjectTypeStore } from '@workspace/ui';
+import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, message, Row } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
@@ -30,37 +30,42 @@ export default function AvailableTrainingTimePage() {
         code: '',
     })
 
-
-    const { data = [], refetch } = useFindManyAvailableTrainingTime({
-        where: {
-            semesterId,
-            trainingObjectTypeId,
+    const { data = [], refetch } = useFindManyAvailableTrainingTime(
+        {
+            where: {
+                semesterId,
+                trainingObjectTypeId,
+            },
+            include: {
+                trainingObjectType: true,
+                semester: true,
+            },
+            take: numberOfPages,
+            skip: (currentPage - 1) * numberOfPages,
         },
-        include:{
-            trainingObjectType:true,
-            semester:true
-        },
-        take: numberOfPages,
-        skip: (currentPage - 1) * numberOfPages,
-    },{
-        refetchOnWindowFocus: false,
-        enabled: !!semesterId && !!trainingObjectTypeId,
-    })
+        {
+            refetchOnWindowFocus: false,
+            enabled: !!semesterId && !!trainingObjectTypeId,
+        }
+    )
 
     // const { data: curriculumVersionData = [] } = useFindManyCurriculumVersion({
     //     orderBy: { name: 'asc' },
     // })
 
-    const { data: count } = useCountAvailableTrainingTime({
-        where: {
-            semesterId,
-            trainingObjectTypeId,
-            deletedAt: null,
+    const { data: count } = useCountAvailableTrainingTime(
+        {
+            where: {
+                semesterId,
+                trainingObjectTypeId,
+                deletedAt: null,
+            },
         },
-    },{
-        refetchOnWindowFocus: false,
-        enabled: !!semesterId && !!trainingObjectTypeId,
-    })
+        {
+            refetchOnWindowFocus: false,
+            enabled: !!semesterId && !!trainingObjectTypeId,
+        }
+    )
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -151,15 +156,15 @@ export default function AvailableTrainingTimePage() {
                                 width: 250,
                                 render: (_, record) => {
                                     return record?.trainingObjectType?.name || ''
-                                }
+                                },
                             },
-                               {
+                            {
                                 title: 'Học kỳ',
                                 align: 'left',
                                 width: 250,
                                 render: (_, record) => {
                                     return record?.semester?.name || ''
-                                }
+                                },
                             },
                             {
                                 title: 'Quỹ thời gian đào tạo',

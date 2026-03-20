@@ -529,6 +529,5147 @@ export function useRoom<TData = Awaited<ReturnType<typeof room>>, TError = Room4
     return query
 }
 
+export type postApiStatsStudentDistributionByTrainingObjectTypeResponse200 = {
+    data: PostApiStatsStudentDistributionByTrainingObjectType200
+    status: 200
+}
+
+export type postApiStatsStudentDistributionByTrainingObjectTypeResponseSuccess =
+    postApiStatsStudentDistributionByTrainingObjectTypeResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsStudentDistributionByTrainingObjectTypeResponse =
+    postApiStatsStudentDistributionByTrainingObjectTypeResponseSuccess
+
+export const getPostApiStatsStudentDistributionByTrainingObjectTypeUrl = () => {
+    return `/api/stats/student-distribution-by-training-object-type`
+}
+
+export const postApiStatsStudentDistributionByTrainingObjectType = async (
+    postApiStatsStudentDistributionByTrainingObjectTypeBody: PostApiStatsStudentDistributionByTrainingObjectTypeBody,
+    options?: RequestInit
+): Promise<postApiStatsStudentDistributionByTrainingObjectTypeResponse> => {
+    return customTrainingFetch<postApiStatsStudentDistributionByTrainingObjectTypeResponse>(
+        getPostApiStatsStudentDistributionByTrainingObjectTypeUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsStudentDistributionByTrainingObjectTypeBody),
+        }
+    )
+}
+
+export const getPostApiStatsStudentDistributionByTrainingObjectTypeMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectType>>,
+        TError,
+        { data: PostApiStatsStudentDistributionByTrainingObjectTypeBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectType>>,
+    TError,
+    { data: PostApiStatsStudentDistributionByTrainingObjectTypeBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsStudentDistributionByTrainingObjectType']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectType>>,
+        { data: PostApiStatsStudentDistributionByTrainingObjectTypeBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsStudentDistributionByTrainingObjectType(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsStudentDistributionByTrainingObjectTypeMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectType>>
+>
+export type PostApiStatsStudentDistributionByTrainingObjectTypeMutationBody =
+    PostApiStatsStudentDistributionByTrainingObjectTypeBody
+export type PostApiStatsStudentDistributionByTrainingObjectTypeMutationError = unknown
+
+export const usePostApiStatsStudentDistributionByTrainingObjectType = <
+    TError = unknown,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectType>>,
+            TError,
+            { data: PostApiStatsStudentDistributionByTrainingObjectTypeBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectType>>,
+    TError,
+    { data: PostApiStatsStudentDistributionByTrainingObjectTypeBody },
+    TContext
+> => {
+    const mutationOptions =
+        getPostApiStatsStudentDistributionByTrainingObjectTypeMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsStudentDistributionByTrainingLevelResponse200 = {
+    data: PostApiStatsStudentDistributionByTrainingLevel200
+    status: 200
+}
+
+export type postApiStatsStudentDistributionByTrainingLevelResponseSuccess =
+    postApiStatsStudentDistributionByTrainingLevelResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsStudentDistributionByTrainingLevelResponse =
+    postApiStatsStudentDistributionByTrainingLevelResponseSuccess
+
+export const getPostApiStatsStudentDistributionByTrainingLevelUrl = () => {
+    return `/api/stats/student-distribution-by-training-level`
+}
+
+export const postApiStatsStudentDistributionByTrainingLevel = async (
+    postApiStatsStudentDistributionByTrainingLevelBody: PostApiStatsStudentDistributionByTrainingLevelBody,
+    options?: RequestInit
+): Promise<postApiStatsStudentDistributionByTrainingLevelResponse> => {
+    return customTrainingFetch<postApiStatsStudentDistributionByTrainingLevelResponse>(
+        getPostApiStatsStudentDistributionByTrainingLevelUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsStudentDistributionByTrainingLevelBody),
+        }
+    )
+}
+
+export const getPostApiStatsStudentDistributionByTrainingLevelMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevel>>,
+        TError,
+        { data: PostApiStatsStudentDistributionByTrainingLevelBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevel>>,
+    TError,
+    { data: PostApiStatsStudentDistributionByTrainingLevelBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsStudentDistributionByTrainingLevel']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevel>>,
+        { data: PostApiStatsStudentDistributionByTrainingLevelBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsStudentDistributionByTrainingLevel(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsStudentDistributionByTrainingLevelMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevel>>
+>
+export type PostApiStatsStudentDistributionByTrainingLevelMutationBody =
+    PostApiStatsStudentDistributionByTrainingLevelBody
+export type PostApiStatsStudentDistributionByTrainingLevelMutationError = unknown
+
+export const usePostApiStatsStudentDistributionByTrainingLevel = <
+    TError = unknown,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevel>>,
+            TError,
+            { data: PostApiStatsStudentDistributionByTrainingLevelBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevel>>,
+    TError,
+    { data: PostApiStatsStudentDistributionByTrainingLevelBody },
+    TContext
+> => {
+    const mutationOptions =
+        getPostApiStatsStudentDistributionByTrainingLevelMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsStudentDistributionByTrainingCourseResponse200 = {
+    data: PostApiStatsStudentDistributionByTrainingCourse200
+    status: 200
+}
+
+export type postApiStatsStudentDistributionByTrainingCourseResponseSuccess =
+    postApiStatsStudentDistributionByTrainingCourseResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsStudentDistributionByTrainingCourseResponse =
+    postApiStatsStudentDistributionByTrainingCourseResponseSuccess
+
+export const getPostApiStatsStudentDistributionByTrainingCourseUrl = () => {
+    return `/api/stats/student-distribution-by-training-course`
+}
+
+export const postApiStatsStudentDistributionByTrainingCourse = async (
+    postApiStatsStudentDistributionByTrainingCourseBody: PostApiStatsStudentDistributionByTrainingCourseBody,
+    options?: RequestInit
+): Promise<postApiStatsStudentDistributionByTrainingCourseResponse> => {
+    return customTrainingFetch<postApiStatsStudentDistributionByTrainingCourseResponse>(
+        getPostApiStatsStudentDistributionByTrainingCourseUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsStudentDistributionByTrainingCourseBody),
+        }
+    )
+}
+
+export const getPostApiStatsStudentDistributionByTrainingCourseMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourse>>,
+        TError,
+        { data: PostApiStatsStudentDistributionByTrainingCourseBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourse>>,
+    TError,
+    { data: PostApiStatsStudentDistributionByTrainingCourseBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsStudentDistributionByTrainingCourse']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourse>>,
+        { data: PostApiStatsStudentDistributionByTrainingCourseBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsStudentDistributionByTrainingCourse(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsStudentDistributionByTrainingCourseMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourse>>
+>
+export type PostApiStatsStudentDistributionByTrainingCourseMutationBody =
+    PostApiStatsStudentDistributionByTrainingCourseBody
+export type PostApiStatsStudentDistributionByTrainingCourseMutationError = unknown
+
+export const usePostApiStatsStudentDistributionByTrainingCourse = <
+    TError = unknown,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourse>>,
+            TError,
+            { data: PostApiStatsStudentDistributionByTrainingCourseBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourse>>,
+    TError,
+    { data: PostApiStatsStudentDistributionByTrainingCourseBody },
+    TContext
+> => {
+    const mutationOptions =
+        getPostApiStatsStudentDistributionByTrainingCourseMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsAverageEntryScoreByCourseResponse200 = {
+    data: PostApiStatsAverageEntryScoreByCourse200
+    status: 200
+}
+
+export type postApiStatsAverageEntryScoreByCourseResponseSuccess =
+    postApiStatsAverageEntryScoreByCourseResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsAverageEntryScoreByCourseResponse =
+    postApiStatsAverageEntryScoreByCourseResponseSuccess
+
+export const getPostApiStatsAverageEntryScoreByCourseUrl = () => {
+    return `/api/stats/average-entry-score-by-course`
+}
+
+export const postApiStatsAverageEntryScoreByCourse = async (
+    postApiStatsAverageEntryScoreByCourseBody: PostApiStatsAverageEntryScoreByCourseBody,
+    options?: RequestInit
+): Promise<postApiStatsAverageEntryScoreByCourseResponse> => {
+    return customTrainingFetch<postApiStatsAverageEntryScoreByCourseResponse>(
+        getPostApiStatsAverageEntryScoreByCourseUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsAverageEntryScoreByCourseBody),
+        }
+    )
+}
+
+export const getPostApiStatsAverageEntryScoreByCourseMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourse>>,
+        TError,
+        { data: PostApiStatsAverageEntryScoreByCourseBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourse>>,
+    TError,
+    { data: PostApiStatsAverageEntryScoreByCourseBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsAverageEntryScoreByCourse']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourse>>,
+        { data: PostApiStatsAverageEntryScoreByCourseBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsAverageEntryScoreByCourse(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsAverageEntryScoreByCourseMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourse>>
+>
+export type PostApiStatsAverageEntryScoreByCourseMutationBody =
+    PostApiStatsAverageEntryScoreByCourseBody
+export type PostApiStatsAverageEntryScoreByCourseMutationError = unknown
+
+export const usePostApiStatsAverageEntryScoreByCourse = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourse>>,
+            TError,
+            { data: PostApiStatsAverageEntryScoreByCourseBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourse>>,
+    TError,
+    { data: PostApiStatsAverageEntryScoreByCourseBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsAverageEntryScoreByCourseMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsAverageGpaByCourseResponse200 = {
+    data: PostApiStatsAverageGpaByCourse200
+    status: 200
+}
+
+export type postApiStatsAverageGpaByCourseResponseSuccess =
+    postApiStatsAverageGpaByCourseResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsAverageGpaByCourseResponse = postApiStatsAverageGpaByCourseResponseSuccess
+
+export const getPostApiStatsAverageGpaByCourseUrl = () => {
+    return `/api/stats/average-gpa-by-course`
+}
+
+export const postApiStatsAverageGpaByCourse = async (
+    postApiStatsAverageGpaByCourseBody: PostApiStatsAverageGpaByCourseBody,
+    options?: RequestInit
+): Promise<postApiStatsAverageGpaByCourseResponse> => {
+    return customTrainingFetch<postApiStatsAverageGpaByCourseResponse>(
+        getPostApiStatsAverageGpaByCourseUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsAverageGpaByCourseBody),
+        }
+    )
+}
+
+export const getPostApiStatsAverageGpaByCourseMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsAverageGpaByCourse>>,
+        TError,
+        { data: PostApiStatsAverageGpaByCourseBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsAverageGpaByCourse>>,
+    TError,
+    { data: PostApiStatsAverageGpaByCourseBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsAverageGpaByCourse']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsAverageGpaByCourse>>,
+        { data: PostApiStatsAverageGpaByCourseBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsAverageGpaByCourse(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsAverageGpaByCourseMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsAverageGpaByCourse>>
+>
+export type PostApiStatsAverageGpaByCourseMutationBody = PostApiStatsAverageGpaByCourseBody
+export type PostApiStatsAverageGpaByCourseMutationError = unknown
+
+export const usePostApiStatsAverageGpaByCourse = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsAverageGpaByCourse>>,
+            TError,
+            { data: PostApiStatsAverageGpaByCourseBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsAverageGpaByCourse>>,
+    TError,
+    { data: PostApiStatsAverageGpaByCourseBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsAverageGpaByCourseMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsGraduationRateByCourseResponse200 = {
+    data: PostApiStatsGraduationRateByCourse200
+    status: 200
+}
+
+export type postApiStatsGraduationRateByCourseResponseSuccess =
+    postApiStatsGraduationRateByCourseResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsGraduationRateByCourseResponse =
+    postApiStatsGraduationRateByCourseResponseSuccess
+
+export const getPostApiStatsGraduationRateByCourseUrl = () => {
+    return `/api/stats/graduation-rate-by-course`
+}
+
+export const postApiStatsGraduationRateByCourse = async (
+    postApiStatsGraduationRateByCourseBody: PostApiStatsGraduationRateByCourseBody,
+    options?: RequestInit
+): Promise<postApiStatsGraduationRateByCourseResponse> => {
+    return customTrainingFetch<postApiStatsGraduationRateByCourseResponse>(
+        getPostApiStatsGraduationRateByCourseUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsGraduationRateByCourseBody),
+        }
+    )
+}
+
+export const getPostApiStatsGraduationRateByCourseMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsGraduationRateByCourse>>,
+        TError,
+        { data: PostApiStatsGraduationRateByCourseBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsGraduationRateByCourse>>,
+    TError,
+    { data: PostApiStatsGraduationRateByCourseBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsGraduationRateByCourse']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsGraduationRateByCourse>>,
+        { data: PostApiStatsGraduationRateByCourseBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsGraduationRateByCourse(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsGraduationRateByCourseMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsGraduationRateByCourse>>
+>
+export type PostApiStatsGraduationRateByCourseMutationBody = PostApiStatsGraduationRateByCourseBody
+export type PostApiStatsGraduationRateByCourseMutationError = unknown
+
+export const usePostApiStatsGraduationRateByCourse = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsGraduationRateByCourse>>,
+            TError,
+            { data: PostApiStatsGraduationRateByCourseBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsGraduationRateByCourse>>,
+    TError,
+    { data: PostApiStatsGraduationRateByCourseBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsGraduationRateByCourseMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsAcademicPerformanceByYearResponse200 = {
+    data: PostApiStatsAcademicPerformanceByYear200
+    status: 200
+}
+
+export type postApiStatsAcademicPerformanceByYearResponseSuccess =
+    postApiStatsAcademicPerformanceByYearResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsAcademicPerformanceByYearResponse =
+    postApiStatsAcademicPerformanceByYearResponseSuccess
+
+export const getPostApiStatsAcademicPerformanceByYearUrl = () => {
+    return `/api/stats/academic-performance-by-year`
+}
+
+export const postApiStatsAcademicPerformanceByYear = async (
+    postApiStatsAcademicPerformanceByYearBody: PostApiStatsAcademicPerformanceByYearBody,
+    options?: RequestInit
+): Promise<postApiStatsAcademicPerformanceByYearResponse> => {
+    return customTrainingFetch<postApiStatsAcademicPerformanceByYearResponse>(
+        getPostApiStatsAcademicPerformanceByYearUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsAcademicPerformanceByYearBody),
+        }
+    )
+}
+
+export const getPostApiStatsAcademicPerformanceByYearMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYear>>,
+        TError,
+        { data: PostApiStatsAcademicPerformanceByYearBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYear>>,
+    TError,
+    { data: PostApiStatsAcademicPerformanceByYearBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsAcademicPerformanceByYear']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYear>>,
+        { data: PostApiStatsAcademicPerformanceByYearBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsAcademicPerformanceByYear(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsAcademicPerformanceByYearMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYear>>
+>
+export type PostApiStatsAcademicPerformanceByYearMutationBody =
+    PostApiStatsAcademicPerformanceByYearBody
+export type PostApiStatsAcademicPerformanceByYearMutationError = unknown
+
+export const usePostApiStatsAcademicPerformanceByYear = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYear>>,
+            TError,
+            { data: PostApiStatsAcademicPerformanceByYearBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYear>>,
+    TError,
+    { data: PostApiStatsAcademicPerformanceByYearBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsAcademicPerformanceByYearMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsKpiCardsResponse200 = {
+    data: PostApiStatsKpiCards200
+    status: 200
+}
+
+export type postApiStatsKpiCardsResponseSuccess = postApiStatsKpiCardsResponse200 & {
+    headers: Headers
+}
+
+export type postApiStatsKpiCardsResponse = postApiStatsKpiCardsResponseSuccess
+
+export const getPostApiStatsKpiCardsUrl = () => {
+    return `/api/stats/kpi-cards`
+}
+
+export const postApiStatsKpiCards = async (
+    postApiStatsKpiCardsBody: PostApiStatsKpiCardsBody,
+    options?: RequestInit
+): Promise<postApiStatsKpiCardsResponse> => {
+    return customTrainingFetch<postApiStatsKpiCardsResponse>(getPostApiStatsKpiCardsUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(postApiStatsKpiCardsBody),
+    })
+}
+
+export const getPostApiStatsKpiCardsMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsKpiCards>>,
+        TError,
+        { data: PostApiStatsKpiCardsBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsKpiCards>>,
+    TError,
+    { data: PostApiStatsKpiCardsBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsKpiCards']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsKpiCards>>,
+        { data: PostApiStatsKpiCardsBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsKpiCards(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsKpiCardsMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsKpiCards>>
+>
+export type PostApiStatsKpiCardsMutationBody = PostApiStatsKpiCardsBody
+export type PostApiStatsKpiCardsMutationError = unknown
+
+export const usePostApiStatsKpiCards = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsKpiCards>>,
+            TError,
+            { data: PostApiStatsKpiCardsBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsKpiCards>>,
+    TError,
+    { data: PostApiStatsKpiCardsBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsKpiCardsMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsStudentDistributionByProvinceResponse200 = {
+    data: PostApiStatsStudentDistributionByProvince200
+    status: 200
+}
+
+export type postApiStatsStudentDistributionByProvinceResponseSuccess =
+    postApiStatsStudentDistributionByProvinceResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsStudentDistributionByProvinceResponse =
+    postApiStatsStudentDistributionByProvinceResponseSuccess
+
+export const getPostApiStatsStudentDistributionByProvinceUrl = () => {
+    return `/api/stats/student-distribution-by-province`
+}
+
+export const postApiStatsStudentDistributionByProvince = async (
+    postApiStatsStudentDistributionByProvinceBody: PostApiStatsStudentDistributionByProvinceBody,
+    options?: RequestInit
+): Promise<postApiStatsStudentDistributionByProvinceResponse> => {
+    return customTrainingFetch<postApiStatsStudentDistributionByProvinceResponse>(
+        getPostApiStatsStudentDistributionByProvinceUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsStudentDistributionByProvinceBody),
+        }
+    )
+}
+
+export const getPostApiStatsStudentDistributionByProvinceMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvince>>,
+        TError,
+        { data: PostApiStatsStudentDistributionByProvinceBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvince>>,
+    TError,
+    { data: PostApiStatsStudentDistributionByProvinceBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsStudentDistributionByProvince']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvince>>,
+        { data: PostApiStatsStudentDistributionByProvinceBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsStudentDistributionByProvince(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsStudentDistributionByProvinceMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvince>>
+>
+export type PostApiStatsStudentDistributionByProvinceMutationBody =
+    PostApiStatsStudentDistributionByProvinceBody
+export type PostApiStatsStudentDistributionByProvinceMutationError = unknown
+
+export const usePostApiStatsStudentDistributionByProvince = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvince>>,
+            TError,
+            { data: PostApiStatsStudentDistributionByProvinceBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvince>>,
+    TError,
+    { data: PostApiStatsStudentDistributionByProvinceBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsStudentDistributionByProvinceMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsStudentDistributionByTrainingObjectTypeFilteredResponse200 = {
+    data: PostApiStatsStudentDistributionByTrainingObjectTypeFiltered200
+    status: 200
+}
+
+export type postApiStatsStudentDistributionByTrainingObjectTypeFilteredResponseSuccess =
+    postApiStatsStudentDistributionByTrainingObjectTypeFilteredResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsStudentDistributionByTrainingObjectTypeFilteredResponse =
+    postApiStatsStudentDistributionByTrainingObjectTypeFilteredResponseSuccess
+
+export const getPostApiStatsStudentDistributionByTrainingObjectTypeFilteredUrl = () => {
+    return `/api/stats/student-distribution-by-training-object-type-filtered`
+}
+
+export const postApiStatsStudentDistributionByTrainingObjectTypeFiltered = async (
+    postApiStatsStudentDistributionByTrainingObjectTypeFilteredBody: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredBody,
+    options?: RequestInit
+): Promise<postApiStatsStudentDistributionByTrainingObjectTypeFilteredResponse> => {
+    return customTrainingFetch<postApiStatsStudentDistributionByTrainingObjectTypeFilteredResponse>(
+        getPostApiStatsStudentDistributionByTrainingObjectTypeFilteredUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsStudentDistributionByTrainingObjectTypeFilteredBody),
+        }
+    )
+}
+
+export const getPostApiStatsStudentDistributionByTrainingObjectTypeFilteredMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectTypeFiltered>>,
+        TError,
+        { data: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectTypeFiltered>>,
+    TError,
+    { data: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsStudentDistributionByTrainingObjectTypeFiltered']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectTypeFiltered>>,
+        { data: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsStudentDistributionByTrainingObjectTypeFiltered(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsStudentDistributionByTrainingObjectTypeFilteredMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectTypeFiltered>>
+>
+export type PostApiStatsStudentDistributionByTrainingObjectTypeFilteredMutationBody =
+    PostApiStatsStudentDistributionByTrainingObjectTypeFilteredBody
+export type PostApiStatsStudentDistributionByTrainingObjectTypeFilteredMutationError = unknown
+
+export const usePostApiStatsStudentDistributionByTrainingObjectTypeFiltered = <
+    TError = unknown,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectTypeFiltered>>,
+            TError,
+            { data: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectTypeFiltered>>,
+    TError,
+    { data: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredBody },
+    TContext
+> => {
+    const mutationOptions =
+        getPostApiStatsStudentDistributionByTrainingObjectTypeFilteredMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsStudentDistributionByTrainingLevelFilteredResponse200 = {
+    data: PostApiStatsStudentDistributionByTrainingLevelFiltered200
+    status: 200
+}
+
+export type postApiStatsStudentDistributionByTrainingLevelFilteredResponseSuccess =
+    postApiStatsStudentDistributionByTrainingLevelFilteredResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsStudentDistributionByTrainingLevelFilteredResponse =
+    postApiStatsStudentDistributionByTrainingLevelFilteredResponseSuccess
+
+export const getPostApiStatsStudentDistributionByTrainingLevelFilteredUrl = () => {
+    return `/api/stats/student-distribution-by-training-level-filtered`
+}
+
+export const postApiStatsStudentDistributionByTrainingLevelFiltered = async (
+    postApiStatsStudentDistributionByTrainingLevelFilteredBody: PostApiStatsStudentDistributionByTrainingLevelFilteredBody,
+    options?: RequestInit
+): Promise<postApiStatsStudentDistributionByTrainingLevelFilteredResponse> => {
+    return customTrainingFetch<postApiStatsStudentDistributionByTrainingLevelFilteredResponse>(
+        getPostApiStatsStudentDistributionByTrainingLevelFilteredUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsStudentDistributionByTrainingLevelFilteredBody),
+        }
+    )
+}
+
+export const getPostApiStatsStudentDistributionByTrainingLevelFilteredMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevelFiltered>>,
+        TError,
+        { data: PostApiStatsStudentDistributionByTrainingLevelFilteredBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevelFiltered>>,
+    TError,
+    { data: PostApiStatsStudentDistributionByTrainingLevelFilteredBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsStudentDistributionByTrainingLevelFiltered']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevelFiltered>>,
+        { data: PostApiStatsStudentDistributionByTrainingLevelFilteredBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsStudentDistributionByTrainingLevelFiltered(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsStudentDistributionByTrainingLevelFilteredMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevelFiltered>>
+>
+export type PostApiStatsStudentDistributionByTrainingLevelFilteredMutationBody =
+    PostApiStatsStudentDistributionByTrainingLevelFilteredBody
+export type PostApiStatsStudentDistributionByTrainingLevelFilteredMutationError = unknown
+
+export const usePostApiStatsStudentDistributionByTrainingLevelFiltered = <
+    TError = unknown,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevelFiltered>>,
+            TError,
+            { data: PostApiStatsStudentDistributionByTrainingLevelFilteredBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevelFiltered>>,
+    TError,
+    { data: PostApiStatsStudentDistributionByTrainingLevelFilteredBody },
+    TContext
+> => {
+    const mutationOptions =
+        getPostApiStatsStudentDistributionByTrainingLevelFilteredMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsStudentDistributionByTrainingCourseFilteredResponse200 = {
+    data: PostApiStatsStudentDistributionByTrainingCourseFiltered200
+    status: 200
+}
+
+export type postApiStatsStudentDistributionByTrainingCourseFilteredResponseSuccess =
+    postApiStatsStudentDistributionByTrainingCourseFilteredResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsStudentDistributionByTrainingCourseFilteredResponse =
+    postApiStatsStudentDistributionByTrainingCourseFilteredResponseSuccess
+
+export const getPostApiStatsStudentDistributionByTrainingCourseFilteredUrl = () => {
+    return `/api/stats/student-distribution-by-training-course-filtered`
+}
+
+export const postApiStatsStudentDistributionByTrainingCourseFiltered = async (
+    postApiStatsStudentDistributionByTrainingCourseFilteredBody: PostApiStatsStudentDistributionByTrainingCourseFilteredBody,
+    options?: RequestInit
+): Promise<postApiStatsStudentDistributionByTrainingCourseFilteredResponse> => {
+    return customTrainingFetch<postApiStatsStudentDistributionByTrainingCourseFilteredResponse>(
+        getPostApiStatsStudentDistributionByTrainingCourseFilteredUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsStudentDistributionByTrainingCourseFilteredBody),
+        }
+    )
+}
+
+export const getPostApiStatsStudentDistributionByTrainingCourseFilteredMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourseFiltered>>,
+        TError,
+        { data: PostApiStatsStudentDistributionByTrainingCourseFilteredBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourseFiltered>>,
+    TError,
+    { data: PostApiStatsStudentDistributionByTrainingCourseFilteredBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsStudentDistributionByTrainingCourseFiltered']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourseFiltered>>,
+        { data: PostApiStatsStudentDistributionByTrainingCourseFilteredBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsStudentDistributionByTrainingCourseFiltered(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsStudentDistributionByTrainingCourseFilteredMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourseFiltered>>
+>
+export type PostApiStatsStudentDistributionByTrainingCourseFilteredMutationBody =
+    PostApiStatsStudentDistributionByTrainingCourseFilteredBody
+export type PostApiStatsStudentDistributionByTrainingCourseFilteredMutationError = unknown
+
+export const usePostApiStatsStudentDistributionByTrainingCourseFiltered = <
+    TError = unknown,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourseFiltered>>,
+            TError,
+            { data: PostApiStatsStudentDistributionByTrainingCourseFilteredBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourseFiltered>>,
+    TError,
+    { data: PostApiStatsStudentDistributionByTrainingCourseFilteredBody },
+    TContext
+> => {
+    const mutationOptions =
+        getPostApiStatsStudentDistributionByTrainingCourseFilteredMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsAverageEntryScoreByCourseFilteredResponse200 = {
+    data: PostApiStatsAverageEntryScoreByCourseFiltered200
+    status: 200
+}
+
+export type postApiStatsAverageEntryScoreByCourseFilteredResponseSuccess =
+    postApiStatsAverageEntryScoreByCourseFilteredResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsAverageEntryScoreByCourseFilteredResponse =
+    postApiStatsAverageEntryScoreByCourseFilteredResponseSuccess
+
+export const getPostApiStatsAverageEntryScoreByCourseFilteredUrl = () => {
+    return `/api/stats/average-entry-score-by-course-filtered`
+}
+
+export const postApiStatsAverageEntryScoreByCourseFiltered = async (
+    postApiStatsAverageEntryScoreByCourseFilteredBody: PostApiStatsAverageEntryScoreByCourseFilteredBody,
+    options?: RequestInit
+): Promise<postApiStatsAverageEntryScoreByCourseFilteredResponse> => {
+    return customTrainingFetch<postApiStatsAverageEntryScoreByCourseFilteredResponse>(
+        getPostApiStatsAverageEntryScoreByCourseFilteredUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsAverageEntryScoreByCourseFilteredBody),
+        }
+    )
+}
+
+export const getPostApiStatsAverageEntryScoreByCourseFilteredMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourseFiltered>>,
+        TError,
+        { data: PostApiStatsAverageEntryScoreByCourseFilteredBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourseFiltered>>,
+    TError,
+    { data: PostApiStatsAverageEntryScoreByCourseFilteredBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsAverageEntryScoreByCourseFiltered']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourseFiltered>>,
+        { data: PostApiStatsAverageEntryScoreByCourseFilteredBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsAverageEntryScoreByCourseFiltered(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsAverageEntryScoreByCourseFilteredMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourseFiltered>>
+>
+export type PostApiStatsAverageEntryScoreByCourseFilteredMutationBody =
+    PostApiStatsAverageEntryScoreByCourseFilteredBody
+export type PostApiStatsAverageEntryScoreByCourseFilteredMutationError = unknown
+
+export const usePostApiStatsAverageEntryScoreByCourseFiltered = <
+    TError = unknown,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourseFiltered>>,
+            TError,
+            { data: PostApiStatsAverageEntryScoreByCourseFilteredBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourseFiltered>>,
+    TError,
+    { data: PostApiStatsAverageEntryScoreByCourseFilteredBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsAverageEntryScoreByCourseFilteredMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsAverageGpaByCourseFilteredResponse200 = {
+    data: PostApiStatsAverageGpaByCourseFiltered200
+    status: 200
+}
+
+export type postApiStatsAverageGpaByCourseFilteredResponseSuccess =
+    postApiStatsAverageGpaByCourseFilteredResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsAverageGpaByCourseFilteredResponse =
+    postApiStatsAverageGpaByCourseFilteredResponseSuccess
+
+export const getPostApiStatsAverageGpaByCourseFilteredUrl = () => {
+    return `/api/stats/average-gpa-by-course-filtered`
+}
+
+export const postApiStatsAverageGpaByCourseFiltered = async (
+    postApiStatsAverageGpaByCourseFilteredBody: PostApiStatsAverageGpaByCourseFilteredBody,
+    options?: RequestInit
+): Promise<postApiStatsAverageGpaByCourseFilteredResponse> => {
+    return customTrainingFetch<postApiStatsAverageGpaByCourseFilteredResponse>(
+        getPostApiStatsAverageGpaByCourseFilteredUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsAverageGpaByCourseFilteredBody),
+        }
+    )
+}
+
+export const getPostApiStatsAverageGpaByCourseFilteredMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsAverageGpaByCourseFiltered>>,
+        TError,
+        { data: PostApiStatsAverageGpaByCourseFilteredBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsAverageGpaByCourseFiltered>>,
+    TError,
+    { data: PostApiStatsAverageGpaByCourseFilteredBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsAverageGpaByCourseFiltered']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsAverageGpaByCourseFiltered>>,
+        { data: PostApiStatsAverageGpaByCourseFilteredBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsAverageGpaByCourseFiltered(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsAverageGpaByCourseFilteredMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsAverageGpaByCourseFiltered>>
+>
+export type PostApiStatsAverageGpaByCourseFilteredMutationBody =
+    PostApiStatsAverageGpaByCourseFilteredBody
+export type PostApiStatsAverageGpaByCourseFilteredMutationError = unknown
+
+export const usePostApiStatsAverageGpaByCourseFiltered = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsAverageGpaByCourseFiltered>>,
+            TError,
+            { data: PostApiStatsAverageGpaByCourseFilteredBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsAverageGpaByCourseFiltered>>,
+    TError,
+    { data: PostApiStatsAverageGpaByCourseFilteredBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsAverageGpaByCourseFilteredMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsGraduationRateByCourseFilteredResponse200 = {
+    data: PostApiStatsGraduationRateByCourseFiltered200
+    status: 200
+}
+
+export type postApiStatsGraduationRateByCourseFilteredResponseSuccess =
+    postApiStatsGraduationRateByCourseFilteredResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsGraduationRateByCourseFilteredResponse =
+    postApiStatsGraduationRateByCourseFilteredResponseSuccess
+
+export const getPostApiStatsGraduationRateByCourseFilteredUrl = () => {
+    return `/api/stats/graduation-rate-by-course-filtered`
+}
+
+export const postApiStatsGraduationRateByCourseFiltered = async (
+    postApiStatsGraduationRateByCourseFilteredBody: PostApiStatsGraduationRateByCourseFilteredBody,
+    options?: RequestInit
+): Promise<postApiStatsGraduationRateByCourseFilteredResponse> => {
+    return customTrainingFetch<postApiStatsGraduationRateByCourseFilteredResponse>(
+        getPostApiStatsGraduationRateByCourseFilteredUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsGraduationRateByCourseFilteredBody),
+        }
+    )
+}
+
+export const getPostApiStatsGraduationRateByCourseFilteredMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsGraduationRateByCourseFiltered>>,
+        TError,
+        { data: PostApiStatsGraduationRateByCourseFilteredBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsGraduationRateByCourseFiltered>>,
+    TError,
+    { data: PostApiStatsGraduationRateByCourseFilteredBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsGraduationRateByCourseFiltered']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsGraduationRateByCourseFiltered>>,
+        { data: PostApiStatsGraduationRateByCourseFilteredBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsGraduationRateByCourseFiltered(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsGraduationRateByCourseFilteredMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsGraduationRateByCourseFiltered>>
+>
+export type PostApiStatsGraduationRateByCourseFilteredMutationBody =
+    PostApiStatsGraduationRateByCourseFilteredBody
+export type PostApiStatsGraduationRateByCourseFilteredMutationError = unknown
+
+export const usePostApiStatsGraduationRateByCourseFiltered = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsGraduationRateByCourseFiltered>>,
+            TError,
+            { data: PostApiStatsGraduationRateByCourseFilteredBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsGraduationRateByCourseFiltered>>,
+    TError,
+    { data: PostApiStatsGraduationRateByCourseFilteredBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsGraduationRateByCourseFilteredMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsAcademicPerformanceByYearFilteredResponse200 = {
+    data: PostApiStatsAcademicPerformanceByYearFiltered200
+    status: 200
+}
+
+export type postApiStatsAcademicPerformanceByYearFilteredResponseSuccess =
+    postApiStatsAcademicPerformanceByYearFilteredResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsAcademicPerformanceByYearFilteredResponse =
+    postApiStatsAcademicPerformanceByYearFilteredResponseSuccess
+
+export const getPostApiStatsAcademicPerformanceByYearFilteredUrl = () => {
+    return `/api/stats/academic-performance-by-year-filtered`
+}
+
+export const postApiStatsAcademicPerformanceByYearFiltered = async (
+    postApiStatsAcademicPerformanceByYearFilteredBody: PostApiStatsAcademicPerformanceByYearFilteredBody,
+    options?: RequestInit
+): Promise<postApiStatsAcademicPerformanceByYearFilteredResponse> => {
+    return customTrainingFetch<postApiStatsAcademicPerformanceByYearFilteredResponse>(
+        getPostApiStatsAcademicPerformanceByYearFilteredUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsAcademicPerformanceByYearFilteredBody),
+        }
+    )
+}
+
+export const getPostApiStatsAcademicPerformanceByYearFilteredMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYearFiltered>>,
+        TError,
+        { data: PostApiStatsAcademicPerformanceByYearFilteredBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYearFiltered>>,
+    TError,
+    { data: PostApiStatsAcademicPerformanceByYearFilteredBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsAcademicPerformanceByYearFiltered']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYearFiltered>>,
+        { data: PostApiStatsAcademicPerformanceByYearFilteredBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsAcademicPerformanceByYearFiltered(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsAcademicPerformanceByYearFilteredMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYearFiltered>>
+>
+export type PostApiStatsAcademicPerformanceByYearFilteredMutationBody =
+    PostApiStatsAcademicPerformanceByYearFilteredBody
+export type PostApiStatsAcademicPerformanceByYearFilteredMutationError = unknown
+
+export const usePostApiStatsAcademicPerformanceByYearFiltered = <
+    TError = unknown,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYearFiltered>>,
+            TError,
+            { data: PostApiStatsAcademicPerformanceByYearFilteredBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYearFiltered>>,
+    TError,
+    { data: PostApiStatsAcademicPerformanceByYearFilteredBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsAcademicPerformanceByYearFilteredMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsStudentDistributionByProvinceFilteredResponse200 = {
+    data: PostApiStatsStudentDistributionByProvinceFiltered200
+    status: 200
+}
+
+export type postApiStatsStudentDistributionByProvinceFilteredResponseSuccess =
+    postApiStatsStudentDistributionByProvinceFilteredResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsStudentDistributionByProvinceFilteredResponse =
+    postApiStatsStudentDistributionByProvinceFilteredResponseSuccess
+
+export const getPostApiStatsStudentDistributionByProvinceFilteredUrl = () => {
+    return `/api/stats/student-distribution-by-province-filtered`
+}
+
+export const postApiStatsStudentDistributionByProvinceFiltered = async (
+    postApiStatsStudentDistributionByProvinceFilteredBody: PostApiStatsStudentDistributionByProvinceFilteredBody,
+    options?: RequestInit
+): Promise<postApiStatsStudentDistributionByProvinceFilteredResponse> => {
+    return customTrainingFetch<postApiStatsStudentDistributionByProvinceFilteredResponse>(
+        getPostApiStatsStudentDistributionByProvinceFilteredUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsStudentDistributionByProvinceFilteredBody),
+        }
+    )
+}
+
+export const getPostApiStatsStudentDistributionByProvinceFilteredMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvinceFiltered>>,
+        TError,
+        { data: PostApiStatsStudentDistributionByProvinceFilteredBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvinceFiltered>>,
+    TError,
+    { data: PostApiStatsStudentDistributionByProvinceFilteredBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsStudentDistributionByProvinceFiltered']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvinceFiltered>>,
+        { data: PostApiStatsStudentDistributionByProvinceFilteredBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsStudentDistributionByProvinceFiltered(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsStudentDistributionByProvinceFilteredMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvinceFiltered>>
+>
+export type PostApiStatsStudentDistributionByProvinceFilteredMutationBody =
+    PostApiStatsStudentDistributionByProvinceFilteredBody
+export type PostApiStatsStudentDistributionByProvinceFilteredMutationError = unknown
+
+export const usePostApiStatsStudentDistributionByProvinceFiltered = <
+    TError = unknown,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvinceFiltered>>,
+            TError,
+            { data: PostApiStatsStudentDistributionByProvinceFilteredBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvinceFiltered>>,
+    TError,
+    { data: PostApiStatsStudentDistributionByProvinceFilteredBody },
+    TContext
+> => {
+    const mutationOptions =
+        getPostApiStatsStudentDistributionByProvinceFilteredMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsStudentsOfInterestResponse200 = {
+    data: PostApiStatsStudentsOfInterest200
+    status: 200
+}
+
+export type postApiStatsStudentsOfInterestResponseSuccess =
+    postApiStatsStudentsOfInterestResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsStudentsOfInterestResponse = postApiStatsStudentsOfInterestResponseSuccess
+
+export const getPostApiStatsStudentsOfInterestUrl = () => {
+    return `/api/stats/students-of-interest`
+}
+
+export const postApiStatsStudentsOfInterest = async (
+    postApiStatsStudentsOfInterestBody: PostApiStatsStudentsOfInterestBody,
+    options?: RequestInit
+): Promise<postApiStatsStudentsOfInterestResponse> => {
+    return customTrainingFetch<postApiStatsStudentsOfInterestResponse>(
+        getPostApiStatsStudentsOfInterestUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsStudentsOfInterestBody),
+        }
+    )
+}
+
+export const getPostApiStatsStudentsOfInterestMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsStudentsOfInterest>>,
+        TError,
+        { data: PostApiStatsStudentsOfInterestBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsStudentsOfInterest>>,
+    TError,
+    { data: PostApiStatsStudentsOfInterestBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsStudentsOfInterest']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsStudentsOfInterest>>,
+        { data: PostApiStatsStudentsOfInterestBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsStudentsOfInterest(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsStudentsOfInterestMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsStudentsOfInterest>>
+>
+export type PostApiStatsStudentsOfInterestMutationBody = PostApiStatsStudentsOfInterestBody
+export type PostApiStatsStudentsOfInterestMutationError = unknown
+
+export const usePostApiStatsStudentsOfInterest = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsStudentsOfInterest>>,
+            TError,
+            { data: PostApiStatsStudentsOfInterestBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsStudentsOfInterest>>,
+    TError,
+    { data: PostApiStatsStudentsOfInterestBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsStudentsOfInterestMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsAverageGpaByFixedClassResponse200 = {
+    data: PostApiStatsAverageGpaByFixedClass200
+    status: 200
+}
+
+export type postApiStatsAverageGpaByFixedClassResponseSuccess =
+    postApiStatsAverageGpaByFixedClassResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsAverageGpaByFixedClassResponse =
+    postApiStatsAverageGpaByFixedClassResponseSuccess
+
+export const getPostApiStatsAverageGpaByFixedClassUrl = () => {
+    return `/api/stats/average-gpa-by-fixed-class`
+}
+
+export const postApiStatsAverageGpaByFixedClass = async (
+    postApiStatsAverageGpaByFixedClassBody: PostApiStatsAverageGpaByFixedClassBody,
+    options?: RequestInit
+): Promise<postApiStatsAverageGpaByFixedClassResponse> => {
+    return customTrainingFetch<postApiStatsAverageGpaByFixedClassResponse>(
+        getPostApiStatsAverageGpaByFixedClassUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsAverageGpaByFixedClassBody),
+        }
+    )
+}
+
+export const getPostApiStatsAverageGpaByFixedClassMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsAverageGpaByFixedClass>>,
+        TError,
+        { data: PostApiStatsAverageGpaByFixedClassBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsAverageGpaByFixedClass>>,
+    TError,
+    { data: PostApiStatsAverageGpaByFixedClassBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsAverageGpaByFixedClass']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsAverageGpaByFixedClass>>,
+        { data: PostApiStatsAverageGpaByFixedClassBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsAverageGpaByFixedClass(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsAverageGpaByFixedClassMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsAverageGpaByFixedClass>>
+>
+export type PostApiStatsAverageGpaByFixedClassMutationBody = PostApiStatsAverageGpaByFixedClassBody
+export type PostApiStatsAverageGpaByFixedClassMutationError = unknown
+
+export const usePostApiStatsAverageGpaByFixedClass = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsAverageGpaByFixedClass>>,
+            TError,
+            { data: PostApiStatsAverageGpaByFixedClassBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsAverageGpaByFixedClass>>,
+    TError,
+    { data: PostApiStatsAverageGpaByFixedClassBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsAverageGpaByFixedClassMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsAverageGpaByTrainingMajorResponse200 = {
+    data: PostApiStatsAverageGpaByTrainingMajor200
+    status: 200
+}
+
+export type postApiStatsAverageGpaByTrainingMajorResponseSuccess =
+    postApiStatsAverageGpaByTrainingMajorResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsAverageGpaByTrainingMajorResponse =
+    postApiStatsAverageGpaByTrainingMajorResponseSuccess
+
+export const getPostApiStatsAverageGpaByTrainingMajorUrl = () => {
+    return `/api/stats/average-gpa-by-training-major`
+}
+
+export const postApiStatsAverageGpaByTrainingMajor = async (
+    postApiStatsAverageGpaByTrainingMajorBody: PostApiStatsAverageGpaByTrainingMajorBody,
+    options?: RequestInit
+): Promise<postApiStatsAverageGpaByTrainingMajorResponse> => {
+    return customTrainingFetch<postApiStatsAverageGpaByTrainingMajorResponse>(
+        getPostApiStatsAverageGpaByTrainingMajorUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsAverageGpaByTrainingMajorBody),
+        }
+    )
+}
+
+export const getPostApiStatsAverageGpaByTrainingMajorMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsAverageGpaByTrainingMajor>>,
+        TError,
+        { data: PostApiStatsAverageGpaByTrainingMajorBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsAverageGpaByTrainingMajor>>,
+    TError,
+    { data: PostApiStatsAverageGpaByTrainingMajorBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsAverageGpaByTrainingMajor']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsAverageGpaByTrainingMajor>>,
+        { data: PostApiStatsAverageGpaByTrainingMajorBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsAverageGpaByTrainingMajor(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsAverageGpaByTrainingMajorMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsAverageGpaByTrainingMajor>>
+>
+export type PostApiStatsAverageGpaByTrainingMajorMutationBody =
+    PostApiStatsAverageGpaByTrainingMajorBody
+export type PostApiStatsAverageGpaByTrainingMajorMutationError = unknown
+
+export const usePostApiStatsAverageGpaByTrainingMajor = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsAverageGpaByTrainingMajor>>,
+            TError,
+            { data: PostApiStatsAverageGpaByTrainingMajorBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsAverageGpaByTrainingMajor>>,
+    TError,
+    { data: PostApiStatsAverageGpaByTrainingMajorBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsAverageGpaByTrainingMajorMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsSubjectPassFailRateResponse200 = {
+    data: PostApiStatsSubjectPassFailRate200
+    status: 200
+}
+
+export type postApiStatsSubjectPassFailRateResponseSuccess =
+    postApiStatsSubjectPassFailRateResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsSubjectPassFailRateResponse = postApiStatsSubjectPassFailRateResponseSuccess
+
+export const getPostApiStatsSubjectPassFailRateUrl = () => {
+    return `/api/stats/subject-pass-fail-rate`
+}
+
+export const postApiStatsSubjectPassFailRate = async (
+    postApiStatsSubjectPassFailRateBody: PostApiStatsSubjectPassFailRateBody,
+    options?: RequestInit
+): Promise<postApiStatsSubjectPassFailRateResponse> => {
+    return customTrainingFetch<postApiStatsSubjectPassFailRateResponse>(
+        getPostApiStatsSubjectPassFailRateUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsSubjectPassFailRateBody),
+        }
+    )
+}
+
+export const getPostApiStatsSubjectPassFailRateMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsSubjectPassFailRate>>,
+        TError,
+        { data: PostApiStatsSubjectPassFailRateBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsSubjectPassFailRate>>,
+    TError,
+    { data: PostApiStatsSubjectPassFailRateBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsSubjectPassFailRate']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsSubjectPassFailRate>>,
+        { data: PostApiStatsSubjectPassFailRateBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsSubjectPassFailRate(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsSubjectPassFailRateMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsSubjectPassFailRate>>
+>
+export type PostApiStatsSubjectPassFailRateMutationBody = PostApiStatsSubjectPassFailRateBody
+export type PostApiStatsSubjectPassFailRateMutationError = unknown
+
+export const usePostApiStatsSubjectPassFailRate = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsSubjectPassFailRate>>,
+            TError,
+            { data: PostApiStatsSubjectPassFailRateBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsSubjectPassFailRate>>,
+    TError,
+    { data: PostApiStatsSubjectPassFailRateBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsSubjectPassFailRateMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsCurriculumStatisticsResponse200 = {
+    data: PostApiStatsCurriculumStatistics200
+    status: 200
+}
+
+export type postApiStatsCurriculumStatisticsResponseSuccess =
+    postApiStatsCurriculumStatisticsResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsCurriculumStatisticsResponse =
+    postApiStatsCurriculumStatisticsResponseSuccess
+
+export const getPostApiStatsCurriculumStatisticsUrl = () => {
+    return `/api/stats/curriculum-statistics`
+}
+
+export const postApiStatsCurriculumStatistics = async (
+    postApiStatsCurriculumStatisticsBody: PostApiStatsCurriculumStatisticsBody,
+    options?: RequestInit
+): Promise<postApiStatsCurriculumStatisticsResponse> => {
+    return customTrainingFetch<postApiStatsCurriculumStatisticsResponse>(
+        getPostApiStatsCurriculumStatisticsUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsCurriculumStatisticsBody),
+        }
+    )
+}
+
+export const getPostApiStatsCurriculumStatisticsMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsCurriculumStatistics>>,
+        TError,
+        { data: PostApiStatsCurriculumStatisticsBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsCurriculumStatistics>>,
+    TError,
+    { data: PostApiStatsCurriculumStatisticsBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsCurriculumStatistics']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsCurriculumStatistics>>,
+        { data: PostApiStatsCurriculumStatisticsBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsCurriculumStatistics(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsCurriculumStatisticsMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsCurriculumStatistics>>
+>
+export type PostApiStatsCurriculumStatisticsMutationBody = PostApiStatsCurriculumStatisticsBody
+export type PostApiStatsCurriculumStatisticsMutationError = unknown
+
+export const usePostApiStatsCurriculumStatistics = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsCurriculumStatistics>>,
+            TError,
+            { data: PostApiStatsCurriculumStatisticsBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsCurriculumStatistics>>,
+    TError,
+    { data: PostApiStatsCurriculumStatisticsBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsCurriculumStatisticsMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsSubjectClassStatisticsResponse200 = {
+    data: PostApiStatsSubjectClassStatistics200
+    status: 200
+}
+
+export type postApiStatsSubjectClassStatisticsResponseSuccess =
+    postApiStatsSubjectClassStatisticsResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsSubjectClassStatisticsResponse =
+    postApiStatsSubjectClassStatisticsResponseSuccess
+
+export const getPostApiStatsSubjectClassStatisticsUrl = () => {
+    return `/api/stats/subject-class-statistics`
+}
+
+export const postApiStatsSubjectClassStatistics = async (
+    postApiStatsSubjectClassStatisticsBody: PostApiStatsSubjectClassStatisticsBody,
+    options?: RequestInit
+): Promise<postApiStatsSubjectClassStatisticsResponse> => {
+    return customTrainingFetch<postApiStatsSubjectClassStatisticsResponse>(
+        getPostApiStatsSubjectClassStatisticsUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsSubjectClassStatisticsBody),
+        }
+    )
+}
+
+export const getPostApiStatsSubjectClassStatisticsMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsSubjectClassStatistics>>,
+        TError,
+        { data: PostApiStatsSubjectClassStatisticsBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsSubjectClassStatistics>>,
+    TError,
+    { data: PostApiStatsSubjectClassStatisticsBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsSubjectClassStatistics']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsSubjectClassStatistics>>,
+        { data: PostApiStatsSubjectClassStatisticsBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsSubjectClassStatistics(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsSubjectClassStatisticsMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsSubjectClassStatistics>>
+>
+export type PostApiStatsSubjectClassStatisticsMutationBody = PostApiStatsSubjectClassStatisticsBody
+export type PostApiStatsSubjectClassStatisticsMutationError = unknown
+
+export const usePostApiStatsSubjectClassStatistics = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsSubjectClassStatistics>>,
+            TError,
+            { data: PostApiStatsSubjectClassStatisticsBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsSubjectClassStatistics>>,
+    TError,
+    { data: PostApiStatsSubjectClassStatisticsBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsSubjectClassStatisticsMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsLecturerWorkloadResponse200 = {
+    data: PostApiStatsLecturerWorkload200
+    status: 200
+}
+
+export type postApiStatsLecturerWorkloadResponseSuccess =
+    postApiStatsLecturerWorkloadResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsLecturerWorkloadResponse = postApiStatsLecturerWorkloadResponseSuccess
+
+export const getPostApiStatsLecturerWorkloadUrl = () => {
+    return `/api/stats/lecturer-workload`
+}
+
+export const postApiStatsLecturerWorkload = async (
+    postApiStatsLecturerWorkloadBody: PostApiStatsLecturerWorkloadBody,
+    options?: RequestInit
+): Promise<postApiStatsLecturerWorkloadResponse> => {
+    return customTrainingFetch<postApiStatsLecturerWorkloadResponse>(
+        getPostApiStatsLecturerWorkloadUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsLecturerWorkloadBody),
+        }
+    )
+}
+
+export const getPostApiStatsLecturerWorkloadMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsLecturerWorkload>>,
+        TError,
+        { data: PostApiStatsLecturerWorkloadBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsLecturerWorkload>>,
+    TError,
+    { data: PostApiStatsLecturerWorkloadBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsLecturerWorkload']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsLecturerWorkload>>,
+        { data: PostApiStatsLecturerWorkloadBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsLecturerWorkload(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsLecturerWorkloadMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsLecturerWorkload>>
+>
+export type PostApiStatsLecturerWorkloadMutationBody = PostApiStatsLecturerWorkloadBody
+export type PostApiStatsLecturerWorkloadMutationError = unknown
+
+export const usePostApiStatsLecturerWorkload = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsLecturerWorkload>>,
+            TError,
+            { data: PostApiStatsLecturerWorkloadBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsLecturerWorkload>>,
+    TError,
+    { data: PostApiStatsLecturerWorkloadBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsLecturerWorkloadMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsGraduationRankingStatisticsResponse200 = {
+    data: PostApiStatsGraduationRankingStatistics200
+    status: 200
+}
+
+export type postApiStatsGraduationRankingStatisticsResponseSuccess =
+    postApiStatsGraduationRankingStatisticsResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsGraduationRankingStatisticsResponse =
+    postApiStatsGraduationRankingStatisticsResponseSuccess
+
+export const getPostApiStatsGraduationRankingStatisticsUrl = () => {
+    return `/api/stats/graduation-ranking-statistics`
+}
+
+export const postApiStatsGraduationRankingStatistics = async (
+    postApiStatsGraduationRankingStatisticsBody: PostApiStatsGraduationRankingStatisticsBody,
+    options?: RequestInit
+): Promise<postApiStatsGraduationRankingStatisticsResponse> => {
+    return customTrainingFetch<postApiStatsGraduationRankingStatisticsResponse>(
+        getPostApiStatsGraduationRankingStatisticsUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsGraduationRankingStatisticsBody),
+        }
+    )
+}
+
+export const getPostApiStatsGraduationRankingStatisticsMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsGraduationRankingStatistics>>,
+        TError,
+        { data: PostApiStatsGraduationRankingStatisticsBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsGraduationRankingStatistics>>,
+    TError,
+    { data: PostApiStatsGraduationRankingStatisticsBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsGraduationRankingStatistics']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsGraduationRankingStatistics>>,
+        { data: PostApiStatsGraduationRankingStatisticsBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsGraduationRankingStatistics(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsGraduationRankingStatisticsMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsGraduationRankingStatistics>>
+>
+export type PostApiStatsGraduationRankingStatisticsMutationBody =
+    PostApiStatsGraduationRankingStatisticsBody
+export type PostApiStatsGraduationRankingStatisticsMutationError = unknown
+
+export const usePostApiStatsGraduationRankingStatistics = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsGraduationRankingStatistics>>,
+            TError,
+            { data: PostApiStatsGraduationRankingStatisticsBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsGraduationRankingStatistics>>,
+    TError,
+    { data: PostApiStatsGraduationRankingStatisticsBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsGraduationRankingStatisticsMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsStudentsForAcademicActionResponse200 = {
+    data: PostApiStatsStudentsForAcademicAction200
+    status: 200
+}
+
+export type postApiStatsStudentsForAcademicActionResponseSuccess =
+    postApiStatsStudentsForAcademicActionResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsStudentsForAcademicActionResponse =
+    postApiStatsStudentsForAcademicActionResponseSuccess
+
+export const getPostApiStatsStudentsForAcademicActionUrl = () => {
+    return `/api/stats/students-for-academic-action`
+}
+
+export const postApiStatsStudentsForAcademicAction = async (
+    postApiStatsStudentsForAcademicActionBody: PostApiStatsStudentsForAcademicActionBody,
+    options?: RequestInit
+): Promise<postApiStatsStudentsForAcademicActionResponse> => {
+    return customTrainingFetch<postApiStatsStudentsForAcademicActionResponse>(
+        getPostApiStatsStudentsForAcademicActionUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsStudentsForAcademicActionBody),
+        }
+    )
+}
+
+export const getPostApiStatsStudentsForAcademicActionMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsStudentsForAcademicAction>>,
+        TError,
+        { data: PostApiStatsStudentsForAcademicActionBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsStudentsForAcademicAction>>,
+    TError,
+    { data: PostApiStatsStudentsForAcademicActionBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsStudentsForAcademicAction']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsStudentsForAcademicAction>>,
+        { data: PostApiStatsStudentsForAcademicActionBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsStudentsForAcademicAction(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsStudentsForAcademicActionMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsStudentsForAcademicAction>>
+>
+export type PostApiStatsStudentsForAcademicActionMutationBody =
+    PostApiStatsStudentsForAcademicActionBody
+export type PostApiStatsStudentsForAcademicActionMutationError = unknown
+
+export const usePostApiStatsStudentsForAcademicAction = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsStudentsForAcademicAction>>,
+            TError,
+            { data: PostApiStatsStudentsForAcademicActionBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsStudentsForAcademicAction>>,
+    TError,
+    { data: PostApiStatsStudentsForAcademicActionBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsStudentsForAcademicActionMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsExamParticipantsBySemesterResponse200 = {
+    data: PostApiStatsExamParticipantsBySemester200
+    status: 200
+}
+
+export type postApiStatsExamParticipantsBySemesterResponseSuccess =
+    postApiStatsExamParticipantsBySemesterResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsExamParticipantsBySemesterResponse =
+    postApiStatsExamParticipantsBySemesterResponseSuccess
+
+export const getPostApiStatsExamParticipantsBySemesterUrl = () => {
+    return `/api/stats/exam-participants-by-semester`
+}
+
+export const postApiStatsExamParticipantsBySemester = async (
+    postApiStatsExamParticipantsBySemesterBody: PostApiStatsExamParticipantsBySemesterBody,
+    options?: RequestInit
+): Promise<postApiStatsExamParticipantsBySemesterResponse> => {
+    return customTrainingFetch<postApiStatsExamParticipantsBySemesterResponse>(
+        getPostApiStatsExamParticipantsBySemesterUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsExamParticipantsBySemesterBody),
+        }
+    )
+}
+
+export const getPostApiStatsExamParticipantsBySemesterMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsExamParticipantsBySemester>>,
+        TError,
+        { data: PostApiStatsExamParticipantsBySemesterBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsExamParticipantsBySemester>>,
+    TError,
+    { data: PostApiStatsExamParticipantsBySemesterBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsExamParticipantsBySemester']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsExamParticipantsBySemester>>,
+        { data: PostApiStatsExamParticipantsBySemesterBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsExamParticipantsBySemester(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsExamParticipantsBySemesterMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsExamParticipantsBySemester>>
+>
+export type PostApiStatsExamParticipantsBySemesterMutationBody =
+    PostApiStatsExamParticipantsBySemesterBody
+export type PostApiStatsExamParticipantsBySemesterMutationError = unknown
+
+export const usePostApiStatsExamParticipantsBySemester = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsExamParticipantsBySemester>>,
+            TError,
+            { data: PostApiStatsExamParticipantsBySemesterBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsExamParticipantsBySemester>>,
+    TError,
+    { data: PostApiStatsExamParticipantsBySemesterBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsExamParticipantsBySemesterMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsAverageExamScoreTrendResponse200 = {
+    data: PostApiStatsAverageExamScoreTrend200
+    status: 200
+}
+
+export type postApiStatsAverageExamScoreTrendResponseSuccess =
+    postApiStatsAverageExamScoreTrendResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsAverageExamScoreTrendResponse =
+    postApiStatsAverageExamScoreTrendResponseSuccess
+
+export const getPostApiStatsAverageExamScoreTrendUrl = () => {
+    return `/api/stats/average-exam-score-trend`
+}
+
+export const postApiStatsAverageExamScoreTrend = async (
+    postApiStatsAverageExamScoreTrendBody: PostApiStatsAverageExamScoreTrendBody,
+    options?: RequestInit
+): Promise<postApiStatsAverageExamScoreTrendResponse> => {
+    return customTrainingFetch<postApiStatsAverageExamScoreTrendResponse>(
+        getPostApiStatsAverageExamScoreTrendUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsAverageExamScoreTrendBody),
+        }
+    )
+}
+
+export const getPostApiStatsAverageExamScoreTrendMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsAverageExamScoreTrend>>,
+        TError,
+        { data: PostApiStatsAverageExamScoreTrendBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsAverageExamScoreTrend>>,
+    TError,
+    { data: PostApiStatsAverageExamScoreTrendBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsAverageExamScoreTrend']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsAverageExamScoreTrend>>,
+        { data: PostApiStatsAverageExamScoreTrendBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsAverageExamScoreTrend(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsAverageExamScoreTrendMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsAverageExamScoreTrend>>
+>
+export type PostApiStatsAverageExamScoreTrendMutationBody = PostApiStatsAverageExamScoreTrendBody
+export type PostApiStatsAverageExamScoreTrendMutationError = unknown
+
+export const usePostApiStatsAverageExamScoreTrend = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsAverageExamScoreTrend>>,
+            TError,
+            { data: PostApiStatsAverageExamScoreTrendBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsAverageExamScoreTrend>>,
+    TError,
+    { data: PostApiStatsAverageExamScoreTrendBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsAverageExamScoreTrendMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsQuestionStatisticsResponse200 = {
+    data: PostApiStatsQuestionStatistics200
+    status: 200
+}
+
+export type postApiStatsQuestionStatisticsResponseSuccess =
+    postApiStatsQuestionStatisticsResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsQuestionStatisticsResponse = postApiStatsQuestionStatisticsResponseSuccess
+
+export const getPostApiStatsQuestionStatisticsUrl = () => {
+    return `/api/stats/question-statistics`
+}
+
+export const postApiStatsQuestionStatistics = async (
+    postApiStatsQuestionStatisticsBody: PostApiStatsQuestionStatisticsBody,
+    options?: RequestInit
+): Promise<postApiStatsQuestionStatisticsResponse> => {
+    return customTrainingFetch<postApiStatsQuestionStatisticsResponse>(
+        getPostApiStatsQuestionStatisticsUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsQuestionStatisticsBody),
+        }
+    )
+}
+
+export const getPostApiStatsQuestionStatisticsMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsQuestionStatistics>>,
+        TError,
+        { data: PostApiStatsQuestionStatisticsBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsQuestionStatistics>>,
+    TError,
+    { data: PostApiStatsQuestionStatisticsBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsQuestionStatistics']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsQuestionStatistics>>,
+        { data: PostApiStatsQuestionStatisticsBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsQuestionStatistics(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsQuestionStatisticsMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsQuestionStatistics>>
+>
+export type PostApiStatsQuestionStatisticsMutationBody = PostApiStatsQuestionStatisticsBody
+export type PostApiStatsQuestionStatisticsMutationError = unknown
+
+export const usePostApiStatsQuestionStatistics = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsQuestionStatistics>>,
+            TError,
+            { data: PostApiStatsQuestionStatisticsBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsQuestionStatistics>>,
+    TError,
+    { data: PostApiStatsQuestionStatisticsBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsQuestionStatisticsMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsHighestIncorrectAnswerRateQuestionsResponse200 = {
+    data: PostApiStatsHighestIncorrectAnswerRateQuestions200
+    status: 200
+}
+
+export type postApiStatsHighestIncorrectAnswerRateQuestionsResponseSuccess =
+    postApiStatsHighestIncorrectAnswerRateQuestionsResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsHighestIncorrectAnswerRateQuestionsResponse =
+    postApiStatsHighestIncorrectAnswerRateQuestionsResponseSuccess
+
+export const getPostApiStatsHighestIncorrectAnswerRateQuestionsUrl = () => {
+    return `/api/stats/highest-incorrect-answer-rate-questions`
+}
+
+export const postApiStatsHighestIncorrectAnswerRateQuestions = async (
+    postApiStatsHighestIncorrectAnswerRateQuestionsBody: PostApiStatsHighestIncorrectAnswerRateQuestionsBody,
+    options?: RequestInit
+): Promise<postApiStatsHighestIncorrectAnswerRateQuestionsResponse> => {
+    return customTrainingFetch<postApiStatsHighestIncorrectAnswerRateQuestionsResponse>(
+        getPostApiStatsHighestIncorrectAnswerRateQuestionsUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsHighestIncorrectAnswerRateQuestionsBody),
+        }
+    )
+}
+
+export const getPostApiStatsHighestIncorrectAnswerRateQuestionsMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsHighestIncorrectAnswerRateQuestions>>,
+        TError,
+        { data: PostApiStatsHighestIncorrectAnswerRateQuestionsBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsHighestIncorrectAnswerRateQuestions>>,
+    TError,
+    { data: PostApiStatsHighestIncorrectAnswerRateQuestionsBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsHighestIncorrectAnswerRateQuestions']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsHighestIncorrectAnswerRateQuestions>>,
+        { data: PostApiStatsHighestIncorrectAnswerRateQuestionsBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsHighestIncorrectAnswerRateQuestions(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsHighestIncorrectAnswerRateQuestionsMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsHighestIncorrectAnswerRateQuestions>>
+>
+export type PostApiStatsHighestIncorrectAnswerRateQuestionsMutationBody =
+    PostApiStatsHighestIncorrectAnswerRateQuestionsBody
+export type PostApiStatsHighestIncorrectAnswerRateQuestionsMutationError = unknown
+
+export const usePostApiStatsHighestIncorrectAnswerRateQuestions = <
+    TError = unknown,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsHighestIncorrectAnswerRateQuestions>>,
+            TError,
+            { data: PostApiStatsHighestIncorrectAnswerRateQuestionsBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsHighestIncorrectAnswerRateQuestions>>,
+    TError,
+    { data: PostApiStatsHighestIncorrectAnswerRateQuestionsBody },
+    TContext
+> => {
+    const mutationOptions =
+        getPostApiStatsHighestIncorrectAnswerRateQuestionsMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsMostUsedQuestionsResponse200 = {
+    data: PostApiStatsMostUsedQuestions200
+    status: 200
+}
+
+export type postApiStatsMostUsedQuestionsResponseSuccess =
+    postApiStatsMostUsedQuestionsResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsMostUsedQuestionsResponse = postApiStatsMostUsedQuestionsResponseSuccess
+
+export const getPostApiStatsMostUsedQuestionsUrl = () => {
+    return `/api/stats/most-used-questions`
+}
+
+export const postApiStatsMostUsedQuestions = async (
+    postApiStatsMostUsedQuestionsBody: PostApiStatsMostUsedQuestionsBody,
+    options?: RequestInit
+): Promise<postApiStatsMostUsedQuestionsResponse> => {
+    return customTrainingFetch<postApiStatsMostUsedQuestionsResponse>(
+        getPostApiStatsMostUsedQuestionsUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsMostUsedQuestionsBody),
+        }
+    )
+}
+
+export const getPostApiStatsMostUsedQuestionsMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsMostUsedQuestions>>,
+        TError,
+        { data: PostApiStatsMostUsedQuestionsBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsMostUsedQuestions>>,
+    TError,
+    { data: PostApiStatsMostUsedQuestionsBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsMostUsedQuestions']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsMostUsedQuestions>>,
+        { data: PostApiStatsMostUsedQuestionsBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsMostUsedQuestions(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsMostUsedQuestionsMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsMostUsedQuestions>>
+>
+export type PostApiStatsMostUsedQuestionsMutationBody = PostApiStatsMostUsedQuestionsBody
+export type PostApiStatsMostUsedQuestionsMutationError = unknown
+
+export const usePostApiStatsMostUsedQuestions = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsMostUsedQuestions>>,
+            TError,
+            { data: PostApiStatsMostUsedQuestionsBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsMostUsedQuestions>>,
+    TError,
+    { data: PostApiStatsMostUsedQuestionsBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsMostUsedQuestionsMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsDemographicsResponse200 = {
+    data: PostApiStatsDemographics200
+    status: 200
+}
+
+export type postApiStatsDemographicsResponseSuccess = postApiStatsDemographicsResponse200 & {
+    headers: Headers
+}
+
+export type postApiStatsDemographicsResponse = postApiStatsDemographicsResponseSuccess
+
+export const getPostApiStatsDemographicsUrl = () => {
+    return `/api/stats/demographics`
+}
+
+export const postApiStatsDemographics = async (
+    postApiStatsDemographicsBody: PostApiStatsDemographicsBody,
+    options?: RequestInit
+): Promise<postApiStatsDemographicsResponse> => {
+    return customTrainingFetch<postApiStatsDemographicsResponse>(getPostApiStatsDemographicsUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(postApiStatsDemographicsBody),
+    })
+}
+
+export const getPostApiStatsDemographicsMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsDemographics>>,
+        TError,
+        { data: PostApiStatsDemographicsBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsDemographics>>,
+    TError,
+    { data: PostApiStatsDemographicsBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsDemographics']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsDemographics>>,
+        { data: PostApiStatsDemographicsBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsDemographics(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsDemographicsMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsDemographics>>
+>
+export type PostApiStatsDemographicsMutationBody = PostApiStatsDemographicsBody
+export type PostApiStatsDemographicsMutationError = unknown
+
+export const usePostApiStatsDemographics = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsDemographics>>,
+            TError,
+            { data: PostApiStatsDemographicsBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsDemographics>>,
+    TError,
+    { data: PostApiStatsDemographicsBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsDemographicsMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsEnrollmentTrendResponse200 = {
+    data: PostApiStatsEnrollmentTrend200
+    status: 200
+}
+
+export type postApiStatsEnrollmentTrendResponseSuccess = postApiStatsEnrollmentTrendResponse200 & {
+    headers: Headers
+}
+
+export type postApiStatsEnrollmentTrendResponse = postApiStatsEnrollmentTrendResponseSuccess
+
+export const getPostApiStatsEnrollmentTrendUrl = () => {
+    return `/api/stats/enrollment-trend`
+}
+
+export const postApiStatsEnrollmentTrend = async (
+    postApiStatsEnrollmentTrendBody: PostApiStatsEnrollmentTrendBody,
+    options?: RequestInit
+): Promise<postApiStatsEnrollmentTrendResponse> => {
+    return customTrainingFetch<postApiStatsEnrollmentTrendResponse>(
+        getPostApiStatsEnrollmentTrendUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsEnrollmentTrendBody),
+        }
+    )
+}
+
+export const getPostApiStatsEnrollmentTrendMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsEnrollmentTrend>>,
+        TError,
+        { data: PostApiStatsEnrollmentTrendBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsEnrollmentTrend>>,
+    TError,
+    { data: PostApiStatsEnrollmentTrendBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsEnrollmentTrend']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsEnrollmentTrend>>,
+        { data: PostApiStatsEnrollmentTrendBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsEnrollmentTrend(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsEnrollmentTrendMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsEnrollmentTrend>>
+>
+export type PostApiStatsEnrollmentTrendMutationBody = PostApiStatsEnrollmentTrendBody
+export type PostApiStatsEnrollmentTrendMutationError = unknown
+
+export const usePostApiStatsEnrollmentTrend = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsEnrollmentTrend>>,
+            TError,
+            { data: PostApiStatsEnrollmentTrendBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsEnrollmentTrend>>,
+    TError,
+    { data: PostApiStatsEnrollmentTrendBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsEnrollmentTrendMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsAdmissionStatisticsByMajorResponse200 = {
+    data: PostApiStatsAdmissionStatisticsByMajor200
+    status: 200
+}
+
+export type postApiStatsAdmissionStatisticsByMajorResponseSuccess =
+    postApiStatsAdmissionStatisticsByMajorResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsAdmissionStatisticsByMajorResponse =
+    postApiStatsAdmissionStatisticsByMajorResponseSuccess
+
+export const getPostApiStatsAdmissionStatisticsByMajorUrl = () => {
+    return `/api/stats/Admission-statistics-by-major`
+}
+
+export const postApiStatsAdmissionStatisticsByMajor = async (
+    postApiStatsAdmissionStatisticsByMajorBody: PostApiStatsAdmissionStatisticsByMajorBody,
+    options?: RequestInit
+): Promise<postApiStatsAdmissionStatisticsByMajorResponse> => {
+    return customTrainingFetch<postApiStatsAdmissionStatisticsByMajorResponse>(
+        getPostApiStatsAdmissionStatisticsByMajorUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsAdmissionStatisticsByMajorBody),
+        }
+    )
+}
+
+export const getPostApiStatsAdmissionStatisticsByMajorMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsAdmissionStatisticsByMajor>>,
+        TError,
+        { data: PostApiStatsAdmissionStatisticsByMajorBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsAdmissionStatisticsByMajor>>,
+    TError,
+    { data: PostApiStatsAdmissionStatisticsByMajorBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsAdmissionStatisticsByMajor']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsAdmissionStatisticsByMajor>>,
+        { data: PostApiStatsAdmissionStatisticsByMajorBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsAdmissionStatisticsByMajor(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsAdmissionStatisticsByMajorMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsAdmissionStatisticsByMajor>>
+>
+export type PostApiStatsAdmissionStatisticsByMajorMutationBody =
+    PostApiStatsAdmissionStatisticsByMajorBody
+export type PostApiStatsAdmissionStatisticsByMajorMutationError = unknown
+
+export const usePostApiStatsAdmissionStatisticsByMajor = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsAdmissionStatisticsByMajor>>,
+            TError,
+            { data: PostApiStatsAdmissionStatisticsByMajorBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsAdmissionStatisticsByMajor>>,
+    TError,
+    { data: PostApiStatsAdmissionStatisticsByMajorBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsAdmissionStatisticsByMajorMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsStatisticsOfRecordsByDateResponse200 = {
+    data: PostApiStatsStatisticsOfRecordsByDate200
+    status: 200
+}
+
+export type postApiStatsStatisticsOfRecordsByDateResponseSuccess =
+    postApiStatsStatisticsOfRecordsByDateResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsStatisticsOfRecordsByDateResponse =
+    postApiStatsStatisticsOfRecordsByDateResponseSuccess
+
+export const getPostApiStatsStatisticsOfRecordsByDateUrl = () => {
+    return `/api/stats/statistics-of-records-by-date`
+}
+
+export const postApiStatsStatisticsOfRecordsByDate = async (
+    postApiStatsStatisticsOfRecordsByDateBody: PostApiStatsStatisticsOfRecordsByDateBody,
+    options?: RequestInit
+): Promise<postApiStatsStatisticsOfRecordsByDateResponse> => {
+    return customTrainingFetch<postApiStatsStatisticsOfRecordsByDateResponse>(
+        getPostApiStatsStatisticsOfRecordsByDateUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsStatisticsOfRecordsByDateBody),
+        }
+    )
+}
+
+export const getPostApiStatsStatisticsOfRecordsByDateMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsStatisticsOfRecordsByDate>>,
+        TError,
+        { data: PostApiStatsStatisticsOfRecordsByDateBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsStatisticsOfRecordsByDate>>,
+    TError,
+    { data: PostApiStatsStatisticsOfRecordsByDateBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsStatisticsOfRecordsByDate']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsStatisticsOfRecordsByDate>>,
+        { data: PostApiStatsStatisticsOfRecordsByDateBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsStatisticsOfRecordsByDate(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsStatisticsOfRecordsByDateMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsStatisticsOfRecordsByDate>>
+>
+export type PostApiStatsStatisticsOfRecordsByDateMutationBody =
+    PostApiStatsStatisticsOfRecordsByDateBody
+export type PostApiStatsStatisticsOfRecordsByDateMutationError = unknown
+
+export const usePostApiStatsStatisticsOfRecordsByDate = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsStatisticsOfRecordsByDate>>,
+            TError,
+            { data: PostApiStatsStatisticsOfRecordsByDateBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsStatisticsOfRecordsByDate>>,
+    TError,
+    { data: PostApiStatsStatisticsOfRecordsByDateBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsStatisticsOfRecordsByDateMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsSummaryAdmissionStatisticsResponse200 = {
+    data: PostApiStatsSummaryAdmissionStatistics200
+    status: 200
+}
+
+export type postApiStatsSummaryAdmissionStatisticsResponseSuccess =
+    postApiStatsSummaryAdmissionStatisticsResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsSummaryAdmissionStatisticsResponse =
+    postApiStatsSummaryAdmissionStatisticsResponseSuccess
+
+export const getPostApiStatsSummaryAdmissionStatisticsUrl = () => {
+    return `/api/stats/summary-admission-statistics`
+}
+
+export const postApiStatsSummaryAdmissionStatistics = async (
+    postApiStatsSummaryAdmissionStatisticsBody: PostApiStatsSummaryAdmissionStatisticsBody,
+    options?: RequestInit
+): Promise<postApiStatsSummaryAdmissionStatisticsResponse> => {
+    return customTrainingFetch<postApiStatsSummaryAdmissionStatisticsResponse>(
+        getPostApiStatsSummaryAdmissionStatisticsUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsSummaryAdmissionStatisticsBody),
+        }
+    )
+}
+
+export const getPostApiStatsSummaryAdmissionStatisticsMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsSummaryAdmissionStatistics>>,
+        TError,
+        { data: PostApiStatsSummaryAdmissionStatisticsBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsSummaryAdmissionStatistics>>,
+    TError,
+    { data: PostApiStatsSummaryAdmissionStatisticsBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsSummaryAdmissionStatistics']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsSummaryAdmissionStatistics>>,
+        { data: PostApiStatsSummaryAdmissionStatisticsBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsSummaryAdmissionStatistics(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsSummaryAdmissionStatisticsMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsSummaryAdmissionStatistics>>
+>
+export type PostApiStatsSummaryAdmissionStatisticsMutationBody =
+    PostApiStatsSummaryAdmissionStatisticsBody
+export type PostApiStatsSummaryAdmissionStatisticsMutationError = unknown
+
+export const usePostApiStatsSummaryAdmissionStatistics = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsSummaryAdmissionStatistics>>,
+            TError,
+            { data: PostApiStatsSummaryAdmissionStatisticsBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsSummaryAdmissionStatistics>>,
+    TError,
+    { data: PostApiStatsSummaryAdmissionStatisticsBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsSummaryAdmissionStatisticsMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsScienceTechnologyOverviewResponse200 = {
+    data: PostApiStatsScienceTechnologyOverview200
+    status: 200
+}
+
+export type postApiStatsScienceTechnologyOverviewResponseSuccess =
+    postApiStatsScienceTechnologyOverviewResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsScienceTechnologyOverviewResponse =
+    postApiStatsScienceTechnologyOverviewResponseSuccess
+
+export const getPostApiStatsScienceTechnologyOverviewUrl = () => {
+    return `/api/stats/science-technology-overview`
+}
+
+export const postApiStatsScienceTechnologyOverview = async (
+    postApiStatsScienceTechnologyOverviewBody: PostApiStatsScienceTechnologyOverviewBody,
+    options?: RequestInit
+): Promise<postApiStatsScienceTechnologyOverviewResponse> => {
+    return customTrainingFetch<postApiStatsScienceTechnologyOverviewResponse>(
+        getPostApiStatsScienceTechnologyOverviewUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsScienceTechnologyOverviewBody),
+        }
+    )
+}
+
+export const getPostApiStatsScienceTechnologyOverviewMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsScienceTechnologyOverview>>,
+        TError,
+        { data: PostApiStatsScienceTechnologyOverviewBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsScienceTechnologyOverview>>,
+    TError,
+    { data: PostApiStatsScienceTechnologyOverviewBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsScienceTechnologyOverview']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsScienceTechnologyOverview>>,
+        { data: PostApiStatsScienceTechnologyOverviewBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsScienceTechnologyOverview(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsScienceTechnologyOverviewMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsScienceTechnologyOverview>>
+>
+export type PostApiStatsScienceTechnologyOverviewMutationBody =
+    PostApiStatsScienceTechnologyOverviewBody
+export type PostApiStatsScienceTechnologyOverviewMutationError = unknown
+
+export const usePostApiStatsScienceTechnologyOverview = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsScienceTechnologyOverview>>,
+            TError,
+            { data: PostApiStatsScienceTechnologyOverviewBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsScienceTechnologyOverview>>,
+    TError,
+    { data: PostApiStatsScienceTechnologyOverviewBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsScienceTechnologyOverviewMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsContractStatisticsByYearResponse200 = {
+    data: PostApiStatsContractStatisticsByYear200
+    status: 200
+}
+
+export type postApiStatsContractStatisticsByYearResponseSuccess =
+    postApiStatsContractStatisticsByYearResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsContractStatisticsByYearResponse =
+    postApiStatsContractStatisticsByYearResponseSuccess
+
+export const getPostApiStatsContractStatisticsByYearUrl = () => {
+    return `/api/stats/contract-statistics-by-year`
+}
+
+export const postApiStatsContractStatisticsByYear = async (
+    postApiStatsContractStatisticsByYearBody: PostApiStatsContractStatisticsByYearBody,
+    options?: RequestInit
+): Promise<postApiStatsContractStatisticsByYearResponse> => {
+    return customTrainingFetch<postApiStatsContractStatisticsByYearResponse>(
+        getPostApiStatsContractStatisticsByYearUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsContractStatisticsByYearBody),
+        }
+    )
+}
+
+export const getPostApiStatsContractStatisticsByYearMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsContractStatisticsByYear>>,
+        TError,
+        { data: PostApiStatsContractStatisticsByYearBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsContractStatisticsByYear>>,
+    TError,
+    { data: PostApiStatsContractStatisticsByYearBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsContractStatisticsByYear']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsContractStatisticsByYear>>,
+        { data: PostApiStatsContractStatisticsByYearBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsContractStatisticsByYear(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsContractStatisticsByYearMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsContractStatisticsByYear>>
+>
+export type PostApiStatsContractStatisticsByYearMutationBody =
+    PostApiStatsContractStatisticsByYearBody
+export type PostApiStatsContractStatisticsByYearMutationError = unknown
+
+export const usePostApiStatsContractStatisticsByYear = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsContractStatisticsByYear>>,
+            TError,
+            { data: PostApiStatsContractStatisticsByYearBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsContractStatisticsByYear>>,
+    TError,
+    { data: PostApiStatsContractStatisticsByYearBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsContractStatisticsByYearMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsProjectStatisticsByYearResponse200 = {
+    data: PostApiStatsProjectStatisticsByYear200
+    status: 200
+}
+
+export type postApiStatsProjectStatisticsByYearResponseSuccess =
+    postApiStatsProjectStatisticsByYearResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsProjectStatisticsByYearResponse =
+    postApiStatsProjectStatisticsByYearResponseSuccess
+
+export const getPostApiStatsProjectStatisticsByYearUrl = () => {
+    return `/api/stats/project-statistics-by-year`
+}
+
+export const postApiStatsProjectStatisticsByYear = async (
+    postApiStatsProjectStatisticsByYearBody: PostApiStatsProjectStatisticsByYearBody,
+    options?: RequestInit
+): Promise<postApiStatsProjectStatisticsByYearResponse> => {
+    return customTrainingFetch<postApiStatsProjectStatisticsByYearResponse>(
+        getPostApiStatsProjectStatisticsByYearUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsProjectStatisticsByYearBody),
+        }
+    )
+}
+
+export const getPostApiStatsProjectStatisticsByYearMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsProjectStatisticsByYear>>,
+        TError,
+        { data: PostApiStatsProjectStatisticsByYearBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsProjectStatisticsByYear>>,
+    TError,
+    { data: PostApiStatsProjectStatisticsByYearBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsProjectStatisticsByYear']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsProjectStatisticsByYear>>,
+        { data: PostApiStatsProjectStatisticsByYearBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsProjectStatisticsByYear(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsProjectStatisticsByYearMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsProjectStatisticsByYear>>
+>
+export type PostApiStatsProjectStatisticsByYearMutationBody =
+    PostApiStatsProjectStatisticsByYearBody
+export type PostApiStatsProjectStatisticsByYearMutationError = unknown
+
+export const usePostApiStatsProjectStatisticsByYear = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsProjectStatisticsByYear>>,
+            TError,
+            { data: PostApiStatsProjectStatisticsByYearBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsProjectStatisticsByYear>>,
+    TError,
+    { data: PostApiStatsProjectStatisticsByYearBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsProjectStatisticsByYearMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsInnovationsStatisticsByYearResponse200 = {
+    data: PostApiStatsInnovationsStatisticsByYear200
+    status: 200
+}
+
+export type postApiStatsInnovationsStatisticsByYearResponseSuccess =
+    postApiStatsInnovationsStatisticsByYearResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsInnovationsStatisticsByYearResponse =
+    postApiStatsInnovationsStatisticsByYearResponseSuccess
+
+export const getPostApiStatsInnovationsStatisticsByYearUrl = () => {
+    return `/api/stats/innovations-statistics-by-year`
+}
+
+export const postApiStatsInnovationsStatisticsByYear = async (
+    postApiStatsInnovationsStatisticsByYearBody: PostApiStatsInnovationsStatisticsByYearBody,
+    options?: RequestInit
+): Promise<postApiStatsInnovationsStatisticsByYearResponse> => {
+    return customTrainingFetch<postApiStatsInnovationsStatisticsByYearResponse>(
+        getPostApiStatsInnovationsStatisticsByYearUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsInnovationsStatisticsByYearBody),
+        }
+    )
+}
+
+export const getPostApiStatsInnovationsStatisticsByYearMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsInnovationsStatisticsByYear>>,
+        TError,
+        { data: PostApiStatsInnovationsStatisticsByYearBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsInnovationsStatisticsByYear>>,
+    TError,
+    { data: PostApiStatsInnovationsStatisticsByYearBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsInnovationsStatisticsByYear']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsInnovationsStatisticsByYear>>,
+        { data: PostApiStatsInnovationsStatisticsByYearBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsInnovationsStatisticsByYear(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsInnovationsStatisticsByYearMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsInnovationsStatisticsByYear>>
+>
+export type PostApiStatsInnovationsStatisticsByYearMutationBody =
+    PostApiStatsInnovationsStatisticsByYearBody
+export type PostApiStatsInnovationsStatisticsByYearMutationError = unknown
+
+export const usePostApiStatsInnovationsStatisticsByYear = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsInnovationsStatisticsByYear>>,
+            TError,
+            { data: PostApiStatsInnovationsStatisticsByYearBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsInnovationsStatisticsByYear>>,
+    TError,
+    { data: PostApiStatsInnovationsStatisticsByYearBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsInnovationsStatisticsByYearMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsArticlesStatisticsByYearResponse200 = {
+    data: PostApiStatsArticlesStatisticsByYear200
+    status: 200
+}
+
+export type postApiStatsArticlesStatisticsByYearResponseSuccess =
+    postApiStatsArticlesStatisticsByYearResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsArticlesStatisticsByYearResponse =
+    postApiStatsArticlesStatisticsByYearResponseSuccess
+
+export const getPostApiStatsArticlesStatisticsByYearUrl = () => {
+    return `/api/stats/articles-statistics-by-year`
+}
+
+export const postApiStatsArticlesStatisticsByYear = async (
+    postApiStatsArticlesStatisticsByYearBody: PostApiStatsArticlesStatisticsByYearBody,
+    options?: RequestInit
+): Promise<postApiStatsArticlesStatisticsByYearResponse> => {
+    return customTrainingFetch<postApiStatsArticlesStatisticsByYearResponse>(
+        getPostApiStatsArticlesStatisticsByYearUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsArticlesStatisticsByYearBody),
+        }
+    )
+}
+
+export const getPostApiStatsArticlesStatisticsByYearMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsArticlesStatisticsByYear>>,
+        TError,
+        { data: PostApiStatsArticlesStatisticsByYearBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsArticlesStatisticsByYear>>,
+    TError,
+    { data: PostApiStatsArticlesStatisticsByYearBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsArticlesStatisticsByYear']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsArticlesStatisticsByYear>>,
+        { data: PostApiStatsArticlesStatisticsByYearBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsArticlesStatisticsByYear(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsArticlesStatisticsByYearMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsArticlesStatisticsByYear>>
+>
+export type PostApiStatsArticlesStatisticsByYearMutationBody =
+    PostApiStatsArticlesStatisticsByYearBody
+export type PostApiStatsArticlesStatisticsByYearMutationError = unknown
+
+export const usePostApiStatsArticlesStatisticsByYear = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsArticlesStatisticsByYear>>,
+            TError,
+            { data: PostApiStatsArticlesStatisticsByYearBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsArticlesStatisticsByYear>>,
+    TError,
+    { data: PostApiStatsArticlesStatisticsByYearBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsArticlesStatisticsByYearMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsFinalExamInfoResponse200 = {
+    data: PostApiStatsFinalExamInfo200
+    status: 200
+}
+
+export type postApiStatsFinalExamInfoResponseSuccess = postApiStatsFinalExamInfoResponse200 & {
+    headers: Headers
+}
+
+export type postApiStatsFinalExamInfoResponse = postApiStatsFinalExamInfoResponseSuccess
+
+export const getPostApiStatsFinalExamInfoUrl = () => {
+    return `/api/stats/final-exam-info`
+}
+
+export const postApiStatsFinalExamInfo = async (
+    postApiStatsFinalExamInfoBody: PostApiStatsFinalExamInfoBody,
+    options?: RequestInit
+): Promise<postApiStatsFinalExamInfoResponse> => {
+    return customTrainingFetch<postApiStatsFinalExamInfoResponse>(
+        getPostApiStatsFinalExamInfoUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsFinalExamInfoBody),
+        }
+    )
+}
+
+export const getPostApiStatsFinalExamInfoMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsFinalExamInfo>>,
+        TError,
+        { data: PostApiStatsFinalExamInfoBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsFinalExamInfo>>,
+    TError,
+    { data: PostApiStatsFinalExamInfoBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsFinalExamInfo']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsFinalExamInfo>>,
+        { data: PostApiStatsFinalExamInfoBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsFinalExamInfo(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsFinalExamInfoMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsFinalExamInfo>>
+>
+export type PostApiStatsFinalExamInfoMutationBody = PostApiStatsFinalExamInfoBody
+export type PostApiStatsFinalExamInfoMutationError = unknown
+
+export const usePostApiStatsFinalExamInfo = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsFinalExamInfo>>,
+            TError,
+            { data: PostApiStatsFinalExamInfoBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsFinalExamInfo>>,
+    TError,
+    { data: PostApiStatsFinalExamInfoBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsFinalExamInfoMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsStudentCountByAcademicResultsResponse200 = {
+    data: PostApiStatsStudentCountByAcademicResults200
+    status: 200
+}
+
+export type postApiStatsStudentCountByAcademicResultsResponseSuccess =
+    postApiStatsStudentCountByAcademicResultsResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsStudentCountByAcademicResultsResponse =
+    postApiStatsStudentCountByAcademicResultsResponseSuccess
+
+export const getPostApiStatsStudentCountByAcademicResultsUrl = () => {
+    return `/api/stats/student-count-by-academic-results`
+}
+
+export const postApiStatsStudentCountByAcademicResults = async (
+    postApiStatsStudentCountByAcademicResultsBody: PostApiStatsStudentCountByAcademicResultsBody,
+    options?: RequestInit
+): Promise<postApiStatsStudentCountByAcademicResultsResponse> => {
+    return customTrainingFetch<postApiStatsStudentCountByAcademicResultsResponse>(
+        getPostApiStatsStudentCountByAcademicResultsUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsStudentCountByAcademicResultsBody),
+        }
+    )
+}
+
+export const getPostApiStatsStudentCountByAcademicResultsMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsStudentCountByAcademicResults>>,
+        TError,
+        { data: PostApiStatsStudentCountByAcademicResultsBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsStudentCountByAcademicResults>>,
+    TError,
+    { data: PostApiStatsStudentCountByAcademicResultsBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsStudentCountByAcademicResults']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsStudentCountByAcademicResults>>,
+        { data: PostApiStatsStudentCountByAcademicResultsBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsStudentCountByAcademicResults(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsStudentCountByAcademicResultsMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsStudentCountByAcademicResults>>
+>
+export type PostApiStatsStudentCountByAcademicResultsMutationBody =
+    PostApiStatsStudentCountByAcademicResultsBody
+export type PostApiStatsStudentCountByAcademicResultsMutationError = unknown
+
+export const usePostApiStatsStudentCountByAcademicResults = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsStudentCountByAcademicResults>>,
+            TError,
+            { data: PostApiStatsStudentCountByAcademicResultsBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsStudentCountByAcademicResults>>,
+    TError,
+    { data: PostApiStatsStudentCountByAcademicResultsBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsStudentCountByAcademicResultsMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsSubjectPassFailRatesResponse200 = {
+    data: PostApiStatsSubjectPassFailRates200
+    status: 200
+}
+
+export type postApiStatsSubjectPassFailRatesResponseSuccess =
+    postApiStatsSubjectPassFailRatesResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsSubjectPassFailRatesResponse =
+    postApiStatsSubjectPassFailRatesResponseSuccess
+
+export const getPostApiStatsSubjectPassFailRatesUrl = () => {
+    return `/api/stats/subject-pass-fail-rates`
+}
+
+export const postApiStatsSubjectPassFailRates = async (
+    postApiStatsSubjectPassFailRatesBody: PostApiStatsSubjectPassFailRatesBody,
+    options?: RequestInit
+): Promise<postApiStatsSubjectPassFailRatesResponse> => {
+    return customTrainingFetch<postApiStatsSubjectPassFailRatesResponse>(
+        getPostApiStatsSubjectPassFailRatesUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsSubjectPassFailRatesBody),
+        }
+    )
+}
+
+export const getPostApiStatsSubjectPassFailRatesMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsSubjectPassFailRates>>,
+        TError,
+        { data: PostApiStatsSubjectPassFailRatesBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsSubjectPassFailRates>>,
+    TError,
+    { data: PostApiStatsSubjectPassFailRatesBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsSubjectPassFailRates']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsSubjectPassFailRates>>,
+        { data: PostApiStatsSubjectPassFailRatesBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsSubjectPassFailRates(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsSubjectPassFailRatesMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsSubjectPassFailRates>>
+>
+export type PostApiStatsSubjectPassFailRatesMutationBody = PostApiStatsSubjectPassFailRatesBody
+export type PostApiStatsSubjectPassFailRatesMutationError = unknown
+
+export const usePostApiStatsSubjectPassFailRates = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsSubjectPassFailRates>>,
+            TError,
+            { data: PostApiStatsSubjectPassFailRatesBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsSubjectPassFailRates>>,
+    TError,
+    { data: PostApiStatsSubjectPassFailRatesBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsSubjectPassFailRatesMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsSubjectsHighFailRatesResponse200 = {
+    data: PostApiStatsSubjectsHighFailRates200
+    status: 200
+}
+
+export type postApiStatsSubjectsHighFailRatesResponseSuccess =
+    postApiStatsSubjectsHighFailRatesResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsSubjectsHighFailRatesResponse =
+    postApiStatsSubjectsHighFailRatesResponseSuccess
+
+export const getPostApiStatsSubjectsHighFailRatesUrl = () => {
+    return `/api/stats/subjects-high-fail-rates`
+}
+
+export const postApiStatsSubjectsHighFailRates = async (
+    postApiStatsSubjectsHighFailRatesBody: PostApiStatsSubjectsHighFailRatesBody,
+    options?: RequestInit
+): Promise<postApiStatsSubjectsHighFailRatesResponse> => {
+    return customTrainingFetch<postApiStatsSubjectsHighFailRatesResponse>(
+        getPostApiStatsSubjectsHighFailRatesUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsSubjectsHighFailRatesBody),
+        }
+    )
+}
+
+export const getPostApiStatsSubjectsHighFailRatesMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsSubjectsHighFailRates>>,
+        TError,
+        { data: PostApiStatsSubjectsHighFailRatesBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsSubjectsHighFailRates>>,
+    TError,
+    { data: PostApiStatsSubjectsHighFailRatesBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsSubjectsHighFailRates']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsSubjectsHighFailRates>>,
+        { data: PostApiStatsSubjectsHighFailRatesBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsSubjectsHighFailRates(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsSubjectsHighFailRatesMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsSubjectsHighFailRates>>
+>
+export type PostApiStatsSubjectsHighFailRatesMutationBody = PostApiStatsSubjectsHighFailRatesBody
+export type PostApiStatsSubjectsHighFailRatesMutationError = unknown
+
+export const usePostApiStatsSubjectsHighFailRates = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsSubjectsHighFailRates>>,
+            TError,
+            { data: PostApiStatsSubjectsHighFailRatesBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsSubjectsHighFailRates>>,
+    TError,
+    { data: PostApiStatsSubjectsHighFailRatesBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsSubjectsHighFailRatesMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsSubjectsHighAbsentStudentsResponse200 = {
+    data: PostApiStatsSubjectsHighAbsentStudents200
+    status: 200
+}
+
+export type postApiStatsSubjectsHighAbsentStudentsResponseSuccess =
+    postApiStatsSubjectsHighAbsentStudentsResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsSubjectsHighAbsentStudentsResponse =
+    postApiStatsSubjectsHighAbsentStudentsResponseSuccess
+
+export const getPostApiStatsSubjectsHighAbsentStudentsUrl = () => {
+    return `/api/stats/subjects-high-absent-students`
+}
+
+export const postApiStatsSubjectsHighAbsentStudents = async (
+    postApiStatsSubjectsHighAbsentStudentsBody: PostApiStatsSubjectsHighAbsentStudentsBody,
+    options?: RequestInit
+): Promise<postApiStatsSubjectsHighAbsentStudentsResponse> => {
+    return customTrainingFetch<postApiStatsSubjectsHighAbsentStudentsResponse>(
+        getPostApiStatsSubjectsHighAbsentStudentsUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsSubjectsHighAbsentStudentsBody),
+        }
+    )
+}
+
+export const getPostApiStatsSubjectsHighAbsentStudentsMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsSubjectsHighAbsentStudents>>,
+        TError,
+        { data: PostApiStatsSubjectsHighAbsentStudentsBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsSubjectsHighAbsentStudents>>,
+    TError,
+    { data: PostApiStatsSubjectsHighAbsentStudentsBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsSubjectsHighAbsentStudents']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsSubjectsHighAbsentStudents>>,
+        { data: PostApiStatsSubjectsHighAbsentStudentsBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsSubjectsHighAbsentStudents(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsSubjectsHighAbsentStudentsMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsSubjectsHighAbsentStudents>>
+>
+export type PostApiStatsSubjectsHighAbsentStudentsMutationBody =
+    PostApiStatsSubjectsHighAbsentStudentsBody
+export type PostApiStatsSubjectsHighAbsentStudentsMutationError = unknown
+
+export const usePostApiStatsSubjectsHighAbsentStudents = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsSubjectsHighAbsentStudents>>,
+            TError,
+            { data: PostApiStatsSubjectsHighAbsentStudentsBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsSubjectsHighAbsentStudents>>,
+    TError,
+    { data: PostApiStatsSubjectsHighAbsentStudentsBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsSubjectsHighAbsentStudentsMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * @summary Thống kê số lượng ngân hàng đề chưa có
+ */
+export type postApiStatsStatisticsExamBankNotYetResponse200 = {
+    data: PostApiStatsStatisticsExamBankNotYet200
+    status: 200
+}
+
+export type postApiStatsStatisticsExamBankNotYetResponseSuccess =
+    postApiStatsStatisticsExamBankNotYetResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsStatisticsExamBankNotYetResponse =
+    postApiStatsStatisticsExamBankNotYetResponseSuccess
+
+export const getPostApiStatsStatisticsExamBankNotYetUrl = () => {
+    return `/api/stats/statistics-exam-bank-not-yet`
+}
+
+export const postApiStatsStatisticsExamBankNotYet = async (
+    postApiStatsStatisticsExamBankNotYetBody: PostApiStatsStatisticsExamBankNotYetBody,
+    options?: RequestInit
+): Promise<postApiStatsStatisticsExamBankNotYetResponse> => {
+    return customTrainingFetch<postApiStatsStatisticsExamBankNotYetResponse>(
+        getPostApiStatsStatisticsExamBankNotYetUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsStatisticsExamBankNotYetBody),
+        }
+    )
+}
+
+export const getPostApiStatsStatisticsExamBankNotYetMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsStatisticsExamBankNotYet>>,
+        TError,
+        { data: PostApiStatsStatisticsExamBankNotYetBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsStatisticsExamBankNotYet>>,
+    TError,
+    { data: PostApiStatsStatisticsExamBankNotYetBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsStatisticsExamBankNotYet']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsStatisticsExamBankNotYet>>,
+        { data: PostApiStatsStatisticsExamBankNotYetBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsStatisticsExamBankNotYet(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsStatisticsExamBankNotYetMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsStatisticsExamBankNotYet>>
+>
+export type PostApiStatsStatisticsExamBankNotYetMutationBody =
+    PostApiStatsStatisticsExamBankNotYetBody
+export type PostApiStatsStatisticsExamBankNotYetMutationError = unknown
+
+/**
+ * @summary Thống kê số lượng ngân hàng đề chưa có
+ */
+export const usePostApiStatsStatisticsExamBankNotYet = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsStatisticsExamBankNotYet>>,
+            TError,
+            { data: PostApiStatsStatisticsExamBankNotYetBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsStatisticsExamBankNotYet>>,
+    TError,
+    { data: PostApiStatsStatisticsExamBankNotYetBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsStatisticsExamBankNotYetMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsLateGradeSubjectsResponse200 = {
+    data: PostApiStatsLateGradeSubjects200
+    status: 200
+}
+
+export type postApiStatsLateGradeSubjectsResponseSuccess =
+    postApiStatsLateGradeSubjectsResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsLateGradeSubjectsResponse = postApiStatsLateGradeSubjectsResponseSuccess
+
+export const getPostApiStatsLateGradeSubjectsUrl = () => {
+    return `/api/stats/late-grade-subjects`
+}
+
+export const postApiStatsLateGradeSubjects = async (
+    postApiStatsLateGradeSubjectsBody: PostApiStatsLateGradeSubjectsBody,
+    options?: RequestInit
+): Promise<postApiStatsLateGradeSubjectsResponse> => {
+    return customTrainingFetch<postApiStatsLateGradeSubjectsResponse>(
+        getPostApiStatsLateGradeSubjectsUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsLateGradeSubjectsBody),
+        }
+    )
+}
+
+export const getPostApiStatsLateGradeSubjectsMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsLateGradeSubjects>>,
+        TError,
+        { data: PostApiStatsLateGradeSubjectsBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsLateGradeSubjects>>,
+    TError,
+    { data: PostApiStatsLateGradeSubjectsBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsLateGradeSubjects']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsLateGradeSubjects>>,
+        { data: PostApiStatsLateGradeSubjectsBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsLateGradeSubjects(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsLateGradeSubjectsMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsLateGradeSubjects>>
+>
+export type PostApiStatsLateGradeSubjectsMutationBody = PostApiStatsLateGradeSubjectsBody
+export type PostApiStatsLateGradeSubjectsMutationError = unknown
+
+export const usePostApiStatsLateGradeSubjects = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsLateGradeSubjects>>,
+            TError,
+            { data: PostApiStatsLateGradeSubjectsBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsLateGradeSubjects>>,
+    TError,
+    { data: PostApiStatsLateGradeSubjectsBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsLateGradeSubjectsMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * @summary Thống kê số lượng ngân hàng đề đã bổ sung / cập nhật
+ */
+export type postApiStatsExamBankUpdateResponse200 = {
+    data: PostApiStatsExamBankUpdate200
+    status: 200
+}
+
+export type postApiStatsExamBankUpdateResponseSuccess = postApiStatsExamBankUpdateResponse200 & {
+    headers: Headers
+}
+
+export type postApiStatsExamBankUpdateResponse = postApiStatsExamBankUpdateResponseSuccess
+
+export const getPostApiStatsExamBankUpdateUrl = () => {
+    return `/api/stats/exam-bank-update`
+}
+
+export const postApiStatsExamBankUpdate = async (
+    postApiStatsExamBankUpdateBody: PostApiStatsExamBankUpdateBody,
+    options?: RequestInit
+): Promise<postApiStatsExamBankUpdateResponse> => {
+    return customTrainingFetch<postApiStatsExamBankUpdateResponse>(
+        getPostApiStatsExamBankUpdateUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsExamBankUpdateBody),
+        }
+    )
+}
+
+export const getPostApiStatsExamBankUpdateMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsExamBankUpdate>>,
+        TError,
+        { data: PostApiStatsExamBankUpdateBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsExamBankUpdate>>,
+    TError,
+    { data: PostApiStatsExamBankUpdateBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsExamBankUpdate']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsExamBankUpdate>>,
+        { data: PostApiStatsExamBankUpdateBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsExamBankUpdate(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsExamBankUpdateMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsExamBankUpdate>>
+>
+export type PostApiStatsExamBankUpdateMutationBody = PostApiStatsExamBankUpdateBody
+export type PostApiStatsExamBankUpdateMutationError = unknown
+
+/**
+ * @summary Thống kê số lượng ngân hàng đề đã bổ sung / cập nhật
+ */
+export const usePostApiStatsExamBankUpdate = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsExamBankUpdate>>,
+            TError,
+            { data: PostApiStatsExamBankUpdateBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsExamBankUpdate>>,
+    TError,
+    { data: PostApiStatsExamBankUpdateBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsExamBankUpdateMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * @summary Thống kê tỷ lệ đạt và chưa đạt chuẩn ngoại ngữ theo tiến trình
+ */
+export type postApiStatsLanguageStandardProgressResponse200 = {
+    data: PostApiStatsLanguageStandardProgress200
+    status: 200
+}
+
+export type postApiStatsLanguageStandardProgressResponseSuccess =
+    postApiStatsLanguageStandardProgressResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsLanguageStandardProgressResponse =
+    postApiStatsLanguageStandardProgressResponseSuccess
+
+export const getPostApiStatsLanguageStandardProgressUrl = () => {
+    return `/api/stats/language-standard-progress`
+}
+
+export const postApiStatsLanguageStandardProgress = async (
+    postApiStatsLanguageStandardProgressBody: PostApiStatsLanguageStandardProgressBody,
+    options?: RequestInit
+): Promise<postApiStatsLanguageStandardProgressResponse> => {
+    return customTrainingFetch<postApiStatsLanguageStandardProgressResponse>(
+        getPostApiStatsLanguageStandardProgressUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsLanguageStandardProgressBody),
+        }
+    )
+}
+
+export const getPostApiStatsLanguageStandardProgressMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsLanguageStandardProgress>>,
+        TError,
+        { data: PostApiStatsLanguageStandardProgressBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsLanguageStandardProgress>>,
+    TError,
+    { data: PostApiStatsLanguageStandardProgressBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsLanguageStandardProgress']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsLanguageStandardProgress>>,
+        { data: PostApiStatsLanguageStandardProgressBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsLanguageStandardProgress(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsLanguageStandardProgressMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsLanguageStandardProgress>>
+>
+export type PostApiStatsLanguageStandardProgressMutationBody =
+    PostApiStatsLanguageStandardProgressBody
+export type PostApiStatsLanguageStandardProgressMutationError = unknown
+
+/**
+ * @summary Thống kê tỷ lệ đạt và chưa đạt chuẩn ngoại ngữ theo tiến trình
+ */
+export const usePostApiStatsLanguageStandardProgress = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsLanguageStandardProgress>>,
+            TError,
+            { data: PostApiStatsLanguageStandardProgressBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsLanguageStandardProgress>>,
+    TError,
+    { data: PostApiStatsLanguageStandardProgressBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsLanguageStandardProgressMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsAdmissionStatisticsResponse200 = {
+    data: PostApiStatsAdmissionStatistics200
+    status: 200
+}
+
+export type postApiStatsAdmissionStatisticsResponseSuccess =
+    postApiStatsAdmissionStatisticsResponse200 & {
+        headers: Headers
+    }
+
+export type postApiStatsAdmissionStatisticsResponse = postApiStatsAdmissionStatisticsResponseSuccess
+
+export const getPostApiStatsAdmissionStatisticsUrl = () => {
+    return `/api/stats/admission-statistics`
+}
+
+export const postApiStatsAdmissionStatistics = async (
+    postApiStatsAdmissionStatisticsBody: PostApiStatsAdmissionStatisticsBody,
+    options?: RequestInit
+): Promise<postApiStatsAdmissionStatisticsResponse> => {
+    return customTrainingFetch<postApiStatsAdmissionStatisticsResponse>(
+        getPostApiStatsAdmissionStatisticsUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsAdmissionStatisticsBody),
+        }
+    )
+}
+
+export const getPostApiStatsAdmissionStatisticsMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsAdmissionStatistics>>,
+        TError,
+        { data: PostApiStatsAdmissionStatisticsBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsAdmissionStatistics>>,
+    TError,
+    { data: PostApiStatsAdmissionStatisticsBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsAdmissionStatistics']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsAdmissionStatistics>>,
+        { data: PostApiStatsAdmissionStatisticsBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsAdmissionStatistics(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsAdmissionStatisticsMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsAdmissionStatistics>>
+>
+export type PostApiStatsAdmissionStatisticsMutationBody = PostApiStatsAdmissionStatisticsBody
+export type PostApiStatsAdmissionStatisticsMutationError = unknown
+
+export const usePostApiStatsAdmissionStatistics = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsAdmissionStatistics>>,
+            TError,
+            { data: PostApiStatsAdmissionStatisticsBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsAdmissionStatistics>>,
+    TError,
+    { data: PostApiStatsAdmissionStatisticsBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsAdmissionStatisticsMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsRetestRatesResponse200 = {
+    data: PostApiStatsRetestRates200
+    status: 200
+}
+
+export type postApiStatsRetestRatesResponseSuccess = postApiStatsRetestRatesResponse200 & {
+    headers: Headers
+}
+
+export type postApiStatsRetestRatesResponse = postApiStatsRetestRatesResponseSuccess
+
+export const getPostApiStatsRetestRatesUrl = () => {
+    return `/api/stats/retest-rates`
+}
+
+export const postApiStatsRetestRates = async (
+    postApiStatsRetestRatesBody: PostApiStatsRetestRatesBody,
+    options?: RequestInit
+): Promise<postApiStatsRetestRatesResponse> => {
+    return customTrainingFetch<postApiStatsRetestRatesResponse>(getPostApiStatsRetestRatesUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(postApiStatsRetestRatesBody),
+    })
+}
+
+export const getPostApiStatsRetestRatesMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsRetestRates>>,
+        TError,
+        { data: PostApiStatsRetestRatesBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsRetestRates>>,
+    TError,
+    { data: PostApiStatsRetestRatesBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsRetestRates']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsRetestRates>>,
+        { data: PostApiStatsRetestRatesBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsRetestRates(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsRetestRatesMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsRetestRates>>
+>
+export type PostApiStatsRetestRatesMutationBody = PostApiStatsRetestRatesBody
+export type PostApiStatsRetestRatesMutationError = unknown
+
+export const usePostApiStatsRetestRates = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsRetestRates>>,
+            TError,
+            { data: PostApiStatsRetestRatesBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsRetestRates>>,
+    TError,
+    { data: PostApiStatsRetestRatesBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsRetestRatesMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type postApiStatsRelearnRatesResponse200 = {
+    data: PostApiStatsRelearnRates200
+    status: 200
+}
+
+export type postApiStatsRelearnRatesResponseSuccess = postApiStatsRelearnRatesResponse200 & {
+    headers: Headers
+}
+
+export type postApiStatsRelearnRatesResponse = postApiStatsRelearnRatesResponseSuccess
+
+export const getPostApiStatsRelearnRatesUrl = () => {
+    return `/api/stats/relearn-rates`
+}
+
+export const postApiStatsRelearnRates = async (
+    postApiStatsRelearnRatesBody: PostApiStatsRelearnRatesBody,
+    options?: RequestInit
+): Promise<postApiStatsRelearnRatesResponse> => {
+    return customTrainingFetch<postApiStatsRelearnRatesResponse>(getPostApiStatsRelearnRatesUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(postApiStatsRelearnRatesBody),
+    })
+}
+
+export const getPostApiStatsRelearnRatesMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof postApiStatsRelearnRates>>,
+        TError,
+        { data: PostApiStatsRelearnRatesBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof postApiStatsRelearnRates>>,
+    TError,
+    { data: PostApiStatsRelearnRatesBody },
+    TContext
+> => {
+    const mutationKey = ['postApiStatsRelearnRates']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof postApiStatsRelearnRates>>,
+        { data: PostApiStatsRelearnRatesBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsRelearnRates(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiStatsRelearnRatesMutationResult = NonNullable<
+    Awaited<ReturnType<typeof postApiStatsRelearnRates>>
+>
+export type PostApiStatsRelearnRatesMutationBody = PostApiStatsRelearnRatesBody
+export type PostApiStatsRelearnRatesMutationError = unknown
+
+export const usePostApiStatsRelearnRates = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof postApiStatsRelearnRates>>,
+            TError,
+            { data: PostApiStatsRelearnRatesBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsRelearnRates>>,
+    TError,
+    { data: PostApiStatsRelearnRatesBody },
+    TContext
+> => {
+    const mutationOptions = getPostApiStatsRelearnRatesMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * Thêm mới danh sách học viên/sinh viên 
 
@@ -6215,5147 +11356,6 @@ export const useImportPhanCongGiangDay = <TError = ImportPhanCongGiangDay400, TC
     TContext
 > => {
     const mutationOptions = getImportPhanCongGiangDayMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsStudentDistributionByTrainingObjectTypeResponse200 = {
-    data: PostApiStatsStudentDistributionByTrainingObjectType200
-    status: 200
-}
-
-export type postApiStatsStudentDistributionByTrainingObjectTypeResponseSuccess =
-    postApiStatsStudentDistributionByTrainingObjectTypeResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsStudentDistributionByTrainingObjectTypeResponse =
-    postApiStatsStudentDistributionByTrainingObjectTypeResponseSuccess
-
-export const getPostApiStatsStudentDistributionByTrainingObjectTypeUrl = () => {
-    return `/api/stats/student-distribution-by-training-object-type`
-}
-
-export const postApiStatsStudentDistributionByTrainingObjectType = async (
-    postApiStatsStudentDistributionByTrainingObjectTypeBody: PostApiStatsStudentDistributionByTrainingObjectTypeBody,
-    options?: RequestInit
-): Promise<postApiStatsStudentDistributionByTrainingObjectTypeResponse> => {
-    return customTrainingFetch<postApiStatsStudentDistributionByTrainingObjectTypeResponse>(
-        getPostApiStatsStudentDistributionByTrainingObjectTypeUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsStudentDistributionByTrainingObjectTypeBody),
-        }
-    )
-}
-
-export const getPostApiStatsStudentDistributionByTrainingObjectTypeMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectType>>,
-        TError,
-        { data: PostApiStatsStudentDistributionByTrainingObjectTypeBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectType>>,
-    TError,
-    { data: PostApiStatsStudentDistributionByTrainingObjectTypeBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsStudentDistributionByTrainingObjectType']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectType>>,
-        { data: PostApiStatsStudentDistributionByTrainingObjectTypeBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsStudentDistributionByTrainingObjectType(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsStudentDistributionByTrainingObjectTypeMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectType>>
->
-export type PostApiStatsStudentDistributionByTrainingObjectTypeMutationBody =
-    PostApiStatsStudentDistributionByTrainingObjectTypeBody
-export type PostApiStatsStudentDistributionByTrainingObjectTypeMutationError = unknown
-
-export const usePostApiStatsStudentDistributionByTrainingObjectType = <
-    TError = unknown,
-    TContext = unknown,
->(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectType>>,
-            TError,
-            { data: PostApiStatsStudentDistributionByTrainingObjectTypeBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectType>>,
-    TError,
-    { data: PostApiStatsStudentDistributionByTrainingObjectTypeBody },
-    TContext
-> => {
-    const mutationOptions =
-        getPostApiStatsStudentDistributionByTrainingObjectTypeMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsStudentDistributionByTrainingLevelResponse200 = {
-    data: PostApiStatsStudentDistributionByTrainingLevel200
-    status: 200
-}
-
-export type postApiStatsStudentDistributionByTrainingLevelResponseSuccess =
-    postApiStatsStudentDistributionByTrainingLevelResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsStudentDistributionByTrainingLevelResponse =
-    postApiStatsStudentDistributionByTrainingLevelResponseSuccess
-
-export const getPostApiStatsStudentDistributionByTrainingLevelUrl = () => {
-    return `/api/stats/student-distribution-by-training-level`
-}
-
-export const postApiStatsStudentDistributionByTrainingLevel = async (
-    postApiStatsStudentDistributionByTrainingLevelBody: PostApiStatsStudentDistributionByTrainingLevelBody,
-    options?: RequestInit
-): Promise<postApiStatsStudentDistributionByTrainingLevelResponse> => {
-    return customTrainingFetch<postApiStatsStudentDistributionByTrainingLevelResponse>(
-        getPostApiStatsStudentDistributionByTrainingLevelUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsStudentDistributionByTrainingLevelBody),
-        }
-    )
-}
-
-export const getPostApiStatsStudentDistributionByTrainingLevelMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevel>>,
-        TError,
-        { data: PostApiStatsStudentDistributionByTrainingLevelBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevel>>,
-    TError,
-    { data: PostApiStatsStudentDistributionByTrainingLevelBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsStudentDistributionByTrainingLevel']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevel>>,
-        { data: PostApiStatsStudentDistributionByTrainingLevelBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsStudentDistributionByTrainingLevel(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsStudentDistributionByTrainingLevelMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevel>>
->
-export type PostApiStatsStudentDistributionByTrainingLevelMutationBody =
-    PostApiStatsStudentDistributionByTrainingLevelBody
-export type PostApiStatsStudentDistributionByTrainingLevelMutationError = unknown
-
-export const usePostApiStatsStudentDistributionByTrainingLevel = <
-    TError = unknown,
-    TContext = unknown,
->(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevel>>,
-            TError,
-            { data: PostApiStatsStudentDistributionByTrainingLevelBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevel>>,
-    TError,
-    { data: PostApiStatsStudentDistributionByTrainingLevelBody },
-    TContext
-> => {
-    const mutationOptions =
-        getPostApiStatsStudentDistributionByTrainingLevelMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsStudentDistributionByTrainingCourseResponse200 = {
-    data: PostApiStatsStudentDistributionByTrainingCourse200
-    status: 200
-}
-
-export type postApiStatsStudentDistributionByTrainingCourseResponseSuccess =
-    postApiStatsStudentDistributionByTrainingCourseResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsStudentDistributionByTrainingCourseResponse =
-    postApiStatsStudentDistributionByTrainingCourseResponseSuccess
-
-export const getPostApiStatsStudentDistributionByTrainingCourseUrl = () => {
-    return `/api/stats/student-distribution-by-training-course`
-}
-
-export const postApiStatsStudentDistributionByTrainingCourse = async (
-    postApiStatsStudentDistributionByTrainingCourseBody: PostApiStatsStudentDistributionByTrainingCourseBody,
-    options?: RequestInit
-): Promise<postApiStatsStudentDistributionByTrainingCourseResponse> => {
-    return customTrainingFetch<postApiStatsStudentDistributionByTrainingCourseResponse>(
-        getPostApiStatsStudentDistributionByTrainingCourseUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsStudentDistributionByTrainingCourseBody),
-        }
-    )
-}
-
-export const getPostApiStatsStudentDistributionByTrainingCourseMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourse>>,
-        TError,
-        { data: PostApiStatsStudentDistributionByTrainingCourseBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourse>>,
-    TError,
-    { data: PostApiStatsStudentDistributionByTrainingCourseBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsStudentDistributionByTrainingCourse']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourse>>,
-        { data: PostApiStatsStudentDistributionByTrainingCourseBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsStudentDistributionByTrainingCourse(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsStudentDistributionByTrainingCourseMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourse>>
->
-export type PostApiStatsStudentDistributionByTrainingCourseMutationBody =
-    PostApiStatsStudentDistributionByTrainingCourseBody
-export type PostApiStatsStudentDistributionByTrainingCourseMutationError = unknown
-
-export const usePostApiStatsStudentDistributionByTrainingCourse = <
-    TError = unknown,
-    TContext = unknown,
->(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourse>>,
-            TError,
-            { data: PostApiStatsStudentDistributionByTrainingCourseBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourse>>,
-    TError,
-    { data: PostApiStatsStudentDistributionByTrainingCourseBody },
-    TContext
-> => {
-    const mutationOptions =
-        getPostApiStatsStudentDistributionByTrainingCourseMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsAverageEntryScoreByCourseResponse200 = {
-    data: PostApiStatsAverageEntryScoreByCourse200
-    status: 200
-}
-
-export type postApiStatsAverageEntryScoreByCourseResponseSuccess =
-    postApiStatsAverageEntryScoreByCourseResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsAverageEntryScoreByCourseResponse =
-    postApiStatsAverageEntryScoreByCourseResponseSuccess
-
-export const getPostApiStatsAverageEntryScoreByCourseUrl = () => {
-    return `/api/stats/average-entry-score-by-course`
-}
-
-export const postApiStatsAverageEntryScoreByCourse = async (
-    postApiStatsAverageEntryScoreByCourseBody: PostApiStatsAverageEntryScoreByCourseBody,
-    options?: RequestInit
-): Promise<postApiStatsAverageEntryScoreByCourseResponse> => {
-    return customTrainingFetch<postApiStatsAverageEntryScoreByCourseResponse>(
-        getPostApiStatsAverageEntryScoreByCourseUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsAverageEntryScoreByCourseBody),
-        }
-    )
-}
-
-export const getPostApiStatsAverageEntryScoreByCourseMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourse>>,
-        TError,
-        { data: PostApiStatsAverageEntryScoreByCourseBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourse>>,
-    TError,
-    { data: PostApiStatsAverageEntryScoreByCourseBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsAverageEntryScoreByCourse']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourse>>,
-        { data: PostApiStatsAverageEntryScoreByCourseBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsAverageEntryScoreByCourse(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsAverageEntryScoreByCourseMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourse>>
->
-export type PostApiStatsAverageEntryScoreByCourseMutationBody =
-    PostApiStatsAverageEntryScoreByCourseBody
-export type PostApiStatsAverageEntryScoreByCourseMutationError = unknown
-
-export const usePostApiStatsAverageEntryScoreByCourse = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourse>>,
-            TError,
-            { data: PostApiStatsAverageEntryScoreByCourseBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourse>>,
-    TError,
-    { data: PostApiStatsAverageEntryScoreByCourseBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsAverageEntryScoreByCourseMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsAverageGpaByCourseResponse200 = {
-    data: PostApiStatsAverageGpaByCourse200
-    status: 200
-}
-
-export type postApiStatsAverageGpaByCourseResponseSuccess =
-    postApiStatsAverageGpaByCourseResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsAverageGpaByCourseResponse = postApiStatsAverageGpaByCourseResponseSuccess
-
-export const getPostApiStatsAverageGpaByCourseUrl = () => {
-    return `/api/stats/average-gpa-by-course`
-}
-
-export const postApiStatsAverageGpaByCourse = async (
-    postApiStatsAverageGpaByCourseBody: PostApiStatsAverageGpaByCourseBody,
-    options?: RequestInit
-): Promise<postApiStatsAverageGpaByCourseResponse> => {
-    return customTrainingFetch<postApiStatsAverageGpaByCourseResponse>(
-        getPostApiStatsAverageGpaByCourseUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsAverageGpaByCourseBody),
-        }
-    )
-}
-
-export const getPostApiStatsAverageGpaByCourseMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsAverageGpaByCourse>>,
-        TError,
-        { data: PostApiStatsAverageGpaByCourseBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsAverageGpaByCourse>>,
-    TError,
-    { data: PostApiStatsAverageGpaByCourseBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsAverageGpaByCourse']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsAverageGpaByCourse>>,
-        { data: PostApiStatsAverageGpaByCourseBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsAverageGpaByCourse(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsAverageGpaByCourseMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsAverageGpaByCourse>>
->
-export type PostApiStatsAverageGpaByCourseMutationBody = PostApiStatsAverageGpaByCourseBody
-export type PostApiStatsAverageGpaByCourseMutationError = unknown
-
-export const usePostApiStatsAverageGpaByCourse = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsAverageGpaByCourse>>,
-            TError,
-            { data: PostApiStatsAverageGpaByCourseBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsAverageGpaByCourse>>,
-    TError,
-    { data: PostApiStatsAverageGpaByCourseBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsAverageGpaByCourseMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsGraduationRateByCourseResponse200 = {
-    data: PostApiStatsGraduationRateByCourse200
-    status: 200
-}
-
-export type postApiStatsGraduationRateByCourseResponseSuccess =
-    postApiStatsGraduationRateByCourseResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsGraduationRateByCourseResponse =
-    postApiStatsGraduationRateByCourseResponseSuccess
-
-export const getPostApiStatsGraduationRateByCourseUrl = () => {
-    return `/api/stats/graduation-rate-by-course`
-}
-
-export const postApiStatsGraduationRateByCourse = async (
-    postApiStatsGraduationRateByCourseBody: PostApiStatsGraduationRateByCourseBody,
-    options?: RequestInit
-): Promise<postApiStatsGraduationRateByCourseResponse> => {
-    return customTrainingFetch<postApiStatsGraduationRateByCourseResponse>(
-        getPostApiStatsGraduationRateByCourseUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsGraduationRateByCourseBody),
-        }
-    )
-}
-
-export const getPostApiStatsGraduationRateByCourseMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsGraduationRateByCourse>>,
-        TError,
-        { data: PostApiStatsGraduationRateByCourseBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsGraduationRateByCourse>>,
-    TError,
-    { data: PostApiStatsGraduationRateByCourseBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsGraduationRateByCourse']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsGraduationRateByCourse>>,
-        { data: PostApiStatsGraduationRateByCourseBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsGraduationRateByCourse(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsGraduationRateByCourseMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsGraduationRateByCourse>>
->
-export type PostApiStatsGraduationRateByCourseMutationBody = PostApiStatsGraduationRateByCourseBody
-export type PostApiStatsGraduationRateByCourseMutationError = unknown
-
-export const usePostApiStatsGraduationRateByCourse = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsGraduationRateByCourse>>,
-            TError,
-            { data: PostApiStatsGraduationRateByCourseBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsGraduationRateByCourse>>,
-    TError,
-    { data: PostApiStatsGraduationRateByCourseBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsGraduationRateByCourseMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsAcademicPerformanceByYearResponse200 = {
-    data: PostApiStatsAcademicPerformanceByYear200
-    status: 200
-}
-
-export type postApiStatsAcademicPerformanceByYearResponseSuccess =
-    postApiStatsAcademicPerformanceByYearResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsAcademicPerformanceByYearResponse =
-    postApiStatsAcademicPerformanceByYearResponseSuccess
-
-export const getPostApiStatsAcademicPerformanceByYearUrl = () => {
-    return `/api/stats/academic-performance-by-year`
-}
-
-export const postApiStatsAcademicPerformanceByYear = async (
-    postApiStatsAcademicPerformanceByYearBody: PostApiStatsAcademicPerformanceByYearBody,
-    options?: RequestInit
-): Promise<postApiStatsAcademicPerformanceByYearResponse> => {
-    return customTrainingFetch<postApiStatsAcademicPerformanceByYearResponse>(
-        getPostApiStatsAcademicPerformanceByYearUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsAcademicPerformanceByYearBody),
-        }
-    )
-}
-
-export const getPostApiStatsAcademicPerformanceByYearMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYear>>,
-        TError,
-        { data: PostApiStatsAcademicPerformanceByYearBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYear>>,
-    TError,
-    { data: PostApiStatsAcademicPerformanceByYearBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsAcademicPerformanceByYear']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYear>>,
-        { data: PostApiStatsAcademicPerformanceByYearBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsAcademicPerformanceByYear(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsAcademicPerformanceByYearMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYear>>
->
-export type PostApiStatsAcademicPerformanceByYearMutationBody =
-    PostApiStatsAcademicPerformanceByYearBody
-export type PostApiStatsAcademicPerformanceByYearMutationError = unknown
-
-export const usePostApiStatsAcademicPerformanceByYear = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYear>>,
-            TError,
-            { data: PostApiStatsAcademicPerformanceByYearBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYear>>,
-    TError,
-    { data: PostApiStatsAcademicPerformanceByYearBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsAcademicPerformanceByYearMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsKpiCardsResponse200 = {
-    data: PostApiStatsKpiCards200
-    status: 200
-}
-
-export type postApiStatsKpiCardsResponseSuccess = postApiStatsKpiCardsResponse200 & {
-    headers: Headers
-}
-
-export type postApiStatsKpiCardsResponse = postApiStatsKpiCardsResponseSuccess
-
-export const getPostApiStatsKpiCardsUrl = () => {
-    return `/api/stats/kpi-cards`
-}
-
-export const postApiStatsKpiCards = async (
-    postApiStatsKpiCardsBody: PostApiStatsKpiCardsBody,
-    options?: RequestInit
-): Promise<postApiStatsKpiCardsResponse> => {
-    return customTrainingFetch<postApiStatsKpiCardsResponse>(getPostApiStatsKpiCardsUrl(), {
-        ...options,
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', ...options?.headers },
-        body: JSON.stringify(postApiStatsKpiCardsBody),
-    })
-}
-
-export const getPostApiStatsKpiCardsMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsKpiCards>>,
-        TError,
-        { data: PostApiStatsKpiCardsBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsKpiCards>>,
-    TError,
-    { data: PostApiStatsKpiCardsBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsKpiCards']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsKpiCards>>,
-        { data: PostApiStatsKpiCardsBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsKpiCards(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsKpiCardsMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsKpiCards>>
->
-export type PostApiStatsKpiCardsMutationBody = PostApiStatsKpiCardsBody
-export type PostApiStatsKpiCardsMutationError = unknown
-
-export const usePostApiStatsKpiCards = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsKpiCards>>,
-            TError,
-            { data: PostApiStatsKpiCardsBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsKpiCards>>,
-    TError,
-    { data: PostApiStatsKpiCardsBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsKpiCardsMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsStudentDistributionByProvinceResponse200 = {
-    data: PostApiStatsStudentDistributionByProvince200
-    status: 200
-}
-
-export type postApiStatsStudentDistributionByProvinceResponseSuccess =
-    postApiStatsStudentDistributionByProvinceResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsStudentDistributionByProvinceResponse =
-    postApiStatsStudentDistributionByProvinceResponseSuccess
-
-export const getPostApiStatsStudentDistributionByProvinceUrl = () => {
-    return `/api/stats/student-distribution-by-province`
-}
-
-export const postApiStatsStudentDistributionByProvince = async (
-    postApiStatsStudentDistributionByProvinceBody: PostApiStatsStudentDistributionByProvinceBody,
-    options?: RequestInit
-): Promise<postApiStatsStudentDistributionByProvinceResponse> => {
-    return customTrainingFetch<postApiStatsStudentDistributionByProvinceResponse>(
-        getPostApiStatsStudentDistributionByProvinceUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsStudentDistributionByProvinceBody),
-        }
-    )
-}
-
-export const getPostApiStatsStudentDistributionByProvinceMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvince>>,
-        TError,
-        { data: PostApiStatsStudentDistributionByProvinceBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvince>>,
-    TError,
-    { data: PostApiStatsStudentDistributionByProvinceBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsStudentDistributionByProvince']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvince>>,
-        { data: PostApiStatsStudentDistributionByProvinceBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsStudentDistributionByProvince(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsStudentDistributionByProvinceMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvince>>
->
-export type PostApiStatsStudentDistributionByProvinceMutationBody =
-    PostApiStatsStudentDistributionByProvinceBody
-export type PostApiStatsStudentDistributionByProvinceMutationError = unknown
-
-export const usePostApiStatsStudentDistributionByProvince = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvince>>,
-            TError,
-            { data: PostApiStatsStudentDistributionByProvinceBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvince>>,
-    TError,
-    { data: PostApiStatsStudentDistributionByProvinceBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsStudentDistributionByProvinceMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsStudentDistributionByTrainingObjectTypeFilteredResponse200 = {
-    data: PostApiStatsStudentDistributionByTrainingObjectTypeFiltered200
-    status: 200
-}
-
-export type postApiStatsStudentDistributionByTrainingObjectTypeFilteredResponseSuccess =
-    postApiStatsStudentDistributionByTrainingObjectTypeFilteredResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsStudentDistributionByTrainingObjectTypeFilteredResponse =
-    postApiStatsStudentDistributionByTrainingObjectTypeFilteredResponseSuccess
-
-export const getPostApiStatsStudentDistributionByTrainingObjectTypeFilteredUrl = () => {
-    return `/api/stats/student-distribution-by-training-object-type-filtered`
-}
-
-export const postApiStatsStudentDistributionByTrainingObjectTypeFiltered = async (
-    postApiStatsStudentDistributionByTrainingObjectTypeFilteredBody: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredBody,
-    options?: RequestInit
-): Promise<postApiStatsStudentDistributionByTrainingObjectTypeFilteredResponse> => {
-    return customTrainingFetch<postApiStatsStudentDistributionByTrainingObjectTypeFilteredResponse>(
-        getPostApiStatsStudentDistributionByTrainingObjectTypeFilteredUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsStudentDistributionByTrainingObjectTypeFilteredBody),
-        }
-    )
-}
-
-export const getPostApiStatsStudentDistributionByTrainingObjectTypeFilteredMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectTypeFiltered>>,
-        TError,
-        { data: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectTypeFiltered>>,
-    TError,
-    { data: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsStudentDistributionByTrainingObjectTypeFiltered']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectTypeFiltered>>,
-        { data: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsStudentDistributionByTrainingObjectTypeFiltered(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsStudentDistributionByTrainingObjectTypeFilteredMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectTypeFiltered>>
->
-export type PostApiStatsStudentDistributionByTrainingObjectTypeFilteredMutationBody =
-    PostApiStatsStudentDistributionByTrainingObjectTypeFilteredBody
-export type PostApiStatsStudentDistributionByTrainingObjectTypeFilteredMutationError = unknown
-
-export const usePostApiStatsStudentDistributionByTrainingObjectTypeFiltered = <
-    TError = unknown,
-    TContext = unknown,
->(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectTypeFiltered>>,
-            TError,
-            { data: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectTypeFiltered>>,
-    TError,
-    { data: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredBody },
-    TContext
-> => {
-    const mutationOptions =
-        getPostApiStatsStudentDistributionByTrainingObjectTypeFilteredMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsStudentDistributionByTrainingLevelFilteredResponse200 = {
-    data: PostApiStatsStudentDistributionByTrainingLevelFiltered200
-    status: 200
-}
-
-export type postApiStatsStudentDistributionByTrainingLevelFilteredResponseSuccess =
-    postApiStatsStudentDistributionByTrainingLevelFilteredResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsStudentDistributionByTrainingLevelFilteredResponse =
-    postApiStatsStudentDistributionByTrainingLevelFilteredResponseSuccess
-
-export const getPostApiStatsStudentDistributionByTrainingLevelFilteredUrl = () => {
-    return `/api/stats/student-distribution-by-training-level-filtered`
-}
-
-export const postApiStatsStudentDistributionByTrainingLevelFiltered = async (
-    postApiStatsStudentDistributionByTrainingLevelFilteredBody: PostApiStatsStudentDistributionByTrainingLevelFilteredBody,
-    options?: RequestInit
-): Promise<postApiStatsStudentDistributionByTrainingLevelFilteredResponse> => {
-    return customTrainingFetch<postApiStatsStudentDistributionByTrainingLevelFilteredResponse>(
-        getPostApiStatsStudentDistributionByTrainingLevelFilteredUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsStudentDistributionByTrainingLevelFilteredBody),
-        }
-    )
-}
-
-export const getPostApiStatsStudentDistributionByTrainingLevelFilteredMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevelFiltered>>,
-        TError,
-        { data: PostApiStatsStudentDistributionByTrainingLevelFilteredBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevelFiltered>>,
-    TError,
-    { data: PostApiStatsStudentDistributionByTrainingLevelFilteredBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsStudentDistributionByTrainingLevelFiltered']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevelFiltered>>,
-        { data: PostApiStatsStudentDistributionByTrainingLevelFilteredBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsStudentDistributionByTrainingLevelFiltered(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsStudentDistributionByTrainingLevelFilteredMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevelFiltered>>
->
-export type PostApiStatsStudentDistributionByTrainingLevelFilteredMutationBody =
-    PostApiStatsStudentDistributionByTrainingLevelFilteredBody
-export type PostApiStatsStudentDistributionByTrainingLevelFilteredMutationError = unknown
-
-export const usePostApiStatsStudentDistributionByTrainingLevelFiltered = <
-    TError = unknown,
-    TContext = unknown,
->(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevelFiltered>>,
-            TError,
-            { data: PostApiStatsStudentDistributionByTrainingLevelFilteredBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevelFiltered>>,
-    TError,
-    { data: PostApiStatsStudentDistributionByTrainingLevelFilteredBody },
-    TContext
-> => {
-    const mutationOptions =
-        getPostApiStatsStudentDistributionByTrainingLevelFilteredMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsStudentDistributionByTrainingCourseFilteredResponse200 = {
-    data: PostApiStatsStudentDistributionByTrainingCourseFiltered200
-    status: 200
-}
-
-export type postApiStatsStudentDistributionByTrainingCourseFilteredResponseSuccess =
-    postApiStatsStudentDistributionByTrainingCourseFilteredResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsStudentDistributionByTrainingCourseFilteredResponse =
-    postApiStatsStudentDistributionByTrainingCourseFilteredResponseSuccess
-
-export const getPostApiStatsStudentDistributionByTrainingCourseFilteredUrl = () => {
-    return `/api/stats/student-distribution-by-training-course-filtered`
-}
-
-export const postApiStatsStudentDistributionByTrainingCourseFiltered = async (
-    postApiStatsStudentDistributionByTrainingCourseFilteredBody: PostApiStatsStudentDistributionByTrainingCourseFilteredBody,
-    options?: RequestInit
-): Promise<postApiStatsStudentDistributionByTrainingCourseFilteredResponse> => {
-    return customTrainingFetch<postApiStatsStudentDistributionByTrainingCourseFilteredResponse>(
-        getPostApiStatsStudentDistributionByTrainingCourseFilteredUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsStudentDistributionByTrainingCourseFilteredBody),
-        }
-    )
-}
-
-export const getPostApiStatsStudentDistributionByTrainingCourseFilteredMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourseFiltered>>,
-        TError,
-        { data: PostApiStatsStudentDistributionByTrainingCourseFilteredBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourseFiltered>>,
-    TError,
-    { data: PostApiStatsStudentDistributionByTrainingCourseFilteredBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsStudentDistributionByTrainingCourseFiltered']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourseFiltered>>,
-        { data: PostApiStatsStudentDistributionByTrainingCourseFilteredBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsStudentDistributionByTrainingCourseFiltered(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsStudentDistributionByTrainingCourseFilteredMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourseFiltered>>
->
-export type PostApiStatsStudentDistributionByTrainingCourseFilteredMutationBody =
-    PostApiStatsStudentDistributionByTrainingCourseFilteredBody
-export type PostApiStatsStudentDistributionByTrainingCourseFilteredMutationError = unknown
-
-export const usePostApiStatsStudentDistributionByTrainingCourseFiltered = <
-    TError = unknown,
-    TContext = unknown,
->(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourseFiltered>>,
-            TError,
-            { data: PostApiStatsStudentDistributionByTrainingCourseFilteredBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourseFiltered>>,
-    TError,
-    { data: PostApiStatsStudentDistributionByTrainingCourseFilteredBody },
-    TContext
-> => {
-    const mutationOptions =
-        getPostApiStatsStudentDistributionByTrainingCourseFilteredMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsAverageEntryScoreByCourseFilteredResponse200 = {
-    data: PostApiStatsAverageEntryScoreByCourseFiltered200
-    status: 200
-}
-
-export type postApiStatsAverageEntryScoreByCourseFilteredResponseSuccess =
-    postApiStatsAverageEntryScoreByCourseFilteredResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsAverageEntryScoreByCourseFilteredResponse =
-    postApiStatsAverageEntryScoreByCourseFilteredResponseSuccess
-
-export const getPostApiStatsAverageEntryScoreByCourseFilteredUrl = () => {
-    return `/api/stats/average-entry-score-by-course-filtered`
-}
-
-export const postApiStatsAverageEntryScoreByCourseFiltered = async (
-    postApiStatsAverageEntryScoreByCourseFilteredBody: PostApiStatsAverageEntryScoreByCourseFilteredBody,
-    options?: RequestInit
-): Promise<postApiStatsAverageEntryScoreByCourseFilteredResponse> => {
-    return customTrainingFetch<postApiStatsAverageEntryScoreByCourseFilteredResponse>(
-        getPostApiStatsAverageEntryScoreByCourseFilteredUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsAverageEntryScoreByCourseFilteredBody),
-        }
-    )
-}
-
-export const getPostApiStatsAverageEntryScoreByCourseFilteredMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourseFiltered>>,
-        TError,
-        { data: PostApiStatsAverageEntryScoreByCourseFilteredBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourseFiltered>>,
-    TError,
-    { data: PostApiStatsAverageEntryScoreByCourseFilteredBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsAverageEntryScoreByCourseFiltered']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourseFiltered>>,
-        { data: PostApiStatsAverageEntryScoreByCourseFilteredBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsAverageEntryScoreByCourseFiltered(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsAverageEntryScoreByCourseFilteredMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourseFiltered>>
->
-export type PostApiStatsAverageEntryScoreByCourseFilteredMutationBody =
-    PostApiStatsAverageEntryScoreByCourseFilteredBody
-export type PostApiStatsAverageEntryScoreByCourseFilteredMutationError = unknown
-
-export const usePostApiStatsAverageEntryScoreByCourseFiltered = <
-    TError = unknown,
-    TContext = unknown,
->(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourseFiltered>>,
-            TError,
-            { data: PostApiStatsAverageEntryScoreByCourseFilteredBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourseFiltered>>,
-    TError,
-    { data: PostApiStatsAverageEntryScoreByCourseFilteredBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsAverageEntryScoreByCourseFilteredMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsAverageGpaByCourseFilteredResponse200 = {
-    data: PostApiStatsAverageGpaByCourseFiltered200
-    status: 200
-}
-
-export type postApiStatsAverageGpaByCourseFilteredResponseSuccess =
-    postApiStatsAverageGpaByCourseFilteredResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsAverageGpaByCourseFilteredResponse =
-    postApiStatsAverageGpaByCourseFilteredResponseSuccess
-
-export const getPostApiStatsAverageGpaByCourseFilteredUrl = () => {
-    return `/api/stats/average-gpa-by-course-filtered`
-}
-
-export const postApiStatsAverageGpaByCourseFiltered = async (
-    postApiStatsAverageGpaByCourseFilteredBody: PostApiStatsAverageGpaByCourseFilteredBody,
-    options?: RequestInit
-): Promise<postApiStatsAverageGpaByCourseFilteredResponse> => {
-    return customTrainingFetch<postApiStatsAverageGpaByCourseFilteredResponse>(
-        getPostApiStatsAverageGpaByCourseFilteredUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsAverageGpaByCourseFilteredBody),
-        }
-    )
-}
-
-export const getPostApiStatsAverageGpaByCourseFilteredMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsAverageGpaByCourseFiltered>>,
-        TError,
-        { data: PostApiStatsAverageGpaByCourseFilteredBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsAverageGpaByCourseFiltered>>,
-    TError,
-    { data: PostApiStatsAverageGpaByCourseFilteredBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsAverageGpaByCourseFiltered']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsAverageGpaByCourseFiltered>>,
-        { data: PostApiStatsAverageGpaByCourseFilteredBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsAverageGpaByCourseFiltered(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsAverageGpaByCourseFilteredMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsAverageGpaByCourseFiltered>>
->
-export type PostApiStatsAverageGpaByCourseFilteredMutationBody =
-    PostApiStatsAverageGpaByCourseFilteredBody
-export type PostApiStatsAverageGpaByCourseFilteredMutationError = unknown
-
-export const usePostApiStatsAverageGpaByCourseFiltered = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsAverageGpaByCourseFiltered>>,
-            TError,
-            { data: PostApiStatsAverageGpaByCourseFilteredBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsAverageGpaByCourseFiltered>>,
-    TError,
-    { data: PostApiStatsAverageGpaByCourseFilteredBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsAverageGpaByCourseFilteredMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsGraduationRateByCourseFilteredResponse200 = {
-    data: PostApiStatsGraduationRateByCourseFiltered200
-    status: 200
-}
-
-export type postApiStatsGraduationRateByCourseFilteredResponseSuccess =
-    postApiStatsGraduationRateByCourseFilteredResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsGraduationRateByCourseFilteredResponse =
-    postApiStatsGraduationRateByCourseFilteredResponseSuccess
-
-export const getPostApiStatsGraduationRateByCourseFilteredUrl = () => {
-    return `/api/stats/graduation-rate-by-course-filtered`
-}
-
-export const postApiStatsGraduationRateByCourseFiltered = async (
-    postApiStatsGraduationRateByCourseFilteredBody: PostApiStatsGraduationRateByCourseFilteredBody,
-    options?: RequestInit
-): Promise<postApiStatsGraduationRateByCourseFilteredResponse> => {
-    return customTrainingFetch<postApiStatsGraduationRateByCourseFilteredResponse>(
-        getPostApiStatsGraduationRateByCourseFilteredUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsGraduationRateByCourseFilteredBody),
-        }
-    )
-}
-
-export const getPostApiStatsGraduationRateByCourseFilteredMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsGraduationRateByCourseFiltered>>,
-        TError,
-        { data: PostApiStatsGraduationRateByCourseFilteredBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsGraduationRateByCourseFiltered>>,
-    TError,
-    { data: PostApiStatsGraduationRateByCourseFilteredBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsGraduationRateByCourseFiltered']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsGraduationRateByCourseFiltered>>,
-        { data: PostApiStatsGraduationRateByCourseFilteredBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsGraduationRateByCourseFiltered(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsGraduationRateByCourseFilteredMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsGraduationRateByCourseFiltered>>
->
-export type PostApiStatsGraduationRateByCourseFilteredMutationBody =
-    PostApiStatsGraduationRateByCourseFilteredBody
-export type PostApiStatsGraduationRateByCourseFilteredMutationError = unknown
-
-export const usePostApiStatsGraduationRateByCourseFiltered = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsGraduationRateByCourseFiltered>>,
-            TError,
-            { data: PostApiStatsGraduationRateByCourseFilteredBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsGraduationRateByCourseFiltered>>,
-    TError,
-    { data: PostApiStatsGraduationRateByCourseFilteredBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsGraduationRateByCourseFilteredMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsAcademicPerformanceByYearFilteredResponse200 = {
-    data: PostApiStatsAcademicPerformanceByYearFiltered200
-    status: 200
-}
-
-export type postApiStatsAcademicPerformanceByYearFilteredResponseSuccess =
-    postApiStatsAcademicPerformanceByYearFilteredResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsAcademicPerformanceByYearFilteredResponse =
-    postApiStatsAcademicPerformanceByYearFilteredResponseSuccess
-
-export const getPostApiStatsAcademicPerformanceByYearFilteredUrl = () => {
-    return `/api/stats/academic-performance-by-year-filtered`
-}
-
-export const postApiStatsAcademicPerformanceByYearFiltered = async (
-    postApiStatsAcademicPerformanceByYearFilteredBody: PostApiStatsAcademicPerformanceByYearFilteredBody,
-    options?: RequestInit
-): Promise<postApiStatsAcademicPerformanceByYearFilteredResponse> => {
-    return customTrainingFetch<postApiStatsAcademicPerformanceByYearFilteredResponse>(
-        getPostApiStatsAcademicPerformanceByYearFilteredUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsAcademicPerformanceByYearFilteredBody),
-        }
-    )
-}
-
-export const getPostApiStatsAcademicPerformanceByYearFilteredMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYearFiltered>>,
-        TError,
-        { data: PostApiStatsAcademicPerformanceByYearFilteredBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYearFiltered>>,
-    TError,
-    { data: PostApiStatsAcademicPerformanceByYearFilteredBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsAcademicPerformanceByYearFiltered']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYearFiltered>>,
-        { data: PostApiStatsAcademicPerformanceByYearFilteredBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsAcademicPerformanceByYearFiltered(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsAcademicPerformanceByYearFilteredMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYearFiltered>>
->
-export type PostApiStatsAcademicPerformanceByYearFilteredMutationBody =
-    PostApiStatsAcademicPerformanceByYearFilteredBody
-export type PostApiStatsAcademicPerformanceByYearFilteredMutationError = unknown
-
-export const usePostApiStatsAcademicPerformanceByYearFiltered = <
-    TError = unknown,
-    TContext = unknown,
->(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYearFiltered>>,
-            TError,
-            { data: PostApiStatsAcademicPerformanceByYearFilteredBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYearFiltered>>,
-    TError,
-    { data: PostApiStatsAcademicPerformanceByYearFilteredBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsAcademicPerformanceByYearFilteredMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsStudentDistributionByProvinceFilteredResponse200 = {
-    data: PostApiStatsStudentDistributionByProvinceFiltered200
-    status: 200
-}
-
-export type postApiStatsStudentDistributionByProvinceFilteredResponseSuccess =
-    postApiStatsStudentDistributionByProvinceFilteredResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsStudentDistributionByProvinceFilteredResponse =
-    postApiStatsStudentDistributionByProvinceFilteredResponseSuccess
-
-export const getPostApiStatsStudentDistributionByProvinceFilteredUrl = () => {
-    return `/api/stats/student-distribution-by-province-filtered`
-}
-
-export const postApiStatsStudentDistributionByProvinceFiltered = async (
-    postApiStatsStudentDistributionByProvinceFilteredBody: PostApiStatsStudentDistributionByProvinceFilteredBody,
-    options?: RequestInit
-): Promise<postApiStatsStudentDistributionByProvinceFilteredResponse> => {
-    return customTrainingFetch<postApiStatsStudentDistributionByProvinceFilteredResponse>(
-        getPostApiStatsStudentDistributionByProvinceFilteredUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsStudentDistributionByProvinceFilteredBody),
-        }
-    )
-}
-
-export const getPostApiStatsStudentDistributionByProvinceFilteredMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvinceFiltered>>,
-        TError,
-        { data: PostApiStatsStudentDistributionByProvinceFilteredBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvinceFiltered>>,
-    TError,
-    { data: PostApiStatsStudentDistributionByProvinceFilteredBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsStudentDistributionByProvinceFiltered']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvinceFiltered>>,
-        { data: PostApiStatsStudentDistributionByProvinceFilteredBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsStudentDistributionByProvinceFiltered(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsStudentDistributionByProvinceFilteredMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvinceFiltered>>
->
-export type PostApiStatsStudentDistributionByProvinceFilteredMutationBody =
-    PostApiStatsStudentDistributionByProvinceFilteredBody
-export type PostApiStatsStudentDistributionByProvinceFilteredMutationError = unknown
-
-export const usePostApiStatsStudentDistributionByProvinceFiltered = <
-    TError = unknown,
-    TContext = unknown,
->(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvinceFiltered>>,
-            TError,
-            { data: PostApiStatsStudentDistributionByProvinceFilteredBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvinceFiltered>>,
-    TError,
-    { data: PostApiStatsStudentDistributionByProvinceFilteredBody },
-    TContext
-> => {
-    const mutationOptions =
-        getPostApiStatsStudentDistributionByProvinceFilteredMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsStudentsOfInterestResponse200 = {
-    data: PostApiStatsStudentsOfInterest200
-    status: 200
-}
-
-export type postApiStatsStudentsOfInterestResponseSuccess =
-    postApiStatsStudentsOfInterestResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsStudentsOfInterestResponse = postApiStatsStudentsOfInterestResponseSuccess
-
-export const getPostApiStatsStudentsOfInterestUrl = () => {
-    return `/api/stats/students-of-interest`
-}
-
-export const postApiStatsStudentsOfInterest = async (
-    postApiStatsStudentsOfInterestBody: PostApiStatsStudentsOfInterestBody,
-    options?: RequestInit
-): Promise<postApiStatsStudentsOfInterestResponse> => {
-    return customTrainingFetch<postApiStatsStudentsOfInterestResponse>(
-        getPostApiStatsStudentsOfInterestUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsStudentsOfInterestBody),
-        }
-    )
-}
-
-export const getPostApiStatsStudentsOfInterestMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsStudentsOfInterest>>,
-        TError,
-        { data: PostApiStatsStudentsOfInterestBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsStudentsOfInterest>>,
-    TError,
-    { data: PostApiStatsStudentsOfInterestBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsStudentsOfInterest']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsStudentsOfInterest>>,
-        { data: PostApiStatsStudentsOfInterestBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsStudentsOfInterest(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsStudentsOfInterestMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsStudentsOfInterest>>
->
-export type PostApiStatsStudentsOfInterestMutationBody = PostApiStatsStudentsOfInterestBody
-export type PostApiStatsStudentsOfInterestMutationError = unknown
-
-export const usePostApiStatsStudentsOfInterest = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsStudentsOfInterest>>,
-            TError,
-            { data: PostApiStatsStudentsOfInterestBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsStudentsOfInterest>>,
-    TError,
-    { data: PostApiStatsStudentsOfInterestBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsStudentsOfInterestMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsAverageGpaByFixedClassResponse200 = {
-    data: PostApiStatsAverageGpaByFixedClass200
-    status: 200
-}
-
-export type postApiStatsAverageGpaByFixedClassResponseSuccess =
-    postApiStatsAverageGpaByFixedClassResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsAverageGpaByFixedClassResponse =
-    postApiStatsAverageGpaByFixedClassResponseSuccess
-
-export const getPostApiStatsAverageGpaByFixedClassUrl = () => {
-    return `/api/stats/average-gpa-by-fixed-class`
-}
-
-export const postApiStatsAverageGpaByFixedClass = async (
-    postApiStatsAverageGpaByFixedClassBody: PostApiStatsAverageGpaByFixedClassBody,
-    options?: RequestInit
-): Promise<postApiStatsAverageGpaByFixedClassResponse> => {
-    return customTrainingFetch<postApiStatsAverageGpaByFixedClassResponse>(
-        getPostApiStatsAverageGpaByFixedClassUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsAverageGpaByFixedClassBody),
-        }
-    )
-}
-
-export const getPostApiStatsAverageGpaByFixedClassMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsAverageGpaByFixedClass>>,
-        TError,
-        { data: PostApiStatsAverageGpaByFixedClassBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsAverageGpaByFixedClass>>,
-    TError,
-    { data: PostApiStatsAverageGpaByFixedClassBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsAverageGpaByFixedClass']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsAverageGpaByFixedClass>>,
-        { data: PostApiStatsAverageGpaByFixedClassBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsAverageGpaByFixedClass(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsAverageGpaByFixedClassMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsAverageGpaByFixedClass>>
->
-export type PostApiStatsAverageGpaByFixedClassMutationBody = PostApiStatsAverageGpaByFixedClassBody
-export type PostApiStatsAverageGpaByFixedClassMutationError = unknown
-
-export const usePostApiStatsAverageGpaByFixedClass = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsAverageGpaByFixedClass>>,
-            TError,
-            { data: PostApiStatsAverageGpaByFixedClassBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsAverageGpaByFixedClass>>,
-    TError,
-    { data: PostApiStatsAverageGpaByFixedClassBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsAverageGpaByFixedClassMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsAverageGpaByTrainingMajorResponse200 = {
-    data: PostApiStatsAverageGpaByTrainingMajor200
-    status: 200
-}
-
-export type postApiStatsAverageGpaByTrainingMajorResponseSuccess =
-    postApiStatsAverageGpaByTrainingMajorResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsAverageGpaByTrainingMajorResponse =
-    postApiStatsAverageGpaByTrainingMajorResponseSuccess
-
-export const getPostApiStatsAverageGpaByTrainingMajorUrl = () => {
-    return `/api/stats/average-gpa-by-training-major`
-}
-
-export const postApiStatsAverageGpaByTrainingMajor = async (
-    postApiStatsAverageGpaByTrainingMajorBody: PostApiStatsAverageGpaByTrainingMajorBody,
-    options?: RequestInit
-): Promise<postApiStatsAverageGpaByTrainingMajorResponse> => {
-    return customTrainingFetch<postApiStatsAverageGpaByTrainingMajorResponse>(
-        getPostApiStatsAverageGpaByTrainingMajorUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsAverageGpaByTrainingMajorBody),
-        }
-    )
-}
-
-export const getPostApiStatsAverageGpaByTrainingMajorMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsAverageGpaByTrainingMajor>>,
-        TError,
-        { data: PostApiStatsAverageGpaByTrainingMajorBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsAverageGpaByTrainingMajor>>,
-    TError,
-    { data: PostApiStatsAverageGpaByTrainingMajorBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsAverageGpaByTrainingMajor']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsAverageGpaByTrainingMajor>>,
-        { data: PostApiStatsAverageGpaByTrainingMajorBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsAverageGpaByTrainingMajor(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsAverageGpaByTrainingMajorMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsAverageGpaByTrainingMajor>>
->
-export type PostApiStatsAverageGpaByTrainingMajorMutationBody =
-    PostApiStatsAverageGpaByTrainingMajorBody
-export type PostApiStatsAverageGpaByTrainingMajorMutationError = unknown
-
-export const usePostApiStatsAverageGpaByTrainingMajor = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsAverageGpaByTrainingMajor>>,
-            TError,
-            { data: PostApiStatsAverageGpaByTrainingMajorBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsAverageGpaByTrainingMajor>>,
-    TError,
-    { data: PostApiStatsAverageGpaByTrainingMajorBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsAverageGpaByTrainingMajorMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsSubjectPassFailRateResponse200 = {
-    data: PostApiStatsSubjectPassFailRate200
-    status: 200
-}
-
-export type postApiStatsSubjectPassFailRateResponseSuccess =
-    postApiStatsSubjectPassFailRateResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsSubjectPassFailRateResponse = postApiStatsSubjectPassFailRateResponseSuccess
-
-export const getPostApiStatsSubjectPassFailRateUrl = () => {
-    return `/api/stats/subject-pass-fail-rate`
-}
-
-export const postApiStatsSubjectPassFailRate = async (
-    postApiStatsSubjectPassFailRateBody: PostApiStatsSubjectPassFailRateBody,
-    options?: RequestInit
-): Promise<postApiStatsSubjectPassFailRateResponse> => {
-    return customTrainingFetch<postApiStatsSubjectPassFailRateResponse>(
-        getPostApiStatsSubjectPassFailRateUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsSubjectPassFailRateBody),
-        }
-    )
-}
-
-export const getPostApiStatsSubjectPassFailRateMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsSubjectPassFailRate>>,
-        TError,
-        { data: PostApiStatsSubjectPassFailRateBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsSubjectPassFailRate>>,
-    TError,
-    { data: PostApiStatsSubjectPassFailRateBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsSubjectPassFailRate']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsSubjectPassFailRate>>,
-        { data: PostApiStatsSubjectPassFailRateBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsSubjectPassFailRate(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsSubjectPassFailRateMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsSubjectPassFailRate>>
->
-export type PostApiStatsSubjectPassFailRateMutationBody = PostApiStatsSubjectPassFailRateBody
-export type PostApiStatsSubjectPassFailRateMutationError = unknown
-
-export const usePostApiStatsSubjectPassFailRate = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsSubjectPassFailRate>>,
-            TError,
-            { data: PostApiStatsSubjectPassFailRateBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsSubjectPassFailRate>>,
-    TError,
-    { data: PostApiStatsSubjectPassFailRateBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsSubjectPassFailRateMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsCurriculumStatisticsResponse200 = {
-    data: PostApiStatsCurriculumStatistics200
-    status: 200
-}
-
-export type postApiStatsCurriculumStatisticsResponseSuccess =
-    postApiStatsCurriculumStatisticsResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsCurriculumStatisticsResponse =
-    postApiStatsCurriculumStatisticsResponseSuccess
-
-export const getPostApiStatsCurriculumStatisticsUrl = () => {
-    return `/api/stats/curriculum-statistics`
-}
-
-export const postApiStatsCurriculumStatistics = async (
-    postApiStatsCurriculumStatisticsBody: PostApiStatsCurriculumStatisticsBody,
-    options?: RequestInit
-): Promise<postApiStatsCurriculumStatisticsResponse> => {
-    return customTrainingFetch<postApiStatsCurriculumStatisticsResponse>(
-        getPostApiStatsCurriculumStatisticsUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsCurriculumStatisticsBody),
-        }
-    )
-}
-
-export const getPostApiStatsCurriculumStatisticsMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsCurriculumStatistics>>,
-        TError,
-        { data: PostApiStatsCurriculumStatisticsBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsCurriculumStatistics>>,
-    TError,
-    { data: PostApiStatsCurriculumStatisticsBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsCurriculumStatistics']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsCurriculumStatistics>>,
-        { data: PostApiStatsCurriculumStatisticsBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsCurriculumStatistics(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsCurriculumStatisticsMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsCurriculumStatistics>>
->
-export type PostApiStatsCurriculumStatisticsMutationBody = PostApiStatsCurriculumStatisticsBody
-export type PostApiStatsCurriculumStatisticsMutationError = unknown
-
-export const usePostApiStatsCurriculumStatistics = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsCurriculumStatistics>>,
-            TError,
-            { data: PostApiStatsCurriculumStatisticsBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsCurriculumStatistics>>,
-    TError,
-    { data: PostApiStatsCurriculumStatisticsBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsCurriculumStatisticsMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsSubjectClassStatisticsResponse200 = {
-    data: PostApiStatsSubjectClassStatistics200
-    status: 200
-}
-
-export type postApiStatsSubjectClassStatisticsResponseSuccess =
-    postApiStatsSubjectClassStatisticsResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsSubjectClassStatisticsResponse =
-    postApiStatsSubjectClassStatisticsResponseSuccess
-
-export const getPostApiStatsSubjectClassStatisticsUrl = () => {
-    return `/api/stats/subject-class-statistics`
-}
-
-export const postApiStatsSubjectClassStatistics = async (
-    postApiStatsSubjectClassStatisticsBody: PostApiStatsSubjectClassStatisticsBody,
-    options?: RequestInit
-): Promise<postApiStatsSubjectClassStatisticsResponse> => {
-    return customTrainingFetch<postApiStatsSubjectClassStatisticsResponse>(
-        getPostApiStatsSubjectClassStatisticsUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsSubjectClassStatisticsBody),
-        }
-    )
-}
-
-export const getPostApiStatsSubjectClassStatisticsMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsSubjectClassStatistics>>,
-        TError,
-        { data: PostApiStatsSubjectClassStatisticsBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsSubjectClassStatistics>>,
-    TError,
-    { data: PostApiStatsSubjectClassStatisticsBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsSubjectClassStatistics']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsSubjectClassStatistics>>,
-        { data: PostApiStatsSubjectClassStatisticsBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsSubjectClassStatistics(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsSubjectClassStatisticsMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsSubjectClassStatistics>>
->
-export type PostApiStatsSubjectClassStatisticsMutationBody = PostApiStatsSubjectClassStatisticsBody
-export type PostApiStatsSubjectClassStatisticsMutationError = unknown
-
-export const usePostApiStatsSubjectClassStatistics = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsSubjectClassStatistics>>,
-            TError,
-            { data: PostApiStatsSubjectClassStatisticsBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsSubjectClassStatistics>>,
-    TError,
-    { data: PostApiStatsSubjectClassStatisticsBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsSubjectClassStatisticsMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsLecturerWorkloadResponse200 = {
-    data: PostApiStatsLecturerWorkload200
-    status: 200
-}
-
-export type postApiStatsLecturerWorkloadResponseSuccess =
-    postApiStatsLecturerWorkloadResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsLecturerWorkloadResponse = postApiStatsLecturerWorkloadResponseSuccess
-
-export const getPostApiStatsLecturerWorkloadUrl = () => {
-    return `/api/stats/lecturer-workload`
-}
-
-export const postApiStatsLecturerWorkload = async (
-    postApiStatsLecturerWorkloadBody: PostApiStatsLecturerWorkloadBody,
-    options?: RequestInit
-): Promise<postApiStatsLecturerWorkloadResponse> => {
-    return customTrainingFetch<postApiStatsLecturerWorkloadResponse>(
-        getPostApiStatsLecturerWorkloadUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsLecturerWorkloadBody),
-        }
-    )
-}
-
-export const getPostApiStatsLecturerWorkloadMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsLecturerWorkload>>,
-        TError,
-        { data: PostApiStatsLecturerWorkloadBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsLecturerWorkload>>,
-    TError,
-    { data: PostApiStatsLecturerWorkloadBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsLecturerWorkload']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsLecturerWorkload>>,
-        { data: PostApiStatsLecturerWorkloadBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsLecturerWorkload(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsLecturerWorkloadMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsLecturerWorkload>>
->
-export type PostApiStatsLecturerWorkloadMutationBody = PostApiStatsLecturerWorkloadBody
-export type PostApiStatsLecturerWorkloadMutationError = unknown
-
-export const usePostApiStatsLecturerWorkload = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsLecturerWorkload>>,
-            TError,
-            { data: PostApiStatsLecturerWorkloadBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsLecturerWorkload>>,
-    TError,
-    { data: PostApiStatsLecturerWorkloadBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsLecturerWorkloadMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsGraduationRankingStatisticsResponse200 = {
-    data: PostApiStatsGraduationRankingStatistics200
-    status: 200
-}
-
-export type postApiStatsGraduationRankingStatisticsResponseSuccess =
-    postApiStatsGraduationRankingStatisticsResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsGraduationRankingStatisticsResponse =
-    postApiStatsGraduationRankingStatisticsResponseSuccess
-
-export const getPostApiStatsGraduationRankingStatisticsUrl = () => {
-    return `/api/stats/graduation-ranking-statistics`
-}
-
-export const postApiStatsGraduationRankingStatistics = async (
-    postApiStatsGraduationRankingStatisticsBody: PostApiStatsGraduationRankingStatisticsBody,
-    options?: RequestInit
-): Promise<postApiStatsGraduationRankingStatisticsResponse> => {
-    return customTrainingFetch<postApiStatsGraduationRankingStatisticsResponse>(
-        getPostApiStatsGraduationRankingStatisticsUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsGraduationRankingStatisticsBody),
-        }
-    )
-}
-
-export const getPostApiStatsGraduationRankingStatisticsMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsGraduationRankingStatistics>>,
-        TError,
-        { data: PostApiStatsGraduationRankingStatisticsBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsGraduationRankingStatistics>>,
-    TError,
-    { data: PostApiStatsGraduationRankingStatisticsBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsGraduationRankingStatistics']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsGraduationRankingStatistics>>,
-        { data: PostApiStatsGraduationRankingStatisticsBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsGraduationRankingStatistics(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsGraduationRankingStatisticsMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsGraduationRankingStatistics>>
->
-export type PostApiStatsGraduationRankingStatisticsMutationBody =
-    PostApiStatsGraduationRankingStatisticsBody
-export type PostApiStatsGraduationRankingStatisticsMutationError = unknown
-
-export const usePostApiStatsGraduationRankingStatistics = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsGraduationRankingStatistics>>,
-            TError,
-            { data: PostApiStatsGraduationRankingStatisticsBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsGraduationRankingStatistics>>,
-    TError,
-    { data: PostApiStatsGraduationRankingStatisticsBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsGraduationRankingStatisticsMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsStudentsForAcademicActionResponse200 = {
-    data: PostApiStatsStudentsForAcademicAction200
-    status: 200
-}
-
-export type postApiStatsStudentsForAcademicActionResponseSuccess =
-    postApiStatsStudentsForAcademicActionResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsStudentsForAcademicActionResponse =
-    postApiStatsStudentsForAcademicActionResponseSuccess
-
-export const getPostApiStatsStudentsForAcademicActionUrl = () => {
-    return `/api/stats/students-for-academic-action`
-}
-
-export const postApiStatsStudentsForAcademicAction = async (
-    postApiStatsStudentsForAcademicActionBody: PostApiStatsStudentsForAcademicActionBody,
-    options?: RequestInit
-): Promise<postApiStatsStudentsForAcademicActionResponse> => {
-    return customTrainingFetch<postApiStatsStudentsForAcademicActionResponse>(
-        getPostApiStatsStudentsForAcademicActionUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsStudentsForAcademicActionBody),
-        }
-    )
-}
-
-export const getPostApiStatsStudentsForAcademicActionMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsStudentsForAcademicAction>>,
-        TError,
-        { data: PostApiStatsStudentsForAcademicActionBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsStudentsForAcademicAction>>,
-    TError,
-    { data: PostApiStatsStudentsForAcademicActionBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsStudentsForAcademicAction']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsStudentsForAcademicAction>>,
-        { data: PostApiStatsStudentsForAcademicActionBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsStudentsForAcademicAction(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsStudentsForAcademicActionMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsStudentsForAcademicAction>>
->
-export type PostApiStatsStudentsForAcademicActionMutationBody =
-    PostApiStatsStudentsForAcademicActionBody
-export type PostApiStatsStudentsForAcademicActionMutationError = unknown
-
-export const usePostApiStatsStudentsForAcademicAction = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsStudentsForAcademicAction>>,
-            TError,
-            { data: PostApiStatsStudentsForAcademicActionBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsStudentsForAcademicAction>>,
-    TError,
-    { data: PostApiStatsStudentsForAcademicActionBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsStudentsForAcademicActionMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsExamParticipantsBySemesterResponse200 = {
-    data: PostApiStatsExamParticipantsBySemester200
-    status: 200
-}
-
-export type postApiStatsExamParticipantsBySemesterResponseSuccess =
-    postApiStatsExamParticipantsBySemesterResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsExamParticipantsBySemesterResponse =
-    postApiStatsExamParticipantsBySemesterResponseSuccess
-
-export const getPostApiStatsExamParticipantsBySemesterUrl = () => {
-    return `/api/stats/exam-participants-by-semester`
-}
-
-export const postApiStatsExamParticipantsBySemester = async (
-    postApiStatsExamParticipantsBySemesterBody: PostApiStatsExamParticipantsBySemesterBody,
-    options?: RequestInit
-): Promise<postApiStatsExamParticipantsBySemesterResponse> => {
-    return customTrainingFetch<postApiStatsExamParticipantsBySemesterResponse>(
-        getPostApiStatsExamParticipantsBySemesterUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsExamParticipantsBySemesterBody),
-        }
-    )
-}
-
-export const getPostApiStatsExamParticipantsBySemesterMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsExamParticipantsBySemester>>,
-        TError,
-        { data: PostApiStatsExamParticipantsBySemesterBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsExamParticipantsBySemester>>,
-    TError,
-    { data: PostApiStatsExamParticipantsBySemesterBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsExamParticipantsBySemester']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsExamParticipantsBySemester>>,
-        { data: PostApiStatsExamParticipantsBySemesterBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsExamParticipantsBySemester(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsExamParticipantsBySemesterMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsExamParticipantsBySemester>>
->
-export type PostApiStatsExamParticipantsBySemesterMutationBody =
-    PostApiStatsExamParticipantsBySemesterBody
-export type PostApiStatsExamParticipantsBySemesterMutationError = unknown
-
-export const usePostApiStatsExamParticipantsBySemester = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsExamParticipantsBySemester>>,
-            TError,
-            { data: PostApiStatsExamParticipantsBySemesterBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsExamParticipantsBySemester>>,
-    TError,
-    { data: PostApiStatsExamParticipantsBySemesterBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsExamParticipantsBySemesterMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsAverageExamScoreTrendResponse200 = {
-    data: PostApiStatsAverageExamScoreTrend200
-    status: 200
-}
-
-export type postApiStatsAverageExamScoreTrendResponseSuccess =
-    postApiStatsAverageExamScoreTrendResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsAverageExamScoreTrendResponse =
-    postApiStatsAverageExamScoreTrendResponseSuccess
-
-export const getPostApiStatsAverageExamScoreTrendUrl = () => {
-    return `/api/stats/average-exam-score-trend`
-}
-
-export const postApiStatsAverageExamScoreTrend = async (
-    postApiStatsAverageExamScoreTrendBody: PostApiStatsAverageExamScoreTrendBody,
-    options?: RequestInit
-): Promise<postApiStatsAverageExamScoreTrendResponse> => {
-    return customTrainingFetch<postApiStatsAverageExamScoreTrendResponse>(
-        getPostApiStatsAverageExamScoreTrendUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsAverageExamScoreTrendBody),
-        }
-    )
-}
-
-export const getPostApiStatsAverageExamScoreTrendMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsAverageExamScoreTrend>>,
-        TError,
-        { data: PostApiStatsAverageExamScoreTrendBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsAverageExamScoreTrend>>,
-    TError,
-    { data: PostApiStatsAverageExamScoreTrendBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsAverageExamScoreTrend']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsAverageExamScoreTrend>>,
-        { data: PostApiStatsAverageExamScoreTrendBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsAverageExamScoreTrend(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsAverageExamScoreTrendMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsAverageExamScoreTrend>>
->
-export type PostApiStatsAverageExamScoreTrendMutationBody = PostApiStatsAverageExamScoreTrendBody
-export type PostApiStatsAverageExamScoreTrendMutationError = unknown
-
-export const usePostApiStatsAverageExamScoreTrend = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsAverageExamScoreTrend>>,
-            TError,
-            { data: PostApiStatsAverageExamScoreTrendBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsAverageExamScoreTrend>>,
-    TError,
-    { data: PostApiStatsAverageExamScoreTrendBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsAverageExamScoreTrendMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsQuestionStatisticsResponse200 = {
-    data: PostApiStatsQuestionStatistics200
-    status: 200
-}
-
-export type postApiStatsQuestionStatisticsResponseSuccess =
-    postApiStatsQuestionStatisticsResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsQuestionStatisticsResponse = postApiStatsQuestionStatisticsResponseSuccess
-
-export const getPostApiStatsQuestionStatisticsUrl = () => {
-    return `/api/stats/question-statistics`
-}
-
-export const postApiStatsQuestionStatistics = async (
-    postApiStatsQuestionStatisticsBody: PostApiStatsQuestionStatisticsBody,
-    options?: RequestInit
-): Promise<postApiStatsQuestionStatisticsResponse> => {
-    return customTrainingFetch<postApiStatsQuestionStatisticsResponse>(
-        getPostApiStatsQuestionStatisticsUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsQuestionStatisticsBody),
-        }
-    )
-}
-
-export const getPostApiStatsQuestionStatisticsMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsQuestionStatistics>>,
-        TError,
-        { data: PostApiStatsQuestionStatisticsBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsQuestionStatistics>>,
-    TError,
-    { data: PostApiStatsQuestionStatisticsBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsQuestionStatistics']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsQuestionStatistics>>,
-        { data: PostApiStatsQuestionStatisticsBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsQuestionStatistics(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsQuestionStatisticsMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsQuestionStatistics>>
->
-export type PostApiStatsQuestionStatisticsMutationBody = PostApiStatsQuestionStatisticsBody
-export type PostApiStatsQuestionStatisticsMutationError = unknown
-
-export const usePostApiStatsQuestionStatistics = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsQuestionStatistics>>,
-            TError,
-            { data: PostApiStatsQuestionStatisticsBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsQuestionStatistics>>,
-    TError,
-    { data: PostApiStatsQuestionStatisticsBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsQuestionStatisticsMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsHighestIncorrectAnswerRateQuestionsResponse200 = {
-    data: PostApiStatsHighestIncorrectAnswerRateQuestions200
-    status: 200
-}
-
-export type postApiStatsHighestIncorrectAnswerRateQuestionsResponseSuccess =
-    postApiStatsHighestIncorrectAnswerRateQuestionsResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsHighestIncorrectAnswerRateQuestionsResponse =
-    postApiStatsHighestIncorrectAnswerRateQuestionsResponseSuccess
-
-export const getPostApiStatsHighestIncorrectAnswerRateQuestionsUrl = () => {
-    return `/api/stats/highest-incorrect-answer-rate-questions`
-}
-
-export const postApiStatsHighestIncorrectAnswerRateQuestions = async (
-    postApiStatsHighestIncorrectAnswerRateQuestionsBody: PostApiStatsHighestIncorrectAnswerRateQuestionsBody,
-    options?: RequestInit
-): Promise<postApiStatsHighestIncorrectAnswerRateQuestionsResponse> => {
-    return customTrainingFetch<postApiStatsHighestIncorrectAnswerRateQuestionsResponse>(
-        getPostApiStatsHighestIncorrectAnswerRateQuestionsUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsHighestIncorrectAnswerRateQuestionsBody),
-        }
-    )
-}
-
-export const getPostApiStatsHighestIncorrectAnswerRateQuestionsMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsHighestIncorrectAnswerRateQuestions>>,
-        TError,
-        { data: PostApiStatsHighestIncorrectAnswerRateQuestionsBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsHighestIncorrectAnswerRateQuestions>>,
-    TError,
-    { data: PostApiStatsHighestIncorrectAnswerRateQuestionsBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsHighestIncorrectAnswerRateQuestions']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsHighestIncorrectAnswerRateQuestions>>,
-        { data: PostApiStatsHighestIncorrectAnswerRateQuestionsBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsHighestIncorrectAnswerRateQuestions(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsHighestIncorrectAnswerRateQuestionsMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsHighestIncorrectAnswerRateQuestions>>
->
-export type PostApiStatsHighestIncorrectAnswerRateQuestionsMutationBody =
-    PostApiStatsHighestIncorrectAnswerRateQuestionsBody
-export type PostApiStatsHighestIncorrectAnswerRateQuestionsMutationError = unknown
-
-export const usePostApiStatsHighestIncorrectAnswerRateQuestions = <
-    TError = unknown,
-    TContext = unknown,
->(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsHighestIncorrectAnswerRateQuestions>>,
-            TError,
-            { data: PostApiStatsHighestIncorrectAnswerRateQuestionsBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsHighestIncorrectAnswerRateQuestions>>,
-    TError,
-    { data: PostApiStatsHighestIncorrectAnswerRateQuestionsBody },
-    TContext
-> => {
-    const mutationOptions =
-        getPostApiStatsHighestIncorrectAnswerRateQuestionsMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsMostUsedQuestionsResponse200 = {
-    data: PostApiStatsMostUsedQuestions200
-    status: 200
-}
-
-export type postApiStatsMostUsedQuestionsResponseSuccess =
-    postApiStatsMostUsedQuestionsResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsMostUsedQuestionsResponse = postApiStatsMostUsedQuestionsResponseSuccess
-
-export const getPostApiStatsMostUsedQuestionsUrl = () => {
-    return `/api/stats/most-used-questions`
-}
-
-export const postApiStatsMostUsedQuestions = async (
-    postApiStatsMostUsedQuestionsBody: PostApiStatsMostUsedQuestionsBody,
-    options?: RequestInit
-): Promise<postApiStatsMostUsedQuestionsResponse> => {
-    return customTrainingFetch<postApiStatsMostUsedQuestionsResponse>(
-        getPostApiStatsMostUsedQuestionsUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsMostUsedQuestionsBody),
-        }
-    )
-}
-
-export const getPostApiStatsMostUsedQuestionsMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsMostUsedQuestions>>,
-        TError,
-        { data: PostApiStatsMostUsedQuestionsBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsMostUsedQuestions>>,
-    TError,
-    { data: PostApiStatsMostUsedQuestionsBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsMostUsedQuestions']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsMostUsedQuestions>>,
-        { data: PostApiStatsMostUsedQuestionsBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsMostUsedQuestions(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsMostUsedQuestionsMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsMostUsedQuestions>>
->
-export type PostApiStatsMostUsedQuestionsMutationBody = PostApiStatsMostUsedQuestionsBody
-export type PostApiStatsMostUsedQuestionsMutationError = unknown
-
-export const usePostApiStatsMostUsedQuestions = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsMostUsedQuestions>>,
-            TError,
-            { data: PostApiStatsMostUsedQuestionsBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsMostUsedQuestions>>,
-    TError,
-    { data: PostApiStatsMostUsedQuestionsBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsMostUsedQuestionsMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsDemographicsResponse200 = {
-    data: PostApiStatsDemographics200
-    status: 200
-}
-
-export type postApiStatsDemographicsResponseSuccess = postApiStatsDemographicsResponse200 & {
-    headers: Headers
-}
-
-export type postApiStatsDemographicsResponse = postApiStatsDemographicsResponseSuccess
-
-export const getPostApiStatsDemographicsUrl = () => {
-    return `/api/stats/demographics`
-}
-
-export const postApiStatsDemographics = async (
-    postApiStatsDemographicsBody: PostApiStatsDemographicsBody,
-    options?: RequestInit
-): Promise<postApiStatsDemographicsResponse> => {
-    return customTrainingFetch<postApiStatsDemographicsResponse>(getPostApiStatsDemographicsUrl(), {
-        ...options,
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', ...options?.headers },
-        body: JSON.stringify(postApiStatsDemographicsBody),
-    })
-}
-
-export const getPostApiStatsDemographicsMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsDemographics>>,
-        TError,
-        { data: PostApiStatsDemographicsBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsDemographics>>,
-    TError,
-    { data: PostApiStatsDemographicsBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsDemographics']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsDemographics>>,
-        { data: PostApiStatsDemographicsBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsDemographics(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsDemographicsMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsDemographics>>
->
-export type PostApiStatsDemographicsMutationBody = PostApiStatsDemographicsBody
-export type PostApiStatsDemographicsMutationError = unknown
-
-export const usePostApiStatsDemographics = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsDemographics>>,
-            TError,
-            { data: PostApiStatsDemographicsBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsDemographics>>,
-    TError,
-    { data: PostApiStatsDemographicsBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsDemographicsMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsEnrollmentTrendResponse200 = {
-    data: PostApiStatsEnrollmentTrend200
-    status: 200
-}
-
-export type postApiStatsEnrollmentTrendResponseSuccess = postApiStatsEnrollmentTrendResponse200 & {
-    headers: Headers
-}
-
-export type postApiStatsEnrollmentTrendResponse = postApiStatsEnrollmentTrendResponseSuccess
-
-export const getPostApiStatsEnrollmentTrendUrl = () => {
-    return `/api/stats/enrollment-trend`
-}
-
-export const postApiStatsEnrollmentTrend = async (
-    postApiStatsEnrollmentTrendBody: PostApiStatsEnrollmentTrendBody,
-    options?: RequestInit
-): Promise<postApiStatsEnrollmentTrendResponse> => {
-    return customTrainingFetch<postApiStatsEnrollmentTrendResponse>(
-        getPostApiStatsEnrollmentTrendUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsEnrollmentTrendBody),
-        }
-    )
-}
-
-export const getPostApiStatsEnrollmentTrendMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsEnrollmentTrend>>,
-        TError,
-        { data: PostApiStatsEnrollmentTrendBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsEnrollmentTrend>>,
-    TError,
-    { data: PostApiStatsEnrollmentTrendBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsEnrollmentTrend']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsEnrollmentTrend>>,
-        { data: PostApiStatsEnrollmentTrendBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsEnrollmentTrend(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsEnrollmentTrendMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsEnrollmentTrend>>
->
-export type PostApiStatsEnrollmentTrendMutationBody = PostApiStatsEnrollmentTrendBody
-export type PostApiStatsEnrollmentTrendMutationError = unknown
-
-export const usePostApiStatsEnrollmentTrend = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsEnrollmentTrend>>,
-            TError,
-            { data: PostApiStatsEnrollmentTrendBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsEnrollmentTrend>>,
-    TError,
-    { data: PostApiStatsEnrollmentTrendBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsEnrollmentTrendMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsAdmissionStatisticsByMajorResponse200 = {
-    data: PostApiStatsAdmissionStatisticsByMajor200
-    status: 200
-}
-
-export type postApiStatsAdmissionStatisticsByMajorResponseSuccess =
-    postApiStatsAdmissionStatisticsByMajorResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsAdmissionStatisticsByMajorResponse =
-    postApiStatsAdmissionStatisticsByMajorResponseSuccess
-
-export const getPostApiStatsAdmissionStatisticsByMajorUrl = () => {
-    return `/api/stats/Admission-statistics-by-major`
-}
-
-export const postApiStatsAdmissionStatisticsByMajor = async (
-    postApiStatsAdmissionStatisticsByMajorBody: PostApiStatsAdmissionStatisticsByMajorBody,
-    options?: RequestInit
-): Promise<postApiStatsAdmissionStatisticsByMajorResponse> => {
-    return customTrainingFetch<postApiStatsAdmissionStatisticsByMajorResponse>(
-        getPostApiStatsAdmissionStatisticsByMajorUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsAdmissionStatisticsByMajorBody),
-        }
-    )
-}
-
-export const getPostApiStatsAdmissionStatisticsByMajorMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsAdmissionStatisticsByMajor>>,
-        TError,
-        { data: PostApiStatsAdmissionStatisticsByMajorBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsAdmissionStatisticsByMajor>>,
-    TError,
-    { data: PostApiStatsAdmissionStatisticsByMajorBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsAdmissionStatisticsByMajor']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsAdmissionStatisticsByMajor>>,
-        { data: PostApiStatsAdmissionStatisticsByMajorBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsAdmissionStatisticsByMajor(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsAdmissionStatisticsByMajorMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsAdmissionStatisticsByMajor>>
->
-export type PostApiStatsAdmissionStatisticsByMajorMutationBody =
-    PostApiStatsAdmissionStatisticsByMajorBody
-export type PostApiStatsAdmissionStatisticsByMajorMutationError = unknown
-
-export const usePostApiStatsAdmissionStatisticsByMajor = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsAdmissionStatisticsByMajor>>,
-            TError,
-            { data: PostApiStatsAdmissionStatisticsByMajorBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsAdmissionStatisticsByMajor>>,
-    TError,
-    { data: PostApiStatsAdmissionStatisticsByMajorBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsAdmissionStatisticsByMajorMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsStatisticsOfRecordsByDateResponse200 = {
-    data: PostApiStatsStatisticsOfRecordsByDate200
-    status: 200
-}
-
-export type postApiStatsStatisticsOfRecordsByDateResponseSuccess =
-    postApiStatsStatisticsOfRecordsByDateResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsStatisticsOfRecordsByDateResponse =
-    postApiStatsStatisticsOfRecordsByDateResponseSuccess
-
-export const getPostApiStatsStatisticsOfRecordsByDateUrl = () => {
-    return `/api/stats/statistics-of-records-by-date`
-}
-
-export const postApiStatsStatisticsOfRecordsByDate = async (
-    postApiStatsStatisticsOfRecordsByDateBody: PostApiStatsStatisticsOfRecordsByDateBody,
-    options?: RequestInit
-): Promise<postApiStatsStatisticsOfRecordsByDateResponse> => {
-    return customTrainingFetch<postApiStatsStatisticsOfRecordsByDateResponse>(
-        getPostApiStatsStatisticsOfRecordsByDateUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsStatisticsOfRecordsByDateBody),
-        }
-    )
-}
-
-export const getPostApiStatsStatisticsOfRecordsByDateMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsStatisticsOfRecordsByDate>>,
-        TError,
-        { data: PostApiStatsStatisticsOfRecordsByDateBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsStatisticsOfRecordsByDate>>,
-    TError,
-    { data: PostApiStatsStatisticsOfRecordsByDateBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsStatisticsOfRecordsByDate']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsStatisticsOfRecordsByDate>>,
-        { data: PostApiStatsStatisticsOfRecordsByDateBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsStatisticsOfRecordsByDate(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsStatisticsOfRecordsByDateMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsStatisticsOfRecordsByDate>>
->
-export type PostApiStatsStatisticsOfRecordsByDateMutationBody =
-    PostApiStatsStatisticsOfRecordsByDateBody
-export type PostApiStatsStatisticsOfRecordsByDateMutationError = unknown
-
-export const usePostApiStatsStatisticsOfRecordsByDate = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsStatisticsOfRecordsByDate>>,
-            TError,
-            { data: PostApiStatsStatisticsOfRecordsByDateBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsStatisticsOfRecordsByDate>>,
-    TError,
-    { data: PostApiStatsStatisticsOfRecordsByDateBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsStatisticsOfRecordsByDateMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsSummaryAdmissionStatisticsResponse200 = {
-    data: PostApiStatsSummaryAdmissionStatistics200
-    status: 200
-}
-
-export type postApiStatsSummaryAdmissionStatisticsResponseSuccess =
-    postApiStatsSummaryAdmissionStatisticsResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsSummaryAdmissionStatisticsResponse =
-    postApiStatsSummaryAdmissionStatisticsResponseSuccess
-
-export const getPostApiStatsSummaryAdmissionStatisticsUrl = () => {
-    return `/api/stats/summary-admission-statistics`
-}
-
-export const postApiStatsSummaryAdmissionStatistics = async (
-    postApiStatsSummaryAdmissionStatisticsBody: PostApiStatsSummaryAdmissionStatisticsBody,
-    options?: RequestInit
-): Promise<postApiStatsSummaryAdmissionStatisticsResponse> => {
-    return customTrainingFetch<postApiStatsSummaryAdmissionStatisticsResponse>(
-        getPostApiStatsSummaryAdmissionStatisticsUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsSummaryAdmissionStatisticsBody),
-        }
-    )
-}
-
-export const getPostApiStatsSummaryAdmissionStatisticsMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsSummaryAdmissionStatistics>>,
-        TError,
-        { data: PostApiStatsSummaryAdmissionStatisticsBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsSummaryAdmissionStatistics>>,
-    TError,
-    { data: PostApiStatsSummaryAdmissionStatisticsBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsSummaryAdmissionStatistics']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsSummaryAdmissionStatistics>>,
-        { data: PostApiStatsSummaryAdmissionStatisticsBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsSummaryAdmissionStatistics(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsSummaryAdmissionStatisticsMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsSummaryAdmissionStatistics>>
->
-export type PostApiStatsSummaryAdmissionStatisticsMutationBody =
-    PostApiStatsSummaryAdmissionStatisticsBody
-export type PostApiStatsSummaryAdmissionStatisticsMutationError = unknown
-
-export const usePostApiStatsSummaryAdmissionStatistics = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsSummaryAdmissionStatistics>>,
-            TError,
-            { data: PostApiStatsSummaryAdmissionStatisticsBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsSummaryAdmissionStatistics>>,
-    TError,
-    { data: PostApiStatsSummaryAdmissionStatisticsBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsSummaryAdmissionStatisticsMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsScienceTechnologyOverviewResponse200 = {
-    data: PostApiStatsScienceTechnologyOverview200
-    status: 200
-}
-
-export type postApiStatsScienceTechnologyOverviewResponseSuccess =
-    postApiStatsScienceTechnologyOverviewResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsScienceTechnologyOverviewResponse =
-    postApiStatsScienceTechnologyOverviewResponseSuccess
-
-export const getPostApiStatsScienceTechnologyOverviewUrl = () => {
-    return `/api/stats/science-technology-overview`
-}
-
-export const postApiStatsScienceTechnologyOverview = async (
-    postApiStatsScienceTechnologyOverviewBody: PostApiStatsScienceTechnologyOverviewBody,
-    options?: RequestInit
-): Promise<postApiStatsScienceTechnologyOverviewResponse> => {
-    return customTrainingFetch<postApiStatsScienceTechnologyOverviewResponse>(
-        getPostApiStatsScienceTechnologyOverviewUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsScienceTechnologyOverviewBody),
-        }
-    )
-}
-
-export const getPostApiStatsScienceTechnologyOverviewMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsScienceTechnologyOverview>>,
-        TError,
-        { data: PostApiStatsScienceTechnologyOverviewBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsScienceTechnologyOverview>>,
-    TError,
-    { data: PostApiStatsScienceTechnologyOverviewBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsScienceTechnologyOverview']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsScienceTechnologyOverview>>,
-        { data: PostApiStatsScienceTechnologyOverviewBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsScienceTechnologyOverview(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsScienceTechnologyOverviewMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsScienceTechnologyOverview>>
->
-export type PostApiStatsScienceTechnologyOverviewMutationBody =
-    PostApiStatsScienceTechnologyOverviewBody
-export type PostApiStatsScienceTechnologyOverviewMutationError = unknown
-
-export const usePostApiStatsScienceTechnologyOverview = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsScienceTechnologyOverview>>,
-            TError,
-            { data: PostApiStatsScienceTechnologyOverviewBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsScienceTechnologyOverview>>,
-    TError,
-    { data: PostApiStatsScienceTechnologyOverviewBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsScienceTechnologyOverviewMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsContractStatisticsByYearResponse200 = {
-    data: PostApiStatsContractStatisticsByYear200
-    status: 200
-}
-
-export type postApiStatsContractStatisticsByYearResponseSuccess =
-    postApiStatsContractStatisticsByYearResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsContractStatisticsByYearResponse =
-    postApiStatsContractStatisticsByYearResponseSuccess
-
-export const getPostApiStatsContractStatisticsByYearUrl = () => {
-    return `/api/stats/contract-statistics-by-year`
-}
-
-export const postApiStatsContractStatisticsByYear = async (
-    postApiStatsContractStatisticsByYearBody: PostApiStatsContractStatisticsByYearBody,
-    options?: RequestInit
-): Promise<postApiStatsContractStatisticsByYearResponse> => {
-    return customTrainingFetch<postApiStatsContractStatisticsByYearResponse>(
-        getPostApiStatsContractStatisticsByYearUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsContractStatisticsByYearBody),
-        }
-    )
-}
-
-export const getPostApiStatsContractStatisticsByYearMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsContractStatisticsByYear>>,
-        TError,
-        { data: PostApiStatsContractStatisticsByYearBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsContractStatisticsByYear>>,
-    TError,
-    { data: PostApiStatsContractStatisticsByYearBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsContractStatisticsByYear']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsContractStatisticsByYear>>,
-        { data: PostApiStatsContractStatisticsByYearBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsContractStatisticsByYear(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsContractStatisticsByYearMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsContractStatisticsByYear>>
->
-export type PostApiStatsContractStatisticsByYearMutationBody =
-    PostApiStatsContractStatisticsByYearBody
-export type PostApiStatsContractStatisticsByYearMutationError = unknown
-
-export const usePostApiStatsContractStatisticsByYear = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsContractStatisticsByYear>>,
-            TError,
-            { data: PostApiStatsContractStatisticsByYearBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsContractStatisticsByYear>>,
-    TError,
-    { data: PostApiStatsContractStatisticsByYearBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsContractStatisticsByYearMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsProjectStatisticsByYearResponse200 = {
-    data: PostApiStatsProjectStatisticsByYear200
-    status: 200
-}
-
-export type postApiStatsProjectStatisticsByYearResponseSuccess =
-    postApiStatsProjectStatisticsByYearResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsProjectStatisticsByYearResponse =
-    postApiStatsProjectStatisticsByYearResponseSuccess
-
-export const getPostApiStatsProjectStatisticsByYearUrl = () => {
-    return `/api/stats/project-statistics-by-year`
-}
-
-export const postApiStatsProjectStatisticsByYear = async (
-    postApiStatsProjectStatisticsByYearBody: PostApiStatsProjectStatisticsByYearBody,
-    options?: RequestInit
-): Promise<postApiStatsProjectStatisticsByYearResponse> => {
-    return customTrainingFetch<postApiStatsProjectStatisticsByYearResponse>(
-        getPostApiStatsProjectStatisticsByYearUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsProjectStatisticsByYearBody),
-        }
-    )
-}
-
-export const getPostApiStatsProjectStatisticsByYearMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsProjectStatisticsByYear>>,
-        TError,
-        { data: PostApiStatsProjectStatisticsByYearBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsProjectStatisticsByYear>>,
-    TError,
-    { data: PostApiStatsProjectStatisticsByYearBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsProjectStatisticsByYear']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsProjectStatisticsByYear>>,
-        { data: PostApiStatsProjectStatisticsByYearBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsProjectStatisticsByYear(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsProjectStatisticsByYearMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsProjectStatisticsByYear>>
->
-export type PostApiStatsProjectStatisticsByYearMutationBody =
-    PostApiStatsProjectStatisticsByYearBody
-export type PostApiStatsProjectStatisticsByYearMutationError = unknown
-
-export const usePostApiStatsProjectStatisticsByYear = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsProjectStatisticsByYear>>,
-            TError,
-            { data: PostApiStatsProjectStatisticsByYearBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsProjectStatisticsByYear>>,
-    TError,
-    { data: PostApiStatsProjectStatisticsByYearBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsProjectStatisticsByYearMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsInnovationsStatisticsByYearResponse200 = {
-    data: PostApiStatsInnovationsStatisticsByYear200
-    status: 200
-}
-
-export type postApiStatsInnovationsStatisticsByYearResponseSuccess =
-    postApiStatsInnovationsStatisticsByYearResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsInnovationsStatisticsByYearResponse =
-    postApiStatsInnovationsStatisticsByYearResponseSuccess
-
-export const getPostApiStatsInnovationsStatisticsByYearUrl = () => {
-    return `/api/stats/innovations-statistics-by-year`
-}
-
-export const postApiStatsInnovationsStatisticsByYear = async (
-    postApiStatsInnovationsStatisticsByYearBody: PostApiStatsInnovationsStatisticsByYearBody,
-    options?: RequestInit
-): Promise<postApiStatsInnovationsStatisticsByYearResponse> => {
-    return customTrainingFetch<postApiStatsInnovationsStatisticsByYearResponse>(
-        getPostApiStatsInnovationsStatisticsByYearUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsInnovationsStatisticsByYearBody),
-        }
-    )
-}
-
-export const getPostApiStatsInnovationsStatisticsByYearMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsInnovationsStatisticsByYear>>,
-        TError,
-        { data: PostApiStatsInnovationsStatisticsByYearBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsInnovationsStatisticsByYear>>,
-    TError,
-    { data: PostApiStatsInnovationsStatisticsByYearBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsInnovationsStatisticsByYear']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsInnovationsStatisticsByYear>>,
-        { data: PostApiStatsInnovationsStatisticsByYearBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsInnovationsStatisticsByYear(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsInnovationsStatisticsByYearMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsInnovationsStatisticsByYear>>
->
-export type PostApiStatsInnovationsStatisticsByYearMutationBody =
-    PostApiStatsInnovationsStatisticsByYearBody
-export type PostApiStatsInnovationsStatisticsByYearMutationError = unknown
-
-export const usePostApiStatsInnovationsStatisticsByYear = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsInnovationsStatisticsByYear>>,
-            TError,
-            { data: PostApiStatsInnovationsStatisticsByYearBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsInnovationsStatisticsByYear>>,
-    TError,
-    { data: PostApiStatsInnovationsStatisticsByYearBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsInnovationsStatisticsByYearMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsArticlesStatisticsByYearResponse200 = {
-    data: PostApiStatsArticlesStatisticsByYear200
-    status: 200
-}
-
-export type postApiStatsArticlesStatisticsByYearResponseSuccess =
-    postApiStatsArticlesStatisticsByYearResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsArticlesStatisticsByYearResponse =
-    postApiStatsArticlesStatisticsByYearResponseSuccess
-
-export const getPostApiStatsArticlesStatisticsByYearUrl = () => {
-    return `/api/stats/articles-statistics-by-year`
-}
-
-export const postApiStatsArticlesStatisticsByYear = async (
-    postApiStatsArticlesStatisticsByYearBody: PostApiStatsArticlesStatisticsByYearBody,
-    options?: RequestInit
-): Promise<postApiStatsArticlesStatisticsByYearResponse> => {
-    return customTrainingFetch<postApiStatsArticlesStatisticsByYearResponse>(
-        getPostApiStatsArticlesStatisticsByYearUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsArticlesStatisticsByYearBody),
-        }
-    )
-}
-
-export const getPostApiStatsArticlesStatisticsByYearMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsArticlesStatisticsByYear>>,
-        TError,
-        { data: PostApiStatsArticlesStatisticsByYearBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsArticlesStatisticsByYear>>,
-    TError,
-    { data: PostApiStatsArticlesStatisticsByYearBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsArticlesStatisticsByYear']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsArticlesStatisticsByYear>>,
-        { data: PostApiStatsArticlesStatisticsByYearBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsArticlesStatisticsByYear(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsArticlesStatisticsByYearMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsArticlesStatisticsByYear>>
->
-export type PostApiStatsArticlesStatisticsByYearMutationBody =
-    PostApiStatsArticlesStatisticsByYearBody
-export type PostApiStatsArticlesStatisticsByYearMutationError = unknown
-
-export const usePostApiStatsArticlesStatisticsByYear = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsArticlesStatisticsByYear>>,
-            TError,
-            { data: PostApiStatsArticlesStatisticsByYearBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsArticlesStatisticsByYear>>,
-    TError,
-    { data: PostApiStatsArticlesStatisticsByYearBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsArticlesStatisticsByYearMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsFinalExamInfoResponse200 = {
-    data: PostApiStatsFinalExamInfo200
-    status: 200
-}
-
-export type postApiStatsFinalExamInfoResponseSuccess = postApiStatsFinalExamInfoResponse200 & {
-    headers: Headers
-}
-
-export type postApiStatsFinalExamInfoResponse = postApiStatsFinalExamInfoResponseSuccess
-
-export const getPostApiStatsFinalExamInfoUrl = () => {
-    return `/api/stats/final-exam-info`
-}
-
-export const postApiStatsFinalExamInfo = async (
-    postApiStatsFinalExamInfoBody: PostApiStatsFinalExamInfoBody,
-    options?: RequestInit
-): Promise<postApiStatsFinalExamInfoResponse> => {
-    return customTrainingFetch<postApiStatsFinalExamInfoResponse>(
-        getPostApiStatsFinalExamInfoUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsFinalExamInfoBody),
-        }
-    )
-}
-
-export const getPostApiStatsFinalExamInfoMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsFinalExamInfo>>,
-        TError,
-        { data: PostApiStatsFinalExamInfoBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsFinalExamInfo>>,
-    TError,
-    { data: PostApiStatsFinalExamInfoBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsFinalExamInfo']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsFinalExamInfo>>,
-        { data: PostApiStatsFinalExamInfoBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsFinalExamInfo(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsFinalExamInfoMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsFinalExamInfo>>
->
-export type PostApiStatsFinalExamInfoMutationBody = PostApiStatsFinalExamInfoBody
-export type PostApiStatsFinalExamInfoMutationError = unknown
-
-export const usePostApiStatsFinalExamInfo = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsFinalExamInfo>>,
-            TError,
-            { data: PostApiStatsFinalExamInfoBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsFinalExamInfo>>,
-    TError,
-    { data: PostApiStatsFinalExamInfoBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsFinalExamInfoMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsStudentCountByAcademicResultsResponse200 = {
-    data: PostApiStatsStudentCountByAcademicResults200
-    status: 200
-}
-
-export type postApiStatsStudentCountByAcademicResultsResponseSuccess =
-    postApiStatsStudentCountByAcademicResultsResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsStudentCountByAcademicResultsResponse =
-    postApiStatsStudentCountByAcademicResultsResponseSuccess
-
-export const getPostApiStatsStudentCountByAcademicResultsUrl = () => {
-    return `/api/stats/student-count-by-academic-results`
-}
-
-export const postApiStatsStudentCountByAcademicResults = async (
-    postApiStatsStudentCountByAcademicResultsBody: PostApiStatsStudentCountByAcademicResultsBody,
-    options?: RequestInit
-): Promise<postApiStatsStudentCountByAcademicResultsResponse> => {
-    return customTrainingFetch<postApiStatsStudentCountByAcademicResultsResponse>(
-        getPostApiStatsStudentCountByAcademicResultsUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsStudentCountByAcademicResultsBody),
-        }
-    )
-}
-
-export const getPostApiStatsStudentCountByAcademicResultsMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsStudentCountByAcademicResults>>,
-        TError,
-        { data: PostApiStatsStudentCountByAcademicResultsBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsStudentCountByAcademicResults>>,
-    TError,
-    { data: PostApiStatsStudentCountByAcademicResultsBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsStudentCountByAcademicResults']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsStudentCountByAcademicResults>>,
-        { data: PostApiStatsStudentCountByAcademicResultsBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsStudentCountByAcademicResults(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsStudentCountByAcademicResultsMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsStudentCountByAcademicResults>>
->
-export type PostApiStatsStudentCountByAcademicResultsMutationBody =
-    PostApiStatsStudentCountByAcademicResultsBody
-export type PostApiStatsStudentCountByAcademicResultsMutationError = unknown
-
-export const usePostApiStatsStudentCountByAcademicResults = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsStudentCountByAcademicResults>>,
-            TError,
-            { data: PostApiStatsStudentCountByAcademicResultsBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsStudentCountByAcademicResults>>,
-    TError,
-    { data: PostApiStatsStudentCountByAcademicResultsBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsStudentCountByAcademicResultsMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsSubjectPassFailRatesResponse200 = {
-    data: PostApiStatsSubjectPassFailRates200
-    status: 200
-}
-
-export type postApiStatsSubjectPassFailRatesResponseSuccess =
-    postApiStatsSubjectPassFailRatesResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsSubjectPassFailRatesResponse =
-    postApiStatsSubjectPassFailRatesResponseSuccess
-
-export const getPostApiStatsSubjectPassFailRatesUrl = () => {
-    return `/api/stats/subject-pass-fail-rates`
-}
-
-export const postApiStatsSubjectPassFailRates = async (
-    postApiStatsSubjectPassFailRatesBody: PostApiStatsSubjectPassFailRatesBody,
-    options?: RequestInit
-): Promise<postApiStatsSubjectPassFailRatesResponse> => {
-    return customTrainingFetch<postApiStatsSubjectPassFailRatesResponse>(
-        getPostApiStatsSubjectPassFailRatesUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsSubjectPassFailRatesBody),
-        }
-    )
-}
-
-export const getPostApiStatsSubjectPassFailRatesMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsSubjectPassFailRates>>,
-        TError,
-        { data: PostApiStatsSubjectPassFailRatesBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsSubjectPassFailRates>>,
-    TError,
-    { data: PostApiStatsSubjectPassFailRatesBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsSubjectPassFailRates']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsSubjectPassFailRates>>,
-        { data: PostApiStatsSubjectPassFailRatesBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsSubjectPassFailRates(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsSubjectPassFailRatesMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsSubjectPassFailRates>>
->
-export type PostApiStatsSubjectPassFailRatesMutationBody = PostApiStatsSubjectPassFailRatesBody
-export type PostApiStatsSubjectPassFailRatesMutationError = unknown
-
-export const usePostApiStatsSubjectPassFailRates = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsSubjectPassFailRates>>,
-            TError,
-            { data: PostApiStatsSubjectPassFailRatesBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsSubjectPassFailRates>>,
-    TError,
-    { data: PostApiStatsSubjectPassFailRatesBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsSubjectPassFailRatesMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsSubjectsHighFailRatesResponse200 = {
-    data: PostApiStatsSubjectsHighFailRates200
-    status: 200
-}
-
-export type postApiStatsSubjectsHighFailRatesResponseSuccess =
-    postApiStatsSubjectsHighFailRatesResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsSubjectsHighFailRatesResponse =
-    postApiStatsSubjectsHighFailRatesResponseSuccess
-
-export const getPostApiStatsSubjectsHighFailRatesUrl = () => {
-    return `/api/stats/subjects-high-fail-rates`
-}
-
-export const postApiStatsSubjectsHighFailRates = async (
-    postApiStatsSubjectsHighFailRatesBody: PostApiStatsSubjectsHighFailRatesBody,
-    options?: RequestInit
-): Promise<postApiStatsSubjectsHighFailRatesResponse> => {
-    return customTrainingFetch<postApiStatsSubjectsHighFailRatesResponse>(
-        getPostApiStatsSubjectsHighFailRatesUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsSubjectsHighFailRatesBody),
-        }
-    )
-}
-
-export const getPostApiStatsSubjectsHighFailRatesMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsSubjectsHighFailRates>>,
-        TError,
-        { data: PostApiStatsSubjectsHighFailRatesBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsSubjectsHighFailRates>>,
-    TError,
-    { data: PostApiStatsSubjectsHighFailRatesBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsSubjectsHighFailRates']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsSubjectsHighFailRates>>,
-        { data: PostApiStatsSubjectsHighFailRatesBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsSubjectsHighFailRates(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsSubjectsHighFailRatesMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsSubjectsHighFailRates>>
->
-export type PostApiStatsSubjectsHighFailRatesMutationBody = PostApiStatsSubjectsHighFailRatesBody
-export type PostApiStatsSubjectsHighFailRatesMutationError = unknown
-
-export const usePostApiStatsSubjectsHighFailRates = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsSubjectsHighFailRates>>,
-            TError,
-            { data: PostApiStatsSubjectsHighFailRatesBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsSubjectsHighFailRates>>,
-    TError,
-    { data: PostApiStatsSubjectsHighFailRatesBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsSubjectsHighFailRatesMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsSubjectsHighAbsentStudentsResponse200 = {
-    data: PostApiStatsSubjectsHighAbsentStudents200
-    status: 200
-}
-
-export type postApiStatsSubjectsHighAbsentStudentsResponseSuccess =
-    postApiStatsSubjectsHighAbsentStudentsResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsSubjectsHighAbsentStudentsResponse =
-    postApiStatsSubjectsHighAbsentStudentsResponseSuccess
-
-export const getPostApiStatsSubjectsHighAbsentStudentsUrl = () => {
-    return `/api/stats/subjects-high-absent-students`
-}
-
-export const postApiStatsSubjectsHighAbsentStudents = async (
-    postApiStatsSubjectsHighAbsentStudentsBody: PostApiStatsSubjectsHighAbsentStudentsBody,
-    options?: RequestInit
-): Promise<postApiStatsSubjectsHighAbsentStudentsResponse> => {
-    return customTrainingFetch<postApiStatsSubjectsHighAbsentStudentsResponse>(
-        getPostApiStatsSubjectsHighAbsentStudentsUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsSubjectsHighAbsentStudentsBody),
-        }
-    )
-}
-
-export const getPostApiStatsSubjectsHighAbsentStudentsMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsSubjectsHighAbsentStudents>>,
-        TError,
-        { data: PostApiStatsSubjectsHighAbsentStudentsBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsSubjectsHighAbsentStudents>>,
-    TError,
-    { data: PostApiStatsSubjectsHighAbsentStudentsBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsSubjectsHighAbsentStudents']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsSubjectsHighAbsentStudents>>,
-        { data: PostApiStatsSubjectsHighAbsentStudentsBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsSubjectsHighAbsentStudents(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsSubjectsHighAbsentStudentsMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsSubjectsHighAbsentStudents>>
->
-export type PostApiStatsSubjectsHighAbsentStudentsMutationBody =
-    PostApiStatsSubjectsHighAbsentStudentsBody
-export type PostApiStatsSubjectsHighAbsentStudentsMutationError = unknown
-
-export const usePostApiStatsSubjectsHighAbsentStudents = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsSubjectsHighAbsentStudents>>,
-            TError,
-            { data: PostApiStatsSubjectsHighAbsentStudentsBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsSubjectsHighAbsentStudents>>,
-    TError,
-    { data: PostApiStatsSubjectsHighAbsentStudentsBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsSubjectsHighAbsentStudentsMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-/**
- * @summary Thống kê số lượng ngân hàng đề chưa có
- */
-export type postApiStatsStatisticsExamBankNotYetResponse200 = {
-    data: PostApiStatsStatisticsExamBankNotYet200
-    status: 200
-}
-
-export type postApiStatsStatisticsExamBankNotYetResponseSuccess =
-    postApiStatsStatisticsExamBankNotYetResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsStatisticsExamBankNotYetResponse =
-    postApiStatsStatisticsExamBankNotYetResponseSuccess
-
-export const getPostApiStatsStatisticsExamBankNotYetUrl = () => {
-    return `/api/stats/statistics-exam-bank-not-yet`
-}
-
-export const postApiStatsStatisticsExamBankNotYet = async (
-    postApiStatsStatisticsExamBankNotYetBody: PostApiStatsStatisticsExamBankNotYetBody,
-    options?: RequestInit
-): Promise<postApiStatsStatisticsExamBankNotYetResponse> => {
-    return customTrainingFetch<postApiStatsStatisticsExamBankNotYetResponse>(
-        getPostApiStatsStatisticsExamBankNotYetUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsStatisticsExamBankNotYetBody),
-        }
-    )
-}
-
-export const getPostApiStatsStatisticsExamBankNotYetMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsStatisticsExamBankNotYet>>,
-        TError,
-        { data: PostApiStatsStatisticsExamBankNotYetBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsStatisticsExamBankNotYet>>,
-    TError,
-    { data: PostApiStatsStatisticsExamBankNotYetBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsStatisticsExamBankNotYet']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsStatisticsExamBankNotYet>>,
-        { data: PostApiStatsStatisticsExamBankNotYetBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsStatisticsExamBankNotYet(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsStatisticsExamBankNotYetMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsStatisticsExamBankNotYet>>
->
-export type PostApiStatsStatisticsExamBankNotYetMutationBody =
-    PostApiStatsStatisticsExamBankNotYetBody
-export type PostApiStatsStatisticsExamBankNotYetMutationError = unknown
-
-/**
- * @summary Thống kê số lượng ngân hàng đề chưa có
- */
-export const usePostApiStatsStatisticsExamBankNotYet = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsStatisticsExamBankNotYet>>,
-            TError,
-            { data: PostApiStatsStatisticsExamBankNotYetBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsStatisticsExamBankNotYet>>,
-    TError,
-    { data: PostApiStatsStatisticsExamBankNotYetBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsStatisticsExamBankNotYetMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsLateGradeSubjectsResponse200 = {
-    data: PostApiStatsLateGradeSubjects200
-    status: 200
-}
-
-export type postApiStatsLateGradeSubjectsResponseSuccess =
-    postApiStatsLateGradeSubjectsResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsLateGradeSubjectsResponse = postApiStatsLateGradeSubjectsResponseSuccess
-
-export const getPostApiStatsLateGradeSubjectsUrl = () => {
-    return `/api/stats/late-grade-subjects`
-}
-
-export const postApiStatsLateGradeSubjects = async (
-    postApiStatsLateGradeSubjectsBody: PostApiStatsLateGradeSubjectsBody,
-    options?: RequestInit
-): Promise<postApiStatsLateGradeSubjectsResponse> => {
-    return customTrainingFetch<postApiStatsLateGradeSubjectsResponse>(
-        getPostApiStatsLateGradeSubjectsUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsLateGradeSubjectsBody),
-        }
-    )
-}
-
-export const getPostApiStatsLateGradeSubjectsMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsLateGradeSubjects>>,
-        TError,
-        { data: PostApiStatsLateGradeSubjectsBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsLateGradeSubjects>>,
-    TError,
-    { data: PostApiStatsLateGradeSubjectsBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsLateGradeSubjects']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsLateGradeSubjects>>,
-        { data: PostApiStatsLateGradeSubjectsBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsLateGradeSubjects(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsLateGradeSubjectsMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsLateGradeSubjects>>
->
-export type PostApiStatsLateGradeSubjectsMutationBody = PostApiStatsLateGradeSubjectsBody
-export type PostApiStatsLateGradeSubjectsMutationError = unknown
-
-export const usePostApiStatsLateGradeSubjects = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsLateGradeSubjects>>,
-            TError,
-            { data: PostApiStatsLateGradeSubjectsBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsLateGradeSubjects>>,
-    TError,
-    { data: PostApiStatsLateGradeSubjectsBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsLateGradeSubjectsMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-/**
- * @summary Thống kê số lượng ngân hàng đề đã bổ sung / cập nhật
- */
-export type postApiStatsExamBankUpdateResponse200 = {
-    data: PostApiStatsExamBankUpdate200
-    status: 200
-}
-
-export type postApiStatsExamBankUpdateResponseSuccess = postApiStatsExamBankUpdateResponse200 & {
-    headers: Headers
-}
-
-export type postApiStatsExamBankUpdateResponse = postApiStatsExamBankUpdateResponseSuccess
-
-export const getPostApiStatsExamBankUpdateUrl = () => {
-    return `/api/stats/exam-bank-update`
-}
-
-export const postApiStatsExamBankUpdate = async (
-    postApiStatsExamBankUpdateBody: PostApiStatsExamBankUpdateBody,
-    options?: RequestInit
-): Promise<postApiStatsExamBankUpdateResponse> => {
-    return customTrainingFetch<postApiStatsExamBankUpdateResponse>(
-        getPostApiStatsExamBankUpdateUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsExamBankUpdateBody),
-        }
-    )
-}
-
-export const getPostApiStatsExamBankUpdateMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsExamBankUpdate>>,
-        TError,
-        { data: PostApiStatsExamBankUpdateBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsExamBankUpdate>>,
-    TError,
-    { data: PostApiStatsExamBankUpdateBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsExamBankUpdate']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsExamBankUpdate>>,
-        { data: PostApiStatsExamBankUpdateBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsExamBankUpdate(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsExamBankUpdateMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsExamBankUpdate>>
->
-export type PostApiStatsExamBankUpdateMutationBody = PostApiStatsExamBankUpdateBody
-export type PostApiStatsExamBankUpdateMutationError = unknown
-
-/**
- * @summary Thống kê số lượng ngân hàng đề đã bổ sung / cập nhật
- */
-export const usePostApiStatsExamBankUpdate = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsExamBankUpdate>>,
-            TError,
-            { data: PostApiStatsExamBankUpdateBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsExamBankUpdate>>,
-    TError,
-    { data: PostApiStatsExamBankUpdateBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsExamBankUpdateMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-/**
- * @summary Thống kê tỷ lệ đạt và chưa đạt chuẩn ngoại ngữ theo tiến trình
- */
-export type postApiStatsLanguageStandardProgressResponse200 = {
-    data: PostApiStatsLanguageStandardProgress200
-    status: 200
-}
-
-export type postApiStatsLanguageStandardProgressResponseSuccess =
-    postApiStatsLanguageStandardProgressResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsLanguageStandardProgressResponse =
-    postApiStatsLanguageStandardProgressResponseSuccess
-
-export const getPostApiStatsLanguageStandardProgressUrl = () => {
-    return `/api/stats/language-standard-progress`
-}
-
-export const postApiStatsLanguageStandardProgress = async (
-    postApiStatsLanguageStandardProgressBody: PostApiStatsLanguageStandardProgressBody,
-    options?: RequestInit
-): Promise<postApiStatsLanguageStandardProgressResponse> => {
-    return customTrainingFetch<postApiStatsLanguageStandardProgressResponse>(
-        getPostApiStatsLanguageStandardProgressUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsLanguageStandardProgressBody),
-        }
-    )
-}
-
-export const getPostApiStatsLanguageStandardProgressMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsLanguageStandardProgress>>,
-        TError,
-        { data: PostApiStatsLanguageStandardProgressBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsLanguageStandardProgress>>,
-    TError,
-    { data: PostApiStatsLanguageStandardProgressBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsLanguageStandardProgress']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsLanguageStandardProgress>>,
-        { data: PostApiStatsLanguageStandardProgressBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsLanguageStandardProgress(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsLanguageStandardProgressMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsLanguageStandardProgress>>
->
-export type PostApiStatsLanguageStandardProgressMutationBody =
-    PostApiStatsLanguageStandardProgressBody
-export type PostApiStatsLanguageStandardProgressMutationError = unknown
-
-/**
- * @summary Thống kê tỷ lệ đạt và chưa đạt chuẩn ngoại ngữ theo tiến trình
- */
-export const usePostApiStatsLanguageStandardProgress = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsLanguageStandardProgress>>,
-            TError,
-            { data: PostApiStatsLanguageStandardProgressBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsLanguageStandardProgress>>,
-    TError,
-    { data: PostApiStatsLanguageStandardProgressBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsLanguageStandardProgressMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsAdmissionStatisticsResponse200 = {
-    data: PostApiStatsAdmissionStatistics200
-    status: 200
-}
-
-export type postApiStatsAdmissionStatisticsResponseSuccess =
-    postApiStatsAdmissionStatisticsResponse200 & {
-        headers: Headers
-    }
-
-export type postApiStatsAdmissionStatisticsResponse = postApiStatsAdmissionStatisticsResponseSuccess
-
-export const getPostApiStatsAdmissionStatisticsUrl = () => {
-    return `/api/stats/admission-statistics`
-}
-
-export const postApiStatsAdmissionStatistics = async (
-    postApiStatsAdmissionStatisticsBody: PostApiStatsAdmissionStatisticsBody,
-    options?: RequestInit
-): Promise<postApiStatsAdmissionStatisticsResponse> => {
-    return customTrainingFetch<postApiStatsAdmissionStatisticsResponse>(
-        getPostApiStatsAdmissionStatisticsUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(postApiStatsAdmissionStatisticsBody),
-        }
-    )
-}
-
-export const getPostApiStatsAdmissionStatisticsMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsAdmissionStatistics>>,
-        TError,
-        { data: PostApiStatsAdmissionStatisticsBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsAdmissionStatistics>>,
-    TError,
-    { data: PostApiStatsAdmissionStatisticsBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsAdmissionStatistics']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsAdmissionStatistics>>,
-        { data: PostApiStatsAdmissionStatisticsBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsAdmissionStatistics(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsAdmissionStatisticsMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsAdmissionStatistics>>
->
-export type PostApiStatsAdmissionStatisticsMutationBody = PostApiStatsAdmissionStatisticsBody
-export type PostApiStatsAdmissionStatisticsMutationError = unknown
-
-export const usePostApiStatsAdmissionStatistics = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsAdmissionStatistics>>,
-            TError,
-            { data: PostApiStatsAdmissionStatisticsBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsAdmissionStatistics>>,
-    TError,
-    { data: PostApiStatsAdmissionStatisticsBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsAdmissionStatisticsMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsRetestRatesResponse200 = {
-    data: PostApiStatsRetestRates200
-    status: 200
-}
-
-export type postApiStatsRetestRatesResponseSuccess = postApiStatsRetestRatesResponse200 & {
-    headers: Headers
-}
-
-export type postApiStatsRetestRatesResponse = postApiStatsRetestRatesResponseSuccess
-
-export const getPostApiStatsRetestRatesUrl = () => {
-    return `/api/stats/retest-rates`
-}
-
-export const postApiStatsRetestRates = async (
-    postApiStatsRetestRatesBody: PostApiStatsRetestRatesBody,
-    options?: RequestInit
-): Promise<postApiStatsRetestRatesResponse> => {
-    return customTrainingFetch<postApiStatsRetestRatesResponse>(getPostApiStatsRetestRatesUrl(), {
-        ...options,
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', ...options?.headers },
-        body: JSON.stringify(postApiStatsRetestRatesBody),
-    })
-}
-
-export const getPostApiStatsRetestRatesMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsRetestRates>>,
-        TError,
-        { data: PostApiStatsRetestRatesBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsRetestRates>>,
-    TError,
-    { data: PostApiStatsRetestRatesBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsRetestRates']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsRetestRates>>,
-        { data: PostApiStatsRetestRatesBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsRetestRates(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsRetestRatesMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsRetestRates>>
->
-export type PostApiStatsRetestRatesMutationBody = PostApiStatsRetestRatesBody
-export type PostApiStatsRetestRatesMutationError = unknown
-
-export const usePostApiStatsRetestRates = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsRetestRates>>,
-            TError,
-            { data: PostApiStatsRetestRatesBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsRetestRates>>,
-    TError,
-    { data: PostApiStatsRetestRatesBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsRetestRatesMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type postApiStatsRelearnRatesResponse200 = {
-    data: PostApiStatsRelearnRates200
-    status: 200
-}
-
-export type postApiStatsRelearnRatesResponseSuccess = postApiStatsRelearnRatesResponse200 & {
-    headers: Headers
-}
-
-export type postApiStatsRelearnRatesResponse = postApiStatsRelearnRatesResponseSuccess
-
-export const getPostApiStatsRelearnRatesUrl = () => {
-    return `/api/stats/relearn-rates`
-}
-
-export const postApiStatsRelearnRates = async (
-    postApiStatsRelearnRatesBody: PostApiStatsRelearnRatesBody,
-    options?: RequestInit
-): Promise<postApiStatsRelearnRatesResponse> => {
-    return customTrainingFetch<postApiStatsRelearnRatesResponse>(getPostApiStatsRelearnRatesUrl(), {
-        ...options,
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', ...options?.headers },
-        body: JSON.stringify(postApiStatsRelearnRatesBody),
-    })
-}
-
-export const getPostApiStatsRelearnRatesMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postApiStatsRelearnRates>>,
-        TError,
-        { data: PostApiStatsRelearnRatesBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsRelearnRates>>,
-    TError,
-    { data: PostApiStatsRelearnRatesBody },
-    TContext
-> => {
-    const mutationKey = ['postApiStatsRelearnRates']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postApiStatsRelearnRates>>,
-        { data: PostApiStatsRelearnRatesBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return postApiStatsRelearnRates(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PostApiStatsRelearnRatesMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postApiStatsRelearnRates>>
->
-export type PostApiStatsRelearnRatesMutationBody = PostApiStatsRelearnRatesBody
-export type PostApiStatsRelearnRatesMutationError = unknown
-
-export const usePostApiStatsRelearnRates = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof postApiStatsRelearnRates>>,
-            TError,
-            { data: PostApiStatsRelearnRatesBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof postApiStatsRelearnRates>>,
-    TError,
-    { data: PostApiStatsRelearnRatesBody },
-    TContext
-> => {
-    const mutationOptions = getPostApiStatsRelearnRatesMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }

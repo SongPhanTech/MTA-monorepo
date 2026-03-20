@@ -423,7 +423,7 @@ const NAVIGATION: NavigationType = {
                                 path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_THOI_GIAN_DAO_TAO,
                                 description: 'Danh mục thời gian đào tạo',
                             },
-                               {
+                            {
                                 id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QUY_THOI_GIAN_DAO_TAO,
                                 label: 'Quỹ thời gian đào tạo',
                                 path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_QUY_THOI_GIAN_DAO_TAO,

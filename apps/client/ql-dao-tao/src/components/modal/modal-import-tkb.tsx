@@ -291,14 +291,14 @@ const ModalNhapTKB = () => {
                         const link =
                             fileType === 'THONG_KE_GIAO_VIEN_GIANG_DAY'
                                 ? getMinioUrl(
-                                    'mta/template/MAU1.TKB.GIAO-VIEN-DANH-CHO-QUAN-SU.xls'
-                                )
+                                      'mta/template/MAU1.TKB.GIAO-VIEN-DANH-CHO-QUAN-SU.xls'
+                                  )
                                 : getMinioUrl(
-                                    'mta/template/MAU2.TKB.LOP-HOC-PHAN-DU-KIEN-DANH-CHO-DAN-SU.xls'
-                                )
+                                      'mta/template/MAU2.TKB.LOP-HOC-PHAN-DU-KIEN-DANH-CHO-DAN-SU.xls'
+                                  )
                         window.open(link, '_blank')
                         if (newWindow) {
-                            newWindow.opener = null;
+                            newWindow.opener = null
                         }
                     }}
                 >
@@ -381,7 +381,7 @@ const ModalNhapTKB = () => {
                                 ),
                                 render: (value: SubjectClassSchedule) =>
                                     SUBJECT_CLASS_SCHEDULE_TYPE[
-                                    value as keyof typeof SUBJECT_CLASS_SCHEDULE_TYPE
+                                        value as keyof typeof SUBJECT_CLASS_SCHEDULE_TYPE
                                     ],
                             },
                             {
