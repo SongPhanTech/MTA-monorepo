@@ -12,7 +12,6 @@ const profiles = await prisma.userProfile.findMany({
     },
 })
 
-console.log(profiles.length)
 
 for (const profileData of profiles) {
     const res = await postDMNhanViens(
@@ -44,12 +43,8 @@ for (const profileData of profiles) {
     )
 
     if (typeof res.data !== 'string') {
-        console.log('original', profileData.id, profileData.fullname)
-        console.log(res.data)
         break
     }
-
-    console.log(JSON.stringify({ Id: res.data, sTenDayDu: profileData.fullname }) + ',')
 
     await prisma.userProfile.update({
         where: { id: profileData.id },

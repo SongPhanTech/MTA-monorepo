@@ -215,7 +215,6 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
         if (students.data && Array.isArray(students.data)) return students.data
         return []
     }, [students])
-    console.log('studentData:', studentData)
     const transformedTrainingCourses = useMemo(() => {
         if (!studentDataAward || !Array.isArray(studentDataAward)) return []
 
