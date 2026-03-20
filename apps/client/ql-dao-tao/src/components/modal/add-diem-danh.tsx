@@ -7,7 +7,6 @@ import { Col, DatePicker, Form,message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import dayjs from 'dayjs'
-import { sqlTransaction } from '@workspace/libs/api/model';
 import { useSession } from '@workspace/auth/react';
 import { queryClient } from '@api/index';
 export type PutSubjectClassAttendance = {

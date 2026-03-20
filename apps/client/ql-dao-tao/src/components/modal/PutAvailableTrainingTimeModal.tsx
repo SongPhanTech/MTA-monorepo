@@ -1,16 +1,16 @@
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import { useCreateAvailableTrainingTime,
-useFindManyStudent,
-useFindUniqueAvailableTrainingTime,useUpdateAvailableTrainingTime } from '@workspace/db/hooks'
-import { Col, DatePicker, Form,InputNumber,message } from 'antd'
+import {
+    useCreateAvailableTrainingTime,
+    useFindUniqueAvailableTrainingTime,
+    useUpdateAvailableTrainingTime,
+} from '@workspace/db/hooks'
+import { Col, Form, InputNumber, message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import dayjs from 'dayjs'
-import { sqlTransaction } from '@workspace/libs/api/model';
-import { useSession } from '@workspace/auth/react';
-import { queryClient } from '@api/index';
-import { useSemesterStore,useTrainingObjectTypeStore } from '@workspace/ui';
+import { useSession } from '@workspace/auth/react'
+import { queryClient } from '@api/index'
+import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 export type PutAvailableTrainingTime = {
     duration: number
 }
@@ -18,14 +18,10 @@ export type PutAvailableTrainingTime = {
 const PutAvailableTrainingTimeModal = () => {
     const [form] = Form.useForm<PutAvailableTrainingTime>()
     const { data: sessionData } = useSession()
-        const { id: semesterId } = useSemesterStore()
+    const { id: semesterId } = useSemesterStore()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
-    const {
-        isOpen,
-        onClose,
-        input,
-    } = useDisclosure<{id?:string}>({
+    const { isOpen, onClose, input } = useDisclosure<{ id?: string }>({
         tag: 'PutAvailableTrainingTimeModal',
         onClose: form.resetFields,
     })
@@ -44,60 +40,57 @@ const PutAvailableTrainingTimeModal = () => {
     const { mutateAsync: createAvailableTrainingTime } = useCreateAvailableTrainingTime()
     async function onOk(output?: PutAvailableTrainingTime) {
         if (!output) return
-       if(!semesterId){
-        message.error('Vui lòng chọn học kỳ')
-        return
-       }
-         if(!trainingObjectTypeId){
-        message.error('Vui lòng chọn đối tượng đào tạo')
-        return
-       }
+        if (!semesterId) {
+            message.error('Vui lòng chọn học kỳ')
+            return
+        }
+        if (!trainingObjectTypeId) {
+            message.error('Vui lòng chọn đối tượng đào tạo')
+            return
+        }
         try {
             showSpinner()
             if (input?.id) {
-                let res= await updateAvailableTrainingTime({
+                let res = await updateAvailableTrainingTime({
                     where: {
-                        id:input?.id,
+                        id: input?.id,
                     },
                     data: {
                         duration: output.duration,
                         semesterId,
-                        trainingObjectTypeId
-
+                        trainingObjectTypeId,
                     },
                 })
-                if(res){
+                if (res) {
                     message.success('Cập nhật thành công')
-                       queryClient.invalidateQueries({
+                    queryClient.invalidateQueries({
                         queryKey: ['AvailableTrainingTime'],
                     })
                     onClose()
                     return
                 }
-            }else {
-               let res= await createAvailableTrainingTime({
+            } else {
+                let res = await createAvailableTrainingTime({
                     data: {
                         duration: output.duration,
                         semesterId,
-                        trainingObjectTypeId
+                        trainingObjectTypeId,
                     },
                 })
-                if(res){
+                if (res) {
                     message.success('Tạo thành công')
-                       queryClient.invalidateQueries({
+                    queryClient.invalidateQueries({
                         queryKey: ['AvailableTrainingTime'],
                     })
                     onClose()
                     return
                 }
-                
             }
         } catch (error: any) {
         } finally {
             hideSpinner()
         }
     }
-
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
@@ -115,15 +108,12 @@ const PutAvailableTrainingTimeModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={input?.id?'Chỉnh sửa phiếu điểm danh':'Tạo phiếu điểm danh'}
+            title={input?.id ? 'Chỉnh sửa quỹ thời gian đào tạo' : 'Tạo quỹ thời gian đào tạo'}
             className="w-[700px]"
         >
             <Col span={24}>
                 <Form.Item name="time" label="Quỹ thời gian" required>
-                       <InputNumber
-                            min={0}
-                            className="w-full"
-                        />
+                    <InputNumber min={0} className="w-full" />
                 </Form.Item>
             </Col>
         </PutFormModal>
