@@ -53,8 +53,8 @@ export default function AvailableTrainingTimePage() {
 
     const { data: count } = useCountAvailableTrainingTime({
         where: {
-            name: { contains: filters.name, mode: 'insensitive' },
-            code: { contains: filters.code, mode: 'insensitive' },
+            semesterId,
+            trainingObjectTypeId,
             deletedAt: null,
         },
     },{
