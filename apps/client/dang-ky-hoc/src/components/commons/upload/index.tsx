@@ -208,9 +208,6 @@ const UploadDragAndDrop = ({
                                 if (!isDisplayable) {
                                     e.stopPropagation()
                                     window.open(getUrl(value || ''), '_blank')
-                                    if (newWindow) {
-                                        newWindow.opener = null;
-                                    }
                                 }
                             }}
                             src={getUrl(value || '')}
