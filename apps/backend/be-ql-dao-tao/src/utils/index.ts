@@ -294,13 +294,12 @@ export const buildCurriculumMapOrThrow = async (
         throw new HTTPException(400, {
             message: `Chương trình đào tạo không tồn tại:
 ${missing
-    .map(
-        ({ curriculum, trainingMajor, trainingField }) =>
-            `${curriculum}${
-                trainingMajor && trainingField ? ` - ${trainingMajor} - ${trainingField}` : ''
-            }`
-    )
-    .join('; \n')}`,
+                    .map(
+                        ({ curriculum, trainingMajor, trainingField }) =>
+                            `${curriculum}${trainingMajor && trainingField ? ` - ${trainingMajor} - ${trainingField}` : ''
+                            }`
+                    )
+                    .join('; \n')}`,
         })
     }
 
@@ -626,10 +625,10 @@ export const buildSubjectMapOrThrow = async (
                     numberOfExam: subject.numberOfExam,
                     ...(orgMap.get(subject.organizationCode || null)
                         ? {
-                              managementOrganizationId: orgMap.get(
-                                  subject.organizationCode || null
-                              ),
-                          }
+                            managementOrganizationId: orgMap.get(
+                                subject.organizationCode || null
+                            ),
+                        }
                         : {}),
                     subjectId: groupMap.get(subject.name) as string,
                 })),
@@ -639,18 +638,18 @@ export const buildSubjectMapOrThrow = async (
 
         return new Map([...existing, ...newSubjects].map(({ code, id }) => [code, id]))
     }
-
     if (missing.length && !createNewSubject) {
-        throw new HTTPException(400, {
-            message: `Phiên bản môn học không tồn tại: ${missing
-                .map(
-                    ({ name, organizationCode, credit }) =>
-                        `${name}${` (${credit})` || ''}${organizationCode ? ` - ${organizationCode}` : ''}`
-                )
-                .join('; ')}`,
-        })
-    }
+        const missingDetails = missing
+            .map(({ name, organizationCode, credit }) =>
+                `${name} (${credit}) - ${organizationCode}`
+            )
+            .join('; ');
 
+        console.error(`[Subject Error]: Versions do not exist: ${missingDetails}`);
+        throw new HTTPException(400, {
+            message: "Một hoặc nhiều phiên bản môn học không tồn tại trong hệ thống. Vui lòng kiểm tra lại dữ liệu."
+        });
+    }
     return new Map(existing.map(({ code, id }) => [code, id]))
 }
 
