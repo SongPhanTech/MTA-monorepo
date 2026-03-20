@@ -3240,7 +3240,7 @@ app.openapi(
                             data: z.array(
                                 z.object({
                                     id: z.string(),
-                                    name: z.string(), // Schema bắt buộc là string
+                                    name: z.string(), 
                                     quota: z.number(),
                                     registered: z.number(),
                                     admitted: z.number(),
@@ -3280,22 +3280,19 @@ app.openapi(
         if (preview) {
             data = Array.from({ length: 10 }, (_, i) => ({
                 id: `major-${i + 1}`,
-                // SỬA TẠI ĐÂY: Dùng ?? để đảm bảo luôn có string, không bị undefined
                 name: danhSachNganh[i] ?? `Ngành ${i + 1}`,
                 quota: 200 + i * 50,
                 registered: 400 + i * 100,
                 admitted: 180 + i * 45,
             }))
         }
-
-        // TypeScript giờ đây đã hài lòng vì 'data' hoàn toàn khớp với Schema
         return c.json({
             data,
             count: data.length,
             summary: {},
             preview: !!preview,
             labels,
-        }, 200) // Nên thêm status code 200 rõ ràng
+        }, 200)
     }
 )
 
