@@ -1,13 +1,13 @@
 function getEnv(name: string): string {
-    const value = process.env[name]
+    const value = process.env[name];
 
     if (!value) {
-        throw new Error(`Missing environment variable`)
+        console.error(`[Internal Config Error]: Environment variable "${name}" is not defined.`);
+        throw new Error('Internal server configuration error.');
     }
 
-    return value
+    return value;
 }
-
 export const env = {
     get MTA_API_URL() {
         return getEnv('MTA_API_URL')
