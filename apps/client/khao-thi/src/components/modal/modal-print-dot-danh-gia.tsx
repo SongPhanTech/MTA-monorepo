@@ -21,6 +21,7 @@ import {
     VerticalAlign,
     WidthType,
 } from 'docx'
+import DOMPurify from 'dompurify'
 import { saveAs } from 'file-saver'
 import { Bookmark, FileDown, Printer } from 'lucide-react'
 import { useMemo, useRef } from 'react'
@@ -55,8 +56,9 @@ const normalizeColor = (color: string): string | undefined => {
 }
 
 const htmlToParagraphs = async (html: string): Promise<(Paragraph | Table | Paragraph)[]> => {
+    const sanitized = DOMPurify.sanitize(html)
     const parser = new DOMParser()
-    const doc = parser.parseFromString(html, 'text/html')
+    const doc = parser.parseFromString(sanitized, 'text/html')
     const nodes = Array.from(doc.body.childNodes)
 
     const paragraphs: (Paragraph | Table | Paragraph)[] = []
@@ -231,7 +233,7 @@ const processHtmlContent = (html: string, evidenceTags: Map<string, string>): st
         }
     })
 
-    return doc.body.innerHTML
+    return DOMPurify.sanitize(doc.body.innerHTML)
 }
 
 const NavigationSidebar = ({

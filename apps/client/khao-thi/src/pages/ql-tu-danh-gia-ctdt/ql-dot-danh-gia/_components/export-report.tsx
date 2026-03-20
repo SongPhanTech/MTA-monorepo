@@ -261,10 +261,8 @@ export default function ExportReport({ id }: { id: string }) {
         return [title, new Paragraph(''), table]
     }
 
-    const htmlToParagraphs = async (html: string): Promise<(Paragraph | Table | Paragraph)[]> => {
-        const parser = new DOMParser()
-        const doc = parser.parseFromString(html, 'text/html')
-        const nodes = Array.from(doc.body.childNodes)
+    const htmlToParagraphs = async (container: HTMLElement): Promise<(Paragraph | Table | Paragraph)[]> => {
+        const nodes = Array.from(container.childNodes)
 
         const paragraphs: (Paragraph | Table | Paragraph)[] = []
 
@@ -273,7 +271,7 @@ export default function ExportReport({ id }: { id: string }) {
                 const el = node as HTMLElement
                 if (el.tagName === 'IMG') {
                     const src = el.getAttribute('src')
-                    if (src) {
+                    if (src && /^https?:\/\//i.test(src)) {
                         try {
                             const res = await fetch(src)
                             const blob = await res.blob()
@@ -311,7 +309,7 @@ export default function ExportReport({ id }: { id: string }) {
                         const cells: TableCell[] = []
                         const tds = Array.from(tr.querySelectorAll('td, th'))
                         for (const td of tds) {
-                            const cellChildren = await htmlToParagraphs(td.innerHTML)
+                            const cellChildren = await htmlToParagraphs(td as HTMLElement)
                             cells.push(
                                 new TableCell({
                                     children: cellChildren as Paragraph[],
@@ -381,11 +379,9 @@ export default function ExportReport({ id }: { id: string }) {
         return paragraphs
     }
 
-    const processHtmlContent = (html: string, evidenceTags: Map<string, string>): string => {
-        if (!html) return ''
-
+    const processHtmlContent = (html: string, evidenceTags: Map<string, string>): HTMLElement => {
         const parser = new DOMParser()
-        const doc = parser.parseFromString(html, 'text/html')
+        const doc = parser.parseFromString(html || '', 'text/html')
 
         const spans = doc.querySelectorAll('span[id]')
 
@@ -393,13 +389,12 @@ export default function ExportReport({ id }: { id: string }) {
             const id = span.getAttribute('id')
             if (id && evidenceTags.has(id)) {
                 span.textContent = evidenceTags.get(id) || ''
-                ;(span as HTMLElement).style.color = 'red'
                 span.removeAttribute('style')
                 span.setAttribute('style', 'color: red;')
             }
         })
 
-        return doc.body.innerHTML
+        return doc.body
     }
 
     const exportToWord = async () => {
