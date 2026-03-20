@@ -113,6 +113,7 @@ import ThongTinBaoCaoModal from './thong-tin-bao-cao'
 import PutInternshipModal from './put-thuc-tap'
 import ModalCurriculumVersionByTrainingBlock from './modal-ctdt-theo-kkt'
 import ModalPreviewReason from './modal-preview-reason'
+import ModalScoreDetail from './modal-chi-tiet-diem-hoc-phan';
 import ModalChuyenCTDT from './modal-chuyen-ctdt'
 import AddSubjectClassAttendance from './add-diem-danh'
 import AddSubjectClassAttendanceStudent from './add-diem-danh-mon-hoc'
@@ -235,6 +236,7 @@ export {
     ModalChuyenDiemLopMonHoc,
     ModalCurriculumVersionByTrainingBlock,
     ModalPreviewReason,
+    ModalScoreDetail,
     ModalChuyenCTDT,
     AddSubjectClassAttendance,
     AddSubjectClassAttendanceStudent,
