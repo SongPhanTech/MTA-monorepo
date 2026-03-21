@@ -2233,6 +2233,8 @@ export type SqlTransactionRequestBody = {
     | "ClassRegisterSession"
     | "ClassRegisterLogs"
     | "SubjectClass"
+    | "SubjectClassAttendance"
+    | "SubjectClassAttendanceStudent"
     | "SubjectClassHistory"
     | "SubjectClassTime"
     | "ClassSchedule"

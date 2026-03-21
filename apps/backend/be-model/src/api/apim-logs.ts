@@ -48,7 +48,7 @@ app.openapi(
             )
         } catch (error) {
             console.log('[ERROR][config-logs]', {
-                message: error instanceof Error ? error.message : String(error)
+                message: error instanceof Error ? error.message : String(error),
             })
             return c.json(false, 200)
         }

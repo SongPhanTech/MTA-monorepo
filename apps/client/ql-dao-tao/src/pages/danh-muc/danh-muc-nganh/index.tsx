@@ -38,6 +38,8 @@ export default function TrainingFieldPage() {
         decisionNo: '',
     })
 
+    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectTypePermission()
+
     const where = useMemo(
         () => ({
             ...(filters.code && filters.code !== ''
@@ -72,17 +74,15 @@ export default function TrainingFieldPage() {
                   }
                 : {}),
 
-            ...(filters.trainingObjectTypes
-                ? {
-                      trainingObjectTypes: {
-                          some: {
-                              trainingObjectTypeId: {
-                                  in: filters.trainingObjectTypes,
-                              },
-                          },
-                      },
-                  }
-                : {}),
+            trainingObjectTypes: {
+                some: {
+                    trainingObjectTypeId: {
+                        in: filters.trainingObjectTypes?.length
+                            ? filters.trainingObjectTypes
+                            : trainingObjectTypeData.map((item) => item.id),
+                    },
+                },
+            },
             ...(filters.organization
                 ? {
                       organizationId: {
@@ -107,6 +107,7 @@ export default function TrainingFieldPage() {
             filters.publishDate,
             filters.active,
             filters.decisionNo,
+            trainingObjectTypeData,
         ]
     )
     const { data = [] } = useFindManyTrainingField({
@@ -183,8 +184,6 @@ export default function TrainingFieldPage() {
         orderBy: [{ iSTT: 'asc' }, { sTen: 'asc' }],
     })
     const treeData = buildOrgTree(manageOrgData)
-
-    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectTypePermission()
 
     return (
         <div>
@@ -265,7 +264,7 @@ export default function TrainingFieldPage() {
                                                 trainingObjectType: TrainingObjectType
                                             }) => trainingObjectType.name
                                         )
-                                        .join(', '),
+                                        .join('; '),
                             },
                             {
                                 title: 'Đơn vị quản lý',

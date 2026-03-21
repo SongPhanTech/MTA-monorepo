@@ -261,7 +261,9 @@ export default function ExportReport({ id }: { id: string }) {
         return [title, new Paragraph(''), table]
     }
 
-    const htmlToParagraphs = async (container: HTMLElement): Promise<(Paragraph | Table | Paragraph)[]> => {
+    const htmlToParagraphs = async (
+        container: HTMLElement
+    ): Promise<(Paragraph | Table | Paragraph)[]> => {
         const nodes = Array.from(container.childNodes)
 
         const paragraphs: (Paragraph | Table | Paragraph)[] = []

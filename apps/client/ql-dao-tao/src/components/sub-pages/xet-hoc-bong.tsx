@@ -866,81 +866,82 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
                     </Col>
                 </Flex>
             </Col>
-            { !!isModalVisible&&
-      <Modal
-                title="Danh sách sinh viên được chọn"
-                open={isModalVisible}
-                onOk={handleSaveScholarshipAward}
-                onCancel={() => setIsModalVisible(false)}
-                width={800}
-                footer={[
-                    <Button key="back" onClick={() => setIsModalVisible(false)}>
-                        Đóng
-                    </Button>,
-                    <Button
-                        key="submit"
-                        type="primary"
-                        onClick={handleSaveScholarshipAward}
-                        disabled={rightPanelData.length === 0}
-                    >
-                        Lưu
-                    </Button>,
-                ]}
-            >
-                {rightPanelData.length > 0 ? (
-                    <Table
-                        rowKey="id"
-                        data={rightPanelData}
-                        columns={[
-                            {
-                                title: 'STT',
-                                width: 50,
-                                align: 'center',
-                                fixed: 'left',
-                                render: (_, __, index) =>
-                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
-                            },
-                            {
-                                title: 'Mã sinh viên',
-                                dataIndex: 'code',
-                                width: 120,
-                                align: 'center',
-                                fixed: 'left',
-                            },
-                            {
-                                title: 'Tên sinh viên',
-                                dataIndex: 'fullname',
-                                width: 200,
-                                fixed: 'left',
-                            },
-                            {
-                                title: 'Trung bình hệ 4',
-                                dataIndex: 'gpaAtAward',
-                                width: 150,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Xếp hạng',
-                                dataIndex: 'priorityRank',
-                                width: 150,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Học bổng',
-                                dataIndex: 'scholarshipName',
-                                width: 150,
-                                align: 'center',
-                                fixed: 'right',
-                            },
-                        ]}
-                        pagination={false}
-                    />
-                ) : (
-                    <div className="text-gray-400 text-center py-8">Chưa có dữ liệu được chọn</div>
-                )}
-            </Modal>
-            }
-      
+            {!!isModalVisible && (
+                <Modal
+                    title="Danh sách sinh viên được chọn"
+                    open={isModalVisible}
+                    onOk={handleSaveScholarshipAward}
+                    onCancel={() => setIsModalVisible(false)}
+                    width={800}
+                    footer={[
+                        <Button key="back" onClick={() => setIsModalVisible(false)}>
+                            Đóng
+                        </Button>,
+                        <Button
+                            key="submit"
+                            type="primary"
+                            onClick={handleSaveScholarshipAward}
+                            disabled={rightPanelData.length === 0}
+                        >
+                            Lưu
+                        </Button>,
+                    ]}
+                >
+                    {rightPanelData.length > 0 ? (
+                        <Table
+                            rowKey="id"
+                            data={rightPanelData}
+                            columns={[
+                                {
+                                    title: 'STT',
+                                    width: 50,
+                                    align: 'center',
+                                    fixed: 'left',
+                                    render: (_, __, index) =>
+                                        index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                },
+                                {
+                                    title: 'Mã sinh viên',
+                                    dataIndex: 'code',
+                                    width: 120,
+                                    align: 'center',
+                                    fixed: 'left',
+                                },
+                                {
+                                    title: 'Tên sinh viên',
+                                    dataIndex: 'fullname',
+                                    width: 200,
+                                    fixed: 'left',
+                                },
+                                {
+                                    title: 'Trung bình hệ 4',
+                                    dataIndex: 'gpaAtAward',
+                                    width: 150,
+                                    align: 'center',
+                                },
+                                {
+                                    title: 'Xếp hạng',
+                                    dataIndex: 'priorityRank',
+                                    width: 150,
+                                    align: 'center',
+                                },
+                                {
+                                    title: 'Học bổng',
+                                    dataIndex: 'scholarshipName',
+                                    width: 150,
+                                    align: 'center',
+                                    fixed: 'right',
+                                },
+                            ]}
+                            pagination={false}
+                        />
+                    ) : (
+                        <div className="text-gray-400 text-center py-8">
+                            Chưa có dữ liệu được chọn
+                        </div>
+                    )}
+                </Modal>
+            )}
         </Row>
     )
 }

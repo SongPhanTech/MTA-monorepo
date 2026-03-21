@@ -22,7 +22,7 @@ const SelectTrainingObjectType = ({ subsystem, ...props }: SelectTrainingObjectT
     return (
         <div className="flex items-center gap-2 font-bold">
             <Tooltip title="Đối tượng đào tạo">
-                <p>ĐTĐT</p>
+                <p>Đối tượng đào tạo</p>
             </Tooltip>
             <Select
                 placeholder="Chọn đối tượng đào tạo"

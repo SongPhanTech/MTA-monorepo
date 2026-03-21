@@ -285,9 +285,13 @@ const metadata: ModelMeta = {
                 }, firstName: {
                     name: "firstName",
                     type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
                 }, lastName: {
                     name: "lastName",
                     type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
                 }, idCardNumber: {
                     name: "idCardNumber",
                     type: "String",

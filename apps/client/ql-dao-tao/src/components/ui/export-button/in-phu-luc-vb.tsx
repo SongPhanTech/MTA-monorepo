@@ -8,7 +8,7 @@ export type ExportDiplomaAppendixType = 'ONE_COLUMN' | 'TWO_COLUMNS' | 'TWO_COLU
 interface ExportDiplomaAppendixProps {
     title?: string
     _typeExport?: ExportDiplomaAppendixType
-    type?: ButtonProps["type"]
+    type?: ButtonProps['type']
     className?: HTMLProps<HTMLElement>['className']
     style?: HTMLProps<HTMLElement>['style']
 }

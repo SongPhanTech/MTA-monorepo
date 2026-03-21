@@ -704,8 +704,8 @@ model UserProfile {
   sThietBiTao                          String?
   sThietBiSua                          String?
   avatar                               String?
-  firstName                            String
-  lastName                             String
+  firstName                            String?                             @default("")
+  lastName                             String?                             @default("")
   idCardNumber                         String                              @unique()
   placeOfIdCardNumber                  String?
   fullname                             String?
@@ -2529,6 +2529,8 @@ model StudentSubjectScore {
   scoreCorrectionItem          ScoreCorrectionItem[]
 
   @@unique([subjectClassId, studentId])
+  @@index([subjectClassId])
+  @@index([subjectVersionId])
   @@schema("ql-dao-tao")
 }
 
@@ -3148,6 +3150,7 @@ model SubjectVersion {
 
   @@unique([trainingObjectTypeId, name, credit, period, managementOrganizationId])
   @@index([name, trainingObjectTypeId])
+  @@index([subjectId])
   @@schema("ql-dao-tao")
 }
 
@@ -3372,6 +3375,10 @@ model SubjectClass {
   examBank                    ExamBank[]
   subjectClassAttendances     SubjectClassAttendance[]
 
+  @@index([lecturerId])
+  @@index([extraLecturerId])
+  @@index([enterGradeLecturerId])
+  @@index([subjectId])
   @@schema("ql-dao-tao")
 }
 
@@ -3451,6 +3458,7 @@ model SubjectClassTime {
   startPeriod    Int
   endPeriod      Int
 
+  @@index([subjectClassId])
   @@schema("ql-dao-tao")
 }
 
@@ -4594,6 +4602,7 @@ model Lecturer {
   evaluationCouncilMember     EvaluationCouncilMember[]
   evaluationCriterionReviews  EvaluationCriterion[]         @relation("EvaluationCriterionLecturerReview")
 
+  @@index([userProfileId])
   @@schema("ql-dao-tao")
 }
 

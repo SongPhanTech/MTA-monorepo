@@ -46,81 +46,93 @@ export default function TrainingMajorPage() {
         return Object.values(filters).some((value) => !!value)
     }, [filters])
 
-    const where: Prisma.TrainingFieldWhereInput = useMemo(
-        () =>
-            isFiltering
-                ? {
-                      ...(filters.searchText
-                          ? {
-                                OR: [
-                                    {
-                                        code: {
-                                            contains: filters.searchText,
-                                            mode: 'insensitive',
-                                        },
-                                    },
-                                    {
-                                        name: {
-                                            contains: filters.searchText,
-                                            mode: 'insensitive',
-                                        },
-                                    },
-                                ],
-                            }
-                          : {}),
+    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectTypePermission()
 
-                      trainingMajors: {
-                          some: {
-                              ...(filters.name
-                                  ? {
-                                        name: {
-                                            contains: filters.name,
-                                            mode: 'insensitive',
-                                        },
-                                    }
-                                  : {}),
-                              ...(filters.active
-                                  ? {
-                                        active: {
-                                            equals: filters.active[0],
-                                        },
-                                    }
-                                  : {}),
-                              ...(filters.code
-                                  ? {
-                                        code: {
-                                            contains: filters.code,
-                                            mode: 'insensitive',
-                                        },
-                                    }
-                                  : {}),
+    const where: Prisma.TrainingFieldWhereInput = useMemo(() => {
+        const filter: Prisma.TrainingFieldWhereInput = isFiltering
+            ? {
+                  ...(filters.searchText
+                      ? {
+                            OR: [
+                                {
+                                    code: {
+                                        contains: filters.searchText,
+                                        mode: 'insensitive',
+                                    },
+                                },
+                                {
+                                    name: {
+                                        contains: filters.searchText,
+                                        mode: 'insensitive',
+                                    },
+                                },
+                            ],
+                        }
+                      : {}),
 
-                              ...emptyObjectIf(
-                                  {
-                                      trainingObjectTypes: {
-                                          some: {
-                                              trainingObjectTypeId: {
-                                                  in: filters.trainingObjectTypes,
-                                              },
+                  trainingMajors: {
+                      some: {
+                          ...(filters.name
+                              ? {
+                                    name: {
+                                        contains: filters.name,
+                                        mode: 'insensitive',
+                                    },
+                                }
+                              : {}),
+                          ...(filters.active
+                              ? {
+                                    active: {
+                                        equals: filters.active[0],
+                                    },
+                                }
+                              : {}),
+                          ...(filters.code
+                              ? {
+                                    code: {
+                                        contains: filters.code,
+                                        mode: 'insensitive',
+                                    },
+                                }
+                              : {}),
+
+                          ...emptyObjectIf(
+                              {
+                                  trainingObjectTypes: {
+                                      some: {
+                                          trainingObjectTypeId: {
+                                              in: filters.trainingObjectTypes,
                                           },
                                       },
                                   },
-                                  !!filters.trainingObjectTypes?.length
-                              ),
-                              ...emptyObjectIf(
-                                  {
-                                      organizationId: {
-                                          in: filters.organization,
-                                      },
+                              },
+                              !!filters.trainingObjectTypes?.length
+                          ),
+                          ...emptyObjectIf(
+                              {
+                                  organizationId: {
+                                      in: filters.organization,
                                   },
-                                  !!filters.organization
-                              ),
-                          },
+                              },
+                              !!filters.organization
+                          ),
                       },
-                  }
-                : {},
-        [filters, isFiltering]
-    )
+                  },
+              }
+            : {}
+
+        filter.trainingObjectTypes = {
+            some: {
+                trainingObjectTypeId: {
+                    in: filters.trainingObjectTypes?.length
+                        ? filters.trainingObjectTypes
+                        : trainingObjectTypeData.map((item) => item.id),
+                },
+            },
+        }
+
+        return filter
+    }, [filters, isFiltering, trainingObjectTypeData])
 
     const { data = [], refetch } = useFindManyTrainingField({
         where,
@@ -264,8 +276,6 @@ export default function TrainingMajorPage() {
             hideSpinner()
         }
     }
-
-    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectTypePermission()
 
     return (
         <div>

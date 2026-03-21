@@ -29,4 +29,3 @@ const finalScore = calcFinalScore(
     },
     'NORMAL'
 )
-

@@ -349,6 +349,7 @@ export default function TrainingProgramSubjects() {
             priority: 'asc',
         },
     })
+    console.log('data table', data)
 
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({
         where: whereOrganization,
@@ -456,7 +457,7 @@ export default function TrainingProgramSubjects() {
     const treeData = buildOrgTree(manageOrgData)
 
     const { handleCloneCurriculumVersion } = useCloneCurriculumVersion()
-
+    const handleExportExcel = async () => {}
     return (
         <div>
             <Divider orientation="left" orientationMargin={0} className="m-0 p-0">

@@ -28,8 +28,8 @@ const baseSchema = z.object({
     sThietBiTao: z.string().nullish(),
     sThietBiSua: z.string().nullish(),
     avatar: z.string().nullish(),
-    firstName: z.string(),
-    lastName: z.string(),
+    firstName: z.string().default("").nullish(),
+    lastName: z.string().default("").nullish(),
     idCardNumber: z.string(),
     placeOfIdCardNumber: z.string().nullish(),
     fullname: z.string().nullish(),
@@ -114,8 +114,8 @@ const baseSchemaWithoutDefaults = z.object({
     sThietBiTao: z.string().nullish(),
     sThietBiSua: z.string().nullish(),
     avatar: z.string().nullish(),
-    firstName: z.string(),
-    lastName: z.string(),
+    firstName: z.string().nullish(),
+    lastName: z.string().nullish(),
     idCardNumber: z.string(),
     placeOfIdCardNumber: z.string().nullish(),
     fullname: z.string().nullish(),
@@ -363,8 +363,8 @@ export const UserProfilePrismaUpdateSchema = z.object({
     sThietBiTao: z.string().nullish(),
     sThietBiSua: z.string().nullish(),
     avatar: z.string().nullish(),
-    firstName: z.string(),
-    lastName: z.string(),
+    firstName: z.string().nullish(),
+    lastName: z.string().nullish(),
     idCardNumber: z.string(),
     placeOfIdCardNumber: z.string().nullish(),
     fullname: z.string().nullish(),
@@ -431,7 +431,7 @@ export const UserProfilePrismaUpdateSchema = z.object({
  * `UserProfile` schema for create operations excluding foreign keys and relations.
  */
 export const UserProfileCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, firstName: true, lastName: true
 });
 
 

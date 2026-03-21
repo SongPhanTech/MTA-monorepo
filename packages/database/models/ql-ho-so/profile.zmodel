@@ -62,8 +62,8 @@ model UserProfile extends BaseUuid {
 
   // general information
   avatar                               String? // đường dẫn ảnh đại diện
-  firstName                            String
-  lastName                             String
+  firstName                            String?                             @default('')
+  lastName                             String?                             @default('')
   idCardNumber                         String                              @unique // số căn cước công dân
   placeOfIdCardNumber                  String?
   fullname                             String?
@@ -302,11 +302,9 @@ model UserProfile extends BaseUuid {
   classSchedules                       ClassSchedule[]
   subjectClassAttendance               SubjectClassAttendance[]
 
-  
+
   @@auth()
   @@schema("ql-nguoi-dung")
-
-	
 }
 
 model HocHam extends Base {

@@ -399,8 +399,16 @@ const getPublicSurveysV2 = createRoute({
                 .string()
                 .optional()
                 .openapi({ description: 'ID loại đối tượng đào tạo' }),
-            take: z.coerce.number().optional().default(10).openapi({ description: 'Số lượng bản ghi' }),
-            skip: z.coerce.number().optional().default(0).openapi({ description: 'Bỏ qua số bản ghi' }),
+            take: z.coerce
+                .number()
+                .optional()
+                .default(10)
+                .openapi({ description: 'Số lượng bản ghi' }),
+            skip: z.coerce
+                .number()
+                .optional()
+                .default(0)
+                .openapi({ description: 'Bỏ qua số bản ghi' }),
         }),
     },
     responses: {
@@ -416,7 +424,8 @@ const getPublicSurveysV2 = createRoute({
                                         surveyObjectType: z
                                             .array(models.SurveyObjectTypeScalarSchema)
                                             .optional(),
-                                        surveyTopic: models.SurveyTopicScalarSchema.nullable().optional(),
+                                        surveyTopic:
+                                            models.SurveyTopicScalarSchema.nullable().optional(),
                                         surveyQuestion: z
                                             .array(models.SurveyQuestionScalarSchema)
                                             .optional(),

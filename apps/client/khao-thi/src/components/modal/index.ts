@@ -111,5 +111,4 @@ export {
     ModalPrintSurvey,
     ModalPrintSurveyToFieldReport,
     ModalPrintDanhSachDoiTuong,
-    
 }

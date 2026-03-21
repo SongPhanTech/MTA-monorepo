@@ -46,6 +46,7 @@ model Lecturer extends Base {
   evaluationCouncilMember     EvaluationCouncilMember[]
   evaluationCriterionReviews  EvaluationCriterion[]         @relation("EvaluationCriterionLecturerReview")
 
+  @@index([userProfileId])
   @@schema("ql-dao-tao")
 }
 

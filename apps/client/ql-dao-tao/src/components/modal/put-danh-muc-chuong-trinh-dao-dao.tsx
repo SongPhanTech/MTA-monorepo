@@ -5,7 +5,7 @@ import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import { buildOrgTree } from '@lib/utils'
-import type { Curriculum, DocumentFile, TrainingMajor } from '@workspace/db/client'
+import type { Curriculum, DocumentFile } from '@workspace/db/client'
 import {
     useCreateCurriculum,
     useFindManyDM_DonVi,
@@ -53,6 +53,11 @@ const PutCurriculum = () => {
     const trainingObjectTypeIdForm = Form.useWatch('trainingObjectTypeId', form)
 
     const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
+        select: {
+            id: true,
+            code: true,
+            name: true,
+        },
         orderBy: { name: 'asc' },
         where: trainingObjectTypeIdForm
             ? {
@@ -251,10 +256,10 @@ const PutCurriculum = () => {
                 <FormItem form={form} name="trainingMajorId" label="Chuyên ngành đào tạo" required>
                     <Select
                         placeholder="Chọn chuyên ngành đào tạo"
-                        options={trainingMajorData.map((i: TrainingMajor) => {
+                        options={trainingMajorData.map((m) => {
                             return {
-                                value: i.id,
-                                label: i.name,
+                                value: m.id,
+                                label: [m.code, m.name].filter(Boolean).join(' - '),
                             }
                         })}
                     />
