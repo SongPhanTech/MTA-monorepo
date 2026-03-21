@@ -6,6 +6,6 @@
  */
 
 export interface StatsArchivedAwardInput {
-    fromSemesterId: string
-    toSemesterId: string
+  fromSemesterId: string;
+  toSemesterId: string;
 }

@@ -6,7 +6,7 @@
  */
 
 export type PostApiStatsStudentDistributionByTrainingLevelFilteredBody = {
-    preview?: boolean
-    /** DM_DonVi.Id - ID đơn vị quản lý */
-    managementOrganizationId: string
-}
+  preview?: boolean;
+  /** DM_DonVi.Id - ID đơn vị quản lý */
+  managementOrganizationId: string;
+};

@@ -4,9 +4,9 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { SemesterId } from './semesterId'
+import type { SemesterId } from './semesterId';
 
 export type CalculateStudentSemesterResultJsonParams = {
-    semesterId: SemesterId & unknown
-    trainingCourseId: string
-}
+semesterId: SemesterId & unknown;
+trainingCourseId: string;
+};

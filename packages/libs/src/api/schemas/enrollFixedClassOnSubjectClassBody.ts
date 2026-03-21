@@ -4,10 +4,10 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { FixedClassIds } from './fixedClassIds'
-import type { SubjectClassId } from './subjectClassId'
+import type { FixedClassIds } from './fixedClassIds';
+import type { SubjectClassId } from './subjectClassId';
 
 export type EnrollFixedClassOnSubjectClassBody = {
-    fixedClassIds: FixedClassIds
-    subjectClassId: SubjectClassId
-}
+  fixedClassIds: FixedClassIds;
+  subjectClassId: SubjectClassId;
+};

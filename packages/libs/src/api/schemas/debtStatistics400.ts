@@ -6,5 +6,5 @@
  */
 
 export type DebtStatistics400 = {
-    message: string
-}
+  message: string;
+};

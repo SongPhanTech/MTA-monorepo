@@ -6,6 +6,6 @@
  */
 
 export type ImportInternship200 = {
-    message: string
-    time: number
-}
+  message: string;
+  time: number;
+};
