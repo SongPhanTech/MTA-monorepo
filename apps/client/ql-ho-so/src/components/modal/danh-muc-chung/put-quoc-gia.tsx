@@ -8,7 +8,12 @@ import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function QuocGiaModal() {
-    const [form] = Form.useForm<DM_QuocGia>()
+type FormValues = {
+    name: string
+    description?: string
+}
+
+const [form] = Form.useForm<FormValues>()
 
     const { isOpen, onClose, input } = useDisclosure<Partial<DM_QuocGia>>({
         tag: 'PutDanhMucQuocGiaModal',
@@ -17,49 +22,54 @@ export default function QuocGiaModal() {
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { mutateAsync: createDM_NhomMau } = useCreateDM_QuocGia()
-    const { mutateAsync: updateDM_NhomMau } = useUpdateDM_QuocGia()
+    const { mutateAsync: createDM_QuocGia } = useCreateDM_QuocGia()
+    const { mutateAsync: updateDM_QuocGia } = useUpdateDM_QuocGia()
 
-    async function onOk(output: DM_QuocGia) {
-        if (!output) return
-        try {
-            showSpinner()
-            if (input?.id) {
-                await updateDM_QuocGia({
-                    where: {
-                        id: input.id,
-                    },
-                    data: {
-                        name: output.sTen.trim(),
-                        description: output.sGhiChu,
-                    },
-                })
-                message.success('Cập nhật thành công')
-            } else {
-                await createDM_QuocGia({
-                    data: {
-                        name: output.sTen.trim(),
-                        description: output.sGhiChu,
-                    },
-                })
-                message.success('Thêm mới thành công')
-            }
-            onClose()
-        } catch (error) {
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        } finally {
-            hideSpinner()
+async function onOk(values: FormValues) {
+    try {
+        showSpinner()
+
+        const payload = {
+            sTen: values.name.trim(),
+            ...(values.description
+                ? { sGhiChu: values.description }
+                : {}),
         }
-    }
 
-    useEffect(() => {
-        if (input && isOpen) {
-            form.setFieldsValue({
-                name: input.sTen,
-                description: input.sGhiChu,
+        if (input?.Id) {
+            await updateDM_QuocGia({
+                where: { Id: input.Id },
+                data: payload,
+            })
+        } else {
+            await createDM_QuocGia({
+                data: payload,
             })
         }
-    }, [input, isOpen, form])
+
+        message.success(
+            input?.Id ? 'Cập nhật thành công' : 'Thêm mới thành công'
+        )
+        onClose()
+    } catch (error) {
+        console.error(error)
+        message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+    } finally {
+        hideSpinner()
+    }
+}
+useEffect(() => {
+    if (isOpen && input?.Id) {
+        form.setFieldsValue({
+            name: input.sTen || '',
+            description: input.sGhiChu || '',
+        })
+    }
+
+    if (isOpen && !input?.Id) {
+        form.resetFields()
+    }
+}, [isOpen, input, form])
 
     return (
         <PutFormModal
@@ -67,7 +77,7 @@ export default function QuocGiaModal() {
             form={form}
             onFinish={onOk}
             onCancel={onClose}
-            title={input?.id ? 'Cập nhật quốc tịch' : 'Thêm mới quốc tịch'}
+            title={input?.Id ? 'Cập nhật quốc tịch' : 'Thêm mới quốc tịch'}
             className="w-[40vw]"
             layout="vertical"
         >

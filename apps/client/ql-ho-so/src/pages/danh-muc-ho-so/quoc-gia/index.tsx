@@ -5,42 +5,52 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import type { DM_QuocGia } from '@workspace/db'
-import { useCountDM_QuocGia, useFindManyDM_QuocGia, useUpdateDM_QuocGia } from '@workspace/db/hooks'
+import {
+    useCountDM_QuocGia,
+    useFindManyDM_QuocGia,
+    useUpdateDM_QuocGia,
+} from '@workspace/db/hooks'
 import { Button, Col, Flex, message, Row } from 'antd'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-export default function BloodType() {
+export default function NationalType() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
 
     const { showSpinner, hideSpinner } = useSpinner()
+
     const { onOpen } = useDisclosure<Partial<DM_QuocGia>>({
         tag: 'PutDanhMucQuocGiaModal',
     })
 
-    const { data = [], refetch } = useFindManyDM_QuocGia()
-    const { data: count } = useCountDM_QuocGia({ where: { deletedAt: null } })
-    const { mutateAsync: updateQuocGia } = useUpdateDM_QuocGia()
+    const { data = [], refetch } = useFindManyDM_QuocGia({
+        skip: (currentPage - 1) * numberOfPages,
+        take: numberOfPages,
+        where: { bDeleted: false }, 
+    })
 
-    const handleModal = () => {
-        onOpen()
-    }
+    const { data: count } = useCountDM_QuocGia({
+        where: { bDeleted: false }, 
+    })
 
-    const handleDeleteQuocGia = async (id: string) => {
+    const { mutateAsync: updateDM_QuocGia } = useUpdateDM_QuocGia()
+
+    const handleDeleteQuocGia = async (Id: string) => {
         try {
             showSpinner()
-            await updateQuocGia({
-                where: {
-                    Id: id,
-                },
+
+            await updateDM_QuocGia({
+                where: { Id }, 
                 data: {
-                    bDeleted: true,
+                    bDeleted: true, 
                 },
             })
+
             message.success('Xóa thành công')
             refetch()
         } catch (error) {
+            console.error(error)
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()
@@ -54,24 +64,26 @@ export default function BloodType() {
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={24}>
                             <Flex justify="end">
-                                <Button onClick={handleModal} type="primary">
+                                <Button onClick={() => onOpen()} type="primary">
                                     Thêm mới
                                 </Button>
                             </Flex>
                         </Col>
                     </Row>
                 </Col>
+
                 <Col span={24}>
                     <Table
-                        rowKey="id"
+                        rowKey="Id" 
                         columns={[
                             {
                                 title: 'STT',
                                 width: 30,
                                 align: 'center',
                                 fixed: 'left',
-                                render: (_, record, index) =>
-                                    index + (currentPage - 1) * DEFAULT_PAGINATE_SIZE + 1,
+                                render: (_, __, index) =>
+                                    index +
+                                    (currentPage - 1) * numberOfPages + 1,
                             },
                             {
                                 title: 'Quốc tịch',
@@ -90,22 +102,27 @@ export default function BloodType() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
-                                render: (_, record) => {
-                                    return (
-                                        <Row className="justify-center gap-2">
-                                            <EditIcon
-                                                className="text-sm text-blue-700 cursor-pointer"
-                                                onClick={() => onOpen(record)}
-                                            />
-                                            <DeleteIcon
-                                                popConfirm={{
-                                                    onConfirm: () => handleDeleteQuocGia(record.id),
-                                                }}
-                                                onClick={(e) => e.stopPropagation()}
-                                            />
-                                        </Row>
-                                    )
-                                },
+                                render: (_, record) => (
+                                    <Row className="justify-center gap-2">
+                                        <EditIcon
+                                            className="text-sm text-blue-700 cursor-pointer"
+                                            onClick={() => onOpen(record)}
+                                        />
+
+                                        <DeleteIcon
+                                            popConfirm={{
+                                                title: 'Bạn có chắc muốn xóa?',
+                                                onConfirm: () =>
+                                                    handleDeleteQuocGia(
+                                                        record.Id
+                                                    ),
+                                            }}
+                                            onClick={(e) =>
+                                                e.stopPropagation()
+                                            }
+                                        />
+                                    </Row>
+                                ),
                             },
                         ]}
                         data={data}
@@ -130,7 +147,7 @@ export default function BloodType() {
     )
 }
 
-BloodType.getLayout = function getLayout(page: React.ReactElement) {
+NationalType.getLayout = function getLayout(page: React.ReactElement) {
     return (
         <DefaultLayout
             breadcrumbList={[
