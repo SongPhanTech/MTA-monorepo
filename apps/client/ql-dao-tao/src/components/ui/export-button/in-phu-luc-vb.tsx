@@ -11,16 +11,14 @@ interface ExportDiplomaAppendixProps {
     type?: ButtonProps['type']
     className?: HTMLProps<HTMLElement>['className']
     style?: HTMLProps<HTMLElement>['style']
+    onClick?: HTMLProps<HTMLElement>['onClick']
 }
 
 const ExportDiplomaAppendix = (props: ExportDiplomaAppendixProps) => {
     const { title, _typeExport, ...restProps } = props
 
-    const handleExportDiplomaAppendix = () => {
-        //TODO: logic export
-    }
     return (
-        <Button onClick={handleExportDiplomaAppendix} {...restProps}>
+        <Button {...restProps}>
             <Printer />
             <span>{title}</span>
         </Button>
