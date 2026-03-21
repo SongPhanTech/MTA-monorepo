@@ -500,7 +500,7 @@ export const buildSubjectMapOrThrow = async (
 
     const existingCode = await prisma.subjectVersion.findMany({
         where: {
-            code: { in: uniqueSubject.map((s) => s.code).filter((c): c is string => Boolean(c)) },
+            code: { in: subjects.map((s) => s.code).filter((c): c is string => Boolean(c)) },
         },
     })
 
@@ -544,10 +544,11 @@ export const buildSubjectMapOrThrow = async (
                 e.name === s.name &&
                 e.credit === s.credit &&
                 e.period === s.period &&
-                e.managementOrganizationId === orgMap.get(s.organizationCode || null)
+                e.managementOrganizationId === orgMap.get(s.organizationCode || null) &&
+                e.code !== null &&
+                e.code !== s.code
         )
-        if (!existing) return false
-        return existing.code && s.code && existing.code !== s.code
+        return !!existing
     })
 
     if (combinationConflicts.length > 0) {
@@ -638,18 +639,19 @@ export const buildSubjectMapOrThrow = async (
 
         return new Map([...existing, ...newSubjects].map(({ code, id }) => [code, id]))
     }
-
     if (missing.length && !createNewSubject) {
+        const missingDetails = missing
+            .map(
+                ({ name, organizationCode, credit }) => `${name} (${credit}) - ${organizationCode}`
+            )
+            .join('; ')
+
+        console.error(`[Subject Error]: Versions do not exist: ${missingDetails}`)
         throw new HTTPException(400, {
-            message: `Phiên bản môn học không tồn tại: ${missing
-                .map(
-                    ({ name, organizationCode, credit }) =>
-                        `${name}${` (${credit})` || ''}${organizationCode ? ` - ${organizationCode}` : ''}`
-                )
-                .join('; ')}`,
+            message:
+                'Một hoặc nhiều phiên bản môn học không tồn tại trong hệ thống. Vui lòng kiểm tra lại dữ liệu.',
         })
     }
-
     return new Map(existing.map(({ code, id }) => [code, id]))
 }
 

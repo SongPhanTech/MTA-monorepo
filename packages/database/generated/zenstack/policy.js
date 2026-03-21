@@ -1630,6 +1630,19 @@ const policy = {
                 update: {},
             },
         },
+        availableTrainingTime: {
+            modelLevel: {
+                read: { guard: AvailableTrainingTime_read, },
+                create: { guard: AvailableTrainingTime_create, inputChecker: AvailableTrainingTime_create_input, },
+                update: { guard: AvailableTrainingTime_update, },
+                postUpdate: { guard: AvailableTrainingTime_postUpdate, },
+                delete: { guard: AvailableTrainingTime_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
         certificate: {
             modelLevel: {
                 read: { guard: Certificate_read, },
@@ -3629,6 +3642,7 @@ const policy = {
         trainingBlock: { hasValidation: false },
         trainingBlockOnCurriculumVersion: { hasValidation: false },
         trainingTime: { hasValidation: false },
+        availableTrainingTime: { hasValidation: false },
         certificate: { hasValidation: false },
         certificateOnSubject: { hasValidation: true },
         award: { hasValidation: false },
@@ -13473,6 +13487,84 @@ function TrainingTime_delete(context, db) {
     return { OR: [] };
 }
 function $check_TrainingTime_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function AvailableTrainingTime_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_AvailableTrainingTime_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function AvailableTrainingTime_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_AvailableTrainingTime_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function AvailableTrainingTime_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function AvailableTrainingTime_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_AvailableTrainingTime_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function AvailableTrainingTime_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_AvailableTrainingTime_postUpdate(input, context) {
+    return true;
+}
+function AvailableTrainingTime_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_AvailableTrainingTime_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {

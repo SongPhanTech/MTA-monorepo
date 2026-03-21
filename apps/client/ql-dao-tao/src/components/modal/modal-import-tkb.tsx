@@ -297,6 +297,9 @@ const ModalNhapTKB = () => {
                                       'mta/template/MAU2.TKB.LOP-HOC-PHAN-DU-KIEN-DANH-CHO-DAN-SU.xls'
                                   )
                         window.open(link, '_blank')
+                        if (newWindow) {
+                            newWindow.opener = null
+                        }
                     }}
                 >
                     Tải mẫu file Excel

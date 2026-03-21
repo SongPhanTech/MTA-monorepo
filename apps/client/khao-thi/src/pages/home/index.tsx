@@ -1,10 +1,4 @@
-import News from '@components/dashboard/news'
-import Notifications from '@components/dashboard/notifications'
-import PieChart from '@components/dashboard/org-structure'
 import DashboardLayout from '@layouts/dashboard-layout'
-import { Col, Row, Typography } from 'antd'
-
-const { Title } = Typography
 
 function Page() {
     return (

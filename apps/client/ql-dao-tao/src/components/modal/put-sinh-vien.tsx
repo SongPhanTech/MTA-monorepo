@@ -466,6 +466,8 @@ const PutStudentModal = () => {
                         <div className="h-full flex items-end pt-2">
                             <Button
                                 className="mt-auto"
+                                type="link"
+                                rel="noopener noreferrer"
                                 loading={isPending || !studentData}
                                 target="_blank"
                                 href={`/hrm/${ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO}/${studentData?.userProfileId}`}

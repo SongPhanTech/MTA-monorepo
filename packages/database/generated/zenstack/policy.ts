@@ -2569,6 +2569,26 @@ const policy: PolicyDef = {
             },
 
         },
+        availableTrainingTime: {
+            modelLevel: {
+                read: { guard: AvailableTrainingTime_read, },
+                create: { guard: AvailableTrainingTime_create, inputChecker: AvailableTrainingTime_create_input, },
+                update: { guard: AvailableTrainingTime_update, },
+                postUpdate: { guard: AvailableTrainingTime_postUpdate, },
+                delete: { guard: AvailableTrainingTime_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
         certificate: {
             modelLevel: {
                 read: { guard: Certificate_read, },
@@ -5576,6 +5596,7 @@ const policy: PolicyDef = {
         trainingBlock: { hasValidation: false },
         trainingBlockOnCurriculumVersion: { hasValidation: false },
         trainingTime: { hasValidation: false },
+        availableTrainingTime: { hasValidation: false },
         certificate: { hasValidation: false },
         certificateOnSubject: { hasValidation: true },
         award: { hasValidation: false },
@@ -13822,6 +13843,71 @@ function TrainingTime_delete(context: QueryContext, db: CrudContract): any {
 }
 
 function $check_TrainingTime_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function AvailableTrainingTime_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_AvailableTrainingTime_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function AvailableTrainingTime_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_AvailableTrainingTime_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function AvailableTrainingTime_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function AvailableTrainingTime_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_AvailableTrainingTime_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function AvailableTrainingTime_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_AvailableTrainingTime_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function AvailableTrainingTime_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_AvailableTrainingTime_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 

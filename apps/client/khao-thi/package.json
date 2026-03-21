@@ -51,6 +51,7 @@
 		"dayjs": "catalog:",
 		"docx": "catalog:",
 		"docxtemplater": "catalog:",
+		"dompurify": "^3.3.3",
 		"easy-peasy": "catalog:",
 		"easy-template-x": "^7.1.1",
 		"echarts": "catalog:",

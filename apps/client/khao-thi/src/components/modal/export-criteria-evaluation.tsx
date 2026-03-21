@@ -1,3 +1,4 @@
+import DOMPurify from 'dompurify'
 import { DownloadOutlined } from '@ant-design/icons'
 import type { DataTabEvaluationCriterionType } from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/standar-reports'
 import { sqlTransaction } from '@workspace/libs/api/model'
@@ -136,7 +137,9 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
                         for (const td of tds) {
                             const colspan = Number.parseInt(td.getAttribute('colspan') || '1', 10)
                             const rowspan = Number.parseInt(td.getAttribute('rowspan') || '1', 10)
-                            const cellChildren = await htmlToParagraphs(td.innerHTML)
+                            const cellChildren = await htmlToParagraphs(
+                                DOMPurify.sanitize(td.innerHTML)
+                            )
                             cells.push(
                                 new TableCell({
                                     children:
@@ -453,7 +456,7 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
             }
         })
 
-        return doc.body.innerHTML
+        return DOMPurify.sanitize(doc.body.innerHTML)
     }
 
     const noBorders = {

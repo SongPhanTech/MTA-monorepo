@@ -6,7 +6,7 @@ import {
 import { useMemo, useState } from 'react'
 import { useAbility } from '@workspace/permissions'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import { Button, Col, Flex, message, Row } from 'antd'
+import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
 import Table from '@components/commons/table'
 import { FilterProps } from '@constants/type'
 import { formatDate } from '@lib/utils'
@@ -56,6 +56,9 @@ export default function DiemDanhList({ selectedSubjectClassId, setSelectedSubjec
     const { mutateAsync: updateSubjectClassAttendance } = useUpdateSubjectClassAttendance()
     const { onOpen } = useDisclosure<{ id?: string; subjectClassId: string }>({
         tag: 'AddSubjectClassAttendance',
+    })
+    const { onOpen: openDiemDanh } = useDisclosure<{ id?: string; subjectClassId: string }>({
+        tag: 'AddSubjectClassAttendanceStudent',
     })
 
     async function handleDelete(id: string) {
@@ -150,9 +153,21 @@ export default function DiemDanhList({ selectedSubjectClassId, setSelectedSubjec
                                             'SUA'
                                         ) && (
                                             <Flex>
-                                                <Flag />
+                                                <Tooltip title={'Điểm danh'} placement="top">
+                                                    <Flag
+                                                        onClick={openDiemDanh.bind(null, {
+                                                            id,
+                                                            subjectClassId: selectedSubjectClassId,
+                                                        })}
+                                                        className="text-sm text-blue-700 cursor-pointer mr-2"
+                                                        size={16}
+                                                    />
+                                                </Tooltip>
                                                 <EditIcon
-                                                    onClick={onOpen.bind(null, id)}
+                                                    onClick={onOpen.bind(null, {
+                                                        id,
+                                                        subjectClassId: selectedSubjectClassId,
+                                                    })}
                                                     className="text-sm text-blue-700 cursor-pointer"
                                                 />
                                             </Flex>

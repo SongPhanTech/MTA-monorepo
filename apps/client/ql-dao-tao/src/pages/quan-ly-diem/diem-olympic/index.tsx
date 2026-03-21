@@ -288,7 +288,7 @@ export default function ArchivedAward() {
                                     >
                                         Từ chối
                                     </Button>
-                                    {!can(
+                                    {can(
                                         QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_OLYMPIC,
                                         'DUYET'
                                     ) && (

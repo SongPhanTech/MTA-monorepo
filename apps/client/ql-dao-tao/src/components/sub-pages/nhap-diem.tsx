@@ -47,7 +47,7 @@ import {
 import dayjs from 'dayjs'
 import type Decimal from 'decimal.js'
 import _ from 'lodash'
-import { FileUp, Printer, Save } from 'lucide-react'
+import { AlertCircle, FileUp, Printer, Save } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -106,6 +106,11 @@ export default function NhapDiem({
     })
     const { onOpen: onOpenDetailStudent } = useDisclosure<string>({
         tag: 'ModalChiTietSinhVien',
+    })
+    const { onOpen: openScoreDetail } = useDisclosure<{
+        id: string
+    }>({
+        tag: 'ModalScoreDetail',
     })
 
     const { data: dataTable = [], refetch } = useFindManyStudentSubjectScore(
@@ -1189,39 +1194,49 @@ export default function NhapDiem({
                                     const readOnly =
                                         role !== 'GV' || score === 'THI' || disabledForm
                                     return (
-                                        <Form.Item
-                                            className="w-full m-0"
-                                            name={['list', record.id, 'attendanceScore']}
-                                            label=""
-                                            rules={[
-                                                {
-                                                    validator: (_, value) =>
-                                                        validateScore(
-                                                            value,
-                                                            dataDetailSubjectClass?.subject
-                                                                .onePoint || false
-                                                        ),
-                                                },
-                                            ]}
-                                        >
-                                            <InputNumber
-                                                readOnly={readOnly}
-                                                variant={readOnly ? 'underlined' : 'outlined'}
-                                                id={`score-cc-${record.id}`}
-                                                style={{ width: '100%' }}
-                                                step={0.5}
-                                                controls={false}
-                                                onKeyDown={(e) =>
-                                                    handleScoreInputKeyDown(
-                                                        e,
-                                                        record.id,
-                                                        'cc',
-                                                        dataTable
-                                                    )
-                                                }
-                                                className="bg-transparent"
-                                            />
-                                        </Form.Item>
+                                        <div className="flex items-center">
+                                            <Form.Item
+                                                className="w-full m-0"
+                                                name={['list', record.id, 'attendanceScore']}
+                                                rules={[
+                                                    {
+                                                        validator: (_, value) =>
+                                                            validateScore(
+                                                                value,
+                                                                dataDetailSubjectClass?.subject
+                                                                    .onePoint || false
+                                                            ),
+                                                    },
+                                                ]}
+                                            >
+                                                <InputNumber
+                                                    readOnly={readOnly}
+                                                    variant={readOnly ? 'underlined' : 'outlined'}
+                                                    id={`score-cc-${record.id}`}
+                                                    style={{ width: '100%' }}
+                                                    step={0.5}
+                                                    controls={false}
+                                                    onKeyDown={(e) =>
+                                                        handleScoreInputKeyDown(
+                                                            e,
+                                                            record.id,
+                                                            'cc',
+                                                            dataTable
+                                                        )
+                                                    }
+                                                />
+                                            </Form.Item>
+
+                                            <span
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    openScoreDetail({ id: record.id })
+                                                }}
+                                                className="ml-1 cursor-pointer text-red-500 hover:scale-110"
+                                            >
+                                                <AlertCircle size={14} />
+                                            </span>
+                                        </div>
                                     )
                                 },
                             },
@@ -1239,41 +1254,49 @@ export default function NhapDiem({
                                     const readOnly =
                                         role !== 'GV' || score === 'THI' || disabledForm
                                     return (
-                                        <Form.Item
-                                            className="w-full mb-0"
-                                            name={['list', record.id, 'midtermScore']}
-                                            label=""
-                                            rules={[
-                                                {
-                                                    validator: (_, value) =>
-                                                        validateScore(
-                                                            value,
-                                                            dataDetailSubjectClass?.subject
-                                                                .onePoint || false
-                                                        ),
-                                                },
-                                            ]}
-                                        >
-                                            <InputNumber
-                                                readOnly={readOnly}
-                                                variant={readOnly ? 'underlined' : 'outlined'}
-                                                id={`score-tx-${record.id}`}
-                                                style={{
-                                                    width: '100%',
+                                        <div className="flex items-center">
+                                            <Form.Item
+                                                className="w-full mb-0"
+                                                name={['list', record.id, 'midtermScore']}
+                                                rules={[
+                                                    {
+                                                        validator: (_, value) =>
+                                                            validateScore(
+                                                                value,
+                                                                dataDetailSubjectClass?.subject
+                                                                    .onePoint || false
+                                                            ),
+                                                    },
+                                                ]}
+                                            >
+                                                <InputNumber
+                                                    readOnly={readOnly}
+                                                    variant={readOnly ? 'underlined' : 'outlined'}
+                                                    id={`score-tx-${record.id}`}
+                                                    style={{ width: '100%' }}
+                                                    step={0.5}
+                                                    controls={false}
+                                                    onKeyDown={(e) =>
+                                                        handleScoreInputKeyDown(
+                                                            e,
+                                                            record.id,
+                                                            'tx',
+                                                            dataTable
+                                                        )
+                                                    }
+                                                />
+                                            </Form.Item>
+
+                                            <span
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    openScoreDetail({ id: record.id })
                                                 }}
-                                                step={0.5}
-                                                controls={false}
-                                                onKeyDown={(e) =>
-                                                    handleScoreInputKeyDown(
-                                                        e,
-                                                        record.id,
-                                                        'tx',
-                                                        dataTable
-                                                    )
-                                                }
-                                                className="bg-transparent"
-                                            />
-                                        </Form.Item>
+                                                className="ml-1 cursor-pointer text-red-500 hover:scale-110"
+                                            >
+                                                <AlertCircle size={14} />
+                                            </span>
+                                        </div>
                                     )
                                 },
                             },
@@ -1307,28 +1330,47 @@ export default function NhapDiem({
                                     }
 
                                     return (
-                                        <Form.Item
-                                            className="w-full m-0"
-                                            name={['list', id, 'examScore']}
-                                            rules={[
-                                                {
-                                                    validator: (_, value) =>
-                                                        validateExamScore(value),
-                                                },
-                                            ]}
-                                        >
-                                            <InputNumber
-                                                disabled={disabledForm}
-                                                readOnly={disabledForm}
-                                                variant={disabledForm ? 'underlined' : 'outlined'}
-                                                id={`score-thi-${id}`}
-                                                style={{ width: '100%' }}
-                                                controls={false}
-                                                onKeyDown={(e) =>
-                                                    handleScoreInputKeyDown(e, id, 'thi', dataTable)
-                                                }
-                                            />
-                                        </Form.Item>
+                                        <div className="flex items-center">
+                                            <Form.Item
+                                                className="w-full m-0"
+                                                name={['list', id, 'examScore']}
+                                                rules={[
+                                                    {
+                                                        validator: (_, value) =>
+                                                            validateExamScore(value),
+                                                    },
+                                                ]}
+                                            >
+                                                <InputNumber
+                                                    disabled={disabledForm}
+                                                    readOnly={disabledForm}
+                                                    variant={
+                                                        disabledForm ? 'underlined' : 'outlined'
+                                                    }
+                                                    id={`score-thi-${id}`}
+                                                    style={{ width: '100%' }}
+                                                    controls={false}
+                                                    onKeyDown={(e) =>
+                                                        handleScoreInputKeyDown(
+                                                            e,
+                                                            id,
+                                                            'thi',
+                                                            dataTable
+                                                        )
+                                                    }
+                                                />
+                                            </Form.Item>
+
+                                            <span
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    openScoreDetail({ id })
+                                                }}
+                                                className="ml-1 cursor-pointer text-red-500 hover:scale-110"
+                                            >
+                                                <AlertCircle size={14} />
+                                            </span>
+                                        </div>
                                     )
                                 },
                             },
@@ -1478,7 +1520,13 @@ export default function NhapDiem({
                                             valuePropName="checked"
                                         >
                                             <Checkbox
-                                                disabled={score === 'THI' || disabledForm}
+                                                disabled={
+                                                    (dataDetailSubjectClass?.examType ===
+                                                        'OfflineWritten' &&
+                                                        role !== 'P13') ||
+                                                    score === 'TX/ĐK' ||
+                                                    disabledForm
+                                                }
                                                 onChange={(e) => {
                                                     if (!e.target.checked) {
                                                         form.setFieldValue(

@@ -38,5 +38,10 @@
     "@hono/zod-openapi": "catalog:",
     "esbuild": "catalog:"
   },
-  "packageManager": "pnpm@10.30.0"
+  "packageManager": "pnpm@10.30.0",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@paralleldrive/cuid2"
+    ]
+  }
 }

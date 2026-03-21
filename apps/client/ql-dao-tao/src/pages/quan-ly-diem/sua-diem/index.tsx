@@ -490,10 +490,6 @@ function TicketDetailDrawer({
     const isFull = ticket?.number ? items.length >= ticket.number : false
 
     const handleStatusChange = async (newStatus: ScoreCorrectionStatus) => {
-        console.log('newStatus', newStatus)
-        console.log('items', items)
-        console.log('ticket', ticket)
-
         if (newStatus === 'PENDING_APPROVAL') {
             if (items?.length !== ticket?.number) {
                 message.error(

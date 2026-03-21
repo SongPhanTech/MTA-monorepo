@@ -13,6 +13,8 @@ import { AutoComplete, Button, Checkbox, Col, Flex, Form, Input, message, Row } 
 import { useEffect } from 'react'
 import { keHoachThiStore } from '..'
 import ExportExamList from './export-exam-list'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 
 interface StudentSubjectScoreFormType {
     list: Record<
@@ -29,6 +31,7 @@ export default function DanhSachSinhVien() {
     const [form] = Form.useForm<StudentSubjectScoreFormType>()
 
     const { selectedExamId } = useStore(keHoachThiStore)
+    const { can } = useAbility()
 
     const { data = [], isLoading } = useFindManyExamList(
         {
@@ -695,7 +698,14 @@ export default function DanhSachSinhVien() {
                             <Button
                                 type="primary"
                                 className="bg-orange-500"
-                                disabled={examData?.lockExamSessions || isCreatedExamCode}
+                                disabled={
+                                    examData?.lockExamSessions ||
+                                    isCreatedExamCode ||
+                                    !can(
+                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_TO_CHUC_THI_LAP_DANH_SANH_THI,
+                                        'DUYET'
+                                    )
+                                }
                                 onClick={handleSaveExamDecision}
                             >
                                 1. Lưu hoãn thi

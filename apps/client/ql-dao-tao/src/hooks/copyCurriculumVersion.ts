@@ -60,7 +60,9 @@ export const useCloneCurriculumVersion = () => {
                 code: originalVersion.code
                     ? `${originalVersion.code}-COPY-${shortSuffix}`
                     : `COPY-${Date.now()}`,
-                curriculum: { connect: { id: targetCurriculumId ?? originalVersion?.curriculumId } },
+                curriculum: {
+                    connect: { id: targetCurriculumId ?? originalVersion?.curriculumId },
+                },
                 trainingObjectType: { connect: { id: originalVersion.trainingObjectTypeId } },
                 ...(originalVersion.trainingLevelId
                     ? { trainingLevel: { connect: { id: originalVersion.trainingLevelId ?? '' } } }

@@ -54,12 +54,8 @@ const ExportAllCriteriaEvaluation = ({ standards }: ExportAllCriteriaEvaluationP
         return color
     }
 
-    const htmlToParagraphs = async (html: string): Promise<(Paragraph | Table)[]> => {
-        if (!html) return []
-
-        const parser = new DOMParser()
-        const doc = parser.parseFromString(html, 'text/html')
-        const nodes = Array.from(doc.body.childNodes)
+    const htmlToParagraphs = async (container: HTMLElement): Promise<(Paragraph | Table)[]> => {
+        const nodes = Array.from(container.childNodes)
 
         const paragraphs: (Paragraph | Table)[] = []
 
@@ -69,7 +65,7 @@ const ExportAllCriteriaEvaluation = ({ standards }: ExportAllCriteriaEvaluationP
 
                 if (el.tagName === 'IMG') {
                     const src = el.getAttribute('src')
-                    if (src) {
+                    if (src && /^https?:\/\//i.test(src)) {
                         try {
                             const res = await fetch(src)
                             const blob = await res.blob()
@@ -107,7 +103,7 @@ const ExportAllCriteriaEvaluation = ({ standards }: ExportAllCriteriaEvaluationP
                         const cells: TableCell[] = []
                         const tds = Array.from(tr.querySelectorAll('td, th'))
                         for (const td of tds) {
-                            const cellChildren = await htmlToParagraphs(td.innerHTML)
+                            const cellChildren = await htmlToParagraphs(td as HTMLElement)
                             cells.push(
                                 new TableCell({
                                     children: cellChildren as Paragraph[],
@@ -408,11 +404,9 @@ const ExportAllCriteriaEvaluation = ({ standards }: ExportAllCriteriaEvaluationP
         return { evidenceTags: map, result }
     }
 
-    const processHtmlContent = (html: string, evidenceTags: Map<string, string>): string => {
-        if (!html) return ''
-
+    const processHtmlContent = (html: string, evidenceTags: Map<string, string>): HTMLElement => {
         const parser = new DOMParser()
-        const doc = parser.parseFromString(html, 'text/html')
+        const doc = parser.parseFromString(html || '', 'text/html')
 
         const spans = doc.querySelectorAll('span[id]')
 
@@ -420,13 +414,12 @@ const ExportAllCriteriaEvaluation = ({ standards }: ExportAllCriteriaEvaluationP
             const id = span.getAttribute('id')
             if (id && evidenceTags.has(id)) {
                 span.textContent = evidenceTags.get(id) || ''
-                ;(span as HTMLElement).style.color = 'red'
                 span.removeAttribute('style')
                 span.setAttribute('style', 'color: red;')
             }
         })
 
-        return doc.body.innerHTML
+        return doc.body
     }
 
     const exportToWord = async () => {

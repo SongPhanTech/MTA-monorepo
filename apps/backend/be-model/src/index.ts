@@ -122,7 +122,6 @@ app.all('/api/system/:appcode/*', async (c) => {
             'content-type': 'application/json-patch+json',
         },
     })
-    console.log('[be-model] Proxy URL:', urlProxy.toString(), `status code: ${res.status}`)
     return res
 })
 

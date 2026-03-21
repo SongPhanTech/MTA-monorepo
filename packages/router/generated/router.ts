@@ -67,6 +67,7 @@ export default {
     "DANH_MUC_QL_DIEM_CONG_COMPONENTS_CERTIFICATE": "/danh-muc/ql-diem-cong/components/certificate",
     "DANH_MUC_QL_DIEM_CONG_COMPONENTS_OLYMPIC_AWARD": "/danh-muc/ql-diem-cong/components/olympic-award",
     "DANH_MUC_QL_DIEM_CONG": "/danh-muc/ql-diem-cong",
+    "DANH_MUC_QUY_THOI_GIAN_DAO_TAO": "/danh-muc/quy-thoi-gian-dao-tao",
     "DANH_MUC_THOI_GIAN_DAO_TAO": "/danh-muc/thoi-gian-dao-tao",
     "DANH_MUC_TRINH_DO_DAO_TAO": "/danh-muc/trinh-do-dao-tao",
     "DANH_MUC_XEP_LOAI_HOC_LUC": "/danh-muc/xep-loai-hoc-luc",
