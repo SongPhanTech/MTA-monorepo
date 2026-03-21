@@ -8,4 +8,4 @@
 /**
  * ID của lớp môn học
  */
-export type Id = string;
+export type Id = string

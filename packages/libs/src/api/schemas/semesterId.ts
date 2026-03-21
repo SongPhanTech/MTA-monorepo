@@ -8,4 +8,4 @@
 /**
  * ID học kỳ
  */
-export type SemesterId = string;
+export type SemesterId = string

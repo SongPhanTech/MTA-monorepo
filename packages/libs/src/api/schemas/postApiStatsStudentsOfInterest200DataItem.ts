@@ -6,9 +6,9 @@
  */
 
 export type PostApiStatsStudentsOfInterest200DataItem = {
-  id: string;
-  name: string;
-  academicWarningLevel: number;
-  cumulativeDebtCredits: number;
-  gpa: number;
-};
+    id: string
+    name: string
+    academicWarningLevel: number
+    cumulativeDebtCredits: number
+    gpa: number
+}

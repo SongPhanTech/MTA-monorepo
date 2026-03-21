@@ -9,4 +9,4 @@
  * Xem tất cả môn học nợ
  * @nullable
  */
-export type ViewAll = number | null;
+export type ViewAll = number | null

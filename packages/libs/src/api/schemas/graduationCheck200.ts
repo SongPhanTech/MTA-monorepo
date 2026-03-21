@@ -4,8 +4,8 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GraduationCheckResult } from './graduationCheckResult';
+import type { GraduationCheckResult } from './graduationCheckResult'
 
 export type GraduationCheck200 = {
-  results: GraduationCheckResult[];
-};
+    results: GraduationCheckResult[]
+}

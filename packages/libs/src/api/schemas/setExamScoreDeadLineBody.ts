@@ -6,17 +6,17 @@
  */
 
 export type SetExamScoreDeadLineBody = {
-  /**
-   * @minimum 0
-   * @nullable
-   */
-  endPadding?: number | null;
-  /** @nullable */
-  endDate?: string | null;
-  /** @nullable */
-  classIds?: string[] | null;
-  trainingObjectTypeId?: string;
-  /** @nullable */
-  semesterId?: string | null;
-  overwrite?: boolean;
-};
+    /**
+     * @minimum 0
+     * @nullable
+     */
+    endPadding?: number | null
+    /** @nullable */
+    endDate?: string | null
+    /** @nullable */
+    classIds?: string[] | null
+    trainingObjectTypeId?: string
+    /** @nullable */
+    semesterId?: string | null
+    overwrite?: boolean
+}

@@ -6,9 +6,9 @@
  */
 
 export type PostApiStatsAverageExamScoreTrend200DataItem = {
-  semesterId: string;
-  semesterName: string;
-  subjectVersionId: string;
-  subjectName: string;
-  averageScore: number;
-};
+    semesterId: string
+    semesterName: string
+    subjectVersionId: string
+    subjectName: string
+    averageScore: number
+}

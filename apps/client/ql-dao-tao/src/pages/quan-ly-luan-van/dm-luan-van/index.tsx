@@ -1800,7 +1800,9 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                                                                                     ?.id || '',
                                                                         },
                                                                     })
-                                                                    message.success('Xóa thành công')
+                                                                    message.success(
+                                                                        'Xóa thành công'
+                                                                    )
                                                                 } catch (error) {
                                                                     message.error(
                                                                         'Đã xảy ra lỗi, vui lòng kiểm tra lại'

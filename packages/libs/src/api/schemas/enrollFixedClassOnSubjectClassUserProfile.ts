@@ -6,14 +6,14 @@
  */
 
 export type EnrollFixedClassOnSubjectClassUserProfile = {
-  id: string;
-  /** @nullable */
-  code: string | null;
-  lastName: string;
-  firstName: string;
-  /** @nullable */
-  familyName: string | null;
-  gender: string;
-  /** @nullable */
-  dateOfBirth: string | null;
-};
+    id: string
+    /** @nullable */
+    code: string | null
+    lastName: string
+    firstName: string
+    /** @nullable */
+    familyName: string | null
+    gender: string
+    /** @nullable */
+    dateOfBirth: string | null
+}

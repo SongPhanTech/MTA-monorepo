@@ -4,12 +4,12 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { SemesterId } from './semesterId';
-import type { TrainingObjectTypeId } from './trainingObjectTypeId';
-import type { AcademicActionType } from './academicActionType';
+import type { SemesterId } from './semesterId'
+import type { TrainingObjectTypeId } from './trainingObjectTypeId'
+import type { AcademicActionType } from './academicActionType'
 
 export type ExportStudentAcademicActionJsonParams = {
-semesterId: SemesterId & unknown;
-trainingObjectTypeId: TrainingObjectTypeId;
-academicActionType?: AcademicActionType;
-};
+    semesterId: SemesterId & unknown
+    trainingObjectTypeId: TrainingObjectTypeId
+    academicActionType?: AcademicActionType
+}

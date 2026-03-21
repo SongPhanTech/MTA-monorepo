@@ -6,5 +6,5 @@
  */
 
 export type GetVersion400 = {
-  message: string;
-};
+    message: string
+}

@@ -171,7 +171,10 @@ const ModalCauHinhLuanVan = () => {
 
         let councilId = thesisProjectData?.councilId
 
-        if (!councilId && (data.chairman || data.secretary || data.reviewer1 || data.reviewer2 || data.member)) {
+        if (
+            !councilId &&
+            (data.chairman || data.secretary || data.reviewer1 || data.reviewer2 || data.member)
+        ) {
             const newCouncil = await createCouncil({
                 data: {
                     proposedDate: new Date(),

@@ -5,12 +5,12 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type UpdateStudentStatusBodyAcademicActionType = typeof UpdateStudentStatusBodyAcademicActionType[keyof typeof UpdateStudentStatusBodyAcademicActionType];
-
+export type UpdateStudentStatusBodyAcademicActionType =
+    (typeof UpdateStudentStatusBodyAcademicActionType)[keyof typeof UpdateStudentStatusBodyAcademicActionType]
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const UpdateStudentStatusBodyAcademicActionType = {
-  REPEAT_YEAR: 'REPEAT_YEAR',
-  SUSPENSION: 'SUSPENSION',
-  EXPULSION: 'EXPULSION',
-} as const;
+    REPEAT_YEAR: 'REPEAT_YEAR',
+    SUSPENSION: 'SUSPENSION',
+    EXPULSION: 'EXPULSION',
+} as const

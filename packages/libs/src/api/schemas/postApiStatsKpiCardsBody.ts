@@ -6,5 +6,5 @@
  */
 
 export type PostApiStatsKpiCardsBody = {
-  preview?: boolean;
-};
+    preview?: boolean
+}

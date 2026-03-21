@@ -6,6 +6,6 @@
  */
 
 export interface UploadExcelCreateUserProfile {
-  file: Blob;
-  type: string;
+    file: Blob
+    type: string
 }

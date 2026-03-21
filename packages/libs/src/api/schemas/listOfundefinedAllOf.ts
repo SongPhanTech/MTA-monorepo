@@ -4,9 +4,9 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { ListOfundefinedAllOfDataItem } from './listOfundefinedAllOfDataItem';
+import type { ListOfundefinedAllOfDataItem } from './listOfundefinedAllOfDataItem'
 
 export type ListOfundefinedAllOf = {
-  data: ListOfundefinedAllOfDataItem[];
-  count: number;
-};
+    data: ListOfundefinedAllOfDataItem[]
+    count: number
+}

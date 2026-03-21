@@ -6,7 +6,7 @@
  */
 
 export type ImportLecturerBody = {
-  file: Blob;
-  /** @nullable */
-  timeout?: number | null;
-};
+    file: Blob
+    /** @nullable */
+    timeout?: number | null
+}

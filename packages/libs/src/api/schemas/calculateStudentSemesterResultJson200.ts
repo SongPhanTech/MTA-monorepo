@@ -8,4 +8,4 @@
 /**
  * @nullable
  */
-export type CalculateStudentSemesterResultJson200 = unknown | null;
+export type CalculateStudentSemesterResultJson200 = unknown | null
