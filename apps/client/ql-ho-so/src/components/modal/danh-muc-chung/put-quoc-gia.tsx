@@ -7,11 +7,12 @@ import { Col, Form, Input, message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-export default function QuocGiaModal() {
 type FormValues = {
     name: string
     description?: string
 }
+export default function QuocGiaModal() {
+
 
 const [form] = Form.useForm<FormValues>()
 

@@ -1,6 +1,7 @@
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
+import QuocGiaModal from '@components/modal/danh-muc-chung/put-quoc-gia'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -59,6 +60,7 @@ export default function NationalType() {
 
     return (
         <div>
+            <QuocGiaModal />
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
