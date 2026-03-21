@@ -437,7 +437,7 @@ export default function TrainingProgramSubjects() {
     const treeData = buildOrgTree(manageOrgData)
 
     const { handleCloneCurriculumVersion } = useCloneCurriculumVersion()
-
+    const handleExportExcel = async () => {}
     return (
         <div>
             <Divider orientation="left" orientationMargin={0} className="m-0 p-0">
@@ -474,7 +474,7 @@ export default function TrainingProgramSubjects() {
                                 ) && (
                                     <>
                                         <Button
-                                            href={getMinioUrl('mta/template/MAU-NHAP_CTDT.xlsx')}
+                                            onClick={() => handleExportExcel()}
                                             className="text-primary border-primary mr-2"
                                             disabled={isLocked}
                                         >

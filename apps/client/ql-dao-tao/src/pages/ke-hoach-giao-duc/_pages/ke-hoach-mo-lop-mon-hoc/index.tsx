@@ -134,6 +134,7 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                     id: true,
                     code: true,
                     maxStudent: true,
+                    _count: { select: { subjectClassStudent: true } },
                 },
             },
             subject: {
@@ -255,6 +256,7 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                                                                               status: 'DRAFT',
                                                                               cancelled: false,
                                                                               type: type,
+                                                                              subjectClassStudent: { none: {} },
                                                                           },
                                                                       },
                                                                   },
@@ -344,60 +346,131 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                                                             : resList.data[1]
                                                     ) as Prisma.SubjectClassGetPayload<{}>[]
 
-                                                    const res = await sqlTransaction([
-                                                        ...Object.values(
-                                                            Object.groupBy(
-                                                                listSubjectVersionIds.planTrainingSubjects.filter(
-                                                                    (pts) =>
-                                                                        !alreadySubjectIds.some(
-                                                                            (asc) =>
-                                                                                asc.subjectId ===
-                                                                                pts
-                                                                                    ?.trainingBlockSubject
-                                                                                    ?.subject?.id
-                                                                        )
-                                                                ),
-                                                                (item) =>
-                                                                    item?.trainingBlockSubject
-                                                                        ?.subject?.code ?? ''
-                                                            )
-                                                        )
-                                                            // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
-                                                            ?.map((e) => e?.[0])
-                                                            .flatMap((e) =>
-                                                                new Array(values.count)
-                                                                    .fill(1)
-                                                                    .map((_, idx) => ({
-                                                                        model: 'SubjectClass' as const,
-                                                                        operation: 'create',
-                                                                        data: {
-                                                                            data: {
-                                                                                semesterId,
-                                                                                trainingObjectTypeId,
-                                                                                type: type,
-                                                                                subjectId:
-                                                                                    e
-                                                                                        ?.trainingBlockSubject
-                                                                                        ?.subject
-                                                                                        ?.id,
-                                                                                code: `${e?.trainingBlockSubject?.subject?.code} ${String(idx + 1)}`,
-                                                                                name: e
-                                                                                    ?.trainingBlockSubject
-                                                                                    ?.subject?.name,
-                                                                                maxStudent:
-                                                                                    subjectVersions?.[
-                                                                                        e
-                                                                                            ?.trainingBlockSubject
-                                                                                            ?.subject
-                                                                                            ?.id ??
-                                                                                            ''
-                                                                                    ]?.maxStudent ||
-                                                                                    0,
-                                                                            },
-                                                                        },
-                                                                    }))
-                                                            ),
-                                                    ])
+                                                    const protectedCountBySubjectId =
+                                                        values.isOverride
+                                                            ? alreadySubjectIds.reduce(
+                                                                  (acc, asc) => {
+                                                                      const subjectId = asc?.subjectId
+                                                                      if (!subjectId) return acc
+                                                                      acc[subjectId] = (acc[subjectId] ?? 0) + 1
+                                                                      return acc
+                                                                  },
+                                                                  {} as Record<string, number>
+                                                              )
+                                                            : {}
+
+                                                    const createOps = values.isOverride
+                                                        ? Object.values(
+                                                              Object.groupBy(
+                                                                  listSubjectVersionIds.planTrainingSubjects.filter(
+                                                                      (pts) =>
+                                                                          !!pts
+                                                                              ?.trainingBlockSubject
+                                                                              ?.subject?.id
+                                                                  ),
+                                                                  (pts) =>
+                                                                      pts
+                                                                          ?.trainingBlockSubject
+                                                                          ?.subject?.id ??
+                                                                      ''
+                                                              )
+                                                          ).flatMap((group) => {
+                                                              const first = group?.[0]
+                                                              const subjectId =
+                                                                  first?.trainingBlockSubject?.subject?.id
+                                                              if (!subjectId) return []
+                                                              const existingCount =
+                                                                  protectedCountBySubjectId?.[
+                                                                      subjectId
+                                                                  ] ?? 0
+                                                              const toCreate = Math.max(
+                                                                  0,
+                                                                  values.count - existingCount
+                                                              )
+                                                              if (toCreate <= 0) return []
+
+                                                              const subjectCode =
+                                                                  first?.trainingBlockSubject?.subject?.code ??
+                                                                  ''
+                                                              const subjectName =
+                                                                  first?.trainingBlockSubject?.subject?.name
+
+                                                              return new Array(toCreate)
+                                                                  .fill(1)
+                                                                  .map((_, idx) => ({
+                                                                      model: 'SubjectClass' as const,
+                                                                      operation: 'create',
+                                                                      data: {
+                                                                          data: {
+                                                                              semesterId,
+                                                                              trainingObjectTypeId,
+                                                                              type: type,
+                                                                              subjectId,
+                                                                              code: `${subjectCode} ${String(existingCount + idx + 1)}`,
+                                                                              name: subjectName,
+                                                                              maxStudent:
+                                                                                  subjectVersions?.[
+                                                                                      subjectId
+                                                                                  ]?.maxStudent ||
+                                                                                  0,
+                                                                          },
+                                                                      },
+                                                                  }))
+                                                          })
+                                                        : Object.values(
+                                                              Object.groupBy(
+                                                                  listSubjectVersionIds.planTrainingSubjects.filter(
+                                                                      (pts) =>
+                                                                          !alreadySubjectIds.some(
+                                                                              (asc) =>
+                                                                                  asc.subjectId ===
+                                                                                  pts
+                                                                                      ?.trainingBlockSubject
+                                                                                      ?.subject?.id
+                                                                          )
+                                                                  ),
+                                                                  (item) =>
+                                                                      item?.trainingBlockSubject
+                                                                          ?.subject
+                                                                          ?.code ?? ''
+                                                              )
+                                                          )
+                                                              .map((e) => e?.[0])
+                                                              .flatMap((e) =>
+                                                                  new Array(values.count)
+                                                                      .fill(1)
+                                                                      .map((_, idx) => ({
+                                                                          model: 'SubjectClass' as const,
+                                                                          operation: 'create',
+                                                                          data: {
+                                                                              data: {
+                                                                                  semesterId,
+                                                                                  trainingObjectTypeId,
+                                                                                  type: type,
+                                                                                  subjectId:
+                                                                                      e
+                                                                                          ?.trainingBlockSubject
+                                                                                          ?.subject
+                                                                                          ?.id,
+                                                                                  code: `${e?.trainingBlockSubject?.subject?.code} ${String(idx + 1)}`,
+                                                                                  name: e
+                                                                                      ?.trainingBlockSubject
+                                                                                      ?.subject?.name,
+                                                                                  maxStudent:
+                                                                                      subjectVersions?.[
+                                                                                          e
+                                                                                              ?.trainingBlockSubject
+                                                                                              ?.subject
+                                                                                              ?.id ??
+                                                                                          ''
+                                                                                      ]?.maxStudent ||
+                                                                                      0,
+                                                                              },
+                                                                          },
+                                                                      }))
+                                                              )
+
+                                                    const res = await sqlTransaction(createOps)
                                                     if (res.status !== 200) {
                                                         throw new Error('Lỗi khi mở LMH')
                                                     }
@@ -452,6 +525,23 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                                             )
                                                 .filter(([_, v]) => v.isEdit)
                                                 .map(([k, _]) => k)
+
+                                            const protectedCountBySubjectId: Record<string, number> =
+                                                subjectIds.reduce((acc, subjectId) => {
+                                                    const subjectVersion =
+                                                        subjects?.find(
+                                                            (s) => s.id === subjectId
+                                                        )
+                                                    const protectedCount =
+                                                        subjectVersion?.subjectClass?.filter(
+                                                            (sc: any) =>
+                                                                (sc?._count
+                                                                    ?.subjectClassStudent ?? 0) > 0
+                                                        ).length ?? 0
+                                                    acc[subjectId] = protectedCount
+                                                    return acc
+                                                }, {} as Record<string, number>)
+
                                             const res = await sqlTransaction([
                                                 {
                                                     model: 'SubjectClass' as const,
@@ -463,6 +553,7 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                                                             status: 'DRAFT',
                                                             cancelled: false,
                                                             type: type,
+                                                            subjectClassStudent: { none: {} },
                                                             subjectId: {
                                                                 in: subjectIds,
                                                             },
@@ -471,8 +562,16 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                                                 },
                                                 ...Object.entries(values.subjectVersions || {})
                                                     .filter(([_, v]) => v.isEdit)
-                                                    .flatMap(([subjectId, v]) =>
-                                                        new Array(v.count)
+                                                    .flatMap(([subjectId, v]) => {
+                                                        const existingCount =
+                                                            protectedCountBySubjectId?.[
+                                                                subjectId
+                                                            ] ?? 0
+                                                        const toCreate = Math.max(
+                                                            0,
+                                                            v.count - existingCount
+                                                        )
+                                                        return new Array(toCreate)
                                                             .fill(1)
                                                             .map((_, idx) => ({
                                                                 model: 'SubjectClass' as const,
@@ -483,14 +582,14 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                                                                         trainingObjectTypeId,
                                                                         type: type,
                                                                         subjectId,
-                                                                        code: `${v.code} ${String(idx + 1)}`,
+                                                                        code: `${v.code} ${String(existingCount + idx + 1)}`,
                                                                         name: v.name,
                                                                         maxStudent:
                                                                             v.maxStudent || 0,
                                                                     },
                                                                 },
                                                             }))
-                                                    ),
+                                                    }),
                                             ])
                                             if (res.status !== 200) {
                                                 throw new Error('Lỗi khi mở LMH')
