@@ -166,6 +166,8 @@ model StudentSubjectScore extends Base {
   studentSubjectScoreHistory   StudentSubjectScoreHistory[]
   scoreCorrectionItem          ScoreCorrectionItem[]
 
+  @@index([subjectClassId])
+  @@index([subjectVersionId])
   @@unique([subjectClassId, studentId])
   @@schema("ql-dao-tao")
 }
@@ -758,6 +760,7 @@ model SubjectVersion extends BaseNoCode {
 
   @@unique([trainingObjectTypeId, name, credit, period, managementOrganizationId])
   @@index([name, trainingObjectTypeId])
+  @@index([subjectId])
   @@schema("ql-dao-tao")
 }
 
@@ -1018,6 +1021,11 @@ model SubjectClass extends BaseNoCode {
   subjectClassHistory         SubjectClassHistory[]
   examBank                    ExamBank[]
   subjectClassAttendances     SubjectClassAttendance[]
+
+  @@index([lecturerId])
+  @@index([extraLecturerId])
+  @@index([enterGradeLecturerId])
+  @@index([subjectId])
   @@schema("ql-dao-tao")
 }
 
@@ -1076,6 +1084,8 @@ model SubjectClassTime extends Base {
   dayOfWeek      Int            // Thứ trong tuần (2-8 tương ứng với Thứ Hai - Chủ Nhật)
   startPeriod    Int            // Tiết bắt đầu (1, 2, 3, ...)
   endPeriod      Int            // Tiết kết thúc (1, 2, 3, ...)
+
+  @@index([subjectClassId])
   @@schema("ql-dao-tao")
 }
 

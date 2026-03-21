@@ -38538,8 +38538,8 @@ export namespace Prisma {
     sThietBiTao: string | null
     sThietBiSua: string | null
     avatar: string | null
-    firstName: string
-    lastName: string
+    firstName: string | null
+    lastName: string | null
     idCardNumber: string
     placeOfIdCardNumber: string | null
     fullname: string | null
@@ -39676,8 +39676,8 @@ export namespace Prisma {
       sThietBiTao: string | null
       sThietBiSua: string | null
       avatar: string | null
-      firstName: string
-      lastName: string
+      firstName: string | null
+      lastName: string | null
       idCardNumber: string
       placeOfIdCardNumber: string | null
       fullname: string | null
@@ -387175,8 +387175,8 @@ export namespace Prisma {
     sThietBiTao?: StringNullableFilter<"UserProfile"> | string | null
     sThietBiSua?: StringNullableFilter<"UserProfile"> | string | null
     avatar?: StringNullableFilter<"UserProfile"> | string | null
-    firstName?: StringFilter<"UserProfile"> | string
-    lastName?: StringFilter<"UserProfile"> | string
+    firstName?: StringNullableFilter<"UserProfile"> | string | null
+    lastName?: StringNullableFilter<"UserProfile"> | string | null
     idCardNumber?: StringFilter<"UserProfile"> | string
     placeOfIdCardNumber?: StringNullableFilter<"UserProfile"> | string | null
     fullname?: StringNullableFilter<"UserProfile"> | string | null
@@ -387394,8 +387394,8 @@ export namespace Prisma {
     sThietBiTao?: SortOrderInput | SortOrder
     sThietBiSua?: SortOrderInput | SortOrder
     avatar?: SortOrderInput | SortOrder
-    firstName?: SortOrder
-    lastName?: SortOrder
+    firstName?: SortOrderInput | SortOrder
+    lastName?: SortOrderInput | SortOrder
     idCardNumber?: SortOrder
     placeOfIdCardNumber?: SortOrderInput | SortOrder
     fullname?: SortOrderInput | SortOrder
@@ -387618,8 +387618,8 @@ export namespace Prisma {
     sThietBiTao?: StringNullableFilter<"UserProfile"> | string | null
     sThietBiSua?: StringNullableFilter<"UserProfile"> | string | null
     avatar?: StringNullableFilter<"UserProfile"> | string | null
-    firstName?: StringFilter<"UserProfile"> | string
-    lastName?: StringFilter<"UserProfile"> | string
+    firstName?: StringNullableFilter<"UserProfile"> | string | null
+    lastName?: StringNullableFilter<"UserProfile"> | string | null
     placeOfIdCardNumber?: StringNullableFilter<"UserProfile"> | string | null
     fullname?: StringNullableFilter<"UserProfile"> | string | null
     healthInsuranceNumber?: StringNullableFilter<"UserProfile"> | string | null
@@ -387836,8 +387836,8 @@ export namespace Prisma {
     sThietBiTao?: SortOrderInput | SortOrder
     sThietBiSua?: SortOrderInput | SortOrder
     avatar?: SortOrderInput | SortOrder
-    firstName?: SortOrder
-    lastName?: SortOrder
+    firstName?: SortOrderInput | SortOrder
+    lastName?: SortOrderInput | SortOrder
     idCardNumber?: SortOrder
     placeOfIdCardNumber?: SortOrderInput | SortOrder
     fullname?: SortOrderInput | SortOrder
@@ -387974,8 +387974,8 @@ export namespace Prisma {
     sThietBiTao?: StringNullableWithAggregatesFilter<"UserProfile"> | string | null
     sThietBiSua?: StringNullableWithAggregatesFilter<"UserProfile"> | string | null
     avatar?: StringNullableWithAggregatesFilter<"UserProfile"> | string | null
-    firstName?: StringWithAggregatesFilter<"UserProfile"> | string
-    lastName?: StringWithAggregatesFilter<"UserProfile"> | string
+    firstName?: StringNullableWithAggregatesFilter<"UserProfile"> | string | null
+    lastName?: StringNullableWithAggregatesFilter<"UserProfile"> | string | null
     idCardNumber?: StringWithAggregatesFilter<"UserProfile"> | string
     placeOfIdCardNumber?: StringNullableWithAggregatesFilter<"UserProfile"> | string | null
     fullname?: StringNullableWithAggregatesFilter<"UserProfile"> | string | null
@@ -417403,8 +417403,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -417579,8 +417579,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -417753,8 +417753,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -417929,8 +417929,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -418104,8 +418104,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -418233,8 +418233,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -418320,8 +418320,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -502795,8 +502795,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -502970,8 +502970,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -503159,8 +503159,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -503334,8 +503334,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -511462,8 +511462,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -511637,8 +511637,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -511875,8 +511875,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -512050,8 +512050,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -512276,8 +512276,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -512451,8 +512451,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -512699,8 +512699,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -512874,8 +512874,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -513100,8 +513100,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -513275,8 +513275,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -513523,8 +513523,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -513698,8 +513698,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -513992,8 +513992,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -514167,8 +514167,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -514495,8 +514495,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -514670,8 +514670,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -514872,8 +514872,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -515047,8 +515047,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -515271,8 +515271,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -515446,8 +515446,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -515619,8 +515619,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -515794,8 +515794,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -516012,8 +516012,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -516187,8 +516187,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -516395,8 +516395,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -516570,8 +516570,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -516788,8 +516788,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -516963,8 +516963,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -517255,8 +517255,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -517430,8 +517430,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -517715,8 +517715,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -517890,8 +517890,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -518104,8 +518104,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -518279,8 +518279,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -518515,8 +518515,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -518690,8 +518690,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -518863,8 +518863,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -519038,8 +519038,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -519227,8 +519227,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -519402,8 +519402,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -519618,8 +519618,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -519793,8 +519793,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -520031,8 +520031,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -520206,8 +520206,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -520461,8 +520461,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -520636,8 +520636,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -520919,8 +520919,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -521094,8 +521094,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -521407,8 +521407,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -521582,8 +521582,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -521935,8 +521935,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -522110,8 +522110,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -522341,8 +522341,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -522516,8 +522516,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -522775,8 +522775,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -522950,8 +522950,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -523152,8 +523152,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -523327,8 +523327,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -523551,8 +523551,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -523726,8 +523726,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -523899,8 +523899,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -524074,8 +524074,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -524263,8 +524263,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -524438,8 +524438,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -524611,8 +524611,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -524786,8 +524786,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -524975,8 +524975,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -525150,8 +525150,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -525323,8 +525323,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -525498,8 +525498,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -525687,8 +525687,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -525862,8 +525862,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -526082,8 +526082,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -526257,8 +526257,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -526499,8 +526499,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -526674,8 +526674,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -526847,8 +526847,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -527022,8 +527022,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -527211,8 +527211,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -527386,8 +527386,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -527606,8 +527606,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -527781,8 +527781,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -528023,8 +528023,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -528198,8 +528198,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -528400,8 +528400,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -528575,8 +528575,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -528799,8 +528799,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -528974,8 +528974,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -529147,8 +529147,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -529322,8 +529322,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -529511,8 +529511,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -529686,8 +529686,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -529948,8 +529948,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -530123,8 +530123,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -530419,8 +530419,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -530594,8 +530594,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -530796,8 +530796,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -530971,8 +530971,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -531195,8 +531195,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -531370,8 +531370,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -531601,8 +531601,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -531776,8 +531776,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -532035,8 +532035,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -532210,8 +532210,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -532502,8 +532502,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -532676,8 +532676,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -532969,8 +532969,8 @@ export namespace Prisma {
     sThietBiTao?: StringNullableFilter<"UserProfile"> | string | null
     sThietBiSua?: StringNullableFilter<"UserProfile"> | string | null
     avatar?: StringNullableFilter<"UserProfile"> | string | null
-    firstName?: StringFilter<"UserProfile"> | string
-    lastName?: StringFilter<"UserProfile"> | string
+    firstName?: StringNullableFilter<"UserProfile"> | string | null
+    lastName?: StringNullableFilter<"UserProfile"> | string | null
     idCardNumber?: StringFilter<"UserProfile"> | string
     placeOfIdCardNumber?: StringNullableFilter<"UserProfile"> | string | null
     fullname?: StringNullableFilter<"UserProfile"> | string | null
@@ -533360,8 +533360,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -533535,8 +533535,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -533713,8 +533713,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -533888,8 +533888,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -534146,8 +534146,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -534321,8 +534321,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -534505,8 +534505,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -534680,8 +534680,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -535108,8 +535108,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -535283,8 +535283,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -535461,8 +535461,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -535636,8 +535636,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -535870,8 +535870,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -536045,8 +536045,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -536229,8 +536229,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -536404,8 +536404,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -536661,8 +536661,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -536836,8 +536836,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -537135,8 +537135,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -537310,8 +537310,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -538129,8 +538129,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -538304,8 +538304,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -538559,8 +538559,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -538734,8 +538734,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -538933,8 +538933,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -539108,8 +539108,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -539291,8 +539291,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -539466,8 +539466,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -539915,8 +539915,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -540090,8 +540090,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -540347,8 +540347,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -540522,8 +540522,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -540779,8 +540779,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -540954,8 +540954,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -542920,8 +542920,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -543095,8 +543095,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -543412,8 +543412,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -543587,8 +543587,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -543972,8 +543972,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -544147,8 +544147,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -544418,8 +544418,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -544593,8 +544593,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -544776,8 +544776,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -544951,8 +544951,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -545134,8 +545134,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -545309,8 +545309,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -545492,8 +545492,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -545667,8 +545667,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -545989,8 +545989,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -546164,8 +546164,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -546347,8 +546347,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -546522,8 +546522,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -546705,8 +546705,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -546880,8 +546880,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -547063,8 +547063,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -547238,8 +547238,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -547543,8 +547543,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -547718,8 +547718,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -547901,8 +547901,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -548076,8 +548076,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -548259,8 +548259,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -548434,8 +548434,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -548617,8 +548617,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -548792,8 +548792,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -549039,8 +549039,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -549214,8 +549214,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -549397,8 +549397,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -549572,8 +549572,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -549755,8 +549755,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -549930,8 +549930,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -550113,8 +550113,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -550288,8 +550288,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -550535,8 +550535,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -550710,8 +550710,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -550893,8 +550893,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -551068,8 +551068,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -551251,8 +551251,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -551426,8 +551426,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -551609,8 +551609,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -551784,8 +551784,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -555457,8 +555457,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -555632,8 +555632,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -555910,8 +555910,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -556085,8 +556085,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -570163,8 +570163,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -570338,8 +570338,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -570646,8 +570646,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -570821,8 +570821,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -575389,8 +575389,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -575564,8 +575564,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -575914,8 +575914,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -576089,8 +576089,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -576798,8 +576798,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -576973,8 +576973,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -577287,8 +577287,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -577462,8 +577462,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -578195,8 +578195,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -578370,8 +578370,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -588222,8 +588222,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -588397,8 +588397,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -590320,8 +590320,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -590495,8 +590495,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -598976,8 +598976,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -599151,8 +599151,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -600654,8 +600654,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -600829,8 +600829,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -601522,8 +601522,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -601697,8 +601697,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -602004,8 +602004,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -602179,8 +602179,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -610699,8 +610699,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -610874,8 +610874,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -611192,8 +611192,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -611367,8 +611367,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -613864,8 +613864,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -614039,8 +614039,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -614271,8 +614271,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -614446,8 +614446,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -618156,8 +618156,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -618331,8 +618331,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -618825,8 +618825,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -619000,8 +619000,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -624215,8 +624215,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -624390,8 +624390,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -624792,8 +624792,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -624967,8 +624967,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -625323,8 +625323,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -625498,8 +625498,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -625836,8 +625836,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -626011,8 +626011,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -637496,8 +637496,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -637671,8 +637671,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -637986,8 +637986,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -638161,8 +638161,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -638422,8 +638422,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -638597,8 +638597,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -638856,8 +638856,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -639031,8 +639031,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -639230,8 +639230,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -639405,8 +639405,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -639604,8 +639604,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -639779,8 +639779,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -640356,8 +640356,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -640531,8 +640531,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -640730,8 +640730,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -640905,8 +640905,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -641104,8 +641104,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -641279,8 +641279,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -641660,8 +641660,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -641835,8 +641835,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -642034,8 +642034,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -642209,8 +642209,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -642408,8 +642408,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -642583,8 +642583,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -642782,8 +642782,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -642957,8 +642957,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -646514,8 +646514,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -646797,8 +646797,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -646971,8 +646971,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -647145,8 +647145,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -647927,8 +647927,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -648070,8 +648070,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -648245,8 +648245,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -648419,8 +648419,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -648593,8 +648593,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -648721,8 +648721,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -648896,8 +648896,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -649070,8 +649070,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -649199,8 +649199,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -649328,8 +649328,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -649521,8 +649521,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -649696,8 +649696,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -649870,8 +649870,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -649998,8 +649998,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -650173,8 +650173,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -650347,8 +650347,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -650671,8 +650671,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -650815,8 +650815,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -650990,8 +650990,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -651164,8 +651164,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -651341,8 +651341,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -651485,8 +651485,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -651660,8 +651660,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -651834,8 +651834,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -652011,8 +652011,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -652154,8 +652154,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -652329,8 +652329,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -652503,8 +652503,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -654415,8 +654415,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -654543,8 +654543,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -654718,8 +654718,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -654892,8 +654892,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -655153,8 +655153,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -655281,8 +655281,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -655456,8 +655456,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -655630,8 +655630,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -655831,8 +655831,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -656022,8 +656022,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -656197,8 +656197,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -656371,8 +656371,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -656545,8 +656545,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -656674,8 +656674,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -656803,8 +656803,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -656932,8 +656932,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -657073,8 +657073,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -657248,8 +657248,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -657422,8 +657422,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -657550,8 +657550,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -657725,8 +657725,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -657899,8 +657899,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -658027,8 +658027,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -658202,8 +658202,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -658376,8 +658376,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -658504,8 +658504,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -658679,8 +658679,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -658853,8 +658853,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -659027,8 +659027,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -659156,8 +659156,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -659285,8 +659285,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -659414,8 +659414,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -659555,8 +659555,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -659730,8 +659730,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -659904,8 +659904,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -660032,8 +660032,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -660207,8 +660207,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -660381,8 +660381,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -660509,8 +660509,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -660684,8 +660684,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -660858,8 +660858,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -660986,8 +660986,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -661161,8 +661161,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -661335,8 +661335,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -661509,8 +661509,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -661638,8 +661638,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -661767,8 +661767,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -661896,8 +661896,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -662024,8 +662024,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -662199,8 +662199,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -662373,8 +662373,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -662501,8 +662501,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -662676,8 +662676,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -662850,8 +662850,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -662978,8 +662978,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -663153,8 +663153,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -663327,8 +663327,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -663455,8 +663455,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -663630,8 +663630,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -663804,8 +663804,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -663933,8 +663933,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -664062,8 +664062,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -664191,8 +664191,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -664320,8 +664320,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -664448,8 +664448,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -664623,8 +664623,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -664797,8 +664797,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -664925,8 +664925,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -665100,8 +665100,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -665274,8 +665274,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -665402,8 +665402,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -665577,8 +665577,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -665751,8 +665751,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -665879,8 +665879,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -666054,8 +666054,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -666228,8 +666228,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -666357,8 +666357,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -666486,8 +666486,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -666615,8 +666615,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -666744,8 +666744,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -666872,8 +666872,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -667047,8 +667047,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -667221,8 +667221,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -667349,8 +667349,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -667524,8 +667524,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -667698,8 +667698,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -667826,8 +667826,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -668001,8 +668001,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -668175,8 +668175,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -668303,8 +668303,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -668478,8 +668478,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -668652,8 +668652,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -678969,8 +678969,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -679144,8 +679144,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -679318,8 +679318,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -700773,8 +700773,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -700901,8 +700901,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -701076,8 +701076,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -701250,8 +701250,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -701507,8 +701507,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -701635,8 +701635,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -701810,8 +701810,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -701984,8 +701984,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -702185,8 +702185,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -702313,8 +702313,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -702488,8 +702488,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -702662,8 +702662,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -702859,8 +702859,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -702987,8 +702987,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -703162,8 +703162,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -703336,8 +703336,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -703465,8 +703465,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -703593,8 +703593,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -703768,8 +703768,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -703942,8 +703942,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -704071,8 +704071,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -704199,8 +704199,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -704374,8 +704374,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -704548,8 +704548,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -705121,8 +705121,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -705249,8 +705249,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -705424,8 +705424,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -705598,8 +705598,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -705727,8 +705727,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -705855,8 +705855,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -706030,8 +706030,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -706204,8 +706204,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -706333,8 +706333,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -706461,8 +706461,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -706636,8 +706636,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -706810,8 +706810,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -707147,8 +707147,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -707275,8 +707275,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -707450,8 +707450,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -707624,8 +707624,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -707753,8 +707753,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -707881,8 +707881,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -708056,8 +708056,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -708230,8 +708230,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -708359,8 +708359,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -708487,8 +708487,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -708662,8 +708662,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -708836,8 +708836,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -708965,8 +708965,8 @@ export namespace Prisma {
     sThietBiTao?: string | null
     sThietBiSua?: string | null
     avatar?: string | null
-    firstName: string
-    lastName: string
+    firstName?: string | null
+    lastName?: string | null
     idCardNumber: string
     placeOfIdCardNumber?: string | null
     fullname?: string | null
@@ -709093,8 +709093,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -709268,8 +709268,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
@@ -709442,8 +709442,8 @@ export namespace Prisma {
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
     idCardNumber?: StringFieldUpdateOperationsInput | string
     placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
     fullname?: NullableStringFieldUpdateOperationsInput | string | null

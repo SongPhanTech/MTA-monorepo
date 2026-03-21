@@ -301,9 +301,13 @@ const metadata: ModelMeta = {
                 }, firstName: {
                     name: "firstName",
                     type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
                 }, lastName: {
                     name: "lastName",
                     type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
                 }, idCardNumber: {
                     name: "idCardNumber",
                     type: "String",
@@ -8532,7 +8536,7 @@ const metadata: ModelMeta = {
                     fields: ["subjectClassId", "studentId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         studentSubjectScoreHistory: {
             name: 'StudentSubjectScoreHistory', fields: {
@@ -11161,7 +11165,7 @@ const metadata: ModelMeta = {
                     fields: ["trainingObjectTypeId", "name", "credit", "period", "managementOrganizationId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null, null, null, null] }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null, null, null, null] }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         subjectVersionHistory: {
             name: 'SubjectVersionHistory', fields: {
@@ -12140,7 +12144,7 @@ const metadata: ModelMeta = {
                     fields: ["scoreLinkSubjectVersionId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         subjectClassAttendance: {
             name: 'SubjectClassAttendance', fields: {
@@ -12491,7 +12495,7 @@ const metadata: ModelMeta = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         classSchedule: {
             name: 'ClassSchedule', fields: {
@@ -17574,7 +17578,7 @@ const metadata: ModelMeta = {
                     fields: ["userProfileId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         lecturerHistory: {
             name: 'LecturerHistory', fields: {

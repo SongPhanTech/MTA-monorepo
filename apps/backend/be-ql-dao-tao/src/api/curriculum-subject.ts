@@ -172,6 +172,8 @@ app.openapi(importCurriculumVersion, async (c) => {
         })
         .filter((item) => item !== null) as Prisma.TrainingBlockSubjectCreateManyInput[]
 
+    const maxSemester = Math.max(...data.subjects.map((s) => s.semester || 0))
+
     await prisma.$transaction(
         async (tx) => {
             if (deleteOldData) {
@@ -194,6 +196,11 @@ app.openapi(importCurriculumVersion, async (c) => {
 
             await tx.trainingBlockSubject.createMany({
                 data: trainingBlockSubjects,
+            })
+
+            await tx.curriculumVersion.update({
+                where: { id: curriculumVersionId },
+                data: { numberOfSemesters: maxSemester },
             })
         },
         { timeout: timeout * 1000 }

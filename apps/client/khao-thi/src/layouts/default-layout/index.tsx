@@ -163,7 +163,7 @@ const DefaultLayout = ({
                             <Divider type="vertical" className="bg-primary h-[30px]" />
                             <div className="flex items-center space-x-2">
                                 <Tooltip title="Học kỳ">
-                                    <div className="mr-2 font-bold">HK</div>
+                                    <div className="mr-2 font-bold">Học kỳ</div>
                                 </Tooltip>
                                 <TreeSelectSemester />
                             </div>
