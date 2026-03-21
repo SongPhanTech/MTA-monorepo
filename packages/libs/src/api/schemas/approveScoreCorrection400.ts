@@ -6,6 +6,6 @@
  */
 
 export type ApproveScoreCorrection400 = {
-    success: boolean
-    message: string
-}
+  success: boolean;
+  message: string;
+};

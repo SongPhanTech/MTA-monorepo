@@ -6,7 +6,7 @@
  */
 
 export interface UploadExcelImportTrainingScore {
-    file: Blob
-    fixedClassId: string
-    trainingSessionId: string
+  file: Blob;
+  fixedClassId: string;
+  trainingSessionId: string;
 }

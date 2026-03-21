@@ -4,10 +4,10 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { SemesterId } from './semesterId'
-import type { TrainingObjectTypeId } from './trainingObjectTypeId'
+import type { SemesterId } from './semesterId';
+import type { TrainingObjectTypeId } from './trainingObjectTypeId';
 
 export type ExportStudentAcademicWarningExcelParams = {
-    semesterId: SemesterId & unknown
-    trainingObjectTypeId: TrainingObjectTypeId
-}
+semesterId: SemesterId & unknown;
+trainingObjectTypeId: TrainingObjectTypeId;
+};

@@ -4,17 +4,17 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { OpenSubjectClassFixedClassItem } from './openSubjectClassFixedClassItem'
+import type { OpenSubjectClassFixedClassItem } from './openSubjectClassFixedClassItem';
 
 export interface OpenSubjectClass {
-    trainingMajorId: string
-    managementOrganizationId: string
-    managementOrganizationName: string
-    subjectVersionId: string
-    subjectVersionName: string
-    subjectVersionCode: string
-    managementOrganizationCode: string
-    subjectVersionCredit: number
-    fixedClass: OpenSubjectClassFixedClassItem[]
-    countStudent: number
+  trainingMajorId: string;
+  managementOrganizationId: string;
+  managementOrganizationName: string;
+  subjectVersionId: string;
+  subjectVersionName: string;
+  subjectVersionCode: string;
+  managementOrganizationCode: string;
+  subjectVersionCredit: number;
+  fixedClass: OpenSubjectClassFixedClassItem[];
+  countStudent: number;
 }

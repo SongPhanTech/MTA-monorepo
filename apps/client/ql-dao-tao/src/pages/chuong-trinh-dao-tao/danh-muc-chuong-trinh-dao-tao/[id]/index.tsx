@@ -33,6 +33,8 @@ import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import CreateIcon from '../../../../components/icons/create'
+import { exportPhienBanCTDT } from '@workspace/libs/api/training'
+import { saveAs } from 'file-saver'
 export default function TrainingProgramSubjects() {
     const { can } = useAbility()
     const router = useRouter()
@@ -433,6 +435,24 @@ export default function TrainingProgramSubjects() {
         }
     }
 
+    const handleExport = async () => {
+        try {
+            showSpinner()
+            const res = await exportPhienBanCTDT(id)
+            if (res.status === 200) {
+                saveAs(res.data as Blob, `MAU-XUAT_CTDT_${initialValue?.name || id}.xlsx`)
+                message.success('Xuất file thành công')
+            } else {
+                message.error('Có lỗi xảy ra khi xuất file')
+            }
+        } catch (error) {
+            console.error('Export error:', error)
+            message.error('Không thể kết nối đến máy chủ')
+        } finally {
+            hideSpinner()
+        }
+    }
+
     const treeData = buildOrgTree(manageOrgData)
 
     const { handleCloneCurriculumVersion } = useCloneCurriculumVersion()
@@ -472,6 +492,13 @@ export default function TrainingProgramSubjects() {
                                     'NHAP_EXCEL'
                                 ) && (
                                     <>
+                                        <Button
+                                            onClick={handleExport}
+                                            className="text-primary border-primary mr-2"
+                                        >
+                                            <Download />
+                                            Mẫu xuất
+                                        </Button>
                                         <Button
                                             href={getMinioUrl('mta/template/MAU-NHAP_CTDT.xlsx')}
                                             className="text-primary border-primary mr-2"

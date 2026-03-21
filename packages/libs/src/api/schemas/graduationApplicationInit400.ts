@@ -6,5 +6,5 @@
  */
 
 export type GraduationApplicationInit400 = {
-    message: string
-}
+  message: string;
+};

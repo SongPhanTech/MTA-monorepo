@@ -5,4 +5,4 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type PostApiStatsStudentDistributionByProvince200Summary = { [key: string]: unknown | null }
+export type PostApiStatsStudentDistributionByProvince200Summary = {[key: string]: unknown | null};

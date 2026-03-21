@@ -6,6 +6,6 @@
  */
 
 export type ExportInternshipProfileBody = {
-    /** @nullable */
-    internshipIds?: string[] | null
-}
+  /** @nullable */
+  internshipIds?: string[] | null;
+};

@@ -5,15 +5,15 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type ExportStudentAcademicWarningJson200ItemStudentsItemAcademicWarningRuleItemOperator =
-    (typeof ExportStudentAcademicWarningJson200ItemStudentsItemAcademicWarningRuleItemOperator)[keyof typeof ExportStudentAcademicWarningJson200ItemStudentsItemAcademicWarningRuleItemOperator]
+export type ExportStudentAcademicWarningJson200ItemStudentsItemAcademicWarningRuleItemOperator = typeof ExportStudentAcademicWarningJson200ItemStudentsItemAcademicWarningRuleItemOperator[keyof typeof ExportStudentAcademicWarningJson200ItemStudentsItemAcademicWarningRuleItemOperator];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ExportStudentAcademicWarningJson200ItemStudentsItemAcademicWarningRuleItemOperator = {
-    GT: 'GT',
-    GTE: 'GTE',
-    LT: 'LT',
-    LTE: 'LTE',
-    EQ: 'EQ',
-    IN: 'IN',
-} as const
+  GT: 'GT',
+  GTE: 'GTE',
+  LT: 'LT',
+  LTE: 'LTE',
+  EQ: 'EQ',
+  IN: 'IN',
+} as const;

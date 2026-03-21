@@ -4,42 +4,42 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { ExportStudentScholarshipJson200ItemStudentsItemStudentSemesterResult } from './exportStudentScholarshipJson200ItemStudentsItemStudentSemesterResult'
-import type { ExportStudentScholarshipJson200ItemStudentsItemUserProfile } from './exportStudentScholarshipJson200ItemStudentsItemUserProfile'
-import type { ExportStudentScholarshipJson200ItemStudentsItemFixedClass } from './exportStudentScholarshipJson200ItemStudentsItemFixedClass'
-import type { ExportStudentScholarshipJson200ItemStudentsItemScholarshipItem } from './exportStudentScholarshipJson200ItemStudentsItemScholarshipItem'
-import type { ExportStudentScholarshipJson200ItemStudentsItemScholarshipRecivedItem } from './exportStudentScholarshipJson200ItemStudentsItemScholarshipRecivedItem'
-import type { ExportStudentScholarshipJson200ItemStudentsItemHighestScholarship } from './exportStudentScholarshipJson200ItemStudentsItemHighestScholarship'
+import type { ExportStudentScholarshipJson200ItemStudentsItemStudentSemesterResult } from './exportStudentScholarshipJson200ItemStudentsItemStudentSemesterResult';
+import type { ExportStudentScholarshipJson200ItemStudentsItemUserProfile } from './exportStudentScholarshipJson200ItemStudentsItemUserProfile';
+import type { ExportStudentScholarshipJson200ItemStudentsItemFixedClass } from './exportStudentScholarshipJson200ItemStudentsItemFixedClass';
+import type { ExportStudentScholarshipJson200ItemStudentsItemScholarshipItem } from './exportStudentScholarshipJson200ItemStudentsItemScholarshipItem';
+import type { ExportStudentScholarshipJson200ItemStudentsItemScholarshipRecivedItem } from './exportStudentScholarshipJson200ItemStudentsItemScholarshipRecivedItem';
+import type { ExportStudentScholarshipJson200ItemStudentsItemHighestScholarship } from './exportStudentScholarshipJson200ItemStudentsItemHighestScholarship';
 
 export type ExportStudentScholarshipJson200ItemStudentsItem = {
-    /** ID của sinh viên */
-    id: string
-    /** @nullable */
-    code: string | null
-    /** Kết quả học tập của sinh viên trong học kỳ */
-    studentSemesterResult: ExportStudentScholarshipJson200ItemStudentsItemStudentSemesterResult
-    /** Chuyên ngành */
-    trainingMajor: string
-    /** ID Chuyên ngành */
-    trainingMajorId: string
-    /** Ngành */
-    trainingField: string
-    /** ID Ngành */
-    trainingFieldId: string
-    /**
-     * Thông tin người dùng
-     * @nullable
-     */
-    userProfile?: ExportStudentScholarshipJson200ItemStudentsItemUserProfile
-    /** Lý do */
-    reason: string
-    /** Thông tin lớp học */
-    fixedClass: ExportStudentScholarshipJson200ItemStudentsItemFixedClass
-    hasScholarship: boolean
-    /** Danh sách học bổng của sinh viên */
-    scholarship: ExportStudentScholarshipJson200ItemStudentsItemScholarshipItem[]
-    /** Thông tin học bổng đã nhận */
-    scholarshipRecived: ExportStudentScholarshipJson200ItemStudentsItemScholarshipRecivedItem[]
-    /** Học bổng cao nhất của sinh viên */
-    highestScholarship: ExportStudentScholarshipJson200ItemStudentsItemHighestScholarship
-}
+  /** ID của sinh viên */
+  id: string;
+  /** @nullable */
+  code: string | null;
+  /** Kết quả học tập của sinh viên trong học kỳ */
+  studentSemesterResult: ExportStudentScholarshipJson200ItemStudentsItemStudentSemesterResult;
+  /** Chuyên ngành */
+  trainingMajor: string;
+  /** ID Chuyên ngành */
+  trainingMajorId: string;
+  /** Ngành */
+  trainingField: string;
+  /** ID Ngành */
+  trainingFieldId: string;
+  /**
+   * Thông tin người dùng
+   * @nullable
+   */
+  userProfile?: ExportStudentScholarshipJson200ItemStudentsItemUserProfile;
+  /** Lý do */
+  reason: string;
+  /** Thông tin lớp học */
+  fixedClass: ExportStudentScholarshipJson200ItemStudentsItemFixedClass;
+  hasScholarship: boolean;
+  /** Danh sách học bổng của sinh viên */
+  scholarship: ExportStudentScholarshipJson200ItemStudentsItemScholarshipItem[];
+  /** Thông tin học bổng đã nhận */
+  scholarshipRecived: ExportStudentScholarshipJson200ItemStudentsItemScholarshipRecivedItem[];
+  /** Học bổng cao nhất của sinh viên */
+  highestScholarship: ExportStudentScholarshipJson200ItemStudentsItemHighestScholarship;
+};

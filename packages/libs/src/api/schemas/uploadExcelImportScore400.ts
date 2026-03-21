@@ -6,5 +6,5 @@
  */
 
 export type UploadExcelImportScore400 = {
-    message: string
-}
+  message: string;
+};

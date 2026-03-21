@@ -6,8 +6,8 @@
  */
 
 export type ExportGraduationDecisionPptxBody = {
-    file?: Blob
-    sessionId?: string
-    /** @nullable */
-    timeout?: number | null
-}
+  file?: Blob;
+  sessionId?: string;
+  /** @nullable */
+  timeout?: number | null;
+};
