@@ -6,10 +6,10 @@
  */
 
 export type PostApiStatsStudentCountByAcademicResultsBody = {
-  preview?: boolean;
-  /**
-   * @minimum 2000
-   * @maximum 2026
-   */
-  year?: number;
-};
+    preview?: boolean
+    /**
+     * @minimum 2000
+     * @maximum 2026
+     */
+    year?: number
+}

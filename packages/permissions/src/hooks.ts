@@ -207,6 +207,12 @@ const listRouter = [
         description: 'Tình Trạng Công Tác',
     },
     {
+        id: 'national',
+        label: 'Quốc tịch',
+        path: ROUTER_PATH.QL_HO_SO.DANH_MUC_HO_SO_QUOC_GIA,
+        description: 'Quốc tịch',
+    },
+    {
         id: 'type-of-study',
         label: 'Loại hình đi học tập',
 

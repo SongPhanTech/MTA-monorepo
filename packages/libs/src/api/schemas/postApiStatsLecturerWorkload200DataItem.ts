@@ -6,8 +6,8 @@
  */
 
 export type PostApiStatsLecturerWorkload200DataItem = {
-  lecturerId: string;
-  name: string;
-  classCount: number;
-  totalPeriods: number;
-};
+    lecturerId: string
+    name: string
+    classCount: number
+    totalPeriods: number
+}

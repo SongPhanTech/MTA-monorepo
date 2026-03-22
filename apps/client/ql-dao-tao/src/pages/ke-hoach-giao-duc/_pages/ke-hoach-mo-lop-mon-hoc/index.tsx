@@ -256,7 +256,9 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                                                                               status: 'DRAFT',
                                                                               cancelled: false,
                                                                               type: type,
-                                                                              subjectClassStudent: { none: {} },
+                                                                              subjectClassStudent: {
+                                                                                  none: {},
+                                                                              },
                                                                           },
                                                                       },
                                                                   },
@@ -350,9 +352,11 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                                                         values.isOverride
                                                             ? alreadySubjectIds.reduce(
                                                                   (acc, asc) => {
-                                                                      const subjectId = asc?.subjectId
+                                                                      const subjectId =
+                                                                          asc?.subjectId
                                                                       if (!subjectId) return acc
-                                                                      acc[subjectId] = (acc[subjectId] ?? 0) + 1
+                                                                      acc[subjectId] =
+                                                                          (acc[subjectId] ?? 0) + 1
                                                                       return acc
                                                                   },
                                                                   {} as Record<string, number>
@@ -369,15 +373,14 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                                                                               ?.subject?.id
                                                                   ),
                                                                   (pts) =>
-                                                                      pts
-                                                                          ?.trainingBlockSubject
-                                                                          ?.subject?.id ??
-                                                                      ''
+                                                                      pts?.trainingBlockSubject
+                                                                          ?.subject?.id ?? ''
                                                               )
                                                           ).flatMap((group) => {
                                                               const first = group?.[0]
                                                               const subjectId =
-                                                                  first?.trainingBlockSubject?.subject?.id
+                                                                  first?.trainingBlockSubject
+                                                                      ?.subject?.id
                                                               if (!subjectId) return []
                                                               const existingCount =
                                                                   protectedCountBySubjectId?.[
@@ -390,10 +393,11 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                                                               if (toCreate <= 0) return []
 
                                                               const subjectCode =
-                                                                  first?.trainingBlockSubject?.subject?.code ??
-                                                                  ''
+                                                                  first?.trainingBlockSubject
+                                                                      ?.subject?.code ?? ''
                                                               const subjectName =
-                                                                  first?.trainingBlockSubject?.subject?.name
+                                                                  first?.trainingBlockSubject
+                                                                      ?.subject?.name
 
                                                               return new Array(toCreate)
                                                                   .fill(1)
@@ -431,8 +435,7 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                                                                   ),
                                                                   (item) =>
                                                                       item?.trainingBlockSubject
-                                                                          ?.subject
-                                                                          ?.code ?? ''
+                                                                          ?.subject?.code ?? ''
                                                               )
                                                           )
                                                               .map((e) => e?.[0])
@@ -455,15 +458,17 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                                                                                   code: `${e?.trainingBlockSubject?.subject?.code} ${String(idx + 1)}`,
                                                                                   name: e
                                                                                       ?.trainingBlockSubject
-                                                                                      ?.subject?.name,
+                                                                                      ?.subject
+                                                                                      ?.name,
                                                                                   maxStudent:
                                                                                       subjectVersions?.[
                                                                                           e
                                                                                               ?.trainingBlockSubject
                                                                                               ?.subject
                                                                                               ?.id ??
-                                                                                          ''
-                                                                                      ]?.maxStudent ||
+                                                                                              ''
+                                                                                      ]
+                                                                                          ?.maxStudent ||
                                                                                       0,
                                                                               },
                                                                           },
@@ -526,21 +531,25 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                                                 .filter(([_, v]) => v.isEdit)
                                                 .map(([k, _]) => k)
 
-                                            const protectedCountBySubjectId: Record<string, number> =
-                                                subjectIds.reduce((acc, subjectId) => {
-                                                    const subjectVersion =
-                                                        subjects?.find(
-                                                            (s) => s.id === subjectId
-                                                        )
+                                            const protectedCountBySubjectId: Record<
+                                                string,
+                                                number
+                                            > = subjectIds.reduce(
+                                                (acc, subjectId) => {
+                                                    const subjectVersion = subjects?.find(
+                                                        (s) => s.id === subjectId
+                                                    )
                                                     const protectedCount =
                                                         subjectVersion?.subjectClass?.filter(
                                                             (sc: any) =>
-                                                                (sc?._count
-                                                                    ?.subjectClassStudent ?? 0) > 0
+                                                                (sc?._count?.subjectClassStudent ??
+                                                                    0) > 0
                                                         ).length ?? 0
                                                     acc[subjectId] = protectedCount
                                                     return acc
-                                                }, {} as Record<string, number>)
+                                                },
+                                                {} as Record<string, number>
+                                            )
 
                                             const res = await sqlTransaction([
                                                 {

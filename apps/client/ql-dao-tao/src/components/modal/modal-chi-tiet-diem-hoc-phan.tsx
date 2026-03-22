@@ -71,13 +71,13 @@ const ModalScoreDetail = () => {
             render: (v: string) => new Date(v).toLocaleString(),
         },
         {
-            title: 'TX',
+            title: 'Thường xuyên',
             dataIndex: 'attendanceScore',
             width: 70,
             align: 'center' as const,
         },
         {
-            title: 'GK',
+            title: 'Định kỳ',
             dataIndex: 'midtermScore',
             width: 70,
             align: 'center' as const,
@@ -147,13 +147,13 @@ const ModalScoreDetail = () => {
 
                     <div className="grid grid-cols-2 gap-2 text-center">
                         <div>
-                            <div className="text-gray-500 text-lg">TX</div>
+                            <div className="text-gray-500 text-lg">Thường xuyên</div>
                             <div className="font-semibold text-lg">
                                 {data?.attendanceScore ?? '-'}
                             </div>
                         </div>
                         <div>
-                            <div className="text-gray-500 text-lg">GK</div>
+                            <div className="text-gray-500 text-lg">Định kỳ</div>
                             <div className="font-semibold text-lg">{data?.midtermScore ?? '-'}</div>
                         </div>
                         <div>

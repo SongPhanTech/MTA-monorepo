@@ -51,12 +51,12 @@ import TrinhDoQuanLyNhaNuocForm from '@components/modal/quan-ly-ho-so/form/trinh
 import useSpinner from '@hooks/spinner'
 import CreateLayout from '@layouts/create-layout'
 import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
+import { useSession } from '@workspace/auth/react'
 import { useFindUniqueUserProfile } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { putDMNhanViens } from '@workspace/libs/api/system'
 import { getRuntimeEnv } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
-import { useSession } from '@workspace/auth/react'
 import ImgCrop from 'antd-img-crop'
 import axios from 'axios'
 import dayjs from 'dayjs'
@@ -449,10 +449,10 @@ export default function UpdateUserPage() {
             putDMNhanViens({
                 sDM_DonViId: organizationId,
                 sMa: values.code,
-                sHoVaDem: values.lastName.trim(),
-                sTen: values.firstName.trim(),
-                sTenDayDu: `${values.lastName.trim() || ''} ${
-                    values.firstName.trim() || ''
+                sHoVaDem: values.lastName?.trim(),
+                sTen: values.firstName?.trim(),
+                sTenDayDu: `${values.lastName?.trim() || ''} ${
+                    values.firstName?.trim() || ''
                 }`.trim(),
                 sDM_GioiTinhId: genderId,
                 dNgaySinh: values.dateOfBirth ? dayjs(values.dateOfBirth).toISOString() : null,
@@ -564,14 +564,14 @@ export default function UpdateUserPage() {
                         },
                         data: {
                             ...values,
-                            lastName: values.lastName.trim(),
-                            firstName: values.firstName.trim(),
+                            lastName: values.lastName?.trim(),
+                            firstName: values.firstName?.trim(),
                             bLaHocVien: values.bLaHocVien,
                             bLaCanBoNhanVien: values?.bLaCanBoNhanVien,
                             bLaGiangVien: bLaGiangVien,
                             bLaNguoiDung: values?.bLaNguoiDung,
-                            fullname: `${values.lastName.trim() || ''} ${
-                                values.firstName.trim() || ''
+                            fullname: `${values.lastName?.trim() || ''} ${
+                                values.firstName?.trim() || ''
                             }`.trim(),
                             dateOfBirth: values.dateOfBirth
                                 ? dayjs(values.dateOfBirth).toISOString()

@@ -6,6 +6,6 @@
  */
 
 /**
- * ID của lớp môn học
+ * ID của ExamBank
  */
-export type Id = string;
+export type Id = string

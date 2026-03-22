@@ -27,7 +27,7 @@ import {
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { whereOrganization } from '@workspace/libs/constants'
 import { exportFromTemplate } from '@workspace/libs/template-excel'
-import { getMinioUrl } from '@workspace/libs/utils'
+import { formatLecturerName, getMinioUrl } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import {
@@ -327,7 +327,6 @@ export default function PhanCongGiangDay({
                                     where,
                                     include: {
                                         semester: true,
-                                        mainLecturer: { include: { userProfile: true } },
                                         subject: {
                                             include: {
                                                 subject: {
@@ -335,8 +334,42 @@ export default function PhanCongGiangDay({
                                                 },
                                             },
                                         },
-                                        extraLecturer: { include: { userProfile: true } },
-                                        enterGradeLecturer: { include: { userProfile: true } },
+                                        mainLecturer: {
+                                            include: {
+                                                userProfile: {
+                                                    select: {
+                                                        id: true,
+                                                        fullname: true,
+                                                        academicRankType: true,
+                                                        academicDegreeType: true,
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        extraLecturer: {
+                                            include: {
+                                                userProfile: {
+                                                    select: {
+                                                        id: true,
+                                                        fullname: true,
+                                                        academicRankType: true,
+                                                        academicDegreeType: true,
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        enterGradeLecturer: {
+                                            include: {
+                                                userProfile: {
+                                                    select: {
+                                                        id: true,
+                                                        fullname: true,
+                                                        academicRankType: true,
+                                                        academicDegreeType: true,
+                                                    },
+                                                },
+                                            },
+                                        },
                                         room: true,
                                         trainingLocation: true,
                                         subjectClassStudent: true,
@@ -1922,7 +1955,7 @@ export default function PhanCongGiangDay({
                                                 />
                                             </FormItem>
                                         ) : (
-                                            (record?.mainLecturer?.userProfile?.fullname ?? '-')
+                                            formatLecturerName(record?.mainLecturer)
                                         ),
                                 },
                                 {
@@ -1966,7 +1999,7 @@ export default function PhanCongGiangDay({
                                                 />
                                             </FormItem>
                                         ) : (
-                                            (record?.extraLecturer?.userProfile?.fullname ?? '-')
+                                            formatLecturerName(record?.extraLecturer)
                                         ),
                                 },
                                 {
@@ -2004,8 +2037,7 @@ export default function PhanCongGiangDay({
                                                 />
                                             </FormItem>
                                         ) : (
-                                            (record?.enterGradeLecturer?.userProfile?.fullname ??
-                                            '-')
+                                            formatLecturerName(record?.enterGradeLecturer)
                                         ),
                                 },
                                 {

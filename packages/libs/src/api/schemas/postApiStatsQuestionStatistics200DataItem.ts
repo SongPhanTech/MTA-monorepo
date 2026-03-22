@@ -4,19 +4,19 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { PostApiStatsQuestionStatistics200DataItemByQuestionBankItem } from './postApiStatsQuestionStatistics200DataItemByQuestionBankItem';
-import type { PostApiStatsQuestionStatistics200DataItemBySubjectVersionItem } from './postApiStatsQuestionStatistics200DataItemBySubjectVersionItem';
-import type { PostApiStatsQuestionStatistics200DataItemByDifficultyItem } from './postApiStatsQuestionStatistics200DataItemByDifficultyItem';
-import type { PostApiStatsQuestionStatistics200DataItemByKnowledgeBlockItem } from './postApiStatsQuestionStatistics200DataItemByKnowledgeBlockItem';
+import type { PostApiStatsQuestionStatistics200DataItemByQuestionBankItem } from './postApiStatsQuestionStatistics200DataItemByQuestionBankItem'
+import type { PostApiStatsQuestionStatistics200DataItemBySubjectVersionItem } from './postApiStatsQuestionStatistics200DataItemBySubjectVersionItem'
+import type { PostApiStatsQuestionStatistics200DataItemByDifficultyItem } from './postApiStatsQuestionStatistics200DataItemByDifficultyItem'
+import type { PostApiStatsQuestionStatistics200DataItemByKnowledgeBlockItem } from './postApiStatsQuestionStatistics200DataItemByKnowledgeBlockItem'
 
 export type PostApiStatsQuestionStatistics200DataItem = {
-  totalQuestions: number;
-  byQuestionBank: PostApiStatsQuestionStatistics200DataItemByQuestionBankItem[];
-  bySubjectVersion: PostApiStatsQuestionStatistics200DataItemBySubjectVersionItem[];
-  byDifficulty: PostApiStatsQuestionStatistics200DataItemByDifficultyItem[];
-  byKnowledgeBlock: PostApiStatsQuestionStatistics200DataItemByKnowledgeBlockItem[];
-  byQuestionBankLabels: string[];
-  bySubjectVersionLabels: string[];
-  byDifficultyLabels: string[];
-  byKnowledgeBlockLabels: string[];
-};
+    totalQuestions: number
+    byQuestionBank: PostApiStatsQuestionStatistics200DataItemByQuestionBankItem[]
+    bySubjectVersion: PostApiStatsQuestionStatistics200DataItemBySubjectVersionItem[]
+    byDifficulty: PostApiStatsQuestionStatistics200DataItemByDifficultyItem[]
+    byKnowledgeBlock: PostApiStatsQuestionStatistics200DataItemByKnowledgeBlockItem[]
+    byQuestionBankLabels: string[]
+    bySubjectVersionLabels: string[]
+    byDifficultyLabels: string[]
+    byKnowledgeBlockLabels: string[]
+}

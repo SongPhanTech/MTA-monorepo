@@ -6,5 +6,5 @@
  */
 
 export type ExportGraduationDecisionPptx400 = {
-  message: string;
-};
+    message: string
+}

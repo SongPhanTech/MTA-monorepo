@@ -6,6 +6,6 @@
  */
 
 export interface UploadExcelImportScore {
-  file: Blob;
-  subjectClassId: string;
+    file: Blob
+    subjectClassId: string
 }

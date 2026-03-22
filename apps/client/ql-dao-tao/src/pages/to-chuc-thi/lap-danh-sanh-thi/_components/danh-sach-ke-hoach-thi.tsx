@@ -1,3 +1,4 @@
+import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
 import RoomSelector from '@components/commons/select-room-table'
@@ -13,7 +14,7 @@ import type { ExamList, SubjectClass } from '@workspace/db/client'
 import { useCountExam, useFindManyExam, useFindManyRoom } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useCreateExams, useMergeExam, useUnmergeExam } from '@workspace/libs/api/training'
-import { fastIsEqual } from '@workspace/libs/utils'
+import { fastIsEqual, formatLecturerName } from '@workspace/libs/utils'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { cn } from '@workspace/ui/lib/utils'
 import {
@@ -33,7 +34,6 @@ import type { TableRowSelection } from 'antd/lib/table/interface'
 import _ from 'lodash'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { keHoachThiStore } from '..'
-import { queryClient } from '@api/index'
 
 interface Props {
     setActiveKey: (key: string) => void
@@ -113,6 +113,8 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                             userProfile: {
                                 select: {
                                     fullname: true,
+                                    academicDegreeType: true,
+                                    academicRankType: true,
                                 },
                             },
                         },
@@ -153,14 +155,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                 },
             },
         },
-        orderBy: [
-            {
-                subjectVersionId: 'asc',
-            },
-            {
-                code: 'asc',
-            },
-        ],
+        orderBy: [{ subjectVersionId: 'asc' }, { code: 'asc' }],
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
@@ -642,14 +637,14 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                             {
                                 title: 'TT',
                                 align: 'center',
-                                width: 30,
+                                width: 40,
                                 render: (_, __, index) =>
                                     index + 1 + (currentPage - 1) * numberOfPages,
                             },
                             {
                                 title: 'Tên môn học',
                                 align: 'center',
-                                width: 150,
+                                width: 200,
                                 render: (_, record) => {
                                     const name = record.subjectClass?.[0]?.subject?.name || ''
                                     return (
@@ -663,16 +658,21 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                                 },
                             },
                             {
-                                title: 'Mã LMH',
+                                title: 'Mã LMH - Giảng viên',
                                 align: 'center',
-                                width: 70,
+                                width: 200,
                                 render: (_, record) => {
-                                    return record.subjectClass.length ? (
+                                    return record.subjectClass?.length ? (
                                         <TextTruncate
-                                            arr={record.subjectClass.map((item: SubjectClass) => {
+                                            arr={record.subjectClass.map((item: any) => {
                                                 return {
                                                     key: item.id,
-                                                    label: item.code,
+                                                    label: [
+                                                        item.code,
+                                                        formatLecturerName(item.mainLecturer),
+                                                    ]
+                                                        .filter(Boolean)
+                                                        .join(' - '),
                                                 }
                                             })}
                                         />
@@ -684,7 +684,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                             {
                                 title: 'Số SV',
                                 align: 'center',
-                                width: 40,
+                                width: 45,
                                 render: (_, record) =>
                                     record.subjectClass?.reduce(
                                         (
@@ -841,7 +841,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                             {
                                 title: 'Số ca thi',
                                 align: 'center',
-                                width: 70,
+                                width: 60,
                                 render: (_, record) => {
                                     return (
                                         <Form.Item
@@ -866,17 +866,17 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                                     )
                                 },
                             },
-                            {
-                                title: 'Giảng viên 1',
-                                align: 'center',
-                                width: 100,
-                                render: (_, record) => {
-                                    const lecturerName =
-                                        record.subjectClass?.[0]?.mainLecturer?.userProfile
-                                            ?.fullname
-                                    return <div className="text-left">{lecturerName || ''}</div>
-                                },
-                            },
+                            // {
+                            //     title: 'Giảng viên 1',
+                            //     align: 'center',
+                            //     width: 100,
+                            //     render: (_, record) => {
+                            //         const lecturerName =
+                            //             record.subjectClass?.[0]?.mainLecturer?.userProfile
+                            //                 ?.fullname
+                            //         return <div className="text-left">{lecturerName || ''}</div>
+                            //     },
+                            // },
                             {
                                 title: 'Ngày thi',
                                 align: 'center',

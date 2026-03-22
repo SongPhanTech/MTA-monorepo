@@ -6,6 +6,6 @@
  */
 
 export type CalculateStudentSchoolYearResultParams = {
-semesterId: string;
-trainingCourseId: string;
-};
+    semesterId: string
+    trainingCourseId: string
+}

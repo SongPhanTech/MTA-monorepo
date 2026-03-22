@@ -5,11 +5,11 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type ImportPhanCongGiangDayFileType = typeof ImportPhanCongGiangDayFileType[keyof typeof ImportPhanCongGiangDayFileType];
-
+export type ImportPhanCongGiangDayFileType =
+    (typeof ImportPhanCongGiangDayFileType)[keyof typeof ImportPhanCongGiangDayFileType]
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ImportPhanCongGiangDayFileType = {
-  THONG_KE_GIAO_VIEN_GIANG_DAY: 'THONG_KE_GIAO_VIEN_GIANG_DAY',
-  TKB_THEO_LOP_HOC_PHAN: 'TKB_THEO_LOP_HOC_PHAN',
-} as const;
+    THONG_KE_GIAO_VIEN_GIANG_DAY: 'THONG_KE_GIAO_VIEN_GIANG_DAY',
+    TKB_THEO_LOP_HOC_PHAN: 'TKB_THEO_LOP_HOC_PHAN',
+} as const

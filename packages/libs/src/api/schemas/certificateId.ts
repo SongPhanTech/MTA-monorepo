@@ -8,4 +8,4 @@
 /**
  * ID chứng chỉ
  */
-export type CertificateId = string;
+export type CertificateId = string

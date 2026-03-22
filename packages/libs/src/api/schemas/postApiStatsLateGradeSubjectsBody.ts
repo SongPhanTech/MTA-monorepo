@@ -6,7 +6,7 @@
  */
 
 export type PostApiStatsLateGradeSubjectsBody = {
-  preview?: boolean;
-  page?: number;
-  pageSize?: number;
-};
+    preview?: boolean
+    page?: number
+    pageSize?: number
+}

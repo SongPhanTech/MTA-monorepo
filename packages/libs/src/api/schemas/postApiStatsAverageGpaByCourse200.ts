@@ -4,13 +4,13 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { PostApiStatsAverageGpaByCourse200Summary } from './postApiStatsAverageGpaByCourse200Summary';
-import type { PostApiStatsAverageGpaByCourse200DataItem } from './postApiStatsAverageGpaByCourse200DataItem';
+import type { PostApiStatsAverageGpaByCourse200Summary } from './postApiStatsAverageGpaByCourse200Summary'
+import type { PostApiStatsAverageGpaByCourse200DataItem } from './postApiStatsAverageGpaByCourse200DataItem'
 
 export type PostApiStatsAverageGpaByCourse200 = {
-  summary: PostApiStatsAverageGpaByCourse200Summary;
-  count: number;
-  preview?: boolean;
-  labels?: string[];
-  data: PostApiStatsAverageGpaByCourse200DataItem[];
-};
+    summary: PostApiStatsAverageGpaByCourse200Summary
+    count: number
+    preview?: boolean
+    labels?: string[]
+    data: PostApiStatsAverageGpaByCourse200DataItem[]
+}

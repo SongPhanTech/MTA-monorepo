@@ -16665,6 +16665,18 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'lecturerReview',
+                }, primarySupervisorThesisProject: {
+                    name: "primarySupervisorThesisProject",
+                    type: "ThesisProject",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'primarySupervisor',
+                }, secondarySupervisorThesisProject: {
+                    name: "secondarySupervisorThesisProject",
+                    type: "ThesisProject",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'secondarySupervisor',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -17253,6 +17265,34 @@ const metadata: ModelMeta = {
                     name: "isEligibleForDefense",
                     type: "Boolean",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, primarySupervisor: {
+                    name: "primarySupervisor",
+                    type: "Lecturer",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'primarySupervisorThesisProject',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "primarySupervisorId" },
+                }, primarySupervisorId: {
+                    name: "primarySupervisorId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'primarySupervisor',
+                }, secondarySupervisor: {
+                    name: "secondarySupervisor",
+                    type: "Lecturer",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'secondarySupervisorThesisProject',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "secondarySupervisorId" },
+                }, secondarySupervisorId: {
+                    name: "secondarySupervisorId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'secondarySupervisor',
                 }, subjectClass: {
                     name: "subjectClass",
                     type: "SubjectClass",
@@ -17477,6 +17517,12 @@ const metadata: ModelMeta = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
+                }, primarySupervisorId: {
+                    name: "primarySupervisorId",
+                    fields: ["primarySupervisorId"]
+                }, secondarySupervisorId: {
+                    name: "secondarySupervisorId",
+                    fields: ["secondarySupervisorId"]
                 },
             },
         },

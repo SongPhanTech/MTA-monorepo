@@ -6,24 +6,24 @@
  */
 
 export type SetScoreDeadLineBody = {
-  /**
-   * @minimum 0
-   * @nullable
-   */
-  startPadding?: number | null;
-  /**
-   * @minimum 0
-   * @nullable
-   */
-  endPadding?: number | null;
-  /** @nullable */
-  startDate?: string | null;
-  /** @nullable */
-  endDate?: string | null;
-  /** @nullable */
-  classIds?: string[] | null;
-  trainingObjectTypeId?: string;
-  /** @nullable */
-  semesterId?: string | null;
-  overwrite?: boolean;
-};
+    /**
+     * @minimum 0
+     * @nullable
+     */
+    startPadding?: number | null
+    /**
+     * @minimum 0
+     * @nullable
+     */
+    endPadding?: number | null
+    /** @nullable */
+    startDate?: string | null
+    /** @nullable */
+    endDate?: string | null
+    /** @nullable */
+    classIds?: string[] | null
+    trainingObjectTypeId?: string
+    /** @nullable */
+    semesterId?: string | null
+    overwrite?: boolean
+}

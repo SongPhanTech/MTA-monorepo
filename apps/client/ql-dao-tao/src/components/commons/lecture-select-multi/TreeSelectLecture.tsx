@@ -1,4 +1,5 @@
 import { useFindManyDM_DonVi, useFindManyLecturer } from '@workspace/db/hooks'
+import { formatLecturerName } from '@workspace/libs'
 import { message, TreeSelect as TreeSelectAnt, type TreeSelectProps } from 'antd'
 import { UserIcon } from 'lucide-react'
 import type React from 'react'
@@ -68,7 +69,14 @@ const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
     } = useFindManyLecturer({
         include: {
             organization: true,
-            userProfile: true,
+            userProfile: {
+                select: {
+                    id: true,
+                    fullname: true,
+                    academicRankType: true,
+                    academicDegreeType: true,
+                },
+            },
         },
         where: {
             userProfile: {
@@ -97,9 +105,7 @@ const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
                 .map((lec) => ({
                     id: lec.id,
                     userProfile: {
-                        fullName:
-                            `${lec.userProfile?.lastName ?? ''} ${lec.userProfile?.firstName ?? ''}`.trim() ||
-                            'Giảng viên không tên',
+                        fullName: formatLecturerName(lec),
                     },
                     organizationId: lec.organizationId,
                 })),

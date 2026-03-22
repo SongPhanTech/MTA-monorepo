@@ -277,7 +277,8 @@ app.openapi(exportCurriculumVersion, async (c) => {
                 index: index++,
                 blockName: block.trainingBlock.name.toUpperCase(),
                 name: subj.name,
-                isMandatory: s.type === $Enums.SubjectRequirementType.Mandatory ? 'Bắt buộc' : 'Tự chọn',
+                isMandatory:
+                    s.type === $Enums.SubjectRequirementType.Mandatory ? 'Bắt buộc' : 'Tự chọn',
                 isCondition: !s.useForFinalScore ? '1' : '',
                 type: typeLabel,
                 code: subj.code,

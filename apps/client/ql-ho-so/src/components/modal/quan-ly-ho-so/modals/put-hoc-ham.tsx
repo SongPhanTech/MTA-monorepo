@@ -105,7 +105,7 @@ export default function PutHocHamModal() {
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem label="Thời gian kết thúc" name="to" required form={form}>
+                <FormItem label="Thời gian kết thúc" name="to" form={form}>
                     <DatePicker
                         placeholder="Nhập thời gian kết thúc"
                         style={{ width: '100%' }}

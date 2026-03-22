@@ -129,11 +129,7 @@ const SubjectClassDropItem: React.FC<{
             }}
         >
             <Tooltip
-                title={
-                    item.hasStudentScores
-                        ? 'LMH đã có đăng ký/điểm — không thể xóa'
-                        : 'Xóa LMH'
-                }
+                title={item.hasStudentScores ? 'LMH đã có đăng ký/điểm — không thể xóa' : 'Xóa LMH'}
             >
                 <XCircleIcon
                     onClick={onRemoveSubjectClass}
@@ -396,8 +392,7 @@ export default function KeHoachGhepLopMonHoc() {
                                 subAcc[subCur.id] = {
                                     id: subCur.id,
                                     code: subCur?.code,
-                                    hasStudentScores:
-                                        (subCur._count?.subjectClassStudent ?? 0) > 0,
+                                    hasStudentScores: (subCur._count?.subjectClassStudent ?? 0) > 0,
                                     count: subCur?.fixedClasses.reduce(
                                         (sum, fc) => sum + (fc?._count?.students ?? 0),
                                         0

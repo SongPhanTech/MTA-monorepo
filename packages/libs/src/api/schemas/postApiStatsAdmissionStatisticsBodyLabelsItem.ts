@@ -5,13 +5,13 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type PostApiStatsAdmissionStatisticsBodyLabelsItem = typeof PostApiStatsAdmissionStatisticsBodyLabelsItem[keyof typeof PostApiStatsAdmissionStatisticsBodyLabelsItem];
-
+export type PostApiStatsAdmissionStatisticsBodyLabelsItem =
+    (typeof PostApiStatsAdmissionStatisticsBodyLabelsItem)[keyof typeof PostApiStatsAdmissionStatisticsBodyLabelsItem]
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const PostApiStatsAdmissionStatisticsBodyLabelsItem = {
-  target: 'target',
-  admitted: 'admitted',
-  enrolled: 'enrolled',
-  rate: 'rate',
-} as const;
+    target: 'target',
+    admitted: 'admitted',
+    enrolled: 'enrolled',
+    rate: 'rate',
+} as const

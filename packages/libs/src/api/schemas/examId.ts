@@ -6,6 +6,6 @@
  */
 
 /**
- * ID của kỳ thi
+ * ID của đề thi
  */
-export type ExamId = string;
+export type ExamId = string

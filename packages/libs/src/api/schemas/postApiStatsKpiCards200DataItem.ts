@@ -6,9 +6,9 @@
  */
 
 export type PostApiStatsKpiCards200DataItem = {
-  totalStudents: number;
-  totalLecturers: number;
-  studentLecturerRatio: number;
-  activeCurricula: number;
-  academicWarningRate: number;
-};
+    totalStudents: number
+    totalLecturers: number
+    studentLecturerRatio: number
+    activeCurricula: number
+    academicWarningRate: number
+}

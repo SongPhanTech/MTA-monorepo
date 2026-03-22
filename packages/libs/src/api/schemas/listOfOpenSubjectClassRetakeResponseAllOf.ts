@@ -4,9 +4,9 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { OpenSubjectClassRetakeResponse } from './openSubjectClassRetakeResponse';
+import type { OpenSubjectClassRetakeResponse } from './openSubjectClassRetakeResponse'
 
 export type ListOfOpenSubjectClassRetakeResponseAllOf = {
-  data: OpenSubjectClassRetakeResponse[];
-  count: number;
-};
+    data: OpenSubjectClassRetakeResponse[]
+    count: number
+}

@@ -6,5 +6,5 @@
  */
 
 export type PostApiStatsScienceTechnologyOverviewBody = {
-  preview?: boolean;
-};
+    preview?: boolean
+}

@@ -6,5 +6,5 @@
  */
 
 export interface UnmergeExamBadResponse {
-  message: string;
+    message: string
 }

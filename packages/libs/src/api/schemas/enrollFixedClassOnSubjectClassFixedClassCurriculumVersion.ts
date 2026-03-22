@@ -4,11 +4,11 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { EnrollFixedClassOnSubjectClassFixedClassCurriculumVersionCurriculum } from './enrollFixedClassOnSubjectClassFixedClassCurriculumVersionCurriculum';
+import type { EnrollFixedClassOnSubjectClassFixedClassCurriculumVersionCurriculum } from './enrollFixedClassOnSubjectClassFixedClassCurriculumVersionCurriculum'
 
 export type EnrollFixedClassOnSubjectClassFixedClassCurriculumVersion = {
-  id: string;
-  name: string;
-  code: string;
-  curriculum: EnrollFixedClassOnSubjectClassFixedClassCurriculumVersionCurriculum;
-};
+    id: string
+    name: string
+    code: string
+    curriculum: EnrollFixedClassOnSubjectClassFixedClassCurriculumVersionCurriculum
+}

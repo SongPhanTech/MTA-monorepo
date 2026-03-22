@@ -9192,6 +9192,8 @@ export namespace Prisma {
         firstCheckProgress: 'firstCheckProgress',
         secondCheckProgress: 'secondCheckProgress',
         isEligibleForDefense: 'isEligibleForDefense',
+        primarySupervisorId: 'primarySupervisorId',
+        secondarySupervisorId: 'secondarySupervisorId',
         subjectClassId: 'subjectClassId',
         thesisSessionId: 'thesisSessionId',
         supervisorName: 'supervisorName',
@@ -12542,6 +12544,8 @@ export namespace Prisma {
         language: 'language',
         type: 'type',
         editProject: 'editProject',
+        primarySupervisorId: 'primarySupervisorId',
+        secondarySupervisorId: 'secondarySupervisorId',
         subjectClassId: 'subjectClassId',
         thesisSessionId: 'thesisSessionId',
         supervisorName: 'supervisorName',
@@ -72589,6 +72593,8 @@ export namespace Prisma {
         analysisCriterion<T extends Lecturer$analysisCriterionArgs<ExtArgs> = {}>(args?: Subset<T, Lecturer$analysisCriterionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AnalysisCriterionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         evaluationCouncilMember<T extends Lecturer$evaluationCouncilMemberArgs<ExtArgs> = {}>(args?: Subset<T, Lecturer$evaluationCouncilMemberArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EvaluationCouncilMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         evaluationCriterionReviews<T extends Lecturer$evaluationCriterionReviewsArgs<ExtArgs> = {}>(args?: Subset<T, Lecturer$evaluationCriterionReviewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EvaluationCriterionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        primarySupervisorThesisProject<T extends Lecturer$primarySupervisorThesisProjectArgs<ExtArgs> = {}>(args?: Subset<T, Lecturer$primarySupervisorThesisProjectArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ThesisProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        secondarySupervisorThesisProject<T extends Lecturer$secondarySupervisorThesisProjectArgs<ExtArgs> = {}>(args?: Subset<T, Lecturer$secondarySupervisorThesisProjectArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ThesisProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -74546,6 +74552,8 @@ export namespace Prisma {
      */
     export interface Prisma__ThesisProjectClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
         readonly [Symbol.toStringTag]: "PrismaPromise";
+        primarySupervisor<T extends ThesisProject$primarySupervisorArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProject$primarySupervisorArgs<ExtArgs>>): Prisma__LecturerClient<$Result.GetResult<Prisma.$LecturerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        secondarySupervisor<T extends ThesisProject$secondarySupervisorArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProject$secondarySupervisorArgs<ExtArgs>>): Prisma__LecturerClient<$Result.GetResult<Prisma.$LecturerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         subjectClass<T extends ThesisProject$subjectClassArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProject$subjectClassArgs<ExtArgs>>): Prisma__SubjectClassClient<$Result.GetResult<Prisma.$SubjectClassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         thesisSession<T extends ThesisProject$thesisSessionArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProject$thesisSessionArgs<ExtArgs>>): Prisma__ThesisSessionClient<$Result.GetResult<Prisma.$ThesisSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         supervisor<T extends ThesisProject$supervisorArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProject$supervisorArgs<ExtArgs>>): Prisma__ExpertProfileClient<$Result.GetResult<Prisma.$ExpertProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
@@ -74612,6 +74620,8 @@ export namespace Prisma {
         readonly firstCheckProgress: FieldRef<"ThesisProject", 'Int'>;
         readonly secondCheckProgress: FieldRef<"ThesisProject", 'Int'>;
         readonly isEligibleForDefense: FieldRef<"ThesisProject", 'Boolean'>;
+        readonly primarySupervisorId: FieldRef<"ThesisProject", 'String'>;
+        readonly secondarySupervisorId: FieldRef<"ThesisProject", 'String'>;
         readonly subjectClassId: FieldRef<"ThesisProject", 'String'>;
         readonly thesisSessionId: FieldRef<"ThesisProject", 'String'>;
         readonly supervisorName: FieldRef<"ThesisProject", 'String'>;
@@ -143068,6 +143078,8 @@ export namespace Prisma {
         analysisCriterion: number
         evaluationCouncilMember: number
         evaluationCriterionReviews: number
+        primarySupervisorThesisProject: number
+        secondarySupervisorThesisProject: number
     };
     export type LecturerCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         mainSubjectClasses?: boolean | LecturerCountOutputTypeCountMainSubjectClassesArgs
@@ -143088,6 +143100,8 @@ export namespace Prisma {
         analysisCriterion?: boolean | LecturerCountOutputTypeCountAnalysisCriterionArgs
         evaluationCouncilMember?: boolean | LecturerCountOutputTypeCountEvaluationCouncilMemberArgs
         evaluationCriterionReviews?: boolean | LecturerCountOutputTypeCountEvaluationCriterionReviewsArgs
+        primarySupervisorThesisProject?: boolean | LecturerCountOutputTypeCountPrimarySupervisorThesisProjectArgs
+        secondarySupervisorThesisProject?: boolean | LecturerCountOutputTypeCountSecondarySupervisorThesisProjectArgs
     };
     /**
      * LecturerCountOutputType without action
@@ -143205,6 +143219,18 @@ export namespace Prisma {
      */
     export type LecturerCountOutputTypeCountEvaluationCriterionReviewsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: EvaluationCriterionWhereInput
+    };
+    /**
+     * LecturerCountOutputType without action
+     */
+    export type LecturerCountOutputTypeCountPrimarySupervisorThesisProjectArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ThesisProjectWhereInput
+    };
+    /**
+     * LecturerCountOutputType without action
+     */
+    export type LecturerCountOutputTypeCountSecondarySupervisorThesisProjectArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ThesisProjectWhereInput
     };
     /**
      * Count Type ResearchProjectCountOutputType
@@ -268964,6 +268990,8 @@ export namespace Prisma {
         analysisCriterion?: boolean | Lecturer$analysisCriterionArgs<ExtArgs>
         evaluationCouncilMember?: boolean | Lecturer$evaluationCouncilMemberArgs<ExtArgs>
         evaluationCriterionReviews?: boolean | Lecturer$evaluationCriterionReviewsArgs<ExtArgs>
+        primarySupervisorThesisProject?: boolean | Lecturer$primarySupervisorThesisProjectArgs<ExtArgs>
+        secondarySupervisorThesisProject?: boolean | Lecturer$secondarySupervisorThesisProjectArgs<ExtArgs>
         _count?: boolean | LecturerCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["lecturer"]>;
     export type LecturerSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -269043,6 +269071,8 @@ export namespace Prisma {
         analysisCriterion?: boolean | Lecturer$analysisCriterionArgs<ExtArgs>
         evaluationCouncilMember?: boolean | Lecturer$evaluationCouncilMemberArgs<ExtArgs>
         evaluationCriterionReviews?: boolean | Lecturer$evaluationCriterionReviewsArgs<ExtArgs>
+        primarySupervisorThesisProject?: boolean | Lecturer$primarySupervisorThesisProjectArgs<ExtArgs>
+        secondarySupervisorThesisProject?: boolean | Lecturer$secondarySupervisorThesisProjectArgs<ExtArgs>
         _count?: boolean | LecturerCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type LecturerIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -269079,6 +269109,8 @@ export namespace Prisma {
             analysisCriterion: Prisma.$AnalysisCriterionPayload<ExtArgs>[]
             evaluationCouncilMember: Prisma.$EvaluationCouncilMemberPayload<ExtArgs>[]
             evaluationCriterionReviews: Prisma.$EvaluationCriterionPayload<ExtArgs>[]
+            primarySupervisorThesisProject: Prisma.$ThesisProjectPayload<ExtArgs>[]
+            secondarySupervisorThesisProject: Prisma.$ThesisProjectPayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -269892,6 +269924,52 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: EvaluationCriterionScalarFieldEnum | EvaluationCriterionScalarFieldEnum[]
+    };
+    /**
+     * Lecturer.primarySupervisorThesisProject
+     */
+    export type Lecturer$primarySupervisorThesisProjectArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ThesisProject
+         */
+        select?: ThesisProjectSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ThesisProject
+         */
+        omit?: ThesisProjectOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ThesisProjectInclude<ExtArgs> | null
+        where?: ThesisProjectWhereInput
+        orderBy?: ThesisProjectOrderByWithRelationInput | ThesisProjectOrderByWithRelationInput[]
+        cursor?: ThesisProjectWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: ThesisProjectScalarFieldEnum | ThesisProjectScalarFieldEnum[]
+    };
+    /**
+     * Lecturer.secondarySupervisorThesisProject
+     */
+    export type Lecturer$secondarySupervisorThesisProjectArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ThesisProject
+         */
+        select?: ThesisProjectSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ThesisProject
+         */
+        omit?: ThesisProjectOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ThesisProjectInclude<ExtArgs> | null
+        where?: ThesisProjectWhereInput
+        orderBy?: ThesisProjectOrderByWithRelationInput | ThesisProjectOrderByWithRelationInput[]
+        cursor?: ThesisProjectWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: ThesisProjectScalarFieldEnum | ThesisProjectScalarFieldEnum[]
     };
     /**
      * Lecturer without action
@@ -273190,6 +273268,8 @@ export namespace Prisma {
         firstCheckProgress: number | null
         secondCheckProgress: number | null
         isEligibleForDefense: boolean | null
+        primarySupervisorId: string | null
+        secondarySupervisorId: string | null
         subjectClassId: string | null
         thesisSessionId: string | null
         supervisorName: string | null
@@ -273241,6 +273321,8 @@ export namespace Prisma {
         firstCheckProgress: number | null
         secondCheckProgress: number | null
         isEligibleForDefense: boolean | null
+        primarySupervisorId: string | null
+        secondarySupervisorId: string | null
         subjectClassId: string | null
         thesisSessionId: string | null
         supervisorName: string | null
@@ -273292,6 +273374,8 @@ export namespace Prisma {
         firstCheckProgress: number
         secondCheckProgress: number
         isEligibleForDefense: number
+        primarySupervisorId: number
+        secondarySupervisorId: number
         subjectClassId: number
         thesisSessionId: number
         supervisorName: number
@@ -273354,6 +273438,8 @@ export namespace Prisma {
         firstCheckProgress?: true
         secondCheckProgress?: true
         isEligibleForDefense?: true
+        primarySupervisorId?: true
+        secondarySupervisorId?: true
         subjectClassId?: true
         thesisSessionId?: true
         supervisorName?: true
@@ -273405,6 +273491,8 @@ export namespace Prisma {
         firstCheckProgress?: true
         secondCheckProgress?: true
         isEligibleForDefense?: true
+        primarySupervisorId?: true
+        secondarySupervisorId?: true
         subjectClassId?: true
         thesisSessionId?: true
         supervisorName?: true
@@ -273456,6 +273544,8 @@ export namespace Prisma {
         firstCheckProgress?: true
         secondCheckProgress?: true
         isEligibleForDefense?: true
+        primarySupervisorId?: true
+        secondarySupervisorId?: true
         subjectClassId?: true
         thesisSessionId?: true
         supervisorName?: true
@@ -273588,6 +273678,8 @@ export namespace Prisma {
         firstCheckProgress: number | null
         secondCheckProgress: number | null
         isEligibleForDefense: boolean
+        primarySupervisorId: string | null
+        secondarySupervisorId: string | null
         subjectClassId: string | null
         thesisSessionId: string | null
         supervisorName: string | null
@@ -273656,6 +273748,8 @@ export namespace Prisma {
         firstCheckProgress?: boolean
         secondCheckProgress?: boolean
         isEligibleForDefense?: boolean
+        primarySupervisorId?: boolean
+        secondarySupervisorId?: boolean
         subjectClassId?: boolean
         thesisSessionId?: boolean
         supervisorName?: boolean
@@ -273679,6 +273773,8 @@ export namespace Prisma {
         registrationEnd?: boolean
         projectStart?: boolean
         projectEnd?: boolean
+        primarySupervisor?: boolean | ThesisProject$primarySupervisorArgs<ExtArgs>
+        secondarySupervisor?: boolean | ThesisProject$secondarySupervisorArgs<ExtArgs>
         subjectClass?: boolean | ThesisProject$subjectClassArgs<ExtArgs>
         thesisSession?: boolean | ThesisProject$thesisSessionArgs<ExtArgs>
         supervisor?: boolean | ThesisProject$supervisorArgs<ExtArgs>
@@ -273722,6 +273818,8 @@ export namespace Prisma {
         firstCheckProgress?: boolean
         secondCheckProgress?: boolean
         isEligibleForDefense?: boolean
+        primarySupervisorId?: boolean
+        secondarySupervisorId?: boolean
         subjectClassId?: boolean
         thesisSessionId?: boolean
         supervisorName?: boolean
@@ -273745,6 +273843,8 @@ export namespace Prisma {
         registrationEnd?: boolean
         projectStart?: boolean
         projectEnd?: boolean
+        primarySupervisor?: boolean | ThesisProject$primarySupervisorArgs<ExtArgs>
+        secondarySupervisor?: boolean | ThesisProject$secondarySupervisorArgs<ExtArgs>
         subjectClass?: boolean | ThesisProject$subjectClassArgs<ExtArgs>
         thesisSession?: boolean | ThesisProject$thesisSessionArgs<ExtArgs>
         supervisor?: boolean | ThesisProject$supervisorArgs<ExtArgs>
@@ -273783,6 +273883,8 @@ export namespace Prisma {
         firstCheckProgress?: boolean
         secondCheckProgress?: boolean
         isEligibleForDefense?: boolean
+        primarySupervisorId?: boolean
+        secondarySupervisorId?: boolean
         subjectClassId?: boolean
         thesisSessionId?: boolean
         supervisorName?: boolean
@@ -273806,6 +273908,8 @@ export namespace Prisma {
         registrationEnd?: boolean
         projectStart?: boolean
         projectEnd?: boolean
+        primarySupervisor?: boolean | ThesisProject$primarySupervisorArgs<ExtArgs>
+        secondarySupervisor?: boolean | ThesisProject$secondarySupervisorArgs<ExtArgs>
         subjectClass?: boolean | ThesisProject$subjectClassArgs<ExtArgs>
         thesisSession?: boolean | ThesisProject$thesisSessionArgs<ExtArgs>
         supervisor?: boolean | ThesisProject$supervisorArgs<ExtArgs>
@@ -273844,6 +273948,8 @@ export namespace Prisma {
         firstCheckProgress?: boolean
         secondCheckProgress?: boolean
         isEligibleForDefense?: boolean
+        primarySupervisorId?: boolean
+        secondarySupervisorId?: boolean
         subjectClassId?: boolean
         thesisSessionId?: boolean
         supervisorName?: boolean
@@ -273868,8 +273974,10 @@ export namespace Prisma {
         projectStart?: boolean
         projectEnd?: boolean
     };
-    export type ThesisProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "title" | "titleEN" | "summary" | "objectives" | "scope" | "methodology" | "expectedResults" | "requirements" | "technologies" | "thesisType" | "status" | "language" | "type" | "isLock" | "editProject" | "firstCheckProgress" | "secondCheckProgress" | "isEligibleForDefense" | "subjectClassId" | "thesisSessionId" | "supervisorName" | "supervisorId" | "supervisorPaymentId" | "coSupervisorName" | "coSupervisorId" | "coSupervisorPaymentId" | "CHUTICH" | "THUKY" | "PHANBIEN1" | "PHANBIEN2" | "UYVIEN3" | "organizationId" | "maxStudents" | "councilId" | "roomId" | "defenseDate" | "defenseSessionId" | "registrationStart" | "registrationEnd" | "projectStart" | "projectEnd", ExtArgs["result"]["thesisProject"]>;
+    export type ThesisProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "title" | "titleEN" | "summary" | "objectives" | "scope" | "methodology" | "expectedResults" | "requirements" | "technologies" | "thesisType" | "status" | "language" | "type" | "isLock" | "editProject" | "firstCheckProgress" | "secondCheckProgress" | "isEligibleForDefense" | "primarySupervisorId" | "secondarySupervisorId" | "subjectClassId" | "thesisSessionId" | "supervisorName" | "supervisorId" | "supervisorPaymentId" | "coSupervisorName" | "coSupervisorId" | "coSupervisorPaymentId" | "CHUTICH" | "THUKY" | "PHANBIEN1" | "PHANBIEN2" | "UYVIEN3" | "organizationId" | "maxStudents" | "councilId" | "roomId" | "defenseDate" | "defenseSessionId" | "registrationStart" | "registrationEnd" | "projectStart" | "projectEnd", ExtArgs["result"]["thesisProject"]>;
     export type ThesisProjectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        primarySupervisor?: boolean | ThesisProject$primarySupervisorArgs<ExtArgs>
+        secondarySupervisor?: boolean | ThesisProject$secondarySupervisorArgs<ExtArgs>
         subjectClass?: boolean | ThesisProject$subjectClassArgs<ExtArgs>
         thesisSession?: boolean | ThesisProject$thesisSessionArgs<ExtArgs>
         supervisor?: boolean | ThesisProject$supervisorArgs<ExtArgs>
@@ -273887,6 +273995,8 @@ export namespace Prisma {
         _count?: boolean | ThesisProjectCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type ThesisProjectIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        primarySupervisor?: boolean | ThesisProject$primarySupervisorArgs<ExtArgs>
+        secondarySupervisor?: boolean | ThesisProject$secondarySupervisorArgs<ExtArgs>
         subjectClass?: boolean | ThesisProject$subjectClassArgs<ExtArgs>
         thesisSession?: boolean | ThesisProject$thesisSessionArgs<ExtArgs>
         supervisor?: boolean | ThesisProject$supervisorArgs<ExtArgs>
@@ -273899,6 +274009,8 @@ export namespace Prisma {
         defenseSession?: boolean | ThesisProject$defenseSessionArgs<ExtArgs>
     };
     export type ThesisProjectIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        primarySupervisor?: boolean | ThesisProject$primarySupervisorArgs<ExtArgs>
+        secondarySupervisor?: boolean | ThesisProject$secondarySupervisorArgs<ExtArgs>
         subjectClass?: boolean | ThesisProject$subjectClassArgs<ExtArgs>
         thesisSession?: boolean | ThesisProject$thesisSessionArgs<ExtArgs>
         supervisor?: boolean | ThesisProject$supervisorArgs<ExtArgs>
@@ -273913,6 +274025,8 @@ export namespace Prisma {
     export type $ThesisProjectPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "ThesisProject"
         objects: {
+            primarySupervisor: Prisma.$LecturerPayload<ExtArgs> | null
+            secondarySupervisor: Prisma.$LecturerPayload<ExtArgs> | null
             subjectClass: Prisma.$SubjectClassPayload<ExtArgs> | null
             thesisSession: Prisma.$ThesisSessionPayload<ExtArgs> | null
             /**
@@ -273970,6 +274084,8 @@ export namespace Prisma {
             firstCheckProgress: number | null
             secondCheckProgress: number | null
             isEligibleForDefense: boolean
+            primarySupervisorId: string | null
+            secondarySupervisorId: string | null
             subjectClassId: string | null
             thesisSessionId: string | null
             supervisorName: string | null
@@ -274379,6 +274495,42 @@ export namespace Prisma {
          * Limit how many ThesisProjects to delete.
          */
         limit?: number
+    };
+    /**
+     * ThesisProject.primarySupervisor
+     */
+    export type ThesisProject$primarySupervisorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Lecturer
+         */
+        select?: LecturerSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Lecturer
+         */
+        omit?: LecturerOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: LecturerInclude<ExtArgs> | null
+        where?: LecturerWhereInput
+    };
+    /**
+     * ThesisProject.secondarySupervisor
+     */
+    export type ThesisProject$secondarySupervisorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Lecturer
+         */
+        select?: LecturerSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Lecturer
+         */
+        omit?: LecturerOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: LecturerInclude<ExtArgs> | null
+        where?: LecturerWhereInput
     };
     /**
      * ThesisProject.subjectClass
@@ -376563,6 +376715,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionListRelationFilter
         evaluationCouncilMember?: EvaluationCouncilMemberListRelationFilter
         evaluationCriterionReviews?: EvaluationCriterionListRelationFilter
+        primarySupervisorThesisProject?: ThesisProjectListRelationFilter
+        secondarySupervisorThesisProject?: ThesisProjectListRelationFilter
     };
     export type LecturerOrderByWithRelationInput = {
         id?: SortOrder
@@ -376600,6 +376754,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionOrderByRelationAggregateInput
         evaluationCouncilMember?: EvaluationCouncilMemberOrderByRelationAggregateInput
         evaluationCriterionReviews?: EvaluationCriterionOrderByRelationAggregateInput
+        primarySupervisorThesisProject?: ThesisProjectOrderByRelationAggregateInput
+        secondarySupervisorThesisProject?: ThesisProjectOrderByRelationAggregateInput
         _relevance?: LecturerOrderByRelevanceInput
     };
     export type LecturerWhereUniqueInput = Prisma.AtLeast<{
@@ -376641,6 +376797,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionListRelationFilter
         evaluationCouncilMember?: EvaluationCouncilMemberListRelationFilter
         evaluationCriterionReviews?: EvaluationCriterionListRelationFilter
+        primarySupervisorThesisProject?: ThesisProjectListRelationFilter
+        secondarySupervisorThesisProject?: ThesisProjectListRelationFilter
     }, "id" | "code" | "lectureID" | "userProfileId">;
     export type LecturerOrderByWithAggregationInput = {
         id?: SortOrder
@@ -377221,6 +377379,8 @@ export namespace Prisma {
         firstCheckProgress?: IntNullableFilter<"ThesisProject"> | number | null
         secondCheckProgress?: IntNullableFilter<"ThesisProject"> | number | null
         isEligibleForDefense?: BoolFilter<"ThesisProject"> | boolean
+        primarySupervisorId?: StringNullableFilter<"ThesisProject"> | string | null
+        secondarySupervisorId?: StringNullableFilter<"ThesisProject"> | string | null
         subjectClassId?: StringNullableFilter<"ThesisProject"> | string | null
         thesisSessionId?: StringNullableFilter<"ThesisProject"> | string | null
         supervisorName?: StringNullableFilter<"ThesisProject"> | string | null
@@ -377244,6 +377404,8 @@ export namespace Prisma {
         registrationEnd?: DateTimeNullableFilter<"ThesisProject"> | Date | string | null
         projectStart?: DateTimeNullableFilter<"ThesisProject"> | Date | string | null
         projectEnd?: DateTimeNullableFilter<"ThesisProject"> | Date | string | null
+        primarySupervisor?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
+        secondarySupervisor?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
         subjectClass?: XOR<SubjectClassNullableScalarRelationFilter, SubjectClassWhereInput> | null
         thesisSession?: XOR<ThesisSessionNullableScalarRelationFilter, ThesisSessionWhereInput> | null
         supervisor?: XOR<ExpertProfileNullableScalarRelationFilter, ExpertProfileWhereInput> | null
@@ -377286,6 +377448,8 @@ export namespace Prisma {
         firstCheckProgress?: SortOrderInput | SortOrder
         secondCheckProgress?: SortOrderInput | SortOrder
         isEligibleForDefense?: SortOrder
+        primarySupervisorId?: SortOrderInput | SortOrder
+        secondarySupervisorId?: SortOrderInput | SortOrder
         subjectClassId?: SortOrderInput | SortOrder
         thesisSessionId?: SortOrderInput | SortOrder
         supervisorName?: SortOrderInput | SortOrder
@@ -377309,6 +377473,8 @@ export namespace Prisma {
         registrationEnd?: SortOrderInput | SortOrder
         projectStart?: SortOrderInput | SortOrder
         projectEnd?: SortOrderInput | SortOrder
+        primarySupervisor?: LecturerOrderByWithRelationInput
+        secondarySupervisor?: LecturerOrderByWithRelationInput
         subjectClass?: SubjectClassOrderByWithRelationInput
         thesisSession?: ThesisSessionOrderByWithRelationInput
         supervisor?: ExpertProfileOrderByWithRelationInput
@@ -377328,6 +377494,8 @@ export namespace Prisma {
     export type ThesisProjectWhereUniqueInput = Prisma.AtLeast<{
         id?: string
         code?: string
+        primarySupervisorId?: string
+        secondarySupervisorId?: string
         AND?: ThesisProjectWhereInput | ThesisProjectWhereInput[]
         OR?: ThesisProjectWhereInput[]
         NOT?: ThesisProjectWhereInput | ThesisProjectWhereInput[]
@@ -377378,6 +377546,8 @@ export namespace Prisma {
         registrationEnd?: DateTimeNullableFilter<"ThesisProject"> | Date | string | null
         projectStart?: DateTimeNullableFilter<"ThesisProject"> | Date | string | null
         projectEnd?: DateTimeNullableFilter<"ThesisProject"> | Date | string | null
+        primarySupervisor?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
+        secondarySupervisor?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
         subjectClass?: XOR<SubjectClassNullableScalarRelationFilter, SubjectClassWhereInput> | null
         thesisSession?: XOR<ThesisSessionNullableScalarRelationFilter, ThesisSessionWhereInput> | null
         supervisor?: XOR<ExpertProfileNullableScalarRelationFilter, ExpertProfileWhereInput> | null
@@ -377392,7 +377562,7 @@ export namespace Prisma {
         librarySubmission?: XOR<LibrarySubmissionNullableScalarRelationFilter, LibrarySubmissionWhereInput> | null
         decisions?: DecisionListRelationFilter
         registrations?: StudentThesisRegistrationListRelationFilter
-    }, "id" | "code">;
+    }, "id" | "code" | "primarySupervisorId" | "secondarySupervisorId">;
     export type ThesisProjectOrderByWithAggregationInput = {
         id?: SortOrder
         code?: SortOrderInput | SortOrder
@@ -377420,6 +377590,8 @@ export namespace Prisma {
         firstCheckProgress?: SortOrderInput | SortOrder
         secondCheckProgress?: SortOrderInput | SortOrder
         isEligibleForDefense?: SortOrder
+        primarySupervisorId?: SortOrderInput | SortOrder
+        secondarySupervisorId?: SortOrderInput | SortOrder
         subjectClassId?: SortOrderInput | SortOrder
         thesisSessionId?: SortOrderInput | SortOrder
         supervisorName?: SortOrderInput | SortOrder
@@ -377479,6 +377651,8 @@ export namespace Prisma {
         firstCheckProgress?: IntNullableWithAggregatesFilter<"ThesisProject"> | number | null
         secondCheckProgress?: IntNullableWithAggregatesFilter<"ThesisProject"> | number | null
         isEligibleForDefense?: BoolWithAggregatesFilter<"ThesisProject"> | boolean
+        primarySupervisorId?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
+        secondarySupervisorId?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
         subjectClassId?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
         thesisSessionId?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
         supervisorName?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
@@ -407801,6 +407975,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionCreateNestedManyWithoutLecturerInput
         evaluationCouncilMember?: EvaluationCouncilMemberCreateNestedManyWithoutLecturerInput
         evaluationCriterionReviews?: EvaluationCriterionCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerUncheckedCreateInput = {
         id?: string
@@ -407835,6 +408011,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUncheckedCreateNestedManyWithoutLecturerInput
         evaluationCouncilMember?: EvaluationCouncilMemberUncheckedCreateNestedManyWithoutLecturerInput
         evaluationCriterionReviews?: EvaluationCriterionUncheckedCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -407869,6 +408047,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUpdateManyWithoutLecturerNestedInput
         evaluationCouncilMember?: EvaluationCouncilMemberUpdateManyWithoutLecturerNestedInput
         evaluationCriterionReviews?: EvaluationCriterionUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type LecturerUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -407903,6 +408083,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUncheckedUpdateManyWithoutLecturerNestedInput
         evaluationCouncilMember?: EvaluationCouncilMemberUncheckedUpdateManyWithoutLecturerNestedInput
         evaluationCriterionReviews?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type LecturerCreateManyInput = {
         id?: string
@@ -408575,6 +408757,8 @@ export namespace Prisma {
         registrationEnd?: Date | string | null
         projectStart?: Date | string | null
         projectEnd?: Date | string | null
+        primarySupervisor?: LecturerCreateNestedOneWithoutPrimarySupervisorThesisProjectInput
+        secondarySupervisor?: LecturerCreateNestedOneWithoutSecondarySupervisorThesisProjectInput
         subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
         thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
         supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
@@ -408617,6 +408801,8 @@ export namespace Prisma {
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
+        primarySupervisorId?: string | null
+        secondarySupervisorId?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
         supervisorName?: string | null
@@ -408685,6 +408871,8 @@ export namespace Prisma {
         registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        primarySupervisor?: LecturerUpdateOneWithoutPrimarySupervisorThesisProjectNestedInput
+        secondarySupervisor?: LecturerUpdateOneWithoutSecondarySupervisorThesisProjectNestedInput
         subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
         thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
         supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
@@ -408727,6 +408915,8 @@ export namespace Prisma {
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
+        primarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        secondarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -408782,6 +408972,8 @@ export namespace Prisma {
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
+        primarySupervisorId?: string | null
+        secondarySupervisorId?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
         supervisorName?: string | null
@@ -408874,6 +409066,8 @@ export namespace Prisma {
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
+        primarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        secondarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -433376,6 +433570,8 @@ export namespace Prisma {
         firstCheckProgress?: SortOrder
         secondCheckProgress?: SortOrder
         isEligibleForDefense?: SortOrder
+        primarySupervisorId?: SortOrder
+        secondarySupervisorId?: SortOrder
         subjectClassId?: SortOrder
         thesisSessionId?: SortOrder
         supervisorName?: SortOrder
@@ -433432,6 +433628,8 @@ export namespace Prisma {
         firstCheckProgress?: SortOrder
         secondCheckProgress?: SortOrder
         isEligibleForDefense?: SortOrder
+        primarySupervisorId?: SortOrder
+        secondarySupervisorId?: SortOrder
         subjectClassId?: SortOrder
         thesisSessionId?: SortOrder
         supervisorName?: SortOrder
@@ -433483,6 +433681,8 @@ export namespace Prisma {
         firstCheckProgress?: SortOrder
         secondCheckProgress?: SortOrder
         isEligibleForDefense?: SortOrder
+        primarySupervisorId?: SortOrder
+        secondarySupervisorId?: SortOrder
         subjectClassId?: SortOrder
         thesisSessionId?: SortOrder
         supervisorName?: SortOrder
@@ -456659,6 +456859,18 @@ export namespace Prisma {
         connectOrCreate?: EvaluationCriterionCreateOrConnectWithoutLecturerReviewInput | EvaluationCriterionCreateOrConnectWithoutLecturerReviewInput[]
         connect?: EvaluationCriterionWhereUniqueInput | EvaluationCriterionWhereUniqueInput[]
     };
+    export type ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput = {
+        create?: XOR<ThesisProjectCreateWithoutPrimarySupervisorInput, ThesisProjectUncheckedCreateWithoutPrimarySupervisorInput> | ThesisProjectCreateWithoutPrimarySupervisorInput[] | ThesisProjectUncheckedCreateWithoutPrimarySupervisorInput[]
+        connectOrCreate?: ThesisProjectCreateOrConnectWithoutPrimarySupervisorInput | ThesisProjectCreateOrConnectWithoutPrimarySupervisorInput[]
+        createMany?: ThesisProjectCreateManyPrimarySupervisorInputEnvelope
+        connect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+    };
+    export type ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput = {
+        create?: XOR<ThesisProjectCreateWithoutSecondarySupervisorInput, ThesisProjectUncheckedCreateWithoutSecondarySupervisorInput> | ThesisProjectCreateWithoutSecondarySupervisorInput[] | ThesisProjectUncheckedCreateWithoutSecondarySupervisorInput[]
+        connectOrCreate?: ThesisProjectCreateOrConnectWithoutSecondarySupervisorInput | ThesisProjectCreateOrConnectWithoutSecondarySupervisorInput[]
+        createMany?: ThesisProjectCreateManySecondarySupervisorInputEnvelope
+        connect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+    };
     export type SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput = {
         create?: XOR<SubjectClassCreateWithoutMainLecturerInput, SubjectClassUncheckedCreateWithoutMainLecturerInput> | SubjectClassCreateWithoutMainLecturerInput[] | SubjectClassUncheckedCreateWithoutMainLecturerInput[]
         connectOrCreate?: SubjectClassCreateOrConnectWithoutMainLecturerInput | SubjectClassCreateOrConnectWithoutMainLecturerInput[]
@@ -456764,6 +456976,18 @@ export namespace Prisma {
         create?: XOR<EvaluationCriterionCreateWithoutLecturerReviewInput, EvaluationCriterionUncheckedCreateWithoutLecturerReviewInput> | EvaluationCriterionCreateWithoutLecturerReviewInput[] | EvaluationCriterionUncheckedCreateWithoutLecturerReviewInput[]
         connectOrCreate?: EvaluationCriterionCreateOrConnectWithoutLecturerReviewInput | EvaluationCriterionCreateOrConnectWithoutLecturerReviewInput[]
         connect?: EvaluationCriterionWhereUniqueInput | EvaluationCriterionWhereUniqueInput[]
+    };
+    export type ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput = {
+        create?: XOR<ThesisProjectCreateWithoutPrimarySupervisorInput, ThesisProjectUncheckedCreateWithoutPrimarySupervisorInput> | ThesisProjectCreateWithoutPrimarySupervisorInput[] | ThesisProjectUncheckedCreateWithoutPrimarySupervisorInput[]
+        connectOrCreate?: ThesisProjectCreateOrConnectWithoutPrimarySupervisorInput | ThesisProjectCreateOrConnectWithoutPrimarySupervisorInput[]
+        createMany?: ThesisProjectCreateManyPrimarySupervisorInputEnvelope
+        connect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+    };
+    export type ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput = {
+        create?: XOR<ThesisProjectCreateWithoutSecondarySupervisorInput, ThesisProjectUncheckedCreateWithoutSecondarySupervisorInput> | ThesisProjectCreateWithoutSecondarySupervisorInput[] | ThesisProjectUncheckedCreateWithoutSecondarySupervisorInput[]
+        connectOrCreate?: ThesisProjectCreateOrConnectWithoutSecondarySupervisorInput | ThesisProjectCreateOrConnectWithoutSecondarySupervisorInput[]
+        createMany?: ThesisProjectCreateManySecondarySupervisorInputEnvelope
+        connect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
     };
     export type UserProfileUpdateOneRequiredWithoutLecturerNestedInput = {
         create?: XOR<UserProfileCreateWithoutLecturerInput, UserProfileUncheckedCreateWithoutLecturerInput>
@@ -457018,6 +457242,32 @@ export namespace Prisma {
         updateMany?: EvaluationCriterionUpdateManyWithWhereWithoutLecturerReviewInput | EvaluationCriterionUpdateManyWithWhereWithoutLecturerReviewInput[]
         deleteMany?: EvaluationCriterionScalarWhereInput | EvaluationCriterionScalarWhereInput[]
     };
+    export type ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput = {
+        create?: XOR<ThesisProjectCreateWithoutPrimarySupervisorInput, ThesisProjectUncheckedCreateWithoutPrimarySupervisorInput> | ThesisProjectCreateWithoutPrimarySupervisorInput[] | ThesisProjectUncheckedCreateWithoutPrimarySupervisorInput[]
+        connectOrCreate?: ThesisProjectCreateOrConnectWithoutPrimarySupervisorInput | ThesisProjectCreateOrConnectWithoutPrimarySupervisorInput[]
+        upsert?: ThesisProjectUpsertWithWhereUniqueWithoutPrimarySupervisorInput | ThesisProjectUpsertWithWhereUniqueWithoutPrimarySupervisorInput[]
+        createMany?: ThesisProjectCreateManyPrimarySupervisorInputEnvelope
+        set?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        disconnect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        delete?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        connect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        update?: ThesisProjectUpdateWithWhereUniqueWithoutPrimarySupervisorInput | ThesisProjectUpdateWithWhereUniqueWithoutPrimarySupervisorInput[]
+        updateMany?: ThesisProjectUpdateManyWithWhereWithoutPrimarySupervisorInput | ThesisProjectUpdateManyWithWhereWithoutPrimarySupervisorInput[]
+        deleteMany?: ThesisProjectScalarWhereInput | ThesisProjectScalarWhereInput[]
+    };
+    export type ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput = {
+        create?: XOR<ThesisProjectCreateWithoutSecondarySupervisorInput, ThesisProjectUncheckedCreateWithoutSecondarySupervisorInput> | ThesisProjectCreateWithoutSecondarySupervisorInput[] | ThesisProjectUncheckedCreateWithoutSecondarySupervisorInput[]
+        connectOrCreate?: ThesisProjectCreateOrConnectWithoutSecondarySupervisorInput | ThesisProjectCreateOrConnectWithoutSecondarySupervisorInput[]
+        upsert?: ThesisProjectUpsertWithWhereUniqueWithoutSecondarySupervisorInput | ThesisProjectUpsertWithWhereUniqueWithoutSecondarySupervisorInput[]
+        createMany?: ThesisProjectCreateManySecondarySupervisorInputEnvelope
+        set?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        disconnect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        delete?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        connect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        update?: ThesisProjectUpdateWithWhereUniqueWithoutSecondarySupervisorInput | ThesisProjectUpdateWithWhereUniqueWithoutSecondarySupervisorInput[]
+        updateMany?: ThesisProjectUpdateManyWithWhereWithoutSecondarySupervisorInput | ThesisProjectUpdateManyWithWhereWithoutSecondarySupervisorInput[]
+        deleteMany?: ThesisProjectScalarWhereInput | ThesisProjectScalarWhereInput[]
+    };
     export type SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput = {
         create?: XOR<SubjectClassCreateWithoutMainLecturerInput, SubjectClassUncheckedCreateWithoutMainLecturerInput> | SubjectClassCreateWithoutMainLecturerInput[] | SubjectClassUncheckedCreateWithoutMainLecturerInput[]
         connectOrCreate?: SubjectClassCreateOrConnectWithoutMainLecturerInput | SubjectClassCreateOrConnectWithoutMainLecturerInput[]
@@ -457250,6 +457500,32 @@ export namespace Prisma {
         updateMany?: EvaluationCriterionUpdateManyWithWhereWithoutLecturerReviewInput | EvaluationCriterionUpdateManyWithWhereWithoutLecturerReviewInput[]
         deleteMany?: EvaluationCriterionScalarWhereInput | EvaluationCriterionScalarWhereInput[]
     };
+    export type ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput = {
+        create?: XOR<ThesisProjectCreateWithoutPrimarySupervisorInput, ThesisProjectUncheckedCreateWithoutPrimarySupervisorInput> | ThesisProjectCreateWithoutPrimarySupervisorInput[] | ThesisProjectUncheckedCreateWithoutPrimarySupervisorInput[]
+        connectOrCreate?: ThesisProjectCreateOrConnectWithoutPrimarySupervisorInput | ThesisProjectCreateOrConnectWithoutPrimarySupervisorInput[]
+        upsert?: ThesisProjectUpsertWithWhereUniqueWithoutPrimarySupervisorInput | ThesisProjectUpsertWithWhereUniqueWithoutPrimarySupervisorInput[]
+        createMany?: ThesisProjectCreateManyPrimarySupervisorInputEnvelope
+        set?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        disconnect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        delete?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        connect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        update?: ThesisProjectUpdateWithWhereUniqueWithoutPrimarySupervisorInput | ThesisProjectUpdateWithWhereUniqueWithoutPrimarySupervisorInput[]
+        updateMany?: ThesisProjectUpdateManyWithWhereWithoutPrimarySupervisorInput | ThesisProjectUpdateManyWithWhereWithoutPrimarySupervisorInput[]
+        deleteMany?: ThesisProjectScalarWhereInput | ThesisProjectScalarWhereInput[]
+    };
+    export type ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput = {
+        create?: XOR<ThesisProjectCreateWithoutSecondarySupervisorInput, ThesisProjectUncheckedCreateWithoutSecondarySupervisorInput> | ThesisProjectCreateWithoutSecondarySupervisorInput[] | ThesisProjectUncheckedCreateWithoutSecondarySupervisorInput[]
+        connectOrCreate?: ThesisProjectCreateOrConnectWithoutSecondarySupervisorInput | ThesisProjectCreateOrConnectWithoutSecondarySupervisorInput[]
+        upsert?: ThesisProjectUpsertWithWhereUniqueWithoutSecondarySupervisorInput | ThesisProjectUpsertWithWhereUniqueWithoutSecondarySupervisorInput[]
+        createMany?: ThesisProjectCreateManySecondarySupervisorInputEnvelope
+        set?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        disconnect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        delete?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        connect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        update?: ThesisProjectUpdateWithWhereUniqueWithoutSecondarySupervisorInput | ThesisProjectUpdateWithWhereUniqueWithoutSecondarySupervisorInput[]
+        updateMany?: ThesisProjectUpdateManyWithWhereWithoutSecondarySupervisorInput | ThesisProjectUpdateManyWithWhereWithoutSecondarySupervisorInput[]
+        deleteMany?: ThesisProjectScalarWhereInput | ThesisProjectScalarWhereInput[]
+    };
     export type UserProfileCreateNestedOneWithoutLecturerHistoryInput = {
         create?: XOR<UserProfileCreateWithoutLecturerHistoryInput, UserProfileUncheckedCreateWithoutLecturerHistoryInput>
         connectOrCreate?: UserProfileCreateOrConnectWithoutLecturerHistoryInput
@@ -457456,6 +457732,16 @@ export namespace Prisma {
         updateMany?: ThesisProjectUpdateManyWithWhereWithoutThesisSessionInput | ThesisProjectUpdateManyWithWhereWithoutThesisSessionInput[]
         deleteMany?: ThesisProjectScalarWhereInput | ThesisProjectScalarWhereInput[]
     };
+    export type LecturerCreateNestedOneWithoutPrimarySupervisorThesisProjectInput = {
+        create?: XOR<LecturerCreateWithoutPrimarySupervisorThesisProjectInput, LecturerUncheckedCreateWithoutPrimarySupervisorThesisProjectInput>
+        connectOrCreate?: LecturerCreateOrConnectWithoutPrimarySupervisorThesisProjectInput
+        connect?: LecturerWhereUniqueInput
+    };
+    export type LecturerCreateNestedOneWithoutSecondarySupervisorThesisProjectInput = {
+        create?: XOR<LecturerCreateWithoutSecondarySupervisorThesisProjectInput, LecturerUncheckedCreateWithoutSecondarySupervisorThesisProjectInput>
+        connectOrCreate?: LecturerCreateOrConnectWithoutSecondarySupervisorThesisProjectInput
+        connect?: LecturerWhereUniqueInput
+    };
     export type SubjectClassCreateNestedOneWithoutThesisProjectsInput = {
         create?: XOR<SubjectClassCreateWithoutThesisProjectsInput, SubjectClassUncheckedCreateWithoutThesisProjectsInput>
         connectOrCreate?: SubjectClassCreateOrConnectWithoutThesisProjectsInput
@@ -457555,6 +457841,24 @@ export namespace Prisma {
     };
     export type EnumThesisProjectStatusFieldUpdateOperationsInput = {
         set?: $Enums.ThesisProjectStatus
+    };
+    export type LecturerUpdateOneWithoutPrimarySupervisorThesisProjectNestedInput = {
+        create?: XOR<LecturerCreateWithoutPrimarySupervisorThesisProjectInput, LecturerUncheckedCreateWithoutPrimarySupervisorThesisProjectInput>
+        connectOrCreate?: LecturerCreateOrConnectWithoutPrimarySupervisorThesisProjectInput
+        upsert?: LecturerUpsertWithoutPrimarySupervisorThesisProjectInput
+        disconnect?: LecturerWhereInput | boolean
+        delete?: LecturerWhereInput | boolean
+        connect?: LecturerWhereUniqueInput
+        update?: XOR<XOR<LecturerUpdateToOneWithWhereWithoutPrimarySupervisorThesisProjectInput, LecturerUpdateWithoutPrimarySupervisorThesisProjectInput>, LecturerUncheckedUpdateWithoutPrimarySupervisorThesisProjectInput>
+    };
+    export type LecturerUpdateOneWithoutSecondarySupervisorThesisProjectNestedInput = {
+        create?: XOR<LecturerCreateWithoutSecondarySupervisorThesisProjectInput, LecturerUncheckedCreateWithoutSecondarySupervisorThesisProjectInput>
+        connectOrCreate?: LecturerCreateOrConnectWithoutSecondarySupervisorThesisProjectInput
+        upsert?: LecturerUpsertWithoutSecondarySupervisorThesisProjectInput
+        disconnect?: LecturerWhereInput | boolean
+        delete?: LecturerWhereInput | boolean
+        connect?: LecturerWhereUniqueInput
+        update?: XOR<XOR<LecturerUpdateToOneWithWhereWithoutSecondarySupervisorThesisProjectInput, LecturerUpdateWithoutSecondarySupervisorThesisProjectInput>, LecturerUncheckedUpdateWithoutSecondarySupervisorThesisProjectInput>
     };
     export type SubjectClassUpdateOneWithoutThesisProjectsNestedInput = {
         create?: XOR<SubjectClassCreateWithoutThesisProjectsInput, SubjectClassUncheckedCreateWithoutThesisProjectsInput>
@@ -470283,6 +470587,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionCreateNestedManyWithoutLecturerInput
         evaluationCouncilMember?: EvaluationCouncilMemberCreateNestedManyWithoutLecturerInput
         evaluationCriterionReviews?: EvaluationCriterionCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerUncheckedCreateWithoutUserProfileInput = {
         id?: string
@@ -470316,6 +470622,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUncheckedCreateNestedManyWithoutLecturerInput
         evaluationCouncilMember?: EvaluationCouncilMemberUncheckedCreateNestedManyWithoutLecturerInput
         evaluationCriterionReviews?: EvaluationCriterionUncheckedCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerCreateOrConnectWithoutUserProfileInput = {
         where: LecturerWhereUniqueInput
@@ -473980,6 +474288,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUpdateManyWithoutLecturerNestedInput
         evaluationCouncilMember?: EvaluationCouncilMemberUpdateManyWithoutLecturerNestedInput
         evaluationCriterionReviews?: EvaluationCriterionUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type LecturerUncheckedUpdateWithoutUserProfileInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -474013,6 +474323,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUncheckedUpdateManyWithoutLecturerNestedInput
         evaluationCouncilMember?: EvaluationCouncilMemberUncheckedUpdateManyWithoutLecturerNestedInput
         evaluationCriterionReviews?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type LecturerHistoryUpsertWithWhereUniqueWithoutUserProfileInput = {
         where: LecturerHistoryWhereUniqueInput
@@ -503652,6 +503964,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionCreateNestedManyWithoutLecturerInput
         evaluationCouncilMember?: EvaluationCouncilMemberCreateNestedManyWithoutLecturerInput
         evaluationCriterionReviews?: EvaluationCriterionCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerUncheckedCreateWithoutOrganizationInput = {
         id?: string
@@ -503685,6 +503999,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUncheckedCreateNestedManyWithoutLecturerInput
         evaluationCouncilMember?: EvaluationCouncilMemberUncheckedCreateNestedManyWithoutLecturerInput
         evaluationCriterionReviews?: EvaluationCriterionUncheckedCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerCreateOrConnectWithoutOrganizationInput = {
         where: LecturerWhereUniqueInput
@@ -504386,6 +504702,8 @@ export namespace Prisma {
         registrationEnd?: Date | string | null
         projectStart?: Date | string | null
         projectEnd?: Date | string | null
+        primarySupervisor?: LecturerCreateNestedOneWithoutPrimarySupervisorThesisProjectInput
+        secondarySupervisor?: LecturerCreateNestedOneWithoutSecondarySupervisorThesisProjectInput
         subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
         thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
         supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
@@ -504427,6 +504745,8 @@ export namespace Prisma {
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
+        primarySupervisorId?: string | null
+        secondarySupervisorId?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
         supervisorName?: string | null
@@ -504929,6 +505249,8 @@ export namespace Prisma {
         firstCheckProgress?: IntNullableFilter<"ThesisProject"> | number | null
         secondCheckProgress?: IntNullableFilter<"ThesisProject"> | number | null
         isEligibleForDefense?: BoolFilter<"ThesisProject"> | boolean
+        primarySupervisorId?: StringNullableFilter<"ThesisProject"> | string | null
+        secondarySupervisorId?: StringNullableFilter<"ThesisProject"> | string | null
         subjectClassId?: StringNullableFilter<"ThesisProject"> | string | null
         thesisSessionId?: StringNullableFilter<"ThesisProject"> | string | null
         supervisorName?: StringNullableFilter<"ThesisProject"> | string | null
@@ -525185,6 +525507,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionCreateNestedManyWithoutLecturerInput
         evaluationCouncilMember?: EvaluationCouncilMemberCreateNestedManyWithoutLecturerInput
         evaluationCriterionReviews?: EvaluationCriterionCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerUncheckedCreateWithoutManageFixedClassInput = {
         id?: string
@@ -525218,6 +525542,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUncheckedCreateNestedManyWithoutLecturerInput
         evaluationCouncilMember?: EvaluationCouncilMemberUncheckedCreateNestedManyWithoutLecturerInput
         evaluationCriterionReviews?: EvaluationCriterionUncheckedCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerCreateOrConnectWithoutManageFixedClassInput = {
         where: LecturerWhereUniqueInput
@@ -526342,6 +526668,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUpdateManyWithoutLecturerNestedInput
         evaluationCouncilMember?: EvaluationCouncilMemberUpdateManyWithoutLecturerNestedInput
         evaluationCriterionReviews?: EvaluationCriterionUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type LecturerUncheckedUpdateWithoutManageFixedClassInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -526375,6 +526703,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUncheckedUpdateManyWithoutLecturerNestedInput
         evaluationCouncilMember?: EvaluationCouncilMemberUncheckedUpdateManyWithoutLecturerNestedInput
         evaluationCriterionReviews?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type StaffUpsertWithoutFixedClassInput = {
         update: XOR<StaffUpdateWithoutFixedClassInput, StaffUncheckedUpdateWithoutFixedClassInput>
@@ -534150,6 +534480,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionCreateNestedManyWithoutLecturerInput
         evaluationCouncilMember?: EvaluationCouncilMemberCreateNestedManyWithoutLecturerInput
         evaluationCriterionReviews?: EvaluationCriterionCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerUncheckedCreateWithoutMainSubjectClassesInput = {
         id?: string
@@ -534183,6 +534515,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUncheckedCreateNestedManyWithoutLecturerInput
         evaluationCouncilMember?: EvaluationCouncilMemberUncheckedCreateNestedManyWithoutLecturerInput
         evaluationCriterionReviews?: EvaluationCriterionUncheckedCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerCreateOrConnectWithoutMainSubjectClassesInput = {
         where: LecturerWhereUniqueInput
@@ -534220,6 +534554,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionCreateNestedManyWithoutLecturerInput
         evaluationCouncilMember?: EvaluationCouncilMemberCreateNestedManyWithoutLecturerInput
         evaluationCriterionReviews?: EvaluationCriterionCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerUncheckedCreateWithoutExtraSubjectClassesInput = {
         id?: string
@@ -534253,6 +534589,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUncheckedCreateNestedManyWithoutLecturerInput
         evaluationCouncilMember?: EvaluationCouncilMemberUncheckedCreateNestedManyWithoutLecturerInput
         evaluationCriterionReviews?: EvaluationCriterionUncheckedCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerCreateOrConnectWithoutExtraSubjectClassesInput = {
         where: LecturerWhereUniqueInput
@@ -534290,6 +534628,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionCreateNestedManyWithoutLecturerInput
         evaluationCouncilMember?: EvaluationCouncilMemberCreateNestedManyWithoutLecturerInput
         evaluationCriterionReviews?: EvaluationCriterionCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerUncheckedCreateWithoutEnterGradeClassesInput = {
         id?: string
@@ -534323,6 +534663,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUncheckedCreateNestedManyWithoutLecturerInput
         evaluationCouncilMember?: EvaluationCouncilMemberUncheckedCreateNestedManyWithoutLecturerInput
         evaluationCriterionReviews?: EvaluationCriterionUncheckedCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerCreateOrConnectWithoutEnterGradeClassesInput = {
         where: LecturerWhereUniqueInput
@@ -534598,6 +534940,8 @@ export namespace Prisma {
         registrationEnd?: Date | string | null
         projectStart?: Date | string | null
         projectEnd?: Date | string | null
+        primarySupervisor?: LecturerCreateNestedOneWithoutPrimarySupervisorThesisProjectInput
+        secondarySupervisor?: LecturerCreateNestedOneWithoutSecondarySupervisorThesisProjectInput
         thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
         supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
         supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
@@ -534639,6 +534983,8 @@ export namespace Prisma {
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
+        primarySupervisorId?: string | null
+        secondarySupervisorId?: string | null
         thesisSessionId?: string | null
         supervisorName?: string | null
         supervisorId?: string | null
@@ -535523,6 +535869,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUpdateManyWithoutLecturerNestedInput
         evaluationCouncilMember?: EvaluationCouncilMemberUpdateManyWithoutLecturerNestedInput
         evaluationCriterionReviews?: EvaluationCriterionUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type LecturerUncheckedUpdateWithoutMainSubjectClassesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -535556,6 +535904,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUncheckedUpdateManyWithoutLecturerNestedInput
         evaluationCouncilMember?: EvaluationCouncilMemberUncheckedUpdateManyWithoutLecturerNestedInput
         evaluationCriterionReviews?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type LecturerUpsertWithoutExtraSubjectClassesInput = {
         update: XOR<LecturerUpdateWithoutExtraSubjectClassesInput, LecturerUncheckedUpdateWithoutExtraSubjectClassesInput>
@@ -535598,6 +535948,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUpdateManyWithoutLecturerNestedInput
         evaluationCouncilMember?: EvaluationCouncilMemberUpdateManyWithoutLecturerNestedInput
         evaluationCriterionReviews?: EvaluationCriterionUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type LecturerUncheckedUpdateWithoutExtraSubjectClassesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -535631,6 +535983,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUncheckedUpdateManyWithoutLecturerNestedInput
         evaluationCouncilMember?: EvaluationCouncilMemberUncheckedUpdateManyWithoutLecturerNestedInput
         evaluationCriterionReviews?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type LecturerUpsertWithoutEnterGradeClassesInput = {
         update: XOR<LecturerUpdateWithoutEnterGradeClassesInput, LecturerUncheckedUpdateWithoutEnterGradeClassesInput>
@@ -535673,6 +536027,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUpdateManyWithoutLecturerNestedInput
         evaluationCouncilMember?: EvaluationCouncilMemberUpdateManyWithoutLecturerNestedInput
         evaluationCriterionReviews?: EvaluationCriterionUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type LecturerUncheckedUpdateWithoutEnterGradeClassesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -535706,6 +536062,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUncheckedUpdateManyWithoutLecturerNestedInput
         evaluationCouncilMember?: EvaluationCouncilMemberUncheckedUpdateManyWithoutLecturerNestedInput
         evaluationCriterionReviews?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type ScoreLinkSubjectVersionUpsertWithoutSubjectClassInput = {
         update: XOR<ScoreLinkSubjectVersionUpdateWithoutSubjectClassInput, ScoreLinkSubjectVersionUncheckedUpdateWithoutSubjectClassInput>
@@ -538749,6 +539107,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionCreateNestedManyWithoutLecturerInput
         evaluationCouncilMember?: EvaluationCouncilMemberCreateNestedManyWithoutLecturerInput
         evaluationCriterionReviews?: EvaluationCriterionCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerUncheckedCreateWithoutClassSchedulesInput = {
         id?: string
@@ -538782,6 +539142,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUncheckedCreateNestedManyWithoutLecturerInput
         evaluationCouncilMember?: EvaluationCouncilMemberUncheckedCreateNestedManyWithoutLecturerInput
         evaluationCriterionReviews?: EvaluationCriterionUncheckedCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerCreateOrConnectWithoutClassSchedulesInput = {
         where: LecturerWhereUniqueInput
@@ -538819,6 +539181,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionCreateNestedManyWithoutLecturerInput
         evaluationCouncilMember?: EvaluationCouncilMemberCreateNestedManyWithoutLecturerInput
         evaluationCriterionReviews?: EvaluationCriterionCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerUncheckedCreateWithoutExtraClassSchedulesInput = {
         id?: string
@@ -538852,6 +539216,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUncheckedCreateNestedManyWithoutLecturerInput
         evaluationCouncilMember?: EvaluationCouncilMemberUncheckedCreateNestedManyWithoutLecturerInput
         evaluationCriterionReviews?: EvaluationCriterionUncheckedCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerCreateOrConnectWithoutExtraClassSchedulesInput = {
         where: LecturerWhereUniqueInput
@@ -539534,6 +539900,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUpdateManyWithoutLecturerNestedInput
         evaluationCouncilMember?: EvaluationCouncilMemberUpdateManyWithoutLecturerNestedInput
         evaluationCriterionReviews?: EvaluationCriterionUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type LecturerUncheckedUpdateWithoutClassSchedulesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -539567,6 +539935,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUncheckedUpdateManyWithoutLecturerNestedInput
         evaluationCouncilMember?: EvaluationCouncilMemberUncheckedUpdateManyWithoutLecturerNestedInput
         evaluationCriterionReviews?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type LecturerUpsertWithoutExtraClassSchedulesInput = {
         update: XOR<LecturerUpdateWithoutExtraClassSchedulesInput, LecturerUncheckedUpdateWithoutExtraClassSchedulesInput>
@@ -539609,6 +539979,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUpdateManyWithoutLecturerNestedInput
         evaluationCouncilMember?: EvaluationCouncilMemberUpdateManyWithoutLecturerNestedInput
         evaluationCriterionReviews?: EvaluationCriterionUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type LecturerUncheckedUpdateWithoutExtraClassSchedulesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -539642,6 +540014,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUncheckedUpdateManyWithoutLecturerNestedInput
         evaluationCouncilMember?: EvaluationCouncilMemberUncheckedUpdateManyWithoutLecturerNestedInput
         evaluationCriterionReviews?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type UserProfileUpsertWithWhereUniqueWithoutClassSchedulesInput = {
         where: UserProfileWhereUniqueInput
@@ -543224,6 +543598,8 @@ export namespace Prisma {
         registrationEnd?: Date | string | null
         projectStart?: Date | string | null
         projectEnd?: Date | string | null
+        primarySupervisor?: LecturerCreateNestedOneWithoutPrimarySupervisorThesisProjectInput
+        secondarySupervisor?: LecturerCreateNestedOneWithoutSecondarySupervisorThesisProjectInput
         subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
         thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
         supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
@@ -543265,6 +543641,8 @@ export namespace Prisma {
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
+        primarySupervisorId?: string | null
+        secondarySupervisorId?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
         supervisorName?: string | null
@@ -558026,6 +558404,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionCreateNestedManyWithoutLecturerInput
         evaluationCouncilMember?: EvaluationCouncilMemberCreateNestedManyWithoutLecturerInput
         evaluationCriterionReviews?: EvaluationCriterionCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerUncheckedCreateWithoutLecturerTypeInput = {
         id?: string
@@ -558059,6 +558439,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUncheckedCreateNestedManyWithoutLecturerInput
         evaluationCouncilMember?: EvaluationCouncilMemberUncheckedCreateNestedManyWithoutLecturerInput
         evaluationCriterionReviews?: EvaluationCriterionUncheckedCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerCreateOrConnectWithoutLecturerTypeInput = {
         where: LecturerWhereUniqueInput
@@ -559928,6 +560310,246 @@ export namespace Prisma {
         where: EvaluationCriterionWhereUniqueInput
         create: XOR<EvaluationCriterionCreateWithoutLecturerReviewInput, EvaluationCriterionUncheckedCreateWithoutLecturerReviewInput>
     };
+    export type ThesisProjectCreateWithoutPrimarySupervisorInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        title?: string | null
+        titleEN?: string | null
+        summary?: string | null
+        objectives?: string | null
+        scope?: string | null
+        methodology?: string | null
+        expectedResults?: string | null
+        requirements?: string | null
+        technologies?: string | null
+        thesisType?: $Enums.ThesisType
+        status?: $Enums.ThesisProjectStatus
+        language?: string | null
+        type?: string | null
+        isLock?: boolean
+        editProject?: string | null
+        firstCheckProgress?: number | null
+        secondCheckProgress?: number | null
+        isEligibleForDefense?: boolean
+        supervisorName?: string | null
+        coSupervisorName?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
+        maxStudents?: number | null
+        defenseDate?: Date | string | null
+        registrationStart?: Date | string | null
+        registrationEnd?: Date | string | null
+        projectStart?: Date | string | null
+        projectEnd?: Date | string | null
+        secondarySupervisor?: LecturerCreateNestedOneWithoutSecondarySupervisorThesisProjectInput
+        subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
+        thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
+        supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
+        supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
+        coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
+        coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
+        organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
+        council?: CouncilCreateNestedOneWithoutThesisInput
+        room?: RoomCreateNestedOneWithoutThesisProjectInput
+        defenseSession?: DefenseSessionCreateNestedOneWithoutThesisProjectInput
+        defenseRecord?: DefenseRecordCreateNestedOneWithoutThesisInput
+        librarySubmission?: LibrarySubmissionCreateNestedOneWithoutThesisInput
+        decisions?: DecisionCreateNestedManyWithoutThesisProjectInput
+        registrations?: StudentThesisRegistrationCreateNestedManyWithoutThesisProjectInput
+    };
+    export type ThesisProjectUncheckedCreateWithoutPrimarySupervisorInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        title?: string | null
+        titleEN?: string | null
+        summary?: string | null
+        objectives?: string | null
+        scope?: string | null
+        methodology?: string | null
+        expectedResults?: string | null
+        requirements?: string | null
+        technologies?: string | null
+        thesisType?: $Enums.ThesisType
+        status?: $Enums.ThesisProjectStatus
+        language?: string | null
+        type?: string | null
+        isLock?: boolean
+        editProject?: string | null
+        firstCheckProgress?: number | null
+        secondCheckProgress?: number | null
+        isEligibleForDefense?: boolean
+        secondarySupervisorId?: string | null
+        subjectClassId?: string | null
+        thesisSessionId?: string | null
+        supervisorName?: string | null
+        supervisorId?: string | null
+        supervisorPaymentId?: string | null
+        coSupervisorName?: string | null
+        coSupervisorId?: string | null
+        coSupervisorPaymentId?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
+        organizationId?: string | null
+        maxStudents?: number | null
+        councilId?: string | null
+        roomId?: string | null
+        defenseDate?: Date | string | null
+        defenseSessionId?: string | null
+        registrationStart?: Date | string | null
+        registrationEnd?: Date | string | null
+        projectStart?: Date | string | null
+        projectEnd?: Date | string | null
+        defenseRecord?: DefenseRecordUncheckedCreateNestedOneWithoutThesisInput
+        librarySubmission?: LibrarySubmissionUncheckedCreateNestedOneWithoutThesisInput
+        decisions?: DecisionUncheckedCreateNestedManyWithoutThesisProjectInput
+        registrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutThesisProjectInput
+    };
+    export type ThesisProjectCreateOrConnectWithoutPrimarySupervisorInput = {
+        where: ThesisProjectWhereUniqueInput
+        create: XOR<ThesisProjectCreateWithoutPrimarySupervisorInput, ThesisProjectUncheckedCreateWithoutPrimarySupervisorInput>
+    };
+    export type ThesisProjectCreateManyPrimarySupervisorInputEnvelope = {
+        data: ThesisProjectCreateManyPrimarySupervisorInput | ThesisProjectCreateManyPrimarySupervisorInput[]
+        skipDuplicates?: boolean
+    };
+    export type ThesisProjectCreateWithoutSecondarySupervisorInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        title?: string | null
+        titleEN?: string | null
+        summary?: string | null
+        objectives?: string | null
+        scope?: string | null
+        methodology?: string | null
+        expectedResults?: string | null
+        requirements?: string | null
+        technologies?: string | null
+        thesisType?: $Enums.ThesisType
+        status?: $Enums.ThesisProjectStatus
+        language?: string | null
+        type?: string | null
+        isLock?: boolean
+        editProject?: string | null
+        firstCheckProgress?: number | null
+        secondCheckProgress?: number | null
+        isEligibleForDefense?: boolean
+        supervisorName?: string | null
+        coSupervisorName?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
+        maxStudents?: number | null
+        defenseDate?: Date | string | null
+        registrationStart?: Date | string | null
+        registrationEnd?: Date | string | null
+        projectStart?: Date | string | null
+        projectEnd?: Date | string | null
+        primarySupervisor?: LecturerCreateNestedOneWithoutPrimarySupervisorThesisProjectInput
+        subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
+        thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
+        supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
+        supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
+        coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
+        coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
+        organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
+        council?: CouncilCreateNestedOneWithoutThesisInput
+        room?: RoomCreateNestedOneWithoutThesisProjectInput
+        defenseSession?: DefenseSessionCreateNestedOneWithoutThesisProjectInput
+        defenseRecord?: DefenseRecordCreateNestedOneWithoutThesisInput
+        librarySubmission?: LibrarySubmissionCreateNestedOneWithoutThesisInput
+        decisions?: DecisionCreateNestedManyWithoutThesisProjectInput
+        registrations?: StudentThesisRegistrationCreateNestedManyWithoutThesisProjectInput
+    };
+    export type ThesisProjectUncheckedCreateWithoutSecondarySupervisorInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        title?: string | null
+        titleEN?: string | null
+        summary?: string | null
+        objectives?: string | null
+        scope?: string | null
+        methodology?: string | null
+        expectedResults?: string | null
+        requirements?: string | null
+        technologies?: string | null
+        thesisType?: $Enums.ThesisType
+        status?: $Enums.ThesisProjectStatus
+        language?: string | null
+        type?: string | null
+        isLock?: boolean
+        editProject?: string | null
+        firstCheckProgress?: number | null
+        secondCheckProgress?: number | null
+        isEligibleForDefense?: boolean
+        primarySupervisorId?: string | null
+        subjectClassId?: string | null
+        thesisSessionId?: string | null
+        supervisorName?: string | null
+        supervisorId?: string | null
+        supervisorPaymentId?: string | null
+        coSupervisorName?: string | null
+        coSupervisorId?: string | null
+        coSupervisorPaymentId?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
+        organizationId?: string | null
+        maxStudents?: number | null
+        councilId?: string | null
+        roomId?: string | null
+        defenseDate?: Date | string | null
+        defenseSessionId?: string | null
+        registrationStart?: Date | string | null
+        registrationEnd?: Date | string | null
+        projectStart?: Date | string | null
+        projectEnd?: Date | string | null
+        defenseRecord?: DefenseRecordUncheckedCreateNestedOneWithoutThesisInput
+        librarySubmission?: LibrarySubmissionUncheckedCreateNestedOneWithoutThesisInput
+        decisions?: DecisionUncheckedCreateNestedManyWithoutThesisProjectInput
+        registrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutThesisProjectInput
+    };
+    export type ThesisProjectCreateOrConnectWithoutSecondarySupervisorInput = {
+        where: ThesisProjectWhereUniqueInput
+        create: XOR<ThesisProjectCreateWithoutSecondarySupervisorInput, ThesisProjectUncheckedCreateWithoutSecondarySupervisorInput>
+    };
+    export type ThesisProjectCreateManySecondarySupervisorInputEnvelope = {
+        data: ThesisProjectCreateManySecondarySupervisorInput | ThesisProjectCreateManySecondarySupervisorInput[]
+        skipDuplicates?: boolean
+    };
     export type UserProfileUpsertWithoutLecturerInput = {
         update: XOR<UserProfileUpdateWithoutLecturerInput, UserProfileUncheckedUpdateWithoutLecturerInput>
         create: XOR<UserProfileCreateWithoutLecturerInput, UserProfileUncheckedCreateWithoutLecturerInput>
@@ -560735,6 +561357,32 @@ export namespace Prisma {
     export type EvaluationCriterionUpdateManyWithWhereWithoutLecturerReviewInput = {
         where: EvaluationCriterionScalarWhereInput
         data: XOR<EvaluationCriterionUpdateManyMutationInput, EvaluationCriterionUncheckedUpdateManyWithoutLecturerReviewInput>
+    };
+    export type ThesisProjectUpsertWithWhereUniqueWithoutPrimarySupervisorInput = {
+        where: ThesisProjectWhereUniqueInput
+        update: XOR<ThesisProjectUpdateWithoutPrimarySupervisorInput, ThesisProjectUncheckedUpdateWithoutPrimarySupervisorInput>
+        create: XOR<ThesisProjectCreateWithoutPrimarySupervisorInput, ThesisProjectUncheckedCreateWithoutPrimarySupervisorInput>
+    };
+    export type ThesisProjectUpdateWithWhereUniqueWithoutPrimarySupervisorInput = {
+        where: ThesisProjectWhereUniqueInput
+        data: XOR<ThesisProjectUpdateWithoutPrimarySupervisorInput, ThesisProjectUncheckedUpdateWithoutPrimarySupervisorInput>
+    };
+    export type ThesisProjectUpdateManyWithWhereWithoutPrimarySupervisorInput = {
+        where: ThesisProjectScalarWhereInput
+        data: XOR<ThesisProjectUpdateManyMutationInput, ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorInput>
+    };
+    export type ThesisProjectUpsertWithWhereUniqueWithoutSecondarySupervisorInput = {
+        where: ThesisProjectWhereUniqueInput
+        update: XOR<ThesisProjectUpdateWithoutSecondarySupervisorInput, ThesisProjectUncheckedUpdateWithoutSecondarySupervisorInput>
+        create: XOR<ThesisProjectCreateWithoutSecondarySupervisorInput, ThesisProjectUncheckedCreateWithoutSecondarySupervisorInput>
+    };
+    export type ThesisProjectUpdateWithWhereUniqueWithoutSecondarySupervisorInput = {
+        where: ThesisProjectWhereUniqueInput
+        data: XOR<ThesisProjectUpdateWithoutSecondarySupervisorInput, ThesisProjectUncheckedUpdateWithoutSecondarySupervisorInput>
+    };
+    export type ThesisProjectUpdateManyWithWhereWithoutSecondarySupervisorInput = {
+        where: ThesisProjectScalarWhereInput
+        data: XOR<ThesisProjectUpdateManyMutationInput, ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorInput>
     };
     export type UserProfileCreateWithoutLecturerHistoryInput = {
         id?: string
@@ -561707,6 +562355,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionCreateNestedManyWithoutLecturerInput
         evaluationCouncilMember?: EvaluationCouncilMemberCreateNestedManyWithoutLecturerInput
         evaluationCriterionReviews?: EvaluationCriterionCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerUncheckedCreateWithoutResearchProjectsInput = {
         id?: string
@@ -561740,6 +562390,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUncheckedCreateNestedManyWithoutLecturerInput
         evaluationCouncilMember?: EvaluationCouncilMemberUncheckedCreateNestedManyWithoutLecturerInput
         evaluationCriterionReviews?: EvaluationCriterionUncheckedCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerCreateOrConnectWithoutResearchProjectsInput = {
         where: LecturerWhereUniqueInput
@@ -561914,6 +562566,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUpdateManyWithoutLecturerNestedInput
         evaluationCouncilMember?: EvaluationCouncilMemberUpdateManyWithoutLecturerNestedInput
         evaluationCriterionReviews?: EvaluationCriterionUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type LecturerUncheckedUpdateWithoutResearchProjectsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -561947,6 +562601,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUncheckedUpdateManyWithoutLecturerNestedInput
         evaluationCouncilMember?: EvaluationCouncilMemberUncheckedUpdateManyWithoutLecturerNestedInput
         evaluationCriterionReviews?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type DM_DonViUpsertWithoutResearchProjectsInput = {
         update: XOR<DM_DonViUpdateWithoutResearchProjectsInput, DM_DonViUncheckedUpdateWithoutResearchProjectsInput>
@@ -562286,6 +562942,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionCreateNestedManyWithoutLecturerInput
         evaluationCouncilMember?: EvaluationCouncilMemberCreateNestedManyWithoutLecturerInput
         evaluationCriterionReviews?: EvaluationCriterionCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerUncheckedCreateWithoutReviewedRegistrationsInput = {
         id?: string
@@ -562319,6 +562977,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUncheckedCreateNestedManyWithoutLecturerInput
         evaluationCouncilMember?: EvaluationCouncilMemberUncheckedCreateNestedManyWithoutLecturerInput
         evaluationCriterionReviews?: EvaluationCriterionUncheckedCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerCreateOrConnectWithoutReviewedRegistrationsInput = {
         where: LecturerWhereUniqueInput
@@ -562579,6 +563239,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUpdateManyWithoutLecturerNestedInput
         evaluationCouncilMember?: EvaluationCouncilMemberUpdateManyWithoutLecturerNestedInput
         evaluationCriterionReviews?: EvaluationCriterionUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type LecturerUncheckedUpdateWithoutReviewedRegistrationsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -562612,6 +563274,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUncheckedUpdateManyWithoutLecturerNestedInput
         evaluationCouncilMember?: EvaluationCouncilMemberUncheckedUpdateManyWithoutLecturerNestedInput
         evaluationCriterionReviews?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type TrainingObjectTypeCreateWithoutThesisSessionInput = {
         id?: string
@@ -562835,6 +563499,8 @@ export namespace Prisma {
         registrationEnd?: Date | string | null
         projectStart?: Date | string | null
         projectEnd?: Date | string | null
+        primarySupervisor?: LecturerCreateNestedOneWithoutPrimarySupervisorThesisProjectInput
+        secondarySupervisor?: LecturerCreateNestedOneWithoutSecondarySupervisorThesisProjectInput
         subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
         supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
         supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
@@ -562876,6 +563542,8 @@ export namespace Prisma {
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
+        primarySupervisorId?: string | null
+        secondarySupervisorId?: string | null
         subjectClassId?: string | null
         supervisorName?: string | null
         supervisorId?: string | null
@@ -563115,6 +563783,154 @@ export namespace Prisma {
     export type ThesisProjectUpdateManyWithWhereWithoutThesisSessionInput = {
         where: ThesisProjectScalarWhereInput
         data: XOR<ThesisProjectUpdateManyMutationInput, ThesisProjectUncheckedUpdateManyWithoutThesisSessionInput>
+    };
+    export type LecturerCreateWithoutPrimarySupervisorThesisProjectInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        from?: Date | string | null
+        lectureID?: string | null
+        serviceDate?: Date | string | null
+        userProfile: UserProfileCreateNestedOneWithoutLecturerInput
+        organization: DM_DonViCreateNestedOneWithoutLecturersInput
+        lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
+        mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
+        extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
+        enterGradeClasses?: SubjectClassCreateNestedManyWithoutEnterGradeLecturerInput
+        manageFixedClass?: FixedClassCreateNestedManyWithoutLecturerManagementInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutLecturerInput
+        extraClassSchedules?: ClassScheduleCreateNestedManyWithoutExtraLecturerInput
+        researchProjects?: ResearchProjectCreateNestedManyWithoutSupervisorInput
+        reviewedRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutReviewedByInput
+        reviewedThesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutReviewedByInput
+        expertProfile?: ExpertProfileCreateNestedManyWithoutLecturerInput
+        survey?: SurveyCreateNestedManyWithoutLectureInput
+        clusterSurvey?: ClusterSurveyCreateNestedManyWithoutLecturersInput
+        examRoomsMain?: ExamListCreateNestedManyWithoutFirstSupervisorInput
+        examRoomsExtra?: ExamListCreateNestedManyWithoutSecondSupervisorInput
+        evaluationCriterions?: EvaluationCriterionCreateNestedManyWithoutLecturerInput
+        analysisCriterion?: AnalysisCriterionCreateNestedManyWithoutLecturerInput
+        evaluationCouncilMember?: EvaluationCouncilMemberCreateNestedManyWithoutLecturerInput
+        evaluationCriterionReviews?: EvaluationCriterionCreateNestedManyWithoutLecturerReviewInput
+        secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
+    };
+    export type LecturerUncheckedCreateWithoutPrimarySupervisorThesisProjectInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        from?: Date | string | null
+        lectureID?: string | null
+        serviceDate?: Date | string | null
+        userProfileId: string
+        organizationId: string
+        lecturerTypeId: string
+        mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
+        extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
+        enterGradeClasses?: SubjectClassUncheckedCreateNestedManyWithoutEnterGradeLecturerInput
+        manageFixedClass?: FixedClassUncheckedCreateNestedManyWithoutLecturerManagementInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutLecturerInput
+        extraClassSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutExtraLecturerInput
+        researchProjects?: ResearchProjectUncheckedCreateNestedManyWithoutSupervisorInput
+        reviewedRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutReviewedByInput
+        reviewedThesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutReviewedByInput
+        expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutLecturerInput
+        survey?: SurveyUncheckedCreateNestedManyWithoutLectureInput
+        clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutLecturersInput
+        examRoomsMain?: ExamListUncheckedCreateNestedManyWithoutFirstSupervisorInput
+        examRoomsExtra?: ExamListUncheckedCreateNestedManyWithoutSecondSupervisorInput
+        evaluationCriterions?: EvaluationCriterionUncheckedCreateNestedManyWithoutLecturerInput
+        analysisCriterion?: AnalysisCriterionUncheckedCreateNestedManyWithoutLecturerInput
+        evaluationCouncilMember?: EvaluationCouncilMemberUncheckedCreateNestedManyWithoutLecturerInput
+        evaluationCriterionReviews?: EvaluationCriterionUncheckedCreateNestedManyWithoutLecturerReviewInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
+    };
+    export type LecturerCreateOrConnectWithoutPrimarySupervisorThesisProjectInput = {
+        where: LecturerWhereUniqueInput
+        create: XOR<LecturerCreateWithoutPrimarySupervisorThesisProjectInput, LecturerUncheckedCreateWithoutPrimarySupervisorThesisProjectInput>
+    };
+    export type LecturerCreateWithoutSecondarySupervisorThesisProjectInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        from?: Date | string | null
+        lectureID?: string | null
+        serviceDate?: Date | string | null
+        userProfile: UserProfileCreateNestedOneWithoutLecturerInput
+        organization: DM_DonViCreateNestedOneWithoutLecturersInput
+        lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
+        mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
+        extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
+        enterGradeClasses?: SubjectClassCreateNestedManyWithoutEnterGradeLecturerInput
+        manageFixedClass?: FixedClassCreateNestedManyWithoutLecturerManagementInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutLecturerInput
+        extraClassSchedules?: ClassScheduleCreateNestedManyWithoutExtraLecturerInput
+        researchProjects?: ResearchProjectCreateNestedManyWithoutSupervisorInput
+        reviewedRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutReviewedByInput
+        reviewedThesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutReviewedByInput
+        expertProfile?: ExpertProfileCreateNestedManyWithoutLecturerInput
+        survey?: SurveyCreateNestedManyWithoutLectureInput
+        clusterSurvey?: ClusterSurveyCreateNestedManyWithoutLecturersInput
+        examRoomsMain?: ExamListCreateNestedManyWithoutFirstSupervisorInput
+        examRoomsExtra?: ExamListCreateNestedManyWithoutSecondSupervisorInput
+        evaluationCriterions?: EvaluationCriterionCreateNestedManyWithoutLecturerInput
+        analysisCriterion?: AnalysisCriterionCreateNestedManyWithoutLecturerInput
+        evaluationCouncilMember?: EvaluationCouncilMemberCreateNestedManyWithoutLecturerInput
+        evaluationCriterionReviews?: EvaluationCriterionCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
+    };
+    export type LecturerUncheckedCreateWithoutSecondarySupervisorThesisProjectInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        from?: Date | string | null
+        lectureID?: string | null
+        serviceDate?: Date | string | null
+        userProfileId: string
+        organizationId: string
+        lecturerTypeId: string
+        mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
+        extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
+        enterGradeClasses?: SubjectClassUncheckedCreateNestedManyWithoutEnterGradeLecturerInput
+        manageFixedClass?: FixedClassUncheckedCreateNestedManyWithoutLecturerManagementInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutLecturerInput
+        extraClassSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutExtraLecturerInput
+        researchProjects?: ResearchProjectUncheckedCreateNestedManyWithoutSupervisorInput
+        reviewedRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutReviewedByInput
+        reviewedThesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutReviewedByInput
+        expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutLecturerInput
+        survey?: SurveyUncheckedCreateNestedManyWithoutLectureInput
+        clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutLecturersInput
+        examRoomsMain?: ExamListUncheckedCreateNestedManyWithoutFirstSupervisorInput
+        examRoomsExtra?: ExamListUncheckedCreateNestedManyWithoutSecondSupervisorInput
+        evaluationCriterions?: EvaluationCriterionUncheckedCreateNestedManyWithoutLecturerInput
+        analysisCriterion?: AnalysisCriterionUncheckedCreateNestedManyWithoutLecturerInput
+        evaluationCouncilMember?: EvaluationCouncilMemberUncheckedCreateNestedManyWithoutLecturerInput
+        evaluationCriterionReviews?: EvaluationCriterionUncheckedCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
+    };
+    export type LecturerCreateOrConnectWithoutSecondarySupervisorThesisProjectInput = {
+        where: LecturerWhereUniqueInput
+        create: XOR<LecturerCreateWithoutSecondarySupervisorThesisProjectInput, LecturerUncheckedCreateWithoutSecondarySupervisorThesisProjectInput>
     };
     export type SubjectClassCreateWithoutThesisProjectsInput = {
         id?: string
@@ -563833,6 +564649,164 @@ export namespace Prisma {
     export type StudentThesisRegistrationCreateManyThesisProjectInputEnvelope = {
         data: StudentThesisRegistrationCreateManyThesisProjectInput | StudentThesisRegistrationCreateManyThesisProjectInput[]
         skipDuplicates?: boolean
+    };
+    export type LecturerUpsertWithoutPrimarySupervisorThesisProjectInput = {
+        update: XOR<LecturerUpdateWithoutPrimarySupervisorThesisProjectInput, LecturerUncheckedUpdateWithoutPrimarySupervisorThesisProjectInput>
+        create: XOR<LecturerCreateWithoutPrimarySupervisorThesisProjectInput, LecturerUncheckedCreateWithoutPrimarySupervisorThesisProjectInput>
+        where?: LecturerWhereInput
+    };
+    export type LecturerUpdateToOneWithWhereWithoutPrimarySupervisorThesisProjectInput = {
+        where?: LecturerWhereInput
+        data: XOR<LecturerUpdateWithoutPrimarySupervisorThesisProjectInput, LecturerUncheckedUpdateWithoutPrimarySupervisorThesisProjectInput>
+    };
+    export type LecturerUpdateWithoutPrimarySupervisorThesisProjectInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
+        organization?: DM_DonViUpdateOneRequiredWithoutLecturersNestedInput
+        lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
+        mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
+        extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
+        enterGradeClasses?: SubjectClassUpdateManyWithoutEnterGradeLecturerNestedInput
+        manageFixedClass?: FixedClassUpdateManyWithoutLecturerManagementNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutLecturerNestedInput
+        extraClassSchedules?: ClassScheduleUpdateManyWithoutExtraLecturerNestedInput
+        researchProjects?: ResearchProjectUpdateManyWithoutSupervisorNestedInput
+        reviewedRegistrations?: StudentResearchRegistrationUpdateManyWithoutReviewedByNestedInput
+        reviewedThesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutReviewedByNestedInput
+        expertProfile?: ExpertProfileUpdateManyWithoutLecturerNestedInput
+        survey?: SurveyUpdateManyWithoutLectureNestedInput
+        clusterSurvey?: ClusterSurveyUpdateManyWithoutLecturersNestedInput
+        examRoomsMain?: ExamListUpdateManyWithoutFirstSupervisorNestedInput
+        examRoomsExtra?: ExamListUpdateManyWithoutSecondSupervisorNestedInput
+        evaluationCriterions?: EvaluationCriterionUpdateManyWithoutLecturerNestedInput
+        analysisCriterion?: AnalysisCriterionUpdateManyWithoutLecturerNestedInput
+        evaluationCouncilMember?: EvaluationCouncilMemberUpdateManyWithoutLecturerNestedInput
+        evaluationCriterionReviews?: EvaluationCriterionUpdateManyWithoutLecturerReviewNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
+    };
+    export type LecturerUncheckedUpdateWithoutPrimarySupervisorThesisProjectInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        userProfileId?: StringFieldUpdateOperationsInput | string
+        organizationId?: StringFieldUpdateOperationsInput | string
+        lecturerTypeId?: StringFieldUpdateOperationsInput | string
+        mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
+        extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
+        enterGradeClasses?: SubjectClassUncheckedUpdateManyWithoutEnterGradeLecturerNestedInput
+        manageFixedClass?: FixedClassUncheckedUpdateManyWithoutLecturerManagementNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutLecturerNestedInput
+        extraClassSchedules?: ClassScheduleUncheckedUpdateManyWithoutExtraLecturerNestedInput
+        researchProjects?: ResearchProjectUncheckedUpdateManyWithoutSupervisorNestedInput
+        reviewedRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutReviewedByNestedInput
+        reviewedThesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutReviewedByNestedInput
+        expertProfile?: ExpertProfileUncheckedUpdateManyWithoutLecturerNestedInput
+        survey?: SurveyUncheckedUpdateManyWithoutLectureNestedInput
+        clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutLecturersNestedInput
+        examRoomsMain?: ExamListUncheckedUpdateManyWithoutFirstSupervisorNestedInput
+        examRoomsExtra?: ExamListUncheckedUpdateManyWithoutSecondSupervisorNestedInput
+        evaluationCriterions?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerNestedInput
+        analysisCriterion?: AnalysisCriterionUncheckedUpdateManyWithoutLecturerNestedInput
+        evaluationCouncilMember?: EvaluationCouncilMemberUncheckedUpdateManyWithoutLecturerNestedInput
+        evaluationCriterionReviews?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerReviewNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
+    };
+    export type LecturerUpsertWithoutSecondarySupervisorThesisProjectInput = {
+        update: XOR<LecturerUpdateWithoutSecondarySupervisorThesisProjectInput, LecturerUncheckedUpdateWithoutSecondarySupervisorThesisProjectInput>
+        create: XOR<LecturerCreateWithoutSecondarySupervisorThesisProjectInput, LecturerUncheckedCreateWithoutSecondarySupervisorThesisProjectInput>
+        where?: LecturerWhereInput
+    };
+    export type LecturerUpdateToOneWithWhereWithoutSecondarySupervisorThesisProjectInput = {
+        where?: LecturerWhereInput
+        data: XOR<LecturerUpdateWithoutSecondarySupervisorThesisProjectInput, LecturerUncheckedUpdateWithoutSecondarySupervisorThesisProjectInput>
+    };
+    export type LecturerUpdateWithoutSecondarySupervisorThesisProjectInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
+        organization?: DM_DonViUpdateOneRequiredWithoutLecturersNestedInput
+        lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
+        mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
+        extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
+        enterGradeClasses?: SubjectClassUpdateManyWithoutEnterGradeLecturerNestedInput
+        manageFixedClass?: FixedClassUpdateManyWithoutLecturerManagementNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutLecturerNestedInput
+        extraClassSchedules?: ClassScheduleUpdateManyWithoutExtraLecturerNestedInput
+        researchProjects?: ResearchProjectUpdateManyWithoutSupervisorNestedInput
+        reviewedRegistrations?: StudentResearchRegistrationUpdateManyWithoutReviewedByNestedInput
+        reviewedThesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutReviewedByNestedInput
+        expertProfile?: ExpertProfileUpdateManyWithoutLecturerNestedInput
+        survey?: SurveyUpdateManyWithoutLectureNestedInput
+        clusterSurvey?: ClusterSurveyUpdateManyWithoutLecturersNestedInput
+        examRoomsMain?: ExamListUpdateManyWithoutFirstSupervisorNestedInput
+        examRoomsExtra?: ExamListUpdateManyWithoutSecondSupervisorNestedInput
+        evaluationCriterions?: EvaluationCriterionUpdateManyWithoutLecturerNestedInput
+        analysisCriterion?: AnalysisCriterionUpdateManyWithoutLecturerNestedInput
+        evaluationCouncilMember?: EvaluationCouncilMemberUpdateManyWithoutLecturerNestedInput
+        evaluationCriterionReviews?: EvaluationCriterionUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
+    };
+    export type LecturerUncheckedUpdateWithoutSecondarySupervisorThesisProjectInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        userProfileId?: StringFieldUpdateOperationsInput | string
+        organizationId?: StringFieldUpdateOperationsInput | string
+        lecturerTypeId?: StringFieldUpdateOperationsInput | string
+        mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
+        extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
+        enterGradeClasses?: SubjectClassUncheckedUpdateManyWithoutEnterGradeLecturerNestedInput
+        manageFixedClass?: FixedClassUncheckedUpdateManyWithoutLecturerManagementNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutLecturerNestedInput
+        extraClassSchedules?: ClassScheduleUncheckedUpdateManyWithoutExtraLecturerNestedInput
+        researchProjects?: ResearchProjectUncheckedUpdateManyWithoutSupervisorNestedInput
+        reviewedRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutReviewedByNestedInput
+        reviewedThesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutReviewedByNestedInput
+        expertProfile?: ExpertProfileUncheckedUpdateManyWithoutLecturerNestedInput
+        survey?: SurveyUncheckedUpdateManyWithoutLectureNestedInput
+        clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutLecturersNestedInput
+        examRoomsMain?: ExamListUncheckedUpdateManyWithoutFirstSupervisorNestedInput
+        examRoomsExtra?: ExamListUncheckedUpdateManyWithoutSecondSupervisorNestedInput
+        evaluationCriterions?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerNestedInput
+        analysisCriterion?: AnalysisCriterionUncheckedUpdateManyWithoutLecturerNestedInput
+        evaluationCouncilMember?: EvaluationCouncilMemberUncheckedUpdateManyWithoutLecturerNestedInput
+        evaluationCriterionReviews?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
     };
     export type SubjectClassUpsertWithoutThesisProjectsInput = {
         update: XOR<SubjectClassUpdateWithoutThesisProjectsInput, SubjectClassUncheckedUpdateWithoutThesisProjectsInput>
@@ -564610,6 +565584,8 @@ export namespace Prisma {
         registrationEnd?: Date | string | null
         projectStart?: Date | string | null
         projectEnd?: Date | string | null
+        primarySupervisor?: LecturerCreateNestedOneWithoutPrimarySupervisorThesisProjectInput
+        secondarySupervisor?: LecturerCreateNestedOneWithoutSecondarySupervisorThesisProjectInput
         subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
         thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
         supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
@@ -564651,6 +565627,8 @@ export namespace Prisma {
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
+        primarySupervisorId?: string | null
+        secondarySupervisorId?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
         supervisorName?: string | null
@@ -564969,6 +565947,8 @@ export namespace Prisma {
         registrationEnd?: Date | string | null
         projectStart?: Date | string | null
         projectEnd?: Date | string | null
+        primarySupervisor?: LecturerCreateNestedOneWithoutPrimarySupervisorThesisProjectInput
+        secondarySupervisor?: LecturerCreateNestedOneWithoutSecondarySupervisorThesisProjectInput
         subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
         thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
         supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
@@ -565010,6 +565990,8 @@ export namespace Prisma {
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
+        primarySupervisorId?: string | null
+        secondarySupervisorId?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
         supervisorName?: string | null
@@ -565073,6 +566055,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionCreateNestedManyWithoutLecturerInput
         evaluationCouncilMember?: EvaluationCouncilMemberCreateNestedManyWithoutLecturerInput
         evaluationCriterionReviews?: EvaluationCriterionCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerUncheckedCreateWithoutReviewedThesisRegistrationsInput = {
         id?: string
@@ -565106,6 +566090,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUncheckedCreateNestedManyWithoutLecturerInput
         evaluationCouncilMember?: EvaluationCouncilMemberUncheckedCreateNestedManyWithoutLecturerInput
         evaluationCriterionReviews?: EvaluationCriterionUncheckedCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerCreateOrConnectWithoutReviewedThesisRegistrationsInput = {
         where: LecturerWhereUniqueInput
@@ -565432,6 +566418,8 @@ export namespace Prisma {
         registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        primarySupervisor?: LecturerUpdateOneWithoutPrimarySupervisorThesisProjectNestedInput
+        secondarySupervisor?: LecturerUpdateOneWithoutSecondarySupervisorThesisProjectNestedInput
         subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
         thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
         supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
@@ -565473,6 +566461,8 @@ export namespace Prisma {
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
+        primarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        secondarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -565541,6 +566531,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUpdateManyWithoutLecturerNestedInput
         evaluationCouncilMember?: EvaluationCouncilMemberUpdateManyWithoutLecturerNestedInput
         evaluationCriterionReviews?: EvaluationCriterionUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type LecturerUncheckedUpdateWithoutReviewedThesisRegistrationsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -565574,6 +566566,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUncheckedUpdateManyWithoutLecturerNestedInput
         evaluationCouncilMember?: EvaluationCouncilMemberUncheckedUpdateManyWithoutLecturerNestedInput
         evaluationCriterionReviews?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type CouncilUpsertWithoutStudentThesisRegistrationInput = {
         update: XOR<CouncilUpdateWithoutStudentThesisRegistrationInput, CouncilUncheckedUpdateWithoutStudentThesisRegistrationInput>
@@ -565644,6 +566638,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionCreateNestedManyWithoutLecturerInput
         evaluationCouncilMember?: EvaluationCouncilMemberCreateNestedManyWithoutLecturerInput
         evaluationCriterionReviews?: EvaluationCriterionCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerUncheckedCreateWithoutExpertProfileInput = {
         id?: string
@@ -565677,6 +566673,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUncheckedCreateNestedManyWithoutLecturerInput
         evaluationCouncilMember?: EvaluationCouncilMemberUncheckedCreateNestedManyWithoutLecturerInput
         evaluationCriterionReviews?: EvaluationCriterionUncheckedCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerCreateOrConnectWithoutExpertProfileInput = {
         where: LecturerWhereUniqueInput
@@ -565776,6 +566774,8 @@ export namespace Prisma {
         registrationEnd?: Date | string | null
         projectStart?: Date | string | null
         projectEnd?: Date | string | null
+        primarySupervisor?: LecturerCreateNestedOneWithoutPrimarySupervisorThesisProjectInput
+        secondarySupervisor?: LecturerCreateNestedOneWithoutSecondarySupervisorThesisProjectInput
         subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
         thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
         supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
@@ -565817,6 +566817,8 @@ export namespace Prisma {
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
+        primarySupervisorId?: string | null
+        secondarySupervisorId?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
         supervisorName?: string | null
@@ -565892,6 +566894,8 @@ export namespace Prisma {
         registrationEnd?: Date | string | null
         projectStart?: Date | string | null
         projectEnd?: Date | string | null
+        primarySupervisor?: LecturerCreateNestedOneWithoutPrimarySupervisorThesisProjectInput
+        secondarySupervisor?: LecturerCreateNestedOneWithoutSecondarySupervisorThesisProjectInput
         subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
         thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
         supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
@@ -565933,6 +566937,8 @@ export namespace Prisma {
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
+        primarySupervisorId?: string | null
+        secondarySupervisorId?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
         supervisorName?: string | null
@@ -566337,6 +567343,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUpdateManyWithoutLecturerNestedInput
         evaluationCouncilMember?: EvaluationCouncilMemberUpdateManyWithoutLecturerNestedInput
         evaluationCriterionReviews?: EvaluationCriterionUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type LecturerUncheckedUpdateWithoutExpertProfileInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -566370,6 +567378,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUncheckedUpdateManyWithoutLecturerNestedInput
         evaluationCouncilMember?: EvaluationCouncilMemberUncheckedUpdateManyWithoutLecturerNestedInput
         evaluationCriterionReviews?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type TrainingMajorUpsertWithWhereUniqueWithoutExpertProfileInput = {
         where: TrainingMajorWhereUniqueInput
@@ -566668,6 +567678,8 @@ export namespace Prisma {
         registrationEnd?: Date | string | null
         projectStart?: Date | string | null
         projectEnd?: Date | string | null
+        primarySupervisor?: LecturerCreateNestedOneWithoutPrimarySupervisorThesisProjectInput
+        secondarySupervisor?: LecturerCreateNestedOneWithoutSecondarySupervisorThesisProjectInput
         subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
         thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
         supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
@@ -566709,6 +567721,8 @@ export namespace Prisma {
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
+        primarySupervisorId?: string | null
+        secondarySupervisorId?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
         supervisorName?: string | null
@@ -566802,6 +567816,8 @@ export namespace Prisma {
         registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        primarySupervisor?: LecturerUpdateOneWithoutPrimarySupervisorThesisProjectNestedInput
+        secondarySupervisor?: LecturerUpdateOneWithoutSecondarySupervisorThesisProjectNestedInput
         subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
         thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
         supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
@@ -566843,6 +567859,8 @@ export namespace Prisma {
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
+        primarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        secondarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -567025,6 +568043,8 @@ export namespace Prisma {
         registrationEnd?: Date | string | null
         projectStart?: Date | string | null
         projectEnd?: Date | string | null
+        primarySupervisor?: LecturerCreateNestedOneWithoutPrimarySupervisorThesisProjectInput
+        secondarySupervisor?: LecturerCreateNestedOneWithoutSecondarySupervisorThesisProjectInput
         subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
         thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
         supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
@@ -567066,6 +568086,8 @@ export namespace Prisma {
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
+        primarySupervisorId?: string | null
+        secondarySupervisorId?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
         supervisorName?: string | null
@@ -567602,6 +568624,8 @@ export namespace Prisma {
         registrationEnd?: Date | string | null
         projectStart?: Date | string | null
         projectEnd?: Date | string | null
+        primarySupervisor?: LecturerCreateNestedOneWithoutPrimarySupervisorThesisProjectInput
+        secondarySupervisor?: LecturerCreateNestedOneWithoutSecondarySupervisorThesisProjectInput
         subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
         thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
         supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
@@ -567643,6 +568667,8 @@ export namespace Prisma {
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
+        primarySupervisorId?: string | null
+        secondarySupervisorId?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
         supervisorName?: string | null
@@ -567803,6 +568829,8 @@ export namespace Prisma {
         registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        primarySupervisor?: LecturerUpdateOneWithoutPrimarySupervisorThesisProjectNestedInput
+        secondarySupervisor?: LecturerUpdateOneWithoutSecondarySupervisorThesisProjectNestedInput
         subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
         thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
         supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
@@ -567844,6 +568872,8 @@ export namespace Prisma {
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
+        primarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        secondarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -567924,6 +568954,8 @@ export namespace Prisma {
         registrationEnd?: Date | string | null
         projectStart?: Date | string | null
         projectEnd?: Date | string | null
+        primarySupervisor?: LecturerCreateNestedOneWithoutPrimarySupervisorThesisProjectInput
+        secondarySupervisor?: LecturerCreateNestedOneWithoutSecondarySupervisorThesisProjectInput
         subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
         thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
         supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
@@ -567965,6 +568997,8 @@ export namespace Prisma {
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
+        primarySupervisorId?: string | null
+        secondarySupervisorId?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
         supervisorName?: string | null
@@ -568125,6 +569159,8 @@ export namespace Prisma {
         registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        primarySupervisor?: LecturerUpdateOneWithoutPrimarySupervisorThesisProjectNestedInput
+        secondarySupervisor?: LecturerUpdateOneWithoutSecondarySupervisorThesisProjectNestedInput
         subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
         thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
         supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
@@ -568166,6 +569202,8 @@ export namespace Prisma {
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
+        primarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        secondarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -568315,6 +569353,8 @@ export namespace Prisma {
         registrationEnd?: Date | string | null
         projectStart?: Date | string | null
         projectEnd?: Date | string | null
+        primarySupervisor?: LecturerCreateNestedOneWithoutPrimarySupervisorThesisProjectInput
+        secondarySupervisor?: LecturerCreateNestedOneWithoutSecondarySupervisorThesisProjectInput
         subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
         thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
         supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
@@ -568356,6 +569396,8 @@ export namespace Prisma {
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
+        primarySupervisorId?: string | null
+        secondarySupervisorId?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
         supervisorName?: string | null
@@ -568431,6 +569473,8 @@ export namespace Prisma {
         registrationEnd?: Date | string | null
         projectStart?: Date | string | null
         projectEnd?: Date | string | null
+        primarySupervisor?: LecturerCreateNestedOneWithoutPrimarySupervisorThesisProjectInput
+        secondarySupervisor?: LecturerCreateNestedOneWithoutSecondarySupervisorThesisProjectInput
         subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
         thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
         supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
@@ -568472,6 +569516,8 @@ export namespace Prisma {
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
+        primarySupervisorId?: string | null
+        secondarySupervisorId?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
         supervisorName?: string | null
@@ -570899,6 +571945,8 @@ export namespace Prisma {
         evaluationCriterions?: EvaluationCriterionCreateNestedManyWithoutLecturerInput
         evaluationCouncilMember?: EvaluationCouncilMemberCreateNestedManyWithoutLecturerInput
         evaluationCriterionReviews?: EvaluationCriterionCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerUncheckedCreateWithoutAnalysisCriterionInput = {
         id?: string
@@ -570932,6 +571980,8 @@ export namespace Prisma {
         evaluationCriterions?: EvaluationCriterionUncheckedCreateNestedManyWithoutLecturerInput
         evaluationCouncilMember?: EvaluationCouncilMemberUncheckedCreateNestedManyWithoutLecturerInput
         evaluationCriterionReviews?: EvaluationCriterionUncheckedCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerCreateOrConnectWithoutAnalysisCriterionInput = {
         where: LecturerWhereUniqueInput
@@ -571093,6 +572143,8 @@ export namespace Prisma {
         evaluationCriterions?: EvaluationCriterionUpdateManyWithoutLecturerNestedInput
         evaluationCouncilMember?: EvaluationCouncilMemberUpdateManyWithoutLecturerNestedInput
         evaluationCriterionReviews?: EvaluationCriterionUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type LecturerUncheckedUpdateWithoutAnalysisCriterionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -571126,6 +572178,8 @@ export namespace Prisma {
         evaluationCriterions?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerNestedInput
         evaluationCouncilMember?: EvaluationCouncilMemberUncheckedUpdateManyWithoutLecturerNestedInput
         evaluationCriterionReviews?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type RequirementCriterionUpsertWithWhereUniqueWithoutAnalysisCriterionInput = {
         where: RequirementCriterionWhereUniqueInput
@@ -571236,6 +572290,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionCreateNestedManyWithoutLecturerInput
         evaluationCouncilMember?: EvaluationCouncilMemberCreateNestedManyWithoutLecturerInput
         evaluationCriterionReviews?: EvaluationCriterionCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerUncheckedCreateWithoutEvaluationCriterionsInput = {
         id?: string
@@ -571269,6 +572325,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUncheckedCreateNestedManyWithoutLecturerInput
         evaluationCouncilMember?: EvaluationCouncilMemberUncheckedCreateNestedManyWithoutLecturerInput
         evaluationCriterionReviews?: EvaluationCriterionUncheckedCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerCreateOrConnectWithoutEvaluationCriterionsInput = {
         where: LecturerWhereUniqueInput
@@ -571338,6 +572396,8 @@ export namespace Prisma {
         evaluationCriterions?: EvaluationCriterionCreateNestedManyWithoutLecturerInput
         analysisCriterion?: AnalysisCriterionCreateNestedManyWithoutLecturerInput
         evaluationCouncilMember?: EvaluationCouncilMemberCreateNestedManyWithoutLecturerInput
+        primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerUncheckedCreateWithoutEvaluationCriterionReviewsInput = {
         id?: string
@@ -571371,6 +572431,8 @@ export namespace Prisma {
         evaluationCriterions?: EvaluationCriterionUncheckedCreateNestedManyWithoutLecturerInput
         analysisCriterion?: AnalysisCriterionUncheckedCreateNestedManyWithoutLecturerInput
         evaluationCouncilMember?: EvaluationCouncilMemberUncheckedCreateNestedManyWithoutLecturerInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerCreateOrConnectWithoutEvaluationCriterionReviewsInput = {
         where: LecturerWhereUniqueInput
@@ -571490,6 +572552,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUpdateManyWithoutLecturerNestedInput
         evaluationCouncilMember?: EvaluationCouncilMemberUpdateManyWithoutLecturerNestedInput
         evaluationCriterionReviews?: EvaluationCriterionUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type LecturerUncheckedUpdateWithoutEvaluationCriterionsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -571523,6 +572587,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUncheckedUpdateManyWithoutLecturerNestedInput
         evaluationCouncilMember?: EvaluationCouncilMemberUncheckedUpdateManyWithoutLecturerNestedInput
         evaluationCriterionReviews?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type EvaluationCouncilMemberUpsertWithoutEvaluationCriterionsInput = {
         update: XOR<EvaluationCouncilMemberUpdateWithoutEvaluationCriterionsInput, EvaluationCouncilMemberUncheckedUpdateWithoutEvaluationCriterionsInput>
@@ -572114,6 +573180,8 @@ export namespace Prisma {
         evaluationCriterions?: EvaluationCriterionCreateNestedManyWithoutLecturerInput
         analysisCriterion?: AnalysisCriterionCreateNestedManyWithoutLecturerInput
         evaluationCriterionReviews?: EvaluationCriterionCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerUncheckedCreateWithoutEvaluationCouncilMemberInput = {
         id?: string
@@ -572147,6 +573215,8 @@ export namespace Prisma {
         evaluationCriterions?: EvaluationCriterionUncheckedCreateNestedManyWithoutLecturerInput
         analysisCriterion?: AnalysisCriterionUncheckedCreateNestedManyWithoutLecturerInput
         evaluationCriterionReviews?: EvaluationCriterionUncheckedCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerCreateOrConnectWithoutEvaluationCouncilMemberInput = {
         where: LecturerWhereUniqueInput
@@ -572278,6 +573348,8 @@ export namespace Prisma {
         evaluationCriterions?: EvaluationCriterionUpdateManyWithoutLecturerNestedInput
         analysisCriterion?: AnalysisCriterionUpdateManyWithoutLecturerNestedInput
         evaluationCriterionReviews?: EvaluationCriterionUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type LecturerUncheckedUpdateWithoutEvaluationCouncilMemberInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -572311,6 +573383,8 @@ export namespace Prisma {
         evaluationCriterions?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerNestedInput
         analysisCriterion?: AnalysisCriterionUncheckedUpdateManyWithoutLecturerNestedInput
         evaluationCriterionReviews?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type EvaluationCriterionUpsertWithWhereUniqueWithoutReviewerInput = {
         where: EvaluationCriterionWhereUniqueInput
@@ -574414,6 +575488,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionCreateNestedManyWithoutLecturerInput
         evaluationCouncilMember?: EvaluationCouncilMemberCreateNestedManyWithoutLecturerInput
         evaluationCriterionReviews?: EvaluationCriterionCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerUncheckedCreateWithoutClusterSurveyInput = {
         id?: string
@@ -574447,6 +575523,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUncheckedCreateNestedManyWithoutLecturerInput
         evaluationCouncilMember?: EvaluationCouncilMemberUncheckedCreateNestedManyWithoutLecturerInput
         evaluationCriterionReviews?: EvaluationCriterionUncheckedCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerCreateOrConnectWithoutClusterSurveyInput = {
         where: LecturerWhereUniqueInput
@@ -574776,6 +575854,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionCreateNestedManyWithoutLecturerInput
         evaluationCouncilMember?: EvaluationCouncilMemberCreateNestedManyWithoutLecturerInput
         evaluationCriterionReviews?: EvaluationCriterionCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerUncheckedCreateWithoutSurveyInput = {
         id?: string
@@ -574809,6 +575889,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUncheckedCreateNestedManyWithoutLecturerInput
         evaluationCouncilMember?: EvaluationCouncilMemberUncheckedCreateNestedManyWithoutLecturerInput
         evaluationCriterionReviews?: EvaluationCriterionUncheckedCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerCreateOrConnectWithoutSurveyInput = {
         where: LecturerWhereUniqueInput
@@ -575300,6 +576382,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUpdateManyWithoutLecturerNestedInput
         evaluationCouncilMember?: EvaluationCouncilMemberUpdateManyWithoutLecturerNestedInput
         evaluationCriterionReviews?: EvaluationCriterionUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type LecturerUncheckedUpdateWithoutSurveyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -575333,6 +576417,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUncheckedUpdateManyWithoutLecturerNestedInput
         evaluationCouncilMember?: EvaluationCouncilMemberUncheckedUpdateManyWithoutLecturerNestedInput
         evaluationCriterionReviews?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type SubjectClassUpsertWithoutSurveyInput = {
         update: XOR<SubjectClassUpdateWithoutSurveyInput, SubjectClassUncheckedUpdateWithoutSurveyInput>
@@ -579690,6 +580776,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionCreateNestedManyWithoutLecturerInput
         evaluationCouncilMember?: EvaluationCouncilMemberCreateNestedManyWithoutLecturerInput
         evaluationCriterionReviews?: EvaluationCriterionCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerUncheckedCreateWithoutExamRoomsMainInput = {
         id?: string
@@ -579723,6 +580811,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUncheckedCreateNestedManyWithoutLecturerInput
         evaluationCouncilMember?: EvaluationCouncilMemberUncheckedCreateNestedManyWithoutLecturerInput
         evaluationCriterionReviews?: EvaluationCriterionUncheckedCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerCreateOrConnectWithoutExamRoomsMainInput = {
         where: LecturerWhereUniqueInput
@@ -579760,6 +580850,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionCreateNestedManyWithoutLecturerInput
         evaluationCouncilMember?: EvaluationCouncilMemberCreateNestedManyWithoutLecturerInput
         evaluationCriterionReviews?: EvaluationCriterionCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerUncheckedCreateWithoutExamRoomsExtraInput = {
         id?: string
@@ -579793,6 +580885,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUncheckedCreateNestedManyWithoutLecturerInput
         evaluationCouncilMember?: EvaluationCouncilMemberUncheckedCreateNestedManyWithoutLecturerInput
         evaluationCriterionReviews?: EvaluationCriterionUncheckedCreateNestedManyWithoutLecturerReviewInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     };
     export type LecturerCreateOrConnectWithoutExamRoomsExtraInput = {
         where: LecturerWhereUniqueInput
@@ -579906,6 +581000,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUpdateManyWithoutLecturerNestedInput
         evaluationCouncilMember?: EvaluationCouncilMemberUpdateManyWithoutLecturerNestedInput
         evaluationCriterionReviews?: EvaluationCriterionUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type LecturerUncheckedUpdateWithoutExamRoomsMainInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -579939,6 +581035,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUncheckedUpdateManyWithoutLecturerNestedInput
         evaluationCouncilMember?: EvaluationCouncilMemberUncheckedUpdateManyWithoutLecturerNestedInput
         evaluationCriterionReviews?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type LecturerUpsertWithoutExamRoomsExtraInput = {
         update: XOR<LecturerUpdateWithoutExamRoomsExtraInput, LecturerUncheckedUpdateWithoutExamRoomsExtraInput>
@@ -579981,6 +581079,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUpdateManyWithoutLecturerNestedInput
         evaluationCouncilMember?: EvaluationCouncilMemberUpdateManyWithoutLecturerNestedInput
         evaluationCriterionReviews?: EvaluationCriterionUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type LecturerUncheckedUpdateWithoutExamRoomsExtraInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -580014,6 +581114,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUncheckedUpdateManyWithoutLecturerNestedInput
         evaluationCouncilMember?: EvaluationCouncilMemberUncheckedUpdateManyWithoutLecturerNestedInput
         evaluationCriterionReviews?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type ExamPaperUpsertWithWhereUniqueWithoutExamListInput = {
         where: ExamPaperWhereUniqueInput
@@ -609650,6 +610752,8 @@ export namespace Prisma {
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
+        primarySupervisorId?: string | null
+        secondarySupervisorId?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
         supervisorName?: string | null
@@ -609705,6 +610809,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUpdateManyWithoutLecturerNestedInput
         evaluationCouncilMember?: EvaluationCouncilMemberUpdateManyWithoutLecturerNestedInput
         evaluationCriterionReviews?: EvaluationCriterionUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type LecturerUncheckedUpdateWithoutOrganizationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -609738,6 +610844,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUncheckedUpdateManyWithoutLecturerNestedInput
         evaluationCouncilMember?: EvaluationCouncilMemberUncheckedUpdateManyWithoutLecturerNestedInput
         evaluationCriterionReviews?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type LecturerUncheckedUpdateManyWithoutOrganizationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -610578,6 +611686,8 @@ export namespace Prisma {
         registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        primarySupervisor?: LecturerUpdateOneWithoutPrimarySupervisorThesisProjectNestedInput
+        secondarySupervisor?: LecturerUpdateOneWithoutSecondarySupervisorThesisProjectNestedInput
         subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
         thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
         supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
@@ -610619,6 +611729,8 @@ export namespace Prisma {
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
+        primarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        secondarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -610673,6 +611785,8 @@ export namespace Prisma {
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
+        primarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        secondarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -633998,6 +635112,8 @@ export namespace Prisma {
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
+        primarySupervisorId?: string | null
+        secondarySupervisorId?: string | null
         thesisSessionId?: string | null
         supervisorName?: string | null
         supervisorId?: string | null
@@ -634411,6 +635527,8 @@ export namespace Prisma {
         registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        primarySupervisor?: LecturerUpdateOneWithoutPrimarySupervisorThesisProjectNestedInput
+        secondarySupervisor?: LecturerUpdateOneWithoutSecondarySupervisorThesisProjectNestedInput
         thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
         supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
         supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
@@ -634452,6 +635570,8 @@ export namespace Prisma {
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
+        primarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        secondarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -634506,6 +635626,8 @@ export namespace Prisma {
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
+        primarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        secondarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -638565,6 +639687,8 @@ export namespace Prisma {
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
+        primarySupervisorId?: string | null
+        secondarySupervisorId?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
         supervisorName?: string | null
@@ -638975,6 +640099,8 @@ export namespace Prisma {
         registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        primarySupervisor?: LecturerUpdateOneWithoutPrimarySupervisorThesisProjectNestedInput
+        secondarySupervisor?: LecturerUpdateOneWithoutSecondarySupervisorThesisProjectNestedInput
         subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
         thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
         supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
@@ -639016,6 +640142,8 @@ export namespace Prisma {
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
+        primarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        secondarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -639070,6 +640198,8 @@ export namespace Prisma {
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
+        primarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        secondarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -644135,6 +645265,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUpdateManyWithoutLecturerNestedInput
         evaluationCouncilMember?: EvaluationCouncilMemberUpdateManyWithoutLecturerNestedInput
         evaluationCriterionReviews?: EvaluationCriterionUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type LecturerUncheckedUpdateWithoutLecturerTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -644168,6 +645300,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUncheckedUpdateManyWithoutLecturerNestedInput
         evaluationCouncilMember?: EvaluationCouncilMemberUncheckedUpdateManyWithoutLecturerNestedInput
         evaluationCriterionReviews?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type LecturerUncheckedUpdateManyWithoutLecturerTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -644853,6 +645987,110 @@ export namespace Prisma {
         evaluationCouncilId: string
         groupName?: string | null
         role?: $Enums.EvaluationMemberRole | null
+    };
+    export type ThesisProjectCreateManyPrimarySupervisorInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        title?: string | null
+        titleEN?: string | null
+        summary?: string | null
+        objectives?: string | null
+        scope?: string | null
+        methodology?: string | null
+        expectedResults?: string | null
+        requirements?: string | null
+        technologies?: string | null
+        thesisType?: $Enums.ThesisType
+        status?: $Enums.ThesisProjectStatus
+        language?: string | null
+        type?: string | null
+        isLock?: boolean
+        editProject?: string | null
+        firstCheckProgress?: number | null
+        secondCheckProgress?: number | null
+        isEligibleForDefense?: boolean
+        secondarySupervisorId?: string | null
+        subjectClassId?: string | null
+        thesisSessionId?: string | null
+        supervisorName?: string | null
+        supervisorId?: string | null
+        supervisorPaymentId?: string | null
+        coSupervisorName?: string | null
+        coSupervisorId?: string | null
+        coSupervisorPaymentId?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
+        organizationId?: string | null
+        maxStudents?: number | null
+        councilId?: string | null
+        roomId?: string | null
+        defenseDate?: Date | string | null
+        defenseSessionId?: string | null
+        registrationStart?: Date | string | null
+        registrationEnd?: Date | string | null
+        projectStart?: Date | string | null
+        projectEnd?: Date | string | null
+    };
+    export type ThesisProjectCreateManySecondarySupervisorInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        title?: string | null
+        titleEN?: string | null
+        summary?: string | null
+        objectives?: string | null
+        scope?: string | null
+        methodology?: string | null
+        expectedResults?: string | null
+        requirements?: string | null
+        technologies?: string | null
+        thesisType?: $Enums.ThesisType
+        status?: $Enums.ThesisProjectStatus
+        language?: string | null
+        type?: string | null
+        isLock?: boolean
+        editProject?: string | null
+        firstCheckProgress?: number | null
+        secondCheckProgress?: number | null
+        isEligibleForDefense?: boolean
+        primarySupervisorId?: string | null
+        subjectClassId?: string | null
+        thesisSessionId?: string | null
+        supervisorName?: string | null
+        supervisorId?: string | null
+        supervisorPaymentId?: string | null
+        coSupervisorName?: string | null
+        coSupervisorId?: string | null
+        coSupervisorPaymentId?: string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
+        organizationId?: string | null
+        maxStudents?: number | null
+        councilId?: string | null
+        roomId?: string | null
+        defenseDate?: Date | string | null
+        defenseSessionId?: string | null
+        registrationStart?: Date | string | null
+        registrationEnd?: Date | string | null
+        projectStart?: Date | string | null
+        projectEnd?: Date | string | null
     };
     export type SubjectClassUpdateWithoutMainLecturerInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -646264,6 +647502,334 @@ export namespace Prisma {
         actionPlan?: StringFieldUpdateOperationsInput | string
         score?: StringFieldUpdateOperationsInput | string
     };
+    export type ThesisProjectUpdateWithoutPrimarySupervisorInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        title?: NullableStringFieldUpdateOperationsInput | string | null
+        titleEN?: NullableStringFieldUpdateOperationsInput | string | null
+        summary?: NullableStringFieldUpdateOperationsInput | string | null
+        objectives?: NullableStringFieldUpdateOperationsInput | string | null
+        scope?: NullableStringFieldUpdateOperationsInput | string | null
+        methodology?: NullableStringFieldUpdateOperationsInput | string | null
+        expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
+        requirements?: NullableStringFieldUpdateOperationsInput | string | null
+        technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
+        status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
+        language?: NullableStringFieldUpdateOperationsInput | string | null
+        type?: NullableStringFieldUpdateOperationsInput | string | null
+        isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+        secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+        isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
+        maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
+        defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        secondarySupervisor?: LecturerUpdateOneWithoutSecondarySupervisorThesisProjectNestedInput
+        subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
+        thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
+        supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
+        supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
+        coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
+        coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
+        organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
+        council?: CouncilUpdateOneWithoutThesisNestedInput
+        room?: RoomUpdateOneWithoutThesisProjectNestedInput
+        defenseSession?: DefenseSessionUpdateOneWithoutThesisProjectNestedInput
+        defenseRecord?: DefenseRecordUpdateOneWithoutThesisNestedInput
+        librarySubmission?: LibrarySubmissionUpdateOneWithoutThesisNestedInput
+        decisions?: DecisionUpdateManyWithoutThesisProjectNestedInput
+        registrations?: StudentThesisRegistrationUpdateManyWithoutThesisProjectNestedInput
+    };
+    export type ThesisProjectUncheckedUpdateWithoutPrimarySupervisorInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        title?: NullableStringFieldUpdateOperationsInput | string | null
+        titleEN?: NullableStringFieldUpdateOperationsInput | string | null
+        summary?: NullableStringFieldUpdateOperationsInput | string | null
+        objectives?: NullableStringFieldUpdateOperationsInput | string | null
+        scope?: NullableStringFieldUpdateOperationsInput | string | null
+        methodology?: NullableStringFieldUpdateOperationsInput | string | null
+        expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
+        requirements?: NullableStringFieldUpdateOperationsInput | string | null
+        technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
+        status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
+        language?: NullableStringFieldUpdateOperationsInput | string | null
+        type?: NullableStringFieldUpdateOperationsInput | string | null
+        isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+        secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+        isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
+        secondarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
+        organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+        maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
+        councilId?: NullableStringFieldUpdateOperationsInput | string | null
+        roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        defenseSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        defenseRecord?: DefenseRecordUncheckedUpdateOneWithoutThesisNestedInput
+        librarySubmission?: LibrarySubmissionUncheckedUpdateOneWithoutThesisNestedInput
+        decisions?: DecisionUncheckedUpdateManyWithoutThesisProjectNestedInput
+        registrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutThesisProjectNestedInput
+    };
+    export type ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        title?: NullableStringFieldUpdateOperationsInput | string | null
+        titleEN?: NullableStringFieldUpdateOperationsInput | string | null
+        summary?: NullableStringFieldUpdateOperationsInput | string | null
+        objectives?: NullableStringFieldUpdateOperationsInput | string | null
+        scope?: NullableStringFieldUpdateOperationsInput | string | null
+        methodology?: NullableStringFieldUpdateOperationsInput | string | null
+        expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
+        requirements?: NullableStringFieldUpdateOperationsInput | string | null
+        technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
+        status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
+        language?: NullableStringFieldUpdateOperationsInput | string | null
+        type?: NullableStringFieldUpdateOperationsInput | string | null
+        isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+        secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+        isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
+        secondarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
+        organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+        maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
+        councilId?: NullableStringFieldUpdateOperationsInput | string | null
+        roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        defenseSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    };
+    export type ThesisProjectUpdateWithoutSecondarySupervisorInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        title?: NullableStringFieldUpdateOperationsInput | string | null
+        titleEN?: NullableStringFieldUpdateOperationsInput | string | null
+        summary?: NullableStringFieldUpdateOperationsInput | string | null
+        objectives?: NullableStringFieldUpdateOperationsInput | string | null
+        scope?: NullableStringFieldUpdateOperationsInput | string | null
+        methodology?: NullableStringFieldUpdateOperationsInput | string | null
+        expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
+        requirements?: NullableStringFieldUpdateOperationsInput | string | null
+        technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
+        status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
+        language?: NullableStringFieldUpdateOperationsInput | string | null
+        type?: NullableStringFieldUpdateOperationsInput | string | null
+        isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+        secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+        isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
+        maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
+        defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        primarySupervisor?: LecturerUpdateOneWithoutPrimarySupervisorThesisProjectNestedInput
+        subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
+        thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
+        supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
+        supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
+        coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
+        coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
+        organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
+        council?: CouncilUpdateOneWithoutThesisNestedInput
+        room?: RoomUpdateOneWithoutThesisProjectNestedInput
+        defenseSession?: DefenseSessionUpdateOneWithoutThesisProjectNestedInput
+        defenseRecord?: DefenseRecordUpdateOneWithoutThesisNestedInput
+        librarySubmission?: LibrarySubmissionUpdateOneWithoutThesisNestedInput
+        decisions?: DecisionUpdateManyWithoutThesisProjectNestedInput
+        registrations?: StudentThesisRegistrationUpdateManyWithoutThesisProjectNestedInput
+    };
+    export type ThesisProjectUncheckedUpdateWithoutSecondarySupervisorInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        title?: NullableStringFieldUpdateOperationsInput | string | null
+        titleEN?: NullableStringFieldUpdateOperationsInput | string | null
+        summary?: NullableStringFieldUpdateOperationsInput | string | null
+        objectives?: NullableStringFieldUpdateOperationsInput | string | null
+        scope?: NullableStringFieldUpdateOperationsInput | string | null
+        methodology?: NullableStringFieldUpdateOperationsInput | string | null
+        expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
+        requirements?: NullableStringFieldUpdateOperationsInput | string | null
+        technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
+        status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
+        language?: NullableStringFieldUpdateOperationsInput | string | null
+        type?: NullableStringFieldUpdateOperationsInput | string | null
+        isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+        secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+        isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
+        primarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
+        organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+        maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
+        councilId?: NullableStringFieldUpdateOperationsInput | string | null
+        roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        defenseSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        defenseRecord?: DefenseRecordUncheckedUpdateOneWithoutThesisNestedInput
+        librarySubmission?: LibrarySubmissionUncheckedUpdateOneWithoutThesisNestedInput
+        decisions?: DecisionUncheckedUpdateManyWithoutThesisProjectNestedInput
+        registrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutThesisProjectNestedInput
+    };
+    export type ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        title?: NullableStringFieldUpdateOperationsInput | string | null
+        titleEN?: NullableStringFieldUpdateOperationsInput | string | null
+        summary?: NullableStringFieldUpdateOperationsInput | string | null
+        objectives?: NullableStringFieldUpdateOperationsInput | string | null
+        scope?: NullableStringFieldUpdateOperationsInput | string | null
+        methodology?: NullableStringFieldUpdateOperationsInput | string | null
+        expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
+        requirements?: NullableStringFieldUpdateOperationsInput | string | null
+        technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
+        status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
+        language?: NullableStringFieldUpdateOperationsInput | string | null
+        type?: NullableStringFieldUpdateOperationsInput | string | null
+        isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+        secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+        isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
+        primarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
+        organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+        maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
+        councilId?: NullableStringFieldUpdateOperationsInput | string | null
+        roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        defenseSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    };
     export type StudentResearchRegistrationCreateManyResearchProjectInput = {
         id?: string
         code?: string | null
@@ -646363,6 +647929,8 @@ export namespace Prisma {
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
+        primarySupervisorId?: string | null
+        secondarySupervisorId?: string | null
         subjectClassId?: string | null
         supervisorName?: string | null
         supervisorId?: string | null
@@ -646426,6 +647994,8 @@ export namespace Prisma {
         registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        primarySupervisor?: LecturerUpdateOneWithoutPrimarySupervisorThesisProjectNestedInput
+        secondarySupervisor?: LecturerUpdateOneWithoutSecondarySupervisorThesisProjectNestedInput
         subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
         supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
         supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
@@ -646467,6 +648037,8 @@ export namespace Prisma {
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
+        primarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        secondarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -646521,6 +648093,8 @@ export namespace Prisma {
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
+        primarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        secondarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -646703,6 +648277,8 @@ export namespace Prisma {
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
+        primarySupervisorId?: string | null
+        secondarySupervisorId?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
         supervisorName?: string | null
@@ -646766,6 +648342,8 @@ export namespace Prisma {
         registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        primarySupervisor?: LecturerUpdateOneWithoutPrimarySupervisorThesisProjectNestedInput
+        secondarySupervisor?: LecturerUpdateOneWithoutSecondarySupervisorThesisProjectNestedInput
         subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
         thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
         supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
@@ -646807,6 +648385,8 @@ export namespace Prisma {
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
+        primarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        secondarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -646861,6 +648441,8 @@ export namespace Prisma {
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
+        primarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        secondarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -646911,6 +648493,8 @@ export namespace Prisma {
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
+        primarySupervisorId?: string | null
+        secondarySupervisorId?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
         supervisorName?: string | null
@@ -646961,6 +648545,8 @@ export namespace Prisma {
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
+        primarySupervisorId?: string | null
+        secondarySupervisorId?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
         supervisorName?: string | null
@@ -647178,6 +648764,8 @@ export namespace Prisma {
         registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        primarySupervisor?: LecturerUpdateOneWithoutPrimarySupervisorThesisProjectNestedInput
+        secondarySupervisor?: LecturerUpdateOneWithoutSecondarySupervisorThesisProjectNestedInput
         subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
         thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
         supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
@@ -647219,6 +648807,8 @@ export namespace Prisma {
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
+        primarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        secondarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -647273,6 +648863,8 @@ export namespace Prisma {
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
+        primarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        secondarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -647336,6 +648928,8 @@ export namespace Prisma {
         registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        primarySupervisor?: LecturerUpdateOneWithoutPrimarySupervisorThesisProjectNestedInput
+        secondarySupervisor?: LecturerUpdateOneWithoutSecondarySupervisorThesisProjectNestedInput
         subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
         thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
         supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
@@ -647377,6 +648971,8 @@ export namespace Prisma {
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
+        primarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        secondarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -647431,6 +649027,8 @@ export namespace Prisma {
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
+        primarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        secondarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -648037,6 +649635,8 @@ export namespace Prisma {
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
+        primarySupervisorId?: string | null
+        secondarySupervisorId?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
         supervisorName?: string | null
@@ -648112,6 +649712,8 @@ export namespace Prisma {
         registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        primarySupervisor?: LecturerUpdateOneWithoutPrimarySupervisorThesisProjectNestedInput
+        secondarySupervisor?: LecturerUpdateOneWithoutSecondarySupervisorThesisProjectNestedInput
         subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
         thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
         supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
@@ -648153,6 +649755,8 @@ export namespace Prisma {
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
+        primarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        secondarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -648207,6 +649811,8 @@ export namespace Prisma {
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
+        primarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        secondarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -648585,6 +650191,8 @@ export namespace Prisma {
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
+        primarySupervisorId?: string | null
+        secondarySupervisorId?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
         supervisorName?: string | null
@@ -648635,6 +650243,8 @@ export namespace Prisma {
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
+        primarySupervisorId?: string | null
+        secondarySupervisorId?: string | null
         subjectClassId?: string | null
         thesisSessionId?: string | null
         supervisorName?: string | null
@@ -648698,6 +650308,8 @@ export namespace Prisma {
         registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        primarySupervisor?: LecturerUpdateOneWithoutPrimarySupervisorThesisProjectNestedInput
+        secondarySupervisor?: LecturerUpdateOneWithoutSecondarySupervisorThesisProjectNestedInput
         subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
         thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
         supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
@@ -648739,6 +650351,8 @@ export namespace Prisma {
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
+        primarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        secondarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -648793,6 +650407,8 @@ export namespace Prisma {
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
+        primarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        secondarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -648856,6 +650472,8 @@ export namespace Prisma {
         registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        primarySupervisor?: LecturerUpdateOneWithoutPrimarySupervisorThesisProjectNestedInput
+        secondarySupervisor?: LecturerUpdateOneWithoutSecondarySupervisorThesisProjectNestedInput
         subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
         thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
         supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
@@ -648897,6 +650515,8 @@ export namespace Prisma {
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
+        primarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        secondarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -648951,6 +650571,8 @@ export namespace Prisma {
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
+        primarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        secondarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -649714,6 +651336,8 @@ export namespace Prisma {
         evaluationCriterions?: EvaluationCriterionUpdateManyWithoutLecturerNestedInput
         analysisCriterion?: AnalysisCriterionUpdateManyWithoutLecturerNestedInput
         evaluationCouncilMember?: EvaluationCouncilMemberUpdateManyWithoutLecturerNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type LecturerUncheckedUpdateWithoutEvaluationCriterionReviewsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -649747,6 +651371,8 @@ export namespace Prisma {
         evaluationCriterions?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerNestedInput
         analysisCriterion?: AnalysisCriterionUncheckedUpdateManyWithoutLecturerNestedInput
         evaluationCouncilMember?: EvaluationCouncilMemberUncheckedUpdateManyWithoutLecturerNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type LecturerUncheckedUpdateManyWithoutEvaluationCriterionReviewsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -651258,6 +652884,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUpdateManyWithoutLecturerNestedInput
         evaluationCouncilMember?: EvaluationCouncilMemberUpdateManyWithoutLecturerNestedInput
         evaluationCriterionReviews?: EvaluationCriterionUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type LecturerUncheckedUpdateWithoutClusterSurveyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -651291,6 +652919,8 @@ export namespace Prisma {
         analysisCriterion?: AnalysisCriterionUncheckedUpdateManyWithoutLecturerNestedInput
         evaluationCouncilMember?: EvaluationCouncilMemberUncheckedUpdateManyWithoutLecturerNestedInput
         evaluationCriterionReviews?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerReviewNestedInput
+        primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
+        secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     };
     export type LecturerUncheckedUpdateManyWithoutClusterSurveyInput = {
         id?: StringFieldUpdateOperationsInput | string

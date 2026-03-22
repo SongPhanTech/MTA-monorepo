@@ -6,7 +6,7 @@
  */
 
 export type GenerateDiplomaNumber400 = {
-  message: string;
-  existing?: string[];
-  shouldSkip?: number[];
-};
+    message: string
+    existing?: string[]
+    shouldSkip?: number[]
+}

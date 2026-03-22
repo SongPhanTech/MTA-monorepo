@@ -4,13 +4,13 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { PostApiStatsLateGradeSubjects200DataItemStatus } from './postApiStatsLateGradeSubjects200DataItemStatus';
+import type { PostApiStatsLateGradeSubjects200DataItemStatus } from './postApiStatsLateGradeSubjects200DataItemStatus'
 
 export type PostApiStatsLateGradeSubjects200DataItem = {
-  subjectName: string;
-  department: string;
-  faculty: string;
-  dueDate: string;
-  daysLate: number;
-  status: PostApiStatsLateGradeSubjects200DataItemStatus;
-};
+    subjectName: string
+    department: string
+    faculty: string
+    dueDate: string
+    daysLate: number
+    status: PostApiStatsLateGradeSubjects200DataItemStatus
+}

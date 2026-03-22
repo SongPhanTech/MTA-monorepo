@@ -4,9 +4,9 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { OpenSubjectClassReExamResponse } from './openSubjectClassReExamResponse';
+import type { OpenSubjectClassReExamResponse } from './openSubjectClassReExamResponse'
 
 export type ListOfOpenSubjectClassReExamResponseAllOf = {
-  data: OpenSubjectClassReExamResponse[];
-  count: number;
-};
+    data: OpenSubjectClassReExamResponse[]
+    count: number
+}

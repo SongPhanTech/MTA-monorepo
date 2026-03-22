@@ -164,6 +164,7 @@ export default {
     "DANH_MUC_HO_SO_NGANH_HOC": "/danh-muc-ho-so/nganh-hoc",
     "DANH_MUC_HO_SO_NHOM_MAU": "/danh-muc-ho-so/nhom-mau",
     "DANH_MUC_HO_SO_QUAN_HE_THAN_NHAN": "/danh-muc-ho-so/quan-he-than-nhan",
+    "DANH_MUC_HO_SO_QUOC_GIA": "/danh-muc-ho-so/quoc-gia",
     "DANH_MUC_HO_SO_TINH_TRANG_CONG_TAC": "/danh-muc-ho-so/tinh-trang-cong-tac",
     "DANH_MUC_HO_SO_TINH_TRANG_DI_HOC_TAP": "/danh-muc-ho-so/tinh-trang-di-hoc-tap",
     "DANH_MUC_HO_SO_TINH_TRANG_HON_NHAN": "/danh-muc-ho-so/tinh-trang-hon-nhan",

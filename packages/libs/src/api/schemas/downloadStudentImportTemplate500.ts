@@ -6,6 +6,6 @@
  */
 
 export type DownloadStudentImportTemplate500 = {
-  message: string;
-  error?: string;
-};
+    message: string
+    error?: string
+}
