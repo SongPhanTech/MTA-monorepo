@@ -123,7 +123,11 @@ export default function ClassRegisterSession() {
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         where: { active: true, trainingObjectTypeId, deletedAt: null },
-        orderBy: { createdAt: 'desc' },
+        orderBy: {
+            semesterStart: {
+                startDate: 'desc',
+            },
+        },
     })
 
     const trainingCourseOptions = useMemo(

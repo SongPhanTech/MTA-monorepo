@@ -76,7 +76,9 @@ export default function GraduationRankingPage() {
         where,
         include: includeQuery,
         orderBy: {
-            name: 'asc',
+            semesterStart: {
+                startDate: 'desc',
+            },
         },
     })
 

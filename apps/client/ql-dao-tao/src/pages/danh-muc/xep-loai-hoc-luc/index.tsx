@@ -123,7 +123,9 @@ export default function AcademicRankingConvertPage() {
             },
         },
         orderBy: {
-            createdAt: 'desc',
+            semesterStart: {
+                startDate: 'desc',
+            },
         },
     })
 

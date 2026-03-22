@@ -1,6 +1,7 @@
 import { Button, Checkbox, Col, Flex, Modal, message, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
+import { DownloadOutlined } from '@ant-design/icons/lib/icons'
 import { queryClient } from '@api/index'
 import Table from '@components/commons/table'
 import TableCollapse from '@components/commons/tableCollapse'
@@ -19,14 +20,13 @@ import {
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import {
-    useExportStudentScholarshipJson,
     exportStudentScholarshipExcel,
+    useExportStudentScholarshipJson,
 } from '@workspace/libs/api/training'
+import { saveAs } from 'file-saver'
 import { BookPlus } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { saveAs } from 'file-saver'
-import { DownloadOutlined } from '@ant-design/icons/lib/icons'
 
 dayjs.locale('vi')
 
@@ -128,6 +128,11 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
 
     const { data: studentDataAward, refetch: refetchAward } = useFindManyTrainingCourse({
         where,
+        orderBy: {
+            semesterStart: {
+                startDate: 'desc',
+            },
+        },
         include: {
             scholarships: {
                 include: {

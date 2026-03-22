@@ -450,16 +450,13 @@ const PutTrainingCourseModal = () => {
 
     const schoolYearIdForm = Form.useWatch('schoolYearId', form)
 
-    const { data: dataSchoolYear = [] } = useFindManySchoolYear()
+    const { data: dataSchoolYear = [] } = useFindManySchoolYear({
+        orderBy: { startDate: 'desc' },
+    })
     const { data: semesterData = [] } = useFindManySemester({
-        where: schoolYearIdForm
-            ? {
-                  schoolYearId: schoolYearIdForm,
-              }
-            : undefined,
-        include: {
-            schoolYear: true,
-        },
+        where: schoolYearIdForm ? { schoolYearId: schoolYearIdForm } : undefined,
+        include: { schoolYear: true },
+        orderBy: { startDate: 'desc' },
     })
     const { data: trainingCourse } = useFindUniqueTrainingCourse(
         {
@@ -543,6 +540,7 @@ const PutTrainingCourseModal = () => {
             setDocument(trainingCourse?.documentFiles)
         } else if (selectedTrainingCourse) {
             form.setFieldsValue({
+                trainingObjectTypeId,
                 coef_1: selectedTrainingCourse.coef_1,
                 coef_2: selectedTrainingCourse.coef_2,
                 coef_3: selectedTrainingCourse.coef_3,
@@ -972,7 +970,7 @@ const PutTrainingCourseModal = () => {
                                         )
                                     }
 
-                                    if (scoreToPass && numValue >= scoreToPass) {
+                                    if (scoreToPass && numValue > scoreToPass) {
                                         return Promise.reject(
                                             new Error(
                                                 'Điểm thi tối thiểu để qua phải nhỏ hơn điểm qua môn'

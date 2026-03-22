@@ -130,6 +130,11 @@ export default function StudentGradeSystem() {
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse(
         {
+            orderBy: {
+                semesterStart: {
+                    startDate: 'desc',
+                },
+            },
             where: {
                 active: true,
                 deletedAt: null,

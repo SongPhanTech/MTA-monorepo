@@ -389,6 +389,7 @@ export function formatLecturerName(
     }> | null
 ) {
     return (
+        `${lecturer?.code ? `${lecturer?.code} - ` : ''}` +
         ([
             lecturer?.userProfile?.academicRankType?.sMa,
             lecturer?.userProfile?.academicDegreeType?.sMa,
@@ -396,9 +397,7 @@ export function formatLecturerName(
             .filter(Boolean)
             .join('.') +
             ' ' +
-            lecturer?.userProfile?.fullname ||
-            lecturer?.code) ??
-        '-'
+            lecturer?.userProfile?.fullname)
     )
 }
 

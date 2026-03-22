@@ -304,7 +304,11 @@ export default function UserProfilePageDs() {
         include: {
             fixedClass: true,
         },
-        orderBy: { name: 'asc' },
+        orderBy: {
+            semesterStart: {
+                startDate: 'desc',
+            },
+        },
         where: { trainingObjectTypeId, deletedAt: null, active: true },
     })
 

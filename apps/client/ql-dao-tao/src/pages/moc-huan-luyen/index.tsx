@@ -130,7 +130,9 @@ export default function MilestonePage() {
             hideSpinner()
         }
     }
-    const { data: dataSchoolYear = [] } = useFindManySchoolYear()
+    const { data: dataSchoolYear = [] } = useFindManySchoolYear({
+        orderBy: { startDate: 'desc' },
+    })
 
     return (
         <div>

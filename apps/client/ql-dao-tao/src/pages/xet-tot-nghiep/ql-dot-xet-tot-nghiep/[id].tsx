@@ -1,7 +1,6 @@
 import { CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
-import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import ViewIcon from '@components/icons/view'
 import GraduationDecision from '@components/sub-pages/graduationDecision'

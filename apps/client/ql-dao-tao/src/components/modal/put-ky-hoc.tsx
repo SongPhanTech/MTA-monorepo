@@ -36,7 +36,8 @@ const PutSemesterModal = () => {
     const { options } = useSemesterTypeOptions()
 
     const { data = [] } = useFindManySchoolYear({
-        take: 1000,
+        orderBy: { startDate: 'desc' },
+        take: 100,
         skip: 0,
     })
 

@@ -62,7 +62,11 @@ const LopBienCheItem: React.FC<LopBienCheItemProps> = ({
             deletedAt: null,
             active: true,
         },
-        orderBy: { name: 'asc' },
+        orderBy: {
+            semesterStart: {
+                startDate: 'desc',
+            },
+        },
     })
 
     // Xây dựng điều kiện filter cho FixedClass

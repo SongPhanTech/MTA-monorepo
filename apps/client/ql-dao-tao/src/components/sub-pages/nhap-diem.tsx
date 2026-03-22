@@ -53,7 +53,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 
 type FilterTable = FilterProps & {
     fullname?: string
-    fixedClassName?: string
+    fixedClassCode?: string
     attendanceScore?: 'asc' | 'desc'
     midtermScore?: 'asc' | 'desc'
     examScore?: 'asc' | 'desc'
@@ -98,7 +98,7 @@ export default function NhapDiem({
     const [importModalVisible, setImportModalVisible] = useState(false)
     const [filterTable, setFilterTable] = useState<FilterTable>({
         fullname: '',
-        fixedClassName: '',
+        fixedClassCode: '',
         dateOfBirth: undefined,
         attendanceScore: undefined,
         midtermScore: undefined,
@@ -138,12 +138,12 @@ export default function NhapDiem({
                           },
                       }
                     : {}),
-                ...(filterTable.fixedClassName
+                ...(filterTable.fixedClassCode
                     ? {
                           student: {
                               fixedClass: {
-                                  name: {
-                                      contains: filterTable.fixedClassName,
+                                  code: {
+                                      contains: filterTable.fixedClassCode,
                                       mode: 'insensitive',
                                   },
                               },
@@ -1174,11 +1174,15 @@ export default function NhapDiem({
                             },
                             {
                                 title: 'Lớp',
-                                dataIndex: 'fixedClassName',
+                                dataIndex: 'fixedClassCode',
                                 width: 100,
                                 align: 'center',
                                 type: 'input',
-                                render: (_, record) => record.student?.fixedClass?.code || '',
+                                render: (_, record) => (
+                                    <Tooltip title={record.student?.fixedClass?.name}>
+                                        {record.student?.fixedClass?.code}
+                                    </Tooltip>
+                                ),
                             },
                             // #region Điểm TX
                             {

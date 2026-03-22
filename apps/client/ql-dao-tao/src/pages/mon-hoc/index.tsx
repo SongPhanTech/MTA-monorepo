@@ -86,7 +86,9 @@ export default function SubjectVersionPage({ subjectInfo }: any) {
             hideSpinner()
         }
     }
-    const { data: dataSchoolYear = [], refetch: refetchSchoolYear } = useFindManySchoolYear()
+    const { data: dataSchoolYear = [], refetch: refetchSchoolYear } = useFindManySchoolYear({
+        orderBy: { startDate: 'desc' },
+    })
     useEffect(() => {
         if (dataSchoolYear && dataSchoolYear.length > 0) {
             const today = new Date()

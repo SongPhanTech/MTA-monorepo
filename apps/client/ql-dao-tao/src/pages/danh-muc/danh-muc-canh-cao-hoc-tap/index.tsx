@@ -108,7 +108,11 @@ export default function AcademicWarningRule() {
             academicWarningRule: true,
             trainingObjectType: true,
         },
-        orderBy: { createdAt: 'desc' },
+        orderBy: {
+            semesterStart: {
+                startDate: 'desc',
+            },
+        },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
@@ -149,7 +153,11 @@ export default function AcademicWarningRule() {
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         where: { active: true },
-        orderBy: { name: 'asc' },
+        orderBy: {
+            semesterStart: {
+                startDate: 'desc',
+            },
+        },
     })
 
     return (

@@ -15,6 +15,7 @@ import {
     useUpdateSurvey,
 } from '@workspace/db/hooks'
 import { useCreateClusterSurvey } from '@workspace/libs/api/exam'
+import { sqlTransaction } from '@workspace/libs/api/model'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import {
     Button,
@@ -31,7 +32,7 @@ import {
 import dayjs from 'dayjs'
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { sqlTransaction } from '@workspace/libs/api/model'
+
 const { Step } = Steps
 
 export type PutSurveyType = Survey & {
@@ -338,7 +339,7 @@ const PutSurveyModal = () => {
         orderBy: { startDate: 'desc' },
         include: {
             semesters: {
-                orderBy: { createdAt: 'desc' },
+                orderBy: { startDate: 'desc' },
             },
         },
     })

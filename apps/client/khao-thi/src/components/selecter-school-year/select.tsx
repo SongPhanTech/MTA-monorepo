@@ -11,9 +11,7 @@ const SelecterSchoolYear = ({ className }: SelecterSchoolYearProps) => {
     const { id: schoolYearId, onSelect } = useSchoolYearStore()
 
     const { data: schoolYear = [], isLoading: schoolYearLoading } = useFindManySchoolYear({
-        orderBy: {
-            startDate: 'desc',
-        },
+        orderBy: { startDate: 'desc' },
     })
 
     const handleChange = (value: string) => {

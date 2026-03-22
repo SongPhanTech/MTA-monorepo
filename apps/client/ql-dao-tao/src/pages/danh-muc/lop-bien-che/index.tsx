@@ -143,7 +143,11 @@ export default function FixedClassPage() {
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         where: { trainingObjectTypeId, deletedAt: null, active: true },
-        orderBy: { name: 'asc' },
+        orderBy: {
+            semesterStart: {
+                startDate: 'desc',
+            },
+        },
     })
     const { data: curriculumVersionData = [] } = useFindManyCurriculumVersion({
         where: { trainingObjectTypeId, deletedAt: null, active: true },

@@ -25,7 +25,7 @@ export default function InfoSurveyExam({ id, type }: { id: string; type: string 
         orderBy: { startDate: 'desc' },
         include: {
             semesters: {
-                orderBy: { createdAt: 'desc' },
+                orderBy: { startDate: 'desc' },
             },
         },
     })

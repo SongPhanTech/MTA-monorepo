@@ -277,7 +277,11 @@ export default function GraduationDecisionDiploma() {
         orderBy: { name: 'asc' },
     })
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
-        orderBy: { name: 'asc' },
+        orderBy: {
+            semesterStart: {
+                startDate: 'desc',
+            },
+        },
         where: { trainingObjectTypeId, deletedAt: null, active: true },
     })
     const { data: fixedClassData = [] } = useFindManyFixedClass({

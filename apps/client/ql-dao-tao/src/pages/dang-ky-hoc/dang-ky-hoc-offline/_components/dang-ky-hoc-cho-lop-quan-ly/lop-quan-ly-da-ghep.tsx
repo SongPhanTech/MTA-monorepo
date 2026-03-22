@@ -111,22 +111,27 @@ export default function LopQuanLyDaGhep() {
         }
     )
 
-    const { data: countFixedClassAll = 0 } = useCountFixedClass({
-        where: {
-            name: {
-                contains: filters.searchText || undefined,
-                mode: 'insensitive',
-            },
-            subjectClasses: {
-                some: {
-                    id: subjectClassId,
+    const { data: countFixedClassAll = 0 } = useCountFixedClass(
+        {
+            where: {
+                name: {
+                    contains: filters.searchText || undefined,
+                    mode: 'insensitive',
+                },
+                subjectClasses: {
+                    some: {
+                        id: subjectClassId,
+                    },
+                },
+                trainingCourse: {
+                    trainingObjectTypeId,
                 },
             },
-            trainingCourse: {
-                trainingObjectTypeId,
-            },
         },
-    })
+        {
+            enabled: !!subjectClassId,
+        }
+    )
 
     useEffect(() => {
         if (fixedClasses && selectedSubjectClass) {

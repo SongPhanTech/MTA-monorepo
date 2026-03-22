@@ -168,15 +168,13 @@ app.openapi(graduationCheck, async (c) => {
         where: { id: sessionId },
         include: {
             applications: {
-                where: {
-                    ...(applicationIds?.length
-                        ? { id: { in: applicationIds } }
-                        : {
-                              status: {
-                                  in: [ApplicationStatus.SUBMITTED, ApplicationStatus.IN_REVIEW],
-                              },
-                          }),
-                },
+                where: applicationIds?.length
+                    ? { id: { in: applicationIds } }
+                    : {
+                          status: {
+                              in: [ApplicationStatus.SUBMITTED, ApplicationStatus.IN_REVIEW],
+                          },
+                      },
             },
         },
     })

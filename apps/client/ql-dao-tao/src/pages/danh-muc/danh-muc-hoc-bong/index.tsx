@@ -181,7 +181,11 @@ export default function Scholarship() {
     }
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
-        orderBy: { name: 'asc' },
+        orderBy: {
+            semesterStart: {
+                startDate: 'desc',
+            },
+        },
         where: {
             trainingObjectTypeId,
             active: true,

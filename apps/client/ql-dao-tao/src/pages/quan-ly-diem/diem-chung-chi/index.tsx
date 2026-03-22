@@ -1,3 +1,4 @@
+import { DownloadOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
@@ -16,12 +17,11 @@ import {
     useUpdateArchivedCertificate,
     useUpdateManyArchivedCertificate,
 } from '@workspace/db/hooks'
-import { useCertificateScore, exportArchivedCertificateExcel } from '@workspace/libs/api/training'
+import { exportArchivedCertificateExcel, useCertificateScore } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Input, Modal, message, Row, Tooltip } from 'antd'
-import { DownloadOutlined } from '@ant-design/icons'
 import { saveAs } from 'file-saver'
 import _ from 'lodash'
 import { InfoIcon } from 'lucide-react'
@@ -53,7 +53,11 @@ export default function ArchivedCertificate() {
                 deletedAt: null,
                 active: true,
             },
-            orderBy: { name: 'asc' },
+            orderBy: {
+                semesterStart: {
+                    startDate: 'desc',
+                },
+            },
         },
         { enabled: !!trainingObjectTypeId }
     )

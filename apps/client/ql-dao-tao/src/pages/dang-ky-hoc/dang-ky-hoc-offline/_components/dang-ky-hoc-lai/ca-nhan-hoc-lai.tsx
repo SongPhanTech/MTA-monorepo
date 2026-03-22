@@ -7,6 +7,7 @@ import {
     useFindManyTrainingCourse,
     useFindUniqueSubjectClass,
 } from '@workspace/db/hooks'
+import { diffArrays } from '@workspace/libs'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useOpenSubjectClassRetakeStudents } from '@workspace/libs/api/training'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
@@ -15,7 +16,6 @@ import _ from 'lodash'
 import { Search } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { dangKyHocLaiStore } from '../..'
-import { diffArrays } from '@workspace/libs'
 
 interface FilterProps {
     searchText: string | null
@@ -61,7 +61,9 @@ export default function CaNhanHocLai() {
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         orderBy: {
-            name: 'asc',
+            semesterStart: {
+                startDate: 'desc',
+            },
         },
         where: {
             active: true,

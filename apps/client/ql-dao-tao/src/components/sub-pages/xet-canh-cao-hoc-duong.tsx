@@ -184,7 +184,9 @@ const XetCanhCaoHocDuong = ({ semesterId }: XetCanhCaoHocDuongProps) => {
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         orderBy: {
-            name: 'asc',
+            semesterStart: {
+                startDate: 'desc',
+            },
         },
         where: {
             trainingObjectTypeId,
