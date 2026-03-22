@@ -131,6 +131,7 @@ const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
             dropdownStyle={dropdownStyle}
             allowClear
             treeData={treeData}
+            popupMatchSelectWidth={false}
             filterTreeNode={filterTreeNode}
             showSearch={true}
             treeNodeFilterProp="title"

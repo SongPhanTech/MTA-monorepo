@@ -1,11 +1,13 @@
 import { LockOutlined, UnlockOutlined } from '@ant-design/icons'
 import { queryClient } from '@api/index'
+import LectureTreeSelect from '@components/commons/lecture-select-multi/TreeSelectLecture'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { useThesisProjectStatusOptions } from '@hooks/thesisProjectStatus'
 import DefaultLayout from '@layouts/default-layout'
+import { buildOrgFlat } from '@lib/utils'
 import { useSession } from '@workspace/auth/react'
 import {
     CouncilRole,
@@ -18,13 +20,15 @@ import {
     useCountThesisProject,
     useFindFirstLecturer,
     useFindManyDefenseSession,
-    useFindManyExpertProfile,
+    useFindManyDM_DonVi,
     useFindManyRoom,
     useFindManySubjectClass,
     useFindManyThesisProject,
     useUpdateThesisProject,
 } from '@workspace/db/hooks'
+import { whereOrganization } from '@workspace/libs'
 import { sqlTransaction } from '@workspace/libs/api/model'
+import { formatLecturerName } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
@@ -68,6 +72,7 @@ export default function DanhMucDoAn() {
     const [editingRowKeys, setEditingRowKeys] = useState<string[]>([])
     const [editingValues, setEditingValues] = useState<Record<string, Record<string, any>>>({})
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
+    const orgId = window.contextData?.organizationId
 
     const { can } = useAbility()
 
@@ -80,6 +85,30 @@ export default function DanhMucDoAn() {
         { where: { userProfileId: me?.sDM_NhanVienId } },
         { enabled: !!me?.sDM_NhanVienId }
     )
+
+    const { data: dmDonViIds = [] } = useFindManyDM_DonVi(
+        {
+            select: { Id: true },
+            where: whereOrganization,
+            orderBy: [{ iSTT: 'asc' }, { sTen: 'asc' }],
+        },
+        {
+            refetchOnWindowFocus: false,
+        }
+    )
+
+    const orgIds = [
+        ...buildOrgFlat(
+            dmDonViIds.map((e) => ({
+                Id: e.Id,
+                sTen: null,
+                sParentId: null,
+                sMa: null,
+            })),
+            orgId || '0'
+        ).map((org) => org.value),
+        orgId,
+    ].filter(Boolean)
 
     const isProjectLecturer = can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DM_DO_AN, 'SUA')
 
@@ -135,13 +164,13 @@ export default function DanhMucDoAn() {
             currentLecturer
                 ? {
                       OR: [
-                          { supervisor: { lecturerId: currentLecturer.id } },
-                          { coSupervisor: { lecturerId: currentLecturer.id } },
+                          { primarySupervisorId: currentLecturer.id },
+                          { secondarySupervisorId: currentLecturer.id },
                       ],
                   }
                 : {}),
         }
-    }, [subjectClassId, subjectClassData, currentLecturer])
+    }, [subjectClassId, subjectClassData, currentLecturer, can])
 
     const {
         data: thesisProjectData = [],
@@ -151,15 +180,11 @@ export default function DanhMucDoAn() {
         where,
         include: {
             subjectClass: { include: { subject: true } },
-            supervisor: {
-                include: {
-                    lecturer: { include: { userProfile: true } },
-                },
+            primarySupervisor: {
+                include: { userProfile: true },
             },
-            coSupervisor: {
-                include: {
-                    lecturer: { include: { userProfile: true } },
-                },
+            secondarySupervisor: {
+                include: { userProfile: true },
             },
             registrations: {
                 include: {
@@ -200,18 +225,7 @@ export default function DanhMucDoAn() {
     const { data: defenseSessionData = [] } = useFindManyDefenseSession()
     const { mutateAsync: updateThesisProject } = useUpdateThesisProject()
     const { data: roomsData = [] } = useFindManyRoom()
-    const { data: expertProfiles = [] } = useFindManyExpertProfile({
-        where: {
-            projectExpert: true,
-        },
-        include: {
-            lecturer: {
-                include: {
-                    userProfile: true,
-                },
-            },
-        },
-    })
+
     const { data: thesisProjectDataCount = 0 } = useCountThesisProject({
         where: where,
     })
@@ -319,8 +333,8 @@ export default function DanhMucDoAn() {
             .forEach((record) => {
                 initialEditingValues[record.id] = {
                     title: record.title || '',
-                    supervisor: record.supervisor?.id || '',
-                    coSupervisor: record.coSupervisor?.id || '',
+                    primarySupervisorId: record.primarySupervisorId || '',
+                    secondarySupervisorId: record.secondarySupervisorId || '',
                     defenseDate: record.defenseDate || '',
                     editProject: record.editProject || '',
                     defenseSession: record.defenseSession?.id || '',
@@ -420,8 +434,8 @@ export default function DanhMucDoAn() {
                     status: values.status || 'PROPOSED',
                     defenseDate: values.defenseDate ? dayjs(values.defenseDate).toDate() : null,
                     editProject: values.editProject ?? null,
-                    supervisor: relation(values.supervisor),
-                    coSupervisor: relation(values.coSupervisor),
+                    primarySupervisorId: values.primarySupervisorId || null,
+                    secondarySupervisorId: values.secondarySupervisorId || null,
                     room: relation(values.room),
                     defenseSession: relation(values.defenseSessionId),
                     defenseRecord: {
@@ -760,68 +774,70 @@ export default function DanhMucDoAn() {
                             title: 'GVHD1',
                             width: 250,
                             align: 'left',
-                            dataIndex: 'supervisor',
+                            dataIndex: 'primarySupervisorId',
                             render: (_, record) => {
                                 if (editingRowKeys.includes(record?.id)) {
                                     const currentValue =
-                                        editingValues[record?.id]?.supervisorId ??
-                                        record?.supervisorId
+                                        editingValues[record?.id]?.primarySupervisorId ??
+                                        record?.primarySupervisorId
                                     return (
-                                        <Select
-                                            className="w-46"
-                                            options={expertProfiles?.map((item: any) => ({
-                                                label: item.lecturer
-                                                    ? item.lecturer?.userProfile?.fullname
-                                                    : item.name,
-                                                value: item.id,
-                                            }))}
+                                        <LectureTreeSelect
+                                            className="w-full"
                                             value={currentValue || undefined}
                                             placeholder="Chọn GVHD1"
+                                            ignoreLectureIds={
+                                                [
+                                                    editingValues[record?.id]
+                                                        ?.secondarySupervisorId ||
+                                                        record?.secondarySupervisorId,
+                                                ].filter(Boolean) as string[]
+                                            }
                                             onChange={(value) =>
-                                                handleEditChange(record?.id, 'supervisor', value)
+                                                handleEditChange(
+                                                    record?.id,
+                                                    'primarySupervisorId',
+                                                    value
+                                                )
                                             }
                                         />
                                     )
                                 }
-                                const data = record?.supervisor
-                                const name = data?.lecturer
-                                    ? data?.lecturer?.userProfile?.fullname
-                                    : data?.name || ''
-                                return name
+                                return formatLecturerName(record?.primarySupervisor)
                             },
                         },
                         {
                             title: 'GVHD2',
                             width: 250,
                             align: 'left',
-                            dataIndex: 'coSupervisor',
+                            dataIndex: 'secondarySupervisorId',
                             render: (_, record) => {
                                 if (editingRowKeys.includes(record?.id)) {
                                     const currentValue =
-                                        editingValues[record?.id]?.coSupervisorId ??
-                                        record?.coSupervisorId
+                                        editingValues[record?.id]?.secondarySupervisorId ??
+                                        record?.secondarySupervisorId
                                     return (
-                                        <Select
-                                            className="w-46"
-                                            options={expertProfiles?.map((item: any) => ({
-                                                label: item.lecturer
-                                                    ? item.lecturer?.userProfile?.fullname
-                                                    : item.name,
-                                                value: item.id,
-                                            }))}
+                                        <LectureTreeSelect
+                                            className="w-full"
                                             value={currentValue || undefined}
                                             placeholder="Chọn GVHD2"
+                                            ignoreLectureIds={
+                                                [
+                                                    editingValues[record?.id]
+                                                        ?.primarySupervisorId ||
+                                                        record?.primarySupervisorId,
+                                                ].filter(Boolean) as string[]
+                                            }
                                             onChange={(value) =>
-                                                handleEditChange(record?.id, 'coSupervisor', value)
+                                                handleEditChange(
+                                                    record?.id,
+                                                    'secondarySupervisorId',
+                                                    value
+                                                )
                                             }
                                         />
                                     )
                                 }
-                                const data = record?.coSupervisor
-                                const name = data?.lecturer
-                                    ? data?.lecturer?.userProfile?.fullname
-                                    : data?.name || ''
-                                return name
+                                return formatLecturerName(record?.secondarySupervisor)
                             },
                         },
                         {
@@ -850,226 +866,226 @@ export default function DanhMucDoAn() {
                                     <Tag color="error">Không đủ ĐK</Tag>
                                 ),
                         },
-                        {
-                            title: 'Chủ tịch',
-                            width: 200,
-                            align: 'left',
-                            dataIndex: 'chairman',
-                            render: (_, record) => {
-                                if (editingRowKeys.includes(record?.id)) {
-                                    const originalChairmanId = record?.council?.members?.find(
-                                        (x: any) => x.role === CouncilRole.CHAIRMAN
-                                    )?.expert?.id
+                        // {
+                        //     title: 'Chủ tịch',
+                        //     width: 200,
+                        //     align: 'left',
+                        //     dataIndex: 'chairman',
+                        //     render: (_, record) => {
+                        //         if (editingRowKeys.includes(record?.id)) {
+                        //             const originalChairmanId = record?.council?.members?.find(
+                        //                 (x: any) => x.role === CouncilRole.CHAIRMAN
+                        //             )?.expert?.id
 
-                                    const currentValue =
-                                        editingValues[record.id]?.chairman ??
-                                        originalChairmanId ??
-                                        undefined
-                                    return (
-                                        <Select
-                                            className="w-40"
-                                            options={expertProfiles
-                                                ?.filter((x: any) => x.eligiblePresident === true)
-                                                ?.map((item: any) => ({
-                                                    label: item.lecturer
-                                                        ? item.lecturer?.userProfile?.fullname
-                                                        : item.name,
-                                                    value: item.id,
-                                                }))}
-                                            value={currentValue || undefined}
-                                            placeholder="Chọn chủ tịch"
-                                            onChange={(value) =>
-                                                handleEditChange(record?.id, 'chairman', value)
-                                            }
-                                        />
-                                    )
-                                }
-                                const data = record?.council?.members.find(
-                                    (x: any) => x.role === CouncilRole.CHAIRMAN
-                                )
-                                const name = data?.expert?.lecturer
-                                    ? data?.expert?.lecturer?.userProfile?.fullname
-                                    : data?.expert?.name || ''
-                                return name
-                            },
-                        },
-                        {
-                            title: 'Thư ký',
-                            width: 200,
-                            align: 'left',
-                            dataIndex: 'secretary',
-                            render: (_, record) => {
-                                if (editingRowKeys.includes(record?.id)) {
-                                    const originalSecretaryId = record?.council?.members?.find(
-                                        (x: any) => x.role === CouncilRole.SECRETARY
-                                    )?.expert?.id
+                        //             const currentValue =
+                        //                 editingValues[record.id]?.chairman ??
+                        //                 originalChairmanId ??
+                        //                 undefined
+                        //             return (
+                        //                 <Select
+                        //                     className="w-40"
+                        //                     options={expertProfiles
+                        //                         ?.filter((x: any) => x.eligiblePresident === true)
+                        //                         ?.map((item: any) => ({
+                        //                             label: item.lecturer
+                        //                                 ? item.lecturer?.userProfile?.fullname
+                        //                                 : item.name,
+                        //                             value: item.id,
+                        //                         }))}
+                        //                     value={currentValue || undefined}
+                        //                     placeholder="Chọn chủ tịch"
+                        //                     onChange={(value) =>
+                        //                         handleEditChange(record?.id, 'chairman', value)
+                        //                     }
+                        //                 />
+                        //             )
+                        //         }
+                        //         const data = record?.council?.members.find(
+                        //             (x: any) => x.role === CouncilRole.CHAIRMAN
+                        //         )
+                        //         const name = data?.expert?.lecturer
+                        //             ? data?.expert?.lecturer?.userProfile?.fullname
+                        //             : data?.expert?.name || ''
+                        //         return name
+                        //     },
+                        // },
+                        // {
+                        //     title: 'Thư ký',
+                        //     width: 200,
+                        //     align: 'left',
+                        //     dataIndex: 'secretary',
+                        //     render: (_, record) => {
+                        //         if (editingRowKeys.includes(record?.id)) {
+                        //             const originalSecretaryId = record?.council?.members?.find(
+                        //                 (x: any) => x.role === CouncilRole.SECRETARY
+                        //             )?.expert?.id
 
-                                    const currentValue =
-                                        editingValues[record.id]?.secretary ??
-                                        originalSecretaryId ??
-                                        undefined
-                                    return (
-                                        <Select
-                                            className="w-40"
-                                            options={expertProfiles
-                                                ?.filter((x: any) => x.eligibleSecretary === true)
-                                                ?.map((item: any) => ({
-                                                    label: item.lecturer
-                                                        ? item.lecturer?.userProfile?.fullname
-                                                        : item.name,
-                                                    value: item.id,
-                                                }))}
-                                            value={currentValue || undefined}
-                                            placeholder="Chọn thư ký"
-                                            onChange={(value) =>
-                                                handleEditChange(record?.id, 'secretary', value)
-                                            }
-                                        />
-                                    )
-                                }
-                                const name =
-                                    record?.council?.members.find(
-                                        (x: any) => x.role === CouncilRole.SECRETARY
-                                    )?.expert?.lecturer?.userProfile?.fullname ||
-                                    record?.council?.members.find(
-                                        (x: any) => x.role === CouncilRole.SECRETARY
-                                    )?.expert?.name ||
-                                    ''
-                                return name
-                            },
-                        },
-                        {
-                            title: 'Phản biện 1',
-                            width: 200,
-                            align: 'left',
-                            dataIndex: 'reviewer1',
-                            render: (_, record) => {
-                                if (editingRowKeys.includes(record?.id)) {
-                                    const originalReviewer1Id = record?.council?.members?.find(
-                                        (x: any) => x.role === CouncilRole.REVIEWER_1
-                                    )?.expert?.id
+                        //             const currentValue =
+                        //                 editingValues[record.id]?.secretary ??
+                        //                 originalSecretaryId ??
+                        //                 undefined
+                        //             return (
+                        //                 <Select
+                        //                     className="w-40"
+                        //                     options={expertProfiles
+                        //                         ?.filter((x: any) => x.eligibleSecretary === true)
+                        //                         ?.map((item: any) => ({
+                        //                             label: item.lecturer
+                        //                                 ? item.lecturer?.userProfile?.fullname
+                        //                                 : item.name,
+                        //                             value: item.id,
+                        //                         }))}
+                        //                     value={currentValue || undefined}
+                        //                     placeholder="Chọn thư ký"
+                        //                     onChange={(value) =>
+                        //                         handleEditChange(record?.id, 'secretary', value)
+                        //                     }
+                        //                 />
+                        //             )
+                        //         }
+                        //         const name =
+                        //             record?.council?.members.find(
+                        //                 (x: any) => x.role === CouncilRole.SECRETARY
+                        //             )?.expert?.lecturer?.userProfile?.fullname ||
+                        //             record?.council?.members.find(
+                        //                 (x: any) => x.role === CouncilRole.SECRETARY
+                        //             )?.expert?.name ||
+                        //             ''
+                        //         return name
+                        //     },
+                        // },
+                        // {
+                        //     title: 'Phản biện 1',
+                        //     width: 200,
+                        //     align: 'left',
+                        //     dataIndex: 'reviewer1',
+                        //     render: (_, record) => {
+                        //         if (editingRowKeys.includes(record?.id)) {
+                        //             const originalReviewer1Id = record?.council?.members?.find(
+                        //                 (x: any) => x.role === CouncilRole.REVIEWER_1
+                        //             )?.expert?.id
 
-                                    const currentValue =
-                                        editingValues[record.id]?.reviewer1 ??
-                                        originalReviewer1Id ??
-                                        undefined
-                                    return (
-                                        <Select
-                                            className="w-40"
-                                            options={expertProfiles?.map((item: any) => ({
-                                                label: item.lecturer
-                                                    ? item.lecturer?.userProfile?.fullname
-                                                    : item.name,
-                                                value: item.id,
-                                            }))}
-                                            value={currentValue || undefined}
-                                            placeholder="Chọn Phản biện 1"
-                                            onChange={(value) =>
-                                                handleEditChange(record?.id, 'reviewer1', value)
-                                            }
-                                        />
-                                    )
-                                }
-                                const name =
-                                    record?.council?.members.find(
-                                        (x: any) => x.role === CouncilRole.REVIEWER_1
-                                    )?.expert?.lecturer?.userProfile?.fullname ||
-                                    record?.council?.members.find(
-                                        (x: any) => x.role === CouncilRole.REVIEWER_1
-                                    )?.expert?.name ||
-                                    ''
-                                return name
-                            },
-                        },
-                        {
-                            title: 'Phản biện 2',
-                            width: 200,
-                            align: 'left',
-                            render: (_, record) => {
-                                if (editingRowKeys.includes(record?.id)) {
-                                    const originalReviewer2Id = record?.council?.members?.find(
-                                        (x: any) => x.role === CouncilRole.REVIEWER_2
-                                    )?.expert?.id
+                        //             const currentValue =
+                        //                 editingValues[record.id]?.reviewer1 ??
+                        //                 originalReviewer1Id ??
+                        //                 undefined
+                        //             return (
+                        //                 <Select
+                        //                     className="w-40"
+                        //                     options={expertProfiles?.map((item: any) => ({
+                        //                         label: item.lecturer
+                        //                             ? item.lecturer?.userProfile?.fullname
+                        //                             : item.name,
+                        //                         value: item.id,
+                        //                     }))}
+                        //                     value={currentValue || undefined}
+                        //                     placeholder="Chọn Phản biện 1"
+                        //                     onChange={(value) =>
+                        //                         handleEditChange(record?.id, 'reviewer1', value)
+                        //                     }
+                        //                 />
+                        //             )
+                        //         }
+                        //         const name =
+                        //             record?.council?.members.find(
+                        //                 (x: any) => x.role === CouncilRole.REVIEWER_1
+                        //             )?.expert?.lecturer?.userProfile?.fullname ||
+                        //             record?.council?.members.find(
+                        //                 (x: any) => x.role === CouncilRole.REVIEWER_1
+                        //             )?.expert?.name ||
+                        //             ''
+                        //         return name
+                        //     },
+                        // },
+                        // {
+                        //     title: 'Phản biện 2',
+                        //     width: 200,
+                        //     align: 'left',
+                        //     render: (_, record) => {
+                        //         if (editingRowKeys.includes(record?.id)) {
+                        //             const originalReviewer2Id = record?.council?.members?.find(
+                        //                 (x: any) => x.role === CouncilRole.REVIEWER_2
+                        //             )?.expert?.id
 
-                                    const currentValue =
-                                        editingValues[record.id]?.reviewer2 ??
-                                        originalReviewer2Id ??
-                                        undefined
+                        //             const currentValue =
+                        //                 editingValues[record.id]?.reviewer2 ??
+                        //                 originalReviewer2Id ??
+                        //                 undefined
 
-                                    return (
-                                        <Select
-                                            className="w-40"
-                                            options={expertProfiles?.map((item: any) => ({
-                                                label: item.lecturer
-                                                    ? item.lecturer?.userProfile?.fullname
-                                                    : item.name,
-                                                value: item.id,
-                                            }))}
-                                            value={currentValue}
-                                            placeholder="Chọn Phản biện 2"
-                                            onChange={(value) =>
-                                                handleEditChange(record?.id, 'reviewer2', value)
-                                            }
-                                        />
-                                    )
-                                }
-                                const name =
-                                    record?.council?.members.find(
-                                        (x: any) => x.role === CouncilRole.REVIEWER_2
-                                    )?.expert?.lecturer?.userProfile?.fullname ||
-                                    record?.council?.members.find(
-                                        (x: any) => x.role === CouncilRole.REVIEWER_2
-                                    )?.expert?.name ||
-                                    ''
-                                return name
-                            },
-                        },
-                        {
-                            title: 'Ủy viên',
-                            width: 200,
-                            align: 'left',
-                            dataIndex: 'councilMember',
-                            render: (_, record) => {
-                                if (editingRowKeys.includes(record?.id)) {
-                                    const originalCouncilMemberId = record?.council?.members?.find(
-                                        (x: any) => x.role === CouncilRole.MEMBER
-                                    )?.expert?.id
-                                    const currentValue =
-                                        editingValues[record.id]?.councilMember ??
-                                        originalCouncilMemberId ??
-                                        undefined
-                                    record?.council?.members.find(
-                                        (x: any) => x.role === CouncilRole.MEMBER
-                                    )?.expert?.id || ''
-                                    return (
-                                        <Select
-                                            className="w-40"
-                                            options={expertProfiles?.map((item: any) => ({
-                                                label: item.lecturer
-                                                    ? item.lecturer?.userProfile?.fullname
-                                                    : item.name,
-                                                value: item.id,
-                                            }))}
-                                            value={currentValue || undefined}
-                                            placeholder="Chọn ủy viên"
-                                            onChange={(value) =>
-                                                handleEditChange(record?.id, 'councilMember', value)
-                                            }
-                                        />
-                                    )
-                                }
-                                const name =
-                                    record?.council?.members.find(
-                                        (x: any) => x.role === CouncilRole.MEMBER
-                                    )?.expert?.lecturer?.userProfile?.fullname ||
-                                    record?.council?.members.find(
-                                        (x: any) => x.role === CouncilRole.MEMBER
-                                    )?.expert?.name ||
-                                    ''
-                                return name
-                            },
-                        },
-
+                        //             return (
+                        //                 <Select
+                        //                     className="w-40"
+                        //                        placeholder="Chọn Phản biện 2"
+                        //                     options={expertProfiles?.map((item: any) => ({
+                        //                         label: item.lecturer
+                        //                             ? item.lecturer?.userProfile?.fullname
+                        //                             : item.name,
+                        //                         value: item.id,
+                        //                     }))}
+                        //                     value={currentValue}
+                        //                     placeholder="Chọn Phản biện 2"
+                        //                     onChange={(value) =>
+                        //                         handleEditChange(record?.id, 'reviewer2', value)
+                        //                     }
+                        //                 />
+                        //             )
+                        //         }
+                        //         const name =
+                        //             record?.council?.members.find(
+                        //                 (x: any) => x.role === CouncilRole.REVIEWER_2
+                        //             )?.expert?.lecturer?.userProfile?.fullname ||
+                        //             record?.council?.members.find(
+                        //                 (x: any) => x.role === CouncilRole.REVIEWER_2
+                        //             )?.expert?.name ||
+                        //             ''
+                        //         return name
+                        //     },
+                        // },
+                        // {
+                        //     title: 'Ủy viên',
+                        //     width: 200,
+                        //     align: 'left',
+                        //     dataIndex: 'councilMember',
+                        //     render: (_, record) => {
+                        //         if (editingRowKeys.includes(record?.id)) {
+                        //             const originalCouncilMemberId = record?.council?.members?.find(
+                        //                 (x: any) => x.role === CouncilRole.MEMBER
+                        //             )?.expert?.id
+                        //             const currentValue =
+                        //                 editingValues[record.id]?.councilMember ??
+                        //                 originalCouncilMemberId ??
+                        //                 undefined
+                        //             record?.council?.members.find(
+                        //                 (x: any) => x.role === CouncilRole.MEMBER
+                        //             )?.expert?.id || ''
+                        //             return (
+                        //                 <Select
+                        //                     className="w-40"
+                        //                     options={expertProfiles?.map((item: any) => ({
+                        //                         label: item.lecturer
+                        //                             ? item.lecturer?.userProfile?.fullname
+                        //                             : item.name,
+                        //                         value: item.id,
+                        //                     }))}
+                        //                     value={currentValue || undefined}
+                        //                     placeholder="Chọn ủy viên"
+                        //                     onChange={(value) =>
+                        //                         handleEditChange(record?.id, 'councilMember', value)
+                        //                     }
+                        //                 />
+                        //             )
+                        //         }
+                        //         const name =
+                        //             record?.council?.members.find(
+                        //                 (x: any) => x.role === CouncilRole.MEMBER
+                        //             )?.expert?.lecturer?.userProfile?.fullname ||
+                        //             record?.council?.members.find(
+                        //                 (x: any) => x.role === CouncilRole.MEMBER
+                        //             )?.expert?.name ||
+                        //             ''
+                        //         return name
+                        //     },
+                        // },
                         {
                             title: 'Phòng bảo vệ',
                             width: 150,

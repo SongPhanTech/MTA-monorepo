@@ -77,12 +77,12 @@ export default function QuocGiaModal() {
             layout="vertical"
         >
             <Col span={24}>
-                <FormItem label="Tên quốc tịch" name="sTen" required form={form}>
+                <FormItem label="Tên quốc tịch" name="name" required form={form}>
                     <Input placeholder="Nhập tên quốc tịch" />
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem label="Mô tả" name="sGhiChu" form={form}>
+                <FormItem label="Mô tả" name="description" form={form}>
                     <Input.TextArea rows={3} placeholder="Nhập ghi chú" />
                 </FormItem>
             </Col>

@@ -783,7 +783,6 @@ export default function PhanCongGiangDay({
         }
         return []
     }, [dmDonViData])
-    console.log('dataWithRowSpan', dataWithRowSpan)
 
     const resetForm = useCallback(() => {
         form.setFieldsValue({
