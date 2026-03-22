@@ -1,7 +1,7 @@
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useOpenSubjectClassRetakeStudents } from '@workspace/libs/api/training'
-import { useTrainingCourseStore, useTrainingObjectTypeStore } from '@workspace/ui'
+import { useSemesterStore, useTrainingCourseStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Checkbox, Col, Form, Input, Row } from 'antd'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
@@ -28,6 +28,7 @@ export default function HSSVChuaDat({ subjectVersionId, viewOnly }: RegisterClas
     })
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { id: trainingCourseId } = useTrainingCourseStore()
+    const { id: semesterId } = useSemesterStore()
 
     const { data: res, refetch } = useOpenSubjectClassRetakeStudents(
         {
@@ -35,6 +36,7 @@ export default function HSSVChuaDat({ subjectVersionId, viewOnly }: RegisterClas
             trainingObjectTypeId: trainingObjectTypeId || '',
             trainingCourseId: trainingCourseId,
             subjectVersionId: subjectVersionId || '',
+            semesterId: semesterId || '',
             page: currentPage,
             pageSize: numberOfPages,
         },
