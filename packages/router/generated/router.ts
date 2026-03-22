@@ -34,6 +34,7 @@ export default {
     "THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG": "/thiet-lap-khao-sat/thiet-lap-chung",
     "XEM_LAI_KHAO_SAT_ID": "/xem-lai-khao-sat/[id]"
   },
+  "QL_DANH_MUC": {},
   "QL_DAO_TAO": {
     "CAU_HINH_THANH_TOAN_PAYMENTCONFIGURATION": "/cau-hinh-thanh-toan/PaymentConfiguration",
     "CAU_HINH_THOI_GIAN_DEFENSESCHEDULECONFIGURATION": "/cau-hinh-thoi-gian/DefenseScheduleConfiguration",
@@ -183,6 +184,7 @@ export default {
     "QUAN_LY_HO_SO_ME": "/quan-ly-ho-so/me",
     "QUAN_LY_HO_SO_TAO_MOI": "/quan-ly-ho-so/tao-moi"
   },
+  "QL_NGUOI_DUNG": {},
   "TRO_LY_AO": {
     "CAU_HOI_THUONG_GAP": "/cau-hoi-thuong-gap",
     "HOI_THOAI_ID": "/hoi-thoai/[id]",

@@ -118,6 +118,7 @@ import ModalChuyenCTDT from './modal-chuyen-ctdt'
 import AddSubjectClassAttendance from './add-diem-danh'
 import AddSubjectClassAttendanceStudent from './add-diem-danh-mon-hoc'
 import PutAvailableTrainingTimeModal from './PutAvailableTrainingTimeModal'
+
 export {
     ExportStatsArchivedAwardModal,
     ModalChiTietLopBienChe,
