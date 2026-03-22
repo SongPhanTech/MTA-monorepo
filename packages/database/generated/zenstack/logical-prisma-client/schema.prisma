@@ -5039,41 +5039,43 @@ model StaffPosition {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model Lecturer {
-  id                          String                        @id() @default(cuid())
-  code                        String?                       @unique()
-  active                      Boolean                       @default(true)
-  description                 String?                       @db.Text()
-  deletedAt                   DateTime?
-  createdAt                   DateTime                      @default(now())
-  updatedAt                   DateTime                      @default(now()) @updatedAt()
-  createdBy                   String?                       @default("") @db.Uuid()
-  from                        DateTime?
-  lectureID                   String?                       @unique()
-  serviceDate                 DateTime?
-  userProfile                 UserProfile                   @relation(fields: [userProfileId], references: [id])
-  userProfileId               String                        @unique() @db.Uuid()
-  organization                DM_DonVi                      @relation(fields: [organizationId], references: [Id])
-  organizationId              String                        @db.Uuid()
-  lecturerType                LecturerType                  @relation(fields: [lecturerTypeId], references: [id])
-  lecturerTypeId              String
-  mainSubjectClasses          SubjectClass[]                @relation("MainLecturer")
-  extraSubjectClasses         SubjectClass[]                @relation("ExtraLecturer")
-  enterGradeClasses           SubjectClass[]                @relation("EnterGradeLecturer")
-  manageFixedClass            FixedClass[]                  @relation("ManageLecturer")
-  classSchedules              ClassSchedule[]               @relation("MainLecturer")
-  extraClassSchedules         ClassSchedule[]               @relation("ExtraLecturer")
-  researchProjects            ResearchProject[]
-  reviewedRegistrations       StudentResearchRegistration[]
-  reviewedThesisRegistrations StudentThesisRegistration[]
-  expertProfile               ExpertProfile[]
-  survey                      Survey[]
-  clusterSurvey               ClusterSurvey[]
-  examRoomsMain               ExamList[]                    @relation("FirstSupervisor")
-  examRoomsExtra              ExamList[]                    @relation("SecondSupervisor")
-  evaluationCriterions        EvaluationCriterion[]         @relation("EvaluationCriterionLecturer")
-  analysisCriterion           AnalysisCriterion[]
-  evaluationCouncilMember     EvaluationCouncilMember[]
-  evaluationCriterionReviews  EvaluationCriterion[]         @relation("EvaluationCriterionLecturerReview")
+  id                               String                        @id() @default(cuid())
+  code                             String?                       @unique()
+  active                           Boolean                       @default(true)
+  description                      String?                       @db.Text()
+  deletedAt                        DateTime?
+  createdAt                        DateTime                      @default(now())
+  updatedAt                        DateTime                      @default(now()) @updatedAt()
+  createdBy                        String?                       @default("") @db.Uuid()
+  from                             DateTime?
+  lectureID                        String?                       @unique()
+  serviceDate                      DateTime?
+  userProfile                      UserProfile                   @relation(fields: [userProfileId], references: [id])
+  userProfileId                    String                        @unique() @db.Uuid()
+  organization                     DM_DonVi                      @relation(fields: [organizationId], references: [Id])
+  organizationId                   String                        @db.Uuid()
+  lecturerType                     LecturerType                  @relation(fields: [lecturerTypeId], references: [id])
+  lecturerTypeId                   String
+  mainSubjectClasses               SubjectClass[]                @relation("MainLecturer")
+  extraSubjectClasses              SubjectClass[]                @relation("ExtraLecturer")
+  enterGradeClasses                SubjectClass[]                @relation("EnterGradeLecturer")
+  manageFixedClass                 FixedClass[]                  @relation("ManageLecturer")
+  classSchedules                   ClassSchedule[]               @relation("MainLecturer")
+  extraClassSchedules              ClassSchedule[]               @relation("ExtraLecturer")
+  researchProjects                 ResearchProject[]
+  reviewedRegistrations            StudentResearchRegistration[]
+  reviewedThesisRegistrations      StudentThesisRegistration[]
+  expertProfile                    ExpertProfile[]
+  survey                           Survey[]
+  clusterSurvey                    ClusterSurvey[]
+  examRoomsMain                    ExamList[]                    @relation("FirstSupervisor")
+  examRoomsExtra                   ExamList[]                    @relation("SecondSupervisor")
+  evaluationCriterions             EvaluationCriterion[]         @relation("EvaluationCriterionLecturer")
+  analysisCriterion                AnalysisCriterion[]
+  evaluationCouncilMember          EvaluationCouncilMember[]
+  evaluationCriterionReviews       EvaluationCriterion[]         @relation("EvaluationCriterionLecturerReview")
+  primarySupervisorThesisProject   ThesisProject[]               @relation("PrimarySupervisorToThesis")
+  secondarySupervisorThesisProject ThesisProject[]               @relation("SecondarySupervisorToThesis")
 
   @@index([userProfileId])
   @@schema("ql-dao-tao")
@@ -5237,6 +5239,10 @@ model ThesisProject {
   firstCheckProgress    Int?
   secondCheckProgress   Int?
   isEligibleForDefense  Boolean                     @default(true)
+  primarySupervisor     Lecturer?                   @relation("PrimarySupervisorToThesis", fields: [primarySupervisorId], references: [id])
+  primarySupervisorId   String?                     @unique()
+  secondarySupervisor   Lecturer?                   @relation("SecondarySupervisorToThesis", fields: [secondarySupervisorId], references: [id])
+  secondarySupervisorId String?                     @unique()
   subjectClass          SubjectClass?               @relation(fields: [subjectClassId], references: [id])
   subjectClassId        String?
   thesisSession         ThesisSession?              @relation(fields: [thesisSessionId], references: [id])
