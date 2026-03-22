@@ -3,35 +3,26 @@ import { PrismaClient } from '../../generated/prisma-client'
 
 const prisma = new PrismaClient()
 
-prisma.subjectVersion.updateMany({
-    where: {
-        period: null,
-        credit: 3,
-    },
-    data: {},
-})
+// const scores = await prisma.studentSubjectScore.findMany({
+//     where: {
+//         attendanceScore: null,
+//         midtermScore: null,
+//         examScore: { not: null },
+//     },
+// })
 
-const scores = await prisma.studentSubjectScore.findMany({
-    where: {
-        attendanceScore: null,
-        midtermScore: null,
-        examScore: { not: null },
-    },
-})
-
-for (const sc of scores) {
-    await prisma.studentSubjectScore.update({
-        where: {
-            id: sc.id,
-        },
-        data: {
-            attendanceScore: sc.examScore,
-            midtermScore: sc.examScore,
-        },
-    })
-}
+// for (const sc of scores) {
+//     await prisma.studentSubjectScore.update({
+//         where: { id: sc.id },
+//         data: {
+//             attendanceScore: sc.examScore,
+//             midtermScore: sc.examScore,
+//         },
+//     })
+// }
 
 const subjectScores = await prisma.studentSubjectScore.findMany({
+    where: { finalScore: null },
     select: {
         id: true,
         subjectClass: {

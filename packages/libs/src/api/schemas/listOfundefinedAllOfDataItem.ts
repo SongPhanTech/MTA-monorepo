@@ -4,6 +4,10 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
+import type { ListOfundefinedAllOfDataItemLecturer } from './listOfundefinedAllOfDataItemLecturer'
+import type { ListOfundefinedAllOfDataItemStaffs } from './listOfundefinedAllOfDataItemStaffs'
+import type { ListOfundefinedAllOfDataItemEducationAndTrainingItem } from './listOfundefinedAllOfDataItemEducationAndTrainingItem'
+import type { ListOfundefinedAllOfDataItemSurveySession } from './listOfundefinedAllOfDataItemSurveySession'
 
 export type ListOfundefinedAllOfDataItem = {
     id: string
@@ -167,4 +171,10 @@ export type ListOfundefinedAllOfDataItem = {
     familyPhone?: string | null
     /** @nullable */
     familyName?: string | null
+    /** @nullable */
+    lecturer: ListOfundefinedAllOfDataItemLecturer
+    /** @nullable */
+    staffs: ListOfundefinedAllOfDataItemStaffs
+    educationAndTraining: ListOfundefinedAllOfDataItemEducationAndTrainingItem[]
+    surveySession?: ListOfundefinedAllOfDataItemSurveySession
 }

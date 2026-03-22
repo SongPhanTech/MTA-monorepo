@@ -6,11 +6,7 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import type { DM_QuocGia } from '@workspace/db'
-import {
-    useCountDM_QuocGia,
-    useFindManyDM_QuocGia,
-    useUpdateDM_QuocGia,
-} from '@workspace/db/hooks'
+import { useCountDM_QuocGia, useFindManyDM_QuocGia, useUpdateDM_QuocGia } from '@workspace/db/hooks'
 import { Button, Col, Flex, message, Row } from 'antd'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -28,11 +24,11 @@ export default function NationalType() {
     const { data = [], refetch } = useFindManyDM_QuocGia({
         skip: (currentPage - 1) * numberOfPages,
         take: numberOfPages,
-        where: { bDeleted: false }, 
+        where: { bDeleted: false },
     })
 
     const { data: count } = useCountDM_QuocGia({
-        where: { bDeleted: false }, 
+        where: { bDeleted: false },
     })
 
     const { mutateAsync: updateDM_QuocGia } = useUpdateDM_QuocGia()
@@ -42,9 +38,9 @@ export default function NationalType() {
             showSpinner()
 
             await updateDM_QuocGia({
-                where: { Id }, 
+                where: { Id },
                 data: {
-                    bDeleted: true, 
+                    bDeleted: true,
                 },
             })
 
@@ -76,7 +72,7 @@ export default function NationalType() {
 
                 <Col span={24}>
                     <Table
-                        rowKey="Id" 
+                        rowKey="Id"
                         columns={[
                             {
                                 title: 'STT',
@@ -84,8 +80,7 @@ export default function NationalType() {
                                 align: 'center',
                                 fixed: 'left',
                                 render: (_, __, index) =>
-                                    index +
-                                    (currentPage - 1) * numberOfPages + 1,
+                                    index + (currentPage - 1) * numberOfPages + 1,
                             },
                             {
                                 title: 'Quốc tịch',
@@ -114,14 +109,9 @@ export default function NationalType() {
                                         <DeleteIcon
                                             popConfirm={{
                                                 title: 'Bạn có chắc muốn xóa?',
-                                                onConfirm: () =>
-                                                    handleDeleteQuocGia(
-                                                        record.Id
-                                                    ),
+                                                onConfirm: () => handleDeleteQuocGia(record.Id),
                                             }}
-                                            onClick={(e) =>
-                                                e.stopPropagation()
-                                            }
+                                            onClick={(e) => e.stopPropagation()}
                                         />
                                     </Row>
                                 ),

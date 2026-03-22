@@ -215,7 +215,7 @@ export default function DanhMucHoSo() {
             id: 'ca-nhan',
             label: 'Cá nhân',
             children: [
-                 {
+                {
                     id: 'national',
                     label: 'Quốc tịch',
                     icon: <Backpack style={{ fontSize: '24px' }} />,

@@ -10234,6 +10234,146 @@ export const useImportPhienBanCTDT = <TError = ImportPhienBanCTDT400, TContext =
     return useMutation(mutationOptions, queryClient)
 }
 
+export type exportPhienBanCTDTResponse200 = {
+    data: Blob
+    status: 200
+}
+
+export type exportPhienBanCTDTResponseSuccess = exportPhienBanCTDTResponse200 & {
+    headers: Headers
+}
+
+export type exportPhienBanCTDTResponse = exportPhienBanCTDTResponseSuccess
+
+export const getExportPhienBanCTDTUrl = (id: string) => {
+    return `/api/curriculum/export-phien-ban-ctdt/${id}`
+}
+
+export const exportPhienBanCTDT = async (
+    id: string,
+    options?: RequestInit
+): Promise<exportPhienBanCTDTResponse> => {
+    return customTrainingFetch<exportPhienBanCTDTResponse>(getExportPhienBanCTDTUrl(id), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getExportPhienBanCTDTQueryKey = (id?: string) => {
+    return [`/api/curriculum/export-phien-ban-ctdt/${id}`] as const
+}
+
+export const getExportPhienBanCTDTQueryOptions = <
+    TData = Awaited<ReturnType<typeof exportPhienBanCTDT>>,
+    TError = unknown,
+>(
+    id: string,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportPhienBanCTDT>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getExportPhienBanCTDTQueryKey(id)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportPhienBanCTDT>>> = ({ signal }) =>
+        exportPhienBanCTDT(id, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof exportPhienBanCTDT>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ExportPhienBanCTDTQueryResult = NonNullable<
+    Awaited<ReturnType<typeof exportPhienBanCTDT>>
+>
+export type ExportPhienBanCTDTQueryError = unknown
+
+export function useExportPhienBanCTDT<
+    TData = Awaited<ReturnType<typeof exportPhienBanCTDT>>,
+    TError = unknown,
+>(
+    id: string,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportPhienBanCTDT>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportPhienBanCTDT>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportPhienBanCTDT>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportPhienBanCTDT<
+    TData = Awaited<ReturnType<typeof exportPhienBanCTDT>>,
+    TError = unknown,
+>(
+    id: string,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportPhienBanCTDT>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportPhienBanCTDT>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportPhienBanCTDT>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportPhienBanCTDT<
+    TData = Awaited<ReturnType<typeof exportPhienBanCTDT>>,
+    TError = unknown,
+>(
+    id: string,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportPhienBanCTDT>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useExportPhienBanCTDT<
+    TData = Awaited<ReturnType<typeof exportPhienBanCTDT>>,
+    TError = unknown,
+>(
+    id: string,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportPhienBanCTDT>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getExportPhienBanCTDTQueryOptions(id, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
 export type importPhienBanCTDTSubjectResponse200 = {
     data: ImportPhienBanCTDTSubject200
     status: 200

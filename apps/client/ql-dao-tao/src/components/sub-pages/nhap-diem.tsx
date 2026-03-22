@@ -47,7 +47,7 @@ import {
 import dayjs from 'dayjs'
 import type Decimal from 'decimal.js'
 import _ from 'lodash'
-import { AlertCircle, FileUp, Printer, Save } from 'lucide-react'
+import { FileUp, History, Printer, Save } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -1184,7 +1184,7 @@ export default function NhapDiem({
                             {
                                 title: 'Điểm TX',
                                 dataIndex: 'attendanceScore',
-                                width: 65,
+                                width: 100,
                                 align: 'center',
                                 // type: 'order',
                                 render: (_, record) => {
@@ -1232,9 +1232,9 @@ export default function NhapDiem({
                                                     e.stopPropagation()
                                                     openScoreDetail({ id: record.id })
                                                 }}
-                                                className="ml-1 cursor-pointer text-red-500 hover:scale-110"
+                                                className="ml-1 cursor-pointer hover:scale-110"
                                             >
-                                                <AlertCircle size={14} />
+                                                <History size={14} />
                                             </span>
                                         </div>
                                     )
@@ -1244,7 +1244,7 @@ export default function NhapDiem({
                             {
                                 title: 'Điểm ĐK',
                                 dataIndex: 'midtermScore',
-                                width: 65,
+                                width: 100,
                                 align: 'center',
                                 // type: 'order',
                                 render: (_, record) => {
@@ -1292,9 +1292,9 @@ export default function NhapDiem({
                                                     e.stopPropagation()
                                                     openScoreDetail({ id: record.id })
                                                 }}
-                                                className="ml-1 cursor-pointer text-red-500 hover:scale-110"
+                                                className="ml-1 cursor-pointer hover:scale-110"
                                             >
-                                                <AlertCircle size={14} />
+                                                <History size={14} />
                                             </span>
                                         </div>
                                     )
@@ -1304,7 +1304,7 @@ export default function NhapDiem({
                             {
                                 title: 'Điểm thi',
                                 dataIndex: 'examScore',
-                                width: 65,
+                                width: 100,
                                 align: 'center',
                                 render: (
                                     _,
@@ -1366,9 +1366,9 @@ export default function NhapDiem({
                                                     e.stopPropagation()
                                                     openScoreDetail({ id })
                                                 }}
-                                                className="ml-1 cursor-pointer text-red-500 hover:scale-110"
+                                                className="ml-1 cursor-pointer hover:scale-110"
                                             >
-                                                <AlertCircle size={14} />
+                                                <History size={14} />
                                             </span>
                                         </div>
                                     )

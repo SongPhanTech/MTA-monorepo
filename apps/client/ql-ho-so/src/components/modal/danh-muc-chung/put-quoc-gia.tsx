@@ -12,9 +12,7 @@ type FormValues = {
     description?: string
 }
 export default function QuocGiaModal() {
-
-
-const [form] = Form.useForm<FormValues>()
+    const [form] = Form.useForm<FormValues>()
 
     const { isOpen, onClose, input } = useDisclosure<Partial<DM_QuocGia>>({
         tag: 'PutDanhMucQuocGiaModal',
@@ -26,51 +24,47 @@ const [form] = Form.useForm<FormValues>()
     const { mutateAsync: createDM_QuocGia } = useCreateDM_QuocGia()
     const { mutateAsync: updateDM_QuocGia } = useUpdateDM_QuocGia()
 
-async function onOk(values: FormValues) {
-    try {
-        showSpinner()
+    async function onOk(values: FormValues) {
+        try {
+            showSpinner()
 
-        const payload = {
-            sTen: values.name.trim(),
-            ...(values.description
-                ? { sGhiChu: values.description }
-                : {}),
+            const payload = {
+                sTen: values.name.trim(),
+                ...(values.description ? { sGhiChu: values.description } : {}),
+            }
+
+            if (input?.Id) {
+                await updateDM_QuocGia({
+                    where: { Id: input.Id },
+                    data: payload,
+                })
+            } else {
+                await createDM_QuocGia({
+                    data: payload,
+                })
+            }
+
+            message.success(input?.Id ? 'Cập nhật thành công' : 'Thêm mới thành công')
+            onClose()
+        } catch (error) {
+            console.error(error)
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
+    }
+    useEffect(() => {
+        if (isOpen && input?.Id) {
+            form.setFieldsValue({
+                name: input.sTen || '',
+                description: input.sGhiChu || '',
+            })
         }
 
-        if (input?.Id) {
-            await updateDM_QuocGia({
-                where: { Id: input.Id },
-                data: payload,
-            })
-        } else {
-            await createDM_QuocGia({
-                data: payload,
-            })
+        if (isOpen && !input?.Id) {
+            form.resetFields()
         }
-
-        message.success(
-            input?.Id ? 'Cập nhật thành công' : 'Thêm mới thành công'
-        )
-        onClose()
-    } catch (error) {
-        console.error(error)
-        message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-    } finally {
-        hideSpinner()
-    }
-}
-useEffect(() => {
-    if (isOpen && input?.Id) {
-        form.setFieldsValue({
-            name: input.sTen || '',
-            description: input.sGhiChu || '',
-        })
-    }
-
-    if (isOpen && !input?.Id) {
-        form.resetFields()
-    }
-}, [isOpen, input, form])
+    }, [isOpen, input, form])
 
     return (
         <PutFormModal
@@ -83,12 +77,12 @@ useEffect(() => {
             layout="vertical"
         >
             <Col span={24}>
-                <FormItem label="Tên quốc tịch" name="name" required form={form}>
+                <FormItem label="Tên quốc tịch" name="sTen" required form={form}>
                     <Input placeholder="Nhập tên quốc tịch" />
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem label="Mô tả" name="description" form={form}>
+                <FormItem label="Mô tả" name="sGhiChu" form={form}>
                     <Input.TextArea rows={3} placeholder="Nhập ghi chú" />
                 </FormItem>
             </Col>

@@ -263,9 +263,7 @@ const PutGraduationDecision = () => {
                             label: [item.classification].filter(Boolean).join(' - '),
                             value: item.id,
                         }))}
-                        showSearch
-                        filterOption={false}
-                        allowClear
+                        disabled
                     />
                 </FormItem>
             </Col>
@@ -277,6 +275,7 @@ const PutGraduationDecision = () => {
                         placeholder="Nhập gpa"
                         step={0.1}
                         className="w-full"
+                        disabled
                     />
                 </FormItem>
             </Col>
