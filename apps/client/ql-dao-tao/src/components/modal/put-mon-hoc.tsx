@@ -16,6 +16,7 @@ import { Col, Form, Input, InputNumber, message } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import { whereOrganization } from '@workspace/libs/constants'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import TreeSelect from '@/components/commons/tree-select'
@@ -107,7 +108,14 @@ const PutSubjectModal = () => {
         orderBy: [{ iSTT: 'asc' }, { sTen: 'asc' }],
     })
     const treeData = buildOrgTree(manageOrgData)
-    const { data: subjectGroupData = [], refetch: refetchSGroup } = useFindManySubject()
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+    const { data: subjectGroupData = [], refetch: refetchSGroup } = useFindManySubject({
+        where: {
+            subjectVersion: {
+                some: { trainingObjectTypeId },
+            },
+        },
+    })
 
     return (
         <PutFormModal

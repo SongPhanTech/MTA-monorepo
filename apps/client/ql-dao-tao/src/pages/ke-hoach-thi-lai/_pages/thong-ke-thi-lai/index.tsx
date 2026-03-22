@@ -145,11 +145,11 @@ export default function ThongKeNoThiLai() {
                             title: 'Môn học',
                             dataIndex: 'name',
                         },
-                        {
-                            title: 'Số SV nợ',
-                            dataIndex: 'count',
-                            align: 'center',
-                        },
+                        // {
+                        //     title: 'Số SV nợ',
+                        //     dataIndex: 'count',
+                        //     align: 'center',
+                        // },
                     ]}
                 />
             </Col>

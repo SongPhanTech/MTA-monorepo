@@ -263,12 +263,12 @@ export default function MonCoHVSVChuaDat({ type }: { type?: $Enums.SubjectClassT
                                     )
                                 },
                             },
-                            {
-                                title: 'Số SV nợ',
-                                dataIndex: 'count',
-                                width: 80,
-                                align: 'center',
-                            },
+                            // {
+                            //     title: 'Số SV nợ',
+                            //     dataIndex: 'count',
+                            //     width: 80,
+                            //     align: 'center',
+                            // },
                         ]}
                         pagination={{
                             current: currentPage,

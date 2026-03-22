@@ -358,20 +358,31 @@ const PutArchivedAwardModal = () => {
                 </FormItem>
             </Col>
             <Col span={24} className="mb-4">
-                <FormItem form={form} name="studentSubjectScoreId" label="Cộng điểm học phần">
-                    <div className="mb-2">
-                        <Switch
-                            checked={filterByAward}
-                            onChange={setFilterByAward}
-                            checkedChildren="Lọc theo giải"
-                            unCheckedChildren="Tất cả môn"
-                        />
-                        <span className="ml-2 text-gray-500">
-                            {filterByAward
-                                ? 'Chỉ hiển thị môn thuộc giải olympic'
-                                : 'Hiển thị tất cả môn học'}
-                        </span>
-                    </div>
+                <FormItem
+                    form={form}
+                    name="studentSubjectScoreId"
+                    label={
+                        <div className="flex flex-col">
+                            <span>Cộng điểm học phần</span>
+                            <div
+                                className="font-normal mt-1"
+                                onClick={(e) => e.preventDefault()}
+                            >
+                                <Switch
+                                    checked={filterByAward}
+                                    onChange={setFilterByAward}
+                                    checkedChildren="Lọc theo giải"
+                                    unCheckedChildren="Tất cả môn"
+                                />
+                                <span className="ml-2 text-gray-500">
+                                    {filterByAward
+                                        ? 'Chỉ hiển thị môn thuộc giải olympic'
+                                        : 'Hiển thị tất cả môn học'}
+                                </span>
+                            </div>
+                        </div>
+                    }
+                >
                     <Select
                         showSearch
                         style={{ width: '100%' }}

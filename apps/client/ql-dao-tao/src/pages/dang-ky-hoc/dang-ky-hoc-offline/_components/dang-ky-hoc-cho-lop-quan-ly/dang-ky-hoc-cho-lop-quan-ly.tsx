@@ -38,7 +38,9 @@ export default function DangKyHocChoLopQuanLy() {
             trainingObjectTypeId,
         },
         orderBy: {
-            name: 'asc',
+            semesterStart: {
+                startDate: 'desc',
+            },
         },
     })
 
@@ -90,7 +92,6 @@ export default function DangKyHocChoLopQuanLy() {
                         },
                     },
                 },
-                
             },
             _count: {
                 select: {

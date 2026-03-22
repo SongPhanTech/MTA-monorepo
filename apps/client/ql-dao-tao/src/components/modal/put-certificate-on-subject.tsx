@@ -11,6 +11,7 @@ import {
     useFindUniqueCertificateOnSubject,
     useUpdateCertificateOnSubject,
 } from '@workspace/db/hooks'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Form, InputNumber, message } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
@@ -64,7 +65,15 @@ const PutCertificateOnSubjectScoreModal = () => {
             hideSpinner()
         }
     }
-    const { data: subjectData = [] } = useFindManySubject()
+
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+    const { data: subjectData = [] } = useFindManySubject({
+        where: {
+            subjectVersion: {
+                some: { trainingObjectTypeId },
+            },
+        },
+    })
     const { data: level } = useFindUniqueCertificateOnSubject(
         {
             where: { id: input?.id },
