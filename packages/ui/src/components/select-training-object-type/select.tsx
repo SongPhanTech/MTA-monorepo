@@ -25,6 +25,7 @@ const SelectTrainingObjectType = ({ subsystem, ...props }: SelectTrainingObjectT
                 <p>Đối tượng đào tạo</p>
             </Tooltip>
             <Select
+                dropdownStyle={{ maxHeight: 300, overflow: 'auto', width: 250 }}
                 placeholder="Chọn đối tượng đào tạo"
                 options={doiTuongDaoTao.map((e) => ({
                     label: e.name,
