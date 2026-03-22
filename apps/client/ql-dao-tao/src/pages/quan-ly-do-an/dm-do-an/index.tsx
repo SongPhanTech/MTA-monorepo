@@ -7,7 +7,6 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { useThesisProjectStatusOptions } from '@hooks/thesisProjectStatus'
 import DefaultLayout from '@layouts/default-layout'
-import { buildOrgFlat } from '@lib/utils'
 import { useSession } from '@workspace/auth/react'
 import {
     CouncilRole,
@@ -16,17 +15,16 @@ import {
     ThesisProjectStatus,
     ThesisType,
 } from '@workspace/db'
+import { $Enums } from '@workspace/db/client'
 import {
     useCountThesisProject,
     useFindFirstLecturer,
     useFindManyDefenseSession,
-    useFindManyDM_DonVi,
     useFindManyRoom,
     useFindManySubjectClass,
     useFindManyThesisProject,
     useUpdateThesisProject,
 } from '@workspace/db/hooks'
-import { whereOrganization } from '@workspace/libs'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { formatLecturerName } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions'
@@ -72,7 +70,6 @@ export default function DanhMucDoAn() {
     const [editingRowKeys, setEditingRowKeys] = useState<string[]>([])
     const [editingValues, setEditingValues] = useState<Record<string, Record<string, any>>>({})
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
-    const orgId = window.contextData?.organizationId
 
     const { can } = useAbility()
 
@@ -85,30 +82,6 @@ export default function DanhMucDoAn() {
         { where: { userProfileId: me?.sDM_NhanVienId } },
         { enabled: !!me?.sDM_NhanVienId }
     )
-
-    const { data: dmDonViIds = [] } = useFindManyDM_DonVi(
-        {
-            select: { Id: true },
-            where: whereOrganization,
-            orderBy: [{ iSTT: 'asc' }, { sTen: 'asc' }],
-        },
-        {
-            refetchOnWindowFocus: false,
-        }
-    )
-
-    const orgIds = [
-        ...buildOrgFlat(
-            dmDonViIds.map((e) => ({
-                Id: e.Id,
-                sTen: null,
-                sParentId: null,
-                sMa: null,
-            })),
-            orgId || '0'
-        ).map((org) => org.value),
-        orgId,
-    ].filter(Boolean)
 
     const isProjectLecturer = can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DM_DO_AN, 'SUA')
 
@@ -431,11 +404,11 @@ export default function DanhMucDoAn() {
 
                 const updateData: any = {
                     title: values.title || '',
-                    status: values.status || 'PROPOSED',
+                    status: values.status || $Enums.ThesisProjectStatus.PROPOSED,
                     defenseDate: values.defenseDate ? dayjs(values.defenseDate).toDate() : null,
                     editProject: values.editProject ?? null,
-                    primarySupervisorId: values.primarySupervisorId || null,
-                    secondarySupervisorId: values.secondarySupervisorId || null,
+                    primarySupervisor: relation(values.primarySupervisorId),
+                    secondarySupervisor: relation(values.secondarySupervisorId),
                     room: relation(values.room),
                     defenseSession: relation(values.defenseSessionId),
                     defenseRecord: {
@@ -792,6 +765,10 @@ export default function DanhMucDoAn() {
                                                         record?.secondarySupervisorId,
                                                 ].filter(Boolean) as string[]
                                             }
+                                            organizationId={
+                                                record?.subjectClass?.subject
+                                                    ?.managementOrganizationId
+                                            }
                                             onChange={(value) =>
                                                 handleEditChange(
                                                     record?.id,
@@ -826,6 +803,10 @@ export default function DanhMucDoAn() {
                                                         ?.primarySupervisorId ||
                                                         record?.primarySupervisorId,
                                                 ].filter(Boolean) as string[]
+                                            }
+                                            organizationId={
+                                                record?.subjectClass?.subject
+                                                    ?.managementOrganizationId
                                             }
                                             onChange={(value) =>
                                                 handleEditChange(
