@@ -19,7 +19,7 @@ export default function QuestionListByKnowledgeBlockModal() {
     }>({
         tag: 'QuestionListByKnowledgeBlockModal',
     })
-    const editModal = useDisclosure<{
+    const { onOpen: onOpenPutQuestion } = useDisclosure<{
         id: string
         questionBankId: string
         subjectVersionId: string
@@ -235,10 +235,10 @@ export default function QuestionListByKnowledgeBlockModal() {
                         render: (_, record) => (
                             <Row className="justify-center gap-2">
                                 <EditIcon
-                                    onClick={() => {
-                                        editModal.onOpen({
+                                    onClick={(e) => {
+                                        onOpenPutQuestion({
                                             id: record.id,
-                                            questionBankId: record.questionBankId, // 🔥 lấy từ record
+                                            questionBankId: record.questionBankId,
                                             subjectVersionId: record.questionBank?.subjectVersionId,
                                         })
                                     }}
