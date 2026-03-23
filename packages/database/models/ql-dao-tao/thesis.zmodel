@@ -86,11 +86,11 @@ model ThesisProject extends Base {
 
   //GVHD1 cho đồ án
   primarySupervisor     Lecturer?                   @relation("PrimarySupervisorToThesis", fields: [primarySupervisorId], references: [id])
-  primarySupervisorId   String?                     @unique // Null nếu là chuyên gia ngoài trường
+  primarySupervisorId   String?                   
 
   //GVHD2 cho đồ án
   secondarySupervisor   Lecturer?                   @relation("SecondarySupervisorToThesis", fields: [secondarySupervisorId], references: [id])
-  secondarySupervisorId String?                     @unique // Null nếu là chuyên gia ngoài trường
+  secondarySupervisorId String?
 
   subjectClass          SubjectClass?               @relation(fields: [subjectClassId], references: [id])
   subjectClassId        String?

@@ -4752,9 +4752,9 @@ model ThesisProject {
   secondCheckProgress   Int?
   isEligibleForDefense  Boolean                     @default(true)
   primarySupervisor     Lecturer?                   @relation("PrimarySupervisorToThesis", fields: [primarySupervisorId], references: [id])
-  primarySupervisorId   String?                     @unique()
+  primarySupervisorId   String?
   secondarySupervisor   Lecturer?                   @relation("SecondarySupervisorToThesis", fields: [secondarySupervisorId], references: [id])
-  secondarySupervisorId String?                     @unique()
+  secondarySupervisorId String?
   subjectClass          SubjectClass?               @relation(fields: [subjectClassId], references: [id])
   subjectClassId        String?
   thesisSession         ThesisSession?              @relation(fields: [thesisSessionId], references: [id])

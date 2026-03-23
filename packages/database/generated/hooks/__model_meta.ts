@@ -17517,12 +17517,6 @@ const metadata: ModelMeta = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                }, primarySupervisorId: {
-                    name: "primarySupervisorId",
-                    fields: ["primarySupervisorId"]
-                }, secondarySupervisorId: {
-                    name: "secondarySupervisorId",
-                    fields: ["secondarySupervisorId"]
                 },
             },
         },

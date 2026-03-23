@@ -18223,7 +18223,6 @@ const metadata: ModelMeta = {
                     name: "primarySupervisorId",
                     type: "String",
                     isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
                     isForeignKey: true,
                     relationField: 'primarySupervisor',
                 }, secondarySupervisor: {
@@ -18239,7 +18238,6 @@ const metadata: ModelMeta = {
                     name: "secondarySupervisorId",
                     type: "String",
                     isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
                     isForeignKey: true,
                     relationField: 'secondarySupervisor',
                 }, subjectClass: {
@@ -18477,12 +18475,6 @@ const metadata: ModelMeta = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                }, primarySupervisorId: {
-                    name: "primarySupervisorId",
-                    fields: ["primarySupervisorId"]
-                }, secondarySupervisorId: {
-                    name: "secondarySupervisorId",
-                    fields: ["secondarySupervisorId"]
                 },
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],

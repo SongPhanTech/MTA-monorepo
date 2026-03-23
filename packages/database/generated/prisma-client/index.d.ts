@@ -405952,8 +405952,6 @@ export namespace Prisma {
   export type ThesisProjectWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     code?: string
-    primarySupervisorId?: string
-    secondarySupervisorId?: string
     AND?: ThesisProjectWhereInput | ThesisProjectWhereInput[]
     OR?: ThesisProjectWhereInput[]
     NOT?: ThesisProjectWhereInput | ThesisProjectWhereInput[]
@@ -405981,6 +405979,8 @@ export namespace Prisma {
     firstCheckProgress?: IntNullableFilter<"ThesisProject"> | number | null
     secondCheckProgress?: IntNullableFilter<"ThesisProject"> | number | null
     isEligibleForDefense?: BoolFilter<"ThesisProject"> | boolean
+    primarySupervisorId?: StringNullableFilter<"ThesisProject"> | string | null
+    secondarySupervisorId?: StringNullableFilter<"ThesisProject"> | string | null
     subjectClassId?: StringNullableFilter<"ThesisProject"> | string | null
     thesisSessionId?: StringNullableFilter<"ThesisProject"> | string | null
     supervisorName?: StringNullableFilter<"ThesisProject"> | string | null
@@ -406020,7 +406020,7 @@ export namespace Prisma {
     librarySubmission?: XOR<LibrarySubmissionNullableScalarRelationFilter, LibrarySubmissionWhereInput> | null
     decisions?: DecisionListRelationFilter
     registrations?: StudentThesisRegistrationListRelationFilter
-  }, "id" | "code" | "primarySupervisorId" | "secondarySupervisorId">
+  }, "id" | "code">
 
   export type ThesisProjectOrderByWithAggregationInput = {
     id?: SortOrder
