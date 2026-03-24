@@ -16,6 +16,7 @@ import {
     useFindManySubjectClass,
     useUpdateManySubjectClass,
 } from '@workspace/db/hooks'
+import { sqlTransaction } from '@workspace/libs/api/model'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
@@ -331,21 +332,18 @@ export default function DanhSachLopMonHoc({
                 return
             }
 
-            await Promise.all(
-                updateData.map((item) =>
-                    updateManySubjectClass({
+            const res = await sqlTransaction(
+                updateData.map((item) => ({
+                    model: 'SubjectClass',
+                    operation: 'update',
+                    data: {
+                        where: { id: item.id },
                         data: {
                             examDate: item.examDate,
                         },
-                        where: {
-                            id: {
-                                in: [item.id],
-                            },
-                        },
-                    })
-                )
+                    },
+                }))
             )
-
             message.success('Cập nhật thành công')
 
             setIsDirty(false)
@@ -642,27 +640,27 @@ export default function DanhSachLopMonHoc({
                                             dayjs().isAfter(dayjs(record.examScoreDeadline))
 
                                         return (
-                                                <Form.Item
-                                                    name={['subjectClass', record.id, 'examDate']}
-                                                    className="m-0"
-                                                >
-                                                    <DatePicker
-                                                        allowClear
-                                                        format="DD/MM/YYYY"
-                                                        className={cn(
-                                                            'w-full px-1',
-                                                            isExpired && 'border-red-500'
-                                                        )}
-                                                        disabled={isExpired || !canUpdate}
-                                                        status={isExpired ? 'error' : ''}
-                                                        onChange={() => {
-                                                            diemLopMonHocStore.setState({
-                                                                selectedSubjectClassId: record.id,
-                                                            })
-                                                            setIsDirty(true)
-                                                        }}
-                                                    />
-                                                </Form.Item>
+                                            <Form.Item
+                                                name={['subjectClass', record.id, 'examDate']}
+                                                className="m-0"
+                                            >
+                                                <DatePicker
+                                                    allowClear
+                                                    format="DD/MM/YYYY"
+                                                    className={cn(
+                                                        'w-full px-1',
+                                                        isExpired && 'border-red-500'
+                                                    )}
+                                                    disabled={isExpired || !canUpdate}
+                                                    status={isExpired ? 'error' : ''}
+                                                    onChange={() => {
+                                                        diemLopMonHocStore.setState({
+                                                            selectedSubjectClassId: record.id,
+                                                        })
+                                                        setIsDirty(true)
+                                                    }}
+                                                />
+                                            </Form.Item>
                                         )
                                     },
                                 },
