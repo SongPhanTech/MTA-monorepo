@@ -500,7 +500,7 @@ export const buildSubjectMapOrThrow = async (
 
     const existingCode = await prisma.subjectVersion.findMany({
         where: {
-            code: { in: uniqueSubject.map((s) => s.code).filter((c): c is string => Boolean(c)) },
+            code: { in: subjects.map((s) => s.code).filter((c): c is string => Boolean(c)) },
         },
     })
 
@@ -544,10 +544,11 @@ export const buildSubjectMapOrThrow = async (
                 e.name === s.name &&
                 e.credit === s.credit &&
                 e.period === s.period &&
-                e.managementOrganizationId === orgMap.get(s.organizationCode || null)
+                e.managementOrganizationId === orgMap.get(s.organizationCode || null) &&
+                e.code !== null &&
+                e.code !== s.code
         )
-        if (!existing) return false
-        return existing.code && s.code && existing.code !== s.code
+        return !!existing
     })
 
     if (combinationConflicts.length > 0) {
@@ -568,16 +569,17 @@ export const buildSubjectMapOrThrow = async (
                     ? { managementOrganizationId: orgMap.get(s.organizationCode || null) }
                     : {}),
                 credit: s.credit,
-                examType: s.examType,
-                type: s.type,
-                period: s.period,
-                schedulePeriod: s.schedulePeriod,
-                ...(s.numberOfTheory ? { numberOfTheory: s.numberOfTheory } : {}),
-                ...(s.numberOfPractical ? { numberOfPractical: s.numberOfPractical } : {}),
-                ...(s.numberOfSelfStudy ? { numberOfSelfStudy: s.numberOfSelfStudy } : {}),
-                ...(s.numberOfPractice ? { numberOfPractice: s.numberOfPractice } : {}),
-                ...(s.numberOfReview ? { numberOfReview: s.numberOfReview } : {}),
-                ...(s.numberOfExam ? { numberOfExam: s.numberOfExam } : {}),
+                OR: [{ period: s.period }, { period: null }],
+                // TODO: correct this
+                // examType: s.examType,
+                // type: s.type,
+                // schedulePeriod: s.schedulePeriod,
+                // ...(s.numberOfTheory ? { numberOfTheory: s.numberOfTheory } : {}),
+                // ...(s.numberOfPractical ? { numberOfPractical: s.numberOfPractical } : {}),
+                // ...(s.numberOfSelfStudy ? { numberOfSelfStudy: s.numberOfSelfStudy } : {}),
+                // ...(s.numberOfPractice ? { numberOfPractice: s.numberOfPractice } : {}),
+                // ...(s.numberOfReview ? { numberOfReview: s.numberOfReview } : {}),
+                // ...(s.numberOfExam ? { numberOfExam: s.numberOfExam } : {}),
             })),
         },
         select: { id: true, code: true },
@@ -610,6 +612,7 @@ export const buildSubjectMapOrThrow = async (
                     trainingObjectTypeId: subject.trainingObjectTypeId,
                     credit: subject.credit,
                     code: subject.code,
+                    codeTkb: subject.code,
                     examType: subject.examType,
                     type: subject.type,
                     onePoint: subject.onePoint,
@@ -636,18 +639,19 @@ export const buildSubjectMapOrThrow = async (
 
         return new Map([...existing, ...newSubjects].map(({ code, id }) => [code, id]))
     }
-
     if (missing.length && !createNewSubject) {
+        const missingDetails = missing
+            .map(
+                ({ name, organizationCode, credit }) => `${name} (${credit}) - ${organizationCode}`
+            )
+            .join('; ')
+
+        console.error(`[Subject Error]: Versions do not exist: ${missingDetails}`)
         throw new HTTPException(400, {
-            message: `Phiên bản môn học không tồn tại: ${missing
-                .map(
-                    ({ name, organizationCode, credit }) =>
-                        `${name}${` (${credit})` || ''}${organizationCode ? ` - ${organizationCode}` : ''}`
-                )
-                .join('; ')}`,
+            message:
+                'Một hoặc nhiều phiên bản môn học không tồn tại trong hệ thống. Vui lòng kiểm tra lại dữ liệu.',
         })
     }
-
     return new Map(existing.map(({ code, id }) => [code, id]))
 }
 

@@ -301,9 +301,13 @@ const metadata: ModelMeta = {
                 }, firstName: {
                     name: "firstName",
                     type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
                 }, lastName: {
                     name: "lastName",
                     type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
                 }, idCardNumber: {
                     name: "idCardNumber",
                     type: "String",
@@ -8532,7 +8536,7 @@ const metadata: ModelMeta = {
                     fields: ["subjectClassId", "studentId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         studentSubjectScoreHistory: {
             name: 'StudentSubjectScoreHistory', fields: {
@@ -9535,6 +9539,12 @@ const metadata: ModelMeta = {
                 }, semesterTrainingScore: {
                     name: "semesterTrainingScore",
                     type: "SemesterTrainingScore",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'semester',
+                }, availableTrainingTime: {
+                    name: "availableTrainingTime",
+                    type: "AvailableTrainingTime",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'semester',
@@ -10865,11 +10875,6 @@ const metadata: ModelMeta = {
                     type: "String",
                     isId: true,
                     attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
                 }, active: {
                     name: "active",
                     type: "Boolean",
@@ -10897,6 +10902,9 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$SubjectVersion$createdBy,
+                }, code: {
+                    name: "code",
+                    type: "String",
                 }, isLocked: {
                     name: "isLocked",
                     type: "Boolean",
@@ -11152,15 +11160,12 @@ const metadata: ModelMeta = {
                 id: {
                     name: "id",
                     fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
                 }, trainingObjectTypeId_name_credit_period_managementOrganizationId: {
                     name: "trainingObjectTypeId_name_credit_period_managementOrganizationId",
                     fields: ["trainingObjectTypeId", "name", "credit", "period", "managementOrganizationId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null, null, null, null] }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null, null, null, null] }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         subjectVersionHistory: {
             name: 'SubjectVersionHistory', fields: {
@@ -12139,7 +12144,7 @@ const metadata: ModelMeta = {
                     fields: ["scoreLinkSubjectVersionId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         subjectClassAttendance: {
             name: 'SubjectClassAttendance', fields: {
@@ -12490,7 +12495,7 @@ const metadata: ModelMeta = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         classSchedule: {
             name: 'ClassSchedule', fields: {
@@ -13045,6 +13050,12 @@ const metadata: ModelMeta = {
                 }, scoreLinkSheet: {
                     name: "scoreLinkSheet",
                     type: "ScoreLinkSheet",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingObjectType',
+                }, availableTrainingTime: {
+                    name: "availableTrainingTime",
+                    type: "AvailableTrainingTime",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingObjectType',
@@ -14313,6 +14324,90 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingTime',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        availableTrainingTime: {
+            name: 'AvailableTrainingTime', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$AvailableTrainingTime$createdBy,
+                }, duration: {
+                    name: "duration",
+                    type: "Float",
+                }, trainingObjectType: {
+                    name: "trainingObjectType",
+                    type: "TrainingObjectType",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'availableTrainingTime',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
+                }, trainingObjectTypeId: {
+                    name: "trainingObjectTypeId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'trainingObjectType',
+                }, semester: {
+                    name: "semester",
+                    type: "Semester",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'availableTrainingTime',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "semesterId" },
+                }, semesterId: {
+                    name: "semesterId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'semester',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -17467,6 +17562,20 @@ const metadata: ModelMeta = {
                     isArray: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "EvaluationCriterionLecturerReview" }] }],
                     backLink: 'lecturerReview',
+                }, primarySupervisorThesisProject: {
+                    name: "primarySupervisorThesisProject",
+                    type: "ThesisProject",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "PrimarySupervisorToThesis" }] }],
+                    backLink: 'primarySupervisor',
+                }, secondarySupervisorThesisProject: {
+                    name: "secondarySupervisorThesisProject",
+                    type: "ThesisProject",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "SecondarySupervisorToThesis" }] }],
+                    backLink: 'secondarySupervisor',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -17483,7 +17592,7 @@ const metadata: ModelMeta = {
                     fields: ["userProfileId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         lecturerHistory: {
             name: 'LecturerHistory', fields: {
@@ -18101,6 +18210,36 @@ const metadata: ModelMeta = {
                     name: "isEligibleForDefense",
                     type: "Boolean",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, primarySupervisor: {
+                    name: "primarySupervisor",
+                    type: "Lecturer",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "PrimarySupervisorToThesis" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'primarySupervisorThesisProject',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "primarySupervisorId" },
+                }, primarySupervisorId: {
+                    name: "primarySupervisorId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'primarySupervisor',
+                }, secondarySupervisor: {
+                    name: "secondarySupervisor",
+                    type: "Lecturer",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "SecondarySupervisorToThesis" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'secondarySupervisorThesisProject',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "secondarySupervisorId" },
+                }, secondarySupervisorId: {
+                    name: "secondarySupervisorId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'secondarySupervisor',
                 }, subjectClass: {
                     name: "subjectClass",
                     type: "SubjectClass",
@@ -28961,6 +29100,10 @@ function $default$TrainingBlockOnCurriculumVersion$createdBy(user: any): unknown
 }
 
 function $default$TrainingTime$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$AvailableTrainingTime$createdBy(user: any): unknown {
     return user?.id;
 }
 

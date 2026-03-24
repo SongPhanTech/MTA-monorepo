@@ -68,7 +68,9 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
             trainingObjectTypeId: trainingObjectTypeId,
         },
         orderBy: {
-            name: 'desc',
+            semesterStart: {
+                startDate: 'desc',
+            },
         },
     })
 

@@ -76,7 +76,9 @@ export default function GraduationRankingPage() {
         where,
         include: includeQuery,
         orderBy: {
-            name: 'asc',
+            semesterStart: {
+                startDate: 'desc',
+            },
         },
     })
 
@@ -118,9 +120,7 @@ export default function GraduationRankingPage() {
         try {
             showSpinner()
             await deleteAcademicRanking({
-                where: {
-                    id,
-                },
+                where: { id },
             })
         } catch (error: any) {
             if (error?.info?.message) {

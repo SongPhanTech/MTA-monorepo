@@ -9,6 +9,7 @@ import {
     useFindUniqueSubjectClass,
     useUpdateSubjectClass,
 } from '@workspace/db/hooks'
+import { formatLecturerName } from '@workspace/libs'
 import { Checkbox, Col, Form, Input, Row, Tabs, type TabsProps } from 'antd'
 import dayjs from 'dayjs'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -48,7 +49,14 @@ export default function QuanLyDiemLopMonHoc({
             include: {
                 mainLecturer: {
                     include: {
-                        userProfile: true,
+                        userProfile: {
+                            select: {
+                                id: true,
+                                fullname: true,
+                                academicDegreeType: true,
+                                academicRankType: true,
+                            },
+                        },
                     },
                 },
                 subject: {
@@ -312,11 +320,7 @@ export default function QuanLyDiemLopMonHoc({
                             className="w-full pointer-events-none"
                             placeholder="Giảng viên"
                             size="small"
-                            value={
-                                data?.mainLecturer
-                                    ? `${data?.mainLecturer?.userProfile?.lastName} ${data?.mainLecturer?.userProfile?.firstName}`
-                                    : ''
-                            }
+                            value={formatLecturerName(data?.mainLecturer)}
                         />
                     </div>
                 </div>

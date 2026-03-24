@@ -263,6 +263,7 @@ export const parseSheetSubject = (file: ArrayBufferLike): ParseSubjectResult => 
     }
 
     // Kiểm tra trùng lặp subjects
+    // TODO: fix
     const duplicateSubjects = subjects.filter((s, index, arr) => arr.indexOf(s) !== index)
 
     if (duplicateSubjects.length) {

@@ -15,6 +15,7 @@ import {
     useFindManyFixedClass,
     useFindManySubjectClass,
 } from '@workspace/db/hooks'
+import { formatLecturerName } from '@workspace/libs'
 import {
     setExamScoreDeadLine,
     setScoreDeadLine,
@@ -285,13 +286,34 @@ export default function ClassSubject() {
                 },
             },
             mainLecturer: {
-                include: { userProfile: true },
+                include: {
+                    userProfile: {
+                        select: {
+                            fullname: true,
+                            code: true,
+                        },
+                    },
+                },
             },
-            extraLecturer: {
-                include: { userProfile: true },
-            },
+            // extraLecturer: {
+            //     include: {
+            //         userProfile: {
+            //             select: {
+            //                 fullname: true,
+            //                 code: true,
+            //             },
+            //         },
+            //     },
+            // },
             enterGradeLecturer: {
-                include: { userProfile: true },
+                include: {
+                    userProfile: {
+                        select: {
+                            fullname: true,
+                            code: true,
+                        },
+                    },
+                },
             },
             subjectClassStudent: {
                 include: {
@@ -556,7 +578,7 @@ export default function ClassSubject() {
                                             open={open}
                                             onOpenChange={setOpen}
                                         >
-                                            <Button type="primary">Đặt hạn nhập điểm ĐK/CC</Button>
+                                            <Button type="primary">Đặt hạn nhập điểm TX/ĐK</Button>
                                         </Popover>
                                         <Popover
                                             content={
@@ -863,13 +885,7 @@ export default function ClassSubject() {
                                 align: 'center',
                                 type: 'input',
                                 dataIndex: 'mainLecturer',
-                                render: (text, record: any) => {
-                                    const mainLecturer = record.mainLecturer
-                                        ? `${record.mainLecturer.userProfile.lastName} ${record.mainLecturer.userProfile.firstName}`
-                                        : ''
-
-                                    return <ul>{mainLecturer && <li>- {mainLecturer}</li>}</ul>
-                                },
+                                render: (text, record) => formatLecturerName(record.mainLecturer),
                             },
 
                             {
@@ -878,16 +894,8 @@ export default function ClassSubject() {
                                 align: 'center',
                                 type: 'input',
                                 dataIndex: 'mainLecturer',
-                                render: (text, record: any) => {
-                                    const enterGradeLecturer = record.enterGradeLecturer
-                                        ? `${record.enterGradeLecturer.userProfile.lastName} ${record.enterGradeLecturer.userProfile.firstName}`
-                                        : ''
-                                    return (
-                                        <ul>
-                                            {enterGradeLecturer && <li>- {enterGradeLecturer}</li>}
-                                        </ul>
-                                    )
-                                },
+                                render: (text, record) =>
+                                    formatLecturerName(record.enterGradeLecturer),
                             },
                             {
                                 title: 'ĐV phụ trách',

@@ -106,7 +106,11 @@ export default function TrainingCoursePage() {
                 ],
                 !!filters.admissionQuota
             ),
-            { name: 'asc' },
+            {
+                semesterStart: {
+                    startDate: 'desc',
+                },
+            },
         ],
 
         take: numberOfPages,
@@ -225,9 +229,7 @@ export default function TrainingCoursePage() {
         }
     }
     const { data: schoolYearData = [] } = useFindManySchoolYear({
-        orderBy: {
-            createdAt: 'desc',
-        },
+        orderBy: { startDate: 'desc' },
     })
 
     return (

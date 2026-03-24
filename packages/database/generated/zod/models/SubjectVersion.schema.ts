@@ -10,13 +10,13 @@ import { ExamTypeSchema } from '../enums/ExamType.schema';
 import { SubjectVersionTypeSchema } from '../enums/SubjectVersionType.schema';
 const baseSchema = z.object({
     id: z.string(),
-    code: z.string().nullish(),
     active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
     createdBy: z.string().uuid().nullish(),
+    code: z.string(),
     isLocked: z.boolean().default(false),
     name: z.string(),
     codeTkb: z.string().nullish(),
@@ -45,13 +45,13 @@ const baseSchema = z.object({
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
     id: z.string(),
-    code: z.string().nullish(),
     active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
+    code: z.string(),
     isLocked: z.boolean(),
     name: z.string(),
     codeTkb: z.string().nullish(),
@@ -134,13 +134,13 @@ export const SubjectVersionPrismaCreateSchema = baseSchemaWithoutDefaults.partia
  */
 export const SubjectVersionPrismaUpdateSchema = z.object({
     id: z.string(),
-    code: z.string().nullish(),
     active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
+    code: z.string(),
     isLocked: z.boolean(),
     name: z.string(),
     codeTkb: z.string().nullish(),

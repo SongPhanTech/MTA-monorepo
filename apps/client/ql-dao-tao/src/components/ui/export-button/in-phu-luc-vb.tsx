@@ -8,19 +8,17 @@ export type ExportDiplomaAppendixType = 'ONE_COLUMN' | 'TWO_COLUMNS' | 'TWO_COLU
 interface ExportDiplomaAppendixProps {
     title?: string
     _typeExport?: ExportDiplomaAppendixType
-    type?: ButtonProps["type"]
+    type?: ButtonProps['type']
     className?: HTMLProps<HTMLElement>['className']
     style?: HTMLProps<HTMLElement>['style']
+    onClick?: HTMLProps<HTMLElement>['onClick']
 }
 
 const ExportDiplomaAppendix = (props: ExportDiplomaAppendixProps) => {
     const { title, _typeExport, ...restProps } = props
 
-    const handleExportDiplomaAppendix = () => {
-        //TODO: logic export
-    }
     return (
-        <Button onClick={handleExportDiplomaAppendix} {...restProps}>
+        <Button {...restProps}>
             <Printer />
             <span>{title}</span>
         </Button>

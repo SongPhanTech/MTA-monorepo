@@ -1,6 +1,7 @@
 import { Button, Checkbox, Col, Flex, Modal, message, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
+import { DownloadOutlined } from '@ant-design/icons/lib/icons'
 import { queryClient } from '@api/index'
 import Table from '@components/commons/table'
 import TableCollapse from '@components/commons/tableCollapse'
@@ -19,14 +20,13 @@ import {
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import {
-    useExportStudentScholarshipJson,
     exportStudentScholarshipExcel,
+    useExportStudentScholarshipJson,
 } from '@workspace/libs/api/training'
+import { saveAs } from 'file-saver'
 import { BookPlus } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { saveAs } from 'file-saver'
-import { DownloadOutlined } from '@ant-design/icons/lib/icons'
 
 dayjs.locale('vi')
 
@@ -128,6 +128,11 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
 
     const { data: studentDataAward, refetch: refetchAward } = useFindManyTrainingCourse({
         where,
+        orderBy: {
+            semesterStart: {
+                startDate: 'desc',
+            },
+        },
         include: {
             scholarships: {
                 include: {
@@ -215,7 +220,6 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
         if (students.data && Array.isArray(students.data)) return students.data
         return []
     }, [students])
-    console.log('studentData:', studentData)
     const transformedTrainingCourses = useMemo(() => {
         if (!studentDataAward || !Array.isArray(studentDataAward)) return []
 
@@ -244,7 +248,6 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
             }
         })
     }, [studentDataAward])
-    console.log('transformedTrainingCourses:', transformedTrainingCourses)
 
     const { data: count } = useCountTrainingCourse({
         where: {
@@ -351,7 +354,6 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
         const dataToTransfer = selectedStudents.filter((s) => s.isSelected)
         setRightPanelData(dataToTransfer)
         setIsModalVisible(true)
-        message.success(`Đã chuyển ${dataToTransfer.length} sinh viên`)
     }
 
     const handleSaveScholarshipAward = async () => {
@@ -869,78 +871,82 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
                     </Col>
                 </Flex>
             </Col>
-            <Modal
-                title="Danh sách sinh viên được chọn"
-                open={isModalVisible}
-                onOk={handleSaveScholarshipAward}
-                onCancel={() => setIsModalVisible(false)}
-                width={800}
-                footer={[
-                    <Button key="back" onClick={() => setIsModalVisible(false)}>
-                        Đóng
-                    </Button>,
-                    <Button
-                        key="submit"
-                        type="primary"
-                        onClick={handleSaveScholarshipAward}
-                        disabled={rightPanelData.length === 0}
-                    >
-                        Lưu
-                    </Button>,
-                ]}
-            >
-                {rightPanelData.length > 0 ? (
-                    <Table
-                        rowKey="id"
-                        data={rightPanelData}
-                        columns={[
-                            {
-                                title: 'STT',
-                                width: 50,
-                                align: 'center',
-                                fixed: 'left',
-                                render: (_, __, index) =>
-                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
-                            },
-                            {
-                                title: 'Mã sinh viên',
-                                dataIndex: 'code',
-                                width: 120,
-                                align: 'center',
-                                fixed: 'left',
-                            },
-                            {
-                                title: 'Tên sinh viên',
-                                dataIndex: 'fullname',
-                                width: 200,
-                                fixed: 'left',
-                            },
-                            {
-                                title: 'Trung bình hệ 4',
-                                dataIndex: 'gpaAtAward',
-                                width: 150,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Xếp hạng',
-                                dataIndex: 'priorityRank',
-                                width: 150,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Học bổng',
-                                dataIndex: 'scholarshipName',
-                                width: 150,
-                                align: 'center',
-                                fixed: 'right',
-                            },
-                        ]}
-                        pagination={false}
-                    />
-                ) : (
-                    <div className="text-gray-400 text-center py-8">Chưa có dữ liệu được chọn</div>
-                )}
-            </Modal>
+            {!!isModalVisible && (
+                <Modal
+                    title="Danh sách sinh viên được chọn"
+                    open={isModalVisible}
+                    onOk={handleSaveScholarshipAward}
+                    onCancel={() => setIsModalVisible(false)}
+                    width={800}
+                    footer={[
+                        <Button key="back" onClick={() => setIsModalVisible(false)}>
+                            Đóng
+                        </Button>,
+                        <Button
+                            key="submit"
+                            type="primary"
+                            onClick={handleSaveScholarshipAward}
+                            disabled={rightPanelData.length === 0}
+                        >
+                            Lưu
+                        </Button>,
+                    ]}
+                >
+                    {rightPanelData.length > 0 ? (
+                        <Table
+                            rowKey="id"
+                            data={rightPanelData}
+                            columns={[
+                                {
+                                    title: 'STT',
+                                    width: 50,
+                                    align: 'center',
+                                    fixed: 'left',
+                                    render: (_, __, index) =>
+                                        index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                },
+                                {
+                                    title: 'Mã sinh viên',
+                                    dataIndex: 'code',
+                                    width: 120,
+                                    align: 'center',
+                                    fixed: 'left',
+                                },
+                                {
+                                    title: 'Tên sinh viên',
+                                    dataIndex: 'fullname',
+                                    width: 200,
+                                    fixed: 'left',
+                                },
+                                {
+                                    title: 'Trung bình hệ 4',
+                                    dataIndex: 'gpaAtAward',
+                                    width: 150,
+                                    align: 'center',
+                                },
+                                {
+                                    title: 'Xếp hạng',
+                                    dataIndex: 'priorityRank',
+                                    width: 150,
+                                    align: 'center',
+                                },
+                                {
+                                    title: 'Học bổng',
+                                    dataIndex: 'scholarshipName',
+                                    width: 150,
+                                    align: 'center',
+                                    fixed: 'right',
+                                },
+                            ]}
+                            pagination={false}
+                        />
+                    ) : (
+                        <div className="text-gray-400 text-center py-8">
+                            Chưa có dữ liệu được chọn
+                        </div>
+                    )}
+                </Modal>
+            )}
         </Row>
     )
 }

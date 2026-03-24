@@ -23,6 +23,7 @@ type SubjectClassForm = {
     id: string
     code: string | null
     count: number
+    hasStudentScores?: boolean
     createdAt?: Date
     fixedClasses?: {
         id: string
@@ -100,6 +101,12 @@ const SubjectClassDropItem: React.FC<{
     }
 
     const onRemoveSubjectClass = () => {
+        if (item.hasStudentScores) {
+            message.warning(
+                'Không thể xóa LMH đã có sinh viên đăng ký hoặc đã có điểm (StudentSubjectScore)'
+            )
+            return
+        }
         const { [item.id]: _, ...subjectClass } =
             subjectVersionsForm[subjectVersionId].subjectClasses || {}
         form.setFieldValue('subjectVersions', {
@@ -121,7 +128,9 @@ const SubjectClassDropItem: React.FC<{
                 opacity: canDrop && isOver ? 0.4 : 1,
             }}
         >
-            <Tooltip title="Xóa LMH">
+            <Tooltip
+                title={item.hasStudentScores ? 'LMH đã có đăng ký/điểm — không thể xóa' : 'Xóa LMH'}
+            >
                 <XCircleIcon
                     onClick={onRemoveSubjectClass}
                     className="absolute -top-4 -right-2 z-10 text-red-500 bg-white rounded p-0"
@@ -315,6 +324,7 @@ export default function KeHoachGhepLopMonHoc() {
                         code: true,
                         maxStudent: true,
                         createdAt: true,
+                        _count: { select: { subjectClassStudent: true } },
                         fixedClasses: {
                             select: {
                                 id: true,
@@ -382,6 +392,7 @@ export default function KeHoachGhepLopMonHoc() {
                                 subAcc[subCur.id] = {
                                     id: subCur.id,
                                     code: subCur?.code,
+                                    hasStudentScores: (subCur._count?.subjectClassStudent ?? 0) > 0,
                                     count: subCur?.fixedClasses.reduce(
                                         (sum, fc) => sum + (fc?._count?.students ?? 0),
                                         0
@@ -487,6 +498,7 @@ export default function KeHoachGhepLopMonHoc() {
                                     trainingObjectTypeId,
                                     subjectId: subjectVersionId,
                                     type: $Enums.SubjectClassType.NORMAL,
+                                    subjectClassStudent: { none: {} },
                                 },
                             },
                         },
@@ -501,6 +513,7 @@ export default function KeHoachGhepLopMonHoc() {
                                     trainingObjectTypeId,
                                     subjectId: subjectVersionId,
                                     type: $Enums.SubjectClassType.NORMAL,
+                                    subjectClassStudent: { none: {} },
                                 },
                             },
                         },
@@ -515,6 +528,7 @@ export default function KeHoachGhepLopMonHoc() {
                                     trainingObjectTypeId,
                                     subjectId: subjectVersionId,
                                     type: $Enums.SubjectClassType.NORMAL,
+                                    subjectClassStudent: { none: {} },
                                 },
                             },
                         },
@@ -528,6 +542,7 @@ export default function KeHoachGhepLopMonHoc() {
                                 semesterId: semesterId,
                                 trainingObjectTypeId: trainingObjectTypeId,
                                 type: $Enums.SubjectClassType.NORMAL,
+                                subjectClassStudent: { none: {} },
                             },
                         },
                     },

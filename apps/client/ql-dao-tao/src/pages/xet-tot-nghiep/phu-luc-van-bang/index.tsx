@@ -3,8 +3,9 @@ import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import TableCollapse from '@components/commons/tableCollapse'
 import { ExportDiplomaAppendix } from '@components/ui/export-button'
+import { useScoreConverter } from '@hooks/scoreConverter'
 import DefaultLayout from '@layouts/default-layout'
-import { buildOrgTree } from '@lib/utils'
+import { buildOrgTree, formatDateVN } from '@lib/utils'
 import type { Semester, Student } from '@workspace/db'
 import type {
     FixedClass,
@@ -25,9 +26,10 @@ import {
     useFindManyTrainingObjectType,
 } from '@workspace/db/hooks'
 import { whereOrganization } from '@workspace/libs/constants'
-import { fuzzyMatch } from '@workspace/libs/utils'
+import { exportFromTemplate, TableRow } from '@workspace/libs/template-excel'
+import { fuzzyMatch, getMinioUrl } from '@workspace/libs/utils'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, DatePicker, Form, Input, TreeSelect } from 'antd'
+import { Button, DatePicker, Form, Input, notification, TreeSelect } from 'antd'
 import { useWatch } from 'antd/es/form/Form'
 import dayjs from 'dayjs'
 import type React from 'react'
@@ -82,49 +84,12 @@ export type TStudentWithSemesters = TStudentWithSubjects & {
             key: string
             stt: number
             tenHocPhan: string
-            soTinChi: string
+            soTinChi: number
             thangDiem10: string
             thangDiem4: string
             thangDiemChu: string | null
         }>
     }>
-}
-
-const subjects: {
-    daiHoc: { id: number; name: string }[]
-    nganHan: { id: number; name: string }[]
-    caoHoc: { id: number; name: string }[]
-} = {
-    daiHoc: [
-        { id: 1, name: 'Phụ lục VB (1 cột)' },
-        { id: 2, name: 'Phụ lục VB (2 cột)' },
-        { id: 3, name: 'Phụ lục VB (2 cột - 1 trang)' },
-        { id: 4, name: 'Bảng điểm Ngân hạn (P2)' },
-    ],
-    nganHan: [
-        { id: 5, name: 'Bảng điểm ngắn hạn SDH' },
-        { id: 6, name: 'In phôi bảng ngắn hạn SDH (Anh)' },
-        { id: 7, name: 'In phôi bảng ngắn/DÀI hạn SDH (Mỹ)' },
-        { id: 8, name: 'In quyết định tốt nghiệp ngắn hạn (ĐẠI HÀN) SDH' },
-        { id: 9, name: 'Bảng điểm ĐẠI HÀN SDH (2 cột)' },
-        { id: 10, name: 'Bảng điểm ĐẠI HÀN SDH (1 cột)' },
-        { id: 12, name: 'Danh sách đề nghị TN - ĐẠI HÀN' },
-    ],
-    caoHoc: [
-        { id: 14, name: 'PL Đề nghị công nhận tốt nghiệp' },
-        { id: 15, name: 'Xác nhận thông tin HV làm văn bằng' },
-        { id: 16, name: 'PL Quyết định tốt nghiệp CAO HỌC' },
-        { id: 17, name: 'Quyết định công nhận tốt nghiệp' },
-        { id: 18, name: 'In PL văn bằng CAO HỌC (2 cột)' },
-        { id: 19, name: 'In PL văn bằng CAO HỌC (1 cột)' },
-        { id: 20, name: 'In phôi bảng CAO HỌC' },
-        { id: 21, name: 'Sổ gốc cấp phát văn bằng' },
-        { id: 22, name: 'Thống kê KQ đào tạo' },
-        { id: 23, name: 'Thống kê kết quả bảo vệ luận văn' },
-        { id: 24, name: 'In Danh sách trình chiếu CAO HỌC' },
-        { id: 25, name: 'Trình chiếu tốt nghiệp (WORD)' },
-        { id: 26, name: 'Trình chiếu tốt nghiệp (PDF)' },
-    ],
 }
 
 const formItemLayout = {
@@ -159,13 +124,17 @@ export default function StudentGradeSystem() {
     const [pageSize, setPageSize] = useState(initialPagination.pageSize)
     const [viewResult, setViewResult] = useState(false)
     const [selectedStudent, setSelectedStudent] = useState<TStudentWithSemesters | null>(null)
-
     const { data: trainingObjectTypes = [] } = useFindManyTrainingObjectType({
         where: { active: true },
     })
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse(
         {
+            orderBy: {
+                semesterStart: {
+                    startDate: 'desc',
+                },
+            },
             where: {
                 active: true,
                 deletedAt: null,
@@ -297,6 +266,10 @@ export default function StudentGradeSystem() {
         }
     )
 
+    const { convertScore } = useScoreConverter(
+        students?.[0]?.fixedClass?.trainingCourse?.scoreConverts
+    )
+
     const studentsWithSemesters = useMemo(() => {
         return (students || []).map((student) => {
             const { scoreConverts } = student?.fixedClass?.trainingCourse || {}
@@ -368,6 +341,434 @@ export default function StudentGradeSystem() {
         }))
     }, [selectedStudent])
 
+    const handleExportPLVB1 = () => {
+        if (!students?.length) {
+            notification.info({ message: 'Không có dữ liệu để xuất!' })
+            return
+        }
+        const TOTAL_COLUMNS = 11
+        const SIGN_COL = 4
+        const MAX_ROWS = 50
+
+        const allSheetOptions = studentsWithSemesters.map((student) => {
+            let stt = 0
+            const tableRows = student.semesters
+                .flatMap((semester) => {
+                    const subjectRows: TableRow[] = []
+
+                    const subjects = semester?.subjects ?? []
+                    for (let i = 0; i < subjects.length; i += 2) {
+                        const s1 = subjects[i]
+                        const s2 = subjects[i + 1]
+                        stt += 2
+
+                        subjectRows.push({
+                            cells: [
+                                { value: stt - 1, align: 'center' },
+
+                                { value: s1?.tenHocPhan ?? '', colSpan: 1, border: true },
+                                { value: s1?.soTinChi ?? 0, align: 'center' },
+                                { value: Number(s1?.thangDiem10 ?? 0), align: 'right' },
+                                { value: Number(s1?.thangDiem4 ?? 0), align: 'right' },
+                                { value: s1?.thangDiemChu ?? '', align: 'center' },
+
+                                { value: stt, align: 'center' },
+                                { value: s2?.tenHocPhan ?? '', colSpan: 1, border: true },
+                                { value: s2?.soTinChi ?? 0, align: 'center' },
+                                { value: Number(s2?.thangDiem10 ?? 0), align: 'right' },
+                                { value: Number(s2?.thangDiem4 ?? 0), align: 'right' },
+                                { value: s2?.thangDiemChu ?? '', align: 'center' },
+                            ],
+                        })
+                    }
+
+                    return subjectRows
+                })
+                .slice(0, MAX_ROWS)
+
+            const tongTinChi = student.semesters.reduce(
+                (acc, semester) =>
+                    acc + (semester.subjects?.reduce((s, sub) => s + (sub.soTinChi ?? 0), 0) ?? 0),
+                0
+            )
+
+            const tongDiemNhanTinChiHe10 = student.semesters.reduce(
+                (acc, semester) =>
+                    acc +
+                    (semester.subjects?.reduce(
+                        (s, sub) => s + (Number(sub?.thangDiem10) || 0) * (sub.soTinChi ?? 0),
+                        0
+                    ) ?? 0),
+                0
+            )
+
+            const tongDiemNhanTinChiHe4 = student.semesters.reduce(
+                (acc, semester) =>
+                    acc +
+                    (semester.subjects?.reduce(
+                        (s, sub) => s + (Number(sub?.thangDiem4) || 0) * (sub.soTinChi ?? 0),
+                        0
+                    ) ?? 0),
+                0
+            )
+
+            const diemTBHe10 =
+                tongTinChi === 0 ? 0 : Number((tongDiemNhanTinChiHe10 / tongTinChi).toFixed(2))
+
+            const diemTBHe4 =
+                tongTinChi === 0 ? 0 : Number((tongDiemNhanTinChiHe4 / tongTinChi).toFixed(2))
+
+            const xepLoai = convertScore(diemTBHe10)?.classification ?? ''
+
+            const gapRow: TableRow = {
+                cells: [{ value: null, colSpan: TOTAL_COLUMNS }],
+            }
+
+            const tongTinChiRow: TableRow = {
+                cells: [
+                    {
+                        value: `Tổng tín chỉ: ${tongTinChi}`,
+                        colSpan: TOTAL_COLUMNS,
+                        bold: true,
+                    },
+                ],
+            }
+
+            const diemHe10Row: TableRow = {
+                cells: [
+                    {
+                        value: `Điểm TB hệ 10: ${diemTBHe10}`,
+                        colSpan: TOTAL_COLUMNS,
+                    },
+                ],
+            }
+
+            const diemHe4Row: TableRow = {
+                cells: [
+                    {
+                        value: `Điểm TB hệ 4: ${diemTBHe4}`,
+                        colSpan: TOTAL_COLUMNS,
+                    },
+                ],
+            }
+
+            const xepLoaiRow: TableRow = {
+                cells: [
+                    {
+                        value: `Xếp loại: ${xepLoai}`,
+                        colSpan: TOTAL_COLUMNS,
+                        bold: true,
+                    },
+                ],
+            }
+
+            const today = new Date()
+
+            const dateSignatureRow: TableRow = {
+                cells: [
+                    { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL }, // 7
+                    {
+                        value: `Hà Nội, ngày ${today.getDate()} tháng ${
+                            today.getMonth() + 1
+                        } năm ${today.getFullYear()}`,
+                        colSpan: SIGN_COL,
+                        align: 'center',
+                    },
+                ],
+            }
+
+            const titleSignatureRow: TableRow = {
+                cells: [
+                    { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL },
+                    {
+                        value: 'KT. TRƯỞNG PHÒNG\nPHÓ TRƯỞNG PHÒNG',
+                        colSpan: SIGN_COL,
+                        align: 'center',
+                        bold: true,
+                    },
+                ],
+            }
+
+            const nameSignatureRow: TableRow = {
+                cells: [
+                    { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL },
+                    {
+                        value: 'Đại tá, TS Nguyễn Văn Bình',
+                        colSpan: SIGN_COL,
+                        align: 'center',
+                        bold: true,
+                    },
+                ],
+            }
+
+            return {
+                sheet: `${student.userProfile.code} - ${student.userProfile.fullname}`,
+                data: {
+                    ho_ten: student.userProfile.fullname,
+                    ma_hoc_vien: student.userProfile.code,
+                    ngay_sinh: formatDateVN(student.userProfile.dateOfBirth ?? ''),
+                    ngay_nhap_hoc: formatDateVN(student.fixedClass.createdAt),
+                    hinh_thuc_dao_tao: student.universityTrainingType || '',
+                    ngon_ngu_dao_tao: '',
+                    nganh_hoc: '',
+                    chuyen_nganh: '',
+                    thoi_gian_dao_tao: '',
+                    trinh_do_dao_tao: '',
+                    ngon_ngu: '',
+                },
+                tableStartCell: { row: 14, col: 1 },
+                rows: [
+                    ...tableRows,
+                    tongTinChiRow,
+                    diemHe10Row,
+                    diemHe4Row,
+                    xepLoaiRow,
+                    gapRow,
+                    dateSignatureRow,
+                    titleSignatureRow,
+                    { cells: [{ value: null, colSpan: TOTAL_COLUMNS }] },
+                    nameSignatureRow,
+                ],
+            }
+        })
+
+        exportFromTemplate({
+            templateUrl: getMinioUrl('/mta/template/phu-luc-van-ban-2-cot.xlsx'),
+            sheets: allSheetOptions,
+            fileName: 'PLVB1.xlsx',
+            mergeSheetsToOne: true,
+            sheetName: 'PLVB1',
+        })
+    }
+
+    const handleExportPLVB1Col = () => {
+        if (!students?.length) {
+            notification.info({ message: 'Không có dữ liệu để xuất!' })
+            return
+        }
+        const TOTAL_COLUMNS = 11
+        const SIGN_COL = 4
+        const MAX_ROWS = 50
+
+        const allSheetOptions = studentsWithSemesters.map((student) => {
+            let stt = 0
+            const tableRows = student.semesters
+                .flatMap((semester) => {
+                    const subjectRows: TableRow[] = []
+
+                    const subjects = semester?.subjects ?? []
+                    for (let i = 0; i < subjects.length; i++) {
+                        const s1 = subjects[i]
+                        stt += 1
+
+                        subjectRows.push({
+                            cells: [
+                                { value: stt - 1, align: 'center' },
+
+                                { value: s1?.tenHocPhan ?? '', colSpan: 3, border: true },
+                                { value: s1?.soTinChi ?? 0, colSpan: 2, align: 'center' },
+                                { value: Number(s1?.thangDiem10 ?? 0), colSpan: 2, align: 'right' },
+                                { value: Number(s1?.thangDiem4 ?? 0), colSpan: 2, align: 'right' },
+                                { value: s1?.thangDiemChu ?? '', colSpan: 2, align: 'center' },
+                            ],
+                        })
+                    }
+
+                    return subjectRows
+                })
+                .slice(0, MAX_ROWS)
+
+            const tongTinChi = student.semesters.reduce(
+                (acc, semester) =>
+                    acc + (semester.subjects?.reduce((s, sub) => s + (sub.soTinChi ?? 0), 0) ?? 0),
+                0
+            )
+
+            const tongDiemNhanTinChiHe10 = student.semesters.reduce(
+                (acc, semester) =>
+                    acc +
+                    (semester.subjects?.reduce(
+                        (s, sub) => s + (Number(sub?.thangDiem10) || 0) * (sub.soTinChi ?? 0),
+                        0
+                    ) ?? 0),
+                0
+            )
+
+            const tongDiemNhanTinChiHe4 = student.semesters.reduce(
+                (acc, semester) =>
+                    acc +
+                    (semester.subjects?.reduce(
+                        (s, sub) => s + (Number(sub?.thangDiem4) || 0) * (sub.soTinChi ?? 0),
+                        0
+                    ) ?? 0),
+                0
+            )
+
+            const diemTBHe10 =
+                tongTinChi === 0 ? 0 : Number((tongDiemNhanTinChiHe10 / tongTinChi).toFixed(2))
+
+            const diemTBHe4 =
+                tongTinChi === 0 ? 0 : Number((tongDiemNhanTinChiHe4 / tongTinChi).toFixed(2))
+
+            const xepLoai = convertScore(diemTBHe10)?.classification ?? ''
+
+            const gapRow: TableRow = {
+                cells: [{ value: null, colSpan: TOTAL_COLUMNS }],
+            }
+
+            const tongTinChiRow: TableRow = {
+                cells: [
+                    {
+                        value: `Tổng tín chỉ: ${tongTinChi}`,
+                        colSpan: TOTAL_COLUMNS,
+                        bold: true,
+                    },
+                ],
+            }
+
+            const diemHe10Row: TableRow = {
+                cells: [
+                    {
+                        value: `Điểm TB hệ 10: ${diemTBHe10}`,
+                        colSpan: TOTAL_COLUMNS,
+                    },
+                ],
+            }
+
+            const diemHe4Row: TableRow = {
+                cells: [
+                    {
+                        value: `Điểm TB hệ 4: ${diemTBHe4}`,
+                        colSpan: TOTAL_COLUMNS,
+                    },
+                ],
+            }
+
+            const xepLoaiRow: TableRow = {
+                cells: [
+                    {
+                        value: `Xếp loại: ${xepLoai}`,
+                        colSpan: TOTAL_COLUMNS,
+                        bold: true,
+                    },
+                ],
+            }
+
+            const today = new Date()
+
+            const dateSignatureRow: TableRow = {
+                cells: [
+                    { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL }, // 7
+                    {
+                        value: `Hà Nội, ngày ${today.getDate()} tháng ${
+                            today.getMonth() + 1
+                        } năm ${today.getFullYear()}`,
+                        colSpan: SIGN_COL,
+                        align: 'center',
+                    },
+                ],
+            }
+
+            const titleSignatureRow: TableRow = {
+                cells: [
+                    { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL },
+                    {
+                        value: 'KT. TRƯỞNG PHÒNG\nPHÓ TRƯỞNG PHÒNG',
+                        colSpan: SIGN_COL,
+                        align: 'center',
+                        bold: true,
+                    },
+                ],
+            }
+
+            const nameSignatureRow: TableRow = {
+                cells: [
+                    { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL },
+                    {
+                        value: 'Đại tá, TS Nguyễn Văn Bình',
+                        colSpan: SIGN_COL,
+                        align: 'center',
+                        bold: true,
+                    },
+                ],
+            }
+
+            return {
+                sheet: `${student.userProfile.code} - ${student.userProfile.fullname}`,
+                data: {
+                    ho_ten: student.userProfile.fullname,
+                    ma_hoc_vien: student.userProfile.code,
+                    ngay_sinh: formatDateVN(student.userProfile.dateOfBirth ?? ''),
+                    ngay_nhap_hoc: formatDateVN(student.fixedClass.createdAt),
+                    hinh_thuc_dao_tao: student.universityTrainingType || '',
+                    ngon_ngu_dao_tao: '',
+                    nganh_hoc: '',
+                    chuyen_nganh: '',
+                    thoi_gian_dao_tao: '',
+                    trinh_do_dao_tao: '',
+                    ngon_ngu: '',
+                },
+                tableStartCell: { row: 14, col: 1 },
+                rows: [
+                    ...tableRows,
+                    tongTinChiRow,
+                    diemHe10Row,
+                    diemHe4Row,
+                    xepLoaiRow,
+                    gapRow,
+                    dateSignatureRow,
+                    titleSignatureRow,
+                    { cells: [{ value: null, colSpan: TOTAL_COLUMNS }] },
+                    nameSignatureRow,
+                ],
+            }
+        })
+
+        exportFromTemplate({
+            templateUrl: getMinioUrl('/mta/template/phu-luc-van-ban-1-cot.xlsx'),
+            sheets: allSheetOptions,
+            fileName: 'PLVB1C.xlsx',
+            mergeSheetsToOne: true,
+            sheetName: 'PLVB',
+        })
+    }
+
+    const subjects: {
+        daiHoc: { id: number; name: string; onClick?: () => void }[]
+        nganHan: { id: number; name: string }[]
+        caoHoc: { id: number; name: string }[]
+    } = {
+        daiHoc: [
+            { id: 1, name: 'Phụ lục VB (1 cột)', onClick: handleExportPLVB1Col },
+            { id: 2, name: 'Phụ lục VB (2 cột)', onClick: handleExportPLVB1 },
+            { id: 3, name: 'Phụ lục VB (2 cột - 1 trang)' },
+            { id: 4, name: 'Bảng điểm Ngân hạn (P2)' },
+        ],
+        nganHan: [
+            { id: 5, name: 'Bảng điểm ngắn hạn SDH' },
+            { id: 6, name: 'In phôi bảng ngắn hạn SDH (Anh)' },
+            { id: 7, name: 'In phôi bảng ngắn/DÀI hạn SDH (Mỹ)' },
+            { id: 8, name: 'In quyết định tốt nghiệp ngắn hạn (ĐẠI HÀN) SDH' },
+            { id: 9, name: 'Bảng điểm ĐẠI HÀN SDH (2 cột)' },
+            { id: 10, name: 'Bảng điểm ĐẠI HÀN SDH (1 cột)' },
+            { id: 12, name: 'Danh sách đề nghị TN - ĐẠI HÀN' },
+        ],
+        caoHoc: [
+            { id: 14, name: 'PL Đề nghị công nhận tốt nghiệp' },
+            { id: 15, name: 'Xác nhận thông tin HV làm văn bằng' },
+            { id: 16, name: 'PL Quyết định tốt nghiệp CAO HỌC' },
+            { id: 17, name: 'Quyết định công nhận tốt nghiệp' },
+            { id: 18, name: 'In PL văn bằng CAO HỌC (2 cột)' },
+            { id: 19, name: 'In PL văn bằng CAO HỌC (1 cột)' },
+            { id: 20, name: 'In phôi bảng CAO HỌC' },
+            { id: 21, name: 'Sổ gốc cấp phát văn bằng' },
+            { id: 22, name: 'Thống kê KQ đào tạo' },
+            { id: 23, name: 'Thống kê kết quả bảo vệ luận văn' },
+            { id: 24, name: 'In Danh sách trình chiếu CAO HỌC' },
+            { id: 25, name: 'Trình chiếu tốt nghiệp (WORD)' },
+            { id: 26, name: 'Trình chiếu tốt nghiệp (PDF)' },
+        ],
+    }
     useEffect(() => {
         if (!form) return
 
@@ -578,6 +979,7 @@ export default function StudentGradeSystem() {
                         {subjects.daiHoc.map((subject, index) => {
                             return (
                                 <ExportDiplomaAppendix
+                                    onClick={subject?.onClick}
                                     key={subject?.id}
                                     title={`${index + 1}. ${subject.name}`}
                                     type="primary"

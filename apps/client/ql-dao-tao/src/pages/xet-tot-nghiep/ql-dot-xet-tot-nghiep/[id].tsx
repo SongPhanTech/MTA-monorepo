@@ -1,7 +1,6 @@
 import { CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
-import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import ViewIcon from '@components/icons/view'
 import GraduationDecision from '@components/sub-pages/graduationDecision'
@@ -12,7 +11,7 @@ import { useApplicationStatusOptions } from '@hooks/applicationStatus'
 import { useCriteriaFieldOptions } from '@hooks/criteriaField'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { ApplicationStatus, GraduationSessionStatus } from '@workspace/db/client'
+import { ApplicationStatus, GraduationSessionStatus, StudentStatus } from '@workspace/db/client'
 import {
     useCountStudentGraduationApplication,
     useFindManyCertificate,
@@ -20,6 +19,7 @@ import {
     useFindManyStudentGraduationApplication,
     useFindManyTrainingCourse,
     useFindUniqueGraduationSession,
+    useUpdateManyStudent,
     useUpdateManyStudentGraduationApplication,
     useUpdateStudentGraduationApplication,
 } from '@workspace/db/hooks'
@@ -250,6 +250,7 @@ export default function StudentGraduationApplication() {
             if (status === 200) {
                 message.success(data.message)
                 refetch()
+                refetchCount()
             } else {
                 message.error(data.message)
             }
@@ -321,6 +322,7 @@ export default function StudentGraduationApplication() {
         useUpdateStudentGraduationApplication()
     const { mutateAsync: updateManyStudentGraduationApplication } =
         useUpdateManyStudentGraduationApplication()
+    const { mutateAsync: updateManyStudent } = useUpdateManyStudent()
     async function handleDelete(id: string) {
         try {
             showSpinner()
@@ -458,6 +460,10 @@ export default function StudentGraduationApplication() {
                     await updateManyStudentGraduationApplication({
                         where: { id: { in: graduationRecords.map((record) => record.id) } },
                         data: { status: ApplicationStatus.APPROVED },
+                    })
+                    await updateManyStudent({
+                        where: { id: { in: graduationRecords.map((record) => record.id) } },
+                        data: { status: StudentStatus.GRADUATED },
                     })
                     await refetch()
                     message.success('Duyệt thành công')
@@ -1049,7 +1055,7 @@ export default function StudentGraduationApplication() {
                                                                         }}
                                                                         className="text-sm text-blue-700 cursor-pointer"
                                                                     />
-                                                                    <DeleteIcon
+                                                                    {/* <DeleteIcon
                                                                         disabled={
                                                                             record.status ===
                                                                             ApplicationStatus.APPROVED
@@ -1068,7 +1074,7 @@ export default function StudentGraduationApplication() {
                                                                         onClick={(e) =>
                                                                             e.stopPropagation()
                                                                         }
-                                                                    />
+                                                                    /> */}
                                                                 </Row>
                                                             )
                                                         }

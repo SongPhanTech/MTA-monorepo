@@ -9,20 +9,13 @@ import { useFindUniqueStudent } from '@workspace/db/hooks'
 
 dayjs.locale('vi')
 
-type ModalChiTietSinhVienProps = {
-    studentId?: string
-}
-
-const ModalChiTietSinhVien = ({ studentId }: ModalChiTietSinhVienProps) => {
-    const {
-        isOpen,
-        onClose,
-        input: disclosureId,
-    } = useDisclosure<string>({
+const ModalChiTietSinhVien = () => {
+    const { isOpen, onClose, input } = useDisclosure<{
+        id: string
+    }>({
         tag: 'ModalChiTietSinhVien',
     })
-    const id = studentId ?? disclosureId
-    const isPageMode = !!studentId
+    const id = input?.id
     const { getStudentTrainingTypeLabel, getStudentTrainingTypeColor } =
         useStudentTrainingTypeOptions()
     const { getAcademicRankingBaseTypeLabel } = useAcademicRankingBaseTypeOptions()
@@ -1746,17 +1739,6 @@ const ModalChiTietSinhVien = ({ studentId }: ModalChiTietSinhVienProps) => {
             ),
         },
     ]
-
-    if (isPageMode) {
-        return (
-            <div className="bg-white rounded-lg p-4 shadow-sm">
-                <div className="text-lg font-semibold mb-4">
-                    {`Chi tiết sinh viên: ${studentData?.code || ''} - ${studentData?.userProfile?.fullname || ''}`}
-                </div>
-                <Tabs items={tabItems} defaultActiveKey="thong-tin-co-ban" />
-            </div>
-        )
-    }
 
     return (
         <Modal

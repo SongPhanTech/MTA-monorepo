@@ -12,6 +12,7 @@ import {
     useFindManySubjectVersion,
     useFindManyTrainingLocation,
 } from '@workspace/db/hooks'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Checkbox, Modal, message } from 'antd'
 import { saveAs } from 'file-saver'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -34,8 +35,19 @@ export default function ExportExcelModal() {
     const { data: donVis = [] } = useFindManyDM_DonVi({
         orderBy: [{ iSTT: 'asc' }, { sTen: 'asc' }],
     })
-    const { data: subjects = [] } = useFindManySubject()
-    const { data: subjectVersions = [] } = useFindManySubjectVersion()
+
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+
+    const { data: subjects = [] } = useFindManySubject({
+        where: {
+            subjectVersion: {
+                some: { trainingObjectTypeId },
+            },
+        },
+    })
+    const { data: subjectVersions = [] } = useFindManySubjectVersion({
+        where: { trainingObjectTypeId },
+    })
     const { data: schoolYears = [] } = useFindManySchoolYear()
     const { data: semesters = [] } = useFindManySemester()
     const { data: trainingLocations = [] } = useFindManyTrainingLocation()

@@ -179,7 +179,9 @@ export default function KeQuaDangKyHocLopQuanLy({ hocLai = false }: { hocLai?: b
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         orderBy: {
-            name: 'asc',
+            semesterStart: {
+                startDate: 'desc',
+            },
         },
         where: {
             active: true,

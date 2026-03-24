@@ -12,40 +12,43 @@ import '../khao-thi/survey'
 import '../khao-thi/exam'
 
 model Lecturer extends Base {
-  from                        DateTime? // từ ngày
+  from                             DateTime? // từ ngày
   
   // lecture/staff information
-  lectureID                   String?                       @unique // giảng viên ID
-  serviceDate                 DateTime? // ngày vào ngành
+  lectureID                        String?                       @unique // giảng viên ID
+  serviceDate                      DateTime? // ngày vào ngành
 
-  userProfile                 UserProfile                   @relation(fields: [userProfileId], references: [id])
-  userProfileId               String                        @db.Uuid @unique
+  userProfile                      UserProfile                   @relation(fields: [userProfileId], references: [id])
+  userProfileId                    String                        @db.Uuid @unique
 
-  organization                DM_DonVi                      @relation(fields: [organizationId], references: [Id])
-  organizationId              String                        @db.Uuid
+  organization                     DM_DonVi                      @relation(fields: [organizationId], references: [Id])
+  organizationId                   String                        @db.Uuid
 
-  lecturerType                LecturerType                  @relation(fields: [lecturerTypeId], references: [id])
-  lecturerTypeId              String
+  lecturerType                     LecturerType                  @relation(fields: [lecturerTypeId], references: [id])
+  lecturerTypeId                   String
 
-  mainSubjectClasses          SubjectClass[]                @relation("MainLecturer")
-  extraSubjectClasses         SubjectClass[]                @relation("ExtraLecturer")
-  enterGradeClasses           SubjectClass[]                @relation("EnterGradeLecturer")
-  manageFixedClass            FixedClass[]                  @relation("ManageLecturer")
-  classSchedules              ClassSchedule[]               @relation("MainLecturer")
-  extraClassSchedules         ClassSchedule[]               @relation("ExtraLecturer")
-  researchProjects            ResearchProject[]         // Đề tài đang hướng dẫn
-  reviewedRegistrations       StudentResearchRegistration[] // Đăng ký đã phê duyệt
-  reviewedThesisRegistrations StudentThesisRegistration[] // Đăng ký đã phê duyệt
-  expertProfile               ExpertProfile[]
-  survey                      Survey[]
-  clusterSurvey               ClusterSurvey[]
-  examRoomsMain               ExamList[]                    @relation("FirstSupervisor")
-  examRoomsExtra              ExamList[]                    @relation("SecondSupervisor")
-  evaluationCriterions        EvaluationCriterion[]         @relation("EvaluationCriterionLecturer")
-  analysisCriterion           AnalysisCriterion[]
-  evaluationCouncilMember     EvaluationCouncilMember[]
-  evaluationCriterionReviews  EvaluationCriterion[]         @relation("EvaluationCriterionLecturerReview")
+  mainSubjectClasses               SubjectClass[]                @relation("MainLecturer")
+  extraSubjectClasses              SubjectClass[]                @relation("ExtraLecturer")
+  enterGradeClasses                SubjectClass[]                @relation("EnterGradeLecturer")
+  manageFixedClass                 FixedClass[]                  @relation("ManageLecturer")
+  classSchedules                   ClassSchedule[]               @relation("MainLecturer")
+  extraClassSchedules              ClassSchedule[]               @relation("ExtraLecturer")
+  researchProjects                 ResearchProject[]         // Đề tài đang hướng dẫn
+  reviewedRegistrations            StudentResearchRegistration[] // Đăng ký đã phê duyệt
+  reviewedThesisRegistrations      StudentThesisRegistration[] // Đăng ký đã phê duyệt
+  expertProfile                    ExpertProfile[]
+  survey                           Survey[]
+  clusterSurvey                    ClusterSurvey[]
+  examRoomsMain                    ExamList[]                    @relation("FirstSupervisor")
+  examRoomsExtra                   ExamList[]                    @relation("SecondSupervisor")
+  evaluationCriterions             EvaluationCriterion[]         @relation("EvaluationCriterionLecturer")
+  analysisCriterion                AnalysisCriterion[]
+  evaluationCouncilMember          EvaluationCouncilMember[]
+  evaluationCriterionReviews       EvaluationCriterion[]         @relation("EvaluationCriterionLecturerReview")
+  primarySupervisorThesisProject   ThesisProject[]               @relation("PrimarySupervisorToThesis")
+  secondarySupervisorThesisProject ThesisProject[]               @relation("SecondarySupervisorToThesis")
 
+  @@index([userProfileId])
   @@schema("ql-dao-tao")
 }
 

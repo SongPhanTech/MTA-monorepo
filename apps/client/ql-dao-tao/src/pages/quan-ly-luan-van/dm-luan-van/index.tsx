@@ -84,7 +84,6 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
     const [editingRowKeys, setEditingRowKeys] = useState<string[]>([])
     const [editingValues, setEditingValues] = useState<Record<string, Record<string, any>>>({})
     const [currentPage, setCurrentPage] = useState(1)
-    const [hasClickedFetch, setHasClickedFetch] = useState<boolean>(false)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const [trainingCourseId, setTrainingCourseId] = useState<string | null>(null)
     const rowSelection = {
@@ -138,7 +137,7 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
     })
     // biome-ignore lint/correctness/useExhaustiveDependencies: <ignore>
     const studentWhere = useMemo(() => {
-        if (!hasClickedFetch || !searchParams.thesisSessionId) return { id: { in: [] } }
+        if (!searchParams.thesisSessionId) return { id: { in: [] } }
 
         return {
             fixedClassId: {
@@ -157,11 +156,11 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                 },
             },
         }
-    }, [searchParams, hasClickedFetch])
+    }, [searchParams, fixedClasses])
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <ignore>
     const allStudentWhere = useMemo(() => {
-        if (!hasClickedFetch) return { id: { in: [] } }
+        if (!searchParams.thesisSessionId) return { id: { in: [] } }
         const filter = {
             fixedClassId: {
                 in:
@@ -172,7 +171,7 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
         }
 
         return filter
-    }, [searchParams, hasClickedFetch])
+    }, [searchParams, fixedClasses])
 
     const { data: students = [], refetch } = useFindManyStudent({
         where: studentWhere,
@@ -279,7 +278,7 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
             where: studentWhere,
         },
         {
-            enabled: hasClickedFetch,
+            enabled: !!searchParams.thesisSessionId,
         }
     )
     const { data: thesisSessionData } = useFindManyThesisSession({
@@ -601,6 +600,7 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
         },
         {
             id: 6,
+            disabled: true,
             label: 'Phụ lục QĐHĐ',
             onClick: async () =>
                 await exportPhuLucQdhdd({
@@ -624,6 +624,7 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
         {
             id: 7,
             label: 'Đề xuất hội đồng',
+            disabled: true,
             onClick: async () =>
                 await exportHDDanhGiaLuanVan({
                     allStudentsInClasses,
@@ -777,6 +778,8 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                                                     thesisSessionData?.find((x) => x.id === value)
                                                         ?.trainingCourse?.id || null
                                                 )
+                                                setCurrentPage(1)
+                                                setEditingRowKeys([])
                                             }}
                                             placeholder="Chọn đợt xét"
                                         />
@@ -805,6 +808,14 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                                                 }
                                             })}
                                             placeholder="Chọn lớp học"
+                                            onChange={(value) => {
+                                                setSearchParams({
+                                                    ...searchParams,
+                                                    fixedClassId: value as string[],
+                                                })
+                                                setCurrentPage(1)
+                                                setEditingRowKeys([])
+                                            }}
                                         />
                                     </Form.Item>
                                     <Form.Item name="organizationId" label="Khoa quản lí">
@@ -815,38 +826,23 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                                             showSearch
                                             treeDefaultExpandAll
                                             treeData={treeOrgData}
-                                        />
-                                    </Form.Item>
-                                    <Form.Item className="flex justify-end gap-3">
-                                        <Button
-                                            type="primary"
-                                            onClick={() => {
-                                                const values = form.getFieldsValue()
-
-                                                if (!values.thesisSessionId) {
-                                                    message.warning('Vui lòng chọn đợt xét')
-                                                    return
-                                                }
-
-                                                setSearchParams(values)
-
-                                                setHasClickedFetch(true)
+                                            onChange={(value) => {
+                                                setSearchParams({
+                                                    ...searchParams,
+                                                    organizationId: value as string,
+                                                })
                                                 setCurrentPage(1)
                                                 setEditingRowKeys([])
                                             }}
-                                        >
-                                            Xem kết quả
-                                        </Button>
-
+                                        />
+                                    </Form.Item>
+                                    <Form.Item className="flex justify-end gap-3">
                                         <Popconfirm
                                             placement="rightTop"
                                             title="Xác nhận tạo dữ liệu mẫu"
                                             description="Tạo dữ liệu mẫu sẽ ghi đè lại dữ liệu (nếu có). Bạn có chắc chắn muốn tạo dữ liệu mẫu không?"
                                             onConfirm={async () => {
                                                 setEditingRowKeys([])
-                                                if (!hasClickedFetch) {
-                                                    setHasClickedFetch(true)
-                                                }
                                                 await taodulieumau()
                                             }}
                                         >
@@ -1787,30 +1783,34 @@ export default function DanhMucLuanVan({ role = 'P7', isManage = false }: DanhMu
                                                         title="Xóa"
                                                         size={24}
                                                         className="text-lg font-bold text-red-700"
-                                                        onClick={async () => {
-                                                            const payload = {
-                                                                deletedAt: new Date(),
-                                                            }
-                                                            try {
-                                                                showSpinner()
-                                                                await updateThesisProject({
-                                                                    data: payload,
-                                                                    where: {
-                                                                        id:
-                                                                            record
-                                                                                ?.thesisRegistrations?.[0]
-                                                                                ?.thesisProject
-                                                                                ?.id || '',
-                                                                    },
-                                                                })
-                                                                message.success('Xóa thành công')
-                                                            } catch (error) {
-                                                                message.error(
-                                                                    'Đã xảy ra lỗi, vui lòng kiểm tra lại'
-                                                                )
-                                                            } finally {
-                                                                hideSpinner()
-                                                            }
+                                                        popConfirm={{
+                                                            onConfirm: async () => {
+                                                                const payload = {
+                                                                    deletedAt: new Date(),
+                                                                }
+                                                                try {
+                                                                    showSpinner()
+                                                                    await updateThesisProject({
+                                                                        data: payload,
+                                                                        where: {
+                                                                            id:
+                                                                                record
+                                                                                    ?.thesisRegistrations?.[0]
+                                                                                    ?.thesisProject
+                                                                                    ?.id || '',
+                                                                        },
+                                                                    })
+                                                                    message.success(
+                                                                        'Xóa thành công'
+                                                                    )
+                                                                } catch (error) {
+                                                                    message.error(
+                                                                        'Đã xảy ra lỗi, vui lòng kiểm tra lại'
+                                                                    )
+                                                                } finally {
+                                                                    hideSpinner()
+                                                                }
+                                                            },
                                                         }}
                                                     />
                                                 </div>

@@ -123,7 +123,9 @@ export default function AcademicRankingConvertPage() {
             },
         },
         orderBy: {
-            createdAt: 'desc',
+            semesterStart: {
+                startDate: 'desc',
+            },
         },
     })
 
@@ -155,9 +157,7 @@ export default function AcademicRankingConvertPage() {
         try {
             showSpinner()
             await deleteAcademicRanking({
-                where: {
-                    id,
-                },
+                where: { id },
             })
         } catch (error: any) {
             if (error?.info?.message) {

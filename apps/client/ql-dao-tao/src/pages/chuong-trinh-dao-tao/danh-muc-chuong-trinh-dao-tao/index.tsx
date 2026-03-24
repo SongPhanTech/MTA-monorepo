@@ -9,6 +9,7 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import { useSession } from '@workspace/auth/react'
 import type { Prisma, TrainingMajor, TrainingTime } from '@workspace/db/client'
 import {
     useCountCurriculum,
@@ -29,7 +30,6 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { useSession } from '@workspace/auth/react'
 
 const SESSION_KEYS = {
     FILTERS: 'curriculum-filters',
@@ -91,7 +91,7 @@ export default function TrainingProgramCatalog() {
     const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([])
     const router = useRouter()
     const { data: me } = useSession()
-    const userProfileId = me?.sDM_NhanVienId || ''
+    const donViId = me?.sDM_DonViId || ''
     const [currentPage, setCurrentPage] = useState(() => getStoredPage())
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>(() => getStoredFilters())
@@ -118,13 +118,7 @@ export default function TrainingProgramCatalog() {
     const where = useMemo(() => {
         const curriculumVersionFilter = {
             ...(!isViewAll && {
-                managementOrganization: {
-                    lecturers: {
-                        some: {
-                            userProfileId,
-                        },
-                    },
-                },
+                organizationId: donViId,
             }),
             ...(filters.name && {
                 name: { contains: filters.name, mode: 'insensitive' as const },
@@ -220,7 +214,7 @@ export default function TrainingProgramCatalog() {
                 curriculumVersion: { some: curriculumVersionFilter },
             }),
         }
-    }, [trainingObjectTypeId, filters])
+    }, [trainingObjectTypeId, filters, donViId, isViewAll])
 
     const { data = [] } = useFindManyCurriculum({
         where,
@@ -308,7 +302,11 @@ export default function TrainingProgramCatalog() {
 
     const { data: count } = useCountCurriculum({ where })
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
-        orderBy: { name: 'asc' },
+        orderBy: {
+            semesterStart: {
+                startDate: 'desc',
+            },
+        },
         where: {
             trainingObjectTypeId,
             active: true,
@@ -605,7 +603,7 @@ export default function TrainingProgramCatalog() {
                                 type: 'input',
                             },
                             {
-                                title: 'Tên CTĐT toàn khoá',
+                                title: 'Tên chương trình đào tạo',
                                 dataIndex: 'name',
                                 fixed: 'left',
                                 width: 300,
@@ -620,7 +618,7 @@ export default function TrainingProgramCatalog() {
                                 },
                             },
                             {
-                                title: <Tooltip title="Tổng số tín chỉ">TSTC</Tooltip>,
+                                title: <Tooltip title="Tổng số tín chỉ">Số tín chỉ</Tooltip>,
                                 align: 'center',
                                 width: 90,
                                 render: ({ trainingBlocks = [] }) => {
@@ -656,7 +654,11 @@ export default function TrainingProgramCatalog() {
                                 },
                             },
                             {
-                                title: <Tooltip title="Số tín chỉ bắt buộc">Số TCBB</Tooltip>,
+                                title: (
+                                    <Tooltip title="Số tín chỉ bắt buộc">
+                                        Số tín chỉ (Bắt buộc)
+                                    </Tooltip>
+                                ),
                                 dataIndex: 'requiredCredits',
                                 align: 'center',
                                 type: 'cmp',
@@ -664,7 +666,11 @@ export default function TrainingProgramCatalog() {
                                 width: 90,
                             },
                             {
-                                title: <Tooltip title="Số tín chỉ tự chọn">Số TCTC</Tooltip>,
+                                title: (
+                                    <Tooltip title="Số tín chỉ tự chọn">
+                                        Số tín chỉ (Tự chọn)
+                                    </Tooltip>
+                                ),
                                 align: 'center',
                                 type: 'cmp',
                                 width: 90,

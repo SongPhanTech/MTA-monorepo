@@ -86,6 +86,11 @@ export default function AcademicActionConfig() {
 
     const { data = [], refetch } = useFindManyTrainingCourse({
         where,
+        orderBy: {
+            semesterStart: {
+                startDate: 'desc',
+            },
+        },
         include: {
             academicActionConfig: {
                 where: {
@@ -117,9 +122,6 @@ export default function AcademicActionConfig() {
                     name: true,
                 },
             },
-        },
-        orderBy: {
-            createdAt: 'desc',
         },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
@@ -172,7 +174,11 @@ export default function AcademicActionConfig() {
     }
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
-        orderBy: { name: 'asc' },
+        orderBy: {
+            semesterStart: {
+                startDate: 'desc',
+            },
+        },
         where: { trainingObjectTypeId, deletedAt: null, active: true },
     })
 

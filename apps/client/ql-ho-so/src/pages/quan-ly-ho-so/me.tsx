@@ -437,10 +437,10 @@ export default function UpdateUserPage() {
             putDMNhanViens({
                 sDM_DonViId: organizationId,
                 sMa: values.code,
-                sHoVaDem: values.lastName.trim(),
-                sTen: values.firstName.trim(),
-                sTenDayDu: `${values.lastName.trim() || ''} ${
-                    values.firstName.trim() || ''
+                sHoVaDem: values.lastName?.trim(),
+                sTen: values.firstName?.trim(),
+                sTenDayDu: `${values.lastName?.trim() || ''} ${
+                    values.firstName?.trim() || ''
                 }`.trim(),
                 sDM_GioiTinhId: genderId,
                 dNgaySinh: values.dateOfBirth ? dayjs(values.dateOfBirth).toISOString() : null,
@@ -543,14 +543,14 @@ export default function UpdateUserPage() {
                         },
                         data: {
                             ...values,
-                            lastName: values.lastName.trim(),
-                            firstName: values.firstName.trim(),
+                            lastName: values.lastName?.trim(),
+                            firstName: values.firstName?.trim(),
                             bLaHocVien: values.bLaHocVien,
                             bLaCanBoNhanVien: values?.bLaCanBoNhanVien,
                             bLaGiangVien: bLaGiangVien,
                             bLaNguoiDung: values?.bLaNguoiDung,
-                            fullname: `${values.lastName.trim() || ''} ${
-                                values.firstName.trim() || ''
+                            fullname: `${values.lastName?.trim() || ''} ${
+                                values.firstName?.trim() || ''
                             }`.trim(),
                             dateOfBirth: values.dateOfBirth
                                 ? dayjs(values.dateOfBirth).toISOString()

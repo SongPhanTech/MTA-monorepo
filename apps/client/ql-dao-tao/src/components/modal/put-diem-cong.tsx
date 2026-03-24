@@ -16,6 +16,7 @@ import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import Select from '@components/commons/select'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 export type PutAward = Award & {
     subjects: string[]
 }
@@ -32,10 +33,15 @@ const PutOlympicScoreModal = () => {
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
-
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { mutateAsync: createAward } = useCreateAward()
     const { mutateAsync: updateAward } = useUpdateAward()
     const { data: subjectData = [] } = useFindManySubject({
+        where: {
+            subjectVersion: {
+                some: { trainingObjectTypeId },
+            },
+        },
         include: {
             managementOrganization: true,
         },

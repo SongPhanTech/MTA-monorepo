@@ -90,6 +90,8 @@ app.all('/api/system/:appcode/*', async (c) => {
                 return process.env.KEYCLOAK_CLIENT_ID_HRM || ''
             case 'portal':
                 return process.env.KEYCLOAK_CLIENT_ID_PORTAL || ''
+            case 'dangkyhoc':
+                return process.env.KEYCLOAK_CLIENT_ID_PORTAL || ''
             case 'chatbot':
                 return process.env.KEYCLOAK_CLIENT_ID_CHATBOT || ''
             default:
@@ -106,6 +108,8 @@ app.all('/api/system/:appcode/*', async (c) => {
                 return process.env.KEYCLOAK_CLIENT_SECRET_HRM || ''
             case 'portal':
                 return process.env.KEYCLOAK_CLIENT_SECRET_PORTAL || ''
+            case 'dangkyhoc':
+                return process.env.KEYCLOAK_CLIENT_SECRET_PORTAL || ''
             case 'chatbot':
                 return process.env.KEYCLOAK_CLIENT_SECRET_CHATBOT || ''
             default:
@@ -113,16 +117,19 @@ app.all('/api/system/:appcode/*', async (c) => {
         }
     })()
 
+    const headers = {
+        'x-clientid': clientId,
+        'x-clientsecret': clientSecret,
+        'content-type': 'application/json-patch+json',
+    }
+
     const urlProxy = new URL(`${pathProxy}`, `${process.env.SYSTEM_BASE_URL}/api/system/public/`)
+    console.log('get session', appCode, headers)
+
     const res = await proxy(urlProxy, {
         ...c.req,
-        headers: {
-            'x-clientid': clientId,
-            'x-clientsecret': clientSecret,
-            'content-type': 'application/json-patch+json',
-        },
+        headers,
     })
-    console.log('[be-model] Proxy URL:', urlProxy.toString(), `status code: ${res.status}`)
     return res
 })
 

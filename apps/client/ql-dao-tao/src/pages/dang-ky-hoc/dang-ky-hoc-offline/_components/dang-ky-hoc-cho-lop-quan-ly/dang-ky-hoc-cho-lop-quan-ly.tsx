@@ -2,10 +2,14 @@ import Table from '@components/commons/table'
 import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { $Enums } from '@workspace/db/client'
-import { useCountSubjectClass, useFindManySubjectClass } from '@workspace/db/hooks'
+import {
+    useCountSubjectClass,
+    useFindManySubjectClass,
+    useFindManyTrainingCourse,
+} from '@workspace/db/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { cn } from '@workspace/ui/lib/utils'
-import { Col, Form, Input, Row } from 'antd'
+import { Col, Form, Input, Row, Select } from 'antd'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
 import { type Key, useCallback, useState } from 'react'
@@ -13,6 +17,7 @@ import { dangKyHocChoLopQuanLyStore } from '../..'
 
 interface FilterProps {
     searchText: string | null
+    trainingCourseId?: string
 }
 
 export default function DangKyHocChoLopQuanLy() {
@@ -22,9 +27,22 @@ export default function DangKyHocChoLopQuanLy() {
 
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
+        trainingCourseId: undefined,
     })
     const { id: semesterId } = useSemesterStore()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+
+    const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
+        where: {
+            active: true,
+            trainingObjectTypeId,
+        },
+        orderBy: {
+            semesterStart: {
+                startDate: 'desc',
+            },
+        },
+    })
 
     const { data: subjectClassData = [], refetch } = useFindManySubjectClass({
         where: {
@@ -42,6 +60,15 @@ export default function DangKyHocChoLopQuanLy() {
             active: true,
             status: 'OFFICIAL',
             type: $Enums.SubjectClassType.NORMAL,
+            ...(filters.trainingCourseId
+                ? {
+                      fixedClasses: {
+                          some: {
+                              trainingCourseId: filters.trainingCourseId,
+                          },
+                      },
+                  }
+                : {}),
         },
         include: {
             subject: true,
@@ -59,6 +86,11 @@ export default function DangKyHocChoLopQuanLy() {
                         },
                     },
                     code: true,
+                    trainingCourse: {
+                        select: {
+                            code: true,
+                        },
+                    },
                 },
             },
             _count: {
@@ -84,6 +116,8 @@ export default function DangKyHocChoLopQuanLy() {
         orderBy: {
             code: 'asc',
         },
+        take: numberOfPages,
+        skip: (currentPage - 1) * numberOfPages,
     })
 
     const { data: countSubjectClass = 0 } = useCountSubjectClass({
@@ -96,11 +130,21 @@ export default function DangKyHocChoLopQuanLy() {
                       },
                   }
                 : {}),
+            ...(filters.trainingCourseId
+                ? {
+                      fixedClasses: {
+                          some: {
+                              trainingCourseId: filters.trainingCourseId,
+                          },
+                      },
+                  }
+                : {}),
             semesterId,
             trainingObjectTypeId,
             cancelled: false,
             active: true,
             status: 'OFFICIAL',
+            type: $Enums.SubjectClassType.NORMAL,
         },
     })
 
@@ -126,26 +170,52 @@ export default function DangKyHocChoLopQuanLy() {
 
     return (
         <div>
-            <Row align="top" justify="space-between">
-                <Col span={24}>
-                    <h3 className="text-lg">Danh sách lớp môn học</h3>
-                    <Form.Item className="m-0" name="searchText">
-                        <Input
-                            id="search"
-                            placeholder="Tìm kiếm..."
-                            onChange={(e) => handleFilterChange('searchText', e.target.value)}
-                            style={{ height: 32 }}
-                            prefix={
-                                <Search
-                                    size={15}
-                                    style={{
-                                        color: 'rgba(0, 0, 0, 0.25)',
-                                    }}
+            <Row align="middle" justify="space-between" gutter={16}>
+                <Col>
+                    <h3 className="text-lg m-0">Danh sách lớp môn học</h3>
+                </Col>
+
+                <Col>
+                    <Row gutter={8}>
+                        <Col>
+                            <Form.Item className="m-0" name="searchText">
+                                <Input
+                                    id="search"
+                                    placeholder="Tìm kiếm..."
+                                    onChange={(e) =>
+                                        handleFilterChange('searchText', e.target.value)
+                                    }
+                                    style={{ height: 32, width: 300 }}
+                                    prefix={
+                                        <Search
+                                            size={15}
+                                            style={{ color: 'rgba(0, 0, 0, 0.25)' }}
+                                        />
+                                    }
+                                    allowClear
                                 />
-                            }
-                            allowClear
-                        />
-                    </Form.Item>
+                            </Form.Item>
+                        </Col>
+
+                        <Col>
+                            <Select
+                                placeholder="Chọn khoá"
+                                style={{ width: 180 }}
+                                options={trainingCourseData.map((i) => ({
+                                    value: i.id,
+                                    label: i.name,
+                                }))}
+                                allowClear
+                                showSearch
+                                filterOption={(input, option) =>
+                                    (option?.label ?? '')
+                                        .toLowerCase()
+                                        .includes(input.toLowerCase())
+                                }
+                                onChange={(value) => handleFilterChange('trainingCourseId', value)}
+                            />
+                        </Col>
+                    </Row>
                 </Col>
             </Row>
             <Table

@@ -1922,13 +1922,13 @@ exports.Prisma.SubjectVersionCategoryScalarFieldEnum = {
 
 exports.Prisma.SubjectVersionScalarFieldEnum = {
   id: 'id',
-  code: 'code',
   active: 'active',
   description: 'description',
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  code: 'code',
   isLocked: 'isLocked',
   name: 'name',
   codeTkb: 'codeTkb',
@@ -2452,6 +2452,20 @@ exports.Prisma.TrainingTimeScalarFieldEnum = {
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
   name: 'name'
+};
+
+exports.Prisma.AvailableTrainingTimeScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  duration: 'duration',
+  trainingObjectTypeId: 'trainingObjectTypeId',
+  semesterId: 'semesterId'
 };
 
 exports.Prisma.CertificateScalarFieldEnum = {
@@ -3052,6 +3066,8 @@ exports.Prisma.ThesisProjectScalarFieldEnum = {
   firstCheckProgress: 'firstCheckProgress',
   secondCheckProgress: 'secondCheckProgress',
   isEligibleForDefense: 'isEligibleForDefense',
+  primarySupervisorId: 'primarySupervisorId',
+  secondarySupervisorId: 'secondarySupervisorId',
   subjectClassId: 'subjectClassId',
   thesisSessionId: 'thesisSessionId',
   supervisorName: 'supervisorName',
@@ -6013,9 +6029,9 @@ exports.Prisma.SubjectVersionCategoryOrderByRelevanceFieldEnum = {
 
 exports.Prisma.SubjectVersionOrderByRelevanceFieldEnum = {
   id: 'id',
-  code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  code: 'code',
   name: 'name',
   codeTkb: 'codeTkb',
   objectives: 'objectives',
@@ -6321,6 +6337,15 @@ exports.Prisma.TrainingTimeOrderByRelevanceFieldEnum = {
   description: 'description',
   createdBy: 'createdBy',
   name: 'name'
+};
+
+exports.Prisma.AvailableTrainingTimeOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  trainingObjectTypeId: 'trainingObjectTypeId',
+  semesterId: 'semesterId'
 };
 
 exports.Prisma.CertificateOrderByRelevanceFieldEnum = {
@@ -6668,6 +6693,8 @@ exports.Prisma.ThesisProjectOrderByRelevanceFieldEnum = {
   language: 'language',
   type: 'type',
   editProject: 'editProject',
+  primarySupervisorId: 'primarySupervisorId',
+  secondarySupervisorId: 'secondarySupervisorId',
   subjectClassId: 'subjectClassId',
   thesisSessionId: 'thesisSessionId',
   supervisorName: 'supervisorName',
@@ -8358,6 +8385,7 @@ exports.Prisma.ModelName = {
   TrainingBlock: 'TrainingBlock',
   TrainingBlockOnCurriculumVersion: 'TrainingBlockOnCurriculumVersion',
   TrainingTime: 'TrainingTime',
+  AvailableTrainingTime: 'AvailableTrainingTime',
   Certificate: 'Certificate',
   CertificateOnSubject: 'CertificateOnSubject',
   Award: 'Award',

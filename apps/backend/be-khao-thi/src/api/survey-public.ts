@@ -384,4 +384,95 @@ app.openapi(validateUserSurvey, async (c) => {
     return c.json({ studentCode, exists: true }, 200)
 })
 
+//danh sách khảo sát công khai
+const getPublicSurveysV2 = createRoute({
+    operationId: 'get-public-surveys-v2',
+    path: '/get-public-surveys-v2',
+    tags: ['Survey'],
+    summary: 'Danh sách đợt khảo sát công khai (v2)',
+    description: 'Danh sách đợt khảo sát công khai, lọc theo học kỳ và loại đối tượng đào tạo',
+    method: 'get',
+    request: {
+        query: z.object({
+            semesterId: z.string().optional().openapi({ description: 'ID học kỳ' }),
+            trainingObjectTypeId: z
+                .string()
+                .optional()
+                .openapi({ description: 'ID loại đối tượng đào tạo' }),
+            take: z.coerce
+                .number()
+                .optional()
+                .default(10)
+                .openapi({ description: 'Số lượng bản ghi' }),
+            skip: z.coerce
+                .number()
+                .optional()
+                .default(0)
+                .openapi({ description: 'Bỏ qua số bản ghi' }),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Get Survey result',
+            content: {
+                'application/json': {
+                    schema: z
+                        .object({
+                            data: z.array(
+                                models.SurveyScalarSchema.merge(
+                                    z.object({
+                                        surveyObjectType: z
+                                            .array(models.SurveyObjectTypeScalarSchema)
+                                            .optional(),
+                                        surveyTopic:
+                                            models.SurveyTopicScalarSchema.nullable().optional(),
+                                        surveyQuestion: z
+                                            .array(models.SurveyQuestionScalarSchema)
+                                            .optional(),
+                                        surveySessions: z
+                                            .array(models.SurveySessionScalarSchema)
+                                            .optional(),
+                                        semester: models.SemesterScalarSchema.nullable().optional(),
+                                    })
+                                )
+                            ),
+                            total: z.number(),
+                        })
+                        .openapi('get-public-surveys-v2-result'),
+                },
+            },
+        },
+    },
+})
+
+app.openapi(getPublicSurveysV2, async (c) => {
+    const { semesterId, trainingObjectTypeId, take, skip } = c.req.valid('query')
+
+    const where = {
+        deletedAt: null,
+        clusterSurveyId: null,
+        ...(semesterId ? { semesterId } : {}),
+        ...(trainingObjectTypeId ? { trainingObjectTypeId } : {}),
+    }
+
+    const [data, total] = await Promise.all([
+        prisma.survey.findMany({
+            where,
+            include: {
+                surveyObjectType: true,
+                surveyTopic: true,
+                surveyQuestion: true,
+                surveySessions: true,
+                semester: true,
+            },
+            orderBy: { createdAt: 'desc' },
+            take,
+            skip,
+        }),
+        prisma.survey.count({ where }),
+    ])
+
+    return c.json({ data, total }, 200)
+})
+
 export default app

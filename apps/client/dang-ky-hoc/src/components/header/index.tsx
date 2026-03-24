@@ -12,7 +12,7 @@ const HeaderApp: React.FC = () => {
                 notificationAppId: 'notificationContainer',
                 userAppId: 'userContainer',
                 tenantCode: window.tenantCode || 'dev',
-                appCode: getRuntimeEnv('NEXT_PUBLIC_APP_CODE') || 'dang-ky-hoc',
+                appCode: getRuntimeEnv('NEXT_PUBLIC_APP_CODE') || 'dangkyhoc',
             })
         } catch (error) {
             console.log(error)

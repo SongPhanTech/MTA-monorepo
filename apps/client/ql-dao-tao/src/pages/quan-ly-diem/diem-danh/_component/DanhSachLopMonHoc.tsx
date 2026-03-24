@@ -10,15 +10,16 @@ import {
     useFindManyFixedClass,
     useFindManySubjectClass,
 } from '@workspace/db/hooks'
+import { formatLecturerName } from '@workspace/libs'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Checkbox, Col, Flex, Form, Input, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
+import { Search } from 'lucide-react'
 import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { Search } from 'lucide-react'
 
 export default function DanhSachLopMonHoc({
     selectedSubjectClassId,
@@ -235,13 +236,40 @@ export default function DanhSachLopMonHoc({
                 },
             },
             mainLecturer: {
-                include: { userProfile: true },
+                include: {
+                    userProfile: {
+                        select: {
+                            id: true,
+                            fullname: true,
+                            academicDegreeType: true,
+                            academicRankType: true,
+                        },
+                    },
+                },
             },
             extraLecturer: {
-                include: { userProfile: true },
+                include: {
+                    userProfile: {
+                        select: {
+                            id: true,
+                            fullname: true,
+                            academicDegreeType: true,
+                            academicRankType: true,
+                        },
+                    },
+                },
             },
             enterGradeLecturer: {
-                include: { userProfile: true },
+                include: {
+                    userProfile: {
+                        select: {
+                            id: true,
+                            fullname: true,
+                            academicDegreeType: true,
+                            academicRankType: true,
+                        },
+                    },
+                },
             },
             subjectClassStudent: {
                 include: {
@@ -539,13 +567,7 @@ export default function DanhSachLopMonHoc({
                                 align: 'center',
                                 type: 'input',
                                 dataIndex: 'mainLecturer',
-                                render: (text, record: any) => {
-                                    const mainLecturer = record.mainLecturer
-                                        ? `${record.mainLecturer.userProfile.lastName} ${record.mainLecturer.userProfile.firstName}`
-                                        : ''
-
-                                    return <ul>{mainLecturer && <li>- {mainLecturer}</li>}</ul>
-                                },
+                                render: (text, record) => formatLecturerName(record.mainLecturer),
                             },
 
                             {
@@ -554,16 +576,8 @@ export default function DanhSachLopMonHoc({
                                 align: 'center',
                                 type: 'input',
                                 dataIndex: 'mainLecturer',
-                                render: (text, record: any) => {
-                                    const enterGradeLecturer = record.enterGradeLecturer
-                                        ? `${record.enterGradeLecturer.userProfile.lastName} ${record.enterGradeLecturer.userProfile.firstName}`
-                                        : ''
-                                    return (
-                                        <ul>
-                                            {enterGradeLecturer && <li>- {enterGradeLecturer}</li>}
-                                        </ul>
-                                    )
-                                },
+                                render: (text, record) =>
+                                    formatLecturerName(record.enterGradeLecturer),
                             },
                             {
                                 title: 'ĐV phụ trách',

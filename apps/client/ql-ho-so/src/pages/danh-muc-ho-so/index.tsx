@@ -216,6 +216,13 @@ export default function DanhMucHoSo() {
             label: 'Cá nhân',
             children: [
                 {
+                    id: 'national',
+                    label: 'Quốc tịch',
+                    icon: <Backpack style={{ fontSize: '24px' }} />,
+                    path: ROUTER_PATH.QL_HO_SO.DANH_MUC_HO_SO_QUOC_GIA,
+                    description: 'Quản lý quốc tịch',
+                },
+                {
                     id: 'working-status',
                     label: 'Trạng thái làm việc',
                     icon: <Backpack style={{ fontSize: '24px' }} />,

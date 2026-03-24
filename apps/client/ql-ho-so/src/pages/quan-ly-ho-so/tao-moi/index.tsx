@@ -513,10 +513,10 @@ export default function CreateUserPage() {
             const res = await postDMNhanViens({
                 sDM_DonViId: organizationId,
                 sMa: values.code,
-                sHoVaDem: values.lastName.trim(),
-                sTen: values.firstName.trim(),
-                sTenDayDu: `${values.lastName.trim() || ''} ${
-                    values.firstName.trim() || ''
+                sHoVaDem: values.lastName?.trim(),
+                sTen: values.firstName?.trim(),
+                sTenDayDu: `${values.lastName?.trim() || ''} ${
+                    values.firstName?.trim() || ''
                 }`.trim(),
                 sDM_GioiTinhId: values.genderId,
                 dNgaySinh: values.dateOfBirth ? dayjs(values.dateOfBirth).toISOString() : null,
@@ -553,8 +553,8 @@ export default function CreateUserPage() {
                 }
                 const profileData = {
                     ...values,
-                    lastName: values.lastName.trim(),
-                    firstName: values.firstName.trim(),
+                    lastName: values.lastName?.trim(),
+                    firstName: values.firstName?.trim(),
                     id: res?.data?.Id,
                     bLaCanBoNhanVien: values?.bLaCanBoNhanVien,
                     bLaGiangVien: bLaGiangVien || undefined,
@@ -572,8 +572,8 @@ export default function CreateUserPage() {
                         : null,
                     tenureDate: values.tenureDate ? dayjs(values.tenureDate).toISOString() : null,
                     avatar: form.getFieldValue('avatar'),
-                    fullname: `${values.lastName.trim() || ''} ${
-                        values.firstName.trim() || ''
+                    fullname: `${values.lastName?.trim() || ''} ${
+                        values.firstName?.trim() || ''
                     }`.trim(),
                     rankId: rank?.capBacId ?? undefined,
                     academicDegreeTypeId: hocvi?.academicRankTypeId ?? undefined,

@@ -129,6 +129,7 @@ export * from './TrainingMajorOnTrainingObjectType.schema';
 export * from './TrainingBlock.schema';
 export * from './TrainingBlockOnCurriculumVersion.schema';
 export * from './TrainingTime.schema';
+export * from './AvailableTrainingTime.schema';
 export * from './Certificate.schema';
 export * from './CertificateOnSubject.schema';
 export * from './Award.schema';

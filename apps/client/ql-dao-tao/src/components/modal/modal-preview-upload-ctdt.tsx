@@ -1,8 +1,8 @@
 import Table from '@components/commons/table'
 import type { $Enums } from '@workspace/db/client'
 import { useFindManySubjectVersion } from '@workspace/db/hooks'
-import type { SubjectResult } from '@workspace/libs/parseExcel'
 import { examTypes, subjectVersionTypes } from '@workspace/libs'
+import type { SubjectResult } from '@workspace/libs/parseExcel'
 
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Checkbox, Collapse, Modal, Tooltip } from 'antd'
@@ -68,24 +68,12 @@ const ModalPreviewUpload = () => {
         select: { name: true },
         where: {
             OR: uniqueSubject.map((s) => ({
-                name: s.name,
-                trainingObjectTypeId: s.trainingObjectTypeId,
-                ...(s.code ? { code: s.code } : {}),
-                // TODO: check it
-                // ...(s.organizationCode
-                //     ? {
-                //           subject: {
-                //               managementOrganization: {
-                //                   sMa: s.organizationCode,
-                //               },
-                //           },
-                //       }
-                //     : {}),
-                credit: s.credit,
-                examType: s.examType,
-                type: s.type,
-                period: s.period,
-                schedulePeriod: s.schedulePeriod,
+                code: s.code,
+                // name: s.name,
+                // trainingObjectTypeId: s.trainingObjectTypeId,
+                // credit: s.credit,
+                // type: s.type,
+                // period: s.period,
             })),
         },
     })
@@ -207,7 +195,7 @@ const ModalPreviewUpload = () => {
                                 index + 1 + (currentPage - 1) * numberOfPages,
                         },
                         {
-                            title: 'Môn mới',
+                            title: 'Mã môn mới',
                             width: 70,
                             align: 'center',
                             render: (_, record) => {

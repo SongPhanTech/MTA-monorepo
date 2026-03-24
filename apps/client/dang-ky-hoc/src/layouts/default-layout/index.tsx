@@ -9,7 +9,7 @@ import { getRuntimeEnv } from '@workspace/libs'
 import { useGetVersion } from '@workspace/libs/api/training'
 import { getDynamicBreadcrumb } from '@workspace/permissions/hooks'
 import { Breadcrumb, Layout, theme } from 'antd'
-import { Footer } from 'antd/es/layout/layout'
+// import { Footer } from 'antd/es/layout/layout'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -176,14 +176,14 @@ const DefaultLayout = ({
                     </Content>
                 </Layout>
             </Layout>
-            <Footer className="fixed bottom-0 w-full z-[1000] flex items-center p-2">
+            {/* <Footer className="fixed bottom-0 w-full z-[1000] flex items-center p-2">
                 <div>
                     Học viện Kỹ thuật Quân sự - Địa chỉ: Số 236, Hoàng Quốc Việt, Cầu Giấy, Hà Nội
                 </div>
                 <div className="ml-auto">
                     Phiên bản: {isLoadingVersion ? '...' : (data?.data as string)}
                 </div>
-            </Footer>
+            </Footer> */}
         </IdleTimerProvider>
     )
 }

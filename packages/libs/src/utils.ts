@@ -374,6 +374,33 @@ export function splitFullName(fullName?: string): {
     return { firstName, lastName }
 }
 
+export function formatLecturerName(
+    lecturer?: Prisma.LecturerGetPayload<{
+        select: {
+            userProfile: {
+                select: {
+                    fullname: true
+                    academicRankType: { select: { sMa: true } }
+                    academicDegreeType: { select: { sMa: true } }
+                }
+            }
+            code: true
+        }
+    }> | null
+) {
+    return (
+        `${lecturer?.code ? `${lecturer?.code} - ` : ''}` +
+        ([
+            lecturer?.userProfile?.academicRankType?.sMa,
+            lecturer?.userProfile?.academicDegreeType?.sMa,
+        ]
+            .filter(Boolean)
+            .join('.') +
+            ' ' +
+            lecturer?.userProfile?.fullname)
+    )
+}
+
 export const calcFinalScore = (
     coef: Prisma.TrainingCourseGetPayload<{
         select: {

@@ -6,7 +6,7 @@ import { useFindManyExamPaper } from '@workspace/db/hooks'
 import { getUrl } from '@workspace/libs/api/custom-instance'
 import { getExportSubjectClassScoreUrl, useSaveExamScore } from '@workspace/libs/api/training'
 import { getRuntimeEnv } from '@workspace/libs/utils'
-import { Button, Col, Flex, Form, InputNumber, Modal, message } from 'antd'
+import { Badge, Button, Col, Flex, Form, InputNumber, Modal, message } from 'antd'
 import { Printer } from 'lucide-react'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -43,6 +43,11 @@ export default function NhapDiemPhach() {
                 },
             },
             include: {
+                examList: {
+                    select: {
+                        lockExamCode: true,
+                    },
+                },
                 studentSubjectScore: {
                     include: {
                         student: {
@@ -136,39 +141,52 @@ export default function NhapDiemPhach() {
             refetch()
         }
     }
+
+    const isAllLocked = examPapers.length > 0 && examPapers.every((p) => p?.examList?.lockExamCode)
+
     return (
         <div className="max-w-screen-sm">
             <Col span={24}>
-                <Flex justify="end" align="center">
-                    <Button
-                        onClick={() => {
-                            openXemTaiLieu({
-                                uri: getUrl(
-                                    getRuntimeEnv('NEXT_PUBLIC_API_LMS_BASE_URL') ||
-                                        'https://api.daotao.mta.swantech.vn',
-                                    `${getExportSubjectClassScoreUrl({
-                                        examId: examId,
-                                        type: 'KEM-PHACH',
-                                    })}`
-                                ),
-                                name: 'Điểm kèm phách',
-                                mimeType: 'xlsx',
-                                convertTo: 'pdf',
-                            })
-                        }}
-                        className="mr-2"
-                    >
-                        <Printer />
-                        In phiếu điểm kèm phách
-                    </Button>
-                    <Button
-                        type="primary"
-                        onClick={() => {
-                            handleSave()
-                        }}
-                    >
-                        Lưu
-                    </Button>
+                <Flex justify="space-between" align="center">
+                    <Badge
+                        status={isAllLocked ? 'success' : 'error'}
+                        text={
+                            isAllLocked
+                                ? 'Đã khóa phách - Cho phép nhập điểm'
+                                : 'Chưa khóa phách - Không thể nhập điểm'
+                        }
+                    />
+                    <Flex gap={8}>
+                        <Button
+                            onClick={() => {
+                                openXemTaiLieu({
+                                    uri: getUrl(
+                                        getRuntimeEnv('NEXT_PUBLIC_API_LMS_BASE_URL') ||
+                                            'https://api.daotao.mta.swantech.vn',
+                                        `${getExportSubjectClassScoreUrl({
+                                            examId: examId,
+                                            type: 'KEM-PHACH',
+                                        })}`
+                                    ),
+                                    name: 'Điểm kèm phách',
+                                    mimeType: 'xlsx',
+                                    convertTo: 'pdf',
+                                })
+                            }}
+                        >
+                            <Printer />
+                            In phiếu điểm kèm phách
+                        </Button>
+                        <Button
+                            type="primary"
+                            disabled={!isAllLocked}
+                            onClick={() => {
+                                handleSave()
+                            }}
+                        >
+                            Lưu
+                        </Button>
+                    </Flex>
                 </Flex>
             </Col>
             <Col span={24}>
@@ -213,6 +231,9 @@ export default function NhapDiemPhach() {
                                                     style={{ width: '100%' }}
                                                     step={0.1}
                                                     controls={false}
+                                                    disabled={
+                                                        !(record as any)?.examList?.lockExamCode
+                                                    }
                                                     parser={(value) => {
                                                         if (!value) return ''
                                                         const num = Number(value)

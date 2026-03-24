@@ -3,7 +3,26 @@ import { PrismaClient } from '../../generated/prisma-client'
 
 const prisma = new PrismaClient()
 
+// const scores = await prisma.studentSubjectScore.findMany({
+//     where: {
+//         attendanceScore: null,
+//         midtermScore: null,
+//         examScore: { not: null },
+//     },
+// })
+
+// for (const sc of scores) {
+//     await prisma.studentSubjectScore.update({
+//         where: { id: sc.id },
+//         data: {
+//             attendanceScore: sc.examScore,
+//             midtermScore: sc.examScore,
+//         },
+//     })
+// }
+
 const subjectScores = await prisma.studentSubjectScore.findMany({
+    where: { finalScore: null },
     select: {
         id: true,
         subjectClass: {
@@ -80,7 +99,7 @@ const updates = subjectScores.map((s) => {
     return { id: s.id, finalScore }
 })
 
-await prisma.$executeRawUnsafe(`
+const result = await prisma.$executeRawUnsafe(`
         UPDATE "ql-dao-tao"."StudentSubjectScore" AS sss
         SET
             "finalScore" = data."finalScore",
@@ -98,3 +117,5 @@ await prisma.$executeRawUnsafe(`
         ) AS data("id", "finalScore")
         WHERE sss.id = data.id;
         `)
+
+console.log(result)

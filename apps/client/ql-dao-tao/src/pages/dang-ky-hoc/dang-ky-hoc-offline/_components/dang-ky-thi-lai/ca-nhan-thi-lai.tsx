@@ -8,9 +8,9 @@ import {
     useFindManyTrainingCourse,
     useFindUniqueSubjectClass,
 } from '@workspace/db/hooks'
+import { diffArrays } from '@workspace/libs'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useOpenSubjectClassReExamStudents } from '@workspace/libs/api/training'
-import { diffArrays } from '@workspace/libs'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Checkbox, Col, Form, Input, message, Row, Select } from 'antd'
 import _ from 'lodash'
@@ -61,7 +61,9 @@ export default function CaNhanThiLai() {
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         orderBy: {
-            name: 'asc',
+            semesterStart: {
+                startDate: 'desc',
+            },
         },
         where: {
             active: true,

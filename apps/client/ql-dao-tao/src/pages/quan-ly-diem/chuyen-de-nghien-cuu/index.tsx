@@ -56,7 +56,9 @@ export default function ChuyenDeNghienCuu({ role = 'P7' }: { role: 'P7' | 'KHOA_
             trainingObjectTypeId: trainingObjectTypeId,
         },
         orderBy: {
-            name: 'desc',
+            semesterStart: {
+                startDate: 'desc',
+            },
         },
     })
 

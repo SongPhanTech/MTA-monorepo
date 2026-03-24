@@ -84,6 +84,14 @@ model ThesisProject extends Base {
   secondCheckProgress   Int?                        // Tiến độ kiểm tra lần 2 % (0-100)
   isEligibleForDefense  Boolean                     @default(true) // Đủ điều kiện bảo vệ
 
+  //GVHD1 cho đồ án
+  primarySupervisor     Lecturer?                   @relation("PrimarySupervisorToThesis", fields: [primarySupervisorId], references: [id])
+  primarySupervisorId   String?                   
+
+  //GVHD2 cho đồ án
+  secondarySupervisor   Lecturer?                   @relation("SecondarySupervisorToThesis", fields: [secondarySupervisorId], references: [id])
+  secondarySupervisorId String?
+
   subjectClass          SubjectClass?               @relation(fields: [subjectClassId], references: [id])
   subjectClassId        String?
 

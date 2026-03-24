@@ -341,12 +341,7 @@ export const buildSubjectMapOrThrow = async (
         // }
 
         throw new HTTPException(400, {
-            message: `Phiên bản môn học không tồn tại: ${missing
-                .map(
-                    ([name, organizationCode, credit]) =>
-                        `${name}${` (${credit})` || ''}${organizationCode ? ` - ${organizationCode}` : ''}`
-                )
-                .join('; ')}`,
+            message: `Phiên bản môn học không tồn tại: ${missing.map(([name]) => name).join(', ')}`,
         })
     }
 

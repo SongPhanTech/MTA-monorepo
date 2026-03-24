@@ -573,7 +573,7 @@ export default function TrainingProgramSubjects() {
                             {
                                 title: (
                                     <Tooltip title="Số tín chỉ tự chọn">
-                                        <span>TCTC</span>
+                                        <span>Số tín chỉ (Tự chọn)</span>
                                     </Tooltip>
                                 ),
                                 width: 80,

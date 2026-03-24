@@ -6,6 +6,7 @@ type SelectProps = AntdSelectProps
 const Select = (props: SelectProps) => {
     return (
         <AntdSelect
+            popupMatchSelectWidth={false}
             allowClear
             showSearch
             filterOption={(input, option) => fuzzyMatch(input, option?.label?.toString() || '')}

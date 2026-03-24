@@ -93,6 +93,8 @@ const baseSchemaWithoutDefaults = z.object({
 }
 ).strict();
 const relationSchema = z.object({
+    primarySupervisor: z.record(z.string(), z.unknown()).optional(),
+    secondarySupervisor: z.record(z.string(), z.unknown()).optional(),
     subjectClass: z.record(z.string(), z.unknown()).optional(),
     thesisSession: z.record(z.string(), z.unknown()).optional(),
     supervisor: z.record(z.string(), z.unknown()).optional(),
@@ -110,6 +112,8 @@ const relationSchema = z.object({
 }
 );
 const fkSchema = z.object({
+    primarySupervisorId: z.string().nullish(),
+    secondarySupervisorId: z.string().nullish(),
     subjectClassId: z.string().nullish(),
     thesisSessionId: z.string().nullish(),
     supervisorId: z.string().nullish(),

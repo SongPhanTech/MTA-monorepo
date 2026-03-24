@@ -495,7 +495,9 @@ export default function UserProfilePageLecture() {
                                                 ) && (
                                                     <Tooltip title="Sửa" placement="top">
                                                         <Button
+                                                            type="link"
                                                             target="_blank"
+                                                            rel="noopener noreferrer"
                                                             href={`/hrm/${ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO}/${userProfileId}`}
                                                             className="text-green-600 border-none"
                                                         >

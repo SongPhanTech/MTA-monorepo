@@ -304,7 +304,11 @@ export default function UserProfilePageDs() {
         include: {
             fixedClass: true,
         },
-        orderBy: { name: 'asc' },
+        orderBy: {
+            semesterStart: {
+                startDate: 'desc',
+            },
+        },
         where: { trainingObjectTypeId, deletedAt: null, active: true },
     })
 
@@ -380,14 +384,7 @@ export default function UserProfilePageDs() {
         tag: 'PutStudentModal',
     })
 
-    const { onOpen: onOpenDetail } = useDisclosure({
-        tag: 'ModalChiTietSinhVien',
-    })
     const { showSpinner, hideSpinner } = useSpinner()
-
-    const goToStudentDetail = (id: string) => {
-        router.push(ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_QL_SINH_VIEN_ID.replace('[id]', id))
-    }
 
     const handleModal = () => {
         onOpen({
@@ -716,7 +713,12 @@ export default function UserProfilePageDs() {
                                             <InfoIcon
                                                 onClick={(e) => {
                                                     e.stopPropagation()
-                                                    onOpenDetail(record.id)
+                                                    router.push(
+                                                        ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_QL_SINH_VIEN_ID.replace(
+                                                            '[id]',
+                                                            record.id
+                                                        )
+                                                    )
                                                 }}
                                                 size={16}
                                                 className="text-green-600 cursor-pointer"
@@ -742,9 +744,10 @@ export default function UserProfilePageDs() {
                                             'SUA'
                                         ) && (
                                             <EditIcon
-                                                onClick={onOpenUpdate.bind(null, {
-                                                    id: record.id,
-                                                })}
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    onOpenUpdate({ id: record.id })
+                                                }}
                                                 className="text-sm text-blue-700 cursor-pointer"
                                             />
                                         )}
@@ -762,10 +765,6 @@ export default function UserProfilePageDs() {
                                 ),
                             },
                         ]}
-                        onRow={(record) => ({
-                            onClick: () => goToStudentDetail(record.id),
-                            className: 'cursor-pointer',
-                        })}
                         rowKey="id"
                         data={data}
                         pagination={{

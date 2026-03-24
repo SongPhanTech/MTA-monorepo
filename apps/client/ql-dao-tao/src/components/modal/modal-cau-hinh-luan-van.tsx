@@ -149,84 +149,82 @@ const ModalCauHinhLuanVan = () => {
         if (!data) return
 
         if (isCouncilRolesDuplicated(data)) {
-            message.error('Một thành viên không thể có nhiều vai trò trong Hội đồng.')
-            return
+            throw new Error('Một thành viên không thể có nhiều vai trò trong Hội đồng.')
         }
 
         const thesisProjectId = input?.thesisProjectId || thesisProjectData?.id
         if (!thesisProjectId) {
-            message.error('Không tìm thấy ID dự án.')
             return
         }
 
-        try {
-            showSpinner()
+        const updateThesisProjectPayload: any = {}
 
-            const updateThesisProjectPayload: any = {
-                defenseDate: data.defenseDate,
-                room: { connect: { id: data.roomId } },
-                defenseSession: { connect: { id: data.sessionId } },
-            }
+        if (data.defenseDate) {
+            updateThesisProjectPayload.defenseDate = data.defenseDate
+        }
+        if (data.roomId) {
+            updateThesisProjectPayload.room = { connect: { id: data.roomId } }
+        }
+        if (data.sessionId) {
+            updateThesisProjectPayload.defenseSession = { connect: { id: data.sessionId } }
+        }
 
-            let councilId = thesisProjectData?.councilId
+        let councilId = thesisProjectData?.councilId
 
-            if (!councilId) {
-                const newCouncil = await createCouncil({
-                    data: {
-                        proposedDate: new Date(),
-                        status: CouncilProposalStatus.PENDING,
-                    },
-                })
-                councilId = newCouncil?.id
-                if (!councilId) throw new Error('Không thể tạo Hội đồng.')
+        if (
+            !councilId &&
+            (data.chairman || data.secretary || data.reviewer1 || data.reviewer2 || data.member)
+        ) {
+            const newCouncil = await createCouncil({
+                data: {
+                    proposedDate: new Date(),
+                    status: CouncilProposalStatus.PENDING,
+                },
+            })
+            councilId = newCouncil?.id
+            if (!councilId) throw new Error('Không thể tạo Hội đồng.')
 
-                updateThesisProjectPayload.council = { connect: { id: councilId } }
-            }
+            updateThesisProjectPayload.council = { connect: { id: councilId } }
+        }
 
+        if (Object.keys(updateThesisProjectPayload).length > 0) {
             await updateThesisProject({
                 where: { id: thesisProjectId },
                 data: updateThesisProjectPayload,
             })
-
-            const rolesMapping = [
-                { role: CouncilRole.CHAIRMAN, expertId: data.chairman },
-                { role: CouncilRole.SECRETARY, expertId: data.secretary },
-                { role: CouncilRole.REVIEWER_1, expertId: data.reviewer1 },
-                { role: CouncilRole.REVIEWER_2, expertId: data.reviewer2 },
-                { role: CouncilRole.MEMBER, expertId: data.member },
-            ]
-
-            const currentMembers = thesisProjectData?.council?.members ?? []
-
-            const memberPromises = rolesMapping
-                .filter((item) => !!item.expertId)
-                .map((item) => {
-                    const existingMember = currentMembers.find((m) => m.role === item.role)
-
-                    if (existingMember) {
-                        return updateCouncilMember({
-                            where: { id: existingMember.id },
-                            data: { expertId: item.expertId },
-                        })
-                    }
-                    return createCouncilMember({
-                        data: {
-                            role: item.role,
-                            expertId: item.expertId || '',
-                            councilId: councilId || '',
-                        },
-                    })
-                })
-
-            await Promise.all(memberPromises)
-
-            message.success('Cập nhật cấu hình bảo vệ thành công')
-            onClose()
-        } catch (error: any) {
-            message.error(error?.message || 'Đã xảy ra lỗi khi cập nhật cấu hình.')
-        } finally {
-            hideSpinner()
         }
+
+        const rolesMapping = [
+            { role: CouncilRole.CHAIRMAN, expertId: data.chairman },
+            { role: CouncilRole.SECRETARY, expertId: data.secretary },
+            { role: CouncilRole.REVIEWER_1, expertId: data.reviewer1 },
+            { role: CouncilRole.REVIEWER_2, expertId: data.reviewer2 },
+            { role: CouncilRole.MEMBER, expertId: data.member },
+        ]
+
+        const currentMembers = thesisProjectData?.council?.members ?? []
+
+        const memberPromises = rolesMapping
+            .filter((item) => !!item.expertId)
+            .map((item) => {
+                const existingMember = currentMembers.find((m) => m.role === item.role)
+
+                if (existingMember) {
+                    return updateCouncilMember({
+                        where: { id: existingMember.id },
+                        data: { expertId: item.expertId },
+                    })
+                }
+                return createCouncilMember({
+                    data: {
+                        role: item.role,
+                        expertId: item.expertId || '',
+                        councilId: councilId || '',
+                    },
+                })
+            })
+
+        await Promise.all(memberPromises)
     }
 
     const handleSubmitThesis = async (data: ModalCauHinhLuanVanType) => {
@@ -234,265 +232,207 @@ const ModalCauHinhLuanVan = () => {
         const initialFiles = document
         const thesisLibraryId = thesisProjectData?.librarySubmission?.id
         if (!thesisLibraryId) {
-            message.error('Không tìm thấy ID nộp luận văn thư viện.')
             return
         }
-        try {
-            showSpinner()
-            const dataSubmit = {
-                submissionDate: data.submissionDate,
-                isHardcopy: data.isHardcopy,
-                isSoftcopy: data.isSoftcopy,
-                librarianNote: data.librarianNote,
-                documentFile: {
-                    upsert: filesInForm
-                        .filter((file: DocumentFile) => !!file.id)
-                        .map((file: DocumentFile) => ({
-                            where: { id: file.id },
-                            create: {
-                                name: file.name,
-                                path: file.path,
-                                mimeType: file.mimeType,
-                                size: file.size,
-                            },
-                            update: {
-                                name: file.name,
-                                path: file.path,
-                                mimeType: file.mimeType,
-                                size: file.size,
-                            },
-                        })),
-                    create: filesInForm
-                        .filter((file: DocumentFile) => !file.id)
-                        .map((file: DocumentFile) => ({
+
+        const dataSubmit = {
+            submissionDate: data.submissionDate,
+            isHardcopy: data.isHardcopy,
+            isSoftcopy: data.isSoftcopy,
+            librarianNote: data.librarianNote,
+            documentFile: {
+                upsert: filesInForm
+                    .filter((file: DocumentFile) => !!file.id)
+                    .map((file: DocumentFile) => ({
+                        where: { id: file.id },
+                        create: {
                             name: file.name,
                             path: file.path,
                             mimeType: file.mimeType,
                             size: file.size,
-                        })),
-                    disconnect: initialFiles
-                        .filter(
-                            (initialFile) =>
-                                !filesInForm.some(
-                                    (finalFile: DocumentFile) => finalFile.id === initialFile.id
-                                )
-                        )
-                        .map((fileToDisconnect) => ({ id: fileToDisconnect.id })),
-                },
-            }
-            await updateLibrarySubmission({
-                where: { id: thesisLibraryId },
-                data: dataSubmit,
-            })
-            message.success('Cập nhật thông tin nộp luận văn thành công')
-            onClose()
-        } catch (error: any) {
-            const errorMessage =
-                error?.info?.message || 'Đã xảy ra lỗi khi cập nhật thông tin nộp luận văn.'
-            message.error(errorMessage)
-        } finally {
-            hideSpinner()
+                        },
+                        update: {
+                            name: file.name,
+                            path: file.path,
+                            mimeType: file.mimeType,
+                            size: file.size,
+                        },
+                    })),
+                create: filesInForm
+                    .filter((file: DocumentFile) => !file.id)
+                    .map((file: DocumentFile) => ({
+                        name: file.name,
+                        path: file.path,
+                        mimeType: file.mimeType,
+                        size: file.size,
+                    })),
+                disconnect: initialFiles
+                    .filter(
+                        (initialFile) =>
+                            !filesInForm.some(
+                                (finalFile: DocumentFile) => finalFile.id === initialFile.id
+                            )
+                    )
+                    .map((fileToDisconnect) => ({ id: fileToDisconnect.id })),
+            },
         }
+        await updateLibrarySubmission({
+            where: { id: thesisLibraryId },
+            data: dataSubmit,
+        })
     }
     const handlePaymentThesis = async (data: ModalCauHinhLuanVanType) => {
-        try {
-            showSpinner()
-            const thesisProjectId = thesisProjectData?.id
-            const paymentTasks: Promise<any>[] = []
+        const thesisProjectId = thesisProjectData?.id
+        if (!thesisProjectId) return
 
-            if (data.supervisorId) {
-                const amount = new Decimal(data.supervisorPaymentAmount ?? 0)
-                if (thesisProjectData?.supervisorPaymentId) {
-                    paymentTasks.push(
-                        updateSupervisorPaymentRecord({
-                            where: { id: thesisProjectData.supervisorPaymentId },
-                            data: { amount },
-                        })
-                    )
-                } else {
-                    paymentTasks.push(
-                        createSupervisorPaymentRecord({
-                            data: {
-                                amount,
-                                status: PaymentStatus.PENDING,
-                                thesisProjects: { connect: { id: thesisProjectId } },
-                            },
-                        })
-                    )
-                }
+        const paymentTasks: Promise<any>[] = []
+
+        if (data.supervisorId) {
+            const amount = new Decimal(data.supervisorPaymentAmount ?? 0)
+            if (thesisProjectData?.supervisorPaymentId) {
+                paymentTasks.push(
+                    updateSupervisorPaymentRecord({
+                        where: { id: thesisProjectData.supervisorPaymentId },
+                        data: { amount },
+                    })
+                )
+            } else {
+                paymentTasks.push(
+                    createSupervisorPaymentRecord({
+                        data: {
+                            amount,
+                            status: PaymentStatus.PENDING,
+                            thesisProjects: { connect: { id: thesisProjectId } },
+                        },
+                    })
+                )
             }
-
-            if (data.coSupervisorId) {
-                const amount = new Decimal(data.coSupervisorPaymentAmount ?? 0)
-                if (thesisProjectData?.coSupervisorPaymentId) {
-                    paymentTasks.push(
-                        updateSupervisorPaymentRecord({
-                            where: { id: thesisProjectData.coSupervisorPaymentId },
-                            data: { amount },
-                        })
-                    )
-                } else {
-                    paymentTasks.push(
-                        createSupervisorPaymentRecord({
-                            data: {
-                                amount,
-                                status: PaymentStatus.PENDING,
-                                coThesisProjects: { connect: { id: thesisProjectId } },
-                            },
-                        })
-                    )
-                }
-            }
-
-            const councilRolesMap = [
-                { role: CouncilRole.CHAIRMAN, amount: data.councilChairmanPaymentAmount },
-                { role: CouncilRole.SECRETARY, amount: data.councilSecretaryPaymentAmount },
-                { role: CouncilRole.REVIEWER_1, amount: data.councilReviewer1PaymentAmount },
-                { role: CouncilRole.REVIEWER_2, amount: data.councilReviewer2PaymentAmount },
-                { role: CouncilRole.MEMBER, amount: data.councilMemberPaymentAmount },
-            ]
-
-            councilRolesMap.forEach(({ role, amount }) => {
-                const member = thesisProjectData?.council?.members.find((m) => m.role === role)
-                if (member) {
-                    const decimalAmount = new Decimal(amount ?? 0)
-                    if (member.payment?.id) {
-                        paymentTasks.push(
-                            updatePaymentRecord({
-                                where: { id: member.payment.id },
-                                data: { amount: decimalAmount },
-                            })
-                        )
-                    } else {
-                        paymentTasks.push(
-                            createPaymentRecord({
-                                data: {
-                                    amount: decimalAmount,
-                                    status: PaymentStatus.PENDING,
-                                    councilMember: { connect: { id: member.id } },
-                                },
-                            })
-                        )
-                    }
-                }
-            })
-            await Promise.all(paymentTasks)
-            message.success('Cập nhật thông tin thanh toán thành công')
-            onClose()
-        } catch (error: any) {
-            message.error(`Lỗi khi xử lý thanh toán: ${error?.message || 'Lỗi không xác định'}`)
-        } finally {
-            hideSpinner()
         }
+
+        if (data.coSupervisorId) {
+            const amount = new Decimal(data.coSupervisorPaymentAmount ?? 0)
+            if (thesisProjectData?.coSupervisorPaymentId) {
+                paymentTasks.push(
+                    updateSupervisorPaymentRecord({
+                        where: { id: thesisProjectData.coSupervisorPaymentId },
+                        data: { amount },
+                    })
+                )
+            } else {
+                paymentTasks.push(
+                    createSupervisorPaymentRecord({
+                        data: {
+                            amount,
+                            status: PaymentStatus.PENDING,
+                            coThesisProjects: { connect: { id: thesisProjectId } },
+                        },
+                    })
+                )
+            }
+        }
+
+        const councilRolesMap = [
+            { role: CouncilRole.CHAIRMAN, amount: data.councilChairmanPaymentAmount },
+            { role: CouncilRole.SECRETARY, amount: data.councilSecretaryPaymentAmount },
+            { role: CouncilRole.REVIEWER_1, amount: data.councilReviewer1PaymentAmount },
+            { role: CouncilRole.REVIEWER_2, amount: data.councilReviewer2PaymentAmount },
+            { role: CouncilRole.MEMBER, amount: data.councilMemberPaymentAmount },
+        ]
+
+        councilRolesMap.forEach(({ role, amount }) => {
+            const member = thesisProjectData?.council?.members.find((m) => m.role === role)
+            if (member) {
+                const decimalAmount = new Decimal(amount ?? 0)
+                if (member.payment?.id) {
+                    paymentTasks.push(
+                        updatePaymentRecord({
+                            where: { id: member.payment.id },
+                            data: { amount: decimalAmount },
+                        })
+                    )
+                } else {
+                    paymentTasks.push(
+                        createPaymentRecord({
+                            data: {
+                                amount: decimalAmount,
+                                status: PaymentStatus.PENDING,
+                                councilMember: { connect: { id: member.id } },
+                            },
+                        })
+                    )
+                }
+            }
+        })
+        await Promise.all(paymentTasks)
     }
     const handleInforSubmit = async (data: ModalCauHinhLuanVanType) => {
-        try {
-            showSpinner()
-            const filesInForm = (data as any).attachments || []
-            const initialFiles = attachments
-            const payload = {
-                finalScore: new Decimal(data.finalResult ?? 0),
-                comments: data.commentsCouncil,
-                isProfileComplete: data.isCompleteCouncil,
-                documents: {
-                    upsert: filesInForm
-                        .filter((file: DocumentFile) => !!file.id)
-                        .map((file: DocumentFile) => ({
-                            where: { id: file.id },
-                            create: {
-                                name: file.name,
-                                path: file.path,
-                                mimeType: file.mimeType,
-                                size: file.size,
-                            },
-                            update: {
-                                name: file.name,
-                                path: file.path,
-                                mimeType: file.mimeType,
-                                size: file.size,
-                            },
-                        })),
-                    create: filesInForm
-                        .filter((file: DocumentFile) => !file.id)
-                        .map((file: DocumentFile) => ({
+        const defenseRecordId = thesisProjectData?.defenseRecord?.id
+        if (!defenseRecordId) return
+
+        const filesInForm = (data as any).attachments || []
+        const initialFiles = attachments
+        const payload = {
+            finalScore: new Decimal(data.finalResult ?? 0),
+            comments: data.commentsCouncil,
+            isProfileComplete: data.isCompleteCouncil,
+            documents: {
+                upsert: filesInForm
+                    .filter((file: DocumentFile) => !!file.id)
+                    .map((file: DocumentFile) => ({
+                        where: { id: file.id },
+                        create: {
                             name: file.name,
                             path: file.path,
                             mimeType: file.mimeType,
                             size: file.size,
-                        })),
-                    disconnect: initialFiles
-                        .filter(
-                            (initialFile) =>
-                                !filesInForm.some(
-                                    (finalFile: DocumentFile) => finalFile.id === initialFile.id
-                                )
-                        )
-                        .map((fileToDisconnect) => ({ id: fileToDisconnect.id })),
-                },
-            }
-            await updateDefenseRecord({
-                data: payload,
-                where: { id: thesisProjectData?.defenseRecord?.id ?? '' },
-            })
-            message.success('Cập nhật thông tin hồ sơ và kết quả bảo vệ thành công')
-            onClose()
-        } catch (error: any) {
-            const errorMessage =
-                error?.info?.message ||
-                'Đã xảy ra lỗi khi cập nhật thông tin hồ sơ và kết quả bảo vệ.'
-            message.error(errorMessage)
-        } finally {
-            hideSpinner()
+                        },
+                        update: {
+                            name: file.name,
+                            path: file.path,
+                            mimeType: file.mimeType,
+                            size: file.size,
+                        },
+                    })),
+                create: filesInForm
+                    .filter((file: DocumentFile) => !file.id)
+                    .map((file: DocumentFile) => ({
+                        name: file.name,
+                        path: file.path,
+                        mimeType: file.mimeType,
+                        size: file.size,
+                    })),
+                disconnect: initialFiles
+                    .filter(
+                        (initialFile) =>
+                            !filesInForm.some(
+                                (finalFile: DocumentFile) => finalFile.id === initialFile.id
+                            )
+                    )
+                    .map((fileToDisconnect) => ({ id: fileToDisconnect.id })),
+            },
         }
+        await updateDefenseRecord({
+            data: payload,
+            where: { id: defenseRecordId },
+        })
     }
     const onOk = async () => {
-        const defenseConfigFields: (keyof ModalCauHinhLuanVanType)[] = [
-            'chairman',
-            'secretary',
-            'reviewer1',
-            'reviewer2',
-            'member',
-            'roomId',
-            'defenseDate',
-            'sessionId',
-        ]
-
-        const submitThesisFields: (keyof ModalCauHinhLuanVanType)[] = [
-            'submissionDate',
-            'isHardcopy',
-            'isSoftcopy',
-            'librarianNote',
-            'documentFile',
-        ]
-
-        const paymentThesisFields: (keyof ModalCauHinhLuanVanType)[] = [
-            'supervisorPaymentAmount',
-            'coSupervisorPaymentAmount',
-        ]
-        const inforSubmitFields: (keyof ModalCauHinhLuanVanType)[] = [
-            'finalResult',
-            'commentsCouncil',
-            'isCompleteCouncil',
-            'attachments',
-        ]
         const dataFormValue = form.getFieldsValue()
 
         try {
-            if (activeTabKey === 'defenseConfig') {
-                await form.validateFields(defenseConfigFields as string[])
-                await handleConfigDefense(dataFormValue)
-            } else if (activeTabKey === 'defenseInforSubmit') {
-                await form.validateFields(submitThesisFields as string[])
-                await handleSubmitThesis(dataFormValue)
-            } else if (activeTabKey === 'defenseInforPayment') {
-                await form.validateFields(paymentThesisFields as string[])
-                await handlePaymentThesis(dataFormValue)
-            } else if (activeTabKey === 'inforSubmit') {
-                await form.validateFields(inforSubmitFields as string[])
-                await handleInforSubmit(dataFormValue)
-            }
-        } catch (error) {
-            return
+            showSpinner()
+            await Promise.all([
+                handleConfigDefense(dataFormValue),
+                handleSubmitThesis(dataFormValue),
+                handlePaymentThesis(dataFormValue),
+                handleInforSubmit(dataFormValue),
+            ])
+            message.success('Lưu thông tin thành công')
+            onClose()
+        } catch (error: any) {
+            message.error(error?.message || 'Đã xảy ra lỗi khi lưu thông tin')
+        } finally {
+            hideSpinner()
         }
     }
 
@@ -732,7 +672,6 @@ const ModalCauHinhLuanVan = () => {
                             className="mb-5"
                             labelAlign="left"
                             {...formItemLayout}
-                            rules={[{ required: true, message: 'Vui lòng chọn Chủ tịch' }]}
                         >
                             <Select
                                 value={
@@ -766,7 +705,6 @@ const ModalCauHinhLuanVan = () => {
                             className="mb-5"
                             labelAlign="left"
                             {...formItemLayout}
-                            rules={[{ required: true, message: 'Vui lòng chọn Thư ký' }]}
                         >
                             <Select
                                 placeholder="Chọn Thư ký"
@@ -795,7 +733,6 @@ const ModalCauHinhLuanVan = () => {
                             className="mb-5"
                             labelAlign="left"
                             {...formItemLayout}
-                            rules={[{ required: true, message: 'Vui lòng chọn Phản biện 1' }]}
                         >
                             <Select
                                 placeholder="Chọn Phản biện 1"
@@ -824,7 +761,6 @@ const ModalCauHinhLuanVan = () => {
                             className="mb-5"
                             labelAlign="left"
                             {...formItemLayout}
-                            rules={[{ required: true, message: 'Vui lòng chọn Phản biện 2' }]}
                         >
                             <Select
                                 placeholder="Chọn Phản biện 2"
@@ -853,7 +789,6 @@ const ModalCauHinhLuanVan = () => {
                             className="mb-5"
                             labelAlign="left"
                             {...formItemLayout}
-                            rules={[{ required: true, message: 'Vui lòng chọn Ủy viên' }]}
                         >
                             <Select
                                 placeholder="Chọn Ủy viên"
@@ -888,7 +823,6 @@ const ModalCauHinhLuanVan = () => {
                             className="mb-5"
                             labelAlign="left"
                             {...formItemLayout}
-                            rules={[{ required: true, message: 'Vui lòng chọn phòng bảo vệ' }]}
                         >
                             <Select
                                 placeholder="Chọn phòng bảo vệ"
@@ -916,7 +850,6 @@ const ModalCauHinhLuanVan = () => {
                             className="mb-5"
                             labelAlign="left"
                             {...formItemLayout}
-                            rules={[{ required: true, message: 'Vui lòng chọn ngày bảo vệ' }]}
                         >
                             <DatePicker
                                 placeholder="Chọn ngày bảo vệ"
@@ -939,7 +872,6 @@ const ModalCauHinhLuanVan = () => {
                             className="mb-5"
                             labelAlign="left"
                             {...formItemLayout}
-                            rules={[{ required: true, message: 'Vui lòng chọn ca bảo vệ' }]}
                         >
                             <Select
                                 placeholder="Chọn ca bảo vệ"
@@ -980,7 +912,6 @@ const ModalCauHinhLuanVan = () => {
                                     className="mb-5"
                                     labelAlign="left"
                                     {...formItemLayout}
-                                    rules={[{ required: true, message: 'Vui lòng chọn Ngày nộp' }]}
                                 >
                                     <DatePicker
                                         placeholder="Chọn Ngày nộp"
@@ -1119,12 +1050,6 @@ const ModalCauHinhLuanVan = () => {
                                     label="Số tiền "
                                     className="mb-5"
                                     labelAlign="left"
-                                    rules={[
-                                        {
-                                            required: !!form.getFieldValue('supervisorName'),
-                                            message: 'Vui lòng nhập số tiền thanh toán',
-                                        },
-                                    ]}
                                 >
                                     <InputNumber
                                         className="w-2/3"
@@ -1170,12 +1095,6 @@ const ModalCauHinhLuanVan = () => {
                                     label="Số tiền"
                                     className="mb-5"
                                     labelAlign="left"
-                                    rules={[
-                                        {
-                                            required: !!form.getFieldValue('coSupervisorName'),
-                                            message: 'Vui lòng nhập số tiền thanh toán',
-                                        },
-                                    ]}
                                 >
                                     <InputNumber
                                         className="w-2/3"
@@ -1235,14 +1154,6 @@ const ModalCauHinhLuanVan = () => {
                                     label="Số tiền "
                                     className="mb-5"
                                     labelAlign="left"
-                                    rules={[
-                                        {
-                                            required: !!form.getFieldValue(
-                                                'councilChairmanPaymentAmount'
-                                            ),
-                                            message: 'Vui lòng nhập số tiền thanh toán',
-                                        },
-                                    ]}
                                 >
                                     <InputNumber
                                         className="w-2/3"
@@ -1289,14 +1200,6 @@ const ModalCauHinhLuanVan = () => {
                                     label="Số tiền"
                                     className="mb-5"
                                     labelAlign="left"
-                                    rules={[
-                                        {
-                                            required: !!form.getFieldValue(
-                                                'councilSecretaryPaymentAmount'
-                                            ),
-                                            message: 'Vui lòng nhập số tiền thanh toán',
-                                        },
-                                    ]}
                                 >
                                     <InputNumber
                                         className="w-2/3"
@@ -1343,14 +1246,6 @@ const ModalCauHinhLuanVan = () => {
                                     label="Số tiền "
                                     className="mb-5"
                                     labelAlign="left"
-                                    rules={[
-                                        {
-                                            required: !!form.getFieldValue(
-                                                'councilReviewer1PaymentAmount'
-                                            ),
-                                            message: 'Vui lòng nhập số tiền thanh toán',
-                                        },
-                                    ]}
                                 >
                                     <InputNumber
                                         className="w-2/3"
@@ -1395,18 +1290,10 @@ const ModalCauHinhLuanVan = () => {
                             <Col span={12}>
                                 <FormItem
                                     form={form}
-                                    name="councilReviewer2PaymentAmount" // Tên trường mới
+                                    name="councilReviewer2PaymentAmount"
                                     label="Số tiền "
                                     className="mb-5"
                                     labelAlign="left"
-                                    rules={[
-                                        {
-                                            required: !!form.getFieldValue(
-                                                'councilReviewer2PaymentAmount'
-                                            ),
-                                            message: 'Vui lòng nhập số tiền thanh toán',
-                                        },
-                                    ]}
                                 >
                                     <InputNumber
                                         className="w-2/3"
@@ -1448,18 +1335,10 @@ const ModalCauHinhLuanVan = () => {
                             <Col span={12}>
                                 <FormItem
                                     form={form}
-                                    name="councilMemberPaymentAmount" // Tên trường mới
+                                    name="councilMemberPaymentAmount"
                                     label="Số tiền "
                                     className="mb-5"
                                     labelAlign="left"
-                                    rules={[
-                                        {
-                                            required: !!form.getFieldValue(
-                                                'councilMemberPaymentAmount'
-                                            ),
-                                            message: 'Vui lòng nhập số tiền thanh toán',
-                                        },
-                                    ]}
                                 >
                                     <InputNumber
                                         className="w-2/3"
@@ -1497,7 +1376,6 @@ const ModalCauHinhLuanVan = () => {
                                     className="mb-5"
                                     labelAlign="left"
                                     {...formItemLayout}
-                                    rules={[{ required: true, message: 'Vui lòng nhập kết quả' }]}
                                 >
                                     <InputNumber
                                         className="w-2/3"

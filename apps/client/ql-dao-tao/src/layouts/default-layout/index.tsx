@@ -123,7 +123,7 @@ const DefaultLayout = ({
                         <SelectTrainingObjectType />
                         <Divider type="vertical" className="bg-primary h-[30px]" />
                         <Tooltip title="Học kỳ">
-                            <div className="mr-2 font-bold">HK</div>
+                            <div className="mr-2 font-bold">Học kỳ</div>
                         </Tooltip>
                         <TreeSelectSemester />
                         <Divider type="vertical" className="bg-primary h-[30px]" />

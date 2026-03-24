@@ -18,9 +18,7 @@ const TreeFixClass: React.FC<TreeFixClassProps> = ({ onChangeSelected }) => {
                     startDate: 'desc',
                 },
             },
-            where: {
-                trainingObjectTypeId,
-            },
+            where: { trainingObjectTypeId },
         })
 
     // Lấy danh sách Fixed Classes

@@ -281,6 +281,11 @@ export default function PostgraduateProject({
             where: {
                 id: thesisSessionSelected?.trainingCourseId,
             },
+            orderBy: {
+                semesterStart: {
+                    startDate: 'desc',
+                },
+            },
         },
         {
             enabled: !!thesisSessionSelected?.trainingCourseId,

@@ -54,6 +54,7 @@ const PutTrainingCourseModal = () => {
     const isGeneralInfoLocked = Form.useWatch('isGeneralInfoLocked', form)
     const isRegulationLocked = Form.useWatch('isRegulationLocked', form)
     const isScoreConfigLocked = Form.useWatch('isScoreConfigLocked', form)
+    const scoreToPass = Form.useWatch('scoreToPass', form)
     const {
         isOpen,
         onClose,
@@ -449,16 +450,13 @@ const PutTrainingCourseModal = () => {
 
     const schoolYearIdForm = Form.useWatch('schoolYearId', form)
 
-    const { data: dataSchoolYear = [] } = useFindManySchoolYear()
+    const { data: dataSchoolYear = [] } = useFindManySchoolYear({
+        orderBy: { startDate: 'desc' },
+    })
     const { data: semesterData = [] } = useFindManySemester({
-        where: schoolYearIdForm
-            ? {
-                  schoolYearId: schoolYearIdForm,
-              }
-            : undefined,
-        include: {
-            schoolYear: true,
-        },
+        where: schoolYearIdForm ? { schoolYearId: schoolYearIdForm } : undefined,
+        include: { schoolYear: true },
+        orderBy: { startDate: 'desc' },
     })
     const { data: trainingCourse } = useFindUniqueTrainingCourse(
         {
@@ -542,6 +540,7 @@ const PutTrainingCourseModal = () => {
             setDocument(trainingCourse?.documentFiles)
         } else if (selectedTrainingCourse) {
             form.setFieldsValue({
+                trainingObjectTypeId,
                 coef_1: selectedTrainingCourse.coef_1,
                 coef_2: selectedTrainingCourse.coef_2,
                 coef_3: selectedTrainingCourse.coef_3,
@@ -900,7 +899,7 @@ const PutTrainingCourseModal = () => {
                                 Điểm TX/ĐK tối thiểu
                                 <Tooltip
                                     placement="topLeft"
-                                    title="Điểm thường xuyên, định kỳ tối thiểu để được thi kết thúc học phần. Thấp hơn điểm này sẽ bị cấm thi"
+                                    title="Điểm thường xuyên, định kỳ tối thiểu để được thi kết thúc học phần. Thấp hơn điểm này sẽ bị cấm thi."
                                 >
                                     <BadgeHelpIcon size={16} style={{ margin: '0 0 -1px' }} />
                                 </Tooltip>
@@ -942,7 +941,17 @@ const PutTrainingCourseModal = () => {
                     <FormItem
                         form={form}
                         name="examScoreToPass"
-                        label="Điểm thi tối thiểu"
+                        label={
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                Điểm thi tối thiểu
+                                <Tooltip
+                                    placement="topLeft"
+                                    title="Điểm thi tối thiểu để được qua môn. Nếu điểm thi thấp hơn điểm, điểm học phần sẽ được đặt bằng điểm thi."
+                                >
+                                    <BadgeHelpIcon size={16} style={{ margin: '0 0 -1px' }} />
+                                </Tooltip>
+                            </div>
+                        }
                         required
                         rules={[
                             {
@@ -958,6 +967,14 @@ const PutTrainingCourseModal = () => {
                                     if (Number.isNaN(numValue) || numValue < 0) {
                                         return Promise.reject(
                                             new Error('Điểm thi tối thiểu để qua phải lớn hơn 0')
+                                        )
+                                    }
+
+                                    if (scoreToPass && numValue > scoreToPass) {
+                                        return Promise.reject(
+                                            new Error(
+                                                'Điểm thi tối thiểu để qua phải nhỏ hơn điểm qua môn'
+                                            )
                                         )
                                     }
 
@@ -1016,7 +1033,7 @@ const PutTrainingCourseModal = () => {
                     <FormItem
                         form={form}
                         name="scoreToPassConditional"
-                        label="Điểm HP tối thiểu để qua môn điều kiện"
+                        label="Điểm học phần tối thiểu để qua môn điều kiện"
                         rules={[
                             {
                                 required: true,
@@ -1090,7 +1107,7 @@ const PutTrainingCourseModal = () => {
                     <FormItem
                         form={form}
                         name="scoreToPassGraduation"
-                        label="Điểm HP tối thiểu để qua môn tốt nghiệp"
+                        label="Điểm học phần tối thiểu để qua môn tốt nghiệp"
                         rules={[
                             {
                                 required: true,
@@ -1255,7 +1272,7 @@ const PutTrainingCourseModal = () => {
                                 Điểm giữ lại khi lưu ban
                                 <Tooltip
                                     placement="topLeft"
-                                    title="Những học phần mà năm học trước đã đạt điểm [x] trở lên sẽ được bảo lưu"
+                                    title="Những học phần mà năm học trước đã đạt điểm lớn hơn điểm này sẽ được bảo lưu"
                                 >
                                     <BadgeHelpIcon size={16} style={{ margin: '0 0 -1px' }} />
                                 </Tooltip>

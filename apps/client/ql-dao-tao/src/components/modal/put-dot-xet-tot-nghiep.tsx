@@ -58,7 +58,7 @@ const PutGraduationSession = () => {
             })
         } else {
             form.setFieldsValue({
-                status: GraduationSessionStatus.PLANNING,
+                status: GraduationSessionStatus.IN_REVIEW,
                 trainingObjectTypeId: selectedTrainingObjectTypeId,
             })
         }

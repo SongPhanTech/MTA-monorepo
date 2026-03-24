@@ -48,7 +48,7 @@ function TabDotKhaoSatCum({
         orderBy: { startDate: 'desc' },
         include: {
             semesters: {
-                orderBy: { createdAt: 'desc' },
+                orderBy: { startDate: 'desc' },
             },
         },
     })

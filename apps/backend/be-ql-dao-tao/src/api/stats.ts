@@ -3264,31 +3264,38 @@ app.openapi(
         }[] = []
 
         const labels = ['ID Ngành', 'Ngành', 'Chỉ tiêu', 'Hồ sơ đăng ký', 'Trúng tuyển']
+        const danhSachNganh = [
+            'Công nghệ thông tin',
+            'Khoa học dữ liệu',
+            'Thông tin',
+            'Công nghệ chế tạo máy',
+            'An toàn hệ thống thông tin',
+            'Công nghệ vật liệu',
+            'Cơ điện tử',
+            'Khoa học máy tính',
+            'Địa tin học',
+            'Thiết kế, chế tạo trang thiết bị thông tin',
+        ]
 
         if (preview) {
             data = Array.from({ length: 10 }, (_, i) => ({
                 id: `major-${i + 1}`,
-                name: `Ngành ${i + 1}`,
+                name: danhSachNganh[i] ?? `Ngành ${i + 1}`,
                 quota: 200 + i * 50,
                 registered: 400 + i * 100,
                 admitted: 180 + i * 45,
             }))
-
-            return c.json({
+        }
+        return c.json(
+            {
                 data,
                 count: data.length,
                 summary: {},
                 preview: !!preview,
                 labels,
-            })
-        }
-        return c.json({
-            data,
-            count: data.length,
-            summary: {},
-            preview: false,
-            labels,
-        })
+            },
+            200
+        )
     }
 )
 
@@ -3423,6 +3430,7 @@ app.openapi(
             total_admitted: number
             actual_enrollment_count: number
             achievement_rate: number
+
             difference_percent: number
         }[] = []
 

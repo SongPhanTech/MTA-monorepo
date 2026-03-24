@@ -529,5696 +529,6 @@ export function useRoom<TData = Awaited<ReturnType<typeof room>>, TError = Room4
     return query
 }
 
-/**
- * Thêm mới danh sách học viên/sinh viên 
-
- [type] là mã của loại đối tượng cần tạo, lấy trong bảng UserType
- * @summary Upload Excel Create UserProfile
- */
-export type uploadExcelCreateUserProfileResponse200 = {
-    data: ListOfundefined
-    status: 200
-}
-
-export type uploadExcelCreateUserProfileResponse400 = {
-    data: UploadExcelCreateUserProfile400
-    status: 400
-}
-
-export type uploadExcelCreateUserProfileResponseSuccess =
-    uploadExcelCreateUserProfileResponse200 & {
-        headers: Headers
-    }
-export type uploadExcelCreateUserProfileResponseError = uploadExcelCreateUserProfileResponse400 & {
-    headers: Headers
-}
-
-export type uploadExcelCreateUserProfileResponse =
-    | uploadExcelCreateUserProfileResponseSuccess
-    | uploadExcelCreateUserProfileResponseError
-
-export const getUploadExcelCreateUserProfileUrl = () => {
-    return `/api/user-profile/upload-excel-create-user-profile`
-}
-
-export const uploadExcelCreateUserProfile = async (
-    uploadExcelCreateUserProfile: UploadExcelCreateUserProfile,
-    options?: RequestInit
-): Promise<uploadExcelCreateUserProfileResponse> => {
-    const formData = new FormData()
-    formData.append(`file`, uploadExcelCreateUserProfile.file)
-    formData.append(`type`, uploadExcelCreateUserProfile.type)
-
-    return customTrainingFetch<uploadExcelCreateUserProfileResponse>(
-        getUploadExcelCreateUserProfileUrl(),
-        {
-            ...options,
-            method: 'POST',
-            body: formData,
-        }
-    )
-}
-
-export const getUploadExcelCreateUserProfileMutationOptions = <
-    TError = UploadExcelCreateUserProfile400,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof uploadExcelCreateUserProfile>>,
-        TError,
-        { data: UploadExcelCreateUserProfile },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof uploadExcelCreateUserProfile>>,
-    TError,
-    { data: UploadExcelCreateUserProfile },
-    TContext
-> => {
-    const mutationKey = ['uploadExcelCreateUserProfile']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof uploadExcelCreateUserProfile>>,
-        { data: UploadExcelCreateUserProfile }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return uploadExcelCreateUserProfile(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type UploadExcelCreateUserProfileMutationResult = NonNullable<
-    Awaited<ReturnType<typeof uploadExcelCreateUserProfile>>
->
-export type UploadExcelCreateUserProfileMutationBody = UploadExcelCreateUserProfile
-export type UploadExcelCreateUserProfileMutationError = UploadExcelCreateUserProfile400
-
-/**
- * @summary Upload Excel Create UserProfile
- */
-export const useUploadExcelCreateUserProfile = <
-    TError = UploadExcelCreateUserProfile400,
-    TContext = unknown,
->(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof uploadExcelCreateUserProfile>>,
-            TError,
-            { data: UploadExcelCreateUserProfile },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof uploadExcelCreateUserProfile>>,
-    TError,
-    { data: UploadExcelCreateUserProfile },
-    TContext
-> => {
-    const mutationOptions = getUploadExcelCreateUserProfileMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-/**
- * Cập nhật thông tin học viên/sinh viên
- * @summary Upload Excel Update UserProfile
- */
-export type uploadExcelUpdateUserProfileResponse200 = {
-    data: ListOfundefined
-    status: 200
-}
-
-export type uploadExcelUpdateUserProfileResponse400 = {
-    data: UploadExcelUpdateUserProfile400
-    status: 400
-}
-
-export type uploadExcelUpdateUserProfileResponseSuccess =
-    uploadExcelUpdateUserProfileResponse200 & {
-        headers: Headers
-    }
-export type uploadExcelUpdateUserProfileResponseError = uploadExcelUpdateUserProfileResponse400 & {
-    headers: Headers
-}
-
-export type uploadExcelUpdateUserProfileResponse =
-    | uploadExcelUpdateUserProfileResponseSuccess
-    | uploadExcelUpdateUserProfileResponseError
-
-export const getUploadExcelUpdateUserProfileUrl = () => {
-    return `/api/user-profile/upload-excel-update-user-profile`
-}
-
-export const uploadExcelUpdateUserProfile = async (
-    uploadExcelUpdateUserProfile: UploadExcelUpdateUserProfile,
-    options?: RequestInit
-): Promise<uploadExcelUpdateUserProfileResponse> => {
-    const formData = new FormData()
-    formData.append(`file`, uploadExcelUpdateUserProfile.file)
-
-    return customTrainingFetch<uploadExcelUpdateUserProfileResponse>(
-        getUploadExcelUpdateUserProfileUrl(),
-        {
-            ...options,
-            method: 'POST',
-            body: formData,
-        }
-    )
-}
-
-export const getUploadExcelUpdateUserProfileMutationOptions = <
-    TError = UploadExcelUpdateUserProfile400,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof uploadExcelUpdateUserProfile>>,
-        TError,
-        { data: UploadExcelUpdateUserProfile },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof uploadExcelUpdateUserProfile>>,
-    TError,
-    { data: UploadExcelUpdateUserProfile },
-    TContext
-> => {
-    const mutationKey = ['uploadExcelUpdateUserProfile']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof uploadExcelUpdateUserProfile>>,
-        { data: UploadExcelUpdateUserProfile }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return uploadExcelUpdateUserProfile(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type UploadExcelUpdateUserProfileMutationResult = NonNullable<
-    Awaited<ReturnType<typeof uploadExcelUpdateUserProfile>>
->
-export type UploadExcelUpdateUserProfileMutationBody = UploadExcelUpdateUserProfile
-export type UploadExcelUpdateUserProfileMutationError = UploadExcelUpdateUserProfile400
-
-/**
- * @summary Upload Excel Update UserProfile
- */
-export const useUploadExcelUpdateUserProfile = <
-    TError = UploadExcelUpdateUserProfile400,
-    TContext = unknown,
->(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof uploadExcelUpdateUserProfile>>,
-            TError,
-            { data: UploadExcelUpdateUserProfile },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof uploadExcelUpdateUserProfile>>,
-    TError,
-    { data: UploadExcelUpdateUserProfile },
-    TContext
-> => {
-    const mutationOptions = getUploadExcelUpdateUserProfileMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-/**
- * Phân chia học viên vào các lớp
- * @summary Class Division
- */
-export type classDivisionResponse200 = {
-    data: ClassDivision200Item[]
-    status: 200
-}
-
-export type classDivisionResponse400 = {
-    data: void
-    status: 400
-}
-
-export type classDivisionResponseSuccess = classDivisionResponse200 & {
-    headers: Headers
-}
-export type classDivisionResponseError = classDivisionResponse400 & {
-    headers: Headers
-}
-
-export type classDivisionResponse = classDivisionResponseSuccess | classDivisionResponseError
-
-export const getClassDivisionUrl = () => {
-    return `/api/fixed-class/upload-excel-update-user-profile`
-}
-
-export const classDivision = async (
-    classDivision: ClassDivision,
-    options?: RequestInit
-): Promise<classDivisionResponse> => {
-    const formData = new FormData()
-    formData.append(`file`, classDivision.file)
-
-    return customTrainingFetch<classDivisionResponse>(getClassDivisionUrl(), {
-        ...options,
-        method: 'POST',
-        body: formData,
-    })
-}
-
-export const getClassDivisionMutationOptions = <TError = void, TContext = unknown>(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof classDivision>>,
-        TError,
-        { data: ClassDivision },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof classDivision>>,
-    TError,
-    { data: ClassDivision },
-    TContext
-> => {
-    const mutationKey = ['classDivision']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof classDivision>>,
-        { data: ClassDivision }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return classDivision(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type ClassDivisionMutationResult = NonNullable<Awaited<ReturnType<typeof classDivision>>>
-export type ClassDivisionMutationBody = ClassDivision
-export type ClassDivisionMutationError = void
-
-/**
- * @summary Class Division
- */
-export const useClassDivision = <TError = void, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof classDivision>>,
-            TError,
-            { data: ClassDivision },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof classDivision>>,
-    TError,
-    { data: ClassDivision },
-    TContext
-> => {
-    const mutationOptions = getClassDivisionMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type fixedClassStudentCountResponse200 = {
-    data: Blob
-    status: 200
-}
-
-export type fixedClassStudentCountResponse400 = {
-    data: FixedClassStudentCount400
-    status: 400
-}
-
-export type fixedClassStudentCountResponseSuccess = fixedClassStudentCountResponse200 & {
-    headers: Headers
-}
-export type fixedClassStudentCountResponseError = fixedClassStudentCountResponse400 & {
-    headers: Headers
-}
-
-export type fixedClassStudentCountResponse =
-    | fixedClassStudentCountResponseSuccess
-    | fixedClassStudentCountResponseError
-
-export const getFixedClassStudentCountUrl = (params: FixedClassStudentCountParams) => {
-    const normalizedParams = new URLSearchParams()
-
-    Object.entries(params || {}).forEach(([key, value]) => {
-        if (value !== undefined) {
-            normalizedParams.append(key, value === null ? 'null' : value.toString())
-        }
-    })
-
-    const stringifiedParams = normalizedParams.toString()
-
-    return stringifiedParams.length > 0
-        ? `/api/fixed-class/fixed-class-student-count?${stringifiedParams}`
-        : `/api/fixed-class/fixed-class-student-count`
-}
-
-export const fixedClassStudentCount = async (
-    params: FixedClassStudentCountParams,
-    options?: RequestInit
-): Promise<fixedClassStudentCountResponse> => {
-    return customTrainingFetch<fixedClassStudentCountResponse>(
-        getFixedClassStudentCountUrl(params),
-        {
-            ...options,
-            method: 'GET',
-        }
-    )
-}
-
-export const getFixedClassStudentCountQueryKey = (params?: FixedClassStudentCountParams) => {
-    return [`/api/fixed-class/fixed-class-student-count`, ...(params ? [params] : [])] as const
-}
-
-export const getFixedClassStudentCountQueryOptions = <
-    TData = Awaited<ReturnType<typeof fixedClassStudentCount>>,
-    TError = FixedClassStudentCount400,
->(
-    params: FixedClassStudentCountParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof fixedClassStudentCount>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    }
-) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
-
-    const queryKey = queryOptions?.queryKey ?? getFixedClassStudentCountQueryKey(params)
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof fixedClassStudentCount>>> = ({
-        signal,
-    }) => fixedClassStudentCount(params, { signal, ...requestOptions })
-
-    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-        Awaited<ReturnType<typeof fixedClassStudentCount>>,
-        TError,
-        TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type FixedClassStudentCountQueryResult = NonNullable<
-    Awaited<ReturnType<typeof fixedClassStudentCount>>
->
-export type FixedClassStudentCountQueryError = FixedClassStudentCount400
-
-export function useFixedClassStudentCount<
-    TData = Awaited<ReturnType<typeof fixedClassStudentCount>>,
-    TError = FixedClassStudentCount400,
->(
-    params: FixedClassStudentCountParams,
-    options: {
-        query: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof fixedClassStudentCount>>, TError, TData>
-        > &
-            Pick<
-                DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof fixedClassStudentCount>>,
-                    TError,
-                    Awaited<ReturnType<typeof fixedClassStudentCount>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useFixedClassStudentCount<
-    TData = Awaited<ReturnType<typeof fixedClassStudentCount>>,
-    TError = FixedClassStudentCount400,
->(
-    params: FixedClassStudentCountParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof fixedClassStudentCount>>, TError, TData>
-        > &
-            Pick<
-                UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof fixedClassStudentCount>>,
-                    TError,
-                    Awaited<ReturnType<typeof fixedClassStudentCount>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useFixedClassStudentCount<
-    TData = Awaited<ReturnType<typeof fixedClassStudentCount>>,
-    TError = FixedClassStudentCount400,
->(
-    params: FixedClassStudentCountParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof fixedClassStudentCount>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useFixedClassStudentCount<
-    TData = Awaited<ReturnType<typeof fixedClassStudentCount>>,
-    TError = FixedClassStudentCount400,
->(
-    params: FixedClassStudentCountParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof fixedClassStudentCount>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getFixedClassStudentCountQueryOptions(params, options)
-
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-        queryKey: DataTag<QueryKey, TData, TError>
-    }
-
-    query.queryKey = queryOptions.queryKey
-
-    return query
-}
-
-/**
- * Lấy danh sách môn dự kiến giảng dạy
- * @summary Lấy danh sách môn dự kiến giảng dạy
- */
-export type openSubjectClassResponse200 = {
-    data: ListOfOpenSubjectClass
-    status: 200
-}
-
-export type openSubjectClassResponse400 = {
-    data: void
-    status: 400
-}
-
-export type openSubjectClassResponseSuccess = openSubjectClassResponse200 & {
-    headers: Headers
-}
-export type openSubjectClassResponseError = openSubjectClassResponse400 & {
-    headers: Headers
-}
-
-export type openSubjectClassResponse =
-    | openSubjectClassResponseSuccess
-    | openSubjectClassResponseError
-
-export const getOpenSubjectClassUrl = (params: OpenSubjectClassParams) => {
-    const normalizedParams = new URLSearchParams()
-
-    Object.entries(params || {}).forEach(([key, value]) => {
-        if (value !== undefined) {
-            normalizedParams.append(key, value === null ? 'null' : value.toString())
-        }
-    })
-
-    const stringifiedParams = normalizedParams.toString()
-
-    return stringifiedParams.length > 0
-        ? `/api/subject-class/open-subject-class?${stringifiedParams}`
-        : `/api/subject-class/open-subject-class`
-}
-
-export const openSubjectClass = async (
-    params: OpenSubjectClassParams,
-    options?: RequestInit
-): Promise<openSubjectClassResponse> => {
-    return customTrainingFetch<openSubjectClassResponse>(getOpenSubjectClassUrl(params), {
-        ...options,
-        method: 'GET',
-    })
-}
-
-export const getOpenSubjectClassQueryKey = (params?: OpenSubjectClassParams) => {
-    return [`/api/subject-class/open-subject-class`, ...(params ? [params] : [])] as const
-}
-
-export const getOpenSubjectClassQueryOptions = <
-    TData = Awaited<ReturnType<typeof openSubjectClass>>,
-    TError = void,
->(
-    params: OpenSubjectClassParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClass>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    }
-) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
-
-    const queryKey = queryOptions?.queryKey ?? getOpenSubjectClassQueryKey(params)
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof openSubjectClass>>> = ({ signal }) =>
-        openSubjectClass(params, { signal, ...requestOptions })
-
-    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-        Awaited<ReturnType<typeof openSubjectClass>>,
-        TError,
-        TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type OpenSubjectClassQueryResult = NonNullable<Awaited<ReturnType<typeof openSubjectClass>>>
-export type OpenSubjectClassQueryError = void
-
-export function useOpenSubjectClass<
-    TData = Awaited<ReturnType<typeof openSubjectClass>>,
-    TError = void,
->(
-    params: OpenSubjectClassParams,
-    options: {
-        query: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClass>>, TError, TData>
-        > &
-            Pick<
-                DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof openSubjectClass>>,
-                    TError,
-                    Awaited<ReturnType<typeof openSubjectClass>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useOpenSubjectClass<
-    TData = Awaited<ReturnType<typeof openSubjectClass>>,
-    TError = void,
->(
-    params: OpenSubjectClassParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClass>>, TError, TData>
-        > &
-            Pick<
-                UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof openSubjectClass>>,
-                    TError,
-                    Awaited<ReturnType<typeof openSubjectClass>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useOpenSubjectClass<
-    TData = Awaited<ReturnType<typeof openSubjectClass>>,
-    TError = void,
->(
-    params: OpenSubjectClassParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClass>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary Lấy danh sách môn dự kiến giảng dạy
- */
-
-export function useOpenSubjectClass<
-    TData = Awaited<ReturnType<typeof openSubjectClass>>,
-    TError = void,
->(
-    params: OpenSubjectClassParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClass>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getOpenSubjectClassQueryOptions(params, options)
-
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-        queryKey: DataTag<QueryKey, TData, TError>
-    }
-
-    query.queryKey = queryOptions.queryKey
-
-    return query
-}
-
-/**
- * Lấy danh sách môn học có hssv nợ
- * @summary Lấy danh sách môn học có hssv nợ
- */
-export type openSubjectClassRetakeResponse200 = {
-    data: ListOfOpenSubjectClassRetakeResponse
-    status: 200
-}
-
-export type openSubjectClassRetakeResponse400 = {
-    data: void
-    status: 400
-}
-
-export type openSubjectClassRetakeResponseSuccess = openSubjectClassRetakeResponse200 & {
-    headers: Headers
-}
-export type openSubjectClassRetakeResponseError = openSubjectClassRetakeResponse400 & {
-    headers: Headers
-}
-
-export type openSubjectClassRetakeResponse =
-    | openSubjectClassRetakeResponseSuccess
-    | openSubjectClassRetakeResponseError
-
-export const getOpenSubjectClassRetakeUrl = (params: OpenSubjectClassRetakeParams) => {
-    const normalizedParams = new URLSearchParams()
-
-    Object.entries(params || {}).forEach(([key, value]) => {
-        if (value !== undefined) {
-            normalizedParams.append(key, value === null ? 'null' : value.toString())
-        }
-    })
-
-    const stringifiedParams = normalizedParams.toString()
-
-    return stringifiedParams.length > 0
-        ? `/api/subject-class/open-subject-class-retake?${stringifiedParams}`
-        : `/api/subject-class/open-subject-class-retake`
-}
-
-export const openSubjectClassRetake = async (
-    params: OpenSubjectClassRetakeParams,
-    options?: RequestInit
-): Promise<openSubjectClassRetakeResponse> => {
-    return customTrainingFetch<openSubjectClassRetakeResponse>(
-        getOpenSubjectClassRetakeUrl(params),
-        {
-            ...options,
-            method: 'GET',
-        }
-    )
-}
-
-export const getOpenSubjectClassRetakeQueryKey = (params?: OpenSubjectClassRetakeParams) => {
-    return [`/api/subject-class/open-subject-class-retake`, ...(params ? [params] : [])] as const
-}
-
-export const getOpenSubjectClassRetakeQueryOptions = <
-    TData = Awaited<ReturnType<typeof openSubjectClassRetake>>,
-    TError = void,
->(
-    params: OpenSubjectClassRetakeParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassRetake>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    }
-) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
-
-    const queryKey = queryOptions?.queryKey ?? getOpenSubjectClassRetakeQueryKey(params)
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof openSubjectClassRetake>>> = ({
-        signal,
-    }) => openSubjectClassRetake(params, { signal, ...requestOptions })
-
-    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-        Awaited<ReturnType<typeof openSubjectClassRetake>>,
-        TError,
-        TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type OpenSubjectClassRetakeQueryResult = NonNullable<
-    Awaited<ReturnType<typeof openSubjectClassRetake>>
->
-export type OpenSubjectClassRetakeQueryError = void
-
-export function useOpenSubjectClassRetake<
-    TData = Awaited<ReturnType<typeof openSubjectClassRetake>>,
-    TError = void,
->(
-    params: OpenSubjectClassRetakeParams,
-    options: {
-        query: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassRetake>>, TError, TData>
-        > &
-            Pick<
-                DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof openSubjectClassRetake>>,
-                    TError,
-                    Awaited<ReturnType<typeof openSubjectClassRetake>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useOpenSubjectClassRetake<
-    TData = Awaited<ReturnType<typeof openSubjectClassRetake>>,
-    TError = void,
->(
-    params: OpenSubjectClassRetakeParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassRetake>>, TError, TData>
-        > &
-            Pick<
-                UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof openSubjectClassRetake>>,
-                    TError,
-                    Awaited<ReturnType<typeof openSubjectClassRetake>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useOpenSubjectClassRetake<
-    TData = Awaited<ReturnType<typeof openSubjectClassRetake>>,
-    TError = void,
->(
-    params: OpenSubjectClassRetakeParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassRetake>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary Lấy danh sách môn học có hssv nợ
- */
-
-export function useOpenSubjectClassRetake<
-    TData = Awaited<ReturnType<typeof openSubjectClassRetake>>,
-    TError = void,
->(
-    params: OpenSubjectClassRetakeParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassRetake>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getOpenSubjectClassRetakeQueryOptions(params, options)
-
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-        queryKey: DataTag<QueryKey, TData, TError>
-    }
-
-    query.queryKey = queryOptions.queryKey
-
-    return query
-}
-
-/**
- * Lấy danh sách sinh viên nợ môn học
- * @summary Lấy danh sách sinh viên nợ môn học
- */
-export type openSubjectClassRetakeStudentsResponse200 = {
-    data: ListOfOpenSubjectClassRetakeStudentsResponse
-    status: 200
-}
-
-export type openSubjectClassRetakeStudentsResponse400 = {
-    data: void
-    status: 400
-}
-
-export type openSubjectClassRetakeStudentsResponseSuccess =
-    openSubjectClassRetakeStudentsResponse200 & {
-        headers: Headers
-    }
-export type openSubjectClassRetakeStudentsResponseError =
-    openSubjectClassRetakeStudentsResponse400 & {
-        headers: Headers
-    }
-
-export type openSubjectClassRetakeStudentsResponse =
-    | openSubjectClassRetakeStudentsResponseSuccess
-    | openSubjectClassRetakeStudentsResponseError
-
-export const getOpenSubjectClassRetakeStudentsUrl = (
-    params: OpenSubjectClassRetakeStudentsParams
-) => {
-    const normalizedParams = new URLSearchParams()
-
-    Object.entries(params || {}).forEach(([key, value]) => {
-        if (value !== undefined) {
-            normalizedParams.append(key, value === null ? 'null' : value.toString())
-        }
-    })
-
-    const stringifiedParams = normalizedParams.toString()
-
-    return stringifiedParams.length > 0
-        ? `/api/subject-class/open-subject-class-retake-students?${stringifiedParams}`
-        : `/api/subject-class/open-subject-class-retake-students`
-}
-
-export const openSubjectClassRetakeStudents = async (
-    params: OpenSubjectClassRetakeStudentsParams,
-    options?: RequestInit
-): Promise<openSubjectClassRetakeStudentsResponse> => {
-    return customTrainingFetch<openSubjectClassRetakeStudentsResponse>(
-        getOpenSubjectClassRetakeStudentsUrl(params),
-        {
-            ...options,
-            method: 'GET',
-        }
-    )
-}
-
-export const getOpenSubjectClassRetakeStudentsQueryKey = (
-    params?: OpenSubjectClassRetakeStudentsParams
-) => {
-    return [
-        `/api/subject-class/open-subject-class-retake-students`,
-        ...(params ? [params] : []),
-    ] as const
-}
-
-export const getOpenSubjectClassRetakeStudentsQueryOptions = <
-    TData = Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
-    TError = void,
->(
-    params: OpenSubjectClassRetakeStudentsParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
-                TError,
-                TData
-            >
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    }
-) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
-
-    const queryKey = queryOptions?.queryKey ?? getOpenSubjectClassRetakeStudentsQueryKey(params)
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>> = ({
-        signal,
-    }) => openSubjectClassRetakeStudents(params, { signal, ...requestOptions })
-
-    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-        Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
-        TError,
-        TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type OpenSubjectClassRetakeStudentsQueryResult = NonNullable<
-    Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>
->
-export type OpenSubjectClassRetakeStudentsQueryError = void
-
-export function useOpenSubjectClassRetakeStudents<
-    TData = Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
-    TError = void,
->(
-    params: OpenSubjectClassRetakeStudentsParams,
-    options: {
-        query: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
-                TError,
-                TData
-            >
-        > &
-            Pick<
-                DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
-                    TError,
-                    Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useOpenSubjectClassRetakeStudents<
-    TData = Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
-    TError = void,
->(
-    params: OpenSubjectClassRetakeStudentsParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
-                TError,
-                TData
-            >
-        > &
-            Pick<
-                UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
-                    TError,
-                    Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useOpenSubjectClassRetakeStudents<
-    TData = Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
-    TError = void,
->(
-    params: OpenSubjectClassRetakeStudentsParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
-                TError,
-                TData
-            >
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary Lấy danh sách sinh viên nợ môn học
- */
-
-export function useOpenSubjectClassRetakeStudents<
-    TData = Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
-    TError = void,
->(
-    params: OpenSubjectClassRetakeStudentsParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
-                TError,
-                TData
-            >
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getOpenSubjectClassRetakeStudentsQueryOptions(params, options)
-
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-        queryKey: DataTag<QueryKey, TData, TError>
-    }
-
-    query.queryKey = queryOptions.queryKey
-
-    return query
-}
-
-/**
- * Lấy danh sách môn học có hssv cần thi lại
- * @summary Lấy danh sách môn học có hssv cần thi lại
- */
-export type openSubjectClassReExamResponse200 = {
-    data: ListOfOpenSubjectClassReExamResponse
-    status: 200
-}
-
-export type openSubjectClassReExamResponse400 = {
-    data: void
-    status: 400
-}
-
-export type openSubjectClassReExamResponseSuccess = openSubjectClassReExamResponse200 & {
-    headers: Headers
-}
-export type openSubjectClassReExamResponseError = openSubjectClassReExamResponse400 & {
-    headers: Headers
-}
-
-export type openSubjectClassReExamResponse =
-    | openSubjectClassReExamResponseSuccess
-    | openSubjectClassReExamResponseError
-
-export const getOpenSubjectClassReExamUrl = (params: OpenSubjectClassReExamParams) => {
-    const normalizedParams = new URLSearchParams()
-
-    Object.entries(params || {}).forEach(([key, value]) => {
-        if (value !== undefined) {
-            normalizedParams.append(key, value === null ? 'null' : value.toString())
-        }
-    })
-
-    const stringifiedParams = normalizedParams.toString()
-
-    return stringifiedParams.length > 0
-        ? `/api/subject-class/open-subject-class-reexam?${stringifiedParams}`
-        : `/api/subject-class/open-subject-class-reexam`
-}
-
-export const openSubjectClassReExam = async (
-    params: OpenSubjectClassReExamParams,
-    options?: RequestInit
-): Promise<openSubjectClassReExamResponse> => {
-    return customTrainingFetch<openSubjectClassReExamResponse>(
-        getOpenSubjectClassReExamUrl(params),
-        {
-            ...options,
-            method: 'GET',
-        }
-    )
-}
-
-export const getOpenSubjectClassReExamQueryKey = (params?: OpenSubjectClassReExamParams) => {
-    return [`/api/subject-class/open-subject-class-reexam`, ...(params ? [params] : [])] as const
-}
-
-export const getOpenSubjectClassReExamQueryOptions = <
-    TData = Awaited<ReturnType<typeof openSubjectClassReExam>>,
-    TError = void,
->(
-    params: OpenSubjectClassReExamParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExam>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    }
-) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
-
-    const queryKey = queryOptions?.queryKey ?? getOpenSubjectClassReExamQueryKey(params)
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof openSubjectClassReExam>>> = ({
-        signal,
-    }) => openSubjectClassReExam(params, { signal, ...requestOptions })
-
-    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-        Awaited<ReturnType<typeof openSubjectClassReExam>>,
-        TError,
-        TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type OpenSubjectClassReExamQueryResult = NonNullable<
-    Awaited<ReturnType<typeof openSubjectClassReExam>>
->
-export type OpenSubjectClassReExamQueryError = void
-
-export function useOpenSubjectClassReExam<
-    TData = Awaited<ReturnType<typeof openSubjectClassReExam>>,
-    TError = void,
->(
-    params: OpenSubjectClassReExamParams,
-    options: {
-        query: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExam>>, TError, TData>
-        > &
-            Pick<
-                DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof openSubjectClassReExam>>,
-                    TError,
-                    Awaited<ReturnType<typeof openSubjectClassReExam>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useOpenSubjectClassReExam<
-    TData = Awaited<ReturnType<typeof openSubjectClassReExam>>,
-    TError = void,
->(
-    params: OpenSubjectClassReExamParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExam>>, TError, TData>
-        > &
-            Pick<
-                UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof openSubjectClassReExam>>,
-                    TError,
-                    Awaited<ReturnType<typeof openSubjectClassReExam>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useOpenSubjectClassReExam<
-    TData = Awaited<ReturnType<typeof openSubjectClassReExam>>,
-    TError = void,
->(
-    params: OpenSubjectClassReExamParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExam>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary Lấy danh sách môn học có hssv cần thi lại
- */
-
-export function useOpenSubjectClassReExam<
-    TData = Awaited<ReturnType<typeof openSubjectClassReExam>>,
-    TError = void,
->(
-    params: OpenSubjectClassReExamParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExam>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getOpenSubjectClassReExamQueryOptions(params, options)
-
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-        queryKey: DataTag<QueryKey, TData, TError>
-    }
-
-    query.queryKey = queryOptions.queryKey
-
-    return query
-}
-
-/**
- * Lấy danh sách sinh viên cần thi lại môn học
- * @summary Lấy danh sách sinh viên cần thi lại môn học
- */
-export type openSubjectClassReExamStudentsResponse200 = {
-    data: ListOfOpenSubjectClassReExamStudentsResponse
-    status: 200
-}
-
-export type openSubjectClassReExamStudentsResponse400 = {
-    data: void
-    status: 400
-}
-
-export type openSubjectClassReExamStudentsResponseSuccess =
-    openSubjectClassReExamStudentsResponse200 & {
-        headers: Headers
-    }
-export type openSubjectClassReExamStudentsResponseError =
-    openSubjectClassReExamStudentsResponse400 & {
-        headers: Headers
-    }
-
-export type openSubjectClassReExamStudentsResponse =
-    | openSubjectClassReExamStudentsResponseSuccess
-    | openSubjectClassReExamStudentsResponseError
-
-export const getOpenSubjectClassReExamStudentsUrl = (
-    params: OpenSubjectClassReExamStudentsParams
-) => {
-    const normalizedParams = new URLSearchParams()
-
-    Object.entries(params || {}).forEach(([key, value]) => {
-        if (value !== undefined) {
-            normalizedParams.append(key, value === null ? 'null' : value.toString())
-        }
-    })
-
-    const stringifiedParams = normalizedParams.toString()
-
-    return stringifiedParams.length > 0
-        ? `/api/subject-class/open-subject-class-reexam-students?${stringifiedParams}`
-        : `/api/subject-class/open-subject-class-reexam-students`
-}
-
-export const openSubjectClassReExamStudents = async (
-    params: OpenSubjectClassReExamStudentsParams,
-    options?: RequestInit
-): Promise<openSubjectClassReExamStudentsResponse> => {
-    return customTrainingFetch<openSubjectClassReExamStudentsResponse>(
-        getOpenSubjectClassReExamStudentsUrl(params),
-        {
-            ...options,
-            method: 'GET',
-        }
-    )
-}
-
-export const getOpenSubjectClassReExamStudentsQueryKey = (
-    params?: OpenSubjectClassReExamStudentsParams
-) => {
-    return [
-        `/api/subject-class/open-subject-class-reexam-students`,
-        ...(params ? [params] : []),
-    ] as const
-}
-
-export const getOpenSubjectClassReExamStudentsQueryOptions = <
-    TData = Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
-    TError = void,
->(
-    params: OpenSubjectClassReExamStudentsParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
-                TError,
-                TData
-            >
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    }
-) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
-
-    const queryKey = queryOptions?.queryKey ?? getOpenSubjectClassReExamStudentsQueryKey(params)
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof openSubjectClassReExamStudents>>> = ({
-        signal,
-    }) => openSubjectClassReExamStudents(params, { signal, ...requestOptions })
-
-    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-        Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
-        TError,
-        TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type OpenSubjectClassReExamStudentsQueryResult = NonNullable<
-    Awaited<ReturnType<typeof openSubjectClassReExamStudents>>
->
-export type OpenSubjectClassReExamStudentsQueryError = void
-
-export function useOpenSubjectClassReExamStudents<
-    TData = Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
-    TError = void,
->(
-    params: OpenSubjectClassReExamStudentsParams,
-    options: {
-        query: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
-                TError,
-                TData
-            >
-        > &
-            Pick<
-                DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
-                    TError,
-                    Awaited<ReturnType<typeof openSubjectClassReExamStudents>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useOpenSubjectClassReExamStudents<
-    TData = Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
-    TError = void,
->(
-    params: OpenSubjectClassReExamStudentsParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
-                TError,
-                TData
-            >
-        > &
-            Pick<
-                UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
-                    TError,
-                    Awaited<ReturnType<typeof openSubjectClassReExamStudents>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useOpenSubjectClassReExamStudents<
-    TData = Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
-    TError = void,
->(
-    params: OpenSubjectClassReExamStudentsParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
-                TError,
-                TData
-            >
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary Lấy danh sách sinh viên cần thi lại môn học
- */
-
-export function useOpenSubjectClassReExamStudents<
-    TData = Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
-    TError = void,
->(
-    params: OpenSubjectClassReExamStudentsParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
-                TError,
-                TData
-            >
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getOpenSubjectClassReExamStudentsQueryOptions(params, options)
-
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-        queryKey: DataTag<QueryKey, TData, TError>
-    }
-
-    query.queryKey = queryOptions.queryKey
-
-    return query
-}
-
-/**
- * Đăng ký lớp môn học cho lớp quản lý
- * @summary Đăng ký lớp môn học cho lớp quản lý
- */
-export type enrollFixedClassOnSubjectClassResponse200 = {
-    data: ListOfEnrollFixedClassOnSubjectClass
-    status: 200
-}
-
-export type enrollFixedClassOnSubjectClassResponse400 = {
-    data: void
-    status: 400
-}
-
-export type enrollFixedClassOnSubjectClassResponseSuccess =
-    enrollFixedClassOnSubjectClassResponse200 & {
-        headers: Headers
-    }
-export type enrollFixedClassOnSubjectClassResponseError =
-    enrollFixedClassOnSubjectClassResponse400 & {
-        headers: Headers
-    }
-
-export type enrollFixedClassOnSubjectClassResponse =
-    | enrollFixedClassOnSubjectClassResponseSuccess
-    | enrollFixedClassOnSubjectClassResponseError
-
-export const getEnrollFixedClassOnSubjectClassUrl = () => {
-    return `/api/subject-class/enroll-fixed-class-on-subject-class`
-}
-
-export const enrollFixedClassOnSubjectClass = async (
-    enrollFixedClassOnSubjectClassBody: EnrollFixedClassOnSubjectClassBody,
-    options?: RequestInit
-): Promise<enrollFixedClassOnSubjectClassResponse> => {
-    return customTrainingFetch<enrollFixedClassOnSubjectClassResponse>(
-        getEnrollFixedClassOnSubjectClassUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(enrollFixedClassOnSubjectClassBody),
-        }
-    )
-}
-
-export const getEnrollFixedClassOnSubjectClassMutationOptions = <
-    TError = void,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>,
-        TError,
-        { data: EnrollFixedClassOnSubjectClassBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>,
-    TError,
-    { data: EnrollFixedClassOnSubjectClassBody },
-    TContext
-> => {
-    const mutationKey = ['enrollFixedClassOnSubjectClass']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>,
-        { data: EnrollFixedClassOnSubjectClassBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return enrollFixedClassOnSubjectClass(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type EnrollFixedClassOnSubjectClassMutationResult = NonNullable<
-    Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>
->
-export type EnrollFixedClassOnSubjectClassMutationBody = EnrollFixedClassOnSubjectClassBody
-export type EnrollFixedClassOnSubjectClassMutationError = void
-
-/**
- * @summary Đăng ký lớp môn học cho lớp quản lý
- */
-export const useEnrollFixedClassOnSubjectClass = <TError = void, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>,
-            TError,
-            { data: EnrollFixedClassOnSubjectClassBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>,
-    TError,
-    { data: EnrollFixedClassOnSubjectClassBody },
-    TContext
-> => {
-    const mutationOptions = getEnrollFixedClassOnSubjectClassMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-/**
- * Đặt hạn nhập điểm
- * @summary Đặt hạn nhập điểm
- */
-export type setScoreDeadLineResponse200 = {
-    data: SetScoreDeadLine200
-    status: 200
-}
-
-export type setScoreDeadLineResponse400 = {
-    data: void
-    status: 400
-}
-
-export type setScoreDeadLineResponseSuccess = setScoreDeadLineResponse200 & {
-    headers: Headers
-}
-export type setScoreDeadLineResponseError = setScoreDeadLineResponse400 & {
-    headers: Headers
-}
-
-export type setScoreDeadLineResponse =
-    | setScoreDeadLineResponseSuccess
-    | setScoreDeadLineResponseError
-
-export const getSetScoreDeadLineUrl = () => {
-    return `/api/subject-class/set-score-dead-line`
-}
-
-export const setScoreDeadLine = async (
-    setScoreDeadLineBody: SetScoreDeadLineBody,
-    options?: RequestInit
-): Promise<setScoreDeadLineResponse> => {
-    return customTrainingFetch<setScoreDeadLineResponse>(getSetScoreDeadLineUrl(), {
-        ...options,
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', ...options?.headers },
-        body: JSON.stringify(setScoreDeadLineBody),
-    })
-}
-
-export const getSetScoreDeadLineMutationOptions = <TError = void, TContext = unknown>(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof setScoreDeadLine>>,
-        TError,
-        { data: SetScoreDeadLineBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof setScoreDeadLine>>,
-    TError,
-    { data: SetScoreDeadLineBody },
-    TContext
-> => {
-    const mutationKey = ['setScoreDeadLine']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof setScoreDeadLine>>,
-        { data: SetScoreDeadLineBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return setScoreDeadLine(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type SetScoreDeadLineMutationResult = NonNullable<
-    Awaited<ReturnType<typeof setScoreDeadLine>>
->
-export type SetScoreDeadLineMutationBody = SetScoreDeadLineBody
-export type SetScoreDeadLineMutationError = void
-
-/**
- * @summary Đặt hạn nhập điểm
- */
-export const useSetScoreDeadLine = <TError = void, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof setScoreDeadLine>>,
-            TError,
-            { data: SetScoreDeadLineBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof setScoreDeadLine>>,
-    TError,
-    { data: SetScoreDeadLineBody },
-    TContext
-> => {
-    const mutationOptions = getSetScoreDeadLineMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-/**
- * Đặt hạn nhập điểm thi
- * @summary Đặt hạn nhập điểm thi
- */
-export type setExamScoreDeadLineResponse200 = {
-    data: SetExamScoreDeadLine200
-    status: 200
-}
-
-export type setExamScoreDeadLineResponse400 = {
-    data: void
-    status: 400
-}
-
-export type setExamScoreDeadLineResponseSuccess = setExamScoreDeadLineResponse200 & {
-    headers: Headers
-}
-export type setExamScoreDeadLineResponseError = setExamScoreDeadLineResponse400 & {
-    headers: Headers
-}
-
-export type setExamScoreDeadLineResponse =
-    | setExamScoreDeadLineResponseSuccess
-    | setExamScoreDeadLineResponseError
-
-export const getSetExamScoreDeadLineUrl = () => {
-    return `/api/subject-class/set-exam-score-dead-line`
-}
-
-export const setExamScoreDeadLine = async (
-    setExamScoreDeadLineBody: SetExamScoreDeadLineBody,
-    options?: RequestInit
-): Promise<setExamScoreDeadLineResponse> => {
-    return customTrainingFetch<setExamScoreDeadLineResponse>(getSetExamScoreDeadLineUrl(), {
-        ...options,
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', ...options?.headers },
-        body: JSON.stringify(setExamScoreDeadLineBody),
-    })
-}
-
-export const getSetExamScoreDeadLineMutationOptions = <
-    TError = void,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof setExamScoreDeadLine>>,
-        TError,
-        { data: SetExamScoreDeadLineBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof setExamScoreDeadLine>>,
-    TError,
-    { data: SetExamScoreDeadLineBody },
-    TContext
-> => {
-    const mutationKey = ['setExamScoreDeadLine']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof setExamScoreDeadLine>>,
-        { data: SetExamScoreDeadLineBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return setExamScoreDeadLine(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type SetExamScoreDeadLineMutationResult = NonNullable<
-    Awaited<ReturnType<typeof setExamScoreDeadLine>>
->
-export type SetExamScoreDeadLineMutationBody = SetExamScoreDeadLineBody
-export type SetExamScoreDeadLineMutationError = void
-
-/**
- * @summary Đặt hạn nhập điểm thi
- */
-export const useSetExamScoreDeadLine = <TError = void, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof setExamScoreDeadLine>>,
-            TError,
-            { data: SetExamScoreDeadLineBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof setExamScoreDeadLine>>,
-    TError,
-    { data: SetExamScoreDeadLineBody },
-    TContext
-> => {
-    const mutationOptions = getSetExamScoreDeadLineMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-/**
- * Import điểm lớp môn học 
-
- [subjectClassId] là id của lớp học
- * @summary Import file nhập điểm
- */
-export type uploadExcelImportScoreResponse200 = {
-    data: UploadExcelImportScore200
-    status: 200
-}
-
-export type uploadExcelImportScoreResponse400 = {
-    data: UploadExcelImportScore400
-    status: 400
-}
-
-export type uploadExcelImportScoreResponseSuccess = uploadExcelImportScoreResponse200 & {
-    headers: Headers
-}
-export type uploadExcelImportScoreResponseError = uploadExcelImportScoreResponse400 & {
-    headers: Headers
-}
-
-export type uploadExcelImportScoreResponse =
-    | uploadExcelImportScoreResponseSuccess
-    | uploadExcelImportScoreResponseError
-
-export const getUploadExcelImportScoreUrl = () => {
-    return `/api/subject-class/upload-excel-import-score`
-}
-
-export const uploadExcelImportScore = async (
-    uploadExcelImportScore: UploadExcelImportScore,
-    options?: RequestInit
-): Promise<uploadExcelImportScoreResponse> => {
-    const formData = new FormData()
-    formData.append(`file`, uploadExcelImportScore.file)
-    formData.append(`subjectClassId`, uploadExcelImportScore.subjectClassId)
-
-    return customTrainingFetch<uploadExcelImportScoreResponse>(getUploadExcelImportScoreUrl(), {
-        ...options,
-        method: 'POST',
-        body: formData,
-    })
-}
-
-export const getUploadExcelImportScoreMutationOptions = <
-    TError = UploadExcelImportScore400,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof uploadExcelImportScore>>,
-        TError,
-        { data: UploadExcelImportScore },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof uploadExcelImportScore>>,
-    TError,
-    { data: UploadExcelImportScore },
-    TContext
-> => {
-    const mutationKey = ['uploadExcelImportScore']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof uploadExcelImportScore>>,
-        { data: UploadExcelImportScore }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return uploadExcelImportScore(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type UploadExcelImportScoreMutationResult = NonNullable<
-    Awaited<ReturnType<typeof uploadExcelImportScore>>
->
-export type UploadExcelImportScoreMutationBody = UploadExcelImportScore
-export type UploadExcelImportScoreMutationError = UploadExcelImportScore400
-
-/**
- * @summary Import file nhập điểm
- */
-export const useUploadExcelImportScore = <TError = UploadExcelImportScore400, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof uploadExcelImportScore>>,
-            TError,
-            { data: UploadExcelImportScore },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof uploadExcelImportScore>>,
-    TError,
-    { data: UploadExcelImportScore },
-    TContext
-> => {
-    const mutationOptions = getUploadExcelImportScoreMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-/**
- * @summary Excel xuất điểm lớp môn học
- */
-export type exportSubjectClassScoreResponse200 = {
-    data: Blob
-    status: 200
-}
-
-export type exportSubjectClassScoreResponse404 = {
-    data: ExportSubjectClassScore404
-    status: 404
-}
-
-export type exportSubjectClassScoreResponseSuccess = exportSubjectClassScoreResponse200 & {
-    headers: Headers
-}
-export type exportSubjectClassScoreResponseError = exportSubjectClassScoreResponse404 & {
-    headers: Headers
-}
-
-export type exportSubjectClassScoreResponse =
-    | exportSubjectClassScoreResponseSuccess
-    | exportSubjectClassScoreResponseError
-
-export const getExportSubjectClassScoreUrl = (params?: ExportSubjectClassScoreParams) => {
-    const normalizedParams = new URLSearchParams()
-
-    Object.entries(params || {}).forEach(([key, value]) => {
-        if (value !== undefined) {
-            normalizedParams.append(key, value === null ? 'null' : value.toString())
-        }
-    })
-
-    const stringifiedParams = normalizedParams.toString()
-
-    return stringifiedParams.length > 0
-        ? `/api/subject-class/export-subject-class-score?${stringifiedParams}`
-        : `/api/subject-class/export-subject-class-score`
-}
-
-export const exportSubjectClassScore = async (
-    params?: ExportSubjectClassScoreParams,
-    options?: RequestInit
-): Promise<exportSubjectClassScoreResponse> => {
-    return customTrainingFetch<exportSubjectClassScoreResponse>(
-        getExportSubjectClassScoreUrl(params),
-        {
-            ...options,
-            method: 'GET',
-        }
-    )
-}
-
-export const getExportSubjectClassScoreQueryKey = (params?: ExportSubjectClassScoreParams) => {
-    return [`/api/subject-class/export-subject-class-score`, ...(params ? [params] : [])] as const
-}
-
-export const getExportSubjectClassScoreQueryOptions = <
-    TData = Awaited<ReturnType<typeof exportSubjectClassScore>>,
-    TError = ExportSubjectClassScore404,
->(
-    params?: ExportSubjectClassScoreParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassScore>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    }
-) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
-
-    const queryKey = queryOptions?.queryKey ?? getExportSubjectClassScoreQueryKey(params)
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportSubjectClassScore>>> = ({
-        signal,
-    }) => exportSubjectClassScore(params, { signal, ...requestOptions })
-
-    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-        Awaited<ReturnType<typeof exportSubjectClassScore>>,
-        TError,
-        TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type ExportSubjectClassScoreQueryResult = NonNullable<
-    Awaited<ReturnType<typeof exportSubjectClassScore>>
->
-export type ExportSubjectClassScoreQueryError = ExportSubjectClassScore404
-
-export function useExportSubjectClassScore<
-    TData = Awaited<ReturnType<typeof exportSubjectClassScore>>,
-    TError = ExportSubjectClassScore404,
->(
-    params: undefined | ExportSubjectClassScoreParams,
-    options: {
-        query: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassScore>>, TError, TData>
-        > &
-            Pick<
-                DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof exportSubjectClassScore>>,
-                    TError,
-                    Awaited<ReturnType<typeof exportSubjectClassScore>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportSubjectClassScore<
-    TData = Awaited<ReturnType<typeof exportSubjectClassScore>>,
-    TError = ExportSubjectClassScore404,
->(
-    params?: ExportSubjectClassScoreParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassScore>>, TError, TData>
-        > &
-            Pick<
-                UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof exportSubjectClassScore>>,
-                    TError,
-                    Awaited<ReturnType<typeof exportSubjectClassScore>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportSubjectClassScore<
-    TData = Awaited<ReturnType<typeof exportSubjectClassScore>>,
-    TError = ExportSubjectClassScore404,
->(
-    params?: ExportSubjectClassScoreParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassScore>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary Excel xuất điểm lớp môn học
- */
-
-export function useExportSubjectClassScore<
-    TData = Awaited<ReturnType<typeof exportSubjectClassScore>>,
-    TError = ExportSubjectClassScore404,
->(
-    params?: ExportSubjectClassScoreParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassScore>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getExportSubjectClassScoreQueryOptions(params, options)
-
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-        queryKey: DataTag<QueryKey, TData, TError>
-    }
-
-    query.queryKey = queryOptions.queryKey
-
-    return query
-}
-
-/**
- * Xuất danh sách học viên đạt học bổng dưới dạng file Excel (dữ liệu đã được làm phẳng)
- * @summary Xuất Excel danh sách học bổng của học viên
- */
-export type exportStudentScholarshipExcelResponse200 = {
-    data: Blob
-    status: 200
-}
-
-export type exportStudentScholarshipExcelResponse404 = {
-    data: ExportStudentScholarshipExcel404
-    status: 404
-}
-
-export type exportStudentScholarshipExcelResponseSuccess =
-    exportStudentScholarshipExcelResponse200 & {
-        headers: Headers
-    }
-export type exportStudentScholarshipExcelResponseError =
-    exportStudentScholarshipExcelResponse404 & {
-        headers: Headers
-    }
-
-export type exportStudentScholarshipExcelResponse =
-    | exportStudentScholarshipExcelResponseSuccess
-    | exportStudentScholarshipExcelResponseError
-
-export const getExportStudentScholarshipExcelUrl = (
-    params: ExportStudentScholarshipExcelParams
-) => {
-    const normalizedParams = new URLSearchParams()
-
-    Object.entries(params || {}).forEach(([key, value]) => {
-        if (value !== undefined) {
-            normalizedParams.append(key, value === null ? 'null' : value.toString())
-        }
-    })
-
-    const stringifiedParams = normalizedParams.toString()
-
-    return stringifiedParams.length > 0
-        ? `/api/student/export-excel-list-student-scholarship?${stringifiedParams}`
-        : `/api/student/export-excel-list-student-scholarship`
-}
-
-export const exportStudentScholarshipExcel = async (
-    params: ExportStudentScholarshipExcelParams,
-    options?: RequestInit
-): Promise<exportStudentScholarshipExcelResponse> => {
-    return customTrainingFetch<exportStudentScholarshipExcelResponse>(
-        getExportStudentScholarshipExcelUrl(params),
-        {
-            ...options,
-            method: 'GET',
-        }
-    )
-}
-
-export const getExportStudentScholarshipExcelQueryKey = (
-    params?: ExportStudentScholarshipExcelParams
-) => {
-    return [
-        `/api/student/export-excel-list-student-scholarship`,
-        ...(params ? [params] : []),
-    ] as const
-}
-
-export const getExportStudentScholarshipExcelQueryOptions = <
-    TData = Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
-    TError = ExportStudentScholarshipExcel404,
->(
-    params: ExportStudentScholarshipExcelParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
-                TError,
-                TData
-            >
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    }
-) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
-
-    const queryKey = queryOptions?.queryKey ?? getExportStudentScholarshipExcelQueryKey(params)
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportStudentScholarshipExcel>>> = ({
-        signal,
-    }) => exportStudentScholarshipExcel(params, { signal, ...requestOptions })
-
-    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-        Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
-        TError,
-        TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type ExportStudentScholarshipExcelQueryResult = NonNullable<
-    Awaited<ReturnType<typeof exportStudentScholarshipExcel>>
->
-export type ExportStudentScholarshipExcelQueryError = ExportStudentScholarshipExcel404
-
-export function useExportStudentScholarshipExcel<
-    TData = Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
-    TError = ExportStudentScholarshipExcel404,
->(
-    params: ExportStudentScholarshipExcelParams,
-    options: {
-        query: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
-                TError,
-                TData
-            >
-        > &
-            Pick<
-                DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
-                    TError,
-                    Awaited<ReturnType<typeof exportStudentScholarshipExcel>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportStudentScholarshipExcel<
-    TData = Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
-    TError = ExportStudentScholarshipExcel404,
->(
-    params: ExportStudentScholarshipExcelParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
-                TError,
-                TData
-            >
-        > &
-            Pick<
-                UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
-                    TError,
-                    Awaited<ReturnType<typeof exportStudentScholarshipExcel>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportStudentScholarshipExcel<
-    TData = Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
-    TError = ExportStudentScholarshipExcel404,
->(
-    params: ExportStudentScholarshipExcelParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
-                TError,
-                TData
-            >
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary Xuất Excel danh sách học bổng của học viên
- */
-
-export function useExportStudentScholarshipExcel<
-    TData = Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
-    TError = ExportStudentScholarshipExcel404,
->(
-    params: ExportStudentScholarshipExcelParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
-                TError,
-                TData
-            >
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getExportStudentScholarshipExcelQueryOptions(params, options)
-
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-        queryKey: DataTag<QueryKey, TData, TError>
-    }
-
-    query.queryKey = queryOptions.queryKey
-
-    return query
-}
-
-/**
- * Xuất danh sách học viên bị cảnh cáo học tập dưới dạng file Excel (dữ liệu đã được làm phẳng)
- * @summary Xuất Excel danh sách cảnh cáo học tập của học viên
- */
-export type exportStudentAcademicWarningExcelResponse200 = {
-    data: Blob
-    status: 200
-}
-
-export type exportStudentAcademicWarningExcelResponse404 = {
-    data: ExportStudentAcademicWarningExcel404
-    status: 404
-}
-
-export type exportStudentAcademicWarningExcelResponseSuccess =
-    exportStudentAcademicWarningExcelResponse200 & {
-        headers: Headers
-    }
-export type exportStudentAcademicWarningExcelResponseError =
-    exportStudentAcademicWarningExcelResponse404 & {
-        headers: Headers
-    }
-
-export type exportStudentAcademicWarningExcelResponse =
-    | exportStudentAcademicWarningExcelResponseSuccess
-    | exportStudentAcademicWarningExcelResponseError
-
-export const getExportStudentAcademicWarningExcelUrl = (
-    params: ExportStudentAcademicWarningExcelParams
-) => {
-    const normalizedParams = new URLSearchParams()
-
-    Object.entries(params || {}).forEach(([key, value]) => {
-        if (value !== undefined) {
-            normalizedParams.append(key, value === null ? 'null' : value.toString())
-        }
-    })
-
-    const stringifiedParams = normalizedParams.toString()
-
-    return stringifiedParams.length > 0
-        ? `/api/student/export-excel-list-student-academic-warning?${stringifiedParams}`
-        : `/api/student/export-excel-list-student-academic-warning`
-}
-
-export const exportStudentAcademicWarningExcel = async (
-    params: ExportStudentAcademicWarningExcelParams,
-    options?: RequestInit
-): Promise<exportStudentAcademicWarningExcelResponse> => {
-    return customTrainingFetch<exportStudentAcademicWarningExcelResponse>(
-        getExportStudentAcademicWarningExcelUrl(params),
-        {
-            ...options,
-            method: 'GET',
-        }
-    )
-}
-
-export const getExportStudentAcademicWarningExcelQueryKey = (
-    params?: ExportStudentAcademicWarningExcelParams
-) => {
-    return [
-        `/api/student/export-excel-list-student-academic-warning`,
-        ...(params ? [params] : []),
-    ] as const
-}
-
-export const getExportStudentAcademicWarningExcelQueryOptions = <
-    TData = Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
-    TError = ExportStudentAcademicWarningExcel404,
->(
-    params: ExportStudentAcademicWarningExcelParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
-                TError,
-                TData
-            >
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    }
-) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
-
-    const queryKey = queryOptions?.queryKey ?? getExportStudentAcademicWarningExcelQueryKey(params)
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>> = ({
-        signal,
-    }) => exportStudentAcademicWarningExcel(params, { signal, ...requestOptions })
-
-    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-        Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
-        TError,
-        TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type ExportStudentAcademicWarningExcelQueryResult = NonNullable<
-    Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>
->
-export type ExportStudentAcademicWarningExcelQueryError = ExportStudentAcademicWarningExcel404
-
-export function useExportStudentAcademicWarningExcel<
-    TData = Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
-    TError = ExportStudentAcademicWarningExcel404,
->(
-    params: ExportStudentAcademicWarningExcelParams,
-    options: {
-        query: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
-                TError,
-                TData
-            >
-        > &
-            Pick<
-                DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
-                    TError,
-                    Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportStudentAcademicWarningExcel<
-    TData = Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
-    TError = ExportStudentAcademicWarningExcel404,
->(
-    params: ExportStudentAcademicWarningExcelParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
-                TError,
-                TData
-            >
-        > &
-            Pick<
-                UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
-                    TError,
-                    Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportStudentAcademicWarningExcel<
-    TData = Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
-    TError = ExportStudentAcademicWarningExcel404,
->(
-    params: ExportStudentAcademicWarningExcelParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
-                TError,
-                TData
-            >
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary Xuất Excel danh sách cảnh cáo học tập của học viên
- */
-
-export function useExportStudentAcademicWarningExcel<
-    TData = Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
-    TError = ExportStudentAcademicWarningExcel404,
->(
-    params: ExportStudentAcademicWarningExcelParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
-                TError,
-                TData
-            >
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getExportStudentAcademicWarningExcelQueryOptions(params, options)
-
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-        queryKey: DataTag<QueryKey, TData, TError>
-    }
-
-    query.queryKey = queryOptions.queryKey
-
-    return query
-}
-
-/**
- * Cập nhật trạng thái, điểm học viên theo xử lý học tập
- * @summary Cập nhật trạng thái, điểm học viên theo xử lý học tập
- */
-export type updateStudentStatusResponse200 = {
-    data: UpdateStudentStatus200
-    status: 200
-}
-
-export type updateStudentStatusResponse400 = {
-    data: UpdateStudentStatus400
-    status: 400
-}
-
-export type updateStudentStatusResponseSuccess = updateStudentStatusResponse200 & {
-    headers: Headers
-}
-export type updateStudentStatusResponseError = updateStudentStatusResponse400 & {
-    headers: Headers
-}
-
-export type updateStudentStatusResponse =
-    | updateStudentStatusResponseSuccess
-    | updateStudentStatusResponseError
-
-export const getUpdateStudentStatusUrl = () => {
-    return `/api/student/update-students-status`
-}
-
-export const updateStudentStatus = async (
-    updateStudentStatusBody: UpdateStudentStatusBody,
-    options?: RequestInit
-): Promise<updateStudentStatusResponse> => {
-    return customTrainingFetch<updateStudentStatusResponse>(getUpdateStudentStatusUrl(), {
-        ...options,
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', ...options?.headers },
-        body: JSON.stringify(updateStudentStatusBody),
-    })
-}
-
-export const getUpdateStudentStatusMutationOptions = <
-    TError = UpdateStudentStatus400,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof updateStudentStatus>>,
-        TError,
-        { data: UpdateStudentStatusBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof updateStudentStatus>>,
-    TError,
-    { data: UpdateStudentStatusBody },
-    TContext
-> => {
-    const mutationKey = ['updateStudentStatus']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof updateStudentStatus>>,
-        { data: UpdateStudentStatusBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return updateStudentStatus(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type UpdateStudentStatusMutationResult = NonNullable<
-    Awaited<ReturnType<typeof updateStudentStatus>>
->
-export type UpdateStudentStatusMutationBody = UpdateStudentStatusBody
-export type UpdateStudentStatusMutationError = UpdateStudentStatus400
-
-/**
- * @summary Cập nhật trạng thái, điểm học viên theo xử lý học tập
- */
-export const useUpdateStudentStatus = <TError = UpdateStudentStatus400, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof updateStudentStatus>>,
-            TError,
-            { data: UpdateStudentStatusBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof updateStudentStatus>>,
-    TError,
-    { data: UpdateStudentStatusBody },
-    TContext
-> => {
-    const mutationOptions = getUpdateStudentStatusMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-/**
- * Xuất danh sách học viên đạt học bổng dưới dạng JSON
- * @summary Danh sách học bổng của học viên
- */
-export type exportStudentScholarshipJsonResponse200 = {
-    data: ExportStudentScholarshipJson200Item[]
-    status: 200
-}
-
-export type exportStudentScholarshipJsonResponse404 = {
-    data: ExportStudentScholarshipJson404
-    status: 404
-}
-
-export type exportStudentScholarshipJsonResponseSuccess =
-    exportStudentScholarshipJsonResponse200 & {
-        headers: Headers
-    }
-export type exportStudentScholarshipJsonResponseError = exportStudentScholarshipJsonResponse404 & {
-    headers: Headers
-}
-
-export type exportStudentScholarshipJsonResponse =
-    | exportStudentScholarshipJsonResponseSuccess
-    | exportStudentScholarshipJsonResponseError
-
-export const getExportStudentScholarshipJsonUrl = (params: ExportStudentScholarshipJsonParams) => {
-    const normalizedParams = new URLSearchParams()
-
-    Object.entries(params || {}).forEach(([key, value]) => {
-        if (value !== undefined) {
-            normalizedParams.append(key, value === null ? 'null' : value.toString())
-        }
-    })
-
-    const stringifiedParams = normalizedParams.toString()
-
-    return stringifiedParams.length > 0
-        ? `/api/student/export-json-list-student-scholarship?${stringifiedParams}`
-        : `/api/student/export-json-list-student-scholarship`
-}
-
-export const exportStudentScholarshipJson = async (
-    params: ExportStudentScholarshipJsonParams,
-    options?: RequestInit
-): Promise<exportStudentScholarshipJsonResponse> => {
-    return customTrainingFetch<exportStudentScholarshipJsonResponse>(
-        getExportStudentScholarshipJsonUrl(params),
-        {
-            ...options,
-            method: 'GET',
-        }
-    )
-}
-
-export const getExportStudentScholarshipJsonQueryKey = (
-    params?: ExportStudentScholarshipJsonParams
-) => {
-    return [
-        `/api/student/export-json-list-student-scholarship`,
-        ...(params ? [params] : []),
-    ] as const
-}
-
-export const getExportStudentScholarshipJsonQueryOptions = <
-    TData = Awaited<ReturnType<typeof exportStudentScholarshipJson>>,
-    TError = ExportStudentScholarshipJson404,
->(
-    params: ExportStudentScholarshipJsonParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof exportStudentScholarshipJson>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    }
-) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
-
-    const queryKey = queryOptions?.queryKey ?? getExportStudentScholarshipJsonQueryKey(params)
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportStudentScholarshipJson>>> = ({
-        signal,
-    }) => exportStudentScholarshipJson(params, { signal, ...requestOptions })
-
-    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-        Awaited<ReturnType<typeof exportStudentScholarshipJson>>,
-        TError,
-        TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type ExportStudentScholarshipJsonQueryResult = NonNullable<
-    Awaited<ReturnType<typeof exportStudentScholarshipJson>>
->
-export type ExportStudentScholarshipJsonQueryError = ExportStudentScholarshipJson404
-
-export function useExportStudentScholarshipJson<
-    TData = Awaited<ReturnType<typeof exportStudentScholarshipJson>>,
-    TError = ExportStudentScholarshipJson404,
->(
-    params: ExportStudentScholarshipJsonParams,
-    options: {
-        query: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof exportStudentScholarshipJson>>, TError, TData>
-        > &
-            Pick<
-                DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof exportStudentScholarshipJson>>,
-                    TError,
-                    Awaited<ReturnType<typeof exportStudentScholarshipJson>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportStudentScholarshipJson<
-    TData = Awaited<ReturnType<typeof exportStudentScholarshipJson>>,
-    TError = ExportStudentScholarshipJson404,
->(
-    params: ExportStudentScholarshipJsonParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof exportStudentScholarshipJson>>, TError, TData>
-        > &
-            Pick<
-                UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof exportStudentScholarshipJson>>,
-                    TError,
-                    Awaited<ReturnType<typeof exportStudentScholarshipJson>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportStudentScholarshipJson<
-    TData = Awaited<ReturnType<typeof exportStudentScholarshipJson>>,
-    TError = ExportStudentScholarshipJson404,
->(
-    params: ExportStudentScholarshipJsonParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof exportStudentScholarshipJson>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary Danh sách học bổng của học viên
- */
-
-export function useExportStudentScholarshipJson<
-    TData = Awaited<ReturnType<typeof exportStudentScholarshipJson>>,
-    TError = ExportStudentScholarshipJson404,
->(
-    params: ExportStudentScholarshipJsonParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof exportStudentScholarshipJson>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getExportStudentScholarshipJsonQueryOptions(params, options)
-
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-        queryKey: DataTag<QueryKey, TData, TError>
-    }
-
-    query.queryKey = queryOptions.queryKey
-
-    return query
-}
-
-/**
- * Xuất danh sách học viên bị cảnh cáo học tập dưới dạng JSON
- * @summary Danh sách cảnh cáo học tập của học viên
- */
-export type exportStudentAcademicWarningJsonResponse200 = {
-    data: ExportStudentAcademicWarningJson200Item[]
-    status: 200
-}
-
-export type exportStudentAcademicWarningJsonResponse404 = {
-    data: ExportStudentAcademicWarningJson404
-    status: 404
-}
-
-export type exportStudentAcademicWarningJsonResponseSuccess =
-    exportStudentAcademicWarningJsonResponse200 & {
-        headers: Headers
-    }
-export type exportStudentAcademicWarningJsonResponseError =
-    exportStudentAcademicWarningJsonResponse404 & {
-        headers: Headers
-    }
-
-export type exportStudentAcademicWarningJsonResponse =
-    | exportStudentAcademicWarningJsonResponseSuccess
-    | exportStudentAcademicWarningJsonResponseError
-
-export const getExportStudentAcademicWarningJsonUrl = (
-    params: ExportStudentAcademicWarningJsonParams
-) => {
-    const normalizedParams = new URLSearchParams()
-
-    Object.entries(params || {}).forEach(([key, value]) => {
-        if (value !== undefined) {
-            normalizedParams.append(key, value === null ? 'null' : value.toString())
-        }
-    })
-
-    const stringifiedParams = normalizedParams.toString()
-
-    return stringifiedParams.length > 0
-        ? `/api/student/export-json-list-student-academic-warning?${stringifiedParams}`
-        : `/api/student/export-json-list-student-academic-warning`
-}
-
-export const exportStudentAcademicWarningJson = async (
-    params: ExportStudentAcademicWarningJsonParams,
-    options?: RequestInit
-): Promise<exportStudentAcademicWarningJsonResponse> => {
-    return customTrainingFetch<exportStudentAcademicWarningJsonResponse>(
-        getExportStudentAcademicWarningJsonUrl(params),
-        {
-            ...options,
-            method: 'GET',
-        }
-    )
-}
-
-export const getExportStudentAcademicWarningJsonQueryKey = (
-    params?: ExportStudentAcademicWarningJsonParams
-) => {
-    return [
-        `/api/student/export-json-list-student-academic-warning`,
-        ...(params ? [params] : []),
-    ] as const
-}
-
-export const getExportStudentAcademicWarningJsonQueryOptions = <
-    TData = Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
-    TError = ExportStudentAcademicWarningJson404,
->(
-    params: ExportStudentAcademicWarningJsonParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
-                TError,
-                TData
-            >
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    }
-) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
-
-    const queryKey = queryOptions?.queryKey ?? getExportStudentAcademicWarningJsonQueryKey(params)
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>> = ({
-        signal,
-    }) => exportStudentAcademicWarningJson(params, { signal, ...requestOptions })
-
-    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-        Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
-        TError,
-        TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type ExportStudentAcademicWarningJsonQueryResult = NonNullable<
-    Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>
->
-export type ExportStudentAcademicWarningJsonQueryError = ExportStudentAcademicWarningJson404
-
-export function useExportStudentAcademicWarningJson<
-    TData = Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
-    TError = ExportStudentAcademicWarningJson404,
->(
-    params: ExportStudentAcademicWarningJsonParams,
-    options: {
-        query: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
-                TError,
-                TData
-            >
-        > &
-            Pick<
-                DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
-                    TError,
-                    Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportStudentAcademicWarningJson<
-    TData = Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
-    TError = ExportStudentAcademicWarningJson404,
->(
-    params: ExportStudentAcademicWarningJsonParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
-                TError,
-                TData
-            >
-        > &
-            Pick<
-                UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
-                    TError,
-                    Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportStudentAcademicWarningJson<
-    TData = Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
-    TError = ExportStudentAcademicWarningJson404,
->(
-    params: ExportStudentAcademicWarningJsonParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
-                TError,
-                TData
-            >
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary Danh sách cảnh cáo học tập của học viên
- */
-
-export function useExportStudentAcademicWarningJson<
-    TData = Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
-    TError = ExportStudentAcademicWarningJson404,
->(
-    params: ExportStudentAcademicWarningJsonParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
-                TError,
-                TData
-            >
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getExportStudentAcademicWarningJsonQueryOptions(params, options)
-
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-        queryKey: DataTag<QueryKey, TData, TError>
-    }
-
-    query.queryKey = queryOptions.queryKey
-
-    return query
-}
-
-/**
- * Xuất danh sách học viên bị xử lý học vụ dưới dạng JSON
- * @summary Danh sách xử lý học vụ của học viên
- */
-export type exportStudentAcademicActionJsonResponse200 = {
-    data: ExportStudentAcademicActionJson200Item[]
-    status: 200
-}
-
-export type exportStudentAcademicActionJsonResponse404 = {
-    data: ExportStudentAcademicActionJson404
-    status: 404
-}
-
-export type exportStudentAcademicActionJsonResponseSuccess =
-    exportStudentAcademicActionJsonResponse200 & {
-        headers: Headers
-    }
-export type exportStudentAcademicActionJsonResponseError =
-    exportStudentAcademicActionJsonResponse404 & {
-        headers: Headers
-    }
-
-export type exportStudentAcademicActionJsonResponse =
-    | exportStudentAcademicActionJsonResponseSuccess
-    | exportStudentAcademicActionJsonResponseError
-
-export const getExportStudentAcademicActionJsonUrl = (
-    params: ExportStudentAcademicActionJsonParams
-) => {
-    const normalizedParams = new URLSearchParams()
-
-    Object.entries(params || {}).forEach(([key, value]) => {
-        if (value !== undefined) {
-            normalizedParams.append(key, value === null ? 'null' : value.toString())
-        }
-    })
-
-    const stringifiedParams = normalizedParams.toString()
-
-    return stringifiedParams.length > 0
-        ? `/api/student/export-json-list-student-academic-action?${stringifiedParams}`
-        : `/api/student/export-json-list-student-academic-action`
-}
-
-export const exportStudentAcademicActionJson = async (
-    params: ExportStudentAcademicActionJsonParams,
-    options?: RequestInit
-): Promise<exportStudentAcademicActionJsonResponse> => {
-    return customTrainingFetch<exportStudentAcademicActionJsonResponse>(
-        getExportStudentAcademicActionJsonUrl(params),
-        {
-            ...options,
-            method: 'GET',
-        }
-    )
-}
-
-export const getExportStudentAcademicActionJsonQueryKey = (
-    params?: ExportStudentAcademicActionJsonParams
-) => {
-    return [
-        `/api/student/export-json-list-student-academic-action`,
-        ...(params ? [params] : []),
-    ] as const
-}
-
-export const getExportStudentAcademicActionJsonQueryOptions = <
-    TData = Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
-    TError = ExportStudentAcademicActionJson404,
->(
-    params: ExportStudentAcademicActionJsonParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
-                TError,
-                TData
-            >
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    }
-) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
-
-    const queryKey = queryOptions?.queryKey ?? getExportStudentAcademicActionJsonQueryKey(params)
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportStudentAcademicActionJson>>> = ({
-        signal,
-    }) => exportStudentAcademicActionJson(params, { signal, ...requestOptions })
-
-    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-        Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
-        TError,
-        TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type ExportStudentAcademicActionJsonQueryResult = NonNullable<
-    Awaited<ReturnType<typeof exportStudentAcademicActionJson>>
->
-export type ExportStudentAcademicActionJsonQueryError = ExportStudentAcademicActionJson404
-
-export function useExportStudentAcademicActionJson<
-    TData = Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
-    TError = ExportStudentAcademicActionJson404,
->(
-    params: ExportStudentAcademicActionJsonParams,
-    options: {
-        query: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
-                TError,
-                TData
-            >
-        > &
-            Pick<
-                DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
-                    TError,
-                    Awaited<ReturnType<typeof exportStudentAcademicActionJson>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportStudentAcademicActionJson<
-    TData = Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
-    TError = ExportStudentAcademicActionJson404,
->(
-    params: ExportStudentAcademicActionJsonParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
-                TError,
-                TData
-            >
-        > &
-            Pick<
-                UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
-                    TError,
-                    Awaited<ReturnType<typeof exportStudentAcademicActionJson>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportStudentAcademicActionJson<
-    TData = Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
-    TError = ExportStudentAcademicActionJson404,
->(
-    params: ExportStudentAcademicActionJsonParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
-                TError,
-                TData
-            >
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary Danh sách xử lý học vụ của học viên
- */
-
-export function useExportStudentAcademicActionJson<
-    TData = Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
-    TError = ExportStudentAcademicActionJson404,
->(
-    params: ExportStudentAcademicActionJsonParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
-                TError,
-                TData
-            >
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getExportStudentAcademicActionJsonQueryOptions(params, options)
-
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-        queryKey: DataTag<QueryKey, TData, TError>
-    }
-
-    query.queryKey = queryOptions.queryKey
-
-    return query
-}
-
-/**
- * Xuất danh sách học viên được giảm cảnh cáo học tập dưới dạng JSON
- * @summary Danh sách giảm cảnh cáo học tập của học viên
- */
-export type exportStudentDecreaseAcademicWarningJsonResponse200 = {
-    data: ExportStudentDecreaseAcademicWarningJson200Item[]
-    status: 200
-}
-
-export type exportStudentDecreaseAcademicWarningJsonResponse404 = {
-    data: ExportStudentDecreaseAcademicWarningJson404
-    status: 404
-}
-
-export type exportStudentDecreaseAcademicWarningJsonResponseSuccess =
-    exportStudentDecreaseAcademicWarningJsonResponse200 & {
-        headers: Headers
-    }
-export type exportStudentDecreaseAcademicWarningJsonResponseError =
-    exportStudentDecreaseAcademicWarningJsonResponse404 & {
-        headers: Headers
-    }
-
-export type exportStudentDecreaseAcademicWarningJsonResponse =
-    | exportStudentDecreaseAcademicWarningJsonResponseSuccess
-    | exportStudentDecreaseAcademicWarningJsonResponseError
-
-export const getExportStudentDecreaseAcademicWarningJsonUrl = (
-    params: ExportStudentDecreaseAcademicWarningJsonParams
-) => {
-    const normalizedParams = new URLSearchParams()
-
-    Object.entries(params || {}).forEach(([key, value]) => {
-        if (value !== undefined) {
-            normalizedParams.append(key, value === null ? 'null' : value.toString())
-        }
-    })
-
-    const stringifiedParams = normalizedParams.toString()
-
-    return stringifiedParams.length > 0
-        ? `/api/student/export-json-list-student-decrease-academic-warning?${stringifiedParams}`
-        : `/api/student/export-json-list-student-decrease-academic-warning`
-}
-
-export const exportStudentDecreaseAcademicWarningJson = async (
-    params: ExportStudentDecreaseAcademicWarningJsonParams,
-    options?: RequestInit
-): Promise<exportStudentDecreaseAcademicWarningJsonResponse> => {
-    return customTrainingFetch<exportStudentDecreaseAcademicWarningJsonResponse>(
-        getExportStudentDecreaseAcademicWarningJsonUrl(params),
-        {
-            ...options,
-            method: 'GET',
-        }
-    )
-}
-
-export const getExportStudentDecreaseAcademicWarningJsonQueryKey = (
-    params?: ExportStudentDecreaseAcademicWarningJsonParams
-) => {
-    return [
-        `/api/student/export-json-list-student-decrease-academic-warning`,
-        ...(params ? [params] : []),
-    ] as const
-}
-
-export const getExportStudentDecreaseAcademicWarningJsonQueryOptions = <
-    TData = Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
-    TError = ExportStudentDecreaseAcademicWarningJson404,
->(
-    params: ExportStudentDecreaseAcademicWarningJsonParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
-                TError,
-                TData
-            >
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    }
-) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
-
-    const queryKey =
-        queryOptions?.queryKey ?? getExportStudentDecreaseAcademicWarningJsonQueryKey(params)
-
-    const queryFn: QueryFunction<
-        Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>
-    > = ({ signal }) =>
-        exportStudentDecreaseAcademicWarningJson(params, { signal, ...requestOptions })
-
-    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-        Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
-        TError,
-        TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type ExportStudentDecreaseAcademicWarningJsonQueryResult = NonNullable<
-    Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>
->
-export type ExportStudentDecreaseAcademicWarningJsonQueryError =
-    ExportStudentDecreaseAcademicWarningJson404
-
-export function useExportStudentDecreaseAcademicWarningJson<
-    TData = Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
-    TError = ExportStudentDecreaseAcademicWarningJson404,
->(
-    params: ExportStudentDecreaseAcademicWarningJsonParams,
-    options: {
-        query: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
-                TError,
-                TData
-            >
-        > &
-            Pick<
-                DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
-                    TError,
-                    Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportStudentDecreaseAcademicWarningJson<
-    TData = Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
-    TError = ExportStudentDecreaseAcademicWarningJson404,
->(
-    params: ExportStudentDecreaseAcademicWarningJsonParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
-                TError,
-                TData
-            >
-        > &
-            Pick<
-                UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
-                    TError,
-                    Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportStudentDecreaseAcademicWarningJson<
-    TData = Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
-    TError = ExportStudentDecreaseAcademicWarningJson404,
->(
-    params: ExportStudentDecreaseAcademicWarningJsonParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
-                TError,
-                TData
-            >
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary Danh sách giảm cảnh cáo học tập của học viên
- */
-
-export function useExportStudentDecreaseAcademicWarningJson<
-    TData = Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
-    TError = ExportStudentDecreaseAcademicWarningJson404,
->(
-    params: ExportStudentDecreaseAcademicWarningJsonParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
-                TError,
-                TData
-            >
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getExportStudentDecreaseAcademicWarningJsonQueryOptions(params, options)
-
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-        queryKey: DataTag<QueryKey, TData, TError>
-    }
-
-    query.queryKey = queryOptions.queryKey
-
-    return query
-}
-
-/**
- * Trả kết quả học kỳ của học viên, sinh viên dưới dạng JSON
- * @summary Tổng kết kết quả học kỳ của học viên, sinh viên
- */
-export type calculateStudentSemesterResultJsonResponse200 = {
-    data: CalculateStudentSemesterResultJson200
-    status: 200
-}
-
-export type calculateStudentSemesterResultJsonResponse400 = {
-    data: CalculateStudentSemesterResultJson400
-    status: 400
-}
-
-export type calculateStudentSemesterResultJsonResponse500 = {
-    data: CalculateStudentSemesterResultJson500
-    status: 500
-}
-
-export type calculateStudentSemesterResultJsonResponseSuccess =
-    calculateStudentSemesterResultJsonResponse200 & {
-        headers: Headers
-    }
-export type calculateStudentSemesterResultJsonResponseError = (
-    | calculateStudentSemesterResultJsonResponse400
-    | calculateStudentSemesterResultJsonResponse500
-) & {
-    headers: Headers
-}
-
-export type calculateStudentSemesterResultJsonResponse =
-    | calculateStudentSemesterResultJsonResponseSuccess
-    | calculateStudentSemesterResultJsonResponseError
-
-export const getCalculateStudentSemesterResultJsonUrl = (
-    params: CalculateStudentSemesterResultJsonParams
-) => {
-    const normalizedParams = new URLSearchParams()
-
-    Object.entries(params || {}).forEach(([key, value]) => {
-        if (value !== undefined) {
-            normalizedParams.append(key, value === null ? 'null' : value.toString())
-        }
-    })
-
-    const stringifiedParams = normalizedParams.toString()
-
-    return stringifiedParams.length > 0
-        ? `/api/student/calculate-student-semester-result-json?${stringifiedParams}`
-        : `/api/student/calculate-student-semester-result-json`
-}
-
-export const calculateStudentSemesterResultJson = async (
-    params: CalculateStudentSemesterResultJsonParams,
-    options?: RequestInit
-): Promise<calculateStudentSemesterResultJsonResponse> => {
-    return customTrainingFetch<calculateStudentSemesterResultJsonResponse>(
-        getCalculateStudentSemesterResultJsonUrl(params),
-        {
-            ...options,
-            method: 'POST',
-        }
-    )
-}
-
-export const getCalculateStudentSemesterResultJsonMutationOptions = <
-    TError = CalculateStudentSemesterResultJson400 | CalculateStudentSemesterResultJson500,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof calculateStudentSemesterResultJson>>,
-        TError,
-        { params: CalculateStudentSemesterResultJsonParams },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof calculateStudentSemesterResultJson>>,
-    TError,
-    { params: CalculateStudentSemesterResultJsonParams },
-    TContext
-> => {
-    const mutationKey = ['calculateStudentSemesterResultJson']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof calculateStudentSemesterResultJson>>,
-        { params: CalculateStudentSemesterResultJsonParams }
-    > = (props) => {
-        const { params } = props ?? {}
-
-        return calculateStudentSemesterResultJson(params, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type CalculateStudentSemesterResultJsonMutationResult = NonNullable<
-    Awaited<ReturnType<typeof calculateStudentSemesterResultJson>>
->
-
-export type CalculateStudentSemesterResultJsonMutationError =
-    | CalculateStudentSemesterResultJson400
-    | CalculateStudentSemesterResultJson500
-
-/**
- * @summary Tổng kết kết quả học kỳ của học viên, sinh viên
- */
-export const useCalculateStudentSemesterResultJson = <
-    TError = CalculateStudentSemesterResultJson400 | CalculateStudentSemesterResultJson500,
-    TContext = unknown,
->(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof calculateStudentSemesterResultJson>>,
-            TError,
-            { params: CalculateStudentSemesterResultJsonParams },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof calculateStudentSemesterResultJson>>,
-    TError,
-    { params: CalculateStudentSemesterResultJsonParams },
-    TContext
-> => {
-    const mutationOptions = getCalculateStudentSemesterResultJsonMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-/**
- * Trả kết quả năm học của học viên, sinh viên dưới dạng
- * @summary Tổng kết kết quả năm học của học viên, sinh viên
- */
-export type calculateStudentSchoolYearResultResponse200 = {
-    data: CalculateStudentSchoolYearResult200
-    status: 200
-}
-
-export type calculateStudentSchoolYearResultResponse400 = {
-    data: CalculateStudentSchoolYearResult400
-    status: 400
-}
-
-export type calculateStudentSchoolYearResultResponse500 = {
-    data: CalculateStudentSchoolYearResult500
-    status: 500
-}
-
-export type calculateStudentSchoolYearResultResponseSuccess =
-    calculateStudentSchoolYearResultResponse200 & {
-        headers: Headers
-    }
-export type calculateStudentSchoolYearResultResponseError = (
-    | calculateStudentSchoolYearResultResponse400
-    | calculateStudentSchoolYearResultResponse500
-) & {
-    headers: Headers
-}
-
-export type calculateStudentSchoolYearResultResponse =
-    | calculateStudentSchoolYearResultResponseSuccess
-    | calculateStudentSchoolYearResultResponseError
-
-export const getCalculateStudentSchoolYearResultUrl = (
-    params: CalculateStudentSchoolYearResultParams
-) => {
-    const normalizedParams = new URLSearchParams()
-
-    Object.entries(params || {}).forEach(([key, value]) => {
-        if (value !== undefined) {
-            normalizedParams.append(key, value === null ? 'null' : value.toString())
-        }
-    })
-
-    const stringifiedParams = normalizedParams.toString()
-
-    return stringifiedParams.length > 0
-        ? `/api/student/calculate-student-school-year-result?${stringifiedParams}`
-        : `/api/student/calculate-student-school-year-result`
-}
-
-export const calculateStudentSchoolYearResult = async (
-    params: CalculateStudentSchoolYearResultParams,
-    options?: RequestInit
-): Promise<calculateStudentSchoolYearResultResponse> => {
-    return customTrainingFetch<calculateStudentSchoolYearResultResponse>(
-        getCalculateStudentSchoolYearResultUrl(params),
-        {
-            ...options,
-            method: 'POST',
-        }
-    )
-}
-
-export const getCalculateStudentSchoolYearResultMutationOptions = <
-    TError = CalculateStudentSchoolYearResult400 | CalculateStudentSchoolYearResult500,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof calculateStudentSchoolYearResult>>,
-        TError,
-        { params: CalculateStudentSchoolYearResultParams },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof calculateStudentSchoolYearResult>>,
-    TError,
-    { params: CalculateStudentSchoolYearResultParams },
-    TContext
-> => {
-    const mutationKey = ['calculateStudentSchoolYearResult']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof calculateStudentSchoolYearResult>>,
-        { params: CalculateStudentSchoolYearResultParams }
-    > = (props) => {
-        const { params } = props ?? {}
-
-        return calculateStudentSchoolYearResult(params, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type CalculateStudentSchoolYearResultMutationResult = NonNullable<
-    Awaited<ReturnType<typeof calculateStudentSchoolYearResult>>
->
-
-export type CalculateStudentSchoolYearResultMutationError =
-    | CalculateStudentSchoolYearResult400
-    | CalculateStudentSchoolYearResult500
-
-/**
- * @summary Tổng kết kết quả năm học của học viên, sinh viên
- */
-export const useCalculateStudentSchoolYearResult = <
-    TError = CalculateStudentSchoolYearResult400 | CalculateStudentSchoolYearResult500,
-    TContext = unknown,
->(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof calculateStudentSchoolYearResult>>,
-            TError,
-            { params: CalculateStudentSchoolYearResultParams },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof calculateStudentSchoolYearResult>>,
-    TError,
-    { params: CalculateStudentSchoolYearResultParams },
-    TContext
-> => {
-    const mutationOptions = getCalculateStudentSchoolYearResultMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type debtStatisticsResponse200 = {
-    data: Blob
-    status: 200
-}
-
-export type debtStatisticsResponse400 = {
-    data: DebtStatistics400
-    status: 400
-}
-
-export type debtStatisticsResponseSuccess = debtStatisticsResponse200 & {
-    headers: Headers
-}
-export type debtStatisticsResponseError = debtStatisticsResponse400 & {
-    headers: Headers
-}
-
-export type debtStatisticsResponse = debtStatisticsResponseSuccess | debtStatisticsResponseError
-
-export const getDebtStatisticsUrl = (params: DebtStatisticsParams) => {
-    const normalizedParams = new URLSearchParams()
-
-    Object.entries(params || {}).forEach(([key, value]) => {
-        if (value !== undefined) {
-            normalizedParams.append(key, value === null ? 'null' : value.toString())
-        }
-    })
-
-    const stringifiedParams = normalizedParams.toString()
-
-    return stringifiedParams.length > 0
-        ? `/api/student/debt-statistics?${stringifiedParams}`
-        : `/api/student/debt-statistics`
-}
-
-export const debtStatistics = async (
-    params: DebtStatisticsParams,
-    options?: RequestInit
-): Promise<debtStatisticsResponse> => {
-    return customTrainingFetch<debtStatisticsResponse>(getDebtStatisticsUrl(params), {
-        ...options,
-        method: 'GET',
-    })
-}
-
-export const getDebtStatisticsQueryKey = (params?: DebtStatisticsParams) => {
-    return [`/api/student/debt-statistics`, ...(params ? [params] : [])] as const
-}
-
-export const getDebtStatisticsQueryOptions = <
-    TData = Awaited<ReturnType<typeof debtStatistics>>,
-    TError = DebtStatistics400,
->(
-    params: DebtStatisticsParams,
-    options?: {
-        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof debtStatistics>>, TError, TData>>
-        request?: SecondParameter<typeof customTrainingFetch>
-    }
-) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
-
-    const queryKey = queryOptions?.queryKey ?? getDebtStatisticsQueryKey(params)
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof debtStatistics>>> = ({ signal }) =>
-        debtStatistics(params, { signal, ...requestOptions })
-
-    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-        Awaited<ReturnType<typeof debtStatistics>>,
-        TError,
-        TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type DebtStatisticsQueryResult = NonNullable<Awaited<ReturnType<typeof debtStatistics>>>
-export type DebtStatisticsQueryError = DebtStatistics400
-
-export function useDebtStatistics<
-    TData = Awaited<ReturnType<typeof debtStatistics>>,
-    TError = DebtStatistics400,
->(
-    params: DebtStatisticsParams,
-    options: {
-        query: Partial<UseQueryOptions<Awaited<ReturnType<typeof debtStatistics>>, TError, TData>> &
-            Pick<
-                DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof debtStatistics>>,
-                    TError,
-                    Awaited<ReturnType<typeof debtStatistics>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useDebtStatistics<
-    TData = Awaited<ReturnType<typeof debtStatistics>>,
-    TError = DebtStatistics400,
->(
-    params: DebtStatisticsParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof debtStatistics>>, TError, TData>
-        > &
-            Pick<
-                UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof debtStatistics>>,
-                    TError,
-                    Awaited<ReturnType<typeof debtStatistics>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useDebtStatistics<
-    TData = Awaited<ReturnType<typeof debtStatistics>>,
-    TError = DebtStatistics400,
->(
-    params: DebtStatisticsParams,
-    options?: {
-        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof debtStatistics>>, TError, TData>>
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useDebtStatistics<
-    TData = Awaited<ReturnType<typeof debtStatistics>>,
-    TError = DebtStatistics400,
->(
-    params: DebtStatisticsParams,
-    options?: {
-        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof debtStatistics>>, TError, TData>>
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getDebtStatisticsQueryOptions(params, options)
-
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-        queryKey: DataTag<QueryKey, TData, TError>
-    }
-
-    query.queryKey = queryOptions.queryKey
-
-    return query
-}
-
-export type downloadStudentImportTemplateResponse200 = {
-    data: Blob
-    status: 200
-}
-
-export type downloadStudentImportTemplateResponse404 = {
-    data: DownloadStudentImportTemplate404
-    status: 404
-}
-
-export type downloadStudentImportTemplateResponse500 = {
-    data: DownloadStudentImportTemplate500
-    status: 500
-}
-
-export type downloadStudentImportTemplateResponseSuccess =
-    downloadStudentImportTemplateResponse200 & {
-        headers: Headers
-    }
-export type downloadStudentImportTemplateResponseError = (
-    | downloadStudentImportTemplateResponse404
-    | downloadStudentImportTemplateResponse500
-) & {
-    headers: Headers
-}
-
-export type downloadStudentImportTemplateResponse =
-    | downloadStudentImportTemplateResponseSuccess
-    | downloadStudentImportTemplateResponseError
-
-export const getDownloadStudentImportTemplateUrl = (
-    params: DownloadStudentImportTemplateParams
-) => {
-    const normalizedParams = new URLSearchParams()
-
-    Object.entries(params || {}).forEach(([key, value]) => {
-        if (value !== undefined) {
-            normalizedParams.append(key, value === null ? 'null' : value.toString())
-        }
-    })
-
-    const stringifiedParams = normalizedParams.toString()
-
-    return stringifiedParams.length > 0
-        ? `/api/student/download-student-import-template?${stringifiedParams}`
-        : `/api/student/download-student-import-template`
-}
-
-export const downloadStudentImportTemplate = async (
-    params: DownloadStudentImportTemplateParams,
-    options?: RequestInit
-): Promise<downloadStudentImportTemplateResponse> => {
-    return customTrainingFetch<downloadStudentImportTemplateResponse>(
-        getDownloadStudentImportTemplateUrl(params),
-        {
-            ...options,
-            method: 'GET',
-        }
-    )
-}
-
-export const getDownloadStudentImportTemplateQueryKey = (
-    params?: DownloadStudentImportTemplateParams
-) => {
-    return [`/api/student/download-student-import-template`, ...(params ? [params] : [])] as const
-}
-
-export const getDownloadStudentImportTemplateQueryOptions = <
-    TData = Awaited<ReturnType<typeof downloadStudentImportTemplate>>,
-    TError = DownloadStudentImportTemplate404 | DownloadStudentImportTemplate500,
->(
-    params: DownloadStudentImportTemplateParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof downloadStudentImportTemplate>>,
-                TError,
-                TData
-            >
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    }
-) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
-
-    const queryKey = queryOptions?.queryKey ?? getDownloadStudentImportTemplateQueryKey(params)
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof downloadStudentImportTemplate>>> = ({
-        signal,
-    }) => downloadStudentImportTemplate(params, { signal, ...requestOptions })
-
-    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-        Awaited<ReturnType<typeof downloadStudentImportTemplate>>,
-        TError,
-        TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type DownloadStudentImportTemplateQueryResult = NonNullable<
-    Awaited<ReturnType<typeof downloadStudentImportTemplate>>
->
-export type DownloadStudentImportTemplateQueryError =
-    | DownloadStudentImportTemplate404
-    | DownloadStudentImportTemplate500
-
-export function useDownloadStudentImportTemplate<
-    TData = Awaited<ReturnType<typeof downloadStudentImportTemplate>>,
-    TError = DownloadStudentImportTemplate404 | DownloadStudentImportTemplate500,
->(
-    params: DownloadStudentImportTemplateParams,
-    options: {
-        query: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof downloadStudentImportTemplate>>,
-                TError,
-                TData
-            >
-        > &
-            Pick<
-                DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof downloadStudentImportTemplate>>,
-                    TError,
-                    Awaited<ReturnType<typeof downloadStudentImportTemplate>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useDownloadStudentImportTemplate<
-    TData = Awaited<ReturnType<typeof downloadStudentImportTemplate>>,
-    TError = DownloadStudentImportTemplate404 | DownloadStudentImportTemplate500,
->(
-    params: DownloadStudentImportTemplateParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof downloadStudentImportTemplate>>,
-                TError,
-                TData
-            >
-        > &
-            Pick<
-                UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof downloadStudentImportTemplate>>,
-                    TError,
-                    Awaited<ReturnType<typeof downloadStudentImportTemplate>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useDownloadStudentImportTemplate<
-    TData = Awaited<ReturnType<typeof downloadStudentImportTemplate>>,
-    TError = DownloadStudentImportTemplate404 | DownloadStudentImportTemplate500,
->(
-    params: DownloadStudentImportTemplateParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof downloadStudentImportTemplate>>,
-                TError,
-                TData
-            >
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useDownloadStudentImportTemplate<
-    TData = Awaited<ReturnType<typeof downloadStudentImportTemplate>>,
-    TError = DownloadStudentImportTemplate404 | DownloadStudentImportTemplate500,
->(
-    params: DownloadStudentImportTemplateParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof downloadStudentImportTemplate>>,
-                TError,
-                TData
-            >
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getDownloadStudentImportTemplateQueryOptions(params, options)
-
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-        queryKey: DataTag<QueryKey, TData, TError>
-    }
-
-    query.queryKey = queryOptions.queryKey
-
-    return query
-}
-
-export type exportStudentProfilesResponse200 = {
-    data: Blob
-    status: 200
-}
-
-export type exportStudentProfilesResponse404 = {
-    data: ExportStudentProfiles404
-    status: 404
-}
-
-export type exportStudentProfilesResponseSuccess = exportStudentProfilesResponse200 & {
-    headers: Headers
-}
-export type exportStudentProfilesResponseError = exportStudentProfilesResponse404 & {
-    headers: Headers
-}
-
-export type exportStudentProfilesResponse =
-    | exportStudentProfilesResponseSuccess
-    | exportStudentProfilesResponseError
-
-export const getExportStudentProfilesUrl = () => {
-    return `/api/student/export-student-profiles`
-}
-
-export const exportStudentProfiles = async (
-    exportStudentProfilesBody: ExportStudentProfilesBody,
-    options?: RequestInit
-): Promise<exportStudentProfilesResponse> => {
-    return customTrainingFetch<exportStudentProfilesResponse>(getExportStudentProfilesUrl(), {
-        ...options,
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', ...options?.headers },
-        body: JSON.stringify(exportStudentProfilesBody),
-    })
-}
-
-export const getExportStudentProfilesMutationOptions = <
-    TError = ExportStudentProfiles404,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof exportStudentProfiles>>,
-        TError,
-        { data: ExportStudentProfilesBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof exportStudentProfiles>>,
-    TError,
-    { data: ExportStudentProfilesBody },
-    TContext
-> => {
-    const mutationKey = ['exportStudentProfiles']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof exportStudentProfiles>>,
-        { data: ExportStudentProfilesBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return exportStudentProfiles(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type ExportStudentProfilesMutationResult = NonNullable<
-    Awaited<ReturnType<typeof exportStudentProfiles>>
->
-export type ExportStudentProfilesMutationBody = ExportStudentProfilesBody
-export type ExportStudentProfilesMutationError = ExportStudentProfiles404
-
-export const useExportStudentProfiles = <TError = ExportStudentProfiles404, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof exportStudentProfiles>>,
-            TError,
-            { data: ExportStudentProfilesBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof exportStudentProfiles>>,
-    TError,
-    { data: ExportStudentProfilesBody },
-    TContext
-> => {
-    const mutationOptions = getExportStudentProfilesMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type exportLecturerProfileResponse200 = {
-    data: Blob
-    status: 200
-}
-
-export type exportLecturerProfileResponse400 = {
-    data: ExportLecturerProfile400
-    status: 400
-}
-
-export type exportLecturerProfileResponseSuccess = exportLecturerProfileResponse200 & {
-    headers: Headers
-}
-export type exportLecturerProfileResponseError = exportLecturerProfileResponse400 & {
-    headers: Headers
-}
-
-export type exportLecturerProfileResponse =
-    | exportLecturerProfileResponseSuccess
-    | exportLecturerProfileResponseError
-
-export const getExportLecturerProfileUrl = () => {
-    return `/api/lecturer/export-lecturer-profile`
-}
-
-export const exportLecturerProfile = async (
-    exportLecturerProfileBody: ExportLecturerProfileBody,
-    options?: RequestInit
-): Promise<exportLecturerProfileResponse> => {
-    return customTrainingFetch<exportLecturerProfileResponse>(getExportLecturerProfileUrl(), {
-        ...options,
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', ...options?.headers },
-        body: JSON.stringify(exportLecturerProfileBody),
-    })
-}
-
-export const getExportLecturerProfileMutationOptions = <
-    TError = ExportLecturerProfile400,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof exportLecturerProfile>>,
-        TError,
-        { data: ExportLecturerProfileBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof exportLecturerProfile>>,
-    TError,
-    { data: ExportLecturerProfileBody },
-    TContext
-> => {
-    const mutationKey = ['exportLecturerProfile']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof exportLecturerProfile>>,
-        { data: ExportLecturerProfileBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return exportLecturerProfile(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type ExportLecturerProfileMutationResult = NonNullable<
-    Awaited<ReturnType<typeof exportLecturerProfile>>
->
-export type ExportLecturerProfileMutationBody = ExportLecturerProfileBody
-export type ExportLecturerProfileMutationError = ExportLecturerProfile400
-
-export const useExportLecturerProfile = <TError = ExportLecturerProfile400, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof exportLecturerProfile>>,
-            TError,
-            { data: ExportLecturerProfileBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof exportLecturerProfile>>,
-    TError,
-    { data: ExportLecturerProfileBody },
-    TContext
-> => {
-    const mutationOptions = getExportLecturerProfileMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type exportDiplomaVerificationResponse200 = {
-    data: Blob
-    status: 200
-}
-
-export type exportDiplomaVerificationResponse400 = {
-    data: ExportDiplomaVerification400
-    status: 400
-}
-
-export type exportDiplomaVerificationResponseSuccess = exportDiplomaVerificationResponse200 & {
-    headers: Headers
-}
-export type exportDiplomaVerificationResponseError = exportDiplomaVerificationResponse400 & {
-    headers: Headers
-}
-
-export type exportDiplomaVerificationResponse =
-    | exportDiplomaVerificationResponseSuccess
-    | exportDiplomaVerificationResponseError
-
-export const getExportDiplomaVerificationUrl = (params?: ExportDiplomaVerificationParams) => {
-    const normalizedParams = new URLSearchParams()
-
-    Object.entries(params || {}).forEach(([key, value]) => {
-        if (value !== undefined) {
-            normalizedParams.append(key, value === null ? 'null' : value.toString())
-        }
-    })
-
-    const stringifiedParams = normalizedParams.toString()
-
-    return stringifiedParams.length > 0
-        ? `/api/diploma-verification/export-diploma-verification?${stringifiedParams}`
-        : `/api/diploma-verification/export-diploma-verification`
-}
-
-export const exportDiplomaVerification = async (
-    params?: ExportDiplomaVerificationParams,
-    options?: RequestInit
-): Promise<exportDiplomaVerificationResponse> => {
-    return customTrainingFetch<exportDiplomaVerificationResponse>(
-        getExportDiplomaVerificationUrl(params),
-        {
-            ...options,
-            method: 'GET',
-        }
-    )
-}
-
-export const getExportDiplomaVerificationQueryKey = (params?: ExportDiplomaVerificationParams) => {
-    return [
-        `/api/diploma-verification/export-diploma-verification`,
-        ...(params ? [params] : []),
-    ] as const
-}
-
-export const getExportDiplomaVerificationQueryOptions = <
-    TData = Awaited<ReturnType<typeof exportDiplomaVerification>>,
-    TError = ExportDiplomaVerification400,
->(
-    params?: ExportDiplomaVerificationParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof exportDiplomaVerification>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    }
-) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
-
-    const queryKey = queryOptions?.queryKey ?? getExportDiplomaVerificationQueryKey(params)
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportDiplomaVerification>>> = ({
-        signal,
-    }) => exportDiplomaVerification(params, { signal, ...requestOptions })
-
-    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-        Awaited<ReturnType<typeof exportDiplomaVerification>>,
-        TError,
-        TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type ExportDiplomaVerificationQueryResult = NonNullable<
-    Awaited<ReturnType<typeof exportDiplomaVerification>>
->
-export type ExportDiplomaVerificationQueryError = ExportDiplomaVerification400
-
-export function useExportDiplomaVerification<
-    TData = Awaited<ReturnType<typeof exportDiplomaVerification>>,
-    TError = ExportDiplomaVerification400,
->(
-    params: undefined | ExportDiplomaVerificationParams,
-    options: {
-        query: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof exportDiplomaVerification>>, TError, TData>
-        > &
-            Pick<
-                DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof exportDiplomaVerification>>,
-                    TError,
-                    Awaited<ReturnType<typeof exportDiplomaVerification>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportDiplomaVerification<
-    TData = Awaited<ReturnType<typeof exportDiplomaVerification>>,
-    TError = ExportDiplomaVerification400,
->(
-    params?: ExportDiplomaVerificationParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof exportDiplomaVerification>>, TError, TData>
-        > &
-            Pick<
-                UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof exportDiplomaVerification>>,
-                    TError,
-                    Awaited<ReturnType<typeof exportDiplomaVerification>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportDiplomaVerification<
-    TData = Awaited<ReturnType<typeof exportDiplomaVerification>>,
-    TError = ExportDiplomaVerification400,
->(
-    params?: ExportDiplomaVerificationParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof exportDiplomaVerification>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useExportDiplomaVerification<
-    TData = Awaited<ReturnType<typeof exportDiplomaVerification>>,
-    TError = ExportDiplomaVerification400,
->(
-    params?: ExportDiplomaVerificationParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof exportDiplomaVerification>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getExportDiplomaVerificationQueryOptions(params, options)
-
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-        queryKey: DataTag<QueryKey, TData, TError>
-    }
-
-    query.queryKey = queryOptions.queryKey
-
-    return query
-}
-
-/**
- * Import điểm rèn luyện lớp biên chế 
-
- [fixedClassId] là id của lớp biên chế, 
-
- [trainingSessionId] là id của đợt đánh giá
- * @summary Import file nhập điểm rèn luyện
- */
-export type uploadExcelImportTrainingScoreResponse200 = {
-    data: UploadExcelImportTrainingScore200
-    status: 200
-}
-
-export type uploadExcelImportTrainingScoreResponse400 = {
-    data: UploadExcelImportTrainingScore400
-    status: 400
-}
-
-export type uploadExcelImportTrainingScoreResponseSuccess =
-    uploadExcelImportTrainingScoreResponse200 & {
-        headers: Headers
-    }
-export type uploadExcelImportTrainingScoreResponseError =
-    uploadExcelImportTrainingScoreResponse400 & {
-        headers: Headers
-    }
-
-export type uploadExcelImportTrainingScoreResponse =
-    | uploadExcelImportTrainingScoreResponseSuccess
-    | uploadExcelImportTrainingScoreResponseError
-
-export const getUploadExcelImportTrainingScoreUrl = () => {
-    return `/api/training-score/upload-excel-import-score`
-}
-
-export const uploadExcelImportTrainingScore = async (
-    uploadExcelImportTrainingScore: UploadExcelImportTrainingScore,
-    options?: RequestInit
-): Promise<uploadExcelImportTrainingScoreResponse> => {
-    const formData = new FormData()
-    formData.append(`file`, uploadExcelImportTrainingScore.file)
-    formData.append(`fixedClassId`, uploadExcelImportTrainingScore.fixedClassId)
-    formData.append(`trainingSessionId`, uploadExcelImportTrainingScore.trainingSessionId)
-
-    return customTrainingFetch<uploadExcelImportTrainingScoreResponse>(
-        getUploadExcelImportTrainingScoreUrl(),
-        {
-            ...options,
-            method: 'POST',
-            body: formData,
-        }
-    )
-}
-
-export const getUploadExcelImportTrainingScoreMutationOptions = <
-    TError = UploadExcelImportTrainingScore400,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof uploadExcelImportTrainingScore>>,
-        TError,
-        { data: UploadExcelImportTrainingScore },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof uploadExcelImportTrainingScore>>,
-    TError,
-    { data: UploadExcelImportTrainingScore },
-    TContext
-> => {
-    const mutationKey = ['uploadExcelImportTrainingScore']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof uploadExcelImportTrainingScore>>,
-        { data: UploadExcelImportTrainingScore }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return uploadExcelImportTrainingScore(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type UploadExcelImportTrainingScoreMutationResult = NonNullable<
-    Awaited<ReturnType<typeof uploadExcelImportTrainingScore>>
->
-export type UploadExcelImportTrainingScoreMutationBody = UploadExcelImportTrainingScore
-export type UploadExcelImportTrainingScoreMutationError = UploadExcelImportTrainingScore400
-
-/**
- * @summary Import file nhập điểm rèn luyện
- */
-export const useUploadExcelImportTrainingScore = <
-    TError = UploadExcelImportTrainingScore400,
-    TContext = unknown,
->(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof uploadExcelImportTrainingScore>>,
-            TError,
-            { data: UploadExcelImportTrainingScore },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof uploadExcelImportTrainingScore>>,
-    TError,
-    { data: UploadExcelImportTrainingScore },
-    TContext
-> => {
-    const mutationOptions = getUploadExcelImportTrainingScoreMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type importPhienBanCTDTResponse200 = {
-    data: ImportPhienBanCTDT200
-    status: 200
-}
-
-export type importPhienBanCTDTResponse400 = {
-    data: ImportPhienBanCTDT400
-    status: 400
-}
-
-export type importPhienBanCTDTResponseSuccess = importPhienBanCTDTResponse200 & {
-    headers: Headers
-}
-export type importPhienBanCTDTResponseError = importPhienBanCTDTResponse400 & {
-    headers: Headers
-}
-
-export type importPhienBanCTDTResponse =
-    | importPhienBanCTDTResponseSuccess
-    | importPhienBanCTDTResponseError
-
-export const getImportPhienBanCTDTUrl = (curriculumVersionId: string) => {
-    return `/api/curriculum/import-phien-ban-ctdt/${curriculumVersionId}`
-}
-
-export const importPhienBanCTDT = async (
-    curriculumVersionId: string,
-    importPhienBanCTDT: ImportPhienBanCTDT,
-    options?: RequestInit
-): Promise<importPhienBanCTDTResponse> => {
-    const formData = new FormData()
-    formData.append(`file`, importPhienBanCTDT.file)
-    if (importPhienBanCTDT.timeout !== undefined && importPhienBanCTDT.timeout !== null) {
-        formData.append(`timeout`, importPhienBanCTDT.timeout.toString())
-    }
-
-    return customTrainingFetch<importPhienBanCTDTResponse>(
-        getImportPhienBanCTDTUrl(curriculumVersionId),
-        {
-            ...options,
-            method: 'POST',
-            body: formData,
-        }
-    )
-}
-
-export const getImportPhienBanCTDTMutationOptions = <
-    TError = ImportPhienBanCTDT400,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof importPhienBanCTDT>>,
-        TError,
-        { curriculumVersionId: string; data: ImportPhienBanCTDT },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof importPhienBanCTDT>>,
-    TError,
-    { curriculumVersionId: string; data: ImportPhienBanCTDT },
-    TContext
-> => {
-    const mutationKey = ['importPhienBanCTDT']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof importPhienBanCTDT>>,
-        { curriculumVersionId: string; data: ImportPhienBanCTDT }
-    > = (props) => {
-        const { curriculumVersionId, data } = props ?? {}
-
-        return importPhienBanCTDT(curriculumVersionId, data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type ImportPhienBanCTDTMutationResult = NonNullable<
-    Awaited<ReturnType<typeof importPhienBanCTDT>>
->
-export type ImportPhienBanCTDTMutationBody = ImportPhienBanCTDT
-export type ImportPhienBanCTDTMutationError = ImportPhienBanCTDT400
-
-export const useImportPhienBanCTDT = <TError = ImportPhienBanCTDT400, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof importPhienBanCTDT>>,
-            TError,
-            { curriculumVersionId: string; data: ImportPhienBanCTDT },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof importPhienBanCTDT>>,
-    TError,
-    { curriculumVersionId: string; data: ImportPhienBanCTDT },
-    TContext
-> => {
-    const mutationOptions = getImportPhienBanCTDTMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type importPhienBanCTDTSubjectResponse200 = {
-    data: ImportPhienBanCTDTSubject200
-    status: 200
-}
-
-export type importPhienBanCTDTSubjectResponse400 = {
-    data: ImportPhienBanCTDTSubject400
-    status: 400
-}
-
-export type importPhienBanCTDTSubjectResponseSuccess = importPhienBanCTDTSubjectResponse200 & {
-    headers: Headers
-}
-export type importPhienBanCTDTSubjectResponseError = importPhienBanCTDTSubjectResponse400 & {
-    headers: Headers
-}
-
-export type importPhienBanCTDTSubjectResponse =
-    | importPhienBanCTDTSubjectResponseSuccess
-    | importPhienBanCTDTSubjectResponseError
-
-export const getImportPhienBanCTDTSubjectUrl = () => {
-    return `/api/curriculum-subject/import-phien-ban-ctdt-subject`
-}
-
-export const importPhienBanCTDTSubject = async (
-    importPhienBanCTDTSubjectBody: ImportPhienBanCTDTSubjectBody,
-    options?: RequestInit
-): Promise<importPhienBanCTDTSubjectResponse> => {
-    const formData = new FormData()
-    formData.append(`file`, importPhienBanCTDTSubjectBody.file)
-    formData.append(`trainingObjectTypeId`, importPhienBanCTDTSubjectBody.trainingObjectTypeId)
-    formData.append(`curriculumVersionId`, importPhienBanCTDTSubjectBody.curriculumVersionId)
-    if (
-        importPhienBanCTDTSubjectBody.createNewSubjects !== undefined &&
-        importPhienBanCTDTSubjectBody.createNewSubjects !== null
-    ) {
-        formData.append(
-            `createNewSubjects`,
-            importPhienBanCTDTSubjectBody.createNewSubjects.toString()
-        )
-    }
-    if (
-        importPhienBanCTDTSubjectBody.deleteOldData !== undefined &&
-        importPhienBanCTDTSubjectBody.deleteOldData !== null
-    ) {
-        formData.append(`deleteOldData`, importPhienBanCTDTSubjectBody.deleteOldData.toString())
-    }
-    if (
-        importPhienBanCTDTSubjectBody.timeout !== undefined &&
-        importPhienBanCTDTSubjectBody.timeout !== null
-    ) {
-        formData.append(`timeout`, importPhienBanCTDTSubjectBody.timeout.toString())
-    }
-
-    return customTrainingFetch<importPhienBanCTDTSubjectResponse>(
-        getImportPhienBanCTDTSubjectUrl(),
-        {
-            ...options,
-            method: 'POST',
-            body: formData,
-        }
-    )
-}
-
-export const getImportPhienBanCTDTSubjectMutationOptions = <
-    TError = ImportPhienBanCTDTSubject400,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof importPhienBanCTDTSubject>>,
-        TError,
-        { data: ImportPhienBanCTDTSubjectBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof importPhienBanCTDTSubject>>,
-    TError,
-    { data: ImportPhienBanCTDTSubjectBody },
-    TContext
-> => {
-    const mutationKey = ['importPhienBanCTDTSubject']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof importPhienBanCTDTSubject>>,
-        { data: ImportPhienBanCTDTSubjectBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return importPhienBanCTDTSubject(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type ImportPhienBanCTDTSubjectMutationResult = NonNullable<
-    Awaited<ReturnType<typeof importPhienBanCTDTSubject>>
->
-export type ImportPhienBanCTDTSubjectMutationBody = ImportPhienBanCTDTSubjectBody
-export type ImportPhienBanCTDTSubjectMutationError = ImportPhienBanCTDTSubject400
-
-export const useImportPhienBanCTDTSubject = <
-    TError = ImportPhienBanCTDTSubject400,
-    TContext = unknown,
->(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof importPhienBanCTDTSubject>>,
-            TError,
-            { data: ImportPhienBanCTDTSubjectBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof importPhienBanCTDTSubject>>,
-    TError,
-    { data: ImportPhienBanCTDTSubjectBody },
-    TContext
-> => {
-    const mutationOptions = getImportPhienBanCTDTSubjectMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type graduationApplicationInitResponse200 = {
-    data: GraduationApplicationInit200
-    status: 200
-}
-
-export type graduationApplicationInitResponse400 = {
-    data: GraduationApplicationInit400
-    status: 400
-}
-
-export type graduationApplicationInitResponseSuccess = graduationApplicationInitResponse200 & {
-    headers: Headers
-}
-export type graduationApplicationInitResponseError = graduationApplicationInitResponse400 & {
-    headers: Headers
-}
-
-export type graduationApplicationInitResponse =
-    | graduationApplicationInitResponseSuccess
-    | graduationApplicationInitResponseError
-
-export const getGraduationApplicationInitUrl = () => {
-    return `/api/graduation/application-init`
-}
-
-export const graduationApplicationInit = async (
-    graduationApplicationInitBody: GraduationApplicationInitBody,
-    options?: RequestInit
-): Promise<graduationApplicationInitResponse> => {
-    return customTrainingFetch<graduationApplicationInitResponse>(
-        getGraduationApplicationInitUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(graduationApplicationInitBody),
-        }
-    )
-}
-
-export const getGraduationApplicationInitMutationOptions = <
-    TError = GraduationApplicationInit400,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof graduationApplicationInit>>,
-        TError,
-        { data: GraduationApplicationInitBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof graduationApplicationInit>>,
-    TError,
-    { data: GraduationApplicationInitBody },
-    TContext
-> => {
-    const mutationKey = ['graduationApplicationInit']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof graduationApplicationInit>>,
-        { data: GraduationApplicationInitBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return graduationApplicationInit(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type GraduationApplicationInitMutationResult = NonNullable<
-    Awaited<ReturnType<typeof graduationApplicationInit>>
->
-export type GraduationApplicationInitMutationBody = GraduationApplicationInitBody
-export type GraduationApplicationInitMutationError = GraduationApplicationInit400
-
-export const useGraduationApplicationInit = <
-    TError = GraduationApplicationInit400,
-    TContext = unknown,
->(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof graduationApplicationInit>>,
-            TError,
-            { data: GraduationApplicationInitBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof graduationApplicationInit>>,
-    TError,
-    { data: GraduationApplicationInitBody },
-    TContext
-> => {
-    const mutationOptions = getGraduationApplicationInitMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type graduationCheckResponse200 = {
-    data: GraduationCheck200
-    status: 200
-}
-
-export type graduationCheckResponse400 = {
-    data: GraduationCheck400
-    status: 400
-}
-
-export type graduationCheckResponseSuccess = graduationCheckResponse200 & {
-    headers: Headers
-}
-export type graduationCheckResponseError = graduationCheckResponse400 & {
-    headers: Headers
-}
-
-export type graduationCheckResponse = graduationCheckResponseSuccess | graduationCheckResponseError
-
-export const getGraduationCheckUrl = () => {
-    return `/api/graduation/check`
-}
-
-export const graduationCheck = async (
-    graduationCheckBody: GraduationCheckBody,
-    options?: RequestInit
-): Promise<graduationCheckResponse> => {
-    return customTrainingFetch<graduationCheckResponse>(getGraduationCheckUrl(), {
-        ...options,
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', ...options?.headers },
-        body: JSON.stringify(graduationCheckBody),
-    })
-}
-
-export const getGraduationCheckMutationOptions = <
-    TError = GraduationCheck400,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof graduationCheck>>,
-        TError,
-        { data: GraduationCheckBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof graduationCheck>>,
-    TError,
-    { data: GraduationCheckBody },
-    TContext
-> => {
-    const mutationKey = ['graduationCheck']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof graduationCheck>>,
-        { data: GraduationCheckBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return graduationCheck(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type GraduationCheckMutationResult = NonNullable<Awaited<ReturnType<typeof graduationCheck>>>
-export type GraduationCheckMutationBody = GraduationCheckBody
-export type GraduationCheckMutationError = GraduationCheck400
-
-export const useGraduationCheck = <TError = GraduationCheck400, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof graduationCheck>>,
-            TError,
-            { data: GraduationCheckBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof graduationCheck>>,
-    TError,
-    { data: GraduationCheckBody },
-    TContext
-> => {
-    const mutationOptions = getGraduationCheckMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type generateDiplomaNumberResponse200 = {
-    data: GenerateDiplomaNumber200
-    status: 200
-}
-
-export type generateDiplomaNumberResponse400 = {
-    data: GenerateDiplomaNumber400
-    status: 400
-}
-
-export type generateDiplomaNumberResponse404 = {
-    data: GenerateDiplomaNumber404
-    status: 404
-}
-
-export type generateDiplomaNumberResponseSuccess = generateDiplomaNumberResponse200 & {
-    headers: Headers
-}
-export type generateDiplomaNumberResponseError = (
-    | generateDiplomaNumberResponse400
-    | generateDiplomaNumberResponse404
-) & {
-    headers: Headers
-}
-
-export type generateDiplomaNumberResponse =
-    | generateDiplomaNumberResponseSuccess
-    | generateDiplomaNumberResponseError
-
-export const getGenerateDiplomaNumberUrl = () => {
-    return `/api/graduation/generate-diploma-number`
-}
-
-export const generateDiplomaNumber = async (
-    generateDiplomaNumberBody: GenerateDiplomaNumberBody,
-    options?: RequestInit
-): Promise<generateDiplomaNumberResponse> => {
-    return customTrainingFetch<generateDiplomaNumberResponse>(getGenerateDiplomaNumberUrl(), {
-        ...options,
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', ...options?.headers },
-        body: JSON.stringify(generateDiplomaNumberBody),
-    })
-}
-
-export const getGenerateDiplomaNumberMutationOptions = <
-    TError = GenerateDiplomaNumber400 | GenerateDiplomaNumber404,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof generateDiplomaNumber>>,
-        TError,
-        { data: GenerateDiplomaNumberBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof generateDiplomaNumber>>,
-    TError,
-    { data: GenerateDiplomaNumberBody },
-    TContext
-> => {
-    const mutationKey = ['generateDiplomaNumber']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof generateDiplomaNumber>>,
-        { data: GenerateDiplomaNumberBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return generateDiplomaNumber(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type GenerateDiplomaNumberMutationResult = NonNullable<
-    Awaited<ReturnType<typeof generateDiplomaNumber>>
->
-export type GenerateDiplomaNumberMutationBody = GenerateDiplomaNumberBody
-export type GenerateDiplomaNumberMutationError = GenerateDiplomaNumber400 | GenerateDiplomaNumber404
-
-export const useGenerateDiplomaNumber = <
-    TError = GenerateDiplomaNumber400 | GenerateDiplomaNumber404,
-    TContext = unknown,
->(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof generateDiplomaNumber>>,
-            TError,
-            { data: GenerateDiplomaNumberBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof generateDiplomaNumber>>,
-    TError,
-    { data: GenerateDiplomaNumberBody },
-    TContext
-> => {
-    const mutationOptions = getGenerateDiplomaNumberMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type graduationSessionDecisionResponse200 = {
-    data: Blob
-    status: 200
-}
-
-export type graduationSessionDecisionResponse404 = {
-    data: GraduationSessionDecision404
-    status: 404
-}
-
-export type graduationSessionDecisionResponseSuccess = graduationSessionDecisionResponse200 & {
-    headers: Headers
-}
-export type graduationSessionDecisionResponseError = graduationSessionDecisionResponse404 & {
-    headers: Headers
-}
-
-export type graduationSessionDecisionResponse =
-    | graduationSessionDecisionResponseSuccess
-    | graduationSessionDecisionResponseError
-
-export const getGraduationSessionDecisionUrl = (params: GraduationSessionDecisionParams) => {
-    const normalizedParams = new URLSearchParams()
-
-    Object.entries(params || {}).forEach(([key, value]) => {
-        if (value !== undefined) {
-            normalizedParams.append(key, value === null ? 'null' : value.toString())
-        }
-    })
-
-    const stringifiedParams = normalizedParams.toString()
-
-    return stringifiedParams.length > 0
-        ? `/api/graduation/session-decision?${stringifiedParams}`
-        : `/api/graduation/session-decision`
-}
-
-export const graduationSessionDecision = async (
-    params: GraduationSessionDecisionParams,
-    options?: RequestInit
-): Promise<graduationSessionDecisionResponse> => {
-    return customTrainingFetch<graduationSessionDecisionResponse>(
-        getGraduationSessionDecisionUrl(params),
-        {
-            ...options,
-            method: 'GET',
-        }
-    )
-}
-
-export const getGraduationSessionDecisionQueryKey = (params?: GraduationSessionDecisionParams) => {
-    return [`/api/graduation/session-decision`, ...(params ? [params] : [])] as const
-}
-
-export const getGraduationSessionDecisionQueryOptions = <
-    TData = Awaited<ReturnType<typeof graduationSessionDecision>>,
-    TError = GraduationSessionDecision404,
->(
-    params: GraduationSessionDecisionParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof graduationSessionDecision>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    }
-) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
-
-    const queryKey = queryOptions?.queryKey ?? getGraduationSessionDecisionQueryKey(params)
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof graduationSessionDecision>>> = ({
-        signal,
-    }) => graduationSessionDecision(params, { signal, ...requestOptions })
-
-    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-        Awaited<ReturnType<typeof graduationSessionDecision>>,
-        TError,
-        TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GraduationSessionDecisionQueryResult = NonNullable<
-    Awaited<ReturnType<typeof graduationSessionDecision>>
->
-export type GraduationSessionDecisionQueryError = GraduationSessionDecision404
-
-export function useGraduationSessionDecision<
-    TData = Awaited<ReturnType<typeof graduationSessionDecision>>,
-    TError = GraduationSessionDecision404,
->(
-    params: GraduationSessionDecisionParams,
-    options: {
-        query: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof graduationSessionDecision>>, TError, TData>
-        > &
-            Pick<
-                DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof graduationSessionDecision>>,
-                    TError,
-                    Awaited<ReturnType<typeof graduationSessionDecision>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGraduationSessionDecision<
-    TData = Awaited<ReturnType<typeof graduationSessionDecision>>,
-    TError = GraduationSessionDecision404,
->(
-    params: GraduationSessionDecisionParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof graduationSessionDecision>>, TError, TData>
-        > &
-            Pick<
-                UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof graduationSessionDecision>>,
-                    TError,
-                    Awaited<ReturnType<typeof graduationSessionDecision>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGraduationSessionDecision<
-    TData = Awaited<ReturnType<typeof graduationSessionDecision>>,
-    TError = GraduationSessionDecision404,
->(
-    params: GraduationSessionDecisionParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof graduationSessionDecision>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useGraduationSessionDecision<
-    TData = Awaited<ReturnType<typeof graduationSessionDecision>>,
-    TError = GraduationSessionDecision404,
->(
-    params: GraduationSessionDecisionParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof graduationSessionDecision>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getGraduationSessionDecisionQueryOptions(params, options)
-
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-        queryKey: DataTag<QueryKey, TData, TError>
-    }
-
-    query.queryKey = queryOptions.queryKey
-
-    return query
-}
-
-export type statisticsGraduationDecisionResponse200 = {
-    data: StatisticsGraduationDecision200Item[]
-    status: 200
-}
-
-export type statisticsGraduationDecisionResponse404 = {
-    data: StatisticsGraduationDecision404
-    status: 404
-}
-
-export type statisticsGraduationDecisionResponseSuccess =
-    statisticsGraduationDecisionResponse200 & {
-        headers: Headers
-    }
-export type statisticsGraduationDecisionResponseError = statisticsGraduationDecisionResponse404 & {
-    headers: Headers
-}
-
-export type statisticsGraduationDecisionResponse =
-    | statisticsGraduationDecisionResponseSuccess
-    | statisticsGraduationDecisionResponseError
-
-export const getStatisticsGraduationDecisionUrl = (params: StatisticsGraduationDecisionParams) => {
-    const normalizedParams = new URLSearchParams()
-
-    Object.entries(params || {}).forEach(([key, value]) => {
-        if (value !== undefined) {
-            normalizedParams.append(key, value === null ? 'null' : value.toString())
-        }
-    })
-
-    const stringifiedParams = normalizedParams.toString()
-
-    return stringifiedParams.length > 0
-        ? `/api/graduation/statistics?${stringifiedParams}`
-        : `/api/graduation/statistics`
-}
-
-export const statisticsGraduationDecision = async (
-    params: StatisticsGraduationDecisionParams,
-    options?: RequestInit
-): Promise<statisticsGraduationDecisionResponse> => {
-    return customTrainingFetch<statisticsGraduationDecisionResponse>(
-        getStatisticsGraduationDecisionUrl(params),
-        {
-            ...options,
-            method: 'GET',
-        }
-    )
-}
-
-export const getStatisticsGraduationDecisionQueryKey = (
-    params?: StatisticsGraduationDecisionParams
-) => {
-    return [`/api/graduation/statistics`, ...(params ? [params] : [])] as const
-}
-
-export const getStatisticsGraduationDecisionQueryOptions = <
-    TData = Awaited<ReturnType<typeof statisticsGraduationDecision>>,
-    TError = StatisticsGraduationDecision404,
->(
-    params: StatisticsGraduationDecisionParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof statisticsGraduationDecision>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    }
-) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
-
-    const queryKey = queryOptions?.queryKey ?? getStatisticsGraduationDecisionQueryKey(params)
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof statisticsGraduationDecision>>> = ({
-        signal,
-    }) => statisticsGraduationDecision(params, { signal, ...requestOptions })
-
-    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-        Awaited<ReturnType<typeof statisticsGraduationDecision>>,
-        TError,
-        TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type StatisticsGraduationDecisionQueryResult = NonNullable<
-    Awaited<ReturnType<typeof statisticsGraduationDecision>>
->
-export type StatisticsGraduationDecisionQueryError = StatisticsGraduationDecision404
-
-export function useStatisticsGraduationDecision<
-    TData = Awaited<ReturnType<typeof statisticsGraduationDecision>>,
-    TError = StatisticsGraduationDecision404,
->(
-    params: StatisticsGraduationDecisionParams,
-    options: {
-        query: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof statisticsGraduationDecision>>, TError, TData>
-        > &
-            Pick<
-                DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof statisticsGraduationDecision>>,
-                    TError,
-                    Awaited<ReturnType<typeof statisticsGraduationDecision>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useStatisticsGraduationDecision<
-    TData = Awaited<ReturnType<typeof statisticsGraduationDecision>>,
-    TError = StatisticsGraduationDecision404,
->(
-    params: StatisticsGraduationDecisionParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof statisticsGraduationDecision>>, TError, TData>
-        > &
-            Pick<
-                UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof statisticsGraduationDecision>>,
-                    TError,
-                    Awaited<ReturnType<typeof statisticsGraduationDecision>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useStatisticsGraduationDecision<
-    TData = Awaited<ReturnType<typeof statisticsGraduationDecision>>,
-    TError = StatisticsGraduationDecision404,
->(
-    params: StatisticsGraduationDecisionParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof statisticsGraduationDecision>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useStatisticsGraduationDecision<
-    TData = Awaited<ReturnType<typeof statisticsGraduationDecision>>,
-    TError = StatisticsGraduationDecision404,
->(
-    params: StatisticsGraduationDecisionParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof statisticsGraduationDecision>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getStatisticsGraduationDecisionQueryOptions(params, options)
-
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-        queryKey: DataTag<QueryKey, TData, TError>
-    }
-
-    query.queryKey = queryOptions.queryKey
-
-    return query
-}
-
-export type exportGraduationDecisionPptxResponse200 = {
-    data: Blob
-    status: 200
-}
-
-export type exportGraduationDecisionPptxResponse400 = {
-    data: ExportGraduationDecisionPptx400
-    status: 400
-}
-
-export type exportGraduationDecisionPptxResponseSuccess =
-    exportGraduationDecisionPptxResponse200 & {
-        headers: Headers
-    }
-export type exportGraduationDecisionPptxResponseError = exportGraduationDecisionPptxResponse400 & {
-    headers: Headers
-}
-
-export type exportGraduationDecisionPptxResponse =
-    | exportGraduationDecisionPptxResponseSuccess
-    | exportGraduationDecisionPptxResponseError
-
-export const getExportGraduationDecisionPptxUrl = () => {
-    return `/api/graduation/export-graduation-decision-pptx`
-}
-
-export const exportGraduationDecisionPptx = async (
-    exportGraduationDecisionPptxBody: ExportGraduationDecisionPptxBody,
-    options?: RequestInit
-): Promise<exportGraduationDecisionPptxResponse> => {
-    const formData = new FormData()
-    if (exportGraduationDecisionPptxBody.file !== undefined) {
-        formData.append(`file`, exportGraduationDecisionPptxBody.file)
-    }
-    if (exportGraduationDecisionPptxBody.sessionId !== undefined) {
-        formData.append(`sessionId`, exportGraduationDecisionPptxBody.sessionId)
-    }
-    if (
-        exportGraduationDecisionPptxBody.timeout !== undefined &&
-        exportGraduationDecisionPptxBody.timeout !== null
-    ) {
-        formData.append(`timeout`, exportGraduationDecisionPptxBody.timeout.toString())
-    }
-
-    return customTrainingFetch<exportGraduationDecisionPptxResponse>(
-        getExportGraduationDecisionPptxUrl(),
-        {
-            ...options,
-            method: 'POST',
-            body: formData,
-        }
-    )
-}
-
-export const getExportGraduationDecisionPptxMutationOptions = <
-    TError = ExportGraduationDecisionPptx400,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof exportGraduationDecisionPptx>>,
-        TError,
-        { data: ExportGraduationDecisionPptxBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof exportGraduationDecisionPptx>>,
-    TError,
-    { data: ExportGraduationDecisionPptxBody },
-    TContext
-> => {
-    const mutationKey = ['exportGraduationDecisionPptx']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof exportGraduationDecisionPptx>>,
-        { data: ExportGraduationDecisionPptxBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return exportGraduationDecisionPptx(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type ExportGraduationDecisionPptxMutationResult = NonNullable<
-    Awaited<ReturnType<typeof exportGraduationDecisionPptx>>
->
-export type ExportGraduationDecisionPptxMutationBody = ExportGraduationDecisionPptxBody
-export type ExportGraduationDecisionPptxMutationError = ExportGraduationDecisionPptx400
-
-export const useExportGraduationDecisionPptx = <
-    TError = ExportGraduationDecisionPptx400,
-    TContext = unknown,
->(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof exportGraduationDecisionPptx>>,
-            TError,
-            { data: ExportGraduationDecisionPptxBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof exportGraduationDecisionPptx>>,
-    TError,
-    { data: ExportGraduationDecisionPptxBody },
-    TContext
-> => {
-    const mutationOptions = getExportGraduationDecisionPptxMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type exportInternshipProfileResponse200 = {
-    data: Blob
-    status: 200
-}
-
-export type exportInternshipProfileResponse400 = {
-    data: ExportInternshipProfile400
-    status: 400
-}
-
-export type exportInternshipProfileResponseSuccess = exportInternshipProfileResponse200 & {
-    headers: Headers
-}
-export type exportInternshipProfileResponseError = exportInternshipProfileResponse400 & {
-    headers: Headers
-}
-
-export type exportInternshipProfileResponse =
-    | exportInternshipProfileResponseSuccess
-    | exportInternshipProfileResponseError
-
-export const getExportInternshipProfileUrl = () => {
-    return `/api/internship/export-internship-profile`
-}
-
-export const exportInternshipProfile = async (
-    exportInternshipProfileBody: ExportInternshipProfileBody,
-    options?: RequestInit
-): Promise<exportInternshipProfileResponse> => {
-    return customTrainingFetch<exportInternshipProfileResponse>(getExportInternshipProfileUrl(), {
-        ...options,
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', ...options?.headers },
-        body: JSON.stringify(exportInternshipProfileBody),
-    })
-}
-
-export const getExportInternshipProfileMutationOptions = <
-    TError = ExportInternshipProfile400,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof exportInternshipProfile>>,
-        TError,
-        { data: ExportInternshipProfileBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof exportInternshipProfile>>,
-    TError,
-    { data: ExportInternshipProfileBody },
-    TContext
-> => {
-    const mutationKey = ['exportInternshipProfile']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof exportInternshipProfile>>,
-        { data: ExportInternshipProfileBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return exportInternshipProfile(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type ExportInternshipProfileMutationResult = NonNullable<
-    Awaited<ReturnType<typeof exportInternshipProfile>>
->
-export type ExportInternshipProfileMutationBody = ExportInternshipProfileBody
-export type ExportInternshipProfileMutationError = ExportInternshipProfile400
-
-export const useExportInternshipProfile = <TError = ExportInternshipProfile400, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof exportInternshipProfile>>,
-            TError,
-            { data: ExportInternshipProfileBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof exportInternshipProfile>>,
-    TError,
-    { data: ExportInternshipProfileBody },
-    TContext
-> => {
-    const mutationOptions = getExportInternshipProfileMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-/**
- * Nhập file excel danh sách phân công giảng dạy
- * @summary Import danh sách phân công giảng dạy
- */
-export type importPhanCongGiangDayResponse200 = {
-    data: ImportPhanCongGiangDay200
-    status: 200
-}
-
-export type importPhanCongGiangDayResponse400 = {
-    data: ImportPhanCongGiangDay400
-    status: 400
-}
-
-export type importPhanCongGiangDayResponseSuccess = importPhanCongGiangDayResponse200 & {
-    headers: Headers
-}
-export type importPhanCongGiangDayResponseError = importPhanCongGiangDayResponse400 & {
-    headers: Headers
-}
-
-export type importPhanCongGiangDayResponse =
-    | importPhanCongGiangDayResponseSuccess
-    | importPhanCongGiangDayResponseError
-
-export const getImportPhanCongGiangDayUrl = () => {
-    return `/api/plan-training/import-phan-cong-giang-day`
-}
-
-export const importPhanCongGiangDay = async (
-    importPhanCongGiangDay: ImportPhanCongGiangDay,
-    options?: RequestInit
-): Promise<importPhanCongGiangDayResponse> => {
-    const formData = new FormData()
-    formData.append(`file`, importPhanCongGiangDay.file)
-    formData.append(`semesterId`, importPhanCongGiangDay.semesterId)
-    formData.append(`trainingObjectTypeId`, importPhanCongGiangDay.trainingObjectTypeId)
-    if (importPhanCongGiangDay.fileType !== undefined) {
-        formData.append(`fileType`, importPhanCongGiangDay.fileType)
-    }
-    if (importPhanCongGiangDay.importType !== undefined) {
-        formData.append(`importType`, importPhanCongGiangDay.importType)
-    }
-    if (importPhanCongGiangDay.type !== undefined) {
-        formData.append(`type`, importPhanCongGiangDay.type)
-    }
-
-    return customTrainingFetch<importPhanCongGiangDayResponse>(getImportPhanCongGiangDayUrl(), {
-        ...options,
-        method: 'POST',
-        body: formData,
-    })
-}
-
-export const getImportPhanCongGiangDayMutationOptions = <
-    TError = ImportPhanCongGiangDay400,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof importPhanCongGiangDay>>,
-        TError,
-        { data: ImportPhanCongGiangDay },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof importPhanCongGiangDay>>,
-    TError,
-    { data: ImportPhanCongGiangDay },
-    TContext
-> => {
-    const mutationKey = ['importPhanCongGiangDay']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof importPhanCongGiangDay>>,
-        { data: ImportPhanCongGiangDay }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return importPhanCongGiangDay(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type ImportPhanCongGiangDayMutationResult = NonNullable<
-    Awaited<ReturnType<typeof importPhanCongGiangDay>>
->
-export type ImportPhanCongGiangDayMutationBody = ImportPhanCongGiangDay
-export type ImportPhanCongGiangDayMutationError = ImportPhanCongGiangDay400
-
-/**
- * @summary Import danh sách phân công giảng dạy
- */
-export const useImportPhanCongGiangDay = <TError = ImportPhanCongGiangDay400, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof importPhanCongGiangDay>>,
-            TError,
-            { data: ImportPhanCongGiangDay },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof importPhanCongGiangDay>>,
-    TError,
-    { data: ImportPhanCongGiangDay },
-    TContext
-> => {
-    const mutationOptions = getImportPhanCongGiangDayMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
 export type postApiStatsStudentDistributionByTrainingObjectTypeResponse200 = {
     data: PostApiStatsStudentDistributionByTrainingObjectType200
     status: 200
@@ -11356,6 +5666,5836 @@ export const usePostApiStatsRelearnRates = <TError = unknown, TContext = unknown
     TContext
 > => {
     const mutationOptions = getPostApiStatsRelearnRatesMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * Thêm mới danh sách học viên/sinh viên 
+
+ [type] là mã của loại đối tượng cần tạo, lấy trong bảng UserType
+ * @summary Upload Excel Create UserProfile
+ */
+export type uploadExcelCreateUserProfileResponse200 = {
+    data: ListOfundefined
+    status: 200
+}
+
+export type uploadExcelCreateUserProfileResponse400 = {
+    data: UploadExcelCreateUserProfile400
+    status: 400
+}
+
+export type uploadExcelCreateUserProfileResponseSuccess =
+    uploadExcelCreateUserProfileResponse200 & {
+        headers: Headers
+    }
+export type uploadExcelCreateUserProfileResponseError = uploadExcelCreateUserProfileResponse400 & {
+    headers: Headers
+}
+
+export type uploadExcelCreateUserProfileResponse =
+    | uploadExcelCreateUserProfileResponseSuccess
+    | uploadExcelCreateUserProfileResponseError
+
+export const getUploadExcelCreateUserProfileUrl = () => {
+    return `/api/user-profile/upload-excel-create-user-profile`
+}
+
+export const uploadExcelCreateUserProfile = async (
+    uploadExcelCreateUserProfile: UploadExcelCreateUserProfile,
+    options?: RequestInit
+): Promise<uploadExcelCreateUserProfileResponse> => {
+    const formData = new FormData()
+    formData.append(`file`, uploadExcelCreateUserProfile.file)
+    formData.append(`type`, uploadExcelCreateUserProfile.type)
+
+    return customTrainingFetch<uploadExcelCreateUserProfileResponse>(
+        getUploadExcelCreateUserProfileUrl(),
+        {
+            ...options,
+            method: 'POST',
+            body: formData,
+        }
+    )
+}
+
+export const getUploadExcelCreateUserProfileMutationOptions = <
+    TError = UploadExcelCreateUserProfile400,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof uploadExcelCreateUserProfile>>,
+        TError,
+        { data: UploadExcelCreateUserProfile },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof uploadExcelCreateUserProfile>>,
+    TError,
+    { data: UploadExcelCreateUserProfile },
+    TContext
+> => {
+    const mutationKey = ['uploadExcelCreateUserProfile']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof uploadExcelCreateUserProfile>>,
+        { data: UploadExcelCreateUserProfile }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return uploadExcelCreateUserProfile(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type UploadExcelCreateUserProfileMutationResult = NonNullable<
+    Awaited<ReturnType<typeof uploadExcelCreateUserProfile>>
+>
+export type UploadExcelCreateUserProfileMutationBody = UploadExcelCreateUserProfile
+export type UploadExcelCreateUserProfileMutationError = UploadExcelCreateUserProfile400
+
+/**
+ * @summary Upload Excel Create UserProfile
+ */
+export const useUploadExcelCreateUserProfile = <
+    TError = UploadExcelCreateUserProfile400,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof uploadExcelCreateUserProfile>>,
+            TError,
+            { data: UploadExcelCreateUserProfile },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof uploadExcelCreateUserProfile>>,
+    TError,
+    { data: UploadExcelCreateUserProfile },
+    TContext
+> => {
+    const mutationOptions = getUploadExcelCreateUserProfileMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * Cập nhật thông tin học viên/sinh viên
+ * @summary Upload Excel Update UserProfile
+ */
+export type uploadExcelUpdateUserProfileResponse200 = {
+    data: ListOfundefined
+    status: 200
+}
+
+export type uploadExcelUpdateUserProfileResponse400 = {
+    data: UploadExcelUpdateUserProfile400
+    status: 400
+}
+
+export type uploadExcelUpdateUserProfileResponseSuccess =
+    uploadExcelUpdateUserProfileResponse200 & {
+        headers: Headers
+    }
+export type uploadExcelUpdateUserProfileResponseError = uploadExcelUpdateUserProfileResponse400 & {
+    headers: Headers
+}
+
+export type uploadExcelUpdateUserProfileResponse =
+    | uploadExcelUpdateUserProfileResponseSuccess
+    | uploadExcelUpdateUserProfileResponseError
+
+export const getUploadExcelUpdateUserProfileUrl = () => {
+    return `/api/user-profile/upload-excel-update-user-profile`
+}
+
+export const uploadExcelUpdateUserProfile = async (
+    uploadExcelUpdateUserProfile: UploadExcelUpdateUserProfile,
+    options?: RequestInit
+): Promise<uploadExcelUpdateUserProfileResponse> => {
+    const formData = new FormData()
+    formData.append(`file`, uploadExcelUpdateUserProfile.file)
+
+    return customTrainingFetch<uploadExcelUpdateUserProfileResponse>(
+        getUploadExcelUpdateUserProfileUrl(),
+        {
+            ...options,
+            method: 'POST',
+            body: formData,
+        }
+    )
+}
+
+export const getUploadExcelUpdateUserProfileMutationOptions = <
+    TError = UploadExcelUpdateUserProfile400,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof uploadExcelUpdateUserProfile>>,
+        TError,
+        { data: UploadExcelUpdateUserProfile },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof uploadExcelUpdateUserProfile>>,
+    TError,
+    { data: UploadExcelUpdateUserProfile },
+    TContext
+> => {
+    const mutationKey = ['uploadExcelUpdateUserProfile']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof uploadExcelUpdateUserProfile>>,
+        { data: UploadExcelUpdateUserProfile }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return uploadExcelUpdateUserProfile(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type UploadExcelUpdateUserProfileMutationResult = NonNullable<
+    Awaited<ReturnType<typeof uploadExcelUpdateUserProfile>>
+>
+export type UploadExcelUpdateUserProfileMutationBody = UploadExcelUpdateUserProfile
+export type UploadExcelUpdateUserProfileMutationError = UploadExcelUpdateUserProfile400
+
+/**
+ * @summary Upload Excel Update UserProfile
+ */
+export const useUploadExcelUpdateUserProfile = <
+    TError = UploadExcelUpdateUserProfile400,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof uploadExcelUpdateUserProfile>>,
+            TError,
+            { data: UploadExcelUpdateUserProfile },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof uploadExcelUpdateUserProfile>>,
+    TError,
+    { data: UploadExcelUpdateUserProfile },
+    TContext
+> => {
+    const mutationOptions = getUploadExcelUpdateUserProfileMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * Phân chia học viên vào các lớp
+ * @summary Class Division
+ */
+export type classDivisionResponse200 = {
+    data: ClassDivision200Item[]
+    status: 200
+}
+
+export type classDivisionResponse400 = {
+    data: void
+    status: 400
+}
+
+export type classDivisionResponseSuccess = classDivisionResponse200 & {
+    headers: Headers
+}
+export type classDivisionResponseError = classDivisionResponse400 & {
+    headers: Headers
+}
+
+export type classDivisionResponse = classDivisionResponseSuccess | classDivisionResponseError
+
+export const getClassDivisionUrl = () => {
+    return `/api/fixed-class/upload-excel-update-user-profile`
+}
+
+export const classDivision = async (
+    classDivision: ClassDivision,
+    options?: RequestInit
+): Promise<classDivisionResponse> => {
+    const formData = new FormData()
+    formData.append(`file`, classDivision.file)
+
+    return customTrainingFetch<classDivisionResponse>(getClassDivisionUrl(), {
+        ...options,
+        method: 'POST',
+        body: formData,
+    })
+}
+
+export const getClassDivisionMutationOptions = <TError = void, TContext = unknown>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof classDivision>>,
+        TError,
+        { data: ClassDivision },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof classDivision>>,
+    TError,
+    { data: ClassDivision },
+    TContext
+> => {
+    const mutationKey = ['classDivision']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof classDivision>>,
+        { data: ClassDivision }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return classDivision(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type ClassDivisionMutationResult = NonNullable<Awaited<ReturnType<typeof classDivision>>>
+export type ClassDivisionMutationBody = ClassDivision
+export type ClassDivisionMutationError = void
+
+/**
+ * @summary Class Division
+ */
+export const useClassDivision = <TError = void, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof classDivision>>,
+            TError,
+            { data: ClassDivision },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof classDivision>>,
+    TError,
+    { data: ClassDivision },
+    TContext
+> => {
+    const mutationOptions = getClassDivisionMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type fixedClassStudentCountResponse200 = {
+    data: Blob
+    status: 200
+}
+
+export type fixedClassStudentCountResponse400 = {
+    data: FixedClassStudentCount400
+    status: 400
+}
+
+export type fixedClassStudentCountResponseSuccess = fixedClassStudentCountResponse200 & {
+    headers: Headers
+}
+export type fixedClassStudentCountResponseError = fixedClassStudentCountResponse400 & {
+    headers: Headers
+}
+
+export type fixedClassStudentCountResponse =
+    | fixedClassStudentCountResponseSuccess
+    | fixedClassStudentCountResponseError
+
+export const getFixedClassStudentCountUrl = (params: FixedClassStudentCountParams) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/fixed-class/fixed-class-student-count?${stringifiedParams}`
+        : `/api/fixed-class/fixed-class-student-count`
+}
+
+export const fixedClassStudentCount = async (
+    params: FixedClassStudentCountParams,
+    options?: RequestInit
+): Promise<fixedClassStudentCountResponse> => {
+    return customTrainingFetch<fixedClassStudentCountResponse>(
+        getFixedClassStudentCountUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getFixedClassStudentCountQueryKey = (params?: FixedClassStudentCountParams) => {
+    return [`/api/fixed-class/fixed-class-student-count`, ...(params ? [params] : [])] as const
+}
+
+export const getFixedClassStudentCountQueryOptions = <
+    TData = Awaited<ReturnType<typeof fixedClassStudentCount>>,
+    TError = FixedClassStudentCount400,
+>(
+    params: FixedClassStudentCountParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof fixedClassStudentCount>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getFixedClassStudentCountQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof fixedClassStudentCount>>> = ({
+        signal,
+    }) => fixedClassStudentCount(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof fixedClassStudentCount>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type FixedClassStudentCountQueryResult = NonNullable<
+    Awaited<ReturnType<typeof fixedClassStudentCount>>
+>
+export type FixedClassStudentCountQueryError = FixedClassStudentCount400
+
+export function useFixedClassStudentCount<
+    TData = Awaited<ReturnType<typeof fixedClassStudentCount>>,
+    TError = FixedClassStudentCount400,
+>(
+    params: FixedClassStudentCountParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof fixedClassStudentCount>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof fixedClassStudentCount>>,
+                    TError,
+                    Awaited<ReturnType<typeof fixedClassStudentCount>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useFixedClassStudentCount<
+    TData = Awaited<ReturnType<typeof fixedClassStudentCount>>,
+    TError = FixedClassStudentCount400,
+>(
+    params: FixedClassStudentCountParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof fixedClassStudentCount>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof fixedClassStudentCount>>,
+                    TError,
+                    Awaited<ReturnType<typeof fixedClassStudentCount>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useFixedClassStudentCount<
+    TData = Awaited<ReturnType<typeof fixedClassStudentCount>>,
+    TError = FixedClassStudentCount400,
+>(
+    params: FixedClassStudentCountParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof fixedClassStudentCount>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useFixedClassStudentCount<
+    TData = Awaited<ReturnType<typeof fixedClassStudentCount>>,
+    TError = FixedClassStudentCount400,
+>(
+    params: FixedClassStudentCountParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof fixedClassStudentCount>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getFixedClassStudentCountQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+/**
+ * Lấy danh sách môn dự kiến giảng dạy
+ * @summary Lấy danh sách môn dự kiến giảng dạy
+ */
+export type openSubjectClassResponse200 = {
+    data: ListOfOpenSubjectClass
+    status: 200
+}
+
+export type openSubjectClassResponse400 = {
+    data: void
+    status: 400
+}
+
+export type openSubjectClassResponseSuccess = openSubjectClassResponse200 & {
+    headers: Headers
+}
+export type openSubjectClassResponseError = openSubjectClassResponse400 & {
+    headers: Headers
+}
+
+export type openSubjectClassResponse =
+    | openSubjectClassResponseSuccess
+    | openSubjectClassResponseError
+
+export const getOpenSubjectClassUrl = (params: OpenSubjectClassParams) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/subject-class/open-subject-class?${stringifiedParams}`
+        : `/api/subject-class/open-subject-class`
+}
+
+export const openSubjectClass = async (
+    params: OpenSubjectClassParams,
+    options?: RequestInit
+): Promise<openSubjectClassResponse> => {
+    return customTrainingFetch<openSubjectClassResponse>(getOpenSubjectClassUrl(params), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getOpenSubjectClassQueryKey = (params?: OpenSubjectClassParams) => {
+    return [`/api/subject-class/open-subject-class`, ...(params ? [params] : [])] as const
+}
+
+export const getOpenSubjectClassQueryOptions = <
+    TData = Awaited<ReturnType<typeof openSubjectClass>>,
+    TError = void,
+>(
+    params: OpenSubjectClassParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClass>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getOpenSubjectClassQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof openSubjectClass>>> = ({ signal }) =>
+        openSubjectClass(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof openSubjectClass>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type OpenSubjectClassQueryResult = NonNullable<Awaited<ReturnType<typeof openSubjectClass>>>
+export type OpenSubjectClassQueryError = void
+
+export function useOpenSubjectClass<
+    TData = Awaited<ReturnType<typeof openSubjectClass>>,
+    TError = void,
+>(
+    params: OpenSubjectClassParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClass>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof openSubjectClass>>,
+                    TError,
+                    Awaited<ReturnType<typeof openSubjectClass>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useOpenSubjectClass<
+    TData = Awaited<ReturnType<typeof openSubjectClass>>,
+    TError = void,
+>(
+    params: OpenSubjectClassParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClass>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof openSubjectClass>>,
+                    TError,
+                    Awaited<ReturnType<typeof openSubjectClass>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useOpenSubjectClass<
+    TData = Awaited<ReturnType<typeof openSubjectClass>>,
+    TError = void,
+>(
+    params: OpenSubjectClassParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClass>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Lấy danh sách môn dự kiến giảng dạy
+ */
+
+export function useOpenSubjectClass<
+    TData = Awaited<ReturnType<typeof openSubjectClass>>,
+    TError = void,
+>(
+    params: OpenSubjectClassParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClass>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getOpenSubjectClassQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+/**
+ * Lấy danh sách môn học có hssv nợ
+ * @summary Lấy danh sách môn học có hssv nợ
+ */
+export type openSubjectClassRetakeResponse200 = {
+    data: ListOfOpenSubjectClassRetakeResponse
+    status: 200
+}
+
+export type openSubjectClassRetakeResponse400 = {
+    data: void
+    status: 400
+}
+
+export type openSubjectClassRetakeResponseSuccess = openSubjectClassRetakeResponse200 & {
+    headers: Headers
+}
+export type openSubjectClassRetakeResponseError = openSubjectClassRetakeResponse400 & {
+    headers: Headers
+}
+
+export type openSubjectClassRetakeResponse =
+    | openSubjectClassRetakeResponseSuccess
+    | openSubjectClassRetakeResponseError
+
+export const getOpenSubjectClassRetakeUrl = (params: OpenSubjectClassRetakeParams) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/subject-class/open-subject-class-retake?${stringifiedParams}`
+        : `/api/subject-class/open-subject-class-retake`
+}
+
+export const openSubjectClassRetake = async (
+    params: OpenSubjectClassRetakeParams,
+    options?: RequestInit
+): Promise<openSubjectClassRetakeResponse> => {
+    return customTrainingFetch<openSubjectClassRetakeResponse>(
+        getOpenSubjectClassRetakeUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getOpenSubjectClassRetakeQueryKey = (params?: OpenSubjectClassRetakeParams) => {
+    return [`/api/subject-class/open-subject-class-retake`, ...(params ? [params] : [])] as const
+}
+
+export const getOpenSubjectClassRetakeQueryOptions = <
+    TData = Awaited<ReturnType<typeof openSubjectClassRetake>>,
+    TError = void,
+>(
+    params: OpenSubjectClassRetakeParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassRetake>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getOpenSubjectClassRetakeQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof openSubjectClassRetake>>> = ({
+        signal,
+    }) => openSubjectClassRetake(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof openSubjectClassRetake>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type OpenSubjectClassRetakeQueryResult = NonNullable<
+    Awaited<ReturnType<typeof openSubjectClassRetake>>
+>
+export type OpenSubjectClassRetakeQueryError = void
+
+export function useOpenSubjectClassRetake<
+    TData = Awaited<ReturnType<typeof openSubjectClassRetake>>,
+    TError = void,
+>(
+    params: OpenSubjectClassRetakeParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassRetake>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof openSubjectClassRetake>>,
+                    TError,
+                    Awaited<ReturnType<typeof openSubjectClassRetake>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useOpenSubjectClassRetake<
+    TData = Awaited<ReturnType<typeof openSubjectClassRetake>>,
+    TError = void,
+>(
+    params: OpenSubjectClassRetakeParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassRetake>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof openSubjectClassRetake>>,
+                    TError,
+                    Awaited<ReturnType<typeof openSubjectClassRetake>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useOpenSubjectClassRetake<
+    TData = Awaited<ReturnType<typeof openSubjectClassRetake>>,
+    TError = void,
+>(
+    params: OpenSubjectClassRetakeParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassRetake>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Lấy danh sách môn học có hssv nợ
+ */
+
+export function useOpenSubjectClassRetake<
+    TData = Awaited<ReturnType<typeof openSubjectClassRetake>>,
+    TError = void,
+>(
+    params: OpenSubjectClassRetakeParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassRetake>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getOpenSubjectClassRetakeQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+/**
+ * Lấy danh sách sinh viên nợ môn học
+ * @summary Lấy danh sách sinh viên nợ môn học
+ */
+export type openSubjectClassRetakeStudentsResponse200 = {
+    data: ListOfOpenSubjectClassRetakeStudentsResponse
+    status: 200
+}
+
+export type openSubjectClassRetakeStudentsResponse400 = {
+    data: void
+    status: 400
+}
+
+export type openSubjectClassRetakeStudentsResponseSuccess =
+    openSubjectClassRetakeStudentsResponse200 & {
+        headers: Headers
+    }
+export type openSubjectClassRetakeStudentsResponseError =
+    openSubjectClassRetakeStudentsResponse400 & {
+        headers: Headers
+    }
+
+export type openSubjectClassRetakeStudentsResponse =
+    | openSubjectClassRetakeStudentsResponseSuccess
+    | openSubjectClassRetakeStudentsResponseError
+
+export const getOpenSubjectClassRetakeStudentsUrl = (
+    params: OpenSubjectClassRetakeStudentsParams
+) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/subject-class/open-subject-class-retake-students?${stringifiedParams}`
+        : `/api/subject-class/open-subject-class-retake-students`
+}
+
+export const openSubjectClassRetakeStudents = async (
+    params: OpenSubjectClassRetakeStudentsParams,
+    options?: RequestInit
+): Promise<openSubjectClassRetakeStudentsResponse> => {
+    return customTrainingFetch<openSubjectClassRetakeStudentsResponse>(
+        getOpenSubjectClassRetakeStudentsUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getOpenSubjectClassRetakeStudentsQueryKey = (
+    params?: OpenSubjectClassRetakeStudentsParams
+) => {
+    return [
+        `/api/subject-class/open-subject-class-retake-students`,
+        ...(params ? [params] : []),
+    ] as const
+}
+
+export const getOpenSubjectClassRetakeStudentsQueryOptions = <
+    TData = Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
+    TError = void,
+>(
+    params: OpenSubjectClassRetakeStudentsParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getOpenSubjectClassRetakeStudentsQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>> = ({
+        signal,
+    }) => openSubjectClassRetakeStudents(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type OpenSubjectClassRetakeStudentsQueryResult = NonNullable<
+    Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>
+>
+export type OpenSubjectClassRetakeStudentsQueryError = void
+
+export function useOpenSubjectClassRetakeStudents<
+    TData = Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
+    TError = void,
+>(
+    params: OpenSubjectClassRetakeStudentsParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
+                    TError,
+                    Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useOpenSubjectClassRetakeStudents<
+    TData = Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
+    TError = void,
+>(
+    params: OpenSubjectClassRetakeStudentsParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
+                    TError,
+                    Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useOpenSubjectClassRetakeStudents<
+    TData = Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
+    TError = void,
+>(
+    params: OpenSubjectClassRetakeStudentsParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Lấy danh sách sinh viên nợ môn học
+ */
+
+export function useOpenSubjectClassRetakeStudents<
+    TData = Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
+    TError = void,
+>(
+    params: OpenSubjectClassRetakeStudentsParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getOpenSubjectClassRetakeStudentsQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+/**
+ * Lấy danh sách môn học có hssv cần thi lại
+ * @summary Lấy danh sách môn học có hssv cần thi lại
+ */
+export type openSubjectClassReExamResponse200 = {
+    data: ListOfOpenSubjectClassReExamResponse
+    status: 200
+}
+
+export type openSubjectClassReExamResponse400 = {
+    data: void
+    status: 400
+}
+
+export type openSubjectClassReExamResponseSuccess = openSubjectClassReExamResponse200 & {
+    headers: Headers
+}
+export type openSubjectClassReExamResponseError = openSubjectClassReExamResponse400 & {
+    headers: Headers
+}
+
+export type openSubjectClassReExamResponse =
+    | openSubjectClassReExamResponseSuccess
+    | openSubjectClassReExamResponseError
+
+export const getOpenSubjectClassReExamUrl = (params: OpenSubjectClassReExamParams) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/subject-class/open-subject-class-reexam?${stringifiedParams}`
+        : `/api/subject-class/open-subject-class-reexam`
+}
+
+export const openSubjectClassReExam = async (
+    params: OpenSubjectClassReExamParams,
+    options?: RequestInit
+): Promise<openSubjectClassReExamResponse> => {
+    return customTrainingFetch<openSubjectClassReExamResponse>(
+        getOpenSubjectClassReExamUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getOpenSubjectClassReExamQueryKey = (params?: OpenSubjectClassReExamParams) => {
+    return [`/api/subject-class/open-subject-class-reexam`, ...(params ? [params] : [])] as const
+}
+
+export const getOpenSubjectClassReExamQueryOptions = <
+    TData = Awaited<ReturnType<typeof openSubjectClassReExam>>,
+    TError = void,
+>(
+    params: OpenSubjectClassReExamParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExam>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getOpenSubjectClassReExamQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof openSubjectClassReExam>>> = ({
+        signal,
+    }) => openSubjectClassReExam(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof openSubjectClassReExam>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type OpenSubjectClassReExamQueryResult = NonNullable<
+    Awaited<ReturnType<typeof openSubjectClassReExam>>
+>
+export type OpenSubjectClassReExamQueryError = void
+
+export function useOpenSubjectClassReExam<
+    TData = Awaited<ReturnType<typeof openSubjectClassReExam>>,
+    TError = void,
+>(
+    params: OpenSubjectClassReExamParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExam>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof openSubjectClassReExam>>,
+                    TError,
+                    Awaited<ReturnType<typeof openSubjectClassReExam>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useOpenSubjectClassReExam<
+    TData = Awaited<ReturnType<typeof openSubjectClassReExam>>,
+    TError = void,
+>(
+    params: OpenSubjectClassReExamParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExam>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof openSubjectClassReExam>>,
+                    TError,
+                    Awaited<ReturnType<typeof openSubjectClassReExam>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useOpenSubjectClassReExam<
+    TData = Awaited<ReturnType<typeof openSubjectClassReExam>>,
+    TError = void,
+>(
+    params: OpenSubjectClassReExamParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExam>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Lấy danh sách môn học có hssv cần thi lại
+ */
+
+export function useOpenSubjectClassReExam<
+    TData = Awaited<ReturnType<typeof openSubjectClassReExam>>,
+    TError = void,
+>(
+    params: OpenSubjectClassReExamParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExam>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getOpenSubjectClassReExamQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+/**
+ * Lấy danh sách sinh viên cần thi lại môn học
+ * @summary Lấy danh sách sinh viên cần thi lại môn học
+ */
+export type openSubjectClassReExamStudentsResponse200 = {
+    data: ListOfOpenSubjectClassReExamStudentsResponse
+    status: 200
+}
+
+export type openSubjectClassReExamStudentsResponse400 = {
+    data: void
+    status: 400
+}
+
+export type openSubjectClassReExamStudentsResponseSuccess =
+    openSubjectClassReExamStudentsResponse200 & {
+        headers: Headers
+    }
+export type openSubjectClassReExamStudentsResponseError =
+    openSubjectClassReExamStudentsResponse400 & {
+        headers: Headers
+    }
+
+export type openSubjectClassReExamStudentsResponse =
+    | openSubjectClassReExamStudentsResponseSuccess
+    | openSubjectClassReExamStudentsResponseError
+
+export const getOpenSubjectClassReExamStudentsUrl = (
+    params: OpenSubjectClassReExamStudentsParams
+) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/subject-class/open-subject-class-reexam-students?${stringifiedParams}`
+        : `/api/subject-class/open-subject-class-reexam-students`
+}
+
+export const openSubjectClassReExamStudents = async (
+    params: OpenSubjectClassReExamStudentsParams,
+    options?: RequestInit
+): Promise<openSubjectClassReExamStudentsResponse> => {
+    return customTrainingFetch<openSubjectClassReExamStudentsResponse>(
+        getOpenSubjectClassReExamStudentsUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getOpenSubjectClassReExamStudentsQueryKey = (
+    params?: OpenSubjectClassReExamStudentsParams
+) => {
+    return [
+        `/api/subject-class/open-subject-class-reexam-students`,
+        ...(params ? [params] : []),
+    ] as const
+}
+
+export const getOpenSubjectClassReExamStudentsQueryOptions = <
+    TData = Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
+    TError = void,
+>(
+    params: OpenSubjectClassReExamStudentsParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getOpenSubjectClassReExamStudentsQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof openSubjectClassReExamStudents>>> = ({
+        signal,
+    }) => openSubjectClassReExamStudents(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type OpenSubjectClassReExamStudentsQueryResult = NonNullable<
+    Awaited<ReturnType<typeof openSubjectClassReExamStudents>>
+>
+export type OpenSubjectClassReExamStudentsQueryError = void
+
+export function useOpenSubjectClassReExamStudents<
+    TData = Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
+    TError = void,
+>(
+    params: OpenSubjectClassReExamStudentsParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
+                    TError,
+                    Awaited<ReturnType<typeof openSubjectClassReExamStudents>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useOpenSubjectClassReExamStudents<
+    TData = Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
+    TError = void,
+>(
+    params: OpenSubjectClassReExamStudentsParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
+                    TError,
+                    Awaited<ReturnType<typeof openSubjectClassReExamStudents>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useOpenSubjectClassReExamStudents<
+    TData = Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
+    TError = void,
+>(
+    params: OpenSubjectClassReExamStudentsParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Lấy danh sách sinh viên cần thi lại môn học
+ */
+
+export function useOpenSubjectClassReExamStudents<
+    TData = Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
+    TError = void,
+>(
+    params: OpenSubjectClassReExamStudentsParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getOpenSubjectClassReExamStudentsQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+/**
+ * Đăng ký lớp môn học cho lớp quản lý
+ * @summary Đăng ký lớp môn học cho lớp quản lý
+ */
+export type enrollFixedClassOnSubjectClassResponse200 = {
+    data: ListOfEnrollFixedClassOnSubjectClass
+    status: 200
+}
+
+export type enrollFixedClassOnSubjectClassResponse400 = {
+    data: void
+    status: 400
+}
+
+export type enrollFixedClassOnSubjectClassResponseSuccess =
+    enrollFixedClassOnSubjectClassResponse200 & {
+        headers: Headers
+    }
+export type enrollFixedClassOnSubjectClassResponseError =
+    enrollFixedClassOnSubjectClassResponse400 & {
+        headers: Headers
+    }
+
+export type enrollFixedClassOnSubjectClassResponse =
+    | enrollFixedClassOnSubjectClassResponseSuccess
+    | enrollFixedClassOnSubjectClassResponseError
+
+export const getEnrollFixedClassOnSubjectClassUrl = () => {
+    return `/api/subject-class/enroll-fixed-class-on-subject-class`
+}
+
+export const enrollFixedClassOnSubjectClass = async (
+    enrollFixedClassOnSubjectClassBody: EnrollFixedClassOnSubjectClassBody,
+    options?: RequestInit
+): Promise<enrollFixedClassOnSubjectClassResponse> => {
+    return customTrainingFetch<enrollFixedClassOnSubjectClassResponse>(
+        getEnrollFixedClassOnSubjectClassUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(enrollFixedClassOnSubjectClassBody),
+        }
+    )
+}
+
+export const getEnrollFixedClassOnSubjectClassMutationOptions = <
+    TError = void,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>,
+        TError,
+        { data: EnrollFixedClassOnSubjectClassBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>,
+    TError,
+    { data: EnrollFixedClassOnSubjectClassBody },
+    TContext
+> => {
+    const mutationKey = ['enrollFixedClassOnSubjectClass']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>,
+        { data: EnrollFixedClassOnSubjectClassBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return enrollFixedClassOnSubjectClass(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type EnrollFixedClassOnSubjectClassMutationResult = NonNullable<
+    Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>
+>
+export type EnrollFixedClassOnSubjectClassMutationBody = EnrollFixedClassOnSubjectClassBody
+export type EnrollFixedClassOnSubjectClassMutationError = void
+
+/**
+ * @summary Đăng ký lớp môn học cho lớp quản lý
+ */
+export const useEnrollFixedClassOnSubjectClass = <TError = void, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>,
+            TError,
+            { data: EnrollFixedClassOnSubjectClassBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>,
+    TError,
+    { data: EnrollFixedClassOnSubjectClassBody },
+    TContext
+> => {
+    const mutationOptions = getEnrollFixedClassOnSubjectClassMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * Đặt hạn nhập điểm
+ * @summary Đặt hạn nhập điểm
+ */
+export type setScoreDeadLineResponse200 = {
+    data: SetScoreDeadLine200
+    status: 200
+}
+
+export type setScoreDeadLineResponse400 = {
+    data: void
+    status: 400
+}
+
+export type setScoreDeadLineResponseSuccess = setScoreDeadLineResponse200 & {
+    headers: Headers
+}
+export type setScoreDeadLineResponseError = setScoreDeadLineResponse400 & {
+    headers: Headers
+}
+
+export type setScoreDeadLineResponse =
+    | setScoreDeadLineResponseSuccess
+    | setScoreDeadLineResponseError
+
+export const getSetScoreDeadLineUrl = () => {
+    return `/api/subject-class/set-score-dead-line`
+}
+
+export const setScoreDeadLine = async (
+    setScoreDeadLineBody: SetScoreDeadLineBody,
+    options?: RequestInit
+): Promise<setScoreDeadLineResponse> => {
+    return customTrainingFetch<setScoreDeadLineResponse>(getSetScoreDeadLineUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(setScoreDeadLineBody),
+    })
+}
+
+export const getSetScoreDeadLineMutationOptions = <TError = void, TContext = unknown>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof setScoreDeadLine>>,
+        TError,
+        { data: SetScoreDeadLineBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof setScoreDeadLine>>,
+    TError,
+    { data: SetScoreDeadLineBody },
+    TContext
+> => {
+    const mutationKey = ['setScoreDeadLine']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof setScoreDeadLine>>,
+        { data: SetScoreDeadLineBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return setScoreDeadLine(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type SetScoreDeadLineMutationResult = NonNullable<
+    Awaited<ReturnType<typeof setScoreDeadLine>>
+>
+export type SetScoreDeadLineMutationBody = SetScoreDeadLineBody
+export type SetScoreDeadLineMutationError = void
+
+/**
+ * @summary Đặt hạn nhập điểm
+ */
+export const useSetScoreDeadLine = <TError = void, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof setScoreDeadLine>>,
+            TError,
+            { data: SetScoreDeadLineBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof setScoreDeadLine>>,
+    TError,
+    { data: SetScoreDeadLineBody },
+    TContext
+> => {
+    const mutationOptions = getSetScoreDeadLineMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * Đặt hạn nhập điểm thi
+ * @summary Đặt hạn nhập điểm thi
+ */
+export type setExamScoreDeadLineResponse200 = {
+    data: SetExamScoreDeadLine200
+    status: 200
+}
+
+export type setExamScoreDeadLineResponse400 = {
+    data: void
+    status: 400
+}
+
+export type setExamScoreDeadLineResponseSuccess = setExamScoreDeadLineResponse200 & {
+    headers: Headers
+}
+export type setExamScoreDeadLineResponseError = setExamScoreDeadLineResponse400 & {
+    headers: Headers
+}
+
+export type setExamScoreDeadLineResponse =
+    | setExamScoreDeadLineResponseSuccess
+    | setExamScoreDeadLineResponseError
+
+export const getSetExamScoreDeadLineUrl = () => {
+    return `/api/subject-class/set-exam-score-dead-line`
+}
+
+export const setExamScoreDeadLine = async (
+    setExamScoreDeadLineBody: SetExamScoreDeadLineBody,
+    options?: RequestInit
+): Promise<setExamScoreDeadLineResponse> => {
+    return customTrainingFetch<setExamScoreDeadLineResponse>(getSetExamScoreDeadLineUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(setExamScoreDeadLineBody),
+    })
+}
+
+export const getSetExamScoreDeadLineMutationOptions = <
+    TError = void,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof setExamScoreDeadLine>>,
+        TError,
+        { data: SetExamScoreDeadLineBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof setExamScoreDeadLine>>,
+    TError,
+    { data: SetExamScoreDeadLineBody },
+    TContext
+> => {
+    const mutationKey = ['setExamScoreDeadLine']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof setExamScoreDeadLine>>,
+        { data: SetExamScoreDeadLineBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return setExamScoreDeadLine(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type SetExamScoreDeadLineMutationResult = NonNullable<
+    Awaited<ReturnType<typeof setExamScoreDeadLine>>
+>
+export type SetExamScoreDeadLineMutationBody = SetExamScoreDeadLineBody
+export type SetExamScoreDeadLineMutationError = void
+
+/**
+ * @summary Đặt hạn nhập điểm thi
+ */
+export const useSetExamScoreDeadLine = <TError = void, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof setExamScoreDeadLine>>,
+            TError,
+            { data: SetExamScoreDeadLineBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof setExamScoreDeadLine>>,
+    TError,
+    { data: SetExamScoreDeadLineBody },
+    TContext
+> => {
+    const mutationOptions = getSetExamScoreDeadLineMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * Import điểm lớp môn học 
+
+ [subjectClassId] là id của lớp học
+ * @summary Import file nhập điểm
+ */
+export type uploadExcelImportScoreResponse200 = {
+    data: UploadExcelImportScore200
+    status: 200
+}
+
+export type uploadExcelImportScoreResponse400 = {
+    data: UploadExcelImportScore400
+    status: 400
+}
+
+export type uploadExcelImportScoreResponseSuccess = uploadExcelImportScoreResponse200 & {
+    headers: Headers
+}
+export type uploadExcelImportScoreResponseError = uploadExcelImportScoreResponse400 & {
+    headers: Headers
+}
+
+export type uploadExcelImportScoreResponse =
+    | uploadExcelImportScoreResponseSuccess
+    | uploadExcelImportScoreResponseError
+
+export const getUploadExcelImportScoreUrl = () => {
+    return `/api/subject-class/upload-excel-import-score`
+}
+
+export const uploadExcelImportScore = async (
+    uploadExcelImportScore: UploadExcelImportScore,
+    options?: RequestInit
+): Promise<uploadExcelImportScoreResponse> => {
+    const formData = new FormData()
+    formData.append(`file`, uploadExcelImportScore.file)
+    formData.append(`subjectClassId`, uploadExcelImportScore.subjectClassId)
+
+    return customTrainingFetch<uploadExcelImportScoreResponse>(getUploadExcelImportScoreUrl(), {
+        ...options,
+        method: 'POST',
+        body: formData,
+    })
+}
+
+export const getUploadExcelImportScoreMutationOptions = <
+    TError = UploadExcelImportScore400,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof uploadExcelImportScore>>,
+        TError,
+        { data: UploadExcelImportScore },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof uploadExcelImportScore>>,
+    TError,
+    { data: UploadExcelImportScore },
+    TContext
+> => {
+    const mutationKey = ['uploadExcelImportScore']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof uploadExcelImportScore>>,
+        { data: UploadExcelImportScore }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return uploadExcelImportScore(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type UploadExcelImportScoreMutationResult = NonNullable<
+    Awaited<ReturnType<typeof uploadExcelImportScore>>
+>
+export type UploadExcelImportScoreMutationBody = UploadExcelImportScore
+export type UploadExcelImportScoreMutationError = UploadExcelImportScore400
+
+/**
+ * @summary Import file nhập điểm
+ */
+export const useUploadExcelImportScore = <TError = UploadExcelImportScore400, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof uploadExcelImportScore>>,
+            TError,
+            { data: UploadExcelImportScore },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof uploadExcelImportScore>>,
+    TError,
+    { data: UploadExcelImportScore },
+    TContext
+> => {
+    const mutationOptions = getUploadExcelImportScoreMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * @summary Excel xuất điểm lớp môn học
+ */
+export type exportSubjectClassScoreResponse200 = {
+    data: Blob
+    status: 200
+}
+
+export type exportSubjectClassScoreResponse404 = {
+    data: ExportSubjectClassScore404
+    status: 404
+}
+
+export type exportSubjectClassScoreResponseSuccess = exportSubjectClassScoreResponse200 & {
+    headers: Headers
+}
+export type exportSubjectClassScoreResponseError = exportSubjectClassScoreResponse404 & {
+    headers: Headers
+}
+
+export type exportSubjectClassScoreResponse =
+    | exportSubjectClassScoreResponseSuccess
+    | exportSubjectClassScoreResponseError
+
+export const getExportSubjectClassScoreUrl = (params?: ExportSubjectClassScoreParams) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/subject-class/export-subject-class-score?${stringifiedParams}`
+        : `/api/subject-class/export-subject-class-score`
+}
+
+export const exportSubjectClassScore = async (
+    params?: ExportSubjectClassScoreParams,
+    options?: RequestInit
+): Promise<exportSubjectClassScoreResponse> => {
+    return customTrainingFetch<exportSubjectClassScoreResponse>(
+        getExportSubjectClassScoreUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getExportSubjectClassScoreQueryKey = (params?: ExportSubjectClassScoreParams) => {
+    return [`/api/subject-class/export-subject-class-score`, ...(params ? [params] : [])] as const
+}
+
+export const getExportSubjectClassScoreQueryOptions = <
+    TData = Awaited<ReturnType<typeof exportSubjectClassScore>>,
+    TError = ExportSubjectClassScore404,
+>(
+    params?: ExportSubjectClassScoreParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassScore>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getExportSubjectClassScoreQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportSubjectClassScore>>> = ({
+        signal,
+    }) => exportSubjectClassScore(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof exportSubjectClassScore>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ExportSubjectClassScoreQueryResult = NonNullable<
+    Awaited<ReturnType<typeof exportSubjectClassScore>>
+>
+export type ExportSubjectClassScoreQueryError = ExportSubjectClassScore404
+
+export function useExportSubjectClassScore<
+    TData = Awaited<ReturnType<typeof exportSubjectClassScore>>,
+    TError = ExportSubjectClassScore404,
+>(
+    params: undefined | ExportSubjectClassScoreParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassScore>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportSubjectClassScore>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportSubjectClassScore>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportSubjectClassScore<
+    TData = Awaited<ReturnType<typeof exportSubjectClassScore>>,
+    TError = ExportSubjectClassScore404,
+>(
+    params?: ExportSubjectClassScoreParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassScore>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportSubjectClassScore>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportSubjectClassScore>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportSubjectClassScore<
+    TData = Awaited<ReturnType<typeof exportSubjectClassScore>>,
+    TError = ExportSubjectClassScore404,
+>(
+    params?: ExportSubjectClassScoreParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassScore>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Excel xuất điểm lớp môn học
+ */
+
+export function useExportSubjectClassScore<
+    TData = Awaited<ReturnType<typeof exportSubjectClassScore>>,
+    TError = ExportSubjectClassScore404,
+>(
+    params?: ExportSubjectClassScoreParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassScore>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getExportSubjectClassScoreQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+/**
+ * Xuất danh sách học viên đạt học bổng dưới dạng file Excel (dữ liệu đã được làm phẳng)
+ * @summary Xuất Excel danh sách học bổng của học viên
+ */
+export type exportStudentScholarshipExcelResponse200 = {
+    data: Blob
+    status: 200
+}
+
+export type exportStudentScholarshipExcelResponse404 = {
+    data: ExportStudentScholarshipExcel404
+    status: 404
+}
+
+export type exportStudentScholarshipExcelResponseSuccess =
+    exportStudentScholarshipExcelResponse200 & {
+        headers: Headers
+    }
+export type exportStudentScholarshipExcelResponseError =
+    exportStudentScholarshipExcelResponse404 & {
+        headers: Headers
+    }
+
+export type exportStudentScholarshipExcelResponse =
+    | exportStudentScholarshipExcelResponseSuccess
+    | exportStudentScholarshipExcelResponseError
+
+export const getExportStudentScholarshipExcelUrl = (
+    params: ExportStudentScholarshipExcelParams
+) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/student/export-excel-list-student-scholarship?${stringifiedParams}`
+        : `/api/student/export-excel-list-student-scholarship`
+}
+
+export const exportStudentScholarshipExcel = async (
+    params: ExportStudentScholarshipExcelParams,
+    options?: RequestInit
+): Promise<exportStudentScholarshipExcelResponse> => {
+    return customTrainingFetch<exportStudentScholarshipExcelResponse>(
+        getExportStudentScholarshipExcelUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getExportStudentScholarshipExcelQueryKey = (
+    params?: ExportStudentScholarshipExcelParams
+) => {
+    return [
+        `/api/student/export-excel-list-student-scholarship`,
+        ...(params ? [params] : []),
+    ] as const
+}
+
+export const getExportStudentScholarshipExcelQueryOptions = <
+    TData = Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
+    TError = ExportStudentScholarshipExcel404,
+>(
+    params: ExportStudentScholarshipExcelParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getExportStudentScholarshipExcelQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportStudentScholarshipExcel>>> = ({
+        signal,
+    }) => exportStudentScholarshipExcel(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ExportStudentScholarshipExcelQueryResult = NonNullable<
+    Awaited<ReturnType<typeof exportStudentScholarshipExcel>>
+>
+export type ExportStudentScholarshipExcelQueryError = ExportStudentScholarshipExcel404
+
+export function useExportStudentScholarshipExcel<
+    TData = Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
+    TError = ExportStudentScholarshipExcel404,
+>(
+    params: ExportStudentScholarshipExcelParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportStudentScholarshipExcel>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentScholarshipExcel<
+    TData = Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
+    TError = ExportStudentScholarshipExcel404,
+>(
+    params: ExportStudentScholarshipExcelParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportStudentScholarshipExcel>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentScholarshipExcel<
+    TData = Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
+    TError = ExportStudentScholarshipExcel404,
+>(
+    params: ExportStudentScholarshipExcelParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Xuất Excel danh sách học bổng của học viên
+ */
+
+export function useExportStudentScholarshipExcel<
+    TData = Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
+    TError = ExportStudentScholarshipExcel404,
+>(
+    params: ExportStudentScholarshipExcelParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getExportStudentScholarshipExcelQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+/**
+ * Xuất danh sách học viên bị cảnh cáo học tập dưới dạng file Excel (dữ liệu đã được làm phẳng)
+ * @summary Xuất Excel danh sách cảnh cáo học tập của học viên
+ */
+export type exportStudentAcademicWarningExcelResponse200 = {
+    data: Blob
+    status: 200
+}
+
+export type exportStudentAcademicWarningExcelResponse404 = {
+    data: ExportStudentAcademicWarningExcel404
+    status: 404
+}
+
+export type exportStudentAcademicWarningExcelResponseSuccess =
+    exportStudentAcademicWarningExcelResponse200 & {
+        headers: Headers
+    }
+export type exportStudentAcademicWarningExcelResponseError =
+    exportStudentAcademicWarningExcelResponse404 & {
+        headers: Headers
+    }
+
+export type exportStudentAcademicWarningExcelResponse =
+    | exportStudentAcademicWarningExcelResponseSuccess
+    | exportStudentAcademicWarningExcelResponseError
+
+export const getExportStudentAcademicWarningExcelUrl = (
+    params: ExportStudentAcademicWarningExcelParams
+) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/student/export-excel-list-student-academic-warning?${stringifiedParams}`
+        : `/api/student/export-excel-list-student-academic-warning`
+}
+
+export const exportStudentAcademicWarningExcel = async (
+    params: ExportStudentAcademicWarningExcelParams,
+    options?: RequestInit
+): Promise<exportStudentAcademicWarningExcelResponse> => {
+    return customTrainingFetch<exportStudentAcademicWarningExcelResponse>(
+        getExportStudentAcademicWarningExcelUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getExportStudentAcademicWarningExcelQueryKey = (
+    params?: ExportStudentAcademicWarningExcelParams
+) => {
+    return [
+        `/api/student/export-excel-list-student-academic-warning`,
+        ...(params ? [params] : []),
+    ] as const
+}
+
+export const getExportStudentAcademicWarningExcelQueryOptions = <
+    TData = Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
+    TError = ExportStudentAcademicWarningExcel404,
+>(
+    params: ExportStudentAcademicWarningExcelParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getExportStudentAcademicWarningExcelQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>> = ({
+        signal,
+    }) => exportStudentAcademicWarningExcel(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ExportStudentAcademicWarningExcelQueryResult = NonNullable<
+    Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>
+>
+export type ExportStudentAcademicWarningExcelQueryError = ExportStudentAcademicWarningExcel404
+
+export function useExportStudentAcademicWarningExcel<
+    TData = Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
+    TError = ExportStudentAcademicWarningExcel404,
+>(
+    params: ExportStudentAcademicWarningExcelParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentAcademicWarningExcel<
+    TData = Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
+    TError = ExportStudentAcademicWarningExcel404,
+>(
+    params: ExportStudentAcademicWarningExcelParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentAcademicWarningExcel<
+    TData = Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
+    TError = ExportStudentAcademicWarningExcel404,
+>(
+    params: ExportStudentAcademicWarningExcelParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Xuất Excel danh sách cảnh cáo học tập của học viên
+ */
+
+export function useExportStudentAcademicWarningExcel<
+    TData = Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
+    TError = ExportStudentAcademicWarningExcel404,
+>(
+    params: ExportStudentAcademicWarningExcelParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getExportStudentAcademicWarningExcelQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+/**
+ * Cập nhật trạng thái, điểm học viên theo xử lý học tập
+ * @summary Cập nhật trạng thái, điểm học viên theo xử lý học tập
+ */
+export type updateStudentStatusResponse200 = {
+    data: UpdateStudentStatus200
+    status: 200
+}
+
+export type updateStudentStatusResponse400 = {
+    data: UpdateStudentStatus400
+    status: 400
+}
+
+export type updateStudentStatusResponseSuccess = updateStudentStatusResponse200 & {
+    headers: Headers
+}
+export type updateStudentStatusResponseError = updateStudentStatusResponse400 & {
+    headers: Headers
+}
+
+export type updateStudentStatusResponse =
+    | updateStudentStatusResponseSuccess
+    | updateStudentStatusResponseError
+
+export const getUpdateStudentStatusUrl = () => {
+    return `/api/student/update-students-status`
+}
+
+export const updateStudentStatus = async (
+    updateStudentStatusBody: UpdateStudentStatusBody,
+    options?: RequestInit
+): Promise<updateStudentStatusResponse> => {
+    return customTrainingFetch<updateStudentStatusResponse>(getUpdateStudentStatusUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(updateStudentStatusBody),
+    })
+}
+
+export const getUpdateStudentStatusMutationOptions = <
+    TError = UpdateStudentStatus400,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof updateStudentStatus>>,
+        TError,
+        { data: UpdateStudentStatusBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof updateStudentStatus>>,
+    TError,
+    { data: UpdateStudentStatusBody },
+    TContext
+> => {
+    const mutationKey = ['updateStudentStatus']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof updateStudentStatus>>,
+        { data: UpdateStudentStatusBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return updateStudentStatus(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type UpdateStudentStatusMutationResult = NonNullable<
+    Awaited<ReturnType<typeof updateStudentStatus>>
+>
+export type UpdateStudentStatusMutationBody = UpdateStudentStatusBody
+export type UpdateStudentStatusMutationError = UpdateStudentStatus400
+
+/**
+ * @summary Cập nhật trạng thái, điểm học viên theo xử lý học tập
+ */
+export const useUpdateStudentStatus = <TError = UpdateStudentStatus400, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof updateStudentStatus>>,
+            TError,
+            { data: UpdateStudentStatusBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof updateStudentStatus>>,
+    TError,
+    { data: UpdateStudentStatusBody },
+    TContext
+> => {
+    const mutationOptions = getUpdateStudentStatusMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * Xuất danh sách học viên đạt học bổng dưới dạng JSON
+ * @summary Danh sách học bổng của học viên
+ */
+export type exportStudentScholarshipJsonResponse200 = {
+    data: ExportStudentScholarshipJson200Item[]
+    status: 200
+}
+
+export type exportStudentScholarshipJsonResponse404 = {
+    data: ExportStudentScholarshipJson404
+    status: 404
+}
+
+export type exportStudentScholarshipJsonResponseSuccess =
+    exportStudentScholarshipJsonResponse200 & {
+        headers: Headers
+    }
+export type exportStudentScholarshipJsonResponseError = exportStudentScholarshipJsonResponse404 & {
+    headers: Headers
+}
+
+export type exportStudentScholarshipJsonResponse =
+    | exportStudentScholarshipJsonResponseSuccess
+    | exportStudentScholarshipJsonResponseError
+
+export const getExportStudentScholarshipJsonUrl = (params: ExportStudentScholarshipJsonParams) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/student/export-json-list-student-scholarship?${stringifiedParams}`
+        : `/api/student/export-json-list-student-scholarship`
+}
+
+export const exportStudentScholarshipJson = async (
+    params: ExportStudentScholarshipJsonParams,
+    options?: RequestInit
+): Promise<exportStudentScholarshipJsonResponse> => {
+    return customTrainingFetch<exportStudentScholarshipJsonResponse>(
+        getExportStudentScholarshipJsonUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getExportStudentScholarshipJsonQueryKey = (
+    params?: ExportStudentScholarshipJsonParams
+) => {
+    return [
+        `/api/student/export-json-list-student-scholarship`,
+        ...(params ? [params] : []),
+    ] as const
+}
+
+export const getExportStudentScholarshipJsonQueryOptions = <
+    TData = Awaited<ReturnType<typeof exportStudentScholarshipJson>>,
+    TError = ExportStudentScholarshipJson404,
+>(
+    params: ExportStudentScholarshipJsonParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportStudentScholarshipJson>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getExportStudentScholarshipJsonQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportStudentScholarshipJson>>> = ({
+        signal,
+    }) => exportStudentScholarshipJson(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof exportStudentScholarshipJson>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ExportStudentScholarshipJsonQueryResult = NonNullable<
+    Awaited<ReturnType<typeof exportStudentScholarshipJson>>
+>
+export type ExportStudentScholarshipJsonQueryError = ExportStudentScholarshipJson404
+
+export function useExportStudentScholarshipJson<
+    TData = Awaited<ReturnType<typeof exportStudentScholarshipJson>>,
+    TError = ExportStudentScholarshipJson404,
+>(
+    params: ExportStudentScholarshipJsonParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportStudentScholarshipJson>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportStudentScholarshipJson>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportStudentScholarshipJson>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentScholarshipJson<
+    TData = Awaited<ReturnType<typeof exportStudentScholarshipJson>>,
+    TError = ExportStudentScholarshipJson404,
+>(
+    params: ExportStudentScholarshipJsonParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportStudentScholarshipJson>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportStudentScholarshipJson>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportStudentScholarshipJson>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentScholarshipJson<
+    TData = Awaited<ReturnType<typeof exportStudentScholarshipJson>>,
+    TError = ExportStudentScholarshipJson404,
+>(
+    params: ExportStudentScholarshipJsonParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportStudentScholarshipJson>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Danh sách học bổng của học viên
+ */
+
+export function useExportStudentScholarshipJson<
+    TData = Awaited<ReturnType<typeof exportStudentScholarshipJson>>,
+    TError = ExportStudentScholarshipJson404,
+>(
+    params: ExportStudentScholarshipJsonParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportStudentScholarshipJson>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getExportStudentScholarshipJsonQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+/**
+ * Xuất danh sách học viên bị cảnh cáo học tập dưới dạng JSON
+ * @summary Danh sách cảnh cáo học tập của học viên
+ */
+export type exportStudentAcademicWarningJsonResponse200 = {
+    data: ExportStudentAcademicWarningJson200Item[]
+    status: 200
+}
+
+export type exportStudentAcademicWarningJsonResponse404 = {
+    data: ExportStudentAcademicWarningJson404
+    status: 404
+}
+
+export type exportStudentAcademicWarningJsonResponseSuccess =
+    exportStudentAcademicWarningJsonResponse200 & {
+        headers: Headers
+    }
+export type exportStudentAcademicWarningJsonResponseError =
+    exportStudentAcademicWarningJsonResponse404 & {
+        headers: Headers
+    }
+
+export type exportStudentAcademicWarningJsonResponse =
+    | exportStudentAcademicWarningJsonResponseSuccess
+    | exportStudentAcademicWarningJsonResponseError
+
+export const getExportStudentAcademicWarningJsonUrl = (
+    params: ExportStudentAcademicWarningJsonParams
+) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/student/export-json-list-student-academic-warning?${stringifiedParams}`
+        : `/api/student/export-json-list-student-academic-warning`
+}
+
+export const exportStudentAcademicWarningJson = async (
+    params: ExportStudentAcademicWarningJsonParams,
+    options?: RequestInit
+): Promise<exportStudentAcademicWarningJsonResponse> => {
+    return customTrainingFetch<exportStudentAcademicWarningJsonResponse>(
+        getExportStudentAcademicWarningJsonUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getExportStudentAcademicWarningJsonQueryKey = (
+    params?: ExportStudentAcademicWarningJsonParams
+) => {
+    return [
+        `/api/student/export-json-list-student-academic-warning`,
+        ...(params ? [params] : []),
+    ] as const
+}
+
+export const getExportStudentAcademicWarningJsonQueryOptions = <
+    TData = Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
+    TError = ExportStudentAcademicWarningJson404,
+>(
+    params: ExportStudentAcademicWarningJsonParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getExportStudentAcademicWarningJsonQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>> = ({
+        signal,
+    }) => exportStudentAcademicWarningJson(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ExportStudentAcademicWarningJsonQueryResult = NonNullable<
+    Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>
+>
+export type ExportStudentAcademicWarningJsonQueryError = ExportStudentAcademicWarningJson404
+
+export function useExportStudentAcademicWarningJson<
+    TData = Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
+    TError = ExportStudentAcademicWarningJson404,
+>(
+    params: ExportStudentAcademicWarningJsonParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentAcademicWarningJson<
+    TData = Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
+    TError = ExportStudentAcademicWarningJson404,
+>(
+    params: ExportStudentAcademicWarningJsonParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentAcademicWarningJson<
+    TData = Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
+    TError = ExportStudentAcademicWarningJson404,
+>(
+    params: ExportStudentAcademicWarningJsonParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Danh sách cảnh cáo học tập của học viên
+ */
+
+export function useExportStudentAcademicWarningJson<
+    TData = Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
+    TError = ExportStudentAcademicWarningJson404,
+>(
+    params: ExportStudentAcademicWarningJsonParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getExportStudentAcademicWarningJsonQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+/**
+ * Xuất danh sách học viên bị xử lý học vụ dưới dạng JSON
+ * @summary Danh sách xử lý học vụ của học viên
+ */
+export type exportStudentAcademicActionJsonResponse200 = {
+    data: ExportStudentAcademicActionJson200Item[]
+    status: 200
+}
+
+export type exportStudentAcademicActionJsonResponse404 = {
+    data: ExportStudentAcademicActionJson404
+    status: 404
+}
+
+export type exportStudentAcademicActionJsonResponseSuccess =
+    exportStudentAcademicActionJsonResponse200 & {
+        headers: Headers
+    }
+export type exportStudentAcademicActionJsonResponseError =
+    exportStudentAcademicActionJsonResponse404 & {
+        headers: Headers
+    }
+
+export type exportStudentAcademicActionJsonResponse =
+    | exportStudentAcademicActionJsonResponseSuccess
+    | exportStudentAcademicActionJsonResponseError
+
+export const getExportStudentAcademicActionJsonUrl = (
+    params: ExportStudentAcademicActionJsonParams
+) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/student/export-json-list-student-academic-action?${stringifiedParams}`
+        : `/api/student/export-json-list-student-academic-action`
+}
+
+export const exportStudentAcademicActionJson = async (
+    params: ExportStudentAcademicActionJsonParams,
+    options?: RequestInit
+): Promise<exportStudentAcademicActionJsonResponse> => {
+    return customTrainingFetch<exportStudentAcademicActionJsonResponse>(
+        getExportStudentAcademicActionJsonUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getExportStudentAcademicActionJsonQueryKey = (
+    params?: ExportStudentAcademicActionJsonParams
+) => {
+    return [
+        `/api/student/export-json-list-student-academic-action`,
+        ...(params ? [params] : []),
+    ] as const
+}
+
+export const getExportStudentAcademicActionJsonQueryOptions = <
+    TData = Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
+    TError = ExportStudentAcademicActionJson404,
+>(
+    params: ExportStudentAcademicActionJsonParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getExportStudentAcademicActionJsonQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportStudentAcademicActionJson>>> = ({
+        signal,
+    }) => exportStudentAcademicActionJson(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ExportStudentAcademicActionJsonQueryResult = NonNullable<
+    Awaited<ReturnType<typeof exportStudentAcademicActionJson>>
+>
+export type ExportStudentAcademicActionJsonQueryError = ExportStudentAcademicActionJson404
+
+export function useExportStudentAcademicActionJson<
+    TData = Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
+    TError = ExportStudentAcademicActionJson404,
+>(
+    params: ExportStudentAcademicActionJsonParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportStudentAcademicActionJson>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentAcademicActionJson<
+    TData = Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
+    TError = ExportStudentAcademicActionJson404,
+>(
+    params: ExportStudentAcademicActionJsonParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportStudentAcademicActionJson>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentAcademicActionJson<
+    TData = Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
+    TError = ExportStudentAcademicActionJson404,
+>(
+    params: ExportStudentAcademicActionJsonParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Danh sách xử lý học vụ của học viên
+ */
+
+export function useExportStudentAcademicActionJson<
+    TData = Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
+    TError = ExportStudentAcademicActionJson404,
+>(
+    params: ExportStudentAcademicActionJsonParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getExportStudentAcademicActionJsonQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+/**
+ * Xuất danh sách học viên được giảm cảnh cáo học tập dưới dạng JSON
+ * @summary Danh sách giảm cảnh cáo học tập của học viên
+ */
+export type exportStudentDecreaseAcademicWarningJsonResponse200 = {
+    data: ExportStudentDecreaseAcademicWarningJson200Item[]
+    status: 200
+}
+
+export type exportStudentDecreaseAcademicWarningJsonResponse404 = {
+    data: ExportStudentDecreaseAcademicWarningJson404
+    status: 404
+}
+
+export type exportStudentDecreaseAcademicWarningJsonResponseSuccess =
+    exportStudentDecreaseAcademicWarningJsonResponse200 & {
+        headers: Headers
+    }
+export type exportStudentDecreaseAcademicWarningJsonResponseError =
+    exportStudentDecreaseAcademicWarningJsonResponse404 & {
+        headers: Headers
+    }
+
+export type exportStudentDecreaseAcademicWarningJsonResponse =
+    | exportStudentDecreaseAcademicWarningJsonResponseSuccess
+    | exportStudentDecreaseAcademicWarningJsonResponseError
+
+export const getExportStudentDecreaseAcademicWarningJsonUrl = (
+    params: ExportStudentDecreaseAcademicWarningJsonParams
+) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/student/export-json-list-student-decrease-academic-warning?${stringifiedParams}`
+        : `/api/student/export-json-list-student-decrease-academic-warning`
+}
+
+export const exportStudentDecreaseAcademicWarningJson = async (
+    params: ExportStudentDecreaseAcademicWarningJsonParams,
+    options?: RequestInit
+): Promise<exportStudentDecreaseAcademicWarningJsonResponse> => {
+    return customTrainingFetch<exportStudentDecreaseAcademicWarningJsonResponse>(
+        getExportStudentDecreaseAcademicWarningJsonUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getExportStudentDecreaseAcademicWarningJsonQueryKey = (
+    params?: ExportStudentDecreaseAcademicWarningJsonParams
+) => {
+    return [
+        `/api/student/export-json-list-student-decrease-academic-warning`,
+        ...(params ? [params] : []),
+    ] as const
+}
+
+export const getExportStudentDecreaseAcademicWarningJsonQueryOptions = <
+    TData = Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
+    TError = ExportStudentDecreaseAcademicWarningJson404,
+>(
+    params: ExportStudentDecreaseAcademicWarningJsonParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey =
+        queryOptions?.queryKey ?? getExportStudentDecreaseAcademicWarningJsonQueryKey(params)
+
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>
+    > = ({ signal }) =>
+        exportStudentDecreaseAcademicWarningJson(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ExportStudentDecreaseAcademicWarningJsonQueryResult = NonNullable<
+    Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>
+>
+export type ExportStudentDecreaseAcademicWarningJsonQueryError =
+    ExportStudentDecreaseAcademicWarningJson404
+
+export function useExportStudentDecreaseAcademicWarningJson<
+    TData = Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
+    TError = ExportStudentDecreaseAcademicWarningJson404,
+>(
+    params: ExportStudentDecreaseAcademicWarningJsonParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentDecreaseAcademicWarningJson<
+    TData = Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
+    TError = ExportStudentDecreaseAcademicWarningJson404,
+>(
+    params: ExportStudentDecreaseAcademicWarningJsonParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentDecreaseAcademicWarningJson<
+    TData = Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
+    TError = ExportStudentDecreaseAcademicWarningJson404,
+>(
+    params: ExportStudentDecreaseAcademicWarningJsonParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Danh sách giảm cảnh cáo học tập của học viên
+ */
+
+export function useExportStudentDecreaseAcademicWarningJson<
+    TData = Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
+    TError = ExportStudentDecreaseAcademicWarningJson404,
+>(
+    params: ExportStudentDecreaseAcademicWarningJsonParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getExportStudentDecreaseAcademicWarningJsonQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+/**
+ * Trả kết quả học kỳ của học viên, sinh viên dưới dạng JSON
+ * @summary Tổng kết kết quả học kỳ của học viên, sinh viên
+ */
+export type calculateStudentSemesterResultJsonResponse200 = {
+    data: CalculateStudentSemesterResultJson200
+    status: 200
+}
+
+export type calculateStudentSemesterResultJsonResponse400 = {
+    data: CalculateStudentSemesterResultJson400
+    status: 400
+}
+
+export type calculateStudentSemesterResultJsonResponse500 = {
+    data: CalculateStudentSemesterResultJson500
+    status: 500
+}
+
+export type calculateStudentSemesterResultJsonResponseSuccess =
+    calculateStudentSemesterResultJsonResponse200 & {
+        headers: Headers
+    }
+export type calculateStudentSemesterResultJsonResponseError = (
+    | calculateStudentSemesterResultJsonResponse400
+    | calculateStudentSemesterResultJsonResponse500
+) & {
+    headers: Headers
+}
+
+export type calculateStudentSemesterResultJsonResponse =
+    | calculateStudentSemesterResultJsonResponseSuccess
+    | calculateStudentSemesterResultJsonResponseError
+
+export const getCalculateStudentSemesterResultJsonUrl = (
+    params: CalculateStudentSemesterResultJsonParams
+) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/student/calculate-student-semester-result-json?${stringifiedParams}`
+        : `/api/student/calculate-student-semester-result-json`
+}
+
+export const calculateStudentSemesterResultJson = async (
+    params: CalculateStudentSemesterResultJsonParams,
+    options?: RequestInit
+): Promise<calculateStudentSemesterResultJsonResponse> => {
+    return customTrainingFetch<calculateStudentSemesterResultJsonResponse>(
+        getCalculateStudentSemesterResultJsonUrl(params),
+        {
+            ...options,
+            method: 'POST',
+        }
+    )
+}
+
+export const getCalculateStudentSemesterResultJsonMutationOptions = <
+    TError = CalculateStudentSemesterResultJson400 | CalculateStudentSemesterResultJson500,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof calculateStudentSemesterResultJson>>,
+        TError,
+        { params: CalculateStudentSemesterResultJsonParams },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof calculateStudentSemesterResultJson>>,
+    TError,
+    { params: CalculateStudentSemesterResultJsonParams },
+    TContext
+> => {
+    const mutationKey = ['calculateStudentSemesterResultJson']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof calculateStudentSemesterResultJson>>,
+        { params: CalculateStudentSemesterResultJsonParams }
+    > = (props) => {
+        const { params } = props ?? {}
+
+        return calculateStudentSemesterResultJson(params, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type CalculateStudentSemesterResultJsonMutationResult = NonNullable<
+    Awaited<ReturnType<typeof calculateStudentSemesterResultJson>>
+>
+
+export type CalculateStudentSemesterResultJsonMutationError =
+    | CalculateStudentSemesterResultJson400
+    | CalculateStudentSemesterResultJson500
+
+/**
+ * @summary Tổng kết kết quả học kỳ của học viên, sinh viên
+ */
+export const useCalculateStudentSemesterResultJson = <
+    TError = CalculateStudentSemesterResultJson400 | CalculateStudentSemesterResultJson500,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof calculateStudentSemesterResultJson>>,
+            TError,
+            { params: CalculateStudentSemesterResultJsonParams },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof calculateStudentSemesterResultJson>>,
+    TError,
+    { params: CalculateStudentSemesterResultJsonParams },
+    TContext
+> => {
+    const mutationOptions = getCalculateStudentSemesterResultJsonMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * Trả kết quả năm học của học viên, sinh viên dưới dạng
+ * @summary Tổng kết kết quả năm học của học viên, sinh viên
+ */
+export type calculateStudentSchoolYearResultResponse200 = {
+    data: CalculateStudentSchoolYearResult200
+    status: 200
+}
+
+export type calculateStudentSchoolYearResultResponse400 = {
+    data: CalculateStudentSchoolYearResult400
+    status: 400
+}
+
+export type calculateStudentSchoolYearResultResponse500 = {
+    data: CalculateStudentSchoolYearResult500
+    status: 500
+}
+
+export type calculateStudentSchoolYearResultResponseSuccess =
+    calculateStudentSchoolYearResultResponse200 & {
+        headers: Headers
+    }
+export type calculateStudentSchoolYearResultResponseError = (
+    | calculateStudentSchoolYearResultResponse400
+    | calculateStudentSchoolYearResultResponse500
+) & {
+    headers: Headers
+}
+
+export type calculateStudentSchoolYearResultResponse =
+    | calculateStudentSchoolYearResultResponseSuccess
+    | calculateStudentSchoolYearResultResponseError
+
+export const getCalculateStudentSchoolYearResultUrl = (
+    params: CalculateStudentSchoolYearResultParams
+) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/student/calculate-student-school-year-result?${stringifiedParams}`
+        : `/api/student/calculate-student-school-year-result`
+}
+
+export const calculateStudentSchoolYearResult = async (
+    params: CalculateStudentSchoolYearResultParams,
+    options?: RequestInit
+): Promise<calculateStudentSchoolYearResultResponse> => {
+    return customTrainingFetch<calculateStudentSchoolYearResultResponse>(
+        getCalculateStudentSchoolYearResultUrl(params),
+        {
+            ...options,
+            method: 'POST',
+        }
+    )
+}
+
+export const getCalculateStudentSchoolYearResultMutationOptions = <
+    TError = CalculateStudentSchoolYearResult400 | CalculateStudentSchoolYearResult500,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof calculateStudentSchoolYearResult>>,
+        TError,
+        { params: CalculateStudentSchoolYearResultParams },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof calculateStudentSchoolYearResult>>,
+    TError,
+    { params: CalculateStudentSchoolYearResultParams },
+    TContext
+> => {
+    const mutationKey = ['calculateStudentSchoolYearResult']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof calculateStudentSchoolYearResult>>,
+        { params: CalculateStudentSchoolYearResultParams }
+    > = (props) => {
+        const { params } = props ?? {}
+
+        return calculateStudentSchoolYearResult(params, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type CalculateStudentSchoolYearResultMutationResult = NonNullable<
+    Awaited<ReturnType<typeof calculateStudentSchoolYearResult>>
+>
+
+export type CalculateStudentSchoolYearResultMutationError =
+    | CalculateStudentSchoolYearResult400
+    | CalculateStudentSchoolYearResult500
+
+/**
+ * @summary Tổng kết kết quả năm học của học viên, sinh viên
+ */
+export const useCalculateStudentSchoolYearResult = <
+    TError = CalculateStudentSchoolYearResult400 | CalculateStudentSchoolYearResult500,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof calculateStudentSchoolYearResult>>,
+            TError,
+            { params: CalculateStudentSchoolYearResultParams },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof calculateStudentSchoolYearResult>>,
+    TError,
+    { params: CalculateStudentSchoolYearResultParams },
+    TContext
+> => {
+    const mutationOptions = getCalculateStudentSchoolYearResultMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type debtStatisticsResponse200 = {
+    data: Blob
+    status: 200
+}
+
+export type debtStatisticsResponse400 = {
+    data: DebtStatistics400
+    status: 400
+}
+
+export type debtStatisticsResponseSuccess = debtStatisticsResponse200 & {
+    headers: Headers
+}
+export type debtStatisticsResponseError = debtStatisticsResponse400 & {
+    headers: Headers
+}
+
+export type debtStatisticsResponse = debtStatisticsResponseSuccess | debtStatisticsResponseError
+
+export const getDebtStatisticsUrl = (params: DebtStatisticsParams) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/student/debt-statistics?${stringifiedParams}`
+        : `/api/student/debt-statistics`
+}
+
+export const debtStatistics = async (
+    params: DebtStatisticsParams,
+    options?: RequestInit
+): Promise<debtStatisticsResponse> => {
+    return customTrainingFetch<debtStatisticsResponse>(getDebtStatisticsUrl(params), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getDebtStatisticsQueryKey = (params?: DebtStatisticsParams) => {
+    return [`/api/student/debt-statistics`, ...(params ? [params] : [])] as const
+}
+
+export const getDebtStatisticsQueryOptions = <
+    TData = Awaited<ReturnType<typeof debtStatistics>>,
+    TError = DebtStatistics400,
+>(
+    params: DebtStatisticsParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof debtStatistics>>, TError, TData>>
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getDebtStatisticsQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof debtStatistics>>> = ({ signal }) =>
+        debtStatistics(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof debtStatistics>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type DebtStatisticsQueryResult = NonNullable<Awaited<ReturnType<typeof debtStatistics>>>
+export type DebtStatisticsQueryError = DebtStatistics400
+
+export function useDebtStatistics<
+    TData = Awaited<ReturnType<typeof debtStatistics>>,
+    TError = DebtStatistics400,
+>(
+    params: DebtStatisticsParams,
+    options: {
+        query: Partial<UseQueryOptions<Awaited<ReturnType<typeof debtStatistics>>, TError, TData>> &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof debtStatistics>>,
+                    TError,
+                    Awaited<ReturnType<typeof debtStatistics>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useDebtStatistics<
+    TData = Awaited<ReturnType<typeof debtStatistics>>,
+    TError = DebtStatistics400,
+>(
+    params: DebtStatisticsParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof debtStatistics>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof debtStatistics>>,
+                    TError,
+                    Awaited<ReturnType<typeof debtStatistics>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useDebtStatistics<
+    TData = Awaited<ReturnType<typeof debtStatistics>>,
+    TError = DebtStatistics400,
+>(
+    params: DebtStatisticsParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof debtStatistics>>, TError, TData>>
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useDebtStatistics<
+    TData = Awaited<ReturnType<typeof debtStatistics>>,
+    TError = DebtStatistics400,
+>(
+    params: DebtStatisticsParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof debtStatistics>>, TError, TData>>
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getDebtStatisticsQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+export type downloadStudentImportTemplateResponse200 = {
+    data: Blob
+    status: 200
+}
+
+export type downloadStudentImportTemplateResponse404 = {
+    data: DownloadStudentImportTemplate404
+    status: 404
+}
+
+export type downloadStudentImportTemplateResponse500 = {
+    data: DownloadStudentImportTemplate500
+    status: 500
+}
+
+export type downloadStudentImportTemplateResponseSuccess =
+    downloadStudentImportTemplateResponse200 & {
+        headers: Headers
+    }
+export type downloadStudentImportTemplateResponseError = (
+    | downloadStudentImportTemplateResponse404
+    | downloadStudentImportTemplateResponse500
+) & {
+    headers: Headers
+}
+
+export type downloadStudentImportTemplateResponse =
+    | downloadStudentImportTemplateResponseSuccess
+    | downloadStudentImportTemplateResponseError
+
+export const getDownloadStudentImportTemplateUrl = (
+    params: DownloadStudentImportTemplateParams
+) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/student/download-student-import-template?${stringifiedParams}`
+        : `/api/student/download-student-import-template`
+}
+
+export const downloadStudentImportTemplate = async (
+    params: DownloadStudentImportTemplateParams,
+    options?: RequestInit
+): Promise<downloadStudentImportTemplateResponse> => {
+    return customTrainingFetch<downloadStudentImportTemplateResponse>(
+        getDownloadStudentImportTemplateUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getDownloadStudentImportTemplateQueryKey = (
+    params?: DownloadStudentImportTemplateParams
+) => {
+    return [`/api/student/download-student-import-template`, ...(params ? [params] : [])] as const
+}
+
+export const getDownloadStudentImportTemplateQueryOptions = <
+    TData = Awaited<ReturnType<typeof downloadStudentImportTemplate>>,
+    TError = DownloadStudentImportTemplate404 | DownloadStudentImportTemplate500,
+>(
+    params: DownloadStudentImportTemplateParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof downloadStudentImportTemplate>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getDownloadStudentImportTemplateQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof downloadStudentImportTemplate>>> = ({
+        signal,
+    }) => downloadStudentImportTemplate(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof downloadStudentImportTemplate>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type DownloadStudentImportTemplateQueryResult = NonNullable<
+    Awaited<ReturnType<typeof downloadStudentImportTemplate>>
+>
+export type DownloadStudentImportTemplateQueryError =
+    | DownloadStudentImportTemplate404
+    | DownloadStudentImportTemplate500
+
+export function useDownloadStudentImportTemplate<
+    TData = Awaited<ReturnType<typeof downloadStudentImportTemplate>>,
+    TError = DownloadStudentImportTemplate404 | DownloadStudentImportTemplate500,
+>(
+    params: DownloadStudentImportTemplateParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof downloadStudentImportTemplate>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof downloadStudentImportTemplate>>,
+                    TError,
+                    Awaited<ReturnType<typeof downloadStudentImportTemplate>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useDownloadStudentImportTemplate<
+    TData = Awaited<ReturnType<typeof downloadStudentImportTemplate>>,
+    TError = DownloadStudentImportTemplate404 | DownloadStudentImportTemplate500,
+>(
+    params: DownloadStudentImportTemplateParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof downloadStudentImportTemplate>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof downloadStudentImportTemplate>>,
+                    TError,
+                    Awaited<ReturnType<typeof downloadStudentImportTemplate>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useDownloadStudentImportTemplate<
+    TData = Awaited<ReturnType<typeof downloadStudentImportTemplate>>,
+    TError = DownloadStudentImportTemplate404 | DownloadStudentImportTemplate500,
+>(
+    params: DownloadStudentImportTemplateParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof downloadStudentImportTemplate>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useDownloadStudentImportTemplate<
+    TData = Awaited<ReturnType<typeof downloadStudentImportTemplate>>,
+    TError = DownloadStudentImportTemplate404 | DownloadStudentImportTemplate500,
+>(
+    params: DownloadStudentImportTemplateParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof downloadStudentImportTemplate>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getDownloadStudentImportTemplateQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+export type exportStudentProfilesResponse200 = {
+    data: Blob
+    status: 200
+}
+
+export type exportStudentProfilesResponse404 = {
+    data: ExportStudentProfiles404
+    status: 404
+}
+
+export type exportStudentProfilesResponseSuccess = exportStudentProfilesResponse200 & {
+    headers: Headers
+}
+export type exportStudentProfilesResponseError = exportStudentProfilesResponse404 & {
+    headers: Headers
+}
+
+export type exportStudentProfilesResponse =
+    | exportStudentProfilesResponseSuccess
+    | exportStudentProfilesResponseError
+
+export const getExportStudentProfilesUrl = () => {
+    return `/api/student/export-student-profiles`
+}
+
+export const exportStudentProfiles = async (
+    exportStudentProfilesBody: ExportStudentProfilesBody,
+    options?: RequestInit
+): Promise<exportStudentProfilesResponse> => {
+    return customTrainingFetch<exportStudentProfilesResponse>(getExportStudentProfilesUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(exportStudentProfilesBody),
+    })
+}
+
+export const getExportStudentProfilesMutationOptions = <
+    TError = ExportStudentProfiles404,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof exportStudentProfiles>>,
+        TError,
+        { data: ExportStudentProfilesBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof exportStudentProfiles>>,
+    TError,
+    { data: ExportStudentProfilesBody },
+    TContext
+> => {
+    const mutationKey = ['exportStudentProfiles']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof exportStudentProfiles>>,
+        { data: ExportStudentProfilesBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return exportStudentProfiles(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type ExportStudentProfilesMutationResult = NonNullable<
+    Awaited<ReturnType<typeof exportStudentProfiles>>
+>
+export type ExportStudentProfilesMutationBody = ExportStudentProfilesBody
+export type ExportStudentProfilesMutationError = ExportStudentProfiles404
+
+export const useExportStudentProfiles = <TError = ExportStudentProfiles404, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof exportStudentProfiles>>,
+            TError,
+            { data: ExportStudentProfilesBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof exportStudentProfiles>>,
+    TError,
+    { data: ExportStudentProfilesBody },
+    TContext
+> => {
+    const mutationOptions = getExportStudentProfilesMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type exportLecturerProfileResponse200 = {
+    data: Blob
+    status: 200
+}
+
+export type exportLecturerProfileResponse400 = {
+    data: ExportLecturerProfile400
+    status: 400
+}
+
+export type exportLecturerProfileResponseSuccess = exportLecturerProfileResponse200 & {
+    headers: Headers
+}
+export type exportLecturerProfileResponseError = exportLecturerProfileResponse400 & {
+    headers: Headers
+}
+
+export type exportLecturerProfileResponse =
+    | exportLecturerProfileResponseSuccess
+    | exportLecturerProfileResponseError
+
+export const getExportLecturerProfileUrl = () => {
+    return `/api/lecturer/export-lecturer-profile`
+}
+
+export const exportLecturerProfile = async (
+    exportLecturerProfileBody: ExportLecturerProfileBody,
+    options?: RequestInit
+): Promise<exportLecturerProfileResponse> => {
+    return customTrainingFetch<exportLecturerProfileResponse>(getExportLecturerProfileUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(exportLecturerProfileBody),
+    })
+}
+
+export const getExportLecturerProfileMutationOptions = <
+    TError = ExportLecturerProfile400,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof exportLecturerProfile>>,
+        TError,
+        { data: ExportLecturerProfileBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof exportLecturerProfile>>,
+    TError,
+    { data: ExportLecturerProfileBody },
+    TContext
+> => {
+    const mutationKey = ['exportLecturerProfile']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof exportLecturerProfile>>,
+        { data: ExportLecturerProfileBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return exportLecturerProfile(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type ExportLecturerProfileMutationResult = NonNullable<
+    Awaited<ReturnType<typeof exportLecturerProfile>>
+>
+export type ExportLecturerProfileMutationBody = ExportLecturerProfileBody
+export type ExportLecturerProfileMutationError = ExportLecturerProfile400
+
+export const useExportLecturerProfile = <TError = ExportLecturerProfile400, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof exportLecturerProfile>>,
+            TError,
+            { data: ExportLecturerProfileBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof exportLecturerProfile>>,
+    TError,
+    { data: ExportLecturerProfileBody },
+    TContext
+> => {
+    const mutationOptions = getExportLecturerProfileMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type exportDiplomaVerificationResponse200 = {
+    data: Blob
+    status: 200
+}
+
+export type exportDiplomaVerificationResponse400 = {
+    data: ExportDiplomaVerification400
+    status: 400
+}
+
+export type exportDiplomaVerificationResponseSuccess = exportDiplomaVerificationResponse200 & {
+    headers: Headers
+}
+export type exportDiplomaVerificationResponseError = exportDiplomaVerificationResponse400 & {
+    headers: Headers
+}
+
+export type exportDiplomaVerificationResponse =
+    | exportDiplomaVerificationResponseSuccess
+    | exportDiplomaVerificationResponseError
+
+export const getExportDiplomaVerificationUrl = (params?: ExportDiplomaVerificationParams) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/diploma-verification/export-diploma-verification?${stringifiedParams}`
+        : `/api/diploma-verification/export-diploma-verification`
+}
+
+export const exportDiplomaVerification = async (
+    params?: ExportDiplomaVerificationParams,
+    options?: RequestInit
+): Promise<exportDiplomaVerificationResponse> => {
+    return customTrainingFetch<exportDiplomaVerificationResponse>(
+        getExportDiplomaVerificationUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getExportDiplomaVerificationQueryKey = (params?: ExportDiplomaVerificationParams) => {
+    return [
+        `/api/diploma-verification/export-diploma-verification`,
+        ...(params ? [params] : []),
+    ] as const
+}
+
+export const getExportDiplomaVerificationQueryOptions = <
+    TData = Awaited<ReturnType<typeof exportDiplomaVerification>>,
+    TError = ExportDiplomaVerification400,
+>(
+    params?: ExportDiplomaVerificationParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportDiplomaVerification>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getExportDiplomaVerificationQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportDiplomaVerification>>> = ({
+        signal,
+    }) => exportDiplomaVerification(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof exportDiplomaVerification>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ExportDiplomaVerificationQueryResult = NonNullable<
+    Awaited<ReturnType<typeof exportDiplomaVerification>>
+>
+export type ExportDiplomaVerificationQueryError = ExportDiplomaVerification400
+
+export function useExportDiplomaVerification<
+    TData = Awaited<ReturnType<typeof exportDiplomaVerification>>,
+    TError = ExportDiplomaVerification400,
+>(
+    params: undefined | ExportDiplomaVerificationParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportDiplomaVerification>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportDiplomaVerification>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportDiplomaVerification>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportDiplomaVerification<
+    TData = Awaited<ReturnType<typeof exportDiplomaVerification>>,
+    TError = ExportDiplomaVerification400,
+>(
+    params?: ExportDiplomaVerificationParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportDiplomaVerification>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportDiplomaVerification>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportDiplomaVerification>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportDiplomaVerification<
+    TData = Awaited<ReturnType<typeof exportDiplomaVerification>>,
+    TError = ExportDiplomaVerification400,
+>(
+    params?: ExportDiplomaVerificationParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportDiplomaVerification>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useExportDiplomaVerification<
+    TData = Awaited<ReturnType<typeof exportDiplomaVerification>>,
+    TError = ExportDiplomaVerification400,
+>(
+    params?: ExportDiplomaVerificationParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportDiplomaVerification>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getExportDiplomaVerificationQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+/**
+ * Import điểm rèn luyện lớp biên chế 
+
+ [fixedClassId] là id của lớp biên chế, 
+
+ [trainingSessionId] là id của đợt đánh giá
+ * @summary Import file nhập điểm rèn luyện
+ */
+export type uploadExcelImportTrainingScoreResponse200 = {
+    data: UploadExcelImportTrainingScore200
+    status: 200
+}
+
+export type uploadExcelImportTrainingScoreResponse400 = {
+    data: UploadExcelImportTrainingScore400
+    status: 400
+}
+
+export type uploadExcelImportTrainingScoreResponseSuccess =
+    uploadExcelImportTrainingScoreResponse200 & {
+        headers: Headers
+    }
+export type uploadExcelImportTrainingScoreResponseError =
+    uploadExcelImportTrainingScoreResponse400 & {
+        headers: Headers
+    }
+
+export type uploadExcelImportTrainingScoreResponse =
+    | uploadExcelImportTrainingScoreResponseSuccess
+    | uploadExcelImportTrainingScoreResponseError
+
+export const getUploadExcelImportTrainingScoreUrl = () => {
+    return `/api/training-score/upload-excel-import-score`
+}
+
+export const uploadExcelImportTrainingScore = async (
+    uploadExcelImportTrainingScore: UploadExcelImportTrainingScore,
+    options?: RequestInit
+): Promise<uploadExcelImportTrainingScoreResponse> => {
+    const formData = new FormData()
+    formData.append(`file`, uploadExcelImportTrainingScore.file)
+    formData.append(`fixedClassId`, uploadExcelImportTrainingScore.fixedClassId)
+    formData.append(`trainingSessionId`, uploadExcelImportTrainingScore.trainingSessionId)
+
+    return customTrainingFetch<uploadExcelImportTrainingScoreResponse>(
+        getUploadExcelImportTrainingScoreUrl(),
+        {
+            ...options,
+            method: 'POST',
+            body: formData,
+        }
+    )
+}
+
+export const getUploadExcelImportTrainingScoreMutationOptions = <
+    TError = UploadExcelImportTrainingScore400,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof uploadExcelImportTrainingScore>>,
+        TError,
+        { data: UploadExcelImportTrainingScore },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof uploadExcelImportTrainingScore>>,
+    TError,
+    { data: UploadExcelImportTrainingScore },
+    TContext
+> => {
+    const mutationKey = ['uploadExcelImportTrainingScore']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof uploadExcelImportTrainingScore>>,
+        { data: UploadExcelImportTrainingScore }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return uploadExcelImportTrainingScore(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type UploadExcelImportTrainingScoreMutationResult = NonNullable<
+    Awaited<ReturnType<typeof uploadExcelImportTrainingScore>>
+>
+export type UploadExcelImportTrainingScoreMutationBody = UploadExcelImportTrainingScore
+export type UploadExcelImportTrainingScoreMutationError = UploadExcelImportTrainingScore400
+
+/**
+ * @summary Import file nhập điểm rèn luyện
+ */
+export const useUploadExcelImportTrainingScore = <
+    TError = UploadExcelImportTrainingScore400,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof uploadExcelImportTrainingScore>>,
+            TError,
+            { data: UploadExcelImportTrainingScore },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof uploadExcelImportTrainingScore>>,
+    TError,
+    { data: UploadExcelImportTrainingScore },
+    TContext
+> => {
+    const mutationOptions = getUploadExcelImportTrainingScoreMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type importPhienBanCTDTResponse200 = {
+    data: ImportPhienBanCTDT200
+    status: 200
+}
+
+export type importPhienBanCTDTResponse400 = {
+    data: ImportPhienBanCTDT400
+    status: 400
+}
+
+export type importPhienBanCTDTResponseSuccess = importPhienBanCTDTResponse200 & {
+    headers: Headers
+}
+export type importPhienBanCTDTResponseError = importPhienBanCTDTResponse400 & {
+    headers: Headers
+}
+
+export type importPhienBanCTDTResponse =
+    | importPhienBanCTDTResponseSuccess
+    | importPhienBanCTDTResponseError
+
+export const getImportPhienBanCTDTUrl = (curriculumVersionId: string) => {
+    return `/api/curriculum/import-phien-ban-ctdt/${curriculumVersionId}`
+}
+
+export const importPhienBanCTDT = async (
+    curriculumVersionId: string,
+    importPhienBanCTDT: ImportPhienBanCTDT,
+    options?: RequestInit
+): Promise<importPhienBanCTDTResponse> => {
+    const formData = new FormData()
+    formData.append(`file`, importPhienBanCTDT.file)
+    if (importPhienBanCTDT.timeout !== undefined && importPhienBanCTDT.timeout !== null) {
+        formData.append(`timeout`, importPhienBanCTDT.timeout.toString())
+    }
+
+    return customTrainingFetch<importPhienBanCTDTResponse>(
+        getImportPhienBanCTDTUrl(curriculumVersionId),
+        {
+            ...options,
+            method: 'POST',
+            body: formData,
+        }
+    )
+}
+
+export const getImportPhienBanCTDTMutationOptions = <
+    TError = ImportPhienBanCTDT400,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof importPhienBanCTDT>>,
+        TError,
+        { curriculumVersionId: string; data: ImportPhienBanCTDT },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof importPhienBanCTDT>>,
+    TError,
+    { curriculumVersionId: string; data: ImportPhienBanCTDT },
+    TContext
+> => {
+    const mutationKey = ['importPhienBanCTDT']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof importPhienBanCTDT>>,
+        { curriculumVersionId: string; data: ImportPhienBanCTDT }
+    > = (props) => {
+        const { curriculumVersionId, data } = props ?? {}
+
+        return importPhienBanCTDT(curriculumVersionId, data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type ImportPhienBanCTDTMutationResult = NonNullable<
+    Awaited<ReturnType<typeof importPhienBanCTDT>>
+>
+export type ImportPhienBanCTDTMutationBody = ImportPhienBanCTDT
+export type ImportPhienBanCTDTMutationError = ImportPhienBanCTDT400
+
+export const useImportPhienBanCTDT = <TError = ImportPhienBanCTDT400, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof importPhienBanCTDT>>,
+            TError,
+            { curriculumVersionId: string; data: ImportPhienBanCTDT },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof importPhienBanCTDT>>,
+    TError,
+    { curriculumVersionId: string; data: ImportPhienBanCTDT },
+    TContext
+> => {
+    const mutationOptions = getImportPhienBanCTDTMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type exportPhienBanCTDTResponse200 = {
+    data: Blob
+    status: 200
+}
+
+export type exportPhienBanCTDTResponseSuccess = exportPhienBanCTDTResponse200 & {
+    headers: Headers
+}
+
+export type exportPhienBanCTDTResponse = exportPhienBanCTDTResponseSuccess
+
+export const getExportPhienBanCTDTUrl = (id: string) => {
+    return `/api/curriculum/export-phien-ban-ctdt/${id}`
+}
+
+export const exportPhienBanCTDT = async (
+    id: string,
+    options?: RequestInit
+): Promise<exportPhienBanCTDTResponse> => {
+    return customTrainingFetch<exportPhienBanCTDTResponse>(getExportPhienBanCTDTUrl(id), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getExportPhienBanCTDTQueryKey = (id?: string) => {
+    return [`/api/curriculum/export-phien-ban-ctdt/${id}`] as const
+}
+
+export const getExportPhienBanCTDTQueryOptions = <
+    TData = Awaited<ReturnType<typeof exportPhienBanCTDT>>,
+    TError = unknown,
+>(
+    id: string,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportPhienBanCTDT>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getExportPhienBanCTDTQueryKey(id)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportPhienBanCTDT>>> = ({ signal }) =>
+        exportPhienBanCTDT(id, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof exportPhienBanCTDT>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ExportPhienBanCTDTQueryResult = NonNullable<
+    Awaited<ReturnType<typeof exportPhienBanCTDT>>
+>
+export type ExportPhienBanCTDTQueryError = unknown
+
+export function useExportPhienBanCTDT<
+    TData = Awaited<ReturnType<typeof exportPhienBanCTDT>>,
+    TError = unknown,
+>(
+    id: string,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportPhienBanCTDT>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportPhienBanCTDT>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportPhienBanCTDT>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportPhienBanCTDT<
+    TData = Awaited<ReturnType<typeof exportPhienBanCTDT>>,
+    TError = unknown,
+>(
+    id: string,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportPhienBanCTDT>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportPhienBanCTDT>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportPhienBanCTDT>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportPhienBanCTDT<
+    TData = Awaited<ReturnType<typeof exportPhienBanCTDT>>,
+    TError = unknown,
+>(
+    id: string,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportPhienBanCTDT>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useExportPhienBanCTDT<
+    TData = Awaited<ReturnType<typeof exportPhienBanCTDT>>,
+    TError = unknown,
+>(
+    id: string,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportPhienBanCTDT>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getExportPhienBanCTDTQueryOptions(id, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+export type importPhienBanCTDTSubjectResponse200 = {
+    data: ImportPhienBanCTDTSubject200
+    status: 200
+}
+
+export type importPhienBanCTDTSubjectResponse400 = {
+    data: ImportPhienBanCTDTSubject400
+    status: 400
+}
+
+export type importPhienBanCTDTSubjectResponseSuccess = importPhienBanCTDTSubjectResponse200 & {
+    headers: Headers
+}
+export type importPhienBanCTDTSubjectResponseError = importPhienBanCTDTSubjectResponse400 & {
+    headers: Headers
+}
+
+export type importPhienBanCTDTSubjectResponse =
+    | importPhienBanCTDTSubjectResponseSuccess
+    | importPhienBanCTDTSubjectResponseError
+
+export const getImportPhienBanCTDTSubjectUrl = () => {
+    return `/api/curriculum-subject/import-phien-ban-ctdt-subject`
+}
+
+export const importPhienBanCTDTSubject = async (
+    importPhienBanCTDTSubjectBody: ImportPhienBanCTDTSubjectBody,
+    options?: RequestInit
+): Promise<importPhienBanCTDTSubjectResponse> => {
+    const formData = new FormData()
+    formData.append(`file`, importPhienBanCTDTSubjectBody.file)
+    formData.append(`trainingObjectTypeId`, importPhienBanCTDTSubjectBody.trainingObjectTypeId)
+    formData.append(`curriculumVersionId`, importPhienBanCTDTSubjectBody.curriculumVersionId)
+    if (
+        importPhienBanCTDTSubjectBody.createNewSubjects !== undefined &&
+        importPhienBanCTDTSubjectBody.createNewSubjects !== null
+    ) {
+        formData.append(
+            `createNewSubjects`,
+            importPhienBanCTDTSubjectBody.createNewSubjects.toString()
+        )
+    }
+    if (
+        importPhienBanCTDTSubjectBody.deleteOldData !== undefined &&
+        importPhienBanCTDTSubjectBody.deleteOldData !== null
+    ) {
+        formData.append(`deleteOldData`, importPhienBanCTDTSubjectBody.deleteOldData.toString())
+    }
+    if (
+        importPhienBanCTDTSubjectBody.timeout !== undefined &&
+        importPhienBanCTDTSubjectBody.timeout !== null
+    ) {
+        formData.append(`timeout`, importPhienBanCTDTSubjectBody.timeout.toString())
+    }
+
+    return customTrainingFetch<importPhienBanCTDTSubjectResponse>(
+        getImportPhienBanCTDTSubjectUrl(),
+        {
+            ...options,
+            method: 'POST',
+            body: formData,
+        }
+    )
+}
+
+export const getImportPhienBanCTDTSubjectMutationOptions = <
+    TError = ImportPhienBanCTDTSubject400,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof importPhienBanCTDTSubject>>,
+        TError,
+        { data: ImportPhienBanCTDTSubjectBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof importPhienBanCTDTSubject>>,
+    TError,
+    { data: ImportPhienBanCTDTSubjectBody },
+    TContext
+> => {
+    const mutationKey = ['importPhienBanCTDTSubject']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof importPhienBanCTDTSubject>>,
+        { data: ImportPhienBanCTDTSubjectBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return importPhienBanCTDTSubject(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type ImportPhienBanCTDTSubjectMutationResult = NonNullable<
+    Awaited<ReturnType<typeof importPhienBanCTDTSubject>>
+>
+export type ImportPhienBanCTDTSubjectMutationBody = ImportPhienBanCTDTSubjectBody
+export type ImportPhienBanCTDTSubjectMutationError = ImportPhienBanCTDTSubject400
+
+export const useImportPhienBanCTDTSubject = <
+    TError = ImportPhienBanCTDTSubject400,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof importPhienBanCTDTSubject>>,
+            TError,
+            { data: ImportPhienBanCTDTSubjectBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof importPhienBanCTDTSubject>>,
+    TError,
+    { data: ImportPhienBanCTDTSubjectBody },
+    TContext
+> => {
+    const mutationOptions = getImportPhienBanCTDTSubjectMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type graduationApplicationInitResponse200 = {
+    data: GraduationApplicationInit200
+    status: 200
+}
+
+export type graduationApplicationInitResponse400 = {
+    data: GraduationApplicationInit400
+    status: 400
+}
+
+export type graduationApplicationInitResponseSuccess = graduationApplicationInitResponse200 & {
+    headers: Headers
+}
+export type graduationApplicationInitResponseError = graduationApplicationInitResponse400 & {
+    headers: Headers
+}
+
+export type graduationApplicationInitResponse =
+    | graduationApplicationInitResponseSuccess
+    | graduationApplicationInitResponseError
+
+export const getGraduationApplicationInitUrl = () => {
+    return `/api/graduation/application-init`
+}
+
+export const graduationApplicationInit = async (
+    graduationApplicationInitBody: GraduationApplicationInitBody,
+    options?: RequestInit
+): Promise<graduationApplicationInitResponse> => {
+    return customTrainingFetch<graduationApplicationInitResponse>(
+        getGraduationApplicationInitUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(graduationApplicationInitBody),
+        }
+    )
+}
+
+export const getGraduationApplicationInitMutationOptions = <
+    TError = GraduationApplicationInit400,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof graduationApplicationInit>>,
+        TError,
+        { data: GraduationApplicationInitBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof graduationApplicationInit>>,
+    TError,
+    { data: GraduationApplicationInitBody },
+    TContext
+> => {
+    const mutationKey = ['graduationApplicationInit']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof graduationApplicationInit>>,
+        { data: GraduationApplicationInitBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return graduationApplicationInit(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type GraduationApplicationInitMutationResult = NonNullable<
+    Awaited<ReturnType<typeof graduationApplicationInit>>
+>
+export type GraduationApplicationInitMutationBody = GraduationApplicationInitBody
+export type GraduationApplicationInitMutationError = GraduationApplicationInit400
+
+export const useGraduationApplicationInit = <
+    TError = GraduationApplicationInit400,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof graduationApplicationInit>>,
+            TError,
+            { data: GraduationApplicationInitBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof graduationApplicationInit>>,
+    TError,
+    { data: GraduationApplicationInitBody },
+    TContext
+> => {
+    const mutationOptions = getGraduationApplicationInitMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type graduationCheckResponse200 = {
+    data: GraduationCheck200
+    status: 200
+}
+
+export type graduationCheckResponse400 = {
+    data: GraduationCheck400
+    status: 400
+}
+
+export type graduationCheckResponseSuccess = graduationCheckResponse200 & {
+    headers: Headers
+}
+export type graduationCheckResponseError = graduationCheckResponse400 & {
+    headers: Headers
+}
+
+export type graduationCheckResponse = graduationCheckResponseSuccess | graduationCheckResponseError
+
+export const getGraduationCheckUrl = () => {
+    return `/api/graduation/check`
+}
+
+export const graduationCheck = async (
+    graduationCheckBody: GraduationCheckBody,
+    options?: RequestInit
+): Promise<graduationCheckResponse> => {
+    return customTrainingFetch<graduationCheckResponse>(getGraduationCheckUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(graduationCheckBody),
+    })
+}
+
+export const getGraduationCheckMutationOptions = <
+    TError = GraduationCheck400,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof graduationCheck>>,
+        TError,
+        { data: GraduationCheckBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof graduationCheck>>,
+    TError,
+    { data: GraduationCheckBody },
+    TContext
+> => {
+    const mutationKey = ['graduationCheck']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof graduationCheck>>,
+        { data: GraduationCheckBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return graduationCheck(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type GraduationCheckMutationResult = NonNullable<Awaited<ReturnType<typeof graduationCheck>>>
+export type GraduationCheckMutationBody = GraduationCheckBody
+export type GraduationCheckMutationError = GraduationCheck400
+
+export const useGraduationCheck = <TError = GraduationCheck400, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof graduationCheck>>,
+            TError,
+            { data: GraduationCheckBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof graduationCheck>>,
+    TError,
+    { data: GraduationCheckBody },
+    TContext
+> => {
+    const mutationOptions = getGraduationCheckMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type generateDiplomaNumberResponse200 = {
+    data: GenerateDiplomaNumber200
+    status: 200
+}
+
+export type generateDiplomaNumberResponse400 = {
+    data: GenerateDiplomaNumber400
+    status: 400
+}
+
+export type generateDiplomaNumberResponse404 = {
+    data: GenerateDiplomaNumber404
+    status: 404
+}
+
+export type generateDiplomaNumberResponseSuccess = generateDiplomaNumberResponse200 & {
+    headers: Headers
+}
+export type generateDiplomaNumberResponseError = (
+    | generateDiplomaNumberResponse400
+    | generateDiplomaNumberResponse404
+) & {
+    headers: Headers
+}
+
+export type generateDiplomaNumberResponse =
+    | generateDiplomaNumberResponseSuccess
+    | generateDiplomaNumberResponseError
+
+export const getGenerateDiplomaNumberUrl = () => {
+    return `/api/graduation/generate-diploma-number`
+}
+
+export const generateDiplomaNumber = async (
+    generateDiplomaNumberBody: GenerateDiplomaNumberBody,
+    options?: RequestInit
+): Promise<generateDiplomaNumberResponse> => {
+    return customTrainingFetch<generateDiplomaNumberResponse>(getGenerateDiplomaNumberUrl(), {
+        ...options,
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(generateDiplomaNumberBody),
+    })
+}
+
+export const getGenerateDiplomaNumberMutationOptions = <
+    TError = GenerateDiplomaNumber400 | GenerateDiplomaNumber404,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof generateDiplomaNumber>>,
+        TError,
+        { data: GenerateDiplomaNumberBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof generateDiplomaNumber>>,
+    TError,
+    { data: GenerateDiplomaNumberBody },
+    TContext
+> => {
+    const mutationKey = ['generateDiplomaNumber']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof generateDiplomaNumber>>,
+        { data: GenerateDiplomaNumberBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return generateDiplomaNumber(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type GenerateDiplomaNumberMutationResult = NonNullable<
+    Awaited<ReturnType<typeof generateDiplomaNumber>>
+>
+export type GenerateDiplomaNumberMutationBody = GenerateDiplomaNumberBody
+export type GenerateDiplomaNumberMutationError = GenerateDiplomaNumber400 | GenerateDiplomaNumber404
+
+export const useGenerateDiplomaNumber = <
+    TError = GenerateDiplomaNumber400 | GenerateDiplomaNumber404,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof generateDiplomaNumber>>,
+            TError,
+            { data: GenerateDiplomaNumberBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof generateDiplomaNumber>>,
+    TError,
+    { data: GenerateDiplomaNumberBody },
+    TContext
+> => {
+    const mutationOptions = getGenerateDiplomaNumberMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type graduationSessionDecisionResponse200 = {
+    data: Blob
+    status: 200
+}
+
+export type graduationSessionDecisionResponse404 = {
+    data: GraduationSessionDecision404
+    status: 404
+}
+
+export type graduationSessionDecisionResponseSuccess = graduationSessionDecisionResponse200 & {
+    headers: Headers
+}
+export type graduationSessionDecisionResponseError = graduationSessionDecisionResponse404 & {
+    headers: Headers
+}
+
+export type graduationSessionDecisionResponse =
+    | graduationSessionDecisionResponseSuccess
+    | graduationSessionDecisionResponseError
+
+export const getGraduationSessionDecisionUrl = (params: GraduationSessionDecisionParams) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/graduation/session-decision?${stringifiedParams}`
+        : `/api/graduation/session-decision`
+}
+
+export const graduationSessionDecision = async (
+    params: GraduationSessionDecisionParams,
+    options?: RequestInit
+): Promise<graduationSessionDecisionResponse> => {
+    return customTrainingFetch<graduationSessionDecisionResponse>(
+        getGraduationSessionDecisionUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getGraduationSessionDecisionQueryKey = (params?: GraduationSessionDecisionParams) => {
+    return [`/api/graduation/session-decision`, ...(params ? [params] : [])] as const
+}
+
+export const getGraduationSessionDecisionQueryOptions = <
+    TData = Awaited<ReturnType<typeof graduationSessionDecision>>,
+    TError = GraduationSessionDecision404,
+>(
+    params: GraduationSessionDecisionParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof graduationSessionDecision>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGraduationSessionDecisionQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof graduationSessionDecision>>> = ({
+        signal,
+    }) => graduationSessionDecision(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof graduationSessionDecision>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GraduationSessionDecisionQueryResult = NonNullable<
+    Awaited<ReturnType<typeof graduationSessionDecision>>
+>
+export type GraduationSessionDecisionQueryError = GraduationSessionDecision404
+
+export function useGraduationSessionDecision<
+    TData = Awaited<ReturnType<typeof graduationSessionDecision>>,
+    TError = GraduationSessionDecision404,
+>(
+    params: GraduationSessionDecisionParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof graduationSessionDecision>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof graduationSessionDecision>>,
+                    TError,
+                    Awaited<ReturnType<typeof graduationSessionDecision>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGraduationSessionDecision<
+    TData = Awaited<ReturnType<typeof graduationSessionDecision>>,
+    TError = GraduationSessionDecision404,
+>(
+    params: GraduationSessionDecisionParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof graduationSessionDecision>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof graduationSessionDecision>>,
+                    TError,
+                    Awaited<ReturnType<typeof graduationSessionDecision>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGraduationSessionDecision<
+    TData = Awaited<ReturnType<typeof graduationSessionDecision>>,
+    TError = GraduationSessionDecision404,
+>(
+    params: GraduationSessionDecisionParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof graduationSessionDecision>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGraduationSessionDecision<
+    TData = Awaited<ReturnType<typeof graduationSessionDecision>>,
+    TError = GraduationSessionDecision404,
+>(
+    params: GraduationSessionDecisionParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof graduationSessionDecision>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGraduationSessionDecisionQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+export type statisticsGraduationDecisionResponse200 = {
+    data: StatisticsGraduationDecision200Item[]
+    status: 200
+}
+
+export type statisticsGraduationDecisionResponse404 = {
+    data: StatisticsGraduationDecision404
+    status: 404
+}
+
+export type statisticsGraduationDecisionResponseSuccess =
+    statisticsGraduationDecisionResponse200 & {
+        headers: Headers
+    }
+export type statisticsGraduationDecisionResponseError = statisticsGraduationDecisionResponse404 & {
+    headers: Headers
+}
+
+export type statisticsGraduationDecisionResponse =
+    | statisticsGraduationDecisionResponseSuccess
+    | statisticsGraduationDecisionResponseError
+
+export const getStatisticsGraduationDecisionUrl = (params: StatisticsGraduationDecisionParams) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/graduation/statistics?${stringifiedParams}`
+        : `/api/graduation/statistics`
+}
+
+export const statisticsGraduationDecision = async (
+    params: StatisticsGraduationDecisionParams,
+    options?: RequestInit
+): Promise<statisticsGraduationDecisionResponse> => {
+    return customTrainingFetch<statisticsGraduationDecisionResponse>(
+        getStatisticsGraduationDecisionUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getStatisticsGraduationDecisionQueryKey = (
+    params?: StatisticsGraduationDecisionParams
+) => {
+    return [`/api/graduation/statistics`, ...(params ? [params] : [])] as const
+}
+
+export const getStatisticsGraduationDecisionQueryOptions = <
+    TData = Awaited<ReturnType<typeof statisticsGraduationDecision>>,
+    TError = StatisticsGraduationDecision404,
+>(
+    params: StatisticsGraduationDecisionParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof statisticsGraduationDecision>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getStatisticsGraduationDecisionQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof statisticsGraduationDecision>>> = ({
+        signal,
+    }) => statisticsGraduationDecision(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof statisticsGraduationDecision>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type StatisticsGraduationDecisionQueryResult = NonNullable<
+    Awaited<ReturnType<typeof statisticsGraduationDecision>>
+>
+export type StatisticsGraduationDecisionQueryError = StatisticsGraduationDecision404
+
+export function useStatisticsGraduationDecision<
+    TData = Awaited<ReturnType<typeof statisticsGraduationDecision>>,
+    TError = StatisticsGraduationDecision404,
+>(
+    params: StatisticsGraduationDecisionParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof statisticsGraduationDecision>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof statisticsGraduationDecision>>,
+                    TError,
+                    Awaited<ReturnType<typeof statisticsGraduationDecision>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useStatisticsGraduationDecision<
+    TData = Awaited<ReturnType<typeof statisticsGraduationDecision>>,
+    TError = StatisticsGraduationDecision404,
+>(
+    params: StatisticsGraduationDecisionParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof statisticsGraduationDecision>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof statisticsGraduationDecision>>,
+                    TError,
+                    Awaited<ReturnType<typeof statisticsGraduationDecision>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useStatisticsGraduationDecision<
+    TData = Awaited<ReturnType<typeof statisticsGraduationDecision>>,
+    TError = StatisticsGraduationDecision404,
+>(
+    params: StatisticsGraduationDecisionParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof statisticsGraduationDecision>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useStatisticsGraduationDecision<
+    TData = Awaited<ReturnType<typeof statisticsGraduationDecision>>,
+    TError = StatisticsGraduationDecision404,
+>(
+    params: StatisticsGraduationDecisionParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof statisticsGraduationDecision>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getStatisticsGraduationDecisionQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+export type exportGraduationDecisionPptxResponse200 = {
+    data: Blob
+    status: 200
+}
+
+export type exportGraduationDecisionPptxResponse400 = {
+    data: ExportGraduationDecisionPptx400
+    status: 400
+}
+
+export type exportGraduationDecisionPptxResponseSuccess =
+    exportGraduationDecisionPptxResponse200 & {
+        headers: Headers
+    }
+export type exportGraduationDecisionPptxResponseError = exportGraduationDecisionPptxResponse400 & {
+    headers: Headers
+}
+
+export type exportGraduationDecisionPptxResponse =
+    | exportGraduationDecisionPptxResponseSuccess
+    | exportGraduationDecisionPptxResponseError
+
+export const getExportGraduationDecisionPptxUrl = () => {
+    return `/api/graduation/export-graduation-decision-pptx`
+}
+
+export const exportGraduationDecisionPptx = async (
+    exportGraduationDecisionPptxBody: ExportGraduationDecisionPptxBody,
+    options?: RequestInit
+): Promise<exportGraduationDecisionPptxResponse> => {
+    const formData = new FormData()
+    if (exportGraduationDecisionPptxBody.file !== undefined) {
+        formData.append(`file`, exportGraduationDecisionPptxBody.file)
+    }
+    if (exportGraduationDecisionPptxBody.sessionId !== undefined) {
+        formData.append(`sessionId`, exportGraduationDecisionPptxBody.sessionId)
+    }
+    if (
+        exportGraduationDecisionPptxBody.timeout !== undefined &&
+        exportGraduationDecisionPptxBody.timeout !== null
+    ) {
+        formData.append(`timeout`, exportGraduationDecisionPptxBody.timeout.toString())
+    }
+
+    return customTrainingFetch<exportGraduationDecisionPptxResponse>(
+        getExportGraduationDecisionPptxUrl(),
+        {
+            ...options,
+            method: 'POST',
+            body: formData,
+        }
+    )
+}
+
+export const getExportGraduationDecisionPptxMutationOptions = <
+    TError = ExportGraduationDecisionPptx400,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof exportGraduationDecisionPptx>>,
+        TError,
+        { data: ExportGraduationDecisionPptxBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof exportGraduationDecisionPptx>>,
+    TError,
+    { data: ExportGraduationDecisionPptxBody },
+    TContext
+> => {
+    const mutationKey = ['exportGraduationDecisionPptx']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof exportGraduationDecisionPptx>>,
+        { data: ExportGraduationDecisionPptxBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return exportGraduationDecisionPptx(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type ExportGraduationDecisionPptxMutationResult = NonNullable<
+    Awaited<ReturnType<typeof exportGraduationDecisionPptx>>
+>
+export type ExportGraduationDecisionPptxMutationBody = ExportGraduationDecisionPptxBody
+export type ExportGraduationDecisionPptxMutationError = ExportGraduationDecisionPptx400
+
+export const useExportGraduationDecisionPptx = <
+    TError = ExportGraduationDecisionPptx400,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof exportGraduationDecisionPptx>>,
+            TError,
+            { data: ExportGraduationDecisionPptxBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof exportGraduationDecisionPptx>>,
+    TError,
+    { data: ExportGraduationDecisionPptxBody },
+    TContext
+> => {
+    const mutationOptions = getExportGraduationDecisionPptxMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type exportInternshipProfileResponse200 = {
+    data: Blob
+    status: 200
+}
+
+export type exportInternshipProfileResponse400 = {
+    data: ExportInternshipProfile400
+    status: 400
+}
+
+export type exportInternshipProfileResponseSuccess = exportInternshipProfileResponse200 & {
+    headers: Headers
+}
+export type exportInternshipProfileResponseError = exportInternshipProfileResponse400 & {
+    headers: Headers
+}
+
+export type exportInternshipProfileResponse =
+    | exportInternshipProfileResponseSuccess
+    | exportInternshipProfileResponseError
+
+export const getExportInternshipProfileUrl = () => {
+    return `/api/internship/export-internship-profile`
+}
+
+export const exportInternshipProfile = async (
+    exportInternshipProfileBody: ExportInternshipProfileBody,
+    options?: RequestInit
+): Promise<exportInternshipProfileResponse> => {
+    return customTrainingFetch<exportInternshipProfileResponse>(getExportInternshipProfileUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(exportInternshipProfileBody),
+    })
+}
+
+export const getExportInternshipProfileMutationOptions = <
+    TError = ExportInternshipProfile400,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof exportInternshipProfile>>,
+        TError,
+        { data: ExportInternshipProfileBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof exportInternshipProfile>>,
+    TError,
+    { data: ExportInternshipProfileBody },
+    TContext
+> => {
+    const mutationKey = ['exportInternshipProfile']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof exportInternshipProfile>>,
+        { data: ExportInternshipProfileBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return exportInternshipProfile(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type ExportInternshipProfileMutationResult = NonNullable<
+    Awaited<ReturnType<typeof exportInternshipProfile>>
+>
+export type ExportInternshipProfileMutationBody = ExportInternshipProfileBody
+export type ExportInternshipProfileMutationError = ExportInternshipProfile400
+
+export const useExportInternshipProfile = <TError = ExportInternshipProfile400, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof exportInternshipProfile>>,
+            TError,
+            { data: ExportInternshipProfileBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof exportInternshipProfile>>,
+    TError,
+    { data: ExportInternshipProfileBody },
+    TContext
+> => {
+    const mutationOptions = getExportInternshipProfileMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * Nhập file excel danh sách phân công giảng dạy
+ * @summary Import danh sách phân công giảng dạy
+ */
+export type importPhanCongGiangDayResponse200 = {
+    data: ImportPhanCongGiangDay200
+    status: 200
+}
+
+export type importPhanCongGiangDayResponse400 = {
+    data: ImportPhanCongGiangDay400
+    status: 400
+}
+
+export type importPhanCongGiangDayResponseSuccess = importPhanCongGiangDayResponse200 & {
+    headers: Headers
+}
+export type importPhanCongGiangDayResponseError = importPhanCongGiangDayResponse400 & {
+    headers: Headers
+}
+
+export type importPhanCongGiangDayResponse =
+    | importPhanCongGiangDayResponseSuccess
+    | importPhanCongGiangDayResponseError
+
+export const getImportPhanCongGiangDayUrl = () => {
+    return `/api/plan-training/import-phan-cong-giang-day`
+}
+
+export const importPhanCongGiangDay = async (
+    importPhanCongGiangDay: ImportPhanCongGiangDay,
+    options?: RequestInit
+): Promise<importPhanCongGiangDayResponse> => {
+    const formData = new FormData()
+    formData.append(`file`, importPhanCongGiangDay.file)
+    formData.append(`semesterId`, importPhanCongGiangDay.semesterId)
+    formData.append(`trainingObjectTypeId`, importPhanCongGiangDay.trainingObjectTypeId)
+    if (importPhanCongGiangDay.fileType !== undefined) {
+        formData.append(`fileType`, importPhanCongGiangDay.fileType)
+    }
+    if (importPhanCongGiangDay.importType !== undefined) {
+        formData.append(`importType`, importPhanCongGiangDay.importType)
+    }
+    if (importPhanCongGiangDay.type !== undefined) {
+        formData.append(`type`, importPhanCongGiangDay.type)
+    }
+
+    return customTrainingFetch<importPhanCongGiangDayResponse>(getImportPhanCongGiangDayUrl(), {
+        ...options,
+        method: 'POST',
+        body: formData,
+    })
+}
+
+export const getImportPhanCongGiangDayMutationOptions = <
+    TError = ImportPhanCongGiangDay400,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof importPhanCongGiangDay>>,
+        TError,
+        { data: ImportPhanCongGiangDay },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof importPhanCongGiangDay>>,
+    TError,
+    { data: ImportPhanCongGiangDay },
+    TContext
+> => {
+    const mutationKey = ['importPhanCongGiangDay']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof importPhanCongGiangDay>>,
+        { data: ImportPhanCongGiangDay }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return importPhanCongGiangDay(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type ImportPhanCongGiangDayMutationResult = NonNullable<
+    Awaited<ReturnType<typeof importPhanCongGiangDay>>
+>
+export type ImportPhanCongGiangDayMutationBody = ImportPhanCongGiangDay
+export type ImportPhanCongGiangDayMutationError = ImportPhanCongGiangDay400
+
+/**
+ * @summary Import danh sách phân công giảng dạy
+ */
+export const useImportPhanCongGiangDay = <TError = ImportPhanCongGiangDay400, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof importPhanCongGiangDay>>,
+            TError,
+            { data: ImportPhanCongGiangDay },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof importPhanCongGiangDay>>,
+    TError,
+    { data: ImportPhanCongGiangDay },
+    TContext
+> => {
+    const mutationOptions = getImportPhanCongGiangDayMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }

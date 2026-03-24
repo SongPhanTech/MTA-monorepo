@@ -32,8 +32,7 @@ const PutMilestoneModal = () => {
 
     const { data = [], refetch } = useFindManySchoolYear({
         orderBy: { createdAt: 'desc' },
-        take: 1000,
-        skip: 0,
+        take: 100,
     })
 
     const { mutateAsync: createMilestone } = useCreateMilestone()
