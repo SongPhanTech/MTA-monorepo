@@ -319,33 +319,29 @@ export default function DanhSachLopMonHoc({
     const handleSave = async () => {
         try {
             const values = form.getFieldsValue()
-
             const subjectClass = values?.subjectClass || {}
 
-            const updateData = Object.entries(subjectClass).map(([id, item]: any) => ({
-                id,
-                examDate: item?.examDate ? dayjs(item.examDate).toDate() : null,
-            }))
+            const queries = Object.entries(subjectClass)
+                .filter(([_, item]: any) => item)
+                .map(([id, item]: any) => ({
+                    model: 'SubjectClass'as const,
+                    operation: 'updateMany',
+                    data: {
+                        where: { id },
+                        data: {
+                            examDate: item?.examDate ? dayjs(item.examDate).toDate() : null,
+                        },
+                    },
+                }))
 
-            if (!updateData.length) {
+            if (!queries.length) {
                 message.warning('Không có dữ liệu để lưu')
                 return
             }
 
-            const res = await sqlTransaction(
-                updateData.map((item) => ({
-                    model: 'SubjectClass',
-                    operation: 'update',
-                    data: {
-                        where: { id: item.id },
-                        data: {
-                            examDate: item.examDate,
-                        },
-                    },
-                }))
-            )
-            message.success('Cập nhật thành công')
+            await sqlTransaction(queries)
 
+            message.success('Cập nhật thành công')
             setIsDirty(false)
             refetch()
         } catch (error) {
