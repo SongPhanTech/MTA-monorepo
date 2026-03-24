@@ -144,35 +144,45 @@ const PutQuestionModal = () => {
                     return
                 }
 
-                const payload = {
-                    ...data,
-                    fillInBlankSlots: input?.id
-                        ? {
-                              deleteMany: {},
-                              createMany: {
-                                  data: output.multipleChoiceOptions.map((i, index) => ({
-                                      order: index + 1,
-                                      correctAnswer: i.content,
-                                  })),
-                              },
-                          }
-                        : {
-                              createMany: {
-                                  data: output.multipleChoiceOptions.map((i, index) => ({
-                                      order: index + 1,
-                                      correctAnswer: i.content,
-                                  })),
-                              },
-                          },
+                if (input?.id) {
+                    await updateQuestion({
+                        data: {
+                            ...data,
+                            fillInBlankSlots: {
+                                upsert: output.multipleChoiceOptions.map((i, index) => ({
+                                    where: {
+                                        questionId_order: {
+                                            questionId: input.id,
+                                            order: index + 1,
+                                        },
+                                    },
+                                    update: {
+                                        correctAnswer: i.content,
+                                    },
+                                    create: {
+                                        order: index + 1,
+                                        correctAnswer: i.content,
+                                    },
+                                })),
+                            },
+                        },
+                        where: { id: input.id },
+                    })
+                } else {
+                    await createQuestion({
+                        data: {
+                            ...data,
+                            fillInBlankSlots: {
+                                createMany: {
+                                    data: output.multipleChoiceOptions.map((i, index) => ({
+                                        order: index + 1,
+                                        correctAnswer: i.content,
+                                    })),
+                                },
+                            },
+                        },
+                    })
                 }
-
-                input?.id
-                    ? await updateQuestion({ data: payload, where: { id: input.id } })
-                    : await createQuestion({ data: payload })
-
-                message.success('Lưu câu hỏi điền khuyết thành công')
-                onClose()
-                return
             }
 
             if (output.type === QuestionType.ORDERING) {
@@ -188,29 +198,42 @@ const PutQuestionModal = () => {
                         correctOrder: Number(i.correctOrder),
                     }))
 
-                const payload = {
-                    ...data,
-                    orderingItems: input?.id
-                        ? {
-                              deleteMany: {},
-                              createMany: {
-                                  data: orderingData,
-                              },
-                          }
-                        : {
-                              createMany: {
-                                  data: orderingData,
-                              },
-                          },
+                if (input?.id) {
+                    await updateQuestion({
+                        data: {
+                            ...data,
+                            orderingItems: {
+                                upsert: orderingData.map((i) => ({
+                                    where: {
+                                        questionId_correctOrder: {
+                                            questionId: input.id,
+                                            correctOrder: i.correctOrder,
+                                        },
+                                    },
+                                    update: {
+                                        content: i.content,
+                                    },
+                                    create: {
+                                        content: i.content,
+                                        correctOrder: i.correctOrder,
+                                    },
+                                })),
+                            },
+                        },
+                        where: { id: input.id },
+                    })
+                } else {
+                    await createQuestion({
+                        data: {
+                            ...data,
+                            orderingItems: {
+                                createMany: {
+                                    data: orderingData,
+                                },
+                            },
+                        },
+                    })
                 }
-
-                input?.id
-                    ? await updateQuestion({ data: payload, where: { id: input.id } })
-                    : await createQuestion({ data: payload })
-
-                message.success('Lưu câu hỏi sắp xếp thành công')
-                onClose()
-                return
             }
 
             if (
@@ -236,21 +259,22 @@ const PutQuestionModal = () => {
                         data: {
                             ...data,
                             multipleChoiceOptions: {
-                                deleteMany: {},
-                                createMany: {
-                                    data: output.multipleChoiceOptions.map((i, index: number) => {
-                                        return {
-                                            content: i.content,
-                                            isCorrect: i.isCorrect,
-                                            order: index + 1,
-                                        }
-                                    }),
-                                },
+                                upsert: output.multipleChoiceOptions.map((i, index) => ({
+                                    where: { id: i.id || '' },
+                                    update: {
+                                        content: i.content,
+                                        isCorrect: i.isCorrect,
+                                        order: index + 1,
+                                    },
+                                    create: {
+                                        content: i.content,
+                                        isCorrect: i.isCorrect,
+                                        order: index + 1,
+                                    },
+                                })),
                             },
                         },
-                        where: {
-                            id: input.id,
-                        },
+                        where: { id: input.id },
                     })
                     message.success('Cập nhật thành công')
                 } else {
