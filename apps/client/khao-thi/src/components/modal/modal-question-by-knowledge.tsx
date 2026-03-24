@@ -235,6 +235,7 @@ export default function QuestionListByKnowledgeBlockModal() {
                         render: (_, record) => (
                             <Row className="justify-center gap-2">
                                 <EditIcon
+                                    className="text-blue-600"
                                     onClick={(e) => {
                                         onOpenPutQuestion({
                                             id: record.id,
