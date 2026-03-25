@@ -20,9 +20,9 @@ import {
 } from 'docx'
 import { saveAs } from 'file-saver'
 
-// Font size constants (half-points: 32 = 16pt, 28 = 14pt)
-const SIZE_BODY = 32
-const SIZE_DESC = 28
+// Font size constants (half-points: 32 = 16pt, 28 = 14pt, 26 = 13pt)
+const SIZE_BODY = 26
+const SIZE_DESC = 26
 
 interface ExportCriteriaEvaluationProps {
     data: DataTabEvaluationCriterionType
@@ -495,8 +495,8 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
                             width: { size: 50, type: WidthType.PERCENTAGE },
                             borders: noBorders,
                             children: [
-                                cellP('Xác nhận', { bold: true, center: true }),
-                                cellP('của trưởng nhóm công tác', { bold: true, center: true }),
+                                cellP('Xác nhận', { bold: true, center: true, size: 28 }),
+                                cellP('của trưởng nhóm công tác', { bold: true, center: true, size: 28 }),
                             ],
                         }),
                         new TableCell({
@@ -508,18 +508,18 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
                                     children: [
                                         new TextRun({
                                             text: '......., ngày ... tháng ... năm 20...',
-                                            size: SIZE_BODY,
+                                            size: 28, // 14pt
                                         }),
                                     ],
                                 }),
-                                cellP('Người viết', { bold: true, center: true }),
+                                cellP('Người viết', { bold: true, center: true, size: 28 }),
                                 new Paragraph({
                                     alignment: AlignmentType.CENTER,
                                     children: [
                                         new TextRun({
                                             text: '(Ký, ghi rõ họ tên)',
                                             italics: true,
-                                            size: SIZE_DESC,
+                                            size: 28, // 14pt
                                         }),
                                     ],
                                 }),
@@ -594,7 +594,7 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
                             new TextRun({
                                 text: 'PHIẾU TỰ ĐÁNH GIÁ TIÊU CHÍ',
                                 bold: true,
-                                size: SIZE_BODY,
+                                size: 28, // 14pt
                             }),
                         ],
                     })
