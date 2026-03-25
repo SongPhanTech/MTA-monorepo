@@ -112,8 +112,8 @@ const PutAvailableTrainingTimeModal = () => {
             className="w-[700px]"
         >
             <Col span={24}>
-                <Form.Item name="time" label="Quỹ thời gian" required>
-                    <InputNumber min={0} className="w-full" />
+                <Form.Item name="duration" label="Quỹ thời gian" required>
+                    <InputNumber min={0} className="w-full" placeholder="Nhập quỹ thời gian tính theo Ngày" />
                 </Form.Item>
             </Col>
         </PutFormModal>

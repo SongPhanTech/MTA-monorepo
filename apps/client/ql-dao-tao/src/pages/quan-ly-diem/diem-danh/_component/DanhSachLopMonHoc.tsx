@@ -24,6 +24,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 export default function DanhSachLopMonHoc({
     selectedSubjectClassId,
     setSelectedSubjectClassId,
+    setActiveKey
 }: any) {
     const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
@@ -356,6 +357,9 @@ export default function DanhSachLopMonHoc({
                             return {
                                 onClick: () => {
                                     setSelectedSubjectClassId(record.id)
+                                },
+                                      onDoubleClick: () => {
+                                    setActiveKey?.('2')
                                 },
                                 className: cn(
                                     selectedSubjectClassId === record.id ? 'bg-orange-200' : ''
