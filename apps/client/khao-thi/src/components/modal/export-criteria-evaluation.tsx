@@ -10,9 +10,11 @@ import {
     type IImageOptions,
     ImageRun,
     Packer,
+    PageOrientation,
     Paragraph,
     Table,
     TableCell,
+    TableLayoutType,
     TableRow,
     TextRun,
     VerticalAlign,
@@ -56,7 +58,7 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
         return color
     }
 
-    const htmlToParagraphs = async (html: string): Promise<(Paragraph | Table)[]> => {
+    const htmlToParagraphs = async (html: string, isInsideTable = false): Promise<(Paragraph | Table)[]> => {
         if (!html) return []
 
         const parser = new DOMParser()
@@ -65,8 +67,48 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
 
         const paragraphs: (Paragraph | Table)[] = []
 
-        for (const node of nodes) {
-            if (node.nodeType === Node.ELEMENT_NODE) {
+        const extractRuns = (n: Node, currentStyle: any = { size: SIZE_BODY }): TextRun[] => {
+            const runs: TextRun[] = []
+            if (n.nodeType === Node.TEXT_NODE) {
+                if (n.textContent) {
+                    runs.push(new TextRun({ text: n.textContent, ...currentStyle }))
+                }
+            } else if (n.nodeType === Node.ELEMENT_NODE) {
+                const el = n as HTMLElement
+                const newStyle = { ...currentStyle }
+                if (el.tagName === 'B' || el.tagName === 'STRONG' || el.style.fontWeight === 'bold') newStyle.bold = true
+                if (el.tagName === 'I' || el.tagName === 'EM' || el.style.fontStyle === 'italic') newStyle.italics = true
+                if (el.tagName === 'U' || el.tagName === 'INS' || el.style.textDecoration.includes('underline')) newStyle.underline = { type: 'single' } as any
+                if (el.tagName === 'S' || el.tagName === 'STRIKE' || el.tagName === 'DEL' || el.style.textDecoration.includes('line-through')) newStyle.strike = true
+                if (el.tagName === 'SUB') newStyle.subScript = true
+                if (el.tagName === 'SUP') newStyle.superScript = true
+                if (/^H([1-6])$/.test(el.tagName)) newStyle.bold = true
+
+                const cColor = normalizeColor(el.style.color)
+                if (cColor) newStyle.color = cColor
+
+                el.childNodes.forEach(child => {
+                    runs.push(...extractRuns(child, newStyle))
+                })
+            }
+            return runs
+        }
+
+        const traverse = async (node: Node) => {
+            if (node.nodeType === Node.TEXT_NODE && node.textContent?.trim()) {
+                paragraphs.push(
+                    new Paragraph({
+                        indent: isInsideTable ? undefined : { firstLine: 720 },
+                        alignment: isInsideTable ? AlignmentType.LEFT : AlignmentType.JUSTIFIED,
+                        children: [
+                            new TextRun({
+                                text: node.textContent,
+                                size: SIZE_BODY,
+                            }),
+                        ],
+                    })
+                )
+            } else if (node.nodeType === Node.ELEMENT_NODE) {
                 const el = node as HTMLElement
 
                 if (el.tagName === 'IMG') {
@@ -99,30 +141,11 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
                             console.error('Lỗi tải ảnh:', err)
                         }
                     }
-                }
-
-                if (el.tagName === 'TABLE') {
+                } else if (el.tagName === 'TABLE') {
                     const rows: TableRow[] = []
                     const trs = Array.from(
                         el.querySelectorAll(':scope > tbody > tr, :scope > thead > tr, :scope > tr')
                     )
-
-                    // Tính số cột tối đa (có tính colspan)
-                    let maxCols = 0
-                    for (const tr of trs) {
-                        let colCount = 0
-                        for (const td of Array.from(
-                            tr.querySelectorAll(':scope > td, :scope > th')
-                        )) {
-                            colCount += Number.parseInt(td.getAttribute('colspan') || '1', 10)
-                        }
-                        maxCols = Math.max(maxCols, colCount)
-                    }
-                    if (maxCols === 0) maxCols = 1
-
-                    // A4 với margin ~2.5cm mỗi bên ≈ 9070 DXA
-                    const PAGE_WIDTH_DXA = 9070
-                    const colWidthDXA = Math.floor(PAGE_WIDTH_DXA / maxCols)
 
                     const cellBorders = {
                         top: { style: BorderStyle.SINGLE, size: 1, color: '000000' },
@@ -138,7 +161,8 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
                             const colspan = Number.parseInt(td.getAttribute('colspan') || '1', 10)
                             const rowspan = Number.parseInt(td.getAttribute('rowspan') || '1', 10)
                             const cellChildren = await htmlToParagraphs(
-                                DOMPurify.sanitize(td.innerHTML)
+                                DOMPurify.sanitize(td.innerHTML),
+                                true
                             )
                             cells.push(
                                 new TableCell({
@@ -155,74 +179,78 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
                                                       ],
                                                   }),
                                               ],
-                                    width: {
-                                        size: colWidthDXA * colspan,
-                                        type: WidthType.DXA,
-                                    },
                                     columnSpan: colspan > 1 ? colspan : undefined,
                                     rowSpan: rowspan > 1 ? rowspan : undefined,
                                     verticalAlign: VerticalAlign.CENTER,
                                     borders: cellBorders,
+                                    margins: { top: 100, bottom: 100, left: 100, right: 100 },
                                 })
                             )
                         }
                         rows.push(new TableRow({ children: cells }))
                     }
                     paragraphs.push(
-                        new Table({ rows, width: { size: 100, type: WidthType.PERCENTAGE } })
+                        new Table({ 
+                            rows, 
+                            width: { size: 100, type: WidthType.PERCENTAGE }
+                        })
                     )
-                }
-
-                if (el.tagName === 'P') {
+                } else if (
+                    el.tagName === 'P' ||
+                    el.tagName === 'DIV' ||
+                    el.tagName === 'LI' ||
+                    /^H[1-6]$/.test(el.tagName) ||
+                    el.tagName === 'SPAN'
+                ) {
+                    const isHeading = el.tagName.match(/^H([1-6])$/)
+                    const hSizes = [32, 28, 26, 26, 26, 26]
+                    const baseStyle = isHeading ? { size: hSizes[parseInt(isHeading[1], 10) - 1], bold: true } : { size: SIZE_BODY }
+                    
                     const runs: TextRun[] = []
-                    el.childNodes.forEach((child) => {
-                        if (child.nodeType === Node.TEXT_NODE) {
-                            runs.push(
-                                new TextRun({ text: child.textContent || '', size: SIZE_BODY })
-                            )
-                        } else if (child.nodeType === Node.ELEMENT_NODE) {
-                            const c = child as HTMLElement
-                            runs.push(
-                                new TextRun({
-                                    text: c.textContent || '',
-                                    bold: c.tagName === 'B' || c.tagName === 'STRONG',
-                                    italics: c.tagName === 'I' || c.tagName === 'EM',
-                                    color: normalizeColor(c.style.color),
-                                    size: SIZE_BODY,
-                                })
-                            )
+                    el.childNodes.forEach(child => runs.push(...extractRuns(child, baseStyle)))
+
+                    if (el.tagName === 'LI') {
+                        const isNumber = el.parentElement?.tagName === 'OL'
+                        if (isNumber) {
+                            const index = Array.from(el.parentElement.children).indexOf(el) + 1
+                            runs.unshift(new TextRun({ text: `${index}. `, ...baseStyle }))
+                        } else {
+                            runs.unshift(new TextRun({ text: '•  ', ...baseStyle }))
                         }
-                    })
+                    }
+
+                    const textAlign = el.style.textAlign || ''
+                    let alignment: any = isInsideTable ? AlignmentType.LEFT : AlignmentType.JUSTIFIED
+                    if (textAlign === 'center') alignment = AlignmentType.CENTER
+                    else if (textAlign === 'right') alignment = AlignmentType.RIGHT
+                    else if (textAlign === 'justify') alignment = AlignmentType.JUSTIFIED
+                    else if (textAlign === 'left') alignment = AlignmentType.LEFT
+
+                    let indent: any = isInsideTable ? undefined : { firstLine: 720 }
+                    if (el.tagName === 'LI') {
+                        indent = isInsideTable ? { left: 360, hanging: 360 } : { left: 720, hanging: 360 }
+                    }
+
                     paragraphs.push(
                         new Paragraph({
-                            indent: { firstLine: 720 },
-                            alignment: AlignmentType.JUSTIFIED,
+                            indent: indent,
+                            alignment: alignment,
                             children:
                                 runs.length > 0
                                     ? runs
-                                    : [new TextRun({ text: '', size: SIZE_BODY })],
+                                    : [new TextRun({ text: '', ...baseStyle })],
                         })
                     )
-                }
-
-                if (el.tagName === 'SPAN') {
-                    paragraphs.push(
-                        new Paragraph({
-                            indent: { firstLine: 720 },
-                            alignment: AlignmentType.JUSTIFIED,
-                            children: [
-                                new TextRun({
-                                    text: el.textContent || '',
-                                    color: normalizeColor(el.style.color) || undefined,
-                                    bold: el.style.fontWeight === 'bold',
-                                    italics: el.style.fontStyle === 'italic',
-                                    size: SIZE_BODY,
-                                }),
-                            ],
-                        })
-                    )
+                } else {
+                    for (let i = 0; i < el.childNodes.length; i++) {
+                        await traverse(el.childNodes[i])
+                    }
                 }
             }
+        }
+
+        for (const node of nodes) {
+            await traverse(node)
         }
 
         return paragraphs
@@ -236,10 +264,18 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
             ],
         })
 
+        // Portrait A4: ~9070 DXA usable
+        const COL_STT = 460
+        const COL_MA = 1470
+        const COL_TEN = 3170
+        const COL_NGAY = 1810
+        const COL_NOI = 1350
+        const COL_GHI = 910
+
         const headerRow = new TableRow({
             children: [
                 new TableCell({
-                    width: { size: 5, type: WidthType.PERCENTAGE },
+                    width: { size: COL_STT, type: WidthType.DXA },
                     children: [
                         new Paragraph({
                             alignment: AlignmentType.CENTER,
@@ -248,7 +284,7 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
                     ],
                 }),
                 new TableCell({
-                    width: { size: 15, type: WidthType.PERCENTAGE },
+                    width: { size: COL_MA, type: WidthType.DXA },
                     children: [
                         new Paragraph({
                             alignment: AlignmentType.CENTER,
@@ -259,7 +295,7 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
                     ],
                 }),
                 new TableCell({
-                    width: { size: 35, type: WidthType.PERCENTAGE },
+                    width: { size: COL_TEN, type: WidthType.DXA },
                     children: [
                         new Paragraph({
                             alignment: AlignmentType.CENTER,
@@ -274,7 +310,7 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
                     ],
                 }),
                 new TableCell({
-                    width: { size: 20, type: WidthType.PERCENTAGE },
+                    width: { size: COL_NGAY, type: WidthType.DXA },
                     children: [
                         new Paragraph({
                             alignment: AlignmentType.CENTER,
@@ -289,7 +325,7 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
                     ],
                 }),
                 new TableCell({
-                    width: { size: 15, type: WidthType.PERCENTAGE },
+                    width: { size: COL_NOI, type: WidthType.DXA },
                     children: [
                         new Paragraph({
                             alignment: AlignmentType.CENTER,
@@ -300,7 +336,7 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
                     ],
                 }),
                 new TableCell({
-                    width: { size: 10, type: WidthType.PERCENTAGE },
+                    width: { size: COL_GHI, type: WidthType.DXA },
                     children: [
                         new Paragraph({
                             alignment: AlignmentType.CENTER,
@@ -389,6 +425,8 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
 
         const table = new Table({
             width: { size: 100, type: WidthType.PERCENTAGE },
+            layout: TableLayoutType.FIXED,
+            columnWidths: [COL_STT, COL_MA, COL_TEN, COL_NGAY, COL_NOI, COL_GHI],
             borders: {
                 top: { style: BorderStyle.SINGLE, size: 1, color: '000000' },
                 bottom: { style: BorderStyle.SINGLE, size: 1, color: '000000' },
@@ -487,6 +525,8 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
     const createSignatureTable = () =>
         new Table({
             width: { size: 100, type: WidthType.PERCENTAGE },
+            layout: TableLayoutType.FIXED,
+            columnWidths: [4535, 4535],
             borders: noBorders,
             rows: [
                 new TableRow({
@@ -536,7 +576,7 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
                 console.error('Không có dữ liệu để xuất')
                 return
             }
-
+            console.log(data)
             const criteriaWithEvidence = await Promise.all(
                 data.criteria.map(async (criterion) => {
                     const res = await sqlTransaction([
@@ -655,6 +695,7 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
                     criterionData?.evaluationCriterion?.currentSituation ||
                     criterion?.evaluationCriterion?.currentSituation ||
                     ''
+                console.log('--- 1. MÔ TẢ HIỆN TRẠNG ---', currentSituation)
                 allChildren.push(
                     ...(await htmlToParagraphs(processHtmlContent(currentSituation, evidenceTags)))
                 )
@@ -672,6 +713,7 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
                     criterionData?.evaluationCriterion?.strengths ||
                     criterion?.evaluationCriterion?.strengths ||
                     ''
+                console.log('--- 2. ĐIỂM MẠNH ---', strengths)
                 allChildren.push(
                     ...(await htmlToParagraphs(processHtmlContent(strengths, evidenceTags)))
                 )
@@ -689,6 +731,7 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
                     criterionData?.evaluationCriterion?.weakness ||
                     criterion?.evaluationCriterion?.weakness ||
                     ''
+                console.log('--- 3. ĐIỂM TỒN TẠI ---', weakness)
                 allChildren.push(
                     ...(await htmlToParagraphs(processHtmlContent(weakness, evidenceTags)))
                 )
@@ -710,6 +753,7 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
                     criterionData?.evaluationCriterion?.actionPlan ||
                     criterion?.evaluationCriterion?.actionPlan ||
                     ''
+                console.log('--- 4. KẾ HOẠCH HÀNH ĐỘNG ---', actionPlan)
                 allChildren.push(
                     ...(await htmlToParagraphs(processHtmlContent(actionPlan, evidenceTags)))
                 )
@@ -720,6 +764,7 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
                     criterionData?.evaluationCriterion?.score ||
                     criterion?.evaluationCriterion?.score ||
                     ''
+                console.log('--- 5. TỰ ĐÁNH GIÁ ---', scoreRaw)
 
                 allChildren.push(
                     new Paragraph({
@@ -739,9 +784,47 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
             }
 
             const doc = new Document({
+                styles: {
+                    default: {
+                        document: {
+                            run: {
+                                font: 'Times New Roman',
+                                size: SIZE_BODY,
+                            },
+                        },
+                    },
+                },
                 sections: [
-                    { children: allChildren },
                     {
+                        properties: {
+                            page: {
+                                size: {
+                                    orientation: PageOrientation.PORTRAIT,
+                                },
+                                margin: {
+                                    top: 720,
+                                    bottom: 720,
+                                    left: 1417,
+                                    right: 1417,
+                                },
+                            },
+                        },
+                        children: allChildren,
+                    },
+                    {
+                        properties: {
+                            page: {
+                                size: {
+                                    orientation: PageOrientation.PORTRAIT,
+                                },
+                                margin: {
+                                    top: 720,
+                                    bottom: 720,
+                                    left: 1417,
+                                    right: 1417,
+                                },
+                            },
+                        },
                         children:
                             evidenceList.length > 0 ? exportDanhSachMinhchung(evidenceList) : [],
                     },
