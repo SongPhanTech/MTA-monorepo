@@ -47,10 +47,15 @@ const DefaultLayout = ({
     })
 
     // SSO Authentication check - sử dụng hook riêng
-    const { status, signIn } = useSSOSession()
+    const { status, signIn, refetch } = useSSOSession()
 
     // Ref để đảm bảo chỉ redirect 1 lần
     const hasRedirected = useRef(false)
+
+    // Force fresh session check on admin page mount to avoid stale cache
+    // preventing premature rendering that triggers mta-session-expired dialog
+    const hasStartedVerify = useRef(false)
+    const [sessionVerified, setSessionVerified] = useState(false)
 
     // All hooks must be called before any early return
     const listBreadcrumb = useMemo(() => {
@@ -108,11 +113,13 @@ const DefaultLayout = ({
                 ]
     }, [breadcrumb, breadcrumbList])
 
+    const isAuthenticated = sessionVerified && status === 'authenticated'
+
     const { data: userSessionTimeout } = useFindUniqueConfig({
         where: {
             key: CONFIG_KEY.USER_SESSION_TIMEOUT,
         },
-    })
+    }, { enabled: isAuthenticated })
 
     const {
         token: { colorBgContainer },
@@ -131,17 +138,34 @@ const DefaultLayout = ({
         handleCollapsed()
     }, [])
 
+    // Force fresh session verification on admin page mount
+    // This prevents stale cache from causing premature rendering
+    // which triggers UMD API calls → 401 → mta-session-expired dialog
+    useEffect(() => {
+        if (!hasStartedVerify.current) {
+            hasStartedVerify.current = true
+            refetch()
+        }
+    }, [refetch])
+
+    // Track when fresh verification completes
+    useEffect(() => {
+        if (hasStartedVerify.current && status !== 'loading') {
+            setSessionVerified(true)
+        }
+    }, [status])
+
     // Redirect to SSO if not authenticated
     // Chỉ redirect 1 lần duy nhất
     useEffect(() => {
-        if (status === 'unauthenticated' && !hasRedirected.current) {
+        if (sessionVerified && status === 'unauthenticated' && !hasRedirected.current) {
             hasRedirected.current = true
             signIn()
         }
-    }, [status, signIn])
+    }, [sessionVerified, status, signIn])
 
-    // Show loading while checking authentication
-    if (status === 'loading') {
+    // Show loading while verifying session
+    if (!sessionVerified || status === 'loading') {
         return (
             <div className="h-screen w-screen flex items-center justify-center bg-gray-50">
                 <div className="text-center">
