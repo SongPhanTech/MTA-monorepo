@@ -15,6 +15,7 @@ import {
     SurveyStatsLecSchema,
     SurveyStatsSchema,
 } from '../services/survey.service'
+import { getRuntimeEnv } from '@workspace/libs';
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -509,7 +510,7 @@ app.openapi(getOrganizationSurveyStatistics, async (c) => {
             sParentId: organizationId,
             OR: [
                 {
-                   sMa:'HD'
+                   sMa:getRuntimeEnv('NEXT_PUBLIC_ROOT_ORG_CODE')||'HD'
                 },
                 {
                     iLoaiDonVi: {

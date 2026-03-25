@@ -123,7 +123,7 @@ export default function BaoCaoGiangVien() {
                 // }),
                 OR: [
                     {
-                        sMa:'HD'
+                        sMa:getRuntimeEnv('NEXT_PUBLIC_ROOT_ORG_CODE')||'HD'
                     },
                     {
                         iLoaiDonVi: {
