@@ -509,8 +509,7 @@ app.openapi(getOrganizationSurveyStatistics, async (c) => {
             sParentId: organizationId,
             OR: [
                 {
-                    iCapDonVi: 0,
-                    iLoaiDonVi: 0,
+                   sMa:'HD'
                 },
                 {
                     iLoaiDonVi: {

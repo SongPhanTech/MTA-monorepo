@@ -51,6 +51,7 @@ export type ConfigKeys =
     | 'NEXT_PUBLIC_API_PORTAL_BASE_URL'
     | 'NEXT_PUBLIC_API_EMS_BASE_URL'
     | 'NEXT_PUBLIC_API_PUBLIC_BASE_URL'
+    | 'NEXT_PUBLIC_ROOT_ORG_CODE'
 
 export const getRuntimeEnv = (name: ConfigKeys): string => {
     if (typeof window === 'undefined') {

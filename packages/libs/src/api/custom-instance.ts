@@ -20,7 +20,6 @@ const getTokenHeaders = (): Record<string, string> => {
 export const fetchInstance = async (url: string, options?: RequestInit): Promise<Response> => {
     const accessToken = BROWSER ? localStorage.getItem('ACCESS_TOKEN') : ''
     const tokenHeaders = getTokenHeaders()
-    console.log('Token headers:', tokenHeaders)
 
     const payload: RequestInit = {
         ...options,
