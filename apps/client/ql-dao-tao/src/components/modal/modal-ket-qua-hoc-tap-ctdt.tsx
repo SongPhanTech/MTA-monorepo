@@ -1,7 +1,7 @@
 import PutFormModal from '@components/commons/put-modal'
 import type { Student } from '@workspace/db/client'
 import { useFindUniqueStudent } from '@workspace/db/hooks'
-import { Col, Form,Tag } from 'antd'
+import { Col, Form, Tag } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
@@ -197,7 +197,7 @@ const ModalLearningResult = () => {
                             align: 'center',
                             render: (_, record) => record?.finalScore?.toNumber(),
                         },
-                           {
+                        {
                             title: 'Loại môn',
                             width: 120,
                             align: 'center',

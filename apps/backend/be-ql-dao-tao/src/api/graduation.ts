@@ -465,7 +465,7 @@ app.openapi(graduationCheck, async (c) => {
                 // Môn tự chọn chưa học → bỏ qua, để bước check tín chỉ tự chọn xử lý
                 if (subject.type === SubjectRequirementType.Optional) continue
 
-                // Môn bắt buộc chưa đạt 
+                // Môn bắt buộc chưa đạt
                 if (subject.type === SubjectRequirementType.Mandatory) {
                     reasons.push(`Chưa đạt môn bắt buộc (${subject.subject.name})`)
                 }
@@ -522,7 +522,10 @@ app.openapi(graduationCheck, async (c) => {
                         const otherSubjectInCurriculum = curriculumSubjects.find(
                             (s) => s.subjectId === result.subjectId
                         )
-                        if (otherSubjectInCurriculum && !otherSubjectInCurriculum.useForFinalScore) {
+                        if (
+                            otherSubjectInCurriculum &&
+                            !otherSubjectInCurriculum.useForFinalScore
+                        ) {
                             markDoneScores.set(result.subjectId, result.score)
                         } else {
                             finalScores.set(result.subjectId, result.score)
@@ -554,7 +557,10 @@ app.openapi(graduationCheck, async (c) => {
                         const otherSubjectInCurriculum = curriculumSubjects.find(
                             (s) => s.subjectId === result.subjectId
                         )
-                        if (otherSubjectInCurriculum && !otherSubjectInCurriculum.useForFinalScore) {
+                        if (
+                            otherSubjectInCurriculum &&
+                            !otherSubjectInCurriculum.useForFinalScore
+                        ) {
                             markDoneScores.set(result.subjectId, result.score)
                         } else {
                             finalScores.set(result.subjectId, result.score)
@@ -565,10 +571,7 @@ app.openapi(graduationCheck, async (c) => {
                 if (hasEquivalencyGroup) break
             }
 
-            if (
-                !hasEquivalencyGroup &&
-                subject.type === SubjectRequirementType.Mandatory
-            ) {
+            if (!hasEquivalencyGroup && subject.type === SubjectRequirementType.Mandatory) {
                 reasons.push(`Chưa đạt môn bắt buộc (${subject.subject.name})`)
             }
         }
