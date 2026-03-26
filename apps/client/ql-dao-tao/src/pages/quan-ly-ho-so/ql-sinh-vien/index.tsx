@@ -649,8 +649,11 @@ export default function UserProfilePageDs() {
                                     label: item.name,
                                     value: item.id,
                                 })),
-                                render: (__, record: any) => {
-                                    return record?.fixedClass?.curriculumVersion?.name
+                                render: (__, record) => {
+                                    const curriculum =
+                                        record.curriculumVersion ||
+                                        record.fixedClass?.curriculumVersion
+                                    return curriculum ? curriculum.name : ''
                                 },
                             },
                             {
