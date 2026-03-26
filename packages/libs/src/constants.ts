@@ -20,7 +20,6 @@ export const examTypes: Record<string, $Enums.ExamType> = {
     'Trực tuyến': $Enums.ExamType.OnlineWritten,
     'Vấn đáp': $Enums.ExamType.Oral,
     'Thực hành - Thí nghiệm': $Enums.ExamType.Practice,
-    'Đồ án': $Enums.ExamType.Project,
     Khác: $Enums.ExamType.Other,
 }
 
