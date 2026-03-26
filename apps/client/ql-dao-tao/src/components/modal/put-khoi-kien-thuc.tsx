@@ -117,8 +117,7 @@ const PutTrainingBlockOnCurriculumVersion = () => {
                 const toDeleteIds = onlyInOld
                     .map((i) => {
                         const found = initialValue?.trainingBlocks?.find(
-                            (tb: TrainingBlockOnCurriculumVersion) =>
-                                tb.trainingBlockId === i.value
+                            (tb: TrainingBlockOnCurriculumVersion) => tb.trainingBlockId === i.value
                         )
                         return found?.id
                     })

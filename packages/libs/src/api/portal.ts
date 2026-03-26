@@ -46,6 +46,8 @@ type AwaitedInput<T> = PromiseLike<T> | T
 
 type Awaited<O> = O extends AwaitedInput<infer T> ? T : never
 
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
+
 export type getSessionResponse200 = {
     data: Session
     status: 200
@@ -102,14 +104,15 @@ export const getGetSessionQueryOptions = <
     params: GetSessionParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>
+        request?: SecondParameter<typeof customPortalFetch>
     }
 ) => {
-    const { query: queryOptions } = options ?? {}
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetSessionQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getSession>>> = ({ signal }) =>
-        getSession(params, signal)
+        getSession(params, { signal, ...requestOptions })
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getSession>>,
@@ -136,6 +139,7 @@ export function useGetSession<
                 >,
                 'initialData'
             >
+        request?: SecondParameter<typeof customPortalFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -154,6 +158,7 @@ export function useGetSession<
                 >,
                 'initialData'
             >
+        request?: SecondParameter<typeof customPortalFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -164,6 +169,7 @@ export function useGetSession<
     params: GetSessionParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>
+        request?: SecondParameter<typeof customPortalFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -175,6 +181,7 @@ export function useGetSession<
     params: GetSessionParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>
+        request?: SecondParameter<typeof customPortalFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -246,14 +253,15 @@ export const getGetClassRegisterSessionQueryOptions = <
     query?: Partial<
         UseQueryOptions<Awaited<ReturnType<typeof getClassRegisterSession>>, TError, TData>
     >
+    request?: SecondParameter<typeof customPortalFetch>
 }) => {
-    const { query: queryOptions } = options ?? {}
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetClassRegisterSessionQueryKey()
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getClassRegisterSession>>> = ({
         signal,
-    }) => getClassRegisterSession(signal)
+    }) => getClassRegisterSession({ signal, ...requestOptions })
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getClassRegisterSession>>,
@@ -285,6 +293,7 @@ export function useGetClassRegisterSession<
                 >,
                 'initialData'
             >
+        request?: SecondParameter<typeof customPortalFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -304,6 +313,7 @@ export function useGetClassRegisterSession<
                 >,
                 'initialData'
             >
+        request?: SecondParameter<typeof customPortalFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -315,6 +325,7 @@ export function useGetClassRegisterSession<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getClassRegisterSession>>, TError, TData>
         >
+        request?: SecondParameter<typeof customPortalFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -330,6 +341,7 @@ export function useGetClassRegisterSession<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getClassRegisterSession>>, TError, TData>
         >
+        request?: SecondParameter<typeof customPortalFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -412,14 +424,15 @@ export const getGetClassesInfoQueryOptions = <
     params: GetClassesInfoParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassesInfo>>, TError, TData>>
+        request?: SecondParameter<typeof customPortalFetch>
     }
 ) => {
-    const { query: queryOptions } = options ?? {}
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetClassesInfoQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getClassesInfo>>> = ({ signal }) =>
-        getClassesInfo(params, signal)
+        getClassesInfo(params, { signal, ...requestOptions })
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getClassesInfo>>,
@@ -446,6 +459,7 @@ export function useGetClassesInfo<
                 >,
                 'initialData'
             >
+        request?: SecondParameter<typeof customPortalFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -466,6 +480,7 @@ export function useGetClassesInfo<
                 >,
                 'initialData'
             >
+        request?: SecondParameter<typeof customPortalFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -476,6 +491,7 @@ export function useGetClassesInfo<
     params: GetClassesInfoParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassesInfo>>, TError, TData>>
+        request?: SecondParameter<typeof customPortalFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -490,6 +506,7 @@ export function useGetClassesInfo<
     params: GetClassesInfoParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassesInfo>>, TError, TData>>
+        request?: SecondParameter<typeof customPortalFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -558,6 +575,7 @@ export const getClassRegisterMutationOptions = <
         { data: ClassRegisterBody },
         TContext
     >
+    request?: SecondParameter<typeof customPortalFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof classRegister>>,
     TError,
@@ -565,11 +583,11 @@ export const getClassRegisterMutationOptions = <
     TContext
 > => {
     const mutationKey = ['classRegister']
-    const { mutation: mutationOptions } = options
+    const { mutation: mutationOptions, request: requestOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof classRegister>>,
@@ -577,7 +595,7 @@ export const getClassRegisterMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return classRegister(data)
+        return classRegister(data, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -598,6 +616,7 @@ export const useClassRegister = <TError = ClassRegister400 | ClassRegister404, T
             { data: ClassRegisterBody },
             TContext
         >
+        request?: SecondParameter<typeof customPortalFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -668,6 +687,7 @@ export const getClassUnregisterMutationOptions = <
         { data: ClassUnregisterBody },
         TContext
     >
+    request?: SecondParameter<typeof customPortalFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof classUnregister>>,
     TError,
@@ -675,11 +695,11 @@ export const getClassUnregisterMutationOptions = <
     TContext
 > => {
     const mutationKey = ['classUnregister']
-    const { mutation: mutationOptions } = options
+    const { mutation: mutationOptions, request: requestOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof classUnregister>>,
@@ -687,7 +707,7 @@ export const getClassUnregisterMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return classUnregister(data)
+        return classUnregister(data, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -711,6 +731,7 @@ export const useClassUnregister = <
             { data: ClassUnregisterBody },
             TContext
         >
+        request?: SecondParameter<typeof customPortalFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
