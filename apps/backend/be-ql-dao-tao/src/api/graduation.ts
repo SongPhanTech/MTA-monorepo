@@ -262,7 +262,7 @@ app.openapi(graduationCheck, async (c) => {
 
         const reasons: string[] = []
 
-        //Kiểm tra chuẩn đầu ra 
+        // Kiểm tra chuẩn đầu ra
         const lackOfOutputStandard = curriculumVersion.outputStandardOnCurriculum.filter(
             (standard) => {
                 const notCompleted = standard.outputStandard.certificates.every((cert) => {
@@ -295,8 +295,8 @@ app.openapi(graduationCheck, async (c) => {
             scoreToRetain,
             scoreConverts,
         } = student.fixedClass.trainingCourse
-        
-        //Kiểm tra các môn có lỗi (hoãn thi, cấm thi, đình chỉ, học lại)
+
+        // Kiểm tra các môn có lỗi (hoãn thi, cấm thi, đình chỉ, học lại)
         const subjectScoresWithIssues = await prisma.studentSubjectScore.findMany({
             where: {
                 studentId: application.studentId,
@@ -326,7 +326,7 @@ app.openapi(graduationCheck, async (c) => {
             }
         }
 
-        //Lấy toàn bộ điểm môn học (bỏ qua các trạng thái không hợp lệ)
+        // Lấy toàn bộ điểm môn học (bỏ qua các trạng thái không hợp lệ)
         const rawSubjectScores = await prisma.studentSubjectScore.findMany({
             where: {
                 AND: [
@@ -356,7 +356,7 @@ app.openapi(graduationCheck, async (c) => {
             orderBy: { createdAt: 'asc' },
         })
 
-        //Chọn điểm cao nhất cho mỗi môn (kết quả môn đạt)
+        // Chọn điểm cao nhất cho mỗi môn (kết quả môn đạt)
         const subjectScoresMap = new Map<
             string,
             (typeof rawSubjectScores)[number] & {
@@ -374,7 +374,9 @@ app.openapi(graduationCheck, async (c) => {
             }
 
             const scoreConvert = scoreConverts.find(
-                (s) => new Decimal(s.base10Min).lte(scoreBase10) && new Decimal(s.base10Max).gte(scoreBase10)
+                (s) =>
+                    new Decimal(s.base10Min).lte(scoreBase10) &&
+                    new Decimal(s.base10Max).gte(scoreBase10)
             )
             const scoreBase4 = new Decimal(scoreConvert?.base4 || 0)
 
@@ -401,7 +403,7 @@ app.openapi(graduationCheck, async (c) => {
             }
         }
 
-        //Xử lý nhóm môn tương đương 
+        // Xử lý nhóm môn tương đương
         const equivalencyGroups = await prisma.equivalencyGroup.findMany({
             where: {
                 deletedAt: null,
@@ -444,7 +446,12 @@ app.openapi(graduationCheck, async (c) => {
 
             const subjectScore = subjectScoresMap.get(subject.subjectId)
             if (subjectScore) {
-                finalScores.set(subject.subjectId, subjectScore)
+                // Môn điều kiện (useForFinalScore=false) chỉ ghi nhận Đạt, không tính GPA
+                if (!subject.useForFinalScore) {
+                    markDoneScores.set(subject.subjectId, subjectScore)
+                } else {
+                    finalScores.set(subject.subjectId, subjectScore)
+                }
                 continue
             }
 
@@ -457,8 +464,9 @@ app.openapi(graduationCheck, async (c) => {
             if (!subjectScore && !equivGroups.length) {
                 // Môn tự chọn chưa học → bỏ qua, để bước check tín chỉ tự chọn xử lý
                 if (subject.type === SubjectRequirementType.Optional) continue
-                // Môn bắt buộc chưa học và không có equivalency
-                if (subject.useForFinalScore) {
+
+                // Môn bắt buộc chưa đạt 
+                if (subject.type === SubjectRequirementType.Mandatory) {
                     reasons.push(`Chưa đạt môn bắt buộc (${subject.subject.name})`)
                 }
                 continue
@@ -503,13 +511,22 @@ app.openapi(graduationCheck, async (c) => {
                     for (const result of curriculumSideResult) {
                         if (result.score) {
                             finalScores.delete(result.subjectId)
+                            markDoneScores.delete(result.subjectId)
                         } else {
                             processedSubjects.add(result.subjectId)
                         }
                     }
                     for (const result of otherSideResult) {
                         if (!result.score) continue
-                        finalScores.set(result.subjectId, result.score)
+                        //Khi equivalency thay thế, cũng phân biệt useForFinalScore
+                        const otherSubjectInCurriculum = curriculumSubjects.find(
+                            (s) => s.subjectId === result.subjectId
+                        )
+                        if (otherSubjectInCurriculum && !otherSubjectInCurriculum.useForFinalScore) {
+                            markDoneScores.set(result.subjectId, result.score)
+                        } else {
+                            finalScores.set(result.subjectId, result.score)
+                        }
                     }
                     break
                 }
@@ -534,7 +551,14 @@ app.openapi(graduationCheck, async (c) => {
                     hasEquivalencyGroup = true
                     for (const result of otherSideResult) {
                         if (!result.score) continue
-                        finalScores.set(result.subjectId, result.score)
+                        const otherSubjectInCurriculum = curriculumSubjects.find(
+                            (s) => s.subjectId === result.subjectId
+                        )
+                        if (otherSubjectInCurriculum && !otherSubjectInCurriculum.useForFinalScore) {
+                            markDoneScores.set(result.subjectId, result.score)
+                        } else {
+                            finalScores.set(result.subjectId, result.score)
+                        }
                     }
                 }
 
@@ -543,7 +567,6 @@ app.openapi(graduationCheck, async (c) => {
 
             if (
                 !hasEquivalencyGroup &&
-                subject.useForFinalScore &&
                 subject.type === SubjectRequirementType.Mandatory
             ) {
                 reasons.push(`Chưa đạt môn bắt buộc (${subject.subject.name})`)
@@ -561,7 +584,8 @@ app.openapi(graduationCheck, async (c) => {
 
             totalDebtCredit += subject.subject.credit
         }
-        // Kiểm tra & lọc tín chỉ tự chọn 
+
+        // Kiểm tra & lọc tín chỉ tự chọn
         // Chỉ xét các môn tự chọn trong CTĐT, loại những môn đã được equivalency xử lý
         const electiveSubjects = curriculumSubjects.filter(
             (s) =>

@@ -1,12 +1,13 @@
 import PutFormModal from '@components/commons/put-modal'
 import type { Student } from '@workspace/db/client'
 import { useFindUniqueStudent } from '@workspace/db/hooks'
-import { Col, Form } from 'antd'
+import { Col, Form,Tag } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import TableCollapse from '@components/commons/tableCollapse'
 import { Table } from '@components/commons/table'
+import { SubjectRequirementType } from '@workspace/db'
 export type Student1 = Student
 dayjs.locale('vi')
 
@@ -72,6 +73,7 @@ const ModalLearningResult = () => {
                 id: s.subject.id,
                 code: s.subject.code,
                 name: s.subject.name,
+                type: s.type,
                 credit: s.subject.credit,
                 finalScore: s.subject.studentSubjectScore?.[0]?.finalScore,
                 attendanceScore: s.subject.studentSubjectScore?.[0]?.attendanceScore,
@@ -195,6 +197,24 @@ const ModalLearningResult = () => {
                             align: 'center',
                             render: (_, record) => record?.finalScore?.toNumber(),
                         },
+                           {
+                            title: 'Loại môn',
+                            width: 120,
+                            align: 'center',
+                            render: (_, record) => (
+                                <Tag
+                                    color={
+                                        record?.type === SubjectRequirementType.Mandatory
+                                            ? 'blue'
+                                            : 'green'
+                                    }
+                                >
+                                    {record?.type === SubjectRequirementType.Mandatory
+                                        ? 'Bắt buộc'
+                                        : 'Tự chọn'}
+                                </Tag>
+                            ),
+                        },
                     ]}
                     pagination={{
                         hideOnSinglePage: true,
@@ -204,7 +224,7 @@ const ModalLearningResult = () => {
 
             <Col span={24}>
                 <div style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 16, margin: 12 }}>
-                    MÔN HỌC TỰ CHỌN
+                    MÔN HỌC NGOÀI CTĐT
                 </div>
                 <Table
                     rowKey="key"
