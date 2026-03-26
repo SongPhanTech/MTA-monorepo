@@ -1135,6 +1135,7 @@ export default function UpdateUserPage() {
         },
         {
             enabled: !!id,
+            refetchOnWindowFocus: false,
         }
     )
 
