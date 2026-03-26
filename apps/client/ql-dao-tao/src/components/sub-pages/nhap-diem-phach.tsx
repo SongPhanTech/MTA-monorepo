@@ -2,7 +2,7 @@ import Table from '@components/commons/table'
 import { validateExamScore } from '@lib/utils'
 import { kythiStore } from '@pages/quan-ly-diem/nhap-diem-theo-phach'
 import { useStore } from '@tanstack/react-store'
-import { useFindManyExamPaper } from '@workspace/db/hooks'
+import { useFindManyExamPaper, useUpdateSubjectClass } from '@workspace/db/hooks'
 import { getUrl } from '@workspace/libs/api/custom-instance'
 import { getExportSubjectClassScoreUrl, useSaveExamScore } from '@workspace/libs/api/training'
 import { getRuntimeEnv } from '@workspace/libs/utils'
@@ -10,10 +10,11 @@ import { Badge, Button, Col, Flex, Form, InputNumber, Modal, message } from 'ant
 import { Printer } from 'lucide-react'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { sqlTransaction } from '@workspace/libs/api/model'
 
 export default function NhapDiemPhach() {
     const [form] = Form.useForm<{ list: Record<string, { score: number | null }> }>()
-    const { examId } = useStore(kythiStore)
+    const { examId, subjectClassId } = useStore(kythiStore)
     const { data: examPapers = [], refetch } = useFindManyExamPaper(
         {
             where: {
@@ -115,7 +116,7 @@ export default function NhapDiemPhach() {
     }
 
     const { mutateAsync: saveScore } = useSaveExamScore()
-
+    const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
     // const listForm = Form.useWatch('list', form) || []
     const handleNhapDiem = async () => {
         const dataForm = form.getFieldsValue()
@@ -142,6 +143,31 @@ export default function NhapDiemPhach() {
         }
     }
 
+    const handlePrint = async () => {
+        try {
+            if (!!subjectClassId && subjectClassId?.length > 0) {
+                let list: any = subjectClassId.map((i) => {
+                    return {
+                        model: 'SubjectClass',
+                        operation: 'update',
+                        data: {
+                            where: {
+                                id: i,
+                            },
+                            data: {
+                                isLockExamScore: true,
+                            },
+                        },
+                    }
+                })
+                let res = await sqlTransaction(list)
+            }
+        } catch (_) {
+            message.warning('Vui lòng kiểm tra lại điểm')
+            return
+        }
+    }
+
     const isAllLocked = examPapers.length > 0 && examPapers.every((p) => p?.examList?.lockExamCode)
 
     return (
@@ -158,7 +184,8 @@ export default function NhapDiemPhach() {
                     />
                     <Flex gap={8}>
                         <Button
-                            onClick={() => {
+                            onClick={async () => {
+                                await handlePrint()
                                 openXemTaiLieu({
                                     uri: getUrl(
                                         getRuntimeEnv('NEXT_PUBLIC_API_LMS_BASE_URL') ||
