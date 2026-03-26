@@ -349,7 +349,6 @@ export default function TrainingProgramSubjects() {
             priority: 'asc',
         },
     })
-    console.log('data table', data)
 
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({
         where: whereOrganization,

@@ -49,7 +49,7 @@ const ModalChuyenCTDT = () => {
                     <Select
                         placeholder="Chọn khung chương trình đào tạo"
                         options={data.map((item) => ({
-                            label: `Khung: ${item.code} - ${item.name}`,
+                            label: `Khung: ${[item.code, item.name].filter(Boolean).join(' - ')}`,
                             value: item.id,
                         }))}
                     />
