@@ -159,7 +159,11 @@ export default function MonCoHVSVChuaDat({ type }: { type?: $Enums.SubjectClassT
                 queryKey: ['zenstack', 'PlanTrainingSubject'],
             })
             queryClient.invalidateQueries({
-                queryKey: ['/api/subject-class/open-subject-class-retake'],
+                queryKey: [
+                    type === $Enums.SubjectClassType.RETAKE
+                        ? '/api/subject-class/open-subject-class-retake'
+                        : '/api/subject-class/open-subject-class-reexam',
+                ],
             })
         } catch (error) {
             message.error('Lưu kế hoạch môn thất bại')
