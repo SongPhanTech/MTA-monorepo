@@ -241,7 +241,7 @@ const DiemTrungBinhKyHoc = () => {
     return (
         <div className="bg-white rounded-lg shadow-sm px-4">
             <Row>
-                <Col span={24} className="mb-4">
+                <Col span={24} className="mb-4 mt-2">
                     <Row align="top" justify="space-between">
                         <Col span={18}>
                             <Flex gap={8}>
@@ -355,28 +355,28 @@ const DiemTrungBinhKyHoc = () => {
                                 dataIndex: ['studentSemesterResult', '0', 'gpaBase4'],
                                 width: 90,
                                 align: 'center',
-                                render: (value) => value?.toString(),
+                                render: (value) => (value !== null && value !== undefined) ? Number(value).toFixed(2).replace('.', ',') : '-',
                             },
                             {
                                 title: 'Tích lỹ hệ 4',
                                 dataIndex: ['studentSemesterResult', '0', 'cumulativeGpaBase4'],
                                 width: 90,
                                 align: 'center',
-                                render: (value) => value?.toString(),
+                                render: (value) => (value !== null && value !== undefined) ? Number(value).toFixed(2).replace('.', ',') : '-',
                             },
                             {
                                 title: 'Trung bình hệ 10',
                                 dataIndex: ['studentSemesterResult', '0', 'gpaBase10'],
                                 width: 90,
                                 align: 'center',
-                                render: (value) => value?.toString(),
+                                render: (value) => (value !== null && value !== undefined) ? Number(value).toFixed(2).replace('.', ',') : '-',
                             },
                             {
                                 title: 'Tích lỹ hệ 10',
                                 dataIndex: ['studentSemesterResult', '0', 'cumulativeGpaBase10'],
                                 width: 90,
                                 align: 'center',
-                                render: (value) => value?.toString(),
+                                render: (value) => (value !== null && value !== undefined) ? Number(value).toFixed(2).replace('.', ',') : '-',
                             },
                             {
                                 title: 'Xếp loại học lực',
@@ -391,24 +391,21 @@ const DiemTrungBinhKyHoc = () => {
                                 dataIndex: ['studentSemesterResult', '0', 'conductScore'],
                                 width: 120,
                                 align: 'center',
-                                render: (value) => (
-                                    <div>{value}</div>
-                                    // <Tag color={getStudentTrainingTypeColor(value)}>
-                                    //     {getStudentTrainingTypeLabel(value)}
-                                    // </Tag>
-                                ),
+                                render: (value) => (value !== null && value !== undefined) ? Number(value).toFixed(2).replace('.', ',') : '-'
                             },
                             {
                                 title: 'Điểm học phần thấp nhất',
                                 dataIndex: ['studentSemesterResult', '0', 'lowestFinalScore'],
                                 width: 120,
                                 align: 'center',
+                                render: (value) => (value !== null && value !== undefined) ? Number(value).toFixed(2).replace('.', ',') : '-'
                             },
                             {
                                 title: 'Điểm tốt nghiệp thấp nhất',
                                 dataIndex: ['studentSemesterResult', '0', 'lowestGraduationScore'],
                                 width: 130,
                                 align: 'center',
+                                render: (value) => (value !== null && value !== undefined) ? Number(value).toFixed(2).replace('.', ',') : '-'
                             },
                             {
                                 title: 'Tổng tín chỉ',

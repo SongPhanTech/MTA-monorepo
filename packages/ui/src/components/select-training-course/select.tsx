@@ -117,7 +117,7 @@ export const SelectTrainingCourseStore = (props: SelectProps) => {
 
     return (
         <Select
-            placeholder="Chọn khoá đào tạo"
+            placeholder="Chọn khóa đào tạo"
             options={khoaDaoTao.map((e) => {
                 let semesterIdx = null
                 if (semester?.semesterType) {
