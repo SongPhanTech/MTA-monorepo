@@ -18,6 +18,7 @@ import { Col, Flex, Row, Skeleton, Tree } from 'antd'
 import { useMemo, useState } from 'react'
 // import ClusterSurveyReport from '@components/sub-pages/khao-sat/bao-cao-cum';
 import OrganizationSurveyReport from '@/components/sub-pages/khao-sat/bao-cao-don-vi'
+import { getRuntimeEnv } from '@workspace/libs';
 
 function buildOrgAndLectureTree(
     list: Array<any>,
@@ -122,8 +123,7 @@ export default function BaoCaoGiangVien() {
                 // }),
                 OR: [
                     {
-                        iCapDonVi: 0,
-                        iLoaiDonVi: 0,
+                        sMa:getRuntimeEnv('NEXT_PUBLIC_ROOT_ORG_CODE')||'HD'
                     },
                     {
                         iLoaiDonVi: {
@@ -170,8 +170,7 @@ export default function BaoCaoGiangVien() {
                 organization: {
                     OR: [
                         {
-                            iCapDonVi: 0,
-                            iLoaiDonVi: 0,
+                            sMa:getRuntimeEnv('NEXT_PUBLIC_ROOT_ORG_CODE')||'HD'
                         },
                         {
                             iLoaiDonVi: {

@@ -129,7 +129,11 @@ const AddSubjectClassAttendance = () => {
     useEffect(() => {
         if (initialValue) {
             form.setFieldsValue({
-                time: initialValue.time ? dayjs(initialValue.time) : null,
+                time: initialValue.time ? dayjs(initialValue.time) : dayjs(),
+            })
+        }else {
+             form.setFieldsValue({
+                time: dayjs(),
             })
         }
     }, [initialValue])

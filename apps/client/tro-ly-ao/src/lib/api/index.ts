@@ -5,6 +5,7 @@ const queryClient = new QueryClient()
 const fetchInstance = async (url: string, options?: RequestInit) => {
     return fetch(url, {
         ...options,
+        credentials: 'include',
         headers: {
             ...options?.headers,
             'Content-Type': 'application/json',

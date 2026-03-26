@@ -2,6 +2,7 @@ import HtmlTruncate from '@components/commons/html-truncate'
 import { renderWithMath } from '@components/commons/rich-text-editor/renderWithMath'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
+import EditIcon from '@components/icons/edit'
 import { LEVEL_COLUMNS, QUESTION_TYPE_LABELS } from '@constants/constants'
 import type { QuestionType } from '@workspace/db/client'
 import { useCountQuestion, useFindManyQuestion, useUpdateQuestion } from '@workspace/db/hooks'
@@ -18,9 +19,14 @@ export default function QuestionListByKnowledgeBlockModal() {
     }>({
         tag: 'QuestionListByKnowledgeBlockModal',
     })
-
+    const { onOpen: onOpenPutQuestion } = useDisclosure<{
+        id: string
+        questionBankId: string
+        subjectVersionId: string
+    }>({
+        tag: 'PutQuestionModal',
+    })
     const { knowledgeBlockId, questionBankId, subjectVersionId } = input || {}
-
     const [currentPage, setCurrentPage] = useState(1)
     const [pageSize, setPageSize] = useState(10)
     const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([])
@@ -40,6 +46,11 @@ export default function QuestionListByKnowledgeBlockModal() {
                 multipleChoiceOptions: true,
                 fillInBlankSlots: true,
                 orderingItems: true,
+                questionBank: {
+                    include: {
+                        subjectVersion: true,
+                    },
+                },
             },
             take: pageSize,
             skip: (currentPage - 1) * pageSize,
@@ -47,7 +58,6 @@ export default function QuestionListByKnowledgeBlockModal() {
         },
         { enabled: !!knowledgeBlockId }
     )
-
     const { data: totalQuestions = 0 } = useCountQuestion(
         {
             where: {
@@ -224,7 +234,16 @@ export default function QuestionListByKnowledgeBlockModal() {
                         fixed: 'right',
                         render: (_, record) => (
                             <Row className="justify-center gap-2">
-                                {/* <EditIcon /> */}
+                                <EditIcon
+                                    className="text-blue-600"
+                                    onClick={(e) => {
+                                        onOpenPutQuestion({
+                                            id: record.id,
+                                            questionBankId: record.questionBankId,
+                                            subjectVersionId: record.questionBank?.subjectVersionId,
+                                        })
+                                    }}
+                                />
                                 <DeleteIcon
                                     popConfirm={{
                                         onConfirm: () => handleDeleteQuestion(record.id),
