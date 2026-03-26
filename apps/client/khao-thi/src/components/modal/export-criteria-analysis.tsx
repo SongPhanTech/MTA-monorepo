@@ -10,6 +10,7 @@ import {
     Paragraph,
     Table,
     TableCell,
+    TableLayoutType,
     TableRow,
     TextRun,
     VerticalAlign,
@@ -123,11 +124,11 @@ const ExportCriteriaAnalysis = ({ data, idx }: ExportCriteriaAnalysisProps) => {
 
         // Portrait A4: ~9070 DXA usable width (with ~2.5cm margins)
         const COL_YEU_CAU = 1800
-        const COL_CAU_HOI = 1600
-        const COL_CAN_THU_THAP = 2000
+        const COL_CAU_HOI = 1800
+        const COL_CAN_THU_THAP = 1200
         const COL_NOI_THU_THAP = 1200
-        const COL_PHUONG_PHAP = 1600
-        const COL_GHI_CHU = 870
+        const COL_PHUONG_PHAP = 1200
+        const COL_GHI_CHU = 1800
 
         const headerRow1 = new TableRow({
             children: [
@@ -187,18 +188,20 @@ const ExportCriteriaAnalysis = ({ data, idx }: ExportCriteriaAnalysisProps) => {
 
             return new TableRow({
                 children: [
-                    makeCell([cellP(`${index + 1}. ${req.name || ''}`)]),
-                    makeCell(questionParagraphs),
-                    makeCell(evidenceParagraphs),
-                    makeCell([cellP(req.evidencePlaces || '')]),
-                    makeCell([cellP(req.collectionMethod || '')]),
-                    makeCell([cellP('')]),
+                    makeCell([cellP(`${index + 1}. ${req.name || ''}`)], { width: COL_YEU_CAU, dxa: true }),
+                    makeCell(questionParagraphs, { width: COL_CAU_HOI, dxa: true }),
+                    makeCell(evidenceParagraphs, { width: COL_CAN_THU_THAP, dxa: true }),
+                    makeCell([cellP(req.evidencePlaces || '')], { width: COL_NOI_THU_THAP, dxa: true }),
+                    makeCell([cellP(req.collectionMethod || '')], { width: COL_PHUONG_PHAP, dxa: true }),
+                    makeCell([cellP('')], { width: COL_GHI_CHU, dxa: true }),
                 ],
             })
         })
 
         return new Table({
             width: { size: 100, type: WidthType.PERCENTAGE },
+            layout: TableLayoutType.FIXED,
+            columnWidths: [COL_YEU_CAU, COL_CAU_HOI, COL_CAN_THU_THAP, COL_NOI_THU_THAP, COL_PHUONG_PHAP, COL_GHI_CHU],
             borders: {
                 top: { style: BorderStyle.SINGLE, size: 1, color: '000000' },
                 bottom: { style: BorderStyle.SINGLE, size: 1, color: '000000' },
