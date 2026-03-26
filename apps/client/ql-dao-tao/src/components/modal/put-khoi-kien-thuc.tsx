@@ -14,6 +14,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { DndProvider, useDrag, useDrop } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
+import { queryClient } from '@api/index'
 export type PutTrainingBlockOnCurriculumVersion = TrainingBlockOnCurriculumVersion & {
     trainingBlockIds: string[]
     trainingBlockElectiveCreditsRequired: Record<string, number>
@@ -113,6 +114,32 @@ const PutTrainingBlockOnCurriculumVersion = () => {
             let listTransition: any = []
 
             if (onlyInOld.length) {
+                const toDeleteIds = onlyInOld
+                    .map((i) => {
+                        const found = initialValue?.trainingBlocks?.find(
+                            (tb: TrainingBlockOnCurriculumVersion) =>
+                                tb.trainingBlockId === i.value
+                        )
+                        return found?.id
+                    })
+                    .filter(Boolean) as string[]
+
+                // Xóa TrainingBlockSubject con trước để tránh lỗi foreign key
+                if (toDeleteIds.length) {
+                    listTransition = [
+                        ...listTransition,
+                        {
+                            model: 'TrainingBlockSubject',
+                            operation: 'deleteMany',
+                            data: {
+                                where: {
+                                    trainingBlockOnCurriculumVersionId: { in: toDeleteIds },
+                                },
+                            },
+                        },
+                    ]
+                }
+
                 listTransition = [
                     ...listTransition,
                     ...onlyInOld.map((i) => {
@@ -172,9 +199,14 @@ const PutTrainingBlockOnCurriculumVersion = () => {
                     }
                 }),
             ]
+
             if (listTransition?.length) {
                 await sqlTransaction(listTransition)
             }
+
+            queryClient.invalidateQueries({
+                queryKey: ['zenstack', 'TrainingBlockOnCurriculumVersion'],
+            })
 
             message.success('Cập nhật thông tin khối kiến thức thành công')
             onClose()

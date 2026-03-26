@@ -80,6 +80,7 @@ export default function TrainingProgramSubjects() {
         },
         { enabled: !!id }
     )
+
     const { options, getExamTypeLabel } = useExamTypeOptions()
 
     const isLocked = initialValue?.isLock ?? false
@@ -393,6 +394,7 @@ export default function TrainingProgramSubjects() {
         useDeleteTrainingBlockOnCurriculumVersion()
     const { mutateAsync: deleteManyTrainingBlockSubject } = useDeleteManyTrainingBlockSubject()
     async function handleDeleteTrainingBlockOnCurriculumVersion(id: string) {
+        console.log('>>> id:', id)
         try {
             showSpinner()
             await deleteManyTrainingBlockSubject({
@@ -418,6 +420,8 @@ export default function TrainingProgramSubjects() {
 
     const { mutateAsync: deleteTrainingBlockSubject } = useDeleteTrainingBlockSubject()
     async function handleDeleteTrainingBlockSubject(id: string) {
+        console.log('>>> id:', id)
+
         try {
             showSpinner()
             await deleteTrainingBlockSubject({
@@ -775,7 +779,7 @@ export default function TrainingProgramSubjects() {
                                                     popConfirm={{
                                                         onConfirm: () =>
                                                             handleDeleteTrainingBlockOnCurriculumVersion(
-                                                                id
+                                                                record?.id
                                                             ),
                                                     }}
                                                     onClick={(e) => e.stopPropagation()}
