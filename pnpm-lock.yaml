@@ -417,6 +417,9 @@ importers:
       '@biomejs/biome':
         specifier: 'catalog:'
         version: 2.3.7
+      '@biomejs/cli-darwin-arm64':
+        specifier: ^2.4.9
+        version: 2.4.9
       '@commitlint/cli':
         specifier: 'catalog:'
         version: 19.8.1(@types/node@24.10.1)(typescript@5.9.3)
@@ -2638,6 +2641,12 @@ packages:
     cpu: [arm64]
     os: [darwin]
 
+  '@biomejs/cli-darwin-arm64@2.4.9':
+    resolution: {integrity: sha512-d5G8Gf2RpH5pYwiHLPA+UpG3G9TLQu4WM+VK6sfL7K68AmhcEQ9r+nkj/DvR/GYhYox6twsHUtmWWWIKfcfQQA==}
+    engines: {node: '>=14.21.3'}
+    cpu: [arm64]
+    os: [darwin]
+
   '@biomejs/cli-darwin-x64@2.3.7':
     resolution: {integrity: sha512-Q4TO633kvrMQkKIV7wmf8HXwF0dhdTD9S458LGE24TYgBjSRbuhvio4D5eOQzirEYg6eqxfs53ga/rbdd8nBKg==}
     engines: {node: '>=14.21.3'}
@@ -4388,10 +4397,6 @@ packages:
 
   '@types/debug@4.1.8':
     resolution: {integrity: sha512-/vPO1EPOs306Cvhwv7KfVfYvOJqA/S/AXjaHQiJboCZzcNDb+TIJFN9/2C9DZ//ijSKWioNyUxD792QmDJ+HKQ==}
-
-  '@types/dompurify@3.2.0':
-    resolution: {integrity: sha512-Fgg31wv9QbLDA0SpTOXO3MaxySc4DKGLi8sna4/Utjo4r3ZRPdCt4UQee8BWr+Q5z21yifghREPJGYaEOEIACg==}
-    deprecated: This is a stub types definition. dompurify provides its own type definitions, so you do not need this installed.
 
   '@types/es-aggregate-error@1.0.6':
     resolution: {integrity: sha512-qJ7LIFp06h1QE1aVxbVd+zJP2wdaugYXYfd6JxsyRMrYHaxb6itXPogW2tz+ylUJ1n1b+JF1PHyYCfYHm0dvUg==}
@@ -10049,6 +10054,8 @@ snapshots:
   '@biomejs/cli-darwin-arm64@2.3.7':
     optional: true
 
+  '@biomejs/cli-darwin-arm64@2.4.9': {}
+
   '@biomejs/cli-darwin-x64@2.3.7':
     optional: true
 
@@ -11941,10 +11948,6 @@ snapshots:
   '@types/debug@4.1.8':
     dependencies:
       '@types/ms': 2.1.0
-
-  '@types/dompurify@3.2.0':
-    dependencies:
-      dompurify: 3.3.3
 
   '@types/es-aggregate-error@1.0.6':
     dependencies:

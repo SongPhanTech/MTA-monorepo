@@ -157,7 +157,7 @@ export default function HSSVChuaDat({ subjectVersionId, viewOnly }: RegisterClas
                             dataIndex: ['fixedClass', 'trainingCourse', 'name'],
                         },
                         {
-                            title: 'Điểm thi',
+                            title: 'Điểm học phần',
                             align: 'center',
                             dataIndex: 'diem_cuoi',
                             width: 80,

@@ -31,7 +31,8 @@
             rgba(0, 0, 0, 0.07) 76%,
             transparent 77%,
             transparent 100%
-        ), linear-gradient(135deg, hsla(155, 100%, 19%, 1) 0%, hsla(155, 100%, 61%, 1) 100%);
+        ),
+        linear-gradient(135deg, hsla(155, 100%, 19%, 1) 0%, hsla(155, 100%, 61%, 1) 100%);
 }
 .error-container > span.four:before,
 .error-container > span.four:after {
@@ -59,7 +60,8 @@
             rgba(0, 0, 0, 0.07) 50%,
             transparent 51%,
             transparent 100%
-        ), linear-gradient(135deg, hsla(155, 100%, 19%, 1) 0%, hsla(155, 100%, 61%, 1) 100%);
+        ),
+        linear-gradient(135deg, hsla(155, 100%, 19%, 1) 0%, hsla(155, 100%, 61%, 1) 100%);
 }
 .error-container > span.four:after {
     width: 137px;
@@ -82,7 +84,8 @@
             rgba(0, 0, 0, 0.06) 50%,
             transparent 51%,
             transparent 100%
-        ), linear-gradient(135deg, hsla(155, 100%, 19%, 1) 0%, hsla(155, 100%, 61%, 1) 100%);
+        ),
+        linear-gradient(135deg, hsla(155, 100%, 19%, 1) 0%, hsla(155, 100%, 61%, 1) 100%);
     overflow: hidden;
     animation: bgshadow 5s infinite;
 }

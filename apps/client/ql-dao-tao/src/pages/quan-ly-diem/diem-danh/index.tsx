@@ -16,7 +16,7 @@ export default function DiemDanh() {
                     <DanhSachLopMonHoc
                         selectedSubjectClassId={selectedSubjectClassId}
                         setSelectedSubjectClassId={(value: any) => setSelectedSubjectClassId(value)}
-                    setActiveKey={(value:string)=>setActiveKey(value)}
+                        setActiveKey={(value: string) => setActiveKey(value)}
                     />
                 ),
             },

@@ -131,8 +131,8 @@ const AddSubjectClassAttendance = () => {
             form.setFieldsValue({
                 time: initialValue.time ? dayjs(initialValue.time) : dayjs(),
             })
-        }else {
-             form.setFieldsValue({
+        } else {
+            form.setFieldsValue({
                 time: dayjs(),
             })
         }
