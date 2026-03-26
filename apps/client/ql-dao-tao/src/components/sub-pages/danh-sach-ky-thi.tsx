@@ -128,7 +128,13 @@ export default function KyThi({ setActiveKey }: { setActiveKey: (key: string) =>
                         onRow={(record) => {
                             return {
                                 onClick: () => {
-                                    kythiStore.setState({ examId: record.id, subjectClassId:record?.subjectClass?.length>0? record?.subjectClass?.map((item:any) => item.id):[] })
+                                    kythiStore.setState({
+                                        examId: record.id,
+                                        subjectClassId:
+                                            record?.subjectClass?.length > 0
+                                                ? record?.subjectClass?.map((item: any) => item.id)
+                                                : [],
+                                    })
                                     diemPhongThiStore.setState({ selectedExamListId: undefined })
                                     debouncedRefetch()
                                 },

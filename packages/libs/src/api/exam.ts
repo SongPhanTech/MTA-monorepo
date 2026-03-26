@@ -111,8 +111,6 @@ type AwaitedInput<T> = PromiseLike<T> | T
 
 type Awaited<O> = O extends AwaitedInput<infer T> ? T : never
 
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
-
 /**
  * Danh sách đợt khảo sát công khai
  * @summary Danh sách đợt khảo sát công khai
@@ -168,14 +166,13 @@ export const getGetPublicSurveysQueryOptions = <
     TError = GetPublicSurveys400 | GetPublicSurveys404,
 >(options?: {
     query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getPublicSurveys>>, TError, TData>>
-    request?: SecondParameter<typeof customExamFetch>
 }) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetPublicSurveysQueryKey()
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getPublicSurveys>>> = ({ signal }) =>
-        getPublicSurveys({ signal, ...requestOptions })
+        getPublicSurveys(signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getPublicSurveys>>,
@@ -203,7 +200,6 @@ export function useGetPublicSurveys<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -223,7 +219,6 @@ export function useGetPublicSurveys<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -235,7 +230,6 @@ export function useGetPublicSurveys<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getPublicSurveys>>, TError, TData>
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -251,7 +245,6 @@ export function useGetPublicSurveys<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getPublicSurveys>>, TError, TData>
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -322,15 +315,14 @@ export const getGetPublicSurveyQueryOptions = <
     id: string,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getPublicSurvey>>, TError, TData>>
-        request?: SecondParameter<typeof customExamFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetPublicSurveyQueryKey(id)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getPublicSurvey>>> = ({ signal }) =>
-        getPublicSurvey(id, { signal, ...requestOptions })
+        getPublicSurvey(id, signal)
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getPublicSurvey>>,
@@ -359,7 +351,6 @@ export function useGetPublicSurvey<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -380,7 +371,6 @@ export function useGetPublicSurvey<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -391,7 +381,6 @@ export function useGetPublicSurvey<
     id: string,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getPublicSurvey>>, TError, TData>>
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -406,7 +395,6 @@ export function useGetPublicSurvey<
     id: string,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getPublicSurvey>>, TError, TData>>
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -480,7 +468,6 @@ export const getSavePublicSurveyMutationOptions = <
         { data: SaveSurveyRequest },
         TContext
     >
-    request?: SecondParameter<typeof customExamFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof savePublicSurvey>>,
     TError,
@@ -488,11 +475,11 @@ export const getSavePublicSurveyMutationOptions = <
     TContext
 > => {
     const mutationKey = ['savePublicSurvey']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof savePublicSurvey>>,
@@ -500,7 +487,7 @@ export const getSavePublicSurveyMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return savePublicSurvey(data, requestOptions)
+        return savePublicSurvey(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -526,7 +513,6 @@ export const useSavePublicSurvey = <
             { data: SaveSurveyRequest },
             TContext
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -612,15 +598,14 @@ export const getValidateUserSurveyQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof validateUserSurvey>>, TError, TData>
         >
-        request?: SecondParameter<typeof customExamFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getValidateUserSurveyQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof validateUserSurvey>>> = ({ signal }) =>
-        validateUserSurvey(params, { signal, ...requestOptions })
+        validateUserSurvey(params, signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof validateUserSurvey>>,
@@ -651,7 +636,6 @@ export function useValidateUserSurvey<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -672,7 +656,6 @@ export function useValidateUserSurvey<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -685,7 +668,6 @@ export function useValidateUserSurvey<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof validateUserSurvey>>, TError, TData>
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -702,7 +684,6 @@ export function useValidateUserSurvey<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof validateUserSurvey>>, TError, TData>
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -771,15 +752,14 @@ export const getGetPublicSurveysV2QueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getPublicSurveysV2>>, TError, TData>
         >
-        request?: SecondParameter<typeof customExamFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetPublicSurveysV2QueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getPublicSurveysV2>>> = ({ signal }) =>
-        getPublicSurveysV2(params, { signal, ...requestOptions })
+        getPublicSurveysV2(params, signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getPublicSurveysV2>>,
@@ -810,7 +790,6 @@ export function useGetPublicSurveysV2<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -831,7 +810,6 @@ export function useGetPublicSurveysV2<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -844,7 +822,6 @@ export function useGetPublicSurveysV2<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getPublicSurveysV2>>, TError, TData>
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -861,7 +838,6 @@ export function useGetPublicSurveysV2<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getPublicSurveysV2>>, TError, TData>
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -930,7 +906,6 @@ export const getGenExamBankMutationOptions = <
         { data: GenExamBank },
         TContext
     >
-    request?: SecondParameter<typeof customExamFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof genExamBank>>,
     TError,
@@ -938,11 +913,11 @@ export const getGenExamBankMutationOptions = <
     TContext
 > => {
     const mutationKey = ['genExamBank']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof genExamBank>>,
@@ -950,7 +925,7 @@ export const getGenExamBankMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return genExamBank(data, requestOptions)
+        return genExamBank(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -971,7 +946,6 @@ export const useGenExamBank = <TError = GenExamBank400 | GenExamBank404, TContex
             { data: GenExamBank },
             TContext
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -1036,7 +1010,6 @@ export const getGetExamBankWithGroupingMutationOptions = <
         { data: GetExamBankWithGrouping },
         TContext
     >
-    request?: SecondParameter<typeof customExamFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof getExamBankWithGrouping>>,
     TError,
@@ -1044,11 +1017,11 @@ export const getGetExamBankWithGroupingMutationOptions = <
     TContext
 > => {
     const mutationKey = ['getExamBankWithGrouping']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof getExamBankWithGrouping>>,
@@ -1056,7 +1029,7 @@ export const getGetExamBankWithGroupingMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return getExamBankWithGrouping(data, requestOptions)
+        return getExamBankWithGrouping(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -1079,7 +1052,6 @@ export const useGetExamBankWithGrouping = <TError = GetExamBankWithGrouping404, 
             { data: GetExamBankWithGrouping },
             TContext
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -1152,7 +1124,6 @@ export const getExportReportSurveyMutationOptions = <
         { data: ExportReportSurvey },
         TContext
     >
-    request?: SecondParameter<typeof customExamFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof exportReportSurvey>>,
     TError,
@@ -1160,11 +1131,11 @@ export const getExportReportSurveyMutationOptions = <
     TContext
 > => {
     const mutationKey = ['exportReportSurvey']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof exportReportSurvey>>,
@@ -1172,7 +1143,7 @@ export const getExportReportSurveyMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return exportReportSurvey(data, requestOptions)
+        return exportReportSurvey(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -1198,7 +1169,6 @@ export const useExportReportSurvey = <
             { data: ExportReportSurvey },
             TContext
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -1275,7 +1245,6 @@ export const getExportReportSurveyOrganizationalMutationOptions = <
         { data: ExportReportSurveyOrganizationalBody },
         TContext
     >
-    request?: SecondParameter<typeof customExamFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof exportReportSurveyOrganizational>>,
     TError,
@@ -1283,11 +1252,11 @@ export const getExportReportSurveyOrganizationalMutationOptions = <
     TContext
 > => {
     const mutationKey = ['exportReportSurveyOrganizational']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof exportReportSurveyOrganizational>>,
@@ -1295,7 +1264,7 @@ export const getExportReportSurveyOrganizationalMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return exportReportSurveyOrganizational(data, requestOptions)
+        return exportReportSurveyOrganizational(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -1323,7 +1292,6 @@ export const useExportReportSurveyOrganizational = <
             { data: ExportReportSurveyOrganizationalBody },
             TContext
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -1388,15 +1356,14 @@ export const getGetSurveyStatisticsQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatistics>>, TError, TData>
         >
-        request?: SecondParameter<typeof customExamFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetSurveyStatisticsQueryKey(id)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getSurveyStatistics>>> = ({ signal }) =>
-        getSurveyStatistics(id, { signal, ...requestOptions })
+        getSurveyStatistics(id, signal)
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getSurveyStatistics>>,
@@ -1427,7 +1394,6 @@ export function useGetSurveyStatistics<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1448,7 +1414,6 @@ export function useGetSurveyStatistics<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1461,7 +1426,6 @@ export function useGetSurveyStatistics<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatistics>>, TError, TData>
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1478,7 +1442,6 @@ export function useGetSurveyStatistics<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatistics>>, TError, TData>
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -1547,16 +1510,15 @@ export const getGetSurveyStatisticsToFieldQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatisticsToField>>, TError, TData>
         >
-        request?: SecondParameter<typeof customExamFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetSurveyStatisticsToFieldQueryKey(id)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getSurveyStatisticsToField>>> = ({
         signal,
-    }) => getSurveyStatisticsToField(id, { signal, ...requestOptions })
+    }) => getSurveyStatisticsToField(id, signal)
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getSurveyStatisticsToField>>,
@@ -1587,7 +1549,6 @@ export function useGetSurveyStatisticsToField<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1608,7 +1569,6 @@ export function useGetSurveyStatisticsToField<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1621,7 +1581,6 @@ export function useGetSurveyStatisticsToField<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatisticsToField>>, TError, TData>
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1638,7 +1597,6 @@ export function useGetSurveyStatisticsToField<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatisticsToField>>, TError, TData>
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -1725,15 +1683,14 @@ export const getGetSurveyObjectsQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getSurveyObjects>>, TError, TData>
         >
-        request?: SecondParameter<typeof customExamFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetSurveyObjectsQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getSurveyObjects>>> = ({ signal }) =>
-        getSurveyObjects(params, { signal, ...requestOptions })
+        getSurveyObjects(params, signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getSurveyObjects>>,
@@ -1762,7 +1719,6 @@ export function useGetSurveyObjects<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1783,7 +1739,6 @@ export function useGetSurveyObjects<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1796,7 +1751,6 @@ export function useGetSurveyObjects<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getSurveyObjects>>, TError, TData>
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1813,7 +1767,6 @@ export function useGetSurveyObjects<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getSurveyObjects>>, TError, TData>
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -1900,15 +1853,14 @@ export const getGetSurveyObjectCountQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getSurveyObjectCount>>, TError, TData>
         >
-        request?: SecondParameter<typeof customExamFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetSurveyObjectCountQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getSurveyObjectCount>>> = ({ signal }) =>
-        getSurveyObjectCount(params, { signal, ...requestOptions })
+        getSurveyObjectCount(params, signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getSurveyObjectCount>>,
@@ -1939,7 +1891,6 @@ export function useGetSurveyObjectCount<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1960,7 +1911,6 @@ export function useGetSurveyObjectCount<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1973,7 +1923,6 @@ export function useGetSurveyObjectCount<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getSurveyObjectCount>>, TError, TData>
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1990,7 +1939,6 @@ export function useGetSurveyObjectCount<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getSurveyObjectCount>>, TError, TData>
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -2070,15 +2018,14 @@ export const getGetSurveysOfProfileQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getSurveysOfProfile>>, TError, TData>
         >
-        request?: SecondParameter<typeof customExamFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetSurveysOfProfileQueryKey(id, params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getSurveysOfProfile>>> = ({ signal }) =>
-        getSurveysOfProfile(id, params, { signal, ...requestOptions })
+        getSurveysOfProfile(id, params, signal)
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getSurveysOfProfile>>,
@@ -2110,7 +2057,6 @@ export function useGetSurveysOfProfile<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2132,7 +2078,6 @@ export function useGetSurveysOfProfile<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2146,7 +2091,6 @@ export function useGetSurveysOfProfile<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getSurveysOfProfile>>, TError, TData>
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2164,7 +2108,6 @@ export function useGetSurveysOfProfile<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getSurveysOfProfile>>, TError, TData>
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -2253,15 +2196,14 @@ export const getGetPrivateSurveyQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getPrivateSurvey>>, TError, TData>
         >
-        request?: SecondParameter<typeof customExamFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetPrivateSurveyQueryKey(id, params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getPrivateSurvey>>> = ({ signal }) =>
-        getPrivateSurvey(id, params, { signal, ...requestOptions })
+        getPrivateSurvey(id, params, signal)
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getPrivateSurvey>>,
@@ -2291,7 +2233,6 @@ export function useGetPrivateSurvey<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2313,7 +2254,6 @@ export function useGetPrivateSurvey<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2327,7 +2267,6 @@ export function useGetPrivateSurvey<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getPrivateSurvey>>, TError, TData>
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2345,7 +2284,6 @@ export function useGetPrivateSurvey<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getPrivateSurvey>>, TError, TData>
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -2419,7 +2357,6 @@ export const getAutomaticTopicGenerationMutationOptions = <
         { data: AutomaticTopicGenerationBody },
         TContext
     >
-    request?: SecondParameter<typeof customExamFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof automaticTopicGeneration>>,
     TError,
@@ -2427,11 +2364,11 @@ export const getAutomaticTopicGenerationMutationOptions = <
     TContext
 > => {
     const mutationKey = ['automaticTopicGeneration']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof automaticTopicGeneration>>,
@@ -2439,7 +2376,7 @@ export const getAutomaticTopicGenerationMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return automaticTopicGeneration(data, requestOptions)
+        return automaticTopicGeneration(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -2467,7 +2404,6 @@ export const useAutomaticTopicGeneration = <
             { data: AutomaticTopicGenerationBody },
             TContext
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -2540,7 +2476,6 @@ export const getCreateClusterSurveyMutationOptions = <
         { data: CreateClusterSurveyRequest },
         TContext
     >
-    request?: SecondParameter<typeof customExamFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof createClusterSurvey>>,
     TError,
@@ -2548,11 +2483,11 @@ export const getCreateClusterSurveyMutationOptions = <
     TContext
 > => {
     const mutationKey = ['createClusterSurvey']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof createClusterSurvey>>,
@@ -2560,7 +2495,7 @@ export const getCreateClusterSurveyMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return createClusterSurvey(data, requestOptions)
+        return createClusterSurvey(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -2586,7 +2521,6 @@ export const useCreateClusterSurvey = <
             { data: CreateClusterSurveyRequest },
             TContext
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -2683,16 +2617,15 @@ export const getGetClusterSurveyStatisticsQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyStatistics>>, TError, TData>
         >
-        request?: SecondParameter<typeof customExamFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetClusterSurveyStatisticsQueryKey(id, params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getClusterSurveyStatistics>>> = ({
         signal,
-    }) => getClusterSurveyStatistics(id, params, { signal, ...requestOptions })
+    }) => getClusterSurveyStatistics(id, params, signal)
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getClusterSurveyStatistics>>,
@@ -2724,7 +2657,6 @@ export function useGetClusterSurveyStatistics<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2746,7 +2678,6 @@ export function useGetClusterSurveyStatistics<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2760,7 +2691,6 @@ export function useGetClusterSurveyStatistics<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyStatistics>>, TError, TData>
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2778,7 +2708,6 @@ export function useGetClusterSurveyStatistics<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyStatistics>>, TError, TData>
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -2867,16 +2796,15 @@ export const getGetLectureSurveyStatisticsQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getLectureSurveyStatistics>>, TError, TData>
         >
-        request?: SecondParameter<typeof customExamFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetLectureSurveyStatisticsQueryKey(id, params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getLectureSurveyStatistics>>> = ({
         signal,
-    }) => getLectureSurveyStatistics(id, params, { signal, ...requestOptions })
+    }) => getLectureSurveyStatistics(id, params, signal)
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getLectureSurveyStatistics>>,
@@ -2908,7 +2836,6 @@ export function useGetLectureSurveyStatistics<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2930,7 +2857,6 @@ export function useGetLectureSurveyStatistics<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2944,7 +2870,6 @@ export function useGetLectureSurveyStatistics<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getLectureSurveyStatistics>>, TError, TData>
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2962,7 +2887,6 @@ export function useGetLectureSurveyStatistics<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getLectureSurveyStatistics>>, TError, TData>
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -3067,17 +2991,16 @@ export const getGetOrganizationSurveyStatisticsQueryOptions = <
                 TData
             >
         >
-        request?: SecondParameter<typeof customExamFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey =
         queryOptions?.queryKey ?? getGetOrganizationSurveyStatisticsQueryKey(id, params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getOrganizationSurveyStatistics>>> = ({
         signal,
-    }) => getOrganizationSurveyStatistics(id, params, { signal, ...requestOptions })
+    }) => getOrganizationSurveyStatistics(id, params, signal)
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getOrganizationSurveyStatistics>>,
@@ -3115,7 +3038,6 @@ export function useGetOrganizationSurveyStatistics<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -3141,7 +3063,6 @@ export function useGetOrganizationSurveyStatistics<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -3159,7 +3080,6 @@ export function useGetOrganizationSurveyStatistics<
                 TData
             >
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -3181,7 +3101,6 @@ export function useGetOrganizationSurveyStatistics<
                 TData
             >
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -3285,16 +3204,15 @@ export const getExportClusterSurveyStatisticsQueryOptions = <
                 TData
             >
         >
-        request?: SecondParameter<typeof customExamFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getExportClusterSurveyStatisticsQueryKey(id, params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof exportClusterSurveyStatistics>>> = ({
         signal,
-    }) => exportClusterSurveyStatistics(id, params, { signal, ...requestOptions })
+    }) => exportClusterSurveyStatistics(id, params, signal)
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof exportClusterSurveyStatistics>>,
@@ -3330,7 +3248,6 @@ export function useExportClusterSurveyStatistics<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -3356,7 +3273,6 @@ export function useExportClusterSurveyStatistics<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -3374,7 +3290,6 @@ export function useExportClusterSurveyStatistics<
                 TData
             >
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -3396,7 +3311,6 @@ export function useExportClusterSurveyStatistics<
                 TData
             >
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -3503,18 +3417,16 @@ export const getGetClusterSurveyStatisticsForLecturerQueryOptions = <
                 TData
             >
         >
-        request?: SecondParameter<typeof customExamFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey =
         queryOptions?.queryKey ?? getGetClusterSurveyStatisticsForLecturerQueryKey(id, params)
 
     const queryFn: QueryFunction<
         Awaited<ReturnType<typeof getClusterSurveyStatisticsForLecturer>>
-    > = ({ signal }) =>
-        getClusterSurveyStatisticsForLecturer(id, params, { signal, ...requestOptions })
+    > = ({ signal }) => getClusterSurveyStatisticsForLecturer(id, params, signal)
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getClusterSurveyStatisticsForLecturer>>,
@@ -3551,7 +3463,6 @@ export function useGetClusterSurveyStatisticsForLecturer<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -3577,7 +3488,6 @@ export function useGetClusterSurveyStatisticsForLecturer<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -3595,7 +3505,6 @@ export function useGetClusterSurveyStatisticsForLecturer<
                 TData
             >
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -3617,7 +3526,6 @@ export function useGetClusterSurveyStatisticsForLecturer<
                 TData
             >
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -3715,18 +3623,16 @@ export const getGetClusterSurveyStatisticsForOrganizationQueryOptions = <
                 TData
             >
         >
-        request?: SecondParameter<typeof customExamFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey =
         queryOptions?.queryKey ?? getGetClusterSurveyStatisticsForOrganizationQueryKey(id, params)
 
     const queryFn: QueryFunction<
         Awaited<ReturnType<typeof getClusterSurveyStatisticsForOrganization>>
-    > = ({ signal }) =>
-        getClusterSurveyStatisticsForOrganization(id, params, { signal, ...requestOptions })
+    > = ({ signal }) => getClusterSurveyStatisticsForOrganization(id, params, signal)
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getClusterSurveyStatisticsForOrganization>>,
@@ -3763,7 +3669,6 @@ export function useGetClusterSurveyStatisticsForOrganization<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -3789,7 +3694,6 @@ export function useGetClusterSurveyStatisticsForOrganization<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -3807,7 +3711,6 @@ export function useGetClusterSurveyStatisticsForOrganization<
                 TData
             >
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -3829,7 +3732,6 @@ export function useGetClusterSurveyStatisticsForOrganization<
                 TData
             >
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -3928,17 +3830,16 @@ export const getGetClusterSurveyStatisticsForAllQueryOptions = <
                 TData
             >
         >
-        request?: SecondParameter<typeof customExamFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey =
         queryOptions?.queryKey ?? getGetClusterSurveyStatisticsForAllQueryKey(id, params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>> = ({
         signal,
-    }) => getClusterSurveyStatisticsForAll(id, params, { signal, ...requestOptions })
+    }) => getClusterSurveyStatisticsForAll(id, params, signal)
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>,
@@ -3974,7 +3875,6 @@ export function useGetClusterSurveyStatisticsForAll<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -4000,7 +3900,6 @@ export function useGetClusterSurveyStatisticsForAll<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -4018,7 +3917,6 @@ export function useGetClusterSurveyStatisticsForAll<
                 TData
             >
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -4040,7 +3938,6 @@ export function useGetClusterSurveyStatisticsForAll<
                 TData
             >
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -4126,15 +4023,14 @@ export const getGetClusterSurveyInfoQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyInfo>>, TError, TData>
         >
-        request?: SecondParameter<typeof customExamFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetClusterSurveyInfoQueryKey(id, params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getClusterSurveyInfo>>> = ({ signal }) =>
-        getClusterSurveyInfo(id, params, { signal, ...requestOptions })
+        getClusterSurveyInfo(id, params, signal)
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getClusterSurveyInfo>>,
@@ -4166,7 +4062,6 @@ export function useGetClusterSurveyInfo<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -4188,7 +4083,6 @@ export function useGetClusterSurveyInfo<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -4202,7 +4096,6 @@ export function useGetClusterSurveyInfo<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyInfo>>, TError, TData>
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -4220,7 +4113,6 @@ export function useGetClusterSurveyInfo<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyInfo>>, TError, TData>
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -4318,16 +4210,15 @@ export const getGetClusterSurveyInfoDepartmentQueryOptions = <
                 TData
             >
         >
-        request?: SecondParameter<typeof customExamFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetClusterSurveyInfoDepartmentQueryKey(id, params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>> = ({
         signal,
-    }) => getClusterSurveyInfoDepartment(id, params, { signal, ...requestOptions })
+    }) => getClusterSurveyInfoDepartment(id, params, signal)
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>,
@@ -4363,7 +4254,6 @@ export function useGetClusterSurveyInfoDepartment<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -4389,7 +4279,6 @@ export function useGetClusterSurveyInfoDepartment<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -4407,7 +4296,6 @@ export function useGetClusterSurveyInfoDepartment<
                 TData
             >
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -4429,7 +4317,6 @@ export function useGetClusterSurveyInfoDepartment<
                 TData
             >
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -4494,7 +4381,6 @@ export const getCalcEvidenceTagsMutationOptions = <
         { data: CalcEvidenceTags },
         TContext
     >
-    request?: SecondParameter<typeof customExamFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof calcEvidenceTags>>,
     TError,
@@ -4502,11 +4388,11 @@ export const getCalcEvidenceTagsMutationOptions = <
     TContext
 > => {
     const mutationKey = ['calcEvidenceTags']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof calcEvidenceTags>>,
@@ -4514,7 +4400,7 @@ export const getCalcEvidenceTagsMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return calcEvidenceTags(data, requestOptions)
+        return calcEvidenceTags(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -4537,7 +4423,6 @@ export const useCalcEvidenceTags = <TError = CalcEvidenceTags404, TContext = unk
             { data: CalcEvidenceTags },
             TContext
         >
-        request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<

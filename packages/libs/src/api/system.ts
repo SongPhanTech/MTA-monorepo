@@ -396,8 +396,6 @@ type AwaitedInput<T> = PromiseLike<T> | T
 
 type Awaited<O> = O extends AwaitedInput<infer T> ? T : never
 
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
-
 /**
  * Lấy danh sách các vai trò theo từng ứng dụng
  * @summary Vai trò - Danh sách
@@ -433,14 +431,13 @@ export const getGetDMVaiTrosQueryOptions = <
     TError = unknown,
 >(options?: {
     query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMVaiTros>>, TError, TData>>
-    request?: SecondParameter<typeof customSystemFetch>
 }) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMVaiTrosQueryKey()
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMVaiTros>>> = ({ signal }) =>
-        getDMVaiTros({ signal, ...requestOptions })
+        getDMVaiTros(signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMVaiTros>>,
@@ -463,7 +460,6 @@ export function useGetDMVaiTros<TData = Awaited<ReturnType<typeof getDMVaiTros>>
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -478,14 +474,12 @@ export function useGetDMVaiTros<TData = Awaited<ReturnType<typeof getDMVaiTros>>
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetDMVaiTros<TData = Awaited<ReturnType<typeof getDMVaiTros>>, TError = unknown>(
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMVaiTros>>, TError, TData>>
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -496,7 +490,6 @@ export function useGetDMVaiTros<TData = Awaited<ReturnType<typeof getDMVaiTros>>
 export function useGetDMVaiTros<TData = Awaited<ReturnType<typeof getDMVaiTros>>, TError = unknown>(
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMVaiTros>>, TError, TData>>
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -548,14 +541,13 @@ export const getGetDMVaiTrosHealthzQueryOptions = <
     TError = unknown,
 >(options?: {
     query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMVaiTrosHealthz>>, TError, TData>>
-    request?: SecondParameter<typeof customSystemFetch>
 }) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMVaiTrosHealthzQueryKey()
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMVaiTrosHealthz>>> = ({ signal }) =>
-        getDMVaiTrosHealthz({ signal, ...requestOptions })
+        getDMVaiTrosHealthz(signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMVaiTrosHealthz>>,
@@ -585,7 +577,6 @@ export function useGetDMVaiTrosHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -605,7 +596,6 @@ export function useGetDMVaiTrosHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -617,7 +607,6 @@ export function useGetDMVaiTrosHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMVaiTrosHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -633,7 +622,6 @@ export function useGetDMVaiTrosHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMVaiTrosHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -719,7 +707,6 @@ export const getPostDMCapBacsListMutationOptions = <
         { data: PublicApiPagingRequestDto },
         TContext
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postDMCapBacsList>>,
     TError,
@@ -727,11 +714,11 @@ export const getPostDMCapBacsListMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postDMCapBacsList']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postDMCapBacsList>>,
@@ -739,7 +726,7 @@ export const getPostDMCapBacsListMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postDMCapBacsList(data, requestOptions)
+        return postDMCapBacsList(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -769,7 +756,6 @@ export const usePostDMCapBacsList = <
             { data: PublicApiPagingRequestDto },
             TContext
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -865,15 +851,14 @@ export const getGetDMCapBacsIdQueryOptions = <
     params?: GetDMCapBacsIdParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMCapBacsId>>, TError, TData>>
-        request?: SecondParameter<typeof customSystemFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMCapBacsIdQueryKey(id, params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMCapBacsId>>> = ({ signal }) =>
-        getDMCapBacsId(id, params, { signal, ...requestOptions })
+        getDMCapBacsId(id, params, signal)
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMCapBacsId>>,
@@ -905,7 +890,6 @@ export function useGetDMCapBacsId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -927,7 +911,6 @@ export function useGetDMCapBacsId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -939,7 +922,6 @@ export function useGetDMCapBacsId<
     params?: GetDMCapBacsIdParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMCapBacsId>>, TError, TData>>
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -955,7 +937,6 @@ export function useGetDMCapBacsId<
     params?: GetDMCapBacsIdParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMCapBacsId>>, TError, TData>>
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -1030,14 +1011,13 @@ export const getGetDMCapBacsHealthzQueryOptions = <
         | GetDMCapBacsHealthz500,
 >(options?: {
     query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMCapBacsHealthz>>, TError, TData>>
-    request?: SecondParameter<typeof customSystemFetch>
 }) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMCapBacsHealthzQueryKey()
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMCapBacsHealthz>>> = ({ signal }) =>
-        getDMCapBacsHealthz({ signal, ...requestOptions })
+        getDMCapBacsHealthz(signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMCapBacsHealthz>>,
@@ -1075,7 +1055,6 @@ export function useGetDMCapBacsHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1099,7 +1078,6 @@ export function useGetDMCapBacsHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1115,7 +1093,6 @@ export function useGetDMCapBacsHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMCapBacsHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1135,7 +1112,6 @@ export function useGetDMCapBacsHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMCapBacsHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -1221,7 +1197,6 @@ export const getPostDMChucDanhsListMutationOptions = <
         { data: PublicApiPagingRequestDto },
         TContext
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postDMChucDanhsList>>,
     TError,
@@ -1229,11 +1204,11 @@ export const getPostDMChucDanhsListMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postDMChucDanhsList']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postDMChucDanhsList>>,
@@ -1241,7 +1216,7 @@ export const getPostDMChucDanhsListMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postDMChucDanhsList(data, requestOptions)
+        return postDMChucDanhsList(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -1271,7 +1246,6 @@ export const usePostDMChucDanhsList = <
             { data: PublicApiPagingRequestDto },
             TContext
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -1371,15 +1345,14 @@ export const getGetDMChucDanhsIdQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMChucDanhsId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMChucDanhsIdQueryKey(id, params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMChucDanhsId>>> = ({ signal }) =>
-        getDMChucDanhsId(id, params, { signal, ...requestOptions })
+        getDMChucDanhsId(id, params, signal)
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMChucDanhsId>>,
@@ -1413,7 +1386,6 @@ export function useGetDMChucDanhsId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1435,7 +1407,6 @@ export function useGetDMChucDanhsId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1449,7 +1420,6 @@ export function useGetDMChucDanhsId<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMChucDanhsId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1467,7 +1437,6 @@ export function useGetDMChucDanhsId<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMChucDanhsId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -1544,15 +1513,14 @@ export const getGetDMChucDanhsHealthzQueryOptions = <
     query?: Partial<
         UseQueryOptions<Awaited<ReturnType<typeof getDMChucDanhsHealthz>>, TError, TData>
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMChucDanhsHealthzQueryKey()
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMChucDanhsHealthz>>> = ({
         signal,
-    }) => getDMChucDanhsHealthz({ signal, ...requestOptions })
+    }) => getDMChucDanhsHealthz(signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMChucDanhsHealthz>>,
@@ -1590,7 +1558,6 @@ export function useGetDMChucDanhsHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1614,7 +1581,6 @@ export function useGetDMChucDanhsHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1630,7 +1596,6 @@ export function useGetDMChucDanhsHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMChucDanhsHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1650,7 +1615,6 @@ export function useGetDMChucDanhsHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMChucDanhsHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -1736,7 +1700,6 @@ export const getPostDMChucVusListMutationOptions = <
         { data: PublicApiPagingRequestDto },
         TContext
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postDMChucVusList>>,
     TError,
@@ -1744,11 +1707,11 @@ export const getPostDMChucVusListMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postDMChucVusList']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postDMChucVusList>>,
@@ -1756,7 +1719,7 @@ export const getPostDMChucVusListMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postDMChucVusList(data, requestOptions)
+        return postDMChucVusList(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -1786,7 +1749,6 @@ export const usePostDMChucVusList = <
             { data: PublicApiPagingRequestDto },
             TContext
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -1882,15 +1844,14 @@ export const getGetDMChucVusIdQueryOptions = <
     params?: GetDMChucVusIdParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMChucVusId>>, TError, TData>>
-        request?: SecondParameter<typeof customSystemFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMChucVusIdQueryKey(id, params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMChucVusId>>> = ({ signal }) =>
-        getDMChucVusId(id, params, { signal, ...requestOptions })
+        getDMChucVusId(id, params, signal)
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMChucVusId>>,
@@ -1922,7 +1883,6 @@ export function useGetDMChucVusId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1944,7 +1904,6 @@ export function useGetDMChucVusId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1956,7 +1915,6 @@ export function useGetDMChucVusId<
     params?: GetDMChucVusIdParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMChucVusId>>, TError, TData>>
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1972,7 +1930,6 @@ export function useGetDMChucVusId<
     params?: GetDMChucVusIdParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMChucVusId>>, TError, TData>>
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -2047,14 +2004,13 @@ export const getGetDMChucVusHealthzQueryOptions = <
         | GetDMChucVusHealthz500,
 >(options?: {
     query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMChucVusHealthz>>, TError, TData>>
-    request?: SecondParameter<typeof customSystemFetch>
 }) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMChucVusHealthzQueryKey()
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMChucVusHealthz>>> = ({ signal }) =>
-        getDMChucVusHealthz({ signal, ...requestOptions })
+        getDMChucVusHealthz(signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMChucVusHealthz>>,
@@ -2092,7 +2048,6 @@ export function useGetDMChucVusHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2116,7 +2071,6 @@ export function useGetDMChucVusHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2132,7 +2086,6 @@ export function useGetDMChucVusHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMChucVusHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2152,7 +2105,6 @@ export function useGetDMChucVusHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMChucVusHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -2242,7 +2194,6 @@ export const getPostDMChungChiTinHocsListMutationOptions = <
         { data: PublicApiPagingRequestDto },
         TContext
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postDMChungChiTinHocsList>>,
     TError,
@@ -2250,11 +2201,11 @@ export const getPostDMChungChiTinHocsListMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postDMChungChiTinHocsList']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postDMChungChiTinHocsList>>,
@@ -2262,7 +2213,7 @@ export const getPostDMChungChiTinHocsListMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postDMChungChiTinHocsList(data, requestOptions)
+        return postDMChungChiTinHocsList(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -2296,7 +2247,6 @@ export const usePostDMChungChiTinHocsList = <
             { data: PublicApiPagingRequestDto },
             TContext
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -2406,16 +2356,15 @@ export const getGetDMChungChiTinHocsIdQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMChungChiTinHocsId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMChungChiTinHocsIdQueryKey(id, params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMChungChiTinHocsId>>> = ({
         signal,
-    }) => getDMChungChiTinHocsId(id, params, { signal, ...requestOptions })
+    }) => getDMChungChiTinHocsId(id, params, signal)
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMChungChiTinHocsId>>,
@@ -2455,7 +2404,6 @@ export function useGetDMChungChiTinHocsId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2481,7 +2429,6 @@ export function useGetDMChungChiTinHocsId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2499,7 +2446,6 @@ export function useGetDMChungChiTinHocsId<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMChungChiTinHocsId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2521,7 +2467,6 @@ export function useGetDMChungChiTinHocsId<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMChungChiTinHocsId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -2601,15 +2546,14 @@ export const getGetDMChungChiTinHocsHealthzQueryOptions = <
     query?: Partial<
         UseQueryOptions<Awaited<ReturnType<typeof getDMChungChiTinHocsHealthz>>, TError, TData>
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMChungChiTinHocsHealthzQueryKey()
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMChungChiTinHocsHealthz>>> = ({
         signal,
-    }) => getDMChungChiTinHocsHealthz({ signal, ...requestOptions })
+    }) => getDMChungChiTinHocsHealthz(signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMChungChiTinHocsHealthz>>,
@@ -2647,7 +2591,6 @@ export function useGetDMChungChiTinHocsHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2671,7 +2614,6 @@ export function useGetDMChungChiTinHocsHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2687,7 +2629,6 @@ export function useGetDMChungChiTinHocsHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMChungChiTinHocsHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2707,7 +2648,6 @@ export function useGetDMChungChiTinHocsHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMChungChiTinHocsHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -2793,7 +2733,6 @@ export const getPostDMDanTocsListMutationOptions = <
         { data: PublicApiPagingRequestDto },
         TContext
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postDMDanTocsList>>,
     TError,
@@ -2801,11 +2740,11 @@ export const getPostDMDanTocsListMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postDMDanTocsList']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postDMDanTocsList>>,
@@ -2813,7 +2752,7 @@ export const getPostDMDanTocsListMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postDMDanTocsList(data, requestOptions)
+        return postDMDanTocsList(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -2843,7 +2782,6 @@ export const usePostDMDanTocsList = <
             { data: PublicApiPagingRequestDto },
             TContext
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -2939,15 +2877,14 @@ export const getGetDMDanTocsIdQueryOptions = <
     params?: GetDMDanTocsIdParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMDanTocsId>>, TError, TData>>
-        request?: SecondParameter<typeof customSystemFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMDanTocsIdQueryKey(id, params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMDanTocsId>>> = ({ signal }) =>
-        getDMDanTocsId(id, params, { signal, ...requestOptions })
+        getDMDanTocsId(id, params, signal)
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMDanTocsId>>,
@@ -2979,7 +2916,6 @@ export function useGetDMDanTocsId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -3001,7 +2937,6 @@ export function useGetDMDanTocsId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -3013,7 +2948,6 @@ export function useGetDMDanTocsId<
     params?: GetDMDanTocsIdParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMDanTocsId>>, TError, TData>>
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -3029,7 +2963,6 @@ export function useGetDMDanTocsId<
     params?: GetDMDanTocsIdParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMDanTocsId>>, TError, TData>>
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -3104,14 +3037,13 @@ export const getGetDMDanTocsHealthzQueryOptions = <
         | GetDMDanTocsHealthz500,
 >(options?: {
     query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMDanTocsHealthz>>, TError, TData>>
-    request?: SecondParameter<typeof customSystemFetch>
 }) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMDanTocsHealthzQueryKey()
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMDanTocsHealthz>>> = ({ signal }) =>
-        getDMDanTocsHealthz({ signal, ...requestOptions })
+        getDMDanTocsHealthz(signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMDanTocsHealthz>>,
@@ -3149,7 +3081,6 @@ export function useGetDMDanTocsHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -3173,7 +3104,6 @@ export function useGetDMDanTocsHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -3189,7 +3119,6 @@ export function useGetDMDanTocsHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMDanTocsHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -3209,7 +3138,6 @@ export function useGetDMDanTocsHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMDanTocsHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -3295,7 +3223,6 @@ export const getPostDMDonVisListMutationOptions = <
         { data: PublicApiPagingRequestDto },
         TContext
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postDMDonVisList>>,
     TError,
@@ -3303,11 +3230,11 @@ export const getPostDMDonVisListMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postDMDonVisList']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postDMDonVisList>>,
@@ -3315,7 +3242,7 @@ export const getPostDMDonVisListMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postDMDonVisList(data, requestOptions)
+        return postDMDonVisList(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -3345,7 +3272,6 @@ export const usePostDMDonVisList = <
             { data: PublicApiPagingRequestDto },
             TContext
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -3441,15 +3367,14 @@ export const getGetDMDonVisIdQueryOptions = <
     params?: GetDMDonVisIdParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMDonVisId>>, TError, TData>>
-        request?: SecondParameter<typeof customSystemFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMDonVisIdQueryKey(id, params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMDonVisId>>> = ({ signal }) =>
-        getDMDonVisId(id, params, { signal, ...requestOptions })
+        getDMDonVisId(id, params, signal)
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMDonVisId>>,
@@ -3477,7 +3402,6 @@ export function useGetDMDonVisId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -3497,7 +3421,6 @@ export function useGetDMDonVisId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -3509,7 +3432,6 @@ export function useGetDMDonVisId<
     params?: GetDMDonVisIdParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMDonVisId>>, TError, TData>>
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -3525,7 +3447,6 @@ export function useGetDMDonVisId<
     params?: GetDMDonVisIdParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMDonVisId>>, TError, TData>>
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -3600,14 +3521,13 @@ export const getGetDMDonVisHealthzQueryOptions = <
         | GetDMDonVisHealthz500,
 >(options?: {
     query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMDonVisHealthz>>, TError, TData>>
-    request?: SecondParameter<typeof customSystemFetch>
 }) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMDonVisHealthzQueryKey()
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMDonVisHealthz>>> = ({ signal }) =>
-        getDMDonVisHealthz({ signal, ...requestOptions })
+        getDMDonVisHealthz(signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMDonVisHealthz>>,
@@ -3645,7 +3565,6 @@ export function useGetDMDonVisHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -3669,7 +3588,6 @@ export function useGetDMDonVisHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -3685,7 +3603,6 @@ export function useGetDMDonVisHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMDonVisHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -3705,7 +3622,6 @@ export function useGetDMDonVisHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMDonVisHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -3791,7 +3707,6 @@ export const getPostDMGioiTinhsListMutationOptions = <
         { data: PublicApiPagingRequestDto },
         TContext
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postDMGioiTinhsList>>,
     TError,
@@ -3799,11 +3714,11 @@ export const getPostDMGioiTinhsListMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postDMGioiTinhsList']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postDMGioiTinhsList>>,
@@ -3811,7 +3726,7 @@ export const getPostDMGioiTinhsListMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postDMGioiTinhsList(data, requestOptions)
+        return postDMGioiTinhsList(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -3841,7 +3756,6 @@ export const usePostDMGioiTinhsList = <
             { data: PublicApiPagingRequestDto },
             TContext
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -3941,15 +3855,14 @@ export const getGetDMGioiTinhsIdQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMGioiTinhsId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMGioiTinhsIdQueryKey(id, params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMGioiTinhsId>>> = ({ signal }) =>
-        getDMGioiTinhsId(id, params, { signal, ...requestOptions })
+        getDMGioiTinhsId(id, params, signal)
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMGioiTinhsId>>,
@@ -3983,7 +3896,6 @@ export function useGetDMGioiTinhsId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -4005,7 +3917,6 @@ export function useGetDMGioiTinhsId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -4019,7 +3930,6 @@ export function useGetDMGioiTinhsId<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMGioiTinhsId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -4037,7 +3947,6 @@ export function useGetDMGioiTinhsId<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMGioiTinhsId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -4114,15 +4023,14 @@ export const getGetDMGioiTinhsHealthzQueryOptions = <
     query?: Partial<
         UseQueryOptions<Awaited<ReturnType<typeof getDMGioiTinhsHealthz>>, TError, TData>
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMGioiTinhsHealthzQueryKey()
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMGioiTinhsHealthz>>> = ({
         signal,
-    }) => getDMGioiTinhsHealthz({ signal, ...requestOptions })
+    }) => getDMGioiTinhsHealthz(signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMGioiTinhsHealthz>>,
@@ -4160,7 +4068,6 @@ export function useGetDMGioiTinhsHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -4184,7 +4091,6 @@ export function useGetDMGioiTinhsHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -4200,7 +4106,6 @@ export function useGetDMGioiTinhsHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMGioiTinhsHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -4220,7 +4125,6 @@ export function useGetDMGioiTinhsHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMGioiTinhsHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -4306,7 +4210,6 @@ export const getPostDMHocHamsListMutationOptions = <
         { data: PublicApiPagingRequestDto },
         TContext
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postDMHocHamsList>>,
     TError,
@@ -4314,11 +4217,11 @@ export const getPostDMHocHamsListMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postDMHocHamsList']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postDMHocHamsList>>,
@@ -4326,7 +4229,7 @@ export const getPostDMHocHamsListMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postDMHocHamsList(data, requestOptions)
+        return postDMHocHamsList(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -4356,7 +4259,6 @@ export const usePostDMHocHamsList = <
             { data: PublicApiPagingRequestDto },
             TContext
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -4452,15 +4354,14 @@ export const getGetDMHocHamsIdQueryOptions = <
     params?: GetDMHocHamsIdParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMHocHamsId>>, TError, TData>>
-        request?: SecondParameter<typeof customSystemFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMHocHamsIdQueryKey(id, params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMHocHamsId>>> = ({ signal }) =>
-        getDMHocHamsId(id, params, { signal, ...requestOptions })
+        getDMHocHamsId(id, params, signal)
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMHocHamsId>>,
@@ -4492,7 +4393,6 @@ export function useGetDMHocHamsId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -4514,7 +4414,6 @@ export function useGetDMHocHamsId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -4526,7 +4425,6 @@ export function useGetDMHocHamsId<
     params?: GetDMHocHamsIdParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMHocHamsId>>, TError, TData>>
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -4542,7 +4440,6 @@ export function useGetDMHocHamsId<
     params?: GetDMHocHamsIdParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMHocHamsId>>, TError, TData>>
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -4617,14 +4514,13 @@ export const getGetDMHocHamsHealthzQueryOptions = <
         | GetDMHocHamsHealthz500,
 >(options?: {
     query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMHocHamsHealthz>>, TError, TData>>
-    request?: SecondParameter<typeof customSystemFetch>
 }) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMHocHamsHealthzQueryKey()
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMHocHamsHealthz>>> = ({ signal }) =>
-        getDMHocHamsHealthz({ signal, ...requestOptions })
+        getDMHocHamsHealthz(signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMHocHamsHealthz>>,
@@ -4662,7 +4558,6 @@ export function useGetDMHocHamsHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -4686,7 +4581,6 @@ export function useGetDMHocHamsHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -4702,7 +4596,6 @@ export function useGetDMHocHamsHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMHocHamsHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -4722,7 +4615,6 @@ export function useGetDMHocHamsHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMHocHamsHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -4808,7 +4700,6 @@ export const getPostDMHocVisListMutationOptions = <
         { data: PublicApiPagingRequestDto },
         TContext
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postDMHocVisList>>,
     TError,
@@ -4816,11 +4707,11 @@ export const getPostDMHocVisListMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postDMHocVisList']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postDMHocVisList>>,
@@ -4828,7 +4719,7 @@ export const getPostDMHocVisListMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postDMHocVisList(data, requestOptions)
+        return postDMHocVisList(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -4858,7 +4749,6 @@ export const usePostDMHocVisList = <
             { data: PublicApiPagingRequestDto },
             TContext
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -4954,15 +4844,14 @@ export const getGetDMHocVisIdQueryOptions = <
     params?: GetDMHocVisIdParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMHocVisId>>, TError, TData>>
-        request?: SecondParameter<typeof customSystemFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMHocVisIdQueryKey(id, params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMHocVisId>>> = ({ signal }) =>
-        getDMHocVisId(id, params, { signal, ...requestOptions })
+        getDMHocVisId(id, params, signal)
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMHocVisId>>,
@@ -4990,7 +4879,6 @@ export function useGetDMHocVisId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -5010,7 +4898,6 @@ export function useGetDMHocVisId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -5022,7 +4909,6 @@ export function useGetDMHocVisId<
     params?: GetDMHocVisIdParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMHocVisId>>, TError, TData>>
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -5038,7 +4924,6 @@ export function useGetDMHocVisId<
     params?: GetDMHocVisIdParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMHocVisId>>, TError, TData>>
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -5113,14 +4998,13 @@ export const getGetDMHocVisHealthzQueryOptions = <
         | GetDMHocVisHealthz500,
 >(options?: {
     query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMHocVisHealthz>>, TError, TData>>
-    request?: SecondParameter<typeof customSystemFetch>
 }) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMHocVisHealthzQueryKey()
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMHocVisHealthz>>> = ({ signal }) =>
-        getDMHocVisHealthz({ signal, ...requestOptions })
+        getDMHocVisHealthz(signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMHocVisHealthz>>,
@@ -5158,7 +5042,6 @@ export function useGetDMHocVisHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -5182,7 +5065,6 @@ export function useGetDMHocVisHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -5198,7 +5080,6 @@ export function useGetDMHocVisHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMHocVisHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -5218,7 +5099,6 @@ export function useGetDMHocVisHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMHocVisHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -5304,7 +5184,6 @@ export const getPostDMNgoaiNgusListMutationOptions = <
         { data: PublicApiPagingRequestDto },
         TContext
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postDMNgoaiNgusList>>,
     TError,
@@ -5312,11 +5191,11 @@ export const getPostDMNgoaiNgusListMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postDMNgoaiNgusList']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postDMNgoaiNgusList>>,
@@ -5324,7 +5203,7 @@ export const getPostDMNgoaiNgusListMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postDMNgoaiNgusList(data, requestOptions)
+        return postDMNgoaiNgusList(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -5354,7 +5233,6 @@ export const usePostDMNgoaiNgusList = <
             { data: PublicApiPagingRequestDto },
             TContext
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -5454,15 +5332,14 @@ export const getGetDMNgoaiNgusIdQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMNgoaiNgusId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMNgoaiNgusIdQueryKey(id, params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMNgoaiNgusId>>> = ({ signal }) =>
-        getDMNgoaiNgusId(id, params, { signal, ...requestOptions })
+        getDMNgoaiNgusId(id, params, signal)
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMNgoaiNgusId>>,
@@ -5496,7 +5373,6 @@ export function useGetDMNgoaiNgusId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -5518,7 +5394,6 @@ export function useGetDMNgoaiNgusId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -5532,7 +5407,6 @@ export function useGetDMNgoaiNgusId<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMNgoaiNgusId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -5550,7 +5424,6 @@ export function useGetDMNgoaiNgusId<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMNgoaiNgusId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -5627,15 +5500,14 @@ export const getGetDMNgoaiNgusHealthzQueryOptions = <
     query?: Partial<
         UseQueryOptions<Awaited<ReturnType<typeof getDMNgoaiNgusHealthz>>, TError, TData>
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMNgoaiNgusHealthzQueryKey()
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMNgoaiNgusHealthz>>> = ({
         signal,
-    }) => getDMNgoaiNgusHealthz({ signal, ...requestOptions })
+    }) => getDMNgoaiNgusHealthz(signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMNgoaiNgusHealthz>>,
@@ -5673,7 +5545,6 @@ export function useGetDMNgoaiNgusHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -5697,7 +5568,6 @@ export function useGetDMNgoaiNgusHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -5713,7 +5583,6 @@ export function useGetDMNgoaiNgusHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMNgoaiNgusHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -5733,7 +5602,6 @@ export function useGetDMNgoaiNgusHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMNgoaiNgusHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -5819,7 +5687,6 @@ export const getPostDMNhanViensListMutationOptions = <
         { data: PublicApiPagingRequestDto },
         TContext
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postDMNhanViensList>>,
     TError,
@@ -5827,11 +5694,11 @@ export const getPostDMNhanViensListMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postDMNhanViensList']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postDMNhanViensList>>,
@@ -5839,7 +5706,7 @@ export const getPostDMNhanViensListMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postDMNhanViensList(data, requestOptions)
+        return postDMNhanViensList(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -5869,7 +5736,6 @@ export const usePostDMNhanViensList = <
             { data: PublicApiPagingRequestDto },
             TContext
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -5969,15 +5835,14 @@ export const getGetDMNhanViensIdQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMNhanViensId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMNhanViensIdQueryKey(id, params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMNhanViensId>>> = ({ signal }) =>
-        getDMNhanViensId(id, params, { signal, ...requestOptions })
+        getDMNhanViensId(id, params, signal)
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMNhanViensId>>,
@@ -6011,7 +5876,6 @@ export function useGetDMNhanViensId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -6033,7 +5897,6 @@ export function useGetDMNhanViensId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -6047,7 +5910,6 @@ export function useGetDMNhanViensId<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMNhanViensId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -6065,7 +5927,6 @@ export function useGetDMNhanViensId<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMNhanViensId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -6149,7 +6010,6 @@ export const getDeleteDMNhanViensIdMutationOptions = <
         { id: string },
         TContext
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof deleteDMNhanViensId>>,
     TError,
@@ -6157,11 +6017,11 @@ export const getDeleteDMNhanViensIdMutationOptions = <
     TContext
 > => {
     const mutationKey = ['deleteDMNhanViensId']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof deleteDMNhanViensId>>,
@@ -6169,7 +6029,7 @@ export const getDeleteDMNhanViensIdMutationOptions = <
     > = (props) => {
         const { id } = props ?? {}
 
-        return deleteDMNhanViensId(id, requestOptions)
+        return deleteDMNhanViensId(id)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -6199,7 +6059,6 @@ export const useDeleteDMNhanViensId = <
             { id: string },
             TContext
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -6282,7 +6141,6 @@ export const getPostDMNhanViensMutationOptions = <
         { data: NhanVienEditDto },
         TContext
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postDMNhanViens>>,
     TError,
@@ -6290,11 +6148,11 @@ export const getPostDMNhanViensMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postDMNhanViens']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postDMNhanViens>>,
@@ -6302,7 +6160,7 @@ export const getPostDMNhanViensMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postDMNhanViens(data, requestOptions)
+        return postDMNhanViens(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -6330,7 +6188,6 @@ export const usePostDMNhanViens = <
             { data: NhanVienEditDto },
             TContext
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -6413,7 +6270,6 @@ export const getPutDMNhanViensMutationOptions = <
         { data: NhanVienEditDto },
         TContext
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof putDMNhanViens>>,
     TError,
@@ -6421,11 +6277,11 @@ export const getPutDMNhanViensMutationOptions = <
     TContext
 > => {
     const mutationKey = ['putDMNhanViens']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof putDMNhanViens>>,
@@ -6433,7 +6289,7 @@ export const getPutDMNhanViensMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return putDMNhanViens(data, requestOptions)
+        return putDMNhanViens(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -6461,7 +6317,6 @@ export const usePutDMNhanViens = <
             { data: NhanVienEditDto },
             TContext
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -6537,15 +6392,14 @@ export const getGetDMNhanViensHealthzQueryOptions = <
     query?: Partial<
         UseQueryOptions<Awaited<ReturnType<typeof getDMNhanViensHealthz>>, TError, TData>
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMNhanViensHealthzQueryKey()
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMNhanViensHealthz>>> = ({
         signal,
-    }) => getDMNhanViensHealthz({ signal, ...requestOptions })
+    }) => getDMNhanViensHealthz(signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMNhanViensHealthz>>,
@@ -6583,7 +6437,6 @@ export function useGetDMNhanViensHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -6607,7 +6460,6 @@ export function useGetDMNhanViensHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -6623,7 +6475,6 @@ export function useGetDMNhanViensHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMNhanViensHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -6643,7 +6494,6 @@ export function useGetDMNhanViensHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMNhanViensHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -6729,7 +6579,6 @@ export const getPostDMNhomViTrisListMutationOptions = <
         { data: PublicApiPagingRequestDto },
         TContext
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postDMNhomViTrisList>>,
     TError,
@@ -6737,11 +6586,11 @@ export const getPostDMNhomViTrisListMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postDMNhomViTrisList']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postDMNhomViTrisList>>,
@@ -6749,7 +6598,7 @@ export const getPostDMNhomViTrisListMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postDMNhomViTrisList(data, requestOptions)
+        return postDMNhomViTrisList(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -6779,7 +6628,6 @@ export const usePostDMNhomViTrisList = <
             { data: PublicApiPagingRequestDto },
             TContext
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -6879,15 +6727,14 @@ export const getGetDMNhomViTrisIdQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMNhomViTrisId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMNhomViTrisIdQueryKey(id, params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMNhomViTrisId>>> = ({ signal }) =>
-        getDMNhomViTrisId(id, params, { signal, ...requestOptions })
+        getDMNhomViTrisId(id, params, signal)
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMNhomViTrisId>>,
@@ -6923,7 +6770,6 @@ export function useGetDMNhomViTrisId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -6945,7 +6791,6 @@ export function useGetDMNhomViTrisId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -6959,7 +6804,6 @@ export function useGetDMNhomViTrisId<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMNhomViTrisId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -6977,7 +6821,6 @@ export function useGetDMNhomViTrisId<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMNhomViTrisId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -7054,15 +6897,14 @@ export const getGetDMNhomViTrisHealthzQueryOptions = <
     query?: Partial<
         UseQueryOptions<Awaited<ReturnType<typeof getDMNhomViTrisHealthz>>, TError, TData>
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMNhomViTrisHealthzQueryKey()
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMNhomViTrisHealthz>>> = ({
         signal,
-    }) => getDMNhomViTrisHealthz({ signal, ...requestOptions })
+    }) => getDMNhomViTrisHealthz(signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMNhomViTrisHealthz>>,
@@ -7100,7 +6942,6 @@ export function useGetDMNhomViTrisHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -7124,7 +6965,6 @@ export function useGetDMNhomViTrisHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -7140,7 +6980,6 @@ export function useGetDMNhomViTrisHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMNhomViTrisHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -7160,7 +6999,6 @@ export function useGetDMNhomViTrisHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMNhomViTrisHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -7254,7 +7092,6 @@ export const getPostDMPhanCapChatLuongTTBsListMutationOptions = <
         { data: PublicApiPagingRequestDto },
         TContext
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postDMPhanCapChatLuongTTBsList>>,
     TError,
@@ -7262,11 +7099,11 @@ export const getPostDMPhanCapChatLuongTTBsListMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postDMPhanCapChatLuongTTBsList']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postDMPhanCapChatLuongTTBsList>>,
@@ -7274,7 +7111,7 @@ export const getPostDMPhanCapChatLuongTTBsListMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postDMPhanCapChatLuongTTBsList(data, requestOptions)
+        return postDMPhanCapChatLuongTTBsList(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -7308,7 +7145,6 @@ export const usePostDMPhanCapChatLuongTTBsList = <
             { data: PublicApiPagingRequestDto },
             TContext
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -7421,16 +7257,15 @@ export const getGetDMPhanCapChatLuongTTBsIdQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMPhanCapChatLuongTTBsIdQueryKey(id, params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsId>>> = ({
         signal,
-    }) => getDMPhanCapChatLuongTTBsId(id, params, { signal, ...requestOptions })
+    }) => getDMPhanCapChatLuongTTBsId(id, params, signal)
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsId>>,
@@ -7470,7 +7305,6 @@ export function useGetDMPhanCapChatLuongTTBsId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -7496,7 +7330,6 @@ export function useGetDMPhanCapChatLuongTTBsId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -7514,7 +7347,6 @@ export function useGetDMPhanCapChatLuongTTBsId<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -7536,7 +7368,6 @@ export function useGetDMPhanCapChatLuongTTBsId<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -7616,15 +7447,14 @@ export const getGetDMPhanCapChatLuongTTBsHealthzQueryOptions = <
     query?: Partial<
         UseQueryOptions<Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsHealthz>>, TError, TData>
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMPhanCapChatLuongTTBsHealthzQueryKey()
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsHealthz>>> = ({
         signal,
-    }) => getDMPhanCapChatLuongTTBsHealthz({ signal, ...requestOptions })
+    }) => getDMPhanCapChatLuongTTBsHealthz(signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMPhanCapChatLuongTTBsHealthz>>,
@@ -7666,7 +7496,6 @@ export function useGetDMPhanCapChatLuongTTBsHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -7694,7 +7523,6 @@ export function useGetDMPhanCapChatLuongTTBsHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -7714,7 +7542,6 @@ export function useGetDMPhanCapChatLuongTTBsHealthz<
                 TData
             >
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -7738,7 +7565,6 @@ export function useGetDMPhanCapChatLuongTTBsHealthz<
                 TData
             >
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -7828,7 +7654,6 @@ export const getPostDMPhanLoaiCSKTsListMutationOptions = <
         { data: PublicApiPagingRequestDto },
         TContext
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postDMPhanLoaiCSKTsList>>,
     TError,
@@ -7836,11 +7661,11 @@ export const getPostDMPhanLoaiCSKTsListMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postDMPhanLoaiCSKTsList']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postDMPhanLoaiCSKTsList>>,
@@ -7848,7 +7673,7 @@ export const getPostDMPhanLoaiCSKTsListMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postDMPhanLoaiCSKTsList(data, requestOptions)
+        return postDMPhanLoaiCSKTsList(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -7882,7 +7707,6 @@ export const usePostDMPhanLoaiCSKTsList = <
             { data: PublicApiPagingRequestDto },
             TContext
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -7985,15 +7809,14 @@ export const getGetDMPhanLoaiCSKTsIdQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMPhanLoaiCSKTsId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMPhanLoaiCSKTsIdQueryKey(id, params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMPhanLoaiCSKTsId>>> = ({ signal }) =>
-        getDMPhanLoaiCSKTsId(id, params, { signal, ...requestOptions })
+        getDMPhanLoaiCSKTsId(id, params, signal)
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMPhanLoaiCSKTsId>>,
@@ -8029,7 +7852,6 @@ export function useGetDMPhanLoaiCSKTsId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -8051,7 +7873,6 @@ export function useGetDMPhanLoaiCSKTsId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -8065,7 +7886,6 @@ export function useGetDMPhanLoaiCSKTsId<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMPhanLoaiCSKTsId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -8083,7 +7903,6 @@ export function useGetDMPhanLoaiCSKTsId<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMPhanLoaiCSKTsId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -8160,15 +7979,14 @@ export const getGetDMPhanLoaiCSKTsHealthzQueryOptions = <
     query?: Partial<
         UseQueryOptions<Awaited<ReturnType<typeof getDMPhanLoaiCSKTsHealthz>>, TError, TData>
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMPhanLoaiCSKTsHealthzQueryKey()
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMPhanLoaiCSKTsHealthz>>> = ({
         signal,
-    }) => getDMPhanLoaiCSKTsHealthz({ signal, ...requestOptions })
+    }) => getDMPhanLoaiCSKTsHealthz(signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMPhanLoaiCSKTsHealthz>>,
@@ -8206,7 +8024,6 @@ export function useGetDMPhanLoaiCSKTsHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -8230,7 +8047,6 @@ export function useGetDMPhanLoaiCSKTsHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -8246,7 +8062,6 @@ export function useGetDMPhanLoaiCSKTsHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMPhanLoaiCSKTsHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -8266,7 +8081,6 @@ export function useGetDMPhanLoaiCSKTsHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMPhanLoaiCSKTsHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -8352,7 +8166,6 @@ export const getPostDMQuanHuyensListMutationOptions = <
         { data: PublicApiPagingRequestDto },
         TContext
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postDMQuanHuyensList>>,
     TError,
@@ -8360,11 +8173,11 @@ export const getPostDMQuanHuyensListMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postDMQuanHuyensList']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postDMQuanHuyensList>>,
@@ -8372,7 +8185,7 @@ export const getPostDMQuanHuyensListMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postDMQuanHuyensList(data, requestOptions)
+        return postDMQuanHuyensList(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -8402,7 +8215,6 @@ export const usePostDMQuanHuyensList = <
             { data: PublicApiPagingRequestDto },
             TContext
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -8502,15 +8314,14 @@ export const getGetDMQuanHuyensIdQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMQuanHuyensId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMQuanHuyensIdQueryKey(id, params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMQuanHuyensId>>> = ({ signal }) =>
-        getDMQuanHuyensId(id, params, { signal, ...requestOptions })
+        getDMQuanHuyensId(id, params, signal)
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMQuanHuyensId>>,
@@ -8546,7 +8357,6 @@ export function useGetDMQuanHuyensId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -8568,7 +8378,6 @@ export function useGetDMQuanHuyensId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -8582,7 +8391,6 @@ export function useGetDMQuanHuyensId<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMQuanHuyensId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -8600,7 +8408,6 @@ export function useGetDMQuanHuyensId<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMQuanHuyensId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -8677,15 +8484,14 @@ export const getGetDMQuanHuyensHealthzQueryOptions = <
     query?: Partial<
         UseQueryOptions<Awaited<ReturnType<typeof getDMQuanHuyensHealthz>>, TError, TData>
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMQuanHuyensHealthzQueryKey()
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMQuanHuyensHealthz>>> = ({
         signal,
-    }) => getDMQuanHuyensHealthz({ signal, ...requestOptions })
+    }) => getDMQuanHuyensHealthz(signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMQuanHuyensHealthz>>,
@@ -8723,7 +8529,6 @@ export function useGetDMQuanHuyensHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -8747,7 +8552,6 @@ export function useGetDMQuanHuyensHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -8763,7 +8567,6 @@ export function useGetDMQuanHuyensHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMQuanHuyensHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -8783,7 +8586,6 @@ export function useGetDMQuanHuyensHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMQuanHuyensHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -8869,7 +8671,6 @@ export const getPostDMQuocGiasListMutationOptions = <
         { data: PublicApiPagingRequestDto },
         TContext
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postDMQuocGiasList>>,
     TError,
@@ -8877,11 +8678,11 @@ export const getPostDMQuocGiasListMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postDMQuocGiasList']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postDMQuocGiasList>>,
@@ -8889,7 +8690,7 @@ export const getPostDMQuocGiasListMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postDMQuocGiasList(data, requestOptions)
+        return postDMQuocGiasList(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -8919,7 +8720,6 @@ export const usePostDMQuocGiasList = <
             { data: PublicApiPagingRequestDto },
             TContext
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -9015,15 +8815,14 @@ export const getGetDMQuocGiasIdQueryOptions = <
     params?: GetDMQuocGiasIdParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMQuocGiasId>>, TError, TData>>
-        request?: SecondParameter<typeof customSystemFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMQuocGiasIdQueryKey(id, params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMQuocGiasId>>> = ({ signal }) =>
-        getDMQuocGiasId(id, params, { signal, ...requestOptions })
+        getDMQuocGiasId(id, params, signal)
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMQuocGiasId>>,
@@ -9057,7 +8856,6 @@ export function useGetDMQuocGiasId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -9079,7 +8877,6 @@ export function useGetDMQuocGiasId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -9091,7 +8888,6 @@ export function useGetDMQuocGiasId<
     params?: GetDMQuocGiasIdParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMQuocGiasId>>, TError, TData>>
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -9107,7 +8903,6 @@ export function useGetDMQuocGiasId<
     params?: GetDMQuocGiasIdParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMQuocGiasId>>, TError, TData>>
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -9184,14 +8979,13 @@ export const getGetDMQuocGiasHealthzQueryOptions = <
     query?: Partial<
         UseQueryOptions<Awaited<ReturnType<typeof getDMQuocGiasHealthz>>, TError, TData>
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMQuocGiasHealthzQueryKey()
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMQuocGiasHealthz>>> = ({ signal }) =>
-        getDMQuocGiasHealthz({ signal, ...requestOptions })
+        getDMQuocGiasHealthz(signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMQuocGiasHealthz>>,
@@ -9229,7 +9023,6 @@ export function useGetDMQuocGiasHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -9253,7 +9046,6 @@ export function useGetDMQuocGiasHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -9269,7 +9061,6 @@ export function useGetDMQuocGiasHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMQuocGiasHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -9289,7 +9080,6 @@ export function useGetDMQuocGiasHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMQuocGiasHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -9373,7 +9163,6 @@ export const getPostDMTinhsListMutationOptions = <
         { data: PublicApiPagingRequestDto },
         TContext
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postDMTinhsList>>,
     TError,
@@ -9381,11 +9170,11 @@ export const getPostDMTinhsListMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postDMTinhsList']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postDMTinhsList>>,
@@ -9393,7 +9182,7 @@ export const getPostDMTinhsListMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postDMTinhsList(data, requestOptions)
+        return postDMTinhsList(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -9421,7 +9210,6 @@ export const usePostDMTinhsList = <
             { data: PublicApiPagingRequestDto },
             TContext
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -9515,15 +9303,14 @@ export const getGetDMTinhsIdQueryOptions = <
     params?: GetDMTinhsIdParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTinhsId>>, TError, TData>>
-        request?: SecondParameter<typeof customSystemFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMTinhsIdQueryKey(id, params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMTinhsId>>> = ({ signal }) =>
-        getDMTinhsId(id, params, { signal, ...requestOptions })
+        getDMTinhsId(id, params, signal)
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMTinhsId>>,
@@ -9551,7 +9338,6 @@ export function useGetDMTinhsId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -9571,7 +9357,6 @@ export function useGetDMTinhsId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -9583,7 +9368,6 @@ export function useGetDMTinhsId<
     params?: GetDMTinhsIdParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTinhsId>>, TError, TData>>
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -9599,7 +9383,6 @@ export function useGetDMTinhsId<
     params?: GetDMTinhsIdParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTinhsId>>, TError, TData>>
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -9674,14 +9457,13 @@ export const getGetDMTinhsHealthzQueryOptions = <
         | GetDMTinhsHealthz500,
 >(options?: {
     query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTinhsHealthz>>, TError, TData>>
-    request?: SecondParameter<typeof customSystemFetch>
 }) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMTinhsHealthzQueryKey()
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMTinhsHealthz>>> = ({ signal }) =>
-        getDMTinhsHealthz({ signal, ...requestOptions })
+        getDMTinhsHealthz(signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMTinhsHealthz>>,
@@ -9719,7 +9501,6 @@ export function useGetDMTinhsHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -9743,7 +9524,6 @@ export function useGetDMTinhsHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -9759,7 +9539,6 @@ export function useGetDMTinhsHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMTinhsHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -9779,7 +9558,6 @@ export function useGetDMTinhsHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMTinhsHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -9865,7 +9643,6 @@ export const getPostDMTinhNewsListMutationOptions = <
         { data: PublicApiPagingRequestDto },
         TContext
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postDMTinhNewsList>>,
     TError,
@@ -9873,11 +9650,11 @@ export const getPostDMTinhNewsListMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postDMTinhNewsList']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postDMTinhNewsList>>,
@@ -9885,7 +9662,7 @@ export const getPostDMTinhNewsListMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postDMTinhNewsList(data, requestOptions)
+        return postDMTinhNewsList(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -9915,7 +9692,6 @@ export const usePostDMTinhNewsList = <
             { data: PublicApiPagingRequestDto },
             TContext
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -10011,15 +9787,14 @@ export const getGetDMTinhNewsIdQueryOptions = <
     params?: GetDMTinhNewsIdParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTinhNewsId>>, TError, TData>>
-        request?: SecondParameter<typeof customSystemFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMTinhNewsIdQueryKey(id, params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMTinhNewsId>>> = ({ signal }) =>
-        getDMTinhNewsId(id, params, { signal, ...requestOptions })
+        getDMTinhNewsId(id, params, signal)
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMTinhNewsId>>,
@@ -10053,7 +9828,6 @@ export function useGetDMTinhNewsId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -10075,7 +9849,6 @@ export function useGetDMTinhNewsId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -10087,7 +9860,6 @@ export function useGetDMTinhNewsId<
     params?: GetDMTinhNewsIdParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTinhNewsId>>, TError, TData>>
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -10103,7 +9875,6 @@ export function useGetDMTinhNewsId<
     params?: GetDMTinhNewsIdParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTinhNewsId>>, TError, TData>>
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -10180,14 +9951,13 @@ export const getGetDMTinhNewsHealthzQueryOptions = <
     query?: Partial<
         UseQueryOptions<Awaited<ReturnType<typeof getDMTinhNewsHealthz>>, TError, TData>
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMTinhNewsHealthzQueryKey()
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMTinhNewsHealthz>>> = ({ signal }) =>
-        getDMTinhNewsHealthz({ signal, ...requestOptions })
+        getDMTinhNewsHealthz(signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMTinhNewsHealthz>>,
@@ -10225,7 +9995,6 @@ export function useGetDMTinhNewsHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -10249,7 +10018,6 @@ export function useGetDMTinhNewsHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -10265,7 +10033,6 @@ export function useGetDMTinhNewsHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMTinhNewsHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -10285,7 +10052,6 @@ export function useGetDMTinhNewsHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMTinhNewsHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -10371,7 +10137,6 @@ export const getPostDMTonGiaosListMutationOptions = <
         { data: PublicApiPagingRequestDto },
         TContext
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postDMTonGiaosList>>,
     TError,
@@ -10379,11 +10144,11 @@ export const getPostDMTonGiaosListMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postDMTonGiaosList']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postDMTonGiaosList>>,
@@ -10391,7 +10156,7 @@ export const getPostDMTonGiaosListMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postDMTonGiaosList(data, requestOptions)
+        return postDMTonGiaosList(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -10421,7 +10186,6 @@ export const usePostDMTonGiaosList = <
             { data: PublicApiPagingRequestDto },
             TContext
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -10517,15 +10281,14 @@ export const getGetDMTonGiaosIdQueryOptions = <
     params?: GetDMTonGiaosIdParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTonGiaosId>>, TError, TData>>
-        request?: SecondParameter<typeof customSystemFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMTonGiaosIdQueryKey(id, params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMTonGiaosId>>> = ({ signal }) =>
-        getDMTonGiaosId(id, params, { signal, ...requestOptions })
+        getDMTonGiaosId(id, params, signal)
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMTonGiaosId>>,
@@ -10559,7 +10322,6 @@ export function useGetDMTonGiaosId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -10581,7 +10343,6 @@ export function useGetDMTonGiaosId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -10593,7 +10354,6 @@ export function useGetDMTonGiaosId<
     params?: GetDMTonGiaosIdParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTonGiaosId>>, TError, TData>>
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -10609,7 +10369,6 @@ export function useGetDMTonGiaosId<
     params?: GetDMTonGiaosIdParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTonGiaosId>>, TError, TData>>
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -10686,14 +10445,13 @@ export const getGetDMTonGiaosHealthzQueryOptions = <
     query?: Partial<
         UseQueryOptions<Awaited<ReturnType<typeof getDMTonGiaosHealthz>>, TError, TData>
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMTonGiaosHealthzQueryKey()
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMTonGiaosHealthz>>> = ({ signal }) =>
-        getDMTonGiaosHealthz({ signal, ...requestOptions })
+        getDMTonGiaosHealthz(signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMTonGiaosHealthz>>,
@@ -10731,7 +10489,6 @@ export function useGetDMTonGiaosHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -10755,7 +10512,6 @@ export function useGetDMTonGiaosHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -10771,7 +10527,6 @@ export function useGetDMTonGiaosHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMTonGiaosHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -10791,7 +10546,6 @@ export function useGetDMTonGiaosHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMTonGiaosHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -10884,7 +10638,6 @@ export const getPostDMTrinhDoNgoaiNgusListMutationOptions = <
         { data: PublicApiPagingRequestDto },
         TContext
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postDMTrinhDoNgoaiNgusList>>,
     TError,
@@ -10892,11 +10645,11 @@ export const getPostDMTrinhDoNgoaiNgusListMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postDMTrinhDoNgoaiNgusList']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postDMTrinhDoNgoaiNgusList>>,
@@ -10904,7 +10657,7 @@ export const getPostDMTrinhDoNgoaiNgusListMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postDMTrinhDoNgoaiNgusList(data, requestOptions)
+        return postDMTrinhDoNgoaiNgusList(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -10938,7 +10691,6 @@ export const usePostDMTrinhDoNgoaiNgusList = <
             { data: PublicApiPagingRequestDto },
             TContext
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -11051,16 +10803,15 @@ export const getGetDMTrinhDoNgoaiNgusIdQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMTrinhDoNgoaiNgusIdQueryKey(id, params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusId>>> = ({
         signal,
-    }) => getDMTrinhDoNgoaiNgusId(id, params, { signal, ...requestOptions })
+    }) => getDMTrinhDoNgoaiNgusId(id, params, signal)
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusId>>,
@@ -11100,7 +10851,6 @@ export function useGetDMTrinhDoNgoaiNgusId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -11126,7 +10876,6 @@ export function useGetDMTrinhDoNgoaiNgusId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -11144,7 +10893,6 @@ export function useGetDMTrinhDoNgoaiNgusId<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -11166,7 +10914,6 @@ export function useGetDMTrinhDoNgoaiNgusId<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -11246,15 +10993,14 @@ export const getGetDMTrinhDoNgoaiNgusHealthzQueryOptions = <
     query?: Partial<
         UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusHealthz>>, TError, TData>
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMTrinhDoNgoaiNgusHealthzQueryKey()
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusHealthz>>> = ({
         signal,
-    }) => getDMTrinhDoNgoaiNgusHealthz({ signal, ...requestOptions })
+    }) => getDMTrinhDoNgoaiNgusHealthz(signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusHealthz>>,
@@ -11292,7 +11038,6 @@ export function useGetDMTrinhDoNgoaiNgusHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -11316,7 +11061,6 @@ export function useGetDMTrinhDoNgoaiNgusHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -11332,7 +11076,6 @@ export function useGetDMTrinhDoNgoaiNgusHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -11352,7 +11095,6 @@ export function useGetDMTrinhDoNgoaiNgusHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoNgoaiNgusHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -11442,7 +11184,6 @@ export const getPostDMTrinhDoTinHocsListMutationOptions = <
         { data: PublicApiPagingRequestDto },
         TContext
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postDMTrinhDoTinHocsList>>,
     TError,
@@ -11450,11 +11191,11 @@ export const getPostDMTrinhDoTinHocsListMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postDMTrinhDoTinHocsList']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postDMTrinhDoTinHocsList>>,
@@ -11462,7 +11203,7 @@ export const getPostDMTrinhDoTinHocsListMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postDMTrinhDoTinHocsList(data, requestOptions)
+        return postDMTrinhDoTinHocsList(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -11496,7 +11237,6 @@ export const usePostDMTrinhDoTinHocsList = <
             { data: PublicApiPagingRequestDto },
             TContext
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -11602,16 +11342,15 @@ export const getGetDMTrinhDoTinHocsIdQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoTinHocsId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMTrinhDoTinHocsIdQueryKey(id, params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMTrinhDoTinHocsId>>> = ({
         signal,
-    }) => getDMTrinhDoTinHocsId(id, params, { signal, ...requestOptions })
+    }) => getDMTrinhDoTinHocsId(id, params, signal)
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMTrinhDoTinHocsId>>,
@@ -11647,7 +11386,6 @@ export function useGetDMTrinhDoTinHocsId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -11669,7 +11407,6 @@ export function useGetDMTrinhDoTinHocsId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -11683,7 +11420,6 @@ export function useGetDMTrinhDoTinHocsId<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoTinHocsId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -11701,7 +11437,6 @@ export function useGetDMTrinhDoTinHocsId<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoTinHocsId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -11781,15 +11516,14 @@ export const getGetDMTrinhDoTinHocsHealthzQueryOptions = <
     query?: Partial<
         UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoTinHocsHealthz>>, TError, TData>
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMTrinhDoTinHocsHealthzQueryKey()
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMTrinhDoTinHocsHealthz>>> = ({
         signal,
-    }) => getDMTrinhDoTinHocsHealthz({ signal, ...requestOptions })
+    }) => getDMTrinhDoTinHocsHealthz(signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMTrinhDoTinHocsHealthz>>,
@@ -11827,7 +11561,6 @@ export function useGetDMTrinhDoTinHocsHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -11851,7 +11584,6 @@ export function useGetDMTrinhDoTinHocsHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -11867,7 +11599,6 @@ export function useGetDMTrinhDoTinHocsHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoTinHocsHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -11887,7 +11618,6 @@ export function useGetDMTrinhDoTinHocsHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMTrinhDoTinHocsHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -11977,7 +11707,6 @@ export const getPostDMViTriCongViecsListMutationOptions = <
         { data: PublicApiPagingRequestDto },
         TContext
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postDMViTriCongViecsList>>,
     TError,
@@ -11985,11 +11714,11 @@ export const getPostDMViTriCongViecsListMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postDMViTriCongViecsList']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postDMViTriCongViecsList>>,
@@ -11997,7 +11726,7 @@ export const getPostDMViTriCongViecsListMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postDMViTriCongViecsList(data, requestOptions)
+        return postDMViTriCongViecsList(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -12031,7 +11760,6 @@ export const usePostDMViTriCongViecsList = <
             { data: PublicApiPagingRequestDto },
             TContext
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -12137,16 +11865,15 @@ export const getGetDMViTriCongViecsIdQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMViTriCongViecsId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMViTriCongViecsIdQueryKey(id, params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMViTriCongViecsId>>> = ({
         signal,
-    }) => getDMViTriCongViecsId(id, params, { signal, ...requestOptions })
+    }) => getDMViTriCongViecsId(id, params, signal)
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMViTriCongViecsId>>,
@@ -12182,7 +11909,6 @@ export function useGetDMViTriCongViecsId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -12204,7 +11930,6 @@ export function useGetDMViTriCongViecsId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -12218,7 +11943,6 @@ export function useGetDMViTriCongViecsId<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMViTriCongViecsId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -12236,7 +11960,6 @@ export function useGetDMViTriCongViecsId<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMViTriCongViecsId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -12316,15 +12039,14 @@ export const getGetDMViTriCongViecsHealthzQueryOptions = <
     query?: Partial<
         UseQueryOptions<Awaited<ReturnType<typeof getDMViTriCongViecsHealthz>>, TError, TData>
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMViTriCongViecsHealthzQueryKey()
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMViTriCongViecsHealthz>>> = ({
         signal,
-    }) => getDMViTriCongViecsHealthz({ signal, ...requestOptions })
+    }) => getDMViTriCongViecsHealthz(signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMViTriCongViecsHealthz>>,
@@ -12362,7 +12084,6 @@ export function useGetDMViTriCongViecsHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -12386,7 +12107,6 @@ export function useGetDMViTriCongViecsHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -12402,7 +12122,6 @@ export function useGetDMViTriCongViecsHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMViTriCongViecsHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -12422,7 +12141,6 @@ export function useGetDMViTriCongViecsHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMViTriCongViecsHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -12508,7 +12226,6 @@ export const getPostDMXaPhuongsListMutationOptions = <
         { data: PublicApiPagingRequestDto },
         TContext
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postDMXaPhuongsList>>,
     TError,
@@ -12516,11 +12233,11 @@ export const getPostDMXaPhuongsListMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postDMXaPhuongsList']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postDMXaPhuongsList>>,
@@ -12528,7 +12245,7 @@ export const getPostDMXaPhuongsListMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postDMXaPhuongsList(data, requestOptions)
+        return postDMXaPhuongsList(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -12558,7 +12275,6 @@ export const usePostDMXaPhuongsList = <
             { data: PublicApiPagingRequestDto },
             TContext
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -12658,15 +12374,14 @@ export const getGetDMXaPhuongsIdQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongsId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMXaPhuongsIdQueryKey(id, params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMXaPhuongsId>>> = ({ signal }) =>
-        getDMXaPhuongsId(id, params, { signal, ...requestOptions })
+        getDMXaPhuongsId(id, params, signal)
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMXaPhuongsId>>,
@@ -12700,7 +12415,6 @@ export function useGetDMXaPhuongsId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -12722,7 +12436,6 @@ export function useGetDMXaPhuongsId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -12736,7 +12449,6 @@ export function useGetDMXaPhuongsId<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongsId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -12754,7 +12466,6 @@ export function useGetDMXaPhuongsId<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongsId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -12831,15 +12542,14 @@ export const getGetDMXaPhuongsHealthzQueryOptions = <
     query?: Partial<
         UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongsHealthz>>, TError, TData>
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMXaPhuongsHealthzQueryKey()
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMXaPhuongsHealthz>>> = ({
         signal,
-    }) => getDMXaPhuongsHealthz({ signal, ...requestOptions })
+    }) => getDMXaPhuongsHealthz(signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMXaPhuongsHealthz>>,
@@ -12877,7 +12587,6 @@ export function useGetDMXaPhuongsHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -12901,7 +12610,6 @@ export function useGetDMXaPhuongsHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -12917,7 +12625,6 @@ export function useGetDMXaPhuongsHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongsHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -12937,7 +12644,6 @@ export function useGetDMXaPhuongsHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongsHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -13027,7 +12733,6 @@ export const getPostDMXaPhuongNewsListMutationOptions = <
         { data: PublicApiPagingRequestDto },
         TContext
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postDMXaPhuongNewsList>>,
     TError,
@@ -13035,11 +12740,11 @@ export const getPostDMXaPhuongNewsListMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postDMXaPhuongNewsList']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postDMXaPhuongNewsList>>,
@@ -13047,7 +12752,7 @@ export const getPostDMXaPhuongNewsListMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postDMXaPhuongNewsList(data, requestOptions)
+        return postDMXaPhuongNewsList(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -13081,7 +12786,6 @@ export const usePostDMXaPhuongNewsList = <
             { data: PublicApiPagingRequestDto },
             TContext
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -13181,15 +12885,14 @@ export const getGetDMXaPhuongNewsIdQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongNewsId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMXaPhuongNewsIdQueryKey(id, params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMXaPhuongNewsId>>> = ({ signal }) =>
-        getDMXaPhuongNewsId(id, params, { signal, ...requestOptions })
+        getDMXaPhuongNewsId(id, params, signal)
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMXaPhuongNewsId>>,
@@ -13225,7 +12928,6 @@ export function useGetDMXaPhuongNewsId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -13247,7 +12949,6 @@ export function useGetDMXaPhuongNewsId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -13261,7 +12962,6 @@ export function useGetDMXaPhuongNewsId<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongNewsId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -13279,7 +12979,6 @@ export function useGetDMXaPhuongNewsId<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongNewsId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -13356,15 +13055,14 @@ export const getGetDMXaPhuongNewsHealthzQueryOptions = <
     query?: Partial<
         UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongNewsHealthz>>, TError, TData>
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDMXaPhuongNewsHealthzQueryKey()
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMXaPhuongNewsHealthz>>> = ({
         signal,
-    }) => getDMXaPhuongNewsHealthz({ signal, ...requestOptions })
+    }) => getDMXaPhuongNewsHealthz(signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDMXaPhuongNewsHealthz>>,
@@ -13402,7 +13100,6 @@ export function useGetDMXaPhuongNewsHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -13426,7 +13123,6 @@ export function useGetDMXaPhuongNewsHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -13442,7 +13138,6 @@ export function useGetDMXaPhuongNewsHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongNewsHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -13462,7 +13157,6 @@ export function useGetDMXaPhuongNewsHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongNewsHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -13518,7 +13212,6 @@ export const getPostNotificationsInsertMutationOptions = <
         { data: NotificationMessageRequest },
         TContext
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postNotificationsInsert>>,
     TError,
@@ -13526,11 +13219,11 @@ export const getPostNotificationsInsertMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postNotificationsInsert']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postNotificationsInsert>>,
@@ -13538,7 +13231,7 @@ export const getPostNotificationsInsertMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postNotificationsInsert(data, requestOptions)
+        return postNotificationsInsert(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -13561,7 +13254,6 @@ export const usePostNotificationsInsert = <TError = unknown, TContext = unknown>
             { data: NotificationMessageRequest },
             TContext
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -13614,15 +13306,14 @@ export const getGetNotificationsHealthzQueryOptions = <
     query?: Partial<
         UseQueryOptions<Awaited<ReturnType<typeof getNotificationsHealthz>>, TError, TData>
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetNotificationsHealthzQueryKey()
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getNotificationsHealthz>>> = ({
         signal,
-    }) => getNotificationsHealthz({ signal, ...requestOptions })
+    }) => getNotificationsHealthz(signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getNotificationsHealthz>>,
@@ -13652,7 +13343,6 @@ export function useGetNotificationsHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -13672,7 +13362,6 @@ export function useGetNotificationsHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -13684,7 +13373,6 @@ export function useGetNotificationsHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getNotificationsHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -13700,7 +13388,6 @@ export function useGetNotificationsHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getNotificationsHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -13752,14 +13439,13 @@ export const getGetUnitInfosInfoQueryOptions = <
     TError = unknown,
 >(options?: {
     query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosInfo>>, TError, TData>>
-    request?: SecondParameter<typeof customSystemFetch>
 }) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetUnitInfosInfoQueryKey()
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getUnitInfosInfo>>> = ({ signal }) =>
-        getUnitInfosInfo({ signal, ...requestOptions })
+        getUnitInfosInfo(signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getUnitInfosInfo>>,
@@ -13787,7 +13473,6 @@ export function useGetUnitInfosInfo<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -13807,7 +13492,6 @@ export function useGetUnitInfosInfo<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -13819,7 +13503,6 @@ export function useGetUnitInfosInfo<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosInfo>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -13835,7 +13518,6 @@ export function useGetUnitInfosInfo<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosInfo>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -13887,14 +13569,13 @@ export const getGetUnitInfosHealthzQueryOptions = <
     TError = unknown,
 >(options?: {
     query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError, TData>>
-    request?: SecondParameter<typeof customSystemFetch>
 }) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetUnitInfosHealthzQueryKey()
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getUnitInfosHealthz>>> = ({ signal }) =>
-        getUnitInfosHealthz({ signal, ...requestOptions })
+        getUnitInfosHealthz(signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getUnitInfosHealthz>>,
@@ -13924,7 +13605,6 @@ export function useGetUnitInfosHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -13944,7 +13624,6 @@ export function useGetUnitInfosHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -13956,7 +13635,6 @@ export function useGetUnitInfosHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -13972,7 +13650,6 @@ export function useGetUnitInfosHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -14079,10 +13756,9 @@ export const getGetUserPermissionsPermissionAppCodeUserIdQueryOptions = <
                 TData
             >
         >
-        request?: SecondParameter<typeof customSystemFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey =
         queryOptions?.queryKey ??
@@ -14090,8 +13766,7 @@ export const getGetUserPermissionsPermissionAppCodeUserIdQueryOptions = <
 
     const queryFn: QueryFunction<
         Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>
-    > = ({ signal }) =>
-        getUserPermissionsPermissionAppCodeUserId(appCode, userId, { signal, ...requestOptions })
+    > = ({ signal }) => getUserPermissionsPermissionAppCodeUserId(appCode, userId, signal)
 
     return {
         queryKey,
@@ -14140,7 +13815,6 @@ export function useGetUserPermissionsPermissionAppCodeUserId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -14170,7 +13844,6 @@ export function useGetUserPermissionsPermissionAppCodeUserId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -14192,7 +13865,6 @@ export function useGetUserPermissionsPermissionAppCodeUserId<
                 TData
             >
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -14218,7 +13890,6 @@ export function useGetUserPermissionsPermissionAppCodeUserId<
                 TData
             >
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -14329,10 +14000,9 @@ export const getGetUserPermissionsAccessLevelAppCodeUserIdQueryOptions = <
                 TData
             >
         >
-        request?: SecondParameter<typeof customSystemFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey =
         queryOptions?.queryKey ??
@@ -14340,8 +14010,7 @@ export const getGetUserPermissionsAccessLevelAppCodeUserIdQueryOptions = <
 
     const queryFn: QueryFunction<
         Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>
-    > = ({ signal }) =>
-        getUserPermissionsAccessLevelAppCodeUserId(appCode, userId, { signal, ...requestOptions })
+    > = ({ signal }) => getUserPermissionsAccessLevelAppCodeUserId(appCode, userId, signal)
 
     return {
         queryKey,
@@ -14390,7 +14059,6 @@ export function useGetUserPermissionsAccessLevelAppCodeUserId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -14420,7 +14088,6 @@ export function useGetUserPermissionsAccessLevelAppCodeUserId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -14442,7 +14109,6 @@ export function useGetUserPermissionsAccessLevelAppCodeUserId<
                 TData
             >
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -14468,7 +14134,6 @@ export function useGetUserPermissionsAccessLevelAppCodeUserId<
                 TData
             >
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -14571,18 +14236,16 @@ export const getGetUserPermissionsMenusPermissionUserIdQueryOptions = <
                 TData
             >
         >
-        request?: SecondParameter<typeof customSystemFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey =
         queryOptions?.queryKey ?? getGetUserPermissionsMenusPermissionUserIdQueryKey(userId)
 
     const queryFn: QueryFunction<
         Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>
-    > = ({ signal }) =>
-        getUserPermissionsMenusPermissionUserId(userId, { signal, ...requestOptions })
+    > = ({ signal }) => getUserPermissionsMenusPermissionUserId(userId, signal)
 
     return { queryKey, queryFn, enabled: !!userId, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>,
@@ -14625,7 +14288,6 @@ export function useGetUserPermissionsMenusPermissionUserId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -14654,7 +14316,6 @@ export function useGetUserPermissionsMenusPermissionUserId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -14675,7 +14336,6 @@ export function useGetUserPermissionsMenusPermissionUserId<
                 TData
             >
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -14700,7 +14360,6 @@ export function useGetUserPermissionsMenusPermissionUserId<
                 TData
             >
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -14777,15 +14436,14 @@ export const getGetUserPermissionsHealthzQueryOptions = <
     query?: Partial<
         UseQueryOptions<Awaited<ReturnType<typeof getUserPermissionsHealthz>>, TError, TData>
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetUserPermissionsHealthzQueryKey()
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getUserPermissionsHealthz>>> = ({
         signal,
-    }) => getUserPermissionsHealthz({ signal, ...requestOptions })
+    }) => getUserPermissionsHealthz(signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getUserPermissionsHealthz>>,
@@ -14823,7 +14481,6 @@ export function useGetUserPermissionsHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -14847,7 +14504,6 @@ export function useGetUserPermissionsHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -14863,7 +14519,6 @@ export function useGetUserPermissionsHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getUserPermissionsHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -14883,7 +14538,6 @@ export function useGetUserPermissionsHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getUserPermissionsHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -14933,14 +14587,13 @@ export const getGetVersionAppsQueryOptions = <
     TError = unknown,
 >(options?: {
     query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersionApps>>, TError, TData>>
-    request?: SecondParameter<typeof customSystemFetch>
 }) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetVersionAppsQueryKey()
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getVersionApps>>> = ({ signal }) =>
-        getVersionApps({ signal, ...requestOptions })
+        getVersionApps(signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getVersionApps>>,
@@ -14966,7 +14619,6 @@ export function useGetVersionApps<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -14986,7 +14638,6 @@ export function useGetVersionApps<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -14996,7 +14647,6 @@ export function useGetVersionApps<
 >(
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersionApps>>, TError, TData>>
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -15010,7 +14660,6 @@ export function useGetVersionApps<
 >(
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersionApps>>, TError, TData>>
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -15064,15 +14713,14 @@ export const getGetVersionAppsHealthzQueryOptions = <
     query?: Partial<
         UseQueryOptions<Awaited<ReturnType<typeof getVersionAppsHealthz>>, TError, TData>
     >
-    request?: SecondParameter<typeof customSystemFetch>
 }) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetVersionAppsHealthzQueryKey()
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getVersionAppsHealthz>>> = ({
         signal,
-    }) => getVersionAppsHealthz({ signal, ...requestOptions })
+    }) => getVersionAppsHealthz(signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getVersionAppsHealthz>>,
@@ -15102,7 +14750,6 @@ export function useGetVersionAppsHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -15122,7 +14769,6 @@ export function useGetVersionAppsHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -15134,7 +14780,6 @@ export function useGetVersionAppsHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getVersionAppsHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -15150,7 +14795,6 @@ export function useGetVersionAppsHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getVersionAppsHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {

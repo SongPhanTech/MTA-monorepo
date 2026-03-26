@@ -287,8 +287,6 @@ type AwaitedInput<T> = PromiseLike<T> | T
 
 type Awaited<O> = O extends AwaitedInput<infer T> ? T : never
 
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
-
 export type trainingFieldResponse200 = {
     data: TrainingField200Item[]
     status: 200
@@ -328,14 +326,13 @@ export const getTrainingFieldQueryOptions = <
     TError = TrainingField400,
 >(options?: {
     query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof trainingField>>, TError, TData>>
-    request?: SecondParameter<typeof customTrainingFetch>
 }) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getTrainingFieldQueryKey()
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof trainingField>>> = ({ signal }) =>
-        trainingField({ signal, ...requestOptions })
+        trainingField(signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof trainingField>>,
@@ -361,7 +358,6 @@ export function useTrainingField<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -379,7 +375,6 @@ export function useTrainingField<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -389,7 +384,6 @@ export function useTrainingField<
 >(
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof trainingField>>, TError, TData>>
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -400,7 +394,6 @@ export function useTrainingField<
 >(
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof trainingField>>, TError, TData>>
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -454,14 +447,12 @@ export const getRoomQueryOptions = <
     TError = Room400,
 >(options?: {
     query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof room>>, TError, TData>>
-    request?: SecondParameter<typeof customTrainingFetch>
 }) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getRoomQueryKey()
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof room>>> = ({ signal }) =>
-        room({ signal, ...requestOptions })
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof room>>> = ({ signal }) => room(signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof room>>,
@@ -484,7 +475,6 @@ export function useRoom<TData = Awaited<ReturnType<typeof room>>, TError = Room4
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -499,23 +489,16 @@ export function useRoom<TData = Awaited<ReturnType<typeof room>>, TError = Room4
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useRoom<TData = Awaited<ReturnType<typeof room>>, TError = Room400>(
-    options?: {
-        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof room>>, TError, TData>>
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
+    options?: { query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof room>>, TError, TData>> },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useRoom<TData = Awaited<ReturnType<typeof room>>, TError = Room400>(
-    options?: {
-        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof room>>, TError, TData>>
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
+    options?: { query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof room>>, TError, TData>> },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
     const queryOptions = getRoomQueryOptions(options)
@@ -571,7 +554,6 @@ export const getPostApiStatsStudentDistributionByTrainingObjectTypeMutationOptio
         { data: PostApiStatsStudentDistributionByTrainingObjectTypeBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectType>>,
     TError,
@@ -579,11 +561,11 @@ export const getPostApiStatsStudentDistributionByTrainingObjectTypeMutationOptio
     TContext
 > => {
     const mutationKey = ['postApiStatsStudentDistributionByTrainingObjectType']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectType>>,
@@ -591,7 +573,7 @@ export const getPostApiStatsStudentDistributionByTrainingObjectTypeMutationOptio
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsStudentDistributionByTrainingObjectType(data, requestOptions)
+        return postApiStatsStudentDistributionByTrainingObjectType(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -615,7 +597,6 @@ export const usePostApiStatsStudentDistributionByTrainingObjectType = <
             { data: PostApiStatsStudentDistributionByTrainingObjectTypeBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -672,7 +653,6 @@ export const getPostApiStatsStudentDistributionByTrainingLevelMutationOptions = 
         { data: PostApiStatsStudentDistributionByTrainingLevelBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevel>>,
     TError,
@@ -680,11 +660,11 @@ export const getPostApiStatsStudentDistributionByTrainingLevelMutationOptions = 
     TContext
 > => {
     const mutationKey = ['postApiStatsStudentDistributionByTrainingLevel']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevel>>,
@@ -692,7 +672,7 @@ export const getPostApiStatsStudentDistributionByTrainingLevelMutationOptions = 
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsStudentDistributionByTrainingLevel(data, requestOptions)
+        return postApiStatsStudentDistributionByTrainingLevel(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -716,7 +696,6 @@ export const usePostApiStatsStudentDistributionByTrainingLevel = <
             { data: PostApiStatsStudentDistributionByTrainingLevelBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -773,7 +752,6 @@ export const getPostApiStatsStudentDistributionByTrainingCourseMutationOptions =
         { data: PostApiStatsStudentDistributionByTrainingCourseBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourse>>,
     TError,
@@ -781,11 +759,11 @@ export const getPostApiStatsStudentDistributionByTrainingCourseMutationOptions =
     TContext
 > => {
     const mutationKey = ['postApiStatsStudentDistributionByTrainingCourse']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourse>>,
@@ -793,7 +771,7 @@ export const getPostApiStatsStudentDistributionByTrainingCourseMutationOptions =
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsStudentDistributionByTrainingCourse(data, requestOptions)
+        return postApiStatsStudentDistributionByTrainingCourse(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -817,7 +795,6 @@ export const usePostApiStatsStudentDistributionByTrainingCourse = <
             { data: PostApiStatsStudentDistributionByTrainingCourseBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -874,7 +851,6 @@ export const getPostApiStatsAverageEntryScoreByCourseMutationOptions = <
         { data: PostApiStatsAverageEntryScoreByCourseBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourse>>,
     TError,
@@ -882,11 +858,11 @@ export const getPostApiStatsAverageEntryScoreByCourseMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsAverageEntryScoreByCourse']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourse>>,
@@ -894,7 +870,7 @@ export const getPostApiStatsAverageEntryScoreByCourseMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsAverageEntryScoreByCourse(data, requestOptions)
+        return postApiStatsAverageEntryScoreByCourse(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -915,7 +891,6 @@ export const usePostApiStatsAverageEntryScoreByCourse = <TError = unknown, TCont
             { data: PostApiStatsAverageEntryScoreByCourseBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -970,7 +945,6 @@ export const getPostApiStatsAverageGpaByCourseMutationOptions = <
         { data: PostApiStatsAverageGpaByCourseBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsAverageGpaByCourse>>,
     TError,
@@ -978,11 +952,11 @@ export const getPostApiStatsAverageGpaByCourseMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsAverageGpaByCourse']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsAverageGpaByCourse>>,
@@ -990,7 +964,7 @@ export const getPostApiStatsAverageGpaByCourseMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsAverageGpaByCourse(data, requestOptions)
+        return postApiStatsAverageGpaByCourse(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -1010,7 +984,6 @@ export const usePostApiStatsAverageGpaByCourse = <TError = unknown, TContext = u
             { data: PostApiStatsAverageGpaByCourseBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -1066,7 +1039,6 @@ export const getPostApiStatsGraduationRateByCourseMutationOptions = <
         { data: PostApiStatsGraduationRateByCourseBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsGraduationRateByCourse>>,
     TError,
@@ -1074,11 +1046,11 @@ export const getPostApiStatsGraduationRateByCourseMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsGraduationRateByCourse']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsGraduationRateByCourse>>,
@@ -1086,7 +1058,7 @@ export const getPostApiStatsGraduationRateByCourseMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsGraduationRateByCourse(data, requestOptions)
+        return postApiStatsGraduationRateByCourse(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -1106,7 +1078,6 @@ export const usePostApiStatsGraduationRateByCourse = <TError = unknown, TContext
             { data: PostApiStatsGraduationRateByCourseBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -1162,7 +1133,6 @@ export const getPostApiStatsAcademicPerformanceByYearMutationOptions = <
         { data: PostApiStatsAcademicPerformanceByYearBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYear>>,
     TError,
@@ -1170,11 +1140,11 @@ export const getPostApiStatsAcademicPerformanceByYearMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsAcademicPerformanceByYear']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYear>>,
@@ -1182,7 +1152,7 @@ export const getPostApiStatsAcademicPerformanceByYearMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsAcademicPerformanceByYear(data, requestOptions)
+        return postApiStatsAcademicPerformanceByYear(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -1203,7 +1173,6 @@ export const usePostApiStatsAcademicPerformanceByYear = <TError = unknown, TCont
             { data: PostApiStatsAcademicPerformanceByYearBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -1254,7 +1223,6 @@ export const getPostApiStatsKpiCardsMutationOptions = <
         { data: PostApiStatsKpiCardsBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsKpiCards>>,
     TError,
@@ -1262,11 +1230,11 @@ export const getPostApiStatsKpiCardsMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsKpiCards']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsKpiCards>>,
@@ -1274,7 +1242,7 @@ export const getPostApiStatsKpiCardsMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsKpiCards(data, requestOptions)
+        return postApiStatsKpiCards(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -1294,7 +1262,6 @@ export const usePostApiStatsKpiCards = <TError = unknown, TContext = unknown>(
             { data: PostApiStatsKpiCardsBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -1350,7 +1317,6 @@ export const getPostApiStatsStudentDistributionByProvinceMutationOptions = <
         { data: PostApiStatsStudentDistributionByProvinceBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvince>>,
     TError,
@@ -1358,11 +1324,11 @@ export const getPostApiStatsStudentDistributionByProvinceMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsStudentDistributionByProvince']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvince>>,
@@ -1370,7 +1336,7 @@ export const getPostApiStatsStudentDistributionByProvinceMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsStudentDistributionByProvince(data, requestOptions)
+        return postApiStatsStudentDistributionByProvince(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -1391,7 +1357,6 @@ export const usePostApiStatsStudentDistributionByProvince = <TError = unknown, T
             { data: PostApiStatsStudentDistributionByProvinceBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -1447,7 +1412,6 @@ export const getPostApiStatsStudentDistributionByTrainingObjectTypeFilteredMutat
         { data: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectTypeFiltered>>,
     TError,
@@ -1455,11 +1419,11 @@ export const getPostApiStatsStudentDistributionByTrainingObjectTypeFilteredMutat
     TContext
 > => {
     const mutationKey = ['postApiStatsStudentDistributionByTrainingObjectTypeFiltered']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectTypeFiltered>>,
@@ -1467,7 +1431,7 @@ export const getPostApiStatsStudentDistributionByTrainingObjectTypeFilteredMutat
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsStudentDistributionByTrainingObjectTypeFiltered(data, requestOptions)
+        return postApiStatsStudentDistributionByTrainingObjectTypeFiltered(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -1491,7 +1455,6 @@ export const usePostApiStatsStudentDistributionByTrainingObjectTypeFiltered = <
             { data: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -1548,7 +1511,6 @@ export const getPostApiStatsStudentDistributionByTrainingLevelFilteredMutationOp
         { data: PostApiStatsStudentDistributionByTrainingLevelFilteredBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevelFiltered>>,
     TError,
@@ -1556,11 +1518,11 @@ export const getPostApiStatsStudentDistributionByTrainingLevelFilteredMutationOp
     TContext
 > => {
     const mutationKey = ['postApiStatsStudentDistributionByTrainingLevelFiltered']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevelFiltered>>,
@@ -1568,7 +1530,7 @@ export const getPostApiStatsStudentDistributionByTrainingLevelFilteredMutationOp
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsStudentDistributionByTrainingLevelFiltered(data, requestOptions)
+        return postApiStatsStudentDistributionByTrainingLevelFiltered(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -1592,7 +1554,6 @@ export const usePostApiStatsStudentDistributionByTrainingLevelFiltered = <
             { data: PostApiStatsStudentDistributionByTrainingLevelFilteredBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -1649,7 +1610,6 @@ export const getPostApiStatsStudentDistributionByTrainingCourseFilteredMutationO
         { data: PostApiStatsStudentDistributionByTrainingCourseFilteredBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourseFiltered>>,
     TError,
@@ -1657,11 +1617,11 @@ export const getPostApiStatsStudentDistributionByTrainingCourseFilteredMutationO
     TContext
 > => {
     const mutationKey = ['postApiStatsStudentDistributionByTrainingCourseFiltered']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourseFiltered>>,
@@ -1669,7 +1629,7 @@ export const getPostApiStatsStudentDistributionByTrainingCourseFilteredMutationO
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsStudentDistributionByTrainingCourseFiltered(data, requestOptions)
+        return postApiStatsStudentDistributionByTrainingCourseFiltered(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -1693,7 +1653,6 @@ export const usePostApiStatsStudentDistributionByTrainingCourseFiltered = <
             { data: PostApiStatsStudentDistributionByTrainingCourseFilteredBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -1750,7 +1709,6 @@ export const getPostApiStatsAverageEntryScoreByCourseFilteredMutationOptions = <
         { data: PostApiStatsAverageEntryScoreByCourseFilteredBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourseFiltered>>,
     TError,
@@ -1758,11 +1716,11 @@ export const getPostApiStatsAverageEntryScoreByCourseFilteredMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsAverageEntryScoreByCourseFiltered']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourseFiltered>>,
@@ -1770,7 +1728,7 @@ export const getPostApiStatsAverageEntryScoreByCourseFilteredMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsAverageEntryScoreByCourseFiltered(data, requestOptions)
+        return postApiStatsAverageEntryScoreByCourseFiltered(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -1794,7 +1752,6 @@ export const usePostApiStatsAverageEntryScoreByCourseFiltered = <
             { data: PostApiStatsAverageEntryScoreByCourseFilteredBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -1850,7 +1807,6 @@ export const getPostApiStatsAverageGpaByCourseFilteredMutationOptions = <
         { data: PostApiStatsAverageGpaByCourseFilteredBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsAverageGpaByCourseFiltered>>,
     TError,
@@ -1858,11 +1814,11 @@ export const getPostApiStatsAverageGpaByCourseFilteredMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsAverageGpaByCourseFiltered']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsAverageGpaByCourseFiltered>>,
@@ -1870,7 +1826,7 @@ export const getPostApiStatsAverageGpaByCourseFilteredMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsAverageGpaByCourseFiltered(data, requestOptions)
+        return postApiStatsAverageGpaByCourseFiltered(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -1891,7 +1847,6 @@ export const usePostApiStatsAverageGpaByCourseFiltered = <TError = unknown, TCon
             { data: PostApiStatsAverageGpaByCourseFilteredBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -1947,7 +1902,6 @@ export const getPostApiStatsGraduationRateByCourseFilteredMutationOptions = <
         { data: PostApiStatsGraduationRateByCourseFilteredBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsGraduationRateByCourseFiltered>>,
     TError,
@@ -1955,11 +1909,11 @@ export const getPostApiStatsGraduationRateByCourseFilteredMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsGraduationRateByCourseFiltered']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsGraduationRateByCourseFiltered>>,
@@ -1967,7 +1921,7 @@ export const getPostApiStatsGraduationRateByCourseFilteredMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsGraduationRateByCourseFiltered(data, requestOptions)
+        return postApiStatsGraduationRateByCourseFiltered(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -1988,7 +1942,6 @@ export const usePostApiStatsGraduationRateByCourseFiltered = <TError = unknown, 
             { data: PostApiStatsGraduationRateByCourseFilteredBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -2044,7 +1997,6 @@ export const getPostApiStatsAcademicPerformanceByYearFilteredMutationOptions = <
         { data: PostApiStatsAcademicPerformanceByYearFilteredBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYearFiltered>>,
     TError,
@@ -2052,11 +2004,11 @@ export const getPostApiStatsAcademicPerformanceByYearFilteredMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsAcademicPerformanceByYearFiltered']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYearFiltered>>,
@@ -2064,7 +2016,7 @@ export const getPostApiStatsAcademicPerformanceByYearFilteredMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsAcademicPerformanceByYearFiltered(data, requestOptions)
+        return postApiStatsAcademicPerformanceByYearFiltered(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -2088,7 +2040,6 @@ export const usePostApiStatsAcademicPerformanceByYearFiltered = <
             { data: PostApiStatsAcademicPerformanceByYearFilteredBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -2144,7 +2095,6 @@ export const getPostApiStatsStudentDistributionByProvinceFilteredMutationOptions
         { data: PostApiStatsStudentDistributionByProvinceFilteredBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvinceFiltered>>,
     TError,
@@ -2152,11 +2102,11 @@ export const getPostApiStatsStudentDistributionByProvinceFilteredMutationOptions
     TContext
 > => {
     const mutationKey = ['postApiStatsStudentDistributionByProvinceFiltered']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvinceFiltered>>,
@@ -2164,7 +2114,7 @@ export const getPostApiStatsStudentDistributionByProvinceFilteredMutationOptions
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsStudentDistributionByProvinceFiltered(data, requestOptions)
+        return postApiStatsStudentDistributionByProvinceFiltered(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -2188,7 +2138,6 @@ export const usePostApiStatsStudentDistributionByProvinceFiltered = <
             { data: PostApiStatsStudentDistributionByProvinceFilteredBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -2244,7 +2193,6 @@ export const getPostApiStatsStudentsOfInterestMutationOptions = <
         { data: PostApiStatsStudentsOfInterestBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsStudentsOfInterest>>,
     TError,
@@ -2252,11 +2200,11 @@ export const getPostApiStatsStudentsOfInterestMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsStudentsOfInterest']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsStudentsOfInterest>>,
@@ -2264,7 +2212,7 @@ export const getPostApiStatsStudentsOfInterestMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsStudentsOfInterest(data, requestOptions)
+        return postApiStatsStudentsOfInterest(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -2284,7 +2232,6 @@ export const usePostApiStatsStudentsOfInterest = <TError = unknown, TContext = u
             { data: PostApiStatsStudentsOfInterestBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -2340,7 +2287,6 @@ export const getPostApiStatsAverageGpaByFixedClassMutationOptions = <
         { data: PostApiStatsAverageGpaByFixedClassBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsAverageGpaByFixedClass>>,
     TError,
@@ -2348,11 +2294,11 @@ export const getPostApiStatsAverageGpaByFixedClassMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsAverageGpaByFixedClass']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsAverageGpaByFixedClass>>,
@@ -2360,7 +2306,7 @@ export const getPostApiStatsAverageGpaByFixedClassMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsAverageGpaByFixedClass(data, requestOptions)
+        return postApiStatsAverageGpaByFixedClass(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -2380,7 +2326,6 @@ export const usePostApiStatsAverageGpaByFixedClass = <TError = unknown, TContext
             { data: PostApiStatsAverageGpaByFixedClassBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -2436,7 +2381,6 @@ export const getPostApiStatsAverageGpaByTrainingMajorMutationOptions = <
         { data: PostApiStatsAverageGpaByTrainingMajorBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsAverageGpaByTrainingMajor>>,
     TError,
@@ -2444,11 +2388,11 @@ export const getPostApiStatsAverageGpaByTrainingMajorMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsAverageGpaByTrainingMajor']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsAverageGpaByTrainingMajor>>,
@@ -2456,7 +2400,7 @@ export const getPostApiStatsAverageGpaByTrainingMajorMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsAverageGpaByTrainingMajor(data, requestOptions)
+        return postApiStatsAverageGpaByTrainingMajor(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -2477,7 +2421,6 @@ export const usePostApiStatsAverageGpaByTrainingMajor = <TError = unknown, TCont
             { data: PostApiStatsAverageGpaByTrainingMajorBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -2532,7 +2475,6 @@ export const getPostApiStatsSubjectPassFailRateMutationOptions = <
         { data: PostApiStatsSubjectPassFailRateBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsSubjectPassFailRate>>,
     TError,
@@ -2540,11 +2482,11 @@ export const getPostApiStatsSubjectPassFailRateMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsSubjectPassFailRate']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsSubjectPassFailRate>>,
@@ -2552,7 +2494,7 @@ export const getPostApiStatsSubjectPassFailRateMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsSubjectPassFailRate(data, requestOptions)
+        return postApiStatsSubjectPassFailRate(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -2572,7 +2514,6 @@ export const usePostApiStatsSubjectPassFailRate = <TError = unknown, TContext = 
             { data: PostApiStatsSubjectPassFailRateBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -2628,7 +2569,6 @@ export const getPostApiStatsCurriculumStatisticsMutationOptions = <
         { data: PostApiStatsCurriculumStatisticsBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsCurriculumStatistics>>,
     TError,
@@ -2636,11 +2576,11 @@ export const getPostApiStatsCurriculumStatisticsMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsCurriculumStatistics']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsCurriculumStatistics>>,
@@ -2648,7 +2588,7 @@ export const getPostApiStatsCurriculumStatisticsMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsCurriculumStatistics(data, requestOptions)
+        return postApiStatsCurriculumStatistics(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -2668,7 +2608,6 @@ export const usePostApiStatsCurriculumStatistics = <TError = unknown, TContext =
             { data: PostApiStatsCurriculumStatisticsBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -2724,7 +2663,6 @@ export const getPostApiStatsSubjectClassStatisticsMutationOptions = <
         { data: PostApiStatsSubjectClassStatisticsBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsSubjectClassStatistics>>,
     TError,
@@ -2732,11 +2670,11 @@ export const getPostApiStatsSubjectClassStatisticsMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsSubjectClassStatistics']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsSubjectClassStatistics>>,
@@ -2744,7 +2682,7 @@ export const getPostApiStatsSubjectClassStatisticsMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsSubjectClassStatistics(data, requestOptions)
+        return postApiStatsSubjectClassStatistics(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -2764,7 +2702,6 @@ export const usePostApiStatsSubjectClassStatistics = <TError = unknown, TContext
             { data: PostApiStatsSubjectClassStatisticsBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -2819,7 +2756,6 @@ export const getPostApiStatsLecturerWorkloadMutationOptions = <
         { data: PostApiStatsLecturerWorkloadBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsLecturerWorkload>>,
     TError,
@@ -2827,11 +2763,11 @@ export const getPostApiStatsLecturerWorkloadMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsLecturerWorkload']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsLecturerWorkload>>,
@@ -2839,7 +2775,7 @@ export const getPostApiStatsLecturerWorkloadMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsLecturerWorkload(data, requestOptions)
+        return postApiStatsLecturerWorkload(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -2859,7 +2795,6 @@ export const usePostApiStatsLecturerWorkload = <TError = unknown, TContext = unk
             { data: PostApiStatsLecturerWorkloadBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -2915,7 +2850,6 @@ export const getPostApiStatsGraduationRankingStatisticsMutationOptions = <
         { data: PostApiStatsGraduationRankingStatisticsBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsGraduationRankingStatistics>>,
     TError,
@@ -2923,11 +2857,11 @@ export const getPostApiStatsGraduationRankingStatisticsMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsGraduationRankingStatistics']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsGraduationRankingStatistics>>,
@@ -2935,7 +2869,7 @@ export const getPostApiStatsGraduationRankingStatisticsMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsGraduationRankingStatistics(data, requestOptions)
+        return postApiStatsGraduationRankingStatistics(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -2956,7 +2890,6 @@ export const usePostApiStatsGraduationRankingStatistics = <TError = unknown, TCo
             { data: PostApiStatsGraduationRankingStatisticsBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -3012,7 +2945,6 @@ export const getPostApiStatsStudentsForAcademicActionMutationOptions = <
         { data: PostApiStatsStudentsForAcademicActionBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsStudentsForAcademicAction>>,
     TError,
@@ -3020,11 +2952,11 @@ export const getPostApiStatsStudentsForAcademicActionMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsStudentsForAcademicAction']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsStudentsForAcademicAction>>,
@@ -3032,7 +2964,7 @@ export const getPostApiStatsStudentsForAcademicActionMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsStudentsForAcademicAction(data, requestOptions)
+        return postApiStatsStudentsForAcademicAction(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -3053,7 +2985,6 @@ export const usePostApiStatsStudentsForAcademicAction = <TError = unknown, TCont
             { data: PostApiStatsStudentsForAcademicActionBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -3109,7 +3040,6 @@ export const getPostApiStatsExamParticipantsBySemesterMutationOptions = <
         { data: PostApiStatsExamParticipantsBySemesterBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsExamParticipantsBySemester>>,
     TError,
@@ -3117,11 +3047,11 @@ export const getPostApiStatsExamParticipantsBySemesterMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsExamParticipantsBySemester']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsExamParticipantsBySemester>>,
@@ -3129,7 +3059,7 @@ export const getPostApiStatsExamParticipantsBySemesterMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsExamParticipantsBySemester(data, requestOptions)
+        return postApiStatsExamParticipantsBySemester(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -3150,7 +3080,6 @@ export const usePostApiStatsExamParticipantsBySemester = <TError = unknown, TCon
             { data: PostApiStatsExamParticipantsBySemesterBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -3206,7 +3135,6 @@ export const getPostApiStatsAverageExamScoreTrendMutationOptions = <
         { data: PostApiStatsAverageExamScoreTrendBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsAverageExamScoreTrend>>,
     TError,
@@ -3214,11 +3142,11 @@ export const getPostApiStatsAverageExamScoreTrendMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsAverageExamScoreTrend']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsAverageExamScoreTrend>>,
@@ -3226,7 +3154,7 @@ export const getPostApiStatsAverageExamScoreTrendMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsAverageExamScoreTrend(data, requestOptions)
+        return postApiStatsAverageExamScoreTrend(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -3246,7 +3174,6 @@ export const usePostApiStatsAverageExamScoreTrend = <TError = unknown, TContext 
             { data: PostApiStatsAverageExamScoreTrendBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -3301,7 +3228,6 @@ export const getPostApiStatsQuestionStatisticsMutationOptions = <
         { data: PostApiStatsQuestionStatisticsBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsQuestionStatistics>>,
     TError,
@@ -3309,11 +3235,11 @@ export const getPostApiStatsQuestionStatisticsMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsQuestionStatistics']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsQuestionStatistics>>,
@@ -3321,7 +3247,7 @@ export const getPostApiStatsQuestionStatisticsMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsQuestionStatistics(data, requestOptions)
+        return postApiStatsQuestionStatistics(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -3341,7 +3267,6 @@ export const usePostApiStatsQuestionStatistics = <TError = unknown, TContext = u
             { data: PostApiStatsQuestionStatisticsBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -3397,7 +3322,6 @@ export const getPostApiStatsHighestIncorrectAnswerRateQuestionsMutationOptions =
         { data: PostApiStatsHighestIncorrectAnswerRateQuestionsBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsHighestIncorrectAnswerRateQuestions>>,
     TError,
@@ -3405,11 +3329,11 @@ export const getPostApiStatsHighestIncorrectAnswerRateQuestionsMutationOptions =
     TContext
 > => {
     const mutationKey = ['postApiStatsHighestIncorrectAnswerRateQuestions']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsHighestIncorrectAnswerRateQuestions>>,
@@ -3417,7 +3341,7 @@ export const getPostApiStatsHighestIncorrectAnswerRateQuestionsMutationOptions =
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsHighestIncorrectAnswerRateQuestions(data, requestOptions)
+        return postApiStatsHighestIncorrectAnswerRateQuestions(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -3441,7 +3365,6 @@ export const usePostApiStatsHighestIncorrectAnswerRateQuestions = <
             { data: PostApiStatsHighestIncorrectAnswerRateQuestionsBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -3497,7 +3420,6 @@ export const getPostApiStatsMostUsedQuestionsMutationOptions = <
         { data: PostApiStatsMostUsedQuestionsBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsMostUsedQuestions>>,
     TError,
@@ -3505,11 +3427,11 @@ export const getPostApiStatsMostUsedQuestionsMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsMostUsedQuestions']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsMostUsedQuestions>>,
@@ -3517,7 +3439,7 @@ export const getPostApiStatsMostUsedQuestionsMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsMostUsedQuestions(data, requestOptions)
+        return postApiStatsMostUsedQuestions(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -3537,7 +3459,6 @@ export const usePostApiStatsMostUsedQuestions = <TError = unknown, TContext = un
             { data: PostApiStatsMostUsedQuestionsBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -3588,7 +3509,6 @@ export const getPostApiStatsDemographicsMutationOptions = <
         { data: PostApiStatsDemographicsBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsDemographics>>,
     TError,
@@ -3596,11 +3516,11 @@ export const getPostApiStatsDemographicsMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsDemographics']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsDemographics>>,
@@ -3608,7 +3528,7 @@ export const getPostApiStatsDemographicsMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsDemographics(data, requestOptions)
+        return postApiStatsDemographics(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -3628,7 +3548,6 @@ export const usePostApiStatsDemographics = <TError = unknown, TContext = unknown
             { data: PostApiStatsDemographicsBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -3682,7 +3601,6 @@ export const getPostApiStatsEnrollmentTrendMutationOptions = <
         { data: PostApiStatsEnrollmentTrendBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsEnrollmentTrend>>,
     TError,
@@ -3690,11 +3608,11 @@ export const getPostApiStatsEnrollmentTrendMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsEnrollmentTrend']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsEnrollmentTrend>>,
@@ -3702,7 +3620,7 @@ export const getPostApiStatsEnrollmentTrendMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsEnrollmentTrend(data, requestOptions)
+        return postApiStatsEnrollmentTrend(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -3722,7 +3640,6 @@ export const usePostApiStatsEnrollmentTrend = <TError = unknown, TContext = unkn
             { data: PostApiStatsEnrollmentTrendBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -3778,7 +3695,6 @@ export const getPostApiStatsAdmissionStatisticsByMajorMutationOptions = <
         { data: PostApiStatsAdmissionStatisticsByMajorBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsAdmissionStatisticsByMajor>>,
     TError,
@@ -3786,11 +3702,11 @@ export const getPostApiStatsAdmissionStatisticsByMajorMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsAdmissionStatisticsByMajor']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsAdmissionStatisticsByMajor>>,
@@ -3798,7 +3714,7 @@ export const getPostApiStatsAdmissionStatisticsByMajorMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsAdmissionStatisticsByMajor(data, requestOptions)
+        return postApiStatsAdmissionStatisticsByMajor(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -3819,7 +3735,6 @@ export const usePostApiStatsAdmissionStatisticsByMajor = <TError = unknown, TCon
             { data: PostApiStatsAdmissionStatisticsByMajorBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -3875,7 +3790,6 @@ export const getPostApiStatsStatisticsOfRecordsByDateMutationOptions = <
         { data: PostApiStatsStatisticsOfRecordsByDateBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsStatisticsOfRecordsByDate>>,
     TError,
@@ -3883,11 +3797,11 @@ export const getPostApiStatsStatisticsOfRecordsByDateMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsStatisticsOfRecordsByDate']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsStatisticsOfRecordsByDate>>,
@@ -3895,7 +3809,7 @@ export const getPostApiStatsStatisticsOfRecordsByDateMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsStatisticsOfRecordsByDate(data, requestOptions)
+        return postApiStatsStatisticsOfRecordsByDate(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -3916,7 +3830,6 @@ export const usePostApiStatsStatisticsOfRecordsByDate = <TError = unknown, TCont
             { data: PostApiStatsStatisticsOfRecordsByDateBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -3972,7 +3885,6 @@ export const getPostApiStatsSummaryAdmissionStatisticsMutationOptions = <
         { data: PostApiStatsSummaryAdmissionStatisticsBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsSummaryAdmissionStatistics>>,
     TError,
@@ -3980,11 +3892,11 @@ export const getPostApiStatsSummaryAdmissionStatisticsMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsSummaryAdmissionStatistics']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsSummaryAdmissionStatistics>>,
@@ -3992,7 +3904,7 @@ export const getPostApiStatsSummaryAdmissionStatisticsMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsSummaryAdmissionStatistics(data, requestOptions)
+        return postApiStatsSummaryAdmissionStatistics(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -4013,7 +3925,6 @@ export const usePostApiStatsSummaryAdmissionStatistics = <TError = unknown, TCon
             { data: PostApiStatsSummaryAdmissionStatisticsBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -4069,7 +3980,6 @@ export const getPostApiStatsScienceTechnologyOverviewMutationOptions = <
         { data: PostApiStatsScienceTechnologyOverviewBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsScienceTechnologyOverview>>,
     TError,
@@ -4077,11 +3987,11 @@ export const getPostApiStatsScienceTechnologyOverviewMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsScienceTechnologyOverview']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsScienceTechnologyOverview>>,
@@ -4089,7 +3999,7 @@ export const getPostApiStatsScienceTechnologyOverviewMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsScienceTechnologyOverview(data, requestOptions)
+        return postApiStatsScienceTechnologyOverview(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -4110,7 +4020,6 @@ export const usePostApiStatsScienceTechnologyOverview = <TError = unknown, TCont
             { data: PostApiStatsScienceTechnologyOverviewBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -4166,7 +4075,6 @@ export const getPostApiStatsContractStatisticsByYearMutationOptions = <
         { data: PostApiStatsContractStatisticsByYearBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsContractStatisticsByYear>>,
     TError,
@@ -4174,11 +4082,11 @@ export const getPostApiStatsContractStatisticsByYearMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsContractStatisticsByYear']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsContractStatisticsByYear>>,
@@ -4186,7 +4094,7 @@ export const getPostApiStatsContractStatisticsByYearMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsContractStatisticsByYear(data, requestOptions)
+        return postApiStatsContractStatisticsByYear(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -4207,7 +4115,6 @@ export const usePostApiStatsContractStatisticsByYear = <TError = unknown, TConte
             { data: PostApiStatsContractStatisticsByYearBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -4263,7 +4170,6 @@ export const getPostApiStatsProjectStatisticsByYearMutationOptions = <
         { data: PostApiStatsProjectStatisticsByYearBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsProjectStatisticsByYear>>,
     TError,
@@ -4271,11 +4177,11 @@ export const getPostApiStatsProjectStatisticsByYearMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsProjectStatisticsByYear']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsProjectStatisticsByYear>>,
@@ -4283,7 +4189,7 @@ export const getPostApiStatsProjectStatisticsByYearMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsProjectStatisticsByYear(data, requestOptions)
+        return postApiStatsProjectStatisticsByYear(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -4304,7 +4210,6 @@ export const usePostApiStatsProjectStatisticsByYear = <TError = unknown, TContex
             { data: PostApiStatsProjectStatisticsByYearBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -4360,7 +4265,6 @@ export const getPostApiStatsInnovationsStatisticsByYearMutationOptions = <
         { data: PostApiStatsInnovationsStatisticsByYearBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsInnovationsStatisticsByYear>>,
     TError,
@@ -4368,11 +4272,11 @@ export const getPostApiStatsInnovationsStatisticsByYearMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsInnovationsStatisticsByYear']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsInnovationsStatisticsByYear>>,
@@ -4380,7 +4284,7 @@ export const getPostApiStatsInnovationsStatisticsByYearMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsInnovationsStatisticsByYear(data, requestOptions)
+        return postApiStatsInnovationsStatisticsByYear(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -4401,7 +4305,6 @@ export const usePostApiStatsInnovationsStatisticsByYear = <TError = unknown, TCo
             { data: PostApiStatsInnovationsStatisticsByYearBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -4457,7 +4360,6 @@ export const getPostApiStatsArticlesStatisticsByYearMutationOptions = <
         { data: PostApiStatsArticlesStatisticsByYearBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsArticlesStatisticsByYear>>,
     TError,
@@ -4465,11 +4367,11 @@ export const getPostApiStatsArticlesStatisticsByYearMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsArticlesStatisticsByYear']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsArticlesStatisticsByYear>>,
@@ -4477,7 +4379,7 @@ export const getPostApiStatsArticlesStatisticsByYearMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsArticlesStatisticsByYear(data, requestOptions)
+        return postApiStatsArticlesStatisticsByYear(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -4498,7 +4400,6 @@ export const usePostApiStatsArticlesStatisticsByYear = <TError = unknown, TConte
             { data: PostApiStatsArticlesStatisticsByYearBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -4552,7 +4453,6 @@ export const getPostApiStatsFinalExamInfoMutationOptions = <
         { data: PostApiStatsFinalExamInfoBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsFinalExamInfo>>,
     TError,
@@ -4560,11 +4460,11 @@ export const getPostApiStatsFinalExamInfoMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsFinalExamInfo']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsFinalExamInfo>>,
@@ -4572,7 +4472,7 @@ export const getPostApiStatsFinalExamInfoMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsFinalExamInfo(data, requestOptions)
+        return postApiStatsFinalExamInfo(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -4592,7 +4492,6 @@ export const usePostApiStatsFinalExamInfo = <TError = unknown, TContext = unknow
             { data: PostApiStatsFinalExamInfoBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -4648,7 +4547,6 @@ export const getPostApiStatsStudentCountByAcademicResultsMutationOptions = <
         { data: PostApiStatsStudentCountByAcademicResultsBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsStudentCountByAcademicResults>>,
     TError,
@@ -4656,11 +4554,11 @@ export const getPostApiStatsStudentCountByAcademicResultsMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsStudentCountByAcademicResults']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsStudentCountByAcademicResults>>,
@@ -4668,7 +4566,7 @@ export const getPostApiStatsStudentCountByAcademicResultsMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsStudentCountByAcademicResults(data, requestOptions)
+        return postApiStatsStudentCountByAcademicResults(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -4689,7 +4587,6 @@ export const usePostApiStatsStudentCountByAcademicResults = <TError = unknown, T
             { data: PostApiStatsStudentCountByAcademicResultsBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -4745,7 +4642,6 @@ export const getPostApiStatsSubjectPassFailRatesMutationOptions = <
         { data: PostApiStatsSubjectPassFailRatesBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsSubjectPassFailRates>>,
     TError,
@@ -4753,11 +4649,11 @@ export const getPostApiStatsSubjectPassFailRatesMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsSubjectPassFailRates']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsSubjectPassFailRates>>,
@@ -4765,7 +4661,7 @@ export const getPostApiStatsSubjectPassFailRatesMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsSubjectPassFailRates(data, requestOptions)
+        return postApiStatsSubjectPassFailRates(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -4785,7 +4681,6 @@ export const usePostApiStatsSubjectPassFailRates = <TError = unknown, TContext =
             { data: PostApiStatsSubjectPassFailRatesBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -4841,7 +4736,6 @@ export const getPostApiStatsSubjectsHighFailRatesMutationOptions = <
         { data: PostApiStatsSubjectsHighFailRatesBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsSubjectsHighFailRates>>,
     TError,
@@ -4849,11 +4743,11 @@ export const getPostApiStatsSubjectsHighFailRatesMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsSubjectsHighFailRates']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsSubjectsHighFailRates>>,
@@ -4861,7 +4755,7 @@ export const getPostApiStatsSubjectsHighFailRatesMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsSubjectsHighFailRates(data, requestOptions)
+        return postApiStatsSubjectsHighFailRates(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -4881,7 +4775,6 @@ export const usePostApiStatsSubjectsHighFailRates = <TError = unknown, TContext 
             { data: PostApiStatsSubjectsHighFailRatesBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -4937,7 +4830,6 @@ export const getPostApiStatsSubjectsHighAbsentStudentsMutationOptions = <
         { data: PostApiStatsSubjectsHighAbsentStudentsBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsSubjectsHighAbsentStudents>>,
     TError,
@@ -4945,11 +4837,11 @@ export const getPostApiStatsSubjectsHighAbsentStudentsMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsSubjectsHighAbsentStudents']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsSubjectsHighAbsentStudents>>,
@@ -4957,7 +4849,7 @@ export const getPostApiStatsSubjectsHighAbsentStudentsMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsSubjectsHighAbsentStudents(data, requestOptions)
+        return postApiStatsSubjectsHighAbsentStudents(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -4978,7 +4870,6 @@ export const usePostApiStatsSubjectsHighAbsentStudents = <TError = unknown, TCon
             { data: PostApiStatsSubjectsHighAbsentStudentsBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -5037,7 +4928,6 @@ export const getPostApiStatsStatisticsExamBankNotYetMutationOptions = <
         { data: PostApiStatsStatisticsExamBankNotYetBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsStatisticsExamBankNotYet>>,
     TError,
@@ -5045,11 +4935,11 @@ export const getPostApiStatsStatisticsExamBankNotYetMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsStatisticsExamBankNotYet']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsStatisticsExamBankNotYet>>,
@@ -5057,7 +4947,7 @@ export const getPostApiStatsStatisticsExamBankNotYetMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsStatisticsExamBankNotYet(data, requestOptions)
+        return postApiStatsStatisticsExamBankNotYet(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -5081,7 +4971,6 @@ export const usePostApiStatsStatisticsExamBankNotYet = <TError = unknown, TConte
             { data: PostApiStatsStatisticsExamBankNotYetBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -5136,7 +5025,6 @@ export const getPostApiStatsLateGradeSubjectsMutationOptions = <
         { data: PostApiStatsLateGradeSubjectsBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsLateGradeSubjects>>,
     TError,
@@ -5144,11 +5032,11 @@ export const getPostApiStatsLateGradeSubjectsMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsLateGradeSubjects']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsLateGradeSubjects>>,
@@ -5156,7 +5044,7 @@ export const getPostApiStatsLateGradeSubjectsMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsLateGradeSubjects(data, requestOptions)
+        return postApiStatsLateGradeSubjects(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -5176,7 +5064,6 @@ export const usePostApiStatsLateGradeSubjects = <TError = unknown, TContext = un
             { data: PostApiStatsLateGradeSubjectsBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -5233,7 +5120,6 @@ export const getPostApiStatsExamBankUpdateMutationOptions = <
         { data: PostApiStatsExamBankUpdateBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsExamBankUpdate>>,
     TError,
@@ -5241,11 +5127,11 @@ export const getPostApiStatsExamBankUpdateMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsExamBankUpdate']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsExamBankUpdate>>,
@@ -5253,7 +5139,7 @@ export const getPostApiStatsExamBankUpdateMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsExamBankUpdate(data, requestOptions)
+        return postApiStatsExamBankUpdate(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -5276,7 +5162,6 @@ export const usePostApiStatsExamBankUpdate = <TError = unknown, TContext = unkno
             { data: PostApiStatsExamBankUpdateBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -5335,7 +5220,6 @@ export const getPostApiStatsLanguageStandardProgressMutationOptions = <
         { data: PostApiStatsLanguageStandardProgressBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsLanguageStandardProgress>>,
     TError,
@@ -5343,11 +5227,11 @@ export const getPostApiStatsLanguageStandardProgressMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsLanguageStandardProgress']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsLanguageStandardProgress>>,
@@ -5355,7 +5239,7 @@ export const getPostApiStatsLanguageStandardProgressMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsLanguageStandardProgress(data, requestOptions)
+        return postApiStatsLanguageStandardProgress(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -5379,7 +5263,6 @@ export const usePostApiStatsLanguageStandardProgress = <TError = unknown, TConte
             { data: PostApiStatsLanguageStandardProgressBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -5434,7 +5317,6 @@ export const getPostApiStatsAdmissionStatisticsMutationOptions = <
         { data: PostApiStatsAdmissionStatisticsBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsAdmissionStatistics>>,
     TError,
@@ -5442,11 +5324,11 @@ export const getPostApiStatsAdmissionStatisticsMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsAdmissionStatistics']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsAdmissionStatistics>>,
@@ -5454,7 +5336,7 @@ export const getPostApiStatsAdmissionStatisticsMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsAdmissionStatistics(data, requestOptions)
+        return postApiStatsAdmissionStatistics(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -5474,7 +5356,6 @@ export const usePostApiStatsAdmissionStatistics = <TError = unknown, TContext = 
             { data: PostApiStatsAdmissionStatisticsBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -5525,7 +5406,6 @@ export const getPostApiStatsRetestRatesMutationOptions = <
         { data: PostApiStatsRetestRatesBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsRetestRates>>,
     TError,
@@ -5533,11 +5413,11 @@ export const getPostApiStatsRetestRatesMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsRetestRates']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsRetestRates>>,
@@ -5545,7 +5425,7 @@ export const getPostApiStatsRetestRatesMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsRetestRates(data, requestOptions)
+        return postApiStatsRetestRates(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -5565,7 +5445,6 @@ export const usePostApiStatsRetestRates = <TError = unknown, TContext = unknown>
             { data: PostApiStatsRetestRatesBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -5616,7 +5495,6 @@ export const getPostApiStatsRelearnRatesMutationOptions = <
         { data: PostApiStatsRelearnRatesBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsRelearnRates>>,
     TError,
@@ -5624,11 +5502,11 @@ export const getPostApiStatsRelearnRatesMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postApiStatsRelearnRates']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsRelearnRates>>,
@@ -5636,7 +5514,7 @@ export const getPostApiStatsRelearnRatesMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postApiStatsRelearnRates(data, requestOptions)
+        return postApiStatsRelearnRates(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -5656,7 +5534,6 @@ export const usePostApiStatsRelearnRates = <TError = unknown, TContext = unknown
             { data: PostApiStatsRelearnRatesBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -5730,7 +5607,6 @@ export const getUploadExcelCreateUserProfileMutationOptions = <
         { data: UploadExcelCreateUserProfile },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof uploadExcelCreateUserProfile>>,
     TError,
@@ -5738,11 +5614,11 @@ export const getUploadExcelCreateUserProfileMutationOptions = <
     TContext
 > => {
     const mutationKey = ['uploadExcelCreateUserProfile']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof uploadExcelCreateUserProfile>>,
@@ -5750,7 +5626,7 @@ export const getUploadExcelCreateUserProfileMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return uploadExcelCreateUserProfile(data, requestOptions)
+        return uploadExcelCreateUserProfile(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -5776,7 +5652,6 @@ export const useUploadExcelCreateUserProfile = <
             { data: UploadExcelCreateUserProfile },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -5847,7 +5722,6 @@ export const getUploadExcelUpdateUserProfileMutationOptions = <
         { data: UploadExcelUpdateUserProfile },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof uploadExcelUpdateUserProfile>>,
     TError,
@@ -5855,11 +5729,11 @@ export const getUploadExcelUpdateUserProfileMutationOptions = <
     TContext
 > => {
     const mutationKey = ['uploadExcelUpdateUserProfile']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof uploadExcelUpdateUserProfile>>,
@@ -5867,7 +5741,7 @@ export const getUploadExcelUpdateUserProfileMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return uploadExcelUpdateUserProfile(data, requestOptions)
+        return uploadExcelUpdateUserProfile(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -5893,7 +5767,6 @@ export const useUploadExcelUpdateUserProfile = <
             { data: UploadExcelUpdateUserProfile },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -5955,7 +5828,6 @@ export const getClassDivisionMutationOptions = <TError = void, TContext = unknow
         { data: ClassDivision },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof classDivision>>,
     TError,
@@ -5963,11 +5835,11 @@ export const getClassDivisionMutationOptions = <TError = void, TContext = unknow
     TContext
 > => {
     const mutationKey = ['classDivision']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof classDivision>>,
@@ -5975,7 +5847,7 @@ export const getClassDivisionMutationOptions = <TError = void, TContext = unknow
     > = (props) => {
         const { data } = props ?? {}
 
-        return classDivision(data, requestOptions)
+        return classDivision(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -5996,7 +5868,6 @@ export const useClassDivision = <TError = void, TContext = unknown>(
             { data: ClassDivision },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -6073,16 +5944,15 @@ export const getFixedClassStudentCountQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof fixedClassStudentCount>>, TError, TData>
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getFixedClassStudentCountQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof fixedClassStudentCount>>> = ({
         signal,
-    }) => fixedClassStudentCount(params, { signal, ...requestOptions })
+    }) => fixedClassStudentCount(params, signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof fixedClassStudentCount>>,
@@ -6113,7 +5983,6 @@ export function useFixedClassStudentCount<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -6134,7 +6003,6 @@ export function useFixedClassStudentCount<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -6147,7 +6015,6 @@ export function useFixedClassStudentCount<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof fixedClassStudentCount>>, TError, TData>
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -6161,7 +6028,6 @@ export function useFixedClassStudentCount<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof fixedClassStudentCount>>, TError, TData>
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -6240,15 +6106,14 @@ export const getOpenSubjectClassQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof openSubjectClass>>, TError, TData>
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getOpenSubjectClassQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof openSubjectClass>>> = ({ signal }) =>
-        openSubjectClass(params, { signal, ...requestOptions })
+        openSubjectClass(params, signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof openSubjectClass>>,
@@ -6277,7 +6142,6 @@ export function useOpenSubjectClass<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -6298,7 +6162,6 @@ export function useOpenSubjectClass<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -6311,7 +6174,6 @@ export function useOpenSubjectClass<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof openSubjectClass>>, TError, TData>
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -6328,7 +6190,6 @@ export function useOpenSubjectClass<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof openSubjectClass>>, TError, TData>
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -6410,16 +6271,15 @@ export const getOpenSubjectClassRetakeQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassRetake>>, TError, TData>
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getOpenSubjectClassRetakeQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof openSubjectClassRetake>>> = ({
         signal,
-    }) => openSubjectClassRetake(params, { signal, ...requestOptions })
+    }) => openSubjectClassRetake(params, signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof openSubjectClassRetake>>,
@@ -6450,7 +6310,6 @@ export function useOpenSubjectClassRetake<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -6471,7 +6330,6 @@ export function useOpenSubjectClassRetake<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -6484,7 +6342,6 @@ export function useOpenSubjectClassRetake<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassRetake>>, TError, TData>
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -6501,7 +6358,6 @@ export function useOpenSubjectClassRetake<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassRetake>>, TError, TData>
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -6596,16 +6452,15 @@ export const getOpenSubjectClassRetakeStudentsQueryOptions = <
                 TData
             >
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getOpenSubjectClassRetakeStudentsQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>> = ({
         signal,
-    }) => openSubjectClassRetakeStudents(params, { signal, ...requestOptions })
+    }) => openSubjectClassRetakeStudents(params, signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
@@ -6640,7 +6495,6 @@ export function useOpenSubjectClassRetakeStudents<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -6665,7 +6519,6 @@ export function useOpenSubjectClassRetakeStudents<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -6682,7 +6535,6 @@ export function useOpenSubjectClassRetakeStudents<
                 TData
             >
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -6703,7 +6555,6 @@ export function useOpenSubjectClassRetakeStudents<
                 TData
             >
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -6785,16 +6636,15 @@ export const getOpenSubjectClassReExamQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExam>>, TError, TData>
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getOpenSubjectClassReExamQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof openSubjectClassReExam>>> = ({
         signal,
-    }) => openSubjectClassReExam(params, { signal, ...requestOptions })
+    }) => openSubjectClassReExam(params, signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof openSubjectClassReExam>>,
@@ -6825,7 +6675,6 @@ export function useOpenSubjectClassReExam<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -6846,7 +6695,6 @@ export function useOpenSubjectClassReExam<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -6859,7 +6707,6 @@ export function useOpenSubjectClassReExam<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExam>>, TError, TData>
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -6876,7 +6723,6 @@ export function useOpenSubjectClassReExam<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExam>>, TError, TData>
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -6971,16 +6817,15 @@ export const getOpenSubjectClassReExamStudentsQueryOptions = <
                 TData
             >
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getOpenSubjectClassReExamStudentsQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof openSubjectClassReExamStudents>>> = ({
         signal,
-    }) => openSubjectClassReExamStudents(params, { signal, ...requestOptions })
+    }) => openSubjectClassReExamStudents(params, signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
@@ -7015,7 +6860,6 @@ export function useOpenSubjectClassReExamStudents<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -7040,7 +6884,6 @@ export function useOpenSubjectClassReExamStudents<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -7057,7 +6900,6 @@ export function useOpenSubjectClassReExamStudents<
                 TData
             >
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -7078,7 +6920,6 @@ export function useOpenSubjectClassReExamStudents<
                 TData
             >
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -7149,7 +6990,6 @@ export const getEnrollFixedClassOnSubjectClassMutationOptions = <
         { data: EnrollFixedClassOnSubjectClassBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>,
     TError,
@@ -7157,11 +6997,11 @@ export const getEnrollFixedClassOnSubjectClassMutationOptions = <
     TContext
 > => {
     const mutationKey = ['enrollFixedClassOnSubjectClass']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>,
@@ -7169,7 +7009,7 @@ export const getEnrollFixedClassOnSubjectClassMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return enrollFixedClassOnSubjectClass(data, requestOptions)
+        return enrollFixedClassOnSubjectClass(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -7192,7 +7032,6 @@ export const useEnrollFixedClassOnSubjectClass = <TError = void, TContext = unkn
             { data: EnrollFixedClassOnSubjectClassBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -7254,7 +7093,6 @@ export const getSetScoreDeadLineMutationOptions = <TError = void, TContext = unk
         { data: SetScoreDeadLineBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof setScoreDeadLine>>,
     TError,
@@ -7262,11 +7100,11 @@ export const getSetScoreDeadLineMutationOptions = <TError = void, TContext = unk
     TContext
 > => {
     const mutationKey = ['setScoreDeadLine']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof setScoreDeadLine>>,
@@ -7274,7 +7112,7 @@ export const getSetScoreDeadLineMutationOptions = <TError = void, TContext = unk
     > = (props) => {
         const { data } = props ?? {}
 
-        return setScoreDeadLine(data, requestOptions)
+        return setScoreDeadLine(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -7297,7 +7135,6 @@ export const useSetScoreDeadLine = <TError = void, TContext = unknown>(
             { data: SetScoreDeadLineBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -7362,7 +7199,6 @@ export const getSetExamScoreDeadLineMutationOptions = <
         { data: SetExamScoreDeadLineBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof setExamScoreDeadLine>>,
     TError,
@@ -7370,11 +7206,11 @@ export const getSetExamScoreDeadLineMutationOptions = <
     TContext
 > => {
     const mutationKey = ['setExamScoreDeadLine']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof setExamScoreDeadLine>>,
@@ -7382,7 +7218,7 @@ export const getSetExamScoreDeadLineMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return setExamScoreDeadLine(data, requestOptions)
+        return setExamScoreDeadLine(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -7405,7 +7241,6 @@ export const useSetExamScoreDeadLine = <TError = void, TContext = unknown>(
             { data: SetExamScoreDeadLineBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -7475,7 +7310,6 @@ export const getUploadExcelImportScoreMutationOptions = <
         { data: UploadExcelImportScore },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof uploadExcelImportScore>>,
     TError,
@@ -7483,11 +7317,11 @@ export const getUploadExcelImportScoreMutationOptions = <
     TContext
 > => {
     const mutationKey = ['uploadExcelImportScore']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof uploadExcelImportScore>>,
@@ -7495,7 +7329,7 @@ export const getUploadExcelImportScoreMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return uploadExcelImportScore(data, requestOptions)
+        return uploadExcelImportScore(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -7518,7 +7352,6 @@ export const useUploadExcelImportScore = <TError = UploadExcelImportScore400, TC
             { data: UploadExcelImportScore },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -7598,16 +7431,15 @@ export const getExportSubjectClassScoreQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassScore>>, TError, TData>
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getExportSubjectClassScoreQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof exportSubjectClassScore>>> = ({
         signal,
-    }) => exportSubjectClassScore(params, { signal, ...requestOptions })
+    }) => exportSubjectClassScore(params, signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof exportSubjectClassScore>>,
@@ -7638,7 +7470,6 @@ export function useExportSubjectClassScore<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -7659,7 +7490,6 @@ export function useExportSubjectClassScore<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -7672,7 +7502,6 @@ export function useExportSubjectClassScore<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassScore>>, TError, TData>
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -7689,7 +7518,6 @@ export function useExportSubjectClassScore<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassScore>>, TError, TData>
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -7784,16 +7612,15 @@ export const getExportStudentScholarshipExcelQueryOptions = <
                 TData
             >
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getExportStudentScholarshipExcelQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof exportStudentScholarshipExcel>>> = ({
         signal,
-    }) => exportStudentScholarshipExcel(params, { signal, ...requestOptions })
+    }) => exportStudentScholarshipExcel(params, signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
@@ -7828,7 +7655,6 @@ export function useExportStudentScholarshipExcel<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -7853,7 +7679,6 @@ export function useExportStudentScholarshipExcel<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -7870,7 +7695,6 @@ export function useExportStudentScholarshipExcel<
                 TData
             >
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -7891,7 +7715,6 @@ export function useExportStudentScholarshipExcel<
                 TData
             >
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -7986,16 +7809,15 @@ export const getExportStudentAcademicWarningExcelQueryOptions = <
                 TData
             >
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getExportStudentAcademicWarningExcelQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>> = ({
         signal,
-    }) => exportStudentAcademicWarningExcel(params, { signal, ...requestOptions })
+    }) => exportStudentAcademicWarningExcel(params, signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
@@ -8030,7 +7852,6 @@ export function useExportStudentAcademicWarningExcel<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -8055,7 +7876,6 @@ export function useExportStudentAcademicWarningExcel<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -8072,7 +7892,6 @@ export function useExportStudentAcademicWarningExcel<
                 TData
             >
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -8093,7 +7912,6 @@ export function useExportStudentAcademicWarningExcel<
                 TData
             >
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -8159,7 +7977,6 @@ export const getUpdateStudentStatusMutationOptions = <
         { data: UpdateStudentStatusBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof updateStudentStatus>>,
     TError,
@@ -8167,11 +7984,11 @@ export const getUpdateStudentStatusMutationOptions = <
     TContext
 > => {
     const mutationKey = ['updateStudentStatus']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof updateStudentStatus>>,
@@ -8179,7 +7996,7 @@ export const getUpdateStudentStatusMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return updateStudentStatus(data, requestOptions)
+        return updateStudentStatus(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -8202,7 +8019,6 @@ export const useUpdateStudentStatus = <TError = UpdateStudentStatus400, TContext
             { data: UpdateStudentStatusBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -8289,16 +8105,15 @@ export const getExportStudentScholarshipJsonQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof exportStudentScholarshipJson>>, TError, TData>
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getExportStudentScholarshipJsonQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof exportStudentScholarshipJson>>> = ({
         signal,
-    }) => exportStudentScholarshipJson(params, { signal, ...requestOptions })
+    }) => exportStudentScholarshipJson(params, signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof exportStudentScholarshipJson>>,
@@ -8329,7 +8144,6 @@ export function useExportStudentScholarshipJson<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -8350,7 +8164,6 @@ export function useExportStudentScholarshipJson<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -8363,7 +8176,6 @@ export function useExportStudentScholarshipJson<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof exportStudentScholarshipJson>>, TError, TData>
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -8380,7 +8192,6 @@ export function useExportStudentScholarshipJson<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof exportStudentScholarshipJson>>, TError, TData>
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -8475,16 +8286,15 @@ export const getExportStudentAcademicWarningJsonQueryOptions = <
                 TData
             >
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getExportStudentAcademicWarningJsonQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>> = ({
         signal,
-    }) => exportStudentAcademicWarningJson(params, { signal, ...requestOptions })
+    }) => exportStudentAcademicWarningJson(params, signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
@@ -8519,7 +8329,6 @@ export function useExportStudentAcademicWarningJson<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -8544,7 +8353,6 @@ export function useExportStudentAcademicWarningJson<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -8561,7 +8369,6 @@ export function useExportStudentAcademicWarningJson<
                 TData
             >
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -8582,7 +8389,6 @@ export function useExportStudentAcademicWarningJson<
                 TData
             >
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -8677,16 +8483,15 @@ export const getExportStudentAcademicActionJsonQueryOptions = <
                 TData
             >
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getExportStudentAcademicActionJsonQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof exportStudentAcademicActionJson>>> = ({
         signal,
-    }) => exportStudentAcademicActionJson(params, { signal, ...requestOptions })
+    }) => exportStudentAcademicActionJson(params, signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
@@ -8721,7 +8526,6 @@ export function useExportStudentAcademicActionJson<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -8746,7 +8550,6 @@ export function useExportStudentAcademicActionJson<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -8763,7 +8566,6 @@ export function useExportStudentAcademicActionJson<
                 TData
             >
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -8784,7 +8586,6 @@ export function useExportStudentAcademicActionJson<
                 TData
             >
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -8879,18 +8680,16 @@ export const getExportStudentDecreaseAcademicWarningJsonQueryOptions = <
                 TData
             >
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey =
         queryOptions?.queryKey ?? getExportStudentDecreaseAcademicWarningJsonQueryKey(params)
 
     const queryFn: QueryFunction<
         Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>
-    > = ({ signal }) =>
-        exportStudentDecreaseAcademicWarningJson(params, { signal, ...requestOptions })
+    > = ({ signal }) => exportStudentDecreaseAcademicWarningJson(params, signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
@@ -8926,7 +8725,6 @@ export function useExportStudentDecreaseAcademicWarningJson<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -8951,7 +8749,6 @@ export function useExportStudentDecreaseAcademicWarningJson<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -8968,7 +8765,6 @@ export function useExportStudentDecreaseAcademicWarningJson<
                 TData
             >
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -8989,7 +8785,6 @@ export function useExportStudentDecreaseAcademicWarningJson<
                 TData
             >
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -9079,7 +8874,6 @@ export const getCalculateStudentSemesterResultJsonMutationOptions = <
         { params: CalculateStudentSemesterResultJsonParams },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof calculateStudentSemesterResultJson>>,
     TError,
@@ -9087,11 +8881,11 @@ export const getCalculateStudentSemesterResultJsonMutationOptions = <
     TContext
 > => {
     const mutationKey = ['calculateStudentSemesterResultJson']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof calculateStudentSemesterResultJson>>,
@@ -9099,7 +8893,7 @@ export const getCalculateStudentSemesterResultJsonMutationOptions = <
     > = (props) => {
         const { params } = props ?? {}
 
-        return calculateStudentSemesterResultJson(params, requestOptions)
+        return calculateStudentSemesterResultJson(params)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -9127,7 +8921,6 @@ export const useCalculateStudentSemesterResultJson = <
             { params: CalculateStudentSemesterResultJsonParams },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -9216,7 +9009,6 @@ export const getCalculateStudentSchoolYearResultMutationOptions = <
         { params: CalculateStudentSchoolYearResultParams },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof calculateStudentSchoolYearResult>>,
     TError,
@@ -9224,11 +9016,11 @@ export const getCalculateStudentSchoolYearResultMutationOptions = <
     TContext
 > => {
     const mutationKey = ['calculateStudentSchoolYearResult']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof calculateStudentSchoolYearResult>>,
@@ -9236,7 +9028,7 @@ export const getCalculateStudentSchoolYearResultMutationOptions = <
     > = (props) => {
         const { params } = props ?? {}
 
-        return calculateStudentSchoolYearResult(params, requestOptions)
+        return calculateStudentSchoolYearResult(params)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -9264,7 +9056,6 @@ export const useCalculateStudentSchoolYearResult = <
             { params: CalculateStudentSchoolYearResultParams },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -9334,15 +9125,14 @@ export const getDebtStatisticsQueryOptions = <
     params: DebtStatisticsParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof debtStatistics>>, TError, TData>>
-        request?: SecondParameter<typeof customTrainingFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getDebtStatisticsQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof debtStatistics>>> = ({ signal }) =>
-        debtStatistics(params, { signal, ...requestOptions })
+        debtStatistics(params, signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof debtStatistics>>,
@@ -9369,7 +9159,6 @@ export function useDebtStatistics<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -9390,7 +9179,6 @@ export function useDebtStatistics<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -9401,7 +9189,6 @@ export function useDebtStatistics<
     params: DebtStatisticsParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof debtStatistics>>, TError, TData>>
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -9413,7 +9200,6 @@ export function useDebtStatistics<
     params: DebtStatisticsParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof debtStatistics>>, TError, TData>>
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -9508,16 +9294,15 @@ export const getDownloadStudentImportTemplateQueryOptions = <
                 TData
             >
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getDownloadStudentImportTemplateQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof downloadStudentImportTemplate>>> = ({
         signal,
-    }) => downloadStudentImportTemplate(params, { signal, ...requestOptions })
+    }) => downloadStudentImportTemplate(params, signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof downloadStudentImportTemplate>>,
@@ -9554,7 +9339,6 @@ export function useDownloadStudentImportTemplate<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -9579,7 +9363,6 @@ export function useDownloadStudentImportTemplate<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -9596,7 +9379,6 @@ export function useDownloadStudentImportTemplate<
                 TData
             >
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -9614,7 +9396,6 @@ export function useDownloadStudentImportTemplate<
                 TData
             >
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -9676,7 +9457,6 @@ export const getExportStudentProfilesMutationOptions = <
         { data: ExportStudentProfilesBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof exportStudentProfiles>>,
     TError,
@@ -9684,11 +9464,11 @@ export const getExportStudentProfilesMutationOptions = <
     TContext
 > => {
     const mutationKey = ['exportStudentProfiles']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof exportStudentProfiles>>,
@@ -9696,7 +9476,7 @@ export const getExportStudentProfilesMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return exportStudentProfiles(data, requestOptions)
+        return exportStudentProfiles(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -9716,7 +9496,6 @@ export const useExportStudentProfiles = <TError = ExportStudentProfiles404, TCon
             { data: ExportStudentProfilesBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -9777,7 +9556,6 @@ export const getExportLecturerProfileMutationOptions = <
         { data: ExportLecturerProfileBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof exportLecturerProfile>>,
     TError,
@@ -9785,11 +9563,11 @@ export const getExportLecturerProfileMutationOptions = <
     TContext
 > => {
     const mutationKey = ['exportLecturerProfile']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof exportLecturerProfile>>,
@@ -9797,7 +9575,7 @@ export const getExportLecturerProfileMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return exportLecturerProfile(data, requestOptions)
+        return exportLecturerProfile(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -9817,7 +9595,6 @@ export const useExportLecturerProfile = <TError = ExportLecturerProfile400, TCon
             { data: ExportLecturerProfileBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -9897,16 +9674,15 @@ export const getExportDiplomaVerificationQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof exportDiplomaVerification>>, TError, TData>
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getExportDiplomaVerificationQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof exportDiplomaVerification>>> = ({
         signal,
-    }) => exportDiplomaVerification(params, { signal, ...requestOptions })
+    }) => exportDiplomaVerification(params, signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof exportDiplomaVerification>>,
@@ -9937,7 +9713,6 @@ export function useExportDiplomaVerification<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -9958,7 +9733,6 @@ export function useExportDiplomaVerification<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -9971,7 +9745,6 @@ export function useExportDiplomaVerification<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof exportDiplomaVerification>>, TError, TData>
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -9985,7 +9758,6 @@ export function useExportDiplomaVerification<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof exportDiplomaVerification>>, TError, TData>
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -10064,7 +9836,6 @@ export const getUploadExcelImportTrainingScoreMutationOptions = <
         { data: UploadExcelImportTrainingScore },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof uploadExcelImportTrainingScore>>,
     TError,
@@ -10072,11 +9843,11 @@ export const getUploadExcelImportTrainingScoreMutationOptions = <
     TContext
 > => {
     const mutationKey = ['uploadExcelImportTrainingScore']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof uploadExcelImportTrainingScore>>,
@@ -10084,7 +9855,7 @@ export const getUploadExcelImportTrainingScoreMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return uploadExcelImportTrainingScore(data, requestOptions)
+        return uploadExcelImportTrainingScore(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -10110,7 +9881,6 @@ export const useUploadExcelImportTrainingScore = <
             { data: UploadExcelImportTrainingScore },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -10180,7 +9950,6 @@ export const getImportPhienBanCTDTMutationOptions = <
         { curriculumVersionId: string; data: ImportPhienBanCTDT },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof importPhienBanCTDT>>,
     TError,
@@ -10188,11 +9957,11 @@ export const getImportPhienBanCTDTMutationOptions = <
     TContext
 > => {
     const mutationKey = ['importPhienBanCTDT']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof importPhienBanCTDT>>,
@@ -10200,7 +9969,7 @@ export const getImportPhienBanCTDTMutationOptions = <
     > = (props) => {
         const { curriculumVersionId, data } = props ?? {}
 
-        return importPhienBanCTDT(curriculumVersionId, data, requestOptions)
+        return importPhienBanCTDT(curriculumVersionId, data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -10220,7 +9989,6 @@ export const useImportPhienBanCTDT = <TError = ImportPhienBanCTDT400, TContext =
             { curriculumVersionId: string; data: ImportPhienBanCTDT },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -10272,15 +10040,14 @@ export const getExportPhienBanCTDTQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof exportPhienBanCTDT>>, TError, TData>
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getExportPhienBanCTDTQueryKey(id)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof exportPhienBanCTDT>>> = ({ signal }) =>
-        exportPhienBanCTDT(id, { signal, ...requestOptions })
+        exportPhienBanCTDT(id, signal)
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof exportPhienBanCTDT>>,
@@ -10311,7 +10078,6 @@ export function useExportPhienBanCTDT<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -10332,7 +10098,6 @@ export function useExportPhienBanCTDT<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -10345,7 +10110,6 @@ export function useExportPhienBanCTDT<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof exportPhienBanCTDT>>, TError, TData>
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -10359,7 +10123,6 @@ export function useExportPhienBanCTDT<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof exportPhienBanCTDT>>, TError, TData>
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -10449,7 +10212,6 @@ export const getImportPhienBanCTDTSubjectMutationOptions = <
         { data: ImportPhienBanCTDTSubjectBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof importPhienBanCTDTSubject>>,
     TError,
@@ -10457,11 +10219,11 @@ export const getImportPhienBanCTDTSubjectMutationOptions = <
     TContext
 > => {
     const mutationKey = ['importPhienBanCTDTSubject']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof importPhienBanCTDTSubject>>,
@@ -10469,7 +10231,7 @@ export const getImportPhienBanCTDTSubjectMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return importPhienBanCTDTSubject(data, requestOptions)
+        return importPhienBanCTDTSubject(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -10492,7 +10254,6 @@ export const useImportPhienBanCTDTSubject = <
             { data: ImportPhienBanCTDTSubjectBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -10556,7 +10317,6 @@ export const getGraduationApplicationInitMutationOptions = <
         { data: GraduationApplicationInitBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof graduationApplicationInit>>,
     TError,
@@ -10564,11 +10324,11 @@ export const getGraduationApplicationInitMutationOptions = <
     TContext
 > => {
     const mutationKey = ['graduationApplicationInit']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof graduationApplicationInit>>,
@@ -10576,7 +10336,7 @@ export const getGraduationApplicationInitMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return graduationApplicationInit(data, requestOptions)
+        return graduationApplicationInit(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -10599,7 +10359,6 @@ export const useGraduationApplicationInit = <
             { data: GraduationApplicationInitBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -10658,7 +10417,6 @@ export const getGraduationCheckMutationOptions = <
         { data: GraduationCheckBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof graduationCheck>>,
     TError,
@@ -10666,11 +10424,11 @@ export const getGraduationCheckMutationOptions = <
     TContext
 > => {
     const mutationKey = ['graduationCheck']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof graduationCheck>>,
@@ -10678,7 +10436,7 @@ export const getGraduationCheckMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return graduationCheck(data, requestOptions)
+        return graduationCheck(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -10696,7 +10454,6 @@ export const useGraduationCheck = <TError = GraduationCheck400, TContext = unkno
             { data: GraduationCheckBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -10765,7 +10522,6 @@ export const getGenerateDiplomaNumberMutationOptions = <
         { data: GenerateDiplomaNumberBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof generateDiplomaNumber>>,
     TError,
@@ -10773,11 +10529,11 @@ export const getGenerateDiplomaNumberMutationOptions = <
     TContext
 > => {
     const mutationKey = ['generateDiplomaNumber']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof generateDiplomaNumber>>,
@@ -10785,7 +10541,7 @@ export const getGenerateDiplomaNumberMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return generateDiplomaNumber(data, requestOptions)
+        return generateDiplomaNumber(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -10808,7 +10564,6 @@ export const useGenerateDiplomaNumber = <
             { data: GenerateDiplomaNumberBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -10885,16 +10640,15 @@ export const getGraduationSessionDecisionQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof graduationSessionDecision>>, TError, TData>
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGraduationSessionDecisionQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof graduationSessionDecision>>> = ({
         signal,
-    }) => graduationSessionDecision(params, { signal, ...requestOptions })
+    }) => graduationSessionDecision(params, signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof graduationSessionDecision>>,
@@ -10925,7 +10679,6 @@ export function useGraduationSessionDecision<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -10946,7 +10699,6 @@ export function useGraduationSessionDecision<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -10959,7 +10711,6 @@ export function useGraduationSessionDecision<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof graduationSessionDecision>>, TError, TData>
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -10973,7 +10724,6 @@ export function useGraduationSessionDecision<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof graduationSessionDecision>>, TError, TData>
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -11054,16 +10804,15 @@ export const getStatisticsGraduationDecisionQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof statisticsGraduationDecision>>, TError, TData>
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getStatisticsGraduationDecisionQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof statisticsGraduationDecision>>> = ({
         signal,
-    }) => statisticsGraduationDecision(params, { signal, ...requestOptions })
+    }) => statisticsGraduationDecision(params, signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof statisticsGraduationDecision>>,
@@ -11094,7 +10843,6 @@ export function useStatisticsGraduationDecision<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -11115,7 +10863,6 @@ export function useStatisticsGraduationDecision<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -11128,7 +10875,6 @@ export function useStatisticsGraduationDecision<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof statisticsGraduationDecision>>, TError, TData>
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -11142,7 +10888,6 @@ export function useStatisticsGraduationDecision<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof statisticsGraduationDecision>>, TError, TData>
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -11221,7 +10966,6 @@ export const getExportGraduationDecisionPptxMutationOptions = <
         { data: ExportGraduationDecisionPptxBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof exportGraduationDecisionPptx>>,
     TError,
@@ -11229,11 +10973,11 @@ export const getExportGraduationDecisionPptxMutationOptions = <
     TContext
 > => {
     const mutationKey = ['exportGraduationDecisionPptx']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof exportGraduationDecisionPptx>>,
@@ -11241,7 +10985,7 @@ export const getExportGraduationDecisionPptxMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return exportGraduationDecisionPptx(data, requestOptions)
+        return exportGraduationDecisionPptx(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -11264,7 +11008,6 @@ export const useExportGraduationDecisionPptx = <
             { data: ExportGraduationDecisionPptxBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -11325,7 +11068,6 @@ export const getExportInternshipProfileMutationOptions = <
         { data: ExportInternshipProfileBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof exportInternshipProfile>>,
     TError,
@@ -11333,11 +11075,11 @@ export const getExportInternshipProfileMutationOptions = <
     TContext
 > => {
     const mutationKey = ['exportInternshipProfile']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof exportInternshipProfile>>,
@@ -11345,7 +11087,7 @@ export const getExportInternshipProfileMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return exportInternshipProfile(data, requestOptions)
+        return exportInternshipProfile(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -11365,7 +11107,6 @@ export const useExportInternshipProfile = <TError = ExportInternshipProfile400, 
             { data: ExportInternshipProfileBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -11443,7 +11184,6 @@ export const getImportPhanCongGiangDayMutationOptions = <
         { data: ImportPhanCongGiangDay },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof importPhanCongGiangDay>>,
     TError,
@@ -11451,11 +11191,11 @@ export const getImportPhanCongGiangDayMutationOptions = <
     TContext
 > => {
     const mutationKey = ['importPhanCongGiangDay']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof importPhanCongGiangDay>>,
@@ -11463,7 +11203,7 @@ export const getImportPhanCongGiangDayMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return importPhanCongGiangDay(data, requestOptions)
+        return importPhanCongGiangDay(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -11486,7 +11226,6 @@ export const useImportPhanCongGiangDay = <TError = ImportPhanCongGiangDay400, TC
             { data: ImportPhanCongGiangDay },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -11550,7 +11289,6 @@ export const getImportLecturerMutationOptions = <
         { data: ImportLecturerBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof importLecturer>>,
     TError,
@@ -11558,11 +11296,11 @@ export const getImportLecturerMutationOptions = <
     TContext
 > => {
     const mutationKey = ['importLecturer']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof importLecturer>>,
@@ -11570,7 +11308,7 @@ export const getImportLecturerMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return importLecturer(data, requestOptions)
+        return importLecturer(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -11588,7 +11326,6 @@ export const useImportLecturer = <TError = ImportLecturer400, TContext = unknown
             { data: ImportLecturerBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -11661,7 +11398,6 @@ export const getImportStudentMutationOptions = <
         { data: ImportStudentRequest },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof importStudent>>,
     TError,
@@ -11669,11 +11405,11 @@ export const getImportStudentMutationOptions = <
     TContext
 > => {
     const mutationKey = ['importStudent']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof importStudent>>,
@@ -11681,7 +11417,7 @@ export const getImportStudentMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return importStudent(data, requestOptions)
+        return importStudent(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -11699,7 +11435,6 @@ export const useImportStudent = <TError = ImportStudent400, TContext = unknown>(
             { data: ImportStudentRequest },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -11763,7 +11498,6 @@ export const getImportHeQuanSuMutationOptions = <
         { data: ImportHeQuanSuRequest },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof importHeQuanSu>>,
     TError,
@@ -11771,11 +11505,11 @@ export const getImportHeQuanSuMutationOptions = <
     TContext
 > => {
     const mutationKey = ['importHeQuanSu']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof importHeQuanSu>>,
@@ -11783,7 +11517,7 @@ export const getImportHeQuanSuMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return importHeQuanSu(data, requestOptions)
+        return importHeQuanSu(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -11801,7 +11535,6 @@ export const useImportHeQuanSu = <TError = ImportHeQuanSu400, TContext = unknown
             { data: ImportHeQuanSuRequest },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -11867,7 +11600,6 @@ export const getImportInternshipMutationOptions = <
         { data: ImportInternshipBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof importInternship>>,
     TError,
@@ -11875,11 +11607,11 @@ export const getImportInternshipMutationOptions = <
     TContext
 > => {
     const mutationKey = ['importInternship']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof importInternship>>,
@@ -11887,7 +11619,7 @@ export const getImportInternshipMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return importInternship(data, requestOptions)
+        return importInternship(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -11907,7 +11639,6 @@ export const useImportInternship = <TError = ImportInternship400, TContext = unk
             { data: ImportInternshipBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -11980,7 +11711,6 @@ export const getApproveScoreCorrectionMutationOptions = <
         { data: ApproveScoreCorrectionInput },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof approveScoreCorrection>>,
     TError,
@@ -11988,11 +11718,11 @@ export const getApproveScoreCorrectionMutationOptions = <
     TContext
 > => {
     const mutationKey = ['approveScoreCorrection']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof approveScoreCorrection>>,
@@ -12000,7 +11730,7 @@ export const getApproveScoreCorrectionMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return approveScoreCorrection(data, requestOptions)
+        return approveScoreCorrection(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -12028,7 +11758,6 @@ export const useApproveScoreCorrection = <
             { data: ApproveScoreCorrectionInput },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -12093,7 +11822,6 @@ export const getCertificateScoreMutationOptions = <
         { data: CertificateIds },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof certificateScore>>,
     TError,
@@ -12101,11 +11829,11 @@ export const getCertificateScoreMutationOptions = <
     TContext
 > => {
     const mutationKey = ['certificateScore']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof certificateScore>>,
@@ -12113,7 +11841,7 @@ export const getCertificateScoreMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return certificateScore(data, requestOptions)
+        return certificateScore(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -12136,7 +11864,6 @@ export const useCertificateScore = <TError = CertificateScore400, TContext = unk
             { data: CertificateIds },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -12196,7 +11923,6 @@ export const getAwardScoreMutationOptions = <TError = AwardScore400, TContext = 
         { data: AwardIds },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof awardScore>>,
     TError,
@@ -12204,11 +11930,11 @@ export const getAwardScoreMutationOptions = <TError = AwardScore400, TContext = 
     TContext
 > => {
     const mutationKey = ['awardScore']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof awardScore>>,
@@ -12216,7 +11942,7 @@ export const getAwardScoreMutationOptions = <TError = AwardScore400, TContext = 
     > = (props) => {
         const { data } = props ?? {}
 
-        return awardScore(data, requestOptions)
+        return awardScore(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -12237,7 +11963,6 @@ export const useAwardScore = <TError = AwardScore400, TContext = unknown>(
             { data: AwardIds },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -12302,7 +12027,6 @@ export const getApproveAwardScoreMutationOptions = <
         { data: AwardIds },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof approveAwardScore>>,
     TError,
@@ -12310,11 +12034,11 @@ export const getApproveAwardScoreMutationOptions = <
     TContext
 > => {
     const mutationKey = ['approveAwardScore']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof approveAwardScore>>,
@@ -12322,7 +12046,7 @@ export const getApproveAwardScoreMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return approveAwardScore(data, requestOptions)
+        return approveAwardScore(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -12345,7 +12069,6 @@ export const useApproveAwardScore = <TError = ApproveAwardScore400, TContext = u
             { data: AwardIds },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -12400,7 +12123,6 @@ export const getStatsArchivedAwardMutationOptions = <
         { data: StatsArchivedAwardInput },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof statsArchivedAward>>,
     TError,
@@ -12408,11 +12130,11 @@ export const getStatsArchivedAwardMutationOptions = <
     TContext
 > => {
     const mutationKey = ['statsArchivedAward']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof statsArchivedAward>>,
@@ -12420,7 +12142,7 @@ export const getStatsArchivedAwardMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return statsArchivedAward(data, requestOptions)
+        return statsArchivedAward(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -12443,7 +12165,6 @@ export const useStatsArchivedAward = <TError = unknown, TContext = unknown>(
             { data: StatsArchivedAwardInput },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -12498,7 +12219,6 @@ export const getExportStatsArchivedAwardMutationOptions = <
         { data: StatsArchivedAwardInput },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof exportStatsArchivedAward>>,
     TError,
@@ -12506,11 +12226,11 @@ export const getExportStatsArchivedAwardMutationOptions = <
     TContext
 > => {
     const mutationKey = ['exportStatsArchivedAward']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof exportStatsArchivedAward>>,
@@ -12518,7 +12238,7 @@ export const getExportStatsArchivedAwardMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return exportStatsArchivedAward(data, requestOptions)
+        return exportStatsArchivedAward(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -12541,7 +12261,6 @@ export const useExportStatsArchivedAward = <TError = unknown, TContext = unknown
             { data: StatsArchivedAwardInput },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -12635,16 +12354,15 @@ export const getExportArchivedCertificateExcelQueryOptions = <
                 TData
             >
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getExportArchivedCertificateExcelQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof exportArchivedCertificateExcel>>> = ({
         signal,
-    }) => exportArchivedCertificateExcel(params, { signal, ...requestOptions })
+    }) => exportArchivedCertificateExcel(params, signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof exportArchivedCertificateExcel>>,
@@ -12679,7 +12397,6 @@ export function useExportArchivedCertificateExcel<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -12704,7 +12421,6 @@ export function useExportArchivedCertificateExcel<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -12721,7 +12437,6 @@ export function useExportArchivedCertificateExcel<
                 TData
             >
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -12742,7 +12457,6 @@ export function useExportArchivedCertificateExcel<
                 TData
             >
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -12802,7 +12516,6 @@ export const getCreateExamsMutationOptions = <
         { data: CreateExamsRequest },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof createExams>>,
     TError,
@@ -12810,11 +12523,11 @@ export const getCreateExamsMutationOptions = <
     TContext
 > => {
     const mutationKey = ['createExams']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof createExams>>,
@@ -12822,7 +12535,7 @@ export const getCreateExamsMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return createExams(data, requestOptions)
+        return createExams(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -12840,7 +12553,6 @@ export const useCreateExams = <TError = CreateExamsBadResponse, TContext = unkno
             { data: CreateExamsRequest },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -12901,7 +12613,6 @@ export const getCreateNewReExamListMutationOptions = <
         { data: CreateReExamsRequest },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof createNewReExamList>>,
     TError,
@@ -12909,11 +12620,11 @@ export const getCreateNewReExamListMutationOptions = <
     TContext
 > => {
     const mutationKey = ['createNewReExamList']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof createNewReExamList>>,
@@ -12921,7 +12632,7 @@ export const getCreateNewReExamListMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return createNewReExamList(data, requestOptions)
+        return createNewReExamList(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -12941,7 +12652,6 @@ export const useCreateNewReExamList = <TError = CreateExamsBadResponse, TContext
             { data: CreateReExamsRequest },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -13000,7 +12710,6 @@ export const getMergeExamMutationOptions = <
         { data: MergeExamRequest },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof mergeExam>>,
     TError,
@@ -13008,11 +12717,11 @@ export const getMergeExamMutationOptions = <
     TContext
 > => {
     const mutationKey = ['mergeExam']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof mergeExam>>,
@@ -13020,7 +12729,7 @@ export const getMergeExamMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return mergeExam(data, requestOptions)
+        return mergeExam(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -13038,7 +12747,6 @@ export const useMergeExam = <TError = MergeExamBadResponse, TContext = unknown>(
             { data: MergeExamRequest },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -13097,7 +12805,6 @@ export const getUnmergeExamMutationOptions = <
         { data: UnmergeExamRequest },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof unmergeExam>>,
     TError,
@@ -13105,11 +12812,11 @@ export const getUnmergeExamMutationOptions = <
     TContext
 > => {
     const mutationKey = ['unmergeExam']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof unmergeExam>>,
@@ -13117,7 +12824,7 @@ export const getUnmergeExamMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return unmergeExam(data, requestOptions)
+        return unmergeExam(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -13135,7 +12842,6 @@ export const useUnmergeExam = <TError = UnmergeExamBadResponse, TContext = unkno
             { data: UnmergeExamRequest },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -13206,7 +12912,6 @@ export const getGenExamListCodeMutationOptions = <
         { data: GenExamRoomCode },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof genExamListCode>>,
     TError,
@@ -13214,11 +12919,11 @@ export const getGenExamListCodeMutationOptions = <
     TContext
 > => {
     const mutationKey = ['genExamListCode']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof genExamListCode>>,
@@ -13226,7 +12931,7 @@ export const getGenExamListCodeMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return genExamListCode(data, requestOptions)
+        return genExamListCode(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -13250,7 +12955,6 @@ export const useGenExamListCode = <
             { data: GenExamRoomCode },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -13313,7 +13017,6 @@ export const getSaveExamScoreMutationOptions = <
         { data: ExamCodes },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof saveExamScore>>,
     TError,
@@ -13321,11 +13024,11 @@ export const getSaveExamScoreMutationOptions = <
     TContext
 > => {
     const mutationKey = ['saveExamScore']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof saveExamScore>>,
@@ -13333,7 +13036,7 @@ export const getSaveExamScoreMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return saveExamScore(data, requestOptions)
+        return saveExamScore(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -13354,7 +13057,6 @@ export const useSaveExamScore = <TError = SaveExamScore400, TContext = unknown>(
             { data: ExamCodes },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -13422,7 +13124,6 @@ export const getExportStudentSemesterResultMutationOptions = <
         { data: ExportStudentSemesterResultBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof exportStudentSemesterResult>>,
     TError,
@@ -13430,11 +13131,11 @@ export const getExportStudentSemesterResultMutationOptions = <
     TContext
 > => {
     const mutationKey = ['exportStudentSemesterResult']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof exportStudentSemesterResult>>,
@@ -13442,7 +13143,7 @@ export const getExportStudentSemesterResultMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return exportStudentSemesterResult(data, requestOptions)
+        return exportStudentSemesterResult(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -13468,7 +13169,6 @@ export const useExportStudentSemesterResult = <
             { data: ExportStudentSemesterResultBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -13533,7 +13233,6 @@ export const getExportStudentYearResultMutationOptions = <
         { data: ExportStudentYearResultBody },
         TContext
     >
-    request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof exportStudentYearResult>>,
     TError,
@@ -13541,11 +13240,11 @@ export const getExportStudentYearResultMutationOptions = <
     TContext
 > => {
     const mutationKey = ['exportStudentYearResult']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof exportStudentYearResult>>,
@@ -13553,7 +13252,7 @@ export const getExportStudentYearResultMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return exportStudentYearResult(data, requestOptions)
+        return exportStudentYearResult(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -13576,7 +13275,6 @@ export const useExportStudentYearResult = <TError = ExportStudentYearResult404, 
             { data: ExportStudentYearResultBody },
             TContext
         >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -13634,15 +13332,14 @@ export const getGetVersionQueryOptions = <
     appCode: string,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersion>>, TError, TData>>
-        request?: SecondParameter<typeof customTrainingFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetVersionQueryKey(appCode)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getVersion>>> = ({ signal }) =>
-        getVersion(appCode, { signal, ...requestOptions })
+        getVersion(appCode, signal)
 
     return { queryKey, queryFn, enabled: !!appCode, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getVersion>>,
@@ -13669,7 +13366,6 @@ export function useGetVersion<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -13688,7 +13384,6 @@ export function useGetVersion<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -13699,7 +13394,6 @@ export function useGetVersion<
     appCode: string,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersion>>, TError, TData>>
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -13711,7 +13405,6 @@ export function useGetVersion<
     appCode: string,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersion>>, TError, TData>>
-        request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {

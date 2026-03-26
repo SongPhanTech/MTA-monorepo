@@ -27,10 +27,9 @@ export type DiemLopMonHocStoreState = {
 export const kythiStore = new Store<{
     examId?: string
     subjectClassId?: string[]
-
 }>({
     examId: undefined,
-    subjectClassId: []
+    subjectClassId: [],
 })
 
 export const diemPhongThiStore = new Store<{
@@ -42,7 +41,7 @@ export const diemPhongThiStore = new Store<{
 export default function DiemTheoPhach({ type = 'NHAP_DIEM_THEO_PHACH' }: DiemTheoPhachProps) {
     const [form] = Form.useForm<SubmitFormType>()
     const [activeKey, setActiveKey] = useState('1')
-    const { examId,subjectClassId } = useStore(kythiStore)
+    const { examId, subjectClassId } = useStore(kythiStore)
     const { selectedExamListId } = useStore(diemPhongThiStore)
     const { data } = useFindFirstSubjectClass(
         {

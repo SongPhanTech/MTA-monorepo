@@ -104,8 +104,6 @@ type AwaitedInput<T> = PromiseLike<T> | T
 
 type Awaited<O> = O extends AwaitedInput<infer T> ? T : never
 
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
-
 /**
  * Hiển thị ảnh
  * @summary Lấy ảnh mẫu của báo cáo
@@ -181,10 +179,9 @@ export const getGetFilesImageStorageTypeFileNameQueryOptions = <
                 TData
             >
         >
-        request?: SecondParameter<typeof customSystemShareFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey =
         queryOptions?.queryKey ??
@@ -192,11 +189,7 @@ export const getGetFilesImageStorageTypeFileNameQueryOptions = <
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>> = ({
         signal,
-    }) =>
-        getFilesImageStorageTypeFileName(storageType, fileName, params, {
-            signal,
-            ...requestOptions,
-        })
+    }) => getFilesImageStorageTypeFileName(storageType, fileName, params, signal)
 
     return {
         queryKey,
@@ -238,7 +231,6 @@ export function useGetFilesImageStorageTypeFileName<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -265,7 +257,6 @@ export function useGetFilesImageStorageTypeFileName<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -284,7 +275,6 @@ export function useGetFilesImageStorageTypeFileName<
                 TData
             >
         >
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -307,7 +297,6 @@ export function useGetFilesImageStorageTypeFileName<
                 TData
             >
         >
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -392,17 +381,16 @@ export const getGetFilesEmployeeUserIdImageQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemShareFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey =
         queryOptions?.queryKey ?? getGetFilesEmployeeUserIdImageQueryKey(userId, params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>> = ({
         signal,
-    }) => getFilesEmployeeUserIdImage(userId, params, { signal, ...requestOptions })
+    }) => getFilesEmployeeUserIdImage(userId, params, signal)
 
     return { queryKey, queryFn, enabled: !!userId, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>,
@@ -434,7 +422,6 @@ export function useGetFilesEmployeeUserIdImage<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -456,7 +443,6 @@ export function useGetFilesEmployeeUserIdImage<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -470,7 +456,6 @@ export function useGetFilesEmployeeUserIdImage<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -488,7 +473,6 @@ export function useGetFilesEmployeeUserIdImage<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -560,16 +544,15 @@ export const getGetFilesAvatarInitialsQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getFilesAvatarInitials>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemShareFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetFilesAvatarInitialsQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getFilesAvatarInitials>>> = ({
         signal,
-    }) => getFilesAvatarInitials(params, { signal, ...requestOptions })
+    }) => getFilesAvatarInitials(params, signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getFilesAvatarInitials>>,
@@ -600,7 +583,6 @@ export function useGetFilesAvatarInitials<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -621,7 +603,6 @@ export function useGetFilesAvatarInitials<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -634,7 +615,6 @@ export function useGetFilesAvatarInitials<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getFilesAvatarInitials>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -651,7 +631,6 @@ export function useGetFilesAvatarInitials<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getFilesAvatarInitials>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -735,7 +714,6 @@ export const getPostFilesSingleStorageTypeMutationOptions = <
         },
         TContext
     >
-    request?: SecondParameter<typeof customSystemShareFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postFilesSingleStorageType>>,
     TError,
@@ -747,11 +725,11 @@ export const getPostFilesSingleStorageTypeMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postFilesSingleStorageType']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postFilesSingleStorageType>>,
@@ -763,7 +741,7 @@ export const getPostFilesSingleStorageTypeMutationOptions = <
     > = (props) => {
         const { storageType, data, params } = props ?? {}
 
-        return postFilesSingleStorageType(storageType, data, params, requestOptions)
+        return postFilesSingleStorageType(storageType, data, params)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -790,7 +768,6 @@ export const usePostFilesSingleStorageType = <TError = unknown, TContext = unkno
             },
             TContext
         >
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -874,7 +851,6 @@ export const getDeleteFilesDeleteSingleStorageTypeFileNameMutationOptions = <
         },
         TContext
     >
-    request?: SecondParameter<typeof customSystemShareFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof deleteFilesDeleteSingleStorageTypeFileName>>,
     TError,
@@ -886,11 +862,11 @@ export const getDeleteFilesDeleteSingleStorageTypeFileNameMutationOptions = <
     TContext
 > => {
     const mutationKey = ['deleteFilesDeleteSingleStorageTypeFileName']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof deleteFilesDeleteSingleStorageTypeFileName>>,
@@ -902,12 +878,7 @@ export const getDeleteFilesDeleteSingleStorageTypeFileNameMutationOptions = <
     > = (props) => {
         const { storageType, fileName, params } = props ?? {}
 
-        return deleteFilesDeleteSingleStorageTypeFileName(
-            storageType,
-            fileName,
-            params,
-            requestOptions
-        )
+        return deleteFilesDeleteSingleStorageTypeFileName(storageType, fileName, params)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -934,7 +905,6 @@ export const useDeleteFilesDeleteSingleStorageTypeFileName = <TError = unknown, 
             },
             TContext
         >
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -987,14 +957,13 @@ export const getGetFilesHealthzQueryOptions = <
     TError = unknown,
 >(options?: {
     query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesHealthz>>, TError, TData>>
-    request?: SecondParameter<typeof customSystemShareFetch>
 }) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetFilesHealthzQueryKey()
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getFilesHealthz>>> = ({ signal }) =>
-        getFilesHealthz({ signal, ...requestOptions })
+        getFilesHealthz(signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getFilesHealthz>>,
@@ -1022,7 +991,6 @@ export function useGetFilesHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1042,7 +1010,6 @@ export function useGetFilesHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1052,7 +1019,6 @@ export function useGetFilesHealthz<
 >(
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesHealthz>>, TError, TData>>
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1066,7 +1032,6 @@ export function useGetFilesHealthz<
 >(
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesHealthz>>, TError, TData>>
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -1112,14 +1077,13 @@ export const getGetNhanviensQueryOptions = <
     TError = unknown,
 >(options?: {
     query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviens>>, TError, TData>>
-    request?: SecondParameter<typeof customSystemShareFetch>
 }) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetNhanviensQueryKey()
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getNhanviens>>> = ({ signal }) =>
-        getNhanviens({ signal, ...requestOptions })
+        getNhanviens(signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getNhanviens>>,
@@ -1142,7 +1106,6 @@ export function useGetNhanviens<TData = Awaited<ReturnType<typeof getNhanviens>>
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1157,14 +1120,12 @@ export function useGetNhanviens<TData = Awaited<ReturnType<typeof getNhanviens>>
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetNhanviens<TData = Awaited<ReturnType<typeof getNhanviens>>, TError = unknown>(
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviens>>, TError, TData>>
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1172,7 +1133,6 @@ export function useGetNhanviens<TData = Awaited<ReturnType<typeof getNhanviens>>
 export function useGetNhanviens<TData = Awaited<ReturnType<typeof getNhanviens>>, TError = unknown>(
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviens>>, TError, TData>>
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -1222,7 +1182,6 @@ export const getPostNhanviensIdMutationOptions = <TError = unknown, TContext = u
         { id: string; data: NhanVienPatchDto },
         TContext
     >
-    request?: SecondParameter<typeof customSystemShareFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postNhanviensId>>,
     TError,
@@ -1230,11 +1189,11 @@ export const getPostNhanviensIdMutationOptions = <TError = unknown, TContext = u
     TContext
 > => {
     const mutationKey = ['postNhanviensId']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postNhanviensId>>,
@@ -1242,7 +1201,7 @@ export const getPostNhanviensIdMutationOptions = <TError = unknown, TContext = u
     > = (props) => {
         const { id, data } = props ?? {}
 
-        return postNhanviensId(id, data, requestOptions)
+        return postNhanviensId(id, data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -1260,7 +1219,6 @@ export const usePostNhanviensId = <TError = unknown, TContext = unknown>(
             { id: string; data: NhanVienPatchDto },
             TContext
         >
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -1312,15 +1270,14 @@ export const getGetNhanviensEditIdQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getNhanviensEditId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemShareFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetNhanviensEditIdQueryKey(id)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getNhanviensEditId>>> = ({ signal }) =>
-        getNhanviensEditId(id, { signal, ...requestOptions })
+        getNhanviensEditId(id, signal)
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getNhanviensEditId>>,
@@ -1351,7 +1308,6 @@ export function useGetNhanviensEditId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1372,7 +1328,6 @@ export function useGetNhanviensEditId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1385,7 +1340,6 @@ export function useGetNhanviensEditId<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getNhanviensEditId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1399,7 +1353,6 @@ export function useGetNhanviensEditId<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getNhanviensEditId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -1455,16 +1408,15 @@ export const getGetNhanviensDuplicateIdQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getNhanviensDuplicateId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemShareFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetNhanviensDuplicateIdQueryKey(id)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getNhanviensDuplicateId>>> = ({
         signal,
-    }) => getNhanviensDuplicateId(id, { signal, ...requestOptions })
+    }) => getNhanviensDuplicateId(id, signal)
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getNhanviensDuplicateId>>,
@@ -1495,7 +1447,6 @@ export function useGetNhanviensDuplicateId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1516,7 +1467,6 @@ export function useGetNhanviensDuplicateId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1529,7 +1479,6 @@ export function useGetNhanviensDuplicateId<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getNhanviensDuplicateId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1543,7 +1492,6 @@ export function useGetNhanviensDuplicateId<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getNhanviensDuplicateId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -1589,14 +1537,13 @@ export const getGetNhanviensNewQueryOptions = <
     TError = unknown,
 >(options?: {
     query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviensNew>>, TError, TData>>
-    request?: SecondParameter<typeof customSystemShareFetch>
 }) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetNhanviensNewQueryKey()
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getNhanviensNew>>> = ({ signal }) =>
-        getNhanviensNew({ signal, ...requestOptions })
+        getNhanviensNew(signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getNhanviensNew>>,
@@ -1624,7 +1571,6 @@ export function useGetNhanviensNew<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1644,7 +1590,6 @@ export function useGetNhanviensNew<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1654,7 +1599,6 @@ export function useGetNhanviensNew<
 >(
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviensNew>>, TError, TData>>
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1665,7 +1609,6 @@ export function useGetNhanviensNew<
 >(
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviensNew>>, TError, TData>>
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -1714,7 +1657,6 @@ export const getPostNhanviensNewMutationOptions = <TError = unknown, TContext = 
         { data: AddNewRequestDto },
         TContext
     >
-    request?: SecondParameter<typeof customSystemShareFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postNhanviensNew>>,
     TError,
@@ -1722,11 +1664,11 @@ export const getPostNhanviensNewMutationOptions = <TError = unknown, TContext = 
     TContext
 > => {
     const mutationKey = ['postNhanviensNew']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postNhanviensNew>>,
@@ -1734,7 +1676,7 @@ export const getPostNhanviensNewMutationOptions = <TError = unknown, TContext = 
     > = (props) => {
         const { data } = props ?? {}
 
-        return postNhanviensNew(data, requestOptions)
+        return postNhanviensNew(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -1754,7 +1696,6 @@ export const usePostNhanviensNew = <TError = unknown, TContext = unknown>(
             { data: AddNewRequestDto },
             TContext
         >
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -1805,7 +1746,6 @@ export const getPostNhanviensListMutationOptions = <
         { data: PagingRequestDto },
         TContext
     >
-    request?: SecondParameter<typeof customSystemShareFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postNhanviensList>>,
     TError,
@@ -1813,11 +1753,11 @@ export const getPostNhanviensListMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postNhanviensList']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postNhanviensList>>,
@@ -1825,7 +1765,7 @@ export const getPostNhanviensListMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postNhanviensList(data, requestOptions)
+        return postNhanviensList(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -1845,7 +1785,6 @@ export const usePostNhanviensList = <TError = unknown, TContext = unknown>(
             { data: PagingRequestDto },
             TContext
         >
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -1896,7 +1835,6 @@ export const getPostNhanviensTreelistMutationOptions = <
         { data: PagingRequestDto },
         TContext
     >
-    request?: SecondParameter<typeof customSystemShareFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postNhanviensTreelist>>,
     TError,
@@ -1904,11 +1842,11 @@ export const getPostNhanviensTreelistMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postNhanviensTreelist']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postNhanviensTreelist>>,
@@ -1916,7 +1854,7 @@ export const getPostNhanviensTreelistMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postNhanviensTreelist(data, requestOptions)
+        return postNhanviensTreelist(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -1936,7 +1874,6 @@ export const usePostNhanviensTreelist = <TError = unknown, TContext = unknown>(
             { data: PagingRequestDto },
             TContext
         >
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -1987,7 +1924,6 @@ export const getPostNhanviensSummaryMutationOptions = <
         { data: PagingRequestDto },
         TContext
     >
-    request?: SecondParameter<typeof customSystemShareFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postNhanviensSummary>>,
     TError,
@@ -1995,11 +1931,11 @@ export const getPostNhanviensSummaryMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postNhanviensSummary']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postNhanviensSummary>>,
@@ -2007,7 +1943,7 @@ export const getPostNhanviensSummaryMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postNhanviensSummary(data, requestOptions)
+        return postNhanviensSummary(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -2027,7 +1963,6 @@ export const usePostNhanviensSummary = <TError = unknown, TContext = unknown>(
             { data: PagingRequestDto },
             TContext
         >
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -2099,16 +2034,15 @@ export const getGetNhanviensGetbyidIdQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getNhanviensGetbyidId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemShareFetch>
     }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetNhanviensGetbyidIdQueryKey(id, params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getNhanviensGetbyidId>>> = ({
         signal,
-    }) => getNhanviensGetbyidId(id, params, { signal, ...requestOptions })
+    }) => getNhanviensGetbyidId(id, params, signal)
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getNhanviensGetbyidId>>,
@@ -2140,7 +2074,6 @@ export function useGetNhanviensGetbyidId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2162,7 +2095,6 @@ export function useGetNhanviensGetbyidId<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2176,7 +2108,6 @@ export function useGetNhanviensGetbyidId<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getNhanviensGetbyidId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2191,7 +2122,6 @@ export function useGetNhanviensGetbyidId<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getNhanviensGetbyidId>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -2246,7 +2176,6 @@ export const getPostNhanviensExportdataMutationOptions = <
         { data: ExportListParameter },
         TContext
     >
-    request?: SecondParameter<typeof customSystemShareFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postNhanviensExportdata>>,
     TError,
@@ -2254,11 +2183,11 @@ export const getPostNhanviensExportdataMutationOptions = <
     TContext
 > => {
     const mutationKey = ['postNhanviensExportdata']
-    const { mutation: mutationOptions, request: requestOptions } = options
+    const { mutation: mutationOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+        : { mutation: { mutationKey } }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postNhanviensExportdata>>,
@@ -2266,7 +2195,7 @@ export const getPostNhanviensExportdataMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return postNhanviensExportdata(data, requestOptions)
+        return postNhanviensExportdata(data)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -2286,7 +2215,6 @@ export const usePostNhanviensExportdata = <TError = unknown, TContext = unknown>
             { data: ExportListParameter },
             TContext
         >
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -2337,14 +2265,13 @@ export const getGetNhanviensHealthzQueryOptions = <
     TError = unknown,
 >(options?: {
     query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviensHealthz>>, TError, TData>>
-    request?: SecondParameter<typeof customSystemShareFetch>
 }) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+    const { query: queryOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetNhanviensHealthzQueryKey()
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getNhanviensHealthz>>> = ({ signal }) =>
-        getNhanviensHealthz({ signal, ...requestOptions })
+        getNhanviensHealthz(signal)
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getNhanviensHealthz>>,
@@ -2374,7 +2301,6 @@ export function useGetNhanviensHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2394,7 +2320,6 @@ export function useGetNhanviensHealthz<
                 >,
                 'initialData'
             >
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2406,7 +2331,6 @@ export function useGetNhanviensHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getNhanviensHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2422,7 +2346,6 @@ export function useGetNhanviensHealthz<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getNhanviensHealthz>>, TError, TData>
         >
-        request?: SecondParameter<typeof customSystemShareFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
