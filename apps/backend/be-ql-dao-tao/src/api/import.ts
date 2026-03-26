@@ -514,7 +514,10 @@ const importStudent = createRoute({
             content: {
                 'multipart/form-data': {
                     schema: UploadExcelModel.extend({
-                        createCurriculumVersion: z.coerce.boolean().default(false).optional(),
+                        createCurriculumVersion: z.preprocess(
+                            (val) => val === 'true' || val === true, 
+                            z.boolean()
+                        ).optional().default(false),
                         timeout: z.coerce.number().default(30),
                     }).openapi('ImportStudentRequest'),
                 },
@@ -743,6 +746,34 @@ app.openapi(importStudent, async (c) => {
         return c.json({ message: `Xung đột dữ liệu: ${dbConflictErrors.join('; ')}` }, 400)
     }
 
+    const uniqueNames = [...new Set(data.students.map(s => s.curriculum?.trim()))].filter(Boolean) as string[];
+
+    const existingCVs = await prisma.curriculumVersion.findMany({
+        where: { 
+            name: { in: uniqueNames },
+            trainingObjectTypeId: trainingObjectType.id,
+            deletedAt: null 
+        },
+        select: { id: true, name: true }
+    });
+
+    const cvIdMap = new Map(existingCVs.map(cv => [cv.name.trim(), cv.id]));
+
+    const missing = uniqueNames.filter(name => !cvIdMap.has(name));
+
+    const MAX_DISPLAY = 5; 
+
+    const errorMessage = missing.length <= MAX_DISPLAY
+        ? `Lỗi: Các CTĐT [${missing.join(', ')}] không tồn tại.`
+        : `Lỗi: Các CTĐT [${missing.slice(0, MAX_DISPLAY).join(', ')}, ... và ${missing.length - MAX_DISPLAY} CTĐT khác] không tồn tại.`;
+
+    if (!createCurriculumVersion && missing.length > 0) {
+        return c.json({ 
+            message: errorMessage,
+            details: missing
+        }, 400);
+    }
+
     const curriculumVersionMap = await buildCurriculumMapOrThrow(
         prisma,
         data.students,
@@ -808,21 +839,36 @@ app.openapi(importStudent, async (c) => {
     }
 
     const start = Date.now()
-    // await prisma.$transaction(
-    //     async (tx) => {
-    await prisma.fixedClass.createMany({
-        skipDuplicates: true,
-        data: data.students.map(
-            ({ fixedClass, fixedClassCode, curriculum, managementOrganization }) => ({
-                name: fixedClass,
-                code: fixedClassCode,
-                trainingCourseId: trainingCourse.id,
-                curriculumVersionId: curriculumVersionMap.get(curriculum),
-                managementOrganizationId: managementOrganizationMap?.get(managementOrganization),
-                startYear: new Date().getFullYear(),
-            })
-        ),
-    })
+
+    const uniqueClasses = Array.from(
+        new Map(data.students.map((s) => [s.fixedClassCode, s])).values()
+    );
+
+    await prisma.$transaction(
+        uniqueClasses.map((s) => {
+            const curriculumName = s.curriculum?.trim();
+            const cvId = curriculumVersionMap.get(curriculumName);
+            const orgId = managementOrganizationMap?.get(s.managementOrganization?.trim());
+
+            return prisma.fixedClass.upsert({
+                where: { code: s.fixedClassCode },
+                update: {
+                    name: s.fixedClass,
+                    trainingCourseId: trainingCourse.id,
+                    curriculumVersionId: cvId,
+                    managementOrganizationId: orgId,
+                },
+                create: {
+                    name: s.fixedClass,
+                    code: s.fixedClassCode,
+                    trainingCourseId: trainingCourse.id,
+                    curriculumVersionId: cvId,
+                    managementOrganizationId: orgId,
+                    startYear: new Date().getFullYear(),
+                },
+            });
+        })
+    );
 
     const fixedClass = await prisma.fixedClass.findMany({
         where: {
@@ -836,11 +882,14 @@ app.openapi(importStudent, async (c) => {
     const fixedClassMap = new Map(fixedClass.map(({ code, id }) => [code, id]))
 
     for (const student of data.students) {
+        const cvName = student.curriculum?.trim();
+        const cvId = curriculumVersionMap.get(cvName);
+        
         const studentData: Prisma.StudentCreateInput = {
             code: student.code,
             entryScore: Number.parseFloat(student.entryScore ?? '') || null,
             fixedClass: { connect: { id: fixedClassMap.get(student.fixedClassCode) } },
-            curriculumVersion: { connect: { id: curriculumVersionMap.get(student.curriculum) } },
+            curriculumVersion: cvId ? { connect: { id: cvId } } : undefined,
             userProfile: {},
             department: student.department,
             departmentAddress: student.departmentAddress,
