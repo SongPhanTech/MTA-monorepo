@@ -5,14 +5,14 @@ import {
     useFindManySubjectClassAttendanceStudent,
 } from '@workspace/db/hooks'
 import { Checkbox, Form, message } from 'antd'
-import { useEffect,useMemo,useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useSession } from '@workspace/auth/react'
 import { Table } from '@components/commons/table'
 import { queryClient } from '@api/index'
 import dayjs from 'dayjs'
-import { FilterProps } from '@constants/type';
+import { FilterProps } from '@constants/type'
 export type PutSubjectClassAttendance = {
     list: any[]
 }
@@ -55,47 +55,51 @@ const AddSubjectClassAttendanceStudent = () => {
     //         enabled: !!input?.id,
     //     }
     // )
-    const where=useMemo(()=>{
+    const where:any = useMemo(() => {
         return {
             subjectClassAttendanceId: input?.id,
-            ...(
-                (filters.name ||filters.idCardNumber ||filters.gender ||filters.dateOfBirth?.length === 2)&&{
-                      userProfile: {
-                ...(filters.name
-                    ? {
-                          fullname: {
-                              contains: filters.name,
-                              mode: 'insensitive',
-                          },
-                      }
-                    : {}),
-                ...(filters.idCardNumber
-                    ? {
-                          idCardNumber: {
-                              contains: filters.idCardNumber,
-                              mode: 'insensitive',
-                          },
-                      }
-                    : {}),
-                ...(filters.gender
-                    ? {
-                          genderId: {
-                              in: filters.gender,
-                          },
-                      }
-                    : {}),
-                ...(filters.dateOfBirth?.length === 2
-                    ? {
-                          dateOfBirth: {
-                              gte: dayjs(filters.dateOfBirth?.[0], 'DD/MM/YYYY').toDate(),
-                              lte: dayjs(filters.dateOfBirth?.[1], 'DD/MM/YYYY').toDate(),
-                          },
-                      }
-                    : {}),
-            },
-                }
-            ),
-             ...(filters.code
+            ...((filters.name ||
+                filters.idCardNumber ||
+                filters.gender ||
+                filters.dateOfBirth?.length === 2) && {
+                    student:{
+                                 userProfile: {
+                    ...(filters.name
+                        ? {
+                              fullname: {
+                                  contains: filters.name,
+                                  mode: 'insensitive',
+                              },
+                          }
+                        : {}),
+                    ...(filters.idCardNumber
+                        ? {
+                              idCardNumber: {
+                                  contains: filters.idCardNumber,
+                                  mode: 'insensitive',
+                              },
+                          }
+                        : {}),
+                    ...(filters.gender
+                        ? {
+                              genderId: {
+                                  in: filters.gender,
+                              },
+                          }
+                        : {}),
+                    ...(filters.dateOfBirth?.length === 2
+                        ? {
+                              dateOfBirth: {
+                                  gte: dayjs(filters.dateOfBirth?.[0], 'DD/MM/YYYY').toDate(),
+                                  lte: dayjs(filters.dateOfBirth?.[1], 'DD/MM/YYYY').toDate(),
+                              },
+                          }
+                        : {}),
+                },
+                    }
+           
+            }),
+            ...(filters.code
                 ? {
                       code: {
                           contains: filters.code,
@@ -104,10 +108,10 @@ const AddSubjectClassAttendanceStudent = () => {
                   }
                 : {}),
         }
-    },[input?.id,filters])
+    }, [input?.id, filters])
     const { data: dataStudent = [] } = useFindManySubjectClassAttendanceStudent(
         {
-            where: { subjectClassAttendanceId: input?.id },
+            where,
             include: {
                 subjectClassAttendance: true,
                 student: {
