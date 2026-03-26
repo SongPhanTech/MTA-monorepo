@@ -2670,6 +2670,14 @@ model ArchivedCertificate {
   student             Student                                    @relation(fields: [studentId], references: [id])
   studentId           String
   finalScore          Float                                      @default(0)
+  /// điểm nghe
+  listeningScore      Float?
+  /// điểm nói
+  speakingScore       Float?
+  /// điểm đọc
+  readingScore        Float?
+  /// điểm viết
+  writingScore        Float?
   /// điểm chứng chỉ
   score               Float?
   /// nơi cấp

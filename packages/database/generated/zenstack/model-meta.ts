@@ -9060,6 +9060,22 @@ const metadata: ModelMeta = {
                     name: "finalScore",
                     type: "Float",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                }, listeningScore: {
+                    name: "listeningScore",
+                    type: "Float",
+                    isOptional: true,
+                }, speakingScore: {
+                    name: "speakingScore",
+                    type: "Float",
+                    isOptional: true,
+                }, readingScore: {
+                    name: "readingScore",
+                    type: "Float",
+                    isOptional: true,
+                }, writingScore: {
+                    name: "writingScore",
+                    type: "Float",
+                    isOptional: true,
                 }, score: {
                     name: "score",
                     type: "Float",
