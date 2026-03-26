@@ -761,8 +761,17 @@ app.openapi(importStudent, async (c) => {
 
     const missing = uniqueNames.filter(name => !cvIdMap.has(name));
 
+    const MAX_DISPLAY = 5; 
+
+    const errorMessage = missing.length <= MAX_DISPLAY
+        ? `Lỗi: Các CTĐT [${missing.join(', ')}] không tồn tại.`
+        : `Lỗi: Các CTĐT [${missing.slice(0, MAX_DISPLAY).join(', ')}, ... và ${missing.length - MAX_DISPLAY} CTĐT khác] không tồn tại.`;
+
     if (!createCurriculumVersion && missing.length > 0) {
-        return c.json({ message: `Lỗi: CTĐT [${missing.join(', ')}] không tồn tại.` }, 400);
+        return c.json({ 
+            message: errorMessage,
+            details: missing
+        }, 400);
     }
 
     const curriculumVersionMap = await buildCurriculumMapOrThrow(
@@ -839,7 +848,7 @@ app.openapi(importStudent, async (c) => {
         uniqueClasses.map((s) => {
             const curriculumName = s.curriculum?.trim();
             const cvId = curriculumVersionMap.get(curriculumName);
-            const orgId = managementOrganizationMap.get(s.managementOrganization?.trim());
+            const orgId = managementOrganizationMap?.get(s.managementOrganization?.trim());
 
             return prisma.fixedClass.upsert({
                 where: { code: s.fixedClassCode },
