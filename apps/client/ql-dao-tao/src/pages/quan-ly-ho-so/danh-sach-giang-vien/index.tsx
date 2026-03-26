@@ -180,7 +180,7 @@ export default function UserProfilePageLecture() {
             ...(filters.organization
                 ? {
                       organizationId: {
-                          in: (filters?.organization as any)?.checked || [],
+                          in: filters.organization,
                       },
                   }
                 : !canXemTatCa
