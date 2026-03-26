@@ -116,7 +116,11 @@ const AddSubjectClassAttendanceStudent = () => {
                 subjectClassAttendance: true,
                 student: {
                     include: {
-                        userProfile: true,
+                        userProfile: {
+                            include: {
+                                gender: true,
+                            }
+                        },
                     },
                 },
             },
@@ -229,7 +233,7 @@ const AddSubjectClassAttendanceStudent = () => {
                         type: 'date',
                         render: (__, record) =>
                             record?.student?.userProfile?.dateOfBirth
-                                ? dayjs(record?.student.userProfile?.dateOfBirth).format(
+                                ? dayjs(record?.student?.userProfile?.dateOfBirth).format(
                                       'DD/MM/YYYY'
                                   )
                                 : '',
@@ -244,8 +248,8 @@ const AddSubjectClassAttendanceStudent = () => {
                             label: i.sTen,
                             value: i.Id,
                         })),
-                        render: (record) =>
-                            record?.student?.userProfile?.gender
+                        render: (__,record) =>
+                            record?.student?.userProfile?.gender?.sTen
                                 ? record?.student?.userProfile?.gender?.sTen
                                 : '',
                     },
@@ -259,12 +263,6 @@ const AddSubjectClassAttendanceStudent = () => {
                                     className="w-full mb-0"
                                     name={['list', index, 'attendanceStatus']}
                                     label=""
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: 'Vui lòng nhập giá trị',
-                                        },
-                                    ]}
                                     valuePropName="checked"
                                 >
                                     <Checkbox className="w-full flex justify-center" />
