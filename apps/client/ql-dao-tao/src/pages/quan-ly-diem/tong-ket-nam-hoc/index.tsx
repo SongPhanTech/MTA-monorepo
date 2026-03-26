@@ -32,23 +32,8 @@ export default function TongKetKyHoc() {
                         label: 'Tổng kết năm học',
                         children: <DiemTrungBinhNamHoc />,
                     },
-                    // {
-                    //     key: '2',
-                    //     label: 'Xét học bổng',
-                    //     children: <XetHocBong semesterId={semesterId} />,
-                    // },
-                    // {
-                    //     key: '3',
-                    //     label: 'Xét cảnh cáo học tập',
-                    //     children: <XetCanhCaoHocTap semesterId={semesterId} />,
-                    // },
-                    // {
-                    //     key: '4',
-                    //     label: 'Xét cảnh cáo học đường',
-                    //     children: <XetCanhCaoHocDuong semesterId={semesterId} />,
-                    // },
                     {
-                        key: '5',
+                        key: '2',
                         label: 'Xét thôi học',
                         children: (
                             <XetXuLyHocTap
@@ -59,7 +44,7 @@ export default function TongKetKyHoc() {
                         ),
                     },
                     {
-                        key: '6',
+                        key: '3',
                         label: 'Xét lưu ban',
                         children: (
                             <XetXuLyHocTap
@@ -69,16 +54,6 @@ export default function TongKetKyHoc() {
                             />
                         ),
                     },
-                    // {
-                    //     key: '7',
-                    //     label: 'Xét đình chỉ',
-                    //     children: (
-                    //         <XetXuLyHocTap
-                    //             semesterId={semesterId}
-                    //             actionTaken={AcademicActionType.SUSPENSION}
-                    //         />
-                    //     ),
-                    // },
                 ]}
                 className="custom-tab-bar"
                 tabBarStyle={{

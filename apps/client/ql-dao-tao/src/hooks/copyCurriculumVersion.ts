@@ -119,6 +119,7 @@ export const useCloneCurriculumVersion = () => {
                     create:
                         originalVersion.trainingBlocks?.map((block) => ({
                             priority: block.priority,
+                            electiveCreditsRequired: block.electiveCreditsRequired,
                             trainingBlock: { connect: { id: block.trainingBlockId } },
                             subjects: {
                                 create:
