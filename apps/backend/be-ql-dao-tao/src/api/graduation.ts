@@ -295,7 +295,7 @@ app.openapi(graduationCheck, async (c) => {
             scoreToRetain,
             scoreConverts,
         } = student.fixedClass.trainingCourse
-
+        
         //Kiểm tra các môn có lỗi (hoãn thi, cấm thi, đình chỉ, học lại)
         const subjectScoresWithIssues = await prisma.studentSubjectScore.findMany({
             where: {
@@ -455,7 +455,12 @@ app.openapi(graduationCheck, async (c) => {
                 .filter(({ id }) => !processedEquivalencyGroups.has(id))
 
             if (!subjectScore && !equivGroups.length) {
-                reasons.push(`Chưa đạt môn bắt buộc (${subject.subject.name})`)
+                // Môn tự chọn chưa học → bỏ qua, để bước check tín chỉ tự chọn xử lý
+                if (subject.type === SubjectRequirementType.Optional) continue
+                // Môn bắt buộc chưa học và không có equivalency
+                if (subject.useForFinalScore) {
+                    reasons.push(`Chưa đạt môn bắt buộc (${subject.subject.name})`)
+                }
                 continue
             }
 
@@ -545,7 +550,6 @@ app.openapi(graduationCheck, async (c) => {
             }
         }
 
-        //Tính debt credit — sau equivalency để tránh tính môn đã được thay thế
         let totalDebtCredit = 0
         for (const subject of curriculumSubjects) {
             // Bỏ qua môn không tính vào điểm tích luỹ
@@ -557,7 +561,6 @@ app.openapi(graduationCheck, async (c) => {
 
             totalDebtCredit += subject.subject.credit
         }
-
         // Kiểm tra & lọc tín chỉ tự chọn 
         // Chỉ xét các môn tự chọn trong CTĐT, loại những môn đã được equivalency xử lý
         const electiveSubjects = curriculumSubjects.filter(
@@ -724,7 +727,6 @@ app.openapi(graduationCheck, async (c) => {
             IS_DEBT_SUBJECT_CONSECUTIVE: false,
             HAS_IMPROVEMENT_REGISTRATION: false,
         }
-
         // Nếu có lý do thất bại → không xét xếp loại
         if (reasons.length > 0) {
             results.push({
