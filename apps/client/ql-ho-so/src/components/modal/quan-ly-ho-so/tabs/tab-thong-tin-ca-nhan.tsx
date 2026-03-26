@@ -104,6 +104,7 @@ export default function ThongTinCaNhanTab({
         },
         {
             enabled: !!idCardNumber,
+            refetchOnWindowFocus: false,
         }
     )
 

@@ -364,10 +364,7 @@ const PutArchivedAwardModal = () => {
                     label={
                         <div className="flex flex-col">
                             <span>Cộng điểm học phần</span>
-                            <div
-                                className="font-normal mt-1"
-                                onClick={(e) => e.preventDefault()}
-                            >
+                            <div className="font-normal mt-1" onClick={(e) => e.preventDefault()}>
                                 <Switch
                                     checked={filterByAward}
                                     onChange={setFilterByAward}

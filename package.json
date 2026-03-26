@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:",
+    "@biomejs/cli-darwin-arm64": "^2.4.9",
     "@commitlint/cli": "catalog:",
     "@commitlint/config-conventional": "catalog:",
     "husky": "catalog:",

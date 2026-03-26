@@ -115,11 +115,14 @@ const DefaultLayout = ({
 
     const isAuthenticated = sessionVerified && status === 'authenticated'
 
-    const { data: userSessionTimeout } = useFindUniqueConfig({
-        where: {
-            key: CONFIG_KEY.USER_SESSION_TIMEOUT,
+    const { data: userSessionTimeout } = useFindUniqueConfig(
+        {
+            where: {
+                key: CONFIG_KEY.USER_SESSION_TIMEOUT,
+            },
         },
-    }, { enabled: isAuthenticated })
+        { enabled: isAuthenticated }
+    )
 
     const {
         token: { colorBgContainer },

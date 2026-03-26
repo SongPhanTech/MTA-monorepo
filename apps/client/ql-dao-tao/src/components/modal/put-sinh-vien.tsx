@@ -180,6 +180,7 @@ const PutStudentModal = () => {
         },
         {
             enabled: !!idCardNumber,
+            refetchOnWindowFocus: false,
         }
     )
 

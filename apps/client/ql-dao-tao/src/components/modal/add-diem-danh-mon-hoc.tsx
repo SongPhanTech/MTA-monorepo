@@ -55,49 +55,48 @@ const AddSubjectClassAttendanceStudent = () => {
     //         enabled: !!input?.id,
     //     }
     // )
-    const where:any = useMemo(() => {
+    const where: any = useMemo(() => {
         return {
             subjectClassAttendanceId: input?.id,
             ...((filters.name ||
                 filters.idCardNumber ||
                 filters.gender ||
                 filters.dateOfBirth?.length === 2) && {
-                    student:{
-                                 userProfile: {
-                    ...(filters.name
-                        ? {
-                              fullname: {
-                                  contains: filters.name,
-                                  mode: 'insensitive',
-                              },
-                          }
-                        : {}),
-                    ...(filters.idCardNumber
-                        ? {
-                              idCardNumber: {
-                                  contains: filters.idCardNumber,
-                                  mode: 'insensitive',
-                              },
-                          }
-                        : {}),
-                    ...(filters.gender
-                        ? {
-                              genderId: {
-                                  in: filters.gender,
-                              },
-                          }
-                        : {}),
-                    ...(filters.dateOfBirth?.length === 2
-                        ? {
-                              dateOfBirth: {
-                                  gte: dayjs(filters.dateOfBirth?.[0], 'DD/MM/YYYY').toDate(),
-                                  lte: dayjs(filters.dateOfBirth?.[1], 'DD/MM/YYYY').toDate(),
-                              },
-                          }
-                        : {}),
+                student: {
+                    userProfile: {
+                        ...(filters.name
+                            ? {
+                                  fullname: {
+                                      contains: filters.name,
+                                      mode: 'insensitive',
+                                  },
+                              }
+                            : {}),
+                        ...(filters.idCardNumber
+                            ? {
+                                  idCardNumber: {
+                                      contains: filters.idCardNumber,
+                                      mode: 'insensitive',
+                                  },
+                              }
+                            : {}),
+                        ...(filters.gender
+                            ? {
+                                  genderId: {
+                                      in: filters.gender,
+                                  },
+                              }
+                            : {}),
+                        ...(filters.dateOfBirth?.length === 2
+                            ? {
+                                  dateOfBirth: {
+                                      gte: dayjs(filters.dateOfBirth?.[0], 'DD/MM/YYYY').toDate(),
+                                      lte: dayjs(filters.dateOfBirth?.[1], 'DD/MM/YYYY').toDate(),
+                                  },
+                              }
+                            : {}),
+                    },
                 },
-                    }
-           
             }),
             ...(filters.code
                 ? {
@@ -119,7 +118,7 @@ const AddSubjectClassAttendanceStudent = () => {
                         userProfile: {
                             include: {
                                 gender: true,
-                            }
+                            },
                         },
                     },
                 },
@@ -248,7 +247,7 @@ const AddSubjectClassAttendanceStudent = () => {
                             label: i.sTen,
                             value: i.Id,
                         })),
-                        render: (__,record) =>
+                        render: (__, record) =>
                             record?.student?.userProfile?.gender?.sTen
                                 ? record?.student?.userProfile?.gender?.sTen
                                 : '',

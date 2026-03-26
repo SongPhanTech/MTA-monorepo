@@ -58,7 +58,10 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
         return color
     }
 
-    const htmlToParagraphs = async (html: string, isInsideTable = false): Promise<(Paragraph | Table)[]> => {
+    const htmlToParagraphs = async (
+        html: string,
+        isInsideTable = false
+    ): Promise<(Paragraph | Table)[]> => {
         if (!html) return []
 
         const parser = new DOMParser()
@@ -76,10 +79,23 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
             } else if (n.nodeType === Node.ELEMENT_NODE) {
                 const el = n as HTMLElement
                 const newStyle = { ...currentStyle }
-                if (el.tagName === 'B' || el.tagName === 'STRONG' || el.style.fontWeight === 'bold') newStyle.bold = true
-                if (el.tagName === 'I' || el.tagName === 'EM' || el.style.fontStyle === 'italic') newStyle.italics = true
-                if (el.tagName === 'U' || el.tagName === 'INS' || el.style.textDecoration.includes('underline')) newStyle.underline = { type: 'single' } as any
-                if (el.tagName === 'S' || el.tagName === 'STRIKE' || el.tagName === 'DEL' || el.style.textDecoration.includes('line-through')) newStyle.strike = true
+                if (el.tagName === 'B' || el.tagName === 'STRONG' || el.style.fontWeight === 'bold')
+                    newStyle.bold = true
+                if (el.tagName === 'I' || el.tagName === 'EM' || el.style.fontStyle === 'italic')
+                    newStyle.italics = true
+                if (
+                    el.tagName === 'U' ||
+                    el.tagName === 'INS' ||
+                    el.style.textDecoration.includes('underline')
+                )
+                    newStyle.underline = { type: 'single' } as any
+                if (
+                    el.tagName === 'S' ||
+                    el.tagName === 'STRIKE' ||
+                    el.tagName === 'DEL' ||
+                    el.style.textDecoration.includes('line-through')
+                )
+                    newStyle.strike = true
                 if (el.tagName === 'SUB') newStyle.subScript = true
                 if (el.tagName === 'SUP') newStyle.superScript = true
                 if (/^H([1-6])$/.test(el.tagName)) newStyle.bold = true
@@ -87,7 +103,7 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
                 const cColor = normalizeColor(el.style.color)
                 if (cColor) newStyle.color = cColor
 
-                el.childNodes.forEach(child => {
+                el.childNodes.forEach((child) => {
                     runs.push(...extractRuns(child, newStyle))
                 })
             }
@@ -190,9 +206,9 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
                         rows.push(new TableRow({ children: cells }))
                     }
                     paragraphs.push(
-                        new Table({ 
-                            rows, 
-                            width: { size: 100, type: WidthType.PERCENTAGE }
+                        new Table({
+                            rows,
+                            width: { size: 100, type: WidthType.PERCENTAGE },
                         })
                     )
                 } else if (
@@ -204,10 +220,12 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
                 ) {
                     const isHeading = el.tagName.match(/^H([1-6])$/)
                     const hSizes = [32, 28, 26, 26, 26, 26]
-                    const baseStyle = isHeading ? { size: hSizes[parseInt(isHeading[1], 10) - 1], bold: true } : { size: SIZE_BODY }
-                    
+                    const baseStyle = isHeading
+                        ? { size: hSizes[parseInt(isHeading[1], 10) - 1], bold: true }
+                        : { size: SIZE_BODY }
+
                     const runs: TextRun[] = []
-                    el.childNodes.forEach(child => runs.push(...extractRuns(child, baseStyle)))
+                    el.childNodes.forEach((child) => runs.push(...extractRuns(child, baseStyle)))
 
                     if (el.tagName === 'LI') {
                         const isNumber = el.parentElement?.tagName === 'OL'
@@ -220,7 +238,9 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
                     }
 
                     const textAlign = el.style.textAlign || ''
-                    let alignment: any = isInsideTable ? AlignmentType.LEFT : AlignmentType.JUSTIFIED
+                    let alignment: any = isInsideTable
+                        ? AlignmentType.LEFT
+                        : AlignmentType.JUSTIFIED
                     if (textAlign === 'center') alignment = AlignmentType.CENTER
                     else if (textAlign === 'right') alignment = AlignmentType.RIGHT
                     else if (textAlign === 'justify') alignment = AlignmentType.JUSTIFIED
@@ -228,7 +248,9 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
 
                     let indent: any = isInsideTable ? undefined : { firstLine: 720 }
                     if (el.tagName === 'LI') {
-                        indent = isInsideTable ? { left: 360, hanging: 360 } : { left: 720, hanging: 360 }
+                        indent = isInsideTable
+                            ? { left: 360, hanging: 360 }
+                            : { left: 720, hanging: 360 }
                     }
 
                     paragraphs.push(
@@ -236,9 +258,7 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
                             indent: indent,
                             alignment: alignment,
                             children:
-                                runs.length > 0
-                                    ? runs
-                                    : [new TextRun({ text: '', ...baseStyle })],
+                                runs.length > 0 ? runs : [new TextRun({ text: '', ...baseStyle })],
                         })
                     )
                 } else {
@@ -536,7 +556,11 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
                             borders: noBorders,
                             children: [
                                 cellP('Xác nhận', { bold: true, center: true, size: 28 }),
-                                cellP('của trưởng nhóm công tác', { bold: true, center: true, size: 28 }),
+                                cellP('của trưởng nhóm công tác', {
+                                    bold: true,
+                                    center: true,
+                                    size: 28,
+                                }),
                             ],
                         }),
                         new TableCell({
