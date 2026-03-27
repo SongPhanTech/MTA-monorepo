@@ -631,6 +631,12 @@ export default function DanhSachLopMonHoc({
                                     // render: (record: string) =>
                                     //     record ? dayjs(record).format('DD/MM/YYYY') : '',
                                     render: (_, record) => {
+                                        const canEdit = canUpdate || role === 'P2/P7'
+
+                                        if (!canEdit) {
+                                            return record.examDate ? dayjs(record.examDate).format('DD/MM/YYYY') : ''
+                                        }
+
                                         const isExpired =
                                             record?.examScoreDeadline &&
                                             dayjs().isAfter(dayjs(record.examScoreDeadline))
@@ -647,7 +653,6 @@ export default function DanhSachLopMonHoc({
                                                         'w-full px-1',
                                                         isExpired && 'border-red-500'
                                                     )}
-                                                    disabled={isExpired || !canUpdate}
                                                     status={isExpired ? 'error' : ''}
                                                     onChange={() => {
                                                         diemLopMonHocStore.setState({
