@@ -3,7 +3,6 @@ import type { $Enums } from '@workspace/db/client'
 import { useFindManySubjectVersion } from '@workspace/db/hooks'
 import { examTypes, subjectVersionTypes } from '@workspace/libs'
 import type { SubjectResult } from '@workspace/libs/parseExcel'
-
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Checkbox, Collapse, Modal, Tooltip } from 'antd'
 import { useMemo, useState } from 'react'
@@ -328,7 +327,7 @@ const ModalPreviewUpload = () => {
                             title: 'Hình thức thi',
                             align: 'center',
                             width: 100,
-                            render: (value) => mapExamType(value),
+                            render: (_, record) => mapExamType(record.examType),
                         },
                         {
                             title: 'Một đầu điểm',
@@ -341,19 +340,16 @@ const ModalPreviewUpload = () => {
                     ]}
                     data={filteredData}
                     pagination={{
-                        hideOnSinglePage: true,
                         current: currentPage,
                         pageSize: numberOfPages,
-                        total: filteredData.length,
                         onChange: (page, pageSize) => {
-                            setCurrentPage(page)
-                            setNumberOfPages(pageSize)
+                            if (numberOfPages === pageSize) {
+                                setCurrentPage(page)
+                            } else {
+                                setCurrentPage(1)
+                                setNumberOfPages(pageSize)
+                            }
                         },
-                        onShowSizeChange: (size: number) => {
-                            setNumberOfPages(size)
-                            setCurrentPage(1)
-                        },
-                        showTotal: (total) => `Tổng ${total} môn học`,
                     }}
                     rowKey={'id'}
                 />

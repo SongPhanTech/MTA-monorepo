@@ -2,7 +2,7 @@ import { queryClient } from '@api/index'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import type { $Enums } from '@workspace/db/client'
+import { $Enums } from '@workspace/db/client'
 import {
     useDeleteManyPlanTrainingSubject,
     useFindFirstPlanTraining,
@@ -163,7 +163,11 @@ export default function MonDaLapKeHoach({ type }: { type?: $Enums.SubjectClassTy
                 queryKey: ['zenstack', 'PlanTrainingSubject'],
             })
             queryClient.invalidateQueries({
-                queryKey: ['/api/subject-class/open-subject-class-retake'],
+                queryKey: [
+                    type === $Enums.SubjectClassType.RETAKE
+                        ? '/api/subject-class/open-subject-class-retake'
+                        : '/api/subject-class/open-subject-class-reexam',
+                ],
             })
         }, 500),
         []

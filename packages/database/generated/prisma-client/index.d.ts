@@ -137200,11 +137200,19 @@ export namespace Prisma {
 
   export type ArchivedCertificateAvgAggregateOutputType = {
     finalScore: number | null
+    listeningScore: number | null
+    speakingScore: number | null
+    readingScore: number | null
+    writingScore: number | null
     score: number | null
   }
 
   export type ArchivedCertificateSumAggregateOutputType = {
     finalScore: number | null
+    listeningScore: number | null
+    speakingScore: number | null
+    readingScore: number | null
+    writingScore: number | null
     score: number | null
   }
 
@@ -137220,6 +137228,10 @@ export namespace Prisma {
     certificateId: string | null
     studentId: string | null
     finalScore: number | null
+    listeningScore: number | null
+    speakingScore: number | null
+    readingScore: number | null
+    writingScore: number | null
     score: number | null
     issuedBy: string | null
     issuedDate: Date | null
@@ -137240,6 +137252,10 @@ export namespace Prisma {
     certificateId: string | null
     studentId: string | null
     finalScore: number | null
+    listeningScore: number | null
+    speakingScore: number | null
+    readingScore: number | null
+    writingScore: number | null
     score: number | null
     issuedBy: string | null
     issuedDate: Date | null
@@ -137260,6 +137276,10 @@ export namespace Prisma {
     certificateId: number
     studentId: number
     finalScore: number
+    listeningScore: number
+    speakingScore: number
+    readingScore: number
+    writingScore: number
     score: number
     issuedBy: number
     issuedDate: number
@@ -137272,11 +137292,19 @@ export namespace Prisma {
 
   export type ArchivedCertificateAvgAggregateInputType = {
     finalScore?: true
+    listeningScore?: true
+    speakingScore?: true
+    readingScore?: true
+    writingScore?: true
     score?: true
   }
 
   export type ArchivedCertificateSumAggregateInputType = {
     finalScore?: true
+    listeningScore?: true
+    speakingScore?: true
+    readingScore?: true
+    writingScore?: true
     score?: true
   }
 
@@ -137292,6 +137320,10 @@ export namespace Prisma {
     certificateId?: true
     studentId?: true
     finalScore?: true
+    listeningScore?: true
+    speakingScore?: true
+    readingScore?: true
+    writingScore?: true
     score?: true
     issuedBy?: true
     issuedDate?: true
@@ -137312,6 +137344,10 @@ export namespace Prisma {
     certificateId?: true
     studentId?: true
     finalScore?: true
+    listeningScore?: true
+    speakingScore?: true
+    readingScore?: true
+    writingScore?: true
     score?: true
     issuedBy?: true
     issuedDate?: true
@@ -137332,6 +137368,10 @@ export namespace Prisma {
     certificateId?: true
     studentId?: true
     finalScore?: true
+    listeningScore?: true
+    speakingScore?: true
+    readingScore?: true
+    writingScore?: true
     score?: true
     issuedBy?: true
     issuedDate?: true
@@ -137439,6 +137479,10 @@ export namespace Prisma {
     certificateId: string
     studentId: string
     finalScore: number
+    listeningScore: number | null
+    speakingScore: number | null
+    readingScore: number | null
+    writingScore: number | null
     score: number | null
     issuedBy: string | null
     issuedDate: Date | null
@@ -137478,6 +137522,10 @@ export namespace Prisma {
     certificateId?: boolean
     studentId?: boolean
     finalScore?: boolean
+    listeningScore?: boolean
+    speakingScore?: boolean
+    readingScore?: boolean
+    writingScore?: boolean
     score?: boolean
     issuedBy?: boolean
     issuedDate?: boolean
@@ -137503,6 +137551,10 @@ export namespace Prisma {
     certificateId?: boolean
     studentId?: boolean
     finalScore?: boolean
+    listeningScore?: boolean
+    speakingScore?: boolean
+    readingScore?: boolean
+    writingScore?: boolean
     score?: boolean
     issuedBy?: boolean
     issuedDate?: boolean
@@ -137525,6 +137577,10 @@ export namespace Prisma {
     certificateId?: boolean
     studentId?: boolean
     finalScore?: boolean
+    listeningScore?: boolean
+    speakingScore?: boolean
+    readingScore?: boolean
+    writingScore?: boolean
     score?: boolean
     issuedBy?: boolean
     issuedDate?: boolean
@@ -137547,6 +137603,10 @@ export namespace Prisma {
     certificateId?: boolean
     studentId?: boolean
     finalScore?: boolean
+    listeningScore?: boolean
+    speakingScore?: boolean
+    readingScore?: boolean
+    writingScore?: boolean
     score?: boolean
     issuedBy?: boolean
     issuedDate?: boolean
@@ -137555,7 +137615,7 @@ export namespace Prisma {
     decisionNumber?: boolean
   }
 
-  export type ArchivedCertificateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "certificateId" | "studentId" | "finalScore" | "score" | "issuedBy" | "issuedDate" | "expiredDate" | "status" | "decisionNumber", ExtArgs["result"]["archivedCertificate"]>
+  export type ArchivedCertificateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "certificateId" | "studentId" | "finalScore" | "listeningScore" | "speakingScore" | "readingScore" | "writingScore" | "score" | "issuedBy" | "issuedDate" | "expiredDate" | "status" | "decisionNumber", ExtArgs["result"]["archivedCertificate"]>
   export type ArchivedCertificateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     certificate?: boolean | CertificateDefaultArgs<ExtArgs>
     student?: boolean | StudentDefaultArgs<ExtArgs>
@@ -137592,6 +137652,22 @@ export namespace Prisma {
       certificateId: string
       studentId: string
       finalScore: number
+      /**
+       * điểm nghe
+       */
+      listeningScore: number | null
+      /**
+       * điểm nói
+       */
+      speakingScore: number | null
+      /**
+       * điểm đọc
+       */
+      readingScore: number | null
+      /**
+       * điểm viết
+       */
+      writingScore: number | null
       /**
        * điểm chứng chỉ
        */
@@ -138048,6 +138124,10 @@ export namespace Prisma {
     readonly certificateId: FieldRef<"ArchivedCertificate", 'String'>
     readonly studentId: FieldRef<"ArchivedCertificate", 'String'>
     readonly finalScore: FieldRef<"ArchivedCertificate", 'Float'>
+    readonly listeningScore: FieldRef<"ArchivedCertificate", 'Float'>
+    readonly speakingScore: FieldRef<"ArchivedCertificate", 'Float'>
+    readonly readingScore: FieldRef<"ArchivedCertificate", 'Float'>
+    readonly writingScore: FieldRef<"ArchivedCertificate", 'Float'>
     readonly score: FieldRef<"ArchivedCertificate", 'Float'>
     readonly issuedBy: FieldRef<"ArchivedCertificate", 'String'>
     readonly issuedDate: FieldRef<"ArchivedCertificate", 'DateTime'>
@@ -378595,6 +378675,10 @@ export namespace Prisma {
     certificateId: 'certificateId',
     studentId: 'studentId',
     finalScore: 'finalScore',
+    listeningScore: 'listeningScore',
+    speakingScore: 'speakingScore',
+    readingScore: 'readingScore',
+    writingScore: 'writingScore',
     score: 'score',
     issuedBy: 'issuedBy',
     issuedDate: 'issuedDate',
@@ -396650,6 +396734,10 @@ export namespace Prisma {
     certificateId?: StringFilter<"ArchivedCertificate"> | string
     studentId?: StringFilter<"ArchivedCertificate"> | string
     finalScore?: FloatFilter<"ArchivedCertificate"> | number
+    listeningScore?: FloatNullableFilter<"ArchivedCertificate"> | number | null
+    speakingScore?: FloatNullableFilter<"ArchivedCertificate"> | number | null
+    readingScore?: FloatNullableFilter<"ArchivedCertificate"> | number | null
+    writingScore?: FloatNullableFilter<"ArchivedCertificate"> | number | null
     score?: FloatNullableFilter<"ArchivedCertificate"> | number | null
     issuedBy?: StringNullableFilter<"ArchivedCertificate"> | string | null
     issuedDate?: DateTimeNullableFilter<"ArchivedCertificate"> | Date | string | null
@@ -396674,6 +396762,10 @@ export namespace Prisma {
     certificateId?: SortOrder
     studentId?: SortOrder
     finalScore?: SortOrder
+    listeningScore?: SortOrderInput | SortOrder
+    speakingScore?: SortOrderInput | SortOrder
+    readingScore?: SortOrderInput | SortOrder
+    writingScore?: SortOrderInput | SortOrder
     score?: SortOrderInput | SortOrder
     issuedBy?: SortOrderInput | SortOrder
     issuedDate?: SortOrderInput | SortOrder
@@ -396702,6 +396794,10 @@ export namespace Prisma {
     certificateId?: StringFilter<"ArchivedCertificate"> | string
     studentId?: StringFilter<"ArchivedCertificate"> | string
     finalScore?: FloatFilter<"ArchivedCertificate"> | number
+    listeningScore?: FloatNullableFilter<"ArchivedCertificate"> | number | null
+    speakingScore?: FloatNullableFilter<"ArchivedCertificate"> | number | null
+    readingScore?: FloatNullableFilter<"ArchivedCertificate"> | number | null
+    writingScore?: FloatNullableFilter<"ArchivedCertificate"> | number | null
     score?: FloatNullableFilter<"ArchivedCertificate"> | number | null
     issuedBy?: StringNullableFilter<"ArchivedCertificate"> | string | null
     issuedDate?: DateTimeNullableFilter<"ArchivedCertificate"> | Date | string | null
@@ -396726,6 +396822,10 @@ export namespace Prisma {
     certificateId?: SortOrder
     studentId?: SortOrder
     finalScore?: SortOrder
+    listeningScore?: SortOrderInput | SortOrder
+    speakingScore?: SortOrderInput | SortOrder
+    readingScore?: SortOrderInput | SortOrder
+    writingScore?: SortOrderInput | SortOrder
     score?: SortOrderInput | SortOrder
     issuedBy?: SortOrderInput | SortOrder
     issuedDate?: SortOrderInput | SortOrder
@@ -396754,6 +396854,10 @@ export namespace Prisma {
     certificateId?: StringWithAggregatesFilter<"ArchivedCertificate"> | string
     studentId?: StringWithAggregatesFilter<"ArchivedCertificate"> | string
     finalScore?: FloatWithAggregatesFilter<"ArchivedCertificate"> | number
+    listeningScore?: FloatNullableWithAggregatesFilter<"ArchivedCertificate"> | number | null
+    speakingScore?: FloatNullableWithAggregatesFilter<"ArchivedCertificate"> | number | null
+    readingScore?: FloatNullableWithAggregatesFilter<"ArchivedCertificate"> | number | null
+    writingScore?: FloatNullableWithAggregatesFilter<"ArchivedCertificate"> | number | null
     score?: FloatNullableWithAggregatesFilter<"ArchivedCertificate"> | number | null
     issuedBy?: StringNullableWithAggregatesFilter<"ArchivedCertificate"> | string | null
     issuedDate?: DateTimeNullableWithAggregatesFilter<"ArchivedCertificate"> | Date | string | null
@@ -428379,6 +428483,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     finalScore?: number
+    listeningScore?: number | null
+    speakingScore?: number | null
+    readingScore?: number | null
+    writingScore?: number | null
     score?: number | null
     issuedBy?: string | null
     issuedDate?: Date | string | null
@@ -428403,6 +428511,10 @@ export namespace Prisma {
     certificateId: string
     studentId: string
     finalScore?: number
+    listeningScore?: number | null
+    speakingScore?: number | null
+    readingScore?: number | null
+    writingScore?: number | null
     score?: number | null
     issuedBy?: string | null
     issuedDate?: Date | string | null
@@ -428423,6 +428535,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     finalScore?: FloatFieldUpdateOperationsInput | number
+    listeningScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    speakingScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    readingScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    writingScore?: NullableFloatFieldUpdateOperationsInput | number | null
     score?: NullableFloatFieldUpdateOperationsInput | number | null
     issuedBy?: NullableStringFieldUpdateOperationsInput | string | null
     issuedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -428447,6 +428563,10 @@ export namespace Prisma {
     certificateId?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     finalScore?: FloatFieldUpdateOperationsInput | number
+    listeningScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    speakingScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    readingScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    writingScore?: NullableFloatFieldUpdateOperationsInput | number | null
     score?: NullableFloatFieldUpdateOperationsInput | number | null
     issuedBy?: NullableStringFieldUpdateOperationsInput | string | null
     issuedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -428469,6 +428589,10 @@ export namespace Prisma {
     certificateId: string
     studentId: string
     finalScore?: number
+    listeningScore?: number | null
+    speakingScore?: number | null
+    readingScore?: number | null
+    writingScore?: number | null
     score?: number | null
     issuedBy?: string | null
     issuedDate?: Date | string | null
@@ -428487,6 +428611,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     finalScore?: FloatFieldUpdateOperationsInput | number
+    listeningScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    speakingScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    readingScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    writingScore?: NullableFloatFieldUpdateOperationsInput | number | null
     score?: NullableFloatFieldUpdateOperationsInput | number | null
     issuedBy?: NullableStringFieldUpdateOperationsInput | string | null
     issuedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -428507,6 +428635,10 @@ export namespace Prisma {
     certificateId?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     finalScore?: FloatFieldUpdateOperationsInput | number
+    listeningScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    speakingScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    readingScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    writingScore?: NullableFloatFieldUpdateOperationsInput | number | null
     score?: NullableFloatFieldUpdateOperationsInput | number | null
     issuedBy?: NullableStringFieldUpdateOperationsInput | string | null
     issuedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -458985,6 +459117,10 @@ export namespace Prisma {
     certificateId?: SortOrder
     studentId?: SortOrder
     finalScore?: SortOrder
+    listeningScore?: SortOrder
+    speakingScore?: SortOrder
+    readingScore?: SortOrder
+    writingScore?: SortOrder
     score?: SortOrder
     issuedBy?: SortOrder
     issuedDate?: SortOrder
@@ -458995,6 +459131,10 @@ export namespace Prisma {
 
   export type ArchivedCertificateAvgOrderByAggregateInput = {
     finalScore?: SortOrder
+    listeningScore?: SortOrder
+    speakingScore?: SortOrder
+    readingScore?: SortOrder
+    writingScore?: SortOrder
     score?: SortOrder
   }
 
@@ -459010,6 +459150,10 @@ export namespace Prisma {
     certificateId?: SortOrder
     studentId?: SortOrder
     finalScore?: SortOrder
+    listeningScore?: SortOrder
+    speakingScore?: SortOrder
+    readingScore?: SortOrder
+    writingScore?: SortOrder
     score?: SortOrder
     issuedBy?: SortOrder
     issuedDate?: SortOrder
@@ -459030,6 +459174,10 @@ export namespace Prisma {
     certificateId?: SortOrder
     studentId?: SortOrder
     finalScore?: SortOrder
+    listeningScore?: SortOrder
+    speakingScore?: SortOrder
+    readingScore?: SortOrder
+    writingScore?: SortOrder
     score?: SortOrder
     issuedBy?: SortOrder
     issuedDate?: SortOrder
@@ -459040,6 +459188,10 @@ export namespace Prisma {
 
   export type ArchivedCertificateSumOrderByAggregateInput = {
     finalScore?: SortOrder
+    listeningScore?: SortOrder
+    speakingScore?: SortOrder
+    readingScore?: SortOrder
+    writingScore?: SortOrder
     score?: SortOrder
   }
 
@@ -557636,6 +557788,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     finalScore?: number
+    listeningScore?: number | null
+    speakingScore?: number | null
+    readingScore?: number | null
+    writingScore?: number | null
     score?: number | null
     issuedBy?: string | null
     issuedDate?: Date | string | null
@@ -557659,6 +557815,10 @@ export namespace Prisma {
     certificateId: string
     studentId: string
     finalScore?: number
+    listeningScore?: number | null
+    speakingScore?: number | null
+    readingScore?: number | null
+    writingScore?: number | null
     score?: number | null
     issuedBy?: string | null
     issuedDate?: Date | string | null
@@ -557783,6 +557943,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     finalScore?: FloatFieldUpdateOperationsInput | number
+    listeningScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    speakingScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    readingScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    writingScore?: NullableFloatFieldUpdateOperationsInput | number | null
     score?: NullableFloatFieldUpdateOperationsInput | number | null
     issuedBy?: NullableStringFieldUpdateOperationsInput | string | null
     issuedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -557806,6 +557970,10 @@ export namespace Prisma {
     certificateId?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     finalScore?: FloatFieldUpdateOperationsInput | number
+    listeningScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    speakingScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    readingScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    writingScore?: NullableFloatFieldUpdateOperationsInput | number | null
     score?: NullableFloatFieldUpdateOperationsInput | number | null
     issuedBy?: NullableStringFieldUpdateOperationsInput | string | null
     issuedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -586755,6 +586923,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     finalScore?: number
+    listeningScore?: number | null
+    speakingScore?: number | null
+    readingScore?: number | null
+    writingScore?: number | null
     score?: number | null
     issuedBy?: string | null
     issuedDate?: Date | string | null
@@ -586777,6 +586949,10 @@ export namespace Prisma {
     createdBy?: string | null
     studentId: string
     finalScore?: number
+    listeningScore?: number | null
+    speakingScore?: number | null
+    readingScore?: number | null
+    writingScore?: number | null
     score?: number | null
     issuedBy?: string | null
     issuedDate?: Date | string | null
@@ -586903,6 +587079,10 @@ export namespace Prisma {
     certificateId?: StringFilter<"ArchivedCertificate"> | string
     studentId?: StringFilter<"ArchivedCertificate"> | string
     finalScore?: FloatFilter<"ArchivedCertificate"> | number
+    listeningScore?: FloatNullableFilter<"ArchivedCertificate"> | number | null
+    speakingScore?: FloatNullableFilter<"ArchivedCertificate"> | number | null
+    readingScore?: FloatNullableFilter<"ArchivedCertificate"> | number | null
+    writingScore?: FloatNullableFilter<"ArchivedCertificate"> | number | null
     score?: FloatNullableFilter<"ArchivedCertificate"> | number | null
     issuedBy?: StringNullableFilter<"ArchivedCertificate"> | string | null
     issuedDate?: DateTimeNullableFilter<"ArchivedCertificate"> | Date | string | null
@@ -589449,6 +589629,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     finalScore?: number
+    listeningScore?: number | null
+    speakingScore?: number | null
+    readingScore?: number | null
+    writingScore?: number | null
     score?: number | null
     issuedBy?: string | null
     issuedDate?: Date | string | null
@@ -589471,6 +589655,10 @@ export namespace Prisma {
     createdBy?: string | null
     certificateId: string
     finalScore?: number
+    listeningScore?: number | null
+    speakingScore?: number | null
+    readingScore?: number | null
+    writingScore?: number | null
     score?: number | null
     issuedBy?: string | null
     issuedDate?: Date | string | null
@@ -593462,6 +593650,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     finalScore?: number
+    listeningScore?: number | null
+    speakingScore?: number | null
+    readingScore?: number | null
+    writingScore?: number | null
     score?: number | null
     issuedBy?: string | null
     issuedDate?: Date | string | null
@@ -593485,6 +593677,10 @@ export namespace Prisma {
     certificateId: string
     studentId: string
     finalScore?: number
+    listeningScore?: number | null
+    speakingScore?: number | null
+    readingScore?: number | null
+    writingScore?: number | null
     score?: number | null
     issuedBy?: string | null
     issuedDate?: Date | string | null
@@ -594706,6 +594902,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     finalScore?: FloatFieldUpdateOperationsInput | number
+    listeningScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    speakingScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    readingScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    writingScore?: NullableFloatFieldUpdateOperationsInput | number | null
     score?: NullableFloatFieldUpdateOperationsInput | number | null
     issuedBy?: NullableStringFieldUpdateOperationsInput | string | null
     issuedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -594729,6 +594929,10 @@ export namespace Prisma {
     certificateId?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     finalScore?: FloatFieldUpdateOperationsInput | number
+    listeningScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    speakingScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    readingScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    writingScore?: NullableFloatFieldUpdateOperationsInput | number | null
     score?: NullableFloatFieldUpdateOperationsInput | number | null
     issuedBy?: NullableStringFieldUpdateOperationsInput | string | null
     issuedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -685612,6 +685816,10 @@ export namespace Prisma {
     createdBy?: string | null
     studentId: string
     finalScore?: number
+    listeningScore?: number | null
+    speakingScore?: number | null
+    readingScore?: number | null
+    writingScore?: number | null
     score?: number | null
     issuedBy?: string | null
     issuedDate?: Date | string | null
@@ -685643,6 +685851,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     finalScore?: FloatFieldUpdateOperationsInput | number
+    listeningScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    speakingScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    readingScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    writingScore?: NullableFloatFieldUpdateOperationsInput | number | null
     score?: NullableFloatFieldUpdateOperationsInput | number | null
     issuedBy?: NullableStringFieldUpdateOperationsInput | string | null
     issuedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -685665,6 +685877,10 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     studentId?: StringFieldUpdateOperationsInput | string
     finalScore?: FloatFieldUpdateOperationsInput | number
+    listeningScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    speakingScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    readingScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    writingScore?: NullableFloatFieldUpdateOperationsInput | number | null
     score?: NullableFloatFieldUpdateOperationsInput | number | null
     issuedBy?: NullableStringFieldUpdateOperationsInput | string | null
     issuedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -685686,6 +685902,10 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     studentId?: StringFieldUpdateOperationsInput | string
     finalScore?: FloatFieldUpdateOperationsInput | number
+    listeningScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    speakingScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    readingScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    writingScore?: NullableFloatFieldUpdateOperationsInput | number | null
     score?: NullableFloatFieldUpdateOperationsInput | number | null
     issuedBy?: NullableStringFieldUpdateOperationsInput | string | null
     issuedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -686644,6 +686864,10 @@ export namespace Prisma {
     createdBy?: string | null
     certificateId: string
     finalScore?: number
+    listeningScore?: number | null
+    speakingScore?: number | null
+    readingScore?: number | null
+    writingScore?: number | null
     score?: number | null
     issuedBy?: string | null
     issuedDate?: Date | string | null
@@ -687428,6 +687652,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     finalScore?: FloatFieldUpdateOperationsInput | number
+    listeningScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    speakingScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    readingScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    writingScore?: NullableFloatFieldUpdateOperationsInput | number | null
     score?: NullableFloatFieldUpdateOperationsInput | number | null
     issuedBy?: NullableStringFieldUpdateOperationsInput | string | null
     issuedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -687450,6 +687678,10 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     certificateId?: StringFieldUpdateOperationsInput | string
     finalScore?: FloatFieldUpdateOperationsInput | number
+    listeningScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    speakingScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    readingScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    writingScore?: NullableFloatFieldUpdateOperationsInput | number | null
     score?: NullableFloatFieldUpdateOperationsInput | number | null
     issuedBy?: NullableStringFieldUpdateOperationsInput | string | null
     issuedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -687471,6 +687703,10 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     certificateId?: StringFieldUpdateOperationsInput | string
     finalScore?: FloatFieldUpdateOperationsInput | number
+    listeningScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    speakingScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    readingScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    writingScore?: NullableFloatFieldUpdateOperationsInput | number | null
     score?: NullableFloatFieldUpdateOperationsInput | number | null
     issuedBy?: NullableStringFieldUpdateOperationsInput | string | null
     issuedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null

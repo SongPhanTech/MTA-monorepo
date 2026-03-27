@@ -154,10 +154,7 @@ catalog:
 ignoredBuiltDependencies:
   - core-js
   - sharp
-supportedArchitectures:
-  os: ['win32'] # Optional: helps with your Windows environment
-  cpu: ['x64']
-
+  
 onlyBuiltDependencies:
   - '@prisma/client'
   - '@prisma/engines'

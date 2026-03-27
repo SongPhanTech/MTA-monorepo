@@ -71,6 +71,8 @@ type AwaitedInput<T> = PromiseLike<T> | T
 
 type Awaited<O> = O extends AwaitedInput<infer T> ? T : never
 
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
+
 export type getSessionResponse200 = {
     data: Session
     status: 200
@@ -127,14 +129,15 @@ export const getGetSessionQueryOptions = <
     params: GetSessionParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
     }
 ) => {
-    const { query: queryOptions } = options ?? {}
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetSessionQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getSession>>> = ({ signal }) =>
-        getSession(params, signal)
+        getSession(params, { signal, ...requestOptions })
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getSession>>,
@@ -161,6 +164,7 @@ export function useGetSession<
                 >,
                 'initialData'
             >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -179,6 +183,7 @@ export function useGetSession<
                 >,
                 'initialData'
             >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -189,6 +194,7 @@ export function useGetSession<
     params: GetSessionParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -200,6 +206,7 @@ export function useGetSession<
     params: GetSessionParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -262,14 +269,15 @@ export const getGetConfigLogsQueryOptions = <
     params: GetConfigLogsParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getConfigLogs>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
     }
 ) => {
-    const { query: queryOptions } = options ?? {}
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetConfigLogsQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getConfigLogs>>> = ({ signal }) =>
-        getConfigLogs(params, signal)
+        getConfigLogs(params, { signal, ...requestOptions })
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getConfigLogs>>,
@@ -296,6 +304,7 @@ export function useGetConfigLogs<
                 >,
                 'initialData'
             >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -314,6 +323,7 @@ export function useGetConfigLogs<
                 >,
                 'initialData'
             >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -324,6 +334,7 @@ export function useGetConfigLogs<
     params: GetConfigLogsParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getConfigLogs>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -335,6 +346,7 @@ export function useGetConfigLogs<
     params: GetConfigLogsParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getConfigLogs>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -383,6 +395,7 @@ export const getUpdateConfigLogsMutationOptions = <TError = unknown, TContext = 
         { data: UpdateConfigLogsBody },
         TContext
     >
+    request?: SecondParameter<typeof customModelFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof updateConfigLogs>>,
     TError,
@@ -390,11 +403,11 @@ export const getUpdateConfigLogsMutationOptions = <TError = unknown, TContext = 
     TContext
 > => {
     const mutationKey = ['updateConfigLogs']
-    const { mutation: mutationOptions } = options
+    const { mutation: mutationOptions, request: requestOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof updateConfigLogs>>,
@@ -402,7 +415,7 @@ export const getUpdateConfigLogsMutationOptions = <TError = unknown, TContext = 
     > = (props) => {
         const { data } = props ?? {}
 
-        return updateConfigLogs(data)
+        return updateConfigLogs(data, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -422,6 +435,7 @@ export const useUpdateConfigLogs = <TError = unknown, TContext = unknown>(
             { data: UpdateConfigLogsBody },
             TContext
         >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -483,14 +497,15 @@ export const getAccessRequestsQueryOptions = <
     params: AccessRequestsParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof accessRequests>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
     }
 ) => {
-    const { query: queryOptions } = options ?? {}
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getAccessRequestsQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof accessRequests>>> = ({ signal }) =>
-        accessRequests(params, signal)
+        accessRequests(params, { signal, ...requestOptions })
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof accessRequests>>,
@@ -517,6 +532,7 @@ export function useAccessRequests<
                 >,
                 'initialData'
             >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -537,6 +553,7 @@ export function useAccessRequests<
                 >,
                 'initialData'
             >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -547,6 +564,7 @@ export function useAccessRequests<
     params: AccessRequestsParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof accessRequests>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -558,6 +576,7 @@ export function useAccessRequests<
     params: AccessRequestsParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof accessRequests>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -620,14 +639,15 @@ export const getCountRequestsQueryOptions = <
     params: CountRequestsParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof countRequests>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
     }
 ) => {
-    const { query: queryOptions } = options ?? {}
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getCountRequestsQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof countRequests>>> = ({ signal }) =>
-        countRequests(params, signal)
+        countRequests(params, { signal, ...requestOptions })
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof countRequests>>,
@@ -654,6 +674,7 @@ export function useCountRequests<
                 >,
                 'initialData'
             >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -672,6 +693,7 @@ export function useCountRequests<
                 >,
                 'initialData'
             >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -682,6 +704,7 @@ export function useCountRequests<
     params: CountRequestsParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof countRequests>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -693,6 +716,7 @@ export function useCountRequests<
     params: CountRequestsParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof countRequests>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -755,14 +779,15 @@ export const getLatencyAverageQueryOptions = <
     params: LatencyAverageParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof latencyAverage>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
     }
 ) => {
-    const { query: queryOptions } = options ?? {}
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getLatencyAverageQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof latencyAverage>>> = ({ signal }) =>
-        latencyAverage(params, signal)
+        latencyAverage(params, { signal, ...requestOptions })
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof latencyAverage>>,
@@ -789,6 +814,7 @@ export function useLatencyAverage<
                 >,
                 'initialData'
             >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -809,6 +835,7 @@ export function useLatencyAverage<
                 >,
                 'initialData'
             >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -819,6 +846,7 @@ export function useLatencyAverage<
     params: LatencyAverageParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof latencyAverage>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -830,6 +858,7 @@ export function useLatencyAverage<
     params: LatencyAverageParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof latencyAverage>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -892,14 +921,15 @@ export const getErrorRateQueryOptions = <
     params: ErrorRateParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof errorRate>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
     }
 ) => {
-    const { query: queryOptions } = options ?? {}
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getErrorRateQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof errorRate>>> = ({ signal }) =>
-        errorRate(params, signal)
+        errorRate(params, { signal, ...requestOptions })
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof errorRate>>,
@@ -923,6 +953,7 @@ export function useErrorRate<TData = Awaited<ReturnType<typeof errorRate>>, TErr
                 >,
                 'initialData'
             >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -938,6 +969,7 @@ export function useErrorRate<TData = Awaited<ReturnType<typeof errorRate>>, TErr
                 >,
                 'initialData'
             >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -945,6 +977,7 @@ export function useErrorRate<TData = Awaited<ReturnType<typeof errorRate>>, TErr
     params: ErrorRateParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof errorRate>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -953,6 +986,7 @@ export function useErrorRate<TData = Awaited<ReturnType<typeof errorRate>>, TErr
     params: ErrorRateParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof errorRate>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -1015,14 +1049,15 @@ export const getThroughputQueryOptions = <
     params: ThroughputParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof throughput>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
     }
 ) => {
-    const { query: queryOptions } = options ?? {}
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getThroughputQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof throughput>>> = ({ signal }) =>
-        throughput(params, signal)
+        throughput(params, { signal, ...requestOptions })
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof throughput>>,
@@ -1046,6 +1081,7 @@ export function useThroughput<TData = Awaited<ReturnType<typeof throughput>>, TE
                 >,
                 'initialData'
             >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1061,6 +1097,7 @@ export function useThroughput<TData = Awaited<ReturnType<typeof throughput>>, TE
                 >,
                 'initialData'
             >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1068,6 +1105,7 @@ export function useThroughput<TData = Awaited<ReturnType<typeof throughput>>, TE
     params: ThroughputParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof throughput>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1076,6 +1114,7 @@ export function useThroughput<TData = Awaited<ReturnType<typeof throughput>>, TE
     params: ThroughputParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof throughput>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -1138,14 +1177,15 @@ export const getApplicationsQueryOptions = <
     params?: ApplicationsParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof applications>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
     }
 ) => {
-    const { query: queryOptions } = options ?? {}
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getApplicationsQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof applications>>> = ({ signal }) =>
-        applications(params, signal)
+        applications(params, { signal, ...requestOptions })
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof applications>>,
@@ -1169,6 +1209,7 @@ export function useApplications<TData = Awaited<ReturnType<typeof applications>>
                 >,
                 'initialData'
             >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1184,6 +1225,7 @@ export function useApplications<TData = Awaited<ReturnType<typeof applications>>
                 >,
                 'initialData'
             >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1191,6 +1233,7 @@ export function useApplications<TData = Awaited<ReturnType<typeof applications>>
     params?: ApplicationsParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof applications>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1199,6 +1242,7 @@ export function useApplications<TData = Awaited<ReturnType<typeof applications>>
     params?: ApplicationsParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof applications>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -1261,14 +1305,15 @@ export const getGetDatabasesQueryOptions = <
     params: GetDatabasesParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDatabases>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
     }
 ) => {
-    const { query: queryOptions } = options ?? {}
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetDatabasesQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getDatabases>>> = ({ signal }) =>
-        getDatabases(params, signal)
+        getDatabases(params, { signal, ...requestOptions })
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getDatabases>>,
@@ -1292,6 +1337,7 @@ export function useGetDatabases<TData = Awaited<ReturnType<typeof getDatabases>>
                 >,
                 'initialData'
             >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1307,6 +1353,7 @@ export function useGetDatabases<TData = Awaited<ReturnType<typeof getDatabases>>
                 >,
                 'initialData'
             >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1314,6 +1361,7 @@ export function useGetDatabases<TData = Awaited<ReturnType<typeof getDatabases>>
     params: GetDatabasesParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDatabases>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1322,6 +1370,7 @@ export function useGetDatabases<TData = Awaited<ReturnType<typeof getDatabases>>
     params: GetDatabasesParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDatabases>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -1384,14 +1433,15 @@ export const getGetTablesQueryOptions = <
     params: GetTablesParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getTables>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
     }
 ) => {
-    const { query: queryOptions } = options ?? {}
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetTablesQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getTables>>> = ({ signal }) =>
-        getTables(params, signal)
+        getTables(params, { signal, ...requestOptions })
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getTables>>,
@@ -1415,6 +1465,7 @@ export function useGetTables<TData = Awaited<ReturnType<typeof getTables>>, TErr
                 >,
                 'initialData'
             >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1430,6 +1481,7 @@ export function useGetTables<TData = Awaited<ReturnType<typeof getTables>>, TErr
                 >,
                 'initialData'
             >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1437,6 +1489,7 @@ export function useGetTables<TData = Awaited<ReturnType<typeof getTables>>, TErr
     params: GetTablesParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getTables>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1445,6 +1498,7 @@ export function useGetTables<TData = Awaited<ReturnType<typeof getTables>>, TErr
     params: GetTablesParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getTables>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -1507,14 +1561,15 @@ export const getGetColumnsQueryOptions = <
     params: GetColumnsParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getColumns>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
     }
 ) => {
-    const { query: queryOptions } = options ?? {}
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetColumnsQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getColumns>>> = ({ signal }) =>
-        getColumns(params, signal)
+        getColumns(params, { signal, ...requestOptions })
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getColumns>>,
@@ -1538,6 +1593,7 @@ export function useGetColumns<TData = Awaited<ReturnType<typeof getColumns>>, TE
                 >,
                 'initialData'
             >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1553,6 +1609,7 @@ export function useGetColumns<TData = Awaited<ReturnType<typeof getColumns>>, TE
                 >,
                 'initialData'
             >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1560,6 +1617,7 @@ export function useGetColumns<TData = Awaited<ReturnType<typeof getColumns>>, TE
     params: GetColumnsParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getColumns>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1568,6 +1626,7 @@ export function useGetColumns<TData = Awaited<ReturnType<typeof getColumns>>, TE
     params: GetColumnsParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getColumns>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -1635,14 +1694,15 @@ export const getExportTableByColumnsQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof exportTableByColumns>>, TError, TData>
         >
+        request?: SecondParameter<typeof customModelFetch>
     }
 ) => {
-    const { query: queryOptions } = options ?? {}
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getExportTableByColumnsQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof exportTableByColumns>>> = ({ signal }) =>
-        exportTableByColumns(params, signal)
+        exportTableByColumns(params, { signal, ...requestOptions })
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof exportTableByColumns>>,
@@ -1673,6 +1733,7 @@ export function useExportTableByColumns<
                 >,
                 'initialData'
             >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1693,6 +1754,7 @@ export function useExportTableByColumns<
                 >,
                 'initialData'
             >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1705,6 +1767,7 @@ export function useExportTableByColumns<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof exportTableByColumns>>, TError, TData>
         >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1718,6 +1781,7 @@ export function useExportTableByColumns<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof exportTableByColumns>>, TError, TData>
         >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -1795,15 +1859,16 @@ export const getCheckExportTableBySqlQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof checkExportTableBySql>>, TError, TData>
         >
+        request?: SecondParameter<typeof customModelFetch>
     }
 ) => {
-    const { query: queryOptions } = options ?? {}
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getCheckExportTableBySqlQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof checkExportTableBySql>>> = ({
         signal,
-    }) => checkExportTableBySql(params, signal)
+    }) => checkExportTableBySql(params, { signal, ...requestOptions })
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof checkExportTableBySql>>,
@@ -1834,6 +1899,7 @@ export function useCheckExportTableBySql<
                 >,
                 'initialData'
             >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1854,6 +1920,7 @@ export function useCheckExportTableBySql<
                 >,
                 'initialData'
             >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1866,6 +1933,7 @@ export function useCheckExportTableBySql<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof checkExportTableBySql>>, TError, TData>
         >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1879,6 +1947,7 @@ export function useCheckExportTableBySql<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof checkExportTableBySql>>, TError, TData>
         >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -1943,14 +2012,15 @@ export const getExportTableBySqlQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof exportTableBySql>>, TError, TData>
         >
+        request?: SecondParameter<typeof customModelFetch>
     }
 ) => {
-    const { query: queryOptions } = options ?? {}
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getExportTableBySqlQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof exportTableBySql>>> = ({ signal }) =>
-        exportTableBySql(params, signal)
+        exportTableBySql(params, { signal, ...requestOptions })
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof exportTableBySql>>,
@@ -1979,6 +2049,7 @@ export function useExportTableBySql<
                 >,
                 'initialData'
             >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1999,6 +2070,7 @@ export function useExportTableBySql<
                 >,
                 'initialData'
             >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2011,6 +2083,7 @@ export function useExportTableBySql<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof exportTableBySql>>, TError, TData>
         >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2024,6 +2097,7 @@ export function useExportTableBySql<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof exportTableBySql>>, TError, TData>
         >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -2074,6 +2148,7 @@ export const getReadExcelColumnsMutationOptions = <TError = unknown, TContext = 
         { data: ReadExcelColumnsBody },
         TContext
     >
+    request?: SecondParameter<typeof customModelFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof readExcelColumns>>,
     TError,
@@ -2081,11 +2156,11 @@ export const getReadExcelColumnsMutationOptions = <TError = unknown, TContext = 
     TContext
 > => {
     const mutationKey = ['readExcelColumns']
-    const { mutation: mutationOptions } = options
+    const { mutation: mutationOptions, request: requestOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof readExcelColumns>>,
@@ -2093,7 +2168,7 @@ export const getReadExcelColumnsMutationOptions = <TError = unknown, TContext = 
     > = (props) => {
         const { data } = props ?? {}
 
-        return readExcelColumns(data)
+        return readExcelColumns(data, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -2113,6 +2188,7 @@ export const useReadExcelColumns = <TError = unknown, TContext = unknown>(
             { data: ReadExcelColumnsBody },
             TContext
         >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -2172,6 +2248,7 @@ export const getImportExcelToDatabaseMutationOptions = <
         { data: ImportExcelToDatabaseBody },
         TContext
     >
+    request?: SecondParameter<typeof customModelFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof importExcelToDatabase>>,
     TError,
@@ -2179,11 +2256,11 @@ export const getImportExcelToDatabaseMutationOptions = <
     TContext
 > => {
     const mutationKey = ['importExcelToDatabase']
-    const { mutation: mutationOptions } = options
+    const { mutation: mutationOptions, request: requestOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof importExcelToDatabase>>,
@@ -2191,7 +2268,7 @@ export const getImportExcelToDatabaseMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return importExcelToDatabase(data)
+        return importExcelToDatabase(data, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -2211,6 +2288,7 @@ export const useImportExcelToDatabase = <TError = unknown, TContext = unknown>(
             { data: ImportExcelToDatabaseBody },
             TContext
         >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -2258,6 +2336,7 @@ export const getExcelTemplateMutationOptions = <TError = unknown, TContext = unk
         { data: ExcelTemplateBody },
         TContext
     >
+    request?: SecondParameter<typeof customModelFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof excelTemplate>>,
     TError,
@@ -2265,11 +2344,11 @@ export const getExcelTemplateMutationOptions = <TError = unknown, TContext = unk
     TContext
 > => {
     const mutationKey = ['excelTemplate']
-    const { mutation: mutationOptions } = options
+    const { mutation: mutationOptions, request: requestOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof excelTemplate>>,
@@ -2277,7 +2356,7 @@ export const getExcelTemplateMutationOptions = <TError = unknown, TContext = unk
     > = (props) => {
         const { data } = props ?? {}
 
-        return excelTemplate(data)
+        return excelTemplate(data, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -2295,6 +2374,7 @@ export const useExcelTemplate = <TError = unknown, TContext = unknown>(
             { data: ExcelTemplateBody },
             TContext
         >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -2345,6 +2425,7 @@ export const getGeneratePresignedUrlMutationOptions = <
         { data: PresignedUrlDto },
         TContext
     >
+    request?: SecondParameter<typeof customModelFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof generatePresignedUrl>>,
     TError,
@@ -2352,11 +2433,11 @@ export const getGeneratePresignedUrlMutationOptions = <
     TContext
 > => {
     const mutationKey = ['generatePresignedUrl']
-    const { mutation: mutationOptions } = options
+    const { mutation: mutationOptions, request: requestOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof generatePresignedUrl>>,
@@ -2364,7 +2445,7 @@ export const getGeneratePresignedUrlMutationOptions = <
     > = (props) => {
         const { data } = props ?? {}
 
-        return generatePresignedUrl(data)
+        return generatePresignedUrl(data, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -2384,6 +2465,7 @@ export const useGeneratePresignedUrl = <TError = unknown, TContext = unknown>(
             { data: PresignedUrlDto },
             TContext
         >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
@@ -2443,14 +2525,15 @@ export const getListObjectsQueryOptions = <
     params: ListObjectsParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof listObjects>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
     }
 ) => {
-    const { query: queryOptions } = options ?? {}
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getListObjectsQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof listObjects>>> = ({ signal }) =>
-        listObjects(params, signal)
+        listObjects(params, { signal, ...requestOptions })
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof listObjects>>,
@@ -2474,6 +2557,7 @@ export function useListObjects<TData = Awaited<ReturnType<typeof listObjects>>, 
                 >,
                 'initialData'
             >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2489,6 +2573,7 @@ export function useListObjects<TData = Awaited<ReturnType<typeof listObjects>>, 
                 >,
                 'initialData'
             >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2496,6 +2581,7 @@ export function useListObjects<TData = Awaited<ReturnType<typeof listObjects>>, 
     params: ListObjectsParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof listObjects>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2504,6 +2590,7 @@ export function useListObjects<TData = Awaited<ReturnType<typeof listObjects>>, 
     params: ListObjectsParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof listObjects>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -2568,14 +2655,15 @@ export const getPresignedGetObjectQueryOptions = <
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof presignedGetObject>>, TError, TData>
         >
+        request?: SecondParameter<typeof customModelFetch>
     }
 ) => {
-    const { query: queryOptions } = options ?? {}
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getPresignedGetObjectQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof presignedGetObject>>> = ({ signal }) =>
-        presignedGetObject(params, signal)
+        presignedGetObject(params, { signal, ...requestOptions })
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof presignedGetObject>>,
@@ -2606,6 +2694,7 @@ export function usePresignedGetObject<
                 >,
                 'initialData'
             >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2626,6 +2715,7 @@ export function usePresignedGetObject<
                 >,
                 'initialData'
             >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2638,6 +2728,7 @@ export function usePresignedGetObject<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof presignedGetObject>>, TError, TData>
         >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2651,6 +2742,7 @@ export function usePresignedGetObject<
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof presignedGetObject>>, TError, TData>
         >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -2713,14 +2805,15 @@ export const getConvertDocumentQueryOptions = <
     params: ConvertDocumentParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof convertDocument>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
     }
 ) => {
-    const { query: queryOptions } = options ?? {}
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getConvertDocumentQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof convertDocument>>> = ({ signal }) =>
-        convertDocument(params, signal)
+        convertDocument(params, { signal, ...requestOptions })
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof convertDocument>>,
@@ -2749,6 +2842,7 @@ export function useConvertDocument<
                 >,
                 'initialData'
             >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2769,6 +2863,7 @@ export function useConvertDocument<
                 >,
                 'initialData'
             >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2779,6 +2874,7 @@ export function useConvertDocument<
     params: ConvertDocumentParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof convertDocument>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2790,6 +2886,7 @@ export function useConvertDocument<
     params: ConvertDocumentParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof convertDocument>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -2838,6 +2935,7 @@ export const getSqlTransactionMutationOptions = <TError = unknown, TContext = un
         { data: SqlTransactionBodyItem[] },
         TContext
     >
+    request?: SecondParameter<typeof customModelFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof sqlTransaction>>,
     TError,
@@ -2845,11 +2943,11 @@ export const getSqlTransactionMutationOptions = <TError = unknown, TContext = un
     TContext
 > => {
     const mutationKey = ['sqlTransaction']
-    const { mutation: mutationOptions } = options
+    const { mutation: mutationOptions, request: requestOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof sqlTransaction>>,
@@ -2857,7 +2955,7 @@ export const getSqlTransactionMutationOptions = <TError = unknown, TContext = un
     > = (props) => {
         const { data } = props ?? {}
 
-        return sqlTransaction(data)
+        return sqlTransaction(data, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -2875,6 +2973,7 @@ export const useSqlTransaction = <TError = unknown, TContext = unknown>(
             { data: SqlTransactionBodyItem[] },
             TContext
         >
+        request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
