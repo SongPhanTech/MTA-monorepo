@@ -1,7 +1,3 @@
-// Trong code này có 2 chỗ hardcode 1 là trong header set appcode = chatbot
-// 2 là trong useSSOsession set appcode = chatbot dòng 208         window.location.href = `${getRuntimeEnv('NEXT_PUBLIC_AUTH_ISSUER')}/authsso/signin?appCode=chatbot&tenantCode=${tenantCode}&sRedirectDefault=${getRuntimeEnv('NEXT_PUBLIC_APP_URL')}`
-// 3 là trong useSSOsession dòng 127
-// Ai config con chatbot này, env không ăn ạ =]]]] Chúc may mắn người đọc đoạn code này lần sau
 import Loading from '@components/commons/loading'
 import { ROUTER_PATH } from '@workspace/router'
 import type { NextPage } from 'next'
