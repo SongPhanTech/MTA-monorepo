@@ -47,9 +47,6 @@ const ModalPrintToKQHT = () => {
                     },
                 },
                 fixedClass: {
-                    where: {
-                        id: input?.dataStudent?.fixedClassId,
-                    },
                     include: {
                         trainingCourse: {
                             include: {
@@ -195,7 +192,6 @@ const ModalPrintToKQHT = () => {
         const gpa = totalCredits > 0 ? totalWeightedScore / totalCredits : 0
         setGpaScore(Number(gpa.toFixed(2)))
     }, [subjectScoreData, convertScore])
-
     return (
         <Modal
             open={isOpen}
@@ -492,8 +488,8 @@ const ModalPrintToKQHT = () => {
                         {/* Sắp xếp dữ liệu theo thứ tự từ cao xuống thấp */}
                         {(() => {
                             const sortedData = [
-                                ...(input?.dataTable?.[0]?.trainingCoursesStart?.[0]
-                                    ?.scoreConverts ?? []),
+                                ...(subjectScoreData?.fixedClass?.trainingCourse?.scoreConverts ??
+                                    []),
                             ].sort((a, b) => b.base4 - a.base4)
 
                             return (
@@ -549,6 +545,7 @@ const ModalPrintToKQHT = () => {
 
                                 // TODO: optimize this function
                                 const formatNumber = (num: number) => {
+                                    if (num == null) return '-'
                                     if (Number.isInteger(num)) {
                                         return num.toFixed(1)
                                     }
