@@ -122,6 +122,7 @@ const saveCache = (cache: CacheEntry) => {
 export const useSSOSession = () => {
     const [status, setStatus] = useState<SSOSessionStatus>(globalCache?.status || 'loading')
     const [session, setSession] = useState<SSOSession | null>(globalCache?.session || null)
+    const appCode = getRuntimeEnv('NEXT_PUBLIC_APP_CODE') || 'chatbot'
 
     const fetchSSOSession = useCallback(async () => {
         // Check cache first
@@ -137,7 +138,7 @@ export const useSSOSession = () => {
 
         try {
             const response = await fetch(
-                `${getRuntimeEnv('NEXT_PUBLIC_API_MODEL_BASE_URL')}/api/auth/get-session?appCode=chatbot`,
+                `${getRuntimeEnv('NEXT_PUBLIC_API_MODEL_BASE_URL')}/api/auth/get-session?appCode=${encodeURIComponent(appCode)}`,
                 {
                     method: 'GET',
                     credentials: 'include',
@@ -183,7 +184,7 @@ export const useSSOSession = () => {
         } finally {
             isFetching = false
         }
-    }, [])
+    }, [appCode])
 
     // Subscribe to cache updates
     useEffect(() => {
@@ -219,9 +220,8 @@ export const useSSOSession = () => {
         // to invalidate cache and force fresh session check
         sessionStorage.setItem(SSO_REDIRECT_FLAG, 'true')
 
-        // window.location.href = `${getRuntimeEnv('NEXT_PUBLIC_AUTH_ISSUER')}/authsso/signin?appCode=${getRuntimeEnv('NEXT_PUBLIC_APP_CODE')}&tenantCode=${tenantCode}&sRedirectDefault=${getRuntimeEnv('NEXT_PUBLIC_APP_URL')}`
-        window.location.href = `${getRuntimeEnv('NEXT_PUBLIC_AUTH_ISSUER')}/authsso/signin?appCode=chatbot&tenantCode=${tenantCode}&sRedirectDefault=${getRuntimeEnv('NEXT_PUBLIC_APP_URL')}`
-    }, [])
+        window.location.href = `${getRuntimeEnv('NEXT_PUBLIC_AUTH_ISSUER')}/authsso/signin?appCode=${encodeURIComponent(appCode)}&tenantCode=${tenantCode}&sRedirectDefault=${getRuntimeEnv('NEXT_PUBLIC_APP_URL')}`
+    }, [appCode])
 
     /**
      * Refresh lại session - invalidate cache và fetch lại

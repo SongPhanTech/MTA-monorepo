@@ -1,5 +1,6 @@
 // Header.tsx
 
+import { getRuntimeEnv } from '@workspace/libs/utils'
 import type React from 'react'
 import { useEffect, useRef } from 'react'
 
@@ -33,7 +34,7 @@ const HeaderApp: React.FC = () => {
                         notificationAppId: 'notificationContainer',
                         userAppId: 'userContainer',
                         tenantCode: window.tenantCode || 'dev',
-                        appCode: 'chatbot', // Hardcoded to ensure lowercase
+                        appCode: getRuntimeEnv('NEXT_PUBLIC_APP_CODE') || 'chatbot',
                     })
                     hasPluginInitialized = true
                     return true
