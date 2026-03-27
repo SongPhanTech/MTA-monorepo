@@ -486,14 +486,14 @@ const PutCertificateArchivedModal = () => {
                                         <FormItem
                                             form={form}
                                             name={['student', record.rowId, 'issuedBy']}
-                                            rules={[
-                                                {
-                                                    required:
-                                                        !!studentFormData?.[record.rowId]
-                                                            ?.certificateId,
-                                                    message: 'Vui lòng nhập nơi cấp',
-                                                },
-                                            ]}
+                                            // rules={[
+                                            //     {
+                                            //         required:
+                                            //             !!studentFormData?.[record.rowId]
+                                            //                 ?.certificateId,
+                                            //         message: 'Vui lòng nhập nơi cấp',
+                                            //     },
+                                            // ]}
                                         >
                                             <Input
                                                 variant="underlined"
