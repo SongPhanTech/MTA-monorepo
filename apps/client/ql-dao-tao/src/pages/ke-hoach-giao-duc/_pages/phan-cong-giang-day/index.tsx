@@ -91,9 +91,11 @@ type FilterStatus = 'YEU_CAU_PCGD' | 'LMH_DA_HUY' | 'CHO_DUYET_PCGD' | 'DA_DUYET
 export default function PhanCongGiangDay({
     type,
     khoaBoMon = false,
+    role,
 }: {
     type?: $Enums.SubjectClassType
     khoaBoMon?: boolean
+    role?: 'P2_QLDT' | 'P2_KHCT'
 }) {
     const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
@@ -1924,10 +1926,11 @@ export default function PhanCongGiangDay({
                                     width: 200,
                                     dataIndex: 'mainLecturer',
                                     render: (__, record) =>
-                                        // khoaBoMon &&
                                         !subjectClassForm?.[record.id]?.cancelled &&
-                                        !record?.submitLecturerAssignmentAt &&
-                                        !record?.approveLecturerAssignmentAt ? (
+                                        (role === 'P2_KHCT' ||
+                                            (!record?.approveLecturerAssignmentAt &&
+                                                (!khoaBoMon ||
+                                                    !record?.submitLecturerAssignmentAt))) ? (
                                             <FormItem
                                                 form={form}
                                                 name={['subjectClass', record.id, 'lecturerId']}
@@ -1941,11 +1944,11 @@ export default function PhanCongGiangDay({
                                                         ].filter(Boolean) as string[]
                                                     }
                                                     disabled={
-                                                        !!record?.submitLecturerAssignmentAt ||
-                                                        (!!record.lecturerAssignmentDeadline &&
-                                                            dayjs(
-                                                                record.lecturerAssignmentDeadline
-                                                            ).isBefore(dayjs().startOf('day')))
+                                                        khoaBoMon &&
+                                                        !!record.lecturerAssignmentDeadline &&
+                                                        dayjs(
+                                                            record.lecturerAssignmentDeadline
+                                                        ).isBefore(dayjs().startOf('day'))
                                                     }
                                                     organizationId={
                                                         record?.subject?.managementOrganizationId ??
@@ -1964,10 +1967,11 @@ export default function PhanCongGiangDay({
                                     type: 'input',
                                     width: 200,
                                     render: (__, record) =>
-                                        // khoaBoMon &&
                                         !subjectClassForm?.[record.id]?.cancelled &&
-                                        !record?.submitLecturerAssignmentAt &&
-                                        !record?.approveLecturerAssignmentAt ? (
+                                        (role === 'P2_KHCT' ||
+                                            (!record?.approveLecturerAssignmentAt &&
+                                                (!khoaBoMon ||
+                                                    !record?.submitLecturerAssignmentAt))) ? (
                                             <FormItem
                                                 form={form}
                                                 name={[
@@ -1985,12 +1989,11 @@ export default function PhanCongGiangDay({
                                                         ].filter(Boolean) as string[]
                                                     }
                                                     disabled={
-                                                        subjectClassForm?.[record.id]?.cancelled ||
-                                                        !!record?.submitLecturerAssignmentAt ||
-                                                        (!!record.lecturerAssignmentDeadline &&
-                                                            dayjs(
-                                                                record.lecturerAssignmentDeadline
-                                                            ).isBefore(dayjs().startOf('day')))
+                                                        khoaBoMon &&
+                                                        !!record.lecturerAssignmentDeadline &&
+                                                        dayjs(
+                                                            record.lecturerAssignmentDeadline
+                                                        ).isBefore(dayjs().startOf('day'))
                                                     }
                                                     organizationId={
                                                         record?.subject?.managementOrganizationId
@@ -2008,10 +2011,11 @@ export default function PhanCongGiangDay({
                                     type: 'input',
                                     width: 200,
                                     render: (__, record) =>
-                                        // khoaBoMon &&
                                         !subjectClassForm?.[record.id]?.cancelled &&
-                                        !record?.submitLecturerAssignmentAt &&
-                                        !record?.approveLecturerAssignmentAt ? (
+                                        (role === 'P2_KHCT' ||
+                                            (!record?.approveLecturerAssignmentAt &&
+                                                (!khoaBoMon ||
+                                                    !record?.submitLecturerAssignmentAt))) ? (
                                             <FormItem
                                                 form={form}
                                                 name={[
@@ -2026,12 +2030,11 @@ export default function PhanCongGiangDay({
                                                         record?.subject?.managementOrganizationId
                                                     }
                                                     disabled={
-                                                        subjectClassForm?.[record.id]?.cancelled ||
-                                                        !!record?.submitLecturerAssignmentAt ||
-                                                        (!!record.lecturerAssignmentDeadline &&
-                                                            dayjs(
-                                                                record.lecturerAssignmentDeadline
-                                                            ).isBefore(dayjs().startOf('day')))
+                                                        khoaBoMon &&
+                                                        !!record.lecturerAssignmentDeadline &&
+                                                        dayjs(
+                                                            record.lecturerAssignmentDeadline
+                                                        ).isBefore(dayjs().startOf('day'))
                                                     }
                                                 />
                                             </FormItem>

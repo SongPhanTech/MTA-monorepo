@@ -57,7 +57,7 @@ export default function KeHoachDaoTao({ type = 'NORMAL', role }: KeHoachDaoTaoPa
                 {
                     key: 'phan-cong-giang-day',
                     label: 'Phân công giảng dạy',
-                    content: <PhanCongGiangDay type={type} />,
+                    content: <PhanCongGiangDay type={type} role={role} />,
                 },
                 {
                     key: 'thoi-khoa-bieu',
@@ -102,7 +102,7 @@ export default function KeHoachDaoTao({ type = 'NORMAL', role }: KeHoachDaoTaoPa
                 {
                     key: 'phan-cong-giang-day',
                     label: 'Phân công giảng dạy',
-                    content: <PhanCongGiangDay type={type} />,
+                    content: <PhanCongGiangDay type={type} role={role} />,
                 },
                 {
                     key: 'thoi-khoa-bieu',
@@ -146,7 +146,7 @@ export default function KeHoachDaoTao({ type = 'NORMAL', role }: KeHoachDaoTaoPa
                 {
                     key: 'phan-cong-giang-day',
                     label: 'Phân công giảng dạy',
-                    content: <PhanCongGiangDay type={type} />,
+                    content: <PhanCongGiangDay type={type} role={role} />,
                 },
                 {
                     key: 'thoi-khoa-bieu',
