@@ -21,13 +21,14 @@ import { exportArchivedCertificateExcel, useCertificateScore } from '@workspace/
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Col, Flex, Input, Modal, message, Row, Tooltip } from 'antd'
+import { Button, Col, Flex, Input, Modal, Select, Switch, message, Row, Tooltip } from 'antd'
 import { saveAs } from 'file-saver'
 import _ from 'lodash'
 import { InfoIcon } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import EditIcon from '../../../../../dang-ky-hoc/src/components/icons/edit'
 
 export default function ArchivedCertificate() {
     const { can } = useAbility()
@@ -43,6 +44,9 @@ export default function ArchivedCertificate() {
     })
 
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
+    const [showLanguageScoreColumns, setShowLanguageScoreColumns] = useState(true)
+    const [isExportModalOpen, setIsExportModalOpen] = useState(false)
+    const [exportTrainingCourseId, setExportTrainingCourseId] = useState<string | undefined>()
 
     const { showSpinner, hideSpinner } = useSpinner()
 
@@ -101,6 +105,7 @@ export default function ArchivedCertificate() {
         studentId: string
         studentName: string
         certificates: any[]
+        isEditMode?: boolean
     }>({
         tag: 'ModalDanhSachChungChi',
     })
@@ -370,32 +375,68 @@ export default function ArchivedCertificate() {
         }
     }
 
+    const handleOpenExportModal = () => {
+        const selectedTrainingCourseId = Array.isArray(filters.trainingCourseId)
+            ? filters.trainingCourseId[0]
+            : filters.trainingCourseId
+
+        setExportTrainingCourseId(selectedTrainingCourseId)
+        setIsExportModalOpen(true)
+    }
+
     const handleExportExcel = async () => {
         if (!trainingObjectTypeId) {
             message.warning('Vui lòng chọn đối tượng đào tạo')
             return
         }
 
+        if (!exportTrainingCourseId) {
+            message.warning('Vui lòng chọn khóa học để xuất Excel')
+            return
+        }
+
+        const extractExportErrorMessage = (error: any) => {
+            const status = error?.response?.status
+            const rawMessage = error?.response?.data?.message || error?.response?.data?.error
+
+            const detailedMessage = Array.isArray(rawMessage)
+                ? rawMessage.join(', ')
+                : rawMessage || error?.message
+
+            if (status && detailedMessage) {
+                return `Xuất Excel thất bại: ${detailedMessage}`
+            }
+
+            if (status) {
+                return `Xuất Excel thất bại`
+            }
+
+            if (detailedMessage) {
+                return `Xuất Excel thất bại: ${detailedMessage}`
+            }
+
+            return 'Đã xảy ra lỗi khi xuất Excel, vui lòng thử lại'
+        }
+
         try {
             showSpinner()
             const res = await exportArchivedCertificateExcel({
                 trainingObjectTypeId,
-                trainingCourseId: filters.trainingCourseId || undefined,
+                trainingCourseId: exportTrainingCourseId,
                 fixedClassId: filters.fixedClassId || undefined,
                 certificateId: filters.certificateId || undefined,
             })
             if (res.status === 200) {
                 saveAs(res.data, 'Danh_sach_diem_chung_chi.xlsx')
                 message.success('Xuất Excel thành công')
+                setIsExportModalOpen(false)
             } else {
-                message.error('Xuất Excel thất bại')
+                const error: any = new Error()
+                error.response = { status: res.status, data: res.data }
+                message.error(extractExportErrorMessage(error))
             }
         } catch (error: any) {
-            if (error?.response?.data?.message) {
-                message.error(error.response.data.message)
-            } else {
-                message.error('Đã xảy ra lỗi khi xuất Excel')
-            }
+            message.error(extractExportErrorMessage(error))
         } finally {
             hideSpinner()
         }
@@ -495,8 +536,15 @@ export default function ArchivedCertificate() {
                                 'THEM'
                             ) && (
                                 <>
+                                    <Flex align="center" gap={8} className="mr-3">
+                                        <span className="text-sm">Điểm ngoại ngữ</span>
+                                        <Switch
+                                            checked={showLanguageScoreColumns}
+                                            onChange={setShowLanguageScoreColumns}
+                                        />
+                                    </Flex>
                                     <Button
-                                        onClick={handleExportExcel}
+                                        onClick={handleOpenExportModal}
                                         icon={<DownloadOutlined />}
                                         type="primary"
                                     >
@@ -675,6 +723,42 @@ export default function ArchivedCertificate() {
                             width: 160,
                             render: (__, record) => record?.certificate?.name || '-',
                         },
+                        ...((showLanguageScoreColumns
+                            ? [
+                                  {
+                                      title: 'Nghe',
+                                      align: 'center',
+                                      width: 80,
+                                      render: (__: any, record: any) =>
+                                          record?.listeningScore ??
+                                          '-',
+                                  },
+                                  {
+                                      title: 'Nói',
+                                      align: 'center',
+                                      width: 80,
+                                      render: (__: any, record: any) =>
+                                          record?.speakingScore ??
+                                          '-',
+                                  },
+                                  {
+                                      title: 'Đọc',
+                                      align: 'center',
+                                      width: 80,
+                                      render: (__: any, record: any) =>
+                                          record?.readingScore ??
+                                          '-',
+                                  },
+                                  {
+                                      title: 'Viết',
+                                      align: 'center',
+                                      width: 80,
+                                      render: (__: any, record: any) =>
+                                          record?.writingScore ??
+                                          '-',
+                                  },
+                              ]
+                            : []) as any[]),
                         {
                             title: 'Điểm',
                             align: 'center',
@@ -737,16 +821,28 @@ export default function ArchivedCertificate() {
                             render: (_, record) => {
                                 const studentName = record?.student?.userProfile?.fullname || ''
                                 return (
-                                    <Row className="justify-center gap-2">
+                                    <Row className="justify-center gap-4 flex items-center">
                                         <InfoIcon
                                             onClick={() => {
                                                 onOpenCertificateList({
                                                     studentId: record.studentId,
                                                     studentName,
                                                     certificates: [record],
+                                                    isEditMode: false,
                                                 })
                                             }}
                                             className="text-sm text-blue-700 cursor-pointer"
+                                        />
+                                        <EditIcon
+                                            onClick={() => {
+                                                onOpenCertificateList({
+                                                    studentId: record.studentId,
+                                                    studentName,
+                                                    certificates: [record],
+                                                    isEditMode: true,
+                                                })
+                                            }}
+                                            className="text-sm text-green-700 cursor-pointer"
                                         />
                                     </Row>
                                 )
@@ -772,6 +868,29 @@ export default function ArchivedCertificate() {
                     }}
                 />
             </Col>
+
+            <Modal
+                title="Chọn khóa học để xuất Excel"
+                open={isExportModalOpen}
+                onCancel={() => setIsExportModalOpen(false)}
+                onOk={handleExportExcel}
+                okText="Xuất Excel"
+                cancelText="Hủy"
+            >
+                <Select
+                    className="w-full"
+                    placeholder="Chọn khóa học"
+                    options={trainingCourseData.map((item: TrainingCourse) => ({
+                        label: item.name,
+                        value: item.id,
+                    }))}
+                    value={exportTrainingCourseId}
+                    onChange={(value) => setExportTrainingCourseId(value)}
+                    allowClear
+                    showSearch
+                    optionFilterProp="label"
+                />
+            </Modal>
         </Row>
     )
 }
