@@ -472,7 +472,7 @@ type SubjectData = {
     code: string
     organizationCode?: string
     credit: number
-    examType: $Enums.ExamType
+    examType: $Enums.ExamType | null
     type: $Enums.SubjectVersionType
     onePoint?: boolean
     period: number

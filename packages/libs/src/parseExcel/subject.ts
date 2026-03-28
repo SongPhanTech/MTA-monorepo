@@ -13,7 +13,7 @@ export type SubjectResult = {
     semester: number | null
     type: $Enums.SubjectRequirementType
     subjectVersionType: $Enums.SubjectVersionType
-    examType: $Enums.ExamType
+    examType: $Enums.ExamType | null
     graduation: boolean
     numberOfTheory?: number
     numberOfPractical?: number
@@ -183,17 +183,8 @@ export const parseSheetSubject = (file: ArrayBufferLike): ParseSubjectResult => 
         }
 
         const examTypeText = row[cols.examType]?.trim()
-        if (!examTypeText) {
-            errors.push({
-                sheetRef: sheetName,
-                cellRef: `${cols.subjectVersionType}${rowNumber}`,
-                message: 'Hình thức thi không được để trống',
-            })
-            continue
-        }
-
-        const examType = examTypes[examTypeText]
-        if (!examType) {
+        const examType = examTypeText ? examTypes[examTypeText] ?? null : null
+        if (examTypeText && examType === null) {
             errors.push({
                 sheetRef: sheetName,
                 cellRef: `${cols.subjectVersionType}${rowNumber}`,
@@ -258,7 +249,7 @@ export const parseSheetSubject = (file: ArrayBufferLike): ParseSubjectResult => 
             numberOfReview,
             numberOfExam,
             onePoint,
-            graduation: false, // TODO: add this
+            graduation: subjectVersionType === $Enums.SubjectVersionType.Project || subjectVersionType === $Enums.SubjectVersionType.Thesis || subjectVersionType === $Enums.SubjectVersionType.Graduation,
         })
     }
 

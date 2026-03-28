@@ -4,6 +4,7 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useStore } from '@tanstack/react-store'
 import type { Prisma } from '@workspace/db/client'
 import {
+useDeleteStudentSubjectScore,
     useFindManyFixedClass,
     useFindManyTrainingCourse,
     useFindUniqueSubjectClass,
@@ -12,9 +13,10 @@ import { diffArrays } from '@workspace/libs'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useOpenSubjectClassReExamStudents } from '@workspace/libs/api/training'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Checkbox, Col, Form, Input, message, Row, Select } from 'antd'
+import { Button, Checkbox, Col, Form, Input, message, Row, Select,Tooltip } from 'antd'
 import _ from 'lodash'
-import { Search } from 'lucide-react'
+import { CircleX,
+Search } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { dangKyThiLaiStore } from '../..'
 
@@ -35,7 +37,7 @@ export default function CaNhanThiLai() {
     })
 
     const { subjectClassId, studentIds = [] } = useStore(dangKyThiLaiStore)
-
+const { mutateAsync: deleteStudentSubjectScore } = useDeleteStudentSubjectScore()
     const { data: subjectClassData } = useFindUniqueSubjectClass(
         {
             where: {
@@ -170,7 +172,7 @@ export default function CaNhanThiLai() {
                     throw new Error('Có lỗi xảy ra khi kiểm tra điều kiện đăng ký thi lại!')
                 }
 
-                studentsData = studentsRes.data as Prisma.StudentGetPayload<{
+                studentsData = studentsRes.data[0] as Prisma.StudentGetPayload<{
                     select: {
                         id: true
                         subjectClassStudent: true
@@ -196,21 +198,26 @@ export default function CaNhanThiLai() {
                     },
                 })
             }
-
+            
             // Thêm operations tạo mới CHỈ cho những ids CHƯA TỒN TẠI
             if (studentsData.length > 0) {
-                operations.push({
-                    model: 'StudentSubjectScore',
-                    operation: 'createMany',
-                    data: {
-                        data: studentsData.map((student) => ({
-                            studentId: student.id,
-                            subjectClassId: subjectClassId,
-                            subjectVersionId: subjectClassData.subjectId,
-                            attendanceScore: student?.subjectClassStudent?.[0]?.attendanceScore,
-                            midtermScore: student?.subjectClassStudent?.[0]?.midtermScore,
-                        })),
-                    },
+                // biome-ignore lint/suspicious/useIterableCallbackReturn: <>
+                studentsData?.map((student:any) => {
+                    console.log(student);
+                    
+                    operations.push({
+                        model: 'StudentSubjectScore',
+                        operation: 'create',
+                        data:{
+                            data: {
+                                studentId: student.id,
+                                subjectClassId: subjectClassId,
+                                subjectVersionId: subjectClassData.subjectId,
+                                attendanceScore: student?.subjectClassStudent?.[0]?.attendanceScore,
+                                midtermScore: student?.subjectClassStudent?.[0]?.midtermScore,
+                            },
+                        }
+                    })
                 })
             }
 
@@ -271,6 +278,23 @@ export default function CaNhanThiLai() {
         }))
     }
 
+    const handleCancel=async(id:string)=>{
+        if(!id) return
+        try {
+            let res=await deleteStudentSubjectScore({
+                where: {
+                    id: id
+                }
+            })
+            if(res){
+                message.success('Huỷ đăng ký thi lại thành công')
+                refetch()
+            }
+
+        }catch (error) {
+            message.error('Có lỗi xảy ra khi hóa đăng ký thi lại!') 
+        }
+    }
     return (
         <Row gutter={[4, 0]}>
             <Col span={6}>
@@ -329,7 +353,7 @@ export default function CaNhanThiLai() {
             </Col>
             <Col span={2} className="text-right">
                 <Button type="primary" className="h-[32px] px-4" onClick={handleSaveStudentClass}>
-                    Lưu
+                    Đăng ký
                 </Button>
             </Col>
             <Col span={24}>
@@ -411,6 +435,16 @@ export default function CaNhanThiLai() {
                             align: 'center',
                             width: 80,
                             render: (_, record) => record?.ly_do_hoan_thi,
+                        },
+                        {
+                            title: 'Thao tác',
+                            align: 'center',
+                            width: 80,
+                            render: (_, record:any) => {
+                                return <Tooltip title={'Huỷ đăng ký'} placement="top">
+                                    <CircleX size={16} className="text-red-600 cursor-pointer" onClick={() => handleCancel(record?.subjectClassStudent?.[0]?.id||'')}/>
+                                </Tooltip>
+                            },
                         },
                     ]}
                     pagination={{

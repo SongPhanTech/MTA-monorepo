@@ -1,5 +1,5 @@
 import DeleteIcon from '@components/icons/delete'
-import { Button, Checkbox, Col, Flex, message, Row, type TableProps, Tag, Tooltip } from 'antd'
+import { Button, Checkbox, Col, Flex, message, Row, type TableProps, Popconfirm, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import { queryClient } from '@api/index'
@@ -601,14 +601,22 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
                                 <Row justify={'space-between'}>
                                     <h3 className="text-xl font-bold">Xét</h3>
                                     <Flex justify="end">
-                                        <Button
+                                         <Popconfirm
+                                        placement="bottomRight"
+                                        title={'Bạn có chắc muốn xét đình chỉ những học viên này không?'}
+                                        onConfirm={handleApprove}
+                                        okText="Đồng ý"
+                                        cancelText="Hủy"
+                                    >
+                                           <Button
                                             type="primary"
-                                            onClick={handleApprove}
                                             disabled={selectedStudents.length === 0}
                                         >
                                             <BookPlus />
                                             Duyệt
                                         </Button>
+                                    </Popconfirm>
+                                   
                                     </Flex>
                                 </Row>
                             </Col>

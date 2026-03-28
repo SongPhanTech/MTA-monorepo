@@ -47,9 +47,6 @@ const ModalPrintToKQHT = () => {
                     },
                 },
                 fixedClass: {
-                    where: {
-                        id: input?.dataStudent?.fixedClassId,
-                    },
                     include: {
                         trainingCourse: {
                             include: {
@@ -81,13 +78,24 @@ const ModalPrintToKQHT = () => {
         { enabled: !!input?.dataStudent?.curriculumVersionId }
     )
 
+    const academicRankingConvertData =
+        subjectScoreData?.fixedClass?.trainingCourse?.academicRankingConvert
+
+    const graduationRankingData = academicRankingConvertData?.filter(
+        (item) => item.context === 'GRADUATION'
+    )
+
+    const graduationBaseScore =
+        graduationRankingData?.find((item) => item.base4Min != null)?.baseScore ??
+        graduationRankingData?.[0]?.baseScore
+
     const { convertScore } = useScoreConverter(
         subjectScoreData?.fixedClass?.trainingCourse?.scoreConverts
     )
 
     const { convertAcademicRanking } = useAcademicRankingConverter(
-        subjectScoreData?.fixedClass?.trainingCourse?.academicRankingConvert,
-        subjectScoreData?.fixedClass?.trainingCourse?.baseScore
+        graduationRankingData,
+        graduationBaseScore
     )
     const handlePrint = useReactToPrint({
         contentRef: printRef,
@@ -166,14 +174,11 @@ const ModalPrintToKQHT = () => {
     ]
 
     useEffect(() => {
-        const validSubjects =
-            subjectScoreData?.trainingBlocks
-                .flatMap((block) => block.subjects)
-                .filter(
-                    (subjectItem) =>
-                        // subjectItem.print === true &&
-                        subjectItem.useForFinalScore === true
-                ) || []
+        if (!subjectScoreData) return
+
+        const validSubjects = subjectScoreData.trainingBlocks
+            .flatMap((block) => block.subjects)
+            .filter((subjectItem) => subjectItem.useForFinalScore === true)
 
         let totalWeightedScore = 0
         let totalCredits = 0
@@ -185,17 +190,17 @@ const ModalPrintToKQHT = () => {
 
             if (score) {
                 const score10 = score.manualFinalScore || score.finalScore || 0
-                const score4 = convertScore(score10).base4 || 0
+                const scoreToUse =
+                    graduationBaseScore === 'Base4' ? convertScore(score10).base4 || 0 : score10
 
-                totalWeightedScore += score4 * credits
+                totalWeightedScore += scoreToUse * credits
                 totalCredits += credits
             }
         })
 
         const gpa = totalCredits > 0 ? totalWeightedScore / totalCredits : 0
         setGpaScore(Number(gpa.toFixed(2)))
-    }, [subjectScoreData, convertScore])
-
+    }, [subjectScoreData, graduationBaseScore])
     return (
         <Modal
             open={isOpen}
@@ -458,7 +463,7 @@ const ModalPrintToKQHT = () => {
                             </span>
                         </div>
                         <div>
-                            <span>Điểm trung bình chung tích lũy toàn khoá (Thang điểm 4): </span>
+                            <span>Điểm trung bình chung tích lũy toàn khoá (Thang điểm {graduationBaseScore === 'Base4' ? '4' : '10'}): </span>
                             <span className="font-bold">{gpaScore.toFixed(2)}</span>
                         </div>
                         <div className="flex">
@@ -492,8 +497,8 @@ const ModalPrintToKQHT = () => {
                         {/* Sắp xếp dữ liệu theo thứ tự từ cao xuống thấp */}
                         {(() => {
                             const sortedData = [
-                                ...(input?.dataTable?.[0]?.trainingCoursesStart?.[0]
-                                    ?.scoreConverts ?? []),
+                                ...(subjectScoreData?.fixedClass?.trainingCourse?.scoreConverts ??
+                                    []),
                             ].sort((a, b) => b.base4 - a.base4)
 
                             return (
@@ -535,35 +540,33 @@ const ModalPrintToKQHT = () => {
                     </div>
 
                     <p className="mt-2">
-                        - Phân hạng tốt nghiệp theo thang điểm 4: {(() => {
-                            const rankingData =
-                                subjectScoreData?.fixedClass?.trainingCourse
-                                    ?.academicRankingConvert || []
-
-                            const sortedRankings = rankingData
+                        - Phân hạng tốt nghiệp theo thang điểm{' '}
+                        {graduationBaseScore === 'Base4' ? '4' : '10'}: {(() => {
+                            const sortedRankings = (graduationRankingData || [])
                                 .filter((item: any) => item.graduated)
-                                .sort((a: any, b: any) => b.base4Min - a.base4Min)
+                                .sort((a: any, b: any) =>
+                                    graduationBaseScore === 'Base4'
+                                        ? b.base4Min - a.base4Min
+                                        : b.base10Min - a.base10Min
+                                )
 
                             return sortedRankings.map((item: any, index: number) => {
-                                const displayName = item.classification
-
-                                // TODO: optimize this function
                                 const formatNumber = (num: number) => {
-                                    if (Number.isInteger(num)) {
-                                        return num.toFixed(1)
-                                    }
+                                    if (num == null) return '-'
+                                    if (Number.isInteger(num)) return num.toFixed(1)
                                     const decimalPart = (num?.toString().split('.')[1] || '').length
-                                    if (decimalPart === 1) {
-                                        return num.toFixed(2) || ''
-                                    }
+                                    if (decimalPart === 1) return num.toFixed(2) || ''
                                     return num ? num?.toString() : ''
                                 }
 
-                                const range = `${formatNumber(item.base4Min)}-${formatNumber(item.base4Max)}`
+                                const range =
+                                    graduationBaseScore === 'Base4'
+                                        ? `${formatNumber(item.base4Min)}-${formatNumber(item.base4Max)}`
+                                        : `${formatNumber(item.base10Min)}-${formatNumber(item.base10Max)}`
 
                                 return (
                                     <span key={item.id || index}>
-                                        {displayName}: {range}
+                                        {item.classification}: {range}
                                         {index < sortedRankings.length - 1 ? '; ' : ''}
                                     </span>
                                 )
