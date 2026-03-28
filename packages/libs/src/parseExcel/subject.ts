@@ -249,7 +249,7 @@ export const parseSheetSubject = (file: ArrayBufferLike): ParseSubjectResult => 
             numberOfReview,
             numberOfExam,
             onePoint,
-            graduation: false, // TODO: add this
+            graduation: subjectVersionType === $Enums.SubjectVersionType.Project || subjectVersionType === $Enums.SubjectVersionType.Thesis || subjectVersionType === $Enums.SubjectVersionType.Graduation,
         })
     }
 
