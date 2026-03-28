@@ -122,7 +122,7 @@ const saveCache = (cache: CacheEntry) => {
 export const useSSOSession = () => {
     const [status, setStatus] = useState<SSOSessionStatus>(globalCache?.status || 'loading')
     const [session, setSession] = useState<SSOSession | null>(globalCache?.session || null)
-    const appCode = getRuntimeEnv('NEXT_PUBLIC_APP_CODE') || 'chatbot'
+    const appCode = (getRuntimeEnv('NEXT_PUBLIC_APP_CODE') || 'chatbot').trim().toLowerCase()
 
     const fetchSSOSession = useCallback(async () => {
         // Check cache first

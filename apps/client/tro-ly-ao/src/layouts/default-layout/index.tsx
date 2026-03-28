@@ -38,14 +38,6 @@ const DefaultLayout = ({
     breadcrumbList?: breadcrumListProps[]
     unLayout?: boolean
 }) => {
-    const menus = useMenuList()
-    const router = useRouter()
-    const currentPath = router.pathname
-    const breadcrumb = getDynamicBreadcrumb('TRO_LY_AO', currentPath)
-    const [collapsed, setCollapsed] = useState(() => {
-        return typeof window !== 'undefined' && localStorage.getItem('collapsed') === 'true'
-    })
-
     // SSO Authentication check - sử dụng hook riêng
     const { status, signIn, refetch } = useSSOSession()
 
@@ -57,7 +49,92 @@ const DefaultLayout = ({
     const hasStartedVerify = useRef(false)
     const [sessionVerified, setSessionVerified] = useState(false)
 
-    // All hooks must be called before any early return
+    // Force fresh session verification on admin page mount
+    // This prevents stale cache from causing premature rendering
+    // which triggers UMD API calls → 401 → mta-session-expired dialog
+    useEffect(() => {
+        if (!hasStartedVerify.current) {
+            hasStartedVerify.current = true
+            refetch()
+        }
+    }, [refetch])
+
+    // Track when fresh verification completes
+    useEffect(() => {
+        if (hasStartedVerify.current && status !== 'loading') {
+            setSessionVerified(true)
+        }
+    }, [status])
+
+    // Redirect to SSO if not authenticated
+    // Chỉ redirect 1 lần duy nhất
+    useEffect(() => {
+        if (sessionVerified && status === 'unauthenticated' && !hasRedirected.current) {
+            hasRedirected.current = true
+            signIn()
+        }
+    }, [sessionVerified, status, signIn])
+
+    // Show loading while verifying session
+    if (!sessionVerified || status === 'loading') {
+        return (
+            <div className="h-screen w-screen flex items-center justify-center bg-gray-50">
+                <div className="text-center">
+                    <Spin size="large" />
+                    <p className="mt-4 text-gray-600">Đang kiểm tra đăng nhập...</p>
+                </div>
+            </div>
+        )
+    }
+
+    // Nếu unauthenticated, hiển thị loading (đang redirect)
+    if (status === 'unauthenticated') {
+        return (
+            <div className="h-screen w-screen flex items-center justify-center bg-gray-50">
+                <div className="text-center">
+                    <Spin size="large" />
+                    <p className="mt-4 text-gray-600">Đang chuyển hướng đến trang đăng nhập...</p>
+                </div>
+            </div>
+        )
+    }
+
+    // Chỉ render content (và gọi useMenuList/usePermissions) SAU KHI đã authenticated
+    return (
+        <DefaultLayoutContent
+            className={className}
+            breadcrumbList={breadcrumbList}
+            unLayout={unLayout}
+        >
+            {children}
+        </DefaultLayoutContent>
+    )
+}
+
+/**
+ * DefaultLayoutContent - Render nội dung quản trị SAU KHI đã xác thực.
+ * Tách riêng để useMenuList() (→ usePermissions() → API call) chỉ chạy
+ * khi session đã verified, tránh race condition gây 401 → modal hết phiên.
+ */
+const DefaultLayoutContent = ({
+    children,
+    className,
+    breadcrumbList,
+    unLayout = false,
+}: {
+    children: ReactNode
+    className?: string
+    breadcrumbList?: breadcrumListProps[]
+    unLayout?: boolean
+}) => {
+    const menus = useMenuList()
+    const router = useRouter()
+    const currentPath = router.pathname
+    const breadcrumb = getDynamicBreadcrumb('TRO_LY_AO', currentPath)
+    const [collapsed, setCollapsed] = useState(() => {
+        return typeof window !== 'undefined' && localStorage.getItem('collapsed') === 'true'
+    })
+
     const listBreadcrumb = useMemo(() => {
         return breadcrumb?.length > 0
             ? [
@@ -113,15 +190,12 @@ const DefaultLayout = ({
                 ]
     }, [breadcrumb, breadcrumbList])
 
-    const isAuthenticated = sessionVerified && status === 'authenticated'
-
     const { data: userSessionTimeout } = useFindUniqueConfig(
         {
             where: {
                 key: CONFIG_KEY.USER_SESSION_TIMEOUT,
             },
         },
-        { enabled: isAuthenticated }
     )
 
     const {
@@ -140,56 +214,6 @@ const DefaultLayout = ({
     useEffect(() => {
         handleCollapsed()
     }, [])
-
-    // Force fresh session verification on admin page mount
-    // This prevents stale cache from causing premature rendering
-    // which triggers UMD API calls → 401 → mta-session-expired dialog
-    useEffect(() => {
-        if (!hasStartedVerify.current) {
-            hasStartedVerify.current = true
-            refetch()
-        }
-    }, [refetch])
-
-    // Track when fresh verification completes
-    useEffect(() => {
-        if (hasStartedVerify.current && status !== 'loading') {
-            setSessionVerified(true)
-        }
-    }, [status])
-
-    // Redirect to SSO if not authenticated
-    // Chỉ redirect 1 lần duy nhất
-    useEffect(() => {
-        if (sessionVerified && status === 'unauthenticated' && !hasRedirected.current) {
-            hasRedirected.current = true
-            signIn()
-        }
-    }, [sessionVerified, status, signIn])
-
-    // Show loading while verifying session
-    if (!sessionVerified || status === 'loading') {
-        return (
-            <div className="h-screen w-screen flex items-center justify-center bg-gray-50">
-                <div className="text-center">
-                    <Spin size="large" />
-                    <p className="mt-4 text-gray-600">Đang kiểm tra đăng nhập...</p>
-                </div>
-            </div>
-        )
-    }
-
-    // Nếu unauthenticated, hiển thị loading (đang redirect)
-    if (status === 'unauthenticated') {
-        return (
-            <div className="h-screen w-screen flex items-center justify-center bg-gray-50">
-                <div className="text-center">
-                    <Spin size="large" />
-                    <p className="mt-4 text-gray-600">Đang chuyển hướng đến trang đăng nhập...</p>
-                </div>
-            </div>
-        )
-    }
 
     return (
         <IdleTimerProvider
