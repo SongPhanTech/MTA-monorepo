@@ -1,53 +1,53 @@
 .evaluation-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
 }
 
 .evaluation-table th,
 .evaluation-table td {
-    border: 1px solid #000;
-    padding: 6px;
+  border: 1px solid #000;
+  padding: 6px;
 }
 
 .evaluation-table thead th {
-    text-align: center;
-    font-weight: 700;
+  text-align: center;
+  font-weight: 700;
 }
 
 .col-tt {
-    width: 50px;
-    text-align: center;
+  width: 50px;
+  text-align: center;
 }
 
 .col-question {
-    width: 55%;
-    vertical-align: top;
+  width: 55%;
+  vertical-align: top;
 }
 
 .col-answer {
-    width: 7%;
-    text-align: center;
-    vertical-align: middle;
+  width: 7%;
+  text-align: center;
+  vertical-align: middle;
 }
 
 .section-row td {
-    font-weight: 700;
-    background: #f5f5f5;
+  font-weight: 700;
+  background: #f5f5f5;
 }
 
 .section-title {
-    text-transform: uppercase;
+  text-transform: uppercase;
 }
 
 /* Question layout */
 .q-text {
-    margin-bottom: 6px;
+  margin-bottom: 6px;
 }
 
 .q-options-text {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    font-size: 13px;
-    text-align: center;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  font-size: 13px;
+  text-align: center;
 }

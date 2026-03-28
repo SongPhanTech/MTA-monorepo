@@ -1,0 +1,31 @@
+{
+  "$schema": "https://raw.githubusercontent.com/oxc-project/oxc/refs/heads/main/npm/oxfmt/configuration_schema.json",
+  "useTabs": false,
+  "tabWidth": 2,
+  "printWidth": 100,
+  "singleQuote": false,
+  "jsxSingleQuote": false,
+  "quoteProps": "as-needed",
+  "trailingComma": "es5",
+  "semi": false,
+  "arrowParens": "always",
+  "bracketSameLine": false,
+  "bracketSpacing": true,
+  "singleAttributePerLine": false,
+  "ignorePatterns": [
+    "**/*.umd.js",
+    "**/apps/backup/**/*",
+    "**/.vscode",
+    "**/package.json",
+    "**/.next/**/*",
+    "**/out/**/*",
+    "**/generated/**/*",
+    "**/open-api/**/*",
+    "**/*.json",
+    "**/lib/api/**/*",
+    "**/packages/libs/src/api/schemas/**/*",
+    "**/.env",
+    "**/.env.*",
+    "**/public"
+  ]
+}

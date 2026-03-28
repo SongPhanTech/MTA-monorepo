@@ -1,2 +1,2 @@
-export * from './danh-sach-thong-bao'
-export * from './view-notification'
+export * from "./danh-sach-thong-bao"
+export * from "./view-notification"

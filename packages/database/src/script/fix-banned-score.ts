@@ -1,5 +1,5 @@
-import { calcFinalScore } from '../../../libs/src/utils'
-import { PrismaClient } from '../../generated/prisma-client'
+import { calcFinalScore } from "../../../libs/src/utils"
+import { PrismaClient } from "../../generated/prisma-client"
 
 const prisma = new PrismaClient()
 
@@ -15,29 +15,29 @@ const prisma = new PrismaClient()
 // })
 
 await prisma.academicRankingConvert.updateMany({
-    where: {
-        trainingCourse: {
-            baseScore: 'Base10',
-        },
+  where: {
+    trainingCourse: {
+      baseScore: "Base10",
     },
-    data: {
-        baseScore: 'Base10',
-        base4Min: null,
-        base4Max: null,
-    },
+  },
+  data: {
+    baseScore: "Base10",
+    base4Min: null,
+    base4Max: null,
+  },
 })
 
 await prisma.academicRankingConvert.updateMany({
-    where: {
-        trainingCourse: {
-            baseScore: 'Base4',
-        },
+  where: {
+    trainingCourse: {
+      baseScore: "Base4",
     },
-    data: {
-        baseScore: 'Base4',
-        base10Min: null,
-        base10Max: null,
-    },
+  },
+  data: {
+    baseScore: "Base4",
+    base10Min: null,
+    base10Max: null,
+  },
 })
 
 // const count = await prisma.subjectClass.count({

@@ -1,525 +1,522 @@
-import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
-import { $Enums, createId } from '@workspace/db'
-import { prisma } from '..'
+import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
+import { $Enums, createId } from "@workspace/db"
+import { prisma } from ".."
 
 const app = new OpenAPIHono({ strict: false })
 
 const createNewExamList = createRoute({
-    operationId: 'create-exams',
-    tags: ['Exam'],
-    path: '',
-    method: 'post',
-    request: {
-        body: {
-            content: {
-                'application/json': {
-                    schema: z
-                        .object({
-                            isGroupBySubject: z.boolean(),
-                            trainingObjectTypeId: z.string(),
-                            semesterId: z.string(),
-                        })
-                        .openapi('CreateExamsRequest'),
-                },
-            },
+  operationId: "create-exams",
+  tags: ["Exam"],
+  path: "",
+  method: "post",
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: z
+            .object({
+              isGroupBySubject: z.boolean(),
+              trainingObjectTypeId: z.string(),
+              semesterId: z.string(),
+            })
+            .openapi("CreateExamsRequest"),
         },
+      },
     },
-    responses: {
-        200: {
-            description: 'Lên danh sách thi thành công',
-            content: {
-                'application/json': {
-                    schema: z
-                        .object({
-                            success: z.boolean(),
-                            message: z.string(),
-                        })
-                        .openapi('CreateExamsResponse'),
-                },
-            },
+  },
+  responses: {
+    200: {
+      description: "Lên danh sách thi thành công",
+      content: {
+        "application/json": {
+          schema: z
+            .object({
+              success: z.boolean(),
+              message: z.string(),
+            })
+            .openapi("CreateExamsResponse"),
         },
-        400: {
-            description: 'Lên danh sách thi thất bại',
-            content: {
-                'application/json': {
-                    schema: z
-                        .object({
-                            message: z.string(),
-                        })
-                        .openapi('CreateExamsBadResponse'),
-                },
-            },
-        },
+      },
     },
+    400: {
+      description: "Lên danh sách thi thất bại",
+      content: {
+        "application/json": {
+          schema: z
+            .object({
+              message: z.string(),
+            })
+            .openapi("CreateExamsBadResponse"),
+        },
+      },
+    },
+  },
 })
 
 app.openapi(createNewExamList, async (c) => {
-    const { isGroupBySubject, trainingObjectTypeId, semesterId } = c.req.valid('json')
+  const { isGroupBySubject, trainingObjectTypeId, semesterId } = c.req.valid("json")
 
-    const subjectClasses = await prisma.subjectClass.findMany({
+  const subjectClasses = await prisma.subjectClass.findMany({
+    where: {
+      trainingObjectTypeId,
+      semesterId,
+      cancelled: false,
+      deletedAt: null,
+      // enteredScore: true,
+      isLockExamScore: false,
+      status: "OFFICIAL",
+      active: true,
+      type: {
+        in: ["NORMAL", "RETAKE", "REEXAM"],
+      },
+      examId: null,
+    },
+    select: {
+      id: true,
+      subjectId: true,
+      subjectClassStudent: {
+        select: { id: true },
         where: {
-            trainingObjectTypeId,
-            semesterId,
-            cancelled: false,
-            deletedAt: null,
-            // enteredScore: true,
-            isLockExamScore: false,
-            status: 'OFFICIAL',
-            active: true,
-            type: {
-                in: ['NORMAL', 'RETAKE', 'REEXAM'],
-            },
-            examId: null,
+          exempted: false,
+          withdrew: false,
+          examBanned: false,
         },
-        select: {
-            id: true,
-            subjectId: true,
-            subjectClassStudent: {
-                select: { id: true },
-                where: {
-                    exempted: false,
-                    withdrew: false,
-                    examBanned: false,
-                },
-            },
-            roomId: true,
-        },
-    })
+      },
+      roomId: true,
+    },
+  })
 
-    const mapExamToSubjectClass: Record<string, string> = {}
-    const exams = subjectClasses.map(({ id, subjectId, roomId, subjectClassStudent }) => {
-        if (!mapExamToSubjectClass[subjectId]) {
-            mapExamToSubjectClass[subjectId] = createId()
-        }
-        const examId = isGroupBySubject ? mapExamToSubjectClass[subjectId] : createId()
-
-        return {
-            examId: examId as string,
-            subjectClassId: id,
-            subjectId: subjectId,
-            roomId,
-            studentCount: subjectClassStudent.length,
-        }
-    })
-
-    if (exams.length === 0) {
-        return c.json(
-            { success: false, message: 'Không có lớp học nào cần lên danh sách thi' },
-            400
-        )
+  const mapExamToSubjectClass: Record<string, string> = {}
+  const exams = subjectClasses.map(({ id, subjectId, roomId, subjectClassStudent }) => {
+    if (!mapExamToSubjectClass[subjectId]) {
+      mapExamToSubjectClass[subjectId] = createId()
     }
+    const examId = isGroupBySubject ? mapExamToSubjectClass[subjectId] : createId()
 
-    const grouped = Object.groupBy(exams, (exam) => exam.examId)
+    return {
+      examId: examId as string,
+      subjectClassId: id,
+      subjectId: subjectId,
+      roomId,
+      studentCount: subjectClassStudent.length,
+    }
+  })
 
-    const groupedExams = Object.entries(grouped).map(([examId, items]) => ({
-        examId,
-        subjectId: items?.[0]?.subjectId ?? '',
-        classIds: items?.map((i) => i.subjectClassId),
-        roomId: items?.[0]?.roomId ?? undefined,
-        count: items?.reduce((acc, curr) => acc + curr.studentCount, 0),
-    }))
+  if (exams.length === 0) {
+    return c.json({ success: false, message: "Không có lớp học nào cần lên danh sách thi" }, 400)
+  }
 
-    await prisma.$transaction(async (tx) => {
-        for (const { examId, subjectId, roomId, count } of groupedExams) {
-            await tx.exam.create({
-                data: {
-                    id: examId,
-                    subjectVersionId: subjectId,
-                    semesterId,
-                    ...(roomId
-                        ? {
-                              examRooms: {
-                                  create: {
-                                      roomId,
-                                      capacity: count,
-                                      examList: {
-                                          create: {
-                                              start: 1,
-                                              end: 1,
-                                          },
-                                      },
-                                  },
-                              },
-                          }
-                        : {}),
+  const grouped = Object.groupBy(exams, (exam) => exam.examId)
+
+  const groupedExams = Object.entries(grouped).map(([examId, items]) => ({
+    examId,
+    subjectId: items?.[0]?.subjectId ?? "",
+    classIds: items?.map((i) => i.subjectClassId),
+    roomId: items?.[0]?.roomId ?? undefined,
+    count: items?.reduce((acc, curr) => acc + curr.studentCount, 0),
+  }))
+
+  await prisma.$transaction(async (tx) => {
+    for (const { examId, subjectId, roomId, count } of groupedExams) {
+      await tx.exam.create({
+        data: {
+          id: examId,
+          subjectVersionId: subjectId,
+          semesterId,
+          ...(roomId
+            ? {
+                examRooms: {
+                  create: {
+                    roomId,
+                    capacity: count,
+                    examList: {
+                      create: {
+                        start: 1,
+                        end: 1,
+                      },
+                    },
+                  },
                 },
-            })
-        }
-        for (const { classIds, examId } of groupedExams) {
-            await tx.subjectClass.updateMany({
-                where: { id: { in: classIds } },
-                data: { examId },
-            })
-        }
-    })
+              }
+            : {}),
+        },
+      })
+    }
+    for (const { classIds, examId } of groupedExams) {
+      await tx.subjectClass.updateMany({
+        where: { id: { in: classIds } },
+        data: { examId },
+      })
+    }
+  })
 
-    return c.json({ success: true, message: 'Lên danh sách thi thành công' })
+  return c.json({ success: true, message: "Lên danh sách thi thành công" })
 })
 
 const createNewReExamList = createRoute({
-    operationId: 'create-new-re-exam-list',
-    tags: ['Exam'],
-    path: '/reexam-list',
-    method: 'post',
-    request: {
-        body: {
-            content: {
-                'application/json': {
-                    schema: z
-                        .object({
-                            trainingObjectTypeId: z.string(),
-                            semesterId: z.string(),
-                        })
-                        .openapi('CreateReExamsRequest'),
-                },
-            },
+  operationId: "create-new-re-exam-list",
+  tags: ["Exam"],
+  path: "/reexam-list",
+  method: "post",
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: z
+            .object({
+              trainingObjectTypeId: z.string(),
+              semesterId: z.string(),
+            })
+            .openapi("CreateReExamsRequest"),
         },
+      },
     },
-    responses: {
-        200: {
-            description: 'Lên danh sách thi lại thành công',
-            content: {
-                'application/json': {
-                    schema: z
-                        .object({
-                            success: z.boolean(),
-                            message: z.string(),
-                        })
-                        .openapi('CreateExamsResponse'),
-                },
-            },
+  },
+  responses: {
+    200: {
+      description: "Lên danh sách thi lại thành công",
+      content: {
+        "application/json": {
+          schema: z
+            .object({
+              success: z.boolean(),
+              message: z.string(),
+            })
+            .openapi("CreateExamsResponse"),
         },
-        400: {
-            description: 'Lên danh sách thi lại thất bại',
-            content: {
-                'application/json': {
-                    schema: z
-                        .object({
-                            message: z.string(),
-                        })
-                        .openapi('CreateExamsBadResponse'),
-                },
-            },
-        },
+      },
     },
+    400: {
+      description: "Lên danh sách thi lại thất bại",
+      content: {
+        "application/json": {
+          schema: z
+            .object({
+              message: z.string(),
+            })
+            .openapi("CreateExamsBadResponse"),
+        },
+      },
+    },
+  },
 })
 
 app.openapi(createNewReExamList, async (c) => {
-    const { trainingObjectTypeId, semesterId } = c.req.valid('json')
+  const { trainingObjectTypeId, semesterId } = c.req.valid("json")
 
-    const subjects = await prisma.subjectVersion.findMany({
-        where: {
-            subjectClass: {
-                some: {
-                    trainingObjectTypeId,
-                    semesterId,
-                    cancelled: false,
-                    deletedAt: null,
-                    // enteredScore: true,
-                    enteredExamScore: true,
-                    type: $Enums.SubjectClassType.REEXAM,
-                },
-            },
+  const subjects = await prisma.subjectVersion.findMany({
+    where: {
+      subjectClass: {
+        some: {
+          trainingObjectTypeId,
+          semesterId,
+          cancelled: false,
+          deletedAt: null,
+          // enteredScore: true,
+          enteredExamScore: true,
+          type: $Enums.SubjectClassType.REEXAM,
         },
+      },
+    },
+    select: {
+      subjectClass: {
         select: {
-            subjectClass: {
-                select: {
-                    id: true,
-                    subjectId: true,
-                    subjectClassStudent: {
-                        select: { id: true },
-                        where: {
-                            examPostponed: true,
-                            suspended: true,
-                        },
-                    },
-                },
-                where: {
-                    // TODO: cần kiểu tra theo yêu cầu
-                    examId: null,
-                },
+          id: true,
+          subjectId: true,
+          subjectClassStudent: {
+            select: { id: true },
+            where: {
+              examPostponed: true,
+              suspended: true,
             },
+          },
         },
-    })
+        where: {
+          // TODO: cần kiểu tra theo yêu cầu
+          examId: null,
+        },
+      },
+    },
+  })
 
-    const exams = subjects.flatMap(({ subjectClass }) => {
-        const id = createId()
-        return subjectClass.map((cls) => ({
-            examId: id,
-            classId: cls.id,
-            studentSubjectScoreIds: cls.subjectClassStudent.map((scs) => scs.id),
-            subjectId: cls.subjectId,
-        }))
-    })
-
-    if (exams.length === 0) {
-        return c.json(
-            { success: false, message: 'Không có lớp học nào cần lên danh sách thi lại' },
-            400
-        )
-    }
-
-    const grouped = Object.groupBy(exams, (exam) => exam.examId)
-
-    const groupedExams = Object.entries(grouped).map(([examId, items]) => ({
-        examId,
-        classIds: items?.map((i) => i.classId),
-        studentSubjectScoreIds: items?.flatMap((i) => i.studentSubjectScoreIds),
-        subjectId: items?.[0]?.subjectId ?? '',
+  const exams = subjects.flatMap(({ subjectClass }) => {
+    const id = createId()
+    return subjectClass.map((cls) => ({
+      examId: id,
+      classId: cls.id,
+      studentSubjectScoreIds: cls.subjectClassStudent.map((scs) => scs.id),
+      subjectId: cls.subjectId,
     }))
+  })
 
-    await prisma.$transaction(async (tx) => {
-        await tx.exam.createMany({
-            data: groupedExams.map(({ examId, subjectId }) => ({
-                id: examId,
-                subjectVersionId: subjectId,
-                semesterId,
-            })),
-        })
+  if (exams.length === 0) {
+    return c.json(
+      { success: false, message: "Không có lớp học nào cần lên danh sách thi lại" },
+      400
+    )
+  }
 
-        await tx.$executeRawUnsafe(`
+  const grouped = Object.groupBy(exams, (exam) => exam.examId)
+
+  const groupedExams = Object.entries(grouped).map(([examId, items]) => ({
+    examId,
+    classIds: items?.map((i) => i.classId),
+    studentSubjectScoreIds: items?.flatMap((i) => i.studentSubjectScoreIds),
+    subjectId: items?.[0]?.subjectId ?? "",
+  }))
+
+  await prisma.$transaction(async (tx) => {
+    await tx.exam.createMany({
+      data: groupedExams.map(({ examId, subjectId }) => ({
+        id: examId,
+        subjectVersionId: subjectId,
+        semesterId,
+      })),
+    })
+
+    await tx.$executeRawUnsafe(`
             UPDATE "ql-dao-tao"."SubjectClass" AS c
             SET "examId" = data."examId"
             FROM (
                 VALUES
-                ${exams.map(({ examId, classId }) => `('${classId}', '${examId}')`).join(',\n')}
+                ${exams.map(({ examId, classId }) => `('${classId}', '${examId}')`).join(",\n")}
             ) AS data("classId", "examId")
             WHERE c."id" = data."classId";
             `)
 
-        await tx.$executeRawUnsafe(`
+    await tx.$executeRawUnsafe(`
             UPDATE "ql-dao-tao"."StudentSubjectScore" AS sss
             SET "examId" = data."examId"
             FROM (
                 VALUES
                 ${exams
-                    .flatMap(({ examId, studentSubjectScoreIds }) =>
-                        studentSubjectScoreIds.map((id) => `('${id}', '${examId}')`)
-                    )
-                    .join(',\n')}
+                  .flatMap(({ examId, studentSubjectScoreIds }) =>
+                    studentSubjectScoreIds.map((id) => `('${id}', '${examId}')`)
+                  )
+                  .join(",\n")}
             ) AS data("id", "examId")
             WHERE sss."id" = data."id";
             `)
-    })
+  })
 
-    return c.json({ success: true, message: 'Lên danh sách thi lại thành công' })
+  return c.json({ success: true, message: "Lên danh sách thi lại thành công" })
 })
 
 const mergeExam = createRoute({
-    operationId: 'merge-exam',
-    tags: ['Exam'],
-    path: '/merge',
-    method: 'post',
-    request: {
-        body: {
-            content: {
-                'application/json': {
-                    schema: z
-                        .object({
-                            examIds: z.array(z.string()).min(2),
-                        })
-                        .openapi('MergeExamRequest'),
-                },
-            },
+  operationId: "merge-exam",
+  tags: ["Exam"],
+  path: "/merge",
+  method: "post",
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: z
+            .object({
+              examIds: z.array(z.string()).min(2),
+            })
+            .openapi("MergeExamRequest"),
         },
+      },
     },
-    responses: {
-        200: {
-            description: 'Ghép kỳ thi thành công',
-            content: {
-                'application/json': {
-                    schema: z
-                        .object({
-                            success: z.boolean(),
-                            message: z.string(),
-                        })
-                        .openapi('MergeExamResponse'),
-                },
-            },
+  },
+  responses: {
+    200: {
+      description: "Ghép kỳ thi thành công",
+      content: {
+        "application/json": {
+          schema: z
+            .object({
+              success: z.boolean(),
+              message: z.string(),
+            })
+            .openapi("MergeExamResponse"),
         },
-        400: {
-            description: 'Ghép kỳ thi thất bại',
-            content: {
-                'application/json': {
-                    schema: z
-                        .object({
-                            message: z.string(),
-                        })
-                        .openapi('MergeExamBadResponse'),
-                },
-            },
-        },
+      },
     },
+    400: {
+      description: "Ghép kỳ thi thất bại",
+      content: {
+        "application/json": {
+          schema: z
+            .object({
+              message: z.string(),
+            })
+            .openapi("MergeExamBadResponse"),
+        },
+      },
+    },
+  },
 })
 
 app.openapi(mergeExam, async (c) => {
-    const { examIds } = c.req.valid('json')
+  const { examIds } = c.req.valid("json")
 
-    const classes = await prisma.subjectClass.findMany({
-        where: {
-            examId: { in: examIds },
-            cancelled: false,
-            deletedAt: null,
-            status: 'OFFICIAL',
-        },
-        select: {
-            id: true,
-            examId: true,
-            subjectId: true,
-            semesterId: true,
-        },
+  const classes = await prisma.subjectClass.findMany({
+    where: {
+      examId: { in: examIds },
+      cancelled: false,
+      deletedAt: null,
+      status: "OFFICIAL",
+    },
+    select: {
+      id: true,
+      examId: true,
+      subjectId: true,
+      semesterId: true,
+    },
+  })
+
+  if (classes.length === 0) {
+    return c.json({ success: false, message: "Không có lớp học cần ghép" }, 400)
+  }
+
+  const subjectVersionIds = [...new Set(classes.map((cls) => cls.subjectId))]
+  if (subjectVersionIds.length > 1) {
+    return c.json(
+      {
+        success: false,
+        message: "Chỉ có thể ghép các kỳ thi cùng môn học",
+      },
+      400
+    )
+  }
+
+  const subjectVersionId = subjectVersionIds[0] as string
+  const semesterId = classes[0]?.semesterId as string
+
+  const newExamId = createId()
+
+  const classIds = classes.map((cls) => cls.id)
+
+  await prisma.$transaction(async (tx) => {
+    await tx.exam.create({
+      data: { id: newExamId, subjectVersionId, semesterId },
     })
-
-    if (classes.length === 0) {
-        return c.json({ success: false, message: 'Không có lớp học cần ghép' }, 400)
-    }
-
-    const subjectVersionIds = [...new Set(classes.map((cls) => cls.subjectId))]
-    if (subjectVersionIds.length > 1) {
-        return c.json(
-            {
-                success: false,
-                message: 'Chỉ có thể ghép các kỳ thi cùng môn học',
-            },
-            400
-        )
-    }
-
-    const subjectVersionId = subjectVersionIds[0] as string
-    const semesterId = classes[0]?.semesterId as string
-
-    const newExamId = createId()
-
-    const classIds = classes.map((cls) => cls.id)
-
-    await prisma.$transaction(async (tx) => {
-        await tx.exam.create({
-            data: { id: newExamId, subjectVersionId, semesterId },
-        })
-        await tx.subjectClass.updateMany({
-            where: { id: { in: classIds } },
-            data: { examId: newExamId },
-        })
-        await tx.exam.deleteMany({
-            where: { id: { in: examIds } },
-        })
+    await tx.subjectClass.updateMany({
+      where: { id: { in: classIds } },
+      data: { examId: newExamId },
     })
+    await tx.exam.deleteMany({
+      where: { id: { in: examIds } },
+    })
+  })
 
-    return c.json({ success: true, message: 'Ghép kỳ thi thành công' })
+  return c.json({ success: true, message: "Ghép kỳ thi thành công" })
 })
 
 const unmergeExam = createRoute({
-    operationId: 'unmerge-exam',
-    tags: ['Exam'],
-    path: '/unmerge',
-    method: 'post',
-    request: {
-        body: {
-            content: {
-                'application/json': {
-                    schema: z
-                        .object({
-                            examId: z.string(),
-                        })
-                        .openapi('UnmergeExamRequest'),
-                },
-            },
+  operationId: "unmerge-exam",
+  tags: ["Exam"],
+  path: "/unmerge",
+  method: "post",
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: z
+            .object({
+              examId: z.string(),
+            })
+            .openapi("UnmergeExamRequest"),
         },
+      },
     },
-    responses: {
-        200: {
-            description: 'Tách kỳ thi thành công',
-            content: {
-                'application/json': {
-                    schema: z
-                        .object({
-                            success: z.boolean(),
-                            message: z.string(),
-                        })
-                        .openapi('UnmergeExamResponse'),
-                },
-            },
+  },
+  responses: {
+    200: {
+      description: "Tách kỳ thi thành công",
+      content: {
+        "application/json": {
+          schema: z
+            .object({
+              success: z.boolean(),
+              message: z.string(),
+            })
+            .openapi("UnmergeExamResponse"),
         },
-        400: {
-            description: 'Tách kỳ thi thất bại',
-            content: {
-                'application/json': {
-                    schema: z
-                        .object({
-                            message: z.string(),
-                        })
-                        .openapi('UnmergeExamBadResponse'),
-                },
-            },
-        },
+      },
     },
+    400: {
+      description: "Tách kỳ thi thất bại",
+      content: {
+        "application/json": {
+          schema: z
+            .object({
+              message: z.string(),
+            })
+            .openapi("UnmergeExamBadResponse"),
+        },
+      },
+    },
+  },
 })
 
 app.openapi(unmergeExam, async (c) => {
-    const { examId } = c.req.valid('json')
+  const { examId } = c.req.valid("json")
 
-    const classes = await prisma.subjectClass.findMany({
-        where: {
-            examId,
-            cancelled: false,
-            deletedAt: null,
-            status: 'OFFICIAL',
+  const classes = await prisma.subjectClass.findMany({
+    where: {
+      examId,
+      cancelled: false,
+      deletedAt: null,
+      status: "OFFICIAL",
+    },
+    select: {
+      id: true,
+      subjectId: true,
+      semesterId: true,
+    },
+  })
+
+  if (classes.length === 0) {
+    return c.json({ success: false, message: "Không có lớp học nào cần tách" }, 400)
+  }
+
+  if (classes.length === 1) {
+    return c.json(
+      {
+        success: false,
+        message: "Kỳ thi chỉ có 1 lớp, không cần tách",
+      },
+      400
+    )
+  }
+
+  const subjectVersionId = classes?.[0]?.subjectId as string
+  const semesterId = classes?.[0]?.semesterId as string
+
+  const newExams = classes.map((cls) => ({
+    examId: createId(),
+    classId: cls.id,
+  }))
+
+  await prisma.$transaction(async (tx) => {
+    await tx.subjectClass.updateMany({
+      where: { id: { in: classes.map((c) => c.id) } },
+      data: { examId: null },
+    })
+    for (const { examId, classId } of newExams) {
+      await tx.exam.create({
+        data: {
+          id: examId,
+          subjectVersionId,
+          semesterId,
+          subjectClass: {
+            connect: { id: classId },
+          },
         },
-        select: {
-            id: true,
-            subjectId: true,
-            semesterId: true,
-        },
-    })
-
-    if (classes.length === 0) {
-        return c.json({ success: false, message: 'Không có lớp học nào cần tách' }, 400)
+      })
     }
-
-    if (classes.length === 1) {
-        return c.json(
-            {
-                success: false,
-                message: 'Kỳ thi chỉ có 1 lớp, không cần tách',
-            },
-            400
-        )
-    }
-
-    const subjectVersionId = classes?.[0]?.subjectId as string
-    const semesterId = classes?.[0]?.semesterId as string
-
-    const newExams = classes.map((cls) => ({
-        examId: createId(),
-        classId: cls.id,
-    }))
-
-    await prisma.$transaction(async (tx) => {
-        await tx.subjectClass.updateMany({
-            where: { id: { in: classes.map((c) => c.id) } },
-            data: { examId: null },
-        })
-        for (const { examId, classId } of newExams) {
-            await tx.exam.create({
-                data: {
-                    id: examId,
-                    subjectVersionId,
-                    semesterId,
-                    subjectClass: {
-                        connect: { id: classId },
-                    },
-                },
-            })
-        }
-        await tx.exam.delete({
-            where: { id: examId },
-        })
+    await tx.exam.delete({
+      where: { id: examId },
     })
+  })
 
-    return c.json({
-        success: true,
-        message: 'Đã tách kỳ thi thành công',
-    })
+  return c.json({
+    success: true,
+    message: "Đã tách kỳ thi thành công",
+  })
 })
 
 export default app

@@ -4,44 +4,44 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from "@tanstack/react-query"
 import type {
-    DataTag,
-    DefinedInitialDataOptions,
-    DefinedUseQueryResult,
-    MutationFunction,
-    QueryClient,
-    QueryFunction,
-    QueryKey,
-    UndefinedInitialDataOptions,
-    UseMutationOptions,
-    UseMutationResult,
-    UseQueryOptions,
-    UseQueryResult,
-} from '@tanstack/react-query'
+  DataTag,
+  DefinedInitialDataOptions,
+  DefinedUseQueryResult,
+  MutationFunction,
+  QueryClient,
+  QueryFunction,
+  QueryKey,
+  UndefinedInitialDataOptions,
+  UseMutationOptions,
+  UseMutationResult,
+  UseQueryOptions,
+  UseQueryResult,
+} from "@tanstack/react-query"
 
 import type {
-    ClassRegister200,
-    ClassRegister400,
-    ClassRegister404,
-    ClassRegisterBody,
-    ClassUnregister200,
-    ClassUnregister400,
-    ClassUnregister404,
-    ClassUnregisterBody,
-    GetClassRegisterSession200Item,
-    GetClassRegisterSession400,
-    GetClassRegisterSession404,
-    GetClassesInfo200Item,
-    GetClassesInfo400,
-    GetClassesInfo404,
-    GetClassesInfoParams,
-    GetSessionParams,
-    Session,
-    Unauthorized,
-} from './schemas'
+  ClassRegister200,
+  ClassRegister400,
+  ClassRegister404,
+  ClassRegisterBody,
+  ClassUnregister200,
+  ClassUnregister400,
+  ClassUnregister404,
+  ClassUnregisterBody,
+  GetClassRegisterSession200Item,
+  GetClassRegisterSession400,
+  GetClassRegisterSession404,
+  GetClassesInfo200Item,
+  GetClassesInfo400,
+  GetClassesInfo404,
+  GetClassesInfoParams,
+  GetSessionParams,
+  Session,
+  Unauthorized,
+} from "./schemas"
 
-import { customPortalFetch } from './custom-instance'
+import { customPortalFetch } from "./custom-instance"
 type AwaitedInput<T> = PromiseLike<T> | T
 
 type Awaited<O> = O extends AwaitedInput<infer T> ? T : never
@@ -49,151 +49,151 @@ type Awaited<O> = O extends AwaitedInput<infer T> ? T : never
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 
 export type getSessionResponse200 = {
-    data: Session
-    status: 200
+  data: Session
+  status: 200
 }
 
 export type getSessionResponse401 = {
-    data: Unauthorized
-    status: 401
+  data: Unauthorized
+  status: 401
 }
 
 export type getSessionResponseSuccess = getSessionResponse200 & {
-    headers: Headers
+  headers: Headers
 }
 export type getSessionResponseError = getSessionResponse401 & {
-    headers: Headers
+  headers: Headers
 }
 
 export type getSessionResponse = getSessionResponseSuccess | getSessionResponseError
 
 export const getGetSessionUrl = (params: GetSessionParams) => {
-    const normalizedParams = new URLSearchParams()
+  const normalizedParams = new URLSearchParams()
 
-    Object.entries(params || {}).forEach(([key, value]) => {
-        if (value !== undefined) {
-            normalizedParams.append(key, value === null ? 'null' : value.toString())
-        }
-    })
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString())
+    }
+  })
 
-    const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString()
 
-    return stringifiedParams.length > 0
-        ? `/api/auth/get-session?${stringifiedParams}`
-        : `/api/auth/get-session`
+  return stringifiedParams.length > 0
+    ? `/api/auth/get-session?${stringifiedParams}`
+    : `/api/auth/get-session`
 }
 
 export const getSession = async (
-    params: GetSessionParams,
-    options?: RequestInit
+  params: GetSessionParams,
+  options?: RequestInit
 ): Promise<getSessionResponse> => {
-    return customPortalFetch<getSessionResponse>(getGetSessionUrl(params), {
-        ...options,
-        method: 'GET',
-    })
+  return customPortalFetch<getSessionResponse>(getGetSessionUrl(params), {
+    ...options,
+    method: "GET",
+  })
 }
 
 export const getGetSessionQueryKey = (params?: GetSessionParams) => {
-    return [`/api/auth/get-session`, ...(params ? [params] : [])] as const
+  return [`/api/auth/get-session`, ...(params ? [params] : [])] as const
 }
 
 export const getGetSessionQueryOptions = <
-    TData = Awaited<ReturnType<typeof getSession>>,
-    TError = Unauthorized,
+  TData = Awaited<ReturnType<typeof getSession>>,
+  TError = Unauthorized,
 >(
-    params: GetSessionParams,
-    options?: {
-        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>
-        request?: SecondParameter<typeof customPortalFetch>
-    }
+  params: GetSessionParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>
+    request?: SecondParameter<typeof customPortalFetch>
+  }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-    const queryKey = queryOptions?.queryKey ?? getGetSessionQueryKey(params)
+  const queryKey = queryOptions?.queryKey ?? getGetSessionQueryKey(params)
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSession>>> = ({ signal }) =>
-        getSession(params, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getSession>>> = ({ signal }) =>
+    getSession(params, { signal, ...requestOptions })
 
-    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-        Awaited<ReturnType<typeof getSession>>,
-        TError,
-        TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getSession>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetSessionQueryResult = NonNullable<Awaited<ReturnType<typeof getSession>>>
 export type GetSessionQueryError = Unauthorized
 
 export function useGetSession<
-    TData = Awaited<ReturnType<typeof getSession>>,
-    TError = Unauthorized,
+  TData = Awaited<ReturnType<typeof getSession>>,
+  TError = Unauthorized,
 >(
-    params: GetSessionParams,
-    options: {
-        query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>> &
-            Pick<
-                DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof getSession>>,
-                    TError,
-                    Awaited<ReturnType<typeof getSession>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customPortalFetch>
-    },
-    queryClient?: QueryClient
+  params: GetSessionParams,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>> &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSession>>,
+          TError,
+          Awaited<ReturnType<typeof getSession>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customPortalFetch>
+  },
+  queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetSession<
-    TData = Awaited<ReturnType<typeof getSession>>,
-    TError = Unauthorized,
+  TData = Awaited<ReturnType<typeof getSession>>,
+  TError = Unauthorized,
 >(
-    params: GetSessionParams,
-    options?: {
-        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>> &
-            Pick<
-                UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof getSession>>,
-                    TError,
-                    Awaited<ReturnType<typeof getSession>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customPortalFetch>
-    },
-    queryClient?: QueryClient
+  params: GetSessionParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>> &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSession>>,
+          TError,
+          Awaited<ReturnType<typeof getSession>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customPortalFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetSession<
-    TData = Awaited<ReturnType<typeof getSession>>,
-    TError = Unauthorized,
+  TData = Awaited<ReturnType<typeof getSession>>,
+  TError = Unauthorized,
 >(
-    params: GetSessionParams,
-    options?: {
-        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>
-        request?: SecondParameter<typeof customPortalFetch>
-    },
-    queryClient?: QueryClient
+  params: GetSessionParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>
+    request?: SecondParameter<typeof customPortalFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useGetSession<
-    TData = Awaited<ReturnType<typeof getSession>>,
-    TError = Unauthorized,
+  TData = Awaited<ReturnType<typeof getSession>>,
+  TError = Unauthorized,
 >(
-    params: GetSessionParams,
-    options?: {
-        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>
-        request?: SecondParameter<typeof customPortalFetch>
-    },
-    queryClient?: QueryClient
+  params: GetSessionParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>
+    request?: SecondParameter<typeof customPortalFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getGetSessionQueryOptions(params, options)
+  const queryOptions = getGetSessionQueryOptions(params, options)
 
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-        queryKey: DataTag<QueryKey, TData, TError>
-    }
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 
-    query.queryKey = queryOptions.queryKey
+  query.queryKey = queryOptions.queryKey
 
-    return query
+  return query
 }
 
 /**
@@ -201,159 +201,159 @@ export function useGetSession<
  * @summary Lấy thống tin đợt đăng ký học
  */
 export type getClassRegisterSessionResponse200 = {
-    data: GetClassRegisterSession200Item[]
-    status: 200
+  data: GetClassRegisterSession200Item[]
+  status: 200
 }
 
 export type getClassRegisterSessionResponse400 = {
-    data: GetClassRegisterSession400
-    status: 400
+  data: GetClassRegisterSession400
+  status: 400
 }
 
 export type getClassRegisterSessionResponse404 = {
-    data: GetClassRegisterSession404
-    status: 404
+  data: GetClassRegisterSession404
+  status: 404
 }
 
 export type getClassRegisterSessionResponseSuccess = getClassRegisterSessionResponse200 & {
-    headers: Headers
+  headers: Headers
 }
 export type getClassRegisterSessionResponseError = (
-    | getClassRegisterSessionResponse400
-    | getClassRegisterSessionResponse404
+  | getClassRegisterSessionResponse400
+  | getClassRegisterSessionResponse404
 ) & {
-    headers: Headers
+  headers: Headers
 }
 
 export type getClassRegisterSessionResponse =
-    | getClassRegisterSessionResponseSuccess
-    | getClassRegisterSessionResponseError
+  | getClassRegisterSessionResponseSuccess
+  | getClassRegisterSessionResponseError
 
 export const getGetClassRegisterSessionUrl = () => {
-    return `/api/class-register/get-class-register-session`
+  return `/api/class-register/get-class-register-session`
 }
 
 export const getClassRegisterSession = async (
-    options?: RequestInit
+  options?: RequestInit
 ): Promise<getClassRegisterSessionResponse> => {
-    return customPortalFetch<getClassRegisterSessionResponse>(getGetClassRegisterSessionUrl(), {
-        ...options,
-        method: 'GET',
-    })
+  return customPortalFetch<getClassRegisterSessionResponse>(getGetClassRegisterSessionUrl(), {
+    ...options,
+    method: "GET",
+  })
 }
 
 export const getGetClassRegisterSessionQueryKey = () => {
-    return [`/api/class-register/get-class-register-session`] as const
+  return [`/api/class-register/get-class-register-session`] as const
 }
 
 export const getGetClassRegisterSessionQueryOptions = <
-    TData = Awaited<ReturnType<typeof getClassRegisterSession>>,
-    TError = GetClassRegisterSession400 | GetClassRegisterSession404,
+  TData = Awaited<ReturnType<typeof getClassRegisterSession>>,
+  TError = GetClassRegisterSession400 | GetClassRegisterSession404,
 >(options?: {
-    query?: Partial<
-        UseQueryOptions<Awaited<ReturnType<typeof getClassRegisterSession>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customPortalFetch>
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof getClassRegisterSession>>, TError, TData>
+  >
+  request?: SecondParameter<typeof customPortalFetch>
 }) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-    const queryKey = queryOptions?.queryKey ?? getGetClassRegisterSessionQueryKey()
+  const queryKey = queryOptions?.queryKey ?? getGetClassRegisterSessionQueryKey()
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getClassRegisterSession>>> = ({
-        signal,
-    }) => getClassRegisterSession({ signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getClassRegisterSession>>> = ({
+    signal,
+  }) => getClassRegisterSession({ signal, ...requestOptions })
 
-    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-        Awaited<ReturnType<typeof getClassRegisterSession>>,
-        TError,
-        TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getClassRegisterSession>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetClassRegisterSessionQueryResult = NonNullable<
-    Awaited<ReturnType<typeof getClassRegisterSession>>
+  Awaited<ReturnType<typeof getClassRegisterSession>>
 >
 export type GetClassRegisterSessionQueryError =
-    | GetClassRegisterSession400
-    | GetClassRegisterSession404
+  | GetClassRegisterSession400
+  | GetClassRegisterSession404
 
 export function useGetClassRegisterSession<
-    TData = Awaited<ReturnType<typeof getClassRegisterSession>>,
-    TError = GetClassRegisterSession400 | GetClassRegisterSession404,
+  TData = Awaited<ReturnType<typeof getClassRegisterSession>>,
+  TError = GetClassRegisterSession400 | GetClassRegisterSession404,
 >(
-    options: {
-        query: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getClassRegisterSession>>, TError, TData>
-        > &
-            Pick<
-                DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof getClassRegisterSession>>,
-                    TError,
-                    Awaited<ReturnType<typeof getClassRegisterSession>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customPortalFetch>
-    },
-    queryClient?: QueryClient
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getClassRegisterSession>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getClassRegisterSession>>,
+          TError,
+          Awaited<ReturnType<typeof getClassRegisterSession>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customPortalFetch>
+  },
+  queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetClassRegisterSession<
-    TData = Awaited<ReturnType<typeof getClassRegisterSession>>,
-    TError = GetClassRegisterSession400 | GetClassRegisterSession404,
+  TData = Awaited<ReturnType<typeof getClassRegisterSession>>,
+  TError = GetClassRegisterSession400 | GetClassRegisterSession404,
 >(
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getClassRegisterSession>>, TError, TData>
-        > &
-            Pick<
-                UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof getClassRegisterSession>>,
-                    TError,
-                    Awaited<ReturnType<typeof getClassRegisterSession>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customPortalFetch>
-    },
-    queryClient?: QueryClient
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getClassRegisterSession>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getClassRegisterSession>>,
+          TError,
+          Awaited<ReturnType<typeof getClassRegisterSession>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customPortalFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetClassRegisterSession<
-    TData = Awaited<ReturnType<typeof getClassRegisterSession>>,
-    TError = GetClassRegisterSession400 | GetClassRegisterSession404,
+  TData = Awaited<ReturnType<typeof getClassRegisterSession>>,
+  TError = GetClassRegisterSession400 | GetClassRegisterSession404,
 >(
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getClassRegisterSession>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customPortalFetch>
-    },
-    queryClient?: QueryClient
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getClassRegisterSession>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customPortalFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Lấy thống tin đợt đăng ký học
  */
 
 export function useGetClassRegisterSession<
-    TData = Awaited<ReturnType<typeof getClassRegisterSession>>,
-    TError = GetClassRegisterSession400 | GetClassRegisterSession404,
+  TData = Awaited<ReturnType<typeof getClassRegisterSession>>,
+  TError = GetClassRegisterSession400 | GetClassRegisterSession404,
 >(
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getClassRegisterSession>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customPortalFetch>
-    },
-    queryClient?: QueryClient
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getClassRegisterSession>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customPortalFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getGetClassRegisterSessionQueryOptions(options)
+  const queryOptions = getGetClassRegisterSessionQueryOptions(options)
 
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-        queryKey: DataTag<QueryKey, TData, TError>
-    }
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 
-    query.queryKey = queryOptions.queryKey
+  query.queryKey = queryOptions.queryKey
 
-    return query
+  return query
 }
 
 /**
@@ -361,164 +361,162 @@ export function useGetClassRegisterSession<
  * @summary Lấy thống tin lớp học
  */
 export type getClassesInfoResponse200 = {
-    data: GetClassesInfo200Item[]
-    status: 200
+  data: GetClassesInfo200Item[]
+  status: 200
 }
 
 export type getClassesInfoResponse400 = {
-    data: GetClassesInfo400
-    status: 400
+  data: GetClassesInfo400
+  status: 400
 }
 
 export type getClassesInfoResponse404 = {
-    data: GetClassesInfo404
-    status: 404
+  data: GetClassesInfo404
+  status: 404
 }
 
 export type getClassesInfoResponseSuccess = getClassesInfoResponse200 & {
-    headers: Headers
+  headers: Headers
 }
 export type getClassesInfoResponseError = (
-    | getClassesInfoResponse400
-    | getClassesInfoResponse404
+  | getClassesInfoResponse400
+  | getClassesInfoResponse404
 ) & {
-    headers: Headers
+  headers: Headers
 }
 
 export type getClassesInfoResponse = getClassesInfoResponseSuccess | getClassesInfoResponseError
 
 export const getGetClassesInfoUrl = (params: GetClassesInfoParams) => {
-    const normalizedParams = new URLSearchParams()
+  const normalizedParams = new URLSearchParams()
 
-    Object.entries(params || {}).forEach(([key, value]) => {
-        if (value !== undefined) {
-            normalizedParams.append(key, value === null ? 'null' : value.toString())
-        }
-    })
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString())
+    }
+  })
 
-    const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString()
 
-    return stringifiedParams.length > 0
-        ? `/api/class-register/get-classes-info?${stringifiedParams}`
-        : `/api/class-register/get-classes-info`
+  return stringifiedParams.length > 0
+    ? `/api/class-register/get-classes-info?${stringifiedParams}`
+    : `/api/class-register/get-classes-info`
 }
 
 export const getClassesInfo = async (
-    params: GetClassesInfoParams,
-    options?: RequestInit
+  params: GetClassesInfoParams,
+  options?: RequestInit
 ): Promise<getClassesInfoResponse> => {
-    return customPortalFetch<getClassesInfoResponse>(getGetClassesInfoUrl(params), {
-        ...options,
-        method: 'GET',
-    })
+  return customPortalFetch<getClassesInfoResponse>(getGetClassesInfoUrl(params), {
+    ...options,
+    method: "GET",
+  })
 }
 
 export const getGetClassesInfoQueryKey = (params?: GetClassesInfoParams) => {
-    return [`/api/class-register/get-classes-info`, ...(params ? [params] : [])] as const
+  return [`/api/class-register/get-classes-info`, ...(params ? [params] : [])] as const
 }
 
 export const getGetClassesInfoQueryOptions = <
-    TData = Awaited<ReturnType<typeof getClassesInfo>>,
-    TError = GetClassesInfo400 | GetClassesInfo404,
+  TData = Awaited<ReturnType<typeof getClassesInfo>>,
+  TError = GetClassesInfo400 | GetClassesInfo404,
 >(
-    params: GetClassesInfoParams,
-    options?: {
-        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassesInfo>>, TError, TData>>
-        request?: SecondParameter<typeof customPortalFetch>
-    }
+  params: GetClassesInfoParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassesInfo>>, TError, TData>>
+    request?: SecondParameter<typeof customPortalFetch>
+  }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-    const queryKey = queryOptions?.queryKey ?? getGetClassesInfoQueryKey(params)
+  const queryKey = queryOptions?.queryKey ?? getGetClassesInfoQueryKey(params)
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getClassesInfo>>> = ({ signal }) =>
-        getClassesInfo(params, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getClassesInfo>>> = ({ signal }) =>
+    getClassesInfo(params, { signal, ...requestOptions })
 
-    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-        Awaited<ReturnType<typeof getClassesInfo>>,
-        TError,
-        TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getClassesInfo>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetClassesInfoQueryResult = NonNullable<Awaited<ReturnType<typeof getClassesInfo>>>
 export type GetClassesInfoQueryError = GetClassesInfo400 | GetClassesInfo404
 
 export function useGetClassesInfo<
-    TData = Awaited<ReturnType<typeof getClassesInfo>>,
-    TError = GetClassesInfo400 | GetClassesInfo404,
+  TData = Awaited<ReturnType<typeof getClassesInfo>>,
+  TError = GetClassesInfo400 | GetClassesInfo404,
 >(
-    params: GetClassesInfoParams,
-    options: {
-        query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassesInfo>>, TError, TData>> &
-            Pick<
-                DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof getClassesInfo>>,
-                    TError,
-                    Awaited<ReturnType<typeof getClassesInfo>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customPortalFetch>
-    },
-    queryClient?: QueryClient
+  params: GetClassesInfoParams,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassesInfo>>, TError, TData>> &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getClassesInfo>>,
+          TError,
+          Awaited<ReturnType<typeof getClassesInfo>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customPortalFetch>
+  },
+  queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetClassesInfo<
-    TData = Awaited<ReturnType<typeof getClassesInfo>>,
-    TError = GetClassesInfo400 | GetClassesInfo404,
+  TData = Awaited<ReturnType<typeof getClassesInfo>>,
+  TError = GetClassesInfo400 | GetClassesInfo404,
 >(
-    params: GetClassesInfoParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getClassesInfo>>, TError, TData>
-        > &
-            Pick<
-                UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof getClassesInfo>>,
-                    TError,
-                    Awaited<ReturnType<typeof getClassesInfo>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customPortalFetch>
-    },
-    queryClient?: QueryClient
+  params: GetClassesInfoParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassesInfo>>, TError, TData>> &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getClassesInfo>>,
+          TError,
+          Awaited<ReturnType<typeof getClassesInfo>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customPortalFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetClassesInfo<
-    TData = Awaited<ReturnType<typeof getClassesInfo>>,
-    TError = GetClassesInfo400 | GetClassesInfo404,
+  TData = Awaited<ReturnType<typeof getClassesInfo>>,
+  TError = GetClassesInfo400 | GetClassesInfo404,
 >(
-    params: GetClassesInfoParams,
-    options?: {
-        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassesInfo>>, TError, TData>>
-        request?: SecondParameter<typeof customPortalFetch>
-    },
-    queryClient?: QueryClient
+  params: GetClassesInfoParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassesInfo>>, TError, TData>>
+    request?: SecondParameter<typeof customPortalFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Lấy thống tin lớp học
  */
 
 export function useGetClassesInfo<
-    TData = Awaited<ReturnType<typeof getClassesInfo>>,
-    TError = GetClassesInfo400 | GetClassesInfo404,
+  TData = Awaited<ReturnType<typeof getClassesInfo>>,
+  TError = GetClassesInfo400 | GetClassesInfo404,
 >(
-    params: GetClassesInfoParams,
-    options?: {
-        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassesInfo>>, TError, TData>>
-        request?: SecondParameter<typeof customPortalFetch>
-    },
-    queryClient?: QueryClient
+  params: GetClassesInfoParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassesInfo>>, TError, TData>>
+    request?: SecondParameter<typeof customPortalFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getGetClassesInfoQueryOptions(params, options)
+  const queryOptions = getGetClassesInfoQueryOptions(params, options)
 
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-        queryKey: DataTag<QueryKey, TData, TError>
-    }
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 
-    query.queryKey = queryOptions.queryKey
+  query.queryKey = queryOptions.queryKey
 
-    return query
+  return query
 }
 
 /**
@@ -526,79 +524,79 @@ export function useGetClassesInfo<
  * @summary Đăng ký lớp học
  */
 export type classRegisterResponse200 = {
-    data: ClassRegister200
-    status: 200
+  data: ClassRegister200
+  status: 200
 }
 
 export type classRegisterResponse400 = {
-    data: ClassRegister400
-    status: 400
+  data: ClassRegister400
+  status: 400
 }
 
 export type classRegisterResponse404 = {
-    data: ClassRegister404
-    status: 404
+  data: ClassRegister404
+  status: 404
 }
 
 export type classRegisterResponseSuccess = classRegisterResponse200 & {
-    headers: Headers
+  headers: Headers
 }
 export type classRegisterResponseError = (classRegisterResponse400 | classRegisterResponse404) & {
-    headers: Headers
+  headers: Headers
 }
 
 export type classRegisterResponse = classRegisterResponseSuccess | classRegisterResponseError
 
 export const getClassRegisterUrl = () => {
-    return `/api/class-register/class-register`
+  return `/api/class-register/class-register`
 }
 
 export const classRegister = async (
-    classRegisterBody: ClassRegisterBody,
-    options?: RequestInit
+  classRegisterBody: ClassRegisterBody,
+  options?: RequestInit
 ): Promise<classRegisterResponse> => {
-    return customPortalFetch<classRegisterResponse>(getClassRegisterUrl(), {
-        ...options,
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', ...options?.headers },
-        body: JSON.stringify(classRegisterBody),
-    })
+  return customPortalFetch<classRegisterResponse>(getClassRegisterUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(classRegisterBody),
+  })
 }
 
 export const getClassRegisterMutationOptions = <
-    TError = ClassRegister400 | ClassRegister404,
-    TContext = unknown,
+  TError = ClassRegister400 | ClassRegister404,
+  TContext = unknown,
 >(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof classRegister>>,
-        TError,
-        { data: ClassRegisterBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customPortalFetch>
-}): UseMutationOptions<
+  mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof classRegister>>,
     TError,
     { data: ClassRegisterBody },
     TContext
+  >
+  request?: SecondParameter<typeof customPortalFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof classRegister>>,
+  TError,
+  { data: ClassRegisterBody },
+  TContext
 > => {
-    const mutationKey = ['classRegister']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+  const mutationKey = ["classRegister"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
 
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof classRegister>>,
-        { data: ClassRegisterBody }
-    > = (props) => {
-        const { data } = props ?? {}
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof classRegister>>,
+    { data: ClassRegisterBody }
+  > = (props) => {
+    const { data } = props ?? {}
 
-        return classRegister(data, requestOptions)
-    }
+    return classRegister(data, requestOptions)
+  }
 
-    return { mutationFn, ...mutationOptions }
+  return { mutationFn, ...mutationOptions }
 }
 
 export type ClassRegisterMutationResult = NonNullable<Awaited<ReturnType<typeof classRegister>>>
@@ -609,25 +607,25 @@ export type ClassRegisterMutationError = ClassRegister400 | ClassRegister404
  * @summary Đăng ký lớp học
  */
 export const useClassRegister = <TError = ClassRegister400 | ClassRegister404, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof classRegister>>,
-            TError,
-            { data: ClassRegisterBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customPortalFetch>
-    },
-    queryClient?: QueryClient
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof classRegister>>,
+      TError,
+      { data: ClassRegisterBody },
+      TContext
+    >
+    request?: SecondParameter<typeof customPortalFetch>
+  },
+  queryClient?: QueryClient
 ): UseMutationResult<
-    Awaited<ReturnType<typeof classRegister>>,
-    TError,
-    { data: ClassRegisterBody },
-    TContext
+  Awaited<ReturnType<typeof classRegister>>,
+  TError,
+  { data: ClassRegisterBody },
+  TContext
 > => {
-    const mutationOptions = getClassRegisterMutationOptions(options)
+  const mutationOptions = getClassRegisterMutationOptions(options)
 
-    return useMutation(mutationOptions, queryClient)
+  return useMutation(mutationOptions, queryClient)
 }
 
 /**
@@ -635,82 +633,82 @@ export const useClassRegister = <TError = ClassRegister400 | ClassRegister404, T
  * @summary Hủy đăng ký lớp học
  */
 export type classUnregisterResponse200 = {
-    data: ClassUnregister200
-    status: 200
+  data: ClassUnregister200
+  status: 200
 }
 
 export type classUnregisterResponse400 = {
-    data: ClassUnregister400
-    status: 400
+  data: ClassUnregister400
+  status: 400
 }
 
 export type classUnregisterResponse404 = {
-    data: ClassUnregister404
-    status: 404
+  data: ClassUnregister404
+  status: 404
 }
 
 export type classUnregisterResponseSuccess = classUnregisterResponse200 & {
-    headers: Headers
+  headers: Headers
 }
 export type classUnregisterResponseError = (
-    | classUnregisterResponse400
-    | classUnregisterResponse404
+  | classUnregisterResponse400
+  | classUnregisterResponse404
 ) & {
-    headers: Headers
+  headers: Headers
 }
 
 export type classUnregisterResponse = classUnregisterResponseSuccess | classUnregisterResponseError
 
 export const getClassUnregisterUrl = () => {
-    return `/api/class-register/class-unregister`
+  return `/api/class-register/class-unregister`
 }
 
 export const classUnregister = async (
-    classUnregisterBody: ClassUnregisterBody,
-    options?: RequestInit
+  classUnregisterBody: ClassUnregisterBody,
+  options?: RequestInit
 ): Promise<classUnregisterResponse> => {
-    return customPortalFetch<classUnregisterResponse>(getClassUnregisterUrl(), {
-        ...options,
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', ...options?.headers },
-        body: JSON.stringify(classUnregisterBody),
-    })
+  return customPortalFetch<classUnregisterResponse>(getClassUnregisterUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(classUnregisterBody),
+  })
 }
 
 export const getClassUnregisterMutationOptions = <
-    TError = ClassUnregister400 | ClassUnregister404,
-    TContext = unknown,
+  TError = ClassUnregister400 | ClassUnregister404,
+  TContext = unknown,
 >(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof classUnregister>>,
-        TError,
-        { data: ClassUnregisterBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customPortalFetch>
-}): UseMutationOptions<
+  mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof classUnregister>>,
     TError,
     { data: ClassUnregisterBody },
     TContext
+  >
+  request?: SecondParameter<typeof customPortalFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof classUnregister>>,
+  TError,
+  { data: ClassUnregisterBody },
+  TContext
 > => {
-    const mutationKey = ['classUnregister']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+  const mutationKey = ["classUnregister"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
 
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof classUnregister>>,
-        { data: ClassUnregisterBody }
-    > = (props) => {
-        const { data } = props ?? {}
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof classUnregister>>,
+    { data: ClassUnregisterBody }
+  > = (props) => {
+    const { data } = props ?? {}
 
-        return classUnregister(data, requestOptions)
-    }
+    return classUnregister(data, requestOptions)
+  }
 
-    return { mutationFn, ...mutationOptions }
+  return { mutationFn, ...mutationOptions }
 }
 
 export type ClassUnregisterMutationResult = NonNullable<Awaited<ReturnType<typeof classUnregister>>>
@@ -721,26 +719,26 @@ export type ClassUnregisterMutationError = ClassUnregister400 | ClassUnregister4
  * @summary Hủy đăng ký lớp học
  */
 export const useClassUnregister = <
-    TError = ClassUnregister400 | ClassUnregister404,
-    TContext = unknown,
+  TError = ClassUnregister400 | ClassUnregister404,
+  TContext = unknown,
 >(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof classUnregister>>,
-            TError,
-            { data: ClassUnregisterBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customPortalFetch>
-    },
-    queryClient?: QueryClient
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof classUnregister>>,
+      TError,
+      { data: ClassUnregisterBody },
+      TContext
+    >
+    request?: SecondParameter<typeof customPortalFetch>
+  },
+  queryClient?: QueryClient
 ): UseMutationResult<
-    Awaited<ReturnType<typeof classUnregister>>,
-    TError,
-    { data: ClassUnregisterBody },
-    TContext
+  Awaited<ReturnType<typeof classUnregister>>,
+  TError,
+  { data: ClassUnregisterBody },
+  TContext
 > => {
-    const mutationOptions = getClassUnregisterMutationOptions(options)
+  const mutationOptions = getClassUnregisterMutationOptions(options)
 
-    return useMutation(mutationOptions, queryClient)
+  return useMutation(mutationOptions, queryClient)
 }

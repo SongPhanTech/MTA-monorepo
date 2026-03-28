@@ -39,7 +39,7 @@ pnpm i
 `pnpm generate:sql` in `packages/database`
 Important part: `generate` scripts in `packages/database` is need for zenstack and prisma to work
 
-## ✏️Sinh lại đường dẫn router:  packages/router/src/index.ts
+## ✏️Sinh lại đường dẫn router: packages/router/src/index.ts
 
 `cd MTA-monorepo/packages/router; pnpm generate:router`
 
@@ -75,13 +75,14 @@ pnpm prisma migrate dev
 
 Check Makefile to see example of build docker
 
-
 ## ✏️Quy Ước Viết Code Frontend (Next.js)
+
 Quy ước viết code dành cho team FE nhằm đồng bộ cách viết code, đặt tên file, thư mục, comp và biến
 
 ## 1. Quy Tắc Đặt Tên Thư Mục, File, Component
 
 ### 1.1 Tên Page và Router
+
 - Dùng **kebab-case**, tiếng Việt **không dấu**.
 - Tên rõ nghĩa, diễn tả mục đích trang hoặc chức năng.
 - Ví dụ:
@@ -89,17 +90,20 @@ Quy ước viết code dành cho team FE nhằm đồng bộ cách viết code, 
   - `pages/chi-tiet-nguoi-dung`
 
 ### 1.2 Tên Modal, Component Có Chức Năng Riêng
+
 - Tên theo **kebab-case**, phản ánh rõ ngữ cảnh sử dụng.
 - Ví dụ:
   - `put-modal-ql-mon-hoc`
   - `them-modal-nguoi-dung`
 
 ### 1.3 Component Đặc trưng
+
 - Giữ nguyên tên tiếng Anh với những component phổ biến như:
   - `Button`, `WrapperModal`, `Input`, v.v...
 - KHÔNG đổi tên thành tiếng Việt như `Nut`, `BocModal`,...
 
 ### 1.4 Component Biến Thể → Tạo Thư Mục Riêng
+
 - Component có nhiều phiên bản hay ngữ cảnh khác nhau cần tách folder riêng.
 - Ví dụ:
   ```
@@ -117,6 +121,7 @@ Quy ước viết code dành cho team FE nhằm đồng bộ cách viết code, 
 - Component trong code viết theo PascalCase: `PutModalQLMonHoc` (file tương ứng: `put-modal-ql-mon-hoc/index.tsx`)
 
 ### Ví dụ:
+
 ```ts
 const danhSachMonHoc = [] // (Ghi rõ cũng đc)
 const DSSinhVienDS = [] // (Danh sách sinh viên dân sự) tuỳ cách viết tắt, nhưng nhớ ghi chú nhé

@@ -1,54 +1,54 @@
-import { CopyOutlined } from '@ant-design/icons'
+import { CopyOutlined } from "@ant-design/icons"
 // import { getRuntimeEnv } from '@workspace/libs/utils'
-import { Button, Flex, Input, Modal, message } from 'antd'
-import { useDisclosure } from 'react-hook-disclosure-modal'
+import { Button, Flex, Input, Modal, message } from "antd"
+import { useDisclosure } from "react-hook-disclosure-modal"
 
 const ThongTinKhaoSatModal = () => {
-    const { isOpen, onClose, input } = useDisclosure<{ dataTable: any[]; id: string }>({
-        tag: 'ThongTinKhaoSatModal',
-    })
-    const link = `${window.location.hostname}/ems/lam-khao-sat/${input?.id}`
+  const { isOpen, onClose, input } = useDisclosure<{ dataTable: any[]; id: string }>({
+    tag: "ThongTinKhaoSatModal",
+  })
+  const link = `${window.location.hostname}/ems/lam-khao-sat/${input?.id}`
 
-    // const handleCopy = async () => {
-    //     try {
-    //         const link = `${getRuntimeEnv('NEXT_PUBLIC_APP_URL')}/lam-khao-sat/${input?.id}`
-    //         await navigator.clipboard.writeText(link)
-    //     } catch (err) {
-    //         console.error('Failed to copy: ', err)
-    //     }
-    // }
-    const handleCopy = async () => {
-        try {
-            await navigator.clipboard.writeText(link)
-            message.success('Đã sao chép liên kết!')
-        } catch {
-            message.error('Không thể sao chép liên kết')
-        }
+  // const handleCopy = async () => {
+  //     try {
+  //         const link = `${getRuntimeEnv('NEXT_PUBLIC_APP_URL')}/lam-khao-sat/${input?.id}`
+  //         await navigator.clipboard.writeText(link)
+  //     } catch (err) {
+  //         console.error('Failed to copy: ', err)
+  //     }
+  // }
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(link)
+      message.success("Đã sao chép liên kết!")
+    } catch {
+      message.error("Không thể sao chép liên kết")
     }
+  }
 
-    return (
-        <Modal
-            open={isOpen}
-            onOk={onClose}
-            onCancel={onClose}
-            maskClosable={true}
-            title="Thông tin bài khảo sát"
-            width="600px"
-            footer={null}
+  return (
+    <Modal
+      open={isOpen}
+      onOk={onClose}
+      onCancel={onClose}
+      maskClosable={true}
+      title="Thông tin bài khảo sát"
+      width="600px"
+      footer={null}
+    >
+      <Flex>
+        <Input value={link} readOnly className="rounded-r-[0px]" />
+        <Button
+          icon={<CopyOutlined />}
+          onClick={handleCopy}
+          type="primary"
+          className="rounded-l-[0px]"
         >
-            <Flex>
-                <Input value={link} readOnly className="rounded-r-[0px]" />
-                <Button
-                    icon={<CopyOutlined />}
-                    onClick={handleCopy}
-                    type="primary"
-                    className="rounded-l-[0px]"
-                >
-                    Copy
-                </Button>
-            </Flex>
+          Copy
+        </Button>
+      </Flex>
 
-            {/* <Table
+      {/* <Table
                 columns={[
                     {
                         title: 'STT',
@@ -84,8 +84,8 @@ const ThongTinKhaoSatModal = () => {
                 size="small"
                 bordered
             /> */}
-        </Modal>
-    )
+    </Modal>
+  )
 }
 
 export default ThongTinKhaoSatModal

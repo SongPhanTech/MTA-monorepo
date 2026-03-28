@@ -10,7 +10,7 @@
     "./can": "./src/can.tsx"
   },
   "devDependencies": {
-    "@biomejs/biome": "catalog:",
+
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@workspace/typescript-config": "workspace:*",

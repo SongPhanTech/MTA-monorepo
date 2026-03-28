@@ -20,7 +20,8 @@
     ]
   },
   "scripts": {
-    "lint": "biome lint .",
+    "lint": "oxlint --fix",
+    "format": "oxfmt",
     "generate:component": "turbo gen react-component",
     "check-types": "tsc --noEmit"
   },
