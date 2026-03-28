@@ -8391,6 +8391,21 @@ const metadata: ModelMeta = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'student',
+                }, semester: {
+                    name: "semester",
+                    type: "Semester",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'studentSubjectScore',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "semesterId" },
+                }, semesterId: {
+                    name: "semesterId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'semester',
                 }, attendanceScore: {
                     name: "attendanceScore",
                     type: "Float",
@@ -9564,6 +9579,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'semester',
+                }, studentSubjectScore: {
+                    name: "studentSubjectScore",
+                    type: "StudentSubjectScore",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'semester',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -10254,6 +10275,10 @@ const metadata: ModelMeta = {
                     attributes: [{ "name": "@unique", "args": [] }],
                     isForeignKey: true,
                     relationField: 'curriculumVersion',
+                }, classType: {
+                    name: "classType",
+                    type: "FixedClassType",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, subjectClasses: {
                     name: "subjectClasses",
                     type: "SubjectClass",

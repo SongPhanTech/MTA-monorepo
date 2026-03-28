@@ -14,6 +14,7 @@ import { DocumentStatus } from "../prisma-client";
 import { ScoreConvertStatus } from "../prisma-client";
 import { ArchivedCertificateStatus } from "../prisma-client";
 import { SemesterType } from "../prisma-client";
+import { FixedClassType } from "../prisma-client";
 import { CurriculumVersionType } from "../prisma-client";
 import { ExamType } from "../prisma-client";
 import { SubjectVersionType } from "../prisma-client";

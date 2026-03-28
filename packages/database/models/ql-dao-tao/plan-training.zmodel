@@ -101,6 +101,9 @@ model StudentSubjectScore extends Base {
   student                      Student                                    @relation(fields: [studentId], references: [id])
   studentId                    String
 
+  semester                     Semester?                                  @relation(fields: [semesterId], references: [id])
+  semesterId                   String?
+
   /// điểm thường xuyên
   attendanceScore              Float?                                     @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10')
   /// điểm định kỳ
@@ -407,6 +410,7 @@ model Semester extends Base {
   scoreLinkSheets         ScoreLinkSheet[]
   semesterTrainingScore   SemesterTrainingScore[]
   availableTrainingTime   AvailableTrainingTime[]
+  studentSubjectScore     StudentSubjectScore[]
 
   @@schema("ql-dao-tao")
 }
@@ -520,7 +524,12 @@ model TrainingCourseRegulation extends BaseNoCode {
   value            Float
   @@schema("ql-dao-tao")
 }
-
+enum FixedClassType {
+  APPLICATION // Lớp ứng dụng
+  RESEARCH // Lớp nghien cứu
+  NORMAL // lớp thường
+  @@schema("ql-dao-tao")
+}
 /// lớp quản lý
 model FixedClass extends Base {
   name                     String
@@ -550,6 +559,7 @@ model FixedClass extends Base {
 
   curriculumVersion        CurriculumVersion?   @relation(fields: [curriculumVersionId], references: [id])
   curriculumVersionId      String?              @unique
+  classType                FixedClassType       @default(NORMAL)
 
   subjectClasses           SubjectClass[]
   notifications            Notification[]  // Thông báo cho lớp
