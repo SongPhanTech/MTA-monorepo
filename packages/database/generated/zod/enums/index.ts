@@ -559,6 +559,7 @@ export * from './ScoreConvertStatus.schema';
 export * from './ArchivedCertificateStatus.schema';
 export * from './SemesterType.schema';
 export * from './AcademicRankingBaseType.schema';
+export * from './FixedClassType.schema';
 export * from './CurriculumVersionType.schema';
 export * from './ExamType.schema';
 export * from './SubjectVersionType.schema';

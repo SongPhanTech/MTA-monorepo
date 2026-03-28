@@ -324,7 +324,7 @@ export default function DanhSachLopMonHoc({
             const queries = Object.entries(subjectClass)
                 .filter(([_, item]: any) => item)
                 .map(([id, item]: any) => ({
-                    model: 'SubjectClass'as const,
+                    model: 'SubjectClass' as const,
                     operation: 'updateMany',
                     data: {
                         where: { id },
@@ -634,7 +634,9 @@ export default function DanhSachLopMonHoc({
                                         const canEdit = canUpdate || role === 'P2/P7'
 
                                         if (!canEdit) {
-                                            return record.examDate ? dayjs(record.examDate).format('DD/MM/YYYY') : ''
+                                            return record.examDate
+                                                ? dayjs(record.examDate).format('DD/MM/YYYY')
+                                                : ''
                                         }
 
                                         const isExpired =

@@ -4,7 +4,7 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useStore } from '@tanstack/react-store'
 import type { Prisma } from '@workspace/db/client'
 import {
-useDeleteStudentSubjectScore,
+    useDeleteStudentSubjectScore,
     useFindManyFixedClass,
     useFindManyTrainingCourse,
     useFindUniqueSubjectClass,
@@ -13,10 +13,9 @@ import { diffArrays } from '@workspace/libs'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useOpenSubjectClassReExamStudents } from '@workspace/libs/api/training'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Checkbox, Col, Form, Input, message, Row, Select,Tooltip } from 'antd'
+import { Button, Checkbox, Col, Form, Input, message, Row, Select, Tooltip } from 'antd'
 import _ from 'lodash'
-import { CircleX,
-Search } from 'lucide-react'
+import { CircleX, Search } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { dangKyThiLaiStore } from '../..'
 
@@ -37,7 +36,7 @@ export default function CaNhanThiLai() {
     })
 
     const { subjectClassId, studentIds = [] } = useStore(dangKyThiLaiStore)
-const { mutateAsync: deleteStudentSubjectScore } = useDeleteStudentSubjectScore()
+    const { mutateAsync: deleteStudentSubjectScore } = useDeleteStudentSubjectScore()
     const { data: subjectClassData } = useFindUniqueSubjectClass(
         {
             where: {
@@ -198,17 +197,17 @@ const { mutateAsync: deleteStudentSubjectScore } = useDeleteStudentSubjectScore(
                     },
                 })
             }
-            
+
             // Thêm operations tạo mới CHỈ cho những ids CHƯA TỒN TẠI
             if (studentsData.length > 0) {
                 // biome-ignore lint/suspicious/useIterableCallbackReturn: <>
-                studentsData?.map((student:any) => {
-                    console.log(student);
-                    
+                studentsData?.map((student: any) => {
+                    console.log(student)
+
                     operations.push({
                         model: 'StudentSubjectScore',
                         operation: 'create',
-                        data:{
+                        data: {
                             data: {
                                 studentId: student.id,
                                 subjectClassId: subjectClassId,
@@ -216,7 +215,7 @@ const { mutateAsync: deleteStudentSubjectScore } = useDeleteStudentSubjectScore(
                                 attendanceScore: student?.subjectClassStudent?.[0]?.attendanceScore,
                                 midtermScore: student?.subjectClassStudent?.[0]?.midtermScore,
                             },
-                        }
+                        },
                     })
                 })
             }
@@ -278,21 +277,20 @@ const { mutateAsync: deleteStudentSubjectScore } = useDeleteStudentSubjectScore(
         }))
     }
 
-    const handleCancel=async(id:string)=>{
-        if(!id) return
+    const handleCancel = async (id: string) => {
+        if (!id) return
         try {
-            let res=await deleteStudentSubjectScore({
+            let res = await deleteStudentSubjectScore({
                 where: {
-                    id: id
-                }
+                    id: id,
+                },
             })
-            if(res){
+            if (res) {
                 message.success('Huỷ đăng ký thi lại thành công')
                 refetch()
             }
-
-        }catch (error) {
-            message.error('Có lỗi xảy ra khi hóa đăng ký thi lại!') 
+        } catch (error) {
+            message.error('Có lỗi xảy ra khi hóa đăng ký thi lại!')
         }
     }
     return (
@@ -440,10 +438,20 @@ const { mutateAsync: deleteStudentSubjectScore } = useDeleteStudentSubjectScore(
                             title: 'Thao tác',
                             align: 'center',
                             width: 80,
-                            render: (_, record:any) => {
-                                return <Tooltip title={'Huỷ đăng ký'} placement="top">
-                                    <CircleX size={16} className="text-red-600 cursor-pointer" onClick={() => handleCancel(record?.subjectClassStudent?.[0]?.id||'')}/>
-                                </Tooltip>
+                            render: (_, record: any) => {
+                                return (
+                                    <Tooltip title={'Huỷ đăng ký'} placement="top">
+                                        <CircleX
+                                            size={16}
+                                            className="text-red-600 cursor-pointer"
+                                            onClick={() =>
+                                                handleCancel(
+                                                    record?.subjectClassStudent?.[0]?.id || ''
+                                                )
+                                            }
+                                        />
+                                    </Tooltip>
+                                )
                             },
                         },
                     ]}

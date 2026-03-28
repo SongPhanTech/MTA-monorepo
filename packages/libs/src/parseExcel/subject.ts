@@ -183,7 +183,7 @@ export const parseSheetSubject = (file: ArrayBufferLike): ParseSubjectResult => 
         }
 
         const examTypeText = row[cols.examType]?.trim()
-        const examType = examTypeText ? examTypes[examTypeText] ?? null : null
+        const examType = examTypeText ? (examTypes[examTypeText] ?? null) : null
         if (examTypeText && examType === null) {
             errors.push({
                 sheetRef: sheetName,
@@ -249,7 +249,10 @@ export const parseSheetSubject = (file: ArrayBufferLike): ParseSubjectResult => 
             numberOfReview,
             numberOfExam,
             onePoint,
-            graduation: subjectVersionType === $Enums.SubjectVersionType.Project || subjectVersionType === $Enums.SubjectVersionType.Thesis || subjectVersionType === $Enums.SubjectVersionType.Graduation,
+            graduation:
+                subjectVersionType === $Enums.SubjectVersionType.Project ||
+                subjectVersionType === $Enums.SubjectVersionType.Thesis ||
+                subjectVersionType === $Enums.SubjectVersionType.Graduation,
         })
     }
 

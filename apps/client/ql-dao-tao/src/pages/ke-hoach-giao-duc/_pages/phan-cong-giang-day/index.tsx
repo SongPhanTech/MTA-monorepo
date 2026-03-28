@@ -464,7 +464,7 @@ export default function PhanCongGiangDay({
             deletedAt: null,
             cancelled: false,
             type: type,
-            ...(trainingCourseId && type==='NORMAL'
+            ...(trainingCourseId && type === 'NORMAL'
                 ? {
                       fixedClasses: {
                           some: {
@@ -484,7 +484,7 @@ export default function PhanCongGiangDay({
             deletedAt: null,
             cancelled: false,
             type: type,
-            ...(trainingCourseId && type==='NORMAL'
+            ...(trainingCourseId && type === 'NORMAL'
                 ? {
                       fixedClasses: {
                           some: {
@@ -924,7 +924,8 @@ export default function PhanCongGiangDay({
                                                                         active: true,
                                                                         deletedAt: null,
                                                                         type: type,
-                                                                        ...(trainingCourseId && type==='NORMAL'
+                                                                        ...(trainingCourseId &&
+                                                                        type === 'NORMAL'
                                                                             ? {
                                                                                   fixedClasses: {
                                                                                       some: {
