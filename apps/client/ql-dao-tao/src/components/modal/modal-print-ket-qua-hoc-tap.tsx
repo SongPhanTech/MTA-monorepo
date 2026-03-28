@@ -382,28 +382,29 @@ const ModalPrintToKQHT = () => {
                                 )
 
                                 // Render các môn tốt nghiệp sau (sử dụng flatMap)
-                                const graduationRows = graduationSubjects?.flatMap(
-                                    ({ subjectItem }, originalIndex) => {
+                                const graduationRows = [
+                                    graduationSubjects.length > 0 ? (
+                                        <tr key="graduation-header">
+                                            <td
+                                                colSpan={6}
+                                                className="border border-black px-1 py-1 font-semibold"
+                                            >
+                                                Học phần tốt nghiệp
+                                            </td>
+                                        </tr>
+                                    ) : null,
+                                    ...graduationSubjects.map(({ subjectItem }, originalIndex) => {
                                         const subject = subjectItem.subject
                                         const score = subject.studentSubjectScore?.[0]
                                         const isOptional =
                                             subjectItem.type === SubjectRequirementType.Optional
                                         const notForFinalScore = !subjectItem.useForFinalScore
-
                                         const score10 =
                                             score?.manualFinalScore || score?.finalScore || 0
                                         const score4 = convertScore(score10).base4
                                         const letterGrade = convertScore(score10).letter
 
-                                        return [
-                                            <tr key={`graduation-header-${subject.id}`}>
-                                                <td
-                                                    colSpan={6}
-                                                    className="border border-black px-1 py-1 font-semibold"
-                                                >
-                                                    Học phần tốt nghiệp
-                                                </td>
-                                            </tr>,
+                                        return (
                                             <tr key={subject.id}>
                                                 <td className="border border-black px-1 py-1 text-center">
                                                     {originalIndex + 1}
@@ -426,10 +427,10 @@ const ModalPrintToKQHT = () => {
                                                 <td className="border border-black px-1 py-1 text-center">
                                                     {String(letterGrade)}
                                                 </td>
-                                            </tr>,
-                                        ]
-                                    }
-                                )
+                                            </tr>
+                                        )
+                                    }),
+                                ].filter(Boolean)
 
                                 // Kết hợp cả 2 và giữ nguyên STT
                                 return [...regularRows, ...graduationRows]
