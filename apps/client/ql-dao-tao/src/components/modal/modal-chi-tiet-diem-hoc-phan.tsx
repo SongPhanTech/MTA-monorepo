@@ -1,5 +1,5 @@
-import { Table, Divider, Row, Col } from 'antd'
-import { PutFormModal } from '@workspace/ui'
+import { Table, Row, Col, Input } from 'antd'
+import { PutFormModal, Select } from '@workspace/ui'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { Form } from 'antd'
 import { useFindUniqueStudentSubjectScore } from '@workspace/db/hooks'
@@ -115,81 +115,123 @@ const ModalScoreDetail = () => {
             width={850}
             centered
         >
-            <div className="flex gap-4 mb-2 w-full">
-                {/* LỚP */}
-                <div className="flex-1 bg-gray-50 p-4 rounded-xl">
-                    <div className="text-gray-500 text-lg">Lớp học</div>
-                    <div className="font-semibold text-lg">
-                        {data?.subjectClass?.name} ({data?.subjectClass?.code})
-                    </div>
+            <Form form={form} layout="vertical">
+                <Row gutter={[16, 12]}>
+                    {/* HỌC KỲ */}
+                    <Col span={6}>
+                        <Form.Item label="Học kỳ">
+                            <Select
+                                placeholder="Chọn học kỳ"
+                                defaultValue={data?.subjectClass?.semester?.id}
+                                options={[
+                                    {
+                                        label: `${data?.subjectClass?.semester?.name} - ${data?.subjectClass?.semester?.schoolYear?.name}`,
+                                        value: data?.subjectClass?.semester?.id,
+                                    },
+                                ]}
+                                disabled
+                            />
+                        </Form.Item>
+                    </Col>
 
-                    <div className="mt-2 text-gray-500 text-lg">Học kỳ</div>
-                    <div className="font-semibold text-lg">
-                        {data?.subjectClass?.semester?.name} -{' '}
-                        {data?.subjectClass?.semester?.schoolYear?.name}
-                    </div>
-                </div>
+                    <Col span={6}>
+                        <Form.Item label="Lớp môn học">
+                            <Select
+                                placeholder="Chọn lớp"
+                                defaultValue={data?.subjectClass?.id}
+                                options={[
+                                    {
+                                        label: `${data?.subjectClass?.name} (${data?.subjectClass?.code})`,
+                                        value: data?.subjectClass?.id,
+                                    },
+                                ]}
+                                disabled
+                            />
+                        </Form.Item>
+                    </Col>
 
-                {/* SINH VIÊN */}
-                <div className="flex-1 bg-blue-50 p-4 rounded-xl">
-                    <div className="text-gray-500 text-lg">Sinh viên</div>
-                    <div className="font-semibold text-lg">
-                        {data?.student?.userProfile?.fullname}
-                    </div>
+                    {/* SINH VIÊN */}
+                    <Col span={6}>
+                        <Form.Item label="Sinh viên">
+                            <Select
+                                placeholder="Chọn sinh viên"
+                                defaultValue={data?.student?.id}
+                                options={[
+                                    {
+                                        label: data?.student?.userProfile?.fullname,
+                                        value: data?.student?.id,
+                                    },
+                                ]}
+                                disabled
+                            />
+                        </Form.Item>
+                    </Col>
 
-                    <div className="mt-2 text-gray-500 text-lg">Mã SV</div>
-                    <div className="font-semibold text-lg">{data?.student?.code}</div>
-                </div>
+                    {/* MÃ SV */}
+                    <Col span={6}>
+                        <Form.Item label="Mã SV">
+                            <Input value={data?.student?.code ?? ''} disabled />
+                        </Form.Item>
+                    </Col>
 
-                {/* ĐIỂM */}
-                <div className="flex-1 bg-white border rounded-xl p-4 shadow-sm">
-                    <div className="font-semibold mb-2 text-lg">Điểm hiện tại</div>
+                    {/* THƯỜNG XUYÊN */}
+                    <Col span={6}>
+                        <Form.Item label="Thường xuyên">
+                            <Input value={data?.attendanceScore?.toString?.() ?? ''} disabled />
+                        </Form.Item>
+                    </Col>
 
-                    <div className="grid grid-cols-2 gap-2 text-center">
-                        <div>
-                            <div className="text-gray-500 text-lg">Thường xuyên</div>
-                            <div className="font-semibold text-lg">
-                                {data?.attendanceScore ?? '-'}
-                            </div>
-                        </div>
-                        <div>
-                            <div className="text-gray-500 text-lg">Định kỳ</div>
-                            <div className="font-semibold text-lg">{data?.midtermScore ?? '-'}</div>
-                        </div>
-                        <div>
-                            <div className="text-gray-500 text-lg">Thi</div>
-                            <div className="font-semibold text-lg">{data?.examScore ?? '-'}</div>
-                        </div>
-                        <div>
-                            <div className="text-gray-500 text-lg">Tổng</div>
-                            <div className="font-bold text-green-600 text-lg">
-                                {data?.finalScore?.toString?.() ?? '-'}
-                            </div>
-                        </div>
-                    </div>
+                    {/* ĐỊNH KỲ */}
+                    <Col span={6}>
+                        <Form.Item label="Định kỳ">
+                            <Input value={data?.midtermScore?.toString?.() ?? ''} disabled />
+                        </Form.Item>
+                    </Col>
 
-                    <Divider className="my-2" />
+                    {/* THI */}
+                    <Col span={6}>
+                        <Form.Item label="Thi">
+                            <Input value={data?.examScore?.toString?.() ?? ''} disabled />
+                        </Form.Item>
+                    </Col>
 
-                    <div className="text-center text-lg">
-                        <div className="text-gray-500 text-lg">Điểm cộng</div>
-                        <div className="font-semibold text-blue-600">+{bonus}</div>
-                    </div>
-                </div>
-            </div>
+                    {/* TỔNG */}
+                    <Col span={6}>
+                        <Form.Item label="Tổng">
+                            <Input value={data?.finalScore?.toString?.() ?? ''} disabled />
+                        </Form.Item>
+                    </Col>
 
-            <Row>
+                    {/* ĐIỂM CỘNG */}
+                    <Col span={6}>
+                        <Form.Item label="Điểm cộng">
+                            <Input value={bonus?.toString?.()} disabled />
+                        </Form.Item>
+                    </Col>
+                </Row>
+            </Form>
+            <Row className="mt-2">
                 <Col span={24}>
-                    <div className="bg-white border rounded-xl p-4 shadow-sm">
-                        <div className="font-semibold mb-3 text-lg">Lịch sử chỉnh sửa</div>
+                    <div className="bg-white rounded-lg border-gray-200">
+                        <div className="px-4 pt-4 pb-2 text-lg font-semibold text-gray-800">
+                            Lịch sử chỉnh sửa
+                        </div>
 
                         <Table
-                            size="middle"
+                            size="small"
                             rowKey="id"
                             columns={columns}
                             dataSource={data?.studentSubjectScoreHistory || []}
                             pagination={false}
-                            bordered
-                            scroll={{ y: 300 }}
+                            bordered={false}
+                            scroll={{ y: 260 }}
+                            locale={{
+                                emptyText: (
+                                    <div className="py-6 text-gray-400 text-sm">
+                                        Không có dữ liệu
+                                    </div>
+                                ),
+                            }}
                         />
                     </div>
                 </Col>
