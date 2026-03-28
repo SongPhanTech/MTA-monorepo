@@ -704,7 +704,7 @@ model SubjectVersion extends BaseNoCode {
   isLocked                 Boolean                   @default(false)
   name                     String
   codeTkb                  String?
-  examType                 ExamType
+  examType                 ExamType?
   /// loại học phần
   type                     SubjectVersionType        @default(Normal)
   /// 1 đầu điểm
