@@ -116,7 +116,7 @@ export default function QuaTrinhCongTacTab() {
                 width: 60,
                 align: "center",
                 fixed: "left",
-                render: (_, __, index) => index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                render: (_, __, index) => index + 1 + (currentPage - 1) * _numberOfPages,
               },
               {
                 title: "Tên cấp bậc",
@@ -189,7 +189,7 @@ export default function QuaTrinhCongTacTab() {
                 width: 60,
                 align: "center",
                 fixed: "left",
-                render: (_, __, index) => index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                render: (_, __, index) => index + 1 + (currentPage - 1) * _numberOfPages,
               },
               {
                 title: "Từ tháng năm",
@@ -262,7 +262,7 @@ export default function QuaTrinhCongTacTab() {
                 width: 60,
                 align: "center",
                 fixed: "left",
-                render: (_, __, index) => index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                render: (_, __, index) => index + 1 + (currentPage - 1) * _numberOfPages,
               },
               {
                 title: "Từ tháng năm",

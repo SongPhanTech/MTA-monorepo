@@ -295,7 +295,7 @@ export default function KhungDeList() {
               title: "STT",
               width: "40px",
               align: "center",
-              render: (_, __, index) => index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+              render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,
             },
             {
               title: "Tên khung đề",
