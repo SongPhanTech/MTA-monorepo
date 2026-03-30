@@ -4743,6 +4743,10 @@ model ThesisSession {
   defenseDecisionDate   DateTime?
   /// Thủ trưởng
   chief                 String?
+  /// Hạn nhập đề tài
+  topicEntryDeadline    DateTime?
+  /// Hạn nhập hội đồng
+  councilDeadline       DateTime?
   thesisProject         ThesisProject[]
 
   @@schema("ql-dao-tao")

@@ -832,18 +832,21 @@ export default function DanhMucDoAn() {
                 return expert?.lecturer?.userProfile?.fullname || expert?.name || ""
               },
             },
-             {
+            {
               title: "Đồ án sản phẩm",
               dataIndex: "isProductProject",
               align: "center",
               width: 120,
               render: (_, record) => {
                 if (editingRowKeys.includes(record?.id)) {
-                  const currentValue = editingValues[record.id]?.isProductProject ?? record.isProductProject ?? false
+                  const currentValue =
+                    editingValues[record.id]?.isProductProject ?? record.isProductProject ?? false
                   return (
                     <Checkbox
                       checked={currentValue}
-                      onChange={(e) => handleEditChange(record.id, "isProductProject", e.target.checked)}
+                      onChange={(e) =>
+                        handleEditChange(record.id, "isProductProject", e.target.checked)
+                      }
                     />
                   )
                 }
@@ -857,11 +860,14 @@ export default function DanhMucDoAn() {
               width: 100,
               render: (_, record) => {
                 if (editingRowKeys.includes(record?.id)) {
-                  const currentValue = editingValues[record.id]?.isGroupProject ?? record.isGroupProject ?? false
+                  const currentValue =
+                    editingValues[record.id]?.isGroupProject ?? record.isGroupProject ?? false
                   return (
                     <Checkbox
                       checked={currentValue}
-                      onChange={(e) => handleEditChange(record.id, "isGroupProject", e.target.checked)}
+                      onChange={(e) =>
+                        handleEditChange(record.id, "isGroupProject", e.target.checked)
+                      }
                     />
                   )
                 }
@@ -875,7 +881,8 @@ export default function DanhMucDoAn() {
               width: 100,
               render: (_, record) => {
                 if (editingRowKeys.includes(record?.id)) {
-                  const currentValue = editingValues[record.id]?.isLanguage ?? record.isLanguage ?? false
+                  const currentValue =
+                    editingValues[record.id]?.isLanguage ?? record.isLanguage ?? false
                   return (
                     <Checkbox
                       checked={currentValue}
@@ -893,11 +900,14 @@ export default function DanhMucDoAn() {
               width: 140,
               render: (_, record) => {
                 if (editingRowKeys.includes(record?.id)) {
-                  const currentValue = editingValues[record.id]?.externalUnit ?? record.externalUnit ?? false
+                  const currentValue =
+                    editingValues[record.id]?.externalUnit ?? record.externalUnit ?? false
                   return (
                     <Checkbox
                       checked={currentValue}
-                      onChange={(e) => handleEditChange(record.id, "externalUnit", e.target.checked)}
+                      onChange={(e) =>
+                        handleEditChange(record.id, "externalUnit", e.target.checked)
+                      }
                     />
                   )
                 }

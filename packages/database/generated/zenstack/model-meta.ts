@@ -18130,6 +18130,14 @@ const metadata: ModelMeta = {
                     name: "chief",
                     type: "String",
                     isOptional: true,
+                }, topicEntryDeadline: {
+                    name: "topicEntryDeadline",
+                    type: "DateTime",
+                    isOptional: true,
+                }, councilDeadline: {
+                    name: "councilDeadline",
+                    type: "DateTime",
+                    isOptional: true,
                 }, thesisProject: {
                     name: "thesisProject",
                     type: "ThesisProject",

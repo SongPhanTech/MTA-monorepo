@@ -3043,7 +3043,9 @@ exports.Prisma.ThesisSessionScalarFieldEnum = {
   defenseDecisionNumber: 'defenseDecisionNumber',
   defenseDecisionMaker: 'defenseDecisionMaker',
   defenseDecisionDate: 'defenseDecisionDate',
-  chief: 'chief'
+  chief: 'chief',
+  topicEntryDeadline: 'topicEntryDeadline',
+  councilDeadline: 'councilDeadline'
 };
 
 exports.Prisma.ThesisProjectScalarFieldEnum = {
