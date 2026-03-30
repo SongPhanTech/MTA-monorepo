@@ -218,6 +218,7 @@ export default function UserProfilePageLecture() {
   const { data: count, refetch: refetchCount } = useCountLecturer({
     where: {
       ...where,
+      organization: { bDeleted: false },
       deletedAt: null,
     },
   })
