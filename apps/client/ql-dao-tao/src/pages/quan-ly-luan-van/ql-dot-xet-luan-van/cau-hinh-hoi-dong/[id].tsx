@@ -567,7 +567,7 @@ export default function SettingCouncil() {
                   align: "center",
                   fixed: "left",
                   render: (_, __, index: number) =>
-                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                    index + 1 + (currentPage - 1) * numberOfPages,
                 },
                 {
                   title: "Tên chuyên gia",
@@ -668,7 +668,7 @@ export default function SettingCouncil() {
                   align: "center",
                   fixed: "left",
                   render: (_, __, index: number) =>
-                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                    index + 1 + (currentPage - 1) * numberOfPages,
                 },
                 {
                   title: "Tên chuyên gia",

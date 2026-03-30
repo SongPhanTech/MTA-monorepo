@@ -375,7 +375,7 @@ export default function MonDaLapKeHoach({ type }: { type?: $Enums.SubjectClassTy
               title: "TT",
               width: 80,
               align: "center",
-              render: (_, __, index) => index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+              render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,
             },
             {
               title: "Mã MH",
