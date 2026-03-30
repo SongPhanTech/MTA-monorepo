@@ -29,7 +29,7 @@
         "husky": "catalog:",
         "lint-staged": "catalog:",
         "oxlint": "catalog:",
-
+        "oxfmt": "catalog:",
         "turbo": "catalog:",
         "typescript": "catalog:"
     },

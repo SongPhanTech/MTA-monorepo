@@ -442,11 +442,11 @@ export default function ThongKe() {
             size="large"
           />
           <style jsx global>{`
-                        .ant-segmented.w-full .ant-segmented-item {
-                            flex: 1;
-                            justify-content: center;
-                        }
-                    `}</style>
+            .ant-segmented.w-full .ant-segmented-item {
+              flex: 1;
+              justify-content: center;
+            }
+          `}</style>
 
           <Tabs
             activeKey={activeKey}

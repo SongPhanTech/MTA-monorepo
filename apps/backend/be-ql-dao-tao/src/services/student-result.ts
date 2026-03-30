@@ -243,16 +243,16 @@ export async function exportStudentYearResult({
     },
   })
 
-    const formatGpa = (val: any) => {
-        const num = typeof val?.toNumber === 'function' ? val.toNumber() : val;
-        if (num === null || num === undefined || isNaN(num)) return '';
-        return num.toFixed(2).replace('.', ',');
-    };
+  const formatGpa = (val: any) => {
+    const num = typeof val?.toNumber === "function" ? val.toNumber() : val
+    if (num === null || num === undefined || isNaN(num)) return ""
+    return num.toFixed(2).replace(".", ",")
+  }
 
-    const data = studentYearResults.map((result, idx) => {
-        const student = result.student
-        const userProfile = student.userProfile
-        const dateOfBirth = userProfile.dateOfBirth ? dayjs(userProfile.dateOfBirth) : null
+  const data = studentYearResults.map((result, idx) => {
+    const student = result.student
+    const userProfile = student.userProfile
+    const dateOfBirth = userProfile.dateOfBirth ? dayjs(userProfile.dateOfBirth) : null
 
     return {
       no: idx + 1,
