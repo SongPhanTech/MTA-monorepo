@@ -473,6 +473,7 @@ const statsArchivedAward = createRoute({
             .object({
               fromSemesterId: z.string(),
               toSemesterId: z.string(),
+              trainingCourseId: z.string(),
             })
             .openapi("StatsArchivedAwardInput"),
         },
@@ -492,8 +493,8 @@ const statsArchivedAward = createRoute({
 })
 
 app.openapi(statsArchivedAward, async (c) => {
-  const { fromSemesterId, toSemesterId } = c.req.valid("json")
-  const result = await getStatsArchivedAward({ fromSemesterId, toSemesterId })
+  const { fromSemesterId, toSemesterId, trainingCourseId } = c.req.valid("json")
+  const result = await getStatsArchivedAward({ fromSemesterId, toSemesterId, trainingCourseId })
   return c.json(result, 200)
 })
 
@@ -512,6 +513,7 @@ const exportStatsArchivedAwardRoute = createRoute({
             .object({
               fromSemesterId: z.string(),
               toSemesterId: z.string(),
+              trainingCourseId: z.string(),
             })
             .openapi("StatsArchivedAwardInput"),
         },
@@ -531,9 +533,9 @@ const exportStatsArchivedAwardRoute = createRoute({
 })
 
 app.openapi(exportStatsArchivedAwardRoute, async (c) => {
-  const { fromSemesterId, toSemesterId } = c.req.valid("json")
+  const { fromSemesterId, toSemesterId, trainingCourseId } = c.req.valid("json")
 
-  const result = await exportStatsArchivedAward({ fromSemesterId, toSemesterId })
+  const result = await exportStatsArchivedAward({ fromSemesterId, toSemesterId, trainingCourseId })
 
   const fileName = "THONG_KE_DIEM_THUONG.xlsx"
   const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`

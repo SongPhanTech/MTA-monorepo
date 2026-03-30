@@ -31,9 +31,11 @@ export type StatItem = z.infer<typeof StatsArchivedAwardItemSchema>
 export const getStatsArchivedAward = async ({
   fromSemesterId,
   toSemesterId,
+  trainingCourseId
 }: {
   fromSemesterId: string
   toSemesterId: string
+  trainingCourseId: string
 }): Promise<StatsArchivedResponse> => {
   const fromSemester = await prisma.semester.findUniqueOrThrow({ where: { id: fromSemesterId } })
   const toSemester = await prisma.semester.findUniqueOrThrow({ where: { id: toSemesterId } })
@@ -54,6 +56,11 @@ export const getStatsArchivedAward = async ({
         lte: endDate,
       },
       active: true,
+      student: {
+        fixedClass: {
+          trainingCourseId,
+        },
+      },
     },
     include: {
       student: {
@@ -134,6 +141,7 @@ export const getStatsArchivedAward = async ({
 export const exportStatsArchivedAward = async (params: {
   fromSemesterId: string
   toSemesterId: string
+  trainingCourseId: string
 }) => {
   const { fromSemester, toSemester, data } = await getStatsArchivedAward(params)
 
