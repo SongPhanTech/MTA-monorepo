@@ -70,6 +70,7 @@ export default function SettingCouncil() {
   const [leftData, setLeftData] = useState<ExpertProfile[]>([])
   const [rightData, setRightData] = useState<ExpertProfile[]>([])
   const [currentPage, setCurrentPage] = useState(1)
+  const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
   const [filters, setFilters] = useState<FilterProps>({
     code: undefined,
     name: undefined,
