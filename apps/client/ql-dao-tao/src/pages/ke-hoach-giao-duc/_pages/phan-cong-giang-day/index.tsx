@@ -212,7 +212,8 @@ export default function PhanCongGiangDay({
               },
             }
           : {}),
-        subject: (filters.organization && filters.organization.length > 0
+        subject:
+          filters.organization && filters.organization.length > 0
             ? {
                 subject: {
                   managementOrganizationId: {
@@ -220,7 +221,7 @@ export default function PhanCongGiangDay({
                   },
                 },
               }
-            : {}),
+            : {},
         ...(trainingCourseId && type === "NORMAL"
           ? {
               fixedClasses: {

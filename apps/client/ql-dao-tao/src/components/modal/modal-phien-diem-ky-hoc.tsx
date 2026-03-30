@@ -1,31 +1,16 @@
-import DatePicker from "@components/commons/date-picker"
 import Table from "@components/commons/table"
 import useSpinner from "@hooks/spinner"
 import { useFindUniqueArchivedCertificate, useUpdateStudentSubjectScore } from "@workspace/db/hooks"
-import { Button, Modal, message } from "antd"
-import dayjs from "dayjs"
-import { useEffect, useState } from "react"
+import { Button, SelectSemester } from "@workspace/ui"
+import { Form, message, Modal } from "antd"
+import { useEffect } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
-
-type DraftValue = {
-  semesterId: dayjs.Dayjs | null
-}
-
-type DraftValues = Record<string, DraftValue>
-
-const initializeDrafts = (records: any[]): DraftValues =>
-  records.reduce(
-    (acc, record) => ({
-      ...acc,
-      [record.id]: {
-        semesterId: record?.semesterId ? dayjs(record.semesterId) : null,
-      },
-    }),
-    {}
-  )
 
 const ModalPhienDiemKyHoc = () => {
   const { showSpinner, hideSpinner } = useSpinner()
+  const { mutateAsync: updateStudentSubjectScore } = useUpdateStudentSubjectScore()
+
+  const [form] = Form.useForm<Record<string, { semesterId: string }>>()
 
   const { isOpen, onClose, input } = useDisclosure<{
     isEditMode?: boolean
@@ -74,64 +59,43 @@ const ModalPhienDiemKyHoc = () => {
     }
   )
 
-  const { mutateAsync: updateStudentSubjectScore } = useUpdateStudentSubjectScore()
-
-  const [draftValues, setDraftValues] = useState<DraftValues>({})
-  const [displayRecords, setDisplayRecords] = useState<any[]>([])
-
-  const rawRecords = data?.studentSubjectScore?.map((item) => item.studentSubjectScore) ?? []
+  const tableData = data?.studentSubjectScore?.map((item) => item.studentSubjectScore) ?? []
 
   useEffect(() => {
-    setDisplayRecords(rawRecords)
-    setDraftValues(initializeDrafts(rawRecords))
+    if (tableData.length === 0) return
+    const initialValues = tableData.reduce(
+      (acc, record) => {
+        if (record?.semesterId) {
+          acc[record.id] = { semesterId: record.semesterId }
+        }
+        return acc
+      },
+      {} as Record<string, { semesterId: string }>
+    )
+    form.setFieldsValue(initialValues)
   }, [data])
 
-  const handleChangeDraft = (id: string, key: keyof DraftValue, value: any) => {
-    setDraftValues((prev) => ({
-      ...prev,
-      [id]: {
-        ...prev[id],
-        [key]: value,
-      },
-    }))
-  }
-
-  const handleSave = async (id: string) => {
-    const draft = draftValues[id]
-    if (!draft) return
-
+  const handleConfirm = async () => {
+    const formValues = form.getFieldsValue()
     try {
       showSpinner()
-      await updateStudentSubjectScore({
-        where: { id },
-        data: {
-          semesterId: draft.semesterId ? draft.semesterId.toISOString() : null,
-        },
-      })
-
-      setDisplayRecords((prev) =>
-        prev.map((record) =>
-          record.id === id
-            ? { ...record, semesterId: draft.semesterId ? draft.semesterId.toISOString() : null }
-            : record
-        )
+      await Promise.all(
+        Object.entries(formValues)
+          .filter(([, value]) => !!value?.semesterId)
+          .map(([studentSubjectScoreId, value]) =>
+            updateStudentSubjectScore({
+              where: { id: studentSubjectScoreId },
+              data: { semesterId: value.semesterId },
+            })
+          )
       )
-      message.success("Cập nhật kỳ học thành công")
+      message.success("Lưu phiên điểm thành công")
+      onClose()
     } catch (error: any) {
-      message.error(error?.info?.message || "Đã xảy ra lỗi, vui lòng kiểm tra lại")
+      message.error(error?.message || "Có lỗi xảy ra")
     } finally {
       hideSpinner()
     }
-  }
-
-  const renderEditableDate = (record: any, key: keyof DraftValue) => {
-    return (
-      <DatePicker
-        className="w-full"
-        value={draftValues?.[record.id]?.[key] || null}
-        onChange={(v) => handleChangeDraft(record.id, key, v)}
-      />
-    )
   }
 
   return (
@@ -141,51 +105,50 @@ const ModalPhienDiemKyHoc = () => {
       onCancel={onClose}
       className="top-2"
       width={700}
-      footer={null}
+      footer={[
+        <Button key="confirm" type="primary" onClick={handleConfirm}>
+          Lưu
+        </Button>,
+      ]}
     >
-      <Table
-        rowKey="id"
-        pagination={false}
-        dataSource={displayRecords}
-        columns={[
-          {
-            title: "STT",
-            width: 50,
-            align: "center",
-            render: (_, __, index) => index + 1,
-          },
-          {
-            title: "Tên môn học",
-            width: 150,
-            render: (_, record) => record?.subjectVersion?.name || "",
-          },
-          {
-            title: "Học kỳ dự kiến",
-            width: 180,
-            align: "center",
-            render: (_, record) =>
-              record?.subjectVersion?.trainingBlocks?.[0]?.semester ?? "",
-          },
-          {
-            title: "Kỳ học",
-            width: 180,
-            align: "center",
-            render: (_, record) =>
-              renderEditableDate(record, "semesterId"),
-          },
-          {
-            title: "Thao tác",
-            width: 100,
-            align: "center",
-            hidden: !input?.isEditMode,
-            render: (_: any, record: any) => (
-              <Button type="primary" size="small" onClick={() => handleSave(record.id)}>
-                Lưu
-              </Button>
-            ),
-          },
-        ]}
-      />
+      <Form form={form}>
+        <Table
+          rowKey="id"
+          pagination={false}
+          data={tableData}
+          columns={[
+            {
+              title: "STT",
+              width: 50,
+              align: "center",
+              render: (_, __, index) => index + 1,
+            },
+            {
+              title: "Tên môn học",
+              width: 150,
+              render: (_, record) => record?.subjectVersion?.name || "",
+            },
+            {
+              title: "Học kỳ dự kiến",
+              width: 180,
+              align: "center",
+              render: (_, record) => record?.subjectVersion?.trainingBlocks?.[0]?.semester ?? "",
+            },
+            {
+              title: "Kỳ học",
+              width: 180,
+              align: "center",
+              render: (_, record) => {
+                return (
+                  <Form.Item className="m-0" name={[record.id, "semesterId"]}>
+                    <SelectSemester />
+                  </Form.Item>
+                )
+              },
+            },
+          ]}
+        />
+      </Form>
     </Modal>
   )
 }
