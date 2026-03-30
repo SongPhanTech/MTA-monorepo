@@ -156,6 +156,7 @@ const PutAcademicWarning = () => {
       <Col span={12}>
         <FormItem form={form} name="trainingCourseId" label="Khoá học">
           <SelectTrainingCourse
+            className="w-full"
             placeholder="Chọn khoá"
             allowClear
             onChange={() => {
