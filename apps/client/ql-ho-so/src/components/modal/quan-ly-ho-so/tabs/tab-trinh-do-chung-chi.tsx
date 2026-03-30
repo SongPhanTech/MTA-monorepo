@@ -81,7 +81,7 @@ const dataQuocPhongAnNinh = [
 export default function TrinhDoChungChiTab({ userSelected }: { userSelected?: UserProfileType }) {
   const [openCollapse, setOpenCollapse] = useState<string | null>(null)
   const [currentPage, _setCurrentPage] = useState(1)
-  const [_numberOfPages, _setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+  const [numberOfPages, _setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
 
   const handleCollapseChange = (collapseId: string) => (key: string | string[]) => {
     if (key && key.length > 0) {
@@ -127,7 +127,7 @@ export default function TrinhDoChungChiTab({ userSelected }: { userSelected?: Us
                 width: 60,
                 align: "center" as const,
                 fixed: "left" as const,
-                render: (_, __, index) => index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,
               },
               {
                 title: "Hình thức đào tạo",
@@ -207,7 +207,7 @@ export default function TrinhDoChungChiTab({ userSelected }: { userSelected?: Us
                 width: 60,
                 align: "center" as const,
                 fixed: "left" as const,
-                render: (_, __, index) => index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,
               },
               {
                 title: "Hình thức đào tạo",
@@ -287,7 +287,7 @@ export default function TrinhDoChungChiTab({ userSelected }: { userSelected?: Us
                 width: 60,
                 align: "center" as const,
                 fixed: "left" as const,
-                render: (_, __, index) => index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,
               },
               {
                 title: "Hình thức đào tạo",
@@ -367,7 +367,7 @@ export default function TrinhDoChungChiTab({ userSelected }: { userSelected?: Us
                 width: 60,
                 align: "center" as const,
                 fixed: "left" as const,
-                render: (_, __, index) => index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,
               },
               {
                 title: "Hình thức đào tạo",
@@ -447,7 +447,7 @@ export default function TrinhDoChungChiTab({ userSelected }: { userSelected?: Us
                 width: 60,
                 align: "center" as const,
                 fixed: "left" as const,
-                render: (_, __, index) => index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,
               },
               {
                 title: "Hình thức đào tạo",
@@ -527,7 +527,7 @@ export default function TrinhDoChungChiTab({ userSelected }: { userSelected?: Us
                 width: 60,
                 align: "center" as const,
                 fixed: "left" as const,
-                render: (_, __, index) => index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,
               },
               {
                 title: "Bồi dưỡng quốc phòng an ninh",
