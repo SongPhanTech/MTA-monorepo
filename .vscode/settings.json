@@ -40,5 +40,8 @@
     },
     "[caddyfile]": {
         "editor.defaultFormatter": "matthewpi.caddyfile-support"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
     }
 }
