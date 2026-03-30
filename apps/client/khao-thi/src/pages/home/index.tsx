@@ -1,9 +1,9 @@
-import DashboardLayout from '@layouts/dashboard-layout'
+import DashboardLayout from "@layouts/dashboard-layout"
 
 function Page() {
-    return (
-        <div>
-            {/*<Row gutter={[8, 8]}>
+  return (
+    <div>
+      {/*<Row gutter={[8, 8]}>
                 <Col xs={24} lg={18}>
                     <div className="bg-white rounded shadow h-96 flex flex-col">
                         <div className="p-4">
@@ -67,12 +67,12 @@ function Page() {
                     </div>
                 </Col>
             </Row>*/}
-        </div>
-    )
+    </div>
+  )
 }
 
 export default Page
 
 Page.getLayout = function getLayout(page: React.ReactElement) {
-    return <DashboardLayout>{page}</DashboardLayout>
+  return <DashboardLayout>{page}</DashboardLayout>
 }

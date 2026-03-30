@@ -4,109 +4,109 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from "@tanstack/react-query"
 import type {
-    DataTag,
-    DefinedInitialDataOptions,
-    DefinedUseQueryResult,
-    MutationFunction,
-    QueryClient,
-    QueryFunction,
-    QueryKey,
-    UndefinedInitialDataOptions,
-    UseMutationOptions,
-    UseMutationResult,
-    UseQueryOptions,
-    UseQueryResult,
-} from '@tanstack/react-query'
+  DataTag,
+  DefinedInitialDataOptions,
+  DefinedUseQueryResult,
+  MutationFunction,
+  QueryClient,
+  QueryFunction,
+  QueryKey,
+  UndefinedInitialDataOptions,
+  UseMutationOptions,
+  UseMutationResult,
+  UseQueryOptions,
+  UseQueryResult,
+} from "@tanstack/react-query"
 
 import type {
-    AutomaticTopicGeneration200,
-    AutomaticTopicGeneration400,
-    AutomaticTopicGeneration404,
-    AutomaticTopicGenerationBody,
-    CalcEvidenceTags,
-    CalcEvidenceTags200,
-    CalcEvidenceTags404,
-    CreateClusterSurvey200,
-    CreateClusterSurvey400,
-    CreateClusterSurvey404,
-    CreateClusterSurveyRequest,
-    ExamBankQuestionsResult,
-    ExportClusterSurveyStatistics404,
-    ExportClusterSurveyStatisticsParams,
-    ExportReportSurvey,
-    ExportReportSurvey400,
-    ExportReportSurvey404,
-    ExportReportSurveyOrganizational400,
-    ExportReportSurveyOrganizational404,
-    ExportReportSurveyOrganizationalBody,
-    GenExamBank,
-    GenExamBank400,
-    GenExamBank404,
-    GenExamBankResult,
-    GetClusterSurveyInfo200,
-    GetClusterSurveyInfo404,
-    GetClusterSurveyInfoDepartment200,
-    GetClusterSurveyInfoDepartment404,
-    GetClusterSurveyInfoDepartmentParams,
-    GetClusterSurveyInfoParams,
-    GetClusterSurveyStatistics200,
-    GetClusterSurveyStatistics404,
-    GetClusterSurveyStatisticsForAll200,
-    GetClusterSurveyStatisticsForAll404,
-    GetClusterSurveyStatisticsForAllParams,
-    GetClusterSurveyStatisticsForLecturer200,
-    GetClusterSurveyStatisticsForLecturer404,
-    GetClusterSurveyStatisticsForLecturerParams,
-    GetClusterSurveyStatisticsForOrganization200,
-    GetClusterSurveyStatisticsForOrganization404,
-    GetClusterSurveyStatisticsForOrganizationParams,
-    GetClusterSurveyStatisticsParams,
-    GetExamBankWithGrouping,
-    GetExamBankWithGrouping404,
-    GetLectureSurveyStatistics200,
-    GetLectureSurveyStatistics404,
-    GetLectureSurveyStatisticsParams,
-    GetOrganizationSurveyStatistics200,
-    GetOrganizationSurveyStatistics400,
-    GetOrganizationSurveyStatistics404,
-    GetOrganizationSurveyStatisticsParams,
-    GetPrivateSurvey400,
-    GetPrivateSurvey404,
-    GetPrivateSurveyParams,
-    GetPublicSurvey400,
-    GetPublicSurvey404,
-    GetPublicSurveys400,
-    GetPublicSurveys404,
-    GetPublicSurveysResult,
-    GetPublicSurveysV2Params,
-    GetPublicSurveysV2Result,
-    GetSurveyObjectCount200Item,
-    GetSurveyObjectCount404,
-    GetSurveyObjectCountParams,
-    GetSurveyObjects404,
-    GetSurveyObjectsParams,
-    GetSurveyResult,
-    GetSurveyStatistics200,
-    GetSurveyStatistics404,
-    GetSurveyStatisticsToField200,
-    GetSurveyStatisticsToField404,
-    GetSurveysOfProfile200,
-    GetSurveysOfProfile404,
-    GetSurveysOfProfileParams,
-    ListOfundefined,
-    SavePublicSurvey400,
-    SavePublicSurvey404,
-    SaveSurveyRequest,
-    SaveSurveyResult,
-    ValidateUserSurvey200,
-    ValidateUserSurvey400,
-    ValidateUserSurvey404,
-    ValidateUserSurveyParams,
-} from './schemas'
+  AutomaticTopicGeneration200,
+  AutomaticTopicGeneration400,
+  AutomaticTopicGeneration404,
+  AutomaticTopicGenerationBody,
+  CalcEvidenceTags,
+  CalcEvidenceTags200,
+  CalcEvidenceTags404,
+  CreateClusterSurvey200,
+  CreateClusterSurvey400,
+  CreateClusterSurvey404,
+  CreateClusterSurveyRequest,
+  ExamBankQuestionsResult,
+  ExportClusterSurveyStatistics404,
+  ExportClusterSurveyStatisticsParams,
+  ExportReportSurvey,
+  ExportReportSurvey400,
+  ExportReportSurvey404,
+  ExportReportSurveyOrganizational400,
+  ExportReportSurveyOrganizational404,
+  ExportReportSurveyOrganizationalBody,
+  GenExamBank,
+  GenExamBank400,
+  GenExamBank404,
+  GenExamBankResult,
+  GetClusterSurveyInfo200,
+  GetClusterSurveyInfo404,
+  GetClusterSurveyInfoDepartment200,
+  GetClusterSurveyInfoDepartment404,
+  GetClusterSurveyInfoDepartmentParams,
+  GetClusterSurveyInfoParams,
+  GetClusterSurveyStatistics200,
+  GetClusterSurveyStatistics404,
+  GetClusterSurveyStatisticsForAll200,
+  GetClusterSurveyStatisticsForAll404,
+  GetClusterSurveyStatisticsForAllParams,
+  GetClusterSurveyStatisticsForLecturer200,
+  GetClusterSurveyStatisticsForLecturer404,
+  GetClusterSurveyStatisticsForLecturerParams,
+  GetClusterSurveyStatisticsForOrganization200,
+  GetClusterSurveyStatisticsForOrganization404,
+  GetClusterSurveyStatisticsForOrganizationParams,
+  GetClusterSurveyStatisticsParams,
+  GetExamBankWithGrouping,
+  GetExamBankWithGrouping404,
+  GetLectureSurveyStatistics200,
+  GetLectureSurveyStatistics404,
+  GetLectureSurveyStatisticsParams,
+  GetOrganizationSurveyStatistics200,
+  GetOrganizationSurveyStatistics400,
+  GetOrganizationSurveyStatistics404,
+  GetOrganizationSurveyStatisticsParams,
+  GetPrivateSurvey400,
+  GetPrivateSurvey404,
+  GetPrivateSurveyParams,
+  GetPublicSurvey400,
+  GetPublicSurvey404,
+  GetPublicSurveys400,
+  GetPublicSurveys404,
+  GetPublicSurveysResult,
+  GetPublicSurveysV2Params,
+  GetPublicSurveysV2Result,
+  GetSurveyObjectCount200Item,
+  GetSurveyObjectCount404,
+  GetSurveyObjectCountParams,
+  GetSurveyObjects404,
+  GetSurveyObjectsParams,
+  GetSurveyResult,
+  GetSurveyStatistics200,
+  GetSurveyStatistics404,
+  GetSurveyStatisticsToField200,
+  GetSurveyStatisticsToField404,
+  GetSurveysOfProfile200,
+  GetSurveysOfProfile404,
+  GetSurveysOfProfileParams,
+  ListOfundefined,
+  SavePublicSurvey400,
+  SavePublicSurvey404,
+  SaveSurveyRequest,
+  SaveSurveyResult,
+  ValidateUserSurvey200,
+  ValidateUserSurvey400,
+  ValidateUserSurvey404,
+  ValidateUserSurveyParams,
+} from "./schemas"
 
-import { customExamFetch } from './custom-instance'
+import { customExamFetch } from "./custom-instance"
 type AwaitedInput<T> = PromiseLike<T> | T
 
 type Awaited<O> = O extends AwaitedInput<infer T> ? T : never
@@ -118,152 +118,144 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
  * @summary Danh sách đợt khảo sát công khai
  */
 export type getPublicSurveysResponse200 = {
-    data: GetPublicSurveysResult
-    status: 200
+  data: GetPublicSurveysResult
+  status: 200
 }
 
 export type getPublicSurveysResponse400 = {
-    data: GetPublicSurveys400
-    status: 400
+  data: GetPublicSurveys400
+  status: 400
 }
 
 export type getPublicSurveysResponse404 = {
-    data: GetPublicSurveys404
-    status: 404
+  data: GetPublicSurveys404
+  status: 404
 }
 
 export type getPublicSurveysResponseSuccess = getPublicSurveysResponse200 & {
-    headers: Headers
+  headers: Headers
 }
 export type getPublicSurveysResponseError = (
-    | getPublicSurveysResponse400
-    | getPublicSurveysResponse404
+  | getPublicSurveysResponse400
+  | getPublicSurveysResponse404
 ) & {
-    headers: Headers
+  headers: Headers
 }
 
 export type getPublicSurveysResponse =
-    | getPublicSurveysResponseSuccess
-    | getPublicSurveysResponseError
+  | getPublicSurveysResponseSuccess
+  | getPublicSurveysResponseError
 
 export const getGetPublicSurveysUrl = () => {
-    return `/api/survey/get-public-surveys`
+  return `/api/survey/get-public-surveys`
 }
 
 export const getPublicSurveys = async (
-    options?: RequestInit
+  options?: RequestInit
 ): Promise<getPublicSurveysResponse> => {
-    return customExamFetch<getPublicSurveysResponse>(getGetPublicSurveysUrl(), {
-        ...options,
-        method: 'GET',
-    })
+  return customExamFetch<getPublicSurveysResponse>(getGetPublicSurveysUrl(), {
+    ...options,
+    method: "GET",
+  })
 }
 
 export const getGetPublicSurveysQueryKey = () => {
-    return [`/api/survey/get-public-surveys`] as const
+  return [`/api/survey/get-public-surveys`] as const
 }
 
 export const getGetPublicSurveysQueryOptions = <
-    TData = Awaited<ReturnType<typeof getPublicSurveys>>,
-    TError = GetPublicSurveys400 | GetPublicSurveys404,
+  TData = Awaited<ReturnType<typeof getPublicSurveys>>,
+  TError = GetPublicSurveys400 | GetPublicSurveys404,
 >(options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getPublicSurveys>>, TError, TData>>
-    request?: SecondParameter<typeof customExamFetch>
+  query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getPublicSurveys>>, TError, TData>>
+  request?: SecondParameter<typeof customExamFetch>
 }) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-    const queryKey = queryOptions?.queryKey ?? getGetPublicSurveysQueryKey()
+  const queryKey = queryOptions?.queryKey ?? getGetPublicSurveysQueryKey()
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPublicSurveys>>> = ({ signal }) =>
-        getPublicSurveys({ signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getPublicSurveys>>> = ({ signal }) =>
+    getPublicSurveys({ signal, ...requestOptions })
 
-    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-        Awaited<ReturnType<typeof getPublicSurveys>>,
-        TError,
-        TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getPublicSurveys>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetPublicSurveysQueryResult = NonNullable<Awaited<ReturnType<typeof getPublicSurveys>>>
 export type GetPublicSurveysQueryError = GetPublicSurveys400 | GetPublicSurveys404
 
 export function useGetPublicSurveys<
-    TData = Awaited<ReturnType<typeof getPublicSurveys>>,
-    TError = GetPublicSurveys400 | GetPublicSurveys404,
+  TData = Awaited<ReturnType<typeof getPublicSurveys>>,
+  TError = GetPublicSurveys400 | GetPublicSurveys404,
 >(
-    options: {
-        query: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getPublicSurveys>>, TError, TData>
-        > &
-            Pick<
-                DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof getPublicSurveys>>,
-                    TError,
-                    Awaited<ReturnType<typeof getPublicSurveys>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getPublicSurveys>>, TError, TData>> &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getPublicSurveys>>,
+          TError,
+          Awaited<ReturnType<typeof getPublicSurveys>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetPublicSurveys<
-    TData = Awaited<ReturnType<typeof getPublicSurveys>>,
-    TError = GetPublicSurveys400 | GetPublicSurveys404,
+  TData = Awaited<ReturnType<typeof getPublicSurveys>>,
+  TError = GetPublicSurveys400 | GetPublicSurveys404,
 >(
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getPublicSurveys>>, TError, TData>
-        > &
-            Pick<
-                UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof getPublicSurveys>>,
-                    TError,
-                    Awaited<ReturnType<typeof getPublicSurveys>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getPublicSurveys>>, TError, TData>> &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getPublicSurveys>>,
+          TError,
+          Awaited<ReturnType<typeof getPublicSurveys>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetPublicSurveys<
-    TData = Awaited<ReturnType<typeof getPublicSurveys>>,
-    TError = GetPublicSurveys400 | GetPublicSurveys404,
+  TData = Awaited<ReturnType<typeof getPublicSurveys>>,
+  TError = GetPublicSurveys400 | GetPublicSurveys404,
 >(
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getPublicSurveys>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getPublicSurveys>>, TError, TData>>
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Danh sách đợt khảo sát công khai
  */
 
 export function useGetPublicSurveys<
-    TData = Awaited<ReturnType<typeof getPublicSurveys>>,
-    TError = GetPublicSurveys400 | GetPublicSurveys404,
+  TData = Awaited<ReturnType<typeof getPublicSurveys>>,
+  TError = GetPublicSurveys400 | GetPublicSurveys404,
 >(
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getPublicSurveys>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getPublicSurveys>>, TError, TData>>
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getGetPublicSurveysQueryOptions(options)
+  const queryOptions = getGetPublicSurveysQueryOptions(options)
 
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-        queryKey: DataTag<QueryKey, TData, TError>
-    }
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 
-    query.queryKey = queryOptions.queryKey
+  query.queryKey = queryOptions.queryKey
 
-    return query
+  return query
 }
 
 /**
@@ -271,154 +263,150 @@ export function useGetPublicSurveys<
  * @summary Thông tin đợt khảo sát công khai
  */
 export type getPublicSurveyResponse200 = {
-    data: GetSurveyResult
-    status: 200
+  data: GetSurveyResult
+  status: 200
 }
 
 export type getPublicSurveyResponse400 = {
-    data: GetPublicSurvey400
-    status: 400
+  data: GetPublicSurvey400
+  status: 400
 }
 
 export type getPublicSurveyResponse404 = {
-    data: GetPublicSurvey404
-    status: 404
+  data: GetPublicSurvey404
+  status: 404
 }
 
 export type getPublicSurveyResponseSuccess = getPublicSurveyResponse200 & {
-    headers: Headers
+  headers: Headers
 }
 export type getPublicSurveyResponseError = (
-    | getPublicSurveyResponse400
-    | getPublicSurveyResponse404
+  | getPublicSurveyResponse400
+  | getPublicSurveyResponse404
 ) & {
-    headers: Headers
+  headers: Headers
 }
 
 export type getPublicSurveyResponse = getPublicSurveyResponseSuccess | getPublicSurveyResponseError
 
 export const getGetPublicSurveyUrl = (id: string) => {
-    return `/api/survey/get-public-survey/${id}`
+  return `/api/survey/get-public-survey/${id}`
 }
 
 export const getPublicSurvey = async (
-    id: string,
-    options?: RequestInit
+  id: string,
+  options?: RequestInit
 ): Promise<getPublicSurveyResponse> => {
-    return customExamFetch<getPublicSurveyResponse>(getGetPublicSurveyUrl(id), {
-        ...options,
-        method: 'GET',
-    })
+  return customExamFetch<getPublicSurveyResponse>(getGetPublicSurveyUrl(id), {
+    ...options,
+    method: "GET",
+  })
 }
 
 export const getGetPublicSurveyQueryKey = (id?: string) => {
-    return [`/api/survey/get-public-survey/${id}`] as const
+  return [`/api/survey/get-public-survey/${id}`] as const
 }
 
 export const getGetPublicSurveyQueryOptions = <
-    TData = Awaited<ReturnType<typeof getPublicSurvey>>,
-    TError = GetPublicSurvey400 | GetPublicSurvey404,
+  TData = Awaited<ReturnType<typeof getPublicSurvey>>,
+  TError = GetPublicSurvey400 | GetPublicSurvey404,
 >(
-    id: string,
-    options?: {
-        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getPublicSurvey>>, TError, TData>>
-        request?: SecondParameter<typeof customExamFetch>
-    }
+  id: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getPublicSurvey>>, TError, TData>>
+    request?: SecondParameter<typeof customExamFetch>
+  }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-    const queryKey = queryOptions?.queryKey ?? getGetPublicSurveyQueryKey(id)
+  const queryKey = queryOptions?.queryKey ?? getGetPublicSurveyQueryKey(id)
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPublicSurvey>>> = ({ signal }) =>
-        getPublicSurvey(id, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getPublicSurvey>>> = ({ signal }) =>
+    getPublicSurvey(id, { signal, ...requestOptions })
 
-    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
-        Awaited<ReturnType<typeof getPublicSurvey>>,
-        TError,
-        TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
+  return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getPublicSurvey>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetPublicSurveyQueryResult = NonNullable<Awaited<ReturnType<typeof getPublicSurvey>>>
 export type GetPublicSurveyQueryError = GetPublicSurvey400 | GetPublicSurvey404
 
 export function useGetPublicSurvey<
-    TData = Awaited<ReturnType<typeof getPublicSurvey>>,
-    TError = GetPublicSurvey400 | GetPublicSurvey404,
+  TData = Awaited<ReturnType<typeof getPublicSurvey>>,
+  TError = GetPublicSurvey400 | GetPublicSurvey404,
 >(
-    id: string,
-    options: {
-        query: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getPublicSurvey>>, TError, TData>
-        > &
-            Pick<
-                DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof getPublicSurvey>>,
-                    TError,
-                    Awaited<ReturnType<typeof getPublicSurvey>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getPublicSurvey>>, TError, TData>> &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getPublicSurvey>>,
+          TError,
+          Awaited<ReturnType<typeof getPublicSurvey>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetPublicSurvey<
-    TData = Awaited<ReturnType<typeof getPublicSurvey>>,
-    TError = GetPublicSurvey400 | GetPublicSurvey404,
+  TData = Awaited<ReturnType<typeof getPublicSurvey>>,
+  TError = GetPublicSurvey400 | GetPublicSurvey404,
 >(
-    id: string,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getPublicSurvey>>, TError, TData>
-        > &
-            Pick<
-                UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof getPublicSurvey>>,
-                    TError,
-                    Awaited<ReturnType<typeof getPublicSurvey>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getPublicSurvey>>, TError, TData>> &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getPublicSurvey>>,
+          TError,
+          Awaited<ReturnType<typeof getPublicSurvey>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetPublicSurvey<
-    TData = Awaited<ReturnType<typeof getPublicSurvey>>,
-    TError = GetPublicSurvey400 | GetPublicSurvey404,
+  TData = Awaited<ReturnType<typeof getPublicSurvey>>,
+  TError = GetPublicSurvey400 | GetPublicSurvey404,
 >(
-    id: string,
-    options?: {
-        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getPublicSurvey>>, TError, TData>>
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getPublicSurvey>>, TError, TData>>
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Thông tin đợt khảo sát công khai
  */
 
 export function useGetPublicSurvey<
-    TData = Awaited<ReturnType<typeof getPublicSurvey>>,
-    TError = GetPublicSurvey400 | GetPublicSurvey404,
+  TData = Awaited<ReturnType<typeof getPublicSurvey>>,
+  TError = GetPublicSurvey400 | GetPublicSurvey404,
 >(
-    id: string,
-    options?: {
-        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getPublicSurvey>>, TError, TData>>
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getPublicSurvey>>, TError, TData>>
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getGetPublicSurveyQueryOptions(id, options)
+  const queryOptions = getGetPublicSurveyQueryOptions(id, options)
 
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-        queryKey: DataTag<QueryKey, TData, TError>
-    }
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 
-    query.queryKey = queryOptions.queryKey
+  query.queryKey = queryOptions.queryKey
 
-    return query
+  return query
 }
 
 /**
@@ -426,88 +414,88 @@ export function useGetPublicSurvey<
  * @summary Lưu kết quả khảo sát công khai
  */
 export type savePublicSurveyResponse200 = {
-    data: SaveSurveyResult
-    status: 200
+  data: SaveSurveyResult
+  status: 200
 }
 
 export type savePublicSurveyResponse400 = {
-    data: SavePublicSurvey400
-    status: 400
+  data: SavePublicSurvey400
+  status: 400
 }
 
 export type savePublicSurveyResponse404 = {
-    data: SavePublicSurvey404
-    status: 404
+  data: SavePublicSurvey404
+  status: 404
 }
 
 export type savePublicSurveyResponseSuccess = savePublicSurveyResponse200 & {
-    headers: Headers
+  headers: Headers
 }
 export type savePublicSurveyResponseError = (
-    | savePublicSurveyResponse400
-    | savePublicSurveyResponse404
+  | savePublicSurveyResponse400
+  | savePublicSurveyResponse404
 ) & {
-    headers: Headers
+  headers: Headers
 }
 
 export type savePublicSurveyResponse =
-    | savePublicSurveyResponseSuccess
-    | savePublicSurveyResponseError
+  | savePublicSurveyResponseSuccess
+  | savePublicSurveyResponseError
 
 export const getSavePublicSurveyUrl = () => {
-    return `/api/survey/save-public-survey`
+  return `/api/survey/save-public-survey`
 }
 
 export const savePublicSurvey = async (
-    saveSurveyRequest: SaveSurveyRequest,
-    options?: RequestInit
+  saveSurveyRequest: SaveSurveyRequest,
+  options?: RequestInit
 ): Promise<savePublicSurveyResponse> => {
-    return customExamFetch<savePublicSurveyResponse>(getSavePublicSurveyUrl(), {
-        ...options,
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', ...options?.headers },
-        body: JSON.stringify(saveSurveyRequest),
-    })
+  return customExamFetch<savePublicSurveyResponse>(getSavePublicSurveyUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(saveSurveyRequest),
+  })
 }
 
 export const getSavePublicSurveyMutationOptions = <
-    TError = SavePublicSurvey400 | SavePublicSurvey404,
-    TContext = unknown,
+  TError = SavePublicSurvey400 | SavePublicSurvey404,
+  TContext = unknown,
 >(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof savePublicSurvey>>,
-        TError,
-        { data: SaveSurveyRequest },
-        TContext
-    >
-    request?: SecondParameter<typeof customExamFetch>
-}): UseMutationOptions<
+  mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof savePublicSurvey>>,
     TError,
     { data: SaveSurveyRequest },
     TContext
+  >
+  request?: SecondParameter<typeof customExamFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof savePublicSurvey>>,
+  TError,
+  { data: SaveSurveyRequest },
+  TContext
 > => {
-    const mutationKey = ['savePublicSurvey']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+  const mutationKey = ["savePublicSurvey"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
 
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof savePublicSurvey>>,
-        { data: SaveSurveyRequest }
-    > = (props) => {
-        const { data } = props ?? {}
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof savePublicSurvey>>,
+    { data: SaveSurveyRequest }
+  > = (props) => {
+    const { data } = props ?? {}
 
-        return savePublicSurvey(data, requestOptions)
-    }
+    return savePublicSurvey(data, requestOptions)
+  }
 
-    return { mutationFn, ...mutationOptions }
+  return { mutationFn, ...mutationOptions }
 }
 
 export type SavePublicSurveyMutationResult = NonNullable<
-    Awaited<ReturnType<typeof savePublicSurvey>>
+  Awaited<ReturnType<typeof savePublicSurvey>>
 >
 export type SavePublicSurveyMutationBody = SaveSurveyRequest
 export type SavePublicSurveyMutationError = SavePublicSurvey400 | SavePublicSurvey404
@@ -516,28 +504,28 @@ export type SavePublicSurveyMutationError = SavePublicSurvey400 | SavePublicSurv
  * @summary Lưu kết quả khảo sát công khai
  */
 export const useSavePublicSurvey = <
-    TError = SavePublicSurvey400 | SavePublicSurvey404,
-    TContext = unknown,
+  TError = SavePublicSurvey400 | SavePublicSurvey404,
+  TContext = unknown,
 >(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof savePublicSurvey>>,
-            TError,
-            { data: SaveSurveyRequest },
-            TContext
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof savePublicSurvey>>,
+      TError,
+      { data: SaveSurveyRequest },
+      TContext
+    >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseMutationResult<
-    Awaited<ReturnType<typeof savePublicSurvey>>,
-    TError,
-    { data: SaveSurveyRequest },
-    TContext
+  Awaited<ReturnType<typeof savePublicSurvey>>,
+  TError,
+  { data: SaveSurveyRequest },
+  TContext
 > => {
-    const mutationOptions = getSavePublicSurveyMutationOptions(options)
+  const mutationOptions = getSavePublicSurveyMutationOptions(options)
 
-    return useMutation(mutationOptions, queryClient)
+  return useMutation(mutationOptions, queryClient)
 }
 
 /**
@@ -545,176 +533,168 @@ export const useSavePublicSurvey = <
  * @summary Kiểm tra mã sinh viên có trong cơ sở dữ liệu
  */
 export type validateUserSurveyResponse200 = {
-    data: ValidateUserSurvey200
-    status: 200
+  data: ValidateUserSurvey200
+  status: 200
 }
 
 export type validateUserSurveyResponse400 = {
-    data: ValidateUserSurvey400
-    status: 400
+  data: ValidateUserSurvey400
+  status: 400
 }
 
 export type validateUserSurveyResponse404 = {
-    data: ValidateUserSurvey404
-    status: 404
+  data: ValidateUserSurvey404
+  status: 404
 }
 
 export type validateUserSurveyResponseSuccess = validateUserSurveyResponse200 & {
-    headers: Headers
+  headers: Headers
 }
 export type validateUserSurveyResponseError = (
-    | validateUserSurveyResponse400
-    | validateUserSurveyResponse404
+  | validateUserSurveyResponse400
+  | validateUserSurveyResponse404
 ) & {
-    headers: Headers
+  headers: Headers
 }
 
 export type validateUserSurveyResponse =
-    | validateUserSurveyResponseSuccess
-    | validateUserSurveyResponseError
+  | validateUserSurveyResponseSuccess
+  | validateUserSurveyResponseError
 
 export const getValidateUserSurveyUrl = (params: ValidateUserSurveyParams) => {
-    const normalizedParams = new URLSearchParams()
+  const normalizedParams = new URLSearchParams()
 
-    Object.entries(params || {}).forEach(([key, value]) => {
-        if (value !== undefined) {
-            normalizedParams.append(key, value === null ? 'null' : value.toString())
-        }
-    })
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString())
+    }
+  })
 
-    const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString()
 
-    return stringifiedParams.length > 0
-        ? `/api/survey/validate-user-survey?${stringifiedParams}`
-        : `/api/survey/validate-user-survey`
+  return stringifiedParams.length > 0
+    ? `/api/survey/validate-user-survey?${stringifiedParams}`
+    : `/api/survey/validate-user-survey`
 }
 
 export const validateUserSurvey = async (
-    params: ValidateUserSurveyParams,
-    options?: RequestInit
+  params: ValidateUserSurveyParams,
+  options?: RequestInit
 ): Promise<validateUserSurveyResponse> => {
-    return customExamFetch<validateUserSurveyResponse>(getValidateUserSurveyUrl(params), {
-        ...options,
-        method: 'GET',
-    })
+  return customExamFetch<validateUserSurveyResponse>(getValidateUserSurveyUrl(params), {
+    ...options,
+    method: "GET",
+  })
 }
 
 export const getValidateUserSurveyQueryKey = (params?: ValidateUserSurveyParams) => {
-    return [`/api/survey/validate-user-survey`, ...(params ? [params] : [])] as const
+  return [`/api/survey/validate-user-survey`, ...(params ? [params] : [])] as const
 }
 
 export const getValidateUserSurveyQueryOptions = <
-    TData = Awaited<ReturnType<typeof validateUserSurvey>>,
-    TError = ValidateUserSurvey400 | ValidateUserSurvey404,
+  TData = Awaited<ReturnType<typeof validateUserSurvey>>,
+  TError = ValidateUserSurvey400 | ValidateUserSurvey404,
 >(
-    params: ValidateUserSurveyParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof validateUserSurvey>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    }
+  params: ValidateUserSurveyParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof validateUserSurvey>>, TError, TData>>
+    request?: SecondParameter<typeof customExamFetch>
+  }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-    const queryKey = queryOptions?.queryKey ?? getValidateUserSurveyQueryKey(params)
+  const queryKey = queryOptions?.queryKey ?? getValidateUserSurveyQueryKey(params)
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof validateUserSurvey>>> = ({ signal }) =>
-        validateUserSurvey(params, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof validateUserSurvey>>> = ({ signal }) =>
+    validateUserSurvey(params, { signal, ...requestOptions })
 
-    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-        Awaited<ReturnType<typeof validateUserSurvey>>,
-        TError,
-        TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof validateUserSurvey>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type ValidateUserSurveyQueryResult = NonNullable<
-    Awaited<ReturnType<typeof validateUserSurvey>>
+  Awaited<ReturnType<typeof validateUserSurvey>>
 >
 export type ValidateUserSurveyQueryError = ValidateUserSurvey400 | ValidateUserSurvey404
 
 export function useValidateUserSurvey<
-    TData = Awaited<ReturnType<typeof validateUserSurvey>>,
-    TError = ValidateUserSurvey400 | ValidateUserSurvey404,
+  TData = Awaited<ReturnType<typeof validateUserSurvey>>,
+  TError = ValidateUserSurvey400 | ValidateUserSurvey404,
 >(
-    params: ValidateUserSurveyParams,
-    options: {
-        query: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof validateUserSurvey>>, TError, TData>
-        > &
-            Pick<
-                DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof validateUserSurvey>>,
-                    TError,
-                    Awaited<ReturnType<typeof validateUserSurvey>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  params: ValidateUserSurveyParams,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof validateUserSurvey>>, TError, TData>> &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof validateUserSurvey>>,
+          TError,
+          Awaited<ReturnType<typeof validateUserSurvey>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useValidateUserSurvey<
-    TData = Awaited<ReturnType<typeof validateUserSurvey>>,
-    TError = ValidateUserSurvey400 | ValidateUserSurvey404,
+  TData = Awaited<ReturnType<typeof validateUserSurvey>>,
+  TError = ValidateUserSurvey400 | ValidateUserSurvey404,
 >(
-    params: ValidateUserSurveyParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof validateUserSurvey>>, TError, TData>
-        > &
-            Pick<
-                UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof validateUserSurvey>>,
-                    TError,
-                    Awaited<ReturnType<typeof validateUserSurvey>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  params: ValidateUserSurveyParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof validateUserSurvey>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof validateUserSurvey>>,
+          TError,
+          Awaited<ReturnType<typeof validateUserSurvey>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useValidateUserSurvey<
-    TData = Awaited<ReturnType<typeof validateUserSurvey>>,
-    TError = ValidateUserSurvey400 | ValidateUserSurvey404,
+  TData = Awaited<ReturnType<typeof validateUserSurvey>>,
+  TError = ValidateUserSurvey400 | ValidateUserSurvey404,
 >(
-    params: ValidateUserSurveyParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof validateUserSurvey>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  params: ValidateUserSurveyParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof validateUserSurvey>>, TError, TData>>
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Kiểm tra mã sinh viên có trong cơ sở dữ liệu
  */
 
 export function useValidateUserSurvey<
-    TData = Awaited<ReturnType<typeof validateUserSurvey>>,
-    TError = ValidateUserSurvey400 | ValidateUserSurvey404,
+  TData = Awaited<ReturnType<typeof validateUserSurvey>>,
+  TError = ValidateUserSurvey400 | ValidateUserSurvey404,
 >(
-    params: ValidateUserSurveyParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof validateUserSurvey>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  params: ValidateUserSurveyParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof validateUserSurvey>>, TError, TData>>
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getValidateUserSurveyQueryOptions(params, options)
+  const queryOptions = getValidateUserSurveyQueryOptions(params, options)
 
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-        queryKey: DataTag<QueryKey, TData, TError>
-    }
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 
-    query.queryKey = queryOptions.queryKey
+  query.queryKey = queryOptions.queryKey
 
-    return query
+  return query
 }
 
 /**
@@ -722,158 +702,150 @@ export function useValidateUserSurvey<
  * @summary Danh sách đợt khảo sát công khai (v2)
  */
 export type getPublicSurveysV2Response200 = {
-    data: GetPublicSurveysV2Result
-    status: 200
+  data: GetPublicSurveysV2Result
+  status: 200
 }
 
 export type getPublicSurveysV2ResponseSuccess = getPublicSurveysV2Response200 & {
-    headers: Headers
+  headers: Headers
 }
 
 export type getPublicSurveysV2Response = getPublicSurveysV2ResponseSuccess
 
 export const getGetPublicSurveysV2Url = (params?: GetPublicSurveysV2Params) => {
-    const normalizedParams = new URLSearchParams()
+  const normalizedParams = new URLSearchParams()
 
-    Object.entries(params || {}).forEach(([key, value]) => {
-        if (value !== undefined) {
-            normalizedParams.append(key, value === null ? 'null' : value.toString())
-        }
-    })
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString())
+    }
+  })
 
-    const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString()
 
-    return stringifiedParams.length > 0
-        ? `/api/survey/get-public-surveys-v2?${stringifiedParams}`
-        : `/api/survey/get-public-surveys-v2`
+  return stringifiedParams.length > 0
+    ? `/api/survey/get-public-surveys-v2?${stringifiedParams}`
+    : `/api/survey/get-public-surveys-v2`
 }
 
 export const getPublicSurveysV2 = async (
-    params?: GetPublicSurveysV2Params,
-    options?: RequestInit
+  params?: GetPublicSurveysV2Params,
+  options?: RequestInit
 ): Promise<getPublicSurveysV2Response> => {
-    return customExamFetch<getPublicSurveysV2Response>(getGetPublicSurveysV2Url(params), {
-        ...options,
-        method: 'GET',
-    })
+  return customExamFetch<getPublicSurveysV2Response>(getGetPublicSurveysV2Url(params), {
+    ...options,
+    method: "GET",
+  })
 }
 
 export const getGetPublicSurveysV2QueryKey = (params?: GetPublicSurveysV2Params) => {
-    return [`/api/survey/get-public-surveys-v2`, ...(params ? [params] : [])] as const
+  return [`/api/survey/get-public-surveys-v2`, ...(params ? [params] : [])] as const
 }
 
 export const getGetPublicSurveysV2QueryOptions = <
-    TData = Awaited<ReturnType<typeof getPublicSurveysV2>>,
-    TError = unknown,
+  TData = Awaited<ReturnType<typeof getPublicSurveysV2>>,
+  TError = unknown,
 >(
-    params?: GetPublicSurveysV2Params,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getPublicSurveysV2>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    }
+  params?: GetPublicSurveysV2Params,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getPublicSurveysV2>>, TError, TData>>
+    request?: SecondParameter<typeof customExamFetch>
+  }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-    const queryKey = queryOptions?.queryKey ?? getGetPublicSurveysV2QueryKey(params)
+  const queryKey = queryOptions?.queryKey ?? getGetPublicSurveysV2QueryKey(params)
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPublicSurveysV2>>> = ({ signal }) =>
-        getPublicSurveysV2(params, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getPublicSurveysV2>>> = ({ signal }) =>
+    getPublicSurveysV2(params, { signal, ...requestOptions })
 
-    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-        Awaited<ReturnType<typeof getPublicSurveysV2>>,
-        TError,
-        TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getPublicSurveysV2>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetPublicSurveysV2QueryResult = NonNullable<
-    Awaited<ReturnType<typeof getPublicSurveysV2>>
+  Awaited<ReturnType<typeof getPublicSurveysV2>>
 >
 export type GetPublicSurveysV2QueryError = unknown
 
 export function useGetPublicSurveysV2<
-    TData = Awaited<ReturnType<typeof getPublicSurveysV2>>,
-    TError = unknown,
+  TData = Awaited<ReturnType<typeof getPublicSurveysV2>>,
+  TError = unknown,
 >(
-    params: undefined | GetPublicSurveysV2Params,
-    options: {
-        query: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getPublicSurveysV2>>, TError, TData>
-        > &
-            Pick<
-                DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof getPublicSurveysV2>>,
-                    TError,
-                    Awaited<ReturnType<typeof getPublicSurveysV2>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  params: undefined | GetPublicSurveysV2Params,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getPublicSurveysV2>>, TError, TData>> &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getPublicSurveysV2>>,
+          TError,
+          Awaited<ReturnType<typeof getPublicSurveysV2>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetPublicSurveysV2<
-    TData = Awaited<ReturnType<typeof getPublicSurveysV2>>,
-    TError = unknown,
+  TData = Awaited<ReturnType<typeof getPublicSurveysV2>>,
+  TError = unknown,
 >(
-    params?: GetPublicSurveysV2Params,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getPublicSurveysV2>>, TError, TData>
-        > &
-            Pick<
-                UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof getPublicSurveysV2>>,
-                    TError,
-                    Awaited<ReturnType<typeof getPublicSurveysV2>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  params?: GetPublicSurveysV2Params,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getPublicSurveysV2>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getPublicSurveysV2>>,
+          TError,
+          Awaited<ReturnType<typeof getPublicSurveysV2>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetPublicSurveysV2<
-    TData = Awaited<ReturnType<typeof getPublicSurveysV2>>,
-    TError = unknown,
+  TData = Awaited<ReturnType<typeof getPublicSurveysV2>>,
+  TError = unknown,
 >(
-    params?: GetPublicSurveysV2Params,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getPublicSurveysV2>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  params?: GetPublicSurveysV2Params,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getPublicSurveysV2>>, TError, TData>>
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Danh sách đợt khảo sát công khai (v2)
  */
 
 export function useGetPublicSurveysV2<
-    TData = Awaited<ReturnType<typeof getPublicSurveysV2>>,
-    TError = unknown,
+  TData = Awaited<ReturnType<typeof getPublicSurveysV2>>,
+  TError = unknown,
 >(
-    params?: GetPublicSurveysV2Params,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getPublicSurveysV2>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  params?: GetPublicSurveysV2Params,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getPublicSurveysV2>>, TError, TData>>
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getGetPublicSurveysV2QueryOptions(params, options)
+  const queryOptions = getGetPublicSurveysV2QueryOptions(params, options)
 
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-        queryKey: DataTag<QueryKey, TData, TError>
-    }
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 
-    query.queryKey = queryOptions.queryKey
+  query.queryKey = queryOptions.queryKey
 
-    return query
+  return query
 }
 
 /**
@@ -881,79 +853,79 @@ export function useGetPublicSurveysV2<
  * @summary Sinh đề thi theo cấu trúc đề thi
  */
 export type genExamBankResponse200 = {
-    data: GenExamBankResult
-    status: 200
+  data: GenExamBankResult
+  status: 200
 }
 
 export type genExamBankResponse400 = {
-    data: GenExamBank400
-    status: 400
+  data: GenExamBank400
+  status: 400
 }
 
 export type genExamBankResponse404 = {
-    data: GenExamBank404
-    status: 404
+  data: GenExamBank404
+  status: 404
 }
 
 export type genExamBankResponseSuccess = genExamBankResponse200 & {
-    headers: Headers
+  headers: Headers
 }
 export type genExamBankResponseError = (genExamBankResponse400 | genExamBankResponse404) & {
-    headers: Headers
+  headers: Headers
 }
 
 export type genExamBankResponse = genExamBankResponseSuccess | genExamBankResponseError
 
 export const getGenExamBankUrl = () => {
-    return `/api/exam/random-exam-question-by-rule`
+  return `/api/exam/random-exam-question-by-rule`
 }
 
 export const genExamBank = async (
-    genExamBank: GenExamBank,
-    options?: RequestInit
+  genExamBank: GenExamBank,
+  options?: RequestInit
 ): Promise<genExamBankResponse> => {
-    return customExamFetch<genExamBankResponse>(getGenExamBankUrl(), {
-        ...options,
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', ...options?.headers },
-        body: JSON.stringify(genExamBank),
-    })
+  return customExamFetch<genExamBankResponse>(getGenExamBankUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(genExamBank),
+  })
 }
 
 export const getGenExamBankMutationOptions = <
-    TError = GenExamBank400 | GenExamBank404,
-    TContext = unknown,
+  TError = GenExamBank400 | GenExamBank404,
+  TContext = unknown,
 >(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof genExamBank>>,
-        TError,
-        { data: GenExamBank },
-        TContext
-    >
-    request?: SecondParameter<typeof customExamFetch>
-}): UseMutationOptions<
+  mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof genExamBank>>,
     TError,
     { data: GenExamBank },
     TContext
+  >
+  request?: SecondParameter<typeof customExamFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof genExamBank>>,
+  TError,
+  { data: GenExamBank },
+  TContext
 > => {
-    const mutationKey = ['genExamBank']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+  const mutationKey = ["genExamBank"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
 
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof genExamBank>>,
-        { data: GenExamBank }
-    > = (props) => {
-        const { data } = props ?? {}
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof genExamBank>>,
+    { data: GenExamBank }
+  > = (props) => {
+    const { data } = props ?? {}
 
-        return genExamBank(data, requestOptions)
-    }
+    return genExamBank(data, requestOptions)
+  }
 
-    return { mutationFn, ...mutationOptions }
+  return { mutationFn, ...mutationOptions }
 }
 
 export type GenExamBankMutationResult = NonNullable<Awaited<ReturnType<typeof genExamBank>>>
@@ -964,25 +936,25 @@ export type GenExamBankMutationError = GenExamBank400 | GenExamBank404
  * @summary Sinh đề thi theo cấu trúc đề thi
  */
 export const useGenExamBank = <TError = GenExamBank400 | GenExamBank404, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof genExamBank>>,
-            TError,
-            { data: GenExamBank },
-            TContext
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof genExamBank>>,
+      TError,
+      { data: GenExamBank },
+      TContext
+    >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseMutationResult<
-    Awaited<ReturnType<typeof genExamBank>>,
-    TError,
-    { data: GenExamBank },
-    TContext
+  Awaited<ReturnType<typeof genExamBank>>,
+  TError,
+  { data: GenExamBank },
+  TContext
 > => {
-    const mutationOptions = getGenExamBankMutationOptions(options)
+  const mutationOptions = getGenExamBankMutationOptions(options)
 
-    return useMutation(mutationOptions, queryClient)
+  return useMutation(mutationOptions, queryClient)
 }
 
 /**
@@ -990,80 +962,80 @@ export const useGenExamBank = <TError = GenExamBank400 | GenExamBank404, TContex
  * @summary Lấy câu hỏi của đề thi có nhóm theo loại
  */
 export type getExamBankWithGroupingResponse200 = {
-    data: ExamBankQuestionsResult
-    status: 200
+  data: ExamBankQuestionsResult
+  status: 200
 }
 
 export type getExamBankWithGroupingResponse404 = {
-    data: GetExamBankWithGrouping404
-    status: 404
+  data: GetExamBankWithGrouping404
+  status: 404
 }
 
 export type getExamBankWithGroupingResponseSuccess = getExamBankWithGroupingResponse200 & {
-    headers: Headers
+  headers: Headers
 }
 export type getExamBankWithGroupingResponseError = getExamBankWithGroupingResponse404 & {
-    headers: Headers
+  headers: Headers
 }
 
 export type getExamBankWithGroupingResponse =
-    | getExamBankWithGroupingResponseSuccess
-    | getExamBankWithGroupingResponseError
+  | getExamBankWithGroupingResponseSuccess
+  | getExamBankWithGroupingResponseError
 
 export const getGetExamBankWithGroupingUrl = () => {
-    return `/api/exam/exam-bank/questions`
+  return `/api/exam/exam-bank/questions`
 }
 
 export const getExamBankWithGrouping = async (
-    getExamBankWithGrouping: GetExamBankWithGrouping,
-    options?: RequestInit
+  getExamBankWithGrouping: GetExamBankWithGrouping,
+  options?: RequestInit
 ): Promise<getExamBankWithGroupingResponse> => {
-    return customExamFetch<getExamBankWithGroupingResponse>(getGetExamBankWithGroupingUrl(), {
-        ...options,
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', ...options?.headers },
-        body: JSON.stringify(getExamBankWithGrouping),
-    })
+  return customExamFetch<getExamBankWithGroupingResponse>(getGetExamBankWithGroupingUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(getExamBankWithGrouping),
+  })
 }
 
 export const getGetExamBankWithGroupingMutationOptions = <
-    TError = GetExamBankWithGrouping404,
-    TContext = unknown,
+  TError = GetExamBankWithGrouping404,
+  TContext = unknown,
 >(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof getExamBankWithGrouping>>,
-        TError,
-        { data: GetExamBankWithGrouping },
-        TContext
-    >
-    request?: SecondParameter<typeof customExamFetch>
-}): UseMutationOptions<
+  mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof getExamBankWithGrouping>>,
     TError,
     { data: GetExamBankWithGrouping },
     TContext
+  >
+  request?: SecondParameter<typeof customExamFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof getExamBankWithGrouping>>,
+  TError,
+  { data: GetExamBankWithGrouping },
+  TContext
 > => {
-    const mutationKey = ['getExamBankWithGrouping']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+  const mutationKey = ["getExamBankWithGrouping"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
 
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof getExamBankWithGrouping>>,
-        { data: GetExamBankWithGrouping }
-    > = (props) => {
-        const { data } = props ?? {}
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof getExamBankWithGrouping>>,
+    { data: GetExamBankWithGrouping }
+  > = (props) => {
+    const { data } = props ?? {}
 
-        return getExamBankWithGrouping(data, requestOptions)
-    }
+    return getExamBankWithGrouping(data, requestOptions)
+  }
 
-    return { mutationFn, ...mutationOptions }
+  return { mutationFn, ...mutationOptions }
 }
 
 export type GetExamBankWithGroupingMutationResult = NonNullable<
-    Awaited<ReturnType<typeof getExamBankWithGrouping>>
+  Awaited<ReturnType<typeof getExamBankWithGrouping>>
 >
 export type GetExamBankWithGroupingMutationBody = GetExamBankWithGrouping
 export type GetExamBankWithGroupingMutationError = GetExamBankWithGrouping404
@@ -1072,25 +1044,25 @@ export type GetExamBankWithGroupingMutationError = GetExamBankWithGrouping404
  * @summary Lấy câu hỏi của đề thi có nhóm theo loại
  */
 export const useGetExamBankWithGrouping = <TError = GetExamBankWithGrouping404, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof getExamBankWithGrouping>>,
-            TError,
-            { data: GetExamBankWithGrouping },
-            TContext
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof getExamBankWithGrouping>>,
+      TError,
+      { data: GetExamBankWithGrouping },
+      TContext
+    >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseMutationResult<
-    Awaited<ReturnType<typeof getExamBankWithGrouping>>,
-    TError,
-    { data: GetExamBankWithGrouping },
-    TContext
+  Awaited<ReturnType<typeof getExamBankWithGrouping>>,
+  TError,
+  { data: GetExamBankWithGrouping },
+  TContext
 > => {
-    const mutationOptions = getGetExamBankWithGroupingMutationOptions(options)
+  const mutationOptions = getGetExamBankWithGroupingMutationOptions(options)
 
-    return useMutation(mutationOptions, queryClient)
+  return useMutation(mutationOptions, queryClient)
 }
 
 /**
@@ -1098,88 +1070,88 @@ export const useGetExamBankWithGrouping = <TError = GetExamBankWithGrouping404, 
  * @summary Báo cáo khảo sát
  */
 export type exportReportSurveyResponse200 = {
-    data: Blob
-    status: 200
+  data: Blob
+  status: 200
 }
 
 export type exportReportSurveyResponse400 = {
-    data: ExportReportSurvey400
-    status: 400
+  data: ExportReportSurvey400
+  status: 400
 }
 
 export type exportReportSurveyResponse404 = {
-    data: ExportReportSurvey404
-    status: 404
+  data: ExportReportSurvey404
+  status: 404
 }
 
 export type exportReportSurveyResponseSuccess = exportReportSurveyResponse200 & {
-    headers: Headers
+  headers: Headers
 }
 export type exportReportSurveyResponseError = (
-    | exportReportSurveyResponse400
-    | exportReportSurveyResponse404
+  | exportReportSurveyResponse400
+  | exportReportSurveyResponse404
 ) & {
-    headers: Headers
+  headers: Headers
 }
 
 export type exportReportSurveyResponse =
-    | exportReportSurveyResponseSuccess
-    | exportReportSurveyResponseError
+  | exportReportSurveyResponseSuccess
+  | exportReportSurveyResponseError
 
 export const getExportReportSurveyUrl = () => {
-    return `/api/survey/export-report-survey`
+  return `/api/survey/export-report-survey`
 }
 
 export const exportReportSurvey = async (
-    exportReportSurvey: ExportReportSurvey,
-    options?: RequestInit
+  exportReportSurvey: ExportReportSurvey,
+  options?: RequestInit
 ): Promise<exportReportSurveyResponse> => {
-    return customExamFetch<exportReportSurveyResponse>(getExportReportSurveyUrl(), {
-        ...options,
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', ...options?.headers },
-        body: JSON.stringify(exportReportSurvey),
-    })
+  return customExamFetch<exportReportSurveyResponse>(getExportReportSurveyUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(exportReportSurvey),
+  })
 }
 
 export const getExportReportSurveyMutationOptions = <
-    TError = ExportReportSurvey400 | ExportReportSurvey404,
-    TContext = unknown,
+  TError = ExportReportSurvey400 | ExportReportSurvey404,
+  TContext = unknown,
 >(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof exportReportSurvey>>,
-        TError,
-        { data: ExportReportSurvey },
-        TContext
-    >
-    request?: SecondParameter<typeof customExamFetch>
-}): UseMutationOptions<
+  mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof exportReportSurvey>>,
     TError,
     { data: ExportReportSurvey },
     TContext
+  >
+  request?: SecondParameter<typeof customExamFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof exportReportSurvey>>,
+  TError,
+  { data: ExportReportSurvey },
+  TContext
 > => {
-    const mutationKey = ['exportReportSurvey']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+  const mutationKey = ["exportReportSurvey"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
 
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof exportReportSurvey>>,
-        { data: ExportReportSurvey }
-    > = (props) => {
-        const { data } = props ?? {}
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof exportReportSurvey>>,
+    { data: ExportReportSurvey }
+  > = (props) => {
+    const { data } = props ?? {}
 
-        return exportReportSurvey(data, requestOptions)
-    }
+    return exportReportSurvey(data, requestOptions)
+  }
 
-    return { mutationFn, ...mutationOptions }
+  return { mutationFn, ...mutationOptions }
 }
 
 export type ExportReportSurveyMutationResult = NonNullable<
-    Awaited<ReturnType<typeof exportReportSurvey>>
+  Awaited<ReturnType<typeof exportReportSurvey>>
 >
 export type ExportReportSurveyMutationBody = ExportReportSurvey
 export type ExportReportSurveyMutationError = ExportReportSurvey400 | ExportReportSurvey404
@@ -1188,28 +1160,28 @@ export type ExportReportSurveyMutationError = ExportReportSurvey400 | ExportRepo
  * @summary Báo cáo khảo sát
  */
 export const useExportReportSurvey = <
-    TError = ExportReportSurvey400 | ExportReportSurvey404,
-    TContext = unknown,
+  TError = ExportReportSurvey400 | ExportReportSurvey404,
+  TContext = unknown,
 >(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof exportReportSurvey>>,
-            TError,
-            { data: ExportReportSurvey },
-            TContext
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof exportReportSurvey>>,
+      TError,
+      { data: ExportReportSurvey },
+      TContext
+    >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseMutationResult<
-    Awaited<ReturnType<typeof exportReportSurvey>>,
-    TError,
-    { data: ExportReportSurvey },
-    TContext
+  Awaited<ReturnType<typeof exportReportSurvey>>,
+  TError,
+  { data: ExportReportSurvey },
+  TContext
 > => {
-    const mutationOptions = getExportReportSurveyMutationOptions(options)
+  const mutationOptions = getExportReportSurveyMutationOptions(options)
 
-    return useMutation(mutationOptions, queryClient)
+  return useMutation(mutationOptions, queryClient)
 }
 
 /**
@@ -1217,966 +1189,941 @@ export const useExportReportSurvey = <
  * @summary Báo cáo khảo sát theo đơn vị
  */
 export type exportReportSurveyOrganizationalResponse200 = {
-    data: Blob
-    status: 200
+  data: Blob
+  status: 200
 }
 
 export type exportReportSurveyOrganizationalResponse400 = {
-    data: ExportReportSurveyOrganizational400
-    status: 400
+  data: ExportReportSurveyOrganizational400
+  status: 400
 }
 
 export type exportReportSurveyOrganizationalResponse404 = {
-    data: ExportReportSurveyOrganizational404
-    status: 404
+  data: ExportReportSurveyOrganizational404
+  status: 404
 }
 
 export type exportReportSurveyOrganizationalResponseSuccess =
-    exportReportSurveyOrganizationalResponse200 & {
-        headers: Headers
-    }
-export type exportReportSurveyOrganizationalResponseError = (
-    | exportReportSurveyOrganizationalResponse400
-    | exportReportSurveyOrganizationalResponse404
-) & {
+  exportReportSurveyOrganizationalResponse200 & {
     headers: Headers
+  }
+export type exportReportSurveyOrganizationalResponseError = (
+  | exportReportSurveyOrganizationalResponse400
+  | exportReportSurveyOrganizationalResponse404
+) & {
+  headers: Headers
 }
 
 export type exportReportSurveyOrganizationalResponse =
-    | exportReportSurveyOrganizationalResponseSuccess
-    | exportReportSurveyOrganizationalResponseError
+  | exportReportSurveyOrganizationalResponseSuccess
+  | exportReportSurveyOrganizationalResponseError
 
 export const getExportReportSurveyOrganizationalUrl = () => {
-    return `/api/survey/export-report-survey-organizational`
+  return `/api/survey/export-report-survey-organizational`
 }
 
 export const exportReportSurveyOrganizational = async (
-    exportReportSurveyOrganizationalBody: ExportReportSurveyOrganizationalBody,
-    options?: RequestInit
+  exportReportSurveyOrganizationalBody: ExportReportSurveyOrganizationalBody,
+  options?: RequestInit
 ): Promise<exportReportSurveyOrganizationalResponse> => {
-    return customExamFetch<exportReportSurveyOrganizationalResponse>(
-        getExportReportSurveyOrganizationalUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(exportReportSurveyOrganizationalBody),
-        }
-    )
+  return customExamFetch<exportReportSurveyOrganizationalResponse>(
+    getExportReportSurveyOrganizationalUrl(),
+    {
+      ...options,
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(exportReportSurveyOrganizationalBody),
+    }
+  )
 }
 
 export const getExportReportSurveyOrganizationalMutationOptions = <
-    TError = ExportReportSurveyOrganizational400 | ExportReportSurveyOrganizational404,
-    TContext = unknown,
+  TError = ExportReportSurveyOrganizational400 | ExportReportSurveyOrganizational404,
+  TContext = unknown,
 >(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof exportReportSurveyOrganizational>>,
-        TError,
-        { data: ExportReportSurveyOrganizationalBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customExamFetch>
-}): UseMutationOptions<
+  mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof exportReportSurveyOrganizational>>,
     TError,
     { data: ExportReportSurveyOrganizationalBody },
     TContext
+  >
+  request?: SecondParameter<typeof customExamFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof exportReportSurveyOrganizational>>,
+  TError,
+  { data: ExportReportSurveyOrganizationalBody },
+  TContext
 > => {
-    const mutationKey = ['exportReportSurveyOrganizational']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+  const mutationKey = ["exportReportSurveyOrganizational"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
 
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof exportReportSurveyOrganizational>>,
-        { data: ExportReportSurveyOrganizationalBody }
-    > = (props) => {
-        const { data } = props ?? {}
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof exportReportSurveyOrganizational>>,
+    { data: ExportReportSurveyOrganizationalBody }
+  > = (props) => {
+    const { data } = props ?? {}
 
-        return exportReportSurveyOrganizational(data, requestOptions)
-    }
+    return exportReportSurveyOrganizational(data, requestOptions)
+  }
 
-    return { mutationFn, ...mutationOptions }
+  return { mutationFn, ...mutationOptions }
 }
 
 export type ExportReportSurveyOrganizationalMutationResult = NonNullable<
-    Awaited<ReturnType<typeof exportReportSurveyOrganizational>>
+  Awaited<ReturnType<typeof exportReportSurveyOrganizational>>
 >
 export type ExportReportSurveyOrganizationalMutationBody = ExportReportSurveyOrganizationalBody
 export type ExportReportSurveyOrganizationalMutationError =
-    | ExportReportSurveyOrganizational400
-    | ExportReportSurveyOrganizational404
+  | ExportReportSurveyOrganizational400
+  | ExportReportSurveyOrganizational404
 
 /**
  * @summary Báo cáo khảo sát theo đơn vị
  */
 export const useExportReportSurveyOrganizational = <
-    TError = ExportReportSurveyOrganizational400 | ExportReportSurveyOrganizational404,
-    TContext = unknown,
+  TError = ExportReportSurveyOrganizational400 | ExportReportSurveyOrganizational404,
+  TContext = unknown,
 >(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof exportReportSurveyOrganizational>>,
-            TError,
-            { data: ExportReportSurveyOrganizationalBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof exportReportSurveyOrganizational>>,
+      TError,
+      { data: ExportReportSurveyOrganizationalBody },
+      TContext
+    >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseMutationResult<
-    Awaited<ReturnType<typeof exportReportSurveyOrganizational>>,
-    TError,
-    { data: ExportReportSurveyOrganizationalBody },
-    TContext
+  Awaited<ReturnType<typeof exportReportSurveyOrganizational>>,
+  TError,
+  { data: ExportReportSurveyOrganizationalBody },
+  TContext
 > => {
-    const mutationOptions = getExportReportSurveyOrganizationalMutationOptions(options)
+  const mutationOptions = getExportReportSurveyOrganizationalMutationOptions(options)
 
-    return useMutation(mutationOptions, queryClient)
+  return useMutation(mutationOptions, queryClient)
 }
 
 /**
  * @summary Thống kê câu trả lời cho từng câu hỏi trong một đợt khảo sát
  */
 export type getSurveyStatisticsResponse200 = {
-    data: GetSurveyStatistics200
-    status: 200
+  data: GetSurveyStatistics200
+  status: 200
 }
 
 export type getSurveyStatisticsResponse404 = {
-    data: GetSurveyStatistics404
-    status: 404
+  data: GetSurveyStatistics404
+  status: 404
 }
 
 export type getSurveyStatisticsResponseSuccess = getSurveyStatisticsResponse200 & {
-    headers: Headers
+  headers: Headers
 }
 export type getSurveyStatisticsResponseError = getSurveyStatisticsResponse404 & {
-    headers: Headers
+  headers: Headers
 }
 
 export type getSurveyStatisticsResponse =
-    | getSurveyStatisticsResponseSuccess
-    | getSurveyStatisticsResponseError
+  | getSurveyStatisticsResponseSuccess
+  | getSurveyStatisticsResponseError
 
 export const getGetSurveyStatisticsUrl = (id: string) => {
-    return `/api/survey/${id}/statistics`
+  return `/api/survey/${id}/statistics`
 }
 
 export const getSurveyStatistics = async (
-    id: string,
-    options?: RequestInit
+  id: string,
+  options?: RequestInit
 ): Promise<getSurveyStatisticsResponse> => {
-    return customExamFetch<getSurveyStatisticsResponse>(getGetSurveyStatisticsUrl(id), {
-        ...options,
-        method: 'GET',
-    })
+  return customExamFetch<getSurveyStatisticsResponse>(getGetSurveyStatisticsUrl(id), {
+    ...options,
+    method: "GET",
+  })
 }
 
 export const getGetSurveyStatisticsQueryKey = (id?: string) => {
-    return [`/api/survey/${id}/statistics`] as const
+  return [`/api/survey/${id}/statistics`] as const
 }
 
 export const getGetSurveyStatisticsQueryOptions = <
-    TData = Awaited<ReturnType<typeof getSurveyStatistics>>,
-    TError = GetSurveyStatistics404,
+  TData = Awaited<ReturnType<typeof getSurveyStatistics>>,
+  TError = GetSurveyStatistics404,
 >(
-    id: string,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatistics>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    }
+  id: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatistics>>, TError, TData>>
+    request?: SecondParameter<typeof customExamFetch>
+  }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-    const queryKey = queryOptions?.queryKey ?? getGetSurveyStatisticsQueryKey(id)
+  const queryKey = queryOptions?.queryKey ?? getGetSurveyStatisticsQueryKey(id)
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSurveyStatistics>>> = ({ signal }) =>
-        getSurveyStatistics(id, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getSurveyStatistics>>> = ({ signal }) =>
+    getSurveyStatistics(id, { signal, ...requestOptions })
 
-    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
-        Awaited<ReturnType<typeof getSurveyStatistics>>,
-        TError,
-        TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
+  return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getSurveyStatistics>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetSurveyStatisticsQueryResult = NonNullable<
-    Awaited<ReturnType<typeof getSurveyStatistics>>
+  Awaited<ReturnType<typeof getSurveyStatistics>>
 >
 export type GetSurveyStatisticsQueryError = GetSurveyStatistics404
 
 export function useGetSurveyStatistics<
-    TData = Awaited<ReturnType<typeof getSurveyStatistics>>,
-    TError = GetSurveyStatistics404,
+  TData = Awaited<ReturnType<typeof getSurveyStatistics>>,
+  TError = GetSurveyStatistics404,
 >(
-    id: string,
-    options: {
-        query: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatistics>>, TError, TData>
-        > &
-            Pick<
-                DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof getSurveyStatistics>>,
-                    TError,
-                    Awaited<ReturnType<typeof getSurveyStatistics>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatistics>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSurveyStatistics>>,
+          TError,
+          Awaited<ReturnType<typeof getSurveyStatistics>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetSurveyStatistics<
-    TData = Awaited<ReturnType<typeof getSurveyStatistics>>,
-    TError = GetSurveyStatistics404,
+  TData = Awaited<ReturnType<typeof getSurveyStatistics>>,
+  TError = GetSurveyStatistics404,
 >(
-    id: string,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatistics>>, TError, TData>
-        > &
-            Pick<
-                UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof getSurveyStatistics>>,
-                    TError,
-                    Awaited<ReturnType<typeof getSurveyStatistics>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatistics>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSurveyStatistics>>,
+          TError,
+          Awaited<ReturnType<typeof getSurveyStatistics>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetSurveyStatistics<
-    TData = Awaited<ReturnType<typeof getSurveyStatistics>>,
-    TError = GetSurveyStatistics404,
+  TData = Awaited<ReturnType<typeof getSurveyStatistics>>,
+  TError = GetSurveyStatistics404,
 >(
-    id: string,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatistics>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatistics>>, TError, TData>>
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Thống kê câu trả lời cho từng câu hỏi trong một đợt khảo sát
  */
 
 export function useGetSurveyStatistics<
-    TData = Awaited<ReturnType<typeof getSurveyStatistics>>,
-    TError = GetSurveyStatistics404,
+  TData = Awaited<ReturnType<typeof getSurveyStatistics>>,
+  TError = GetSurveyStatistics404,
 >(
-    id: string,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatistics>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatistics>>, TError, TData>>
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getGetSurveyStatisticsQueryOptions(id, options)
+  const queryOptions = getGetSurveyStatisticsQueryOptions(id, options)
 
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-        queryKey: DataTag<QueryKey, TData, TError>
-    }
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 
-    query.queryKey = queryOptions.queryKey
+  query.queryKey = queryOptions.queryKey
 
-    return query
+  return query
 }
 
 /**
  * @summary Thống kê câu trả lời cho từng nhóm câu hỏi trong một đợt khảo sát
  */
 export type getSurveyStatisticsToFieldResponse200 = {
-    data: GetSurveyStatisticsToField200
-    status: 200
+  data: GetSurveyStatisticsToField200
+  status: 200
 }
 
 export type getSurveyStatisticsToFieldResponse404 = {
-    data: GetSurveyStatisticsToField404
-    status: 404
+  data: GetSurveyStatisticsToField404
+  status: 404
 }
 
 export type getSurveyStatisticsToFieldResponseSuccess = getSurveyStatisticsToFieldResponse200 & {
-    headers: Headers
+  headers: Headers
 }
 export type getSurveyStatisticsToFieldResponseError = getSurveyStatisticsToFieldResponse404 & {
-    headers: Headers
+  headers: Headers
 }
 
 export type getSurveyStatisticsToFieldResponse =
-    | getSurveyStatisticsToFieldResponseSuccess
-    | getSurveyStatisticsToFieldResponseError
+  | getSurveyStatisticsToFieldResponseSuccess
+  | getSurveyStatisticsToFieldResponseError
 
 export const getGetSurveyStatisticsToFieldUrl = (id: string) => {
-    return `/api/survey/${id}/statistics-to-Field`
+  return `/api/survey/${id}/statistics-to-Field`
 }
 
 export const getSurveyStatisticsToField = async (
-    id: string,
-    options?: RequestInit
+  id: string,
+  options?: RequestInit
 ): Promise<getSurveyStatisticsToFieldResponse> => {
-    return customExamFetch<getSurveyStatisticsToFieldResponse>(
-        getGetSurveyStatisticsToFieldUrl(id),
-        {
-            ...options,
-            method: 'GET',
-        }
-    )
+  return customExamFetch<getSurveyStatisticsToFieldResponse>(getGetSurveyStatisticsToFieldUrl(id), {
+    ...options,
+    method: "GET",
+  })
 }
 
 export const getGetSurveyStatisticsToFieldQueryKey = (id?: string) => {
-    return [`/api/survey/${id}/statistics-to-Field`] as const
+  return [`/api/survey/${id}/statistics-to-Field`] as const
 }
 
 export const getGetSurveyStatisticsToFieldQueryOptions = <
-    TData = Awaited<ReturnType<typeof getSurveyStatisticsToField>>,
-    TError = GetSurveyStatisticsToField404,
+  TData = Awaited<ReturnType<typeof getSurveyStatisticsToField>>,
+  TError = GetSurveyStatisticsToField404,
 >(
-    id: string,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatisticsToField>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    }
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatisticsToField>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customExamFetch>
+  }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-    const queryKey = queryOptions?.queryKey ?? getGetSurveyStatisticsToFieldQueryKey(id)
+  const queryKey = queryOptions?.queryKey ?? getGetSurveyStatisticsToFieldQueryKey(id)
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSurveyStatisticsToField>>> = ({
-        signal,
-    }) => getSurveyStatisticsToField(id, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getSurveyStatisticsToField>>> = ({
+    signal,
+  }) => getSurveyStatisticsToField(id, { signal, ...requestOptions })
 
-    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
-        Awaited<ReturnType<typeof getSurveyStatisticsToField>>,
-        TError,
-        TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
+  return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getSurveyStatisticsToField>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetSurveyStatisticsToFieldQueryResult = NonNullable<
-    Awaited<ReturnType<typeof getSurveyStatisticsToField>>
+  Awaited<ReturnType<typeof getSurveyStatisticsToField>>
 >
 export type GetSurveyStatisticsToFieldQueryError = GetSurveyStatisticsToField404
 
 export function useGetSurveyStatisticsToField<
-    TData = Awaited<ReturnType<typeof getSurveyStatisticsToField>>,
-    TError = GetSurveyStatisticsToField404,
+  TData = Awaited<ReturnType<typeof getSurveyStatisticsToField>>,
+  TError = GetSurveyStatisticsToField404,
 >(
-    id: string,
-    options: {
-        query: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatisticsToField>>, TError, TData>
-        > &
-            Pick<
-                DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof getSurveyStatisticsToField>>,
-                    TError,
-                    Awaited<ReturnType<typeof getSurveyStatisticsToField>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatisticsToField>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSurveyStatisticsToField>>,
+          TError,
+          Awaited<ReturnType<typeof getSurveyStatisticsToField>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetSurveyStatisticsToField<
-    TData = Awaited<ReturnType<typeof getSurveyStatisticsToField>>,
-    TError = GetSurveyStatisticsToField404,
+  TData = Awaited<ReturnType<typeof getSurveyStatisticsToField>>,
+  TError = GetSurveyStatisticsToField404,
 >(
-    id: string,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatisticsToField>>, TError, TData>
-        > &
-            Pick<
-                UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof getSurveyStatisticsToField>>,
-                    TError,
-                    Awaited<ReturnType<typeof getSurveyStatisticsToField>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatisticsToField>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSurveyStatisticsToField>>,
+          TError,
+          Awaited<ReturnType<typeof getSurveyStatisticsToField>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetSurveyStatisticsToField<
-    TData = Awaited<ReturnType<typeof getSurveyStatisticsToField>>,
-    TError = GetSurveyStatisticsToField404,
+  TData = Awaited<ReturnType<typeof getSurveyStatisticsToField>>,
+  TError = GetSurveyStatisticsToField404,
 >(
-    id: string,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatisticsToField>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatisticsToField>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Thống kê câu trả lời cho từng nhóm câu hỏi trong một đợt khảo sát
  */
 
 export function useGetSurveyStatisticsToField<
-    TData = Awaited<ReturnType<typeof getSurveyStatisticsToField>>,
-    TError = GetSurveyStatisticsToField404,
+  TData = Awaited<ReturnType<typeof getSurveyStatisticsToField>>,
+  TError = GetSurveyStatisticsToField404,
 >(
-    id: string,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatisticsToField>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatisticsToField>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getGetSurveyStatisticsToFieldQueryOptions(id, options)
+  const queryOptions = getGetSurveyStatisticsToFieldQueryOptions(id, options)
 
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-        queryKey: DataTag<QueryKey, TData, TError>
-    }
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 
-    query.queryKey = queryOptions.queryKey
+  query.queryKey = queryOptions.queryKey
 
-    return query
+  return query
 }
 
 /**
  * @summary Danh sách người làm khảo sát
  */
 export type getSurveyObjectsResponse200 = {
-    data: ListOfundefined
-    status: 200
+  data: ListOfundefined
+  status: 200
 }
 
 export type getSurveyObjectsResponse404 = {
-    data: GetSurveyObjects404
-    status: 404
+  data: GetSurveyObjects404
+  status: 404
 }
 
 export type getSurveyObjectsResponseSuccess = getSurveyObjectsResponse200 & {
-    headers: Headers
+  headers: Headers
 }
 export type getSurveyObjectsResponseError = getSurveyObjectsResponse404 & {
-    headers: Headers
+  headers: Headers
 }
 
 export type getSurveyObjectsResponse =
-    | getSurveyObjectsResponseSuccess
-    | getSurveyObjectsResponseError
+  | getSurveyObjectsResponseSuccess
+  | getSurveyObjectsResponseError
 
 export const getGetSurveyObjectsUrl = (params: GetSurveyObjectsParams) => {
-    const normalizedParams = new URLSearchParams()
+  const normalizedParams = new URLSearchParams()
 
-    Object.entries(params || {}).forEach(([key, value]) => {
-        const explodeParameters = ['organizationId', 'fixedClassIds', 'trainingCourseIds']
+  Object.entries(params || {}).forEach(([key, value]) => {
+    const explodeParameters = ["organizationId", "fixedClassIds", "trainingCourseIds"]
 
-        if (Array.isArray(value) && explodeParameters.includes(key)) {
-            value.forEach((v) => {
-                normalizedParams.append(key, v === null ? 'null' : v.toString())
-            })
-            return
-        }
+    if (Array.isArray(value) && explodeParameters.includes(key)) {
+      value.forEach((v) => {
+        normalizedParams.append(key, v === null ? "null" : v.toString())
+      })
+      return
+    }
 
-        if (value !== undefined) {
-            normalizedParams.append(key, value === null ? 'null' : value.toString())
-        }
-    })
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString())
+    }
+  })
 
-    const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString()
 
-    return stringifiedParams.length > 0
-        ? `/api/survey/objects?${stringifiedParams}`
-        : `/api/survey/objects`
+  return stringifiedParams.length > 0
+    ? `/api/survey/objects?${stringifiedParams}`
+    : `/api/survey/objects`
 }
 
 export const getSurveyObjects = async (
-    params: GetSurveyObjectsParams,
-    options?: RequestInit
+  params: GetSurveyObjectsParams,
+  options?: RequestInit
 ): Promise<getSurveyObjectsResponse> => {
-    return customExamFetch<getSurveyObjectsResponse>(getGetSurveyObjectsUrl(params), {
-        ...options,
-        method: 'GET',
-    })
+  return customExamFetch<getSurveyObjectsResponse>(getGetSurveyObjectsUrl(params), {
+    ...options,
+    method: "GET",
+  })
 }
 
 export const getGetSurveyObjectsQueryKey = (params?: GetSurveyObjectsParams) => {
-    return [`/api/survey/objects`, ...(params ? [params] : [])] as const
+  return [`/api/survey/objects`, ...(params ? [params] : [])] as const
 }
 
 export const getGetSurveyObjectsQueryOptions = <
-    TData = Awaited<ReturnType<typeof getSurveyObjects>>,
-    TError = GetSurveyObjects404,
+  TData = Awaited<ReturnType<typeof getSurveyObjects>>,
+  TError = GetSurveyObjects404,
 >(
-    params: GetSurveyObjectsParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getSurveyObjects>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    }
+  params: GetSurveyObjectsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSurveyObjects>>, TError, TData>>
+    request?: SecondParameter<typeof customExamFetch>
+  }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-    const queryKey = queryOptions?.queryKey ?? getGetSurveyObjectsQueryKey(params)
+  const queryKey = queryOptions?.queryKey ?? getGetSurveyObjectsQueryKey(params)
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSurveyObjects>>> = ({ signal }) =>
-        getSurveyObjects(params, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getSurveyObjects>>> = ({ signal }) =>
+    getSurveyObjects(params, { signal, ...requestOptions })
 
-    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-        Awaited<ReturnType<typeof getSurveyObjects>>,
-        TError,
-        TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getSurveyObjects>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetSurveyObjectsQueryResult = NonNullable<Awaited<ReturnType<typeof getSurveyObjects>>>
 export type GetSurveyObjectsQueryError = GetSurveyObjects404
 
 export function useGetSurveyObjects<
-    TData = Awaited<ReturnType<typeof getSurveyObjects>>,
-    TError = GetSurveyObjects404,
+  TData = Awaited<ReturnType<typeof getSurveyObjects>>,
+  TError = GetSurveyObjects404,
 >(
-    params: GetSurveyObjectsParams,
-    options: {
-        query: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getSurveyObjects>>, TError, TData>
-        > &
-            Pick<
-                DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof getSurveyObjects>>,
-                    TError,
-                    Awaited<ReturnType<typeof getSurveyObjects>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  params: GetSurveyObjectsParams,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSurveyObjects>>, TError, TData>> &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSurveyObjects>>,
+          TError,
+          Awaited<ReturnType<typeof getSurveyObjects>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetSurveyObjects<
-    TData = Awaited<ReturnType<typeof getSurveyObjects>>,
-    TError = GetSurveyObjects404,
+  TData = Awaited<ReturnType<typeof getSurveyObjects>>,
+  TError = GetSurveyObjects404,
 >(
-    params: GetSurveyObjectsParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getSurveyObjects>>, TError, TData>
-        > &
-            Pick<
-                UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof getSurveyObjects>>,
-                    TError,
-                    Awaited<ReturnType<typeof getSurveyObjects>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  params: GetSurveyObjectsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSurveyObjects>>, TError, TData>> &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSurveyObjects>>,
+          TError,
+          Awaited<ReturnType<typeof getSurveyObjects>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetSurveyObjects<
-    TData = Awaited<ReturnType<typeof getSurveyObjects>>,
-    TError = GetSurveyObjects404,
+  TData = Awaited<ReturnType<typeof getSurveyObjects>>,
+  TError = GetSurveyObjects404,
 >(
-    params: GetSurveyObjectsParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getSurveyObjects>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  params: GetSurveyObjectsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSurveyObjects>>, TError, TData>>
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Danh sách người làm khảo sát
  */
 
 export function useGetSurveyObjects<
-    TData = Awaited<ReturnType<typeof getSurveyObjects>>,
-    TError = GetSurveyObjects404,
+  TData = Awaited<ReturnType<typeof getSurveyObjects>>,
+  TError = GetSurveyObjects404,
 >(
-    params: GetSurveyObjectsParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getSurveyObjects>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  params: GetSurveyObjectsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSurveyObjects>>, TError, TData>>
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getGetSurveyObjectsQueryOptions(params, options)
+  const queryOptions = getGetSurveyObjectsQueryOptions(params, options)
 
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-        queryKey: DataTag<QueryKey, TData, TError>
-    }
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 
-    query.queryKey = queryOptions.queryKey
+  query.queryKey = queryOptions.queryKey
 
-    return query
+  return query
 }
 
 /**
  * @summary Lấy số người làm khảo sát
  */
 export type getSurveyObjectCountResponse200 = {
-    data: GetSurveyObjectCount200Item[]
-    status: 200
+  data: GetSurveyObjectCount200Item[]
+  status: 200
 }
 
 export type getSurveyObjectCountResponse404 = {
-    data: GetSurveyObjectCount404
-    status: 404
+  data: GetSurveyObjectCount404
+  status: 404
 }
 
 export type getSurveyObjectCountResponseSuccess = getSurveyObjectCountResponse200 & {
-    headers: Headers
+  headers: Headers
 }
 export type getSurveyObjectCountResponseError = getSurveyObjectCountResponse404 & {
-    headers: Headers
+  headers: Headers
 }
 
 export type getSurveyObjectCountResponse =
-    | getSurveyObjectCountResponseSuccess
-    | getSurveyObjectCountResponseError
+  | getSurveyObjectCountResponseSuccess
+  | getSurveyObjectCountResponseError
 
 export const getGetSurveyObjectCountUrl = (params: GetSurveyObjectCountParams) => {
-    const normalizedParams = new URLSearchParams()
+  const normalizedParams = new URLSearchParams()
 
-    Object.entries(params || {}).forEach(([key, value]) => {
-        const explodeParameters = ['organizationId', 'fixedClassIds', 'trainingCourseIds']
+  Object.entries(params || {}).forEach(([key, value]) => {
+    const explodeParameters = ["organizationId", "fixedClassIds", "trainingCourseIds"]
 
-        if (Array.isArray(value) && explodeParameters.includes(key)) {
-            value.forEach((v) => {
-                normalizedParams.append(key, v === null ? 'null' : v.toString())
-            })
-            return
-        }
+    if (Array.isArray(value) && explodeParameters.includes(key)) {
+      value.forEach((v) => {
+        normalizedParams.append(key, v === null ? "null" : v.toString())
+      })
+      return
+    }
 
-        if (value !== undefined) {
-            normalizedParams.append(key, value === null ? 'null' : value.toString())
-        }
-    })
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString())
+    }
+  })
 
-    const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString()
 
-    return stringifiedParams.length > 0
-        ? `/api/survey/objects/count?${stringifiedParams}`
-        : `/api/survey/objects/count`
+  return stringifiedParams.length > 0
+    ? `/api/survey/objects/count?${stringifiedParams}`
+    : `/api/survey/objects/count`
 }
 
 export const getSurveyObjectCount = async (
-    params: GetSurveyObjectCountParams,
-    options?: RequestInit
+  params: GetSurveyObjectCountParams,
+  options?: RequestInit
 ): Promise<getSurveyObjectCountResponse> => {
-    return customExamFetch<getSurveyObjectCountResponse>(getGetSurveyObjectCountUrl(params), {
-        ...options,
-        method: 'GET',
-    })
+  return customExamFetch<getSurveyObjectCountResponse>(getGetSurveyObjectCountUrl(params), {
+    ...options,
+    method: "GET",
+  })
 }
 
 export const getGetSurveyObjectCountQueryKey = (params?: GetSurveyObjectCountParams) => {
-    return [`/api/survey/objects/count`, ...(params ? [params] : [])] as const
+  return [`/api/survey/objects/count`, ...(params ? [params] : [])] as const
 }
 
 export const getGetSurveyObjectCountQueryOptions = <
-    TData = Awaited<ReturnType<typeof getSurveyObjectCount>>,
-    TError = GetSurveyObjectCount404,
+  TData = Awaited<ReturnType<typeof getSurveyObjectCount>>,
+  TError = GetSurveyObjectCount404,
 >(
-    params: GetSurveyObjectCountParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getSurveyObjectCount>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    }
+  params: GetSurveyObjectCountParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getSurveyObjectCount>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customExamFetch>
+  }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-    const queryKey = queryOptions?.queryKey ?? getGetSurveyObjectCountQueryKey(params)
+  const queryKey = queryOptions?.queryKey ?? getGetSurveyObjectCountQueryKey(params)
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSurveyObjectCount>>> = ({ signal }) =>
-        getSurveyObjectCount(params, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getSurveyObjectCount>>> = ({ signal }) =>
+    getSurveyObjectCount(params, { signal, ...requestOptions })
 
-    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-        Awaited<ReturnType<typeof getSurveyObjectCount>>,
-        TError,
-        TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getSurveyObjectCount>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetSurveyObjectCountQueryResult = NonNullable<
-    Awaited<ReturnType<typeof getSurveyObjectCount>>
+  Awaited<ReturnType<typeof getSurveyObjectCount>>
 >
 export type GetSurveyObjectCountQueryError = GetSurveyObjectCount404
 
 export function useGetSurveyObjectCount<
-    TData = Awaited<ReturnType<typeof getSurveyObjectCount>>,
-    TError = GetSurveyObjectCount404,
+  TData = Awaited<ReturnType<typeof getSurveyObjectCount>>,
+  TError = GetSurveyObjectCount404,
 >(
-    params: GetSurveyObjectCountParams,
-    options: {
-        query: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getSurveyObjectCount>>, TError, TData>
-        > &
-            Pick<
-                DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof getSurveyObjectCount>>,
-                    TError,
-                    Awaited<ReturnType<typeof getSurveyObjectCount>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  params: GetSurveyObjectCountParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getSurveyObjectCount>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSurveyObjectCount>>,
+          TError,
+          Awaited<ReturnType<typeof getSurveyObjectCount>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetSurveyObjectCount<
-    TData = Awaited<ReturnType<typeof getSurveyObjectCount>>,
-    TError = GetSurveyObjectCount404,
+  TData = Awaited<ReturnType<typeof getSurveyObjectCount>>,
+  TError = GetSurveyObjectCount404,
 >(
-    params: GetSurveyObjectCountParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getSurveyObjectCount>>, TError, TData>
-        > &
-            Pick<
-                UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof getSurveyObjectCount>>,
-                    TError,
-                    Awaited<ReturnType<typeof getSurveyObjectCount>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  params: GetSurveyObjectCountParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getSurveyObjectCount>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSurveyObjectCount>>,
+          TError,
+          Awaited<ReturnType<typeof getSurveyObjectCount>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetSurveyObjectCount<
-    TData = Awaited<ReturnType<typeof getSurveyObjectCount>>,
-    TError = GetSurveyObjectCount404,
+  TData = Awaited<ReturnType<typeof getSurveyObjectCount>>,
+  TError = GetSurveyObjectCount404,
 >(
-    params: GetSurveyObjectCountParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getSurveyObjectCount>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  params: GetSurveyObjectCountParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getSurveyObjectCount>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Lấy số người làm khảo sát
  */
 
 export function useGetSurveyObjectCount<
-    TData = Awaited<ReturnType<typeof getSurveyObjectCount>>,
-    TError = GetSurveyObjectCount404,
+  TData = Awaited<ReturnType<typeof getSurveyObjectCount>>,
+  TError = GetSurveyObjectCount404,
 >(
-    params: GetSurveyObjectCountParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getSurveyObjectCount>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  params: GetSurveyObjectCountParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getSurveyObjectCount>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getGetSurveyObjectCountQueryOptions(params, options)
+  const queryOptions = getGetSurveyObjectCountQueryOptions(params, options)
 
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-        queryKey: DataTag<QueryKey, TData, TError>
-    }
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 
-    query.queryKey = queryOptions.queryKey
+  query.queryKey = queryOptions.queryKey
 
-    return query
+  return query
 }
 
 /**
  * @summary Danh sách khảo sát cần làm
  */
 export type getSurveysOfProfileResponse200 = {
-    data: GetSurveysOfProfile200
-    status: 200
+  data: GetSurveysOfProfile200
+  status: 200
 }
 
 export type getSurveysOfProfileResponse404 = {
-    data: GetSurveysOfProfile404
-    status: 404
+  data: GetSurveysOfProfile404
+  status: 404
 }
 
 export type getSurveysOfProfileResponseSuccess = getSurveysOfProfileResponse200 & {
-    headers: Headers
+  headers: Headers
 }
 export type getSurveysOfProfileResponseError = getSurveysOfProfileResponse404 & {
-    headers: Headers
+  headers: Headers
 }
 
 export type getSurveysOfProfileResponse =
-    | getSurveysOfProfileResponseSuccess
-    | getSurveysOfProfileResponseError
+  | getSurveysOfProfileResponseSuccess
+  | getSurveysOfProfileResponseError
 
 export const getGetSurveysOfProfileUrl = (id: string, params?: GetSurveysOfProfileParams) => {
-    const normalizedParams = new URLSearchParams()
+  const normalizedParams = new URLSearchParams()
 
-    Object.entries(params || {}).forEach(([key, value]) => {
-        if (value !== undefined) {
-            normalizedParams.append(key, value === null ? 'null' : value.toString())
-        }
-    })
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString())
+    }
+  })
 
-    const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString()
 
-    return stringifiedParams.length > 0
-        ? `/api/survey/of-profile/${id}?${stringifiedParams}`
-        : `/api/survey/of-profile/${id}`
+  return stringifiedParams.length > 0
+    ? `/api/survey/of-profile/${id}?${stringifiedParams}`
+    : `/api/survey/of-profile/${id}`
 }
 
 export const getSurveysOfProfile = async (
-    id: string,
-    params?: GetSurveysOfProfileParams,
-    options?: RequestInit
+  id: string,
+  params?: GetSurveysOfProfileParams,
+  options?: RequestInit
 ): Promise<getSurveysOfProfileResponse> => {
-    return customExamFetch<getSurveysOfProfileResponse>(getGetSurveysOfProfileUrl(id, params), {
-        ...options,
-        method: 'GET',
-    })
+  return customExamFetch<getSurveysOfProfileResponse>(getGetSurveysOfProfileUrl(id, params), {
+    ...options,
+    method: "GET",
+  })
 }
 
 export const getGetSurveysOfProfileQueryKey = (id?: string, params?: GetSurveysOfProfileParams) => {
-    return [`/api/survey/of-profile/${id}`, ...(params ? [params] : [])] as const
+  return [`/api/survey/of-profile/${id}`, ...(params ? [params] : [])] as const
 }
 
 export const getGetSurveysOfProfileQueryOptions = <
-    TData = Awaited<ReturnType<typeof getSurveysOfProfile>>,
-    TError = GetSurveysOfProfile404,
+  TData = Awaited<ReturnType<typeof getSurveysOfProfile>>,
+  TError = GetSurveysOfProfile404,
 >(
-    id: string,
-    params?: GetSurveysOfProfileParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getSurveysOfProfile>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    }
+  id: string,
+  params?: GetSurveysOfProfileParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSurveysOfProfile>>, TError, TData>>
+    request?: SecondParameter<typeof customExamFetch>
+  }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-    const queryKey = queryOptions?.queryKey ?? getGetSurveysOfProfileQueryKey(id, params)
+  const queryKey = queryOptions?.queryKey ?? getGetSurveysOfProfileQueryKey(id, params)
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSurveysOfProfile>>> = ({ signal }) =>
-        getSurveysOfProfile(id, params, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getSurveysOfProfile>>> = ({ signal }) =>
+    getSurveysOfProfile(id, params, { signal, ...requestOptions })
 
-    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
-        Awaited<ReturnType<typeof getSurveysOfProfile>>,
-        TError,
-        TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
+  return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getSurveysOfProfile>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetSurveysOfProfileQueryResult = NonNullable<
-    Awaited<ReturnType<typeof getSurveysOfProfile>>
+  Awaited<ReturnType<typeof getSurveysOfProfile>>
 >
 export type GetSurveysOfProfileQueryError = GetSurveysOfProfile404
 
 export function useGetSurveysOfProfile<
-    TData = Awaited<ReturnType<typeof getSurveysOfProfile>>,
-    TError = GetSurveysOfProfile404,
+  TData = Awaited<ReturnType<typeof getSurveysOfProfile>>,
+  TError = GetSurveysOfProfile404,
 >(
-    id: string,
-    params: undefined | GetSurveysOfProfileParams,
-    options: {
-        query: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getSurveysOfProfile>>, TError, TData>
-        > &
-            Pick<
-                DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof getSurveysOfProfile>>,
-                    TError,
-                    Awaited<ReturnType<typeof getSurveysOfProfile>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params: undefined | GetSurveysOfProfileParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getSurveysOfProfile>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSurveysOfProfile>>,
+          TError,
+          Awaited<ReturnType<typeof getSurveysOfProfile>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetSurveysOfProfile<
-    TData = Awaited<ReturnType<typeof getSurveysOfProfile>>,
-    TError = GetSurveysOfProfile404,
+  TData = Awaited<ReturnType<typeof getSurveysOfProfile>>,
+  TError = GetSurveysOfProfile404,
 >(
-    id: string,
-    params?: GetSurveysOfProfileParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getSurveysOfProfile>>, TError, TData>
-        > &
-            Pick<
-                UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof getSurveysOfProfile>>,
-                    TError,
-                    Awaited<ReturnType<typeof getSurveysOfProfile>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params?: GetSurveysOfProfileParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getSurveysOfProfile>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSurveysOfProfile>>,
+          TError,
+          Awaited<ReturnType<typeof getSurveysOfProfile>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetSurveysOfProfile<
-    TData = Awaited<ReturnType<typeof getSurveysOfProfile>>,
-    TError = GetSurveysOfProfile404,
+  TData = Awaited<ReturnType<typeof getSurveysOfProfile>>,
+  TError = GetSurveysOfProfile404,
 >(
-    id: string,
-    params?: GetSurveysOfProfileParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getSurveysOfProfile>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params?: GetSurveysOfProfileParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSurveysOfProfile>>, TError, TData>>
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Danh sách khảo sát cần làm
  */
 
 export function useGetSurveysOfProfile<
-    TData = Awaited<ReturnType<typeof getSurveysOfProfile>>,
-    TError = GetSurveysOfProfile404,
+  TData = Awaited<ReturnType<typeof getSurveysOfProfile>>,
+  TError = GetSurveysOfProfile404,
 >(
-    id: string,
-    params?: GetSurveysOfProfileParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getSurveysOfProfile>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params?: GetSurveysOfProfileParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSurveysOfProfile>>, TError, TData>>
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getGetSurveysOfProfileQueryOptions(id, params, options)
+  const queryOptions = getGetSurveysOfProfileQueryOptions(id, params, options)
 
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-        queryKey: DataTag<QueryKey, TData, TError>
-    }
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 
-    query.queryKey = queryOptions.queryKey
+  query.queryKey = queryOptions.queryKey
 
-    return query
+  return query
 }
 
 /**
@@ -2184,180 +2131,170 @@ export function useGetSurveysOfProfile<
  * @summary Thông tin đợt khảo sát không công khai
  */
 export type getPrivateSurveyResponse200 = {
-    data: GetSurveyResult
-    status: 200
+  data: GetSurveyResult
+  status: 200
 }
 
 export type getPrivateSurveyResponse400 = {
-    data: GetPrivateSurvey400
-    status: 400
+  data: GetPrivateSurvey400
+  status: 400
 }
 
 export type getPrivateSurveyResponse404 = {
-    data: GetPrivateSurvey404
-    status: 404
+  data: GetPrivateSurvey404
+  status: 404
 }
 
 export type getPrivateSurveyResponseSuccess = getPrivateSurveyResponse200 & {
-    headers: Headers
+  headers: Headers
 }
 export type getPrivateSurveyResponseError = (
-    | getPrivateSurveyResponse400
-    | getPrivateSurveyResponse404
+  | getPrivateSurveyResponse400
+  | getPrivateSurveyResponse404
 ) & {
-    headers: Headers
+  headers: Headers
 }
 
 export type getPrivateSurveyResponse =
-    | getPrivateSurveyResponseSuccess
-    | getPrivateSurveyResponseError
+  | getPrivateSurveyResponseSuccess
+  | getPrivateSurveyResponseError
 
 export const getGetPrivateSurveyUrl = (id: string, params?: GetPrivateSurveyParams) => {
-    const normalizedParams = new URLSearchParams()
+  const normalizedParams = new URLSearchParams()
 
-    Object.entries(params || {}).forEach(([key, value]) => {
-        if (value !== undefined) {
-            normalizedParams.append(key, value === null ? 'null' : value.toString())
-        }
-    })
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString())
+    }
+  })
 
-    const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString()
 
-    return stringifiedParams.length > 0
-        ? `/api/survey/get-private-survey/${id}?${stringifiedParams}`
-        : `/api/survey/get-private-survey/${id}`
+  return stringifiedParams.length > 0
+    ? `/api/survey/get-private-survey/${id}?${stringifiedParams}`
+    : `/api/survey/get-private-survey/${id}`
 }
 
 export const getPrivateSurvey = async (
-    id: string,
-    params?: GetPrivateSurveyParams,
-    options?: RequestInit
+  id: string,
+  params?: GetPrivateSurveyParams,
+  options?: RequestInit
 ): Promise<getPrivateSurveyResponse> => {
-    return customExamFetch<getPrivateSurveyResponse>(getGetPrivateSurveyUrl(id, params), {
-        ...options,
-        method: 'GET',
-    })
+  return customExamFetch<getPrivateSurveyResponse>(getGetPrivateSurveyUrl(id, params), {
+    ...options,
+    method: "GET",
+  })
 }
 
 export const getGetPrivateSurveyQueryKey = (id?: string, params?: GetPrivateSurveyParams) => {
-    return [`/api/survey/get-private-survey/${id}`, ...(params ? [params] : [])] as const
+  return [`/api/survey/get-private-survey/${id}`, ...(params ? [params] : [])] as const
 }
 
 export const getGetPrivateSurveyQueryOptions = <
-    TData = Awaited<ReturnType<typeof getPrivateSurvey>>,
-    TError = GetPrivateSurvey400 | GetPrivateSurvey404,
+  TData = Awaited<ReturnType<typeof getPrivateSurvey>>,
+  TError = GetPrivateSurvey400 | GetPrivateSurvey404,
 >(
-    id: string,
-    params?: GetPrivateSurveyParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getPrivateSurvey>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    }
+  id: string,
+  params?: GetPrivateSurveyParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getPrivateSurvey>>, TError, TData>>
+    request?: SecondParameter<typeof customExamFetch>
+  }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-    const queryKey = queryOptions?.queryKey ?? getGetPrivateSurveyQueryKey(id, params)
+  const queryKey = queryOptions?.queryKey ?? getGetPrivateSurveyQueryKey(id, params)
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPrivateSurvey>>> = ({ signal }) =>
-        getPrivateSurvey(id, params, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getPrivateSurvey>>> = ({ signal }) =>
+    getPrivateSurvey(id, params, { signal, ...requestOptions })
 
-    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
-        Awaited<ReturnType<typeof getPrivateSurvey>>,
-        TError,
-        TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
+  return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getPrivateSurvey>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetPrivateSurveyQueryResult = NonNullable<Awaited<ReturnType<typeof getPrivateSurvey>>>
 export type GetPrivateSurveyQueryError = GetPrivateSurvey400 | GetPrivateSurvey404
 
 export function useGetPrivateSurvey<
-    TData = Awaited<ReturnType<typeof getPrivateSurvey>>,
-    TError = GetPrivateSurvey400 | GetPrivateSurvey404,
+  TData = Awaited<ReturnType<typeof getPrivateSurvey>>,
+  TError = GetPrivateSurvey400 | GetPrivateSurvey404,
 >(
-    id: string,
-    params: undefined | GetPrivateSurveyParams,
-    options: {
-        query: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getPrivateSurvey>>, TError, TData>
-        > &
-            Pick<
-                DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof getPrivateSurvey>>,
-                    TError,
-                    Awaited<ReturnType<typeof getPrivateSurvey>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params: undefined | GetPrivateSurveyParams,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getPrivateSurvey>>, TError, TData>> &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getPrivateSurvey>>,
+          TError,
+          Awaited<ReturnType<typeof getPrivateSurvey>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetPrivateSurvey<
-    TData = Awaited<ReturnType<typeof getPrivateSurvey>>,
-    TError = GetPrivateSurvey400 | GetPrivateSurvey404,
+  TData = Awaited<ReturnType<typeof getPrivateSurvey>>,
+  TError = GetPrivateSurvey400 | GetPrivateSurvey404,
 >(
-    id: string,
-    params?: GetPrivateSurveyParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getPrivateSurvey>>, TError, TData>
-        > &
-            Pick<
-                UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof getPrivateSurvey>>,
-                    TError,
-                    Awaited<ReturnType<typeof getPrivateSurvey>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params?: GetPrivateSurveyParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getPrivateSurvey>>, TError, TData>> &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getPrivateSurvey>>,
+          TError,
+          Awaited<ReturnType<typeof getPrivateSurvey>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetPrivateSurvey<
-    TData = Awaited<ReturnType<typeof getPrivateSurvey>>,
-    TError = GetPrivateSurvey400 | GetPrivateSurvey404,
+  TData = Awaited<ReturnType<typeof getPrivateSurvey>>,
+  TError = GetPrivateSurvey400 | GetPrivateSurvey404,
 >(
-    id: string,
-    params?: GetPrivateSurveyParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getPrivateSurvey>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params?: GetPrivateSurveyParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getPrivateSurvey>>, TError, TData>>
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Thông tin đợt khảo sát không công khai
  */
 
 export function useGetPrivateSurvey<
-    TData = Awaited<ReturnType<typeof getPrivateSurvey>>,
-    TError = GetPrivateSurvey400 | GetPrivateSurvey404,
+  TData = Awaited<ReturnType<typeof getPrivateSurvey>>,
+  TError = GetPrivateSurvey400 | GetPrivateSurvey404,
 >(
-    id: string,
-    params?: GetPrivateSurveyParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getPrivateSurvey>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params?: GetPrivateSurveyParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getPrivateSurvey>>, TError, TData>>
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getGetPrivateSurveyQueryOptions(id, params, options)
+  const queryOptions = getGetPrivateSurveyQueryOptions(id, params, options)
 
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-        queryKey: DataTag<QueryKey, TData, TError>
-    }
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 
-    query.queryKey = queryOptions.queryKey
+  query.queryKey = queryOptions.queryKey
 
-    return query
+  return query
 }
 
 /**
@@ -2365,120 +2302,120 @@ export function useGetPrivateSurvey<
  * @summary Sinh đề tự động
  */
 export type automaticTopicGenerationResponse200 = {
-    data: AutomaticTopicGeneration200
-    status: 200
+  data: AutomaticTopicGeneration200
+  status: 200
 }
 
 export type automaticTopicGenerationResponse400 = {
-    data: AutomaticTopicGeneration400
-    status: 400
+  data: AutomaticTopicGeneration400
+  status: 400
 }
 
 export type automaticTopicGenerationResponse404 = {
-    data: AutomaticTopicGeneration404
-    status: 404
+  data: AutomaticTopicGeneration404
+  status: 404
 }
 
 export type automaticTopicGenerationResponseSuccess = automaticTopicGenerationResponse200 & {
-    headers: Headers
+  headers: Headers
 }
 export type automaticTopicGenerationResponseError = (
-    | automaticTopicGenerationResponse400
-    | automaticTopicGenerationResponse404
+  | automaticTopicGenerationResponse400
+  | automaticTopicGenerationResponse404
 ) & {
-    headers: Headers
+  headers: Headers
 }
 
 export type automaticTopicGenerationResponse =
-    | automaticTopicGenerationResponseSuccess
-    | automaticTopicGenerationResponseError
+  | automaticTopicGenerationResponseSuccess
+  | automaticTopicGenerationResponseError
 
 export const getAutomaticTopicGenerationUrl = () => {
-    return `/api/survey/automatic-topic-generation`
+  return `/api/survey/automatic-topic-generation`
 }
 
 export const automaticTopicGeneration = async (
-    automaticTopicGenerationBody: AutomaticTopicGenerationBody,
-    options?: RequestInit
+  automaticTopicGenerationBody: AutomaticTopicGenerationBody,
+  options?: RequestInit
 ): Promise<automaticTopicGenerationResponse> => {
-    return customExamFetch<automaticTopicGenerationResponse>(getAutomaticTopicGenerationUrl(), {
-        ...options,
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', ...options?.headers },
-        body: JSON.stringify(automaticTopicGenerationBody),
-    })
+  return customExamFetch<automaticTopicGenerationResponse>(getAutomaticTopicGenerationUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(automaticTopicGenerationBody),
+  })
 }
 
 export const getAutomaticTopicGenerationMutationOptions = <
-    TError = AutomaticTopicGeneration400 | AutomaticTopicGeneration404,
-    TContext = unknown,
+  TError = AutomaticTopicGeneration400 | AutomaticTopicGeneration404,
+  TContext = unknown,
 >(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof automaticTopicGeneration>>,
-        TError,
-        { data: AutomaticTopicGenerationBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customExamFetch>
-}): UseMutationOptions<
+  mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof automaticTopicGeneration>>,
     TError,
     { data: AutomaticTopicGenerationBody },
     TContext
+  >
+  request?: SecondParameter<typeof customExamFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof automaticTopicGeneration>>,
+  TError,
+  { data: AutomaticTopicGenerationBody },
+  TContext
 > => {
-    const mutationKey = ['automaticTopicGeneration']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+  const mutationKey = ["automaticTopicGeneration"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
 
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof automaticTopicGeneration>>,
-        { data: AutomaticTopicGenerationBody }
-    > = (props) => {
-        const { data } = props ?? {}
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof automaticTopicGeneration>>,
+    { data: AutomaticTopicGenerationBody }
+  > = (props) => {
+    const { data } = props ?? {}
 
-        return automaticTopicGeneration(data, requestOptions)
-    }
+    return automaticTopicGeneration(data, requestOptions)
+  }
 
-    return { mutationFn, ...mutationOptions }
+  return { mutationFn, ...mutationOptions }
 }
 
 export type AutomaticTopicGenerationMutationResult = NonNullable<
-    Awaited<ReturnType<typeof automaticTopicGeneration>>
+  Awaited<ReturnType<typeof automaticTopicGeneration>>
 >
 export type AutomaticTopicGenerationMutationBody = AutomaticTopicGenerationBody
 export type AutomaticTopicGenerationMutationError =
-    | AutomaticTopicGeneration400
-    | AutomaticTopicGeneration404
+  | AutomaticTopicGeneration400
+  | AutomaticTopicGeneration404
 
 /**
  * @summary Sinh đề tự động
  */
 export const useAutomaticTopicGeneration = <
-    TError = AutomaticTopicGeneration400 | AutomaticTopicGeneration404,
-    TContext = unknown,
+  TError = AutomaticTopicGeneration400 | AutomaticTopicGeneration404,
+  TContext = unknown,
 >(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof automaticTopicGeneration>>,
-            TError,
-            { data: AutomaticTopicGenerationBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof automaticTopicGeneration>>,
+      TError,
+      { data: AutomaticTopicGenerationBody },
+      TContext
+    >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseMutationResult<
-    Awaited<ReturnType<typeof automaticTopicGeneration>>,
-    TError,
-    { data: AutomaticTopicGenerationBody },
-    TContext
+  Awaited<ReturnType<typeof automaticTopicGeneration>>,
+  TError,
+  { data: AutomaticTopicGenerationBody },
+  TContext
 > => {
-    const mutationOptions = getAutomaticTopicGenerationMutationOptions(options)
+  const mutationOptions = getAutomaticTopicGenerationMutationOptions(options)
 
-    return useMutation(mutationOptions, queryClient)
+  return useMutation(mutationOptions, queryClient)
 }
 
 /**
@@ -2486,88 +2423,88 @@ export const useAutomaticTopicGeneration = <
  * @summary Tạo cụm khảo sát
  */
 export type createClusterSurveyResponse200 = {
-    data: CreateClusterSurvey200
-    status: 200
+  data: CreateClusterSurvey200
+  status: 200
 }
 
 export type createClusterSurveyResponse400 = {
-    data: CreateClusterSurvey400
-    status: 400
+  data: CreateClusterSurvey400
+  status: 400
 }
 
 export type createClusterSurveyResponse404 = {
-    data: CreateClusterSurvey404
-    status: 404
+  data: CreateClusterSurvey404
+  status: 404
 }
 
 export type createClusterSurveyResponseSuccess = createClusterSurveyResponse200 & {
-    headers: Headers
+  headers: Headers
 }
 export type createClusterSurveyResponseError = (
-    | createClusterSurveyResponse400
-    | createClusterSurveyResponse404
+  | createClusterSurveyResponse400
+  | createClusterSurveyResponse404
 ) & {
-    headers: Headers
+  headers: Headers
 }
 
 export type createClusterSurveyResponse =
-    | createClusterSurveyResponseSuccess
-    | createClusterSurveyResponseError
+  | createClusterSurveyResponseSuccess
+  | createClusterSurveyResponseError
 
 export const getCreateClusterSurveyUrl = () => {
-    return `/api/cluster-survey/cluster-survey`
+  return `/api/cluster-survey/cluster-survey`
 }
 
 export const createClusterSurvey = async (
-    createClusterSurveyRequest: CreateClusterSurveyRequest,
-    options?: RequestInit
+  createClusterSurveyRequest: CreateClusterSurveyRequest,
+  options?: RequestInit
 ): Promise<createClusterSurveyResponse> => {
-    return customExamFetch<createClusterSurveyResponse>(getCreateClusterSurveyUrl(), {
-        ...options,
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', ...options?.headers },
-        body: JSON.stringify(createClusterSurveyRequest),
-    })
+  return customExamFetch<createClusterSurveyResponse>(getCreateClusterSurveyUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(createClusterSurveyRequest),
+  })
 }
 
 export const getCreateClusterSurveyMutationOptions = <
-    TError = CreateClusterSurvey400 | CreateClusterSurvey404,
-    TContext = unknown,
+  TError = CreateClusterSurvey400 | CreateClusterSurvey404,
+  TContext = unknown,
 >(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof createClusterSurvey>>,
-        TError,
-        { data: CreateClusterSurveyRequest },
-        TContext
-    >
-    request?: SecondParameter<typeof customExamFetch>
-}): UseMutationOptions<
+  mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof createClusterSurvey>>,
     TError,
     { data: CreateClusterSurveyRequest },
     TContext
+  >
+  request?: SecondParameter<typeof customExamFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createClusterSurvey>>,
+  TError,
+  { data: CreateClusterSurveyRequest },
+  TContext
 > => {
-    const mutationKey = ['createClusterSurvey']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+  const mutationKey = ["createClusterSurvey"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
 
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof createClusterSurvey>>,
-        { data: CreateClusterSurveyRequest }
-    > = (props) => {
-        const { data } = props ?? {}
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createClusterSurvey>>,
+    { data: CreateClusterSurveyRequest }
+  > = (props) => {
+    const { data } = props ?? {}
 
-        return createClusterSurvey(data, requestOptions)
-    }
+    return createClusterSurvey(data, requestOptions)
+  }
 
-    return { mutationFn, ...mutationOptions }
+  return { mutationFn, ...mutationOptions }
 }
 
 export type CreateClusterSurveyMutationResult = NonNullable<
-    Awaited<ReturnType<typeof createClusterSurvey>>
+  Awaited<ReturnType<typeof createClusterSurvey>>
 >
 export type CreateClusterSurveyMutationBody = CreateClusterSurveyRequest
 export type CreateClusterSurveyMutationError = CreateClusterSurvey400 | CreateClusterSurvey404
@@ -2576,1952 +2513,1857 @@ export type CreateClusterSurveyMutationError = CreateClusterSurvey400 | CreateCl
  * @summary Tạo cụm khảo sát
  */
 export const useCreateClusterSurvey = <
-    TError = CreateClusterSurvey400 | CreateClusterSurvey404,
-    TContext = unknown,
+  TError = CreateClusterSurvey400 | CreateClusterSurvey404,
+  TContext = unknown,
 >(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof createClusterSurvey>>,
-            TError,
-            { data: CreateClusterSurveyRequest },
-            TContext
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof createClusterSurvey>>,
+      TError,
+      { data: CreateClusterSurveyRequest },
+      TContext
+    >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseMutationResult<
-    Awaited<ReturnType<typeof createClusterSurvey>>,
-    TError,
-    { data: CreateClusterSurveyRequest },
-    TContext
+  Awaited<ReturnType<typeof createClusterSurvey>>,
+  TError,
+  { data: CreateClusterSurveyRequest },
+  TContext
 > => {
-    const mutationOptions = getCreateClusterSurveyMutationOptions(options)
+  const mutationOptions = getCreateClusterSurveyMutationOptions(options)
 
-    return useMutation(mutationOptions, queryClient)
+  return useMutation(mutationOptions, queryClient)
 }
 
 /**
  * @summary Thống kê câu trả lời cho từng câu hỏi trong một cụm khảo sát
  */
 export type getClusterSurveyStatisticsResponse200 = {
-    data: GetClusterSurveyStatistics200
-    status: 200
+  data: GetClusterSurveyStatistics200
+  status: 200
 }
 
 export type getClusterSurveyStatisticsResponse404 = {
-    data: GetClusterSurveyStatistics404
-    status: 404
+  data: GetClusterSurveyStatistics404
+  status: 404
 }
 
 export type getClusterSurveyStatisticsResponseSuccess = getClusterSurveyStatisticsResponse200 & {
-    headers: Headers
+  headers: Headers
 }
 export type getClusterSurveyStatisticsResponseError = getClusterSurveyStatisticsResponse404 & {
-    headers: Headers
+  headers: Headers
 }
 
 export type getClusterSurveyStatisticsResponse =
-    | getClusterSurveyStatisticsResponseSuccess
-    | getClusterSurveyStatisticsResponseError
+  | getClusterSurveyStatisticsResponseSuccess
+  | getClusterSurveyStatisticsResponseError
 
 export const getGetClusterSurveyStatisticsUrl = (
-    id: string,
-    params?: GetClusterSurveyStatisticsParams
+  id: string,
+  params?: GetClusterSurveyStatisticsParams
 ) => {
-    const normalizedParams = new URLSearchParams()
+  const normalizedParams = new URLSearchParams()
 
-    Object.entries(params || {}).forEach(([key, value]) => {
-        const explodeParameters = ['organizations']
+  Object.entries(params || {}).forEach(([key, value]) => {
+    const explodeParameters = ["organizations"]
 
-        if (Array.isArray(value) && explodeParameters.includes(key)) {
-            value.forEach((v) => {
-                normalizedParams.append(key, v === null ? 'null' : v.toString())
-            })
-            return
-        }
+    if (Array.isArray(value) && explodeParameters.includes(key)) {
+      value.forEach((v) => {
+        normalizedParams.append(key, v === null ? "null" : v.toString())
+      })
+      return
+    }
 
-        if (value !== undefined) {
-            normalizedParams.append(key, value === null ? 'null' : value.toString())
-        }
-    })
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString())
+    }
+  })
 
-    const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString()
 
-    return stringifiedParams.length > 0
-        ? `/api/cluster-survey/${id}/statistics?${stringifiedParams}`
-        : `/api/cluster-survey/${id}/statistics`
+  return stringifiedParams.length > 0
+    ? `/api/cluster-survey/${id}/statistics?${stringifiedParams}`
+    : `/api/cluster-survey/${id}/statistics`
 }
 
 export const getClusterSurveyStatistics = async (
-    id: string,
-    params?: GetClusterSurveyStatisticsParams,
-    options?: RequestInit
+  id: string,
+  params?: GetClusterSurveyStatisticsParams,
+  options?: RequestInit
 ): Promise<getClusterSurveyStatisticsResponse> => {
-    return customExamFetch<getClusterSurveyStatisticsResponse>(
-        getGetClusterSurveyStatisticsUrl(id, params),
-        {
-            ...options,
-            method: 'GET',
-        }
-    )
+  return customExamFetch<getClusterSurveyStatisticsResponse>(
+    getGetClusterSurveyStatisticsUrl(id, params),
+    {
+      ...options,
+      method: "GET",
+    }
+  )
 }
 
 export const getGetClusterSurveyStatisticsQueryKey = (
-    id?: string,
-    params?: GetClusterSurveyStatisticsParams
+  id?: string,
+  params?: GetClusterSurveyStatisticsParams
 ) => {
-    return [`/api/cluster-survey/${id}/statistics`, ...(params ? [params] : [])] as const
+  return [`/api/cluster-survey/${id}/statistics`, ...(params ? [params] : [])] as const
 }
 
 export const getGetClusterSurveyStatisticsQueryOptions = <
-    TData = Awaited<ReturnType<typeof getClusterSurveyStatistics>>,
-    TError = GetClusterSurveyStatistics404,
+  TData = Awaited<ReturnType<typeof getClusterSurveyStatistics>>,
+  TError = GetClusterSurveyStatistics404,
 >(
-    id: string,
-    params?: GetClusterSurveyStatisticsParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyStatistics>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    }
+  id: string,
+  params?: GetClusterSurveyStatisticsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyStatistics>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customExamFetch>
+  }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-    const queryKey = queryOptions?.queryKey ?? getGetClusterSurveyStatisticsQueryKey(id, params)
+  const queryKey = queryOptions?.queryKey ?? getGetClusterSurveyStatisticsQueryKey(id, params)
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getClusterSurveyStatistics>>> = ({
-        signal,
-    }) => getClusterSurveyStatistics(id, params, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getClusterSurveyStatistics>>> = ({
+    signal,
+  }) => getClusterSurveyStatistics(id, params, { signal, ...requestOptions })
 
-    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
-        Awaited<ReturnType<typeof getClusterSurveyStatistics>>,
-        TError,
-        TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
+  return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getClusterSurveyStatistics>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetClusterSurveyStatisticsQueryResult = NonNullable<
-    Awaited<ReturnType<typeof getClusterSurveyStatistics>>
+  Awaited<ReturnType<typeof getClusterSurveyStatistics>>
 >
 export type GetClusterSurveyStatisticsQueryError = GetClusterSurveyStatistics404
 
 export function useGetClusterSurveyStatistics<
-    TData = Awaited<ReturnType<typeof getClusterSurveyStatistics>>,
-    TError = GetClusterSurveyStatistics404,
+  TData = Awaited<ReturnType<typeof getClusterSurveyStatistics>>,
+  TError = GetClusterSurveyStatistics404,
 >(
-    id: string,
-    params: undefined | GetClusterSurveyStatisticsParams,
-    options: {
-        query: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyStatistics>>, TError, TData>
-        > &
-            Pick<
-                DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof getClusterSurveyStatistics>>,
-                    TError,
-                    Awaited<ReturnType<typeof getClusterSurveyStatistics>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params: undefined | GetClusterSurveyStatisticsParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyStatistics>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getClusterSurveyStatistics>>,
+          TError,
+          Awaited<ReturnType<typeof getClusterSurveyStatistics>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetClusterSurveyStatistics<
-    TData = Awaited<ReturnType<typeof getClusterSurveyStatistics>>,
-    TError = GetClusterSurveyStatistics404,
+  TData = Awaited<ReturnType<typeof getClusterSurveyStatistics>>,
+  TError = GetClusterSurveyStatistics404,
 >(
-    id: string,
-    params?: GetClusterSurveyStatisticsParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyStatistics>>, TError, TData>
-        > &
-            Pick<
-                UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof getClusterSurveyStatistics>>,
-                    TError,
-                    Awaited<ReturnType<typeof getClusterSurveyStatistics>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params?: GetClusterSurveyStatisticsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyStatistics>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getClusterSurveyStatistics>>,
+          TError,
+          Awaited<ReturnType<typeof getClusterSurveyStatistics>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetClusterSurveyStatistics<
-    TData = Awaited<ReturnType<typeof getClusterSurveyStatistics>>,
-    TError = GetClusterSurveyStatistics404,
+  TData = Awaited<ReturnType<typeof getClusterSurveyStatistics>>,
+  TError = GetClusterSurveyStatistics404,
 >(
-    id: string,
-    params?: GetClusterSurveyStatisticsParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyStatistics>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params?: GetClusterSurveyStatisticsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyStatistics>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Thống kê câu trả lời cho từng câu hỏi trong một cụm khảo sát
  */
 
 export function useGetClusterSurveyStatistics<
-    TData = Awaited<ReturnType<typeof getClusterSurveyStatistics>>,
-    TError = GetClusterSurveyStatistics404,
+  TData = Awaited<ReturnType<typeof getClusterSurveyStatistics>>,
+  TError = GetClusterSurveyStatistics404,
 >(
-    id: string,
-    params?: GetClusterSurveyStatisticsParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyStatistics>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params?: GetClusterSurveyStatisticsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyStatistics>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getGetClusterSurveyStatisticsQueryOptions(id, params, options)
+  const queryOptions = getGetClusterSurveyStatisticsQueryOptions(id, params, options)
 
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-        queryKey: DataTag<QueryKey, TData, TError>
-    }
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 
-    query.queryKey = queryOptions.queryKey
+  query.queryKey = queryOptions.queryKey
 
-    return query
+  return query
 }
 
 /**
  * @summary Thống kê câu trả lời theo giảng viên trong một cụm khảo sát
  */
 export type getLectureSurveyStatisticsResponse200 = {
-    data: GetLectureSurveyStatistics200
-    status: 200
+  data: GetLectureSurveyStatistics200
+  status: 200
 }
 
 export type getLectureSurveyStatisticsResponse404 = {
-    data: GetLectureSurveyStatistics404
-    status: 404
+  data: GetLectureSurveyStatistics404
+  status: 404
 }
 
 export type getLectureSurveyStatisticsResponseSuccess = getLectureSurveyStatisticsResponse200 & {
-    headers: Headers
+  headers: Headers
 }
 export type getLectureSurveyStatisticsResponseError = getLectureSurveyStatisticsResponse404 & {
-    headers: Headers
+  headers: Headers
 }
 
 export type getLectureSurveyStatisticsResponse =
-    | getLectureSurveyStatisticsResponseSuccess
-    | getLectureSurveyStatisticsResponseError
+  | getLectureSurveyStatisticsResponseSuccess
+  | getLectureSurveyStatisticsResponseError
 
 export const getGetLectureSurveyStatisticsUrl = (
-    id: string,
-    params?: GetLectureSurveyStatisticsParams
+  id: string,
+  params?: GetLectureSurveyStatisticsParams
 ) => {
-    const normalizedParams = new URLSearchParams()
+  const normalizedParams = new URLSearchParams()
 
-    Object.entries(params || {}).forEach(([key, value]) => {
-        if (value !== undefined) {
-            normalizedParams.append(key, value === null ? 'null' : value.toString())
-        }
-    })
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString())
+    }
+  })
 
-    const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString()
 
-    return stringifiedParams.length > 0
-        ? `/api/cluster-survey/${id}/lecture-statistics?${stringifiedParams}`
-        : `/api/cluster-survey/${id}/lecture-statistics`
+  return stringifiedParams.length > 0
+    ? `/api/cluster-survey/${id}/lecture-statistics?${stringifiedParams}`
+    : `/api/cluster-survey/${id}/lecture-statistics`
 }
 
 export const getLectureSurveyStatistics = async (
-    id: string,
-    params?: GetLectureSurveyStatisticsParams,
-    options?: RequestInit
+  id: string,
+  params?: GetLectureSurveyStatisticsParams,
+  options?: RequestInit
 ): Promise<getLectureSurveyStatisticsResponse> => {
-    return customExamFetch<getLectureSurveyStatisticsResponse>(
-        getGetLectureSurveyStatisticsUrl(id, params),
-        {
-            ...options,
-            method: 'GET',
-        }
-    )
+  return customExamFetch<getLectureSurveyStatisticsResponse>(
+    getGetLectureSurveyStatisticsUrl(id, params),
+    {
+      ...options,
+      method: "GET",
+    }
+  )
 }
 
 export const getGetLectureSurveyStatisticsQueryKey = (
-    id?: string,
-    params?: GetLectureSurveyStatisticsParams
+  id?: string,
+  params?: GetLectureSurveyStatisticsParams
 ) => {
-    return [`/api/cluster-survey/${id}/lecture-statistics`, ...(params ? [params] : [])] as const
+  return [`/api/cluster-survey/${id}/lecture-statistics`, ...(params ? [params] : [])] as const
 }
 
 export const getGetLectureSurveyStatisticsQueryOptions = <
-    TData = Awaited<ReturnType<typeof getLectureSurveyStatistics>>,
-    TError = GetLectureSurveyStatistics404,
+  TData = Awaited<ReturnType<typeof getLectureSurveyStatistics>>,
+  TError = GetLectureSurveyStatistics404,
 >(
-    id: string,
-    params?: GetLectureSurveyStatisticsParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getLectureSurveyStatistics>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    }
+  id: string,
+  params?: GetLectureSurveyStatisticsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getLectureSurveyStatistics>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customExamFetch>
+  }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-    const queryKey = queryOptions?.queryKey ?? getGetLectureSurveyStatisticsQueryKey(id, params)
+  const queryKey = queryOptions?.queryKey ?? getGetLectureSurveyStatisticsQueryKey(id, params)
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getLectureSurveyStatistics>>> = ({
-        signal,
-    }) => getLectureSurveyStatistics(id, params, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getLectureSurveyStatistics>>> = ({
+    signal,
+  }) => getLectureSurveyStatistics(id, params, { signal, ...requestOptions })
 
-    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
-        Awaited<ReturnType<typeof getLectureSurveyStatistics>>,
-        TError,
-        TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
+  return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getLectureSurveyStatistics>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetLectureSurveyStatisticsQueryResult = NonNullable<
-    Awaited<ReturnType<typeof getLectureSurveyStatistics>>
+  Awaited<ReturnType<typeof getLectureSurveyStatistics>>
 >
 export type GetLectureSurveyStatisticsQueryError = GetLectureSurveyStatistics404
 
 export function useGetLectureSurveyStatistics<
-    TData = Awaited<ReturnType<typeof getLectureSurveyStatistics>>,
-    TError = GetLectureSurveyStatistics404,
+  TData = Awaited<ReturnType<typeof getLectureSurveyStatistics>>,
+  TError = GetLectureSurveyStatistics404,
 >(
-    id: string,
-    params: undefined | GetLectureSurveyStatisticsParams,
-    options: {
-        query: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getLectureSurveyStatistics>>, TError, TData>
-        > &
-            Pick<
-                DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof getLectureSurveyStatistics>>,
-                    TError,
-                    Awaited<ReturnType<typeof getLectureSurveyStatistics>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params: undefined | GetLectureSurveyStatisticsParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getLectureSurveyStatistics>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getLectureSurveyStatistics>>,
+          TError,
+          Awaited<ReturnType<typeof getLectureSurveyStatistics>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetLectureSurveyStatistics<
-    TData = Awaited<ReturnType<typeof getLectureSurveyStatistics>>,
-    TError = GetLectureSurveyStatistics404,
+  TData = Awaited<ReturnType<typeof getLectureSurveyStatistics>>,
+  TError = GetLectureSurveyStatistics404,
 >(
-    id: string,
-    params?: GetLectureSurveyStatisticsParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getLectureSurveyStatistics>>, TError, TData>
-        > &
-            Pick<
-                UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof getLectureSurveyStatistics>>,
-                    TError,
-                    Awaited<ReturnType<typeof getLectureSurveyStatistics>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params?: GetLectureSurveyStatisticsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getLectureSurveyStatistics>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getLectureSurveyStatistics>>,
+          TError,
+          Awaited<ReturnType<typeof getLectureSurveyStatistics>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetLectureSurveyStatistics<
-    TData = Awaited<ReturnType<typeof getLectureSurveyStatistics>>,
-    TError = GetLectureSurveyStatistics404,
+  TData = Awaited<ReturnType<typeof getLectureSurveyStatistics>>,
+  TError = GetLectureSurveyStatistics404,
 >(
-    id: string,
-    params?: GetLectureSurveyStatisticsParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getLectureSurveyStatistics>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params?: GetLectureSurveyStatisticsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getLectureSurveyStatistics>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Thống kê câu trả lời theo giảng viên trong một cụm khảo sát
  */
 
 export function useGetLectureSurveyStatistics<
-    TData = Awaited<ReturnType<typeof getLectureSurveyStatistics>>,
-    TError = GetLectureSurveyStatistics404,
+  TData = Awaited<ReturnType<typeof getLectureSurveyStatistics>>,
+  TError = GetLectureSurveyStatistics404,
 >(
-    id: string,
-    params?: GetLectureSurveyStatisticsParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getLectureSurveyStatistics>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params?: GetLectureSurveyStatisticsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getLectureSurveyStatistics>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getGetLectureSurveyStatisticsQueryOptions(id, params, options)
+  const queryOptions = getGetLectureSurveyStatisticsQueryOptions(id, params, options)
 
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-        queryKey: DataTag<QueryKey, TData, TError>
-    }
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 
-    query.queryKey = queryOptions.queryKey
+  query.queryKey = queryOptions.queryKey
 
-    return query
+  return query
 }
 
 /**
  * @summary Thống kê theo đơn vị
  */
 export type getOrganizationSurveyStatisticsResponse200 = {
-    data: GetOrganizationSurveyStatistics200
-    status: 200
+  data: GetOrganizationSurveyStatistics200
+  status: 200
 }
 
 export type getOrganizationSurveyStatisticsResponse400 = {
-    data: GetOrganizationSurveyStatistics400
-    status: 400
+  data: GetOrganizationSurveyStatistics400
+  status: 400
 }
 
 export type getOrganizationSurveyStatisticsResponse404 = {
-    data: GetOrganizationSurveyStatistics404
-    status: 404
+  data: GetOrganizationSurveyStatistics404
+  status: 404
 }
 
 export type getOrganizationSurveyStatisticsResponseSuccess =
-    getOrganizationSurveyStatisticsResponse200 & {
-        headers: Headers
-    }
-export type getOrganizationSurveyStatisticsResponseError = (
-    | getOrganizationSurveyStatisticsResponse400
-    | getOrganizationSurveyStatisticsResponse404
-) & {
+  getOrganizationSurveyStatisticsResponse200 & {
     headers: Headers
+  }
+export type getOrganizationSurveyStatisticsResponseError = (
+  | getOrganizationSurveyStatisticsResponse400
+  | getOrganizationSurveyStatisticsResponse404
+) & {
+  headers: Headers
 }
 
 export type getOrganizationSurveyStatisticsResponse =
-    | getOrganizationSurveyStatisticsResponseSuccess
-    | getOrganizationSurveyStatisticsResponseError
+  | getOrganizationSurveyStatisticsResponseSuccess
+  | getOrganizationSurveyStatisticsResponseError
 
 export const getGetOrganizationSurveyStatisticsUrl = (
-    id: string,
-    params: GetOrganizationSurveyStatisticsParams
+  id: string,
+  params: GetOrganizationSurveyStatisticsParams
 ) => {
-    const normalizedParams = new URLSearchParams()
+  const normalizedParams = new URLSearchParams()
 
-    Object.entries(params || {}).forEach(([key, value]) => {
-        if (value !== undefined) {
-            normalizedParams.append(key, value === null ? 'null' : value.toString())
-        }
-    })
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString())
+    }
+  })
 
-    const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString()
 
-    return stringifiedParams.length > 0
-        ? `/api/cluster-survey/${id}/organization-statistics?${stringifiedParams}`
-        : `/api/cluster-survey/${id}/organization-statistics`
+  return stringifiedParams.length > 0
+    ? `/api/cluster-survey/${id}/organization-statistics?${stringifiedParams}`
+    : `/api/cluster-survey/${id}/organization-statistics`
 }
 
 export const getOrganizationSurveyStatistics = async (
-    id: string,
-    params: GetOrganizationSurveyStatisticsParams,
-    options?: RequestInit
+  id: string,
+  params: GetOrganizationSurveyStatisticsParams,
+  options?: RequestInit
 ): Promise<getOrganizationSurveyStatisticsResponse> => {
-    return customExamFetch<getOrganizationSurveyStatisticsResponse>(
-        getGetOrganizationSurveyStatisticsUrl(id, params),
-        {
-            ...options,
-            method: 'GET',
-        }
-    )
+  return customExamFetch<getOrganizationSurveyStatisticsResponse>(
+    getGetOrganizationSurveyStatisticsUrl(id, params),
+    {
+      ...options,
+      method: "GET",
+    }
+  )
 }
 
 export const getGetOrganizationSurveyStatisticsQueryKey = (
-    id?: string,
-    params?: GetOrganizationSurveyStatisticsParams
+  id?: string,
+  params?: GetOrganizationSurveyStatisticsParams
 ) => {
-    return [
-        `/api/cluster-survey/${id}/organization-statistics`,
-        ...(params ? [params] : []),
-    ] as const
+  return [`/api/cluster-survey/${id}/organization-statistics`, ...(params ? [params] : [])] as const
 }
 
 export const getGetOrganizationSurveyStatisticsQueryOptions = <
-    TData = Awaited<ReturnType<typeof getOrganizationSurveyStatistics>>,
-    TError = GetOrganizationSurveyStatistics400 | GetOrganizationSurveyStatistics404,
+  TData = Awaited<ReturnType<typeof getOrganizationSurveyStatistics>>,
+  TError = GetOrganizationSurveyStatistics400 | GetOrganizationSurveyStatistics404,
 >(
-    id: string,
-    params: GetOrganizationSurveyStatisticsParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof getOrganizationSurveyStatistics>>,
-                TError,
-                TData
-            >
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    }
+  id: string,
+  params: GetOrganizationSurveyStatisticsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getOrganizationSurveyStatistics>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customExamFetch>
+  }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-    const queryKey =
-        queryOptions?.queryKey ?? getGetOrganizationSurveyStatisticsQueryKey(id, params)
+  const queryKey = queryOptions?.queryKey ?? getGetOrganizationSurveyStatisticsQueryKey(id, params)
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getOrganizationSurveyStatistics>>> = ({
-        signal,
-    }) => getOrganizationSurveyStatistics(id, params, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getOrganizationSurveyStatistics>>> = ({
+    signal,
+  }) => getOrganizationSurveyStatistics(id, params, { signal, ...requestOptions })
 
-    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
-        Awaited<ReturnType<typeof getOrganizationSurveyStatistics>>,
-        TError,
-        TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
+  return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getOrganizationSurveyStatistics>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetOrganizationSurveyStatisticsQueryResult = NonNullable<
-    Awaited<ReturnType<typeof getOrganizationSurveyStatistics>>
+  Awaited<ReturnType<typeof getOrganizationSurveyStatistics>>
 >
 export type GetOrganizationSurveyStatisticsQueryError =
-    | GetOrganizationSurveyStatistics400
-    | GetOrganizationSurveyStatistics404
+  | GetOrganizationSurveyStatistics400
+  | GetOrganizationSurveyStatistics404
 
 export function useGetOrganizationSurveyStatistics<
-    TData = Awaited<ReturnType<typeof getOrganizationSurveyStatistics>>,
-    TError = GetOrganizationSurveyStatistics400 | GetOrganizationSurveyStatistics404,
+  TData = Awaited<ReturnType<typeof getOrganizationSurveyStatistics>>,
+  TError = GetOrganizationSurveyStatistics400 | GetOrganizationSurveyStatistics404,
 >(
-    id: string,
-    params: GetOrganizationSurveyStatisticsParams,
-    options: {
-        query: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof getOrganizationSurveyStatistics>>,
-                TError,
-                TData
-            >
-        > &
-            Pick<
-                DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof getOrganizationSurveyStatistics>>,
-                    TError,
-                    Awaited<ReturnType<typeof getOrganizationSurveyStatistics>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params: GetOrganizationSurveyStatisticsParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getOrganizationSurveyStatistics>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getOrganizationSurveyStatistics>>,
+          TError,
+          Awaited<ReturnType<typeof getOrganizationSurveyStatistics>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetOrganizationSurveyStatistics<
-    TData = Awaited<ReturnType<typeof getOrganizationSurveyStatistics>>,
-    TError = GetOrganizationSurveyStatistics400 | GetOrganizationSurveyStatistics404,
+  TData = Awaited<ReturnType<typeof getOrganizationSurveyStatistics>>,
+  TError = GetOrganizationSurveyStatistics400 | GetOrganizationSurveyStatistics404,
 >(
-    id: string,
-    params: GetOrganizationSurveyStatisticsParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof getOrganizationSurveyStatistics>>,
-                TError,
-                TData
-            >
-        > &
-            Pick<
-                UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof getOrganizationSurveyStatistics>>,
-                    TError,
-                    Awaited<ReturnType<typeof getOrganizationSurveyStatistics>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params: GetOrganizationSurveyStatisticsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getOrganizationSurveyStatistics>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getOrganizationSurveyStatistics>>,
+          TError,
+          Awaited<ReturnType<typeof getOrganizationSurveyStatistics>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetOrganizationSurveyStatistics<
-    TData = Awaited<ReturnType<typeof getOrganizationSurveyStatistics>>,
-    TError = GetOrganizationSurveyStatistics400 | GetOrganizationSurveyStatistics404,
+  TData = Awaited<ReturnType<typeof getOrganizationSurveyStatistics>>,
+  TError = GetOrganizationSurveyStatistics400 | GetOrganizationSurveyStatistics404,
 >(
-    id: string,
-    params: GetOrganizationSurveyStatisticsParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof getOrganizationSurveyStatistics>>,
-                TError,
-                TData
-            >
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params: GetOrganizationSurveyStatisticsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getOrganizationSurveyStatistics>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Thống kê theo đơn vị
  */
 
 export function useGetOrganizationSurveyStatistics<
-    TData = Awaited<ReturnType<typeof getOrganizationSurveyStatistics>>,
-    TError = GetOrganizationSurveyStatistics400 | GetOrganizationSurveyStatistics404,
+  TData = Awaited<ReturnType<typeof getOrganizationSurveyStatistics>>,
+  TError = GetOrganizationSurveyStatistics400 | GetOrganizationSurveyStatistics404,
 >(
-    id: string,
-    params: GetOrganizationSurveyStatisticsParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof getOrganizationSurveyStatistics>>,
-                TError,
-                TData
-            >
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params: GetOrganizationSurveyStatisticsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getOrganizationSurveyStatistics>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getGetOrganizationSurveyStatisticsQueryOptions(id, params, options)
+  const queryOptions = getGetOrganizationSurveyStatisticsQueryOptions(id, params, options)
 
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-        queryKey: DataTag<QueryKey, TData, TError>
-    }
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 
-    query.queryKey = queryOptions.queryKey
+  query.queryKey = queryOptions.queryKey
 
-    return query
+  return query
 }
 
 /**
  * @summary Excel thống kê câu trả lời cho từng câu hỏi trong một cụm khảo sát
  */
 export type exportClusterSurveyStatisticsResponse200 = {
-    data: Blob
-    status: 200
+  data: Blob
+  status: 200
 }
 
 export type exportClusterSurveyStatisticsResponse404 = {
-    data: ExportClusterSurveyStatistics404
-    status: 404
+  data: ExportClusterSurveyStatistics404
+  status: 404
 }
 
 export type exportClusterSurveyStatisticsResponseSuccess =
-    exportClusterSurveyStatisticsResponse200 & {
-        headers: Headers
-    }
+  exportClusterSurveyStatisticsResponse200 & {
+    headers: Headers
+  }
 export type exportClusterSurveyStatisticsResponseError =
-    exportClusterSurveyStatisticsResponse404 & {
-        headers: Headers
-    }
+  exportClusterSurveyStatisticsResponse404 & {
+    headers: Headers
+  }
 
 export type exportClusterSurveyStatisticsResponse =
-    | exportClusterSurveyStatisticsResponseSuccess
-    | exportClusterSurveyStatisticsResponseError
+  | exportClusterSurveyStatisticsResponseSuccess
+  | exportClusterSurveyStatisticsResponseError
 
 export const getExportClusterSurveyStatisticsUrl = (
-    id: string,
-    params?: ExportClusterSurveyStatisticsParams
+  id: string,
+  params?: ExportClusterSurveyStatisticsParams
 ) => {
-    const normalizedParams = new URLSearchParams()
+  const normalizedParams = new URLSearchParams()
 
-    Object.entries(params || {}).forEach(([key, value]) => {
-        const explodeParameters = ['organizations']
+  Object.entries(params || {}).forEach(([key, value]) => {
+    const explodeParameters = ["organizations"]
 
-        if (Array.isArray(value) && explodeParameters.includes(key)) {
-            value.forEach((v) => {
-                normalizedParams.append(key, v === null ? 'null' : v.toString())
-            })
-            return
-        }
+    if (Array.isArray(value) && explodeParameters.includes(key)) {
+      value.forEach((v) => {
+        normalizedParams.append(key, v === null ? "null" : v.toString())
+      })
+      return
+    }
 
-        if (value !== undefined) {
-            normalizedParams.append(key, value === null ? 'null' : value.toString())
-        }
-    })
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString())
+    }
+  })
 
-    const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString()
 
-    return stringifiedParams.length > 0
-        ? `/api/cluster-survey/${id}/statistics/export?${stringifiedParams}`
-        : `/api/cluster-survey/${id}/statistics/export`
+  return stringifiedParams.length > 0
+    ? `/api/cluster-survey/${id}/statistics/export?${stringifiedParams}`
+    : `/api/cluster-survey/${id}/statistics/export`
 }
 
 export const exportClusterSurveyStatistics = async (
-    id: string,
-    params?: ExportClusterSurveyStatisticsParams,
-    options?: RequestInit
+  id: string,
+  params?: ExportClusterSurveyStatisticsParams,
+  options?: RequestInit
 ): Promise<exportClusterSurveyStatisticsResponse> => {
-    return customExamFetch<exportClusterSurveyStatisticsResponse>(
-        getExportClusterSurveyStatisticsUrl(id, params),
-        {
-            ...options,
-            method: 'GET',
-        }
-    )
+  return customExamFetch<exportClusterSurveyStatisticsResponse>(
+    getExportClusterSurveyStatisticsUrl(id, params),
+    {
+      ...options,
+      method: "GET",
+    }
+  )
 }
 
 export const getExportClusterSurveyStatisticsQueryKey = (
-    id?: string,
-    params?: ExportClusterSurveyStatisticsParams
+  id?: string,
+  params?: ExportClusterSurveyStatisticsParams
 ) => {
-    return [`/api/cluster-survey/${id}/statistics/export`, ...(params ? [params] : [])] as const
+  return [`/api/cluster-survey/${id}/statistics/export`, ...(params ? [params] : [])] as const
 }
 
 export const getExportClusterSurveyStatisticsQueryOptions = <
-    TData = Awaited<ReturnType<typeof exportClusterSurveyStatistics>>,
-    TError = ExportClusterSurveyStatistics404,
+  TData = Awaited<ReturnType<typeof exportClusterSurveyStatistics>>,
+  TError = ExportClusterSurveyStatistics404,
 >(
-    id: string,
-    params?: ExportClusterSurveyStatisticsParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof exportClusterSurveyStatistics>>,
-                TError,
-                TData
-            >
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    }
+  id: string,
+  params?: ExportClusterSurveyStatisticsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof exportClusterSurveyStatistics>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customExamFetch>
+  }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-    const queryKey = queryOptions?.queryKey ?? getExportClusterSurveyStatisticsQueryKey(id, params)
+  const queryKey = queryOptions?.queryKey ?? getExportClusterSurveyStatisticsQueryKey(id, params)
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportClusterSurveyStatistics>>> = ({
-        signal,
-    }) => exportClusterSurveyStatistics(id, params, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof exportClusterSurveyStatistics>>> = ({
+    signal,
+  }) => exportClusterSurveyStatistics(id, params, { signal, ...requestOptions })
 
-    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
-        Awaited<ReturnType<typeof exportClusterSurveyStatistics>>,
-        TError,
-        TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
+  return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof exportClusterSurveyStatistics>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type ExportClusterSurveyStatisticsQueryResult = NonNullable<
-    Awaited<ReturnType<typeof exportClusterSurveyStatistics>>
+  Awaited<ReturnType<typeof exportClusterSurveyStatistics>>
 >
 export type ExportClusterSurveyStatisticsQueryError = ExportClusterSurveyStatistics404
 
 export function useExportClusterSurveyStatistics<
-    TData = Awaited<ReturnType<typeof exportClusterSurveyStatistics>>,
-    TError = ExportClusterSurveyStatistics404,
+  TData = Awaited<ReturnType<typeof exportClusterSurveyStatistics>>,
+  TError = ExportClusterSurveyStatistics404,
 >(
-    id: string,
-    params: undefined | ExportClusterSurveyStatisticsParams,
-    options: {
-        query: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof exportClusterSurveyStatistics>>,
-                TError,
-                TData
-            >
-        > &
-            Pick<
-                DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof exportClusterSurveyStatistics>>,
-                    TError,
-                    Awaited<ReturnType<typeof exportClusterSurveyStatistics>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params: undefined | ExportClusterSurveyStatisticsParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof exportClusterSurveyStatistics>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof exportClusterSurveyStatistics>>,
+          TError,
+          Awaited<ReturnType<typeof exportClusterSurveyStatistics>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useExportClusterSurveyStatistics<
-    TData = Awaited<ReturnType<typeof exportClusterSurveyStatistics>>,
-    TError = ExportClusterSurveyStatistics404,
+  TData = Awaited<ReturnType<typeof exportClusterSurveyStatistics>>,
+  TError = ExportClusterSurveyStatistics404,
 >(
-    id: string,
-    params?: ExportClusterSurveyStatisticsParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof exportClusterSurveyStatistics>>,
-                TError,
-                TData
-            >
-        > &
-            Pick<
-                UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof exportClusterSurveyStatistics>>,
-                    TError,
-                    Awaited<ReturnType<typeof exportClusterSurveyStatistics>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params?: ExportClusterSurveyStatisticsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof exportClusterSurveyStatistics>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof exportClusterSurveyStatistics>>,
+          TError,
+          Awaited<ReturnType<typeof exportClusterSurveyStatistics>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useExportClusterSurveyStatistics<
-    TData = Awaited<ReturnType<typeof exportClusterSurveyStatistics>>,
-    TError = ExportClusterSurveyStatistics404,
+  TData = Awaited<ReturnType<typeof exportClusterSurveyStatistics>>,
+  TError = ExportClusterSurveyStatistics404,
 >(
-    id: string,
-    params?: ExportClusterSurveyStatisticsParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof exportClusterSurveyStatistics>>,
-                TError,
-                TData
-            >
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params?: ExportClusterSurveyStatisticsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof exportClusterSurveyStatistics>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Excel thống kê câu trả lời cho từng câu hỏi trong một cụm khảo sát
  */
 
 export function useExportClusterSurveyStatistics<
-    TData = Awaited<ReturnType<typeof exportClusterSurveyStatistics>>,
-    TError = ExportClusterSurveyStatistics404,
+  TData = Awaited<ReturnType<typeof exportClusterSurveyStatistics>>,
+  TError = ExportClusterSurveyStatistics404,
 >(
-    id: string,
-    params?: ExportClusterSurveyStatisticsParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof exportClusterSurveyStatistics>>,
-                TError,
-                TData
-            >
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params?: ExportClusterSurveyStatisticsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof exportClusterSurveyStatistics>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getExportClusterSurveyStatisticsQueryOptions(id, params, options)
+  const queryOptions = getExportClusterSurveyStatisticsQueryOptions(id, params, options)
 
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-        queryKey: DataTag<QueryKey, TData, TError>
-    }
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 
-    query.queryKey = queryOptions.queryKey
+  query.queryKey = queryOptions.queryKey
 
-    return query
+  return query
 }
 
 /**
  * @summary Thống kê câu trả lời cho từng câu hỏi trong một cụm khảo sát cuar từng giáo viên
  */
 export type getClusterSurveyStatisticsForLecturerResponse200 = {
-    data: GetClusterSurveyStatisticsForLecturer200
-    status: 200
+  data: GetClusterSurveyStatisticsForLecturer200
+  status: 200
 }
 
 export type getClusterSurveyStatisticsForLecturerResponse404 = {
-    data: GetClusterSurveyStatisticsForLecturer404
-    status: 404
+  data: GetClusterSurveyStatisticsForLecturer404
+  status: 404
 }
 
 export type getClusterSurveyStatisticsForLecturerResponseSuccess =
-    getClusterSurveyStatisticsForLecturerResponse200 & {
-        headers: Headers
-    }
+  getClusterSurveyStatisticsForLecturerResponse200 & {
+    headers: Headers
+  }
 export type getClusterSurveyStatisticsForLecturerResponseError =
-    getClusterSurveyStatisticsForLecturerResponse404 & {
-        headers: Headers
-    }
+  getClusterSurveyStatisticsForLecturerResponse404 & {
+    headers: Headers
+  }
 
 export type getClusterSurveyStatisticsForLecturerResponse =
-    | getClusterSurveyStatisticsForLecturerResponseSuccess
-    | getClusterSurveyStatisticsForLecturerResponseError
+  | getClusterSurveyStatisticsForLecturerResponseSuccess
+  | getClusterSurveyStatisticsForLecturerResponseError
 
 export const getGetClusterSurveyStatisticsForLecturerUrl = (
-    id: string,
-    params: GetClusterSurveyStatisticsForLecturerParams
+  id: string,
+  params: GetClusterSurveyStatisticsForLecturerParams
 ) => {
-    const normalizedParams = new URLSearchParams()
+  const normalizedParams = new URLSearchParams()
 
-    Object.entries(params || {}).forEach(([key, value]) => {
-        const explodeParameters = ['organizations']
+  Object.entries(params || {}).forEach(([key, value]) => {
+    const explodeParameters = ["organizations"]
 
-        if (Array.isArray(value) && explodeParameters.includes(key)) {
-            value.forEach((v) => {
-                normalizedParams.append(key, v === null ? 'null' : v.toString())
-            })
-            return
-        }
+    if (Array.isArray(value) && explodeParameters.includes(key)) {
+      value.forEach((v) => {
+        normalizedParams.append(key, v === null ? "null" : v.toString())
+      })
+      return
+    }
 
-        if (value !== undefined) {
-            normalizedParams.append(key, value === null ? 'null' : value.toString())
-        }
-    })
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString())
+    }
+  })
 
-    const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString()
 
-    return stringifiedParams.length > 0
-        ? `/api/cluster-survey/${id}/statistics-for-lecturer?${stringifiedParams}`
-        : `/api/cluster-survey/${id}/statistics-for-lecturer`
+  return stringifiedParams.length > 0
+    ? `/api/cluster-survey/${id}/statistics-for-lecturer?${stringifiedParams}`
+    : `/api/cluster-survey/${id}/statistics-for-lecturer`
 }
 
 export const getClusterSurveyStatisticsForLecturer = async (
-    id: string,
-    params: GetClusterSurveyStatisticsForLecturerParams,
-    options?: RequestInit
+  id: string,
+  params: GetClusterSurveyStatisticsForLecturerParams,
+  options?: RequestInit
 ): Promise<getClusterSurveyStatisticsForLecturerResponse> => {
-    return customExamFetch<getClusterSurveyStatisticsForLecturerResponse>(
-        getGetClusterSurveyStatisticsForLecturerUrl(id, params),
-        {
-            ...options,
-            method: 'GET',
-        }
-    )
+  return customExamFetch<getClusterSurveyStatisticsForLecturerResponse>(
+    getGetClusterSurveyStatisticsForLecturerUrl(id, params),
+    {
+      ...options,
+      method: "GET",
+    }
+  )
 }
 
 export const getGetClusterSurveyStatisticsForLecturerQueryKey = (
-    id?: string,
-    params?: GetClusterSurveyStatisticsForLecturerParams
+  id?: string,
+  params?: GetClusterSurveyStatisticsForLecturerParams
 ) => {
-    return [
-        `/api/cluster-survey/${id}/statistics-for-lecturer`,
-        ...(params ? [params] : []),
-    ] as const
+  return [`/api/cluster-survey/${id}/statistics-for-lecturer`, ...(params ? [params] : [])] as const
 }
 
 export const getGetClusterSurveyStatisticsForLecturerQueryOptions = <
-    TData = Awaited<ReturnType<typeof getClusterSurveyStatisticsForLecturer>>,
-    TError = GetClusterSurveyStatisticsForLecturer404,
+  TData = Awaited<ReturnType<typeof getClusterSurveyStatisticsForLecturer>>,
+  TError = GetClusterSurveyStatisticsForLecturer404,
 >(
-    id: string,
-    params: GetClusterSurveyStatisticsForLecturerParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof getClusterSurveyStatisticsForLecturer>>,
-                TError,
-                TData
-            >
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    }
-) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
-
-    const queryKey =
-        queryOptions?.queryKey ?? getGetClusterSurveyStatisticsForLecturerQueryKey(id, params)
-
-    const queryFn: QueryFunction<
-        Awaited<ReturnType<typeof getClusterSurveyStatisticsForLecturer>>
-    > = ({ signal }) =>
-        getClusterSurveyStatisticsForLecturer(id, params, { signal, ...requestOptions })
-
-    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+  id: string,
+  params: GetClusterSurveyStatisticsForLecturerParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
         Awaited<ReturnType<typeof getClusterSurveyStatisticsForLecturer>>,
         TError,
         TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
+      >
+    >
+    request?: SecondParameter<typeof customExamFetch>
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetClusterSurveyStatisticsForLecturerQueryKey(id, params)
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getClusterSurveyStatisticsForLecturer>>
+  > = ({ signal }) =>
+    getClusterSurveyStatisticsForLecturer(id, params, { signal, ...requestOptions })
+
+  return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getClusterSurveyStatisticsForLecturer>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetClusterSurveyStatisticsForLecturerQueryResult = NonNullable<
-    Awaited<ReturnType<typeof getClusterSurveyStatisticsForLecturer>>
+  Awaited<ReturnType<typeof getClusterSurveyStatisticsForLecturer>>
 >
 export type GetClusterSurveyStatisticsForLecturerQueryError =
-    GetClusterSurveyStatisticsForLecturer404
+  GetClusterSurveyStatisticsForLecturer404
 
 export function useGetClusterSurveyStatisticsForLecturer<
-    TData = Awaited<ReturnType<typeof getClusterSurveyStatisticsForLecturer>>,
-    TError = GetClusterSurveyStatisticsForLecturer404,
+  TData = Awaited<ReturnType<typeof getClusterSurveyStatisticsForLecturer>>,
+  TError = GetClusterSurveyStatisticsForLecturer404,
 >(
-    id: string,
-    params: GetClusterSurveyStatisticsForLecturerParams,
-    options: {
-        query: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof getClusterSurveyStatisticsForLecturer>>,
-                TError,
-                TData
-            >
-        > &
-            Pick<
-                DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof getClusterSurveyStatisticsForLecturer>>,
-                    TError,
-                    Awaited<ReturnType<typeof getClusterSurveyStatisticsForLecturer>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params: GetClusterSurveyStatisticsForLecturerParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getClusterSurveyStatisticsForLecturer>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getClusterSurveyStatisticsForLecturer>>,
+          TError,
+          Awaited<ReturnType<typeof getClusterSurveyStatisticsForLecturer>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetClusterSurveyStatisticsForLecturer<
-    TData = Awaited<ReturnType<typeof getClusterSurveyStatisticsForLecturer>>,
-    TError = GetClusterSurveyStatisticsForLecturer404,
+  TData = Awaited<ReturnType<typeof getClusterSurveyStatisticsForLecturer>>,
+  TError = GetClusterSurveyStatisticsForLecturer404,
 >(
-    id: string,
-    params: GetClusterSurveyStatisticsForLecturerParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof getClusterSurveyStatisticsForLecturer>>,
-                TError,
-                TData
-            >
-        > &
-            Pick<
-                UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof getClusterSurveyStatisticsForLecturer>>,
-                    TError,
-                    Awaited<ReturnType<typeof getClusterSurveyStatisticsForLecturer>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params: GetClusterSurveyStatisticsForLecturerParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getClusterSurveyStatisticsForLecturer>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getClusterSurveyStatisticsForLecturer>>,
+          TError,
+          Awaited<ReturnType<typeof getClusterSurveyStatisticsForLecturer>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetClusterSurveyStatisticsForLecturer<
-    TData = Awaited<ReturnType<typeof getClusterSurveyStatisticsForLecturer>>,
-    TError = GetClusterSurveyStatisticsForLecturer404,
+  TData = Awaited<ReturnType<typeof getClusterSurveyStatisticsForLecturer>>,
+  TError = GetClusterSurveyStatisticsForLecturer404,
 >(
-    id: string,
-    params: GetClusterSurveyStatisticsForLecturerParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof getClusterSurveyStatisticsForLecturer>>,
-                TError,
-                TData
-            >
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params: GetClusterSurveyStatisticsForLecturerParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getClusterSurveyStatisticsForLecturer>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Thống kê câu trả lời cho từng câu hỏi trong một cụm khảo sát cuar từng giáo viên
  */
 
 export function useGetClusterSurveyStatisticsForLecturer<
-    TData = Awaited<ReturnType<typeof getClusterSurveyStatisticsForLecturer>>,
-    TError = GetClusterSurveyStatisticsForLecturer404,
+  TData = Awaited<ReturnType<typeof getClusterSurveyStatisticsForLecturer>>,
+  TError = GetClusterSurveyStatisticsForLecturer404,
 >(
-    id: string,
-    params: GetClusterSurveyStatisticsForLecturerParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof getClusterSurveyStatisticsForLecturer>>,
-                TError,
-                TData
-            >
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params: GetClusterSurveyStatisticsForLecturerParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getClusterSurveyStatisticsForLecturer>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getGetClusterSurveyStatisticsForLecturerQueryOptions(id, params, options)
+  const queryOptions = getGetClusterSurveyStatisticsForLecturerQueryOptions(id, params, options)
 
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-        queryKey: DataTag<QueryKey, TData, TError>
-    }
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 
-    query.queryKey = queryOptions.queryKey
+  query.queryKey = queryOptions.queryKey
 
-    return query
+  return query
 }
 
 /**
  * @summary Thống kê câu trả lời cho từng câu hỏi trong một cụm khảo sát của từng đơn vị
  */
 export type getClusterSurveyStatisticsForOrganizationResponse200 = {
-    data: GetClusterSurveyStatisticsForOrganization200
-    status: 200
+  data: GetClusterSurveyStatisticsForOrganization200
+  status: 200
 }
 
 export type getClusterSurveyStatisticsForOrganizationResponse404 = {
-    data: GetClusterSurveyStatisticsForOrganization404
-    status: 404
+  data: GetClusterSurveyStatisticsForOrganization404
+  status: 404
 }
 
 export type getClusterSurveyStatisticsForOrganizationResponseSuccess =
-    getClusterSurveyStatisticsForOrganizationResponse200 & {
-        headers: Headers
-    }
+  getClusterSurveyStatisticsForOrganizationResponse200 & {
+    headers: Headers
+  }
 export type getClusterSurveyStatisticsForOrganizationResponseError =
-    getClusterSurveyStatisticsForOrganizationResponse404 & {
-        headers: Headers
-    }
+  getClusterSurveyStatisticsForOrganizationResponse404 & {
+    headers: Headers
+  }
 
 export type getClusterSurveyStatisticsForOrganizationResponse =
-    | getClusterSurveyStatisticsForOrganizationResponseSuccess
-    | getClusterSurveyStatisticsForOrganizationResponseError
+  | getClusterSurveyStatisticsForOrganizationResponseSuccess
+  | getClusterSurveyStatisticsForOrganizationResponseError
 
 export const getGetClusterSurveyStatisticsForOrganizationUrl = (
-    id: string,
-    params: GetClusterSurveyStatisticsForOrganizationParams
+  id: string,
+  params: GetClusterSurveyStatisticsForOrganizationParams
 ) => {
-    const normalizedParams = new URLSearchParams()
+  const normalizedParams = new URLSearchParams()
 
-    Object.entries(params || {}).forEach(([key, value]) => {
-        if (value !== undefined) {
-            normalizedParams.append(key, value === null ? 'null' : value.toString())
-        }
-    })
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString())
+    }
+  })
 
-    const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString()
 
-    return stringifiedParams.length > 0
-        ? `/api/cluster-survey/${id}/statistics-for-organization?${stringifiedParams}`
-        : `/api/cluster-survey/${id}/statistics-for-organization`
+  return stringifiedParams.length > 0
+    ? `/api/cluster-survey/${id}/statistics-for-organization?${stringifiedParams}`
+    : `/api/cluster-survey/${id}/statistics-for-organization`
 }
 
 export const getClusterSurveyStatisticsForOrganization = async (
-    id: string,
-    params: GetClusterSurveyStatisticsForOrganizationParams,
-    options?: RequestInit
+  id: string,
+  params: GetClusterSurveyStatisticsForOrganizationParams,
+  options?: RequestInit
 ): Promise<getClusterSurveyStatisticsForOrganizationResponse> => {
-    return customExamFetch<getClusterSurveyStatisticsForOrganizationResponse>(
-        getGetClusterSurveyStatisticsForOrganizationUrl(id, params),
-        {
-            ...options,
-            method: 'GET',
-        }
-    )
+  return customExamFetch<getClusterSurveyStatisticsForOrganizationResponse>(
+    getGetClusterSurveyStatisticsForOrganizationUrl(id, params),
+    {
+      ...options,
+      method: "GET",
+    }
+  )
 }
 
 export const getGetClusterSurveyStatisticsForOrganizationQueryKey = (
-    id?: string,
-    params?: GetClusterSurveyStatisticsForOrganizationParams
+  id?: string,
+  params?: GetClusterSurveyStatisticsForOrganizationParams
 ) => {
-    return [
-        `/api/cluster-survey/${id}/statistics-for-organization`,
-        ...(params ? [params] : []),
-    ] as const
+  return [
+    `/api/cluster-survey/${id}/statistics-for-organization`,
+    ...(params ? [params] : []),
+  ] as const
 }
 
 export const getGetClusterSurveyStatisticsForOrganizationQueryOptions = <
-    TData = Awaited<ReturnType<typeof getClusterSurveyStatisticsForOrganization>>,
-    TError = GetClusterSurveyStatisticsForOrganization404,
+  TData = Awaited<ReturnType<typeof getClusterSurveyStatisticsForOrganization>>,
+  TError = GetClusterSurveyStatisticsForOrganization404,
 >(
-    id: string,
-    params: GetClusterSurveyStatisticsForOrganizationParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof getClusterSurveyStatisticsForOrganization>>,
-                TError,
-                TData
-            >
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    }
-) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
-
-    const queryKey =
-        queryOptions?.queryKey ?? getGetClusterSurveyStatisticsForOrganizationQueryKey(id, params)
-
-    const queryFn: QueryFunction<
-        Awaited<ReturnType<typeof getClusterSurveyStatisticsForOrganization>>
-    > = ({ signal }) =>
-        getClusterSurveyStatisticsForOrganization(id, params, { signal, ...requestOptions })
-
-    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+  id: string,
+  params: GetClusterSurveyStatisticsForOrganizationParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
         Awaited<ReturnType<typeof getClusterSurveyStatisticsForOrganization>>,
         TError,
         TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
+      >
+    >
+    request?: SecondParameter<typeof customExamFetch>
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetClusterSurveyStatisticsForOrganizationQueryKey(id, params)
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getClusterSurveyStatisticsForOrganization>>
+  > = ({ signal }) =>
+    getClusterSurveyStatisticsForOrganization(id, params, { signal, ...requestOptions })
+
+  return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getClusterSurveyStatisticsForOrganization>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetClusterSurveyStatisticsForOrganizationQueryResult = NonNullable<
-    Awaited<ReturnType<typeof getClusterSurveyStatisticsForOrganization>>
+  Awaited<ReturnType<typeof getClusterSurveyStatisticsForOrganization>>
 >
 export type GetClusterSurveyStatisticsForOrganizationQueryError =
-    GetClusterSurveyStatisticsForOrganization404
+  GetClusterSurveyStatisticsForOrganization404
 
 export function useGetClusterSurveyStatisticsForOrganization<
-    TData = Awaited<ReturnType<typeof getClusterSurveyStatisticsForOrganization>>,
-    TError = GetClusterSurveyStatisticsForOrganization404,
+  TData = Awaited<ReturnType<typeof getClusterSurveyStatisticsForOrganization>>,
+  TError = GetClusterSurveyStatisticsForOrganization404,
 >(
-    id: string,
-    params: GetClusterSurveyStatisticsForOrganizationParams,
-    options: {
-        query: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof getClusterSurveyStatisticsForOrganization>>,
-                TError,
-                TData
-            >
-        > &
-            Pick<
-                DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof getClusterSurveyStatisticsForOrganization>>,
-                    TError,
-                    Awaited<ReturnType<typeof getClusterSurveyStatisticsForOrganization>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params: GetClusterSurveyStatisticsForOrganizationParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getClusterSurveyStatisticsForOrganization>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getClusterSurveyStatisticsForOrganization>>,
+          TError,
+          Awaited<ReturnType<typeof getClusterSurveyStatisticsForOrganization>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetClusterSurveyStatisticsForOrganization<
-    TData = Awaited<ReturnType<typeof getClusterSurveyStatisticsForOrganization>>,
-    TError = GetClusterSurveyStatisticsForOrganization404,
+  TData = Awaited<ReturnType<typeof getClusterSurveyStatisticsForOrganization>>,
+  TError = GetClusterSurveyStatisticsForOrganization404,
 >(
-    id: string,
-    params: GetClusterSurveyStatisticsForOrganizationParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof getClusterSurveyStatisticsForOrganization>>,
-                TError,
-                TData
-            >
-        > &
-            Pick<
-                UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof getClusterSurveyStatisticsForOrganization>>,
-                    TError,
-                    Awaited<ReturnType<typeof getClusterSurveyStatisticsForOrganization>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params: GetClusterSurveyStatisticsForOrganizationParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getClusterSurveyStatisticsForOrganization>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getClusterSurveyStatisticsForOrganization>>,
+          TError,
+          Awaited<ReturnType<typeof getClusterSurveyStatisticsForOrganization>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetClusterSurveyStatisticsForOrganization<
-    TData = Awaited<ReturnType<typeof getClusterSurveyStatisticsForOrganization>>,
-    TError = GetClusterSurveyStatisticsForOrganization404,
+  TData = Awaited<ReturnType<typeof getClusterSurveyStatisticsForOrganization>>,
+  TError = GetClusterSurveyStatisticsForOrganization404,
 >(
-    id: string,
-    params: GetClusterSurveyStatisticsForOrganizationParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof getClusterSurveyStatisticsForOrganization>>,
-                TError,
-                TData
-            >
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params: GetClusterSurveyStatisticsForOrganizationParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getClusterSurveyStatisticsForOrganization>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Thống kê câu trả lời cho từng câu hỏi trong một cụm khảo sát của từng đơn vị
  */
 
 export function useGetClusterSurveyStatisticsForOrganization<
-    TData = Awaited<ReturnType<typeof getClusterSurveyStatisticsForOrganization>>,
-    TError = GetClusterSurveyStatisticsForOrganization404,
+  TData = Awaited<ReturnType<typeof getClusterSurveyStatisticsForOrganization>>,
+  TError = GetClusterSurveyStatisticsForOrganization404,
 >(
-    id: string,
-    params: GetClusterSurveyStatisticsForOrganizationParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof getClusterSurveyStatisticsForOrganization>>,
-                TError,
-                TData
-            >
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params: GetClusterSurveyStatisticsForOrganizationParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getClusterSurveyStatisticsForOrganization>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getGetClusterSurveyStatisticsForOrganizationQueryOptions(
-        id,
-        params,
-        options
-    )
+  const queryOptions = getGetClusterSurveyStatisticsForOrganizationQueryOptions(id, params, options)
 
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-        queryKey: DataTag<QueryKey, TData, TError>
-    }
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 
-    query.queryKey = queryOptions.queryKey
+  query.queryKey = queryOptions.queryKey
 
-    return query
+  return query
 }
 
 /**
  * @summary Thống kê câu trả lời cho từng câu hỏi trong một cụm khảo sát của từng đơn vị
  */
 export type getClusterSurveyStatisticsForAllResponse200 = {
-    data: GetClusterSurveyStatisticsForAll200
-    status: 200
+  data: GetClusterSurveyStatisticsForAll200
+  status: 200
 }
 
 export type getClusterSurveyStatisticsForAllResponse404 = {
-    data: GetClusterSurveyStatisticsForAll404
-    status: 404
+  data: GetClusterSurveyStatisticsForAll404
+  status: 404
 }
 
 export type getClusterSurveyStatisticsForAllResponseSuccess =
-    getClusterSurveyStatisticsForAllResponse200 & {
-        headers: Headers
-    }
+  getClusterSurveyStatisticsForAllResponse200 & {
+    headers: Headers
+  }
 export type getClusterSurveyStatisticsForAllResponseError =
-    getClusterSurveyStatisticsForAllResponse404 & {
-        headers: Headers
-    }
+  getClusterSurveyStatisticsForAllResponse404 & {
+    headers: Headers
+  }
 
 export type getClusterSurveyStatisticsForAllResponse =
-    | getClusterSurveyStatisticsForAllResponseSuccess
-    | getClusterSurveyStatisticsForAllResponseError
+  | getClusterSurveyStatisticsForAllResponseSuccess
+  | getClusterSurveyStatisticsForAllResponseError
 
 export const getGetClusterSurveyStatisticsForAllUrl = (
-    id: string,
-    params: GetClusterSurveyStatisticsForAllParams
+  id: string,
+  params: GetClusterSurveyStatisticsForAllParams
 ) => {
-    const normalizedParams = new URLSearchParams()
+  const normalizedParams = new URLSearchParams()
 
-    Object.entries(params || {}).forEach(([key, value]) => {
-        if (value !== undefined) {
-            normalizedParams.append(key, value === null ? 'null' : value.toString())
-        }
-    })
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString())
+    }
+  })
 
-    const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString()
 
-    return stringifiedParams.length > 0
-        ? `/api/cluster-survey/${id}/statistics-for-all?${stringifiedParams}`
-        : `/api/cluster-survey/${id}/statistics-for-all`
+  return stringifiedParams.length > 0
+    ? `/api/cluster-survey/${id}/statistics-for-all?${stringifiedParams}`
+    : `/api/cluster-survey/${id}/statistics-for-all`
 }
 
 export const getClusterSurveyStatisticsForAll = async (
-    id: string,
-    params: GetClusterSurveyStatisticsForAllParams,
-    options?: RequestInit
+  id: string,
+  params: GetClusterSurveyStatisticsForAllParams,
+  options?: RequestInit
 ): Promise<getClusterSurveyStatisticsForAllResponse> => {
-    return customExamFetch<getClusterSurveyStatisticsForAllResponse>(
-        getGetClusterSurveyStatisticsForAllUrl(id, params),
-        {
-            ...options,
-            method: 'GET',
-        }
-    )
+  return customExamFetch<getClusterSurveyStatisticsForAllResponse>(
+    getGetClusterSurveyStatisticsForAllUrl(id, params),
+    {
+      ...options,
+      method: "GET",
+    }
+  )
 }
 
 export const getGetClusterSurveyStatisticsForAllQueryKey = (
-    id?: string,
-    params?: GetClusterSurveyStatisticsForAllParams
+  id?: string,
+  params?: GetClusterSurveyStatisticsForAllParams
 ) => {
-    return [`/api/cluster-survey/${id}/statistics-for-all`, ...(params ? [params] : [])] as const
+  return [`/api/cluster-survey/${id}/statistics-for-all`, ...(params ? [params] : [])] as const
 }
 
 export const getGetClusterSurveyStatisticsForAllQueryOptions = <
-    TData = Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>,
-    TError = GetClusterSurveyStatisticsForAll404,
+  TData = Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>,
+  TError = GetClusterSurveyStatisticsForAll404,
 >(
-    id: string,
-    params: GetClusterSurveyStatisticsForAllParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>,
-                TError,
-                TData
-            >
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    }
+  id: string,
+  params: GetClusterSurveyStatisticsForAllParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customExamFetch>
+  }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-    const queryKey =
-        queryOptions?.queryKey ?? getGetClusterSurveyStatisticsForAllQueryKey(id, params)
+  const queryKey = queryOptions?.queryKey ?? getGetClusterSurveyStatisticsForAllQueryKey(id, params)
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>> = ({
-        signal,
-    }) => getClusterSurveyStatisticsForAll(id, params, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>> = ({
+    signal,
+  }) => getClusterSurveyStatisticsForAll(id, params, { signal, ...requestOptions })
 
-    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
-        Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>,
-        TError,
-        TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
+  return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetClusterSurveyStatisticsForAllQueryResult = NonNullable<
-    Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>
+  Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>
 >
 export type GetClusterSurveyStatisticsForAllQueryError = GetClusterSurveyStatisticsForAll404
 
 export function useGetClusterSurveyStatisticsForAll<
-    TData = Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>,
-    TError = GetClusterSurveyStatisticsForAll404,
+  TData = Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>,
+  TError = GetClusterSurveyStatisticsForAll404,
 >(
-    id: string,
-    params: GetClusterSurveyStatisticsForAllParams,
-    options: {
-        query: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>,
-                TError,
-                TData
-            >
-        > &
-            Pick<
-                DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>,
-                    TError,
-                    Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params: GetClusterSurveyStatisticsForAllParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>,
+          TError,
+          Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetClusterSurveyStatisticsForAll<
-    TData = Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>,
-    TError = GetClusterSurveyStatisticsForAll404,
+  TData = Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>,
+  TError = GetClusterSurveyStatisticsForAll404,
 >(
-    id: string,
-    params: GetClusterSurveyStatisticsForAllParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>,
-                TError,
-                TData
-            >
-        > &
-            Pick<
-                UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>,
-                    TError,
-                    Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params: GetClusterSurveyStatisticsForAllParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>,
+          TError,
+          Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetClusterSurveyStatisticsForAll<
-    TData = Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>,
-    TError = GetClusterSurveyStatisticsForAll404,
+  TData = Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>,
+  TError = GetClusterSurveyStatisticsForAll404,
 >(
-    id: string,
-    params: GetClusterSurveyStatisticsForAllParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>,
-                TError,
-                TData
-            >
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params: GetClusterSurveyStatisticsForAllParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Thống kê câu trả lời cho từng câu hỏi trong một cụm khảo sát của từng đơn vị
  */
 
 export function useGetClusterSurveyStatisticsForAll<
-    TData = Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>,
-    TError = GetClusterSurveyStatisticsForAll404,
+  TData = Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>,
+  TError = GetClusterSurveyStatisticsForAll404,
 >(
-    id: string,
-    params: GetClusterSurveyStatisticsForAllParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>,
-                TError,
-                TData
-            >
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params: GetClusterSurveyStatisticsForAllParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyStatisticsForAll>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getGetClusterSurveyStatisticsForAllQueryOptions(id, params, options)
+  const queryOptions = getGetClusterSurveyStatisticsForAllQueryOptions(id, params, options)
 
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-        queryKey: DataTag<QueryKey, TData, TError>
-    }
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 
-    query.queryKey = queryOptions.queryKey
+  query.queryKey = queryOptions.queryKey
 
-    return query
+  return query
 }
 
 /**
  * @summary Thống kê khảo sát cụm thông tin chung
  */
 export type getClusterSurveyInfoResponse200 = {
-    data: GetClusterSurveyInfo200
-    status: 200
+  data: GetClusterSurveyInfo200
+  status: 200
 }
 
 export type getClusterSurveyInfoResponse404 = {
-    data: GetClusterSurveyInfo404
-    status: 404
+  data: GetClusterSurveyInfo404
+  status: 404
 }
 
 export type getClusterSurveyInfoResponseSuccess = getClusterSurveyInfoResponse200 & {
-    headers: Headers
+  headers: Headers
 }
 export type getClusterSurveyInfoResponseError = getClusterSurveyInfoResponse404 & {
-    headers: Headers
+  headers: Headers
 }
 
 export type getClusterSurveyInfoResponse =
-    | getClusterSurveyInfoResponseSuccess
-    | getClusterSurveyInfoResponseError
+  | getClusterSurveyInfoResponseSuccess
+  | getClusterSurveyInfoResponseError
 
 export const getGetClusterSurveyInfoUrl = (id: string, params: GetClusterSurveyInfoParams) => {
-    const normalizedParams = new URLSearchParams()
+  const normalizedParams = new URLSearchParams()
 
-    Object.entries(params || {}).forEach(([key, value]) => {
-        if (value !== undefined) {
-            normalizedParams.append(key, value === null ? 'null' : value.toString())
-        }
-    })
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString())
+    }
+  })
 
-    const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString()
 
-    return stringifiedParams.length > 0
-        ? `/api/cluster-survey/${id}/get-cluster-survey-info?${stringifiedParams}`
-        : `/api/cluster-survey/${id}/get-cluster-survey-info`
+  return stringifiedParams.length > 0
+    ? `/api/cluster-survey/${id}/get-cluster-survey-info?${stringifiedParams}`
+    : `/api/cluster-survey/${id}/get-cluster-survey-info`
 }
 
 export const getClusterSurveyInfo = async (
-    id: string,
-    params: GetClusterSurveyInfoParams,
-    options?: RequestInit
+  id: string,
+  params: GetClusterSurveyInfoParams,
+  options?: RequestInit
 ): Promise<getClusterSurveyInfoResponse> => {
-    return customExamFetch<getClusterSurveyInfoResponse>(getGetClusterSurveyInfoUrl(id, params), {
-        ...options,
-        method: 'GET',
-    })
+  return customExamFetch<getClusterSurveyInfoResponse>(getGetClusterSurveyInfoUrl(id, params), {
+    ...options,
+    method: "GET",
+  })
 }
 
 export const getGetClusterSurveyInfoQueryKey = (
-    id?: string,
-    params?: GetClusterSurveyInfoParams
+  id?: string,
+  params?: GetClusterSurveyInfoParams
 ) => {
-    return [
-        `/api/cluster-survey/${id}/get-cluster-survey-info`,
-        ...(params ? [params] : []),
-    ] as const
+  return [`/api/cluster-survey/${id}/get-cluster-survey-info`, ...(params ? [params] : [])] as const
 }
 
 export const getGetClusterSurveyInfoQueryOptions = <
-    TData = Awaited<ReturnType<typeof getClusterSurveyInfo>>,
-    TError = GetClusterSurveyInfo404,
+  TData = Awaited<ReturnType<typeof getClusterSurveyInfo>>,
+  TError = GetClusterSurveyInfo404,
 >(
-    id: string,
-    params: GetClusterSurveyInfoParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyInfo>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    }
+  id: string,
+  params: GetClusterSurveyInfoParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyInfo>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customExamFetch>
+  }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-    const queryKey = queryOptions?.queryKey ?? getGetClusterSurveyInfoQueryKey(id, params)
+  const queryKey = queryOptions?.queryKey ?? getGetClusterSurveyInfoQueryKey(id, params)
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getClusterSurveyInfo>>> = ({ signal }) =>
-        getClusterSurveyInfo(id, params, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getClusterSurveyInfo>>> = ({ signal }) =>
+    getClusterSurveyInfo(id, params, { signal, ...requestOptions })
 
-    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
-        Awaited<ReturnType<typeof getClusterSurveyInfo>>,
-        TError,
-        TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
+  return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getClusterSurveyInfo>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetClusterSurveyInfoQueryResult = NonNullable<
-    Awaited<ReturnType<typeof getClusterSurveyInfo>>
+  Awaited<ReturnType<typeof getClusterSurveyInfo>>
 >
 export type GetClusterSurveyInfoQueryError = GetClusterSurveyInfo404
 
 export function useGetClusterSurveyInfo<
-    TData = Awaited<ReturnType<typeof getClusterSurveyInfo>>,
-    TError = GetClusterSurveyInfo404,
+  TData = Awaited<ReturnType<typeof getClusterSurveyInfo>>,
+  TError = GetClusterSurveyInfo404,
 >(
-    id: string,
-    params: GetClusterSurveyInfoParams,
-    options: {
-        query: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyInfo>>, TError, TData>
-        > &
-            Pick<
-                DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof getClusterSurveyInfo>>,
-                    TError,
-                    Awaited<ReturnType<typeof getClusterSurveyInfo>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params: GetClusterSurveyInfoParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyInfo>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getClusterSurveyInfo>>,
+          TError,
+          Awaited<ReturnType<typeof getClusterSurveyInfo>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetClusterSurveyInfo<
-    TData = Awaited<ReturnType<typeof getClusterSurveyInfo>>,
-    TError = GetClusterSurveyInfo404,
+  TData = Awaited<ReturnType<typeof getClusterSurveyInfo>>,
+  TError = GetClusterSurveyInfo404,
 >(
-    id: string,
-    params: GetClusterSurveyInfoParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyInfo>>, TError, TData>
-        > &
-            Pick<
-                UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof getClusterSurveyInfo>>,
-                    TError,
-                    Awaited<ReturnType<typeof getClusterSurveyInfo>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params: GetClusterSurveyInfoParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyInfo>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getClusterSurveyInfo>>,
+          TError,
+          Awaited<ReturnType<typeof getClusterSurveyInfo>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetClusterSurveyInfo<
-    TData = Awaited<ReturnType<typeof getClusterSurveyInfo>>,
-    TError = GetClusterSurveyInfo404,
+  TData = Awaited<ReturnType<typeof getClusterSurveyInfo>>,
+  TError = GetClusterSurveyInfo404,
 >(
-    id: string,
-    params: GetClusterSurveyInfoParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyInfo>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params: GetClusterSurveyInfoParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyInfo>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Thống kê khảo sát cụm thông tin chung
  */
 
 export function useGetClusterSurveyInfo<
-    TData = Awaited<ReturnType<typeof getClusterSurveyInfo>>,
-    TError = GetClusterSurveyInfo404,
+  TData = Awaited<ReturnType<typeof getClusterSurveyInfo>>,
+  TError = GetClusterSurveyInfo404,
 >(
-    id: string,
-    params: GetClusterSurveyInfoParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyInfo>>, TError, TData>
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params: GetClusterSurveyInfoParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyInfo>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getGetClusterSurveyInfoQueryOptions(id, params, options)
+  const queryOptions = getGetClusterSurveyInfoQueryOptions(id, params, options)
 
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-        queryKey: DataTag<QueryKey, TData, TError>
-    }
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 
-    query.queryKey = queryOptions.queryKey
+  query.queryKey = queryOptions.queryKey
 
-    return query
+  return query
 }
 
 /**
  * @summary Thống kê khảo sát cụm thông tin chung theo khoa
  */
 export type getClusterSurveyInfoDepartmentResponse200 = {
-    data: GetClusterSurveyInfoDepartment200
-    status: 200
+  data: GetClusterSurveyInfoDepartment200
+  status: 200
 }
 
 export type getClusterSurveyInfoDepartmentResponse404 = {
-    data: GetClusterSurveyInfoDepartment404
-    status: 404
+  data: GetClusterSurveyInfoDepartment404
+  status: 404
 }
 
 export type getClusterSurveyInfoDepartmentResponseSuccess =
-    getClusterSurveyInfoDepartmentResponse200 & {
-        headers: Headers
-    }
+  getClusterSurveyInfoDepartmentResponse200 & {
+    headers: Headers
+  }
 export type getClusterSurveyInfoDepartmentResponseError =
-    getClusterSurveyInfoDepartmentResponse404 & {
-        headers: Headers
-    }
+  getClusterSurveyInfoDepartmentResponse404 & {
+    headers: Headers
+  }
 
 export type getClusterSurveyInfoDepartmentResponse =
-    | getClusterSurveyInfoDepartmentResponseSuccess
-    | getClusterSurveyInfoDepartmentResponseError
+  | getClusterSurveyInfoDepartmentResponseSuccess
+  | getClusterSurveyInfoDepartmentResponseError
 
 export const getGetClusterSurveyInfoDepartmentUrl = (
-    id: string,
-    params: GetClusterSurveyInfoDepartmentParams
+  id: string,
+  params: GetClusterSurveyInfoDepartmentParams
 ) => {
-    const normalizedParams = new URLSearchParams()
+  const normalizedParams = new URLSearchParams()
 
-    Object.entries(params || {}).forEach(([key, value]) => {
-        if (value !== undefined) {
-            normalizedParams.append(key, value === null ? 'null' : value.toString())
-        }
-    })
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString())
+    }
+  })
 
-    const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString()
 
-    return stringifiedParams.length > 0
-        ? `/api/cluster-survey/${id}/get-cluster-survey-info-department?${stringifiedParams}`
-        : `/api/cluster-survey/${id}/get-cluster-survey-info-department`
+  return stringifiedParams.length > 0
+    ? `/api/cluster-survey/${id}/get-cluster-survey-info-department?${stringifiedParams}`
+    : `/api/cluster-survey/${id}/get-cluster-survey-info-department`
 }
 
 export const getClusterSurveyInfoDepartment = async (
-    id: string,
-    params: GetClusterSurveyInfoDepartmentParams,
-    options?: RequestInit
+  id: string,
+  params: GetClusterSurveyInfoDepartmentParams,
+  options?: RequestInit
 ): Promise<getClusterSurveyInfoDepartmentResponse> => {
-    return customExamFetch<getClusterSurveyInfoDepartmentResponse>(
-        getGetClusterSurveyInfoDepartmentUrl(id, params),
-        {
-            ...options,
-            method: 'GET',
-        }
-    )
+  return customExamFetch<getClusterSurveyInfoDepartmentResponse>(
+    getGetClusterSurveyInfoDepartmentUrl(id, params),
+    {
+      ...options,
+      method: "GET",
+    }
+  )
 }
 
 export const getGetClusterSurveyInfoDepartmentQueryKey = (
-    id?: string,
-    params?: GetClusterSurveyInfoDepartmentParams
+  id?: string,
+  params?: GetClusterSurveyInfoDepartmentParams
 ) => {
-    return [
-        `/api/cluster-survey/${id}/get-cluster-survey-info-department`,
-        ...(params ? [params] : []),
-    ] as const
+  return [
+    `/api/cluster-survey/${id}/get-cluster-survey-info-department`,
+    ...(params ? [params] : []),
+  ] as const
 }
 
 export const getGetClusterSurveyInfoDepartmentQueryOptions = <
-    TData = Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>,
-    TError = GetClusterSurveyInfoDepartment404,
+  TData = Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>,
+  TError = GetClusterSurveyInfoDepartment404,
 >(
-    id: string,
-    params: GetClusterSurveyInfoDepartmentParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>,
-                TError,
-                TData
-            >
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    }
+  id: string,
+  params: GetClusterSurveyInfoDepartmentParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customExamFetch>
+  }
 ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {}
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-    const queryKey = queryOptions?.queryKey ?? getGetClusterSurveyInfoDepartmentQueryKey(id, params)
+  const queryKey = queryOptions?.queryKey ?? getGetClusterSurveyInfoDepartmentQueryKey(id, params)
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>> = ({
-        signal,
-    }) => getClusterSurveyInfoDepartment(id, params, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>> = ({
+    signal,
+  }) => getClusterSurveyInfoDepartment(id, params, { signal, ...requestOptions })
 
-    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
-        Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>,
-        TError,
-        TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
+  return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetClusterSurveyInfoDepartmentQueryResult = NonNullable<
-    Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>
+  Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>
 >
 export type GetClusterSurveyInfoDepartmentQueryError = GetClusterSurveyInfoDepartment404
 
 export function useGetClusterSurveyInfoDepartment<
-    TData = Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>,
-    TError = GetClusterSurveyInfoDepartment404,
+  TData = Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>,
+  TError = GetClusterSurveyInfoDepartment404,
 >(
-    id: string,
-    params: GetClusterSurveyInfoDepartmentParams,
-    options: {
-        query: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>,
-                TError,
-                TData
-            >
-        > &
-            Pick<
-                DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>,
-                    TError,
-                    Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params: GetClusterSurveyInfoDepartmentParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>,
+          TError,
+          Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetClusterSurveyInfoDepartment<
-    TData = Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>,
-    TError = GetClusterSurveyInfoDepartment404,
+  TData = Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>,
+  TError = GetClusterSurveyInfoDepartment404,
 >(
-    id: string,
-    params: GetClusterSurveyInfoDepartmentParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>,
-                TError,
-                TData
-            >
-        > &
-            Pick<
-                UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>,
-                    TError,
-                    Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>
-                >,
-                'initialData'
-            >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params: GetClusterSurveyInfoDepartmentParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>,
+          TError,
+          Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetClusterSurveyInfoDepartment<
-    TData = Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>,
-    TError = GetClusterSurveyInfoDepartment404,
+  TData = Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>,
+  TError = GetClusterSurveyInfoDepartment404,
 >(
-    id: string,
-    params: GetClusterSurveyInfoDepartmentParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>,
-                TError,
-                TData
-            >
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params: GetClusterSurveyInfoDepartmentParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Thống kê khảo sát cụm thông tin chung theo khoa
  */
 
 export function useGetClusterSurveyInfoDepartment<
-    TData = Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>,
-    TError = GetClusterSurveyInfoDepartment404,
+  TData = Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>,
+  TError = GetClusterSurveyInfoDepartment404,
 >(
-    id: string,
-    params: GetClusterSurveyInfoDepartmentParams,
-    options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>,
-                TError,
-                TData
-            >
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  id: string,
+  params: GetClusterSurveyInfoDepartmentParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyInfoDepartment>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getGetClusterSurveyInfoDepartmentQueryOptions(id, params, options)
+  const queryOptions = getGetClusterSurveyInfoDepartmentQueryOptions(id, params, options)
 
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-        queryKey: DataTag<QueryKey, TData, TError>
-    }
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 
-    query.queryKey = queryOptions.queryKey
+  query.queryKey = queryOptions.queryKey
 
-    return query
+  return query
 }
 
 /**
  * @summary Đánh tag minh chứng cho đợt đánh giá
  */
 export type calcEvidenceTagsResponse200 = {
-    data: CalcEvidenceTags200
-    status: 200
+  data: CalcEvidenceTags200
+  status: 200
 }
 
 export type calcEvidenceTagsResponse404 = {
-    data: CalcEvidenceTags404
-    status: 404
+  data: CalcEvidenceTags404
+  status: 404
 }
 
 export type calcEvidenceTagsResponseSuccess = calcEvidenceTagsResponse200 & {
-    headers: Headers
+  headers: Headers
 }
 export type calcEvidenceTagsResponseError = calcEvidenceTagsResponse404 & {
-    headers: Headers
+  headers: Headers
 }
 
 export type calcEvidenceTagsResponse =
-    | calcEvidenceTagsResponseSuccess
-    | calcEvidenceTagsResponseError
+  | calcEvidenceTagsResponseSuccess
+  | calcEvidenceTagsResponseError
 
 export const getCalcEvidenceTagsUrl = () => {
-    return `/api/evaluate/calc-evidence-tags`
+  return `/api/evaluate/calc-evidence-tags`
 }
 
 export const calcEvidenceTags = async (
-    calcEvidenceTags: CalcEvidenceTags,
-    options?: RequestInit
+  calcEvidenceTags: CalcEvidenceTags,
+  options?: RequestInit
 ): Promise<calcEvidenceTagsResponse> => {
-    return customExamFetch<calcEvidenceTagsResponse>(getCalcEvidenceTagsUrl(), {
-        ...options,
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', ...options?.headers },
-        body: JSON.stringify(calcEvidenceTags),
-    })
+  return customExamFetch<calcEvidenceTagsResponse>(getCalcEvidenceTagsUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(calcEvidenceTags),
+  })
 }
 
 export const getCalcEvidenceTagsMutationOptions = <
-    TError = CalcEvidenceTags404,
-    TContext = unknown,
+  TError = CalcEvidenceTags404,
+  TContext = unknown,
 >(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof calcEvidenceTags>>,
-        TError,
-        { data: CalcEvidenceTags },
-        TContext
-    >
-    request?: SecondParameter<typeof customExamFetch>
-}): UseMutationOptions<
+  mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof calcEvidenceTags>>,
     TError,
     { data: CalcEvidenceTags },
     TContext
+  >
+  request?: SecondParameter<typeof customExamFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof calcEvidenceTags>>,
+  TError,
+  { data: CalcEvidenceTags },
+  TContext
 > => {
-    const mutationKey = ['calcEvidenceTags']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
+  const mutationKey = ["calcEvidenceTags"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
 
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof calcEvidenceTags>>,
-        { data: CalcEvidenceTags }
-    > = (props) => {
-        const { data } = props ?? {}
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof calcEvidenceTags>>,
+    { data: CalcEvidenceTags }
+  > = (props) => {
+    const { data } = props ?? {}
 
-        return calcEvidenceTags(data, requestOptions)
-    }
+    return calcEvidenceTags(data, requestOptions)
+  }
 
-    return { mutationFn, ...mutationOptions }
+  return { mutationFn, ...mutationOptions }
 }
 
 export type CalcEvidenceTagsMutationResult = NonNullable<
-    Awaited<ReturnType<typeof calcEvidenceTags>>
+  Awaited<ReturnType<typeof calcEvidenceTags>>
 >
 export type CalcEvidenceTagsMutationBody = CalcEvidenceTags
 export type CalcEvidenceTagsMutationError = CalcEvidenceTags404
@@ -4530,23 +4372,23 @@ export type CalcEvidenceTagsMutationError = CalcEvidenceTags404
  * @summary Đánh tag minh chứng cho đợt đánh giá
  */
 export const useCalcEvidenceTags = <TError = CalcEvidenceTags404, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof calcEvidenceTags>>,
-            TError,
-            { data: CalcEvidenceTags },
-            TContext
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof calcEvidenceTags>>,
+      TError,
+      { data: CalcEvidenceTags },
+      TContext
+    >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
 ): UseMutationResult<
-    Awaited<ReturnType<typeof calcEvidenceTags>>,
-    TError,
-    { data: CalcEvidenceTags },
-    TContext
+  Awaited<ReturnType<typeof calcEvidenceTags>>,
+  TError,
+  { data: CalcEvidenceTags },
+  TContext
 > => {
-    const mutationOptions = getCalcEvidenceTagsMutationOptions(options)
+  const mutationOptions = getCalcEvidenceTagsMutationOptions(options)
 
-    return useMutation(mutationOptions, queryClient)
+  return useMutation(mutationOptions, queryClient)
 }

@@ -1,610 +1,606 @@
-import { FileOutlined, TableOutlined, UploadOutlined } from '@ant-design/icons'
-import DatePicker from '@components/commons/date-picker'
-import Select from '@components/commons/select'
-import Table from '@components/commons/table'
-import TreeSelect from '@components/commons/tree-select'
-import ImportInternshipModal from '@components/modal/import-excel-internship'
-import type { FilterProps } from '@constants/type'
-import DefaultLayout from '@layouts/default-layout'
-import { buildOrgFlat, buildOrgTree } from '@lib/utils'
-import { SubjectVersionType } from '@workspace/db'
-import type { Prisma } from '@workspace/db/client'
+import { FileOutlined, TableOutlined, UploadOutlined } from "@ant-design/icons"
+import DatePicker from "@components/commons/date-picker"
+import Select from "@components/commons/select"
+import Table from "@components/commons/table"
+import TreeSelect from "@components/commons/tree-select"
+import ImportInternshipModal from "@components/modal/import-excel-internship"
+import type { FilterProps } from "@constants/type"
+import DefaultLayout from "@layouts/default-layout"
+import { buildOrgFlat, buildOrgTree } from "@lib/utils"
+import { SubjectVersionType } from "@workspace/db"
+import type { Prisma } from "@workspace/db/client"
 import {
-    useCountStudentInternship,
-    useCreateManyStudentInternship,
-    useFindManyDM_DonVi,
-    useFindManyStudentInternship,
-    useFindManySubjectClass,
-    useFindManyTrainingCourse,
-} from '@workspace/db/hooks'
-import { sqlTransaction } from '@workspace/libs/api/model'
-import { exportInternshipProfile } from '@workspace/libs/api/training'
-import { whereOrganization } from '@workspace/libs/constants'
-import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import { cn } from '@workspace/ui/lib/utils'
-import { Button, Col, Flex, Form, Modal, message, Row, Tooltip } from 'antd'
-import dayjs from 'dayjs'
-import ExcelJS from 'exceljs'
-import { saveAs } from 'file-saver'
-import { SquarePen } from 'lucide-react'
-import type React from 'react'
-import { useMemo, useState } from 'react'
-import { useDisclosure } from 'react-hook-disclosure-modal'
-import ExportTemplateInternship from '../../../components/modal/export-template-internship'
+  useCountStudentInternship,
+  useCreateManyStudentInternship,
+  useFindManyDM_DonVi,
+  useFindManyStudentInternship,
+  useFindManySubjectClass,
+  useFindManyTrainingCourse,
+} from "@workspace/db/hooks"
+import { sqlTransaction } from "@workspace/libs/api/model"
+import { exportInternshipProfile } from "@workspace/libs/api/training"
+import { whereOrganization } from "@workspace/libs/constants"
+import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
+import { cn } from "@workspace/ui/lib/utils"
+import { Button, Col, Flex, Form, Modal, message, Row, Tooltip } from "antd"
+import dayjs from "dayjs"
+import ExcelJS from "exceljs"
+import { saveAs } from "file-saver"
+import { SquarePen } from "lucide-react"
+import type React from "react"
+import { useMemo, useState } from "react"
+import { useDisclosure } from "react-hook-disclosure-modal"
+import ExportTemplateInternship from "../../../components/modal/export-template-internship"
 
 interface ThucTapForm {
-    trainingCourseId: string
-    organizationId: string
-    subjectClassId: string
-    reportDate: string
+  trainingCourseId: string
+  organizationId: string
+  subjectClassId: string
+  reportDate: string
 }
 
-export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' }) {
-    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
-    const [form] = Form.useForm<ThucTapForm>()
-    const organizationId = Form.useWatch('organizationId', form)
-    const trainingCourseId = Form.useWatch('trainingCourseId', form)
-    const subjectClassId = Form.useWatch('subjectClassId', form)
-    const [currentPage, setCurrentPage] = useState(1)
-    const [numberOfPages, setNumberOfPages] = useState(10)
-    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
-    const { id: semesterId } = useSemesterStore()
-    const [importModalVisible, setImportModalVisible] = useState(false)
-    const [filters, setFilters] = useState<FilterProps>({
-        code: '',
-        name: '',
-        subjectName: '',
-    })
+export default function ThucTap({ role = "P7" }: { role: "P7" | "KHOA_BO_MON" }) {
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
+  const [form] = Form.useForm<ThucTapForm>()
+  const organizationId = Form.useWatch("organizationId", form)
+  const trainingCourseId = Form.useWatch("trainingCourseId", form)
+  const subjectClassId = Form.useWatch("subjectClassId", form)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [numberOfPages, setNumberOfPages] = useState(10)
+  const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+  const { id: semesterId } = useSemesterStore()
+  const [importModalVisible, setImportModalVisible] = useState(false)
+  const [filters, setFilters] = useState<FilterProps>({
+    code: "",
+    name: "",
+    subjectName: "",
+  })
 
-    const { onOpen: openPutInternshipModal } = useDisclosure<{
-        studentInternshipId: string
-        role: 'P7' | 'KHOA_BO_MON'
-    }>({
-        tag: 'PutInternshipModal',
-    })
+  const { onOpen: openPutInternshipModal } = useDisclosure<{
+    studentInternshipId: string
+    role: "P7" | "KHOA_BO_MON"
+  }>({
+    tag: "PutInternshipModal",
+  })
 
-    const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
-        where: {
-            trainingObjectTypeId: trainingObjectTypeId,
-        },
-        orderBy: {
-            semesterStart: {
-                startDate: 'desc',
+  const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
+    where: {
+      trainingObjectTypeId: trainingObjectTypeId,
+    },
+    orderBy: {
+      semesterStart: {
+        startDate: "desc",
+      },
+    },
+  })
+
+  const { data: organizationData = [] } = useFindManyDM_DonVi({
+    where: {
+      ...whereOrganization,
+    },
+    orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
+  })
+  const orgId = window.contextData?.organizationId
+  const orgIds = [
+    ...buildOrgFlat(
+      organizationData.map((e) => ({
+        Id: e.Id,
+        sTen: null,
+        sParentId: e.sParentId,
+        sMa: null,
+      })),
+      orgId || "0"
+    ).map((org) => org.value),
+    orgId,
+  ].filter(Boolean)
+
+  const { data: subjectClassData = [] } = useFindManySubjectClass({
+    where: {
+      subject: {
+        type: SubjectVersionType.Internship,
+        studentSubjectScore: {
+          some: {
+            student: {
+              fixedClass: {
+                trainingCourseId,
+              },
             },
+          },
         },
-    })
-
-    const { data: organizationData = [] } = useFindManyDM_DonVi({
-        where: {
-            ...whereOrganization,
+      },
+      semesterId,
+      trainingObjectTypeId,
+    },
+  })
+  const where = useMemo(() => {
+    const filter: Prisma.StudentInternshipWhereInput = {
+      studentSubjectScore: {
+        subjectClass: {
+          subject: {
+            type: SubjectVersionType.Internship,
+            ...(role === "KHOA_BO_MON"
+              ? { managementOrganizationId: { in: orgIds } }
+              : organizationId
+                ? { managementOrganizationId: organizationId }
+                : {}),
+          },
+          trainingObjectTypeId,
+          semesterId,
+          cancelled: false,
+          active: true,
+          ...(subjectClassId ? { id: subjectClassId } : {}),
+          ...(filters.subjectName
+            ? {
+                code: {
+                  contains: filters.subjectName,
+                  mode: "insensitive" as const,
+                },
+              }
+            : {}),
         },
-        orderBy: [{ iSTT: 'asc' }, { sTen: 'asc' }],
-    })
-    const orgId = window.contextData?.organizationId
-    const orgIds = [
-        ...buildOrgFlat(
-            organizationData.map((e) => ({
-                Id: e.Id,
-                sTen: null,
-                sParentId: e.sParentId,
-                sMa: null,
-            })),
-            orgId || '0'
-        ).map((org) => org.value),
-        orgId,
-    ].filter(Boolean)
+        student: {
+          ...(trainingCourseId
+            ? {
+                fixedClass: {
+                  trainingCourseId: trainingCourseId,
+                },
+              }
+            : {}),
+          status: "ENROLLED",
+          active: true,
+          deletedAt: null,
+          ...(filters.code
+            ? {
+                code: {
+                  contains: filters.code,
+                  mode: "insensitive" as const,
+                },
+              }
+            : {}),
+          ...(filters.name
+            ? {
+                userProfile: {
+                  fullname: {
+                    contains: filters.name,
+                    mode: "insensitive" as const,
+                  },
+                },
+              }
+            : {}),
+        },
+      },
+      deletedAt: null,
+    }
 
-    const { data: subjectClassData = [] } = useFindManySubjectClass({
-        where: {
-            subject: {
-                type: SubjectVersionType.Internship,
-                studentSubjectScore: {
-                    some: {
-                        student: {
-                            fixedClass: {
-                                trainingCourseId,
-                            },
+    return {
+      ...filter,
+      deletedAt: null,
+    }
+  }, [
+    organizationId,
+    trainingCourseId,
+    subjectClassId,
+    trainingObjectTypeId,
+    semesterId,
+    orgIds,
+    role,
+    filters,
+  ])
+
+  const { data: studentInternshipData = [], refetch: refetchStudentInternship } =
+    useFindManyStudentInternship({
+      where,
+      include: {
+        supervisor: {
+          include: {
+            lecturer: {
+              select: {
+                userProfile: {
+                  select: {
+                    fullname: true,
+                    academicRankType: true,
+                    academicDegreeType: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+        coSupervisor: {
+          include: {
+            lecturer: {
+              select: {
+                userProfile: {
+                  select: {
+                    fullname: true,
+                    academicRankType: true,
+                    academicDegreeType: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+        studentSubjectScore: {
+          include: {
+            subjectClass: {
+              include: {
+                trainingObjectType: true,
+                semester: true,
+              },
+            },
+            student: {
+              include: {
+                userProfile: true,
+                fixedClass: {
+                  include: {
+                    trainingCourse: true,
+                  },
+                },
+                curriculumVersion: {
+                  select: {
+                    curriculum: {
+                      select: {
+                        trainingMajor: {
+                          select: {
+                            name: true,
+                            code: true,
+                          },
                         },
+                      },
                     },
+                  },
                 },
+              },
             },
-            semesterId,
-            trainingObjectTypeId,
+            subjectVersion: {
+              include: {
+                subject: {
+                  include: {
+                    managementOrganization: true,
+                  },
+                },
+              },
+            },
+          },
         },
-    })
-    const where = useMemo(() => {
-        const filter: Prisma.StudentInternshipWhereInput = {
-            studentSubjectScore: {
-                subjectClass: {
-                    subject: {
-                        type: SubjectVersionType.Internship,
-                        ...(role === 'KHOA_BO_MON'
-                            ? { managementOrganizationId: { in: orgIds } }
-                            : organizationId
-                              ? { managementOrganizationId: organizationId }
-                              : {}),
-                    },
-                    trainingObjectTypeId,
-                    semesterId,
-                    cancelled: false,
-                    active: true,
-                    ...(subjectClassId ? { id: subjectClassId } : {}),
-                    ...(filters.subjectName
-                        ? {
-                              code: {
-                                  contains: filters.subjectName,
-                                  mode: 'insensitive' as const,
-                              },
-                          }
-                        : {}),
-                },
-                student: {
-                    ...(trainingCourseId
-                        ? {
-                              fixedClass: {
-                                  trainingCourseId: trainingCourseId,
-                              },
-                          }
-                        : {}),
-                    status: 'ENROLLED',
-                    active: true,
-                    deletedAt: null,
-                    ...(filters.code
-                        ? {
-                              code: {
-                                  contains: filters.code,
-                                  mode: 'insensitive' as const,
-                              },
-                          }
-                        : {}),
-                    ...(filters.name
-                        ? {
-                              userProfile: {
-                                  fullname: {
-                                      contains: filters.name,
-                                      mode: 'insensitive' as const,
-                                  },
-                              },
-                          }
-                        : {}),
-                },
+      },
+      orderBy: [
+        {
+          studentSubjectScore: {
+            student: {
+              userProfile: {
+                firstName: "asc",
+              },
             },
-            deletedAt: null,
+          },
+        },
+        {
+          studentSubjectScore: {
+            student: {
+              userProfile: {
+                lastName: "asc",
+              },
+            },
+          },
+        },
+      ],
+      take: numberOfPages,
+      skip: (currentPage - 1) * numberOfPages,
+    })
+
+  const { data: count, refetch: refetchCount } = useCountStudentInternship({
+    where,
+  })
+
+  const { mutateAsync: createManyStudentInternship } = useCreateManyStudentInternship()
+
+  const handleAssignDate = async () => {
+    const reportDate = form.getFieldValue("reportDate")
+    if (!reportDate) {
+      return message.warning("Vui lòng chọn hạn nhập thực tập trước khi gán!")
+    }
+
+    const res = await sqlTransaction([
+      {
+        model: "StudentInternship",
+        operation: "updateMany",
+        data: {
+          where,
+          data: {
+            deadline: reportDate,
+          },
+        },
+      },
+    ])
+    if (res.status !== 200) {
+      return message.error("Có lỗi xảy ra khi gán ngày.")
+    }
+    message.success("Gán ngày thành công!")
+    refetchStudentInternship()
+    refetchCount()
+  }
+
+  const treeOrgData = buildOrgTree(organizationData ?? [], "0")
+  const getData = async () => {
+    if (!subjectClassId) {
+      return message.warning("Vui lòng chọn lớp môn học trước khi lấy dữ liệu")
+    }
+    try {
+      const subjectStudent = await sqlTransaction([
+        {
+          model: "StudentSubjectScore",
+          operation: "findMany",
+          data: {
+            where: { subjectClassId: subjectClassId },
+          },
+        },
+      ])
+      const studentSubjectScoreData = subjectStudent
+        .data?.[0] as Prisma.StudentSubjectScoreGetPayload<{}>[]
+      if (studentSubjectScoreData.length === 0) {
+        return message.error("Lớp môn học này không có sinh viên nào.")
+      }
+      await createManyStudentInternship({
+        data: studentSubjectScoreData.map((record) => ({
+          studentSubjectScoreId: record.id,
+        })),
+        skipDuplicates: true,
+      })
+      message.success("Lấy dữ liệu thành công!")
+    } catch (error) {
+      console.error("getData Error:", error)
+      message.error("Có lỗi xảy ra khi xử lý dữ liệu.")
+    } finally {
+      refetchStudentInternship()
+      refetchCount()
+    }
+  }
+
+  const getCellValue = (cell: ExcelJS.Cell) => {
+    const val = cell.value
+
+    if (val === null || val === undefined) return null
+
+    if (typeof val === "object" && "result" in val) {
+      const result = val.result
+      if (result === null || result === undefined || result === "") return null
+      return result.toString().trim()
+    }
+
+    const strVal = val.toString().trim()
+    return strVal !== "" ? strVal : null
+  }
+  const importExcel = async (file: File) => {
+    const loading = message.loading("Đang xử lý file Excel...", 0)
+    try {
+      const workbook = new ExcelJS.Workbook()
+      const buffer = await file.arrayBuffer()
+      await workbook.xlsx.load(buffer)
+
+      const worksheet = workbook.getWorksheet("Danh sách thực tập")
+      if (!worksheet) {
+        return message.error('Không tìm thấy Sheet "Danh sách thực tập" trong file!')
+      }
+
+      const dataToUpdate: any[] = []
+
+      let startRow = 1
+      worksheet.eachRow((row, rowNumber) => {
+        if (row.getCell(1).value === "ID_RECORD") {
+          startRow = rowNumber + 1
         }
+      })
+
+      worksheet.eachRow((row, rowNumber) => {
+        if (rowNumber < startRow) return
+
+        const studentSubjectScoreId = getCellValue(row.getCell(1))
+        if (!studentSubjectScoreId) return
+
+        const supervisorId = getCellValue(row.getCell(14))
+        const coSupervisorId = getCellValue(row.getCell(15))
+
+        const unit = getCellValue(row.getCell(10))
+        const internshipContent = getCellValue(row.getCell(11))
+
+        const address = getCellValue(row.getCell(3))
+
+        const startDateVal = row.getCell(12).value
+        const endDateVal = row.getCell(13).value
+
+        const deadlineVal = row.getCell(2).value
+        const reportDateVal = row.getCell(16).value
+
+        const startDate = startDateVal instanceof Date ? startDateVal.toISOString() : null
+        const endDate = endDateVal instanceof Date ? endDateVal.toISOString() : null
+
+        const deadline = deadlineVal instanceof Date ? deadlineVal.toISOString() : null
+        const reportDate = reportDateVal instanceof Date ? reportDateVal.toISOString() : null
+
+        dataToUpdate.push({
+          model: "StudentInternship",
+          operation: "upsert",
+          data: {
+            where: { studentSubjectScoreId: studentSubjectScoreId },
+            update: {
+              unit,
+              internshipContent,
+              supervisorId,
+              coSupervisorId,
+              address,
+              deadline,
+              startDate,
+              endDate,
+              reportDate,
+            },
+            create: {
+              studentSubjectScoreId,
+              unit,
+              internshipContent,
+              supervisorId,
+              coSupervisorId,
+              address,
+              deadline,
+              startDate,
+              endDate,
+              reportDate,
+            },
+          },
+        })
+      })
+
+      if (dataToUpdate.length === 0) {
+        return message.warning("Không tìm thấy dữ liệu hợp lệ trong file.")
+      }
+      const finalData = dataToUpdate.map((item) => {
+        const fixValue = (val: any) => (val === "[object Object]" ? null : val)
 
         return {
-            ...filter,
-            deletedAt: null,
-        }
-    }, [
-        organizationId,
-        trainingCourseId,
-        subjectClassId,
-        trainingObjectTypeId,
-        semesterId,
-        orgIds,
-        role,
-        filters,
-    ])
-
-    const { data: studentInternshipData = [], refetch: refetchStudentInternship } =
-        useFindManyStudentInternship({
-            where,
-            include: {
-                supervisor: {
-                    include: {
-                        lecturer: {
-                            select: {
-                                userProfile: {
-                                    select: {
-                                        fullname: true,
-                                        academicRankType: true,
-                                        academicDegreeType: true,
-                                    },
-                                },
-                            },
-                        },
-                    },
-                },
-                coSupervisor: {
-                    include: {
-                        lecturer: {
-                            select: {
-                                userProfile: {
-                                    select: {
-                                        fullname: true,
-                                        academicRankType: true,
-                                        academicDegreeType: true,
-                                    },
-                                },
-                            },
-                        },
-                    },
-                },
-                studentSubjectScore: {
-                    include: {
-                        subjectClass: {
-                            include: {
-                                trainingObjectType: true,
-                                semester: true,
-                            },
-                        },
-                        student: {
-                            include: {
-                                userProfile: true,
-                                fixedClass: {
-                                    include: {
-                                        trainingCourse: true,
-                                    },
-                                },
-                                curriculumVersion: {
-                                    select: {
-                                        curriculum: {
-                                            select: {
-                                                trainingMajor: {
-                                                    select: {
-                                                        name: true,
-                                                        code: true,
-                                                    },
-                                                },
-                                            },
-                                        },
-                                    },
-                                },
-                            },
-                        },
-                        subjectVersion: {
-                            include: {
-                                subject: {
-                                    include: {
-                                        managementOrganization: true,
-                                    },
-                                },
-                            },
-                        },
-                    },
-                },
+          ...item,
+          data: {
+            ...item.data,
+            update: {
+              ...item.data.update,
+              supervisorId: fixValue(item.data.update.supervisorId),
+              coSupervisorId: fixValue(item.data.update.coSupervisorId),
             },
-            orderBy: [
-                {
-                    studentSubjectScore: {
-                        student: {
-                            userProfile: {
-                                firstName: 'asc',
-                            },
-                        },
-                    },
-                },
-                {
-                    studentSubjectScore: {
-                        student: {
-                            userProfile: {
-                                lastName: 'asc',
-                            },
-                        },
-                    },
-                },
-            ],
-            take: numberOfPages,
-            skip: (currentPage - 1) * numberOfPages,
-        })
+            create: {
+              ...item.data.create,
+              supervisorId: fixValue(item.data.create.supervisorId),
+              coSupervisorId: fixValue(item.data.create.coSupervisorId),
+            },
+          },
+        }
+      })
 
-    const { data: count, refetch: refetchCount } = useCountStudentInternship({
-        where,
+      const res = await sqlTransaction(finalData)
+
+      message.success(`Cập nhật thành công ${finalData.length} bản ghi!`)
+      refetchStudentInternship()
+    } catch (error) {
+      console.error("Import Excel Error:", error)
+      message.error("Lỗi khi đọc file hoặc cập nhật dữ liệu. Vui lòng kiểm tra lại định dạng file!")
+    } finally {
+      loading()
+    }
+  }
+  const handleExportInternship = async () => {
+    let internshipIds: string[]
+
+    if (selectedRowKeys.length > 0) {
+      // Nếu có chọn row, chỉ export những row đã chọn
+      internshipIds = selectedRowKeys as string[]
+    } else {
+      // Nếu không chọn row nào, fetch tất cả IDs thỏa mãn filter (không pagination)
+      const loading = message.loading("Đang tải dữ liệu...", 0)
+      try {
+        const allData = await sqlTransaction([
+          {
+            model: "StudentInternship",
+            operation: "findMany",
+            data: {
+              where,
+              select: { id: true },
+            },
+          },
+        ])
+        loading()
+
+        const allInternships = allData.data?.[0] as Array<{ id: string }>
+        internshipIds = allInternships?.map((item) => item.id) || []
+
+        if (internshipIds.length === 0) {
+          return message.warning("Không có dữ liệu để xuất")
+        }
+      } catch (error) {
+        loading()
+        return message.error("Có lỗi khi tải dữ liệu")
+      }
+    }
+
+    const { status, data } = await exportInternshipProfile({
+      internshipIds,
     })
 
-    const { mutateAsync: createManyStudentInternship } = useCreateManyStudentInternship()
-
-    const handleAssignDate = async () => {
-        const reportDate = form.getFieldValue('reportDate')
-        if (!reportDate) {
-            return message.warning('Vui lòng chọn hạn nhập thực tập trước khi gán!')
-        }
-
-        const res = await sqlTransaction([
-            {
-                model: 'StudentInternship',
-                operation: 'updateMany',
-                data: {
-                    where,
-                    data: {
-                        deadline: reportDate,
-                    },
-                },
-            },
-        ])
-        if (res.status !== 200) {
-            return message.error('Có lỗi xảy ra khi gán ngày.')
-        }
-        message.success('Gán ngày thành công!')
-        refetchStudentInternship()
-        refetchCount()
+    if (status === 200) {
+      saveAs(data, "danh_sach_thuc_tap.xlsx")
     }
+  }
+  const confirmImport = (file: File) => {
+    Modal.confirm({
+      title: "Xác nhận Import dữ liệu",
+      icon: <FileOutlined />,
+      content: (
+        <div>
+          <p>Bạn có chắc chắn muốn import thông tin từ file sau không?</p>
+          <p>
+            <strong>Tên file:</strong> <span className="text-blue-600">{file.name}</span>
+          </p>
+          <p className="text-red-500 text-xs">
+            * Lưu ý: Dữ liệu trong hệ thống sẽ được cập nhật hoặc tạo mới dựa trên nội dung file
+            Excel.
+          </p>
+        </div>
+      ),
+      okText: "Xác nhận Import",
+      cancelText: "Hủy bỏ",
+      okButtonProps: {
+        type: "primary",
+        className: "bg-[#02884f] hover:bg-[#19945d] border-none",
+      },
+      onOk: () => {
+        importExcel(file)
+      },
+    })
+  }
 
-    const treeOrgData = buildOrgTree(organizationData ?? [], '0')
-    const getData = async () => {
-        if (!subjectClassId) {
-            return message.warning('Vui lòng chọn lớp môn học trước khi lấy dữ liệu')
-        }
-        try {
-            const subjectStudent = await sqlTransaction([
-                {
-                    model: 'StudentSubjectScore',
-                    operation: 'findMany',
-                    data: {
-                        where: { subjectClassId: subjectClassId },
-                    },
-                },
-            ])
-            const studentSubjectScoreData = subjectStudent
-                .data?.[0] as Prisma.StudentSubjectScoreGetPayload<{}>[]
-            if (studentSubjectScoreData.length === 0) {
-                return message.error('Lớp môn học này không có sinh viên nào.')
-            }
-            await createManyStudentInternship({
-                data: studentSubjectScoreData.map((record) => ({
-                    studentSubjectScoreId: record.id,
-                })),
-                skipDuplicates: true,
-            })
-            message.success('Lấy dữ liệu thành công!')
-        } catch (error) {
-            console.error('getData Error:', error)
-            message.error('Có lỗi xảy ra khi xử lý dữ liệu.')
-        } finally {
-            refetchStudentInternship()
-            refetchCount()
-        }
-    }
-
-    const getCellValue = (cell: ExcelJS.Cell) => {
-        const val = cell.value
-
-        if (val === null || val === undefined) return null
-
-        if (typeof val === 'object' && 'result' in val) {
-            const result = val.result
-            if (result === null || result === undefined || result === '') return null
-            return result.toString().trim()
-        }
-
-        const strVal = val.toString().trim()
-        return strVal !== '' ? strVal : null
-    }
-    const importExcel = async (file: File) => {
-        const loading = message.loading('Đang xử lý file Excel...', 0)
-        try {
-            const workbook = new ExcelJS.Workbook()
-            const buffer = await file.arrayBuffer()
-            await workbook.xlsx.load(buffer)
-
-            const worksheet = workbook.getWorksheet('Danh sách thực tập')
-            if (!worksheet) {
-                return message.error('Không tìm thấy Sheet "Danh sách thực tập" trong file!')
-            }
-
-            const dataToUpdate: any[] = []
-
-            let startRow = 1
-            worksheet.eachRow((row, rowNumber) => {
-                if (row.getCell(1).value === 'ID_RECORD') {
-                    startRow = rowNumber + 1
+  return (
+    <Row gutter={[8, 8]}>
+      <Col span={24}>
+        <Form form={form}>
+          <Flex gap={6} wrap="wrap">
+            <Form.Item name="trainingCourseId" label="Khóa học" className="mb-0">
+              <Select
+                className="w-36"
+                options={
+                  trainingCourseData?.map((item) => ({
+                    label: item.name,
+                    value: item.id,
+                  })) || []
                 }
-            })
+                popupMatchSelectWidth={false}
+                placeholder="Chọn khóa học"
+              />
+            </Form.Item>
+            <Form.Item name="organizationId" label="Khoa quản lí" className="mb-0">
+              <TreeSelect
+                className="w-80"
+                placeholder="Chọn khoa quản lý"
+                allowClear
+                showSearch
+                treeDefaultExpandAll
+                treeData={treeOrgData}
+              />
+            </Form.Item>
 
-            worksheet.eachRow((row, rowNumber) => {
-                if (rowNumber < startRow) return
-
-                const studentSubjectScoreId = getCellValue(row.getCell(1))
-                if (!studentSubjectScoreId) return
-
-                const supervisorId = getCellValue(row.getCell(14))
-                const coSupervisorId = getCellValue(row.getCell(15))
-
-                const unit = getCellValue(row.getCell(10))
-                const internshipContent = getCellValue(row.getCell(11))
-
-                const address = getCellValue(row.getCell(3))
-
-                const startDateVal = row.getCell(12).value
-                const endDateVal = row.getCell(13).value
-
-                const deadlineVal = row.getCell(2).value
-                const reportDateVal = row.getCell(16).value
-
-                const startDate = startDateVal instanceof Date ? startDateVal.toISOString() : null
-                const endDate = endDateVal instanceof Date ? endDateVal.toISOString() : null
-
-                const deadline = deadlineVal instanceof Date ? deadlineVal.toISOString() : null
-                const reportDate =
-                    reportDateVal instanceof Date ? reportDateVal.toISOString() : null
-
-                dataToUpdate.push({
-                    model: 'StudentInternship',
-                    operation: 'upsert',
-                    data: {
-                        where: { studentSubjectScoreId: studentSubjectScoreId },
-                        update: {
-                            unit,
-                            internshipContent,
-                            supervisorId,
-                            coSupervisorId,
-                            address,
-                            deadline,
-                            startDate,
-                            endDate,
-                            reportDate,
-                        },
-                        create: {
-                            studentSubjectScoreId,
-                            unit,
-                            internshipContent,
-                            supervisorId,
-                            coSupervisorId,
-                            address,
-                            deadline,
-                            startDate,
-                            endDate,
-                            reportDate,
-                        },
-                    },
-                })
-            })
-
-            if (dataToUpdate.length === 0) {
-                return message.warning('Không tìm thấy dữ liệu hợp lệ trong file.')
-            }
-            const finalData = dataToUpdate.map((item) => {
-                const fixValue = (val: any) => (val === '[object Object]' ? null : val)
-
-                return {
-                    ...item,
-                    data: {
-                        ...item.data,
-                        update: {
-                            ...item.data.update,
-                            supervisorId: fixValue(item.data.update.supervisorId),
-                            coSupervisorId: fixValue(item.data.update.coSupervisorId),
-                        },
-                        create: {
-                            ...item.data.create,
-                            supervisorId: fixValue(item.data.create.supervisorId),
-                            coSupervisorId: fixValue(item.data.create.coSupervisorId),
-                        },
-                    },
-                }
-            })
-
-            const res = await sqlTransaction(finalData)
-
-            message.success(`Cập nhật thành công ${finalData.length} bản ghi!`)
-            refetchStudentInternship()
-        } catch (error) {
-            console.error('Import Excel Error:', error)
-            message.error(
-                'Lỗi khi đọc file hoặc cập nhật dữ liệu. Vui lòng kiểm tra lại định dạng file!'
-            )
-        } finally {
-            loading()
-        }
-    }
-    const handleExportInternship = async () => {
-        let internshipIds: string[]
-
-        if (selectedRowKeys.length > 0) {
-            // Nếu có chọn row, chỉ export những row đã chọn
-            internshipIds = selectedRowKeys as string[]
-        } else {
-            // Nếu không chọn row nào, fetch tất cả IDs thỏa mãn filter (không pagination)
-            const loading = message.loading('Đang tải dữ liệu...', 0)
-            try {
-                const allData = await sqlTransaction([
-                    {
-                        model: 'StudentInternship',
-                        operation: 'findMany',
-                        data: {
-                            where,
-                            select: { id: true },
-                        },
-                    },
-                ])
-                loading()
-
-                const allInternships = allData.data?.[0] as Array<{ id: string }>
-                internshipIds = allInternships?.map((item) => item.id) || []
-
-                if (internshipIds.length === 0) {
-                    return message.warning('Không có dữ liệu để xuất')
-                }
-            } catch (error) {
-                loading()
-                return message.error('Có lỗi khi tải dữ liệu')
-            }
-        }
-
-        const { status, data } = await exportInternshipProfile({
-            internshipIds,
-        })
-
-        if (status === 200) {
-            saveAs(data, 'danh_sach_thuc_tap.xlsx')
-        }
-    }
-    const confirmImport = (file: File) => {
-        Modal.confirm({
-            title: 'Xác nhận Import dữ liệu',
-            icon: <FileOutlined />,
-            content: (
-                <div>
-                    <p>Bạn có chắc chắn muốn import thông tin từ file sau không?</p>
-                    <p>
-                        <strong>Tên file:</strong>{' '}
-                        <span className="text-blue-600">{file.name}</span>
-                    </p>
-                    <p className="text-red-500 text-xs">
-                        * Lưu ý: Dữ liệu trong hệ thống sẽ được cập nhật hoặc tạo mới dựa trên nội
-                        dung file Excel.
-                    </p>
-                </div>
-            ),
-            okText: 'Xác nhận Import',
-            cancelText: 'Hủy bỏ',
-            okButtonProps: {
-                type: 'primary',
-                className: 'bg-[#02884f] hover:bg-[#19945d] border-none',
-            },
-            onOk: () => {
-                importExcel(file)
-            },
-        })
-    }
-
-    return (
-        <Row gutter={[8, 8]}>
-            <Col span={24}>
-                <Form form={form}>
-                    <Flex gap={6} wrap="wrap">
-                        <Form.Item name="trainingCourseId" label="Khóa học" className="mb-0">
-                            <Select
-                                className="w-36"
-                                options={
-                                    trainingCourseData?.map((item) => ({
-                                        label: item.name,
-                                        value: item.id,
-                                    })) || []
-                                }
-                                popupMatchSelectWidth={false}
-                                placeholder="Chọn khóa học"
-                            />
-                        </Form.Item>
-                        <Form.Item name="organizationId" label="Khoa quản lí" className="mb-0">
-                            <TreeSelect
-                                className="w-80"
-                                placeholder="Chọn khoa quản lý"
-                                allowClear
-                                showSearch
-                                treeDefaultExpandAll
-                                treeData={treeOrgData}
-                            />
-                        </Form.Item>
-
-                        <Form.Item name="subjectClassId" label="Lớp môn học" className="mb-0">
-                            <Select
-                                className="w-46"
-                                options={subjectClassData?.map((item) => ({
-                                    label: `${item.code} - ${item.name}`,
-                                    value: item.id,
-                                }))}
-                                popupMatchSelectWidth={false}
-                                placeholder="Chọn lớp môn học"
-                            />
-                        </Form.Item>
-                        <Form.Item className="mb-0">
-                            <div className="flex gap-2">
-                                <Button type="primary" onClick={async () => await getData()}>
-                                    Lấy dữ liệu
-                                </Button>
-                                {/* <Button type="primary" onClick={async () => await exportToExcel()}>
+            <Form.Item name="subjectClassId" label="Lớp môn học" className="mb-0">
+              <Select
+                className="w-46"
+                options={subjectClassData?.map((item) => ({
+                  label: `${item.code} - ${item.name}`,
+                  value: item.id,
+                }))}
+                popupMatchSelectWidth={false}
+                placeholder="Chọn lớp môn học"
+              />
+            </Form.Item>
+            <Form.Item className="mb-0">
+              <div className="flex gap-2">
+                <Button type="primary" onClick={async () => await getData()}>
+                  Lấy dữ liệu
+                </Button>
+                {/* <Button type="primary" onClick={async () => await exportToExcel()}>
                                     Xuất mẫu excel
                                 </Button>
                                 <Button
@@ -613,7 +609,7 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
                                 >
                                     Import Excel
                                 </Button> */}
-                                {/* <input
+                {/* <input
                                     id="import-excel"
                                     type="file"
                                     accept=".xlsx"
@@ -626,30 +622,23 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
                                         e.target.value = ''
                                     }}
                                 /> */}
-                            </div>
-                        </Form.Item>
-                        {role === 'P7' && (
-                            <>
-                                <Form.Item
-                                    name="reportDate"
-                                    label="Hạn nhập thực tập"
-                                    className="mb-0 ml-2"
-                                >
-                                    <DatePicker
-                                        className="w-44"
-                                        placeholder="Chọn hạn nhập thực tập"
-                                    />
-                                </Form.Item>
-                                <Form.Item className="mb-0">
-                                    <div className="flex gap-2">
-                                        <Button type="primary" onClick={handleAssignDate}>
-                                            Gán ngày
-                                        </Button>
-                                    </div>
-                                </Form.Item>
-                            </>
-                        )}
-                        {/* {role === 'P7' && (
+              </div>
+            </Form.Item>
+            {role === "P7" && (
+              <>
+                <Form.Item name="reportDate" label="Hạn nhập thực tập" className="mb-0 ml-2">
+                  <DatePicker className="w-44" placeholder="Chọn hạn nhập thực tập" />
+                </Form.Item>
+                <Form.Item className="mb-0">
+                  <div className="flex gap-2">
+                    <Button type="primary" onClick={handleAssignDate}>
+                      Gán ngày
+                    </Button>
+                  </div>
+                </Form.Item>
+              </>
+            )}
+            {/* {role === 'P7' && (
                             <Form.Item className="mb-0">
                                 <div className="flex gap-2">
                                     <Button
@@ -1450,325 +1439,299 @@ export default function ThucTap({ role = 'P7' }: { role: 'P7' | 'KHOA_BO_MON' })
                                 </div>
                             </Form.Item>
                         )} */}
-                    </Flex>
-                </Form>
-                <Col span={24} className="pt-2 ml-1">
-                    <Row gutter={[16, 16]} align="middle" justify="start" className="gap-1">
-                        {selectedRowKeys.length > 0 && (
-                            <p>(Đang chọn {selectedRowKeys.length} TTS)</p>
-                        )}
-                        <Button
-                            type="primary"
-                            onClick={handleExportInternship}
-                            icon={<TableOutlined />}
-                        >
-                            Xuất DS Thực Tập
-                        </Button>
-                        <Button
-                            type="primary"
-                            onClick={() => setImportModalVisible(true)}
-                            icon={<UploadOutlined />}
-                        >
-                            Nhập dữ liệu Excel
-                        </Button>
-                        <ImportInternshipModal
-                            visible={importModalVisible}
-                            onSuccess={() => {
-                                setImportModalVisible(false)
-                                refetchStudentInternship()
-                                refetchCount()
-                            }}
-                            onCancel={() => setImportModalVisible(false)}
-                        />
-                        <ExportTemplateInternship />
-                        {/* <Button onClick={handleModal} type="primary">
+          </Flex>
+        </Form>
+        <Col span={24} className="pt-2 ml-1">
+          <Row gutter={[16, 16]} align="middle" justify="start" className="gap-1">
+            {selectedRowKeys.length > 0 && <p>(Đang chọn {selectedRowKeys.length} TTS)</p>}
+            <Button type="primary" onClick={handleExportInternship} icon={<TableOutlined />}>
+              Xuất DS Thực Tập
+            </Button>
+            <Button
+              type="primary"
+              onClick={() => setImportModalVisible(true)}
+              icon={<UploadOutlined />}
+            >
+              Nhập dữ liệu Excel
+            </Button>
+            <ImportInternshipModal
+              visible={importModalVisible}
+              onSuccess={() => {
+                setImportModalVisible(false)
+                refetchStudentInternship()
+                refetchCount()
+              }}
+              onCancel={() => setImportModalVisible(false)}
+            />
+            <ExportTemplateInternship />
+            {/* <Button onClick={handleModal} type="primary">
                                     Thêm mới
                                 </Button> */}
-                    </Row>
-                </Col>
-                <Table
-                    scrollable={studentInternshipData.length > 0}
-                    maxHeight={'calc(100vh - 330px)'}
-                    rowSelection={{
-                        selectedRowKeys,
-                        preserveSelectedRowKeys: true,
-                        onChange: (keys) => {
-                            setSelectedRowKeys(keys)
-                        },
-                    }}
-                    filters={filters}
-                    setFilters={(value) => {
-                        setFilters(value)
-                        setCurrentPage(1)
-                    }}
-                    columns={[
-                        {
-                            title: 'Hạn nhập',
-                            width: 80,
-                            align: 'center',
-                            fixed: 'left',
-                            render: (_, record) => {
-                                return (
-                                    <p
-                                        className={cn(
-                                            record?.deadline &&
-                                                dayjs().isAfter(dayjs(record.deadline))
-                                                ? 'text-red-600'
-                                                : ''
-                                        )}
-                                    >
-                                        {record?.deadline
-                                            ? dayjs(record.deadline).format('DD/MM/YYYY')
-                                            : ''}
-                                    </p>
-                                )
-                            },
-                        },
-                        {
-                            title: 'Mã SV',
-                            width: 100,
-                            align: 'center',
-                            fixed: 'left',
-                            dataIndex: 'code',
-                            type: 'input',
-                            render: (_, record) => {
-                                return record?.studentSubjectScore?.student?.code || ''
-                            },
-                        },
-                        {
-                            title: 'Họ và tên',
-                            width: 150,
-                            align: 'left',
-                            fixed: 'left',
-                            dataIndex: 'name',
-                            type: 'input',
-                            render: (_, record) => {
-                                return record?.studentSubjectScore?.student?.userProfile?.fullname
-                            },
-                        },
-                        {
-                            title: 'Mã lớp môn học',
-                            width: 150,
-                            align: 'center',
-                            dataIndex: 'subjectName',
-                            type: 'input',
-                            render: (_, record) => {
-                                return (
-                                    <Tooltip
-                                        title={record?.studentSubjectScore?.subjectClass?.name}
-                                    >
-                                        {record?.studentSubjectScore?.subjectClass?.code || ''}
-                                    </Tooltip>
-                                )
-                            },
-                        },
-                        {
-                            title: 'Ngày sinh',
-                            width: 80,
-                            align: 'center',
-                            render: (_, record) => {
-                                return record?.studentSubjectScore?.student?.userProfile
-                                    ?.dateOfBirth
-                                    ? dayjs(
-                                          record?.studentSubjectScore?.student?.userProfile
-                                              ?.dateOfBirth
-                                      ).format('DD/MM/YYYY')
-                                    : ''
-                            },
-                        },
-                        // {
-                        //     title: 'Lớp môn học',
-                        //     width: 150,
-                        //     align: 'left',
-                        //     render: (_, record) => {
-                        //         return record?.subjectClass?.name || ''
-                        //     },
-                        // },
-                        // {
-                        //     title: 'STC',
-                        //     width: 50,
-                        //     align: 'center',
-                        //     render: (_, record) => {
-                        //         return record?.subjectVersion?.credit || ''
-                        //     },
-                        // },
-                        {
-                            title: 'Cơ quan thực tập',
-                            width: 170,
-                            align: 'left',
-                            render: (_, record) => {
-                                return record?.institution || ''
-                            },
-                        },
-                        {
-                            title: 'Đơn vị thực tập',
-                            width: 170,
-                            align: 'left',
-                            render: (_, record) => {
-                                return record?.unit || ''
-                            },
-                        },
-                        {
-                            title: 'Địa chỉ đơn vị thực tập',
-                            width: 250,
-                            align: 'left',
-                            render: (_, record) => {
-                                return record?.address || ''
-                            },
-                        },
-                        // {
-                        //     title: 'Tên thực tập',
-                        //     width: 250,
-                        //     align: 'left',
-                        //     render: (_, record) => {
-                        //         return record?.name || ''
-                        //     },
-                        // },
-                        {
-                            title: 'Nội dung thực tập',
-                            width: 300,
-                            align: 'left',
-                            render: (_, record) => {
-                                return record?.internshipContent || ''
-                            },
-                        },
-                        {
-                            title: <Tooltip title="Giảng viên hướng dẫn 1">GVHD1</Tooltip>,
-                            width: 170,
-                            align: 'left',
-                            render: (_, record) => {
-                                return record?.supervisor?.lecturer
-                                    ? [
-                                          record?.supervisor?.lecturer?.userProfile.academicRankType
-                                              ?.sMa,
-                                          record?.supervisor?.lecturer?.userProfile
-                                              .academicDegreeType?.sMa,
-                                          record?.supervisor?.lecturer?.userProfile.fullname,
-                                      ]
-                                          .filter(Boolean)
-                                          .join('. ')
-                                    : [
-                                          record?.supervisor?.academicRank,
-                                          record?.supervisor?.academicDegree,
-                                          record?.supervisor?.name,
-                                      ]
-                                          .filter(Boolean)
-                                          .join('. ')
-                            },
-                        },
-                        {
-                            title: <Tooltip title="Giảng viên hướng dẫn 2">GVHD2</Tooltip>,
-                            width: 170,
-                            align: 'left',
-                            render: (_, record) => {
-                                return record?.coSupervisor?.lecturer
-                                    ? [
-                                          record?.coSupervisor?.lecturer?.userProfile
-                                              ?.academicRankType?.sMa,
-                                          record?.coSupervisor?.lecturer?.userProfile
-                                              ?.academicDegreeType?.sMa,
-                                          record?.coSupervisor?.lecturer?.userProfile?.fullname,
-                                      ]
-                                          .filter(Boolean)
-                                          .join('. ')
-                                    : [
-                                          record?.coSupervisor?.academicRank,
-                                          record?.coSupervisor?.academicDegree,
-                                          record?.coSupervisor?.name,
-                                      ]
-                                          .filter(Boolean)
-                                          .join('. ')
-                            },
-                        },
-                        {
-                            title: 'Thời gian bắt đầu thực tập',
-                            width: 150,
-                            align: 'center',
-                            render: (_, record) => {
-                                return record?.startDate
-                                    ? dayjs(record?.startDate).format('DD/MM/YYYY')
-                                    : ''
-                            },
-                        },
-                        {
-                            title: 'Thời gian kết thúc thực tập',
-                            width: 150,
-                            align: 'center',
-                            render: (_, record) => {
-                                return record?.endDate
-                                    ? dayjs(record?.endDate).format('DD/MM/YYYY')
-                                    : ''
-                            },
-                        },
-                        {
-                            title: 'Thời gian báo cáo',
-                            width: 150,
-                            align: 'center',
-                            render: (_, record) => {
-                                return record?.reportDate
-                                    ? dayjs(record?.reportDate).format('DD/MM/YYYY')
-                                    : ''
-                            },
-                        },
-                        {
-                            title: 'Điểm',
-                            width: 80,
-                            align: 'center',
-                            fixed: 'right',
-                            render: (_, record) => {
-                                return record?.studentSubjectScore?.finalScore
-                                    ? Number(record?.studentSubjectScore?.finalScore).toFixedSmart(
-                                          2
-                                      )
-                                    : ''
-                            },
-                        },
-                        {
-                            title: '',
-                            width: 40,
-                            align: 'center',
-                            fixed: 'right',
-                            render: (_, record) => {
-                                return (
-                                    <div className="flex justify-center items-center">
-                                        {((record?.deadline &&
-                                            dayjs().isBefore(dayjs(record.deadline))) ||
-                                            role === 'P7') && (
-                                            <SquarePen
-                                                className="text-sm cursor-pointer m-1"
-                                                onClick={() =>
-                                                    openPutInternshipModal({
-                                                        studentInternshipId: record.id,
-                                                        role,
-                                                    })
-                                                }
-                                            />
-                                        )}
-                                    </div>
-                                )
-                            },
-                        },
-                    ]}
-                    data={studentInternshipData}
-                    rowKey="id"
-                    pagination={{
-                        current: currentPage,
-                        pageSize: numberOfPages,
-                        total: count,
-                        onChange: (page, pageSize) => {
-                            if (numberOfPages === pageSize) {
-                                setCurrentPage(page)
-                            } else {
-                                setCurrentPage(1)
-                                setNumberOfPages(pageSize)
-                            }
-                        },
-                    }}
-                />
-            </Col>
-        </Row>
-    )
+          </Row>
+        </Col>
+        <Table
+          scrollable={studentInternshipData.length > 0}
+          maxHeight={"calc(100vh - 330px)"}
+          rowSelection={{
+            selectedRowKeys,
+            preserveSelectedRowKeys: true,
+            onChange: (keys) => {
+              setSelectedRowKeys(keys)
+            },
+          }}
+          filters={filters}
+          setFilters={(value) => {
+            setFilters(value)
+            setCurrentPage(1)
+          }}
+          columns={[
+            {
+              title: "Hạn nhập",
+              width: 80,
+              align: "center",
+              fixed: "left",
+              render: (_, record) => {
+                return (
+                  <p
+                    className={cn(
+                      record?.deadline && dayjs().isAfter(dayjs(record.deadline))
+                        ? "text-red-600"
+                        : ""
+                    )}
+                  >
+                    {record?.deadline ? dayjs(record.deadline).format("DD/MM/YYYY") : ""}
+                  </p>
+                )
+              },
+            },
+            {
+              title: "Mã SV",
+              width: 100,
+              align: "center",
+              fixed: "left",
+              dataIndex: "code",
+              type: "input",
+              render: (_, record) => {
+                return record?.studentSubjectScore?.student?.code || ""
+              },
+            },
+            {
+              title: "Họ và tên",
+              width: 150,
+              align: "left",
+              fixed: "left",
+              dataIndex: "name",
+              type: "input",
+              render: (_, record) => {
+                return record?.studentSubjectScore?.student?.userProfile?.fullname
+              },
+            },
+            {
+              title: "Mã lớp môn học",
+              width: 150,
+              align: "center",
+              dataIndex: "subjectName",
+              type: "input",
+              render: (_, record) => {
+                return (
+                  <Tooltip title={record?.studentSubjectScore?.subjectClass?.name}>
+                    {record?.studentSubjectScore?.subjectClass?.code || ""}
+                  </Tooltip>
+                )
+              },
+            },
+            {
+              title: "Ngày sinh",
+              width: 80,
+              align: "center",
+              render: (_, record) => {
+                return record?.studentSubjectScore?.student?.userProfile?.dateOfBirth
+                  ? dayjs(record?.studentSubjectScore?.student?.userProfile?.dateOfBirth).format(
+                      "DD/MM/YYYY"
+                    )
+                  : ""
+              },
+            },
+            // {
+            //     title: 'Lớp môn học',
+            //     width: 150,
+            //     align: 'left',
+            //     render: (_, record) => {
+            //         return record?.subjectClass?.name || ''
+            //     },
+            // },
+            // {
+            //     title: 'STC',
+            //     width: 50,
+            //     align: 'center',
+            //     render: (_, record) => {
+            //         return record?.subjectVersion?.credit || ''
+            //     },
+            // },
+            {
+              title: "Cơ quan thực tập",
+              width: 170,
+              align: "left",
+              render: (_, record) => {
+                return record?.institution || ""
+              },
+            },
+            {
+              title: "Đơn vị thực tập",
+              width: 170,
+              align: "left",
+              render: (_, record) => {
+                return record?.unit || ""
+              },
+            },
+            {
+              title: "Địa chỉ đơn vị thực tập",
+              width: 250,
+              align: "left",
+              render: (_, record) => {
+                return record?.address || ""
+              },
+            },
+            // {
+            //     title: 'Tên thực tập',
+            //     width: 250,
+            //     align: 'left',
+            //     render: (_, record) => {
+            //         return record?.name || ''
+            //     },
+            // },
+            {
+              title: "Nội dung thực tập",
+              width: 300,
+              align: "left",
+              render: (_, record) => {
+                return record?.internshipContent || ""
+              },
+            },
+            {
+              title: <Tooltip title="Giảng viên hướng dẫn 1">GVHD1</Tooltip>,
+              width: 170,
+              align: "left",
+              render: (_, record) => {
+                return record?.supervisor?.lecturer
+                  ? [
+                      record?.supervisor?.lecturer?.userProfile.academicRankType?.sMa,
+                      record?.supervisor?.lecturer?.userProfile.academicDegreeType?.sMa,
+                      record?.supervisor?.lecturer?.userProfile.fullname,
+                    ]
+                      .filter(Boolean)
+                      .join(". ")
+                  : [
+                      record?.supervisor?.academicRank,
+                      record?.supervisor?.academicDegree,
+                      record?.supervisor?.name,
+                    ]
+                      .filter(Boolean)
+                      .join(". ")
+              },
+            },
+            {
+              title: <Tooltip title="Giảng viên hướng dẫn 2">GVHD2</Tooltip>,
+              width: 170,
+              align: "left",
+              render: (_, record) => {
+                return record?.coSupervisor?.lecturer
+                  ? [
+                      record?.coSupervisor?.lecturer?.userProfile?.academicRankType?.sMa,
+                      record?.coSupervisor?.lecturer?.userProfile?.academicDegreeType?.sMa,
+                      record?.coSupervisor?.lecturer?.userProfile?.fullname,
+                    ]
+                      .filter(Boolean)
+                      .join(". ")
+                  : [
+                      record?.coSupervisor?.academicRank,
+                      record?.coSupervisor?.academicDegree,
+                      record?.coSupervisor?.name,
+                    ]
+                      .filter(Boolean)
+                      .join(". ")
+              },
+            },
+            {
+              title: "Thời gian bắt đầu thực tập",
+              width: 150,
+              align: "center",
+              render: (_, record) => {
+                return record?.startDate ? dayjs(record?.startDate).format("DD/MM/YYYY") : ""
+              },
+            },
+            {
+              title: "Thời gian kết thúc thực tập",
+              width: 150,
+              align: "center",
+              render: (_, record) => {
+                return record?.endDate ? dayjs(record?.endDate).format("DD/MM/YYYY") : ""
+              },
+            },
+            {
+              title: "Thời gian báo cáo",
+              width: 150,
+              align: "center",
+              render: (_, record) => {
+                return record?.reportDate ? dayjs(record?.reportDate).format("DD/MM/YYYY") : ""
+              },
+            },
+            {
+              title: "Điểm",
+              width: 80,
+              align: "center",
+              fixed: "right",
+              render: (_, record) => {
+                return record?.studentSubjectScore?.finalScore
+                  ? Number(record?.studentSubjectScore?.finalScore).toFixedSmart(2)
+                  : ""
+              },
+            },
+            {
+              title: "",
+              width: 40,
+              align: "center",
+              fixed: "right",
+              render: (_, record) => {
+                return (
+                  <div className="flex justify-center items-center">
+                    {((record?.deadline && dayjs().isBefore(dayjs(record.deadline))) ||
+                      role === "P7") && (
+                      <SquarePen
+                        className="text-sm cursor-pointer m-1"
+                        onClick={() =>
+                          openPutInternshipModal({
+                            studentInternshipId: record.id,
+                            role,
+                          })
+                        }
+                      />
+                    )}
+                  </div>
+                )
+              },
+            },
+          ]}
+          data={studentInternshipData}
+          rowKey="id"
+          pagination={{
+            current: currentPage,
+            pageSize: numberOfPages,
+            total: count,
+            onChange: (page, pageSize) => {
+              if (numberOfPages === pageSize) {
+                setCurrentPage(page)
+              } else {
+                setCurrentPage(1)
+                setNumberOfPages(pageSize)
+              }
+            },
+          }}
+        />
+      </Col>
+    </Row>
+  )
 }
 ThucTap.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
+  return <DefaultLayout>{page}</DefaultLayout>
 }

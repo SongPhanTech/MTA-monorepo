@@ -1,2 +1,2 @@
-export { default as ability } from './ability'
-export { useAbility } from './hooks'
+export { default as ability } from "./ability"
+export { useAbility } from "./hooks"

@@ -1,10 +1,10 @@
 export type Session = {
-    userId: string
-    username: string
-    fullName: string
-    organizationId: string
-    sDM_NhanVienId: string
-    sDM_DonViId: string
+  userId: string
+  username: string
+  fullName: string
+  organizationId: string
+  sDM_NhanVienId: string
+  sDM_DonViId: string
 }
 
-export type SessionStatus = 'authenticated' | 'unauthenticated' | 'loading'
+export type SessionStatus = "authenticated" | "unauthenticated" | "loading"

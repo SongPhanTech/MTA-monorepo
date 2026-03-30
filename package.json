@@ -1,50 +1,49 @@
 {
-  "name": "mta-monorepo",
-  "private": true,
-  "scripts": {
-    "build": "turbo build",
-    "build:backend": "turbo run build --filter=backend",
-    "dev": "turbo dev",
-    "lint": "biome lint --fix",
-    "generate": "turbo run generate",
-    "generate:sql": "turbo run generate:sql",
-    "generate:router": "turbo run generate:router",
-    "generate:api": "turbo run generate:api && pnpm format",
-    "db:push": "turbo run db:push",
-    "db:sync": "turbo run db:sync",
-    "format": "biome format --write --verbose",
-    "check": "biome check --write --files-ignore-unknown=true --no-errors-on-unmatched --colors=off",
-    "lint-staged": "lint-staged"
-  },
-  "lint-staged": {
-    "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
-      "pnpm check"
-    ]
-  },
-  "devDependencies": {
-    "@biomejs/biome": "catalog:",
-    "@biomejs/cli-darwin-arm64": "^2.4.9",
-    "@commitlint/cli": "catalog:",
-    "@commitlint/config-conventional": "catalog:",
-    "@img/sharp-libvips-linux-x64": "1.0.4",
-    "@img/sharp-linux-x64": "0.33.5",
-    "husky": "catalog:",
-    "lint-staged": "catalog:",
-    "oxlint": "catalog:",
-    "turbo": "catalog:",
-    "typescript": "catalog:"
-  },
-  "engines": {
-    "node": ">=18"
-  },
-  "dependencies": {
-    "@hono/zod-openapi": "catalog:",
-    "esbuild": "catalog:"
-  },
-  "packageManager": "pnpm@10.32.1",
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "@paralleldrive/cuid2"
-    ]
-  }
+    "name": "mta-monorepo",
+    "private": true,
+    "scripts": {
+        "build": "turbo build",
+        "build:backend": "turbo run build --filter=backend",
+        "dev": "turbo dev",
+        "lint": "oxlint --fix",
+        "generate": "turbo run generate",
+        "generate:sql": "turbo run generate:sql",
+        "generate:router": "turbo run generate:router",
+        "generate:api": "turbo run generate:api && pnpm format",
+        "db:push": "turbo run db:push",
+        "db:sync": "turbo run db:sync",
+        "format": "oxfmt",
+        "check": "oxlint && oxfmt --check",
+        "lint-staged": "lint-staged"
+    },
+    "lint-staged": {
+        "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
+            "pnpm check"
+        ]
+    },
+    "devDependencies": {
+        "@commitlint/cli": "catalog:",
+        "@commitlint/config-conventional": "catalog:",
+        "@img/sharp-libvips-linux-x64": "1.0.4",
+        "@img/sharp-linux-x64": "0.33.5",
+        "husky": "catalog:",
+        "lint-staged": "catalog:",
+        "oxlint": "catalog:",
+
+        "turbo": "catalog:",
+        "typescript": "catalog:"
+    },
+    "engines": {
+        "node": ">=18"
+    },
+    "dependencies": {
+        "@hono/zod-openapi": "catalog:",
+        "esbuild": "catalog:"
+    },
+    "packageManager": "pnpm@10.32.1",
+    "pnpm": {
+        "onlyBuiltDependencies": [
+            "@paralleldrive/cuid2"
+        ]
+    }
 }

@@ -1,2 +1,2 @@
-import FilterSubjectClass from './filter-lop-mon-hoc'
+import FilterSubjectClass from "./filter-lop-mon-hoc"
 export { FilterSubjectClass }

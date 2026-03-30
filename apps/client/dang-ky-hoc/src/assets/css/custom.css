@@ -1,26 +1,26 @@
 .ant-table-body {
-    scrollbar-width: none;
-    scrollbar-color: rgba(180, 180, 180, 0.4) transparent;
+  scrollbar-width: none;
+  scrollbar-color: rgba(180, 180, 180, 0.4) transparent;
 }
 
 .ant-table-body::-webkit-scrollbar {
-    width: 6px;
-    background: transparent;
+  width: 6px;
+  background: transparent;
 }
 
 .ant-table-body:hover::-webkit-scrollbar {
-    width: 6px;
-    background: rgba(0, 0, 0, 0.1);
+  width: 6px;
+  background: rgba(0, 0, 0, 0.1);
 }
 
 .ant-table-body::-webkit-scrollbar-thumb {
-    visibility: hidden;
-    background-color: rgba(180, 180, 180, 0.4);
+  visibility: hidden;
+  background-color: rgba(180, 180, 180, 0.4);
 }
 
 .ant-table-body:hover::-webkit-scrollbar-thumb {
-    visibility: visible;
+  visibility: visible;
 }
 .ant-table-expanded-row:hover {
-    background-color: aliceblue;
+  background-color: aliceblue;
 }

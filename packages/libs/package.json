@@ -1,47 +1,47 @@
 {
-  "name": "@workspace/libs",
-  "version": "0.0.0",
-  "type": "module",
-  "private": true,
-  "exports": {
-    "./api/schemas": "./src/api/schemas/index.ts",
-    "./api/*": "./src/api/*.ts",
-    "./hook/*": "./src/hook/*.ts",
-    "./constants": "./src/constants.ts",
-    "./parseExcel": "./src/parseExcel.ts",
-    "./template-excel": "./src/template-excel.ts",
-    "./create-excel": "./src/create-excel.ts",
-    "./utils": "./src/utils.ts",
-    "./server": "./src/server.ts",
-    "./docxjs": "./src/docxjs.ts",
-    ".": "./src/index.ts"
-  },
-  "scripts": {
-    "generate:api": "orval"
-  },
-  "devDependencies": {
-    "@types/file-saver": "catalog:",
-    "@types/node": "catalog:",
-    "@types/react": "catalog:",
-    "@workspace/typescript-config": "workspace:*",
-    "orval": "catalog:",
-    "typescript": "catalog:"
-  },
-  "dependencies": {
-    "@tanstack/react-query": "catalog:",
-    "@workspace/db": "workspace:*",
-    "core-js": "catalog:",
-    "dayjs": "catalog:",
-    "decimal.js": "catalog:",
-    "docxtemplater": "catalog:",
-    "esm-env": "catalog:",
-    "exceljs": "catalog:",
-    "file-saver": "catalog:",
-    "hono": "catalog:",
-    "pizzip": "catalog:",
-    "react": "catalog:",
-    "read-vietnamese-number": "^2.3.0",
-    "xlsx": "catalog:",
-    "xlsx-template": "catalog:"
-  }
+    "name": "@workspace/libs",
+    "version": "0.0.0",
+    "type": "module",
+    "private": true,
+    "exports": {
+        "./api/schemas": "./src/api/schemas/index.ts",
+        "./api/*": "./src/api/*.ts",
+        "./hook/*": "./src/hook/*.ts",
+        "./constants": "./src/constants.ts",
+        "./parseExcel": "./src/parseExcel.ts",
+        "./template-excel": "./src/template-excel.ts",
+        "./create-excel": "./src/create-excel.ts",
+        "./utils": "./src/utils.ts",
+        "./server": "./src/server.ts",
+        "./docxjs": "./src/docxjs.ts",
+        ".": "./src/index.ts"
+    },
+    "scripts": {
+        "generate:api": "orval"
+    },
+    "devDependencies": {
+        "@types/file-saver": "catalog:",
+        "@types/node": "catalog:",
+        "@types/react": "catalog:",
+        "@workspace/typescript-config": "workspace:*",
+        "orval": "catalog:",
+        "typescript": "catalog:"
+    },
+    "dependencies": {
+        "@tanstack/react-query": "catalog:",
+        "@workspace/db": "workspace:*",
+        "core-js": "catalog:",
+        "dayjs": "catalog:",
+        "decimal.js": "catalog:",
+        "docxtemplater": "catalog:",
+        "esm-env": "catalog:",
+        "exceljs": "catalog:",
+        "file-saver": "catalog:",
+        "hono": "catalog:",
+        "pizzip": "catalog:",
+        "react": "catalog:",
+        "read-vietnamese-number": "^2.3.0",
+        "xlsx": "catalog:",
+        "xlsx-template": "catalog:"
+    }
 }

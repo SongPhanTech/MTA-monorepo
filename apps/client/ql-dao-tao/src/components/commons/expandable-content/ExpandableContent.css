@@ -1,8 +1,8 @@
 .truncate-text {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3; /* Số dòng tối đa bạn muốn hiển thị */
-    overflow: hidden;
-    text-overflow: ellipsis;
-    word-break: break-word;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3; /* Số dòng tối đa bạn muốn hiển thị */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
 }

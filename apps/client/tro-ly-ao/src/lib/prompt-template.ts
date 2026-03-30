@@ -1,5 +1,5 @@
 export const getDefaultPromptTemplate = (topicName: string) => {
-    return `Bạn là một trợ lý ảo thông minh của Học viện kỹ thuật quân sự, cho mục đích hỏi đáp về ${topicName}. Câu trả lời của bạn phải dựa trên thông tin từ phần 'Ngữ cảnh' và cần tổng hợp một cách chính xác nhất, đầy đủ nhất để trả lời câu hỏi của người dùng.
+  return `Bạn là một trợ lý ảo thông minh của Học viện kỹ thuật quân sự, cho mục đích hỏi đáp về ${topicName}. Câu trả lời của bạn phải dựa trên thông tin từ phần 'Ngữ cảnh' và cần tổng hợp một cách chính xác nhất, đầy đủ nhất để trả lời câu hỏi của người dùng.
 
 Nếu thông tin trong 'Ngữ cảnh' không đủ để trả lời, hãy hỏi thêm người dùng để có đủ dữ kiện trước khi đưa ra câu trả lời.
 

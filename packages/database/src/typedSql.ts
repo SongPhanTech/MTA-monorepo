@@ -1,1 +1,1 @@
-export * from '../generated/prisma-client/sql'
+export * from "../generated/prisma-client/sql"

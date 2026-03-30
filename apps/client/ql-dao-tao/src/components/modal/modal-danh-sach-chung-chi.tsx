@@ -1,11 +1,11 @@
-import Table from '@components/commons/table'
+import Table from "@components/commons/table"
 // import DeleteIcon from '@components/icons/delete'
 // import EditIcon from '@components/icons/edit'
-import { useArchivedCertificateStatusOptions } from '@hooks/paymentStatus'
-import useSpinner from '@hooks/spinner'
-import { formatDate } from '@lib/utils'
-import { useUpdateArchivedCertificate } from '@workspace/db/hooks'
-import { useAbility } from '@workspace/permissions/hooks'
+import { useArchivedCertificateStatusOptions } from "@hooks/paymentStatus"
+import useSpinner from "@hooks/spinner"
+import { formatDate } from "@lib/utils"
+import { useUpdateArchivedCertificate } from "@workspace/db/hooks"
+import { useAbility } from "@workspace/permissions/hooks"
 // import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { Button, DatePicker, Flex, InputNumber, Modal, Switch, Tag, message } from 'antd'
 import dayjs from 'dayjs'
@@ -51,22 +51,22 @@ const initializeDrafts = (certificates: any[]): DraftValues =>
     )
 
 const ModalDanhSachChungChi = () => {
-    const { can, canSome } = useAbility()
-    const { showSpinner, hideSpinner } = useSpinner()
+  const { can, canSome } = useAbility()
+  const { showSpinner, hideSpinner } = useSpinner()
 
-    const {
-        archivedCertificateStatusOptions,
-        getArchivedCertificateStatusStatusLabel,
-        getArchivedCertificateStatusColor,
-    } = useArchivedCertificateStatusOptions()
+  const {
+    archivedCertificateStatusOptions,
+    getArchivedCertificateStatusStatusLabel,
+    getArchivedCertificateStatusColor,
+  } = useArchivedCertificateStatusOptions()
 
-    const { isOpen, onClose, input } = useDisclosure<StudentCertificatesInput>({
-        tag: 'ModalDanhSachChungChi',
-    })
+  const { isOpen, onClose, input } = useDisclosure<StudentCertificatesInput>({
+    tag: "ModalDanhSachChungChi",
+  })
 
-    const { onOpen: onOpenEdit } = useDisclosure<string>({
-        tag: 'PutCertificateArchivedModal',
-    })
+  const { onOpen: onOpenEdit } = useDisclosure<string>({
+    tag: "PutCertificateArchivedModal",
+  })
 
     const { mutateAsync: updateArchivedCertificate } = useUpdateArchivedCertificate()
 
@@ -75,29 +75,29 @@ const ModalDanhSachChungChi = () => {
     const [editingCertId, setEditingCertId] = useState<string | null>(null)
     const [draftValues, setDraftValues] = useState<DraftValues>({})
 
-    async function handleDelete(id: string) {
-        try {
-            showSpinner()
-            await updateArchivedCertificate({
-                where: {
-                    id,
-                },
-                data: {
-                    status: 'CANCEL',
-                },
-            })
-            message.success('Xóa chứng chỉ thành công')
-            onClose()
-        } catch (error: any) {
-            if (error?.info?.message) {
-                message.error(error?.info?.message)
-                return
-            }
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        } finally {
-            hideSpinner()
-        }
+  async function handleDelete(id: string) {
+    try {
+      showSpinner()
+      await updateArchivedCertificate({
+        where: {
+          id,
+        },
+        data: {
+          status: "CANCEL",
+        },
+      })
+      message.success("Xóa chứng chỉ thành công")
+      onClose()
+    } catch (error: any) {
+      if (error?.info?.message) {
+        message.error(error?.info?.message)
+        return
+      }
+      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+    } finally {
+      hideSpinner()
     }
+  }
 
     const certificates = input?.certificates || []
 

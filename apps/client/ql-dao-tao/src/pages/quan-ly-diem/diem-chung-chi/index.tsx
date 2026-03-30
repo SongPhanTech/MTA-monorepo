@@ -1,10 +1,10 @@
-import { DownloadOutlined } from '@ant-design/icons'
-import Table from '@components/commons/table'
-import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import type { FilterProps } from '@constants/type'
-import useSpinner from '@hooks/spinner'
-import DefaultLayout from '@layouts/default-layout'
-import type { FixedClass, TrainingCourse } from '@workspace/db/client'
+import { DownloadOutlined } from "@ant-design/icons"
+import Table from "@components/commons/table"
+import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
+import type { FilterProps } from "@constants/type"
+import useSpinner from "@hooks/spinner"
+import DefaultLayout from "@layouts/default-layout"
+import type { FixedClass, TrainingCourse } from "@workspace/db/client"
 import {
     useCountArchivedCertificate,
     useFindManyArchivedCertificate,
@@ -31,75 +31,75 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import EditIcon from '../../../../../dang-ky-hoc/src/components/icons/edit'
 
 export default function ArchivedCertificate() {
-    const { can } = useAbility()
-    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
-    const [currentPage, setCurrentPage] = useState(1)
-    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [filters, setFilters] = useState<FilterProps>({
-        name: '',
-        count: undefined,
-        trainingCourseId: undefined,
-        fixedClassId: undefined,
-        certificateId: undefined,
-    })
+  const { can } = useAbility()
+  const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+  const [currentPage, setCurrentPage] = useState(1)
+  const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+  const [filters, setFilters] = useState<FilterProps>({
+    name: "",
+    count: undefined,
+    trainingCourseId: undefined,
+    fixedClassId: undefined,
+    certificateId: undefined,
+  })
 
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const [showLanguageScoreColumns, setShowLanguageScoreColumns] = useState(true)
     const [isExportModalOpen, setIsExportModalOpen] = useState(false)
     const [exportTrainingCourseId, setExportTrainingCourseId] = useState<string | undefined>()
 
-    const { showSpinner, hideSpinner } = useSpinner()
+  const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data: trainingCourseData = [] } = useFindManyTrainingCourse(
-        {
-            where: {
-                trainingObjectTypeId,
-                deletedAt: null,
-                active: true,
-            },
-            orderBy: {
-                semesterStart: {
-                    startDate: 'desc',
-                },
-            },
+  const { data: trainingCourseData = [] } = useFindManyTrainingCourse(
+    {
+      where: {
+        trainingObjectTypeId,
+        deletedAt: null,
+        active: true,
+      },
+      orderBy: {
+        semesterStart: {
+          startDate: "desc",
         },
-        { enabled: !!trainingObjectTypeId }
-    )
+      },
+    },
+    { enabled: !!trainingObjectTypeId }
+  )
 
-    const { data: fixedClassData = [] } = useFindManyFixedClass(
-        {
-            where: {
-                trainingCourse: {
-                    trainingObjectTypeId,
-                    deletedAt: null,
-                    active: true,
-                    ...(filters.trainingCourseId ? { id: filters.trainingCourseId } : {}),
-                },
-            },
-            include: {
-                trainingCourse: true,
-            },
+  const { data: fixedClassData = [] } = useFindManyFixedClass(
+    {
+      where: {
+        trainingCourse: {
+          trainingObjectTypeId,
+          deletedAt: null,
+          active: true,
+          ...(filters.trainingCourseId ? { id: filters.trainingCourseId } : {}),
         },
-        { enabled: !!trainingObjectTypeId }
-    )
+      },
+      include: {
+        trainingCourse: true,
+      },
+    },
+    { enabled: !!trainingObjectTypeId }
+  )
 
-    const { data: trainingFieldData = [] } = useFindManyTrainingField()
+  const { data: trainingFieldData = [] } = useFindManyTrainingField()
 
-    const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
-        orderBy: { name: 'asc' },
-    })
+  const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
+    orderBy: { name: "asc" },
+  })
 
-    const { data: TrainingCurriculumVersionData = [] } = useFindManyCurriculumVersion({
-        orderBy: { name: 'asc' },
-    })
+  const { data: TrainingCurriculumVersionData = [] } = useFindManyCurriculumVersion({
+    orderBy: { name: "asc" },
+  })
 
-    const { data: certificatesData = [] } = useFindManyCertificate({
-        orderBy: { name: 'asc' },
-    })
+  const { data: certificatesData = [] } = useFindManyCertificate({
+    orderBy: { name: "asc" },
+  })
 
-    const { onOpen, onClose } = useDisclosure<string>({
-        tag: 'PutCertificateArchivedModal',
-    })
+  const { onOpen, onClose } = useDisclosure<string>({
+    tag: "PutCertificateArchivedModal",
+  })
 
     const { onOpen: onOpenCertificateList } = useDisclosure<{
         studentId: string
@@ -110,251 +110,251 @@ export default function ArchivedCertificate() {
         tag: 'ModalDanhSachChungChi',
     })
 
-    const { onOpen: onOpenConvertCertificate } = useDisclosure<{
-        studentIds: string[]
-        studentNames: string[]
-    }>({
-        tag: 'ModalChuyenDoiChungChiThanhDiem',
-    })
+  const { onOpen: onOpenConvertCertificate } = useDisclosure<{
+    studentIds: string[]
+    studentNames: string[]
+  }>({
+    tag: "ModalChuyenDoiChungChiThanhDiem",
+  })
 
-    const handleModal = () => {
-        onOpen()
+  const handleModal = () => {
+    onOpen()
+  }
+
+  const { mutateAsync: updateArchivedCertificate } = useUpdateArchivedCertificate()
+  const { mutateAsync: updateManyArchivedCertificate } = useUpdateManyArchivedCertificate()
+
+  const where = useMemo(() => {
+    const conditions: any = {
+      deletedAt: null,
     }
 
-    const { mutateAsync: updateArchivedCertificate } = useUpdateArchivedCertificate()
-    const { mutateAsync: updateManyArchivedCertificate } = useUpdateManyArchivedCertificate()
+    // Điều kiện lọc theo sinh viên
+    const studentCondition: any = {}
 
-    const where = useMemo(() => {
-        const conditions: any = {
-            deletedAt: null,
-        }
+    if (filters.name) {
+      studentCondition.userProfile = {
+        fullname: {
+          contains: filters.name,
+          mode: "insensitive" as const,
+        },
+      }
+    }
 
-        // Điều kiện lọc theo sinh viên
-        const studentCondition: any = {}
+    if ((filters as any).code) {
+      studentCondition.userProfile = {
+        ...studentCondition.userProfile,
+        code: {
+          contains: (filters as any).code,
+          mode: "insensitive" as const,
+        },
+      }
+    }
 
-        if (filters.name) {
-            studentCondition.userProfile = {
-                fullname: {
-                    contains: filters.name,
-                    mode: 'insensitive' as const,
-                },
-            }
-        }
+    if ((filters as any).phone) {
+      studentCondition.userProfile = {
+        ...studentCondition.userProfile,
+        phoneNumber: {
+          contains: (filters as any).phone,
+          mode: "insensitive" as const,
+        },
+      }
+    }
 
-        if ((filters as any).code) {
-            studentCondition.userProfile = {
-                ...studentCondition.userProfile,
-                code: {
-                    contains: (filters as any).code,
-                    mode: 'insensitive' as const,
-                },
-            }
-        }
+    const fixedClassCondition: any = {}
 
-        if ((filters as any).phone) {
-            studentCondition.userProfile = {
-                ...studentCondition.userProfile,
-                phoneNumber: {
-                    contains: (filters as any).phone,
-                    mode: 'insensitive' as const,
-                },
-            }
-        }
+    const hasValue = (val: any) => {
+      if (Array.isArray(val)) return val.length > 0
+      return val !== undefined && val !== null && val !== ""
+    }
 
-        const fixedClassCondition: any = {}
+    if (hasValue(filters.trainingCourseId)) {
+      if (Array.isArray(filters.trainingCourseId)) {
+        fixedClassCondition.trainingCourseId = { in: filters.trainingCourseId }
+      } else {
+        fixedClassCondition.trainingCourseId = filters.trainingCourseId
+      }
+    } else {
+      fixedClassCondition.trainingCourse = {
+        trainingObjectTypeId,
+        deletedAt: null,
+        active: true,
+      }
+    }
 
-        const hasValue = (val: any) => {
-            if (Array.isArray(val)) return val.length > 0
-            return val !== undefined && val !== null && val !== ''
-        }
+    if (hasValue((filters as any).trainingMajorId)) {
+      const val = (filters as any).trainingMajorId
+      fixedClassCondition.curriculumVersion = {
+        curriculum: {
+          trainingMajorId: Array.isArray(val) ? { in: val } : val,
+        },
+      }
+    }
 
-        if (hasValue(filters.trainingCourseId)) {
-            if (Array.isArray(filters.trainingCourseId)) {
-                fixedClassCondition.trainingCourseId = { in: filters.trainingCourseId }
-            } else {
-                fixedClassCondition.trainingCourseId = filters.trainingCourseId
-            }
-        } else {
-            fixedClassCondition.trainingCourse = {
-                trainingObjectTypeId,
-                deletedAt: null,
-                active: true,
-            }
-        }
+    if (hasValue((filters as any).trainingFieldId)) {
+      const val = (filters as any).trainingFieldId
+      fixedClassCondition.curriculumVersion = {
+        ...fixedClassCondition.curriculumVersion,
+        curriculum: {
+          ...fixedClassCondition.curriculumVersion?.curriculum,
+          trainingMajor: {
+            trainingFieldId: Array.isArray(val) ? { in: val } : val,
+          },
+        },
+      }
+    }
 
-        if (hasValue((filters as any).trainingMajorId)) {
-            const val = (filters as any).trainingMajorId
-            fixedClassCondition.curriculumVersion = {
-                curriculum: {
-                    trainingMajorId: Array.isArray(val) ? { in: val } : val,
-                },
-            }
-        }
+    if (hasValue(filters.fixedClassId)) {
+      if (Array.isArray(filters.fixedClassId)) {
+        studentCondition.fixedClassId = { in: filters.fixedClassId }
+      } else {
+        studentCondition.fixedClassId = filters.fixedClassId
+      }
+    }
 
-        if (hasValue((filters as any).trainingFieldId)) {
-            const val = (filters as any).trainingFieldId
-            fixedClassCondition.curriculumVersion = {
-                ...fixedClassCondition.curriculumVersion,
-                curriculum: {
-                    ...fixedClassCondition.curriculumVersion?.curriculum,
-                    trainingMajor: {
-                        trainingFieldId: Array.isArray(val) ? { in: val } : val,
-                    },
-                },
-            }
-        }
+    if (Object.keys(fixedClassCondition).length > 0) {
+      studentCondition.fixedClass = fixedClassCondition
+    }
 
-        if (hasValue(filters.fixedClassId)) {
-            if (Array.isArray(filters.fixedClassId)) {
-                studentCondition.fixedClassId = { in: filters.fixedClassId }
-            } else {
-                studentCondition.fixedClassId = filters.fixedClassId
-            }
-        }
+    if (Object.keys(studentCondition).length > 0) {
+      conditions.student = studentCondition
+    }
 
-        if (Object.keys(fixedClassCondition).length > 0) {
-            studentCondition.fixedClass = fixedClassCondition
-        }
+    // Lọc theo chứng chỉ (top-level)
+    if (filters.certificateId) {
+      conditions.certificateId = filters.certificateId
+    }
 
-        if (Object.keys(studentCondition).length > 0) {
-            conditions.student = studentCondition
-        }
+    // Lọc theo số quyết định
+    if ((filters as any).decisionNumber) {
+      conditions.decisionNumber = {
+        contains: (filters as any).decisionNumber,
+        mode: "insensitive" as const,
+      }
+    }
 
-        // Lọc theo chứng chỉ (top-level)
-        if (filters.certificateId) {
-            conditions.certificateId = filters.certificateId
-        }
+    return conditions
+  }, [filters, trainingObjectTypeId])
 
-        // Lọc theo số quyết định
-        if ((filters as any).decisionNumber) {
-            conditions.decisionNumber = {
-                contains: (filters as any).decisionNumber,
-                mode: 'insensitive' as const,
-            }
-        }
-
-        return conditions
-    }, [filters, trainingObjectTypeId])
-
-    // Lấy danh sách ArchivedCertificate
-    const { data: dataTable = [], refetch } = useFindManyArchivedCertificate({
-        where,
+  // Lấy danh sách ArchivedCertificate
+  const { data: dataTable = [], refetch } = useFindManyArchivedCertificate({
+    where,
+    include: {
+      certificate: true,
+      studentSubjectScore: true,
+      documentFiles: true,
+      student: {
         include: {
-            certificate: true,
-            studentSubjectScore: true,
-            documentFiles: true,
-            student: {
+          userProfile: {
+            include: { rank: true },
+          },
+          fixedClass: {
+            include: {
+              trainingCourse: {
                 include: {
-                    userProfile: {
-                        include: { rank: true },
-                    },
-                    fixedClass: {
-                        include: {
-                            trainingCourse: {
-                                include: {
-                                    trainingObjectType: true,
-                                },
-                            },
-                            curriculumVersion: {
-                                include: {
-                                    curriculum: {
-                                        include: {
-                                            trainingMajor: {
-                                                include: {
-                                                    trainingField: true,
-                                                },
-                                            },
-                                        },
-                                    },
-                                },
-                            },
-                        },
-                    },
+                  trainingObjectType: true,
                 },
-            },
-        },
-        orderBy: {
-            createdAt: 'desc',
-        },
-        take: numberOfPages,
-        skip: (currentPage - 1) * numberOfPages,
-    })
-
-    const debouncedRefetch = useCallback(
-        _.debounce(() => {
-            refetch()
-        }, 500),
-        []
-    )
-
-    const { data: count } = useCountArchivedCertificate({
-        where,
-    })
-
-    const rowSelection = {
-        selectedRowKeys,
-        getCheckboxProps: (record: any) => ({
-            disabled: record.status === 'APPROVED' || record.status === 'REJECTED',
-        }),
-        onChange: (newSelectedRowKeys: React.Key[]) => {
-            setSelectedRowKeys(newSelectedRowKeys)
-        },
-    }
-
-    const handleOpenAprove = () => {
-        Modal.confirm({
-            title: 'Xác nhận',
-            content: 'Bạn có chắc chắn muốn phê duyệt không?',
-            okText: 'Xác nhận',
-            cancelText: 'Hủy',
-            onOk: async () => {
-                handleApprove('APPROVED')
-            },
-        })
-    }
-    const handleOpenReject = () => {
-        Modal.confirm({
-            title: 'Xác nhận',
-            content: 'Bạn có chắc chắn muốn từ chối không?',
-            okText: 'Xác nhận',
-            cancelText: 'Hủy',
-            onOk: async () => {
-                handleApprove('REJECTED')
-            },
-        })
-    }
-    const { mutateAsync: updateCertificateScore } = useCertificateScore()
-
-    const handleApprove = async (status: 'APPROVED' | 'REJECTED') => {
-        try {
-            if (selectedRowKeys?.length > 0) {
-                // Các row đã chọn chính là ArchivedCertificate, lọc những cái PENDING
-                const certificateIds = (selectedRowKeys as string[]).filter((certId) => {
-                    const cert = dataTable.find((c: any) => c.id === certId)
-                    return cert?.status === 'PENDING'
-                })
-
-                if (status === 'REJECTED') {
-                    if (certificateIds.length === 0) {
-                        message.warning('Không có chứng chỉ nào cần từ chối')
-                        return
-                    }
-                    await updateManyArchivedCertificate({
-                        where: {
-                            id: { in: certificateIds },
+              },
+              curriculumVersion: {
+                include: {
+                  curriculum: {
+                    include: {
+                      trainingMajor: {
+                        include: {
+                          trainingField: true,
                         },
-                        data: { status: 'REJECTED' },
-                    })
-                    message.success('Từ chối thành công')
-                    refetch()
-                    setSelectedRowKeys([])
-                    return
-                }
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+    take: numberOfPages,
+    skip: (currentPage - 1) * numberOfPages,
+  })
 
-                if (certificateIds.length === 0) {
-                    message.warning('Không có chứng chỉ nào cần phê duyệt')
-                    return
-                }
+  const debouncedRefetch = useCallback(
+    _.debounce(() => {
+      refetch()
+    }, 500),
+    []
+  )
+
+  const { data: count } = useCountArchivedCertificate({
+    where,
+  })
+
+  const rowSelection = {
+    selectedRowKeys,
+    getCheckboxProps: (record: any) => ({
+      disabled: record.status === "APPROVED" || record.status === "REJECTED",
+    }),
+    onChange: (newSelectedRowKeys: React.Key[]) => {
+      setSelectedRowKeys(newSelectedRowKeys)
+    },
+  }
+
+  const handleOpenAprove = () => {
+    Modal.confirm({
+      title: "Xác nhận",
+      content: "Bạn có chắc chắn muốn phê duyệt không?",
+      okText: "Xác nhận",
+      cancelText: "Hủy",
+      onOk: async () => {
+        handleApprove("APPROVED")
+      },
+    })
+  }
+  const handleOpenReject = () => {
+    Modal.confirm({
+      title: "Xác nhận",
+      content: "Bạn có chắc chắn muốn từ chối không?",
+      okText: "Xác nhận",
+      cancelText: "Hủy",
+      onOk: async () => {
+        handleApprove("REJECTED")
+      },
+    })
+  }
+  const { mutateAsync: updateCertificateScore } = useCertificateScore()
+
+  const handleApprove = async (status: "APPROVED" | "REJECTED") => {
+    try {
+      if (selectedRowKeys?.length > 0) {
+        // Các row đã chọn chính là ArchivedCertificate, lọc những cái PENDING
+        const certificateIds = (selectedRowKeys as string[]).filter((certId) => {
+          const cert = dataTable.find((c: any) => c.id === certId)
+          return cert?.status === "PENDING"
+        })
+
+        if (status === "REJECTED") {
+          if (certificateIds.length === 0) {
+            message.warning("Không có chứng chỉ nào cần từ chối")
+            return
+          }
+          await updateManyArchivedCertificate({
+            where: {
+              id: { in: certificateIds },
+            },
+            data: { status: "REJECTED" },
+          })
+          message.success("Từ chối thành công")
+          refetch()
+          setSelectedRowKeys([])
+          return
+        }
+
+        if (certificateIds.length === 0) {
+          message.warning("Không có chứng chỉ nào cần phê duyệt")
+          return
+        }
 
                 const res = await updateCertificateScore({
                     data: { archivedCertificateIds: certificateIds },
@@ -442,13 +442,13 @@ export default function ArchivedCertificate() {
         }
     }
 
-    return (
-        <Row gutter={[16, 0]}>
-            <Col span={24}>
-                <Row gutter={[16, 16]} align="top" justify="space-between">
-                    <Col span={4}>
-                        <Flex gap={8}>
-                            {/* <Select
+  return (
+    <Row gutter={[16, 0]}>
+      <Col span={24}>
+        <Row gutter={[16, 16]} align="top" justify="space-between">
+          <Col span={4}>
+            <Flex gap={8}>
+              {/* <Select
                                 className="w-full"
                                 placeholder="Chọn khóa học"
                                 options={trainingCourseData
@@ -896,5 +896,5 @@ export default function ArchivedCertificate() {
 }
 
 ArchivedCertificate.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
+  return <DefaultLayout>{page}</DefaultLayout>
 }

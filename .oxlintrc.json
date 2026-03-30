@@ -1,51 +1,42 @@
 {
-  "$schema": "https://raw.githubusercontent.com/oxc-project/oxc/refs/heads/main/npm/oxlint/configuration_schema.json",
-  "files": {
-    "ignorePatterns": [
-      "**/apps/backup/**/*",
-      "**/.vscode",
-      "**/package.json",
-      "**/.next/**/*",
-      "**/generated/**/*",
-      "**/open-api/**/*",
-      "**/*.json",
-      "**/lib/api/**/*",
-      "**/packages/libs/src/api/schemas/**/*",
-      "**/.env",
-      "**/.env.*"
-    ]
-  },
-  "linter": {
-    "enable": true,
-    "rules": {
-      "import/no-unused-modules": "error",
-      "typescript/no-unused-vars": "off",
-      "typescript/no-unused-params": "off",
-      "react-hooks/exhaustive-deps": "warn",
-      "typescript/ban-types": "off",
-      "security/detect-object-injection": "off",
-      "typescript/no-explicit-any": "off",
-      "typescript/no-parameter-reassignment": "error",
-      "typescript/prefer-as-const": "error",
-      "typescript/default-param-last": "error",
-      "react/self-closing-comp": "error",
-      "typescript/no-unnecessary-type-assertion": "error",
-      "typescript/prefer-namespace-keyword": "error",
-      "typescript/no-inferrable-types": "error"
+    "$schema": "https://raw.githubusercontent.com/oxc-project/oxc/refs/heads/main/npm/oxlint/configuration_schema.json",
+    "files": {
+        "ignorePatterns": [
+            "**/*.umd.js",
+            "**/apps/backup/**/*",
+            "**/.vscode",
+            "**/package.json",
+            "**/.next/**/*",
+            "**/out/**/*",
+            "**/generated/**/*",
+            "**/open-api/**/*",
+            "**/*.json",
+            "**/lib/api/**/*",
+            "**/packages/libs/src/api/schemas/**/*",
+            "**/.env",
+            "**/.env.*",
+            "**/public"
+        ]
+    },
+    "linter": {
+        "enable": true,
+        "rules": {
+            "typescript/no-unused-vars": "off",
+            "typescript/no-unused-params": "off",
+            "react-hooks/exhaustive-deps": "warn",
+            "typescript/ban-types": "off",
+            "react/no-danger": "off",
+            "typescript/no-explicit-any": "off",
+            "eslint/no-param-reassign": "error",
+            "typescript/prefer-as-const": "error",
+            "typescript/default-param-last": "error",
+            "typescript/prefer-enum-initializers": "error",
+            "react/self-closing-comp": "error",
+            "eslint/one-var": ["error", "never"],
+            "eslint/no-useless-concat": "error",
+            "unicorn/prefer-number-properties": "error",
+            "typescript/no-inferrable-types": "error",
+            "eslint/no-else-return": "error"
+        }
     }
-  },
-  "formatter": {
-    "enable": true,
-    "indentType": "space",
-    "indentSize": 4,
-    "lineEnding": "lf",
-    "printWidth": 100,
-    "singleQuote": true,
-    "trailingComma": "es5",
-    "semicolons": false,
-    "arrowParens": "always",
-    "bracketSpacing": true,
-    "bracketSameLine": false,
-    "jsxSingleQuote": false
-  }
 }
