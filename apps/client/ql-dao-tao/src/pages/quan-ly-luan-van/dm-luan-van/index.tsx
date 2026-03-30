@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/a11y/useKeyWithClickEvents: <explanation> */
 import Select from "@components/commons/select"
 import Table from "@components/commons/table"
 import ApproveIcon from "@components/icons/approve"
@@ -10,6 +11,7 @@ import { buildOrgTree } from "@lib/utils"
 import {
   CouncilProposalStatus,
   CouncilRole,
+  FixedClassType,
   ThesisProjectStatus,
   ThesisType,
 } from "@workspace/db/client"
@@ -69,15 +71,15 @@ interface ThesisProjectForm {
   thesisSessionId: string
   fixedClassId: string[]
   organizationId: string
+  
 }
 
 export interface DanhMucLuanVanProps {
-  role?: "P7" | "P2"
-  isManage?: boolean
+  role?: "P7" | "Khoa"
 }
 const { TextArea } = Input
 
-export default function DanhMucLuanVan({ role = "P7", isManage = false }: DanhMucLuanVanProps) {
+export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
   const [form] = Form.useForm<ThesisProjectForm>()
   const [searchParams, setSearchParams] = useState<Partial<ThesisProjectForm>>({})
   const { showSpinner, hideSpinner } = useSpinner()
@@ -135,7 +137,7 @@ export default function DanhMucLuanVan({ role = "P7", isManage = false }: DanhMu
       },
     },
   })
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <ignore>
+  // biome-ignore lint/correctness/useExhaustiveDependencies: dùng cho searchParams
   const studentWhere = useMemo(() => {
     if (!searchParams.thesisSessionId) return { id: { in: [] } }
 
@@ -158,7 +160,7 @@ export default function DanhMucLuanVan({ role = "P7", isManage = false }: DanhMu
     }
   }, [searchParams, fixedClasses])
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <ignore>
+  // biome-ignore lint/correctness/useExhaustiveDependencies: dùng cho searchParams
   const allStudentWhere = useMemo(() => {
     if (!searchParams.thesisSessionId) return { id: { in: [] } }
     const filter = {
@@ -210,6 +212,13 @@ export default function DanhMucLuanVan({ role = "P7", isManage = false }: DanhMu
     where: allStudentWhere,
     include: {
       userProfile: true,
+      curriculumVersion: {
+        include: {
+          curriculum: {
+            include: { managementOrganization: true },
+          },
+        },
+      },
       fixedClass: {
         include: {
           trainingCourse: {
@@ -312,10 +321,20 @@ export default function DanhMucLuanVan({ role = "P7", isManage = false }: DanhMu
   }
 
   const taodulieumau = async () => {
+    const thesisSessionId = searchParams.thesisSessionId?.trim()
+    if (!thesisSessionId) {
+      message.warning("Vui lòng chọn đợt luận văn trước khi tạo dữ liệu mẫu.")
+      return
+    }
     showSpinner()
     const createPromises = allStudentsInClasses?.map(async (student) => {
+      const fixedClassType = student.fixedClass?.classType
+      const organizationId = student.curriculumVersion?.curriculum?.managementOrganizationId
+      const thesisTypeForStudent =
+        fixedClassType === FixedClassType.APPLICATION ? ThesisType.PROJECT : ThesisType.THESIS
+      const typeLabel = thesisTypeForStudent === ThesisType.PROJECT ? "Đề án" : "Luận văn"
       const hasThesisRegistration = student.thesisRegistrations?.some(
-        (registration) => registration.thesisProject?.thesisType === ThesisType.THESIS
+        (registration) => registration.thesisProject?.thesisType === thesisTypeForStudent
       )
       if (hasThesisRegistration) {
         return null
@@ -326,13 +345,20 @@ export default function DanhMucLuanVan({ role = "P7", isManage = false }: DanhMu
         titleEN: "",
         maxStudents: 1,
         language: "Tiếng Việt",
-        type: "Luận văn",
+        type: typeLabel,
+        organization: organizationId
+          ? {
+              connect: {
+                Id: organizationId,
+              },
+            }
+          : { disconnect: true },
         thesisSession: {
           connect: {
-            id: searchParams?.thesisSessionId ?? "",
+            id: thesisSessionId,
           },
         },
-        thesisType: ThesisType.THESIS,
+        thesisType: thesisTypeForStudent,
         librarySubmission: {
           create: {
             isHardcopy: false,
@@ -367,12 +393,11 @@ export default function DanhMucLuanVan({ role = "P7", isManage = false }: DanhMu
       return { response, responseRegistration }
     })
     try {
-      const validPromises = (createPromises || []).filter((p) => p !== null)
-      await Promise.all(validPromises)
-      const skippedCount = (createPromises?.length || 0) - validPromises.length
+      const results = await Promise.all(createPromises || [])
+      const skippedCount = results.filter((r) => r === null).length
       if (skippedCount > 0) {
         message.success(
-          `Tạo dữ liệu mẫu thành công. Đã bỏ qua ${skippedCount} sinh viên đã có luận văn.`
+          `Tạo dữ liệu mẫu thành công. Đã bỏ qua ${skippedCount} sinh viên đã có luận văn/đề án.`
         )
       } else {
         message.success("Tạo dữ liệu mẫu thành công")
@@ -406,9 +431,7 @@ export default function DanhMucLuanVan({ role = "P7", isManage = false }: DanhMu
 
         const description = `Ngôn ngữ: ${rowData.language} - Luận án/Đề án: ${rowData.type}`
         const status = rowData.status
-        // if (status === ThesisProjectStatus.PROPOSED && isManage) {
-        //     status = ThesisProjectStatus.APPROVED_BY_DEPT
-        // }
+
         const councilMembersData = [
           { role: CouncilRole.CHAIRMAN, expertId: rowData.councilChairman },
           { role: CouncilRole.SECRETARY, expertId: rowData.councilSecretary },
@@ -542,6 +565,7 @@ export default function DanhMucLuanVan({ role = "P7", isManage = false }: DanhMu
     setEditingValues(initialEditingValues)
   }
   // hàm xử lý lấy ra danh sách button
+  const [selectedPrintTemplateId, setSelectedPrintTemplateId] = useState<string | undefined>(undefined)
   const buttonList = [
     {
       id: 1,
@@ -743,6 +767,21 @@ export default function DanhMucLuanVan({ role = "P7", isManage = false }: DanhMu
         }),
     },
   ]
+
+  const handleExportExcelFromTemplate = async () => {
+    if (!selectedPrintTemplateId) {
+      message.warning("Vui lòng chọn mẫu in trước khi xuất excel.")
+      return
+    }
+
+    const selected = buttonList.find((i) => String(i.id) === selectedPrintTemplateId)
+    if (!selected || selected.disabled) {
+      message.warning("Mẫu in hiện không khả dụng.")
+      return
+    }
+
+    await selected.onClick()
+  }
   return (
     <div>
       <Row gutter={[8, 0]}>
@@ -843,7 +882,7 @@ export default function DanhMucLuanVan({ role = "P7", isManage = false }: DanhMu
                       </Button>
                     </Popconfirm>
 
-                    {editingRowKeys.length > 0 && (isManage || role === "P7") ? (
+                    {editingRowKeys.length > 0 && role === "P7" ? (
                       <>
                         <Button
                           type="default"
@@ -893,19 +932,29 @@ export default function DanhMucLuanVan({ role = "P7", isManage = false }: DanhMu
           </Row>
           <Row gutter={[8, 8]}>
             <Col>
-              <Flex gap={4} wrap="wrap">
-                {buttonList.map((item) => (
-                  <Button
-                    key={item.id}
-                    type="primary"
-                    onClick={async () => await item.onClick()}
-                    disabled={item.disabled}
-                  >
-                    {item.id}. {item.label}
-                  </Button>
-                ))}
+              <Flex gap={8} align="center" wrap="wrap">
+                <Select
+                  className="w-72"
+                  placeholder="Chọn mẫu in"
+                  dropdownMatchSelectWidth={false}
+                  options={buttonList.map((item) => ({
+                    label: `${item.id}. ${item.label}`,
+                    value: String(item.id),
+                    disabled: item.disabled,
+                  }))}
+                  value={selectedPrintTemplateId}
+                  onChange={(value) => setSelectedPrintTemplateId(value ? String(value) : undefined)}
+                />
+                <Button
+                  type="primary"
+                  onClick={handleExportExcelFromTemplate}
+                  disabled={!selectedPrintTemplateId}
+                >
+                  Xuất Excel
+                </Button>
               </Flex>
             </Col>
+
           </Row>
         </Col>
 
@@ -923,7 +972,7 @@ export default function DanhMucLuanVan({ role = "P7", isManage = false }: DanhMu
                 fixed: "left",
                 render: (_, record) => {
                   const status = record?.thesisRegistrations?.[0]?.thesisProject?.status || ""
-                  if (editingRowKeys.includes(record?.id) && (isManage || role === "P7")) {
+                  if (editingRowKeys.includes(record?.id) && role === "P7") {
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <TreeSelect
@@ -995,7 +1044,7 @@ export default function DanhMucLuanVan({ role = "P7", isManage = false }: DanhMu
                 dataIndex: "title",
                 render: (_, record) => {
                   const status = record?.thesisRegistrations?.[0]?.thesisProject?.status || ""
-                  if (editingRowKeys.includes(record?.id) && (isManage || role === "P7")) {
+                  if (editingRowKeys.includes(record?.id) && role === "P7") {
                     const currentValue =
                       editingValues[record?.id]?.title !== undefined
                         ? editingValues[record?.id]?.title
@@ -1028,7 +1077,7 @@ export default function DanhMucLuanVan({ role = "P7", isManage = false }: DanhMu
                 dataIndex: "supervisor",
                 render: (_, record) => {
                   const status = record?.thesisRegistrations?.[0]?.thesisProject?.status || ""
-                  if (editingRowKeys.includes(record?.id) && (isManage || role === "P7")) {
+                  if (editingRowKeys.includes(record?.id) && role === "P7") {
                     const currentValue =
                       editingValues[record?.id]?.supervisor !== undefined
                         ? editingValues[record?.id]?.supervisor
@@ -1059,7 +1108,7 @@ export default function DanhMucLuanVan({ role = "P7", isManage = false }: DanhMu
                 dataIndex: "coSupervisor",
                 render: (_, record) => {
                   const status = record?.thesisRegistrations?.[0]?.thesisProject?.status || ""
-                  if (editingRowKeys.includes(record?.id) && (isManage || role === "P7")) {
+                  if (editingRowKeys.includes(record?.id) && role === "P7") {
                     const currentValue =
                       editingValues[record?.id]?.coSupervisor !== undefined
                         ? editingValues[record?.id]?.coSupervisor
@@ -1438,7 +1487,7 @@ export default function DanhMucLuanVan({ role = "P7", isManage = false }: DanhMu
                 width: 100,
                 dataIndex: "language",
                 render: (_, record) => {
-                  if (editingRowKeys.includes(record?.id) && isManage) {
+                  if (editingRowKeys.includes(record?.id) ) {
                     const currentValue =
                       editingValues[record?.id]?.language !== undefined
                         ? editingValues[record?.id]?.language
@@ -1460,7 +1509,7 @@ export default function DanhMucLuanVan({ role = "P7", isManage = false }: DanhMu
                 width: 130,
                 dataIndex: "type",
                 render: (_, record) => {
-                  if (editingRowKeys.includes(record?.id) && isManage) {
+                  if (editingRowKeys.includes(record?.id) ) {
                     const currentValue =
                       editingValues[record?.id]?.type !== undefined
                         ? editingValues[record?.id]?.type
@@ -1528,11 +1577,12 @@ export default function DanhMucLuanVan({ role = "P7", isManage = false }: DanhMu
                     const status = record?.thesisRegistrations?.[0]?.thesisProject?.status || ""
                     return (
                       <Row className="justify-center gap-2">
+                        {/** biome-ignore lint/a11y/noStaticElementInteractions: <React.Fragment> */}
                         <div
                           className="flex items-center gap-2"
                           onClick={(e) => e.stopPropagation()}
                         >
-                          {!isManage && status === ThesisProjectStatus.APPROVED_BY_DEPT ? (
+                          { status === ThesisProjectStatus.APPROVED_BY_DEPT ? (
                             <ApproveIcon
                               title="Phê duyệt"
                               className="text-lg font-bold text-green-700"

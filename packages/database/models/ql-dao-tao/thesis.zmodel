@@ -49,6 +49,11 @@ model ThesisSession extends Base {
 
   /// Thủ trưởng
   chief                 String?
+  /// Hạn nhập đề tài
+  topicEntryDeadline    DateTime?
+  /// Hạn nhập hội đồng
+  councilDeadline       DateTime?
+
 
   thesisProject         ThesisProject[]
 
