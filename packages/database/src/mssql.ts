@@ -1,1 +1,1 @@
-export * from '../generated/mssql-client'
+export * from "../generated/mssql-client"

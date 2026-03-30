@@ -1,1 +1,1 @@
-export * from '../../generated/zenstack/models'
+export * from "../../generated/zenstack/models"

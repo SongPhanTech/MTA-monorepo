@@ -1550,6 +1550,7 @@ exports.Prisma.StudentSubjectScoreScalarFieldEnum = {
   subjectClassId: 'subjectClassId',
   subjectVersionId: 'subjectVersionId',
   studentId: 'studentId',
+  semesterId: 'semesterId',
   attendanceScore: 'attendanceScore',
   midtermScore: 'midtermScore',
   examScore: 'examScore',
@@ -1657,6 +1658,10 @@ exports.Prisma.ArchivedCertificateScalarFieldEnum = {
   certificateId: 'certificateId',
   studentId: 'studentId',
   finalScore: 'finalScore',
+  listeningScore: 'listeningScore',
+  speakingScore: 'speakingScore',
+  readingScore: 'readingScore',
+  writingScore: 'writingScore',
   score: 'score',
   issuedBy: 'issuedBy',
   issuedDate: 'issuedDate',
@@ -1832,6 +1837,7 @@ exports.Prisma.FixedClassScalarFieldEnum = {
   lecturerManagementId: 'lecturerManagementId',
   staffManagementId: 'staffManagementId',
   curriculumVersionId: 'curriculumVersionId',
+  classType: 'classType',
   planTrainingSubjectId: 'planTrainingSubjectId'
 };
 
@@ -5806,6 +5812,7 @@ exports.Prisma.StudentSubjectScoreOrderByRelevanceFieldEnum = {
   subjectClassId: 'subjectClassId',
   subjectVersionId: 'subjectVersionId',
   studentId: 'studentId',
+  semesterId: 'semesterId',
   examPostponedReason: 'examPostponedReason',
   examBannedReason: 'examBannedReason',
   suspendedReason: 'suspendedReason',
@@ -7865,6 +7872,12 @@ exports.SemesterType = exports.$Enums.SemesterType = {
 exports.AcademicRankingBaseType = exports.$Enums.AcademicRankingBaseType = {
   Base10: 'Base10',
   Base4: 'Base4'
+};
+
+exports.FixedClassType = exports.$Enums.FixedClassType = {
+  APPLICATION: 'APPLICATION',
+  RESEARCH: 'RESEARCH',
+  NORMAL: 'NORMAL'
 };
 
 exports.CurriculumVersionType = exports.$Enums.CurriculumVersionType = {

@@ -1,13 +1,13 @@
-import { PrismaClient } from '../../generated/prisma-client'
+import { PrismaClient } from "../../generated/prisma-client"
 
 const prisma = new PrismaClient()
 
 await prisma.archivedAward.deleteMany({
-    where: {
-        deletedAt: {
-            not: null,
-        },
+  where: {
+    deletedAt: {
+      not: null,
     },
+  },
 })
 
 // await prisma.curriculumVersion.deleteMany({

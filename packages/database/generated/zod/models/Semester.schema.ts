@@ -55,6 +55,7 @@ const relationSchema = z.object({
     scoreLinkSheets: z.array(z.unknown()).optional(),
     semesterTrainingScore: z.array(z.unknown()).optional(),
     availableTrainingTime: z.array(z.unknown()).optional(),
+    studentSubjectScore: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

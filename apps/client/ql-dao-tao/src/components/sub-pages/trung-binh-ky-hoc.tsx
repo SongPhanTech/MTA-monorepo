@@ -1,242 +1,242 @@
-import Table from '@components/commons/table'
-import { DEFAULT_PAGINATE_SIZE, TRANG_THAI_HOC_VIEN } from '@constants/constants'
-import type { FilterProps } from '@constants/type'
-import { useAcademicRankingBaseTypeOptions } from '@hooks/academicRankingBaseType'
-import { getWarningLevelColor } from '@hooks/getWarningLevelColor'
-import useSpinner from '@hooks/spinner'
-import { useStudentTrainingTypeOptions } from '@hooks/studentTrainingType'
-import type { AcademicRankingConvert, FixedClass } from '@workspace/db/client'
-import { useCountStudent, useFindManyFixedClass, useFindManyStudent } from '@workspace/db/hooks'
+import Table from "@components/commons/table"
+import { DEFAULT_PAGINATE_SIZE, TRANG_THAI_HOC_VIEN } from "@constants/constants"
+import type { FilterProps } from "@constants/type"
+import { useAcademicRankingBaseTypeOptions } from "@hooks/academicRankingBaseType"
+import { getWarningLevelColor } from "@hooks/getWarningLevelColor"
+import useSpinner from "@hooks/spinner"
+import { useStudentTrainingTypeOptions } from "@hooks/studentTrainingType"
+import type { AcademicRankingConvert, FixedClass } from "@workspace/db/client"
+import { useCountStudent, useFindManyFixedClass, useFindManyStudent } from "@workspace/db/hooks"
 import {
-    useCalculateStudentSemesterResultJson,
-    useExportStudentSemesterResult,
-} from '@workspace/libs/api/training'
+  useCalculateStudentSemesterResultJson,
+  useExportStudentSemesterResult,
+} from "@workspace/libs/api/training"
 import {
-    Select,
-    SelectTrainingCourseStore,
-    useSemesterStore,
-    useTrainingCourseStore,
-    useTrainingObjectTypeStore,
-} from '@workspace/ui'
-import { Button, Checkbox, Col, Flex, Form, message, Row, Tag, Tooltip } from 'antd'
-import dayjs from 'dayjs'
-import { saveAs } from 'file-saver'
-import 'dayjs/locale/vi'
-import _ from 'lodash'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+  Select,
+  SelectTrainingCourseStore,
+  useSemesterStore,
+  useTrainingCourseStore,
+  useTrainingObjectTypeStore,
+} from "@workspace/ui"
+import { Button, Checkbox, Col, Flex, Form, message, Row, Tag, Tooltip } from "antd"
+import dayjs from "dayjs"
+import { saveAs } from "file-saver"
+import "dayjs/locale/vi"
+import _ from "lodash"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 
-dayjs.locale('vi')
+dayjs.locale("vi")
 
 const DiemTrungBinhKyHoc = () => {
-    const { id: semesterId } = useSemesterStore()
-    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
-    const { id: trainingCourseId } = useTrainingCourseStore()
+  const { id: semesterId } = useSemesterStore()
+  const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+  const { id: trainingCourseId } = useTrainingCourseStore()
 
-    const [currentPage, setCurrentPage] = useState(1)
-    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [filters, setFilters] = useState<FilterProps>({
-        code: '',
-        name: '',
-        trainingCourseId: undefined,
-        managementOrganizationId: undefined,
-        fixedClassId: undefined,
+  const [currentPage, setCurrentPage] = useState(1)
+  const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+  const [filters, setFilters] = useState<FilterProps>({
+    code: "",
+    name: "",
+    trainingCourseId: undefined,
+    managementOrganizationId: undefined,
+    fixedClassId: undefined,
+  })
+  const { getStudentTrainingTypeLabel, getStudentTrainingTypeColor } =
+    useStudentTrainingTypeOptions()
+  const { getAcademicRankingBaseTypeLabel } = useAcademicRankingBaseTypeOptions()
+  const { showSpinner, hideSpinner } = useSpinner()
+
+  const where = useMemo(() => {
+    return {
+      deletedAt: null,
+      OR: [
+        {
+          subjectClassStudent: {
+            some: {
+              subjectClass: {
+                semesterId,
+              },
+            },
+          },
+        },
+        {
+          studentSemesterResult: {
+            some: { semesterId },
+          },
+        },
+      ],
+      ...(filters.code
+        ? {
+            code: {
+              contains: filters.code,
+              mode: "insensitive" as const,
+            },
+          }
+        : {}),
+      ...(filters.name
+        ? {
+            userProfile: {
+              fullname: {
+                contains: filters.name,
+                mode: "insensitive" as const,
+              },
+            },
+          }
+        : {}),
+      ...(trainingCourseId || filters.fixedClassId || filters.managementOrganizationId
+        ? {
+            fixedClass: {
+              ...(trainingCourseId
+                ? { trainingCourseId }
+                : trainingObjectTypeId
+                  ? { trainingCourse: { trainingObjectTypeId } }
+                  : {}),
+              ...(filters.fixedClassId ? { id: filters.fixedClassId } : {}),
+              ...(filters.managementOrganizationId
+                ? { managementOrganizationId: filters.managementOrganizationId }
+                : {}),
+            },
+          }
+        : {}),
+    }
+  }, [filters, semesterId, trainingObjectTypeId, trainingCourseId])
+
+  const { data: dataStudents, refetch } = useFindManyStudent(
+    {
+      where,
+      include: {
+        studentSemesterResult: {
+          where: { semesterId },
+          include: { rank: true },
+        },
+        userProfile: {
+          select: {
+            fullname: true,
+            dateOfBirth: true,
+          },
+        },
+        fixedClass: {
+          select: {
+            code: true,
+            name: true,
+          },
+        },
+      },
+      orderBy: [
+        { fixedClass: { code: "desc" } },
+        { userProfile: { firstName: "asc" } },
+        { userProfile: { lastName: "asc" } },
+      ],
+      take: numberOfPages,
+      skip: (currentPage - 1) * numberOfPages,
+    },
+    { enabled: !!semesterId || !!trainingObjectTypeId }
+  )
+
+  const { data: count } = useCountStudent({ where }, { enabled: !!semesterId })
+
+  const { data: fixedClassData = [] } = useFindManyFixedClass(
+    {
+      orderBy: { name: "asc" },
+      where: {
+        ...(filters.managementOrganizationId
+          ? { managementOrganizationId: filters.managementOrganizationId }
+          : {}),
+        ...(trainingCourseId ? { trainingCourseId } : {}),
+      },
+    },
+    { enabled: !!trainingCourseId }
+  )
+
+  const handleFilterChange = (key: string, value: string) => {
+    setFilters((prev) => {
+      const newFilters = { ...prev, [key]: value }
+      debouncedRefetch()
+      return newFilters
     })
-    const { getStudentTrainingTypeLabel, getStudentTrainingTypeColor } =
-        useStudentTrainingTypeOptions()
-    const { getAcademicRankingBaseTypeLabel } = useAcademicRankingBaseTypeOptions()
-    const { showSpinner, hideSpinner } = useSpinner()
+  }
 
-    const where = useMemo(() => {
-        return {
-            deletedAt: null,
-            OR: [
-                {
-                    subjectClassStudent: {
-                        some: {
-                            subjectClass: {
-                                semesterId,
-                            },
-                        },
-                    },
-                },
-                {
-                    studentSemesterResult: {
-                        some: { semesterId },
-                    },
-                },
-            ],
-            ...(filters.code
-                ? {
-                      code: {
-                          contains: filters.code,
-                          mode: 'insensitive' as const,
-                      },
-                  }
-                : {}),
-            ...(filters.name
-                ? {
-                      userProfile: {
-                          fullname: {
-                              contains: filters.name,
-                              mode: 'insensitive' as const,
-                          },
-                      },
-                  }
-                : {}),
-            ...(trainingCourseId || filters.fixedClassId || filters.managementOrganizationId
-                ? {
-                      fixedClass: {
-                          ...(trainingCourseId
-                              ? { trainingCourseId }
-                              : trainingObjectTypeId
-                                ? { trainingCourse: { trainingObjectTypeId } }
-                                : {}),
-                          ...(filters.fixedClassId ? { id: filters.fixedClassId } : {}),
-                          ...(filters.managementOrganizationId
-                              ? { managementOrganizationId: filters.managementOrganizationId }
-                              : {}),
-                      },
-                  }
-                : {}),
-        }
-    }, [filters, semesterId, trainingObjectTypeId, trainingCourseId])
+  const debouncedRefetch = useCallback(
+    _.debounce(() => {
+      refetch()
+    }, 500),
+    []
+  )
 
-    const { data: dataStudents, refetch } = useFindManyStudent(
-        {
-            where,
-            include: {
-                studentSemesterResult: {
-                    where: { semesterId },
-                    include: { rank: true },
-                },
-                userProfile: {
-                    select: {
-                        fullname: true,
-                        dateOfBirth: true,
-                    },
-                },
-                fixedClass: {
-                    select: {
-                        code: true,
-                        name: true,
-                    },
-                },
-            },
-            orderBy: [
-                { fixedClass: { code: 'desc' } },
-                { userProfile: { firstName: 'asc' } },
-                { userProfile: { lastName: 'asc' } },
-            ],
-            take: numberOfPages,
-            skip: (currentPage - 1) * numberOfPages,
-        },
-        { enabled: !!semesterId || !!trainingObjectTypeId }
-    )
+  const { mutateAsync: calculateSemesterResults } = useCalculateStudentSemesterResultJson()
+  const { mutateAsync: exportExcel } = useExportStudentSemesterResult()
 
-    const { data: count } = useCountStudent({ where }, { enabled: !!semesterId })
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
-    const { data: fixedClassData = [] } = useFindManyFixedClass(
-        {
-            orderBy: { name: 'asc' },
-            where: {
-                ...(filters.managementOrganizationId
-                    ? { managementOrganizationId: filters.managementOrganizationId }
-                    : {}),
-                ...(trainingCourseId ? { trainingCourseId } : {}),
-            },
-        },
-        { enabled: !!trainingCourseId }
-    )
+  useEffect(() => {
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+      }
+    }
+  }, [])
 
-    const handleFilterChange = (key: string, value: string) => {
-        setFilters((prev) => {
-            const newFilters = { ...prev, [key]: value }
-            debouncedRefetch()
-            return newFilters
-        })
+  const handleSummaryClick = async () => {
+    if (!semesterId) {
+      message.warning("Vui lòng chọn học kỳ")
+      return
     }
 
-    const debouncedRefetch = useCallback(
-        _.debounce(() => {
-            refetch()
-        }, 500),
-        []
-    )
-
-    const { mutateAsync: calculateSemesterResults } = useCalculateStudentSemesterResultJson()
-    const { mutateAsync: exportExcel } = useExportStudentSemesterResult()
-
-    const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
-
-    useEffect(() => {
-        return () => {
-            if (intervalRef.current) {
-                clearInterval(intervalRef.current)
-            }
-        }
-    }, [])
-
-    const handleSummaryClick = async () => {
-        if (!semesterId) {
-            message.warning('Vui lòng chọn học kỳ')
-            return
-        }
-
-        if (!trainingCourseId) {
-            message.warning('Vui lòng chọn khoá')
-            return
-        }
-
-        try {
-            showSpinner()
-            const res = await calculateSemesterResults({
-                params: { semesterId, trainingCourseId: trainingCourseId ?? '' },
-            })
-
-            if (res?.status === 400 || res?.status === 500) {
-                message.error(res?.data?.message || 'Đã xảy ra lỗi khi tổng kết học kỳ')
-                return
-            }
-
-            message.success('Tổng kết kết quả học kỳ thành công, vui lòng chờ hệ thống cập nhật')
-
-            if (intervalRef.current) {
-                clearInterval(intervalRef.current)
-            }
-
-            intervalRef.current = setInterval(() => {
-                refetch()
-            }, 5000)
-        } catch (error) {
-            console.error('Lỗi khi tổng kết kết quả học kỳ:', error)
-            message.error('Có lỗi xảy ra khi tổng kết kết quả học kỳ')
-        } finally {
-            hideSpinner()
-        }
+    if (!trainingCourseId) {
+      message.warning("Vui lòng chọn khoá")
+      return
     }
 
-    const handleExportExcel = async () => {
-        if (!semesterId) {
-            message.warning('Vui lòng chọn học kỳ')
-            return
-        }
+    try {
+      showSpinner()
+      const res = await calculateSemesterResults({
+        params: { semesterId, trainingCourseId: trainingCourseId ?? "" },
+      })
 
-        if (!trainingObjectTypeId) {
-            message.warning('Vui lòng chọn đối tượng đào tạo')
-            return
-        }
+      if (res?.status === 400 || res?.status === 500) {
+        message.error(res?.data?.message || "Đã xảy ra lỗi khi tổng kết học kỳ")
+        return
+      }
 
-        const res = await exportExcel({
-            data: { semesterId, trainingObjectTypeId },
-        })
+      message.success("Tổng kết kết quả học kỳ thành công, vui lòng chờ hệ thống cập nhật")
 
-        if (res.status === 200) {
-            message.success('Xuất file thành công')
-            saveAs(res.data, 'KET_QUA_HOC_TAP_HK.xlsx')
-        } else {
-            message.error(res.data?.message || 'Xuất file thất bại')
-        }
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+      }
+
+      intervalRef.current = setInterval(() => {
+        refetch()
+      }, 5000)
+    } catch (error) {
+      console.error("Lỗi khi tổng kết kết quả học kỳ:", error)
+      message.error("Có lỗi xảy ra khi tổng kết kết quả học kỳ")
+    } finally {
+      hideSpinner()
     }
+  }
+
+  const handleExportExcel = async () => {
+    if (!semesterId) {
+      message.warning("Vui lòng chọn học kỳ")
+      return
+    }
+
+    if (!trainingObjectTypeId) {
+      message.warning("Vui lòng chọn đối tượng đào tạo")
+      return
+    }
+
+    const res = await exportExcel({
+      data: { semesterId, trainingObjectTypeId },
+    })
+
+    if (res.status === 200) {
+      message.success("Xuất file thành công")
+      saveAs(res.data, "KET_QUA_HOC_TAP_HK.xlsx")
+    } else {
+      message.error(res.data?.message || "Xuất file thất bại")
+    }
+  }
 
     return (
         <div className="bg-white rounded-lg shadow-sm px-4">
@@ -594,37 +594,35 @@ const DiemTrungBinhKyHoc = () => {
                                         return <Tag color="error">Không hoạt động</Tag>
                                     }
 
-                                    const trangThai =
-                                        TRANG_THAI_HOC_VIEN[
-                                            record?.status as keyof typeof TRANG_THAI_HOC_VIEN
-                                        ]
+                  const trangThai =
+                    TRANG_THAI_HOC_VIEN[record?.status as keyof typeof TRANG_THAI_HOC_VIEN]
 
-                                    if (!trangThai) {
-                                        return <Tag color="default">Không rõ</Tag>
-                                    }
+                  if (!trangThai) {
+                    return <Tag color="default">Không rõ</Tag>
+                  }
 
-                                    return <Tag color={trangThai.color}>{trangThai.label}</Tag>
-                                },
-                            },
-                        ]}
-                        pagination={{
-                            current: currentPage,
-                            pageSize: numberOfPages,
-                            total: count,
-                            onChange: (page, pageSize) => {
-                                if (numberOfPages === pageSize) {
-                                    setCurrentPage(page)
-                                } else {
-                                    setCurrentPage(1)
-                                    setNumberOfPages(pageSize)
-                                }
-                            },
-                        }}
-                    />
-                </Col>
-            </Row>
-        </div>
-    )
+                  return <Tag color={trangThai.color}>{trangThai.label}</Tag>
+                },
+              },
+            ]}
+            pagination={{
+              current: currentPage,
+              pageSize: numberOfPages,
+              total: count,
+              onChange: (page, pageSize) => {
+                if (numberOfPages === pageSize) {
+                  setCurrentPage(page)
+                } else {
+                  setCurrentPage(1)
+                  setNumberOfPages(pageSize)
+                }
+              },
+            }}
+          />
+        </Col>
+      </Row>
+    </div>
+  )
 }
 
 export default DiemTrungBinhKyHoc

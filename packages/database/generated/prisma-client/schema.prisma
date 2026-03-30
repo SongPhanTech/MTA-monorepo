@@ -108,6 +108,14 @@ enum SemesterType {
   @@schema("ql-dao-tao")
 }
 
+enum FixedClassType {
+  APPLICATION
+  RESEARCH
+  NORMAL
+
+  @@schema("ql-dao-tao")
+}
+
 enum CurriculumVersionType {
   FRAMEWORK
   FULL_COURSE
@@ -2490,6 +2498,8 @@ model StudentSubjectScore {
   subjectVersionId             String
   student                      Student                                    @relation(fields: [studentId], references: [id])
   studentId                    String
+  semester                     Semester?                                  @relation(fields: [semesterId], references: [id])
+  semesterId                   String?
   /// điểm thường xuyên
   attendanceScore              Float?
   /// điểm định kỳ
@@ -2670,6 +2680,14 @@ model ArchivedCertificate {
   student             Student                                    @relation(fields: [studentId], references: [id])
   studentId           String
   finalScore          Float                                      @default(0)
+  /// điểm nghe
+  listeningScore      Float?
+  /// điểm nói
+  speakingScore       Float?
+  /// điểm đọc
+  readingScore        Float?
+  /// điểm viết
+  writingScore        Float?
   /// điểm chứng chỉ
   score               Float?
   /// nơi cấp
@@ -2785,6 +2803,7 @@ model Semester {
   scoreLinkSheets         ScoreLinkSheet[]
   semesterTrainingScore   SemesterTrainingScore[]
   availableTrainingTime   AvailableTrainingTime[]
+  studentSubjectScore     StudentSubjectScore[]
 
   @@schema("ql-dao-tao")
 }
@@ -2951,6 +2970,7 @@ model FixedClass {
   students                 Student[]
   curriculumVersion        CurriculumVersion?   @relation(fields: [curriculumVersionId], references: [id])
   curriculumVersionId      String?              @unique()
+  classType                FixedClassType       @default(NORMAL)
   subjectClasses           SubjectClass[]
   notifications            Notification[]
   surveyObjectTypes        SurveyObjectType[]

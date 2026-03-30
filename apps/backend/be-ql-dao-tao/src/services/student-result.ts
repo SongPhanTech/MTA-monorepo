@@ -1,8 +1,8 @@
-import { getTemplateBuffer } from '@workspace/libs/server'
-import dayjs from 'dayjs'
-import { HTTPException } from 'hono/http-exception'
-import XlsxTemplate from 'xlsx-template'
-import { prisma } from '..'
+import { getTemplateBuffer } from "@workspace/libs/server"
+import dayjs from "dayjs"
+import { HTTPException } from "hono/http-exception"
+import XlsxTemplate from "xlsx-template"
+import { prisma } from ".."
 
 // ${semester}	Name of the semester.
 // ${trainingObjectType}	 Name of the Training Object Type (e.g. Quân sự, Dân sự).
@@ -36,118 +36,118 @@ import { prisma } from '..'
 // ${table:data.disciplinaryWarningLevel}	Disciplinary Warning Level (Mức CC rèn luyện).
 // ${table:data.note}	Note (Ghi chú - e.g., Học cải thiện, Tạm hoãn, Đình chỉ...).
 export async function exportStudentSemesterResult({
-    semesterId,
-    trainingObjectTypeId,
+  semesterId,
+  trainingObjectTypeId,
 }: {
-    semesterId: string
-    trainingObjectTypeId: string
+  semesterId: string
+  trainingObjectTypeId: string
 }) {
-    const semester = await prisma.semester.findUniqueOrThrow({
-        where: { id: semesterId },
-    })
+  const semester = await prisma.semester.findUniqueOrThrow({
+    where: { id: semesterId },
+  })
 
-    const trainingObjectType = await prisma.trainingObjectType.findUniqueOrThrow({
-        where: { id: trainingObjectTypeId },
-    })
+  const trainingObjectType = await prisma.trainingObjectType.findUniqueOrThrow({
+    where: { id: trainingObjectTypeId },
+  })
 
-    const studentSemesterResults = await prisma.studentSemesterResult.findMany({
-        where: {
-            semesterId,
-            student: {
-                fixedClass: {
-                    trainingCourse: {
-                        trainingObjectTypeId,
-                    },
-                },
-            },
+  const studentSemesterResults = await prisma.studentSemesterResult.findMany({
+    where: {
+      semesterId,
+      student: {
+        fixedClass: {
+          trainingCourse: {
+            trainingObjectTypeId,
+          },
         },
-        include: {
-            student: {
+      },
+    },
+    include: {
+      student: {
+        select: {
+          code: true,
+          userProfile: {
+            select: {
+              fullname: true,
+              dateOfBirth: true,
+            },
+          },
+          fixedClass: {
+            select: {
+              code: true,
+              name: true,
+              trainingCourse: {
                 select: {
-                    code: true,
-                    userProfile: {
-                        select: {
-                            fullname: true,
-                            dateOfBirth: true,
-                        },
-                    },
-                    fixedClass: {
-                        select: {
-                            code: true,
-                            name: true,
-                            trainingCourse: {
-                                select: {
-                                    name: true,
-                                },
-                            },
-                        },
-                    },
+                  name: true,
                 },
+              },
             },
+          },
         },
-    })
+      },
+    },
+  })
 
-    const data = studentSemesterResults.map((result, idx) => {
-        const student = result.student
-        const userProfile = student.userProfile
-        const dateOfBirth = userProfile.dateOfBirth ? dayjs(userProfile.dateOfBirth) : null
+  const data = studentSemesterResults.map((result, idx) => {
+    const student = result.student
+    const userProfile = student.userProfile
+    const dateOfBirth = userProfile.dateOfBirth ? dayjs(userProfile.dateOfBirth) : null
 
-        return {
-            no: idx + 1,
-            code: student.code,
-            fullname: userProfile.fullname,
-            dateOfBirth: dateOfBirth ? `'${dateOfBirth.format('DD/MM/YYYY')}` : '',
-            fixedClass: student.fixedClass?.code,
-            trainingCourse: student.fixedClass?.trainingCourse?.name,
+    return {
+      no: idx + 1,
+      code: student.code,
+      fullname: userProfile.fullname,
+      dateOfBirth: dateOfBirth ? `'${dateOfBirth.format("DD/MM/YYYY")}` : "",
+      fixedClass: student.fixedClass?.code,
+      trainingCourse: student.fixedClass?.trainingCourse?.name,
 
-            // StudentSemesterResult Data
-            studyYear: result.studyYear,
-            semesterIndexInCourse: result.semesterIndexInCourse,
-            gpaBase4: result.gpaBase4?.toNumber(),
-            cumulativeGpaBase4: result.cumulativeGpaBase4?.toNumber(),
-            gpaBase10: result.gpaBase10?.toNumber(),
-            cumulativeGpaBase10: result.cumulativeGpaBase10?.toNumber(),
-            conductScore: result.conductScore,
-            studentTrainingType: result.studentTrainingType,
-            lowestFinalScore: result.lowestFinalScore,
-            totalCredits: result.totalCredits,
-            registeredCredits: result.registeredCredits,
-            retakingCredits: result.retakingCredits,
-            reExamCredits: result.reExamCredits,
-            passedCredits: result.passedCredits,
-            failedCredits: result.failedCredits,
-            accumulatedCredits: result.accumulatedCredits,
-            totalCreditsByCurriculum: result.totalCreditsByCurriculum,
-            totalFailedCredits: result.totalFailedCredits,
-            foreignLangPass: result.foreignLangPass ? 'Đạt' : 'Không đạt',
-            academicWarningLevel: result.academicWarningLevel,
-            disciplinaryWarningLevel: result.disciplinaryWarningLevel,
-            note: result.isImproving
-                ? 'Học cải thiện'
-                : result.postponeWithReason
-                  ? 'Tạm hoãn'
-                  : result.suspended
-                    ? 'Đình chỉ'
-                    : result.expelled
-                      ? 'Buộc thôi học'
-                      : '',
-        }
-    })
+      // StudentSemesterResult Data
+      studyYear: result.studyYear,
+      semesterIndexInCourse: result.semesterIndexInCourse,
+      gpaBase4: result.gpaBase4?.toNumber(),
+      cumulativeGpaBase4: result.cumulativeGpaBase4?.toNumber(),
+      gpaBase10: result.gpaBase10?.toNumber(),
+      cumulativeGpaBase10: result.cumulativeGpaBase10?.toNumber(),
+      conductScore: result.conductScore,
+      studentTrainingType: result.studentTrainingType,
+      lowestFinalScore: result.lowestFinalScore,
+      totalCredits: result.totalCredits,
+      registeredCredits: result.registeredCredits,
+      retakingCredits: result.retakingCredits,
+      reExamCredits: result.reExamCredits,
+      passedCredits: result.passedCredits,
+      failedCredits: result.failedCredits,
+      accumulatedCredits: result.accumulatedCredits,
+      totalCreditsByCurriculum: result.totalCreditsByCurriculum,
+      totalFailedCredits: result.totalFailedCredits,
+      foreignLangPass: result.foreignLangPass ? "Đạt" : "Không đạt",
+      academicWarningLevel: result.academicWarningLevel,
+      disciplinaryWarningLevel: result.disciplinaryWarningLevel,
+      note: result.isImproving
+        ? "Học cải thiện"
+        : result.postponeWithReason
+          ? "Tạm hoãn"
+          : result.suspended
+            ? "Đình chỉ"
+            : result.expelled
+              ? "Buộc thôi học"
+              : "",
+    }
+  })
 
-    // Use 'KET_QUA_HOC_TAP_HK' template or fallback if needed.
-    // Assuming the template exists based on requirements.
-    const buffer = await getTemplateBuffer(prisma, 'KET_QUA_HOC_TAP_HK.xlsx')
-    const template = new XlsxTemplate(buffer)
+  // Use 'KET_QUA_HOC_TAP_HK' template or fallback if needed.
+  // Assuming the template exists based on requirements.
+  const buffer = await getTemplateBuffer(prisma, "KET_QUA_HOC_TAP_HK.xlsx")
+  const template = new XlsxTemplate(buffer)
 
-    template.substitute(1, {
-        semester: semester.name,
-        trainingObjectType: trainingObjectType.name,
-        data,
-    })
+  template.substitute(1, {
+    semester: semester.name,
+    trainingObjectType: trainingObjectType.name,
+    data,
+  })
 
-    const result = (await template.generate({ type: 'arraybuffer' })) as ArrayBuffer
+  const result = (await template.generate({ type: "arraybuffer" })) as ArrayBuffer
 
-    return result
+  return result
 }
 
 // ${schoolYear}	Name of the school year.
@@ -176,72 +176,72 @@ export async function exportStudentSemesterResult({
 // ${table:data.disciplinaryWarningLevel}	Disciplinary Warning Level.
 // ${table:data.note}	Note.
 export async function exportStudentYearResult({
-    semesterId,
-    schoolYearId,
-    trainingObjectTypeId,
+  semesterId,
+  schoolYearId,
+  trainingObjectTypeId,
 }: {
-    semesterId?: string
-    schoolYearId?: string
-    trainingObjectTypeId: string
+  semesterId?: string
+  schoolYearId?: string
+  trainingObjectTypeId: string
 }) {
-    const schoolYear = await prisma.schoolYear.findFirst({
-        where: {
-            OR: [
-                { id: schoolYearId },
-                {
-                    semesters: {
-                        some: {
-                            id: semesterId,
-                        },
-                    },
-                },
-            ],
-        },
-    })
-
-    if (!schoolYear) {
-        throw new HTTPException(404, { message: 'Không tìm thấy năm học' })
-    }
-
-    const trainingObjectType = await prisma.trainingObjectType.findUniqueOrThrow({
-        where: { id: trainingObjectTypeId },
-    })
-
-    const studentYearResults = await prisma.studentYearResult.findMany({
-        where: {
-            schoolYearId: schoolYear.id,
-            student: {
-                curriculumVersion: {
-                    trainingObjectTypeId,
-                },
+  const schoolYear = await prisma.schoolYear.findFirst({
+    where: {
+      OR: [
+        { id: schoolYearId },
+        {
+          semesters: {
+            some: {
+              id: semesterId,
             },
+          },
         },
-        include: {
-            student: {
+      ],
+    },
+  })
+
+  if (!schoolYear) {
+    throw new HTTPException(404, { message: "Không tìm thấy năm học" })
+  }
+
+  const trainingObjectType = await prisma.trainingObjectType.findUniqueOrThrow({
+    where: { id: trainingObjectTypeId },
+  })
+
+  const studentYearResults = await prisma.studentYearResult.findMany({
+    where: {
+      schoolYearId: schoolYear.id,
+      student: {
+        curriculumVersion: {
+          trainingObjectTypeId,
+        },
+      },
+    },
+    include: {
+      student: {
+        select: {
+          code: true,
+          userProfile: {
+            select: {
+              fullname: true,
+              dateOfBirth: true,
+            },
+          },
+          fixedClass: {
+            select: {
+              code: true,
+              name: true,
+              trainingCourse: {
                 select: {
-                    code: true,
-                    userProfile: {
-                        select: {
-                            fullname: true,
-                            dateOfBirth: true,
-                        },
-                    },
-                    fixedClass: {
-                        select: {
-                            code: true,
-                            name: true,
-                            trainingCourse: {
-                                select: {
-                                    name: true,
-                                },
-                            },
-                        },
-                    },
+                  name: true,
                 },
+              },
             },
-            rank: true,
+          },
         },
-    })
+      },
+      rank: true,
+    },
+  })
 
     const formatGpa = (val: any) => {
         const num = typeof val?.toNumber === 'function' ? val.toNumber() : val;
@@ -254,46 +254,45 @@ export async function exportStudentYearResult({
         const userProfile = student.userProfile
         const dateOfBirth = userProfile.dateOfBirth ? dayjs(userProfile.dateOfBirth) : null
 
-        return {
-            no: idx + 1,
-            code: student.code,
-            fullname: userProfile.fullname,
-            dateOfBirth: dateOfBirth ? `'${dateOfBirth.format('DD/MM/YYYY')}` : '',
-            fixedClass: student.fixedClass?.code,
-            trainingCourse: student.fixedClass?.trainingCourse?.name,
+    return {
+      no: idx + 1,
+      code: student.code,
+      fullname: userProfile.fullname,
+      dateOfBirth: dateOfBirth ? `'${dateOfBirth.format("DD/MM/YYYY")}` : "",
+      fixedClass: student.fixedClass?.code,
+      trainingCourse: student.fixedClass?.trainingCourse?.name,
+      // StudentYearResult Data
+      studyYear: result.studyYear,
+      gpaBase4: formatGpa(result.gpaBase4),
+      cumulativeGpaBase4: formatGpa(result.cumulativeGpaBase4),
+      gpaBase10: formatGpa(result.gpaBase10),
+      cumulativeGpaBase10: formatGpa(result.cumulativeGpaBase10),
+      conductScore: formatGpa(result.conductScore),
+      studentTrainingType: result.studentTrainingType,
+      rank: result.rank?.classification,
+      lowestFinalScore: formatGpa(result.lowestFinalScore),
+      totalCredits: result.totalCredits,
+      retakingCredits: result.retakingCredits,
+      reExamCredits: result.reExamCredits,
+      failedCredits: result.failedCredits,
 
-            // StudentYearResult Data
-            studyYear: result.studyYear,
-            gpaBase4: formatGpa(result.gpaBase4),
-            cumulativeGpaBase4: formatGpa(result.cumulativeGpaBase4),
-            gpaBase10: formatGpa(result.gpaBase10),
-            cumulativeGpaBase10: formatGpa(result.cumulativeGpaBase10),
-            conductScore: formatGpa(result.conductScore),
-            studentTrainingType: result.studentTrainingType,
-            rank: result.rank?.classification,
-            lowestFinalScore: formatGpa(result.lowestFinalScore),
-            totalCredits: result.totalCredits,
-            retakingCredits: result.retakingCredits,
-            reExamCredits: result.reExamCredits,
-            failedCredits: result.failedCredits,
+      academicWarningLevel: result.academicWarningLevel,
+      disciplinaryWarningLevel: result.disciplinaryWarningLevel,
+      note: result.suspended ? "Đình chỉ" : result.expelled ? "Buộc thôi học" : "",
+    }
+  })
 
-            academicWarningLevel: result.academicWarningLevel,
-            disciplinaryWarningLevel: result.disciplinaryWarningLevel,
-            note: result.suspended ? 'Đình chỉ' : result.expelled ? 'Buộc thôi học' : '',
-        }
-    })
+  // Use 'KET_QUA_HOC_TAP_NAM.xlsx' template
+  const buffer = await getTemplateBuffer(prisma, "KET_QUA_HOC_TAP_NAM.xlsx")
+  const template = new XlsxTemplate(buffer)
 
-    // Use 'KET_QUA_HOC_TAP_NAM.xlsx' template
-    const buffer = await getTemplateBuffer(prisma, 'KET_QUA_HOC_TAP_NAM.xlsx')
-    const template = new XlsxTemplate(buffer)
+  template.substitute(1, {
+    schoolYear: schoolYear.name,
+    trainingObjectType: trainingObjectType.name,
+    data,
+  })
 
-    template.substitute(1, {
-        schoolYear: schoolYear.name,
-        trainingObjectType: trainingObjectType.name,
-        data,
-    })
+  const result = (await template.generate({ type: "arraybuffer" })) as ArrayBuffer
 
-    const result = (await template.generate({ type: 'arraybuffer' })) as ArrayBuffer
-
-    return result
+  return result
 }

@@ -1,58 +1,58 @@
 .fixed-chatbox {
-    position: fixed;
-    bottom: 96px;
-    right: 24px;
-    width: 600px;
-    height: 700px;
-    border-radius: 1rem;
-    background: #fff;
-    z-index: 50;
-    transition:
-        opacity 0.2s,
-        visibility 0.2s;
-    overflow: hidden;
-    box-shadow: 0 4px 16px 0 rgba(31, 41, 55, 0.14);
-    border: 1px solid #d1d5db; /* Thêm dòng này để hiện border */
+  position: fixed;
+  bottom: 96px;
+  right: 24px;
+  width: 600px;
+  height: 700px;
+  border-radius: 1rem;
+  background: #fff;
+  z-index: 50;
+  transition:
+    opacity 0.2s,
+    visibility 0.2s;
+  overflow: hidden;
+  box-shadow: 0 4px 16px 0 rgba(31, 41, 55, 0.14);
+  border: 1px solid #d1d5db; /* Thêm dòng này để hiện border */
 }
 .fixed-chatbox.hide {
-    opacity: 0;
-    pointer-events: none;
-    visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
 }
 .fixed-chatbox.show {
-    opacity: 1;
-    pointer-events: auto;
-    visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
 }
 .fixed-chatbox-iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-    border-radius: 1rem;
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 1rem;
 }
 .chatbox-toggle-btn {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    z-index: 51;
-    width: 56px;
-    height: 56px;
-    padding: 0;
-    border-radius: 50%;
-    background: #108851;
-    color: white;
-    border: none;
-    box-shadow: 0 8px 24px 0 rgba(31, 41, 55, 0.24); /* shadow đậm và rộng hơn */
-    cursor: pointer;
-    font-size: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition:
-        box-shadow 0.2s,
-        background 0.2s;
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 51;
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  border-radius: 50%;
+  background: #108851;
+  color: white;
+  border: none;
+  box-shadow: 0 8px 24px 0 rgba(31, 41, 55, 0.24); /* shadow đậm và rộng hơn */
+  cursor: pointer;
+  font-size: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    box-shadow 0.2s,
+    background 0.2s;
 }
 .chatbox-toggle-btn:hover {
-    box-shadow: 0 12px 32px 0 rgba(31, 41, 55, 0.28); /* shadow khi hover rõ hơn nữa */
-    background: #0e6c43;
+  box-shadow: 0 12px 32px 0 rgba(31, 41, 55, 0.28); /* shadow khi hover rõ hơn nữa */
+  background: #0e6c43;
 }

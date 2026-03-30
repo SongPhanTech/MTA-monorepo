@@ -1,1 +1,1 @@
-export * from '@zenstackhq/server/hono'
+export * from "@zenstackhq/server/hono"

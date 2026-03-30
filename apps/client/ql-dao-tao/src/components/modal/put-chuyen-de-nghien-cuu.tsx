@@ -1,290 +1,276 @@
-import PutFormModal from '@components/commons/put-modal'
-import useSpinner from '@hooks/spinner'
+import PutFormModal from "@components/commons/put-modal"
+import useSpinner from "@hooks/spinner"
 import {
-    useFindManyExpertProfile,
-    useFindUniqueStudentResearchTopic,
-    useUpdateStudentResearchTopic,
-} from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, message, Row, Select } from 'antd'
-import dayjs from 'dayjs'
-import { useDisclosure } from 'react-hook-disclosure-modal'
-import 'dayjs/locale/vi'
-import DatePicker from '@components/commons/date-picker'
-import type { StudentResearchTopic } from '@workspace/db/client'
-import { FormItem } from '@workspace/ui'
-import { useEffect } from 'react'
+  useFindManyExpertProfile,
+  useFindUniqueStudentResearchTopic,
+  useUpdateStudentResearchTopic,
+} from "@workspace/db/hooks"
+import { Col, Form, Input, InputNumber, message, Row, Select } from "antd"
+import dayjs from "dayjs"
+import { useDisclosure } from "react-hook-disclosure-modal"
+import "dayjs/locale/vi"
+import DatePicker from "@components/commons/date-picker"
+import type { StudentResearchTopic } from "@workspace/db/client"
+import { FormItem } from "@workspace/ui"
+import { useEffect } from "react"
 
-dayjs.locale('vi')
+dayjs.locale("vi")
 const { TextArea } = Input
 type PutResearchTopicForm = {
-    score: string
-    studentFullname?: string | null
-    studentCode?: string | null
-    studentDateOfBirth?: Date | null
+  score: string
+  studentFullname?: string | null
+  studentCode?: string | null
+  studentDateOfBirth?: Date | null
 } & StudentResearchTopic
 
 const PutResearchTopicModal = () => {
-    const [form] = Form.useForm<PutResearchTopicForm>()
-    const { isOpen, onClose, input } = useDisclosure<{
-        studentResearchTopicId: string
-        role: 'P7' | 'KHOA_BO_MON'
-    }>({
-        tag: 'PutResearchTopicModal',
-        onClose: form.resetFields,
-    })
+  const [form] = Form.useForm<PutResearchTopicForm>()
+  const { isOpen, onClose, input } = useDisclosure<{
+    studentResearchTopicId: string
+    role: "P7" | "KHOA_BO_MON"
+  }>({
+    tag: "PutResearchTopicModal",
+    onClose: form.resetFields,
+  })
 
-    const { showSpinner, hideSpinner } = useSpinner()
-    const { data: expertProfile = [] } = useFindManyExpertProfile({
-        include: {
-            lecturer: {
-                select: {
-                    code: true,
-                    userProfile: {
-                        include: {
-                            academicRankType: true,
-                            academicDegreeType: true,
-                        },
-                    },
-                },
-            },
-        },
-    })
-
-    const { data: studentResearchTopic } = useFindUniqueStudentResearchTopic(
-        {
-            where: { id: input?.studentResearchTopicId },
+  const { showSpinner, hideSpinner } = useSpinner()
+  const { data: expertProfile = [] } = useFindManyExpertProfile({
+    include: {
+      lecturer: {
+        select: {
+          code: true,
+          userProfile: {
             include: {
-                supervisor: {
-                    include: {
-                        lecturer: {
-                            select: {
-                                userProfile: true,
-                            },
-                        },
-                    },
-                },
-                coSupervisor: {
-                    include: {
-                        lecturer: {
-                            select: {
-                                userProfile: true,
-                            },
-                        },
-                    },
-                },
-                studentSubjectScore: {
-                    include: {
-                        student: {
-                            select: {
-                                code: true,
-                                userProfile: true,
-                            },
-                        },
-                    },
-                },
+              academicRankType: true,
+              academicDegreeType: true,
             },
+          },
         },
-        {
-            enabled: !!input?.studentResearchTopicId,
-        }
-    )
+      },
+    },
+  })
 
-    const { mutateAsync: updateStudentResearchTopic } = useUpdateStudentResearchTopic()
-    async function onOk(values: PutResearchTopicForm) {
-        try {
-            showSpinner()
-            if (input?.studentResearchTopicId) {
-                const score = values.score ? Number(values.score) : null
-
-                await updateStudentResearchTopic({
-                    where: { id: input?.studentResearchTopicId },
-                    data: {
-                        name: values.name,
-                        mainContent: values.mainContent,
-                        supervisor: {
-                            connect: { id: values.supervisorId ?? '' },
-                        },
-                        ...(values.coSupervisorId
-                            ? {
-                                  coSupervisor: { connect: { id: values.coSupervisorId } },
-                              }
-                            : {}),
-                        reportDate: values.reportDate,
-                        deadline: values.deadline,
-                        studentSubjectScore: {
-                            update: {
-                                attendanceScore: score,
-                                midtermScore: score,
-                                examScore: score,
-                                finalScore: score,
-                            },
-                        },
-                    },
-                })
-            }
-            message.success('Cập nhật thành công')
-            onClose()
-        } catch (error) {
-            console.error(error)
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        } finally {
-            hideSpinner()
-        }
+  const { data: studentResearchTopic } = useFindUniqueStudentResearchTopic(
+    {
+      where: { id: input?.studentResearchTopicId },
+      include: {
+        supervisor: {
+          include: {
+            lecturer: {
+              select: {
+                userProfile: true,
+              },
+            },
+          },
+        },
+        coSupervisor: {
+          include: {
+            lecturer: {
+              select: {
+                userProfile: true,
+              },
+            },
+          },
+        },
+        studentSubjectScore: {
+          include: {
+            student: {
+              select: {
+                code: true,
+                userProfile: true,
+              },
+            },
+          },
+        },
+      },
+    },
+    {
+      enabled: !!input?.studentResearchTopicId,
     }
-    useEffect(() => {
-        if (input?.studentResearchTopicId) {
-            form.setFieldsValue({
-                name: studentResearchTopic?.name ?? '',
-                mainContent: studentResearchTopic?.mainContent ?? '',
-                supervisorId: studentResearchTopic?.supervisorId ?? undefined,
-                coSupervisorId: studentResearchTopic?.coSupervisorId ?? undefined,
-                reportDate: studentResearchTopic?.reportDate
-                    ? dayjs(studentResearchTopic?.reportDate)
-                    : undefined,
-                deadline: studentResearchTopic?.deadline
-                    ? dayjs(studentResearchTopic?.deadline)
-                    : undefined,
-                score: studentResearchTopic?.studentSubjectScore?.finalScore?.toString() ?? '',
-                studentFullname:
-                    studentResearchTopic?.studentSubjectScore?.student?.userProfile?.fullname,
-                studentCode: studentResearchTopic?.studentSubjectScore?.student?.code,
-                studentDateOfBirth: studentResearchTopic?.studentSubjectScore?.student?.userProfile
-                    ?.dateOfBirth
-                    ? dayjs(
-                          studentResearchTopic?.studentSubjectScore?.student?.userProfile
-                              ?.dateOfBirth
-                      ).format('DD/MM/YYYY')
-                    : undefined,
-            })
-        }
-    }, [input?.studentResearchTopicId, studentResearchTopic, form])
-    return (
-        <PutFormModal
-            open={isOpen}
-            onFinish={onOk}
-            form={form}
-            onCancel={onClose}
-            maskClosable={true}
-            title={
-                input?.studentResearchTopicId
-                    ? 'Chỉnh sửa chuyên đề nghiên cứu'
-                    : 'Thêm mới chuyên đề nghiên cứu'
-            }
-            className="w-[60vw]"
-        >
-            <Row gutter={[8, 8]}>
-                <Col span={8}>
-                    <FormItem form={form} name="studentCode" label="Mã HV/SV">
-                        <Input variant="outlined" disabled />
-                    </FormItem>
-                </Col>
-                <Col span={8}>
-                    <FormItem form={form} name="studentFullname" label="Họ và tên">
-                        <Input variant="outlined" disabled />
-                    </FormItem>
-                </Col>
-                <Col span={8}>
-                    <FormItem form={form} name="studentDateOfBirth" label="Ngày sinh">
-                        <Input variant="outlined" disabled />
-                    </FormItem>
-                </Col>
-                <Col span={12}>
-                    <FormItem form={form} name="name" label="Tên chuyên đề" required>
-                        <TextArea
-                            placeholder="Nhập tên chuyên đề"
-                            autoSize={{ minRows: 2, maxRows: 6 }}
-                        />
-                    </FormItem>
-                </Col>
-                <Col span={12}>
-                    <FormItem
-                        form={form}
-                        name="mainContent"
-                        label="Nội dung chính của chuyên đề"
-                        required
-                    >
-                        <TextArea
-                            placeholder="Nhập nội dung chính của chuyên đề"
-                            autoSize={{ minRows: 2, maxRows: 6 }}
-                        />
-                    </FormItem>
-                </Col>
+  )
 
-                <Col span={12}>
-                    <FormItem form={form} name="supervisorId" label="Hướng dẫn 1" required>
-                        <Select
-                            placeholder="Chọn giảng viên hướng dẫn"
-                            options={expertProfile.map((item) => ({
-                                label: item.lecturer
-                                    ? [
-                                          item.lecturer?.userProfile.academicRankType?.sMa,
-                                          item.lecturer?.userProfile.academicDegreeType?.sMa,
-                                          item.lecturer?.userProfile.fullname,
-                                      ]
-                                          .filter(Boolean)
-                                          .join('. ')
-                                    : [item.academicRank, item.academicDegree, item.name]
-                                          .filter(Boolean)
-                                          .join('. '),
-                                value: item.id,
-                            }))}
-                            showSearch
-                            filterOption={false}
-                            allowClear
-                        />
-                    </FormItem>
-                </Col>
-                <Col span={12}>
-                    <FormItem form={form} name="coSupervisorId" label="Hướng dẫn 2">
-                        <Select
-                            placeholder="Chọn giảng viên hướng dẫn"
-                            options={expertProfile.map((item) => ({
-                                label: item.lecturer
-                                    ? [
-                                          item.lecturer?.userProfile.academicRankType?.sMa,
-                                          item.lecturer?.userProfile.academicDegreeType?.sMa,
-                                          item.lecturer?.userProfile.fullname,
-                                      ]
-                                          .filter(Boolean)
-                                          .join('. ')
-                                    : [item.academicRank, item.academicDegree, item.name]
-                                          .filter(Boolean)
-                                          .join('. '),
-                                value: item.id,
-                            }))}
-                            showSearch
-                            filterOption={false}
-                            allowClear
-                        />
-                    </FormItem>
-                </Col>
-                <Col span={8}>
-                    <FormItem form={form} name="reportDate" label="Thời gian báo cáo">
-                        <DatePicker
-                            format={{ format: 'DD/MM/YYYY', type: 'mask' }}
-                            className="w-full"
-                            placeholder="Chọn ngày báo cáo"
-                        />
-                    </FormItem>
-                </Col>
-                <Col span={8}>
-                    <FormItem form={form} name="deadline" label="Hạn nhập chuyên đề">
-                        <DatePicker
-                            disabled={input?.role !== 'P7'}
-                            format={{ format: 'DD/MM/YYYY', type: 'mask' }}
-                            className="w-full"
-                            placeholder="Chọn hạn nhập chuyên đề"
-                        />
-                    </FormItem>
-                </Col>
-                <Col span={8}>
-                    <FormItem form={form} name="score" label="Điểm số">
-                        <InputNumber disabled min={0} max={10} step={0.1} className="w-full" />
-                    </FormItem>
-                </Col>
-            </Row>
-        </PutFormModal>
-    )
+  const { mutateAsync: updateStudentResearchTopic } = useUpdateStudentResearchTopic()
+  async function onOk(values: PutResearchTopicForm) {
+    try {
+      showSpinner()
+      if (input?.studentResearchTopicId) {
+        const score = values.score ? Number(values.score) : null
+
+        await updateStudentResearchTopic({
+          where: { id: input?.studentResearchTopicId },
+          data: {
+            name: values.name,
+            mainContent: values.mainContent,
+            supervisor: {
+              connect: { id: values.supervisorId ?? "" },
+            },
+            ...(values.coSupervisorId
+              ? {
+                  coSupervisor: { connect: { id: values.coSupervisorId } },
+                }
+              : {}),
+            reportDate: values.reportDate,
+            deadline: values.deadline,
+            studentSubjectScore: {
+              update: {
+                attendanceScore: score,
+                midtermScore: score,
+                examScore: score,
+                finalScore: score,
+              },
+            },
+          },
+        })
+      }
+      message.success("Cập nhật thành công")
+      onClose()
+    } catch (error) {
+      console.error(error)
+      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+    } finally {
+      hideSpinner()
+    }
+  }
+  useEffect(() => {
+    if (input?.studentResearchTopicId) {
+      form.setFieldsValue({
+        name: studentResearchTopic?.name ?? "",
+        mainContent: studentResearchTopic?.mainContent ?? "",
+        supervisorId: studentResearchTopic?.supervisorId ?? undefined,
+        coSupervisorId: studentResearchTopic?.coSupervisorId ?? undefined,
+        reportDate: studentResearchTopic?.reportDate
+          ? dayjs(studentResearchTopic?.reportDate)
+          : undefined,
+        deadline: studentResearchTopic?.deadline
+          ? dayjs(studentResearchTopic?.deadline)
+          : undefined,
+        score: studentResearchTopic?.studentSubjectScore?.finalScore?.toString() ?? "",
+        studentFullname: studentResearchTopic?.studentSubjectScore?.student?.userProfile?.fullname,
+        studentCode: studentResearchTopic?.studentSubjectScore?.student?.code,
+        studentDateOfBirth: studentResearchTopic?.studentSubjectScore?.student?.userProfile
+          ?.dateOfBirth
+          ? dayjs(
+              studentResearchTopic?.studentSubjectScore?.student?.userProfile?.dateOfBirth
+            ).format("DD/MM/YYYY")
+          : undefined,
+      })
+    }
+  }, [input?.studentResearchTopicId, studentResearchTopic, form])
+  return (
+    <PutFormModal
+      open={isOpen}
+      onFinish={onOk}
+      form={form}
+      onCancel={onClose}
+      maskClosable={true}
+      title={
+        input?.studentResearchTopicId
+          ? "Chỉnh sửa chuyên đề nghiên cứu"
+          : "Thêm mới chuyên đề nghiên cứu"
+      }
+      className="w-[60vw]"
+    >
+      <Row gutter={[8, 8]}>
+        <Col span={8}>
+          <FormItem form={form} name="studentCode" label="Mã HV/SV">
+            <Input variant="outlined" disabled />
+          </FormItem>
+        </Col>
+        <Col span={8}>
+          <FormItem form={form} name="studentFullname" label="Họ và tên">
+            <Input variant="outlined" disabled />
+          </FormItem>
+        </Col>
+        <Col span={8}>
+          <FormItem form={form} name="studentDateOfBirth" label="Ngày sinh">
+            <Input variant="outlined" disabled />
+          </FormItem>
+        </Col>
+        <Col span={12}>
+          <FormItem form={form} name="name" label="Tên chuyên đề" required>
+            <TextArea placeholder="Nhập tên chuyên đề" autoSize={{ minRows: 2, maxRows: 6 }} />
+          </FormItem>
+        </Col>
+        <Col span={12}>
+          <FormItem form={form} name="mainContent" label="Nội dung chính của chuyên đề" required>
+            <TextArea
+              placeholder="Nhập nội dung chính của chuyên đề"
+              autoSize={{ minRows: 2, maxRows: 6 }}
+            />
+          </FormItem>
+        </Col>
+
+        <Col span={12}>
+          <FormItem form={form} name="supervisorId" label="Hướng dẫn 1" required>
+            <Select
+              placeholder="Chọn giảng viên hướng dẫn"
+              options={expertProfile.map((item) => ({
+                label: item.lecturer
+                  ? [
+                      item.lecturer?.userProfile.academicRankType?.sMa,
+                      item.lecturer?.userProfile.academicDegreeType?.sMa,
+                      item.lecturer?.userProfile.fullname,
+                    ]
+                      .filter(Boolean)
+                      .join(". ")
+                  : [item.academicRank, item.academicDegree, item.name].filter(Boolean).join(". "),
+                value: item.id,
+              }))}
+              showSearch
+              filterOption={false}
+              allowClear
+            />
+          </FormItem>
+        </Col>
+        <Col span={12}>
+          <FormItem form={form} name="coSupervisorId" label="Hướng dẫn 2">
+            <Select
+              placeholder="Chọn giảng viên hướng dẫn"
+              options={expertProfile.map((item) => ({
+                label: item.lecturer
+                  ? [
+                      item.lecturer?.userProfile.academicRankType?.sMa,
+                      item.lecturer?.userProfile.academicDegreeType?.sMa,
+                      item.lecturer?.userProfile.fullname,
+                    ]
+                      .filter(Boolean)
+                      .join(". ")
+                  : [item.academicRank, item.academicDegree, item.name].filter(Boolean).join(". "),
+                value: item.id,
+              }))}
+              showSearch
+              filterOption={false}
+              allowClear
+            />
+          </FormItem>
+        </Col>
+        <Col span={8}>
+          <FormItem form={form} name="reportDate" label="Thời gian báo cáo">
+            <DatePicker
+              format={{ format: "DD/MM/YYYY", type: "mask" }}
+              className="w-full"
+              placeholder="Chọn ngày báo cáo"
+            />
+          </FormItem>
+        </Col>
+        <Col span={8}>
+          <FormItem form={form} name="deadline" label="Hạn nhập chuyên đề">
+            <DatePicker
+              disabled={input?.role !== "P7"}
+              format={{ format: "DD/MM/YYYY", type: "mask" }}
+              className="w-full"
+              placeholder="Chọn hạn nhập chuyên đề"
+            />
+          </FormItem>
+        </Col>
+        <Col span={8}>
+          <FormItem form={form} name="score" label="Điểm số">
+            <InputNumber disabled min={0} max={10} step={0.1} className="w-full" />
+          </FormItem>
+        </Col>
+      </Row>
+    </PutFormModal>
+  )
 }
 
 export default PutResearchTopicModal

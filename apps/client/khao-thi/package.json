@@ -6,8 +6,8 @@
 		"dev": "cross-env NODE_OPTIONS='--inspect --max_old_space_size=8096' next dev --turbopack",
 		"build": "cross-env NODE_OPTIONS='--max_old_space_size=8096' next build",
 		"start": "next start",
-		"lint": "biome lint --write --verbose",
-		"format": "biome format --write --verbose",
+		"format": "oxfmt",
+        "check": "oxlint && oxfmt --check",
 		"generate": "patch-package"
 	},
 	"dependencies": {
@@ -88,7 +88,6 @@
 		"zod": "catalog:"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "catalog:",
 		"@types/file-saver": "catalog:",
 		"@types/lodash": "catalog:",
 		"@types/minio": "catalog:",
@@ -106,7 +105,6 @@
 		"patch-package": "catalog:",
 		"path-browserify": "catalog:",
 		"postcss": "catalog:",
-		"prettier-plugin-tailwindcss": "catalog:",
 		"stream-browserify": "catalog:",
 		"tailwindcss": "catalog:",
 		"terser-webpack-plugin": "catalog:",

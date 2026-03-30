@@ -1,54 +1,54 @@
-import { calcFinalScore } from '../../../libs/src/utils'
-import { PrismaClient } from '../../generated/prisma-client'
+import { calcFinalScore } from "../../../libs/src/utils"
+import { PrismaClient } from "../../generated/prisma-client"
 
 const prisma = new PrismaClient()
 
 // THI VIẾT: only fill attandance and midterm
 const subjectClassIds = await prisma.subjectClass.findMany({
-    where: {
-        examType: 'OfflineWritten',
-        subject: { onePoint: false },
-        semester: {
-            startDate: {
-                gte: new Date(2035, 1, 1),
-            },
-        },
+  where: {
+    examType: "OfflineWritten",
+    subject: { onePoint: false },
+    semester: {
+      startDate: {
+        gte: new Date(2035, 1, 1),
+      },
     },
+  },
 })
 
-console.log('lớp thi viết', subjectClassIds.length)
+console.log("lớp thi viết", subjectClassIds.length)
 
 const whereCondition = {
-    subjectClassId: {
-        in: subjectClassIds.map((c) => c.id),
-    },
-    attendanceScore: null,
-    midtermScore: null,
-    examScore: null,
+  subjectClassId: {
+    in: subjectClassIds.map((c) => c.id),
+  },
+  attendanceScore: null,
+  midtermScore: null,
+  examScore: null,
 }
 
 const count = await prisma.studentSubjectScore.count({
-    where: whereCondition,
+  where: whereCondition,
 })
 
 console.log(`Found ${count} records to update`)
 
 const scoresToUpdate = await prisma.studentSubjectScore.findMany({
-    where: whereCondition,
-    select: { id: true },
+  where: whereCondition,
+  select: { id: true },
 })
 
 const getRandomScore = () => {
-    // Generate random score between 6.0 and 10.0 with 0.5 increments
-    const steps = Math.floor(Math.random() * 9) // 0 to 8
-    return 6 + steps * 0.5
+  // Generate random score between 6.0 and 10.0 with 0.5 increments
+  const steps = Math.floor(Math.random() * 9) // 0 to 8
+  return 6 + steps * 0.5
 }
 
 const chunkSize = 1000
 for (let i = 0; i < scoresToUpdate.length; i += chunkSize) {
-    const chunk = scoresToUpdate.slice(i, i + chunkSize)
+  const chunk = scoresToUpdate.slice(i, i + chunkSize)
 
-    await prisma.$executeRawUnsafe(`
+  await prisma.$executeRawUnsafe(`
         UPDATE "ql-dao-tao"."StudentSubjectScore" AS sss
         SET
             "attendanceScore" = data."attendanceScore"::double precision,
@@ -57,69 +57,69 @@ for (let i = 0; i < scoresToUpdate.length; i += chunkSize) {
         FROM (
             VALUES
             ${chunk
-                .map(
-                    (u) => `(
+              .map(
+                (u) => `(
                         '${u.id}',
                         ${getRandomScore()},
                         ${getRandomScore()}
                     )`
-                )
-                .join(',\n')}
+              )
+              .join(",\n")}
         ) AS data("id", "attendanceScore", "midtermScore")
         WHERE sss.id = data.id;
     `)
 
-    console.log(
-        `Updated ${Math.min(i + chunkSize, scoresToUpdate.length)} / ${scoresToUpdate.length} records...`
-    )
+  console.log(
+    `Updated ${Math.min(i + chunkSize, scoresToUpdate.length)} / ${scoresToUpdate.length} records...`
+  )
 }
 
 await prisma.subjectClass.updateMany({
-    where: { id: { in: subjectClassIds.map((c) => c.id) } },
-    data: { enteredScore: true },
+  where: { id: { in: subjectClassIds.map((c) => c.id) } },
+  data: { enteredScore: true },
 })
 
 // THI KHÁC
 const classes = await prisma.subjectClass.findMany({
-    include: {
-        subject: { select: { onePoint: true } },
+  include: {
+    subject: { select: { onePoint: true } },
+  },
+  where: {
+    examType: { not: "OfflineWritten" },
+    semester: {
+      startDate: {
+        gte: new Date(2035, 1, 1),
+      },
     },
-    where: {
-        examType: { not: 'OfflineWritten' },
-        semester: {
-            startDate: {
-                gte: new Date(2035, 1, 1),
-            },
-        },
-    },
+  },
 })
 
-console.log('lớp thi khác', classes.length)
+console.log("lớp thi khác", classes.length)
 
 const scoresKhac = await prisma.studentSubjectScore.findMany({
-    where: {
-        subjectClassId: { in: classes.map((c) => c.id) },
-        finalScore: null,
-    },
-    select: {
-        id: true,
-        subjectClass: {
-            select: {
-                subject: {
-                    select: { onePoint: true },
-                },
-            },
+  where: {
+    subjectClassId: { in: classes.map((c) => c.id) },
+    finalScore: null,
+  },
+  select: {
+    id: true,
+    subjectClass: {
+      select: {
+        subject: {
+          select: { onePoint: true },
         },
+      },
     },
+  },
 })
 
-console.log('scores thi khác', scoresKhac.length)
+console.log("scores thi khác", scoresKhac.length)
 
 if (scoresKhac.length > 0) {
-    for (let i = 0; i < scoresKhac.length; i += chunkSize) {
-        const chunk = scoresKhac.slice(i, i + chunkSize)
+  for (let i = 0; i < scoresKhac.length; i += chunkSize) {
+    const chunk = scoresKhac.slice(i, i + chunkSize)
 
-        await prisma.$executeRawUnsafe(`
+    await prisma.$executeRawUnsafe(`
             UPDATE "ql-dao-tao"."StudentSubjectScore" AS sss
             SET
                 "attendanceScore" = data."attendanceScore"::double precision,
@@ -129,38 +129,38 @@ if (scoresKhac.length > 0) {
             FROM (
                 VALUES
                 ${chunk
-                    .map((s) => {
-                        const isOnePoint = s.subjectClass?.subject.onePoint
-                        if (isOnePoint) {
-                            const score = getRandomScore()
-                            return `(
+                  .map((s) => {
+                    const isOnePoint = s.subjectClass?.subject.onePoint
+                    if (isOnePoint) {
+                      const score = getRandomScore()
+                      return `(
                                 '${s.id}',
                                 ${score},
                                 ${score},
                                 ${score}
                             )`
-                        }
-                        return `(
+                    }
+                    return `(
                             '${s.id}',
                             ${getRandomScore()},
                             ${getRandomScore()},
                             ${getRandomScore()}
                         )`
-                    })
-                    .join(',\n')}
+                  })
+                  .join(",\n")}
             ) AS data("id", "attendanceScore", "midtermScore", "examScore")
             WHERE sss.id = data.id;
         `)
 
-        console.log(
-            `Updated ${Math.min(i + chunkSize, scoresKhac.length)} / ${scoresKhac.length} records... (THI KHÁC)`
-        )
-    }
+    console.log(
+      `Updated ${Math.min(i + chunkSize, scoresKhac.length)} / ${scoresKhac.length} records... (THI KHÁC)`
+    )
+  }
 }
 
 await prisma.subjectClass.updateMany({
-    where: { id: { in: classes.map((c) => c.id) } },
-    data: { enteredScore: true, enteredExamScore: true },
+  where: { id: { in: classes.map((c) => c.id) } },
+  data: { enteredScore: true, enteredExamScore: true },
 })
 
-console.log('Update complete!')
+console.log("Update complete!")

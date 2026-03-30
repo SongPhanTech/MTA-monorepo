@@ -5,6 +5,8 @@
 /* eslint-disable */
 
 import { z } from 'zod/v3';
+import { FixedClassType } from '../../zenstack/models';
+import { FixedClassTypeSchema } from '../enums/FixedClassType.schema';
 const baseSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
@@ -18,6 +20,7 @@ const baseSchema = z.object({
     summary: z.string().nullish(),
     startYear: z.number().nullish(),
     graduated: z.boolean().default(false),
+    classType: FixedClassTypeSchema,
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -33,6 +36,7 @@ const baseSchemaWithoutDefaults = z.object({
     summary: z.string().nullish(),
     startYear: z.number().nullish(),
     graduated: z.boolean(),
+    classType: FixedClassTypeSchema,
 }
 ).strict();
 const relationSchema = z.object({
@@ -98,7 +102,8 @@ export const FixedClassPrismaUpdateSchema = z.object({
     name: z.string(),
     summary: z.string().nullish(),
     startYear: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
-    graduated: z.boolean()
+    graduated: z.boolean(),
+    classType: FixedClassTypeSchema
 }).partial().passthrough();
 
 
@@ -106,7 +111,7 @@ export const FixedClassPrismaUpdateSchema = z.object({
  * `FixedClass` schema for create operations excluding foreign keys and relations.
  */
 export const FixedClassCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, graduated: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, graduated: true, classType: true
 });
 
 

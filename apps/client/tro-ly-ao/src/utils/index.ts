@@ -1,2 +1,2 @@
-import { readStreamToText, readStreamWithLiveUpdate } from './readSteamToText'
+import { readStreamToText, readStreamWithLiveUpdate } from "./readSteamToText"
 export { readStreamToText, readStreamWithLiveUpdate }

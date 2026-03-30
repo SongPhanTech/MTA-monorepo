@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState } from "react"
 
 /**
  * Hook lưu trạng thái vào localStorage.
@@ -23,21 +23,21 @@ import { useState } from 'react'
  * )
  */
 export function useLocalStorage<T>(key: string, defaultValue: T) {
-    const [value, setValue] = useState<T>(() => {
-        try {
-            const stored = localStorage.getItem(key)
-            return stored !== null ? JSON.parse(stored) : defaultValue
-        } catch {
-            return defaultValue
-        }
-    })
-
-    const updateValue = (newValue: T) => {
-        try {
-            localStorage.setItem(key, JSON.stringify(newValue))
-            setValue(newValue)
-        } catch {}
+  const [value, setValue] = useState<T>(() => {
+    try {
+      const stored = localStorage.getItem(key)
+      return stored !== null ? JSON.parse(stored) : defaultValue
+    } catch {
+      return defaultValue
     }
+  })
 
-    return [value, updateValue] as const
+  const updateValue = (newValue: T) => {
+    try {
+      localStorage.setItem(key, JSON.stringify(newValue))
+      setValue(newValue)
+    } catch {}
+  }
+
+  return [value, updateValue] as const
 }

@@ -1,63 +1,62 @@
-import { prisma } from '..'
+import { prisma } from ".."
 
 export const findClassRegisterSession = async (userId: string) => {
-    const profile = await prisma.userProfile.findUniqueOrThrow({
-        where: { id: userId },
+  const profile = await prisma.userProfile.findUniqueOrThrow({
+    where: { id: userId },
+    include: {
+      educationAndTraining: {
         include: {
-            educationAndTraining: {
-                include: {
-                    curriculumVersion: true,
-                    fixedClass: {
-                        include: {
-                            trainingCourse: true,
-                            curriculumVersion: true,
-                        },
-                    },
-                },
+          curriculumVersion: true,
+          fixedClass: {
+            include: {
+              trainingCourse: true,
+              curriculumVersion: true,
             },
+          },
         },
+      },
+    },
+  })
+
+  // trainingCourseId => curriculumVersion
+  const map = new Map(
+    profile.educationAndTraining.map((course) => {
+      const curriculumVersion = course.curriculumVersion || course.fixedClass?.curriculumVersion
+      return [course.fixedClass?.trainingCourse.id, curriculumVersion]
     })
+  )
 
-    // trainingCourseId => curriculumVersion
-    const map = new Map(
-        profile.educationAndTraining.map((course) => {
-            const curriculumVersion =
-                course.curriculumVersion || course.fixedClass?.curriculumVersion
-            return [course.fixedClass?.trainingCourse.id, curriculumVersion]
-        })
-    )
-
-    const now = new Date()
-    const classRegisterSession = await prisma.classRegisterSession.findMany({
-        where: {
-            startDate: { lte: now },
-            endDate: { gte: now },
-            trainingCourses: {
-                some: {
-                    id: {
-                        in: profile.educationAndTraining.map(
-                            (item) => item.fixedClass?.trainingCourse.id || ''
-                        ),
-                    },
-                },
-            },
+  const now = new Date()
+  const classRegisterSession = await prisma.classRegisterSession.findMany({
+    where: {
+      startDate: { lte: now },
+      endDate: { gte: now },
+      trainingCourses: {
+        some: {
+          id: {
+            in: profile.educationAndTraining.map(
+              (item) => item.fixedClass?.trainingCourse.id || ""
+            ),
+          },
         },
-        include: {
-            semester: { include: { schoolYear: true } },
-            trainingCourses: { select: { id: true } },
-            creditLimit: true,
-        },
-    })
+      },
+    },
+    include: {
+      semester: { include: { schoolYear: true } },
+      trainingCourses: { select: { id: true } },
+      creditLimit: true,
+    },
+  })
 
-    const sessions = classRegisterSession.map((session) => {
-        const curriculumVersions = [...map]
-            .filter(([trainingCourseId]) =>
-                session.trainingCourses.some(({ id }) => id === trainingCourseId)
-            )
-            .map(([_, curriculumVersion]) => curriculumVersion)
+  const sessions = classRegisterSession.map((session) => {
+    const curriculumVersions = [...map]
+      .filter(([trainingCourseId]) =>
+        session.trainingCourses.some(({ id }) => id === trainingCourseId)
+      )
+      .map(([_, curriculumVersion]) => curriculumVersion)
 
-        return { ...session, curriculumVersions }
-    })
+    return { ...session, curriculumVersions }
+  })
 
-    return sessions
+  return sessions
 }

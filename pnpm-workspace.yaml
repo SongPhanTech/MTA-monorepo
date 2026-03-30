@@ -4,69 +4,68 @@ packages:
   - packages/*
 
 catalog:
-  '@ant-design/cssinjs': ^1.22.1
-  '@ant-design/icons': ^5.5.2
-  '@ant-design/nextjs-registry': ^1.0.2
-  '@ant-design/plots': ^2.3.3
-  '@biomejs/biome': ^2.3.0
-  '@casl/ability': ^6.7.2
-  '@casl/react': ^4.0.0
-  '@commitlint/cli': ^19.8.1
-  '@commitlint/config-conventional': ^19.8.1
-  '@faker-js/faker': ^10.1.0
-  '@hono/oidc-auth': ^1.7.1
-  '@hono/otel': 1.0.1
-  '@hono/zod-openapi': ^0.18.4
-  '@openapi-codegen/cli': ^3.1.0
-  '@openapi-codegen/typescript': ^11.0.1
-  '@opentelemetry/api': 1.9.0
-  '@opentelemetry/auto-instrumentations-node': 0.67.0
-  '@opentelemetry/exporter-metrics-otlp-http': ^0.208.0
-  '@opentelemetry/exporter-trace-otlp-http': 0.208.0
-  '@opentelemetry/resources': 2.2.0
-  '@opentelemetry/sdk-metrics': ^2.2.0
-  '@opentelemetry/sdk-node': 0.208.0
-  '@opentelemetry/sdk-trace-base': ^2.2.0
-  '@opentelemetry/sdk-trace-web': 2.2.0
-  '@opentelemetry/semantic-conventions': 1.38.0
-  '@prisma/client': 6.10.1
-  '@scalar/hono-api-reference': ^0.5.175
-  '@t3-oss/env-nextjs': 0.12.0
-  '@tanstack/react-query': 5.90.5
-  '@tanstack/react-store': ^0.8.0
-  '@tiptap/extension-color': 3.10.5
-  '@tiptap/extension-highlight': 3.10.5
-  '@tiptap/extension-image': 3.10.5
-  '@tiptap/extension-mathematics': 3.10.5
-  '@tiptap/extension-mention': 3.10.5
-  '@tiptap/extension-table': 3.10.5
-  '@tiptap/extension-table-cell': 3.10.5
-  '@tiptap/extension-table-header': 3.10.5
-  '@tiptap/extension-table-row': 3.10.5
-  '@tiptap/extension-text-align': 3.10.5
-  '@tiptap/extension-text-style': 3.10.5
-  '@tiptap/extension-underline': 3.10.5
-  '@tiptap/pm': 3.10.5
-  '@tiptap/react': 3.10.5
-  '@tiptap/starter-kit': 3.10.5
-  '@tiptap/suggestion': 3.10.5
-  '@turbo/gen': ^2.6.3
-  '@types/axios': ^0.14.4
-  '@types/bun': ^1.3.1
-  '@types/exceljs': ^1.3.2
-  '@types/file-saver': 2.0.7
-  '@types/lodash': 4.17.20
-  '@types/minio': ^7.1.1
-  '@types/node': ^20.19.23
-  '@types/qs': ^6.9.17
-  '@types/react': 18.3.24
-  '@types/react-big-calendar': ^1.16.3
-  '@types/react-dom': ^18.3
-  '@types/react-image-fallback': ^8.0.6
-  '@zenstackhq/openapi': ^2.20.1
-  '@zenstackhq/runtime': ^2.20.1
-  '@zenstackhq/server': ^2.20.1
-  '@zenstackhq/tanstack-query': 2.21.1
+  "@ant-design/cssinjs": ^1.22.1
+  "@ant-design/icons": ^5.5.2
+  "@ant-design/nextjs-registry": ^1.0.2
+  "@ant-design/plots": ^2.3.3
+  "@casl/ability": ^6.7.2
+  "@casl/react": ^4.0.0
+  "@commitlint/cli": ^19.8.1
+  "@commitlint/config-conventional": ^19.8.1
+  "@faker-js/faker": ^10.1.0
+  "@hono/oidc-auth": ^1.7.1
+  "@hono/otel": 1.0.1
+  "@hono/zod-openapi": ^0.18.4
+  "@openapi-codegen/cli": ^3.1.0
+  "@openapi-codegen/typescript": ^11.0.1
+  "@opentelemetry/api": 1.9.0
+  "@opentelemetry/auto-instrumentations-node": 0.67.0
+  "@opentelemetry/exporter-metrics-otlp-http": ^0.208.0
+  "@opentelemetry/exporter-trace-otlp-http": 0.208.0
+  "@opentelemetry/resources": 2.2.0
+  "@opentelemetry/sdk-metrics": ^2.2.0
+  "@opentelemetry/sdk-node": 0.208.0
+  "@opentelemetry/sdk-trace-base": ^2.2.0
+  "@opentelemetry/sdk-trace-web": 2.2.0
+  "@opentelemetry/semantic-conventions": 1.38.0
+  "@prisma/client": 6.10.1
+  "@scalar/hono-api-reference": ^0.5.175
+  "@t3-oss/env-nextjs": 0.12.0
+  "@tanstack/react-query": 5.90.5
+  "@tanstack/react-store": ^0.8.0
+  "@tiptap/extension-color": 3.10.5
+  "@tiptap/extension-highlight": 3.10.5
+  "@tiptap/extension-image": 3.10.5
+  "@tiptap/extension-mathematics": 3.10.5
+  "@tiptap/extension-mention": 3.10.5
+  "@tiptap/extension-table": 3.10.5
+  "@tiptap/extension-table-cell": 3.10.5
+  "@tiptap/extension-table-header": 3.10.5
+  "@tiptap/extension-table-row": 3.10.5
+  "@tiptap/extension-text-align": 3.10.5
+  "@tiptap/extension-text-style": 3.10.5
+  "@tiptap/extension-underline": 3.10.5
+  "@tiptap/pm": 3.10.5
+  "@tiptap/react": 3.10.5
+  "@tiptap/starter-kit": 3.10.5
+  "@tiptap/suggestion": 3.10.5
+  "@turbo/gen": ^2.6.3
+  "@types/axios": ^0.14.4
+  "@types/bun": ^1.3.1
+  "@types/exceljs": ^1.3.2
+  "@types/file-saver": 2.0.7
+  "@types/lodash": 4.17.20
+  "@types/minio": ^7.1.1
+  "@types/node": ^20.19.23
+  "@types/qs": ^6.9.17
+  "@types/react": 18.3.24
+  "@types/react-big-calendar": ^1.16.3
+  "@types/react-dom": ^18.3
+  "@types/react-image-fallback": ^8.0.6
+  "@zenstackhq/openapi": ^2.20.1
+  "@zenstackhq/runtime": ^2.20.1
+  "@zenstackhq/server": ^2.20.1
+  "@zenstackhq/tanstack-query": 2.21.1
   antd: ^5.23.1
   antd-img-crop: ^4.25.0
   autoprefixer: ^10.4.20
@@ -113,7 +112,7 @@ catalog:
   pizzip: 3.2.0
   postcss: ^8.4.49
   pptx-automizer: ^0.8.0
-  prettier-plugin-tailwindcss: ^0.6.9
+  oxfmt: ^0.42.0
   prisma: 6.10.1
   prisma-dbml-generator: ^0.12.0
   prom-client: ^15.1.3
@@ -154,14 +153,11 @@ catalog:
 ignoredBuiltDependencies:
   - core-js
   - sharp
-supportedArchitectures:
-  os: ['win32'] # Optional: helps with your Windows environment
-  cpu: ['x64']
 
 onlyBuiltDependencies:
-  - '@prisma/client'
-  - '@prisma/engines'
-  - '@swc/core'
+  - "@prisma/client"
+  - "@prisma/engines"
+  - "@swc/core"
   - core-js-pure
   - esbuild
   - prisma

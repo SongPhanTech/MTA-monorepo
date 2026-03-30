@@ -7965,6 +7965,20 @@ const metadata: ModelMeta = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'student',
+                }, semester: {
+                    name: "semester",
+                    type: "Semester",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'studentSubjectScore',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "semesterId" },
+                }, semesterId: {
+                    name: "semesterId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'semester',
                 }, attendanceScore: {
                     name: "attendanceScore",
                     type: "Float",
@@ -8591,6 +8605,22 @@ const metadata: ModelMeta = {
                     name: "finalScore",
                     type: "Float",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                }, listeningScore: {
+                    name: "listeningScore",
+                    type: "Float",
+                    isOptional: true,
+                }, speakingScore: {
+                    name: "speakingScore",
+                    type: "Float",
+                    isOptional: true,
+                }, readingScore: {
+                    name: "readingScore",
+                    type: "Float",
+                    isOptional: true,
+                }, writingScore: {
+                    name: "writingScore",
+                    type: "Float",
+                    isOptional: true,
                 }, score: {
                     name: "score",
                     type: "Float",
@@ -9059,6 +9089,12 @@ const metadata: ModelMeta = {
                 }, availableTrainingTime: {
                     name: "availableTrainingTime",
                     type: "AvailableTrainingTime",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'semester',
+                }, studentSubjectScore: {
+                    name: "studentSubjectScore",
+                    type: "StudentSubjectScore",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'semester',
@@ -9722,6 +9758,10 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'curriculumVersion',
+                }, classType: {
+                    name: "classType",
+                    type: "FixedClassType",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, subjectClasses: {
                     name: "subjectClasses",
                     type: "SubjectClass",

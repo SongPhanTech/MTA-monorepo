@@ -1,1 +1,1 @@
-export * from '../generated/mysql-client'
+export * from "../generated/mysql-client"
