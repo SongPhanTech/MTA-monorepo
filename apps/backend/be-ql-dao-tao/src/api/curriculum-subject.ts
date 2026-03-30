@@ -1,15 +1,15 @@
-import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
-import { createId, type Prisma } from "@workspace/db";
+import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
+import { createId, type Prisma } from "@workspace/db"
 import {
   parseSheetSubject,
   parseSheetTrainingBlock,
   zParseSheetError,
-} from "@workspace/libs/parseExcel";
-import { prisma } from "..";
-import { UploadExcelModel } from "../dto/upload-excel.dto";
-import { buildSubjectMapOrThrow, buildTrainingBlockMapOrThrow } from "../utils";
-import { $Enums } from "@workspace/db";
-const app = new OpenAPIHono({ strict: false });
+} from "@workspace/libs/parseExcel"
+import { prisma } from ".."
+import { UploadExcelModel } from "../dto/upload-excel.dto"
+import { buildSubjectMapOrThrow, buildTrainingBlockMapOrThrow } from "../utils"
+import { $Enums } from "@workspace/db"
+const app = new OpenAPIHono({ strict: false })
 
 const importCurriculumVersion = createRoute({
   operationId: "import-phien-ban-CTDT-Subject",
@@ -52,7 +52,7 @@ const importCurriculumVersion = createRoute({
       },
     },
   },
-});
+})
 
 app.openapi(importCurriculumVersion, async (c) => {
   const {
@@ -62,11 +62,11 @@ app.openapi(importCurriculumVersion, async (c) => {
     timeout,
     createNewSubjects,
     deleteOldData,
-  } = c.req.valid("form");
+  } = c.req.valid("form")
 
-  const buf = await file.arrayBuffer();
-  const data = parseSheetSubject(buf);
-  const trainingBlocks = parseSheetTrainingBlock(buf);
+  const buf = await file.arrayBuffer()
+  const data = parseSheetSubject(buf)
+  const trainingBlocks = parseSheetTrainingBlock(buf)
 
   if (data.errors.length || trainingBlocks.errors.length) {
     return c.json(
@@ -74,19 +74,19 @@ app.openapi(importCurriculumVersion, async (c) => {
         message: "Lỗi khi đọc file",
         errors: [...data.errors, ...trainingBlocks.errors],
       },
-      400,
-    );
+      400
+    )
   }
 
   const uniqueTrainingBlockNames = [
     ...new Set(data.subjects.map(({ trainingBlockName }) => trainingBlockName)),
-  ];
+  ]
 
   const trainingBlockMap = await buildTrainingBlockMapOrThrow(
     prisma,
     trainingObjectTypeId,
-    uniqueTrainingBlockNames,
-  );
+    uniqueTrainingBlockNames
+  )
 
   const subjectMap = await buildSubjectMapOrThrow(
     prisma,
@@ -95,20 +95,20 @@ app.openapi(importCurriculumVersion, async (c) => {
       ...s,
       type: s.subjectVersionType,
     })),
-    createNewSubjects,
-  );
+    createNewSubjects
+  )
 
-  let existingTBCVs: { id: string; trainingBlockId: string }[] = [];
+  let existingTBCVs: { id: string; trainingBlockId: string }[] = []
   let existingTBSs: {
-    trainingBlockOnCurriculumVersionId: string;
-    subjectId: string;
-  }[] = [];
+    trainingBlockOnCurriculumVersionId: string
+    subjectId: string
+  }[] = []
 
   if (!deleteOldData) {
     existingTBCVs = await prisma.trainingBlockOnCurriculumVersion.findMany({
       where: { curriculumVersionId },
       select: { id: true, trainingBlockId: true },
-    });
+    })
 
     existingTBSs = await prisma.trainingBlockSubject.findMany({
       where: {
@@ -117,36 +117,31 @@ app.openapi(importCurriculumVersion, async (c) => {
         },
       },
       select: { trainingBlockOnCurriculumVersionId: true, subjectId: true },
-    });
+    })
   }
 
-  const existingTBCVMap = new Map(
-    existingTBCVs.map((item) => [item.trainingBlockId, item.id]),
-  );
+  const existingTBCVMap = new Map(existingTBCVs.map((item) => [item.trainingBlockId, item.id]))
   const existingTBSSet = new Set(
-    existingTBSs.map(
-      (item) => `${item.trainingBlockOnCurriculumVersionId}-${item.subjectId}`,
-    ),
-  );
+    existingTBSs.map((item) => `${item.trainingBlockOnCurriculumVersionId}-${item.subjectId}`)
+  )
 
   const curriculumTrainingBlock = new Map(
     uniqueTrainingBlockNames.map((trainingBlock) => {
-      const trainingBlockId = trainingBlockMap.get(trainingBlock) as string;
-      const existingId = existingTBCVMap.get(trainingBlockId);
+      const trainingBlockId = trainingBlockMap.get(trainingBlock) as string
+      const existingId = existingTBCVMap.get(trainingBlockId)
 
       return [
         trainingBlock,
         {
           id: existingId ?? createId(),
           electiveCreditsRequired:
-            trainingBlocks.trainingBlocks.find(
-              (tb) => tb.trainingBlockName === trainingBlock,
-            )?.credit || 0,
+            trainingBlocks.trainingBlocks.find((tb) => tb.trainingBlockName === trainingBlock)
+              ?.credit || 0,
           isNew: !existingId,
         },
-      ];
-    }),
-  );
+      ]
+    })
+  )
 
   const trainingBlockOnCurriculumVersion: Prisma.TrainingBlockOnCurriculumVersionCreateManyInput[] =
     Array.from(curriculumTrainingBlock.entries())
@@ -157,64 +152,46 @@ app.openapi(importCurriculumVersion, async (c) => {
         trainingBlockId: trainingBlockMap.get(name) as string,
         electiveCreditsRequired,
         priority: i + 1,
-      }));
+      }))
 
-  const trainingBlockSubjects: Prisma.TrainingBlockSubjectCreateManyInput[] =
-    data.subjects
-      .map(
-        ({
-          code,
-          trainingBlockName,
-          semester,
-          type,
-          useForFinalScore,
-          graduation,
-        }) => {
-          const trainingBlockOnCurriculumVersionId =
-            curriculumTrainingBlock.get(trainingBlockName)?.id as string;
-          const subjectId = subjectMap.get(code) as string;
+  const trainingBlockSubjects: Prisma.TrainingBlockSubjectCreateManyInput[] = data.subjects
+    .map(({ code, trainingBlockName, semester, type, useForFinalScore, graduation }) => {
+      const trainingBlockOnCurriculumVersionId = curriculumTrainingBlock.get(trainingBlockName)
+        ?.id as string
+      const subjectId = subjectMap.get(code) as string
 
-          if (
-            existingTBSSet.has(
-              `${trainingBlockOnCurriculumVersionId}-${subjectId}`,
-            )
-          ) {
-            return null;
-          }
-
-          return {
-            id: createId(),
-            trainingBlockOnCurriculumVersionId,
-            subjectId,
-            semester,
-            type,
-            useForFinalScore,
-            graduation,
-          };
-        },
-      )
-      .filter(
-        (item) => item !== null,
-      ) as Prisma.TrainingBlockSubjectCreateManyInput[];
-
-  const maxSemester = Math.max(...data.subjects.map((s) => s.semester || 0));
-
-  const { totalMandatoryCredits, totalElectiveCredits } = (
-    data?.subjects || []
-  ).reduce(
-    (acc, s) => {
-      const credit = Number(s.credit) || 0;
-
-      if (s.type === $Enums.SubjectRequirementType.Mandatory) {
-        acc.totalMandatoryCredits += credit;
-      } else if (s.type === $Enums.SubjectRequirementType.Optional) {
-        acc.totalElectiveCredits += credit;
+      if (existingTBSSet.has(`${trainingBlockOnCurriculumVersionId}-${subjectId}`)) {
+        return null
       }
 
-      return acc;
+      return {
+        id: createId(),
+        trainingBlockOnCurriculumVersionId,
+        subjectId,
+        semester,
+        type,
+        useForFinalScore,
+        graduation,
+      }
+    })
+    .filter((item) => item !== null) as Prisma.TrainingBlockSubjectCreateManyInput[]
+
+  const maxSemester = Math.max(...data.subjects.map((s) => s.semester || 0))
+
+  const { totalMandatoryCredits, totalElectiveCredits } = (data?.subjects || []).reduce(
+    (acc, s) => {
+      const credit = Number(s.credit) || 0
+
+      if (s.type === $Enums.SubjectRequirementType.Mandatory) {
+        acc.totalMandatoryCredits += credit
+      } else if (s.type === $Enums.SubjectRequirementType.Optional) {
+        acc.totalElectiveCredits += credit
+      }
+
+      return acc
     },
-    { totalMandatoryCredits: 0, totalElectiveCredits: 0 },
-  );
+    { totalMandatoryCredits: 0, totalElectiveCredits: 0 }
+  )
   await prisma.$transaction(
     async (tx) => {
       if (deleteOldData) {
@@ -224,20 +201,20 @@ app.openapi(importCurriculumVersion, async (c) => {
               curriculumVersionId,
             },
           },
-        });
+        })
 
         await tx.trainingBlockOnCurriculumVersion.deleteMany({
           where: { curriculumVersionId },
-        });
+        })
       }
 
       await tx.trainingBlockOnCurriculumVersion.createMany({
         data: trainingBlockOnCurriculumVersion,
-      });
+      })
 
       await tx.trainingBlockSubject.createMany({
         data: trainingBlockSubjects,
-      });
+      })
 
       await tx.curriculumVersion.update({
         where: { id: curriculumVersionId },
@@ -246,17 +223,17 @@ app.openapi(importCurriculumVersion, async (c) => {
           requiredCredits: totalMandatoryCredits,
           electiveCredits: totalElectiveCredits,
         },
-      });
+      })
     },
-    { timeout: timeout * 1000 },
-  );
+    { timeout: timeout * 1000 }
+  )
 
   return c.json(
     {
       message: `Import training blocks successfully: ${uniqueTrainingBlockNames.length}`,
     },
-    200,
-  );
-});
+    200
+  )
+})
 
-export default app;
+export default app
