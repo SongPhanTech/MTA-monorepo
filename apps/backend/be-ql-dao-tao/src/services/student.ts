@@ -497,42 +497,37 @@ export const exportArchivedCertificate = async ({
     CANCEL: "Đã huỷ",
   }
 
-  // Flatten data
-  const data = archivedCertificates.map((item, idx) => {
-    const student = item.student
-    const userProfile = student?.userProfile
-    const fixedClass = student?.fixedClass
-    // const trainingCourse = fixedClass?.trainingCourse
-    const curriculum = fixedClass?.curriculumVersion?.curriculum
-    const trainingMajor = curriculum?.trainingMajor
-    // const trainingField = trainingMajor?.trainingField
+    // Flatten data
+    const data = archivedCertificates.map((item, idx) => {
+        const student = item.student
+        const userProfile = student?.userProfile
+        const fixedClass = student?.fixedClass
+        const curriculum = fixedClass?.curriculumVersion?.curriculum
+        const trainingMajor = curriculum?.trainingMajor
 
-    return {
-      no: idx + 1,
-      // studentCode: userProfile?.code || '',
-      studentName: userProfile?.fullname || "",
-      // phoneNumber: userProfile?.phoneNumber || '',
-      dateOfBirth: userProfile?.dateOfBirth
-        ? `'${dayjs(userProfile.dateOfBirth).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY")}`
-        : "",
-      // fixedClassName: fixedClass?.name || '',
-      // fixedClassCode: fixedClass?.code || '',
-      // trainingCourseName: trainingCourse?.name || '',
-      // trainingFieldName: trainingField?.name || '',
-      trainingMajorName: trainingMajor?.name || "",
-      certificateName: item.certificate?.name || "",
-      score: item.score ?? "",
-      // decisionNumber: item.decisionNumber || '',
-      issuedDate: item.issuedDate
-        ? `'${dayjs(item.issuedDate).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY")}`
-        : "",
-      issuedBy: item.issuedBy || "",
-      // expiredDate: item.expiredDate
-      //     ? `'${dayjs(item.expiredDate).format('DD/MM/YYYY')}`
-      //     : '',
-      // status: statusMap[item.status] || item.status,
-    }
-  })
+        return {
+            no: idx + 1,
+            studentName: userProfile?.fullname || '',
+            dateOfBirth: userProfile?.dateOfBirth
+                ? `'${dayjs(userProfile.dateOfBirth).tz('Asia/Ho_Chi_Minh').format('DD/MM/YYYY')}`
+                : '',
+            placeOfBirth: userProfile?.placeOfBirth || '',
+            idCardNumber: userProfile?.idCardNumber || '',
+            fixedClass: fixedClass?.name || '',
+            trainingCourse: fixedClass?.trainingCourse?.name || '',
+            trainingMajorName: trainingMajor?.name || '',
+            certificateName: item.certificate?.name || '',
+            listening: item.listeningScore || '',
+            speaking: item.speakingScore || '',
+            reading: item.readingScore || '',
+            writing: item.writingScore || '',
+            score: item.score ?? '',
+            issuedDate: item.issuedDate
+                ? `'${dayjs(item.issuedDate).tz('Asia/Ho_Chi_Minh').format('DD/MM/YYYY')}`
+                : '',
+            issuedBy: item.issuedBy || '',
+        }
+    })
 
   const buffer = await getTemplateBuffer(prisma, "DIEM_CHUNG_CHI.xlsx")
   const template = new XlsxTemplate(buffer)

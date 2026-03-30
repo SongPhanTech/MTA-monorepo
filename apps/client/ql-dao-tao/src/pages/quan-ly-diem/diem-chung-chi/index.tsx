@@ -6,28 +6,29 @@ import useSpinner from "@hooks/spinner"
 import DefaultLayout from "@layouts/default-layout"
 import type { FixedClass, TrainingCourse } from "@workspace/db/client"
 import {
-  useCountArchivedCertificate,
-  useFindManyArchivedCertificate,
-  useFindManyCertificate,
-  useFindManyCurriculumVersion,
-  useFindManyFixedClass,
-  useFindManyTrainingCourse,
-  useFindManyTrainingField,
-  useFindManyTrainingMajor,
-  useUpdateArchivedCertificate,
-  useUpdateManyArchivedCertificate,
-} from "@workspace/db/hooks"
-import { exportArchivedCertificateExcel, useCertificateScore } from "@workspace/libs/api/training"
-import { useAbility } from "@workspace/permissions/hooks"
-import { QL_DAO_TAO_PERMISSION } from "@workspace/router"
-import { useTrainingObjectTypeStore } from "@workspace/ui"
-import { Button, Col, Flex, Input, Modal, message, Row, Tooltip } from "antd"
-import { saveAs } from "file-saver"
-import _ from "lodash"
-import { InfoIcon } from "lucide-react"
-import type React from "react"
-import { useCallback, useMemo, useState } from "react"
-import { useDisclosure } from "react-hook-disclosure-modal"
+    useCountArchivedCertificate,
+    useFindManyArchivedCertificate,
+    useFindManyCertificate,
+    useFindManyCurriculumVersion,
+    useFindManyFixedClass,
+    useFindManyTrainingCourse,
+    useFindManyTrainingField,
+    useFindManyTrainingMajor,
+    useUpdateArchivedCertificate,
+    useUpdateManyArchivedCertificate,
+} from '@workspace/db/hooks'
+import { exportArchivedCertificateExcel, useCertificateScore } from '@workspace/libs/api/training'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
+import { Button, Col, Flex, Input, Modal, Select, Switch, message, Row, Tooltip } from 'antd'
+import { saveAs } from 'file-saver'
+import _ from 'lodash'
+import { InfoIcon } from 'lucide-react'
+import type React from 'react'
+import { useCallback, useMemo, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
+import EditIcon from '../../../../../dang-ky-hoc/src/components/icons/edit'
 
 export default function ArchivedCertificate() {
   const { can } = useAbility()
@@ -42,7 +43,10 @@ export default function ArchivedCertificate() {
     certificateId: undefined,
   })
 
-  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
+    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
+    const [showLanguageScoreColumns, setShowLanguageScoreColumns] = useState(true)
+    const [isExportModalOpen, setIsExportModalOpen] = useState(false)
+    const [exportTrainingCourseId, setExportTrainingCourseId] = useState<string | undefined>()
 
   const { showSpinner, hideSpinner } = useSpinner()
 
@@ -97,13 +101,14 @@ export default function ArchivedCertificate() {
     tag: "PutCertificateArchivedModal",
   })
 
-  const { onOpen: onOpenCertificateList } = useDisclosure<{
-    studentId: string
-    studentName: string
-    certificates: any[]
-  }>({
-    tag: "ModalDanhSachChungChi",
-  })
+    const { onOpen: onOpenCertificateList } = useDisclosure<{
+        studentId: string
+        studentName: string
+        certificates: any[]
+        isEditMode?: boolean
+    }>({
+        tag: 'ModalDanhSachChungChi',
+    })
 
   const { onOpen: onOpenConvertCertificate } = useDisclosure<{
     studentIds: string[]
@@ -351,55 +356,91 @@ export default function ArchivedCertificate() {
           return
         }
 
-        const res = await updateCertificateScore({
-          data: { archivedCertificateIds: certificateIds },
-        })
-        if (res?.status === 200) {
-          message.success("Phê duyệt thành công")
-          refetch()
-          setSelectedRowKeys([])
-          return
+                const res = await updateCertificateScore({
+                    data: { archivedCertificateIds: certificateIds },
+                })
+                if (res?.status === 200) {
+                    message.success('Phê duyệt thành công')
+                    refetch()
+                    setSelectedRowKeys([])
+                    return
+                }
+            }
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
-      }
-    } catch (error: any) {
-      if (error?.info?.message) {
-        message.error(error?.info?.message)
-        return
-      }
-      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
-    }
-  }
-
-  const handleExportExcel = async () => {
-    if (!trainingObjectTypeId) {
-      message.warning("Vui lòng chọn đối tượng đào tạo")
-      return
     }
 
-    try {
-      showSpinner()
-      const res = await exportArchivedCertificateExcel({
-        trainingObjectTypeId,
-        trainingCourseId: filters.trainingCourseId || undefined,
-        fixedClassId: filters.fixedClassId || undefined,
-        certificateId: filters.certificateId || undefined,
-      })
-      if (res.status === 200) {
-        saveAs(res.data, "Danh_sach_diem_chung_chi.xlsx")
-        message.success("Xuất Excel thành công")
-      } else {
-        message.error("Xuất Excel thất bại")
-      }
-    } catch (error: any) {
-      if (error?.response?.data?.message) {
-        message.error(error.response.data.message)
-      } else {
-        message.error("Đã xảy ra lỗi khi xuất Excel")
-      }
-    } finally {
-      hideSpinner()
+    const handleOpenExportModal = () => {
+        const selectedTrainingCourseId = Array.isArray(filters.trainingCourseId)
+            ? filters.trainingCourseId[0]
+            : filters.trainingCourseId
+
+        setExportTrainingCourseId(selectedTrainingCourseId)
+        setIsExportModalOpen(true)
     }
-  }
+
+    const handleExportExcel = async () => {
+        if (!trainingObjectTypeId) {
+            message.warning('Vui lòng chọn đối tượng đào tạo')
+            return
+        }
+
+        if (!exportTrainingCourseId) {
+            message.warning('Vui lòng chọn khóa học để xuất Excel')
+            return
+        }
+
+        const extractExportErrorMessage = (error: any) => {
+            const status = error?.response?.status
+            const rawMessage = error?.response?.data?.message || error?.response?.data?.error
+
+            const detailedMessage = Array.isArray(rawMessage)
+                ? rawMessage.join(', ')
+                : rawMessage || error?.message
+
+            if (status && detailedMessage) {
+                return `Xuất Excel thất bại: ${detailedMessage}`
+            }
+
+            if (status) {
+                return `Xuất Excel thất bại`
+            }
+
+            if (detailedMessage) {
+                return `Xuất Excel thất bại: ${detailedMessage}`
+            }
+
+            return 'Đã xảy ra lỗi khi xuất Excel, vui lòng thử lại'
+        }
+
+        try {
+            showSpinner()
+            const res = await exportArchivedCertificateExcel({
+                trainingObjectTypeId,
+                trainingCourseId: exportTrainingCourseId,
+                fixedClassId: filters.fixedClassId || undefined,
+                certificateId: filters.certificateId || undefined,
+            })
+            if (res.status === 200) {
+                saveAs(res.data, 'Danh_sach_diem_chung_chi.xlsx')
+                message.success('Xuất Excel thành công')
+                setIsExportModalOpen(false)
+            } else {
+                const error: any = new Error()
+                error.response = { status: res.status, data: res.data }
+                message.error(extractExportErrorMessage(error))
+            }
+        } catch (error: any) {
+            message.error(extractExportErrorMessage(error))
+        } finally {
+            hideSpinner()
+        }
+    }
 
   return (
     <Row gutter={[16, 0]}>
@@ -474,44 +515,58 @@ export default function ArchivedCertificate() {
                                 value={filters.certificateId}
                                 allowClear
                             /> */}
-              <Input
-                className="w-full"
-                placeholder="Tìm số quyết định"
-                value={(filters as any).decisionNumber || ""}
-                onChange={(e) =>
-                  setFilters({
-                    ...filters,
-                    decisionNumber: e.target.value || undefined,
-                  } as any)
-                }
-                allowClear
-              />
-            </Flex>
-          </Col>
-          <Col span={8}>
-            <Flex justify="end">
-              {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_CHUNG_CHI, "THEM") && (
-                <>
-                  <Button onClick={handleExportExcel} icon={<DownloadOutlined />} type="primary">
-                    Xuất Excel
-                  </Button>
-                  <Button
-                    className="ml-3"
-                    onClick={handleOpenReject}
-                    disabled={!selectedRowKeys.length}
-                    type="default"
-                  >
-                    Từ chối
-                  </Button>
-                  <Button
-                    className="ml-3"
-                    onClick={handleOpenAprove}
-                    disabled={!selectedRowKeys.length}
-                    type="primary"
-                  >
-                    Phê duyệt
-                  </Button>
-                  {/* <Button
+                            <Input
+                                className="w-full"
+                                placeholder="Tìm số quyết định"
+                                value={(filters as any).decisionNumber || ''}
+                                onChange={(e) =>
+                                    setFilters({
+                                        ...filters,
+                                        decisionNumber: e.target.value || undefined,
+                                    } as any)
+                                }
+                                allowClear
+                            />
+                        </Flex>
+                    </Col>
+                    <Col span={8}>
+                        <Flex justify="end">
+                            {can(
+                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_CHUNG_CHI,
+                                'THEM'
+                            ) && (
+                                <>
+                                    <Flex align="center" gap={8} className="mr-3">
+                                        <span className="text-sm">Điểm ngoại ngữ</span>
+                                        <Switch
+                                            checked={showLanguageScoreColumns}
+                                            onChange={setShowLanguageScoreColumns}
+                                        />
+                                    </Flex>
+                                    <Button
+                                        onClick={handleOpenExportModal}
+                                        icon={<DownloadOutlined />}
+                                        type="primary"
+                                    >
+                                        Xuất Excel
+                                    </Button>
+                                    <Button
+                                        className="ml-3"
+                                        onClick={handleOpenReject}
+                                        disabled={!selectedRowKeys.length}
+                                        type="default"
+                                    >
+                                        Từ chối
+                                    </Button>
+                                    <Button
+                                        className="ml-3"
+                                        onClick={handleOpenAprove}
+                                        disabled={!selectedRowKeys.length}
+                                        type="primary"
+                                    >
+                                        Phê duyệt
+                                    </Button>
+                                    {/* <Button
                                         className="ml-3"
                                         onClick={() => {
                                             if (selectedRowKeys.length === 0) {
@@ -535,230 +590,309 @@ export default function ArchivedCertificate() {
                                     >
                                         Chuyển đổi CC → Điểm
                                     </Button> */}
-                </>
-              )}
-              {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_CHUNG_CHI, "THEM") && (
-                <Button onClick={handleModal} type="primary" className="ml-3">
-                  Thêm mới
-                </Button>
-              )}
-            </Flex>
-          </Col>
-        </Row>
-      </Col>
-      <Col span={24}>
-        <Table
-          rowKey="id"
-          id="training-category"
-          filters={filters}
-          setFilters={(value) => {
-            setFilters(value)
-            setCurrentPage(1)
-          }}
-          rowSelection={rowSelection}
-          columns={[
-            {
-              title: "STT",
-              width: 50,
-              align: "center",
-              fixed: "left",
-              render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,
-            },
-            {
-              title: "Mã học viên",
-              dataIndex: "code",
-              align: "center",
-              width: 130,
-              fixed: "left",
-              type: "input",
-              render: (__, record) => record?.student?.userProfile?.code,
-            },
-            {
-              title: "Họ và tên",
-              dataIndex: "name",
-              align: "center",
-              width: 180,
-              fixed: "left",
-              type: "input",
-              render: (__, record) => {
-                return `${record?.student?.userProfile?.fullname || ""}`.trim()
-              },
-            },
-            {
-              title: "SĐT",
-              align: "center",
-              width: 120,
-              dataIndex: "phone",
-              type: "input",
-              render: (__, record) => record.student?.userProfile?.phoneNumber || "",
-            },
-            {
-              title: "Lớp",
-              align: "center",
-              width: 120,
-              dataIndex: "fixedClassId",
-              type: "select",
-              options: fixedClassData.map((item: FixedClass) => ({
-                label: item.name,
-                value: item.id,
-              })),
-              render: (__, record) => {
-                const fixedClass = record?.student?.fixedClass
-                if (!fixedClass) return "-"
-                return <Tooltip title={fixedClass?.name}>{fixedClass?.code}</Tooltip>
-              },
-            },
-            {
-              title: "Khóa",
-              align: "center",
-              width: 100,
-              dataIndex: "trainingCourseId",
-              type: "select",
-              options: trainingCourseData.map((item: TrainingCourse) => ({
-                label: item.name,
-                value: item.id,
-              })),
-              render: (__, record) => {
-                const trainingCourse = record?.student?.fixedClass?.trainingCourse
-                return trainingCourse ? trainingCourse?.name : "-"
-              },
-            },
-            {
-              title: "Ngành",
-              align: "center",
-              width: 160,
-              dataIndex: "trainingFieldId",
-              type: "select",
-              options: trainingFieldData.map((item: any) => ({
-                label: item.name,
-                value: item.id,
-              })),
-              render: (__, record) => {
-                return (
-                  record?.student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
-                    ?.trainingField?.name || "-"
-                )
-              },
-            },
-            {
-              title: "Chuyên ngành",
-              align: "center",
-              width: 180,
-              dataIndex: "trainingMajorId",
-              type: "select",
-              options: trainingMajorData.map((item: any) => ({
-                label: item.name,
-                value: item.id,
-              })),
-              render: (__, record) => {
-                return (
-                  record?.student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name ||
-                  "-"
-                )
-              },
-            },
-            {
-              title: "Chứng chỉ",
-              align: "center",
-              width: 160,
-              render: (__, record) => record?.certificate?.name || "-",
-            },
-            {
-              title: "Điểm",
-              align: "center",
-              width: 80,
-              render: (__, record) => record?.score ?? "-",
-            },
-            {
-              title: "Nơi cấp",
-              align: "center",
-              width: 120,
-              render: (__, record) => record?.issuedBy || "-",
-            },
-            {
-              title: "Số QĐ",
-              align: "center",
-              width: 120,
-              render: (__, record) => record?.decisionNumber || "-",
-            },
-            {
-              title: "Ngày cấp",
-              align: "center",
-              width: 110,
-              render: (__, record) =>
-                record?.issuedDate ? new Date(record.issuedDate).toLocaleDateString("vi-VN") : "-",
-            },
-            {
-              title: "Ngày hết hạn",
-              align: "center",
-              width: 110,
-              render: (__, record) =>
-                record?.expiredDate
-                  ? new Date(record.expiredDate).toLocaleDateString("vi-VN")
-                  : "-",
-            },
-            {
-              title: "Trạng thái",
-              align: "center",
-              width: 120,
-              render: (__, record) => {
-                const statusMap: Record<string, { text: string; color: string }> = {
-                  PENDING: { text: "Chờ duyệt", color: "orange" },
-                  APPROVED: { text: "Đã duyệt", color: "green" },
-                  REJECTED: { text: "Từ chối", color: "red" },
-                  CANCEL: { text: "Đã huỷ", color: "gray" },
-                }
-                const s = statusMap[record?.status] || {
-                  text: record?.status,
-                  color: "default",
-                }
-                return <span style={{ color: s.color }}>{s.text}</span>
-              },
-            },
-            {
-              title: "Thao tác",
-              width: 100,
-              align: "center",
-              fixed: "right",
-              render: (_, record) => {
-                const studentName = record?.student?.userProfile?.fullname || ""
-                return (
-                  <Row className="justify-center gap-2">
-                    <InfoIcon
-                      onClick={() => {
-                        onOpenCertificateList({
-                          studentId: record.studentId,
-                          studentName,
-                          certificates: [record],
-                        })
-                      }}
-                      className="text-sm text-blue-700 cursor-pointer"
-                    />
-                  </Row>
-                )
-              },
-            },
-          ]}
-          data={dataTable}
-          pagination={{
-            current: currentPage,
-            pageSize: numberOfPages,
-            total: count,
+                                </>
+                            )}
+                            {can(
+                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_CHUNG_CHI,
+                                'THEM'
+                            ) && (
+                                <Button onClick={handleModal} type="primary" className="ml-3">
+                                    Thêm mới
+                                </Button>
+                            )}
+                        </Flex>
+                    </Col>
+                </Row>
+            </Col>
+            <Col span={24}>
+                <Table
+                    rowKey="id"
+                    id="training-category"
+                    filters={filters}
+                    setFilters={(value) => {
+                        setFilters(value)
+                        setCurrentPage(1)
+                    }}
+                    rowSelection={rowSelection}
+                    columns={[
+                        {
+                            title: 'STT',
+                            width: 50,
+                            align: 'center',
+                            fixed: 'left',
+                            render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,
+                        },
+                        {
+                            title: 'Mã học viên',
+                            dataIndex: 'code',
+                            align: 'center',
+                            width: 130,
+                            fixed: 'left',
+                            type: 'input',
+                            render: (__, record) => record?.student?.userProfile?.code,
+                        },
+                        {
+                            title: 'Họ và tên',
+                            dataIndex: 'name',
+                            align: 'center',
+                            width: 180,
+                            fixed: 'left',
+                            type: 'input',
+                            render: (__, record) => {
+                                return `${record?.student?.userProfile?.fullname || ''}`.trim()
+                            },
+                        },
+                        {
+                            title: 'SĐT',
+                            align: 'center',
+                            width: 120,
+                            dataIndex: 'phone',
+                            type: 'input',
+                            render: (__, record) => record.student?.userProfile?.phoneNumber || '',
+                        },
+                        {
+                            title: 'Lớp',
+                            align: 'center',
+                            width: 120,
+                            dataIndex: 'fixedClassId',
+                            type: 'select',
+                            options: fixedClassData.map((item: FixedClass) => ({
+                                label: item.name,
+                                value: item.id,
+                            })),
+                            render: (__, record) => {
+                                const fixedClass = record?.student?.fixedClass
+                                if (!fixedClass) return '-'
+                                return (
+                                    <Tooltip title={fixedClass?.name}>{fixedClass?.code}</Tooltip>
+                                )
+                            },
+                        },
+                        {
+                            title: 'Khóa',
+                            align: 'center',
+                            width: 100,
+                            dataIndex: 'trainingCourseId',
+                            type: 'select',
+                            options: trainingCourseData.map((item: TrainingCourse) => ({
+                                label: item.name,
+                                value: item.id,
+                            })),
+                            render: (__, record) => {
+                                const trainingCourse = record?.student?.fixedClass?.trainingCourse
+                                return trainingCourse ? trainingCourse?.name : '-'
+                            },
+                        },
+                        {
+                            title: 'Ngành',
+                            align: 'center',
+                            width: 160,
+                            dataIndex: 'trainingFieldId',
+                            type: 'select',
+                            options: trainingFieldData.map((item: any) => ({
+                                label: item.name,
+                                value: item.id,
+                            })),
+                            render: (__, record) => {
+                                return (
+                                    record?.student?.fixedClass?.curriculumVersion?.curriculum
+                                        ?.trainingMajor?.trainingField?.name || '-'
+                                )
+                            },
+                        },
+                        {
+                            title: 'Chuyên ngành',
+                            align: 'center',
+                            width: 180,
+                            dataIndex: 'trainingMajorId',
+                            type: 'select',
+                            options: trainingMajorData.map((item: any) => ({
+                                label: item.name,
+                                value: item.id,
+                            })),
+                            render: (__, record) => {
+                                return (
+                                    record?.student?.fixedClass?.curriculumVersion?.curriculum
+                                        ?.trainingMajor?.name || '-'
+                                )
+                            },
+                        },
+                        {
+                            title: 'Chứng chỉ',
+                            align: 'center',
+                            width: 160,
+                            render: (__, record) => record?.certificate?.name || '-',
+                        },
+                        ...((showLanguageScoreColumns
+                            ? [
+                                  {
+                                      title: 'Nghe',
+                                      align: 'center',
+                                      width: 80,
+                                      render: (__: any, record: any) =>
+                                          record?.listeningScore ??
+                                          '-',
+                                  },
+                                  {
+                                      title: 'Nói',
+                                      align: 'center',
+                                      width: 80,
+                                      render: (__: any, record: any) =>
+                                          record?.speakingScore ??
+                                          '-',
+                                  },
+                                  {
+                                      title: 'Đọc',
+                                      align: 'center',
+                                      width: 80,
+                                      render: (__: any, record: any) =>
+                                          record?.readingScore ??
+                                          '-',
+                                  },
+                                  {
+                                      title: 'Viết',
+                                      align: 'center',
+                                      width: 80,
+                                      render: (__: any, record: any) =>
+                                          record?.writingScore ??
+                                          '-',
+                                  },
+                              ]
+                            : []) as any[]),
+                        {
+                            title: 'Điểm',
+                            align: 'center',
+                            width: 80,
+                            render: (__, record) => record?.score ?? '-',
+                        },
+                        {
+                            title: 'Nơi cấp',
+                            align: 'center',
+                            width: 120,
+                            render: (__, record) => record?.issuedBy || '-',
+                        },
+                        {
+                            title: 'Số QĐ',
+                            align: 'center',
+                            width: 120,
+                            render: (__, record) => record?.decisionNumber || '-',
+                        },
+                        {
+                            title: 'Ngày cấp',
+                            align: 'center',
+                            width: 110,
+                            render: (__, record) =>
+                                record?.issuedDate
+                                    ? new Date(record.issuedDate).toLocaleDateString('vi-VN')
+                                    : '-',
+                        },
+                        {
+                            title: 'Ngày hết hạn',
+                            align: 'center',
+                            width: 110,
+                            render: (__, record) =>
+                                record?.expiredDate
+                                    ? new Date(record.expiredDate).toLocaleDateString('vi-VN')
+                                    : '-',
+                        },
+                        {
+                            title: 'Trạng thái',
+                            align: 'center',
+                            width: 120,
+                            render: (__, record) => {
+                                const statusMap: Record<string, { text: string; color: string }> = {
+                                    PENDING: { text: 'Chờ duyệt', color: 'orange' },
+                                    APPROVED: { text: 'Đã duyệt', color: 'green' },
+                                    REJECTED: { text: 'Từ chối', color: 'red' },
+                                    CANCEL: { text: 'Đã huỷ', color: 'gray' },
+                                }
+                                const s = statusMap[record?.status] || {
+                                    text: record?.status,
+                                    color: 'default',
+                                }
+                                return <span style={{ color: s.color }}>{s.text}</span>
+                            },
+                        },
+                        {
+                            title: 'Thao tác',
+                            width: 100,
+                            align: 'center',
+                            fixed: 'right',
+                            render: (_, record) => {
+                                const studentName = record?.student?.userProfile?.fullname || ''
+                                return (
+                                    <Row className="justify-center gap-4 flex items-center">
+                                        <InfoIcon
+                                            onClick={() => {
+                                                onOpenCertificateList({
+                                                    studentId: record.studentId,
+                                                    studentName,
+                                                    certificates: [record],
+                                                    isEditMode: false,
+                                                })
+                                            }}
+                                            className="text-sm text-blue-700 cursor-pointer"
+                                        />
+                                        <EditIcon
+                                            onClick={() => {
+                                                onOpenCertificateList({
+                                                    studentId: record.studentId,
+                                                    studentName,
+                                                    certificates: [record],
+                                                    isEditMode: true,
+                                                })
+                                            }}
+                                            className="text-sm text-green-700 cursor-pointer"
+                                        />
+                                    </Row>
+                                )
+                            },
+                        },
+                    ]}
+                    data={dataTable}
+                    pagination={{
+                        current: currentPage,
+                        pageSize: numberOfPages,
+                        total: count,
 
-            onChange: (page, pageSize) => {
-              if (numberOfPages === pageSize) {
-                setCurrentPage(page)
-              } else {
-                setCurrentPage(1)
-                setNumberOfPages(pageSize)
-              }
-            },
-            showTotal: (total, range) => `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
-          }}
-        />
-      </Col>
-    </Row>
-  )
+                        onChange: (page, pageSize) => {
+                            if (numberOfPages === pageSize) {
+                                setCurrentPage(page)
+                            } else {
+                                setCurrentPage(1)
+                                setNumberOfPages(pageSize)
+                            }
+                        },
+                        showTotal: (total, range) =>
+                            `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
+                    }}
+                />
+            </Col>
+
+            <Modal
+                title="Chọn khóa học để xuất Excel"
+                open={isExportModalOpen}
+                onCancel={() => setIsExportModalOpen(false)}
+                onOk={handleExportExcel}
+                okText="Xuất Excel"
+                cancelText="Hủy"
+            >
+                <Select
+                    className="w-full"
+                    placeholder="Chọn khóa học"
+                    options={trainingCourseData.map((item: TrainingCourse) => ({
+                        label: item.name,
+                        value: item.id,
+                    }))}
+                    value={exportTrainingCourseId}
+                    onChange={(value) => setExportTrainingCourseId(value)}
+                    allowClear
+                    showSearch
+                    optionFilterProp="label"
+                />
+            </Modal>
+        </Row>
+    )
 }
 
 ArchivedCertificate.getLayout = function getLayout(page: React.ReactElement) {
