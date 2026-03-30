@@ -118,6 +118,7 @@ import ModalChuyenCTDT from "./modal-chuyen-ctdt"
 import AddSubjectClassAttendance from "./add-diem-danh"
 import AddSubjectClassAttendanceStudent from "./add-diem-danh-mon-hoc"
 import PutAvailableTrainingTimeModal from "./PutAvailableTrainingTimeModal"
+import ModalPhienDiemKyHoc from "./modal-phien-diem-ky-hoc"
 
 export {
   ExportStatsArchivedAwardModal,
@@ -242,6 +243,7 @@ export {
   AddSubjectClassAttendance,
   AddSubjectClassAttendanceStudent,
   PutAvailableTrainingTimeModal,
+  ModalPhienDiemKyHoc,
 }
 export * from "./ke-hoach-dao-tao"
 export * from "./thong-bao"

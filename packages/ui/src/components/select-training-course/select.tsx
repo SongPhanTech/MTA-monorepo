@@ -114,20 +114,19 @@ export const SelectTrainingCourseStore = (props: SelectProps) => {
 
   const { id, onSelect } = useTrainingCourseStore()
 
-    return (
-        <Select
-            placeholder="Chọn khóa đào tạo"
-            options={khoaDaoTao.map((e) => {
-                let semesterIdx = null
-                if (semester?.semesterType) {
-                    const idx =
-                        (semester.schoolYear.startDate.getFullYear() -
-                            e.semesterStart.schoolYear.startDate.getFullYear()) *
-                            2 +
-                        (semester.semesterType === 'FIRST' ||
-                        semester.semesterType === 'FIRST_SUPPLEMENTARY'
-                            ? 1
-                            : 2)
+  return (
+    <Select
+      placeholder="Chọn khóa đào tạo"
+      options={khoaDaoTao.map((e) => {
+        let semesterIdx = null
+        if (semester?.semesterType) {
+          const idx =
+            (semester.schoolYear.startDate.getFullYear() -
+              e.semesterStart.schoolYear.startDate.getFullYear()) *
+              2 +
+            (semester.semesterType === "FIRST" || semester.semesterType === "FIRST_SUPPLEMENTARY"
+              ? 1
+              : 2)
 
           semesterIdx = idx > 0 && idx <= 12 ? idx : null
         }

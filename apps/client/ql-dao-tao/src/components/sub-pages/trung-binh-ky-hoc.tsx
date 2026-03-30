@@ -238,361 +238,361 @@ const DiemTrungBinhKyHoc = () => {
     }
   }
 
-    return (
-        <div className="bg-white rounded-lg shadow-sm px-4">
-            <Row>
-                <Col span={24} className="mb-4 mt-2">
-                    <Row align="top" justify="space-between">
-                        <Col span={18}>
-                            <Flex gap={8}>
-                                <Col span={6}>
-                                    <SelectTrainingCourseStore className="w-full" />
-                                </Col>
-                                <Col span={8}>
-                                    <Form.Item className="mb-0" name="fixedClassId">
-                                        <Select
-                                            placeholder="Lớp quản lý"
-                                            notFoundContent={
-                                                trainingCourseId
-                                                    ? 'Không có dữ liệu'
-                                                    : 'Vui lòng chọn khoá'
-                                            }
-                                            options={fixedClassData.map((i: FixedClass) => ({
-                                                value: i.id,
-                                                label: `${i?.code} - ${i.name}`,
-                                            }))}
-                                            onChange={(val) =>
-                                                handleFilterChange('fixedClassId', val)
-                                            }
-                                            allowClear
-                                        />
-                                    </Form.Item>
-                                </Col>
-                            </Flex>
-                        </Col>
-                        <Col span={6}>
-                            <Flex justify="end" gap={4}>
-                                <Button type="primary" onClick={handleSummaryClick}>
-                                    Tổng kết kết quả học kỳ
-                                </Button>
-                                <Button type="primary" onClick={handleExportExcel}>
-                                    Xuất Excel
-                                </Button>
-                            </Flex>
-                        </Col>
-                    </Row>
+  return (
+    <div className="bg-white rounded-lg shadow-sm px-4">
+      <Row>
+        <Col span={24} className="mb-4 mt-2">
+          <Row align="top" justify="space-between">
+            <Col span={18}>
+              <Flex gap={8}>
+                <Col span={6}>
+                  <SelectTrainingCourseStore className="w-full" />
                 </Col>
-                <Col span={24}>
-                    <Table
-                        rowKey="id"
-                        className="m-0"
-                        filters={filters}
-                        setFilters={(value) => {
-                            setFilters(value)
-                            setCurrentPage(1)
-                        }}
-                        data={dataStudents}
-                        columns={[
-                            {
-                                title: 'Mã SV',
-                                dataIndex: 'code',
-                                width: 120,
-                                align: 'center',
-                                fixed: 'left',
-                                type: 'input',
-                                render: (__, record) => record?.code,
-                            },
-                            {
-                                title: 'Tên sinh viên',
-                                dataIndex: 'name',
-                                width: 200,
-                                align: 'center',
-                                fixed: 'left',
-                                type: 'input',
-                                render: (__, record) => record?.userProfile?.fullname,
-                            },
-                            {
-                                title: 'Ngày sinh',
-                                width: 150,
-                                align: 'center',
-                                render: (_, record) =>
-                                    record?.userProfile?.dateOfBirth
-                                        ? dayjs(record.userProfile.dateOfBirth).format('DD/MM/YYYY')
-                                        : '',
-                            },
+                <Col span={8}>
+                  <Form.Item className="mb-0" name="fixedClassId">
+                    <Select
+                      placeholder="Lớp quản lý"
+                      notFoundContent={trainingCourseId ? "Không có dữ liệu" : "Vui lòng chọn khoá"}
+                      options={fixedClassData.map((i: FixedClass) => ({
+                        value: i.id,
+                        label: `${i?.code} - ${i.name}`,
+                      }))}
+                      onChange={(val) => handleFilterChange("fixedClassId", val)}
+                      allowClear
+                    />
+                  </Form.Item>
+                </Col>
+              </Flex>
+            </Col>
+            <Col span={6}>
+              <Flex justify="end" gap={4}>
+                <Button type="primary" onClick={handleSummaryClick}>
+                  Tổng kết kết quả học kỳ
+                </Button>
+                <Button type="primary" onClick={handleExportExcel}>
+                  Xuất Excel
+                </Button>
+              </Flex>
+            </Col>
+          </Row>
+        </Col>
+        <Col span={24}>
+          <Table
+            rowKey="id"
+            className="m-0"
+            filters={filters}
+            setFilters={(value) => {
+              setFilters(value)
+              setCurrentPage(1)
+            }}
+            data={dataStudents}
+            columns={[
+              {
+                title: "Mã SV",
+                dataIndex: "code",
+                width: 120,
+                align: "center",
+                fixed: "left",
+                type: "input",
+                render: (__, record) => record?.code,
+              },
+              {
+                title: "Tên sinh viên",
+                dataIndex: "name",
+                width: 200,
+                align: "center",
+                fixed: "left",
+                type: "input",
+                render: (__, record) => record?.userProfile?.fullname,
+              },
+              {
+                title: "Ngày sinh",
+                width: 150,
+                align: "center",
+                render: (_, record) =>
+                  record?.userProfile?.dateOfBirth
+                    ? dayjs(record.userProfile.dateOfBirth).format("DD/MM/YYYY")
+                    : "",
+              },
 
-                            {
-                                title: 'Lớp',
-                                width: 150,
-                                align: 'center',
-                                render: (__, record) => (
-                                    <Tooltip title={record?.fixedClass?.name}>
-                                        {record?.fixedClass?.code}
-                                    </Tooltip>
-                                ),
-                            },
-                            {
-                                title: 'Năm học thứ...',
-                                dataIndex: ['studentSemesterResult', '0', 'studyYear'],
-                                width: 100,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Học kỳ thứ.../ toàn khoá',
-                                dataIndex: ['studentSemesterResult', '0', 'semesterIndexInCourse'],
-                                width: 120,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Hệ số xét học bổng',
-                                dataIndex: ['studentSemesterResult', '0', 'baseScore'],
-                                width: 100,
-                                align: 'center',
-                                render: (value) => getAcademicRankingBaseTypeLabel(value),
-                            },
-                            {
-                                title: 'Trung bình hệ 4',
-                                dataIndex: ['studentSemesterResult', '0', 'gpaBase4'],
-                                width: 90,
-                                align: 'center',
-                                render: (value) => (value !== null && value !== undefined) ? Number(value).toFixed(2).replace('.', ',') : '-',
-                            },
-                            {
-                                title: 'Tích lỹ hệ 4',
-                                dataIndex: ['studentSemesterResult', '0', 'cumulativeGpaBase4'],
-                                width: 90,
-                                align: 'center',
-                                render: (value) => (value !== null && value !== undefined) ? Number(value).toFixed(2).replace('.', ',') : '-',
-                            },
-                            {
-                                title: 'Trung bình hệ 10',
-                                dataIndex: ['studentSemesterResult', '0', 'gpaBase10'],
-                                width: 90,
-                                align: 'center',
-                                render: (value) => (value !== null && value !== undefined) ? Number(value).toFixed(2).replace('.', ',') : '-',
-                            },
-                            {
-                                title: 'Tích lỹ hệ 10',
-                                dataIndex: ['studentSemesterResult', '0', 'cumulativeGpaBase10'],
-                                width: 90,
-                                align: 'center',
-                                render: (value) => (value !== null && value !== undefined) ? Number(value).toFixed(2).replace('.', ',') : '-',
-                            },
-                            {
-                                title: 'Xếp loại học lực',
-                                dataIndex: ['studentSemesterResult', '0', 'rank'],
-                                width: 140,
-                                align: 'center',
-                                render: (rank?: AcademicRankingConvert) =>
-                                    rank?.classification || '-',
-                            },
-                            {
-                                title: 'Điểm rèn luyện',
-                                dataIndex: ['studentSemesterResult', '0', 'conductScore'],
-                                width: 120,
-                                align: 'center',
-                                render: (value) => (value !== null && value !== undefined) ? Number(value).toFixed(2).replace('.', ',') : '-'
-                            },
-                            {
-                                title: 'Điểm học phần thấp nhất',
-                                dataIndex: ['studentSemesterResult', '0', 'lowestFinalScore'],
-                                width: 120,
-                                align: 'center',
-                                render: (value) => (value !== null && value !== undefined) ? Number(value).toFixed(2).replace('.', ',') : '-'
-                            },
-                            {
-                                title: 'Điểm tốt nghiệp thấp nhất',
-                                dataIndex: ['studentSemesterResult', '0', 'lowestGraduationScore'],
-                                width: 130,
-                                align: 'center',
-                                render: (value) => (value !== null && value !== undefined) ? Number(value).toFixed(2).replace('.', ',') : '-'
-                            },
-                            {
-                                title: 'Tổng tín chỉ',
-                                dataIndex: ['studentSemesterResult', '0', 'totalCredits'],
-                                width: 90,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Số TC đăng ký',
-                                dataIndex: ['studentSemesterResult', '0', 'registeredCredits'],
-                                width: 90,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Tổng số tín chỉ thi lại',
-                                dataIndex: ['studentSemesterResult', '0', 'reExamCredits'],
-                                width: 120,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Tổng số tín chỉ học lại',
-                                dataIndex: ['studentSemesterResult', '0', 'retakingCredits'],
-                                width: 120,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Số TC đạt',
-                                dataIndex: ['studentSemesterResult', '0', 'passedCredits'],
-                                width: 60,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Số TC không đạt',
-                                dataIndex: ['studentSemesterResult', '0', 'failedCredits'],
-                                width: 90,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Tổng TC tích lũy',
-                                dataIndex: ['studentSemesterResult', '0', 'accumulatedCredits'],
-                                width: 80,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Tổng TC học kỳ',
-                                dataIndex: [
-                                    'studentSemesterResult',
-                                    '0',
-                                    'totalCreditsByCurriculum',
-                                ],
-                                width: 80,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Tổng TC nợ',
-                                dataIndex: ['studentSemesterResult', '0', 'totalFailedCredits'],
-                                width: 60,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Chuẩn ngoại ngữ',
-                                dataIndex: ['studentSemesterResult', '0', 'foreignLangPass'],
-                                align: 'center',
-                                width: 90,
-                                render: (value) => {
-                                    return (
-                                        <div className="flex items-center justify-center">
-                                            <Checkbox checked={value} disabled />
-                                        </div>
-                                    )
-                                },
-                            },
-                            {
-                                title: 'Lớp trưởng',
-                                dataIndex: ['studentSemesterResult', '0', 'isClassMonitor'],
-                                align: 'center',
-                                width: 80,
-                                render: (value) => {
-                                    return (
-                                        <div className="flex items-center justify-center">
-                                            <Checkbox checked={value} disabled />
-                                        </div>
-                                    )
-                                },
-                            },
-                            {
-                                title: 'Bí thư',
-                                dataIndex: ['studentSemesterResult', '0', 'isUnionLeader'],
-                                align: 'center',
-                                width: 80,
-                                render: (value) => {
-                                    return (
-                                        <div className="flex items-center justify-center">
-                                            <Checkbox checked={value} disabled />
-                                        </div>
-                                    )
-                                },
-                            },
-                            {
-                                title: 'Điểm thi đầu vào',
-                                dataIndex: ['studentSemesterResult', '0', 'entryScore'],
-                                width: 80,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Học lại / Cải thiện',
-                                dataIndex: ['studentSemesterResult', '0', 'isImproving'],
-                                align: 'center',
-                                width: 80,
-                                render: (value) => {
-                                    return (
-                                        <div className="flex items-center justify-center">
-                                            <Checkbox checked={value} disabled />
-                                        </div>
-                                    )
-                                },
-                            },
-                            {
-                                title: 'Tạm ngưng có lý do',
-                                dataIndex: ['studentSemesterResult', '0', 'postponeWithReason'],
-                                align: 'center',
-                                width: 100,
-                                render: (value) => {
-                                    return (
-                                        <div className="flex items-center justify-center">
-                                            <Checkbox checked={value} disabled />
-                                        </div>
-                                    )
-                                },
-                            },
-                            {
-                                title: 'Mức cảnh cáo học tập',
-                                dataIndex: ['studentSemesterResult', '0', 'academicWarningLevel'],
-                                width: 100,
-                                align: 'center',
-                                render: (value: number) => (
-                                    <Tag color={getWarningLevelColor(value)}>{value}</Tag>
-                                ),
-                            },
-                            {
-                                title: 'Mức cảnh cáo học đường',
-                                dataIndex: [
-                                    'studentSemesterResult',
-                                    '0',
-                                    'disciplinaryWarningLevel',
-                                ],
-                                width: 120,
-                                align: 'center',
-                                render: (value: number) => (
-                                    <Tag color={getWarningLevelColor(value)}>{value}</Tag>
-                                ),
-                            },
-                            {
-                                title: 'Đình chỉ học',
-                                dataIndex: ['studentSemesterResult', '0', 'suspended'],
-                                align: 'center',
-                                width: 80,
-                                render: (value) => {
-                                    return (
-                                        <div className="flex items-center justify-center">
-                                            <Checkbox checked={value} disabled />
-                                        </div>
-                                    )
-                                },
-                            },
-                            {
-                                title: 'Đuổi học',
-                                dataIndex: ['studentSemesterResult', '0', 'expelled'],
-                                align: 'center',
-                                width: 80,
-                                render: (value) => {
-                                    return (
-                                        <div className="flex items-center justify-center">
-                                            <Checkbox checked={value} disabled />
-                                        </div>
-                                    )
-                                },
-                            },
-                            {
-                                title: 'Trạng thái',
-                                align: 'center',
-                                width: 80,
-                                fixed: 'right',
-                                render: (value, record: any) => {
-                                    if (!record?.status) {
-                                        return <Tag color="error">Không hoạt động</Tag>
-                                    }
+              {
+                title: "Lớp",
+                width: 150,
+                align: "center",
+                render: (__, record) => (
+                  <Tooltip title={record?.fixedClass?.name}>{record?.fixedClass?.code}</Tooltip>
+                ),
+              },
+              {
+                title: "Năm học thứ...",
+                dataIndex: ["studentSemesterResult", "0", "studyYear"],
+                width: 100,
+                align: "center",
+              },
+              {
+                title: "Học kỳ thứ.../ toàn khoá",
+                dataIndex: ["studentSemesterResult", "0", "semesterIndexInCourse"],
+                width: 120,
+                align: "center",
+              },
+              {
+                title: "Hệ số xét học bổng",
+                dataIndex: ["studentSemesterResult", "0", "baseScore"],
+                width: 100,
+                align: "center",
+                render: (value) => getAcademicRankingBaseTypeLabel(value),
+              },
+              {
+                title: "Trung bình hệ 4",
+                dataIndex: ["studentSemesterResult", "0", "gpaBase4"],
+                width: 90,
+                align: "center",
+                render: (value) =>
+                  value !== null && value !== undefined
+                    ? Number(value).toFixed(2).replace(".", ",")
+                    : "-",
+              },
+              {
+                title: "Tích lỹ hệ 4",
+                dataIndex: ["studentSemesterResult", "0", "cumulativeGpaBase4"],
+                width: 90,
+                align: "center",
+                render: (value) =>
+                  value !== null && value !== undefined
+                    ? Number(value).toFixed(2).replace(".", ",")
+                    : "-",
+              },
+              {
+                title: "Trung bình hệ 10",
+                dataIndex: ["studentSemesterResult", "0", "gpaBase10"],
+                width: 90,
+                align: "center",
+                render: (value) =>
+                  value !== null && value !== undefined
+                    ? Number(value).toFixed(2).replace(".", ",")
+                    : "-",
+              },
+              {
+                title: "Tích lỹ hệ 10",
+                dataIndex: ["studentSemesterResult", "0", "cumulativeGpaBase10"],
+                width: 90,
+                align: "center",
+                render: (value) =>
+                  value !== null && value !== undefined
+                    ? Number(value).toFixed(2).replace(".", ",")
+                    : "-",
+              },
+              {
+                title: "Xếp loại học lực",
+                dataIndex: ["studentSemesterResult", "0", "rank"],
+                width: 140,
+                align: "center",
+                render: (rank?: AcademicRankingConvert) => rank?.classification || "-",
+              },
+              {
+                title: "Điểm rèn luyện",
+                dataIndex: ["studentSemesterResult", "0", "conductScore"],
+                width: 120,
+                align: "center",
+                render: (value) =>
+                  value !== null && value !== undefined
+                    ? Number(value).toFixed(2).replace(".", ",")
+                    : "-",
+              },
+              {
+                title: "Điểm học phần thấp nhất",
+                dataIndex: ["studentSemesterResult", "0", "lowestFinalScore"],
+                width: 120,
+                align: "center",
+                render: (value) =>
+                  value !== null && value !== undefined
+                    ? Number(value).toFixed(2).replace(".", ",")
+                    : "-",
+              },
+              {
+                title: "Điểm tốt nghiệp thấp nhất",
+                dataIndex: ["studentSemesterResult", "0", "lowestGraduationScore"],
+                width: 130,
+                align: "center",
+                render: (value) =>
+                  value !== null && value !== undefined
+                    ? Number(value).toFixed(2).replace(".", ",")
+                    : "-",
+              },
+              {
+                title: "Tổng tín chỉ",
+                dataIndex: ["studentSemesterResult", "0", "totalCredits"],
+                width: 90,
+                align: "center",
+              },
+              {
+                title: "Số TC đăng ký",
+                dataIndex: ["studentSemesterResult", "0", "registeredCredits"],
+                width: 90,
+                align: "center",
+              },
+              {
+                title: "Tổng số tín chỉ thi lại",
+                dataIndex: ["studentSemesterResult", "0", "reExamCredits"],
+                width: 120,
+                align: "center",
+              },
+              {
+                title: "Tổng số tín chỉ học lại",
+                dataIndex: ["studentSemesterResult", "0", "retakingCredits"],
+                width: 120,
+                align: "center",
+              },
+              {
+                title: "Số TC đạt",
+                dataIndex: ["studentSemesterResult", "0", "passedCredits"],
+                width: 60,
+                align: "center",
+              },
+              {
+                title: "Số TC không đạt",
+                dataIndex: ["studentSemesterResult", "0", "failedCredits"],
+                width: 90,
+                align: "center",
+              },
+              {
+                title: "Tổng TC tích lũy",
+                dataIndex: ["studentSemesterResult", "0", "accumulatedCredits"],
+                width: 80,
+                align: "center",
+              },
+              {
+                title: "Tổng TC học kỳ",
+                dataIndex: ["studentSemesterResult", "0", "totalCreditsByCurriculum"],
+                width: 80,
+                align: "center",
+              },
+              {
+                title: "Tổng TC nợ",
+                dataIndex: ["studentSemesterResult", "0", "totalFailedCredits"],
+                width: 60,
+                align: "center",
+              },
+              {
+                title: "Chuẩn ngoại ngữ",
+                dataIndex: ["studentSemesterResult", "0", "foreignLangPass"],
+                align: "center",
+                width: 90,
+                render: (value) => {
+                  return (
+                    <div className="flex items-center justify-center">
+                      <Checkbox checked={value} disabled />
+                    </div>
+                  )
+                },
+              },
+              {
+                title: "Lớp trưởng",
+                dataIndex: ["studentSemesterResult", "0", "isClassMonitor"],
+                align: "center",
+                width: 80,
+                render: (value) => {
+                  return (
+                    <div className="flex items-center justify-center">
+                      <Checkbox checked={value} disabled />
+                    </div>
+                  )
+                },
+              },
+              {
+                title: "Bí thư",
+                dataIndex: ["studentSemesterResult", "0", "isUnionLeader"],
+                align: "center",
+                width: 80,
+                render: (value) => {
+                  return (
+                    <div className="flex items-center justify-center">
+                      <Checkbox checked={value} disabled />
+                    </div>
+                  )
+                },
+              },
+              {
+                title: "Điểm thi đầu vào",
+                dataIndex: ["studentSemesterResult", "0", "entryScore"],
+                width: 80,
+                align: "center",
+              },
+              {
+                title: "Học lại / Cải thiện",
+                dataIndex: ["studentSemesterResult", "0", "isImproving"],
+                align: "center",
+                width: 80,
+                render: (value) => {
+                  return (
+                    <div className="flex items-center justify-center">
+                      <Checkbox checked={value} disabled />
+                    </div>
+                  )
+                },
+              },
+              {
+                title: "Tạm ngưng có lý do",
+                dataIndex: ["studentSemesterResult", "0", "postponeWithReason"],
+                align: "center",
+                width: 100,
+                render: (value) => {
+                  return (
+                    <div className="flex items-center justify-center">
+                      <Checkbox checked={value} disabled />
+                    </div>
+                  )
+                },
+              },
+              {
+                title: "Mức cảnh cáo học tập",
+                dataIndex: ["studentSemesterResult", "0", "academicWarningLevel"],
+                width: 100,
+                align: "center",
+                render: (value: number) => <Tag color={getWarningLevelColor(value)}>{value}</Tag>,
+              },
+              {
+                title: "Mức cảnh cáo học đường",
+                dataIndex: ["studentSemesterResult", "0", "disciplinaryWarningLevel"],
+                width: 120,
+                align: "center",
+                render: (value: number) => <Tag color={getWarningLevelColor(value)}>{value}</Tag>,
+              },
+              {
+                title: "Đình chỉ học",
+                dataIndex: ["studentSemesterResult", "0", "suspended"],
+                align: "center",
+                width: 80,
+                render: (value) => {
+                  return (
+                    <div className="flex items-center justify-center">
+                      <Checkbox checked={value} disabled />
+                    </div>
+                  )
+                },
+              },
+              {
+                title: "Đuổi học",
+                dataIndex: ["studentSemesterResult", "0", "expelled"],
+                align: "center",
+                width: 80,
+                render: (value) => {
+                  return (
+                    <div className="flex items-center justify-center">
+                      <Checkbox checked={value} disabled />
+                    </div>
+                  )
+                },
+              },
+              {
+                title: "Trạng thái",
+                align: "center",
+                width: 80,
+                fixed: "right",
+                render: (value, record: any) => {
+                  if (!record?.status) {
+                    return <Tag color="error">Không hoạt động</Tag>
+                  }
 
                   const trangThai =
                     TRANG_THAI_HOC_VIEN[record?.status as keyof typeof TRANG_THAI_HOC_VIEN]

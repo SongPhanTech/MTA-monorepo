@@ -170,10 +170,10 @@ export default function ChatInput({
                 }}
               >
                 <style jsx>{`
-                                    div::-webkit-scrollbar {
-                                        display: none;
-                                    }
-                                `}</style>
+                  div::-webkit-scrollbar {
+                    display: none;
+                  }
+                `}</style>
                 {selectedDocuments.map((doc) => (
                   <Tag
                     key={doc.id}

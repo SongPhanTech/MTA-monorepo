@@ -58,22 +58,22 @@ Sử dụng pattern export đồng nhất để dễ dàng quản lý và tái s
 ### File 📂`src/index.ts`
 
 ```typescript
-export * from "./components";
-export * from "./lib";
-export * from "./assets/styles"; // Nếu cần thiết
+export * from "./components"
+export * from "./lib"
+export * from "./assets/styles" // Nếu cần thiết
 ```
 
 ### File 📂`src/components/index.ts`
 
 ```typescript
-export * from "./commons";
-export * from "./layouts";
+export * from "./commons"
+export * from "./layouts"
 ```
 
 ### File 📂`src/components/commons/index.ts`
 
 ```typescript
-export * from "./Button";
+export * from "./Button"
 ```
 
 Các file khác tương tự vậy.
