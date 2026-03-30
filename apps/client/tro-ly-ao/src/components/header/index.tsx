@@ -70,6 +70,8 @@ const HeaderApp: React.FC = () => {
       if (retryTimerRef.current) {
         clearTimeout(retryTimerRef.current)
       }
+      // Reset flag on unmount so plugin reinitializes in new layout
+      hasPluginInitialized = false
     }
   }, [])
 
