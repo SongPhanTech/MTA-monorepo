@@ -212,8 +212,7 @@ export default function PhanCongGiangDay({
               },
             }
           : {}),
-        subject: {
-          ...(filters.organization && filters.organization.length > 0
+        subject: (filters.organization && filters.organization.length > 0
             ? {
                 subject: {
                   managementOrganizationId: {
@@ -222,7 +221,6 @@ export default function PhanCongGiangDay({
                 },
               }
             : {}),
-        },
         ...(trainingCourseId && type === "NORMAL"
           ? {
               fixedClasses: {
@@ -1202,7 +1200,7 @@ export default function PhanCongGiangDay({
                         trigger="click"
                         placement="bottomRight"
                       >
-                        <Button type="primary">2. Duyệt báo dạy</Button>
+                        <Button type="primary">2. Tiếp nhận báo dạy</Button>
                       </Popover>
                     )}
                   {!khoaBoMon && (
