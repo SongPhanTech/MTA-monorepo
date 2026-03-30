@@ -30,7 +30,7 @@
         "editor.defaultFormatter": "golang.go"
     },
     "[typescriptreact]": {
-        "editor.defaultFormatter": "oxc.oxc-vscode"
+        "editor.defaultFormatter": "biomejs.biome"
     },
     "[sql]": {
         "editor.defaultFormatter": "inferrinizzard.prettier-sql-vscode"
