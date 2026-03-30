@@ -201,13 +201,13 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
     }
 
     const selectedRecords =
-      studentData?.flatMap((record) =>
+      filteredStudentData?.flatMap((record) =>
         (record.students || []).filter((student: Student) => selectedRowKeys.includes(student.id))
       ) || []
 
     Modal.confirm({
       title: "Xác nhận duyệt",
-      content: `Bạn có chắc chắn muốn chấp nhận ${selectedRowKeys.length} sinh viên đã chọn?`,
+      content: `Bạn có chắc chắn muốn chấp nhận ${selectedRecords.length} sinh viên đã chọn?`,
       okText: "Xác nhận",
       cancelText: "Hủy",
       onOk: async () => {
