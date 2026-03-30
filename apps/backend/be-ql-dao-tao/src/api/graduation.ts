@@ -206,7 +206,7 @@ app.openapi(graduationCheck, async (c) => {
         classMonitor: { select: { id: true } },
         studentAcademicDecision: true,
         curriculumVersion: { select: curriculumSelect },
-        studentTrainingScore: { take: 1, orderBy: { createdAt: "desc" } },
+        semesterTrainingScore: { take: 1, orderBy: { semester: { startDate: "desc" } } },
         studentSemesterResult: { take: 1, orderBy: { createdAt: "desc" } },
         studentYearResult: { take: 1, orderBy: { createdAt: "desc" } },
         archivedCertificate: true,
@@ -719,7 +719,7 @@ app.openapi(graduationCheck, async (c) => {
       REPEAT_YEAR_COUNT: repeatYearCount,
       SUSPENSION_COUNT: suspensionCount,
 
-      CONDUCT_SCORE: student.studentTrainingScore[0]?.score || 0,
+      CONDUCT_SCORE: student.semesterTrainingScore[0]?.score || 0,
       HAS_PASSED_FOREIGN_LANGUAGE: student.foreignLangPass,
       HAS_REGISTERED_FOR_SEMESTER: true,
       IS_PRIORITY_STUDENT: !!student._count.priorityObject,
