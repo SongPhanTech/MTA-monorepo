@@ -227,10 +227,16 @@ model StudentResearchTopic extends Base {
   coSupervisor          ExpertProfile?      @relation("CoSupervisorToResearchTopic", fields: [coSupervisorId], references: [id])
   coSupervisorId        String?
 
+  /// GVHD 3
+  thirdSupervisor ExpertProfile? @relation("ThirdSupervisorToResearchTopic", fields: [thirdSupervisorId], references: [id])
+	thirdSupervisorId String?
+
   /// ngày báo cáo
   reportDate            DateTime?
 
   @@schema("ql-dao-tao")
+
+	
 }
 
 model StudentInternship extends Base {

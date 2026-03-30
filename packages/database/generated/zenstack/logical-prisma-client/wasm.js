@@ -1608,6 +1608,7 @@ exports.Prisma.StudentResearchTopicScalarFieldEnum = {
   mainContent: 'mainContent',
   supervisorId: 'supervisorId',
   coSupervisorId: 'coSupervisorId',
+  thirdSupervisorId: 'thirdSupervisorId',
   reportDate: 'reportDate'
 };
 
@@ -3074,6 +3075,11 @@ exports.Prisma.ThesisProjectScalarFieldEnum = {
   isEligibleForDefense: 'isEligibleForDefense',
   primarySupervisorId: 'primarySupervisorId',
   secondarySupervisorId: 'secondarySupervisorId',
+  thirdSupervisorId: 'thirdSupervisorId',
+  isProductProject: 'isProductProject',
+  isGroupProject: 'isGroupProject',
+  isLanguage: 'isLanguage',
+  externalUnit: 'externalUnit',
   subjectClassId: 'subjectClassId',
   thesisSessionId: 'thesisSessionId',
   supervisorName: 'supervisorName',
@@ -5840,7 +5846,8 @@ exports.Prisma.StudentResearchTopicOrderByRelevanceFieldEnum = {
   name: 'name',
   mainContent: 'mainContent',
   supervisorId: 'supervisorId',
-  coSupervisorId: 'coSupervisorId'
+  coSupervisorId: 'coSupervisorId',
+  thirdSupervisorId: 'thirdSupervisorId'
 };
 
 exports.Prisma.StudentInternshipOrderByRelevanceFieldEnum = {
@@ -6702,6 +6709,7 @@ exports.Prisma.ThesisProjectOrderByRelevanceFieldEnum = {
   editProject: 'editProject',
   primarySupervisorId: 'primarySupervisorId',
   secondarySupervisorId: 'secondarySupervisorId',
+  thirdSupervisorId: 'thirdSupervisorId',
   subjectClassId: 'subjectClassId',
   thesisSessionId: 'thesisSessionId',
   supervisorName: 'supervisorName',

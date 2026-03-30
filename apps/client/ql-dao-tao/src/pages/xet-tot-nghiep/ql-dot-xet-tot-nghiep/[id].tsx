@@ -703,8 +703,7 @@ export default function StudentGraduationApplication() {
                           width: 40,
                           align: "center",
                           fixed: "left",
-                          render: (_, __, index) =>
-                            index + 1 + (currentPage - 1) * numberOfPages,
+                          render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,
                         },
                         {
                           title: "Mã SV",

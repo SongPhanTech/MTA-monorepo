@@ -722,8 +722,7 @@ export default function SettingClass() {
                   width: 60,
                   align: "center",
                   fixed: "left",
-                  render: (_, __, index: number) =>
-                    index + 1 
+                  render: (_, __, index: number) => index + 1,
                 },
                 {
                   title: "Tên chuyên gia",
@@ -818,8 +817,7 @@ export default function SettingClass() {
                   width: 60,
                   align: "center",
                   fixed: "left",
-                  render: (_, __, index: number) =>
-                    index + 1,
+                  render: (_, __, index: number) => index + 1,
                 },
                 {
                   title: "Tên chuyên gia",
