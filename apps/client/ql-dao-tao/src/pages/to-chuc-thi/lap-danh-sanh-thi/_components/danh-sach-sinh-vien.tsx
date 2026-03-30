@@ -786,7 +786,7 @@ export default function DanhSachSinhVien() {
       <Col span={24}>
         <Form form={form}>
           <TableCollapse
-            resetIndexPerGroup 
+            resetIndexPerGroup
             rowKey="id"
             id="danh-sach-sinh-vien"
             headerTitleKey={(record) =>

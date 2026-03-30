@@ -20,6 +20,7 @@ import {
   useCountThesisProject,
   useFindFirstLecturer,
   useFindManyDefenseSession,
+  useFindManyExpertProfile,
   useFindManyRoom,
   useFindManySubjectClass,
   useFindManyThesisProject,
@@ -31,7 +32,9 @@ import { useAbility } from "@workspace/permissions"
 import { QL_DAO_TAO_PERMISSION } from "@workspace/router"
 import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
 import {
+  AutoComplete,
   Button,
+  Checkbox,
   Col,
   DatePicker,
   Form,
@@ -159,6 +162,9 @@ export default function DanhMucDoAn() {
       secondarySupervisor: {
         include: { userProfile: true },
       },
+      thirdSupervisor: {
+        include: { lecturer: { include: { userProfile: true } } },
+      },
       registrations: {
         include: {
           student: {
@@ -198,6 +204,9 @@ export default function DanhMucDoAn() {
   const { data: defenseSessionData = [] } = useFindManyDefenseSession()
   const { mutateAsync: updateThesisProject } = useUpdateThesisProject()
   const { data: roomsData = [] } = useFindManyRoom()
+  const { data: expertProfiles = [] } = useFindManyExpertProfile({
+    include: { lecturer: { include: { userProfile: true } } },
+  })
 
   const { data: thesisProjectDataCount = 0 } = useCountThesisProject({
     where: where,
@@ -308,6 +317,11 @@ export default function DanhMucDoAn() {
           title: record.title || "",
           primarySupervisorId: record.primarySupervisorId || "",
           secondarySupervisorId: record.secondarySupervisorId || "",
+          thirdSupervisorId: record.thirdSupervisorId || "",
+          thirdSupervisorName:
+            record.thirdSupervisor?.lecturer?.userProfile?.fullname ||
+            record.thirdSupervisor?.name ||
+            "",
           defenseDate: record.defenseDate || "",
           editProject: record.editProject || "",
           defenseSession: record.defenseSession?.id || "",
@@ -331,6 +345,10 @@ export default function DanhMucDoAn() {
           defenseRecordComments: record.defenseRecord?.comments || "",
           defenseRecordFinalScore: record.defenseRecord?.finalScore || null,
           subjectClassId: record.subjectClassId || "",
+          isProductProject: record.isProductProject ?? false,
+          isGroupProject: record.isGroupProject ?? false,
+          isLanguage: record.isLanguage ?? false,
+          externalUnit: record.externalUnit ?? false,
         }
       })
     setEditingRowKeys(newEditingRowKeys)
@@ -407,8 +425,13 @@ export default function DanhMucDoAn() {
           status: values.status || $Enums.ThesisProjectStatus.PROPOSED,
           defenseDate: values.defenseDate ? dayjs(values.defenseDate).toDate() : null,
           editProject: values.editProject ?? null,
+          isProductProject: values.isProductProject ?? false,
+          isGroupProject: values.isGroupProject ?? false,
+          isLanguage: values.isLanguage ?? false,
+          externalUnit: values.externalUnit ?? false,
           primarySupervisor: relation(values.primarySupervisorId),
           secondarySupervisor: relation(values.secondarySupervisorId),
+          thirdSupervisor: relation(values.thirdSupervisorId),
           room: relation(values.room),
           defenseSession: relation(values.defenseSessionId),
           defenseRecord: {
@@ -764,6 +787,121 @@ export default function DanhMucDoAn() {
                   )
                 }
                 return formatLecturerName(record?.secondarySupervisor)
+              },
+            },
+            {
+              title: "GVHD3",
+              width: 250,
+              align: "left",
+              dataIndex: "thirdSupervisorId",
+              render: (_, record) => {
+                if (editingRowKeys.includes(record?.id)) {
+                  const displayValue = editingValues[record?.id]?.thirdSupervisorName ?? ""
+                  return (
+                    <AutoComplete
+                      className="w-full"
+                      value={displayValue}
+                      placeholder="Nhập tên GVHD3"
+                      allowClear
+                      options={expertProfiles
+                        .filter((item) => {
+                          const name = item.lecturer?.userProfile?.fullname || item.name || ""
+                          return name.toLowerCase().includes(displayValue.toLowerCase())
+                        })
+                        .map((item: any) => ({
+                          label: item.lecturer?.userProfile?.fullname || item.name,
+                          value: item.lecturer?.userProfile?.fullname || item.name || "",
+                          expertId: item.id,
+                        }))}
+                      onChange={(val) => {
+                        handleEditChange(record?.id, "thirdSupervisorName", val)
+                        handleEditChange(record?.id, "thirdSupervisorId", undefined)
+                      }}
+                      onSelect={(_val, option) => {
+                        handleEditChange(record?.id, "thirdSupervisorName", _val)
+                        handleEditChange(record?.id, "thirdSupervisorId", option.expertId)
+                      }}
+                      onClear={() => {
+                        handleEditChange(record?.id, "thirdSupervisorName", "")
+                        handleEditChange(record?.id, "thirdSupervisorId", undefined)
+                      }}
+                    />
+                  )
+                }
+                const expert = record?.thirdSupervisor
+                return expert?.lecturer?.userProfile?.fullname || expert?.name || ""
+              },
+            },
+             {
+              title: "Đồ án sản phẩm",
+              dataIndex: "isProductProject",
+              align: "center",
+              width: 120,
+              render: (_, record) => {
+                if (editingRowKeys.includes(record?.id)) {
+                  const currentValue = editingValues[record.id]?.isProductProject ?? record.isProductProject ?? false
+                  return (
+                    <Checkbox
+                      checked={currentValue}
+                      onChange={(e) => handleEditChange(record.id, "isProductProject", e.target.checked)}
+                    />
+                  )
+                }
+                return <Checkbox checked={record.isProductProject} disabled />
+              },
+            },
+            {
+              title: "Đồ án nhóm",
+              dataIndex: "isGroupProject",
+              align: "center",
+              width: 100,
+              render: (_, record) => {
+                if (editingRowKeys.includes(record?.id)) {
+                  const currentValue = editingValues[record.id]?.isGroupProject ?? record.isGroupProject ?? false
+                  return (
+                    <Checkbox
+                      checked={currentValue}
+                      onChange={(e) => handleEditChange(record.id, "isGroupProject", e.target.checked)}
+                    />
+                  )
+                }
+                return <Checkbox checked={record.isGroupProject} disabled />
+              },
+            },
+            {
+              title: "Ngoại ngữ",
+              dataIndex: "isLanguage",
+              align: "center",
+              width: 100,
+              render: (_, record) => {
+                if (editingRowKeys.includes(record?.id)) {
+                  const currentValue = editingValues[record.id]?.isLanguage ?? record.isLanguage ?? false
+                  return (
+                    <Checkbox
+                      checked={currentValue}
+                      onChange={(e) => handleEditChange(record.id, "isLanguage", e.target.checked)}
+                    />
+                  )
+                }
+                return <Checkbox checked={record.isLanguage} disabled />
+              },
+            },
+            {
+              title: "Đơn vị ngoài đề xuất",
+              dataIndex: "externalUnit",
+              align: "center",
+              width: 140,
+              render: (_, record) => {
+                if (editingRowKeys.includes(record?.id)) {
+                  const currentValue = editingValues[record.id]?.externalUnit ?? record.externalUnit ?? false
+                  return (
+                    <Checkbox
+                      checked={currentValue}
+                      onChange={(e) => handleEditChange(record.id, "externalUnit", e.target.checked)}
+                    />
+                  )
+                }
+                return <Checkbox checked={record.externalUnit} disabled />
               },
             },
             {

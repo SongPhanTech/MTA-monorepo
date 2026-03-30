@@ -300,10 +300,10 @@ export default function UserProfilePageDs() {
         curriculumVersion: {
           curriculum: {
             trainingMajor: {
-              name: 'asc'
-            }
-          }
-        }
+              name: "asc",
+            },
+          },
+        },
       },
       { userProfile: { firstName: "asc" } },
       { userProfile: { lastName: "asc" } },

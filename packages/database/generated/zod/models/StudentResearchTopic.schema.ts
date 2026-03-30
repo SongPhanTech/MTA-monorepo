@@ -39,12 +39,14 @@ const relationSchema = z.object({
     studentSubjectScore: z.record(z.string(), z.unknown()),
     supervisor: z.record(z.string(), z.unknown()).optional(),
     coSupervisor: z.record(z.string(), z.unknown()).optional(),
+    thirdSupervisor: z.record(z.string(), z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
     studentSubjectScoreId: z.string(),
     supervisorId: z.string().nullish(),
     coSupervisorId: z.string().nullish(),
+    thirdSupervisorId: z.string().nullish(),
 }
 );
 

@@ -92,6 +92,15 @@ model ThesisProject extends Base {
   secondarySupervisor   Lecturer?                   @relation("SecondarySupervisorToThesis", fields: [secondarySupervisorId], references: [id])
   secondarySupervisorId String?
 
+  //GVHD3 cho đồ án
+  thirdSupervisor       ExpertProfile?              @relation("ThirdSupervisorToThesis", fields: [thirdSupervisorId], references: [id])
+  thirdSupervisorId     String?
+
+  isProductProject      Boolean                     @default(false) // Đồ án sản phẩm
+  isGroupProject        Boolean                     @default(false) // Đồ án nhóm
+  isLanguage            Boolean                     @default(false) // Ngoại ngữ
+  externalUnit          Boolean                     @default(false) // Đơn vị ngoài đề xuất
+
   subjectClass          SubjectClass?               @relation(fields: [subjectClassId], references: [id])
   subjectClassId        String?
 
@@ -226,8 +235,10 @@ model ExpertProfile extends Base {
 
   supervisedTheses          ThesisProject[]        @relation("SupervisorToThesis")
   coSupervisedTheses        ThesisProject[]        @relation("CoSupervisorToThesis")
+  thirdSupervisedTheses     ThesisProject[]        @relation("ThirdSupervisorToThesis")
   supervisorResearchTopic   StudentResearchTopic[] @relation("SupervisorToResearchTopic")
   coSupervisorResearchTopic StudentResearchTopic[] @relation("CoSupervisorToResearchTopic")
+  thirdSupervisorResearchTopic StudentResearchTopic[] @relation("ThirdSupervisorToResearchTopic")
   supervisorInternship      StudentInternship[]    @relation("SupervisorToInternship")
   coSupervisorInternship    StudentInternship[]    @relation("CoSupervisorToInternship")
   subjectClass              SubjectClass[] // DS lớp đồ án chuyên gia tham gia hội đồng
@@ -236,7 +247,7 @@ model ExpertProfile extends Base {
   // supervisorPaymentRecord SupervisorPaymentRecord[]
 
   @@schema("ql-dao-tao")
-}
+  }
 
 /// Loại quyết định
 enum DecisionType {
