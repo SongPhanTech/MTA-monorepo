@@ -5,27 +5,17 @@ import { useRouter } from "next/router"
 import { useEffect } from "react"
 
 /**
- * Index page - chỉ xử lý redirect dựa vào query param 'mode'
- * Reload ở trang nào thì vẫn ở trang đó (Next.js tự động handle)
+ * Index page - redirect về trang chatbot
+ * Các trang khác (quan-tri, hoi-thoai...) đã có direct URL riêng
+ * không cần query param ?mode= nữa
  */
 const IndexPage: NextPage = () => {
   const router = useRouter()
 
   useEffect(() => {
     if (!router.isReady) return
-
-    const { mode } = router.query
-
-    // Redirect dựa vào query param 'mode'
-    if (mode === "quan-tri") {
-      router.replace(ROUTER_PATH.TRO_LY_AO.QUAN_TRI_DU_LIEU_TAI_LIEU)
-    } else if (mode === "tro-ly-ao") {
-      router.replace(ROUTER_PATH.TRO_LY_AO.TRO_LY_AO)
-    } else {
-      // Mặc định redirect về chatbot nếu vào root path
-      router.replace(ROUTER_PATH.TRO_LY_AO.TRO_LY_AO)
-    }
-  }, [router.isReady, router.query.mode, router])
+    router.replace(ROUTER_PATH.TRO_LY_AO.TRO_LY_AO)
+  }, [router.isReady, router])
 
   return <Loading />
 }
