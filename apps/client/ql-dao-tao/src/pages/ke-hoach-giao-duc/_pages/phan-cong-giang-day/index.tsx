@@ -136,34 +136,34 @@ export default function PhanCongGiangDay({
       ({
         ...(filters?.name
           ? {
-            name: { contains: filters.name, mode: "insensitive" as const },
-          }
+              name: { contains: filters.name, mode: "insensitive" as const },
+            }
           : {}),
         ...(filters?.code
           ? {
-            code: { contains: filters.code, mode: "insensitive" as const },
-          }
+              code: { contains: filters.code, mode: "insensitive" as const },
+            }
           : {}),
         ...(filters?.examType
           ? {
-            examType: {
-              in: filters.examType,
-            },
-          }
+              examType: {
+                in: filters.examType,
+              },
+            }
           : {}),
         ...(filters?.schedule
           ? {
-            schedule: {
-              in: filters.schedule,
-            },
-          }
+              schedule: {
+                in: filters.schedule,
+              },
+            }
           : {}),
         ...(semesterId
           ? {
-            semester: {
-              id: semesterId,
-            },
-          }
+              semester: {
+                id: semesterId,
+              },
+            }
           : {}),
         ...(filters.lecturerId?.length === 1
           ? filters.lecturerId[0]
@@ -172,115 +172,115 @@ export default function PhanCongGiangDay({
           : {}),
         ...(filters.mainLecturer
           ? {
-            mainLecturer: {
-              userProfile: filters.mainLecturer
-                ? {
-                  fullname: {
-                    contains: filters.mainLecturer,
-                    mode: "insensitive" as const,
-                  },
-                }
-                : {},
-            },
-          }
+              mainLecturer: {
+                userProfile: filters.mainLecturer
+                  ? {
+                      fullname: {
+                        contains: filters.mainLecturer,
+                        mode: "insensitive" as const,
+                      },
+                    }
+                  : {},
+              },
+            }
           : {}),
         ...(filters.extraLecturer
           ? {
-            extraLecturer: {
-              userProfile: filters.extraLecturer
-                ? {
-                  fullname: {
-                    contains: filters.extraLecturer,
-                    mode: "insensitive" as const,
-                  },
-                }
-                : {},
-            },
-          }
+              extraLecturer: {
+                userProfile: filters.extraLecturer
+                  ? {
+                      fullname: {
+                        contains: filters.extraLecturer,
+                        mode: "insensitive" as const,
+                      },
+                    }
+                  : {},
+              },
+            }
           : {}),
         ...(filters.room
           ? {
-            room: {
-              building: {
-                trainingLocation: {
-                  name: {
-                    contains: filters.room,
-                    mode: "insensitive" as const,
+              room: {
+                building: {
+                  trainingLocation: {
+                    name: {
+                      contains: filters.room,
+                      mode: "insensitive" as const,
+                    },
                   },
                 },
               },
-            },
-          }
+            }
           : {}),
         subject:
           filters.organization && filters.organization.length > 0
             ? {
-              subject: {
-                managementOrganizationId: {
-                  in: filters.organization,
+                subject: {
+                  managementOrganizationId: {
+                    in: filters.organization,
+                  },
                 },
-              },
-            }
+              }
             : {},
         ...(trainingCourseId && type === "NORMAL"
           ? {
-            fixedClasses: {
-              some: {
-                trainingCourseId,
+              fixedClasses: {
+                some: {
+                  trainingCourseId,
+                },
               },
-            },
-          }
+            }
           : {}),
         ...(fixedClassId
           ? {
-            fixedClasses: {
-              some: {
-                id: fixedClassId,
+              fixedClasses: {
+                some: {
+                  id: fixedClassId,
+                },
               },
-            },
-          }
+            }
           : {}),
         deletedAt: null,
         active: true,
         trainingObjectTypeId,
         ...(khoaBoMon
           ? {
-            lecturerAssignmentDeadline: {
-              not: null,
-            },
-          }
+              lecturerAssignmentDeadline: {
+                not: null,
+              },
+            }
           : {}),
         type: type,
         ...(filterStatus === "CHO_DUYET_PCGD"
           ? {
-            submitLecturerAssignmentAt: {
-              not: null,
-            },
-          }
+              submitLecturerAssignmentAt: {
+                not: null,
+              },
+            }
           : filterStatus === "YEU_CAU_PCGD"
             ? {
-              OR: [
-                {
-                  lecturerId: null,
-                },
-                {
-                  extraLecturerId: null,
-                },
-                {
-                  enterGradeLecturerId: null,
-                },
-              ],
-            }
+                OR: [
+                  {
+                    lecturerId: null,
+                  },
+                  {
+                    extraLecturerId: null,
+                  },
+                  {
+                    enterGradeLecturerId: null,
+                  },
+                ],
+              }
             : filterStatus === "DA_DUYET_PCGD"
               ? {
-                approveLecturerAssignmentAt: {
-                  not: null,
-                },
-              }
+                  approveLecturerAssignmentAt: {
+                    not: null,
+                  },
+                }
               : filterStatus === "LMH_DA_HUY"
                 ? {
-                  cancelled: true,
-                }
+                    cancelled: true,
+                  }
                 : {}),
       }) satisfies Prisma.SubjectClassWhereInput,
     [
@@ -442,8 +442,8 @@ export default function PhanCongGiangDay({
         Id: !khoaBoMon
           ? undefined
           : {
-            in: orgIds,
-          },
+              in: orgIds,
+            },
         ...whereOrganization,
         // sParentId: !khoaBoMon ? undefined : orgId,
       },
@@ -465,12 +465,12 @@ export default function PhanCongGiangDay({
       type: type,
       ...(trainingCourseId && type === "NORMAL"
         ? {
-          fixedClasses: {
-            some: {
-              trainingCourseId,
+            fixedClasses: {
+              some: {
+                trainingCourseId,
+              },
             },
-          },
-        }
+          }
         : {}),
     },
   })
@@ -485,12 +485,12 @@ export default function PhanCongGiangDay({
       type: type,
       ...(trainingCourseId && type === "NORMAL"
         ? {
-          fixedClasses: {
-            some: {
-              trainingCourseId,
+            fixedClasses: {
+              some: {
+                trainingCourseId,
+              },
             },
-          },
-        }
+          }
         : {}),
     },
   })
@@ -514,8 +514,8 @@ export default function PhanCongGiangDay({
       Id: !khoaBoMon
         ? undefined
         : {
-          in: orgIds,
-        },
+            in: orgIds,
+          },
     },
   })
 
@@ -552,8 +552,8 @@ export default function PhanCongGiangDay({
           ...(values.isOverride
             ? {}
             : {
-              lecturerAssignmentDeadline: null,
-            }),
+                lecturerAssignmentDeadline: null,
+              }),
           type: type,
         },
       })
@@ -921,12 +921,12 @@ export default function PhanCongGiangDay({
                                     type: type,
                                     ...(trainingCourseId && type === "NORMAL"
                                       ? {
-                                        fixedClasses: {
-                                          some: {
-                                            trainingCourseId,
+                                          fixedClasses: {
+                                            some: {
+                                              trainingCourseId,
+                                            },
                                           },
-                                        },
-                                      }
+                                        }
                                       : {}),
                                   },
                                   data: {
@@ -940,7 +940,7 @@ export default function PhanCongGiangDay({
                             queryClient.invalidateQueries({
                               queryKey: ["zenstack", "SubjectClass"],
                             })
-                          } catch (error) { }
+                          } catch (error) {}
                         }}
                       />
                       <span>Đưa LMH vào giảng dạy</span>
@@ -1054,8 +1054,8 @@ export default function PhanCongGiangDay({
                                       status: $Enums.SubjectClassStatus.DRAFT,
                                       ...(!values.isOverride
                                         ? {
-                                          trainingLocationId: null,
-                                        }
+                                            trainingLocationId: null,
+                                          }
                                         : {}),
                                     },
                                     data: {
@@ -1490,8 +1490,8 @@ export default function PhanCongGiangDay({
                                           {
                                             value: item.schedule
                                               ? SUBJECT_CLASS_SCHEDULE_TYPE[
-                                              item.schedule as keyof typeof SUBJECT_CLASS_SCHEDULE_TYPE
-                                              ]
+                                                  item.schedule as keyof typeof SUBJECT_CLASS_SCHEDULE_TYPE
+                                                ]
                                               : "",
                                             align: "center",
                                           },
@@ -1521,8 +1521,8 @@ export default function PhanCongGiangDay({
                                           {
                                             value: item.examType
                                               ? getExamTypeLabel(item?.examType, {
-                                                exportPCGD: true,
-                                              })
+                                                  exportPCGD: true,
+                                                })
                                               : "",
                                           },
                                         ],
@@ -1583,7 +1583,7 @@ export default function PhanCongGiangDay({
                     if (
                       changedField.lecturerId &&
                       subjectClassForm?.[subjectClassId]?.extraLecturerId ===
-                      changedField.lecturerId
+                        changedField.lecturerId
                     ) {
                       newSubjectClassData.extraLecturerId = null
                     }
@@ -1593,7 +1593,7 @@ export default function PhanCongGiangDay({
                     if (
                       changedField.extraLecturerId &&
                       subjectClassForm?.[subjectClassId]?.lecturerId ===
-                      changedField.extraLecturerId
+                        changedField.extraLecturerId
                     ) {
                       newSubjectClassData.lecturerId = null
                     }
@@ -1652,7 +1652,7 @@ export default function PhanCongGiangDay({
                     !!recordSubjectClass?.submitLecturerAssignmentAt && "bg-yellow-200",
                     (!subjectClassForm?.[record.id]?.lecturerId ||
                       !subjectClassForm?.[record.id]?.enterGradeLecturerId) &&
-                    "bg-slate-200",
+                      "bg-slate-200",
                     !!recordSubjectClass?.approveLecturerAssignmentAt && "bg-green-200",
                     subjectClassForm?.[record.id]?.isEdit && "bg-yellow-100",
                     subjectClassForm?.[record.id]?.cancelled && "bg-red-200",
@@ -1732,7 +1732,7 @@ export default function PhanCongGiangDay({
                   }),
                   render: (_, record) =>
                     SUBJECT_CLASS_SCHEDULE_TYPE[
-                    record.schedule as keyof typeof SUBJECT_CLASS_SCHEDULE_TYPE
+                      record.schedule as keyof typeof SUBJECT_CLASS_SCHEDULE_TYPE
                     ],
                 },
                 {
@@ -1771,10 +1771,10 @@ export default function PhanCongGiangDay({
                   dataIndex: "mainLecturer",
                   render: (__, record) =>
                     !subjectClassForm?.[record.id]?.cancelled &&
-                      (role === "P2_KHCT" ||
-                        (!khoaBoMon &&
-                          !record?.submitLecturerAssignmentAt &&
-                          !record?.approveLecturerAssignmentAt)) ? (
+                    (role === "P2_KHCT" ||
+                      (!khoaBoMon &&
+                        !record?.submitLecturerAssignmentAt &&
+                        !record?.approveLecturerAssignmentAt)) ? (
                       <FormItem form={form} name={["subjectClass", record.id, "lecturerId"]}>
                         <LectureTreeSelect
                           placeholder="Chọn giảng viên"
@@ -1805,10 +1805,10 @@ export default function PhanCongGiangDay({
                   width: 200,
                   render: (__, record) =>
                     !subjectClassForm?.[record.id]?.cancelled &&
-                      (role === "P2_KHCT" ||
-                        (!khoaBoMon &&
-                          !record?.submitLecturerAssignmentAt &&
-                          !record?.approveLecturerAssignmentAt)) ? (
+                    (role === "P2_KHCT" ||
+                      (!khoaBoMon &&
+                        !record?.submitLecturerAssignmentAt &&
+                        !record?.approveLecturerAssignmentAt)) ? (
                       <FormItem form={form} name={["subjectClass", record.id, "extraLecturerId"]}>
                         <LectureTreeSelect
                           placeholder="Chọn giảng viên"
@@ -1837,10 +1837,10 @@ export default function PhanCongGiangDay({
                   width: 200,
                   render: (__, record) =>
                     !subjectClassForm?.[record.id]?.cancelled &&
-                      (role === "P2_KHCT" ||
-                        (!khoaBoMon &&
-                          !record?.submitLecturerAssignmentAt &&
-                          !record?.approveLecturerAssignmentAt)) ? (
+                    (role === "P2_KHCT" ||
+                      (!khoaBoMon &&
+                        !record?.submitLecturerAssignmentAt &&
+                        !record?.approveLecturerAssignmentAt)) ? (
                       <FormItem
                         form={form}
                         name={["subjectClass", record.id, "enterGradeLecturerId"]}
@@ -1944,7 +1944,7 @@ export default function PhanCongGiangDay({
                             (e) =>
                               subjectClassForm?.[record.id]?.trainingLocationId &&
                               e.trainingLocationId ===
-                              subjectClassForm[record.id]?.trainingLocationId
+                                subjectClassForm[record.id]?.trainingLocationId
                           )
                           .map((e) => ({
                             title: e.name,
@@ -2050,43 +2050,43 @@ export default function PhanCongGiangDay({
                 // },
                 ...(canXemTatCa && !khoaBoMon
                   ? [
-                    {
-                      title: "Thao tác",
-                      width: 80,
-                      align: "center" as const,
-                      render: (_: any, record: SubjectClass) => {
-                        if (record.cancelled) {
-                          return null
-                        }
-                        const id = record?.id
+                      {
+                        title: "Thao tác",
+                        width: 80,
+                        align: "center" as const,
+                        render: (_: any, record: SubjectClass) => {
+                          if (record.cancelled) {
+                            return null
+                          }
+                          const id = record?.id
 
-                        if (id) {
-                          return (
-                            <Row className="justify-center gap-2">
-                              {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC, "SUA") && (
-                                <EditIcon
-                                  onClick={onOpenEditSubjectClass.bind(null, {
-                                    id,
-                                    mode: "edit",
-                                  })}
-                                  className="text-sm text-blue-700 cursor-pointer"
-                                />
-                              )}
-                              {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC, "XOA") && (
-                                <DeleteIcon
-                                  popConfirm={{
-                                    onConfirm: () => handleDelete(id),
-                                  }}
-                                  disabled={record?.status !== $Enums.SubjectClassStatus.DRAFT}
-                                />
-                              )}
-                            </Row>
-                          )
-                        }
-                        return ""
+                          if (id) {
+                            return (
+                              <Row className="justify-center gap-2">
+                                {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC, "SUA") && (
+                                  <EditIcon
+                                    onClick={onOpenEditSubjectClass.bind(null, {
+                                      id,
+                                      mode: "edit",
+                                    })}
+                                    className="text-sm text-blue-700 cursor-pointer"
+                                  />
+                                )}
+                                {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC, "XOA") && (
+                                  <DeleteIcon
+                                    popConfirm={{
+                                      onConfirm: () => handleDelete(id),
+                                    }}
+                                    disabled={record?.status !== $Enums.SubjectClassStatus.DRAFT}
+                                  />
+                                )}
+                              </Row>
+                            )
+                          }
+                          return ""
+                        },
                       },
-                    },
-                  ]
+                    ]
                   : []),
               ]}
               headerTitleKey={"sTen"}

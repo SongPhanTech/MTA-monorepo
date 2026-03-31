@@ -86,7 +86,7 @@ const classes = await prisma.subjectClass.findMany({
   },
   where: {
     // examType: { not: "OfflineWritten" },
-    semesterId:'080'
+    semesterId: "080",
   },
 })
 

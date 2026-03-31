@@ -574,7 +574,6 @@ app.openapi(classUnregister, async (c) => {
       (item) => curriculumVersionId && item.curriculumVersionId === curriculumVersionId
     )?.id ?? (profile.educationAndTraining[0]?.id as string) // TODO: check session => student trainingCourse
 
-
   // save the register log
   // const registerLogs = await prisma.classRegisterLogs.createManyAndReturn({
   //     data: subjectClassIds.map((subjectClassId) => ({

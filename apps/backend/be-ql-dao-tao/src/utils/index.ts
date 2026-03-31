@@ -594,9 +594,7 @@ export const buildSubjectMapOrThrow = async (
     select: { id: true, code: true },
   })
 
-  const missing = subjects.filter(
-    ({ code }) => !existing.some((version) => version.code === code)
-  )
+  const missing = subjects.filter(({ code }) => !existing.some((version) => version.code === code))
 
   if (missing.length && createNewSubject) {
     const newSubjects = await prisma.$transaction(async (tx) => {
