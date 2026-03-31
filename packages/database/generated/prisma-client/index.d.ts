@@ -146472,6 +146472,7 @@ export namespace Prisma {
     endYear: number | null
     academicYear: string | null
     maxTrainingTime: number | null
+    isRetakeExam: boolean | null
     admissionQuota: number | null
     admittedStudent: number | null
     enrolledStudent: number | null
@@ -146515,6 +146516,7 @@ export namespace Prisma {
     endYear: number | null
     academicYear: string | null
     maxTrainingTime: number | null
+    isRetakeExam: boolean | null
     admissionQuota: number | null
     admittedStudent: number | null
     enrolledStudent: number | null
@@ -146558,6 +146560,7 @@ export namespace Prisma {
     endYear: number
     academicYear: number
     maxTrainingTime: number
+    isRetakeExam: number
     admissionQuota: number
     admittedStudent: number
     enrolledStudent: number
@@ -146645,6 +146648,7 @@ export namespace Prisma {
     endYear?: true
     academicYear?: true
     maxTrainingTime?: true
+    isRetakeExam?: true
     admissionQuota?: true
     admittedStudent?: true
     enrolledStudent?: true
@@ -146688,6 +146692,7 @@ export namespace Prisma {
     endYear?: true
     academicYear?: true
     maxTrainingTime?: true
+    isRetakeExam?: true
     admissionQuota?: true
     admittedStudent?: true
     enrolledStudent?: true
@@ -146731,6 +146736,7 @@ export namespace Prisma {
     endYear?: true
     academicYear?: true
     maxTrainingTime?: true
+    isRetakeExam?: true
     admissionQuota?: true
     admittedStudent?: true
     enrolledStudent?: true
@@ -146861,6 +146867,7 @@ export namespace Prisma {
     endYear: number | null
     academicYear: string | null
     maxTrainingTime: number | null
+    isRetakeExam: boolean
     admissionQuota: number | null
     admittedStudent: number | null
     enrolledStudent: number | null
@@ -146923,6 +146930,7 @@ export namespace Prisma {
     endYear?: boolean
     academicYear?: boolean
     maxTrainingTime?: boolean
+    isRetakeExam?: boolean
     admissionQuota?: boolean
     admittedStudent?: boolean
     enrolledStudent?: boolean
@@ -146985,6 +146993,7 @@ export namespace Prisma {
     endYear?: boolean
     academicYear?: boolean
     maxTrainingTime?: boolean
+    isRetakeExam?: boolean
     admissionQuota?: boolean
     admittedStudent?: boolean
     enrolledStudent?: boolean
@@ -147031,6 +147040,7 @@ export namespace Prisma {
     endYear?: boolean
     academicYear?: boolean
     maxTrainingTime?: boolean
+    isRetakeExam?: boolean
     admissionQuota?: boolean
     admittedStudent?: boolean
     enrolledStudent?: boolean
@@ -147077,6 +147087,7 @@ export namespace Prisma {
     endYear?: boolean
     academicYear?: boolean
     maxTrainingTime?: boolean
+    isRetakeExam?: boolean
     admissionQuota?: boolean
     admittedStudent?: boolean
     enrolledStudent?: boolean
@@ -147105,7 +147116,7 @@ export namespace Prisma {
     trainingObjectTypeId?: boolean
   }
 
-  export type TrainingCourseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "semesterStartId" | "startYear" | "endYear" | "academicYear" | "maxTrainingTime" | "admissionQuota" | "admittedStudent" | "enrolledStudent" | "admissionStartDate" | "admissionEndDate" | "admissionDecision" | "studentRecognitionDecision" | "regulation" | "trainingLanguageId" | "isGeneralInfoLocked" | "isRegulationLocked" | "isScoreConfigLocked" | "baseScore" | "coef_1" | "coef_2" | "coef_3" | "scoreToTakeExam" | "examScoreToPass" | "scoreToPass" | "scoreToPassConditional" | "scoreToTakeGraduation" | "scoreToPassGraduation" | "maxReExamScore" | "reduceReExamScore" | "scoreToRetain" | "trainingObjectTypeId", ExtArgs["result"]["trainingCourse"]>
+  export type TrainingCourseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "semesterStartId" | "startYear" | "endYear" | "academicYear" | "maxTrainingTime" | "isRetakeExam" | "admissionQuota" | "admittedStudent" | "enrolledStudent" | "admissionStartDate" | "admissionEndDate" | "admissionDecision" | "studentRecognitionDecision" | "regulation" | "trainingLanguageId" | "isGeneralInfoLocked" | "isRegulationLocked" | "isScoreConfigLocked" | "baseScore" | "coef_1" | "coef_2" | "coef_3" | "scoreToTakeExam" | "examScoreToPass" | "scoreToPass" | "scoreToPassConditional" | "scoreToTakeGraduation" | "scoreToPassGraduation" | "maxReExamScore" | "reduceReExamScore" | "scoreToRetain" | "trainingObjectTypeId", ExtArgs["result"]["trainingCourse"]>
   export type TrainingCourseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     semesterStart?: boolean | SemesterDefaultArgs<ExtArgs>
     trainingLanguage?: boolean | TrainingCourse$trainingLanguageArgs<ExtArgs>
@@ -147175,6 +147186,7 @@ export namespace Prisma {
       endYear: number | null
       academicYear: string | null
       maxTrainingTime: number | null
+      isRetakeExam: boolean
       /**
        * Chỉ tiêu tuyển sinh
        */
@@ -147698,6 +147710,7 @@ export namespace Prisma {
     readonly endYear: FieldRef<"TrainingCourse", 'Int'>
     readonly academicYear: FieldRef<"TrainingCourse", 'String'>
     readonly maxTrainingTime: FieldRef<"TrainingCourse", 'Float'>
+    readonly isRetakeExam: FieldRef<"TrainingCourse", 'Boolean'>
     readonly admissionQuota: FieldRef<"TrainingCourse", 'Int'>
     readonly admittedStudent: FieldRef<"TrainingCourse", 'Int'>
     readonly enrolledStudent: FieldRef<"TrainingCourse", 'Int'>
@@ -379159,6 +379172,7 @@ export namespace Prisma {
     endYear: 'endYear',
     academicYear: 'academicYear',
     maxTrainingTime: 'maxTrainingTime',
+    isRetakeExam: 'isRetakeExam',
     admissionQuota: 'admissionQuota',
     admittedStudent: 'admittedStudent',
     enrolledStudent: 'enrolledStudent',
@@ -397900,6 +397914,7 @@ export namespace Prisma {
     endYear?: IntNullableFilter<"TrainingCourse"> | number | null
     academicYear?: StringNullableFilter<"TrainingCourse"> | string | null
     maxTrainingTime?: FloatNullableFilter<"TrainingCourse"> | number | null
+    isRetakeExam?: BoolFilter<"TrainingCourse"> | boolean
     admissionQuota?: IntNullableFilter<"TrainingCourse"> | number | null
     admittedStudent?: IntNullableFilter<"TrainingCourse"> | number | null
     enrolledStudent?: IntNullableFilter<"TrainingCourse"> | number | null
@@ -397961,6 +397976,7 @@ export namespace Prisma {
     endYear?: SortOrderInput | SortOrder
     academicYear?: SortOrderInput | SortOrder
     maxTrainingTime?: SortOrderInput | SortOrder
+    isRetakeExam?: SortOrder
     admissionQuota?: SortOrderInput | SortOrder
     admittedStudent?: SortOrderInput | SortOrder
     enrolledStudent?: SortOrderInput | SortOrder
@@ -398026,6 +398042,7 @@ export namespace Prisma {
     endYear?: IntNullableFilter<"TrainingCourse"> | number | null
     academicYear?: StringNullableFilter<"TrainingCourse"> | string | null
     maxTrainingTime?: FloatNullableFilter<"TrainingCourse"> | number | null
+    isRetakeExam?: BoolFilter<"TrainingCourse"> | boolean
     admissionQuota?: IntNullableFilter<"TrainingCourse"> | number | null
     admittedStudent?: IntNullableFilter<"TrainingCourse"> | number | null
     enrolledStudent?: IntNullableFilter<"TrainingCourse"> | number | null
@@ -398087,6 +398104,7 @@ export namespace Prisma {
     endYear?: SortOrderInput | SortOrder
     academicYear?: SortOrderInput | SortOrder
     maxTrainingTime?: SortOrderInput | SortOrder
+    isRetakeExam?: SortOrder
     admissionQuota?: SortOrderInput | SortOrder
     admittedStudent?: SortOrderInput | SortOrder
     enrolledStudent?: SortOrderInput | SortOrder
@@ -398138,6 +398156,7 @@ export namespace Prisma {
     endYear?: IntNullableWithAggregatesFilter<"TrainingCourse"> | number | null
     academicYear?: StringNullableWithAggregatesFilter<"TrainingCourse"> | string | null
     maxTrainingTime?: FloatNullableWithAggregatesFilter<"TrainingCourse"> | number | null
+    isRetakeExam?: BoolWithAggregatesFilter<"TrainingCourse"> | boolean
     admissionQuota?: IntNullableWithAggregatesFilter<"TrainingCourse"> | number | null
     admittedStudent?: IntNullableWithAggregatesFilter<"TrainingCourse"> | number | null
     enrolledStudent?: IntNullableWithAggregatesFilter<"TrainingCourse"> | number | null
@@ -429840,6 +429859,7 @@ export namespace Prisma {
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
+    isRetakeExam?: boolean
     admissionQuota?: number | null
     admittedStudent?: number | null
     enrolledStudent?: number | null
@@ -429899,6 +429919,7 @@ export namespace Prisma {
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
+    isRetakeExam?: boolean
     admissionQuota?: number | null
     admittedStudent?: number | null
     enrolledStudent?: number | null
@@ -429956,6 +429977,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -430015,6 +430037,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -430073,6 +430096,7 @@ export namespace Prisma {
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
+    isRetakeExam?: boolean
     admissionQuota?: number | null
     admittedStudent?: number | null
     enrolledStudent?: number | null
@@ -430115,6 +430139,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -430156,6 +430181,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -460436,6 +460462,7 @@ export namespace Prisma {
     endYear?: SortOrder
     academicYear?: SortOrder
     maxTrainingTime?: SortOrder
+    isRetakeExam?: SortOrder
     admissionQuota?: SortOrder
     admittedStudent?: SortOrder
     enrolledStudent?: SortOrder
@@ -460500,6 +460527,7 @@ export namespace Prisma {
     endYear?: SortOrder
     academicYear?: SortOrder
     maxTrainingTime?: SortOrder
+    isRetakeExam?: SortOrder
     admissionQuota?: SortOrder
     admittedStudent?: SortOrder
     enrolledStudent?: SortOrder
@@ -460543,6 +460571,7 @@ export namespace Prisma {
     endYear?: SortOrder
     academicYear?: SortOrder
     maxTrainingTime?: SortOrder
+    isRetakeExam?: SortOrder
     admissionQuota?: SortOrder
     admittedStudent?: SortOrder
     enrolledStudent?: SortOrder
@@ -553430,6 +553459,7 @@ export namespace Prisma {
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
+    isRetakeExam?: boolean
     admissionQuota?: number | null
     admittedStudent?: number | null
     enrolledStudent?: number | null
@@ -553488,6 +553518,7 @@ export namespace Prisma {
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
+    isRetakeExam?: boolean
     admissionQuota?: number | null
     admittedStudent?: number | null
     enrolledStudent?: number | null
@@ -553748,6 +553779,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -553806,6 +553838,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -561227,6 +561260,7 @@ export namespace Prisma {
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
+    isRetakeExam?: boolean
     admissionQuota?: number | null
     admittedStudent?: number | null
     enrolledStudent?: number | null
@@ -561284,6 +561318,7 @@ export namespace Prisma {
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
+    isRetakeExam?: boolean
     admissionQuota?: number | null
     admittedStudent?: number | null
     enrolledStudent?: number | null
@@ -562196,6 +562231,7 @@ export namespace Prisma {
     endYear?: IntNullableFilter<"TrainingCourse"> | number | null
     academicYear?: StringNullableFilter<"TrainingCourse"> | string | null
     maxTrainingTime?: FloatNullableFilter<"TrainingCourse"> | number | null
+    isRetakeExam?: BoolFilter<"TrainingCourse"> | boolean
     admissionQuota?: IntNullableFilter<"TrainingCourse"> | number | null
     admittedStudent?: IntNullableFilter<"TrainingCourse"> | number | null
     enrolledStudent?: IntNullableFilter<"TrainingCourse"> | number | null
@@ -562845,6 +562881,7 @@ export namespace Prisma {
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
+    isRetakeExam?: boolean
     admissionQuota?: number | null
     admittedStudent?: number | null
     enrolledStudent?: number | null
@@ -562903,6 +562940,7 @@ export namespace Prisma {
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
+    isRetakeExam?: boolean
     admissionQuota?: number | null
     admittedStudent?: number | null
     enrolledStudent?: number | null
@@ -564803,6 +564841,7 @@ export namespace Prisma {
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
+    isRetakeExam?: boolean
     admissionQuota?: number | null
     admittedStudent?: number | null
     enrolledStudent?: number | null
@@ -564861,6 +564900,7 @@ export namespace Prisma {
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
+    isRetakeExam?: boolean
     admissionQuota?: number | null
     admittedStudent?: number | null
     enrolledStudent?: number | null
@@ -564933,6 +564973,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -564991,6 +565032,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -565353,6 +565395,7 @@ export namespace Prisma {
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
+    isRetakeExam?: boolean
     admissionQuota?: number | null
     admittedStudent?: number | null
     enrolledStudent?: number | null
@@ -565411,6 +565454,7 @@ export namespace Prisma {
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
+    isRetakeExam?: boolean
     admissionQuota?: number | null
     admittedStudent?: number | null
     enrolledStudent?: number | null
@@ -566549,6 +566593,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -566607,6 +566652,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -567905,6 +567951,7 @@ export namespace Prisma {
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
+    isRetakeExam?: boolean
     admissionQuota?: number | null
     admittedStudent?: number | null
     enrolledStudent?: number | null
@@ -567963,6 +568010,7 @@ export namespace Prisma {
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
+    isRetakeExam?: boolean
     admissionQuota?: number | null
     admittedStudent?: number | null
     enrolledStudent?: number | null
@@ -568861,6 +568909,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -568919,6 +568968,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -573685,6 +573735,7 @@ export namespace Prisma {
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
+    isRetakeExam?: boolean
     admissionQuota?: number | null
     admittedStudent?: number | null
     enrolledStudent?: number | null
@@ -573743,6 +573794,7 @@ export namespace Prisma {
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
+    isRetakeExam?: boolean
     admissionQuota?: number | null
     admittedStudent?: number | null
     enrolledStudent?: number | null
@@ -581534,6 +581586,7 @@ export namespace Prisma {
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
+    isRetakeExam?: boolean
     admissionQuota?: number | null
     admittedStudent?: number | null
     enrolledStudent?: number | null
@@ -581592,6 +581645,7 @@ export namespace Prisma {
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
+    isRetakeExam?: boolean
     admissionQuota?: number | null
     admittedStudent?: number | null
     enrolledStudent?: number | null
@@ -589050,6 +589104,7 @@ export namespace Prisma {
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
+    isRetakeExam?: boolean
     admissionQuota?: number | null
     admittedStudent?: number | null
     enrolledStudent?: number | null
@@ -589108,6 +589163,7 @@ export namespace Prisma {
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
+    isRetakeExam?: boolean
     admissionQuota?: number | null
     admittedStudent?: number | null
     enrolledStudent?: number | null
@@ -589180,6 +589236,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -589238,6 +589295,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -594520,6 +594578,7 @@ export namespace Prisma {
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
+    isRetakeExam?: boolean
     admissionQuota?: number | null
     admittedStudent?: number | null
     enrolledStudent?: number | null
@@ -594578,6 +594637,7 @@ export namespace Prisma {
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
+    isRetakeExam?: boolean
     admissionQuota?: number | null
     admittedStudent?: number | null
     enrolledStudent?: number | null
@@ -595056,6 +595116,7 @@ export namespace Prisma {
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
+    isRetakeExam?: boolean
     admissionQuota?: number | null
     admittedStudent?: number | null
     enrolledStudent?: number | null
@@ -595114,6 +595175,7 @@ export namespace Prisma {
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
+    isRetakeExam?: boolean
     admissionQuota?: number | null
     admittedStudent?: number | null
     enrolledStudent?: number | null
@@ -596314,6 +596376,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -596372,6 +596435,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -597621,6 +597685,7 @@ export namespace Prisma {
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
+    isRetakeExam?: boolean
     admissionQuota?: number | null
     admittedStudent?: number | null
     enrolledStudent?: number | null
@@ -597679,6 +597744,7 @@ export namespace Prisma {
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
+    isRetakeExam?: boolean
     admissionQuota?: number | null
     admittedStudent?: number | null
     enrolledStudent?: number | null
@@ -597837,6 +597903,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -597895,6 +597962,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -605807,6 +605875,7 @@ export namespace Prisma {
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
+    isRetakeExam?: boolean
     admissionQuota?: number | null
     admittedStudent?: number | null
     enrolledStudent?: number | null
@@ -605865,6 +605934,7 @@ export namespace Prisma {
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
+    isRetakeExam?: boolean
     admissionQuota?: number | null
     admittedStudent?: number | null
     enrolledStudent?: number | null
@@ -606146,6 +606216,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -606204,6 +606275,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -618128,6 +618200,7 @@ export namespace Prisma {
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
+    isRetakeExam?: boolean
     admissionQuota?: number | null
     admittedStudent?: number | null
     enrolledStudent?: number | null
@@ -618186,6 +618259,7 @@ export namespace Prisma {
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
+    isRetakeExam?: boolean
     admissionQuota?: number | null
     admittedStudent?: number | null
     enrolledStudent?: number | null
@@ -629662,6 +629736,7 @@ export namespace Prisma {
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
+    isRetakeExam?: boolean
     admissionQuota?: number | null
     admittedStudent?: number | null
     enrolledStudent?: number | null
@@ -629720,6 +629795,7 @@ export namespace Prisma {
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
+    isRetakeExam?: boolean
     admissionQuota?: number | null
     admittedStudent?: number | null
     enrolledStudent?: number | null
@@ -629878,6 +629954,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -629936,6 +630013,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -630885,6 +630963,7 @@ export namespace Prisma {
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
+    isRetakeExam?: boolean
     admissionQuota?: number | null
     admittedStudent?: number | null
     enrolledStudent?: number | null
@@ -630943,6 +631022,7 @@ export namespace Prisma {
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
+    isRetakeExam?: boolean
     admissionQuota?: number | null
     admittedStudent?: number | null
     enrolledStudent?: number | null
@@ -631137,6 +631217,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -631195,6 +631276,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -634336,6 +634418,7 @@ export namespace Prisma {
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
+    isRetakeExam?: boolean
     admissionQuota?: number | null
     admittedStudent?: number | null
     enrolledStudent?: number | null
@@ -634394,6 +634477,7 @@ export namespace Prisma {
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
+    isRetakeExam?: boolean
     admissionQuota?: number | null
     admittedStudent?: number | null
     enrolledStudent?: number | null
@@ -634912,6 +634996,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -634970,6 +635055,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -639275,6 +639361,7 @@ export namespace Prisma {
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
+    isRetakeExam?: boolean
     admissionQuota?: number | null
     admittedStudent?: number | null
     enrolledStudent?: number | null
@@ -639333,6 +639420,7 @@ export namespace Prisma {
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
+    isRetakeExam?: boolean
     admissionQuota?: number | null
     admittedStudent?: number | null
     enrolledStudent?: number | null
@@ -639442,6 +639530,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -639500,6 +639589,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -674073,6 +674163,7 @@ export namespace Prisma {
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
+    isRetakeExam?: boolean
     admissionQuota?: number | null
     admittedStudent?: number | null
     enrolledStudent?: number | null
@@ -674532,6 +674623,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -674589,6 +674681,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -674646,6 +674739,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -675520,6 +675614,7 @@ export namespace Prisma {
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
+    isRetakeExam?: boolean
     admissionQuota?: number | null
     admittedStudent?: number | null
     enrolledStudent?: number | null
@@ -675600,6 +675695,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -675658,6 +675754,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -675715,6 +675812,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -681079,6 +681177,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -681137,6 +681236,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -681194,6 +681294,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -683092,6 +683193,7 @@ export namespace Prisma {
     endYear?: number | null
     academicYear?: string | null
     maxTrainingTime?: number | null
+    isRetakeExam?: boolean
     admissionQuota?: number | null
     admittedStudent?: number | null
     enrolledStudent?: number | null
@@ -683473,6 +683575,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -683531,6 +683634,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -683588,6 +683692,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -691003,6 +691108,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -691061,6 +691167,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -691118,6 +691225,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -699511,6 +699619,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -699569,6 +699678,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
@@ -699626,6 +699736,7 @@ export namespace Prisma {
     endYear?: NullableIntFieldUpdateOperationsInput | number | null
     academicYear?: NullableStringFieldUpdateOperationsInput | string | null
     maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
     admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
     admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
     enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null

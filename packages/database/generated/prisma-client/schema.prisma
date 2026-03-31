@@ -2865,6 +2865,7 @@ model TrainingCourse {
   endYear                    Int?
   academicYear               String?
   maxTrainingTime            Float?
+  isRetakeExam               Boolean                    @default(false)
   /// Chỉ tiêu tuyển sinh
   admissionQuota             Int?
   /// Số lượng trúng tuyển
