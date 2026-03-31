@@ -166,7 +166,7 @@ export default function EvaluationPeriod() {
               title: "STT",
               width: 30,
               align: "center",
-              render: (_, __, index) => index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+              render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,
             },
             {
               title: "Tên đợt đánh giá",

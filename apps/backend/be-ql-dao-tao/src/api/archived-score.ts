@@ -152,6 +152,7 @@ app.openapi(certificateScore, async (c) => {
   await prisma.$transaction(async (tx) => {
     await tx.studentSubjectScore.createMany({
       data: translateSubjectScore.map(({ archivedCertificateId, ...score }) => score),
+      skipDuplicates: true,
     })
 
     await tx.archivedCertificateOnStudentSubjectScore.createMany({
@@ -159,11 +160,7 @@ app.openapi(certificateScore, async (c) => {
         studentSubjectScoreId: id,
         archivedCertificateId,
       })),
-    })
-
-    await tx.archivedCertificate.updateMany({
-      where: { id: { in: archivedCertificateIds } },
-      data: { status: $Enums.ArchivedCertificateStatus.APPROVED },
+      skipDuplicates: true,
     })
   })
 

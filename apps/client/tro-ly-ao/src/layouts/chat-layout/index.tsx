@@ -2,6 +2,8 @@ import ChatHeader from "@components/layouts/header/chat-header"
 import SiderChatLayout from "@components/layouts/sider/chat-sider"
 import ChatIframeLayout from "@layouts/chat-iframe-layout"
 import { cn } from "@lib/utils"
+import ability from "@workspace/permissions/ability"
+import { usePermissions } from "@workspace/permissions/hooks"
 import {
   useDeleteConversation,
   useDeleteManyCitationMessage,
@@ -30,9 +32,21 @@ const ChatLayout = ({
   const router = useRouter()
   const { sessionId } = useUserSession()
   const { isAuthenticated: isSSOAuthenticated, signIn, session: ssoSession } = useSSOSession()
+  const permissions = usePermissions()
   const [isDeleting, setIsDeleting] = useState(false)
   const [isInIframe, setIsInIframe] = useState(false)
   const [isResizing, setIsResizing] = useState(false)
+
+  // Load permissions vào ability để ChatHeader có thể check quyền
+  useEffect(() => {
+    if (!permissions.length) return
+    ability.update(
+      permissions.map((permission) => ({
+        action: String(permission.permission),
+        subject: permission.name,
+      }))
+    )
+  }, [permissions])
   const [collapsed, setCollapsed] = useState(() => {
     if (typeof window !== "undefined") {
       const isMobile = window.innerWidth < 768

@@ -70,6 +70,7 @@ export default function SettingCouncil() {
   const [leftData, setLeftData] = useState<ExpertProfile[]>([])
   const [rightData, setRightData] = useState<ExpertProfile[]>([])
   const [currentPage, setCurrentPage] = useState(1)
+  const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
   const [filters, setFilters] = useState<FilterProps>({
     code: undefined,
     name: undefined,
@@ -566,8 +567,7 @@ export default function SettingCouncil() {
                   width: 60,
                   align: "center",
                   fixed: "left",
-                  render: (_, __, index: number) =>
-                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                  render: (_, __, index: number) => index + 1 + (currentPage - 1) * numberOfPages,
                 },
                 {
                   title: "Tên chuyên gia",
@@ -667,8 +667,7 @@ export default function SettingCouncil() {
                   width: 60,
                   align: "center",
                   fixed: "left",
-                  render: (_, __, index: number) =>
-                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                  render: (_, __, index: number) => index + 1 + (currentPage - 1) * numberOfPages,
                 },
                 {
                   title: "Tên chuyên gia",

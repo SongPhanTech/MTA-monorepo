@@ -5,8 +5,15 @@ import { useRouter } from "next/router"
 import { useEffect } from "react"
 
 /**
- * Index page - chỉ xử lý redirect dựa vào query param 'mode'
- * Reload ở trang nào thì vẫn ở trang đó (Next.js tự động handle)
+ * Index page - xử lý routing khi vào trang gốc "/"
+ *
+ * Với output: "export" (static HTML), khi reload trang quản trị (vd: /quan-tri/du-lieu/tai-lieu/),
+ * web server có thể fallback về /index.html → component này được render.
+ * Lúc đó router.asPath vẫn giữ nguyên URL gốc trên trình duyệt.
+ *
+ * - Nếu asPath là "/" → redirect về trang chatbot (hành vi mặc định)
+ * - Nếu asPath là route khác (fallback từ server) → navigate đến đúng route đó
+ *   để Next.js client-side router load đúng page component
  */
 const IndexPage: NextPage = () => {
   const router = useRouter()
@@ -14,18 +21,17 @@ const IndexPage: NextPage = () => {
   useEffect(() => {
     if (!router.isReady) return
 
-    const { mode } = router.query
+    const currentPath = router.asPath.split("?")[0].replace(/\/+$/, "") || "/"
 
-    // Redirect dựa vào query param 'mode'
-    if (mode === "quan-tri") {
-      router.replace(ROUTER_PATH.TRO_LY_AO.QUAN_TRI_DU_LIEU_TAI_LIEU)
-    } else if (mode === "tro-ly-ao") {
+    if (currentPath === "/" || currentPath === "") {
+      // User thực sự truy cập trang gốc → redirect về chatbot
       router.replace(ROUTER_PATH.TRO_LY_AO.TRO_LY_AO)
     } else {
-      // Mặc định redirect về chatbot nếu vào root path
-      router.replace(ROUTER_PATH.TRO_LY_AO.TRO_LY_AO)
+      // Server fallback về index.html khi reload trang khác
+      // → dùng client-side router để navigate đến đúng route gốc
+      router.replace(router.asPath)
     }
-  }, [router.isReady, router.query.mode, router])
+  }, [router.isReady, router])
 
   return <Loading />
 }

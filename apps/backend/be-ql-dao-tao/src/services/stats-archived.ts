@@ -31,7 +31,7 @@ export type StatItem = z.infer<typeof StatsArchivedAwardItemSchema>
 export const getStatsArchivedAward = async ({
   fromSemesterId,
   toSemesterId,
-  trainingCourseId
+  trainingCourseId,
 }: {
   fromSemesterId: string
   toSemesterId: string

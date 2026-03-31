@@ -5,7 +5,7 @@ import {
   MenuOutlined,
   UnorderedListOutlined,
 } from "@ant-design/icons"
-import { ROUTER_PATH } from "@workspace/router"
+import { ROUTER_PATH, TRO_LY_AO_PERMISSION } from "@workspace/router"
 import { useAbility } from "@workspace/permissions/hooks"
 import { Button, Layout, Typography } from "antd"
 import { usePathname } from "next/navigation"
@@ -34,7 +34,7 @@ const ChatHeader = ({
 }: ChatHeaderProps) => {
   const pathname = usePathname()
   const router = useRouter()
-  const { can } = useAbility()
+  const { can, canSome } = useAbility()
   const { onOpen: openAppSwitcher } = useDisclosure({
     tag: "AppSwitcherModal",
   })
@@ -55,7 +55,14 @@ const ChatHeader = ({
   const handleNavigateToAdmin = () => {
     router.push(ROUTER_PATH.TRO_LY_AO.QUAN_TRI_DU_LIEU_TAI_LIEU)
   }
-
+  const canAccessAdmin =
+    canSome(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DU_LIEU_TAI_LIEU, "XEM") ||
+    canSome(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DU_LIEU_FAQ, "XEM") ||
+    canSome(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DANH_MUC_CHU_DE, "XEM") ||
+    canSome(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DANH_MUC_LOAI_TAI_LIEU, "XEM") ||
+    canSome(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_CAU_HINH_THAM_SO, "XEM") ||
+    canSome(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_CAU_HINH_PROMPT_HOI_DAP, "XEM") ||
+    canSome(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_CAU_HINH_PROMPT_CHUC_NANG, "XEM")
   return (
     <Header className="bg-white rounded-xl px-4 h-14 flex items-center justify-between mb-2">
       <div className="flex items-center gap-2">
@@ -83,7 +90,7 @@ const ChatHeader = ({
         )}
 
         {/* Nút Quản trị - chỉ hiện khi đã đăng nhập SSO và có quyền QUAN_TRI */}
-        {isSSOAuthenticated && can("QUAN_TRI" as any, "XEM") && (
+        {isSSOAuthenticated && canAccessAdmin && (
           <Button
             type="link"
             onClick={handleNavigateToAdmin}

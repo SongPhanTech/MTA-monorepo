@@ -8324,6 +8324,20 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'coSupervisor',
+                }, thirdSupervisor: {
+                    name: "thirdSupervisor",
+                    type: "ExpertProfile",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'thirdSupervisorResearchTopic',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "thirdSupervisorId" },
+                }, thirdSupervisorId: {
+                    name: "thirdSupervisorId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'thirdSupervisor',
                 }, reportDate: {
                     name: "reportDate",
                     type: "DateTime",
@@ -10646,6 +10660,9 @@ const metadata: ModelMeta = {
                 }, trainingObjectTypeId_name_credit_period_managementOrganizationId: {
                     name: "trainingObjectTypeId_name_credit_period_managementOrganizationId",
                     fields: ["trainingObjectTypeId", "name", "credit", "period", "managementOrganizationId"]
+                }, trainingObjectTypeId_codeTkb: {
+                    name: "trainingObjectTypeId_codeTkb",
+                    fields: ["trainingObjectTypeId", "codeTkb"]
                 },
             },
         },
@@ -17179,6 +17196,14 @@ const metadata: ModelMeta = {
                     name: "chief",
                     type: "String",
                     isOptional: true,
+                }, topicEntryDeadline: {
+                    name: "topicEntryDeadline",
+                    type: "DateTime",
+                    isOptional: true,
+                }, councilDeadline: {
+                    name: "councilDeadline",
+                    type: "DateTime",
+                    isOptional: true,
                 }, thesisProject: {
                     name: "thesisProject",
                     type: "ThesisProject",
@@ -17333,6 +17358,36 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'secondarySupervisor',
+                }, thirdSupervisor: {
+                    name: "thirdSupervisor",
+                    type: "ExpertProfile",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'thirdSupervisedTheses',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "thirdSupervisorId" },
+                }, thirdSupervisorId: {
+                    name: "thirdSupervisorId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'thirdSupervisor',
+                }, isProductProject: {
+                    name: "isProductProject",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, isGroupProject: {
+                    name: "isGroupProject",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, isLanguage: {
+                    name: "isLanguage",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, externalUnit: {
+                    name: "externalUnit",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, subjectClass: {
                     name: "subjectClass",
                     type: "SubjectClass",
@@ -17882,6 +17937,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'coSupervisor',
+                }, thirdSupervisedTheses: {
+                    name: "thirdSupervisedTheses",
+                    type: "ThesisProject",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'thirdSupervisor',
                 }, supervisorResearchTopic: {
                     name: "supervisorResearchTopic",
                     type: "StudentResearchTopic",
@@ -17894,6 +17955,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'coSupervisor',
+                }, thirdSupervisorResearchTopic: {
+                    name: "thirdSupervisorResearchTopic",
+                    type: "StudentResearchTopic",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'thirdSupervisor',
                 }, supervisorInternship: {
                     name: "supervisorInternship",
                     type: "StudentInternship",

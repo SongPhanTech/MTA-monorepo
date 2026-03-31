@@ -218,6 +218,7 @@ export default function UserProfilePageLecture() {
   const { data: count, refetch: refetchCount } = useCountLecturer({
     where: {
       ...where,
+      organization: { bDeleted: false },
       deletedAt: null,
     },
   })
@@ -309,7 +310,7 @@ export default function UserProfilePageLecture() {
                 width: 50,
                 align: "center",
                 fixed: "left",
-                render: (_, __, index) => index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,
               },
               {
                 title: "Mã giảng viên",

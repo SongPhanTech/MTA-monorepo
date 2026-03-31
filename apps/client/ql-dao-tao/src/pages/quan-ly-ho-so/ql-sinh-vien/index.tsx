@@ -288,7 +288,26 @@ export default function UserProfilePageDs() {
       },
       curriculumVersionParallel: true,
     },
-    orderBy: [{ userProfile: { firstName: "asc" } }, { userProfile: { lastName: "asc" } }],
+    orderBy: [
+      {
+        fixedClass: {
+          trainingCourse: {
+            semesterStart: { startDate: "desc" },
+          },
+        },
+      },
+      {
+        curriculumVersion: {
+          curriculum: {
+            trainingMajor: {
+              name: "asc",
+            },
+          },
+        },
+      },
+      { userProfile: { firstName: "asc" } },
+      { userProfile: { lastName: "asc" } },
+    ],
     take: numberOfPages,
     skip: (currentPage - 1) * numberOfPages,
   })
@@ -512,7 +531,7 @@ export default function UserProfilePageDs() {
                 width: 50,
                 align: "center",
                 fixed: "left",
-                render: (_, __, index) => index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,
               },
               {
                 title: "Mã sinh viên",

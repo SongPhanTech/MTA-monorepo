@@ -2147,9 +2147,18 @@ export default function StudentFixedClassPage() {
                 render: (__, record) => record?.userProfile?.gender?.sTen,
               },
               {
+                title: "CCCD",
+                align: "center",
+                width: 100,
+                dataIndex: "idCardNumber",
+                type: "input",
+                render: (__, record) =>
+                  record.userProfile?.idCardNumber ? record.userProfile?.idCardNumber : "",
+              },
+              {
                 title: "SĐT",
                 align: "center",
-                width: 120,
+                width: 100,
                 dataIndex: "phone",
                 type: "input",
                 render: (__, record) =>

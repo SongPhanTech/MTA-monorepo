@@ -327,7 +327,7 @@ export function useSuspenseCountStudentResearchTopic<TArgs extends Prisma.Studen
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('StudentResearchTopic', `${endpoint}/studentResearchTopic/count`, args, options, fetch);
 }
 
-export function useCheckStudentResearchTopic<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; studentSubjectScoreId?: string; name?: string; mainContent?: string; supervisorId?: string; coSupervisorId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckStudentResearchTopic<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; studentSubjectScoreId?: string; name?: string; mainContent?: string; supervisorId?: string; coSupervisorId?: string; thirdSupervisorId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('StudentResearchTopic', `${endpoint}/studentResearchTopic/check`, args, options, fetch);
 }
