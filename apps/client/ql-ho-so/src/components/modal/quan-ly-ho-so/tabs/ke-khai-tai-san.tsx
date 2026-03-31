@@ -32,7 +32,7 @@ const dataKeKhaiTaiSan = [
 export default function KeKhaiTaiSanTab() {
   const [openCollapse, setOpenCollapse] = useState<string | null>(null)
   const [currentPage, _setCurrentPage] = useState(1)
-  const [_numberOfPages, _setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+  const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
 
   const handleCollapseChange = (collapseId: string) => (key: string | string[]) => {
     if (key && key.length > 0) {

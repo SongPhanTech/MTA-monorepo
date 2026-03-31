@@ -81,7 +81,7 @@ const dataQuocPhongAnNinh = [
 export default function TrinhDoChungChiTab({ userSelected }: { userSelected?: UserProfileType }) {
   const [openCollapse, setOpenCollapse] = useState<string | null>(null)
   const [currentPage, _setCurrentPage] = useState(1)
-  const [numberOfPages, _setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+  const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
 
   const handleCollapseChange = (collapseId: string) => (key: string | string[]) => {
     if (key && key.length > 0) {

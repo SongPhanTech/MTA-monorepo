@@ -622,24 +622,15 @@ export default function DanhSachSinhVien() {
     try {
       showSpinner()
       const values = form.getFieldsValue()
-      const valueListObject = Object.entries(values.list).map(([key, value_]) => {
-        return {
-          id: key,
-          ...value_,
-        }
-      })
-
-      const filteredValues = valueListObject.filter(
-        (item) => item.examPostponed || item.examPostponedReason
-      )
-
-      const updateTransactions: SqlTransactionBodyItem[] = filteredValues.map((i) => ({
+      const valueListObject = Object.entries(values.list).map(([key, value_]) => ({
+        id: key,
+        ...value_,
+      }))
+      const updateTransactions: SqlTransactionBodyItem[] = valueListObject.map((i) => ({
         model: "StudentSubjectScore",
         operation: "update",
         data: {
-          where: {
-            id: i.id,
-          },
+          where: { id: i.id },
           data: {
             examPostponed: i.examPostponed ?? false,
             examPostponedReason: i.examPostponed ? i.examPostponedReason || null : null,
@@ -650,10 +641,13 @@ export default function DanhSachSinhVien() {
       const res = await sqlTransaction(updateTransactions)
 
       if (res.status === 200) {
+        queryClient.invalidateQueries({
+          queryKey: ["zenstack", "StudentSubjectScore"],
+        })
+        queryClient.invalidateQueries({ queryKey: ["zenstack", "ExamPaper"] })
+        queryClient.invalidateQueries({ queryKey: ["zenstack", "ExamList"] })
         message.success("Cập nhật thành công")
       }
-
-      console.log(valueListObject)
     } catch (error: any) {
       message.error(error.message || "Có lỗi xảy ra, vui lòng thử lại sau!")
     } finally {
