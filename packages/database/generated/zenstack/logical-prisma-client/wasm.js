@@ -1776,6 +1776,7 @@ exports.Prisma.TrainingCourseScalarFieldEnum = {
   endYear: 'endYear',
   academicYear: 'academicYear',
   maxTrainingTime: 'maxTrainingTime',
+  isRetakeExam: 'isRetakeExam',
   admissionQuota: 'admissionQuota',
   admittedStudent: 'admittedStudent',
   enrolledStudent: 'enrolledStudent',

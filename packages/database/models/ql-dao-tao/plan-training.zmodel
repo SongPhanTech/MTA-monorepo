@@ -452,6 +452,9 @@ model TrainingCourse extends Base {
   academicYear               String?
   maxTrainingTime            Float?
 
+  // Khoá này có được thi lại không
+  isRetakeExam               Boolean                    @default(false)
+
   /// Chỉ tiêu tuyển sinh
   admissionQuota             Int?
   /// Số lượng trúng tuyển

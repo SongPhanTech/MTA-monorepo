@@ -155,6 +155,8 @@ const openSubjectClassRetakeStudents = createRoute({
                   }),
                 }),
                 studentId: z.string(),
+                thuong_xuyen: z.number(),
+                dinh_ky: z.number(),
                 diem_cuoi: z.number().nullable(),
                 withdrew: z.boolean(),
                 mien_thi: z.boolean(),
@@ -905,6 +907,8 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
     hoan_thi: boolean
     ly_do_hoan_thi: string | null
     cam_thi: boolean
+    thuong_xuyen: number
+    dinh_ky: number
     ly_do_cam_thi: string | null
     dinh_chi: boolean
     ly_do_dinh_chi: string | null
@@ -921,6 +925,8 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
                                TC.id                                                                                             as trainingCourseId,
                                FC.id                                                                                             as fixedClassId,
                                SSS."studentId",
+                               SSS."attendanceScore"                                                                              as thuong_xuyen,
+                               SSS."midtermScore"                                                                                 as dinh_ky,
                                SSS."finalScore"                                                                                  as diem_cuoi,
                                SSS.withdrew,
                                SSS.exempted                                                                                      as mien_thi,
@@ -959,6 +965,8 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
                                                             or SSS."examScore" is not null
                                                             or SSS."finalScore" is not null))
         select "studentId",
+               thuong_xuyen,
+               dinh_ky,
                diem_cuoi,
                withdrew,
                mien_thi,

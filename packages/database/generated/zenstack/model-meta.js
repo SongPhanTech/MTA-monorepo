@@ -9827,6 +9827,10 @@ const metadata = {
                     name: "maxTrainingTime",
                     type: "Float",
                     isOptional: true,
+                }, isRetakeExam: {
+                    name: "isRetakeExam",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, admissionQuota: {
                     name: "admissionQuota",
                     type: "Int",
