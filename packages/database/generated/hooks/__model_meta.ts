@@ -10660,9 +10660,6 @@ const metadata: ModelMeta = {
                 }, trainingObjectTypeId_name_credit_period_managementOrganizationId: {
                     name: "trainingObjectTypeId_name_credit_period_managementOrganizationId",
                     fields: ["trainingObjectTypeId", "name", "credit", "period", "managementOrganizationId"]
-                }, trainingObjectTypeId_codeTkb: {
-                    name: "trainingObjectTypeId_codeTkb",
-                    fields: ["trainingObjectTypeId", "codeTkb"]
                 },
             },
         },

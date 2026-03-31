@@ -785,9 +785,8 @@ model SubjectVersion extends BaseNoCode {
   examFramework            ExamFramework[]
   scoreLinkSubjectVersion  ScoreLinkSubjectVersion[]
 
-
   @@unique([trainingObjectTypeId, name, credit, period, managementOrganizationId])
-  @@unique([trainingObjectTypeId, codeTkb])
+  // @@unique([trainingObjectTypeId, codeTkb])
   @@index([name, trainingObjectTypeId])
   @@index([subjectId])
   @@schema("ql-dao-tao")

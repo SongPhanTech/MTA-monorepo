@@ -399105,7 +399105,6 @@ export namespace Prisma {
   export type SubjectVersionWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     trainingObjectTypeId_name_credit_period_managementOrganizationId?: SubjectVersionTrainingObjectTypeIdNameCreditPeriodManagementOrganizationIdCompoundUniqueInput
-    trainingObjectTypeId_codeTkb?: SubjectVersionTrainingObjectTypeIdCodeTkbCompoundUniqueInput
     AND?: SubjectVersionWhereInput | SubjectVersionWhereInput[]
     OR?: SubjectVersionWhereInput[]
     NOT?: SubjectVersionWhereInput | SubjectVersionWhereInput[]
@@ -399164,7 +399163,7 @@ export namespace Prisma {
     exams?: ExamListRelationFilter
     examFramework?: ExamFrameworkListRelationFilter
     scoreLinkSubjectVersion?: ScoreLinkSubjectVersionListRelationFilter
-  }, "id" | "trainingObjectTypeId_name_credit_period_managementOrganizationId" | "trainingObjectTypeId_codeTkb">
+  }, "id" | "trainingObjectTypeId_name_credit_period_managementOrganizationId">
 
   export type SubjectVersionOrderByWithAggregationInput = {
     id?: SortOrder
@@ -461281,11 +461280,6 @@ export namespace Prisma {
     credit: number
     period: number
     managementOrganizationId: string
-  }
-
-  export type SubjectVersionTrainingObjectTypeIdCodeTkbCompoundUniqueInput = {
-    trainingObjectTypeId: string
-    codeTkb: string
   }
 
   export type SubjectVersionCountOrderByAggregateInput = {
