@@ -4,39 +4,39 @@ import { PrismaClient } from "../../generated/prisma-client"
 const prisma = new PrismaClient()
 
 // THI VIẾT: only fill attandance and midterm
-const subjectClassIds = await prisma.subjectClass.findMany({
-  where: {
-    examType: "OfflineWritten",
-    subject: { onePoint: false },
-    semester: {
-      startDate: {
-        gte: new Date(2035, 1, 1),
-      },
-    },
-  },
-})
+// const subjectClassIds = await prisma.subjectClass.findMany({
+//   where: {
+//     examType: "OfflineWritten",
+//     subject: { onePoint: false },
+//     // semester: {
+//     //   startDate: {
+//     //     gte: new Date(2035, 1, 1),
+//     //   },
+//     // },
+//   },
+// })
 
-console.log("lớp thi viết", subjectClassIds.length)
+// console.log("lớp thi viết", subjectClassIds.length)
 
-const whereCondition = {
-  subjectClassId: {
-    in: subjectClassIds.map((c) => c.id),
-  },
-  attendanceScore: null,
-  midtermScore: null,
-  examScore: null,
-}
+// const whereCondition = {
+//   subjectClassId: {
+//     in: subjectClassIds.map((c) => c.id),
+//   },
+//   attendanceScore: null,
+//   midtermScore: null,
+//   examScore: null,
+// }
 
-const count = await prisma.studentSubjectScore.count({
-  where: whereCondition,
-})
+// const count = await prisma.studentSubjectScore.count({
+//   where: whereCondition,
+// })
 
-console.log(`Found ${count} records to update`)
+// console.log(`Found ${count} records to update`)
 
-const scoresToUpdate = await prisma.studentSubjectScore.findMany({
-  where: whereCondition,
-  select: { id: true },
-})
+// const scoresToUpdate = await prisma.studentSubjectScore.findMany({
+//   where: whereCondition,
+//   select: { id: true },
+// })
 
 const getRandomScore = () => {
   // Generate random score between 6.0 and 10.0 with 0.5 increments
@@ -45,39 +45,39 @@ const getRandomScore = () => {
 }
 
 const chunkSize = 1000
-for (let i = 0; i < scoresToUpdate.length; i += chunkSize) {
-  const chunk = scoresToUpdate.slice(i, i + chunkSize)
+// for (let i = 0; i < scoresToUpdate.length; i += chunkSize) {
+//   const chunk = scoresToUpdate.slice(i, i + chunkSize)
 
-  await prisma.$executeRawUnsafe(`
-        UPDATE "ql-dao-tao"."StudentSubjectScore" AS sss
-        SET
-            "attendanceScore" = data."attendanceScore"::double precision,
-            "midtermScore" = data."midtermScore"::double precision,
-            "updatedAt" = NOW()
-        FROM (
-            VALUES
-            ${chunk
-              .map(
-                (u) => `(
-                        '${u.id}',
-                        ${getRandomScore()},
-                        ${getRandomScore()}
-                    )`
-              )
-              .join(",\n")}
-        ) AS data("id", "attendanceScore", "midtermScore")
-        WHERE sss.id = data.id;
-    `)
+//   await prisma.$executeRawUnsafe(`
+//         UPDATE "ql-dao-tao"."StudentSubjectScore" AS sss
+//         SET
+//             "attendanceScore" = data."attendanceScore"::double precision,
+//             "midtermScore" = data."midtermScore"::double precision,
+//             "updatedAt" = NOW()
+//         FROM (
+//             VALUES
+//             ${chunk
+//               .map(
+//                 (u) => `(
+//                         '${u.id}',
+//                         ${getRandomScore()},
+//                         ${getRandomScore()}
+//                     )`
+//               )
+//               .join(",\n")}
+//         ) AS data("id", "attendanceScore", "midtermScore")
+//         WHERE sss.id = data.id;
+//     `)
 
-  console.log(
-    `Updated ${Math.min(i + chunkSize, scoresToUpdate.length)} / ${scoresToUpdate.length} records...`
-  )
-}
+//   console.log(
+//     `Updated ${Math.min(i + chunkSize, scoresToUpdate.length)} / ${scoresToUpdate.length} records...`
+//   )
+// }
 
-await prisma.subjectClass.updateMany({
-  where: { id: { in: subjectClassIds.map((c) => c.id) } },
-  data: { enteredScore: true },
-})
+// await prisma.subjectClass.updateMany({
+//   where: { id: { in: subjectClassIds.map((c) => c.id) } },
+//   data: { enteredScore: true },
+// })
 
 // THI KHÁC
 const classes = await prisma.subjectClass.findMany({
@@ -85,12 +85,8 @@ const classes = await prisma.subjectClass.findMany({
     subject: { select: { onePoint: true } },
   },
   where: {
-    examType: { not: "OfflineWritten" },
-    semester: {
-      startDate: {
-        gte: new Date(2035, 1, 1),
-      },
-    },
+    // examType: { not: "OfflineWritten" },
+    semesterId:'080'
   },
 })
 

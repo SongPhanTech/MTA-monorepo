@@ -21,7 +21,7 @@ const data = [
 export default function DoiTuongChinhSachTab() {
   const [openCollapse, setOpenCollapse] = useState<string | null>(null)
   const [currentPage, _setCurrentPage] = useState(1)
-  const [_numberOfPages, _setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+  const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
 
   const handleCollapseChange = (collapseId: string) => (key: string | string[]) => {
     if (key && key.length > 0) {
@@ -66,7 +66,7 @@ export default function DoiTuongChinhSachTab() {
                 width: 60,
                 align: "center",
                 fixed: "left",
-                render: (_, __, index) => index + 1 + (currentPage - 1) * _numberOfPages,
+                render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,
               },
               {
                 title: "Đối tượng",
