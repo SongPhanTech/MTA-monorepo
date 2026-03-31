@@ -1771,10 +1771,9 @@ export default function PhanCongGiangDay({
                   dataIndex: "mainLecturer",
                   render: (__, record) =>
                     !subjectClassForm?.[record.id]?.cancelled &&
+                  
                       (role === "P2_KHCT" ||
-                        (!khoaBoMon &&
-                          !record?.submitLecturerAssignmentAt &&
-                          !record?.approveLecturerAssignmentAt)) ? (
+                        (!khoaBoMon || !record?.submitLecturerAssignmentAt)) ? (
                       <FormItem form={form} name={["subjectClass", record.id, "lecturerId"]}>
                         <LectureTreeSelect
                           placeholder="Chọn giảng viên"
@@ -1806,9 +1805,7 @@ export default function PhanCongGiangDay({
                   render: (__, record) =>
                     !subjectClassForm?.[record.id]?.cancelled &&
                       (role === "P2_KHCT" ||
-                        (!khoaBoMon &&
-                          !record?.submitLecturerAssignmentAt &&
-                          !record?.approveLecturerAssignmentAt)) ? (
+                        (!khoaBoMon || !record?.submitLecturerAssignmentAt)) ? (
                       <FormItem form={form} name={["subjectClass", record.id, "extraLecturerId"]}>
                         <LectureTreeSelect
                           placeholder="Chọn giảng viên"
@@ -1838,9 +1835,7 @@ export default function PhanCongGiangDay({
                   render: (__, record) =>
                     !subjectClassForm?.[record.id]?.cancelled &&
                       (role === "P2_KHCT" ||
-                        (!khoaBoMon &&
-                          !record?.submitLecturerAssignmentAt &&
-                          !record?.approveLecturerAssignmentAt)) ? (
+                        (!khoaBoMon || !record?.submitLecturerAssignmentAt)) ? (
                       <FormItem
                         form={form}
                         name={["subjectClass", record.id, "enterGradeLecturerId"]}
