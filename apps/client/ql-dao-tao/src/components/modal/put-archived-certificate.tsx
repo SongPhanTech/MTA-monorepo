@@ -397,6 +397,7 @@ const PutCertificateArchivedModal = () => {
                 },
                 {
                   title: "Họ và tên",
+                  width: 200,
                   align: "left",
                   render: (_, record) => record.fullname,
                 },
