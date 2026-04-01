@@ -166,17 +166,17 @@ const PutThesisSession = () => {
         </FormItem>
       </Col>
       <Col span={12}>
-        <FormItem form={form} name="decisionNumber" label="Số QĐĐT" required>
+        <FormItem form={form} name="decisionNumber" label="Số QĐĐT" >
           <Input placeholder="Nhập số QĐĐT" />
         </FormItem>
       </Col>
       <Col span={12}>
-        <FormItem form={form} name="decisionMaker" label="Người ký QĐĐT" required>
+        <FormItem form={form} name="decisionMaker" label="Người ký QĐĐT" >
           <Input placeholder="Nhập người ký QĐĐT" />
         </FormItem>
       </Col>
       <Col span={12}>
-        <FormItem form={form} name="decisionDate" label="Ngày QĐĐT" required>
+        <FormItem form={form} name="decisionDate" label="Ngày QĐĐT" >
           <DatePicker
             format={{
               format: "DD/MM/YYYY",
@@ -188,17 +188,17 @@ const PutThesisSession = () => {
         </FormItem>
       </Col>
       <Col span={12}>
-        <FormItem form={form} name="defenseDecisionNumber" label="Số QĐBVLV" required>
+        <FormItem form={form} name="defenseDecisionNumber" label="Số QĐBVLV" >
           <Input placeholder="Nhập số QĐBVLV" />
         </FormItem>
       </Col>
       <Col span={12}>
-        <FormItem form={form} name="defenseDecisionMaker" label="Người ký QĐBVLV" required>
+        <FormItem form={form} name="defenseDecisionMaker" label="Người ký QĐBVLV" >
           <Input placeholder="Nhập người ký QĐBVLV" />
         </FormItem>
       </Col>
       <Col span={12}>
-        <FormItem form={form} name="defenseDecisionDate" label="Ngày QĐBVLV" required>
+        <FormItem form={form} name="defenseDecisionDate" label="Ngày QĐBVLV" >
           <DatePicker
             format={{
               format: "DD/MM/YYYY",
@@ -210,7 +210,7 @@ const PutThesisSession = () => {
         </FormItem>
       </Col>
       <Col span={12}>
-        <FormItem form={form} name="chief" label="Thủ trưởng" required>
+        <FormItem form={form} name="chief" label="Thủ trưởng" >
           <Input placeholder="Nhập thủ trưởng" />
         </FormItem>
       </Col>

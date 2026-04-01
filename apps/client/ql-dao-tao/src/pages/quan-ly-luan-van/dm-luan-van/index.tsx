@@ -1,4 +1,4 @@
-/** biome-ignore-all lint/a11y/useKeyWithClickEvents: <explanation> */
+/** biome-ignore-all lint/a11y/useKeyWithClickEvents: <sử dụng onClick để ngăn chặn sự kiện click lồng nhau> */
 import Select from "@components/commons/select"
 import Table from "@components/commons/table"
 import ApproveIcon from "@components/icons/approve"
@@ -15,6 +15,7 @@ import {
   ThesisProjectStatus,
   ThesisType,
 } from "@workspace/db/client"
+import { queryClient } from "@api/index"
 import {
   useCountStudent,
   useCreateStudentThesisRegistration,
@@ -27,6 +28,7 @@ import {
   useFindManyStudent,
   useFindManyThesisSession,
   useUpdateThesisProject,
+  useUpdateThesisSession,
 } from "@workspace/db/hooks"
 import { whereOrganization } from "@workspace/libs/constants"
 import { dayjs, useTrainingObjectTypeStore } from "@workspace/ui"
@@ -41,10 +43,11 @@ import {
   message,
   Popconfirm,
   Row,
+  Space,
   Tag,
 } from "antd"
 import { SquarePen } from "lucide-react"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import TreeSelect from "@/components/commons/tree-select"
 import {
@@ -71,7 +74,8 @@ interface ThesisProjectForm {
   thesisSessionId: string
   fixedClassId: string[]
   organizationId: string
-  
+  topicEntryDeadline?: ReturnType<typeof dayjs>
+  councilDeadline?: ReturnType<typeof dayjs>
 }
 
 export interface DanhMucLuanVanProps {
@@ -304,9 +308,40 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
   const trainingCourse = thesisSessionData?.find(
     (x) => x.id === searchParams.thesisSessionId
   )?.trainingCourse
+  const selectedThesisSession = useMemo(
+    () => thesisSessionData?.find((s) => s.id === searchParams.thesisSessionId),
+    [thesisSessionData, searchParams.thesisSessionId]
+  )
+  /** Hạn nhập GVHD: dùng topicEntryDeadline của đợt xét (ThesisSession) */
+  const isWithinGvhdSupervisorEditWindow = (): boolean => {
+    const deadline = selectedThesisSession?.topicEntryDeadline
+    if (!deadline) return true
+    return !dayjs().isAfter(dayjs(deadline).endOf("day"))
+  }
+  const { mutateAsync: updateThesisSession } = useUpdateThesisSession()
   const { mutateAsync: createThesisProject } = useCreateThesisProject()
   const { mutateAsync: createStudentThesisRegistration } = useCreateStudentThesisRegistration()
   const { mutateAsync: updateThesisProject } = useUpdateThesisProject()
+
+  useEffect(() => {
+    const id = searchParams.thesisSessionId
+    if (!id || !thesisSessionData?.length) {
+      form.setFieldsValue({
+        topicEntryDeadline: undefined,
+        councilDeadline: undefined,
+      })
+      return
+    }
+    const session = thesisSessionData.find((s) => s.id === id)
+    if (session) {
+      form.setFieldsValue({
+        topicEntryDeadline: session.topicEntryDeadline
+          ? dayjs(session.topicEntryDeadline)
+          : undefined,
+        councilDeadline: session.councilDeadline ? dayjs(session.councilDeadline) : undefined,
+      })
+    }
+  }, [searchParams.thesisSessionId, thesisSessionData, form])
   const handleEditChange = (rowId: string, field: string, value: any) => {
     setEditingValues((prev) => ({
       ...prev,
@@ -330,11 +365,11 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     const createPromises = allStudentsInClasses?.map(async (student) => {
       const fixedClassType = student.fixedClass?.classType
       const organizationId = student.curriculumVersion?.curriculum?.managementOrganizationId
-      const thesisTypeForStudent =
-        fixedClassType === FixedClassType.APPLICATION ? ThesisType.PROJECT : ThesisType.THESIS
-      const typeLabel = thesisTypeForStudent === ThesisType.PROJECT ? "Đề án" : "Luận văn"
+      const typeLabel = fixedClassType === FixedClassType.APPLICATION ? "Đề án" : "Luận văn"
       const hasThesisRegistration = student.thesisRegistrations?.some(
-        (registration) => registration.thesisProject?.thesisType === thesisTypeForStudent
+        (registration) =>
+          registration.thesisProject?.thesisType === ThesisType.THESIS &&
+          registration.thesisProject?.thesisSessionId === thesisSessionId
       )
       if (hasThesisRegistration) {
         return null
@@ -353,12 +388,13 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               },
             }
           : { disconnect: true },
-        thesisSession: {
-          connect: {
-            id: thesisSessionId,
-          },
-        },
-        thesisType: thesisTypeForStudent,
+        thesisSession: thesisSessionId ? {
+            connect: {
+              id: thesisSessionId,
+            },
+          }
+        : { disconnect: true },
+        thesisType: ThesisType.THESIS,
         librarySubmission: {
           create: {
             isHardcopy: false,
@@ -420,6 +456,29 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     }
 
     showSpinner()
+    if (role === "Khoa") {
+      for (const studentId of selectedRowKeys) {
+        const rowData = editingValues[studentId.toString()]
+        if (!rowData) continue
+        const studentRecord = students?.find((s) => s.id === studentId)
+        const orig = studentRecord?.thesisRegistrations?.[0]?.thesisProject
+        if (!orig) continue
+        const newSup = rowData.supervisor ?? ""
+        const newCo = rowData.coSupervisor ?? ""
+        const oldSup = orig.supervisor?.id ?? ""
+        const oldCo = orig.coSupervisor?.id ?? ""
+        if (
+          (newSup !== oldSup || newCo !== oldCo) &&
+          !isWithinGvhdSupervisorEditWindow()
+        ) {
+          message.error(
+            "Đã quá hạn nhập GVHD. Chỉ được thay đổi giáo viên hướng dẫn khi còn trong hạn (theo ngày hạn nhập đề tài của đợt xét)."
+          )
+          hideSpinner()
+          return
+        }
+      }
+    }
     try {
       const updatePromises = selectedRowKeys.map(async (studentId) => {
         const rowData = editingValues[studentId.toString()]
@@ -452,12 +511,6 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
           language: rowData.language,
           defenseDate: rowData.defenseDate ? new Date(rowData.defenseDate) : null,
 
-          supervisor: rowData.supervisor
-            ? { connect: { id: rowData.supervisor } }
-            : { disconnect: true },
-          coSupervisor: rowData.coSupervisor
-            ? { connect: { id: rowData.coSupervisor } }
-            : { disconnect: true },
           organization: rowData.organization
             ? { connect: { Id: rowData.organization } }
             : { disconnect: true },
@@ -486,15 +539,22 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
             upsert: {
               create: {
                 finalScore: rowData.score ? Number.parseFloat(rowData.score) : null,
-                comments: rowData.comments || "",
                 isProfileComplete: false,
               },
               update: {
                 finalScore: rowData.score ? Number.parseFloat(rowData.score) : null,
-                comments: rowData.comments || "",
               },
             },
           },
+        }
+
+        if (role === "Khoa") {
+          payload.supervisor = rowData.supervisor
+            ? { connect: { id: rowData.supervisor } }
+            : { disconnect: true }
+          payload.coSupervisor = rowData.coSupervisor
+            ? { connect: { id: rowData.coSupervisor } }
+            : { disconnect: true }
         }
 
         return await updateThesisProject({
@@ -556,7 +616,6 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               ?.expert?.id || "",
           organization: thesisProject.organization?.Id ?? "",
           score: thesisProject.defenseRecord?.finalScore?.toString() || "",
-          comments: thesisProject.defenseRecord?.comments || "",
         }
       }
     })
@@ -782,18 +841,50 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
 
     await selected.onClick()
   }
+
+  const handleAssignDates = async () => {
+    if (role !== "P7") {
+      message.warning("Chỉ tài khoản P7 mới được gán hạn nhập đề tài và hạn nhập hội đồng.")
+      return
+    }
+    const thesisSessionId = searchParams.thesisSessionId?.trim()
+    if (!thesisSessionId) {
+      message.warning("Vui lòng chọn đợt xét trước khi gán ngày.")
+      return
+    }
+    const topicEntryDeadline = form.getFieldValue("topicEntryDeadline") as ReturnType<typeof dayjs> | undefined
+    const councilDeadline = form.getFieldValue("councilDeadline") as ReturnType<typeof dayjs> | undefined
+    showSpinner()
+    try {
+      await updateThesisSession({
+        where: { id: thesisSessionId },
+        data: {
+          topicEntryDeadline: topicEntryDeadline?.toDate?.() ?? null,
+          councilDeadline: councilDeadline?.toDate?.() ?? null,
+        },
+      })
+      message.success("Đã gán ngày thành công")
+      queryClient.invalidateQueries({ queryKey: ["ThesisSession"] })
+    } catch (error: unknown) {
+      const err = error as { info?: { message?: string } }
+      if (err?.info?.message) {
+        message.error(err.info.message)
+        return
+      }
+      message.error("Đã xảy ra lỗi, vui lòng thử lại")
+    } finally {
+      hideSpinner()
+    }
+  }
+
   return (
     <div>
       <Row gutter={[8, 0]}>
         <Col span={24}>
-          <Row gutter={[8, 8]} align="top" justify="space-between">
-            <Col span={36}>
-              <Flex gap={12}>
-                <Form
-                  form={form}
-                  layout="horizontal"
-                  className="w-full flex flex-wrap items-end gap-2"
-                >
+          <Form form={form} layout="horizontal" className="w-full">
+            <Row gutter={[8, 8]} align="top" justify="space-between">
+              <Col span={36}>
+                <Flex gap={12} className="flex flex-wrap items-end gap-2">
                   <Form.Item name="thesisSessionId" label="Đợt xét" required>
                     <Select
                       className="w-36"
@@ -926,36 +1017,68 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       Gán điểm sang LMH
                     </Button>
                   </Form.Item>
-                </Form>
-              </Flex>
-            </Col>
-          </Row>
-          <Row gutter={[8, 8]}>
-            <Col>
-              <Flex gap={8} align="center" wrap="wrap">
-                <Select
-                  className="w-72"
-                  placeholder="Chọn mẫu in"
-                  dropdownMatchSelectWidth={false}
-                  options={buttonList.map((item) => ({
-                    label: `${item.id}. ${item.label}`,
-                    value: String(item.id),
-                    disabled: item.disabled,
-                  }))}
-                  value={selectedPrintTemplateId}
-                  onChange={(value) => setSelectedPrintTemplateId(value ? String(value) : undefined)}
-                />
-                <Button
-                  type="primary"
-                  onClick={handleExportExcelFromTemplate}
-                  disabled={!selectedPrintTemplateId}
-                >
-                  Xuất Excel
-                </Button>
-              </Flex>
-            </Col>
-
-          </Row>
+                </Flex>
+              </Col>
+            </Row>
+            <Row gutter={[8, 8]}>
+              <Col span={24}>
+                <Space size={12} align="end" wrap className="w-full">
+                  <Select
+                    className="min-w-72 w-72"
+                    placeholder="Chọn mẫu in"
+                    dropdownMatchSelectWidth={false}
+                    options={buttonList.map((item) => ({
+                      label: `${item.id}. ${item.label}`,
+                      value: String(item.id),
+                      disabled: item.disabled,
+                    }))}
+                    value={selectedPrintTemplateId}
+                    onChange={(value) => setSelectedPrintTemplateId(value ? String(value) : undefined)}
+                  />
+                  <Button
+                    type="primary"
+                    onClick={handleExportExcelFromTemplate}
+                    disabled={!selectedPrintTemplateId}
+                  >
+                    Xuất Excel
+                  </Button>
+                  <Form.Item
+                    name="topicEntryDeadline"
+                    label="Hạn nhập đề tài"
+                    className="mb-0"
+                    style={{ marginBottom: 0 }}
+                  >
+                    <DatePicker
+                      format="DD/MM/YYYY"
+                      className="w-40"
+                      allowClear
+                      placeholder="Chọn ngày"
+                      disabled={role !== "P7"}
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    name="councilDeadline"
+                    label="Hạn nhập hội đồng"
+                    className="mb-0"
+                    style={{ marginBottom: 0 }}
+                  >
+                    <DatePicker
+                      format="DD/MM/YYYY"
+                      className="w-40"
+                      allowClear
+                      placeholder="Chọn ngày"
+                      disabled={role !== "P7"}
+                    />
+                  </Form.Item>
+                  {role === "P7" && (
+                    <Button type="primary" onClick={handleAssignDates}>
+                      Gán ngày
+                    </Button>
+                  )}
+                </Space>
+              </Col>
+            </Row>
+          </Form>
         </Col>
 
         <Col span={24}>
@@ -968,8 +1091,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               {
                 title: "Khoa quản lí",
                 dataIndex: "organization",
-                width: 240,
+                width: 100,
                 fixed: "left",
+                align: "center",
                 render: (_, record) => {
                   const status = record?.thesisRegistrations?.[0]?.thesisProject?.status || ""
                   if (editingRowKeys.includes(record?.id) && role === "P7") {
@@ -994,8 +1118,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     return (
                       `${
                         record?.thesisRegistrations?.[0]?.thesisProject?.organization?.sMa || ""
-                      } - ${record?.thesisRegistrations?.[0]?.thesisProject?.organization?.sTen || ""}` ||
-                      ""
+                      } - ${
+                        record?.thesisRegistrations?.[0]?.thesisProject?.organization?.sTen || ""
+                      }` || ""
                     )
                   }
                   return ""
@@ -1040,7 +1165,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               },
               {
                 title: "Đề tài",
-                width: 200,
+                width: 350,
                 dataIndex: "title",
                 render: (_, record) => {
                   const status = record?.thesisRegistrations?.[0]?.thesisProject?.status || ""
@@ -1052,7 +1177,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
 
                     return (
                       <div
-                        onClick={(e) => e.stopPropagation()} // <-- Thêm dòng này
+                        onClick={(e) => e.stopPropagation()} 
                       >
                         <TextArea
                           rows={2}
@@ -1072,16 +1197,68 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 },
               },
               {
+                title: "Ngôn ngữ",
+                width: 100,
+                dataIndex: "language",
+                render: (_, record) => {
+                  if (editingRowKeys.includes(record?.id) ) {
+                    const currentValue =
+                      editingValues[record?.id]?.language !== undefined
+                        ? editingValues[record?.id]?.language
+                        : record?.thesisRegistrations?.[0]?.thesisProject?.language?.language || ""
+                    return (
+                      <div onClick={(e) => e.stopPropagation()}>
+                        <Input
+                          value={currentValue || ""}
+                          onChange={(e) => handleEditChange(record?.id, "language", e.target.value)}
+                        />
+                      </div>
+                    )
+                  }
+                  return record?.thesisRegistrations?.[0]?.thesisProject?.language || ""
+                },
+              },
+              {
+                title: "Luận văn/Đề án",
+                width: 130,
+                dataIndex: "type",
+                render: (_, record) => {
+                  if (editingRowKeys.includes(record?.id) ) {
+                    const currentValue =
+                      editingValues[record?.id]?.type !== undefined
+                        ? editingValues[record?.id]?.type
+                        : record?.thesisRegistrations?.[0]?.thesisProject?.type || ""
+                    return (
+                      <div onClick={(e) => e.stopPropagation()}>
+                        <Select
+                          className="w-full"
+                          options={["Luận văn", "Đề án"].map((item) => ({
+                            label: item,
+                            value: item,
+                          }))}
+                          value={currentValue || ""}
+                          onChange={(value) => handleEditChange(record?.id, "type", value)}
+                        />
+                      </div>
+                    )
+                  }
+                  return record?.thesisRegistrations?.[0]?.thesisProject?.type || ""
+                },
+              },
+              {
                 title: "GVHD 1",
                 width: 150,
                 dataIndex: "supervisor",
                 render: (_, record) => {
-                  const status = record?.thesisRegistrations?.[0]?.thesisProject?.status || ""
-                  if (editingRowKeys.includes(record?.id) && role === "P7") {
+                  const canEditGvhd =
+                    role === "Khoa" &&
+                    editingRowKeys.includes(record?.id) &&
+                    isWithinGvhdSupervisorEditWindow()
+                  if (canEditGvhd) {
                     const currentValue =
                       editingValues[record?.id]?.supervisor !== undefined
                         ? editingValues[record?.id]?.supervisor
-                        : record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.name || ""
+                        : record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.id || ""
 
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
@@ -1093,10 +1270,22 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                             label: item.name,
                             value: item.id,
                           }))}
-                          value={currentValue || ""}
+                          value={currentValue || undefined}
                           onChange={(value) => handleEditChange(record?.id, "supervisor", value)}
                         />
                       </div>
+                    )
+                  }
+                  if (
+                    editingRowKeys.includes(record?.id) &&
+                    role === "Khoa" &&
+                    !isWithinGvhdSupervisorEditWindow()
+                  ) {
+                    return (
+                      <span className="text-neutral-500">
+                        {record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.name || "—"}
+                        <span className="block text-xs"> (Hết hạn nhập GVHD)</span>
+                      </span>
                     )
                   }
                   return record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.name || ""
@@ -1107,12 +1296,15 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 width: 150,
                 dataIndex: "coSupervisor",
                 render: (_, record) => {
-                  const status = record?.thesisRegistrations?.[0]?.thesisProject?.status || ""
-                  if (editingRowKeys.includes(record?.id) && role === "P7") {
+                  const canEditGvhd =
+                    role === "Khoa" &&
+                    editingRowKeys.includes(record?.id) &&
+                    isWithinGvhdSupervisorEditWindow()
+                  if (canEditGvhd) {
                     const currentValue =
                       editingValues[record?.id]?.coSupervisor !== undefined
                         ? editingValues[record?.id]?.coSupervisor
-                        : record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.name || ""
+                        : record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.id || ""
 
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
@@ -1124,10 +1316,22 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                             label: item.name,
                             value: item.id,
                           }))}
-                          value={currentValue || ""}
+                          value={currentValue || undefined}
                           onChange={(value) => handleEditChange(record?.id, "coSupervisor", value)}
                         />
                       </div>
+                    )
+                  }
+                  if (
+                    editingRowKeys.includes(record?.id) &&
+                    role === "Khoa" &&
+                    !isWithinGvhdSupervisorEditWindow()
+                  ) {
+                    return (
+                      <span className="text-neutral-500">
+                        {record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.name || "—"}
+                        <span className="block text-xs"> (Hết hạn nhập GVHD)</span>
+                      </span>
                     )
                   }
                   return record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.name || ""
@@ -1384,7 +1588,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               },
 
               {
-                title: "Ca bảo vệ",
+                title: "Thời gian bảo vệ",
                 width: 90,
                 dataIndex: "defenseSession",
                 render: (_, record) => {
@@ -1403,7 +1607,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 100 }}
                           value={dayjsValue || undefined}
-                          placeholder="Chọn ca bảo vệ"
+                          placeholder="Chọn thời gian bảo vệ"
                           options={defenseSessionData?.map((item) => ({
                             label: item.startTime ? dayjs(item.startTime).format("HH:mm") : "",
                             value: item.id,
@@ -1455,82 +1659,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   )
                 },
               },
-              {
-                title: "Nhận xét",
-                width: 200,
-                dataIndex: "comments",
-                render: (_, record) => {
-                  if (editingRowKeys.includes(record?.id)) {
-                    const currentValue =
-                      editingValues[record?.id]?.comments !== undefined
-                        ? editingValues[record?.id]?.comments
-                        : record?.thesisRegistrations?.[0]?.thesisProject?.defenseRecord
-                            ?.comments || ""
-
-                    return (
-                      <div onClick={(e) => e.stopPropagation()}>
-                        <Input
-                          placeholder="Nhập nhận xét"
-                          value={currentValue}
-                          onChange={(e) => handleEditChange(record?.id, "comments", e.target.value)}
-                        />
-                      </div>
-                    )
-                  }
-                  return (
-                    record?.thesisRegistrations?.[0]?.thesisProject?.defenseRecord?.comments || ""
-                  )
-                },
-              },
-              {
-                title: "Ngôn ngữ",
-                width: 100,
-                dataIndex: "language",
-                render: (_, record) => {
-                  if (editingRowKeys.includes(record?.id) ) {
-                    const currentValue =
-                      editingValues[record?.id]?.language !== undefined
-                        ? editingValues[record?.id]?.language
-                        : record?.thesisRegistrations?.[0]?.thesisProject?.language?.language || ""
-                    return (
-                      <div onClick={(e) => e.stopPropagation()}>
-                        <Input
-                          value={currentValue || ""}
-                          onChange={(e) => handleEditChange(record?.id, "language", e.target.value)}
-                        />
-                      </div>
-                    )
-                  }
-                  return record?.thesisRegistrations?.[0]?.thesisProject?.language || ""
-                },
-              },
-              {
-                title: "Luận văn/Đề án",
-                width: 130,
-                dataIndex: "type",
-                render: (_, record) => {
-                  if (editingRowKeys.includes(record?.id) ) {
-                    const currentValue =
-                      editingValues[record?.id]?.type !== undefined
-                        ? editingValues[record?.id]?.type
-                        : record?.thesisRegistrations?.[0]?.thesisProject?.type || ""
-                    return (
-                      <div onClick={(e) => e.stopPropagation()}>
-                        <Select
-                          className="w-full"
-                          options={["Luận văn", "Đề án"].map((item) => ({
-                            label: item,
-                            value: item,
-                          }))}
-                          value={currentValue || ""}
-                          onChange={(value) => handleEditChange(record?.id, "type", value)}
-                        />
-                      </div>
-                    )
-                  }
-                  return record?.thesisRegistrations?.[0]?.thesisProject?.type || ""
-                },
-              },
+            
+              
               {
                 title: "Trạng thái",
                 width: 100,

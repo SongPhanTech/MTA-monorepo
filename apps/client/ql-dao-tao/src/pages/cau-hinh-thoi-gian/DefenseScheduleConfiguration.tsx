@@ -70,7 +70,7 @@ export default function DefenseScheduleConfigurationPage({ isThesis }: { isThesi
       )
 
       if (isDuplicated) {
-        message.error("Thời gian này đã tồn tại ca bảo vệ khác!")
+        message.error("Thời gian này đã tồn tại thời gian bảo vệ khác!")
         return
       }
 
@@ -89,14 +89,14 @@ export default function DefenseScheduleConfigurationPage({ isThesis }: { isThesi
         })
       }
 
-      message.success("Lưu ca bảo vệ thành công!")
+      message.success("Lưu thời gian bảo vệ thành công!")
       setIsModalOpen(false)
       setEditingRow(null)
       form.resetFields()
       await refetch()
     } catch (error) {
       console.error("Save failed:", error)
-      message.error("Lưu ca bảo vệ thất bại. Vui lòng thử lại.")
+      message.error("Lưu thời gian bảo vệ thất bại. Vui lòng thử lại.")
     } finally {
       hideSpinner()
     }
@@ -106,11 +106,11 @@ export default function DefenseScheduleConfigurationPage({ isThesis }: { isThesi
     try {
       showSpinner()
       await deleteSession({ where: { id } })
-      message.success("Xóa ca bảo vệ thành công!")
+      message.success("Xóa thời gian bảo vệ thành công!")
       await refetch()
     } catch (error) {
       console.error("Delete failed:", error)
-      message.error("Xóa ca bảo vệ thất bại.")
+      message.error("Xóa thời gian bảo vệ thất bại.")
     } finally {
       hideSpinner()
     }
@@ -145,7 +145,7 @@ export default function DefenseScheduleConfigurationPage({ isThesis }: { isThesi
             rowKey="id"
             data={dataSource}
             pagination={false}
-            locale={{ emptyText: "Chưa có ca bảo vệ" }}
+            locale={{ emptyText: "Chưa có thời gian bảo vệ" }}
             columns={[
               {
                 title: "STT",
@@ -183,10 +183,10 @@ export default function DefenseScheduleConfigurationPage({ isThesis }: { isThesi
                       />
 
                       <DeleteIcon
-                        title="Xóa ca bảo vệ"
+                        title="Xóa thời gian bảo vệ"
                         popConfirm={{
-                          title: "Xóa ca bảo vệ",
-                          description: "Bạn có chắc chắn muốn xóa ca bảo vệ này?",
+                          title: "Xóa thời gian bảo vệ",
+                          description: "Bạn có chắc chắn muốn xóa thời gian bảo vệ này?",
                           onConfirm: () => handleDelete(row.id),
                           onPopupClick: (e) => e.stopPropagation(),
                         }}
@@ -201,7 +201,7 @@ export default function DefenseScheduleConfigurationPage({ isThesis }: { isThesi
       </Row>
       <Modal
         open={isModalOpen}
-        title={editingRow ? "Chỉnh sửa ca bảo vệ" : "Thêm mới ca bảo vệ"}
+        title={editingRow ? "Chỉnh sửa thời gian bảo vệ" : "Thêm mới thời gian bảo vệ"}
         onCancel={handleCancel}
         onOk={handleSave}
         destroyOnClose
