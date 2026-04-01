@@ -6,6 +6,6 @@
  */
 
 export type UploadExcelImportTrainingScore200 = {
-    data: number[]
-    count: number
-}
+  data: number[];
+  count: number;
+};

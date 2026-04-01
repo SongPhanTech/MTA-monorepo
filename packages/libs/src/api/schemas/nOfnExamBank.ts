@@ -8,4 +8,4 @@
 /**
  * Số lượng đề thi
  */
-export type NOfnExamBank = number
+export type NOfnExamBank = number;

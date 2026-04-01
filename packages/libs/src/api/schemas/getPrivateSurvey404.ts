@@ -6,5 +6,5 @@
  */
 
 export type GetPrivateSurvey404 = {
-    message: string
-}
+  message: string;
+};

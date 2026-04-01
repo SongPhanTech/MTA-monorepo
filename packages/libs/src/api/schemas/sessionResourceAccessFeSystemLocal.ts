@@ -6,5 +6,5 @@
  */
 
 export type SessionResourceAccessFeSystemLocal = {
-    roles: string[]
-}
+  roles: string[];
+};

@@ -6,22 +6,22 @@
  */
 
 export type GetPublicSurveysV2Params = {
-    /**
-     * ID học kỳ
-     */
-    semesterId?: string
-    /**
-     * ID loại đối tượng đào tạo
-     */
-    trainingObjectTypeId?: string
-    /**
-     * Số lượng bản ghi
-     * @nullable
-     */
-    take?: number | null
-    /**
-     * Bỏ qua số bản ghi
-     * @nullable
-     */
-    skip?: number | null
-}
+/**
+ * ID học kỳ
+ */
+semesterId?: string;
+/**
+ * ID loại đối tượng đào tạo
+ */
+trainingObjectTypeId?: string;
+/**
+ * Số lượng bản ghi
+ * @nullable
+ */
+take?: number | null;
+/**
+ * Bỏ qua số bản ghi
+ * @nullable
+ */
+skip?: number | null;
+};

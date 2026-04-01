@@ -6,5 +6,5 @@
  */
 
 export interface UploadExcelUpdateUserProfile {
-    file: Blob
+  file: Blob;
 }

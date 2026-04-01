@@ -6,5 +6,5 @@
  */
 
 export type GetClassesInfo404 = {
-    message: string
-}
+  message: string;
+};

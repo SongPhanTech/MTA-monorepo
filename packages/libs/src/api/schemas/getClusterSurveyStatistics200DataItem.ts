@@ -4,19 +4,19 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetClusterSurveyStatistics200DataItemQuestionsItem } from './getClusterSurveyStatistics200DataItemQuestionsItem'
-import type { GetClusterSurveyStatistics200DataItemAverageItem } from './getClusterSurveyStatistics200DataItemAverageItem'
+import type { GetClusterSurveyStatistics200DataItemQuestionsItem } from './getClusterSurveyStatistics200DataItemQuestionsItem';
+import type { GetClusterSurveyStatistics200DataItemAverageItem } from './getClusterSurveyStatistics200DataItemAverageItem';
 
 export type GetClusterSurveyStatistics200DataItem = {
-    surveyId: string
-    /** @nullable */
-    lecture?: string | null
-    /** @nullable */
-    subjectClassId?: string | null
-    /** @nullable */
-    subjectClassName?: string | null
-    /** @nullable */
-    lectureId?: string | null
-    questions: GetClusterSurveyStatistics200DataItemQuestionsItem[]
-    average: GetClusterSurveyStatistics200DataItemAverageItem[]
-}
+  surveyId: string;
+  /** @nullable */
+  lecture?: string | null;
+  /** @nullable */
+  subjectClassId?: string | null;
+  /** @nullable */
+  subjectClassName?: string | null;
+  /** @nullable */
+  lectureId?: string | null;
+  questions: GetClusterSurveyStatistics200DataItemQuestionsItem[];
+  average: GetClusterSurveyStatistics200DataItemAverageItem[];
+};

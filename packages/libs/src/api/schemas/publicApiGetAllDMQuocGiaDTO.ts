@@ -55,20 +55,20 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  * Quốc gia
  */
 export interface PublicApiGetAllDMQuocGiaDTO {
-    Id?: string
-    /**
-     * Mã
-     * @nullable
-     */
-    sMa?: string | null
-    /**
-     * Tên
-     * @nullable
-     */
-    sTen?: string | null
-    /**
-     * Ngôn ngữ
-     * @nullable
-     */
-    sLanguage?: string | null
+  Id?: string;
+  /**
+   * Mã
+   * @nullable
+   */
+  sMa?: string | null;
+  /**
+   * Tên
+   * @nullable
+   */
+  sTen?: string | null;
+  /**
+   * Ngôn ngữ
+   * @nullable
+   */
+  sLanguage?: string | null;
 }

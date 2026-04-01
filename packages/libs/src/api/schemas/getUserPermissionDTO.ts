@@ -50,18 +50,18 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { RoleInUserDTO } from './roleInUserDTO'
-import type { PermissionDTO } from './permissionDTO'
+import type { RoleInUserDTO } from './roleInUserDTO';
+import type { PermissionDTO } from './permissionDTO';
 
 export interface GetUserPermissionDTO {
-    /**
-     * Danh sách vai trò
-     * @nullable
-     */
-    Roles?: RoleInUserDTO[] | null
-    /**
-     * Danh sách quyền
-     * @nullable
-     */
-    Permissions?: PermissionDTO[] | null
+  /**
+   * Danh sách vai trò
+   * @nullable
+   */
+  Roles?: RoleInUserDTO[] | null;
+  /**
+   * Danh sách quyền
+   * @nullable
+   */
+  Permissions?: PermissionDTO[] | null;
 }

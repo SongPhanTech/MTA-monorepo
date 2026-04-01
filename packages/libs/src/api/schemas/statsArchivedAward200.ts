@@ -4,10 +4,10 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { StatsArchivedAward200DataItem } from './statsArchivedAward200DataItem'
+import type { StatsArchivedAward200DataItem } from './statsArchivedAward200DataItem';
 
 export type StatsArchivedAward200 = {
-    fromSemester: string
-    toSemester: string
-    data: StatsArchivedAward200DataItem[]
-}
+  fromSemester: string;
+  toSemester: string;
+  data: StatsArchivedAward200DataItem[];
+};

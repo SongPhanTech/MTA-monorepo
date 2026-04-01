@@ -4,6 +4,6 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetPublicSurveysResultItem } from './getPublicSurveysResultItem'
+import type { GetPublicSurveysResultItem } from './getPublicSurveysResultItem';
 
-export type GetPublicSurveysResult = GetPublicSurveysResultItem[]
+export type GetPublicSurveysResult = GetPublicSurveysResultItem[];

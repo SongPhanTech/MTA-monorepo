@@ -4,30 +4,29 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersionCurriculumTrainingMajor } from './listOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersionCurriculumTrainingMajor'
+import type { ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersionCurriculumTrainingMajor } from './listOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersionCurriculumTrainingMajor';
 
-export type ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersionCurriculum =
-    {
-        id: string
-        active?: boolean
-        /** @nullable */
-        description?: string | null
-        /** @nullable */
-        deletedAt?: string | null
-        /** @nullable */
-        createdAt?: string | null
-        /** @nullable */
-        updatedAt?: string | null
-        /** @nullable */
-        createdBy?: string | null
-        /** @nullable */
-        code?: string | null
-        name: string
-        /** @nullable */
-        englishName?: string | null
-        /** @nullable */
-        information?: string | null
-        /** @nullable */
-        renderPath?: string | null
-        trainingMajor: ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersionCurriculumTrainingMajor
-    }
+export type ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersionCurriculum = {
+  id: string;
+  active?: boolean;
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  deletedAt?: string | null;
+  /** @nullable */
+  createdAt?: string | null;
+  /** @nullable */
+  updatedAt?: string | null;
+  /** @nullable */
+  createdBy?: string | null;
+  /** @nullable */
+  code?: string | null;
+  name: string;
+  /** @nullable */
+  englishName?: string | null;
+  /** @nullable */
+  information?: string | null;
+  /** @nullable */
+  renderPath?: string | null;
+  trainingMajor: ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersionCurriculumTrainingMajor;
+};

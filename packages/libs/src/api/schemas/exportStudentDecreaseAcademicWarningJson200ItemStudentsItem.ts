@@ -4,33 +4,33 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { ExportStudentDecreaseAcademicWarningJson200ItemStudentsItemStudentSemesterResult } from './exportStudentDecreaseAcademicWarningJson200ItemStudentsItemStudentSemesterResult'
-import type { ExportStudentDecreaseAcademicWarningJson200ItemStudentsItemUserProfile } from './exportStudentDecreaseAcademicWarningJson200ItemStudentsItemUserProfile'
-import type { ExportStudentDecreaseAcademicWarningJson200ItemStudentsItemFixedClass } from './exportStudentDecreaseAcademicWarningJson200ItemStudentsItemFixedClass'
+import type { ExportStudentDecreaseAcademicWarningJson200ItemStudentsItemStudentSemesterResult } from './exportStudentDecreaseAcademicWarningJson200ItemStudentsItemStudentSemesterResult';
+import type { ExportStudentDecreaseAcademicWarningJson200ItemStudentsItemUserProfile } from './exportStudentDecreaseAcademicWarningJson200ItemStudentsItemUserProfile';
+import type { ExportStudentDecreaseAcademicWarningJson200ItemStudentsItemFixedClass } from './exportStudentDecreaseAcademicWarningJson200ItemStudentsItemFixedClass';
 
 export type ExportStudentDecreaseAcademicWarningJson200ItemStudentsItem = {
-    /** ID của sinh viên */
-    id: string
-    /** @nullable */
-    code: string | null
-    /** Kết quả học tập của sinh viên trong học kỳ */
-    studentSemesterResult: ExportStudentDecreaseAcademicWarningJson200ItemStudentsItemStudentSemesterResult
-    /** Chuyên ngành */
-    trainingMajor: string
-    /** ID Chuyên ngành */
-    trainingMajorId: string
-    /** Ngành */
-    trainingField: string
-    /** ID Ngành */
-    trainingFieldId: string
-    /**
-     * Thông tin người dùng
-     * @nullable
-     */
-    userProfile?: ExportStudentDecreaseAcademicWarningJson200ItemStudentsItemUserProfile
-    /** Lý do */
-    reason: string
-    /** Thông tin lớp học */
-    fixedClass: ExportStudentDecreaseAcademicWarningJson200ItemStudentsItemFixedClass
-    decreaseAcademicWarning: boolean
-}
+  /** ID của sinh viên */
+  id: string;
+  /** @nullable */
+  code: string | null;
+  /** Kết quả học tập của sinh viên trong học kỳ */
+  studentSemesterResult: ExportStudentDecreaseAcademicWarningJson200ItemStudentsItemStudentSemesterResult;
+  /** Chuyên ngành */
+  trainingMajor: string;
+  /** ID Chuyên ngành */
+  trainingMajorId: string;
+  /** Ngành */
+  trainingField: string;
+  /** ID Ngành */
+  trainingFieldId: string;
+  /**
+   * Thông tin người dùng
+   * @nullable
+   */
+  userProfile?: ExportStudentDecreaseAcademicWarningJson200ItemStudentsItemUserProfile;
+  /** Lý do */
+  reason: string;
+  /** Thông tin lớp học */
+  fixedClass: ExportStudentDecreaseAcademicWarningJson200ItemStudentsItemFixedClass;
+  decreaseAcademicWarning: boolean;
+};

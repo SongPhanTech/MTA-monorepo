@@ -4,36 +4,36 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { ExportStudentAcademicWarningJson200ItemStudentsItemStudentSemesterResult } from './exportStudentAcademicWarningJson200ItemStudentsItemStudentSemesterResult'
-import type { ExportStudentAcademicWarningJson200ItemStudentsItemUserProfile } from './exportStudentAcademicWarningJson200ItemStudentsItemUserProfile'
-import type { ExportStudentAcademicWarningJson200ItemStudentsItemFixedClass } from './exportStudentAcademicWarningJson200ItemStudentsItemFixedClass'
-import type { ExportStudentAcademicWarningJson200ItemStudentsItemAcademicWarningRuleItem } from './exportStudentAcademicWarningJson200ItemStudentsItemAcademicWarningRuleItem'
+import type { ExportStudentAcademicWarningJson200ItemStudentsItemStudentSemesterResult } from './exportStudentAcademicWarningJson200ItemStudentsItemStudentSemesterResult';
+import type { ExportStudentAcademicWarningJson200ItemStudentsItemUserProfile } from './exportStudentAcademicWarningJson200ItemStudentsItemUserProfile';
+import type { ExportStudentAcademicWarningJson200ItemStudentsItemFixedClass } from './exportStudentAcademicWarningJson200ItemStudentsItemFixedClass';
+import type { ExportStudentAcademicWarningJson200ItemStudentsItemAcademicWarningRuleItem } from './exportStudentAcademicWarningJson200ItemStudentsItemAcademicWarningRuleItem';
 
 export type ExportStudentAcademicWarningJson200ItemStudentsItem = {
-    /** ID của sinh viên */
-    id: string
-    /** @nullable */
-    code: string | null
-    /** Kết quả học tập của sinh viên trong học kỳ */
-    studentSemesterResult: ExportStudentAcademicWarningJson200ItemStudentsItemStudentSemesterResult
-    /** Chuyên ngành */
-    trainingMajor: string
-    /** ID Chuyên ngành */
-    trainingMajorId: string
-    /** Ngành */
-    trainingField: string
-    /** ID Ngành */
-    trainingFieldId: string
-    /**
-     * Thông tin người dùng
-     * @nullable
-     */
-    userProfile?: ExportStudentAcademicWarningJson200ItemStudentsItemUserProfile
-    /** Lý do */
-    reason: string
-    /** Thông tin lớp học */
-    fixedClass: ExportStudentAcademicWarningJson200ItemStudentsItemFixedClass
-    hasAcademicWarning: boolean
-    /** Danh sách cảnh cáo học tập của sinh viên */
-    academicWarningRule: ExportStudentAcademicWarningJson200ItemStudentsItemAcademicWarningRuleItem[]
-}
+  /** ID của sinh viên */
+  id: string;
+  /** @nullable */
+  code: string | null;
+  /** Kết quả học tập của sinh viên trong học kỳ */
+  studentSemesterResult: ExportStudentAcademicWarningJson200ItemStudentsItemStudentSemesterResult;
+  /** Chuyên ngành */
+  trainingMajor: string;
+  /** ID Chuyên ngành */
+  trainingMajorId: string;
+  /** Ngành */
+  trainingField: string;
+  /** ID Ngành */
+  trainingFieldId: string;
+  /**
+   * Thông tin người dùng
+   * @nullable
+   */
+  userProfile?: ExportStudentAcademicWarningJson200ItemStudentsItemUserProfile;
+  /** Lý do */
+  reason: string;
+  /** Thông tin lớp học */
+  fixedClass: ExportStudentAcademicWarningJson200ItemStudentsItemFixedClass;
+  hasAcademicWarning: boolean;
+  /** Danh sách cảnh cáo học tập của sinh viên */
+  academicWarningRule: ExportStudentAcademicWarningJson200ItemStudentsItemAcademicWarningRuleItem[];
+};

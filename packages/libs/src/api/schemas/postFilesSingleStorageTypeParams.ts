@@ -71,6 +71,6 @@ API này cho phép các ứng dụng truy cập từ client hoặc server thông
  */
 
 export type PostFilesSingleStorageTypeParams = {
-    tenantCode?: string
-    appCode?: string
-}
+tenantCode?: string;
+appCode?: string;
+};

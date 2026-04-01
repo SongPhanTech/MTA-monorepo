@@ -13855,12 +13855,7 @@ export const getGetUserPermissionsPermissionAppCodeUserIdQueryOptions = <
   > = ({ signal }) =>
     getUserPermissionsPermissionAppCodeUserId(appCode, userId, { signal, ...requestOptions })
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!(appCode && userId),
-    ...queryOptions,
-  } as UseQueryOptions<
+  return { queryKey, queryFn, enabled: !!(appCode && userId), ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>,
     TError,
     TData
@@ -14104,12 +14099,7 @@ export const getGetUserPermissionsAccessLevelAppCodeUserIdQueryOptions = <
   > = ({ signal }) =>
     getUserPermissionsAccessLevelAppCodeUserId(appCode, userId, { signal, ...requestOptions })
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!(appCode && userId),
-    ...queryOptions,
-  } as UseQueryOptions<
+  return { queryKey, queryFn, enabled: !!(appCode && userId), ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>,
     TError,
     TData

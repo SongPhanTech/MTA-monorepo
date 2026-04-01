@@ -4,25 +4,25 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetSurveyObjectCount200ItemTypeItem } from './getSurveyObjectCount200ItemTypeItem'
+import type { GetSurveyObjectCount200ItemTypeItem } from './getSurveyObjectCount200ItemTypeItem';
 
 export type GetSurveyObjectCount200Item = {
-    id: string
-    /** @nullable */
-    code?: string | null
-    active?: boolean
-    /** @nullable */
-    description?: string | null
-    /** @nullable */
-    deletedAt?: string | null
-    /** @nullable */
-    createdAt?: string | null
-    /** @nullable */
-    updatedAt?: string | null
-    /** @nullable */
-    createdBy?: string | null
-    name: string
-    type: GetSurveyObjectCount200ItemTypeItem[]
-    total: number
-    taken: number
-}
+  id: string;
+  /** @nullable */
+  code?: string | null;
+  active?: boolean;
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  deletedAt?: string | null;
+  /** @nullable */
+  createdAt?: string | null;
+  /** @nullable */
+  updatedAt?: string | null;
+  /** @nullable */
+  createdBy?: string | null;
+  name: string;
+  type: GetSurveyObjectCount200ItemTypeItem[];
+  total: number;
+  taken: number;
+};

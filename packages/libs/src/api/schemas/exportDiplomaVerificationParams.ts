@@ -6,12 +6,12 @@
  */
 
 export type ExportDiplomaVerificationParams = {
-    /**
-     * @nullable
-     */
-    startDate?: string | null
-    /**
-     * @nullable
-     */
-    endDate?: string | null
-}
+/**
+ * @nullable
+ */
+startDate?: string | null;
+/**
+ * @nullable
+ */
+endDate?: string | null;
+};

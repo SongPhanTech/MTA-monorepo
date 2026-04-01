@@ -6,12 +6,12 @@
  */
 
 export type PostApiStatsSummaryAdmissionStatistics200DataItem = {
-    organizationId: string
-    total_quota: number
-    total_registered: number
-    total_eligible: number
-    total_admitted: number
-    actual_enrollment_count: number
-    achievement_rate: number
-    difference_percent: number
-}
+  organizationId: string;
+  total_quota: number;
+  total_registered: number;
+  total_eligible: number;
+  total_admitted: number;
+  actual_enrollment_count: number;
+  achievement_rate: number;
+  difference_percent: number;
+};

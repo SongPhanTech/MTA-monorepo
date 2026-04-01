@@ -6,18 +6,18 @@
  */
 
 export type GetSurveysOfProfileParams = {
-    /**
-     * @nullable
-     */
-    page?: number | null
-    /**
-     * @nullable
-     */
-    limit?: number | null
-    name?: string
-    code?: string
-    taken?: boolean
-    lecturerName?: string
-    subjectClassName?: string
-    semesterId?: string
-}
+/**
+ * @nullable
+ */
+page?: number | null;
+/**
+ * @nullable
+ */
+limit?: number | null;
+name?: string;
+code?: string;
+taken?: boolean;
+lecturerName?: string;
+subjectClassName?: string;
+semesterId?: string;
+};

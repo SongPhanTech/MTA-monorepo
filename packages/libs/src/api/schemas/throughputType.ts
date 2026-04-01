@@ -5,11 +5,12 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type ThroughputType = (typeof ThroughputType)[keyof typeof ThroughputType]
+export type ThroughputType = typeof ThroughputType[keyof typeof ThroughputType];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ThroughputType = {
-    minute: 'minute',
-    hour: 'hour',
-    day: 'day',
-} as const
+  minute: 'minute',
+  hour: 'hour',
+  day: 'day',
+} as const;

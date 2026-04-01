@@ -6,8 +6,8 @@
  */
 
 export type GetClusterSurveyInfo200 = {
-    surveyCount: number
-    completedSurveyCount: number
-    listStudentCount: number
-    studentCompletedSurveyCount: number
-}
+  surveyCount: number;
+  completedSurveyCount: number;
+  listStudentCount: number;
+  studentCompletedSurveyCount: number;
+};

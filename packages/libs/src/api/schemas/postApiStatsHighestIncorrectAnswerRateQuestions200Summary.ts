@@ -5,6 +5,4 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type PostApiStatsHighestIncorrectAnswerRateQuestions200Summary = {
-    [key: string]: unknown | null
-}
+export type PostApiStatsHighestIncorrectAnswerRateQuestions200Summary = {[key: string]: unknown | null};

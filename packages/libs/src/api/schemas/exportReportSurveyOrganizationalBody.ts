@@ -4,8 +4,7 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { ExportReportSurvey } from './exportReportSurvey'
-import type { ExportReportSurveyOrganizationalBodyAllOf } from './exportReportSurveyOrganizationalBodyAllOf'
+import type { ExportReportSurvey } from './exportReportSurvey';
+import type { ExportReportSurveyOrganizationalBodyAllOf } from './exportReportSurveyOrganizationalBodyAllOf';
 
-export type ExportReportSurveyOrganizationalBody = ExportReportSurvey &
-    ExportReportSurveyOrganizationalBodyAllOf
+export type ExportReportSurveyOrganizationalBody = ExportReportSurvey & ExportReportSurveyOrganizationalBodyAllOf;

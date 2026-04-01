@@ -6,5 +6,5 @@
  */
 
 export type ConvertDocument200 = {
-    fileUrl: string
-}
+  fileUrl: string;
+};

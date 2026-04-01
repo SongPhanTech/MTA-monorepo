@@ -189,10 +189,7 @@ export const getGetFilesImageStorageTypeFileNameQueryOptions = <
   const queryFn: QueryFunction<Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>> = ({
     signal,
   }) =>
-    getFilesImageStorageTypeFileName(storageType, fileName, params, {
-      signal,
-      ...requestOptions,
-    })
+    getFilesImageStorageTypeFileName(storageType, fileName, params, { signal, ...requestOptions })
 
   return {
     queryKey,

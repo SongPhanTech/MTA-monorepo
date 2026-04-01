@@ -8,16 +8,15 @@
 /**
  * @nullable
  */
-export type GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassExamType =
-    | (typeof GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassExamType)[keyof typeof GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassExamType]
-    | null
+export type GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassExamType = typeof GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassExamType[keyof typeof GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassExamType] | null;
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassExamType = {
-    OfflineWritten: 'OfflineWritten',
-    OnlineWritten: 'OnlineWritten',
-    Oral: 'Oral',
-    Practice: 'Practice',
-    Project: 'Project',
-    Other: 'Other',
-} as const
+  OfflineWritten: 'OfflineWritten',
+  OnlineWritten: 'OnlineWritten',
+  Oral: 'Oral',
+  Practice: 'Practice',
+  Project: 'Project',
+  Other: 'Other',
+} as const;

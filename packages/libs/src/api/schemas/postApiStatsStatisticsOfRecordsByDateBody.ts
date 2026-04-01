@@ -6,15 +6,15 @@
  */
 
 export type PostApiStatsStatisticsOfRecordsByDateBody = {
-    preview?: boolean
-    /**
-     * @minimum 1
-     * @maximum 12
-     */
-    month?: number
-    /**
-     * @minimum 2000
-     * @maximum 3000
-     */
-    year?: number
-}
+  preview?: boolean;
+  /**
+   * @minimum 1
+   * @maximum 12
+   */
+  month?: number;
+  /**
+   * @minimum 2000
+   * @maximum 3000
+   */
+  year?: number;
+};

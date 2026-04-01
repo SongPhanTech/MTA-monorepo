@@ -4,17 +4,17 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { ThroughputType } from './throughputType'
+import type { ThroughputType } from './throughputType';
 
 export type ThroughputParams = {
-    service: string
-    /**
-     * @nullable
-     */
-    from?: string | null
-    /**
-     * @nullable
-     */
-    to?: string | null
-    type?: ThroughputType
-}
+service: string;
+/**
+ * @nullable
+ */
+from?: string | null;
+/**
+ * @nullable
+ */
+to?: string | null;
+type?: ThroughputType;
+};

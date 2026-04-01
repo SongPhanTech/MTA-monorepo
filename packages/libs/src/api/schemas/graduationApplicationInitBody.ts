@@ -6,7 +6,7 @@
  */
 
 export type GraduationApplicationInitBody = {
-    sessionId: string
-    trainingCourseId?: string
-    fixedClassId?: string
-}
+  sessionId: string;
+  trainingCourseId?: string;
+  fixedClassId?: string;
+};

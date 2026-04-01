@@ -6,8 +6,8 @@
  */
 
 export type PostApiStatsStudentsOfInterestBody = {
-    preview?: boolean
-    warningLevel?: string
-    debtCredits?: string
-    gpaThreshold?: string
-}
+  preview?: boolean;
+  warningLevel?: string;
+  debtCredits?: string;
+  gpaThreshold?: string;
+};

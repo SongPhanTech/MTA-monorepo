@@ -8,4 +8,4 @@
 /**
  * @nullable
  */
-export type CalcEvidenceTags200ResultItem = unknown | null
+export type CalcEvidenceTags200ResultItem = unknown | null;
