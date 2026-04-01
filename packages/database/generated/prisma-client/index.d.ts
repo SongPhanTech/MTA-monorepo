@@ -242934,7 +242934,7 @@ export namespace Prisma {
     /**
      * The data needed to create a ExpertProfile.
      */
-    data: XOR<ExpertProfileCreateInput, ExpertProfileUncheckedCreateInput>
+    data?: XOR<ExpertProfileCreateInput, ExpertProfileUncheckedCreateInput>
   }
 
   /**
@@ -440174,8 +440174,8 @@ export namespace Prisma {
     bankName?: string | null
     projectExpert?: boolean
     thesisExpert?: boolean
-    eligiblePresident: boolean
-    eligibleSecretary: boolean
+    eligiblePresident?: boolean
+    eligibleSecretary?: boolean
     lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
     major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
     supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
@@ -440213,8 +440213,8 @@ export namespace Prisma {
     bankName?: string | null
     projectExpert?: boolean
     thesisExpert?: boolean
-    eligiblePresident: boolean
-    eligibleSecretary: boolean
+    eligiblePresident?: boolean
+    eligibleSecretary?: boolean
     major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
     supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
     coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
@@ -440327,8 +440327,8 @@ export namespace Prisma {
     bankName?: string | null
     projectExpert?: boolean
     thesisExpert?: boolean
-    eligiblePresident: boolean
-    eligibleSecretary: boolean
+    eligiblePresident?: boolean
+    eligibleSecretary?: boolean
   }
 
   export type ExpertProfileUpdateManyMutationInput = {
@@ -557836,8 +557836,8 @@ export namespace Prisma {
     bankName?: string | null
     projectExpert?: boolean
     thesisExpert?: boolean
-    eligiblePresident: boolean
-    eligibleSecretary: boolean
+    eligiblePresident?: boolean
+    eligibleSecretary?: boolean
     lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
     major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
     supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
@@ -557874,8 +557874,8 @@ export namespace Prisma {
     bankName?: string | null
     projectExpert?: boolean
     thesisExpert?: boolean
-    eligiblePresident: boolean
-    eligibleSecretary: boolean
+    eligiblePresident?: boolean
+    eligibleSecretary?: boolean
     major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
     supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
     coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
@@ -557915,8 +557915,8 @@ export namespace Prisma {
     bankName?: string | null
     projectExpert?: boolean
     thesisExpert?: boolean
-    eligiblePresident: boolean
-    eligibleSecretary: boolean
+    eligiblePresident?: boolean
+    eligibleSecretary?: boolean
     lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
     major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
     supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
@@ -557953,8 +557953,8 @@ export namespace Prisma {
     bankName?: string | null
     projectExpert?: boolean
     thesisExpert?: boolean
-    eligiblePresident: boolean
-    eligibleSecretary: boolean
+    eligiblePresident?: boolean
+    eligibleSecretary?: boolean
     major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
     supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
     coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
@@ -557994,8 +557994,8 @@ export namespace Prisma {
     bankName?: string | null
     projectExpert?: boolean
     thesisExpert?: boolean
-    eligiblePresident: boolean
-    eligibleSecretary: boolean
+    eligiblePresident?: boolean
+    eligibleSecretary?: boolean
     lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
     major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
     supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
@@ -558032,8 +558032,8 @@ export namespace Prisma {
     bankName?: string | null
     projectExpert?: boolean
     thesisExpert?: boolean
-    eligiblePresident: boolean
-    eligibleSecretary: boolean
+    eligiblePresident?: boolean
+    eligibleSecretary?: boolean
     major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
     supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
     coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
@@ -558504,8 +558504,8 @@ export namespace Prisma {
     bankName?: string | null
     projectExpert?: boolean
     thesisExpert?: boolean
-    eligiblePresident: boolean
-    eligibleSecretary: boolean
+    eligiblePresident?: boolean
+    eligibleSecretary?: boolean
     lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
     major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
     supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
@@ -558542,8 +558542,8 @@ export namespace Prisma {
     bankName?: string | null
     projectExpert?: boolean
     thesisExpert?: boolean
-    eligiblePresident: boolean
-    eligibleSecretary: boolean
+    eligiblePresident?: boolean
+    eligibleSecretary?: boolean
     major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
     supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
     coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
@@ -558583,8 +558583,8 @@ export namespace Prisma {
     bankName?: string | null
     projectExpert?: boolean
     thesisExpert?: boolean
-    eligiblePresident: boolean
-    eligibleSecretary: boolean
+    eligiblePresident?: boolean
+    eligibleSecretary?: boolean
     lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
     major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
     supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
@@ -558621,8 +558621,8 @@ export namespace Prisma {
     bankName?: string | null
     projectExpert?: boolean
     thesisExpert?: boolean
-    eligiblePresident: boolean
-    eligibleSecretary: boolean
+    eligiblePresident?: boolean
+    eligibleSecretary?: boolean
     major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
     supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
     coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
@@ -575740,8 +575740,8 @@ export namespace Prisma {
     bankName?: string | null
     projectExpert?: boolean
     thesisExpert?: boolean
-    eligiblePresident: boolean
-    eligibleSecretary: boolean
+    eligiblePresident?: boolean
+    eligibleSecretary?: boolean
     lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
     major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
     supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
@@ -575778,8 +575778,8 @@ export namespace Prisma {
     bankName?: string | null
     projectExpert?: boolean
     thesisExpert?: boolean
-    eligiblePresident: boolean
-    eligibleSecretary: boolean
+    eligiblePresident?: boolean
+    eligibleSecretary?: boolean
     major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
     supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
     coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
@@ -586302,8 +586302,8 @@ export namespace Prisma {
     bankName?: string | null
     projectExpert?: boolean
     thesisExpert?: boolean
-    eligiblePresident: boolean
-    eligibleSecretary: boolean
+    eligiblePresident?: boolean
+    eligibleSecretary?: boolean
     lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
     supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
     coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
@@ -586340,8 +586340,8 @@ export namespace Prisma {
     bankName?: string | null
     projectExpert?: boolean
     thesisExpert?: boolean
-    eligiblePresident: boolean
-    eligibleSecretary: boolean
+    eligiblePresident?: boolean
+    eligibleSecretary?: boolean
     supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
     coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
     thirdSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutThirdSupervisorInput
@@ -602244,8 +602244,8 @@ export namespace Prisma {
     bankName?: string | null
     projectExpert?: boolean
     thesisExpert?: boolean
-    eligiblePresident: boolean
-    eligibleSecretary: boolean
+    eligiblePresident?: boolean
+    eligibleSecretary?: boolean
     major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
     supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
     coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
@@ -602281,8 +602281,8 @@ export namespace Prisma {
     bankName?: string | null
     projectExpert?: boolean
     thesisExpert?: boolean
-    eligiblePresident: boolean
-    eligibleSecretary: boolean
+    eligiblePresident?: boolean
+    eligibleSecretary?: boolean
     major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
     supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
     coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
@@ -606553,8 +606553,8 @@ export namespace Prisma {
     bankName?: string | null
     projectExpert?: boolean
     thesisExpert?: boolean
-    eligiblePresident: boolean
-    eligibleSecretary: boolean
+    eligiblePresident?: boolean
+    eligibleSecretary?: boolean
     lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
     major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
     supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
@@ -606591,8 +606591,8 @@ export namespace Prisma {
     bankName?: string | null
     projectExpert?: boolean
     thesisExpert?: boolean
-    eligiblePresident: boolean
-    eligibleSecretary: boolean
+    eligiblePresident?: boolean
+    eligibleSecretary?: boolean
     major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
     supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
     coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
@@ -606806,8 +606806,8 @@ export namespace Prisma {
     bankName?: string | null
     projectExpert?: boolean
     thesisExpert?: boolean
-    eligiblePresident: boolean
-    eligibleSecretary: boolean
+    eligiblePresident?: boolean
+    eligibleSecretary?: boolean
     lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
     major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
     coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
@@ -606844,8 +606844,8 @@ export namespace Prisma {
     bankName?: string | null
     projectExpert?: boolean
     thesisExpert?: boolean
-    eligiblePresident: boolean
-    eligibleSecretary: boolean
+    eligiblePresident?: boolean
+    eligibleSecretary?: boolean
     major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
     coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
     thirdSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutThirdSupervisorInput
@@ -606922,8 +606922,8 @@ export namespace Prisma {
     bankName?: string | null
     projectExpert?: boolean
     thesisExpert?: boolean
-    eligiblePresident: boolean
-    eligibleSecretary: boolean
+    eligiblePresident?: boolean
+    eligibleSecretary?: boolean
     lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
     major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
     supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
@@ -606960,8 +606960,8 @@ export namespace Prisma {
     bankName?: string | null
     projectExpert?: boolean
     thesisExpert?: boolean
-    eligiblePresident: boolean
-    eligibleSecretary: boolean
+    eligiblePresident?: boolean
+    eligibleSecretary?: boolean
     major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
     supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
     thirdSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutThirdSupervisorInput
@@ -611661,8 +611661,8 @@ export namespace Prisma {
     bankName?: string | null
     projectExpert?: boolean
     thesisExpert?: boolean
-    eligiblePresident: boolean
-    eligibleSecretary: boolean
+    eligiblePresident?: boolean
+    eligibleSecretary?: boolean
     lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
     major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
     supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
@@ -611699,8 +611699,8 @@ export namespace Prisma {
     bankName?: string | null
     projectExpert?: boolean
     thesisExpert?: boolean
-    eligiblePresident: boolean
-    eligibleSecretary: boolean
+    eligiblePresident?: boolean
+    eligibleSecretary?: boolean
     major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
     supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
     coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
@@ -692853,8 +692853,8 @@ export namespace Prisma {
     bankName?: string | null
     projectExpert?: boolean
     thesisExpert?: boolean
-    eligiblePresident: boolean
-    eligibleSecretary: boolean
+    eligiblePresident?: boolean
+    eligibleSecretary?: boolean
   }
 
   export type SurveyCreateManyLectureInput = {

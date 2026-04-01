@@ -162,16 +162,28 @@ const ThongTinTichLuy = async (
     })
 
     // Kiểm tra tổng tích lũy tín chỉ của sinh viên đến kỳ xác định
-    const highestSubjectScores = await prisma.studentSubjectScore.findMany({
+    // Lấy tất cả điểm (kể cả lớp học lại), sau đó tự nhóm + lấy điểm cao nhất theo môn
+    const allSubjectScores = await prisma.studentSubjectScore.findMany({
       where: {
-        studentId,
-        subjectClass: {
-          semester: {
-            startDate: {
-              lte: semesterStartDate, // lấy tất cả các kỳ trước kỳ đang xét
+        OR: [
+          {
+            subjectClass: null,
+            createdAt: {
+              lte: semesterStartDate, // lấy điểm nhập tay đến thời điểm kỳ đang xét
             },
           },
-        },
+          {
+            subjectClass: {
+              semester: {
+                startDate: {
+                  lte: semesterStartDate, // lấy tất cả các kỳ trước kỳ đang xét
+                },
+              },
+              cancelled: false,
+            },
+          },
+        ],
+        studentId,
         subjectVersionId: {
           // Chỉ lấy các môn trong chương trình đào tạo
           in: curriculumSubjects.map((item) => item.subjectId),
@@ -193,15 +205,35 @@ const ThongTinTichLuy = async (
             },
           },
         },
+        subjectClass: {
+          select: { type: true }, // Xác định lớp học lại (RETAKE)
+        },
         manualFinalScore: true, // Lấy điểm thủ công nếu có
         finalScore: true, // Lấy điểm cuối
         examBanned: true, // Có cấm thi không
         suspended: true, // Có đình chỉ học không
         exempted: true, // Có miễn thi không
       },
-      orderBy: { finalScore: "desc" },
-      distinct: ["subjectVersionId"],
     })
+
+    // Nhóm theo môn học và lấy điểm cao nhất (ưu tiên lớp học lại có điểm cao hơn)
+    type ScoreRecord = (typeof allSubjectScores)[number]
+    const bestScoreMap = new Map<string, ScoreRecord>()
+    for (const record of allSubjectScores) {
+      const existing = bestScoreMap.get(record.subjectVersionId)
+      if (!existing) {
+        bestScoreMap.set(record.subjectVersionId, record)
+        continue
+      }
+      const newScore = record.manualFinalScore ?? record.finalScore?.toNumber() ?? null
+      const existingScore = existing.manualFinalScore ?? existing.finalScore?.toNumber() ?? null
+      // Ưu tiên lớp học lại hoặc điểm cao hơn
+      const isRetake = record.subjectClass?.type === "RETAKE" || record.subjectClass?.type === "REEXAM"
+      if (newScore !== null && (existingScore === null || newScore > existingScore || isRetake)) {
+        bestScoreMap.set(record.subjectVersionId, record)
+      }
+    }
+    const highestSubjectScores = Array.from(bestScoreMap.values())
 
     // Danh sách chuyển đổi điểm
     const scoreConverts = await prisma.scoreConvert.findMany({

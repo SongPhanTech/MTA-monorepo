@@ -17927,9 +17927,11 @@ const metadata: ModelMeta = {
                 }, eligiblePresident: {
                     name: "eligiblePresident",
                     type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, eligibleSecretary: {
                     name: "eligibleSecretary",
                     type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, supervisedTheses: {
                     name: "supervisedTheses",
                     type: "ThesisProject",
