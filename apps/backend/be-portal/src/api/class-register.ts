@@ -258,9 +258,7 @@ app.openapi(getClassesInfo, async (c) => {
       subjectClass: {
         some: {
           semesterId: registerSession.semesterId,
-          trainingCourse: {
-            trainingObjectTypeId: { in: trainingObjectTypeIds },
-          },
+          trainingObjectTypeId: { in: trainingObjectTypeIds },
           ...(isRegisteredBool
             ? {
                 classRegisterLogs: {
@@ -474,14 +472,6 @@ app.openapi(classRegister, async (c) => {
   // TODO: check subjectVersionIds, prerequisiteSubjectIds, coRequisiteSubjectIds
 
   await prisma.$transaction(async (tx) => {
-    await tx.classRegisterLogs.createMany({
-      data: subjectClassIds.map((subjectClassId) => ({
-        classRegisterSessionId: sessionId,
-        studentId,
-        subjectClassId,
-      })),
-    })
-
     for (const subjectClassId of subjectClassIds) {
       const isExist = await tx.studentSubjectScore.findFirst({
         where: {
@@ -504,6 +494,13 @@ app.openapi(classRegister, async (c) => {
       if ((subjectClass.maxStudent || 0) <= currentEnrolled) {
         throw new Error("Lớp học đã đủ số lượng sinh viên")
       }
+      await tx.classRegisterLogs.createMany({
+        data: subjectClassIds.map((subjectClassId) => ({
+          classRegisterSessionId: sessionId,
+          studentId,
+          subjectClassId,
+        })),
+      })
       await tx.studentSubjectScore.create({
         data: {
           subjectClassId,
