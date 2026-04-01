@@ -297,28 +297,36 @@ app.openapi(graduationCheck, async (c) => {
       where: {
         studentId: application.studentId,
         deletedAt: null,
-        OR: [
-          { examPostponed: true },
-          { examBanned: true },
-          { suspended: true },
-          { repeated: true },
-        ],
+        OR: [{ examBanned: true }, { suspended: true }],
+      },
+      include: { subjectVersion: true },
+    })
+
+    const subjectScores = await prisma.studentSubjectScore.findMany({
+      where: {
+        studentId: application.studentId,
+        deletedAt: null,
+        examBanned: false,
+        suspended: false,
+        subjectVersionId: {
+          in: subjectScoresWithIssues.map((s) => s.subjectVersionId),
+        },
       },
       include: { subjectVersion: true },
     })
 
     for (const score of subjectScoresWithIssues) {
-      if (score.examPostponed && score.examPostponedReason) {
-        reasons.push(`Môn ${score.subjectVersion.name}: ${score.examPostponedReason}`)
+      const passedScore = subjectScores.find((s) => s.subjectVersionId === score.subjectVersionId)
+      if (passedScore?.finalScore && passedScore.finalScore.toNumber() >= scoreToPass) {
+        continue
       }
+
       if (score.examBanned && score.examBannedReason) {
         reasons.push(`Môn ${score.subjectVersion.name}: ${score.examBannedReason}`)
       }
+
       if (score.suspended && score.suspendedReason) {
         reasons.push(`Môn ${score.subjectVersion.name}: ${score.suspendedReason}`)
-      }
-      if (score.repeated && score.repeatedReason) {
-        reasons.push(`Môn ${score.subjectVersion.name}: ${score.repeatedReason}`)
       }
     }
 

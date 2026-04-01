@@ -4,15 +4,15 @@ import { kythiStore } from "@pages/quan-ly-diem/nhap-diem-theo-phach"
 import { useStore } from "@tanstack/react-store"
 import {
   useFindManyExamPaper,
+  useFindManySubjectClass,
   useUpdateManySubjectClass,
-  useUpdateSubjectClass,
 } from "@workspace/db/hooks"
 import { getUrl } from "@workspace/libs/api/custom-instance"
 import { getExportSubjectClassScoreUrl, useSaveExamScore } from "@workspace/libs/api/training"
 import { getRuntimeEnv } from "@workspace/libs/utils"
 import { Badge, Button, Col, Flex, Form, InputNumber, Modal, message } from "antd"
 import { Printer } from "lucide-react"
-import { useEffect } from "react"
+import { useEffect, useMemo } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
 export default function NhapDiemPhach() {
@@ -28,20 +28,12 @@ export default function NhapDiemPhach() {
           examPostponed: false,
           OR: [
             {
-              attendanceScore: {
-                not: null,
-              },
-              midtermScore: {
-                not: null,
-              },
-              subjectVersion: {
-                onePoint: false,
-              },
+              attendanceScore: { not: null },
+              midtermScore: { not: null },
+              subjectVersion: { onePoint: false },
             },
             {
-              subjectVersion: {
-                onePoint: true,
-              },
+              subjectVersion: { onePoint: true },
             },
           ],
         },
@@ -53,23 +45,8 @@ export default function NhapDiemPhach() {
           },
         },
         studentSubjectScore: {
-          include: {
-            student: {
-              include: {
-                userProfile: true,
-                fixedClass: true,
-              },
-            },
-            subjectClass: {
-              include: {
-                fixedClasses: {
-                  include: {
-                    trainingCourse: true,
-                  },
-                },
-              },
-            },
-            subjectVersion: true,
+          select: {
+            examScore: true,
           },
         },
       },
@@ -79,6 +56,22 @@ export default function NhapDiemPhach() {
     },
     { enabled: !!examId }
   )
+
+  const { data: subjectClasses = [] } = useFindManySubjectClass(
+    {
+      where: { id: { in: subjectClassId } },
+      select: { isLockExamScore: true },
+    },
+    { enabled: !!examId }
+  )
+
+  const isLockExamScore = useMemo(() => {
+    return subjectClasses.some((s) => s.isLockExamScore)
+  }, [subjectClasses])
+
+  const isLockExamCode = useMemo(() => {
+    return examPapers.length > 0 && examPapers.every((p) => p?.examList?.lockExamCode)
+  }, [examPapers])
 
   const { onOpen: openXemTaiLieu } = useDisclosure<{
     uri: string
@@ -157,18 +150,18 @@ export default function NhapDiemPhach() {
     }
   }
 
-  const isAllLocked = examPapers.length > 0 && examPapers.every((p) => p?.examList?.lockExamCode)
-
   return (
     <div className="max-w-screen-sm">
       <Col span={24}>
         <Flex justify="space-between" align="center">
           <Badge
-            status={isAllLocked ? "success" : "error"}
+            status={isLockExamCode ? "success" : "error"}
             text={
-              isAllLocked
-                ? "Đã khóa phách - Cho phép nhập điểm"
-                : "Chưa khóa phách - Không thể nhập điểm"
+              isLockExamScore
+                ? "P13 đã khóa điểm"
+                : isLockExamCode
+                  ? "Đã khóa phách - Cho phép nhập điểm"
+                  : "Chưa khóa phách - Không thể nhập điểm"
             }
           />
           <Flex gap={8}>
@@ -195,7 +188,7 @@ export default function NhapDiemPhach() {
             </Button>
             <Button
               type="primary"
-              disabled={!isAllLocked}
+              disabled={!isLockExamCode}
               onClick={() => {
                 handleSave()
               }}
@@ -246,7 +239,7 @@ export default function NhapDiemPhach() {
                           style={{ width: "100%" }}
                           step={0.1}
                           controls={false}
-                          disabled={!(record as any)?.examList?.lockExamCode}
+                          disabled={isLockExamScore || !isLockExamCode}
                           parser={(value) => {
                             if (!value) return ""
                             const num = Number(value)

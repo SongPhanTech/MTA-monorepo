@@ -8,12 +8,14 @@ interface ExportScoreTemplateProps {
   selectedSubjectClass: string | undefined
   dataTable: any[]
   type: DiemLopMonHocProps["score"]
+  role?: "GV" | "P13" | "P2/P7"
 }
 
 const ExportScoreTemplate = ({
   selectedSubjectClass,
   dataTable,
   type,
+  role = "GV",
 }: ExportScoreTemplateProps) => {
   const exportTemplate = async () => {
     if (!selectedSubjectClass || dataTable.length === 0) return
@@ -236,7 +238,7 @@ const ExportScoreTemplate = ({
       row.eachCell((cell: ExcelJS.Cell) => {
         if (Number(cell.col) >= 6 && Number(cell.col) <= 8 && row.number >= 11) {
           cell.protection = { locked: false }
-        } else {
+        } else if (role !== "P13") {
           cell.protection = { locked: true }
         }
         cell.dataValidation = {
@@ -292,20 +294,22 @@ const ExportScoreTemplate = ({
       { width: 15 }, // Điểm ĐK
       { width: 15 }, // Điểm Thi
     ]
-    if (type !== "THI") {
-      worksheet.eachRow((row, rowNumber) => {
-        row.eachCell((cell, colNumber) => {
-          // Nếu là cột "Điểm thi" → khóa, ngược lại thì cho sửa
-          cell.protection = { locked: colNumber === 8 }
+    if (role !== "P13") {
+      if (type !== "THI") {
+        worksheet.eachRow((row, rowNumber) => {
+          row.eachCell((cell, colNumber) => {
+            // Nếu là cột "Điểm thi" → khóa, ngược lại thì cho sửa
+            cell.protection = { locked: colNumber === 8 }
+          })
         })
-      })
-    } else {
-      worksheet.eachRow((row, rowNumber) => {
-        row.eachCell((cell, colNumber) => {
-          // Nếu là cột "Điểm thi" → khóa, ngược lại thì cho sửa
-          cell.protection = { locked: colNumber === 7 || colNumber === 6 }
+      } else {
+        worksheet.eachRow((row, rowNumber) => {
+          row.eachCell((cell, colNumber) => {
+            // Nếu là cột "Điểm thi" → khóa, ngược lại thì cho sửa
+            cell.protection = { locked: colNumber === 7 || colNumber === 6 }
+          })
         })
-      })
+      }
     }
 
     // Xuất file
