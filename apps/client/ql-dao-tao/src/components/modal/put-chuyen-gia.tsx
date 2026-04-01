@@ -304,6 +304,7 @@ const PutExpertProfile = () => {
           </FormItem>
         </Col>
       )}
+      {isInternal && (
       <Col span={24} className="flex flex-row">
         <Col span={12}>
           <FormItem form={form} name="eligiblePresident" valuePropName="checked">
@@ -315,7 +316,7 @@ const PutExpertProfile = () => {
             <Checkbox>Có thể là Thư ký hội đồng</Checkbox>
           </FormItem>
         </Col>
-      </Col>
+      </Col>)}
     </PutFormModal>
   )
 }

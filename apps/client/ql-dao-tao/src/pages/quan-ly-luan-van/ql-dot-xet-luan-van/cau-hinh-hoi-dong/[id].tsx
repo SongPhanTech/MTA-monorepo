@@ -348,7 +348,7 @@ export default function SettingCouncil() {
         ),
       },
       {
-        title: "Ca bảo vệ",
+        title: "Thời gian bảo vệ",
         key: "session",
         width: 100,
         render: (_: any, record: any) => {
@@ -457,12 +457,12 @@ export default function SettingCouncil() {
           <div className="flex items-start gap-x-4">
             <Form.Item
               name="defenseSessionIds"
-              label={<span className="font-semibold">Ca bảo vệ</span>}
+              label={<span className="font-semibold">thời gian bảo vệ</span>}
               className="mb-0 flex-1"
             >
               <Select
                 mode="multiple"
-                placeholder="Chọn ca bảo vệ"
+                placeholder="Chọn thời gian bảo vệ"
                 options={defenseSession?.map((item) => ({
                   label: item.startTime ? dayjs(item.startTime).format("HH:mm") : "",
                   value: item.id,

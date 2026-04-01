@@ -641,10 +641,10 @@ export default function SettingClass() {
         </Col>
         <Form form={form}>
           <Col span={12}>
-            <FormItem form={form} name="defenseSessionIds" label="Danh sách ca bảo vệ">
+            <FormItem form={form} name="defenseSessionIds" label="Thời gian bảo vệ">
               <Select
                 mode="multiple"
-                placeholder="Chọn danh sách ca bảo vệ"
+                placeholder="Chọn thời gian bảo vệ"
                 options={defenseSession?.map((item) => ({
                   label: `${item.startTime ? dayjs(item.startTime).format("HH:mm") : ""}`,
                   value: item.id,
