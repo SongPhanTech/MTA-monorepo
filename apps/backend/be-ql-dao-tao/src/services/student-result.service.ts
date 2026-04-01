@@ -228,7 +228,8 @@ const ThongTinTichLuy = async (
       const newScore = record.manualFinalScore ?? record.finalScore?.toNumber() ?? null
       const existingScore = existing.manualFinalScore ?? existing.finalScore?.toNumber() ?? null
       // Ưu tiên lớp học lại hoặc điểm cao hơn
-      const isRetake = record.subjectClass?.type === "RETAKE" || record.subjectClass?.type === "REEXAM"
+      const isRetake =
+        record.subjectClass?.type === "RETAKE" || record.subjectClass?.type === "REEXAM"
       if (newScore !== null && (existingScore === null || newScore > existingScore || isRetake)) {
         bestScoreMap.set(record.subjectVersionId, record)
       }
