@@ -1272,20 +1272,21 @@ export async function calculateStudentYearResult({
     const config = subjectConfigMap.get(record.subjectVersionId)
     if (!config || !config.useForFinalScore) continue
 
-    const subjectVersionId = record.subjectVersion.id
+    // Dùng subjectId (môn học gốc) làm key để gộp các lần học lại/thi lại cùng môn
+    const subjectKey = record.subjectVersion.subjectId
     const score10 = Number(record.finalScore)
     const score4 = convertScore10to4(score10)
     const credit = record.subjectVersion.credit
     const passed = score10 >= scoreToPass
 
-    const existing = uniqueSubjectsMap.get(subjectVersionId)
+    const existing = uniqueSubjectsMap.get(subjectKey)
     if (existing) {
       // Nếu đã có, kiểm tra xem điểm mới có cao hơn không
       if (score10 > existing.score10) {
-        uniqueSubjectsMap.set(subjectVersionId, { score10, score4, credit, passed })
+        uniqueSubjectsMap.set(subjectKey, { score10, score4, credit, passed })
       }
     } else {
-      uniqueSubjectsMap.set(subjectVersionId, { score10, score4, credit, passed })
+      uniqueSubjectsMap.set(subjectKey, { score10, score4, credit, passed })
     }
   }
 
