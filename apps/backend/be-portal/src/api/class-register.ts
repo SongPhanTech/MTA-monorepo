@@ -286,6 +286,7 @@ app.openapi(getClassesInfo, async (c) => {
           deletedAt: null,
           cancelled: false,
           semesterId: registerSession.semesterId,
+          trainingObjectTypeId: { in: trainingObjectTypeIds },
         },
 
         include: {
