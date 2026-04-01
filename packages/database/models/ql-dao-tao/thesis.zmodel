@@ -237,8 +237,8 @@ model ExpertProfile extends Base {
   projectExpert                Boolean                @default(true)
   thesisExpert                 Boolean                @default(true)
 
-  eligiblePresident            Boolean // có thể làm chủ tịch
-  eligibleSecretary            Boolean // có thể làm thư ký
+  eligiblePresident            Boolean                @default(false) // có thể làm chủ tịch
+  eligibleSecretary            Boolean                @default(false) // có thể làm thư ký
 
   supervisedTheses             ThesisProject[]        @relation("SupervisorToThesis")
   coSupervisedTheses           ThesisProject[]        @relation("CoSupervisorToThesis")
