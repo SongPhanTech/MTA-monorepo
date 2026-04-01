@@ -287,8 +287,8 @@ const DanhSachMonDangKy = ({
               fixed: "right",
               render: (_, record) => {
                 const isMaxed =
-                  (record?.maxStudent || 0) <= (record?.subjectClassStudent?.length || 0)
-                const isRegisteredBool = record?.subjectClassStudent?.length > 0
+                  (record?.maxStudent || 0) <= (record?._count?.subjectClassStudent || 0)
+                const isRegisteredBool = (record?.classRegisterLogs?.length || 0) > 0
                 const isDisabled = isMaxed || isRegisteredBool || isPendingClassRegister
                 return (
                   <Button
@@ -313,10 +313,7 @@ const DanhSachMonDangKy = ({
           onRow={(record) => {
             const r = record as unknown as GetClassesInfo200ItemSubjectClassItem
             return {
-              className:
-                r?.classRegisterLogs?.map?.((e) => e?.student?.userProfileId).length > 0
-                  ? "bg-green-200"
-                  : "",
+              className: (r?.classRegisterLogs?.length || 0) > 0 ? "bg-green-200" : "",
             }
           }}
           headerTitleKey={(record) => [record?.code, record?.name].filter(Boolean).join(" - ")}
@@ -403,7 +400,7 @@ const DanhSachMonDangKy = ({
               align: "center",
               width: 80,
               render: (_, record) =>
-                `${record?._count?.subjectClassStudent || 0}/${record?.maxStudent}`,
+                `${record?._count?.studentSubjectScore || 0}/${record?.maxStudent}`,
             },
             {
               title: "Học phí",
