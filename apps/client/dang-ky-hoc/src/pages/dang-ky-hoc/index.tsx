@@ -400,7 +400,7 @@ const DanhSachMonDangKy = ({
               align: "center",
               width: 80,
               render: (_, record) =>
-                `${record?._count?.studentSubjectScore || 0}/${record?.maxStudent}`,
+                `${record?._count?.studentClassStudent || 0}/${record?.maxStudent}`,
             },
             {
               title: "Học phí",
