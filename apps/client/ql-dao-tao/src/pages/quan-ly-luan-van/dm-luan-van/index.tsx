@@ -510,7 +510,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
           type: rowData.type,
           language: rowData.language,
           defenseDate: rowData.defenseDate ? new Date(rowData.defenseDate) : null,
-
+          researchTopicAssociated: rowData.researchTopicAssociated || "",
           organization: rowData.organization
             ? { connect: { Id: rowData.organization } }
             : { disconnect: true },
@@ -616,6 +616,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               ?.expert?.id || "",
           organization: thesisProject.organization?.Id ?? "",
           score: thesisProject.defenseRecord?.finalScore?.toString() || "",
+          researchTopicAssociated: thesisProject.researchTopicAssociated || "",
         }
       }
     })
@@ -973,7 +974,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       </Button>
                     </Popconfirm>
 
-                    {editingRowKeys.length > 0 && role === "P7" ? (
+                    {editingRowKeys.length > 0  ? (
                       <>
                         <Button
                           type="default"
@@ -1118,9 +1119,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     return (
                       `${
                         record?.thesisRegistrations?.[0]?.thesisProject?.organization?.sMa || ""
-                      } - ${
-                        record?.thesisRegistrations?.[0]?.thesisProject?.organization?.sTen || ""
-                      }` || ""
+                      } ` || "N/A "
                     )
                   }
                   return ""
@@ -1192,6 +1191,39 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   return (
                     <p className="line-clamp-2">
                       {record?.thesisRegistrations?.[0]?.thesisProject?.title || ""}
+                    </p>
+                  )
+                },
+              },
+              {
+                title: "Gán với đề tài nghiên cứu",
+                width: 350,
+                dataIndex: "researchTopicAssociated",
+                render: (_, record) => {
+                  const status = record?.thesisRegistrations?.[0]?.thesisProject?.status || ""
+                  if (editingRowKeys.includes(record?.id) && role === "P7") {
+                    const currentValue =
+                      editingValues[record?.id]?.researchTopicAssociated !== undefined
+                        ? editingValues[record?.id]?.researchTopicAssociated
+                        : record?.thesisRegistrations?.[0]?.thesisProject?.researchTopicAssociated || ""
+
+                    return (
+                      <div
+                        onClick={(e) => e.stopPropagation()} 
+                      >
+                        <TextArea
+                          rows={2}
+                          value={currentValue}
+                          onChange={(e) => {
+                            handleEditChange(record?.id, "researchTopicAssociated", e.target.value)
+                          }}
+                        />
+                      </div>
+                    )
+                  }
+                  return (
+                    <p className="line-clamp-2">
+                      {record?.thesisRegistrations?.[0]?.thesisProject?.researchTopicAssociated || ""}
                     </p>
                   )
                 },
@@ -1589,7 +1621,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
 
               {
                 title: "Thời gian bảo vệ",
-                width: 90,
+                width: 120,
                 dataIndex: "defenseSession",
                 render: (_, record) => {
                   if (editingRowKeys.includes(record?.id)) {
