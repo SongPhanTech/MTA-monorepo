@@ -70,11 +70,12 @@ API này cho phép các ứng dụng truy cập từ client hoặc server thông
  * OpenAPI spec version: v1.0
  */
 
-export type IExportType = (typeof IExportType)[keyof typeof IExportType]
+export type IExportType = typeof IExportType[keyof typeof IExportType];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const IExportType = {
-    NUMBER_0: 0,
-    NUMBER_1: 1,
-    NUMBER_2: 2,
-} as const
+  NUMBER_0: 0,
+  NUMBER_1: 1,
+  NUMBER_2: 2,
+} as const;

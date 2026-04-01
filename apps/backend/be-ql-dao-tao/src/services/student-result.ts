@@ -88,10 +88,10 @@ export async function exportStudentSemesterResult({
   })
 
   const formatGpa = (val: any) => {
-    const num = typeof val?.toNumber === "function" ? val.toNumber() : val;
-    if (num === null || num === undefined || isNaN(num)) return "";
-    return num.toFixed(2).replace(".", ",");
-  };
+    const num = typeof val?.toNumber === "function" ? val.toNumber() : val
+    if (num === null || num === undefined || isNaN(num)) return ""
+    return num.toFixed(2).replace(".", ",")
+  }
 
   const data = studentSemesterResults.map((result, idx) => {
     const student = result.student

@@ -5,11 +5,11 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GetClassRegisterSession200ItemCreditLimitItemBaseScore =
-    (typeof GetClassRegisterSession200ItemCreditLimitItemBaseScore)[keyof typeof GetClassRegisterSession200ItemCreditLimitItemBaseScore]
+export type GetClassRegisterSession200ItemCreditLimitItemBaseScore = typeof GetClassRegisterSession200ItemCreditLimitItemBaseScore[keyof typeof GetClassRegisterSession200ItemCreditLimitItemBaseScore];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetClassRegisterSession200ItemCreditLimitItemBaseScore = {
-    Base10: 'Base10',
-    Base4: 'Base4',
-} as const
+  Base10: 'Base10',
+  Base4: 'Base4',
+} as const;

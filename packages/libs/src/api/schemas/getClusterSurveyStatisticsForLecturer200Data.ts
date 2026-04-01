@@ -4,10 +4,10 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetClusterSurveyStatisticsForLecturer200DataQuestionsItem } from './getClusterSurveyStatisticsForLecturer200DataQuestionsItem'
-import type { GetClusterSurveyStatisticsForLecturer200DataAverageItem } from './getClusterSurveyStatisticsForLecturer200DataAverageItem'
+import type { GetClusterSurveyStatisticsForLecturer200DataQuestionsItem } from './getClusterSurveyStatisticsForLecturer200DataQuestionsItem';
+import type { GetClusterSurveyStatisticsForLecturer200DataAverageItem } from './getClusterSurveyStatisticsForLecturer200DataAverageItem';
 
 export type GetClusterSurveyStatisticsForLecturer200Data = {
-    questions: GetClusterSurveyStatisticsForLecturer200DataQuestionsItem[]
-    average: GetClusterSurveyStatisticsForLecturer200DataAverageItem[]
-}
+  questions: GetClusterSurveyStatisticsForLecturer200DataQuestionsItem[];
+  average: GetClusterSurveyStatisticsForLecturer200DataAverageItem[];
+};

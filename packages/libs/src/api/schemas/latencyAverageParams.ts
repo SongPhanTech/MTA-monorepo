@@ -6,13 +6,13 @@
  */
 
 export type LatencyAverageParams = {
-    service: string
-    /**
-     * @nullable
-     */
-    from?: string | null
-    /**
-     * @nullable
-     */
-    to?: string | null
-}
+service: string;
+/**
+ * @nullable
+ */
+from?: string | null;
+/**
+ * @nullable
+ */
+to?: string | null;
+};

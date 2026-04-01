@@ -6,7 +6,7 @@
  */
 
 export type PostApiStatsStudentDistributionByTrainingLevel200DataItem = {
-    trainingLevelId: string
-    name: string
-    count: number
-}
+  trainingLevelId: string;
+  name: string;
+  count: number;
+};

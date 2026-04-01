@@ -8,4 +8,4 @@
 /**
  * @nullable
  */
-export type GetVersion200 = unknown | null
+export type GetVersion200 = unknown | null;

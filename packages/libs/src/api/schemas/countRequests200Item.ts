@@ -6,6 +6,6 @@
  */
 
 export type CountRequests200Item = {
-    api: string
-    total_requests: number
-}
+  api: string;
+  total_requests: number;
+};

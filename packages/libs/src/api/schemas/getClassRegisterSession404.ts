@@ -6,5 +6,5 @@
  */
 
 export type GetClassRegisterSession404 = {
-    message: string
-}
+  message: string;
+};

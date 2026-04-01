@@ -8,4 +8,4 @@
 /**
  * ID của ExamBank
  */
-export type Id = string
+export type Id = string;

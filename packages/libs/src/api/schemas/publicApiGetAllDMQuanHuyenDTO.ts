@@ -55,30 +55,30 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  * Quận huyện
  */
 export interface PublicApiGetAllDMQuanHuyenDTO {
-    Id?: string
-    /**
-     * Mã
-     * @nullable
-     */
-    sMa?: string | null
-    /**
-     * Tên
-     * @nullable
-     */
-    sTen?: string | null
-    /**
-     * Id tỉnh
-     * @nullable
-     */
-    sDM_TinhId?: string | null
-    /**
-     * Tên tỉnh
-     * @nullable
-     */
-    sTenTinh?: string | null
-    /**
-     * Tên quốc gia
-     * @nullable
-     */
-    sTenQuocGia?: string | null
+  Id?: string;
+  /**
+   * Mã
+   * @nullable
+   */
+  sMa?: string | null;
+  /**
+   * Tên
+   * @nullable
+   */
+  sTen?: string | null;
+  /**
+   * Id tỉnh
+   * @nullable
+   */
+  sDM_TinhId?: string | null;
+  /**
+   * Tên tỉnh
+   * @nullable
+   */
+  sTenTinh?: string | null;
+  /**
+   * Tên quốc gia
+   * @nullable
+   */
+  sTenQuocGia?: string | null;
 }

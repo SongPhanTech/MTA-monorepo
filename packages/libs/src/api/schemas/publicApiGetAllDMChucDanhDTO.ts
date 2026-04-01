@@ -55,16 +55,16 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  * Chức danh
  */
 export interface PublicApiGetAllDMChucDanhDTO {
-    /** Id chức danh */
-    Id?: string
-    /**
-     * Mã chức danh
-     * @nullable
-     */
-    sMa?: string | null
-    /**
-     * Tên chức danh
-     * @nullable
-     */
-    sTen?: string | null
+  /** Id chức danh */
+  Id?: string;
+  /**
+   * Mã chức danh
+   * @nullable
+   */
+  sMa?: string | null;
+  /**
+   * Tên chức danh
+   * @nullable
+   */
+  sTen?: string | null;
 }

@@ -6,5 +6,5 @@
  */
 
 export type GetSurveyStatistics404 = {
-    message: string
-}
+  message: string;
+};

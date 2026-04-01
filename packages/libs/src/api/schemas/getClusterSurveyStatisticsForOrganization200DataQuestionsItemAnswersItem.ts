@@ -6,13 +6,13 @@
  */
 
 export type GetClusterSurveyStatisticsForOrganization200DataQuestionsItemAnswersItem = {
-    id: string
-    answer: string
-    /** @nullable */
-    description: string | null
-    count: number
-    total: number
-    rate: number
-    sRate: string
-    summary: string
-}
+  id: string;
+  answer: string;
+  /** @nullable */
+  description: string | null;
+  count: number;
+  total: number;
+  rate: number;
+  sRate: string;
+  summary: string;
+};

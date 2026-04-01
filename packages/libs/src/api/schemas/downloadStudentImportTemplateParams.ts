@@ -4,8 +4,8 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { TrainingObjectTypeId } from './trainingObjectTypeId'
+import type { TrainingObjectTypeId } from './trainingObjectTypeId';
 
 export type DownloadStudentImportTemplateParams = {
-    trainingObjectTypeId: TrainingObjectTypeId
-}
+trainingObjectTypeId: TrainingObjectTypeId;
+};

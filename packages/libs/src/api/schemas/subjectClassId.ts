@@ -8,4 +8,4 @@
 /**
  * ID của lớp môn học
  */
-export type SubjectClassId = string
+export type SubjectClassId = string;

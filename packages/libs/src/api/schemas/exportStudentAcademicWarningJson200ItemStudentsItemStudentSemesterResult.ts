@@ -4,60 +4,60 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { ExportStudentAcademicWarningJson200ItemStudentsItemStudentSemesterResultBaseScore } from './exportStudentAcademicWarningJson200ItemStudentsItemStudentSemesterResultBaseScore'
-import type { ExportStudentAcademicWarningJson200ItemStudentsItemStudentSemesterResultStudentTrainingType } from './exportStudentAcademicWarningJson200ItemStudentsItemStudentSemesterResultStudentTrainingType'
+import type { ExportStudentAcademicWarningJson200ItemStudentsItemStudentSemesterResultBaseScore } from './exportStudentAcademicWarningJson200ItemStudentsItemStudentSemesterResultBaseScore';
+import type { ExportStudentAcademicWarningJson200ItemStudentsItemStudentSemesterResultStudentTrainingType } from './exportStudentAcademicWarningJson200ItemStudentsItemStudentSemesterResultStudentTrainingType';
 
 /**
  * Kết quả học tập của sinh viên trong học kỳ
  */
 export type ExportStudentAcademicWarningJson200ItemStudentsItemStudentSemesterResult = {
-    id: string
-    /** @nullable */
-    code?: string | null
-    active?: boolean
-    /** @nullable */
-    description?: string | null
-    /** @nullable */
-    deletedAt?: string | null
-    /** @nullable */
-    createdAt?: string | null
-    /** @nullable */
-    updatedAt?: string | null
-    /** @nullable */
-    createdBy?: string | null
-    studyYear: number
-    semesterIndexInCourse: number
-    isLastSemester: boolean
-    baseScore: ExportStudentAcademicWarningJson200ItemStudentsItemStudentSemesterResultBaseScore
-    gpaBase4: unknown
-    cumulativeGpaBase4: unknown
-    gpaBase10: unknown
-    cumulativeGpaBase10: unknown
-    /** @nullable */
-    conductScore?: number | null
-    /** @nullable */
-    studentTrainingType?: ExportStudentAcademicWarningJson200ItemStudentsItemStudentSemesterResultStudentTrainingType
-    lowestFinalScore: number
-    /** @nullable */
-    lowestGraduationScore?: number | null
-    totalCredits: number
-    registeredCredits: number
-    retakingCredits?: number
-    reExamCredits?: number
-    passedCredits: number
-    failedCredits: number
-    accumulatedCredits: number
-    totalCreditsByCurriculum: number
-    totalFailedCredits: number
-    foreignLangPass: boolean
-    isClassMonitor: boolean
-    isUnionLeader: boolean
-    /** @nullable */
-    entryScore?: number | null
-    isImproving: boolean
-    postponeWithReason?: boolean
-    academicWarningLevel?: number
-    disciplinaryWarningLevel?: number
-    suspended?: boolean
-    expelled?: boolean
-}
+  id: string;
+  /** @nullable */
+  code?: string | null;
+  active?: boolean;
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  deletedAt?: string | null;
+  /** @nullable */
+  createdAt?: string | null;
+  /** @nullable */
+  updatedAt?: string | null;
+  /** @nullable */
+  createdBy?: string | null;
+  studyYear: number;
+  semesterIndexInCourse: number;
+  isLastSemester: boolean;
+  baseScore: ExportStudentAcademicWarningJson200ItemStudentsItemStudentSemesterResultBaseScore;
+  gpaBase4: unknown;
+  cumulativeGpaBase4: unknown;
+  gpaBase10: unknown;
+  cumulativeGpaBase10: unknown;
+  /** @nullable */
+  conductScore?: number | null;
+  /** @nullable */
+  studentTrainingType?: ExportStudentAcademicWarningJson200ItemStudentsItemStudentSemesterResultStudentTrainingType;
+  lowestFinalScore: number;
+  /** @nullable */
+  lowestGraduationScore?: number | null;
+  totalCredits: number;
+  registeredCredits: number;
+  retakingCredits?: number;
+  reExamCredits?: number;
+  passedCredits: number;
+  failedCredits: number;
+  accumulatedCredits: number;
+  totalCreditsByCurriculum: number;
+  totalFailedCredits: number;
+  foreignLangPass: boolean;
+  isClassMonitor: boolean;
+  isUnionLeader: boolean;
+  /** @nullable */
+  entryScore?: number | null;
+  isImproving: boolean;
+  postponeWithReason?: boolean;
+  academicWarningLevel?: number;
+  disciplinaryWarningLevel?: number;
+  suspended?: boolean;
+  expelled?: boolean;
+};

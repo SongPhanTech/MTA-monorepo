@@ -4,66 +4,65 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetClassesInfo200ItemExamType } from './getClassesInfo200ItemExamType'
-import type { GetClassesInfo200ItemType } from './getClassesInfo200ItemType'
-import type { GetClassesInfo200ItemSubjectClassItem } from './getClassesInfo200ItemSubjectClassItem'
+import type { GetClassesInfo200ItemExamType } from './getClassesInfo200ItemExamType';
+import type { GetClassesInfo200ItemType } from './getClassesInfo200ItemType';
+import type { GetClassesInfo200ItemSubjectClassItem } from './getClassesInfo200ItemSubjectClassItem';
 
 export type GetClassesInfo200Item = {
-    id: string
-    /** @nullable */
-    code?: string | null
-    active?: boolean
-    /** @nullable */
-    description?: string | null
-    /** @nullable */
-    deletedAt?: string | null
-    /** @nullable */
-    createdAt?: string | null
-    /** @nullable */
-    updatedAt?: string | null
-    /** @nullable */
-    createdBy?: string | null
-    isLocked?: boolean
-    name: string
-    /** @nullable */
-    codeTkb?: string | null
-    examType: GetClassesInfo200ItemExamType
-    type: GetClassesInfo200ItemType
-    onePoint?: boolean
-    credit: number
-    /** @nullable */
-    week?: number | null
-    /** @nullable */
-    period?: number | null
-    /** @nullable */
-    schedulePeriod?: number | null
-    /** @nullable */
-    numberOfTheory?: number | null
-    /** @nullable */
-    numberOfPractical?: number | null
-    /** @nullable */
-    numberOfSelfStudy?: number | null
-    /** @nullable */
-    numberOfPractice?: number | null
-    /** @nullable */
-    numberOfReview?: number | null
-    /** @nullable */
-    numberOfExam?: number | null
-    /** @nullable */
-    numberOfOther?: number | null
-    /** @nullable */
-    objectives?: string | null
-    /** @nullable */
-    learningOutcome?: string | null
-    /** @nullable */
-    structure?: string | null
-    /** @nullable */
-    guild?: string | null
-    /** @nullable */
-    academicResults?: string | null
-    /** @nullable */
-    materials?: string | null
-    /** @nullable */
-    rules?: string | null
-    subjectClass: GetClassesInfo200ItemSubjectClassItem[]
-}
+  id: string;
+  active?: boolean;
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  deletedAt?: string | null;
+  /** @nullable */
+  createdAt?: string | null;
+  /** @nullable */
+  updatedAt?: string | null;
+  /** @nullable */
+  createdBy?: string | null;
+  code: string;
+  isLocked?: boolean;
+  name: string;
+  /** @nullable */
+  codeTkb?: string | null;
+  examType: GetClassesInfo200ItemExamType;
+  type: GetClassesInfo200ItemType;
+  onePoint?: boolean;
+  credit: number;
+  /** @nullable */
+  week?: number | null;
+  /** @nullable */
+  period?: number | null;
+  /** @nullable */
+  schedulePeriod?: number | null;
+  /** @nullable */
+  numberOfTheory?: number | null;
+  /** @nullable */
+  numberOfPractical?: number | null;
+  /** @nullable */
+  numberOfSelfStudy?: number | null;
+  /** @nullable */
+  numberOfPractice?: number | null;
+  /** @nullable */
+  numberOfReview?: number | null;
+  /** @nullable */
+  numberOfExam?: number | null;
+  /** @nullable */
+  numberOfOther?: number | null;
+  /** @nullable */
+  objectives?: string | null;
+  /** @nullable */
+  learningOutcome?: string | null;
+  /** @nullable */
+  structure?: string | null;
+  /** @nullable */
+  guild?: string | null;
+  /** @nullable */
+  academicResults?: string | null;
+  /** @nullable */
+  materials?: string | null;
+  /** @nullable */
+  rules?: string | null;
+  subjectClass: GetClassesInfo200ItemSubjectClassItem[];
+};

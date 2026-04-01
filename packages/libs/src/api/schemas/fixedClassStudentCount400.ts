@@ -6,5 +6,5 @@
  */
 
 export type FixedClassStudentCount400 = {
-    message: string
-}
+  message: string;
+};

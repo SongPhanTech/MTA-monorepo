@@ -71,32 +71,32 @@ API này cho phép các ứng dụng truy cập từ client hoặc server thông
  */
 
 export type GetFilesImageStorageTypeFileNameParams = {
-    /**
-     * Mã ứng dụng
-     */
-    appCode?: string
-    /**
-     * Mã đơn vị sử dụng
-     */
-    tenantCode?: string
-    /**
-     * Chiều rộng ảnh
-     */
-    w?: number
-    /**
-     * Chiều cao ảnh
-     */
-    h?: number
-    /**
-     * Chất lượng ảnh
-     */
-    quanlity?: number
-    /**
-     * Phiên bản
-     */
-    version?: string
-    /**
-     * Tên ảnh
-     */
-    fullName?: string
-}
+/**
+ * Mã ứng dụng
+ */
+appCode?: string;
+/**
+ * Mã đơn vị sử dụng
+ */
+tenantCode?: string;
+/**
+ * Chiều rộng ảnh
+ */
+w?: number;
+/**
+ * Chiều cao ảnh
+ */
+h?: number;
+/**
+ * Chất lượng ảnh
+ */
+quanlity?: number;
+/**
+ * Phiên bản
+ */
+version?: string;
+/**
+ * Tên ảnh
+ */
+fullName?: string;
+};

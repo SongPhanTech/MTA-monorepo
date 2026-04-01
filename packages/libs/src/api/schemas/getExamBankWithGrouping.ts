@@ -4,10 +4,10 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { Id } from './id'
-import type { IsGroup } from './isGroup'
+import type { Id } from './id';
+import type { IsGroup } from './isGroup';
 
 export interface GetExamBankWithGrouping {
-    id: Id
-    isGroup: IsGroup
+  id: Id;
+  isGroup: IsGroup;
 }

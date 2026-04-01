@@ -71,5 +71,5 @@ API này cho phép các ứng dụng truy cập từ client hoặc server thông
  */
 
 export type GetNhanviensGetbyidIdParams = {
-    cols?: string
-}
+cols?: string;
+};

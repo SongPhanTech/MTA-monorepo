@@ -4,19 +4,19 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { ExcelTemplateBodyTail } from './excelTemplateBodyTail'
-import type { ExcelTemplateBodyHead } from './excelTemplateBodyHead'
-import type { ExcelTemplateBodyPayloadItem } from './excelTemplateBodyPayloadItem'
+import type { ExcelTemplateBodyTail } from './excelTemplateBodyTail';
+import type { ExcelTemplateBodyHead } from './excelTemplateBodyHead';
+import type { ExcelTemplateBodyPayloadItem } from './excelTemplateBodyPayloadItem';
 
 export type ExcelTemplateBody = {
-    tail?: ExcelTemplateBodyTail
-    head?: ExcelTemplateBodyHead
-    /** Dữ liệu để điền vào template */
-    payload: ExcelTemplateBodyPayloadItem[]
-    fileName: string
-    path: string
-    /** Có hiển thị lưới trong Excel hay không */
-    showGridLines?: boolean
-    /** Có tự động xuống dòng trong ô hay không */
-    wrapText?: boolean
-}
+  tail?: ExcelTemplateBodyTail;
+  head?: ExcelTemplateBodyHead;
+  /** Dữ liệu để điền vào template */
+  payload: ExcelTemplateBodyPayloadItem[];
+  fileName: string;
+  path: string;
+  /** Có hiển thị lưới trong Excel hay không */
+  showGridLines?: boolean;
+  /** Có tự động xuống dòng trong ô hay không */
+  wrapText?: boolean;
+};

@@ -5,11 +5,11 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type ImportExcelToDatabaseBodyDbType =
-    (typeof ImportExcelToDatabaseBodyDbType)[keyof typeof ImportExcelToDatabaseBodyDbType]
+export type ImportExcelToDatabaseBodyDbType = typeof ImportExcelToDatabaseBodyDbType[keyof typeof ImportExcelToDatabaseBodyDbType];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ImportExcelToDatabaseBodyDbType = {
-    mysql: 'mysql',
-    mssql: 'mssql',
-} as const
+  mysql: 'mysql',
+  mssql: 'mssql',
+} as const;

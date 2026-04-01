@@ -6,5 +6,5 @@
  */
 
 export type GraduationCheck400 = {
-    message: string
-}
+  message: string;
+};

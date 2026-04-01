@@ -8,4 +8,4 @@
 /**
  * @nullable
  */
-export type ExamBankQuestionsResultQuestionsItem = unknown | null
+export type ExamBankQuestionsResultQuestionsItem = unknown | null;

@@ -6,5 +6,5 @@
  */
 
 export type PostApiStatsLecturerWorkloadBody = {
-    preview?: boolean
-}
+  preview?: boolean;
+};

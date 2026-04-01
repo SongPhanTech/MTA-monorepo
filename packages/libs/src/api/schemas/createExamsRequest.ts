@@ -6,7 +6,7 @@
  */
 
 export interface CreateExamsRequest {
-    isGroupBySubject: boolean
-    trainingObjectTypeId: string
-    semesterId: string
+  isGroupBySubject: boolean;
+  trainingObjectTypeId: string;
+  semesterId: string;
 }

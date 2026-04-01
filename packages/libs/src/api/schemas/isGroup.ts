@@ -8,4 +8,4 @@
 /**
  * true: nhóm trắc nghiệm / tự luận | false: theo thứ tự
  */
-export type IsGroup = boolean
+export type IsGroup = boolean;
