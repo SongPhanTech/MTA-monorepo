@@ -254,7 +254,7 @@ const DanhSachMonDangKy = ({
               align: "center",
               width: 80,
               render: (_, record) =>
-                `${record?.subjectClassStudent?.length || 0}/${record?.maxStudent}`,
+                `${record?._count?.subjectClassStudent || 0}/${record?.maxStudent}`,
             },
             {
               title: "Thời khoá biểu",
