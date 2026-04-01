@@ -276,6 +276,7 @@ const ThongTinTichLuy = async (
             continue // Bỏ qua nếu chưa có điểm hoặc điểm không hợp lệ
           }
           const soTinChi = item.subjectVersion?.credit || 0 // Số tín chỉ của môn học
+          TongTinChiDangKy += soTinChi // Cộng dồn số tín chỉ đăng ký
           if (
             checkScorePassed({
               subjectId: s.subjectId,
@@ -288,24 +289,23 @@ const ThongTinTichLuy = async (
             })
           ) {
             TongTinChiTichLuy += soTinChi // chỉ tính môn đã qua
+            const diemHe4 = layGiaTriDiem4(diemHe10, trainingCourseId, scoreConverts)
+            DSDiemHe4.push(diemHe4 * soTinChi) // Nhân điểm hệ 4 với số tín chỉ (chỉ môn đạt)
+            DSDiemHe10.push(diemHe10 * soTinChi) // Nhân điểm hệ 10 với số tín chỉ (chỉ môn đạt)
           } else {
             failedCredits += soTinChi
           }
-          TongTinChiDangKy += soTinChi // Cộng dồn số tín chỉ đăng ký
-          const diemHe4 = layGiaTriDiem4(diemHe10, trainingCourseId, scoreConverts)
-          DSDiemHe4.push(diemHe4 * soTinChi) // Nhân điểm hệ 4 với số tín chỉ
-          DSDiemHe10.push(diemHe10 * soTinChi) // Nhân điểm hệ 10 với số tín chỉ
         }
       }
     }
 
     // GPA hệ 4
-    // Làm tròn đến 2 số thập phân
+    // Làm tròn đến 2 số thập phân (chỉ tính môn đạt, không tính môn trượt)
     const diemTrungBinh4 =
-      Math.round((DSDiemHe4.reduce((sum, diem) => sum + diem, 0) / TongTinChiDangKy || 0) * 100) /
+      Math.round((DSDiemHe4.reduce((sum, diem) => sum + diem, 0) / TongTinChiTichLuy || 0) * 100) /
       100
     const diemTrungBinh10 =
-      Math.round((DSDiemHe10.reduce((sum, diem) => sum + diem, 0) / TongTinChiDangKy || 0) * 100) /
+      Math.round((DSDiemHe10.reduce((sum, diem) => sum + diem, 0) / TongTinChiTichLuy || 0) * 100) /
       100
 
     const MonHocYeuCau = await prisma.trainingBlockOnCurriculumVersion.findMany({
@@ -616,6 +616,7 @@ const ThongTinDiemHocKy = async (
 
           const soTinChi = item.subjectVersion.credit // Số tín chỉ của môn học
 
+          TongTinChiDangKy += soTinChi // Cộng dồn số tín chỉ
           if (
             !checkScorePassed({
               subjectId: item.subjectVersionId,
@@ -630,11 +631,10 @@ const ThongTinDiemHocKy = async (
             soTinChiKhongDat += soTinChi // Cộng dồn số tín chỉ không đạt
           } else {
             soTinChiDat += soTinChi // Cộng dồn số tín chỉ đạt
+            const diemHe4 = layGiaTriDiem4(diemHe10, trainingCourseId, scoreConverts)
+            DsDiemHe4.push(diemHe4 * soTinChi) // Nhân điểm hệ 4 với số tín chỉ (chỉ môn đạt)
+            DSDiemHe10.push(diemHe10 * soTinChi) // Nhân điểm hệ 10 với số tín chỉ (chỉ môn đạt)
           }
-          TongTinChiDangKy += soTinChi // Cộng dồn số tín chỉ
-          const diemHe4 = layGiaTriDiem4(diemHe10, trainingCourseId, scoreConverts)
-          DsDiemHe4.push(diemHe4 * soTinChi) // Nhân điểm hệ 4 với số tín chỉ
-          DSDiemHe10.push(diemHe10 * soTinChi) // Nhân điểm hệ 10 với số tín chỉ
         }
       }
     })
@@ -653,13 +653,13 @@ const ThongTinDiemHocKy = async (
       }
     }
 
-    // Tính điểm trung bình hệ 4 trong kỳ
+    // Tính điểm trung bình hệ 4 trong kỳ (chỉ tính môn đạt, không tính môn trượt)
     const diemTrungBinh4 =
-      Math.round((DsDiemHe4.reduce((sum, diem) => sum + diem, 0) / TongTinChiDangKy || 0) * 100) /
+      Math.round((DsDiemHe4.reduce((sum, diem) => sum + diem, 0) / soTinChiDat || 0) * 100) /
       100
-    // Tính điểm trung bình hệ 10 trong kỳ
+    // Tính điểm trung bình hệ 10 trong kỳ (chỉ tính môn đạt, không tính môn trượt)
     const diemTrungBinh10 =
-      Math.round((DSDiemHe10.reduce((sum, diem) => sum + diem, 0) / TongTinChiDangKy || 0) * 100) /
+      Math.round((DSDiemHe10.reduce((sum, diem) => sum + diem, 0) / soTinChiDat || 0) * 100) /
       100
     console.log("Điểm trung bình hệ 4:", diemTrungBinh4)
     console.log("Điểm trung bình hệ 10:", diemTrungBinh10)
