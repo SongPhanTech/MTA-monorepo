@@ -1175,7 +1175,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 width: 350,
                 dataIndex: "title",
                 render: (_, record) => {
-                  const status = record?.thesisRegistrations?.[0]?.thesisProject?.status || ""
+               
                   if (editingRowKeys.includes(record?.id) && role === "P7") {
                     const currentValue =
                       editingValues[record?.id]?.title !== undefined
@@ -1187,7 +1187,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                         onClick={(e) => e.stopPropagation()} 
                       >
                         <TextArea
-                          rows={2}
+                          rows={3}
                           value={currentValue}
                           onChange={(e) => {
                             handleEditChange(record?.id, "title", e.target.value)
@@ -1291,7 +1291,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 dataIndex: "supervisor",
                 render: (_, record) => {
                   const canEditGvhd =
-                    role === "Khoa" &&
+                    // role === "Khoa" &&
                     editingRowKeys.includes(record?.id) &&
                     isWithinGvhdSupervisorEditWindow()
                   if (canEditGvhd) {
@@ -1312,8 +1312,17 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                               const academicDegree = item.lecturer?.userProfile?.academicDegreeType?.sTen || item.academicDegree || ""
                               const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
                               const expertName = item.lecturer?.userProfile?.fullname || item.name || ""
+                              const hasLecturer = item.lecturer != null
                               return {
-                                label: `${academicRankAndDegree} ${expertName}`.trim(),
+                                label: (
+                                  <span
+                                    title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
+                                    className={hasLecturer ? "text-green-600" : "text-red-600"}
+                                    style={{ color: hasLecturer ? "#16a34a" : "#dc2626" }}
+                                  >
+                                    {`${academicRankAndDegree} ${expertName}`.trim()}
+                                  </span>
+                                ),
                                 value: item.id,
                               }
                             }
@@ -1350,7 +1359,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 dataIndex: "coSupervisor",
                 render: (_, record) => {
                   const canEditGvhd =
-                    role === "Khoa" &&
+                    // role === "Khoa" &&
                     editingRowKeys.includes(record?.id) &&
                     isWithinGvhdSupervisorEditWindow()
                   if (canEditGvhd) {
@@ -1371,8 +1380,17 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                               const academicDegree = item.lecturer?.userProfile?.academicDegreeType?.sTen || item.academicDegree || ""
                               const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
                               const expertName = item.lecturer?.userProfile?.fullname || item.name || ""
+                              const hasLecturer = item.lecturer != null
                               return {
-                                label: `${academicRankAndDegree} ${expertName}`.trim(),
+                                label: (
+                                  <span
+                                    title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
+                                    className={hasLecturer ? "text-green-600" : "text-red-600"}
+                                    style={{ color: hasLecturer ? "#16a34a" : "#dc2626" }}
+                                  >
+                                    {`${academicRankAndDegree} ${expertName}`.trim()}
+                                  </span>
+                                ),
                                 value: item.id,
                               }
                             }
@@ -1430,8 +1448,17 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                                 const academicDegree = item.lecturer?.userProfile?.academicDegreeType?.sTen || item.academicDegree || ""
                                 const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
                                 const expertName = item.lecturer?.userProfile?.fullname || item.name || ""
+                                const hasLecturer = item.lecturer != null
                                 return {
-                                  label: `${academicRankAndDegree} ${expertName}`.trim(),
+                                  label: (
+                                    <span
+                                      title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
+                                      className={hasLecturer ? "text-green-600" : "text-red-600"}
+                                      style={{ color: hasLecturer ? "#16a34a" : "#dc2626" }}
+                                    >
+                                      {`${academicRankAndDegree} ${expertName}`.trim()}
+                                    </span>
+                                  ),
                                   value: item.id,
                                 }
                               }
@@ -1488,8 +1515,17 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                                 const academicDegree = item.lecturer?.userProfile?.academicDegreeType?.sTen || item.academicDegree || ""
                                 const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
                                 const expertName = item.lecturer?.userProfile?.fullname || item.name || ""
+                                const hasLecturer = item.lecturer != null
                                 return {
-                                  label: `${academicRankAndDegree} ${expertName}`.trim(),
+                                  label: (
+                                    <span
+                                      title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
+                                      className={hasLecturer ? "text-green-600" : "text-red-600"}
+                                      style={{ color: hasLecturer ? "#16a34a" : "#dc2626" }}
+                                    >
+                                      {`${academicRankAndDegree} ${expertName}`.trim()}
+                                    </span>
+                                  ),
                                   value: item.id,
                                 }
                               }
@@ -1538,18 +1574,33 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           className="w-full"
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
-                          options={expertProfileData?.map(
-                            (item) => {
-                              const academicRank = item.lecturer?.userProfile?.academicRankType?.sTen || item.academicRank || ""
-                              const academicDegree = item.lecturer?.userProfile?.academicDegreeType?.sTen || item.academicDegree || ""
-                              const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
-                              const expertName = item.lecturer?.userProfile?.fullname || item.name || ""
-                              return {
-                                label: `${academicRankAndDegree} ${expertName}`.trim(),
-                                value: item.id,
-                              }
+                          options={expertProfileData?.map((item) => {
+                            const academicRank =
+                              item.lecturer?.userProfile?.academicRankType?.sTen ||
+                              item.academicRank ||
+                              ""
+                            const academicDegree =
+                              item.lecturer?.userProfile?.academicDegreeType?.sTen ||
+                              item.academicDegree ||
+                              ""
+                            const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
+                            const expertName =
+                              item.lecturer?.userProfile?.fullname || item.name || ""
+                            const text = `${academicRankAndDegree} ${expertName}`.trim()
+                            const hasLecturer = item.lecturer != null
+                            return {
+                              label: (
+                                <span
+                                  title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
+                                  className={hasLecturer ? "text-green-600" : "text-red-600"}
+                                  style={{ color: hasLecturer ? "#16a34a" : "#dc2626" }}
+                                >
+                                  {text}
+                                </span>
+                              ),
+                              value: item.id,
                             }
-                          )}
+                          })}
                           value={currentValue || ""}
                           onChange={(value) => handleEditChange(record?.id, "reviewer1", value)}
                         />
@@ -1598,8 +1649,17 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                               const academicDegree = item.lecturer?.userProfile?.academicDegreeType?.sTen || item.academicDegree || ""
                               const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
                               const expertName = item.lecturer?.userProfile?.fullname || item.name || ""
+                              const hasLecturer = item.lecturer != null
                               return {
-                                label: `${academicRankAndDegree} ${expertName}`.trim(),
+                                label: (
+                                  <span
+                                    title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
+                                    className={hasLecturer ? "text-green-600" : "text-red-600"}
+                                    style={{ color: hasLecturer ? "#16a34a" : "#dc2626" }}
+                                  >
+                                    {`${academicRankAndDegree} ${expertName}`.trim()}
+                                  </span>
+                                ),
                                 value: item.id,
                               }
                             }
@@ -1652,8 +1712,17 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                               const academicDegree = item.lecturer?.userProfile?.academicDegreeType?.sTen || item.academicDegree || ""
                               const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
                               const expertName = item.lecturer?.userProfile?.fullname || item.name || ""
+                              const hasLecturer = item.lecturer != null
                               return {
-                                label: `${academicRankAndDegree} ${expertName}`.trim(),
+                                label: (
+                                  <span
+                                    title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
+                                    className={hasLecturer ? "text-green-600" : "text-red-600"}
+                                    style={{ color: hasLecturer ? "#16a34a" : "#dc2626" }}
+                                  >
+                                    {`${academicRankAndDegree} ${expertName}`.trim()}
+                                  </span>
+                                ),
                                 value: item.id,
                               }
                             }
