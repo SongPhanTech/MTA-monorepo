@@ -18266,6 +18266,10 @@ const metadata: ModelMeta = {
                     type: "String",
                     isOptional: true,
                     attributes: [{ "name": "@db.Text", "args": [] }],
+                }, researchTopicAssociated: {
+                    name: "researchTopicAssociated",
+                    type: "String",
+                    isOptional: true,
                 }, firstCheckProgress: {
                     name: "firstCheckProgress",
                     type: "Int",

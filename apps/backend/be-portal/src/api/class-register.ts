@@ -277,11 +277,10 @@ app.openapi(getClassesInfo, async (c) => {
           deletedAt: null,
           cancelled: false,
           semesterId: registerSession.semesterId,
-        
         },
-        
+
         include: {
-           _count: {
+          _count: {
             select: {
               subjectClassStudent: true,
             },

@@ -17319,6 +17319,10 @@ const metadata: ModelMeta = {
                     name: "editProject",
                     type: "String",
                     isOptional: true,
+                }, researchTopicAssociated: {
+                    name: "researchTopicAssociated",
+                    type: "String",
+                    isOptional: true,
                 }, firstCheckProgress: {
                     name: "firstCheckProgress",
                     type: "Int",
