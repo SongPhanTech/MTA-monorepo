@@ -133,10 +133,18 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     }
   )
   const { data: expertProfileData } = useFindManyExpertProfile({
+    where: {
+      thesisExpert: true,      
+    },
     include: {
       lecturer: {
         include: {
-          userProfile: true,
+          userProfile: {
+            include: {
+              academicRankType: true,
+              academicDegreeType: true,
+            },
+          },
         },
       },
     },
@@ -1298,10 +1306,18 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           className="w-full"
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
-                          options={expertProfileData?.map((item) => ({
-                            label: item.name,
-                            value: item.id,
-                          }))}
+                          options={expertProfileData?.map(
+                            (item) => {
+                              const academicRank = item.lecturer?.userProfile?.academicRankType?.sTen || item.academicRank || ""
+                              const academicDegree = item.lecturer?.userProfile?.academicDegreeType?.sTen || item.academicDegree || ""
+                              const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
+                              const expertName = item.lecturer?.userProfile?.fullname || item.name || ""
+                              return {
+                                label: `${academicRankAndDegree} ${expertName}`.trim(),
+                                value: item.id,
+                              }
+                            }
+                          )}
                           value={currentValue || undefined}
                           onChange={(value) => handleEditChange(record?.id, "supervisor", value)}
                         />
@@ -1320,7 +1336,12 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       </span>
                     )
                   }
-                  return record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.name || ""
+                  const academicRank = record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.lecturer?.userProfile?.academicRankType?.sTen 
+                  || record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.academicRank || ""
+                  const academicDegree = record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.lecturer?.userProfile?.academicDegreeType?.sTen 
+                  || record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.academicDegree || ""
+                  const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
+                  return `${academicRankAndDegree} ${record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.name || ""}`
                 },
               },
               {
@@ -1344,10 +1365,18 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
                           className="w-full"
-                          options={expertProfileData?.map((item) => ({
-                            label: item.name,
-                            value: item.id,
-                          }))}
+                          options={expertProfileData?.map(
+                            (item) => {
+                              const academicRank = item.lecturer?.userProfile?.academicRankType?.sTen || item.academicRank || ""
+                              const academicDegree = item.lecturer?.userProfile?.academicDegreeType?.sTen || item.academicDegree || ""
+                              const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
+                              const expertName = item.lecturer?.userProfile?.fullname || item.name || ""
+                              return {
+                                label: `${academicRankAndDegree} ${expertName}`.trim(),
+                                value: item.id,
+                              }
+                            }
+                          )}
                           value={currentValue || undefined}
                           onChange={(value) => handleEditChange(record?.id, "coSupervisor", value)}
                         />
@@ -1366,7 +1395,13 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       </span>
                     )
                   }
-                  return record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.name || ""
+                  const academicRank = record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.lecturer?.userProfile?.academicRankType?.sTen 
+                  || record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.academicRank || ""
+                  const academicDegree = record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.lecturer?.userProfile?.academicDegreeType?.sTen 
+                  || record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.academicDegree || ""
+                  const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
+                  return `${academicRankAndDegree} ${record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.name || ""}`
+                  
                 },
               },
               {
@@ -1374,7 +1409,6 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 width: 150,
                 dataIndex: "councilChairman",
                 render: (_, record) => {
-                  const status = record?.thesisRegistrations?.[0]?.thesisProject?.status || ""
                   if (editingRowKeys.includes(record?.id)) {
                     const currentValue =
                       editingValues[record?.id]?.councilChairman !== undefined
@@ -1390,10 +1424,18 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           className="w-full"
                           options={expertProfileData
                             ?.filter((item) => item.eligiblePresident === true)
-                            .map((item) => ({
-                              label: item.name,
-                              value: item.id,
-                            }))}
+                            .map(
+                              (item) => {
+                                const academicRank = item.lecturer?.userProfile?.academicRankType?.sTen || item.academicRank || ""
+                                const academicDegree = item.lecturer?.userProfile?.academicDegreeType?.sTen || item.academicDegree || ""
+                                const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
+                                const expertName = item.lecturer?.userProfile?.fullname || item.name || ""
+                                return {
+                                  label: `${academicRankAndDegree} ${expertName}`.trim(),
+                                  value: item.id,
+                                }
+                              }
+                            )}
                           value={currentValue || ""}
                           onChange={(value) =>
                             handleEditChange(record?.id, "councilChairman", value)
@@ -1402,11 +1444,22 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       </div>
                     )
                   }
-                  return (
-                    record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                      (member: any) => member.role === CouncilRole.CHAIRMAN
-                    )?.expert?.name || ""
-                  )
+                  const academicRank = record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                    (member: any) => member.role === CouncilRole.CHAIRMAN
+                  )?.expert?.lecturer?.userProfile?.academicRankType?.sTen 
+                  || record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                    (member: any) => member.role === CouncilRole.CHAIRMAN
+                  )?.expert?.academicRank || ""
+                  const academicDegree = record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                    (member: any) => member.role === CouncilRole.CHAIRMAN
+                  )?.expert?.lecturer?.userProfile?.academicDegreeType?.sTen 
+                  || record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                    (member: any) => member.role === CouncilRole.CHAIRMAN
+                  )?.expert?.academicDegree || ""
+                  const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
+                  return `${academicRankAndDegree} ${record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                    (member: any) => member.role === CouncilRole.CHAIRMAN
+                  )?.expert?.name || ""}`
                 },
               },
               {
@@ -1414,7 +1467,6 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 width: 150,
                 dataIndex: "councilSecretary",
                 render: (_, record) => {
-                  const status = record?.thesisRegistrations?.[0]?.thesisProject?.status || ""
                   if (editingRowKeys.includes(record?.id)) {
                     const currentValue =
                       editingValues[record?.id]?.councilSecretary !== undefined
@@ -1430,10 +1482,18 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownStyle={{ minWidth: 200 }}
                           options={expertProfileData
                             ?.filter((item) => item.eligibleSecretary === true)
-                            .map((item) => ({
-                              label: item.name,
-                              value: item.id,
-                            }))}
+                            .map(
+                              (item) => {
+                                const academicRank = item.lecturer?.userProfile?.academicRankType?.sTen || item.academicRank || ""
+                                const academicDegree = item.lecturer?.userProfile?.academicDegreeType?.sTen || item.academicDegree || ""
+                                const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
+                                const expertName = item.lecturer?.userProfile?.fullname || item.name || ""
+                                return {
+                                  label: `${academicRankAndDegree} ${expertName}`.trim(),
+                                  value: item.id,
+                                }
+                              }
+                            )}
                           value={currentValue || ""}
                           onChange={(value) =>
                             handleEditChange(record?.id, "councilSecretary", value)
@@ -1442,11 +1502,22 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       </div>
                     )
                   }
-                  return (
-                    record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                      (member: any) => member.role === CouncilRole.SECRETARY
-                    )?.expert?.name || ""
-                  )
+                  const academicRank = record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                    (member: any) => member.role === CouncilRole.SECRETARY
+                  )?.expert?.lecturer?.userProfile?.academicRankType?.sTen 
+                  || record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                    (member: any) => member.role === CouncilRole.SECRETARY
+                  )?.expert?.academicRank || ""
+                  const academicDegree = record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                    (member: any) => member.role === CouncilRole.SECRETARY
+                  )?.expert?.lecturer?.userProfile?.academicDegreeType?.sTen 
+                  || record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                    (member: any) => member.role === CouncilRole.SECRETARY
+                  )?.expert?.academicDegree || ""
+                  const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
+                  return `${academicRankAndDegree} ${record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                    (member: any) => member.role === CouncilRole.SECRETARY
+                  )?.expert?.name || ""}`
                 },
               },
               {
@@ -1454,7 +1525,6 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 width: 150,
                 dataIndex: "reviewer1",
                 render: (_, record) => {
-                  const status = record?.thesisRegistrations?.[0]?.thesisProject?.status || ""
                   if (editingRowKeys.includes(record?.id)) {
                     const currentValue =
                       editingValues[record?.id]?.reviewer1 !== undefined
@@ -1468,21 +1538,40 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           className="w-full"
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
-                          options={expertProfileData?.map((item) => ({
-                            label: item.name,
-                            value: item.id,
-                          }))}
+                          options={expertProfileData?.map(
+                            (item) => {
+                              const academicRank = item.lecturer?.userProfile?.academicRankType?.sTen || item.academicRank || ""
+                              const academicDegree = item.lecturer?.userProfile?.academicDegreeType?.sTen || item.academicDegree || ""
+                              const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
+                              const expertName = item.lecturer?.userProfile?.fullname || item.name || ""
+                              return {
+                                label: `${academicRankAndDegree} ${expertName}`.trim(),
+                                value: item.id,
+                              }
+                            }
+                          )}
                           value={currentValue || ""}
                           onChange={(value) => handleEditChange(record?.id, "reviewer1", value)}
                         />
                       </div>
                     )
                   }
-                  return (
-                    record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                      (member: any) => member.role === CouncilRole.REVIEWER_1
-                    )?.expert?.name || ""
-                  )
+                  const academicRank = record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                    (member: any) => member.role === CouncilRole.REVIEWER_1
+                  )?.expert?.lecturer?.userProfile?.academicRankType?.sTen 
+                  || record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                    (member: any) => member.role === CouncilRole.REVIEWER_1
+                  )?.expert?.academicRank || ""
+                  const academicDegree = record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                    (member: any) => member.role === CouncilRole.REVIEWER_1
+                  )?.expert?.lecturer?.userProfile?.academicDegreeType?.sTen 
+                  || record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                    (member: any) => member.role === CouncilRole.REVIEWER_1
+                  )?.expert?.academicDegree || ""
+                  const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
+                  return `${academicRankAndDegree} ${record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                    (member: any) => member.role === CouncilRole.REVIEWER_1
+                  )?.expert?.name || ""}`
                 },
               },
               {
@@ -1490,7 +1579,6 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 width: 150,
                 dataIndex: "reviewer2",
                 render: (_, record) => {
-                  const status = record?.thesisRegistrations?.[0]?.thesisProject?.status || ""
                   if (editingRowKeys.includes(record?.id)) {
                     const currentValue =
                       editingValues[record?.id]?.reviewer2 !== undefined
@@ -1504,29 +1592,47 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           className="w-full"
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
-                          options={expertProfileData?.map((item) => ({
-                            label: item.name,
-                            value: item.id,
-                          }))}
+                          options={expertProfileData?.map(
+                            (item) => {
+                              const academicRank = item.lecturer?.userProfile?.academicRankType?.sTen || item.academicRank || ""
+                              const academicDegree = item.lecturer?.userProfile?.academicDegreeType?.sTen || item.academicDegree || ""
+                              const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
+                              const expertName = item.lecturer?.userProfile?.fullname || item.name || ""
+                              return {
+                                label: `${academicRankAndDegree} ${expertName}`.trim(),
+                                value: item.id,
+                              }
+                            }
+                          )}
                           value={currentValue || ""}
                           onChange={(value) => handleEditChange(record?.id, "reviewer2", value)}
                         />
                       </div>
                     )
                   }
-                  return (
-                    record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                      (member: any) => member.role === CouncilRole.REVIEWER_2
-                    )?.expert?.name || ""
-                  )
+                  const academicRank = record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                    (member: any) => member.role === CouncilRole.REVIEWER_2
+                  )?.expert?.lecturer?.userProfile?.academicRankType?.sTen 
+                  || record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                    (member: any) => member.role === CouncilRole.REVIEWER_2
+                  )?.expert?.academicRank || ""
+                  const academicDegree = record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                    (member: any) => member.role === CouncilRole.REVIEWER_2
+                  )?.expert?.lecturer?.userProfile?.academicDegreeType?.sTen 
+                  || record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                    (member: any) => member.role === CouncilRole.REVIEWER_2
+                  )?.expert?.academicDegree || ""
+                  const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
+                  return `${academicRankAndDegree} ${record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                    (member: any) => member.role === CouncilRole.REVIEWER_2
+                  )?.expert?.name || ""}`
                 },
               },
               {
                 title: "Ủy viên",
                 width: 150,
                 dataIndex: "councilMember",
-                render: (_, record) => {
-                  const status = record?.thesisRegistrations?.[0]?.thesisProject?.status || ""
+                render: (_, record) => {                
                   if (editingRowKeys.includes(record?.id)) {
                     const currentValue =
                       editingValues[record?.id]?.councilMember !== undefined
@@ -1540,29 +1646,48 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           className="w-full"
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
-                          options={expertProfileData?.map((item) => ({
-                            label: item.name,
-                            value: item.id,
-                          }))}
+                          options={expertProfileData?.map(
+                            (item) => {
+                              const academicRank = item.lecturer?.userProfile?.academicRankType?.sTen || item.academicRank || ""
+                              const academicDegree = item.lecturer?.userProfile?.academicDegreeType?.sTen || item.academicDegree || ""
+                              const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
+                              const expertName = item.lecturer?.userProfile?.fullname || item.name || ""
+                              return {
+                                label: `${academicRankAndDegree} ${expertName}`.trim(),
+                                value: item.id,
+                              }
+                            }
+                          )}
                           value={currentValue || ""}
                           onChange={(value) => handleEditChange(record?.id, "councilMember", value)}
                         />
                       </div>
                     )
                   }
-                  return (
-                    record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                      (member: any) => member.role === CouncilRole.MEMBER
-                    )?.expert?.name || ""
-                  )
+                  const academicRank = record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                    (member: any) => member.role === CouncilRole.MEMBER
+                  )?.expert?.lecturer?.userProfile?.academicRankType?.sTen 
+                  || record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                    (member: any) => member.role === CouncilRole.MEMBER
+                  )?.expert?.academicRank || ""
+                  const academicDegree = record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                    (member: any) => member.role === CouncilRole.MEMBER
+                  )?.expert?.lecturer?.userProfile?.academicDegreeType?.sTen 
+                  || record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                    (member: any) => member.role === CouncilRole.MEMBER
+                  )?.expert?.academicDegree || ""
+                  const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
+                  return `${academicRankAndDegree} ${record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                    (member: any) => member.role === CouncilRole.MEMBER
+                  )?.expert?.name || ""}`
+                  
                 },
               },
               {
                 title: "Phòng bảo vệ",
                 width: 150,
                 dataIndex: "room",
-                render: (text: string, record: any) => {
-                  const status = record?.thesisRegistrations?.[0]?.thesisProject?.status || ""
+                render: (text: string, record: any) => {                  
                   if (editingRowKeys.includes(record?.id)) {
                     const currentValue =
                       editingValues[record?.id]?.room !== undefined
@@ -1593,7 +1718,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 width: 150,
                 dataIndex: "defenseDate",
                 render: (_, record) => {
-                  const status = record?.thesisRegistrations?.[0]?.thesisProject?.status || ""
+               
                   if (editingRowKeys.includes(record?.id)) {
                     const currentValue =
                       editingValues[record?.id]?.defenseDate !== undefined
