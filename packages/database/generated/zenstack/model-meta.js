@@ -9827,6 +9827,10 @@ const metadata = {
                     name: "maxTrainingTime",
                     type: "Float",
                     isOptional: true,
+                }, isRetakeExam: {
+                    name: "isRetakeExam",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, admissionQuota: {
                     name: "admissionQuota",
                     type: "Int",
@@ -11216,12 +11220,9 @@ const metadata = {
                 }, trainingObjectTypeId_name_credit_period_managementOrganizationId: {
                     name: "trainingObjectTypeId_name_credit_period_managementOrganizationId",
                     fields: ["trainingObjectTypeId", "name", "credit", "period", "managementOrganizationId"]
-                }, trainingObjectTypeId_codeTkb: {
-                    name: "trainingObjectTypeId_codeTkb",
-                    fields: ["trainingObjectTypeId", "codeTkb"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null, null, null, null] }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null, null, null, null] }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         subjectVersionHistory: {
             name: 'SubjectVersionHistory', fields: {
@@ -18262,6 +18263,10 @@ const metadata = {
                     type: "String",
                     isOptional: true,
                     attributes: [{ "name": "@db.Text", "args": [] }],
+                }, researchTopicAssociated: {
+                    name: "researchTopicAssociated",
+                    type: "String",
+                    isOptional: true,
                 }, firstCheckProgress: {
                     name: "firstCheckProgress",
                     type: "Int",

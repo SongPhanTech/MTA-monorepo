@@ -1453,7 +1453,7 @@ export default function NhapDiem({
                   const examPostponed = listForm[record.id]?.examPostponed
                   return (
                     <Form.Item
-                      name={[record.id, "examPostponedReason"]}
+                      name={["list", record.id, "examPostponedReason"]}
                       style={{ margin: 0 }}
                       required={!!examPostponed}
                     >

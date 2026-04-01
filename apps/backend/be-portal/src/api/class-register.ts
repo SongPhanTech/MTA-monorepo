@@ -278,7 +278,13 @@ app.openapi(getClassesInfo, async (c) => {
           cancelled: false,
           semesterId: registerSession.semesterId,
         },
+
         include: {
+          _count: {
+            select: {
+              subjectClassStudent: true,
+            },
+          },
           classRegisterLogs: {
             select: {
               student: {
@@ -339,11 +345,11 @@ app.openapi(getClassesInfo, async (c) => {
               },
             },
           },
-          _count: {
-            select: {
-              classRegisterLogs: true,
-            },
-          },
+          // _count: {
+          //   select: {
+          //     class: true,
+          //   },
+          // },
         },
       },
     },
@@ -573,8 +579,6 @@ app.openapi(classUnregister, async (c) => {
     profile.educationAndTraining.find(
       (item) => curriculumVersionId && item.curriculumVersionId === curriculumVersionId
     )?.id ?? (profile.educationAndTraining[0]?.id as string) // TODO: check session => student trainingCourse
-
-  console.log({ studentId, session, subjectClassIds })
 
   // save the register log
   // const registerLogs = await prisma.classRegisterLogs.createManyAndReturn({

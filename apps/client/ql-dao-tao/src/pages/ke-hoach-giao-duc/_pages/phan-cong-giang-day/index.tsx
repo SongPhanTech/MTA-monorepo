@@ -995,9 +995,6 @@ export default function PhanCongGiangDay({
                                       lecturerId: {
                                         not: null,
                                       },
-                                      extraLecturerId: {
-                                        not: null,
-                                      },
                                       lecturerAssignmentDeadline: { not: null },
                                       submitLecturerAssignmentAt: null,
                                       approveLecturerAssignmentAt: null,
@@ -1632,7 +1629,6 @@ export default function PhanCongGiangDay({
                 getCheckboxProps(record) {
                   let disabledRecord =
                     !subjectClassForm?.[record.id]?.lecturerId ||
-                    !subjectClassForm?.[record.id]?.extraLecturerId ||
                     !subjectClassForm?.[record.id]?.enterGradeLecturerId ||
                     !!record.cancelled ||
                     !!record.approveLecturerAssignmentAt ||
@@ -1655,7 +1651,6 @@ export default function PhanCongGiangDay({
                   className: cn(
                     !!recordSubjectClass?.submitLecturerAssignmentAt && "bg-yellow-200",
                     (!subjectClassForm?.[record.id]?.lecturerId ||
-                      !subjectClassForm?.[record.id]?.extraLecturerId ||
                       !subjectClassForm?.[record.id]?.enterGradeLecturerId) &&
                       "bg-slate-200",
                     !!recordSubjectClass?.approveLecturerAssignmentAt && "bg-green-200",
@@ -1776,9 +1771,7 @@ export default function PhanCongGiangDay({
                   dataIndex: "mainLecturer",
                   render: (__, record) =>
                     !subjectClassForm?.[record.id]?.cancelled &&
-                    (role === "P2_KHCT" ||
-                      (!record?.approveLecturerAssignmentAt &&
-                        (!khoaBoMon || !record?.submitLecturerAssignmentAt))) ? (
+                    (role === "P2_KHCT" || !khoaBoMon || !record?.submitLecturerAssignmentAt) ? (
                       <FormItem form={form} name={["subjectClass", record.id, "lecturerId"]}>
                         <LectureTreeSelect
                           placeholder="Chọn giảng viên"
@@ -1809,9 +1802,7 @@ export default function PhanCongGiangDay({
                   width: 200,
                   render: (__, record) =>
                     !subjectClassForm?.[record.id]?.cancelled &&
-                    (role === "P2_KHCT" ||
-                      (!record?.approveLecturerAssignmentAt &&
-                        (!khoaBoMon || !record?.submitLecturerAssignmentAt))) ? (
+                    (role === "P2_KHCT" || !khoaBoMon || !record?.submitLecturerAssignmentAt) ? (
                       <FormItem form={form} name={["subjectClass", record.id, "extraLecturerId"]}>
                         <LectureTreeSelect
                           placeholder="Chọn giảng viên"
@@ -1840,9 +1831,7 @@ export default function PhanCongGiangDay({
                   width: 200,
                   render: (__, record) =>
                     !subjectClassForm?.[record.id]?.cancelled &&
-                    (role === "P2_KHCT" ||
-                      (!record?.approveLecturerAssignmentAt &&
-                        (!khoaBoMon || !record?.submitLecturerAssignmentAt))) ? (
+                    (role === "P2_KHCT" || !khoaBoMon || !record?.submitLecturerAssignmentAt) ? (
                       <FormItem
                         form={form}
                         name={["subjectClass", record.id, "enterGradeLecturerId"]}

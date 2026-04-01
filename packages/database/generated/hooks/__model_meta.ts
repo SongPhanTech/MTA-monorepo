@@ -9331,6 +9331,10 @@ const metadata: ModelMeta = {
                     name: "maxTrainingTime",
                     type: "Float",
                     isOptional: true,
+                }, isRetakeExam: {
+                    name: "isRetakeExam",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, admissionQuota: {
                     name: "admissionQuota",
                     type: "Int",
@@ -10660,9 +10664,6 @@ const metadata: ModelMeta = {
                 }, trainingObjectTypeId_name_credit_period_managementOrganizationId: {
                     name: "trainingObjectTypeId_name_credit_period_managementOrganizationId",
                     fields: ["trainingObjectTypeId", "name", "credit", "period", "managementOrganizationId"]
-                }, trainingObjectTypeId_codeTkb: {
-                    name: "trainingObjectTypeId_codeTkb",
-                    fields: ["trainingObjectTypeId", "codeTkb"]
                 },
             },
         },
@@ -17316,6 +17317,10 @@ const metadata: ModelMeta = {
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, editProject: {
                     name: "editProject",
+                    type: "String",
+                    isOptional: true,
+                }, researchTopicAssociated: {
+                    name: "researchTopicAssociated",
                     type: "String",
                     isOptional: true,
                 }, firstCheckProgress: {

@@ -75,156 +75,156 @@ async function main() {
     data: [{ name: "Cơ hữu" }, { name: "Thuê ngoài" }],
   })
 
-  // Seed TrainingObjectType
-  await prisma.trainingObjectType.createMany({
-    skipDuplicates: true,
-    data: [
-      {
-        id: "550e8402-e29b-41d4-a716-446655440000",
-        name: "Đại học quân sự",
-        code: "QS",
-        type: $Enums.TrainingObjectTypes.MILITARY,
-        createdAt: new Date("2025-04-03T12:58:40.507Z"),
-        updatedAt: new Date("2025-04-03T12:58:40.507Z"),
-      },
-      {
-        id: "550e8402-e29b-41d4-a716-446655440001",
-        name: "Đại học dân sự",
-        code: "DS",
-        type: $Enums.TrainingObjectTypes.CIVILIAN,
-        createdAt: new Date("2025-04-03T12:58:41.507Z"),
-        updatedAt: new Date("2025-04-03T12:58:41.507Z"),
-      },
-    ],
-  })
+  // // Seed TrainingObjectType
+  // await prisma.trainingObjectType.createMany({
+  //   skipDuplicates: true,
+  //   data: [
+  //     {
+  //       id: "550e8402-e29b-41d4-a716-446655440000",
+  //       name: "Đại học quân sự",
+  //       code: "QS",
+  //       type: $Enums.TrainingObjectTypes.MILITARY,
+  //       createdAt: new Date("2025-04-03T12:58:40.507Z"),
+  //       updatedAt: new Date("2025-04-03T12:58:40.507Z"),
+  //     },
+  //     {
+  //       id: "550e8402-e29b-41d4-a716-446655440001",
+  //       name: "Đại học dân sự",
+  //       code: "DS",
+  //       type: $Enums.TrainingObjectTypes.CIVILIAN,
+  //       createdAt: new Date("2025-04-03T12:58:41.507Z"),
+  //       updatedAt: new Date("2025-04-03T12:58:41.507Z"),
+  //     },
+  //   ],
+  // })
 
-  // Seed TrainingType
-  await prisma.trainingType.createMany({
-    skipDuplicates: true,
-    data: [
-      {
-        id: "550e8403-e29b-41d4-a716-446655440000",
-        name: "Chính quy",
-        code: "CQ",
-        createdAt: new Date("2025-04-03T12:58:40.507Z"),
-        updatedAt: new Date("2025-04-03T12:58:40.507Z"),
-      },
-      {
-        id: "550e8403-e29b-41d4-a716-446655440001",
-        name: "Không chính quy",
-        code: "KCQ",
-        createdAt: new Date("2025-04-03T12:58:41.507Z"),
-        updatedAt: new Date("2025-04-03T12:58:41.507Z"),
-      },
-      {
-        id: "550e8403-e29b-41d4-a716-446655440002",
-        name: "Từ xa",
-        code: "TX",
-        createdAt: new Date("2025-04-03T12:58:42.507Z"),
-        updatedAt: new Date("2025-04-03T12:58:42.507Z"),
-      },
-      {
-        id: "550e8403-e29b-41d4-a716-446655440003",
-        name: "Tại chức",
-        code: "TC",
-        createdAt: new Date("2025-04-03T12:58:43.507Z"),
-        updatedAt: new Date("2025-04-03T12:58:43.507Z"),
-      },
-    ],
-  })
+  // // Seed TrainingType
+  // await prisma.trainingType.createMany({
+  //   skipDuplicates: true,
+  //   data: [
+  //     {
+  //       id: "550e8403-e29b-41d4-a716-446655440000",
+  //       name: "Chính quy",
+  //       code: "CQ",
+  //       createdAt: new Date("2025-04-03T12:58:40.507Z"),
+  //       updatedAt: new Date("2025-04-03T12:58:40.507Z"),
+  //     },
+  //     {
+  //       id: "550e8403-e29b-41d4-a716-446655440001",
+  //       name: "Không chính quy",
+  //       code: "KCQ",
+  //       createdAt: new Date("2025-04-03T12:58:41.507Z"),
+  //       updatedAt: new Date("2025-04-03T12:58:41.507Z"),
+  //     },
+  //     {
+  //       id: "550e8403-e29b-41d4-a716-446655440002",
+  //       name: "Từ xa",
+  //       code: "TX",
+  //       createdAt: new Date("2025-04-03T12:58:42.507Z"),
+  //       updatedAt: new Date("2025-04-03T12:58:42.507Z"),
+  //     },
+  //     {
+  //       id: "550e8403-e29b-41d4-a716-446655440003",
+  //       name: "Tại chức",
+  //       code: "TC",
+  //       createdAt: new Date("2025-04-03T12:58:43.507Z"),
+  //       updatedAt: new Date("2025-04-03T12:58:43.507Z"),
+  //     },
+  //   ],
+  // })
 
-  // Seed TrainingLevel
-  await prisma.trainingLevel.createMany({
-    skipDuplicates: true,
-    data: [
-      {
-        id: "550e8404-e29b-41d4-a716-446655440000",
-        name: "Đại học",
-        code: "ĐH",
-        createdAt: new Date("2025-04-03T12:58:40.507Z"),
-        updatedAt: new Date("2025-04-03T12:58:40.507Z"),
-      },
-      {
-        id: "550e8404-e29b-41d4-a716-446655440001",
-        name: "Thạc sĩ",
-        code: "ThS",
-        createdAt: new Date("2025-04-03T12:58:41.507Z"),
-        updatedAt: new Date("2025-04-03T12:58:41.507Z"),
-      },
-      {
-        id: "550e8404-e29b-41d4-a716-446655440002",
-        name: "Tiến sĩ",
-        code: "TS",
-        createdAt: new Date("2025-04-03T12:58:42.507Z"),
-        updatedAt: new Date("2025-04-03T12:58:42.507Z"),
-      },
-    ],
-  })
+  // // Seed TrainingLevel
+  // await prisma.trainingLevel.createMany({
+  //   skipDuplicates: true,
+  //   data: [
+  //     {
+  //       id: "550e8404-e29b-41d4-a716-446655440000",
+  //       name: "Đại học",
+  //       code: "ĐH",
+  //       createdAt: new Date("2025-04-03T12:58:40.507Z"),
+  //       updatedAt: new Date("2025-04-03T12:58:40.507Z"),
+  //     },
+  //     {
+  //       id: "550e8404-e29b-41d4-a716-446655440001",
+  //       name: "Thạc sĩ",
+  //       code: "ThS",
+  //       createdAt: new Date("2025-04-03T12:58:41.507Z"),
+  //       updatedAt: new Date("2025-04-03T12:58:41.507Z"),
+  //     },
+  //     {
+  //       id: "550e8404-e29b-41d4-a716-446655440002",
+  //       name: "Tiến sĩ",
+  //       code: "TS",
+  //       createdAt: new Date("2025-04-03T12:58:42.507Z"),
+  //       updatedAt: new Date("2025-04-03T12:58:42.507Z"),
+  //     },
+  //   ],
+  // })
 
-  await prisma.trainingTime.createMany({
-    data: [
-      {
-        id: "4years",
-        name: "4 năm",
-      },
-      {
-        id: "5years",
-        name: "5 năm",
-      },
-    ],
-    skipDuplicates: true,
-  })
+  // await prisma.trainingTime.createMany({
+  //   data: [
+  //     {
+  //       id: "4years",
+  //       name: "4 năm",
+  //     },
+  //     {
+  //       id: "5years",
+  //       name: "5 năm",
+  //     },
+  //   ],
+  //   skipDuplicates: true,
+  // })
 
-  // Seed TrainingForm
-  await prisma.trainingForm.createMany({
-    skipDuplicates: true,
-    data: [
-      {
-        id: "550e8405-e29b-41d4-a716-446655440000",
-        name: "Trực tiếp",
-        code: "TT",
-        createdAt: new Date("2025-04-03T12:58:40.507Z"),
-        updatedAt: new Date("2025-04-03T12:58:40.507Z"),
-      },
-      {
-        id: "550e8405-e29b-41d4-a716-446655440001",
-        name: "Trực tuyến",
-        code: "TTY",
-        createdAt: new Date("2025-04-03T12:58:41.507Z"),
-        updatedAt: new Date("2025-04-03T12:58:41.507Z"),
-      },
-      {
-        id: "550e8405-e29b-41d4-a716-446655440002",
-        name: "Kết hợp",
-        code: "KH",
-        createdAt: new Date("2025-04-03T12:58:42.507Z"),
-        updatedAt: new Date("2025-04-03T12:58:42.507Z"),
-      },
-    ],
-  })
+  // // Seed TrainingForm
+  // await prisma.trainingForm.createMany({
+  //   skipDuplicates: true,
+  //   data: [
+  //     {
+  //       id: "550e8405-e29b-41d4-a716-446655440000",
+  //       name: "Trực tiếp",
+  //       code: "TT",
+  //       createdAt: new Date("2025-04-03T12:58:40.507Z"),
+  //       updatedAt: new Date("2025-04-03T12:58:40.507Z"),
+  //     },
+  //     {
+  //       id: "550e8405-e29b-41d4-a716-446655440001",
+  //       name: "Trực tuyến",
+  //       code: "TTY",
+  //       createdAt: new Date("2025-04-03T12:58:41.507Z"),
+  //       updatedAt: new Date("2025-04-03T12:58:41.507Z"),
+  //     },
+  //     {
+  //       id: "550e8405-e29b-41d4-a716-446655440002",
+  //       name: "Kết hợp",
+  //       code: "KH",
+  //       createdAt: new Date("2025-04-03T12:58:42.507Z"),
+  //       updatedAt: new Date("2025-04-03T12:58:42.507Z"),
+  //     },
+  //   ],
+  // })
 
-  await seedSchoolYear()
-  const semester = await prisma.semester.findFirstOrThrow({
-    orderBy: { startDate: "asc" },
-  })
+  // await seedSchoolYear()
+  // const semester = await prisma.semester.findFirstOrThrow({
+  //   orderBy: { startDate: "asc" },
+  // })
 
-  await prisma.trainingCourse.create({
-    data: {
-      code: "K59",
-      name: "Khoá 59",
-      description: "Khoá 59 Quân sự",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      semesterStartId: semester.id,
-      trainingObjectTypeId: "550e8402-e29b-41d4-a716-446655440000", // Quân sự
-      coef_1: 0.1,
-      coef_2: 0.3,
-      coef_3: 0.6,
-      scoreToPass: 4,
-      scoreToTakeExam: 4,
-      baseScore: "Base10",
-    },
-  })
+  // await prisma.trainingCourse.create({
+  //   data: {
+  //     code: "K59",
+  //     name: "Khoá 59",
+  //     description: "Khoá 59 Quân sự",
+  //     createdAt: new Date(),
+  //     updatedAt: new Date(),
+  //     semesterStartId: semester.id,
+  //     trainingObjectTypeId: "550e8402-e29b-41d4-a716-446655440000", // Quân sự
+  //     coef_1: 0.1,
+  //     coef_2: 0.3,
+  //     coef_3: 0.6,
+  //     scoreToPass: 4,
+  //     scoreToTakeExam: 4,
+  //     baseScore: "Base10",
+  //   },
+  // })
 
   const trainingCourses = await prisma.trainingCourse.findMany({
     where: {
@@ -293,7 +293,7 @@ async function main() {
           create: {
             field: "CONDUCT_SCORE",
             operator: "LT",
-            value: 80,
+            value: 8,
           },
         },
       },
@@ -489,32 +489,32 @@ async function main() {
   })
 
   // Seed TrainingLocation
-  await prisma.trainingLocation.createMany({
-    skipDuplicates: true,
-    data: [
-      {
-        id: "550e840f-e29b-41d4-a716-446655440000",
-        name: "Khu A",
-        code: "A",
-        createdAt: new Date("2025-04-03T12:59:07.507Z"),
-        updatedAt: new Date("2025-04-03T12:58:40.507Z"),
-      },
-      {
-        id: "550e840f-e29b-41d4-a716-446655440001",
-        name: "Xuân Phương",
-        code: "XP",
-        createdAt: new Date("2025-04-03T12:59:08.507Z"),
-        updatedAt: new Date("2025-04-03T12:58:40.507Z"),
-      },
-      {
-        id: "550e840f-e29b-41d4-a716-446655440002",
-        name: "Vĩnh Phúc",
-        code: "VP",
-        createdAt: new Date("2025-04-03T12:59:09.507Z"),
-        updatedAt: new Date("2025-04-03T12:58:40.507Z"),
-      },
-    ],
-  })
+  // await prisma.trainingLocation.createMany({
+  //   skipDuplicates: true,
+  //   data: [
+  //     {
+  //       id: "550e840f-e29b-41d4-a716-446655440000",
+  //       name: "Khu A",
+  //       code: "A",
+  //       createdAt: new Date("2025-04-03T12:59:07.507Z"),
+  //       updatedAt: new Date("2025-04-03T12:58:40.507Z"),
+  //     },
+  //     {
+  //       id: "550e840f-e29b-41d4-a716-446655440001",
+  //       name: "Xuân Phương",
+  //       code: "XP",
+  //       createdAt: new Date("2025-04-03T12:59:08.507Z"),
+  //       updatedAt: new Date("2025-04-03T12:58:40.507Z"),
+  //     },
+  //     {
+  //       id: "550e840f-e29b-41d4-a716-446655440002",
+  //       name: "Vĩnh Phúc",
+  //       code: "VP",
+  //       createdAt: new Date("2025-04-03T12:59:09.507Z"),
+  //       updatedAt: new Date("2025-04-03T12:58:40.507Z"),
+  //     },
+  //   ],
+  // })
 
   await prisma.diplomaType.createMany({
     skipDuplicates: true,
@@ -546,43 +546,43 @@ async function main() {
     ],
   })
 
-  const firstOrg = await prisma.dM_DonVi.findFirstOrThrow()
-  await prisma.trainingField.createMany({
-    data: trainingData.map(({ id, trainingField }) => ({
-      id,
-      name: trainingField,
-      englishName: trainingField,
-      organizationId: firstOrg?.Id,
-      publishDate: new Date(),
-    })),
-    skipDuplicates: true,
-  })
+  // const firstOrg = await prisma.dM_DonVi.findFirstOrThrow()
+  // await prisma.trainingField.createMany({
+  //   data: trainingData.map(({ id, trainingField }) => ({
+  //     id,
+  //     name: trainingField,
+  //     englishName: trainingField,
+  //     organizationId: firstOrg?.Id,
+  //     publishDate: new Date(),
+  //   })),
+  //   skipDuplicates: true,
+  // })
 
-  await prisma.trainingMajor.createMany({
-    data: trainingData.flatMap(({ id: trainingFieldId, trainingMajors }) =>
-      trainingMajors.map(({ id, trainingMajor }) => ({
-        id,
-        name: trainingMajor,
-        organizationId: firstOrg.Id,
-        summary: "",
-        trainingFieldId,
-      }))
-    ),
-    skipDuplicates: true,
-  })
+  // await prisma.trainingMajor.createMany({
+  //   data: trainingData.flatMap(({ id: trainingFieldId, trainingMajors }) =>
+  //     trainingMajors.map(({ id, trainingMajor }) => ({
+  //       id,
+  //       name: trainingMajor,
+  //       organizationId: firstOrg.Id,
+  //       summary: "",
+  //       trainingFieldId,
+  //     }))
+  //   ),
+  //   skipDuplicates: true,
+  // })
 
-  await prisma.curriculum.createMany({
-    data: trainingData.flatMap(({ id: trainingFieldId, trainingMajors }) =>
-      trainingMajors.map(({ id, trainingMajor }) => ({
-        id,
-        name: trainingMajor,
-        managementOrganizationId: firstOrg.Id,
-        trainingMajorId: id,
-        trainingObjectTypeId: "550e8402-e29b-41d4-a716-446655440000",
-      }))
-    ),
-    skipDuplicates: true,
-  })
+  // await prisma.curriculum.createMany({
+  //   data: trainingData.flatMap(({ id: trainingFieldId, trainingMajors }) =>
+  //     trainingMajors.map(({ id, trainingMajor }) => ({
+  //       id,
+  //       name: trainingMajor,
+  //       managementOrganizationId: firstOrg.Id,
+  //       trainingMajorId: id,
+  //       trainingObjectTypeId: "550e8402-e29b-41d4-a716-446655440000",
+  //     }))
+  //   ),
+  //   skipDuplicates: true,
+  // })
 
   // await prisma.curriculumVersion.createMany({
   //     data: trainingData.flatMap(({ id: trainingFieldId, trainingMajors }) =>
@@ -601,76 +601,76 @@ async function main() {
   //     skipDuplicates: true,
   // })
 
-  const _curriculum = await prisma.curriculum.create({
-    data: {
-      name: "Công nghệ thông tin seed",
-      code: "CNTT-2023",
-      information: "Công nghệ thông tin là ngành học về máy tính và công nghệ thông tin.",
-      description:
-        "Chương trình đào tạo Công nghệ thông tin cung cấp kiến thức và kỹ năng về lập trình, quản trị hệ thống, và phát triển phần mềm.",
-      managementOrganization: { connect: { Id: firstOrg.Id } },
-      trainingObjectType: { connect: { id: "550e8402-e29b-41d4-a716-446655440000" } },
-      trainingMajor: {
-        create: {
-          name: "Công nghệ thông tin seed",
-          code: "CNTT",
-          englishName: "Information Technology",
-          description:
-            "Chuyên ngành Công nghệ thông tin tập trung vào phát triển phần mềm và quản trị hệ thống.",
-          summary:
-            "Chuyên ngành Công nghệ thông tin cung cấp kiến thức về lập trình, cơ sở dữ liệu, và mạng máy tính.",
-          organization: { connect: { Id: firstOrg.Id } },
-          trainingField: {
-            create: {
-              name: "Công nghệ thông tin seed",
-              englishName: "Information Technology",
-              publishDate: new Date(),
-              organization: {
-                connect: { Id: firstOrg.Id },
-              },
-            },
-          },
-        },
-      },
+  // const _curriculum = await prisma.curriculum.create({
+  //   data: {
+  //     name: "Công nghệ thông tin seed",
+  //     code: "CNTT-2023",
+  //     information: "Công nghệ thông tin là ngành học về máy tính và công nghệ thông tin.",
+  //     description:
+  //       "Chương trình đào tạo Công nghệ thông tin cung cấp kiến thức và kỹ năng về lập trình, quản trị hệ thống, và phát triển phần mềm.",
+  //     managementOrganization: { connect: { Id: firstOrg.Id } },
+  //     trainingObjectType: { connect: { id: "550e8402-e29b-41d4-a716-446655440000" } },
+  //     trainingMajor: {
+  //       create: {
+  //         name: "Công nghệ thông tin seed",
+  //         code: "CNTT",
+  //         englishName: "Information Technology",
+  //         description:
+  //           "Chuyên ngành Công nghệ thông tin tập trung vào phát triển phần mềm và quản trị hệ thống.",
+  //         summary:
+  //           "Chuyên ngành Công nghệ thông tin cung cấp kiến thức về lập trình, cơ sở dữ liệu, và mạng máy tính.",
+  //         organization: { connect: { Id: firstOrg.Id } },
+  //         trainingField: {
+  //           create: {
+  //             name: "Công nghệ thông tin seed",
+  //             englishName: "Information Technology",
+  //             publishDate: new Date(),
+  //             organization: {
+  //               connect: { Id: firstOrg.Id },
+  //             },
+  //           },
+  //         },
+  //       },
+  //     },
 
-      curriculumVersion: {
-        create: {
-          name: "Công nghệ thông tin 2023 seed",
-          code: "CNTT-DS-2023",
-          numberOfSemesters: 10,
-          trainingType: {
-            connect: {
-              id: "550e8403-e29b-41d4-a716-446655440000",
-            },
-          },
-          trainingObjectType: {
-            connectOrCreate: {
-              where: { name: "Đại học quân sự" },
-              create: {
-                name: "Đại học quân sự",
-                type: $Enums.TrainingObjectTypes.MILITARY,
-              },
-            },
-          },
-          trainingLevel: {
-            connectOrCreate: {
-              where: { name: "Đại học" },
-              create: { name: "Đại học" },
-            },
-          },
-          trainingTime: {
-            connectOrCreate: {
-              where: { id: "4years" },
-              create: { name: "4 năm" },
-            },
-          },
-          diplomaType: {
-            connect: { code: "BS" },
-          },
-        },
-      },
-    },
-  })
+  //     curriculumVersion: {
+  //       create: {
+  //         name: "Công nghệ thông tin 2023 seed",
+  //         code: "CNTT-DS-2023",
+  //         numberOfSemesters: 10,
+  //         trainingType: {
+  //           connect: {
+  //             id: "550e8403-e29b-41d4-a716-446655440000",
+  //           },
+  //         },
+  //         trainingObjectType: {
+  //           connectOrCreate: {
+  //             where: { name: "Đại học quân sự" },
+  //             create: {
+  //               name: "Đại học quân sự",
+  //               type: $Enums.TrainingObjectTypes.MILITARY,
+  //             },
+  //           },
+  //         },
+  //         trainingLevel: {
+  //           connectOrCreate: {
+  //             where: { name: "Đại học" },
+  //             create: { name: "Đại học" },
+  //           },
+  //         },
+  //         trainingTime: {
+  //           connectOrCreate: {
+  //             where: { id: "4years" },
+  //             create: { name: "4 năm" },
+  //           },
+  //         },
+  //         diplomaType: {
+  //           connect: { code: "BS" },
+  //         },
+  //       },
+  //     },
+  //   },
+  // })
 
   seedScholarshipCriteria()
   seedAcademicActionConfig()

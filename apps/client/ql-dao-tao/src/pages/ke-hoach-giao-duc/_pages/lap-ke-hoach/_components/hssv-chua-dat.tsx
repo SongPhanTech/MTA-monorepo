@@ -1,5 +1,4 @@
 import Table from "@components/commons/table"
-import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import { useOpenSubjectClassRetakeStudents } from "@workspace/libs/api/training"
 import { useSemesterStore, useTrainingCourseStore, useTrainingObjectTypeStore } from "@workspace/ui"
 import { Button, Checkbox, Col, Form, Input, Row } from "antd"
@@ -42,6 +41,9 @@ export default function HSSVChuaDat({ subjectVersionId, viewOnly }: RegisterClas
     },
     { query: { enabled: !!trainingObjectTypeId && !!subjectVersionId } }
   )
+
+  console.log("res: ", res)
+
   // queryKey /api/subject-class/open-subject-class-retake
 
   const data = useMemo(() => (res?.status === 200 ? res?.data.data : []), [res])
@@ -138,7 +140,7 @@ export default function HSSVChuaDat({ subjectVersionId, viewOnly }: RegisterClas
               title: "Tên",
               dataIndex: ["userProfile", "fullname"],
               align: "center",
-              width: 200,
+              width: 170,
               render: (text) => <p className="text-left">{text}</p>,
             },
             {
@@ -154,7 +156,19 @@ export default function HSSVChuaDat({ subjectVersionId, viewOnly }: RegisterClas
               dataIndex: ["fixedClass", "trainingCourse", "name"],
             },
             {
-              title: "Điểm học phần",
+              title: "Điểm TX",
+              align: "center",
+              width: 80,
+              dataIndex: "thuong_xuyen",
+            },
+            {
+              title: "Điểm ĐK",
+              align: "center",
+              width: 80,
+              dataIndex: "dinh_ky",
+            },
+            {
+              title: "Điểm thi",
               align: "center",
               dataIndex: "diem_cuoi",
               width: 80,
@@ -183,7 +197,7 @@ export default function HSSVChuaDat({ subjectVersionId, viewOnly }: RegisterClas
             {
               title: "Lý do",
               align: "center",
-              width: 80,
+              width: 150,
               render: (_, record) =>
                 record?.ly_do_cam_thi ?? record?.ly_do_dinh_chi ?? record?.ly_do_hoan_thi,
             },
