@@ -32,6 +32,7 @@ import { buildOrgTree } from "@lib/utils"
 import { whereOrganization } from "@workspace/libs/constants"
 import { useFindManyTrainingObjectTypePermission, useTrainingObjectTypeStore } from "@workspace/ui"
 import TreeSelect from "@/components/commons/tree-select"
+import { useFixedClassTypeOptions } from "@hooks/fixedClassType"
 export type PutFixedClass = FixedClass & {
   trainingObjectTypeId: string | null
   trainingMajorId: string | null
@@ -76,7 +77,7 @@ const PutFixedClassModal = () => {
       semesterStart: { include: { schoolYear: true } },
     },
   })
-
+  const { options: fixedClassTypeOptions } = useFixedClassTypeOptions()
   const { data: curriculumData = [] } = useFindManyCurriculum({
     where: {
       ...(trainingMajorIdForm ? { trainingMajorId: trainingMajorIdForm } : {}),
@@ -164,6 +165,7 @@ const PutFixedClassModal = () => {
       graduated: dataOutput.graduated,
       active: dataOutput.active,
       summary: dataOutput.summary,
+      classType: dataOutput.classType,
     }
     await updateFixedClass({
       data: {
@@ -207,6 +209,7 @@ const PutFixedClassModal = () => {
         graduated: output.graduated,
         active: output.active,
         summary: output.summary,
+        classType: output.classType,
       }
       if (id) {
         if (
@@ -433,6 +436,19 @@ const PutFixedClassModal = () => {
       <Col span={12}>
         <FormItem form={form} name="summary" label="Tên viết tắt">
           <Input placeholder="Nhập tên viết tắt" />
+        </FormItem>
+      </Col>
+      <Col span={12}>
+        <FormItem form={form} name="classType" label="Loại lớp">
+          <Select
+            placeholder="Chọn loại lớp"
+            options={fixedClassTypeOptions.map((i) => {
+              return {
+                value: i.value,
+                label: i.label,
+              }
+            })}
+          />
         </FormItem>
       </Col>
       <Col span={12}>
