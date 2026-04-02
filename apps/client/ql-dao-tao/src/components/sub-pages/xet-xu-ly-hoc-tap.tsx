@@ -19,7 +19,6 @@ import TableCollapse from "@components/commons/tableCollapse"
 import EditIcon from "@components/icons/edit"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import type { FilterProps } from "@constants/type"
-import { useAcademicActionTypeOption } from "@hooks/academicActionType"
 import { useDecisionStatusOptions } from "@hooks/decisionStatus"
 import useSpinner from "@hooks/spinner"
 import {
@@ -64,7 +63,6 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
   const [selectedStudents, setSelectedStudents] = useState<SelectedStudent[]>([])
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
   const [selectedDecision, setSelectedDecision] = useState<React.Key[]>([])
-  const { getAcademicActionTypeLabel } = useAcademicActionTypeOption()
   const {
     options: decisionStatusOption,
     getDecisionStatusLabel,
@@ -231,6 +229,8 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
     },
     queryClient
   )
+
+  console.log("students: ", students)
 
   const studentData = useMemo(() => {
     if (!students) return []

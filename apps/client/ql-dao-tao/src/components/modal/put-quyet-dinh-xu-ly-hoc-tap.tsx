@@ -20,7 +20,6 @@ import dayjs from "dayjs"
 import { useEffect, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import "dayjs/locale/vi"
-import "./index.css"
 import { queryClient } from "@api/index"
 import DatePicker from "@components/commons/date-picker"
 import DocumentPaths from "@components/commons/documentPaths"
@@ -233,6 +232,7 @@ const PutStudentAcademicDecision = () => {
       <Col span={12}>
         <FormItem form={form} name="trainingCourseId" label="Khoá học">
           <SelectTrainingCourse
+            className="w-full"
             placeholder="Chọn khoá"
             allowClear
             onChange={(val) => {

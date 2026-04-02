@@ -655,12 +655,10 @@ const ThongTinDiemHocKy = async (
 
     // Tính điểm trung bình hệ 4 trong kỳ (chỉ tính môn đạt, không tính môn trượt)
     const diemTrungBinh4 =
-      Math.round((DsDiemHe4.reduce((sum, diem) => sum + diem, 0) / soTinChiDat || 0) * 100) /
-      100
+      Math.round((DsDiemHe4.reduce((sum, diem) => sum + diem, 0) / soTinChiDat || 0) * 100) / 100
     // Tính điểm trung bình hệ 10 trong kỳ (chỉ tính môn đạt, không tính môn trượt)
     const diemTrungBinh10 =
-      Math.round((DSDiemHe10.reduce((sum, diem) => sum + diem, 0) / soTinChiDat || 0) * 100) /
-      100
+      Math.round((DSDiemHe10.reduce((sum, diem) => sum + diem, 0) / soTinChiDat || 0) * 100) / 100
     console.log("Điểm trung bình hệ 4:", diemTrungBinh4)
     console.log("Điểm trung bình hệ 10:", diemTrungBinh10)
     // Điểm thấp nhất
@@ -1606,30 +1604,33 @@ export function evaluateCondition(
 
   const value = Number(actualValue)
 
+  let result: boolean
   switch (condition.operator) {
     case "GTE": // Lớn hơn hoặc bằng (>=)
-      return value >= condition.value
-
+      result = value >= condition.value
+      break
     case "GT": // Lớn hơn (>)
-      return value > condition.value
-
+      result = value > condition.value
+      break
     case "LTE": // Nhỏ hơn hoặc bằng (<=)
-      return value <= condition.value
-
+      result = value <= condition.value
+      break
     case "LT": // Nhỏ hơn (<)
-      return value < condition.value
-
+      result = value < condition.value
+      break
     case "EQ": // Bằng (==)
-      return value === condition.value
-
+      result = value === condition.value
+      break
     // Toán tử 'IN' cần xử lý đặc biệt nếu giá trị là một mảng
     case "IN":
-      return condition.tuple?.includes(`${value}`) || false
-
+      result = condition.tuple?.includes(`${value}`) || false
+      break
     default:
       // Nếu toán tử không hợp lệ, trả về false
       return false
   }
+
+  return condition.invert ? !result : result
 }
 
 const checkAcademicActionRule = async (
@@ -1662,40 +1663,51 @@ const checkAcademicActionRule = async (
       console.warn("No action criteria found for training ruleSet:", ruleSetId)
       return false
     }
-    // console.log('Student Info:', student)
-    // console.log('Checking action criteria for ruleSet:', actionCriteriaListFilter)
+
+    const studentDataContext: StudentDataContext = {
+      SEMESTER_GPA: student.heSoDiem === 10 ? student.diemTrungBinh10 : student.diemTrungBinh4,
+      YEARLY_GPA: 0,
+      CUMULATIVE_GPA: student.heSoDiem === 10 ? student.diemHe10TichLuy : student.diemHe4TichLuy,
+      ENTRY_SCORE: student.diemDauVao,
+      COURSE_GRADE_LOWEST: student.diemMonThuongNhoNhat,
+      GRADUATION_COURSE_GRADE_LOWEST: student.diemMonTotNghiepNhoNhat,
+      SEMESTER_REGISTERED_CREDITS: student.soTinChiDangKy,
+      SEMESTER_PASSED_CREDITS: student.soTinChiDangKy - student.noTinChiTrongKy,
+      SEMESTER_FAILED_CREDITS: student.noTinChiTrongKy,
+      YEAR_FAILED_CREDITS: 0,
+      FAILED_CREDITS_PERCENT: student.soTinChiDangKy
+        ? (student.noTinChiTrongKy / student.soTinChiDangKy) * 100
+        : 0,
+      CUMULATIVE_PASSED_CREDITS: student.soTinChiTichLuy,
+      CUMULATIVE_DEBT_CREDITS: student.tongSoTinChiNo,
+      CUMULATIVE_PROGRESS_PERCENT: student.soTinChiYeuCau
+        ? (student.soTinChiTichLuy / student.soTinChiYeuCau) * 100
+        : 0,
+      CUMULATIVE_RETAKE_PERCENT: student.soTinChiTichLuy
+        ? (student.tongSoTinChiNo / student.soTinChiTichLuy) * 100
+        : 0,
+      ACADEMIC_WARNING_LEVEL: student.mucCanhCaoHocTap,
+      DISCIPLINARY_WARNING_LEVEL: student.mucCanhCaoHocDuong,
+      REPEAT_YEAR_COUNT: 0,
+      SUSPENSION_COUNT: 0,
+      CONDUCT_SCORE: 0,
+      HAS_PASSED_FOREIGN_LANGUAGE: student.trinhDoNgoaiNgu,
+      HAS_REGISTERED_FOR_SEMESTER: true,
+      IS_PRIORITY_STUDENT: false,
+      IS_CLASS_MONITOR_OR_LEADER: !!student.chucVuHocVien,
+      IS_STUDY_DURATION_EXCEEDED: false,
+      IS_DEBT_SUBJECT_CONSECUTIVE: false,
+      HAS_IMPROVEMENT_REGISTRATION: false,
+    }
+
     // Kiểm tra từng điều kiện, tất cả điều kiện thỏa thì mới true
     for (const criteria of actionCriteriaListFilter) {
-      // Cảnh cáo học tập
-      if (criteria.field === CriteriaField.ACADEMIC_WARNING_LEVEL) {
-        if (
-          !checkEligible(
-            student,
-            CriteriaField.ACADEMIC_WARNING_LEVEL,
-            student.mucCanhCaoHocTap,
-            criteria.value,
-            criteria.operator,
-            criteria.invert
-          )
-        ) {
-          return false
-        }
-      } else if (criteria.field === CriteriaField.DISCIPLINARY_WARNING_LEVEL) {
-        if (
-          !checkEligible(
-            student,
-            CriteriaField.DISCIPLINARY_WARNING_LEVEL,
-            student.mucCanhCaoHocDuong,
-            criteria.value,
-            criteria.operator,
-            criteria.invert
-          )
-        ) {
-          return false
-        }
-      } else {
-        return false // Unrecognized criterion
+      const passed = evaluateCondition(studentDataContext, criteria)
+      if (!passed) {
+        return false
       }
+      const studentValue = studentDataContext[criteria.field]
+      student.lyDoXepLoai = `${student.lyDoXepLoai}\n ${criteriaFieldLabels[criteria.field]}(${studentValue}) ${criteria.invert ? "*không* " : ""}${criteriaOperatorLabels[criteria.operator]} ${criteria.value}`
     }
     console.log("All criteria passed for ruleSet:", ruleSetId)
     return true // All criteria passed
@@ -2349,6 +2361,7 @@ export const resultCourseStudentAcademicAction = async (
       active: true,
     },
   })
+
   const actionRuleSet = await prisma.academicActionRuleSet.findMany({
     where: {
       configId: { in: academicActionConfig.map((c) => c.id) },
@@ -2356,6 +2369,7 @@ export const resultCourseStudentAcademicAction = async (
       active: true,
     },
   })
+
   const actionCriteriaList = await prisma.academicActionCondition.findMany({
     where: {
       ruleSetId: { in: actionRuleSet.map((r) => r.id) },
@@ -2370,11 +2384,12 @@ export const resultCourseStudentAcademicAction = async (
       },
     },
   })
-  const studentAcademicDecision = await prisma.studentAcademicDecision.findMany({
+
+  const approvedDecisions = await prisma.studentAcademicDecision.findMany({
     where: {
       studentId: { in: students.map((s) => s.id) },
       semesterId: semesterId,
-      status: { not: DecisionStatus.APPROVED },
+      status: DecisionStatus.APPROVED,
       actionTaken: academicActionType ? academicActionType : undefined,
       deletedAt: null,
       active: true,
@@ -2396,10 +2411,8 @@ export const resultCourseStudentAcademicAction = async (
 
       if (!studentSemesterResult) return
 
-      const checkAcademicActionExists = studentAcademicDecision.find(
-        (decision) => decision.studentId === student.id && decision.semesterId === semesterId
-      )
-      if (!checkAcademicActionExists) return
+      const alreadyApproved = approvedDecisions.some((d) => d.studentId === student.id)
+      if (alreadyApproved) return
 
       const academicActionInfo = await getAcademicAction(
         student,
