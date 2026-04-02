@@ -41,26 +41,26 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
   })
 
   const toDay = dayjs().startOf("day")
-  const { data: currentSemester } = useFindFirstSemester({
-    where: {
-      schoolYear: {
-        startDate: { lte: toDay.toDate() },
-        endDate: { gte: toDay.toDate() },
-      },
-      startDate: { lte: toDay.toDate() },
-      endDate: { gte: toDay.toDate() },
-    },
-    select: {
-      id: true,
-      name: true,
-      schoolYear: { select: { name: true } },
-    },
-  })
+  // const { data: currentSemester } = useFindFirstSemester({
+  //   where: {
+  //     schoolYear: {
+  //       startDate: { lte: toDay.toDate() },
+  //       endDate: { gte: toDay.toDate() },
+  //     },
+  //     startDate: { lte: toDay.toDate() },
+  //     endDate: { gte: toDay.toDate() },
+  //   },
+  //   select: {
+  //     id: true,
+  //     name: true,
+  //     schoolYear: { select: { name: true } },
+  //   },
+  // })
 
   const { data: allSemesters = [] } = useFindManySemester(
     {
       where: {
-        startDate: { lte: toDay.toDate() },
+        //startDate: { lte: toDay.toDate() },
         subjectClasses: {
           some: {
             deletedAt: null,
@@ -89,10 +89,10 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
   )
 
   useEffect(() => {
-    if (currentSemester?.id && !selectedSemesterId) {
-      setSelectedSemesterId(currentSemester.id)
+    if (allSemesters?.[0]?.id && !selectedSemesterId) {
+      setSelectedSemesterId(allSemesters[0].id)
     }
-  }, [currentSemester?.id])
+  }, [allSemesters?.[0]?.id])
 
   const displaySemester = allSemesters.find((s) => s.id === selectedSemesterId)
 
