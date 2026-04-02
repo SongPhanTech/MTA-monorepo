@@ -341,6 +341,7 @@ const PutClassRegisterSession = () => {
               render: (_, record) => (
                 <FormItem
                   form={form}
+                  label="Tín chỉ tối thiểu"
                   required
                   name={[
                     "creditLimit",
@@ -367,6 +368,7 @@ const PutClassRegisterSession = () => {
                 <FormItem
                   form={form}
                   required
+                  label="Tín chỉ tối đa"
                   name={[
                     "creditLimit",
                     getClassificationKey(
