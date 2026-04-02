@@ -7327,6 +7327,7 @@ export namespace Prisma {
         sThietBiTao: 'sThietBiTao',
         sThietBiSua: 'sThietBiSua',
         sCode: 'sCode',
+        sTKPUCode: 'sTKPUCode',
         sTenVietTat: 'sTenVietTat',
         sParentId: 'sParentId',
         sTruongDonVi: 'sTruongDonVi',
@@ -11497,6 +11498,7 @@ export namespace Prisma {
         sThietBiTao: 'sThietBiTao',
         sThietBiSua: 'sThietBiSua',
         sCode: 'sCode',
+        sTKPUCode: 'sTKPUCode',
         sTenVietTat: 'sTenVietTat',
         sParentId: 'sParentId',
         sTruongDonVi: 'sTruongDonVi',
@@ -33936,6 +33938,7 @@ export namespace Prisma {
         readonly sThietBiTao: FieldRef<"DM_DonVi", 'String'>;
         readonly sThietBiSua: FieldRef<"DM_DonVi", 'String'>;
         readonly sCode: FieldRef<"DM_DonVi", 'String'>;
+        readonly sTKPUCode: FieldRef<"DM_DonVi", 'String'>;
         readonly sTenVietTat: FieldRef<"DM_DonVi", 'String'>;
         readonly sParentId: FieldRef<"DM_DonVi", 'String'>;
         readonly sTruongDonVi: FieldRef<"DM_DonVi", 'String'>;
@@ -186572,6 +186575,7 @@ export namespace Prisma {
         sThietBiTao: string | null
         sThietBiSua: string | null
         sCode: string | null
+        sTKPUCode: string | null
         sTenVietTat: string | null
         sParentId: string | null
         sTruongDonVi: string | null
@@ -186598,6 +186602,7 @@ export namespace Prisma {
         sThietBiTao: string | null
         sThietBiSua: string | null
         sCode: string | null
+        sTKPUCode: string | null
         sTenVietTat: string | null
         sParentId: string | null
         sTruongDonVi: string | null
@@ -186624,6 +186629,7 @@ export namespace Prisma {
         sThietBiTao: number
         sThietBiSua: number
         sCode: number
+        sTKPUCode: number
         sTenVietTat: number
         sParentId: number
         sTruongDonVi: number
@@ -186665,6 +186671,7 @@ export namespace Prisma {
         sThietBiTao?: true
         sThietBiSua?: true
         sCode?: true
+        sTKPUCode?: true
         sTenVietTat?: true
         sParentId?: true
         sTruongDonVi?: true
@@ -186691,6 +186698,7 @@ export namespace Prisma {
         sThietBiTao?: true
         sThietBiSua?: true
         sCode?: true
+        sTKPUCode?: true
         sTenVietTat?: true
         sParentId?: true
         sTruongDonVi?: true
@@ -186717,6 +186725,7 @@ export namespace Prisma {
         sThietBiTao?: true
         sThietBiSua?: true
         sCode?: true
+        sTKPUCode?: true
         sTenVietTat?: true
         sParentId?: true
         sTruongDonVi?: true
@@ -186824,6 +186833,7 @@ export namespace Prisma {
         sThietBiTao: string | null
         sThietBiSua: string | null
         sCode: string | null
+        sTKPUCode: string | null
         sTenVietTat: string | null
         sParentId: string | null
         sTruongDonVi: string | null
@@ -186867,6 +186877,7 @@ export namespace Prisma {
         sThietBiTao?: boolean
         sThietBiSua?: boolean
         sCode?: boolean
+        sTKPUCode?: boolean
         sTenVietTat?: boolean
         sParentId?: boolean
         sTruongDonVi?: boolean
@@ -186909,6 +186920,7 @@ export namespace Prisma {
         sThietBiTao?: boolean
         sThietBiSua?: boolean
         sCode?: boolean
+        sTKPUCode?: boolean
         sTenVietTat?: boolean
         sParentId?: boolean
         sTruongDonVi?: boolean
@@ -186935,6 +186947,7 @@ export namespace Prisma {
         sThietBiTao?: boolean
         sThietBiSua?: boolean
         sCode?: boolean
+        sTKPUCode?: boolean
         sTenVietTat?: boolean
         sParentId?: boolean
         sTruongDonVi?: boolean
@@ -186961,6 +186974,7 @@ export namespace Prisma {
         sThietBiTao?: boolean
         sThietBiSua?: boolean
         sCode?: boolean
+        sTKPUCode?: boolean
         sTenVietTat?: boolean
         sParentId?: boolean
         sTruongDonVi?: boolean
@@ -186970,7 +186984,7 @@ export namespace Prisma {
         iCapDonVi?: boolean
         iLoaiDonVi?: boolean
     };
-    export type DM_DonViOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"Id" | "sMa" | "sTen" | "sGhiChu" | "iSTT" | "bActive" | "bDeleted" | "bSystem" | "iDictionaryKey" | "dNgayTao" | "dNgaySua" | "sNguoiTao" | "sNguoiSua" | "sThietBiTao" | "sThietBiSua" | "sCode" | "sTenVietTat" | "sParentId" | "sTruongDonVi" | "sChucNangNhiemVu" | "sDiaChi" | "iNhomDonVi" | "iCapDonVi" | "iLoaiDonVi", ExtArgs["result"]["dM_DonVi"]>;
+    export type DM_DonViOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"Id" | "sMa" | "sTen" | "sGhiChu" | "iSTT" | "bActive" | "bDeleted" | "bSystem" | "iDictionaryKey" | "dNgayTao" | "dNgaySua" | "sNguoiTao" | "sNguoiSua" | "sThietBiTao" | "sThietBiSua" | "sCode" | "sTKPUCode" | "sTenVietTat" | "sParentId" | "sTruongDonVi" | "sChucNangNhiemVu" | "sDiaChi" | "iNhomDonVi" | "iCapDonVi" | "iLoaiDonVi", ExtArgs["result"]["dM_DonVi"]>;
     export type DM_DonViInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         lecturers?: boolean | DM_DonVi$lecturersArgs<ExtArgs>
         lecturerHistory?: boolean | DM_DonVi$lecturerHistoryArgs<ExtArgs>
@@ -187027,6 +187041,7 @@ export namespace Prisma {
             sThietBiTao: string | null
             sThietBiSua: string | null
             sCode: string | null
+            sTKPUCode: string | null
             sTenVietTat: string | null
             sParentId: string | null
             sTruongDonVi: string | null
@@ -365641,6 +365656,7 @@ export namespace Prisma {
         sThietBiTao?: StringNullableFilter<"DM_DonVi"> | string | null
         sThietBiSua?: StringNullableFilter<"DM_DonVi"> | string | null
         sCode?: StringNullableFilter<"DM_DonVi"> | string | null
+        sTKPUCode?: StringNullableFilter<"DM_DonVi"> | string | null
         sTenVietTat?: StringNullableFilter<"DM_DonVi"> | string | null
         sParentId?: UuidNullableFilter<"DM_DonVi"> | string | null
         sTruongDonVi?: UuidNullableFilter<"DM_DonVi"> | string | null
@@ -365682,6 +365698,7 @@ export namespace Prisma {
         sThietBiTao?: SortOrderInput | SortOrder
         sThietBiSua?: SortOrderInput | SortOrder
         sCode?: SortOrderInput | SortOrder
+        sTKPUCode?: SortOrderInput | SortOrder
         sTenVietTat?: SortOrderInput | SortOrder
         sParentId?: SortOrderInput | SortOrder
         sTruongDonVi?: SortOrderInput | SortOrder
@@ -365727,6 +365744,7 @@ export namespace Prisma {
         sThietBiTao?: StringNullableFilter<"DM_DonVi"> | string | null
         sThietBiSua?: StringNullableFilter<"DM_DonVi"> | string | null
         sCode?: StringNullableFilter<"DM_DonVi"> | string | null
+        sTKPUCode?: StringNullableFilter<"DM_DonVi"> | string | null
         sTenVietTat?: StringNullableFilter<"DM_DonVi"> | string | null
         sParentId?: UuidNullableFilter<"DM_DonVi"> | string | null
         sTruongDonVi?: UuidNullableFilter<"DM_DonVi"> | string | null
@@ -365768,6 +365786,7 @@ export namespace Prisma {
         sThietBiTao?: SortOrderInput | SortOrder
         sThietBiSua?: SortOrderInput | SortOrder
         sCode?: SortOrderInput | SortOrder
+        sTKPUCode?: SortOrderInput | SortOrder
         sTenVietTat?: SortOrderInput | SortOrder
         sParentId?: SortOrderInput | SortOrder
         sTruongDonVi?: SortOrderInput | SortOrder
@@ -365802,6 +365821,7 @@ export namespace Prisma {
         sThietBiTao?: StringNullableWithAggregatesFilter<"DM_DonVi"> | string | null
         sThietBiSua?: StringNullableWithAggregatesFilter<"DM_DonVi"> | string | null
         sCode?: StringNullableWithAggregatesFilter<"DM_DonVi"> | string | null
+        sTKPUCode?: StringNullableWithAggregatesFilter<"DM_DonVi"> | string | null
         sTenVietTat?: StringNullableWithAggregatesFilter<"DM_DonVi"> | string | null
         sParentId?: UuidNullableWithAggregatesFilter<"DM_DonVi"> | string | null
         sTruongDonVi?: UuidNullableWithAggregatesFilter<"DM_DonVi"> | string | null
@@ -395327,6 +395347,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -395368,6 +395389,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -395409,6 +395431,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -395450,6 +395473,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -395491,6 +395515,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -395517,6 +395542,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -395543,6 +395569,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -425795,6 +425822,7 @@ export namespace Prisma {
         sThietBiTao?: SortOrder
         sThietBiSua?: SortOrder
         sCode?: SortOrder
+        sTKPUCode?: SortOrder
         sTenVietTat?: SortOrder
         sParentId?: SortOrder
         sTruongDonVi?: SortOrder
@@ -425828,6 +425856,7 @@ export namespace Prisma {
         sThietBiTao?: SortOrder
         sThietBiSua?: SortOrder
         sCode?: SortOrder
+        sTKPUCode?: SortOrder
         sTenVietTat?: SortOrder
         sParentId?: SortOrder
         sTruongDonVi?: SortOrder
@@ -425854,6 +425883,7 @@ export namespace Prisma {
         sThietBiTao?: SortOrder
         sThietBiSua?: SortOrder
         sCode?: SortOrder
+        sTKPUCode?: SortOrder
         sTenVietTat?: SortOrder
         sParentId?: SortOrder
         sTruongDonVi?: SortOrder
@@ -526890,6 +526920,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -526930,6 +526961,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -528048,6 +528080,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -528088,6 +528121,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -528443,6 +528477,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -528483,6 +528518,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -528832,6 +528868,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -528872,6 +528909,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -530518,6 +530556,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -530558,6 +530597,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -530789,6 +530829,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -530829,6 +530870,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -531067,6 +531109,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -531107,6 +531150,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -532336,6 +532380,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -532376,6 +532421,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -545419,6 +545465,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -545459,6 +545506,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -545726,6 +545774,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -545766,6 +545815,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -546080,6 +546130,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -546120,6 +546171,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -546164,6 +546216,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -546204,6 +546257,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -546248,6 +546302,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -546288,6 +546343,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -546725,6 +546781,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -546765,6 +546822,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -546814,6 +546872,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -546854,6 +546913,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -546903,6 +546963,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -546943,6 +547004,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -560693,6 +560755,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -560733,6 +560796,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -562565,6 +562629,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -562605,6 +562670,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -563385,6 +563451,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -563425,6 +563492,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -563861,6 +563929,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -563901,6 +563970,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -564048,6 +564118,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -564088,6 +564159,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -564264,6 +564336,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -564304,6 +564377,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -566063,6 +566137,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -566103,6 +566178,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -567071,6 +567147,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -567111,6 +567188,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -576462,6 +576540,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -576502,6 +576581,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -577113,6 +577193,7 @@ export namespace Prisma {
         sThietBiTao?: StringNullableFilter<"DM_DonVi"> | string | null
         sThietBiSua?: StringNullableFilter<"DM_DonVi"> | string | null
         sCode?: StringNullableFilter<"DM_DonVi"> | string | null
+        sTKPUCode?: StringNullableFilter<"DM_DonVi"> | string | null
         sTenVietTat?: StringNullableFilter<"DM_DonVi"> | string | null
         sParentId?: UuidNullableFilter<"DM_DonVi"> | string | null
         sTruongDonVi?: UuidNullableFilter<"DM_DonVi"> | string | null
@@ -585767,6 +585848,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -585807,6 +585889,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -586333,6 +586416,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -586373,6 +586457,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -586842,6 +586927,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -586882,6 +586968,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -587346,6 +587433,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -587386,6 +587474,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -654904,6 +654993,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -654944,6 +655034,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -654984,6 +655075,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null

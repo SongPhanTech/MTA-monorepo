@@ -1227,6 +1227,7 @@ export default function PhanCongGiangDay({
                                   subject: {
                                     select: {
                                       code: true,
+                                      codeTkb: true,
                                       name: true,
                                       credit: true,
                                       period: true,
@@ -1236,6 +1237,7 @@ export default function PhanCongGiangDay({
                                             select: {
                                               sTen: true,
                                               sMa: true,
+                                              sTKPUCode: true,
                                               sParentId: true,
                                             },
                                           },
@@ -1306,6 +1308,7 @@ export default function PhanCongGiangDay({
                                 },
                                 select: {
                                   sMa: true,
+                                  sTKPUCode: true,
                                   Id: true,
                                   sTen: true,
                                   sParentId: true,
@@ -1324,13 +1327,15 @@ export default function PhanCongGiangDay({
                             mainLecturer: any
                             subject: {
                               code: string
+                              codeTkb: string | null
                               name: string
                               credit: number
                               period: number
                               subject: {
                                 managementOrganization: {
                                   sTen: string
-                                  sMa: string
+                                  sMa: string | null
+                                  sTKPUCode: string | null
                                   sParentId: any
                                 }
                               }
@@ -1360,7 +1365,8 @@ export default function PhanCongGiangDay({
                           }
 
                           const orgPayload = res.data[2] as Array<{
-                            sMa: string
+                            sMa: string | null
+                            sTKPUCode: string | null
                             Id: string
                             sTen: string
                             sParentId: string
@@ -1460,7 +1466,7 @@ export default function PhanCongGiangDay({
                                             align: "center",
                                           },
                                           {
-                                            value: item.subject?.code,
+                                            value: item.subject?.codeTkb || item.subject?.code,
                                             rowSpan,
                                           },
                                           {
@@ -1530,7 +1536,7 @@ export default function PhanCongGiangDay({
                                     })
                                   }
                                 ),
-                                sheet: `BM_${sMa}`,
+                                sheet: `BM_${boMon?.sTKPUCode || boMon?.sMa}`,
                               }
                             }),
                           })

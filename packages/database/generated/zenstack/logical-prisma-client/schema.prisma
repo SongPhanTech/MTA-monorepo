@@ -2064,6 +2064,7 @@ model DM_DonVi {
   sThietBiTao          String?
   sThietBiSua          String?
   sCode                String?
+  sTKPUCode            String?
   sTenVietTat          String?
   sParentId            String?            @db.Uuid()
   sTruongDonVi         String?            @db.Uuid()

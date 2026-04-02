@@ -8,6 +8,41 @@ const prismaNew = new PrismaClient({
   datasourceUrl: "postgres://admin:123456654321@113.192.17.90:5432/mta",
 })
 
+const docsC = await prismaOld.documentClassification.findMany()
+
+await prismaNew.documentClassification.createMany({
+  data: docsC.map((item) => ({
+    ...item,
+    createdBy: "df692945-a305-402c-a5af-6179ca44896d",
+  })),
+  skipDuplicates: true,
+})
+
+const docs = await prismaOld.document.findMany()
+
+await prismaNew.document.createMany({
+  data: docs.map(({ uploadedById, ...item }) => ({
+    ...item,
+    uploadedById: "df692945-a305-402c-a5af-6179ca44896d",
+  })),
+  skipDuplicates: true,
+})
+
+const topics = await prismaOld.topic.findMany()
+
+await prismaNew.topic.createMany({
+  data: topics,
+  skipDuplicates: true,
+})
+
+
+const DocumentTopic = await prismaOld.documentTopic.findMany()
+
+await prismaNew.documentTopic.createMany({
+  data: DocumentTopic,
+  skipDuplicates: true,
+})
+
 // const trainingField = await prismaOld.trainingField.findMany({
 //   where: {
 //     trainingObjectTypes: {
@@ -81,19 +116,19 @@ const prismaNew = new PrismaClient({
 //   skipDuplicates: true,
 // })
 
-const yearIds = await prismaNew.schoolYear.findMany()
+// const yearIds = await prismaNew.schoolYear.findMany()
 
-const semesters = await prismaOld.semester.findMany({
-  where: {
-    schoolYearId: {
-      in: yearIds.map((item) => item.id),
-    },
-  },
-})
+// const semesters = await prismaOld.semester.findMany({
+//   where: {
+//     schoolYearId: {
+//       in: yearIds.map((item) => item.id),
+//     },
+//   },
+// })
 
-await prismaNew.semester.createMany({
-  data: semesters,
-  skipDuplicates: true,
-})
+// await prismaNew.semester.createMany({
+//   data: semesters,
+//   skipDuplicates: true,
+// })
 
 console.log("Done")

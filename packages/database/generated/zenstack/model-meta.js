@@ -5960,6 +5960,10 @@ const metadata = {
                     name: "sCode",
                     type: "String",
                     isOptional: true,
+                }, sTKPUCode: {
+                    name: "sTKPUCode",
+                    type: "String",
+                    isOptional: true,
                 }, sTenVietTat: {
                     name: "sTenVietTat",
                     type: "String",
