@@ -11,12 +11,12 @@ import type { $Enums, Prisma, SubjectClassTime } from "@workspace/db/client"
 import {
   useCountSubjectClass,
   useFindFirstSemester,
-  useFindManySemester, // 👈 thêm
+  useFindManySemester,
   useFindManySubjectClass,
   useFindUniqueUserProfile,
 } from "@workspace/db/hooks"
 import { dayjs } from "@workspace/ui"
-import { Col, Row, Select } from "antd" // 👈 thêm Select
+import { Col, Row, Select } from "antd"
 import _ from "lodash"
 import type React from "react"
 import { useCallback, useEffect, useMemo, useState } from "react"
@@ -27,7 +27,7 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
   const id = me?.sDM_NhanVienId || ""
   const [currentPage, setCurrentPage] = useState(1)
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-  const [selectedSemesterId, setSelectedSemesterId] = useState<string | undefined>(undefined) // 👈 thêm
+  const [selectedSemesterId, setSelectedSemesterId] = useState<string | undefined>(undefined)
   const [filters, setFilters] = useState<FilterProps>({
     code: "",
     name: "",
@@ -212,7 +212,7 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
       skip: (currentPage - 1) * numberOfPages,
     },
     {
-      enabled: !!semesterId && !!trainingObjectTypeId, // 👈 chờ cả hai
+      enabled: !!semesterId && !!trainingObjectTypeId,
       refetchOnWindowFocus: false,
     }
   )
