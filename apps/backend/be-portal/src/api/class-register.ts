@@ -119,7 +119,7 @@ const GetClassesInfoResponseSchema = z.array(
           .nullish(),
         credit: z.number().optional(),
         _count: z.object({
-          studentClassStudent: z.number(),
+          subjectStudentScore: z.number(),
         }),
         classRegisterLogs: z.array(
           z.object({
@@ -231,7 +231,6 @@ app.openapi(getClassesInfo, async (c) => {
       trainingCourses: {
         select: {
           id: true,
-          trainingObjectTypeId: true,
         },
         where: {
           id: {
@@ -248,9 +247,7 @@ app.openapi(getClassesInfo, async (c) => {
     where: { id: curriculumVersionId },
     include: { trainingBlocks: { include: { subjects: { include: { subject: true } } } } },
   })
-  const trainingObjectTypeIds = [
-    ...new Set(registerSession.trainingCourses.map((c) => c.trainingObjectTypeId)),
-  ]
+
   const curriculumSubjects = curriculumVersion.trainingBlocks.flatMap((block) => block.subjects)
   const subjectVersions = await prisma.subjectVersion.findMany({
     where: {
@@ -258,14 +255,6 @@ app.openapi(getClassesInfo, async (c) => {
       subjectClass: {
         some: {
           semesterId: registerSession.semesterId,
-          subjectClassStudent: {
-            some: {
-              student: {
-                userProfileId: session.id,
-              },
-            },
-          },
-          trainingObjectTypeId: { in: trainingObjectTypeIds },
           ...(isRegisteredBool
             ? {
                 classRegisterLogs: {
@@ -293,9 +282,18 @@ app.openapi(getClassesInfo, async (c) => {
           deletedAt: null,
           cancelled: false,
           semesterId: registerSession.semesterId,
-          trainingObjectTypeId: { in: trainingObjectTypeIds },
+          ...(isRegisteredBool
+            ? {
+                classRegisterLogs: {
+                  some: {
+                    student: {
+                      userProfileId: session.id,
+                    },
+                  },
+                },
+              }
+            : {}),
         },
-
         include: {
           _count: {
             select: {
@@ -362,11 +360,6 @@ app.openapi(getClassesInfo, async (c) => {
               },
             },
           },
-          // _count: {
-          //   select: {
-          //     class: true,
-          //   },
-          // },
         },
       },
     },

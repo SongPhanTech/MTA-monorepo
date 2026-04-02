@@ -143,7 +143,7 @@ const DanhSachMonDangKy = ({
   const { data: classesRegisteredInfo, refetch: refetchClassesRegisteredInfo } = useGetClassesInfo({
     sessionId,
     curriculumVersionId,
-    byCurriculum: "false",
+    byCurriculum: byCurriculum === 1 ? "true" : "false",
     isRegistered: "true",
   })
 
