@@ -114,6 +114,9 @@ const PutTrainingBlockSubject = () => {
         : {}),
       trainingObjectTypeId,
     },
+    include: {
+      managementOrganization: true,
+    }
   })
 
   useEffect(() => {
@@ -204,7 +207,13 @@ const PutTrainingBlockSubject = () => {
   }
 
   const subjectVersionOptions = subjectVersionData.map((item: SubjectVersion) => ({
-    label: [item?.code, item?.name, item?.period].filter(Boolean).join(" - "),
+    label: [
+      item?.code, 
+      item?.name, 
+      item?.credit + "TC", 
+      item?.period + "T", 
+      item?.managementOrganization?.sMa
+    ].filter(Boolean).join(" - "),
     value: item.id,
     searchText: `${item.code} ${item.name}`,
   }))
@@ -293,7 +302,7 @@ const PutTrainingBlockSubject = () => {
           <Select placeholder="Chọn loại môn học" options={subjectRequirementTypeOptions} />
         </FormItem>
       </Col>
-      <Col span={24}>
+      <Col span={12}>
         <FormItem
           form={form}
           name="conditional"
@@ -305,7 +314,7 @@ const PutTrainingBlockSubject = () => {
           <Checkbox />
         </FormItem>
       </Col>
-      <Col span={24}>
+      <Col span={12}>
         <FormItem
           form={form}
           name="graduation"
