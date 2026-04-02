@@ -2,7 +2,7 @@ import { queryClient } from "@api/index"
 import FormItem from "@components/commons/form-item"
 import PutFormModal from "@components/commons/put-modal"
 import useSpinner from "@hooks/spinner"
-import { $Enums, type SubjectVersion, type TrainingBlockSubject } from "@workspace/db/client"
+import { $Enums, Prisma, type TrainingBlockSubject } from "@workspace/db/client"
 import {
   useCreateManyTrainingBlockSubject,
   useFindManyDM_DonVi,
@@ -27,6 +27,12 @@ export type PutTrainingBlockSubject = TrainingBlockSubject & {
   conditional?: boolean
 }
 dayjs.locale("vi")
+
+type SubjectVersion = Prisma.SubjectVersionGetPayload<{
+  include: {
+    managementOrganization: true
+  }
+}>
 
 type TrainingBlockOnCurriculumVersionInput = {
   trainingBlockOnCurriculumVersionId: string
@@ -116,7 +122,7 @@ const PutTrainingBlockSubject = () => {
     },
     include: {
       managementOrganization: true,
-    }
+    },
   })
 
   useEffect(() => {
@@ -208,12 +214,14 @@ const PutTrainingBlockSubject = () => {
 
   const subjectVersionOptions = subjectVersionData.map((item: SubjectVersion) => ({
     label: [
-      item?.code, 
-      item?.name, 
-      item?.credit + "TC", 
-      item?.period + "T", 
-      item?.managementOrganization?.sMa
-    ].filter(Boolean).join(" - "),
+      item?.code,
+      item?.name,
+      item?.credit + "TC",
+      item?.period + "T",
+      item?.managementOrganization?.sMa,
+    ]
+      .filter(Boolean)
+      .join(" - "),
     value: item.id,
     searchText: `${item.code} ${item.name}`,
   }))
