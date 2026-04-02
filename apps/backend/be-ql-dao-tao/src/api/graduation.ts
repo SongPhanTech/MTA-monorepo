@@ -665,7 +665,16 @@ app.openapi(graduationCheck, async (c) => {
     // Kiểm tra tổng tín chỉ tích luỹ
     if (curriculumVersion.requiredCredits && totalPassCredit < curriculumVersion.requiredCredits) {
       reasons.push(
-        `Chưa đạt số tín chỉ (${totalPassCredit} < ${curriculumVersion.requiredCredits})`
+        `Chưa đạt số tín chỉ bắt buộc (${totalPassCredit} < ${curriculumVersion.requiredCredits})`
+      )
+    }
+
+    if (
+      curriculumVersion.electiveCredits &&
+      accumulatedElectiveCredits < curriculumVersion.electiveCredits
+    ) {
+      reasons.push(
+        `Chưa đạt số tín chỉ tự chọn (${accumulatedElectiveCredits} < ${curriculumVersion.electiveCredits})`
       )
     }
 

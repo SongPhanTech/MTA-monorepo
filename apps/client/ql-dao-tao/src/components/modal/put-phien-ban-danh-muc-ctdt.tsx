@@ -180,8 +180,11 @@ const PutCurriculumVersion = () => {
       const totalMandatoryCredits = versionData.trainingBlocks.reduce((total, block) => {
         const blockCredit =
           block?.subjects?.reduce(
-            (sum, { subject, type }) =>
-              sum + (type === $Enums.SubjectRequirementType.Mandatory ? subject?.credit || 0 : 0),
+            (sum, { useForFinalScore, subject, type }) =>
+              sum +
+              (type === $Enums.SubjectRequirementType.Mandatory && useForFinalScore
+                ? subject?.credit || 0
+                : 0),
             0
           ) || 0
         return total + blockCredit

@@ -1,47 +1,92 @@
 import { PrismaClient } from "../generated/prisma-client"
 
-const prismaOld = new PrismaClient({
-  datasourceUrl: "postgres://admin:123456654321@113.192.17.90:5432/mta_31_03_2026",
-})
+// const prismaOld = new PrismaClient({
+//   datasourceUrl: "postgres://admin:123456654321@113.192.17.90:5432/mta_31_03_2026",
+// })
 
 const prismaNew = new PrismaClient({
   datasourceUrl: "postgres://admin:123456654321@113.192.17.90:5432/mta",
 })
 
-const docsC = await prismaOld.documentClassification.findMany()
-
-await prismaNew.documentClassification.createMany({
-  data: docsC.map((item) => ({
-    ...item,
-    createdBy: "df692945-a305-402c-a5af-6179ca44896d",
-  })),
-  skipDuplicates: true,
+const curriculum = await prismaNew.curriculumVersion.findMany({
+  include: {
+    trainingBlocks: {
+      include: {
+        subjects: {
+          include: { subject: true },
+        },
+      },
+    },
+  },
 })
 
-const docs = await prismaOld.document.findMany()
+for (const item of curriculum) {
+  const requiredCredits = item.trainingBlocks.reduce((acc, block) => {
+    return (
+      acc +
+      block.subjects.reduce((acc2, subject) => {
+        if (subject.type === "Mandatory" && subject.useForFinalScore) {
+          return acc2 + subject.subject.credit
+        }
+        return acc2
+      }, 0)
+    )
+  }, 0)
 
-await prismaNew.document.createMany({
-  data: docs.map(({ uploadedById, ...item }) => ({
-    ...item,
-    uploadedById: "df692945-a305-402c-a5af-6179ca44896d",
-  })),
-  skipDuplicates: true,
-})
+  const electiveCredits = item.trainingBlocks.reduce((acc, block) => {
+    return (
+      acc +
+      block.subjects.reduce((acc2, subject) => {
+        if (subject.type === "Optional" && subject.useForFinalScore) {
+          return acc2 + subject.subject.credit
+        }
+        return acc2
+      }, 0)
+    )
+  }, 0)
 
-const topics = await prismaOld.topic.findMany()
+  await prismaNew.curriculumVersion.update({
+    where: { id: item.id },
+    data: {
+      requiredCredits,
+      electiveCredits,
+    },
+  })
+}
 
-await prismaNew.topic.createMany({
-  data: topics,
-  skipDuplicates: true,
-})
+// const docsC = await prismaOld.documentClassification.findMany()
 
+// await prismaNew.documentClassification.createMany({
+//   data: docsC.map((item) => ({
+//     ...item,
+//     createdBy: "df692945-a305-402c-a5af-6179ca44896d",
+//   })),
+//   skipDuplicates: true,
+// })
 
-const DocumentTopic = await prismaOld.documentTopic.findMany()
+// const docs = await prismaOld.document.findMany()
 
-await prismaNew.documentTopic.createMany({
-  data: DocumentTopic,
-  skipDuplicates: true,
-})
+// await prismaNew.document.createMany({
+//   data: docs.map(({ uploadedById, ...item }) => ({
+//     ...item,
+//     uploadedById: "df692945-a305-402c-a5af-6179ca44896d",
+//   })),
+//   skipDuplicates: true,
+// })
+
+// const topics = await prismaOld.topic.findMany()
+
+// await prismaNew.topic.createMany({
+//   data: topics,
+//   skipDuplicates: true,
+// })
+
+// const DocumentTopic = await prismaOld.documentTopic.findMany()
+
+// await prismaNew.documentTopic.createMany({
+//   data: DocumentTopic,
+//   skipDuplicates: true,
+// })
 
 // const trainingField = await prismaOld.trainingField.findMany({
 //   where: {
