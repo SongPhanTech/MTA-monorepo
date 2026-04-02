@@ -2620,6 +2620,12 @@ const SaveStudentRepeatGrade = async (
         student: {
           include: {
             userProfile: true,
+            studentYearResult: {
+              where: {
+                deletedAt: null,
+                active: true,
+              },
+            },
             fixedClass: {
               include: {
                 trainingCourse: {
@@ -2744,27 +2750,70 @@ const SaveStudentRepeatGrade = async (
     }
     const ListResult: StudentRepeatGrade[] = []
     for (const studentId of studentIds) {
+      const semResult = studentSemesterResult.find((result) => result.studentId === studentId)
+      const yearResult = semResult?.student.studentYearResult.find(
+        (yr) => yr.studyYear === semResult.studyYear
+      )
+
+      const studentDataContext: StudentDataContext = {
+        SEMESTER_GPA: semResult
+          ? semResult.baseScore === "Base10"
+            ? semResult.gpaBase10.toNumber()
+            : semResult.gpaBase4.toNumber()
+          : 0,
+        YEARLY_GPA: yearResult
+          ? yearResult.baseScore === "Base10"
+            ? yearResult.gpaBase10.toNumber()
+            : yearResult.gpaBase4.toNumber()
+          : 0,
+        CUMULATIVE_GPA: semResult
+          ? semResult.baseScore === "Base10"
+            ? semResult.cumulativeGpaBase10.toNumber()
+            : semResult.cumulativeGpaBase4.toNumber()
+          : 0,
+        ENTRY_SCORE: semResult?.entryScore || 0,
+        COURSE_GRADE_LOWEST: semResult?.lowestFinalScore || 0,
+        GRADUATION_COURSE_GRADE_LOWEST: semResult?.lowestGraduationScore || 0,
+        SEMESTER_REGISTERED_CREDITS: semResult?.registeredCredits || 0,
+        SEMESTER_PASSED_CREDITS: semResult?.passedCredits || 0,
+        SEMESTER_FAILED_CREDITS: semResult?.failedCredits || 0,
+        FAILED_CREDITS_PERCENT: semResult?.registeredCredits
+          ? (semResult.failedCredits / semResult.registeredCredits) * 100
+          : 0,
+        YEAR_FAILED_CREDITS: yearResult?.failedCredits || 0,
+        CUMULATIVE_PASSED_CREDITS: semResult?.accumulatedCredits || 0,
+        CUMULATIVE_DEBT_CREDITS: semResult?.totalFailedCredits || 0,
+        CUMULATIVE_PROGRESS_PERCENT: semResult?.totalCreditsByCurriculum
+          ? (semResult.accumulatedCredits / semResult.totalCreditsByCurriculum) * 100
+          : 0,
+        CUMULATIVE_RETAKE_PERCENT: semResult?.accumulatedCredits
+          ? (semResult.totalFailedCredits / semResult.accumulatedCredits) * 100
+          : 0,
+        ACADEMIC_WARNING_LEVEL: semResult?.academicWarningLevel || 0,
+        DISCIPLINARY_WARNING_LEVEL: semResult?.disciplinaryWarningLevel || 0,
+        REPEAT_YEAR_COUNT: existingDecisions.filter(
+          (decision) => decision.studentId === studentId
+        ).length,
+        SUSPENSION_COUNT: 0,
+        CONDUCT_SCORE: semResult?.conductScore || 0,
+        HAS_PASSED_FOREIGN_LANGUAGE: semResult?.foreignLangPass || false,
+        HAS_REGISTERED_FOR_SEMESTER: !!semResult,
+        IS_PRIORITY_STUDENT: false,
+        IS_CLASS_MONITOR_OR_LEADER: !!(semResult?.isClassMonitor || semResult?.isUnionLeader),
+        IS_STUDY_DURATION_EXCEEDED: false,
+        IS_DEBT_SUBJECT_CONSECUTIVE: false,
+        HAS_IMPROVEMENT_REGISTRATION: semResult?.isImproving || false,
+      }
+
       const newResult: StudentRepeatGrade = {
         id: studentId,
-        studentName:
-          studentSemesterResult.find((result) => result.studentId === studentId)?.student
-            .userProfile.fullname || "",
-        studentCode:
-          studentSemesterResult.find((result) => result.studentId === studentId)?.student
-            .userProfile.code || "",
-        gpa_semester:
-          studentSemesterResult
-            .find((result) => result.studentId === studentId)
-            ?.gpaBase10.toNumber() || 0,
-        gpa_academic:
-          studentSemesterResult
-            .find((result) => result.studentId === studentId)
-            ?.cumulativeGpaBase10.toNumber() || 0,
-        total_credit:
-          studentSemesterResult.find((result) => result.studentId === studentId)
-            ?.totalCreditsByCurriculum || 0,
+        studentName: semResult?.student.userProfile.fullname || "",
+        studentCode: semResult?.student.userProfile.code || "",
+        gpa_semester: studentDataContext.SEMESTER_GPA,
+        gpa_academic: studentDataContext.CUMULATIVE_GPA,
+        total_credit: semResult?.totalCreditsByCurriculum || 0,
         repeatGradeTimes:
-          existingDecisions.filter((decision) => decision.studentId === studentId).length +
+          studentDataContext.REPEAT_YEAR_COUNT +
           (newDecisions.some((decision) => decision.studentId === studentId) ? 1 : 0),
         statusRepeatGrade: existingStudentIds.has(studentId)
           ? "Đã có quyết định lưu ban"
