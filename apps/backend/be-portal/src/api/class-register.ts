@@ -258,6 +258,13 @@ app.openapi(getClassesInfo, async (c) => {
       subjectClass: {
         some: {
           semesterId: registerSession.semesterId,
+          subjectClassStudent: {
+            some: {
+              student: {
+                userProfileId: session.id,
+              },
+            },
+          },
           trainingObjectTypeId: { in: trainingObjectTypeIds },
           ...(isRegisteredBool
             ? {
@@ -495,13 +502,15 @@ app.openapi(classRegister, async (c) => {
       if ((subjectClass.maxStudent || 0) <= currentEnrolled) {
         throw new Error("Lớp học đã đủ số lượng sinh viên")
       }
-      await tx.classRegisterLogs.createMany({
+
+      const c = await tx.classRegisterLogs.createMany({
         data: subjectClassIds.map((subjectClassId) => ({
           classRegisterSessionId: sessionId,
           studentId,
           subjectClassId,
         })),
       })
+
       await tx.studentSubjectScore.create({
         data: {
           subjectClassId,
