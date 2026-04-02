@@ -492,9 +492,15 @@ export const buildSubjectMapOrThrow = async (
     subjects.map((s) => s.organizationCode || null)
   )
 
+  const subjectsWithCode = subjects.filter((s): s is SubjectData & { code: string } =>
+    Boolean(s.code)
+  )
   const existingCode = await prisma.subjectVersion.findMany({
     where: {
-      code: { in: subjects.map((s) => s.code).filter((c): c is string => Boolean(c)) },
+      OR: subjectsWithCode.map((s) => ({
+        code: s.code,
+        trainingObjectTypeId: s.trainingObjectTypeId,
+      })),
     },
   })
 
@@ -505,7 +511,6 @@ export const buildSubjectMapOrThrow = async (
       if (!existing) return null
 
       const diffs: string[] = []
-      if (existing.trainingObjectTypeId !== s.trainingObjectTypeId) diffs.push("đối tượng đào tạo")
       // if (existing.name !== s.name) {
       //   console.log(existing.name, s.name)
 
