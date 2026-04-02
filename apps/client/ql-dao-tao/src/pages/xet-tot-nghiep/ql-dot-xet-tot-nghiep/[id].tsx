@@ -442,6 +442,7 @@ export default function StudentGraduationApplication() {
                 ...(record.diplomaTypeId
                   ? { diplomaType: { connect: { id: record.diplomaTypeId } } }
                   : {}),
+                notes: record.reason,
               }
 
               return {
