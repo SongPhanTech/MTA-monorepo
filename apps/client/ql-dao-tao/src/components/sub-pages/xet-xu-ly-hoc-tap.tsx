@@ -237,6 +237,19 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
     return []
   }, [students])
 
+  const filteredStudentData = useMemo(() => {
+    if (!data) return studentData
+
+    const studentIdsWithDecisions = new Set(data.map((decision: any) => decision.studentId))
+
+    return studentData.map((record) => ({
+      ...record,
+      students: (record.students || []).filter(
+        (student: any) => !studentIdsWithDecisions.has(student.id)
+      ),
+    }))
+  }, [studentData, data])
+
   const updateSelectedStudents = useMemo(() => {
     return (keys: React.Key[]) => {
       const selected = keys
@@ -327,6 +340,9 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
 
       queryClient.invalidateQueries({
         queryKey: ["zenstack", "StudentAcademicDecision"],
+      })
+      queryClient.invalidateQueries({
+        queryKey: ["/api/student/export-json-list-student-academic-action"],
       })
 
       message.success(`Đã duyệt thành công cho ${selectedStudents.length} sinh viên`)
@@ -677,11 +693,14 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
                   },
                 },
               ]}
-              data={studentData}
+              data={filteredStudentData}
               pagination={{
                 current: currentPage,
                 pageSize: numberOfPages,
-                total: studentData.length,
+                total: filteredStudentData.reduce(
+                  (acc: number, course: any) => acc + (course.students?.length || 0),
+                  0
+                ),
                 onChange: (page, pageSize) => {
                   if (numberOfPages === pageSize) {
                     setCurrentPage(page)
