@@ -93,6 +93,14 @@ const DanhSachMonDangKy = ({
     byCurriculum: byCurriculum === 1 ? "true" : "false",
     isRegistered: "false",
   })
+
+  const registeredClasses =
+    classesInfo?.status === 200
+      ? classesInfo.data
+          ?.flatMap((e) => e?.subjectClass)
+          ?.filter((sc) => (sc?.classRegisterLogs?.length || 0) > 0)
+      : []
+
   const { mutateAsync: classRegisterMutate, isPending: isPendingClassRegister } = useMutation({
     mutationFn: async (subjectClassIds: string[]) => {
       const res = await classRegister({
@@ -107,17 +115,15 @@ const DanhSachMonDangKy = ({
 
       return res
     },
-
     onSuccess: () => {
       refetchClassesInfo()
-      refetchClassesRegisteredInfo()
       message.success("Đăng ký thành công")
     },
-
     onError: (error: any) => {
       message.error(error?.message || "Đăng ký thất bại")
     },
   })
+
   const { mutateAsync: unregisterMutate, isPending: isUnregistering } = useMutation({
     mutationFn: async (subjectClassId: string) => {
       const res = await classUnregister({
@@ -134,17 +140,10 @@ const DanhSachMonDangKy = ({
     onSuccess: () => {
       message.success("Huỷ đăng ký thành công")
       refetchClassesInfo()
-      refetchClassesRegisteredInfo()
     },
     onError: (error: any) => {
       message.error(error?.message || "Huỷ đăng ký thất bại")
     },
-  })
-  const { data: classesRegisteredInfo, refetch: refetchClassesRegisteredInfo } = useGetClassesInfo({
-    sessionId,
-    curriculumVersionId,
-    byCurriculum: byCurriculum === 1 ? "true" : "false",
-    isRegistered: "true",
   })
 
   const handleClassRegister = (subjectClassIds: string[]) => {
@@ -324,26 +323,28 @@ const DanhSachMonDangKy = ({
 
       <div className="flex gap-2 items-center">
         <b className="text-lg">Danh sách môn học đã đăng ký</b>
-        {classesRegisteredInfo?.status === 200 && (
+        {classesInfo?.status === 200 && (
           <p>
-            Bạn đã đăng ký{" "}
-            <b>{classesRegisteredInfo?.data?.flatMap?.((e) => e?.subjectClass)?.length || 0}</b> học
-            phần,{" "}
+            Bạn đã đăng ký <b>{registeredClasses?.length || 0}</b> học phần,{" "}
             <b>
-              {classesRegisteredInfo?.data
-                ?.flatMap?.((e) => e?.subjectClass)
-                .reduce((acc, curr) => acc + (curr?.credit || 0), 0)}
+              {registeredClasses?.reduce(
+                (acc: number, curr: GetClassesInfo200ItemSubjectClassItem) =>
+                  acc + (curr?.credit || 0),
+                0
+              )}
             </b>{" "}
             tín chỉ, học phí{" "}
             {(
-              classesRegisteredInfo?.data
-                ?.flatMap?.((e) => e?.subjectClass)
-                .reduce((acc, curr) => acc + (curr?.credit || 0), 0) * (tuitionPerCredit || 0)
+              (registeredClasses?.reduce(
+                (acc: number, curr: GetClassesInfo200ItemSubjectClassItem) =>
+                  acc + (curr?.credit || 0),
+                0
+              ) ?? 0) * (tuitionPerCredit || 0)
             ).formatVND()}
           </p>
         )}
       </div>
-      {classesRegisteredInfo?.status === 200 && (
+      {classesInfo?.status === 200 && (
         <Table
           columns={[
             {
@@ -400,7 +401,7 @@ const DanhSachMonDangKy = ({
               align: "center",
               width: 80,
               render: (_, record) =>
-                `${record?._count?.studentClassStudent || 0}/${record?.maxStudent}`,
+                `${record?._count?.subjectClassStudent || 0}/${record?.maxStudent}`,
             },
             {
               title: "Học phí",
@@ -451,7 +452,7 @@ const DanhSachMonDangKy = ({
           scroll={{
             x: "max-content",
           }}
-          data={classesRegisteredInfo?.data?.flatMap((e) => e?.subjectClass)}
+          data={registeredClasses}
         />
       )}
     </div>

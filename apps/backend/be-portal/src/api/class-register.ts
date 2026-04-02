@@ -231,6 +231,7 @@ app.openapi(getClassesInfo, async (c) => {
       trainingCourses: {
         select: {
           id: true,
+          trainingObjectTypeId: true,
         },
         where: {
           id: {
@@ -473,21 +474,21 @@ app.openapi(classRegister, async (c) => {
   // TODO: check subjectVersionIds, prerequisiteSubjectIds, coRequisiteSubjectIds
 
   await prisma.$transaction(async (tx) => {
+    await tx.classRegisterLogs.createMany({
+      data: subjectClassIds.map((subjectClassId) => ({
+        classRegisterSessionId: sessionId,
+        studentId,
+        subjectClassId,
+      })),
+    })
+
     for (const subjectClassId of subjectClassIds) {
       const isExist = await tx.studentSubjectScore.findFirst({
-        where: {
-          studentId,
-          subjectClassId,
-        },
+        where: { studentId, subjectClassId },
       })
-      if (isExist) {
-        throw new Error("Bạn đã đăng ký học phần này rồi")
-      }
+      if (isExist) throw new Error("Bạn đã đăng ký học phần này rồi")
 
-      const currentEnrolled = await tx.studentSubjectScore.count({
-        where: { subjectClassId },
-      })
-
+      const currentEnrolled = await tx.studentSubjectScore.count({ where: { subjectClassId } })
       const subjectClass = await tx.subjectClass.findUniqueOrThrow({
         where: { id: subjectClassId },
         include: { subject: true },
@@ -496,20 +497,8 @@ app.openapi(classRegister, async (c) => {
         throw new Error("Lớp học đã đủ số lượng sinh viên")
       }
 
-      const c = await tx.classRegisterLogs.createMany({
-        data: subjectClassIds.map((subjectClassId) => ({
-          classRegisterSessionId: sessionId,
-          studentId,
-          subjectClassId,
-        })),
-      })
-
       await tx.studentSubjectScore.create({
-        data: {
-          subjectClassId,
-          studentId,
-          subjectVersionId: subjectClass.subjectId,
-        },
+        data: { subjectClassId, studentId, subjectVersionId: subjectClass.subjectId },
       })
     }
   })
