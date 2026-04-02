@@ -119,7 +119,7 @@ const GetClassesInfoResponseSchema = z.array(
           .nullish(),
         credit: z.number().optional(),
         _count: z.object({
-          studentClassStudent: z.number(),
+          subjectStudentScore: z.number(),
         }),
         classRegisterLogs: z.array(
           z.object({
@@ -231,7 +231,6 @@ app.openapi(getClassesInfo, async (c) => {
       trainingCourses: {
         select: {
           id: true,
-          trainingObjectTypeId: true,
         },
         where: {
           id: {
@@ -248,9 +247,7 @@ app.openapi(getClassesInfo, async (c) => {
     where: { id: curriculumVersionId },
     include: { trainingBlocks: { include: { subjects: { include: { subject: true } } } } },
   })
-  const trainingObjectTypeIds = [
-    ...new Set(registerSession.trainingCourses.map((c) => c.trainingObjectTypeId)),
-  ]
+
   const curriculumSubjects = curriculumVersion.trainingBlocks.flatMap((block) => block.subjects)
   const subjectVersions = await prisma.subjectVersion.findMany({
     where: {
@@ -258,7 +255,6 @@ app.openapi(getClassesInfo, async (c) => {
       subjectClass: {
         some: {
           semesterId: registerSession.semesterId,
-          trainingObjectTypeId: { in: trainingObjectTypeIds },
           ...(isRegisteredBool
             ? {
                 classRegisterLogs: {
@@ -286,8 +282,18 @@ app.openapi(getClassesInfo, async (c) => {
           deletedAt: null,
           cancelled: false,
           semesterId: registerSession.semesterId,
+          ...(isRegisteredBool
+            ? {
+                classRegisterLogs: {
+                  some: {
+                    student: {
+                      userProfileId: session.id,
+                    },
+                  },
+                },
+              }
+            : {}),
         },
-
         include: {
           _count: {
             select: {
@@ -354,11 +360,6 @@ app.openapi(getClassesInfo, async (c) => {
               },
             },
           },
-          // _count: {
-          //   select: {
-          //     class: true,
-          //   },
-          // },
         },
       },
     },
@@ -494,13 +495,15 @@ app.openapi(classRegister, async (c) => {
       if ((subjectClass.maxStudent || 0) <= currentEnrolled) {
         throw new Error("Lớp học đã đủ số lượng sinh viên")
       }
-      await tx.classRegisterLogs.createMany({
+
+      const c = await tx.classRegisterLogs.createMany({
         data: subjectClassIds.map((subjectClassId) => ({
           classRegisterSessionId: sessionId,
           studentId,
           subjectClassId,
         })),
       })
+
       await tx.studentSubjectScore.create({
         data: {
           subjectClassId,

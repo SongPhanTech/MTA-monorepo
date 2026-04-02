@@ -787,7 +787,7 @@ const ModalCauHinhLuanVan = () => {
 
           <Col span={12}>
             <Title level={5} className="mb-4" style={{ marginTop: 0 }}>
-              Phòng bảo vệ và Ca bảo vệ
+              Phòng bảo vệ và thời gian bảo vệ
             </Title>
 
             <FormItem
@@ -842,13 +842,13 @@ const ModalCauHinhLuanVan = () => {
             <FormItem
               form={form}
               name="sessionId"
-              label="Ca bảo vệ"
+              label="Thời gian bảo vệ"
               className="mb-5"
               labelAlign="left"
               {...formItemLayout}
             >
               <Select
-                placeholder="Chọn ca bảo vệ"
+                placeholder="Chọn thời gian bảo vệ"
                 allowClear
                 showSearch
                 filterOption={(input, option) => {

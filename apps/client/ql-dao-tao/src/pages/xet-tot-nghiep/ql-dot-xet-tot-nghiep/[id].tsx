@@ -156,6 +156,8 @@ export default function StudentGraduationApplication() {
               userProfile: {
                 include: {
                   ethnicity: true,
+                  gender: true,
+                  newProvinceHometown: true,
                 },
               },
               fixedClass: true,
@@ -292,6 +294,8 @@ export default function StudentGraduationApplication() {
       }
     })
   }, [studentGraduationApplicationData, requiredCertificateIds])
+
+  console.log("data: ", data)
 
   const { onOpen } = useDisclosure<{
     id: string | null
@@ -755,17 +759,17 @@ export default function StudentGraduationApplication() {
                           dataIndex: ["student", "userProfile", "gender"],
                           align: "center",
                           width: 60,
-                          render: (_, record) => record?.userProfile?.gender?.sTen,
+                          render: (_, record) => record?.student?.userProfile?.gender?.sTen,
                         },
                         {
                           title: "Nơi sinh",
-                          dataIndex: ["student", "userProfile", "placeOfBirth"],
                           width: 100,
                           align: "center",
+                          render: (_, record) =>
+                            record?.student?.userProfile?.newProvinceHometown?.sTen,
                         },
                         {
                           title: "Dân tộc",
-                          dataIndex: "",
                           width: 80,
                           align: "center",
                           render: (_, record) => record.student?.userProfile?.ethnicity?.sTen || "",

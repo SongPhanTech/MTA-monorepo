@@ -95,7 +95,10 @@ export default function ThesisSession() {
   }
   const handleNavigateSetting = (id: string) => {
     router.push(
-      `${ROUTER_PATH.QL_DAO_TAO.QUAN_LY_LUAN_VAN_QL_DOT_XET_LUAN_VAN_CAU_HINH_HOI_DONG_ID}/${id}`
+      ROUTER_PATH.QL_DAO_TAO.QUAN_LY_LUAN_VAN_QL_DOT_XET_LUAN_VAN_CAU_HINH_HOI_DONG_ID.replace(
+        "[id]",
+        id
+      )
     )
   }
 
