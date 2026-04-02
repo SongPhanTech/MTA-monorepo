@@ -934,6 +934,10 @@ app.openapi(importStudent, async (c) => {
           },
         },
       })
+      await prisma.userProfile.update({
+        where: { id: st.userProfileId },
+        data: profileData,
+      })
 
       if (student.department) {
         await prisma.quaTrinhCongTac.create({
