@@ -904,6 +904,9 @@ const importFileTKBTheoLopHocPhan = async (
               startDate: ngayBatDau ?? existSubjectClass.startDate,
               endDate: ngayKetThuc ?? existSubjectClass.endDate,
               roomId: subjectClass?.phongHoc ?? existSubjectClass.roomId,
+              status: "OFFICIAL",
+              cancelled: false,
+              approveLecturerAssignmentAt: new Date(),
               subjectClassTimes:
                 thuTrongTuan && String(thuTrongTuan).trim()
                   ? {
@@ -999,6 +1002,8 @@ const importFileTKBTheoLopHocPhan = async (
               subjectId: subjectClass.monHoc,
               roomId: subjectClass.phongHoc,
               trainingObjectTypeId,
+              status: "OFFICIAL",
+              approveLecturerAssignmentAt: new Date(),
               subjectClassTimes:
                 thuTrongTuan && String(thuTrongTuan).trim()
                   ? {
