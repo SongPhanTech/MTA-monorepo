@@ -5,7 +5,7 @@ import TableCollapse from "@components/commons/tableCollapse"
 import type { FilterProps } from "@constants/type"
 import { useScoreConverter } from "@hooks/scoreConverter"
 import DefaultLayout from "@layouts/default-layout"
-import type { ArchivedCertificate, Prisma, StudentSubjectScore } from "@workspace/db/client"
+import { $Enums, type ArchivedCertificate, type Prisma, type StudentSubjectScore } from "@workspace/db/client"
 import {
   useFindManySemester,
   useFindManyStudentSemesterResult,
@@ -17,7 +17,7 @@ import { exportFromTemplate, type TableRow } from "@workspace/libs/template-exce
 import { getMinioUrl } from "@workspace/libs/utils"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from "@workspace/router"
-import { Button, Col, Divider, Flex, Row, Tooltip } from "antd"
+import { Button, Col, Divider, Flex, Row, Tag, Tooltip } from "antd"
 import dayjs from "dayjs"
 import _ from "lodash"
 import { Check, X } from "lucide-react"
@@ -52,6 +52,9 @@ export default function StudentScoreClassPage() {
   const [expandAll, setExpandAll] = useState(true)
   const studentId = router.query.id as string
   const [semesterId, setSemesterId] = useState<string>()
+  const [subjectClassTypeFilter, setSubjectClassTypeFilter] = useState<
+    $Enums.SubjectClassType | undefined
+  >()
   const [filters, setFilters] = useState<FilterProps>({
     name: "",
   })
@@ -505,6 +508,11 @@ export default function StudentScoreClassPage() {
       subjectClasses: {
         some: {
           subject: subjectVersionWhere,
+          ...(subjectClassTypeFilter
+            ? {
+                type: subjectClassTypeFilter,
+              }
+            : {}),
           subjectClassStudent: {
             some: subjectScoreWhere,
           },
@@ -514,6 +522,11 @@ export default function StudentScoreClassPage() {
     include: {
       subjectClasses: {
         where: {
+          ...(subjectClassTypeFilter
+            ? {
+                type: subjectClassTypeFilter,
+              }
+            : {}),
           subjectClassStudent: {
             some: subjectScoreWhere,
           },
@@ -664,17 +677,48 @@ export default function StudentScoreClassPage() {
           <Col span={24}>
             <h3 className="text-lg font-bold">Kết quả học tập theo kỳ</h3>
             <Flex justify="space-between">
-              <Select
-                value={semesterId}
-                onChange={(v) => {
-                  setSemesterId(v)
-                }}
-                className="w-64"
-                options={data.map((s) => ({
-                  label: `${s.code} - ${s.name} - ${s.schoolYear.name}`,
-                  value: s.id,
-                }))}
-              />
+              <div className="flex items-center gap-2">
+                <Select
+                  value={semesterId}
+                  onChange={(v) => {
+                    setSemesterId(v)
+                  }}
+                  placeholder="Chọn kỳ học"
+                  className="w-64"
+                  options={data.map((s) => ({
+                    label: `${s.code} - ${s.name} - ${s.schoolYear.name}`,
+                    value: s.id,
+                  }))}
+                />
+                <Button
+                  type={
+                    subjectClassTypeFilter === $Enums.SubjectClassType.RETAKE ? "primary" : "default"
+                  }
+                  onClick={() => {
+                    setSubjectClassTypeFilter((prev) =>
+                      prev === $Enums.SubjectClassType.RETAKE
+                        ? undefined
+                        : $Enums.SubjectClassType.RETAKE
+                    )
+                  }}
+                >
+                  Học lại
+                </Button>
+                <Button
+                  type={
+                    subjectClassTypeFilter === $Enums.SubjectClassType.REEXAM ? "primary" : "default"
+                  }
+                  onClick={() => {
+                    setSubjectClassTypeFilter((prev) =>
+                      prev === $Enums.SubjectClassType.REEXAM
+                        ? undefined
+                        : $Enums.SubjectClassType.REEXAM
+                    )
+                  }}
+                >
+                  Thi lại
+                </Button>
+              </div>
               <Button onClick={() => setExpandAll(!expandAll)}>
                 {expandAll ? "Thu gọn" : "Mở rộng"}
               </Button>
@@ -736,6 +780,24 @@ export default function StudentScoreClassPage() {
                     value: item.name,
                   })),
                   width: 200,
+                  render: (value: string, record: any) => {
+                    return (
+                      <div className="flex flex-row items-center">
+                        <p>
+                          {record?.type === $Enums.SubjectClassType.RETAKE ? (
+                            <Tag color={"blue"} className="p-0 px-1">
+                              Học lại
+                            </Tag>
+                          ) : record?.type === $Enums.SubjectClassType.REEXAM ? (
+                            <Tag color={"yellow"} className="p-0 px-1">
+                              Thi lại
+                            </Tag>
+                          ) : null}
+                        </p>
+                        {value}
+                      </div>
+                    )
+                  },
                 },
                 {
                   title: "Điểm TX",
