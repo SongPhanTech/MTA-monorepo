@@ -49,6 +49,9 @@ export default function DangKyHocChoCaNhan() {
     where: {
       active: true,
       trainingCourseId: filters.trainingCourseId,
+      trainingCourse: {
+        trainingObjectTypeId,
+      },
     },
   })
 
