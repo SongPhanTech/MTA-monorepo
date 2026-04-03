@@ -367,7 +367,7 @@ export default function FixedClassPage() {
                 align: "center",
                 width: 150,
                 dataIndex: "classType",
-                type: "input",               
+                type: "input",
                 render: (_, record) => getFixedClassTypeLabel(record.classType),
               },
               {

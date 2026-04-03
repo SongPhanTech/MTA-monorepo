@@ -5,7 +5,12 @@ import TableCollapse from "@components/commons/tableCollapse"
 import type { FilterProps } from "@constants/type"
 import { useScoreConverter } from "@hooks/scoreConverter"
 import DefaultLayout from "@layouts/default-layout"
-import { $Enums, type ArchivedCertificate, type Prisma, type StudentSubjectScore } from "@workspace/db/client"
+import {
+  $Enums,
+  type ArchivedCertificate,
+  type Prisma,
+  type StudentSubjectScore,
+} from "@workspace/db/client"
 import {
   useFindManySemester,
   useFindManyStudentSemesterResult,
@@ -692,7 +697,9 @@ export default function StudentScoreClassPage() {
                 />
                 <Button
                   type={
-                    subjectClassTypeFilter === $Enums.SubjectClassType.RETAKE ? "primary" : "default"
+                    subjectClassTypeFilter === $Enums.SubjectClassType.RETAKE
+                      ? "primary"
+                      : "default"
                   }
                   onClick={() => {
                     setSubjectClassTypeFilter((prev) =>
@@ -706,7 +713,9 @@ export default function StudentScoreClassPage() {
                 </Button>
                 <Button
                   type={
-                    subjectClassTypeFilter === $Enums.SubjectClassType.REEXAM ? "primary" : "default"
+                    subjectClassTypeFilter === $Enums.SubjectClassType.REEXAM
+                      ? "primary"
+                      : "default"
                   }
                   onClick={() => {
                     setSubjectClassTypeFilter((prev) =>

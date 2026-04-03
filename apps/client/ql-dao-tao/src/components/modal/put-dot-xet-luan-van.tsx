@@ -182,14 +182,14 @@ const PutThesisSession = () => {
         </FormItem>
       </Col>
       <Col span={12}>
-        <FormItem form={form} name="decisionNumber" label="Số quyết định giao đề tài" >
+        <FormItem form={form} name="decisionNumber" label="Số quyết định giao đề tài">
           <Input placeholder="Nhập số quyết định giao đề tài" />
         </FormItem>
       </Col>
       <Col span={12}>
         <Form.Item label="Người ký quyết định giao đề tài" className="mb-0">
           <div className="flex gap-2">
-            <Form.Item name="decisionMakerRole"  noStyle >
+            <Form.Item name="decisionMakerRole" noStyle>
               <Select
                 className="w-24"
                 placeholder="PGĐ/GĐ"
@@ -199,14 +199,14 @@ const PutThesisSession = () => {
                 ]}
               />
             </Form.Item>
-            <Form.Item name="decisionMakerName"  noStyle >
+            <Form.Item name="decisionMakerName" noStyle>
               <Input placeholder="Nhập tên người ký quyết định giao đề tài" />
             </Form.Item>
           </div>
         </Form.Item>
       </Col>
       <Col span={12}>
-        <FormItem form={form} name="decisionDate" label="Ngày quyết định giao đề tài" >
+        <FormItem form={form} name="decisionDate" label="Ngày quyết định giao đề tài">
           <DatePicker
             format={{
               format: "DD/MM/YYYY",
@@ -218,17 +218,29 @@ const PutThesisSession = () => {
         </FormItem>
       </Col>
       <Col span={12}>
-        <FormItem form={form} name="defenseDecisionNumber" label="Số quyết định thành lập hội đồng bảo vệ luận văn đề án" >
+        <FormItem
+          form={form}
+          name="defenseDecisionNumber"
+          label="Số quyết định thành lập hội đồng bảo vệ luận văn đề án"
+        >
           <Input placeholder="Nhập số quyết định thành lập hội đồng bảo vệ luận văn đề án" />
         </FormItem>
       </Col>
       <Col span={12}>
-        <FormItem form={form} name="defenseDecisionMaker" label="Người ký quyết định thành lập hội đồng bảo vệ luận văn đề án" >
+        <FormItem
+          form={form}
+          name="defenseDecisionMaker"
+          label="Người ký quyết định thành lập hội đồng bảo vệ luận văn đề án"
+        >
           <Input placeholder="Nhập người ký quyết định thành lập hội đồng bảo vệ luận văn đề án" />
         </FormItem>
       </Col>
       <Col span={12}>
-        <FormItem form={form} name="defenseDecisionDate" label="Ngày quyết định thành lập hội đồng bảo vệ luận văn đề án" >
+        <FormItem
+          form={form}
+          name="defenseDecisionDate"
+          label="Ngày quyết định thành lập hội đồng bảo vệ luận văn đề án"
+        >
           <DatePicker
             format={{
               format: "DD/MM/YYYY",
@@ -240,7 +252,7 @@ const PutThesisSession = () => {
         </FormItem>
       </Col>
       <Col span={12}>
-        <FormItem form={form} name="chief" label="Thủ trưởng" >
+        <FormItem form={form} name="chief" label="Thủ trưởng">
           <Input placeholder="Nhập thủ trưởng" />
         </FormItem>
       </Col>

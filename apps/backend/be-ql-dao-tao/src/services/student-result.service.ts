@@ -2791,9 +2791,8 @@ const SaveStudentRepeatGrade = async (
           : 0,
         ACADEMIC_WARNING_LEVEL: semResult?.academicWarningLevel || 0,
         DISCIPLINARY_WARNING_LEVEL: semResult?.disciplinaryWarningLevel || 0,
-        REPEAT_YEAR_COUNT: existingDecisions.filter(
-          (decision) => decision.studentId === studentId
-        ).length,
+        REPEAT_YEAR_COUNT: existingDecisions.filter((decision) => decision.studentId === studentId)
+          .length,
         SUSPENSION_COUNT: 0,
         CONDUCT_SCORE: semResult?.conductScore || 0,
         HAS_PASSED_FOREIGN_LANGUAGE: semResult?.foreignLangPass || false,
