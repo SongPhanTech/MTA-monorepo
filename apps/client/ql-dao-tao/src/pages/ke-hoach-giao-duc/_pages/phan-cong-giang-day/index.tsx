@@ -224,11 +224,10 @@ export default function PhanCongGiangDay({
             : {},
         ...(trainingCourseId && type === "NORMAL"
           ? {
-              fixedClasses: {
-                some: {
-                  trainingCourseId,
-                },
-              },
+              OR: [
+                { fixedClasses: { some: { trainingCourseId } } },
+                { fixedClasses: { none: {} } },
+              ],
             }
           : {}),
         ...(fixedClassId

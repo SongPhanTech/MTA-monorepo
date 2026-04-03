@@ -499,7 +499,6 @@ export const buildSubjectMapOrThrow = async (
     where: {
       OR: subjectsWithCode.map((s) => ({
         code: s.code,
-        trainingObjectTypeId: s.trainingObjectTypeId,
       })),
     },
   })

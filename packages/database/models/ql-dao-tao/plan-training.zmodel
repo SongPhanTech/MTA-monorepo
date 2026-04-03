@@ -1004,7 +1004,7 @@ model SubjectClass extends BaseNoCode {
   // khi xuất phiếu điểm cuối cùng
   issuedScoreAt               DateTime? // ngày xuất phiếu điểm
 
-  // khoá khi xuất phiếu điểm, lên DS thi. (P13 có thể mở khoá)
+  // khoá khi xuất phiếu điểm, lên DS thi. (P2/P7 có thể mở khoá)
   /// khoá điểm TX/ĐK
   isLockScore                 Boolean                  @default(false)
   // khoá khi xuất phiếu điểm. (P13 có thể mở khoá)
