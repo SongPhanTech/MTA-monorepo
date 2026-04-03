@@ -85,6 +85,11 @@ export async function exportThoiKhoaBieu({
           },
         },
       },
+      room: {
+        select: {
+          name: true,
+        },
+      },
     },
     orderBy: [{ subject: { code: "asc" } }, { code: "asc" }],
   })
@@ -102,9 +107,13 @@ export async function exportThoiKhoaBieu({
       subjectName: sc.subject.name,
       credit: sc.subject.credit,
       classCode: sc.code,
-      mainLecturer: sc.mainLecturer?.userProfile?.fullname ?? "",
-      extraLecturer: sc.extraLecturer?.userProfile?.fullname ?? "",
-      maxStudent: sc.fixedClasses.reduce((acc, fc) => acc + fc._count.students, 0),
+      lecturers: [sc.mainLecturer?.userProfile?.fullname, sc.extraLecturer?.userProfile?.fullname]
+        .filter(Boolean)
+        .join("; "),
+      weekday: "",
+      period: "",
+      room: sc.room?.name || "",
+      maxStudent: sc.maxStudent,
     }))
   })
 
