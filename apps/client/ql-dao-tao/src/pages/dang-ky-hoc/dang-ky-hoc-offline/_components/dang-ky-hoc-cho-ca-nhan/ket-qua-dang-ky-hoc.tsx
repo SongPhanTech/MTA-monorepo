@@ -89,25 +89,15 @@ export default function KetQuaDangKyHoc() {
             id: true,
           },
         },
-        fixedClasses: {
+        _count: {
           select: {
-            _count: {
-              select: {
-                students: {
-                  where: {
-                    active: true,
-                    deletedAt: null,
-                    status: "ENROLLED",
-                  },
-                },
-              },
-            },
-            students: {
+            subjectClassStudent: {
               where: {
-                id: studentId as string,
-              },
-              select: {
-                id: true,
+                student: {
+                  status: "ENROLLED",
+                  active: true,
+                  deletedAt: null,
+                },
               },
             },
           },
@@ -222,11 +212,7 @@ export default function KetQuaDangKyHoc() {
               title: "Sĩ số",
               align: "center",
               width: 100,
-              render: (record) =>
-                record?.fixedClasses?.reduce(
-                  (acc: number, curr: any) => acc + (curr?._count?.students ?? 0),
-                  0
-                ),
+              render: (record) => record?._count?.subjectClassStudent ?? 0,
             },
             {
               title: "Điểm",
