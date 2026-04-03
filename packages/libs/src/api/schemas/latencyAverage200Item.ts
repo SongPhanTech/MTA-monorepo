@@ -6,9 +6,9 @@
  */
 
 export type LatencyAverage200Item = {
-    api: string
-    avg_latency: number
-    min_latency: number
-    max_latency: number
-    p95_latency: number
-}
+  api: string;
+  avg_latency: number;
+  min_latency: number;
+  max_latency: number;
+  p95_latency: number;
+};

@@ -69,22 +69,22 @@ API này cho phép các ứng dụng truy cập từ client hoặc server thông
 4. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { PagingRequestDtoCustomParam } from './pagingRequestDtoCustomParam'
+import type { PagingRequestDtoCustomParam } from './pagingRequestDtoCustomParam';
 
 export interface PagingRequestDto {
-    /** @nullable */
-    Sort?: string | null
-    Skip?: number
-    Take?: number
-    /** @nullable */
-    Columns?: string | null
-    /** @nullable */
-    Aggs?: string | null
-    /** @nullable */
-    Filter?: string | null
-    /** @nullable */
-    EmptyFilter?: string | null
-    IsGetTotal?: boolean
-    /** @nullable */
-    CustomParam?: PagingRequestDtoCustomParam
+  /** @nullable */
+  Sort?: string | null;
+  Skip?: number;
+  Take?: number;
+  /** @nullable */
+  Columns?: string | null;
+  /** @nullable */
+  Aggs?: string | null;
+  /** @nullable */
+  Filter?: string | null;
+  /** @nullable */
+  EmptyFilter?: string | null;
+  IsGetTotal?: boolean;
+  /** @nullable */
+  CustomParam?: PagingRequestDtoCustomParam;
 }

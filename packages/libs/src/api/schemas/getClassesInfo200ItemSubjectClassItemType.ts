@@ -5,11 +5,11 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GetClassesInfo200ItemSubjectClassItemType =
-    (typeof GetClassesInfo200ItemSubjectClassItemType)[keyof typeof GetClassesInfo200ItemSubjectClassItemType]
+export type GetClassesInfo200ItemSubjectClassItemType = typeof GetClassesInfo200ItemSubjectClassItemType[keyof typeof GetClassesInfo200ItemSubjectClassItemType];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetClassesInfo200ItemSubjectClassItemType = {
-    Mandatory: 'Mandatory',
-    Optional: 'Optional',
-} as const
+  Mandatory: 'Mandatory',
+  Optional: 'Optional',
+} as const;

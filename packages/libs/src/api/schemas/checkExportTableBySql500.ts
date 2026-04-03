@@ -6,5 +6,5 @@
  */
 
 export type CheckExportTableBySql500 = {
-    message: string
-}
+  message: string;
+};

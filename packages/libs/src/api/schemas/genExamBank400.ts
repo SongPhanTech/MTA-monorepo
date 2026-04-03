@@ -6,5 +6,5 @@
  */
 
 export type GenExamBank400 = {
-    message: string
-}
+  message: string;
+};

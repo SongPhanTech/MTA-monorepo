@@ -9,5 +9,5 @@
  * @nullable
  */
 export type GetClassesInfo200ItemSubjectClassItemRoomBuildingTrainingLocation = {
-    name: string
-} | null
+  name: string;
+} | null;

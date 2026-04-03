@@ -413,7 +413,11 @@ export default function DanhSachLopMonHoc({
                 type: "radio",
                 selectedRowKeys: [selectedSubjectClassId as Key],
                 onChange: (selectedRowKeys, selectedRows, info) => {
-                  if (selectedRows[0]?.subject?.examType === "OfflineWritten" && score === "THI") {
+                  if (
+                    selectedRows[0]?.subject?.examType === "OfflineWritten" &&
+                    role !== "P13" &&
+                    score === "THI"
+                  ) {
                     message.error("Lớp thi viết không được nhập điểm trực tiếp")
                     return
                   }
@@ -426,7 +430,11 @@ export default function DanhSachLopMonHoc({
               onRow={(record) => {
                 return {
                   onClick: () => {
-                    if (record?.subject?.examType === "OfflineWritten" && score === "THI") {
+                    if (
+                      record?.subject?.examType === "OfflineWritten" &&
+                      role !== "P13" &&
+                      score === "THI"
+                    ) {
                       message.error("Lớp thi viết không được nhập điểm trực tiếp")
                       return
                     }
@@ -435,7 +443,11 @@ export default function DanhSachLopMonHoc({
                     })
                   },
                   onDoubleClick: () => {
-                    if (record?.subject?.examType === "OfflineWritten" && score === "THI") {
+                    if (
+                      record?.subject?.examType === "OfflineWritten" &&
+                      role !== "P13" &&
+                      score === "THI"
+                    ) {
                       message.error("Lớp thi viết không được nhập điểm trực tiếp")
                       return
                     }

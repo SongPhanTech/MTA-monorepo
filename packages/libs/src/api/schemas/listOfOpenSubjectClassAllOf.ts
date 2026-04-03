@@ -4,9 +4,9 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { OpenSubjectClass } from './openSubjectClass'
+import type { OpenSubjectClass } from './openSubjectClass';
 
 export type ListOfOpenSubjectClassAllOf = {
-    data: OpenSubjectClass[]
-    count: number
-}
+  data: OpenSubjectClass[];
+  count: number;
+};

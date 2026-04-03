@@ -162,16 +162,28 @@ const ThongTinTichLuy = async (
     })
 
     // Kiểm tra tổng tích lũy tín chỉ của sinh viên đến kỳ xác định
-    const highestSubjectScores = await prisma.studentSubjectScore.findMany({
+    // Lấy tất cả điểm (kể cả lớp học lại), sau đó tự nhóm + lấy điểm cao nhất theo môn
+    const allSubjectScores = await prisma.studentSubjectScore.findMany({
       where: {
-        studentId,
-        subjectClass: {
-          semester: {
-            startDate: {
-              lte: semesterStartDate, // lấy tất cả các kỳ trước kỳ đang xét
+        OR: [
+          {
+            subjectClass: null,
+            createdAt: {
+              lte: semesterStartDate, // lấy điểm nhập tay đến thời điểm kỳ đang xét
             },
           },
-        },
+          {
+            subjectClass: {
+              semester: {
+                startDate: {
+                  lte: semesterStartDate, // lấy tất cả các kỳ trước kỳ đang xét
+                },
+              },
+              cancelled: false,
+            },
+          },
+        ],
+        studentId,
         subjectVersionId: {
           // Chỉ lấy các môn trong chương trình đào tạo
           in: curriculumSubjects.map((item) => item.subjectId),
@@ -193,15 +205,36 @@ const ThongTinTichLuy = async (
             },
           },
         },
+        subjectClass: {
+          select: { type: true }, // Xác định lớp học lại (RETAKE)
+        },
         manualFinalScore: true, // Lấy điểm thủ công nếu có
         finalScore: true, // Lấy điểm cuối
         examBanned: true, // Có cấm thi không
         suspended: true, // Có đình chỉ học không
         exempted: true, // Có miễn thi không
       },
-      orderBy: { finalScore: "desc" },
-      distinct: ["subjectVersionId"],
     })
+
+    // Nhóm theo môn học và lấy điểm cao nhất (ưu tiên lớp học lại có điểm cao hơn)
+    type ScoreRecord = (typeof allSubjectScores)[number]
+    const bestScoreMap = new Map<string, ScoreRecord>()
+    for (const record of allSubjectScores) {
+      const existing = bestScoreMap.get(record.subjectVersionId)
+      if (!existing) {
+        bestScoreMap.set(record.subjectVersionId, record)
+        continue
+      }
+      const newScore = record.manualFinalScore ?? record.finalScore?.toNumber() ?? null
+      const existingScore = existing.manualFinalScore ?? existing.finalScore?.toNumber() ?? null
+      // Ưu tiên lớp học lại hoặc điểm cao hơn
+      const isRetake =
+        record.subjectClass?.type === "RETAKE" || record.subjectClass?.type === "REEXAM"
+      if (newScore !== null && (existingScore === null || newScore > existingScore || isRetake)) {
+        bestScoreMap.set(record.subjectVersionId, record)
+      }
+    }
+    const highestSubjectScores = Array.from(bestScoreMap.values())
 
     // Danh sách chuyển đổi điểm
     const scoreConverts = await prisma.scoreConvert.findMany({
@@ -243,6 +276,7 @@ const ThongTinTichLuy = async (
             continue // Bỏ qua nếu chưa có điểm hoặc điểm không hợp lệ
           }
           const soTinChi = item.subjectVersion?.credit || 0 // Số tín chỉ của môn học
+          TongTinChiDangKy += soTinChi // Cộng dồn số tín chỉ đăng ký
           if (
             checkScorePassed({
               subjectId: s.subjectId,
@@ -255,24 +289,23 @@ const ThongTinTichLuy = async (
             })
           ) {
             TongTinChiTichLuy += soTinChi // chỉ tính môn đã qua
+            const diemHe4 = layGiaTriDiem4(diemHe10, trainingCourseId, scoreConverts)
+            DSDiemHe4.push(diemHe4 * soTinChi) // Nhân điểm hệ 4 với số tín chỉ (chỉ môn đạt)
+            DSDiemHe10.push(diemHe10 * soTinChi) // Nhân điểm hệ 10 với số tín chỉ (chỉ môn đạt)
           } else {
             failedCredits += soTinChi
           }
-          TongTinChiDangKy += soTinChi // Cộng dồn số tín chỉ đăng ký
-          const diemHe4 = layGiaTriDiem4(diemHe10, trainingCourseId, scoreConverts)
-          DSDiemHe4.push(diemHe4 * soTinChi) // Nhân điểm hệ 4 với số tín chỉ
-          DSDiemHe10.push(diemHe10 * soTinChi) // Nhân điểm hệ 10 với số tín chỉ
         }
       }
     }
 
     // GPA hệ 4
-    // Làm tròn đến 2 số thập phân
+    // Làm tròn đến 2 số thập phân (chỉ tính môn đạt, không tính môn trượt)
     const diemTrungBinh4 =
-      Math.round((DSDiemHe4.reduce((sum, diem) => sum + diem, 0) / TongTinChiDangKy || 0) * 100) /
+      Math.round((DSDiemHe4.reduce((sum, diem) => sum + diem, 0) / TongTinChiTichLuy || 0) * 100) /
       100
     const diemTrungBinh10 =
-      Math.round((DSDiemHe10.reduce((sum, diem) => sum + diem, 0) / TongTinChiDangKy || 0) * 100) /
+      Math.round((DSDiemHe10.reduce((sum, diem) => sum + diem, 0) / TongTinChiTichLuy || 0) * 100) /
       100
 
     const MonHocYeuCau = await prisma.trainingBlockOnCurriculumVersion.findMany({
@@ -583,6 +616,7 @@ const ThongTinDiemHocKy = async (
 
           const soTinChi = item.subjectVersion.credit // Số tín chỉ của môn học
 
+          TongTinChiDangKy += soTinChi // Cộng dồn số tín chỉ
           if (
             !checkScorePassed({
               subjectId: item.subjectVersionId,
@@ -597,11 +631,10 @@ const ThongTinDiemHocKy = async (
             soTinChiKhongDat += soTinChi // Cộng dồn số tín chỉ không đạt
           } else {
             soTinChiDat += soTinChi // Cộng dồn số tín chỉ đạt
+            const diemHe4 = layGiaTriDiem4(diemHe10, trainingCourseId, scoreConverts)
+            DsDiemHe4.push(diemHe4 * soTinChi) // Nhân điểm hệ 4 với số tín chỉ (chỉ môn đạt)
+            DSDiemHe10.push(diemHe10 * soTinChi) // Nhân điểm hệ 10 với số tín chỉ (chỉ môn đạt)
           }
-          TongTinChiDangKy += soTinChi // Cộng dồn số tín chỉ
-          const diemHe4 = layGiaTriDiem4(diemHe10, trainingCourseId, scoreConverts)
-          DsDiemHe4.push(diemHe4 * soTinChi) // Nhân điểm hệ 4 với số tín chỉ
-          DSDiemHe10.push(diemHe10 * soTinChi) // Nhân điểm hệ 10 với số tín chỉ
         }
       }
     })
@@ -620,14 +653,12 @@ const ThongTinDiemHocKy = async (
       }
     }
 
-    // Tính điểm trung bình hệ 4 trong kỳ
+    // Tính điểm trung bình hệ 4 trong kỳ (chỉ tính môn đạt, không tính môn trượt)
     const diemTrungBinh4 =
-      Math.round((DsDiemHe4.reduce((sum, diem) => sum + diem, 0) / TongTinChiDangKy || 0) * 100) /
-      100
-    // Tính điểm trung bình hệ 10 trong kỳ
+      Math.round((DsDiemHe4.reduce((sum, diem) => sum + diem, 0) / soTinChiDat || 0) * 100) / 100
+    // Tính điểm trung bình hệ 10 trong kỳ (chỉ tính môn đạt, không tính môn trượt)
     const diemTrungBinh10 =
-      Math.round((DSDiemHe10.reduce((sum, diem) => sum + diem, 0) / TongTinChiDangKy || 0) * 100) /
-      100
+      Math.round((DSDiemHe10.reduce((sum, diem) => sum + diem, 0) / soTinChiDat || 0) * 100) / 100
     console.log("Điểm trung bình hệ 4:", diemTrungBinh4)
     console.log("Điểm trung bình hệ 10:", diemTrungBinh10)
     // Điểm thấp nhất
@@ -1239,20 +1270,21 @@ export async function calculateStudentYearResult({
     const config = subjectConfigMap.get(record.subjectVersionId)
     if (!config || !config.useForFinalScore) continue
 
-    const subjectVersionId = record.subjectVersion.id
+    // Dùng subjectId (môn học gốc) làm key để gộp các lần học lại/thi lại cùng môn
+    const subjectKey = record.subjectVersion.subjectId
     const score10 = Number(record.finalScore)
     const score4 = convertScore10to4(score10)
     const credit = record.subjectVersion.credit
     const passed = score10 >= scoreToPass
 
-    const existing = uniqueSubjectsMap.get(subjectVersionId)
+    const existing = uniqueSubjectsMap.get(subjectKey)
     if (existing) {
       // Nếu đã có, kiểm tra xem điểm mới có cao hơn không
       if (score10 > existing.score10) {
-        uniqueSubjectsMap.set(subjectVersionId, { score10, score4, credit, passed })
+        uniqueSubjectsMap.set(subjectKey, { score10, score4, credit, passed })
       }
     } else {
-      uniqueSubjectsMap.set(subjectVersionId, { score10, score4, credit, passed })
+      uniqueSubjectsMap.set(subjectKey, { score10, score4, credit, passed })
     }
   }
 
@@ -1572,30 +1604,33 @@ export function evaluateCondition(
 
   const value = Number(actualValue)
 
+  let result: boolean
   switch (condition.operator) {
     case "GTE": // Lớn hơn hoặc bằng (>=)
-      return value >= condition.value
-
+      result = value >= condition.value
+      break
     case "GT": // Lớn hơn (>)
-      return value > condition.value
-
+      result = value > condition.value
+      break
     case "LTE": // Nhỏ hơn hoặc bằng (<=)
-      return value <= condition.value
-
+      result = value <= condition.value
+      break
     case "LT": // Nhỏ hơn (<)
-      return value < condition.value
-
+      result = value < condition.value
+      break
     case "EQ": // Bằng (==)
-      return value === condition.value
-
+      result = value === condition.value
+      break
     // Toán tử 'IN' cần xử lý đặc biệt nếu giá trị là một mảng
     case "IN":
-      return condition.tuple?.includes(`${value}`) || false
-
+      result = condition.tuple?.includes(`${value}`) || false
+      break
     default:
       // Nếu toán tử không hợp lệ, trả về false
       return false
   }
+
+  return condition.invert ? !result : result
 }
 
 const checkAcademicActionRule = async (
@@ -1628,40 +1663,51 @@ const checkAcademicActionRule = async (
       console.warn("No action criteria found for training ruleSet:", ruleSetId)
       return false
     }
-    // console.log('Student Info:', student)
-    // console.log('Checking action criteria for ruleSet:', actionCriteriaListFilter)
+
+    const studentDataContext: StudentDataContext = {
+      SEMESTER_GPA: student.heSoDiem === 10 ? student.diemTrungBinh10 : student.diemTrungBinh4,
+      YEARLY_GPA: 0,
+      CUMULATIVE_GPA: student.heSoDiem === 10 ? student.diemHe10TichLuy : student.diemHe4TichLuy,
+      ENTRY_SCORE: student.diemDauVao,
+      COURSE_GRADE_LOWEST: student.diemMonThuongNhoNhat,
+      GRADUATION_COURSE_GRADE_LOWEST: student.diemMonTotNghiepNhoNhat,
+      SEMESTER_REGISTERED_CREDITS: student.soTinChiDangKy,
+      SEMESTER_PASSED_CREDITS: student.soTinChiDangKy - student.noTinChiTrongKy,
+      SEMESTER_FAILED_CREDITS: student.noTinChiTrongKy,
+      YEAR_FAILED_CREDITS: 0,
+      FAILED_CREDITS_PERCENT: student.soTinChiDangKy
+        ? (student.noTinChiTrongKy / student.soTinChiDangKy) * 100
+        : 0,
+      CUMULATIVE_PASSED_CREDITS: student.soTinChiTichLuy,
+      CUMULATIVE_DEBT_CREDITS: student.tongSoTinChiNo,
+      CUMULATIVE_PROGRESS_PERCENT: student.soTinChiYeuCau
+        ? (student.soTinChiTichLuy / student.soTinChiYeuCau) * 100
+        : 0,
+      CUMULATIVE_RETAKE_PERCENT: student.soTinChiTichLuy
+        ? (student.tongSoTinChiNo / student.soTinChiTichLuy) * 100
+        : 0,
+      ACADEMIC_WARNING_LEVEL: student.mucCanhCaoHocTap,
+      DISCIPLINARY_WARNING_LEVEL: student.mucCanhCaoHocDuong,
+      REPEAT_YEAR_COUNT: 0,
+      SUSPENSION_COUNT: 0,
+      CONDUCT_SCORE: 0,
+      HAS_PASSED_FOREIGN_LANGUAGE: student.trinhDoNgoaiNgu,
+      HAS_REGISTERED_FOR_SEMESTER: true,
+      IS_PRIORITY_STUDENT: false,
+      IS_CLASS_MONITOR_OR_LEADER: !!student.chucVuHocVien,
+      IS_STUDY_DURATION_EXCEEDED: false,
+      IS_DEBT_SUBJECT_CONSECUTIVE: false,
+      HAS_IMPROVEMENT_REGISTRATION: false,
+    }
+
     // Kiểm tra từng điều kiện, tất cả điều kiện thỏa thì mới true
     for (const criteria of actionCriteriaListFilter) {
-      // Cảnh cáo học tập
-      if (criteria.field === CriteriaField.ACADEMIC_WARNING_LEVEL) {
-        if (
-          !checkEligible(
-            student,
-            CriteriaField.ACADEMIC_WARNING_LEVEL,
-            student.mucCanhCaoHocTap,
-            criteria.value,
-            criteria.operator,
-            criteria.invert
-          )
-        ) {
-          return false
-        }
-      } else if (criteria.field === CriteriaField.DISCIPLINARY_WARNING_LEVEL) {
-        if (
-          !checkEligible(
-            student,
-            CriteriaField.DISCIPLINARY_WARNING_LEVEL,
-            student.mucCanhCaoHocDuong,
-            criteria.value,
-            criteria.operator,
-            criteria.invert
-          )
-        ) {
-          return false
-        }
-      } else {
-        return false // Unrecognized criterion
+      const passed = evaluateCondition(studentDataContext, criteria)
+      if (!passed) {
+        return false
       }
+      const studentValue = studentDataContext[criteria.field]
+      student.lyDoXepLoai = `${student.lyDoXepLoai}\n ${criteriaFieldLabels[criteria.field]}(${studentValue}) ${criteria.invert ? "*không* " : ""}${criteriaOperatorLabels[criteria.operator]} ${criteria.value}`
     }
     console.log("All criteria passed for ruleSet:", ruleSetId)
     return true // All criteria passed
@@ -2315,6 +2361,7 @@ export const resultCourseStudentAcademicAction = async (
       active: true,
     },
   })
+
   const actionRuleSet = await prisma.academicActionRuleSet.findMany({
     where: {
       configId: { in: academicActionConfig.map((c) => c.id) },
@@ -2322,6 +2369,7 @@ export const resultCourseStudentAcademicAction = async (
       active: true,
     },
   })
+
   const actionCriteriaList = await prisma.academicActionCondition.findMany({
     where: {
       ruleSetId: { in: actionRuleSet.map((r) => r.id) },
@@ -2336,11 +2384,12 @@ export const resultCourseStudentAcademicAction = async (
       },
     },
   })
-  const studentAcademicDecision = await prisma.studentAcademicDecision.findMany({
+
+  const approvedDecisions = await prisma.studentAcademicDecision.findMany({
     where: {
       studentId: { in: students.map((s) => s.id) },
       semesterId: semesterId,
-      status: { not: DecisionStatus.APPROVED },
+      status: DecisionStatus.APPROVED,
       actionTaken: academicActionType ? academicActionType : undefined,
       deletedAt: null,
       active: true,
@@ -2362,10 +2411,8 @@ export const resultCourseStudentAcademicAction = async (
 
       if (!studentSemesterResult) return
 
-      const checkAcademicActionExists = studentAcademicDecision.find(
-        (decision) => decision.studentId === student.id && decision.semesterId === semesterId
-      )
-      if (!checkAcademicActionExists) return
+      const alreadyApproved = approvedDecisions.some((d) => d.studentId === student.id)
+      if (alreadyApproved) return
 
       const academicActionInfo = await getAcademicAction(
         student,
@@ -2573,6 +2620,12 @@ const SaveStudentRepeatGrade = async (
         student: {
           include: {
             userProfile: true,
+            studentYearResult: {
+              where: {
+                deletedAt: null,
+                active: true,
+              },
+            },
             fixedClass: {
               include: {
                 trainingCourse: {
@@ -2697,27 +2750,70 @@ const SaveStudentRepeatGrade = async (
     }
     const ListResult: StudentRepeatGrade[] = []
     for (const studentId of studentIds) {
+      const semResult = studentSemesterResult.find((result) => result.studentId === studentId)
+      const yearResult = semResult?.student.studentYearResult.find(
+        (yr) => yr.studyYear === semResult.studyYear
+      )
+
+      const studentDataContext: StudentDataContext = {
+        SEMESTER_GPA: semResult
+          ? semResult.baseScore === "Base10"
+            ? semResult.gpaBase10.toNumber()
+            : semResult.gpaBase4.toNumber()
+          : 0,
+        YEARLY_GPA: yearResult
+          ? yearResult.baseScore === "Base10"
+            ? yearResult.gpaBase10.toNumber()
+            : yearResult.gpaBase4.toNumber()
+          : 0,
+        CUMULATIVE_GPA: semResult
+          ? semResult.baseScore === "Base10"
+            ? semResult.cumulativeGpaBase10.toNumber()
+            : semResult.cumulativeGpaBase4.toNumber()
+          : 0,
+        ENTRY_SCORE: semResult?.entryScore || 0,
+        COURSE_GRADE_LOWEST: semResult?.lowestFinalScore || 0,
+        GRADUATION_COURSE_GRADE_LOWEST: semResult?.lowestGraduationScore || 0,
+        SEMESTER_REGISTERED_CREDITS: semResult?.registeredCredits || 0,
+        SEMESTER_PASSED_CREDITS: semResult?.passedCredits || 0,
+        SEMESTER_FAILED_CREDITS: semResult?.failedCredits || 0,
+        FAILED_CREDITS_PERCENT: semResult?.registeredCredits
+          ? (semResult.failedCredits / semResult.registeredCredits) * 100
+          : 0,
+        YEAR_FAILED_CREDITS: yearResult?.failedCredits || 0,
+        CUMULATIVE_PASSED_CREDITS: semResult?.accumulatedCredits || 0,
+        CUMULATIVE_DEBT_CREDITS: semResult?.totalFailedCredits || 0,
+        CUMULATIVE_PROGRESS_PERCENT: semResult?.totalCreditsByCurriculum
+          ? (semResult.accumulatedCredits / semResult.totalCreditsByCurriculum) * 100
+          : 0,
+        CUMULATIVE_RETAKE_PERCENT: semResult?.accumulatedCredits
+          ? (semResult.totalFailedCredits / semResult.accumulatedCredits) * 100
+          : 0,
+        ACADEMIC_WARNING_LEVEL: semResult?.academicWarningLevel || 0,
+        DISCIPLINARY_WARNING_LEVEL: semResult?.disciplinaryWarningLevel || 0,
+        REPEAT_YEAR_COUNT: existingDecisions.filter(
+          (decision) => decision.studentId === studentId
+        ).length,
+        SUSPENSION_COUNT: 0,
+        CONDUCT_SCORE: semResult?.conductScore || 0,
+        HAS_PASSED_FOREIGN_LANGUAGE: semResult?.foreignLangPass || false,
+        HAS_REGISTERED_FOR_SEMESTER: !!semResult,
+        IS_PRIORITY_STUDENT: false,
+        IS_CLASS_MONITOR_OR_LEADER: !!(semResult?.isClassMonitor || semResult?.isUnionLeader),
+        IS_STUDY_DURATION_EXCEEDED: false,
+        IS_DEBT_SUBJECT_CONSECUTIVE: false,
+        HAS_IMPROVEMENT_REGISTRATION: semResult?.isImproving || false,
+      }
+
       const newResult: StudentRepeatGrade = {
         id: studentId,
-        studentName:
-          studentSemesterResult.find((result) => result.studentId === studentId)?.student
-            .userProfile.fullname || "",
-        studentCode:
-          studentSemesterResult.find((result) => result.studentId === studentId)?.student
-            .userProfile.code || "",
-        gpa_semester:
-          studentSemesterResult
-            .find((result) => result.studentId === studentId)
-            ?.gpaBase10.toNumber() || 0,
-        gpa_academic:
-          studentSemesterResult
-            .find((result) => result.studentId === studentId)
-            ?.cumulativeGpaBase10.toNumber() || 0,
-        total_credit:
-          studentSemesterResult.find((result) => result.studentId === studentId)
-            ?.totalCreditsByCurriculum || 0,
+        studentName: semResult?.student.userProfile.fullname || "",
+        studentCode: semResult?.student.userProfile.code || "",
+        gpa_semester: studentDataContext.SEMESTER_GPA,
+        gpa_academic: studentDataContext.CUMULATIVE_GPA,
+        total_credit: semResult?.totalCreditsByCurriculum || 0,
         repeatGradeTimes:
-          existingDecisions.filter((decision) => decision.studentId === studentId).length +
+          studentDataContext.REPEAT_YEAR_COUNT +
           (newDecisions.some((decision) => decision.studentId === studentId) ? 1 : 0),
         statusRepeatGrade: existingStudentIds.has(studentId)
           ? "Đã có quyết định lưu ban"

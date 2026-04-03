@@ -5,16 +5,16 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GetClassesInfo200ItemType =
-    (typeof GetClassesInfo200ItemType)[keyof typeof GetClassesInfo200ItemType]
+export type GetClassesInfo200ItemType = typeof GetClassesInfo200ItemType[keyof typeof GetClassesInfo200ItemType];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetClassesInfo200ItemType = {
-    Normal: 'Normal',
-    Practice: 'Practice',
-    Internship: 'Internship',
-    Research: 'Research',
-    Project: 'Project',
-    Thesis: 'Thesis',
-    Graduation: 'Graduation',
-} as const
+  Normal: 'Normal',
+  Practice: 'Practice',
+  Internship: 'Internship',
+  Research: 'Research',
+  Project: 'Project',
+  Thesis: 'Thesis',
+  Graduation: 'Graduation',
+} as const;

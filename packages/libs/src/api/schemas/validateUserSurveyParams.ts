@@ -6,5 +6,5 @@
  */
 
 export type ValidateUserSurveyParams = {
-    studentCode: string
-}
+studentCode: string;
+};

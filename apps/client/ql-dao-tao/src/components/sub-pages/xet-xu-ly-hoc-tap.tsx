@@ -19,7 +19,6 @@ import TableCollapse from "@components/commons/tableCollapse"
 import EditIcon from "@components/icons/edit"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import type { FilterProps } from "@constants/type"
-import { useAcademicActionTypeOption } from "@hooks/academicActionType"
 import { useDecisionStatusOptions } from "@hooks/decisionStatus"
 import useSpinner from "@hooks/spinner"
 import {
@@ -64,7 +63,6 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
   const [selectedStudents, setSelectedStudents] = useState<SelectedStudent[]>([])
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
   const [selectedDecision, setSelectedDecision] = useState<React.Key[]>([])
-  const { getAcademicActionTypeLabel } = useAcademicActionTypeOption()
   const {
     options: decisionStatusOption,
     getDecisionStatusLabel,
@@ -148,7 +146,7 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
         : {},
     [filters, isFiltering]
   )
-  const { data, refetch } = useFindManyStudentAcademicDecision(
+  const { data } = useFindManyStudentAcademicDecision(
     {
       where: {
         semesterId,
@@ -239,6 +237,19 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
     return []
   }, [students])
 
+  const filteredStudentData = useMemo(() => {
+    if (!data) return studentData
+
+    const studentIdsWithDecisions = new Set(data.map((decision: any) => decision.studentId))
+
+    return studentData.map((record) => ({
+      ...record,
+      students: (record.students || []).filter(
+        (student: any) => !studentIdsWithDecisions.has(student.id)
+      ),
+    }))
+  }, [studentData, data])
+
   const updateSelectedStudents = useMemo(() => {
     return (keys: React.Key[]) => {
       const selected = keys
@@ -283,34 +294,17 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
     }),
   }
 
-  const onSelectChange = (id: string, selected: boolean) => {
-    const newSelectedKeys = selected
-      ? [...selectedRowKeys, id]
-      : selectedRowKeys.filter((key) => key !== id)
-
-    setSelectedRowKeys(newSelectedKeys)
-    updateSelectedStudents(newSelectedKeys)
-  }
-
   const rowSelection = {
     selectedRowKeys,
-    onSelect: (record: any, selected: boolean) => {
-      if (record.id) {
-        onSelectChange(record.id, selected)
-      }
+    onChange: (newSelectedRowKeys: React.Key[]) => {
+      setSelectedRowKeys(newSelectedRowKeys as string[])
+      updateSelectedStudents(newSelectedRowKeys)
     },
-    hideSelectAll: true,
-    columnWidth: 0,
-    renderCell: (_: any, record: any, index: number) => {
-      if (record.id) {
-        return (
-          <Checkbox
-            checked={selectedRowKeys.includes(record.id)}
-            onChange={(e) => onSelectChange(record.id, e.target.checked)}
-          />
-        )
+    getCheckboxProps: (record: any) => {
+      const isHeaderRow = Array.isArray(record.students)
+      return {
+        style: isHeaderRow ? { display: "none" } : {},
       }
-      return null
     },
   }
 
@@ -326,41 +320,34 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
     }
 
     try {
-      const decisionsToUpsert = selectedStudents.map((student) => ({
-        where: {
-          studentId: student.id,
-          semesterId: semesterId,
-          actionTaken: actionTaken,
-        },
-        create: {
-          student: { connect: { id: student.id } },
-          semester: { connect: { id: semesterId } },
-          actionTaken: actionTaken,
-          status: DecisionStatus.PENDING,
-          appliedConfig: student.academicActionId
-            ? { connect: { id: student.academicActionId } }
-            : undefined,
-          decisionDate: new Date(),
-          reason: student.reason || undefined,
-        },
-        update: {
-          status: DecisionStatus.PENDING,
-          decisionDate: new Date(),
-          reason: student.reason || undefined,
-        },
-      }))
-      const queries = decisionsToUpsert.map((decision) => ({
+      const queries = selectedStudents.map((student) => ({
         model: "StudentAcademicDecision" as const,
-        operation: "upsert" as const,
-        data: decision,
+        operation: "create" as const,
+        data: {
+          data: {
+            studentId: student.id,
+            semesterId: semesterId,
+            actionTaken: actionTaken,
+            status: DecisionStatus.PENDING,
+            appliedConfigId: student.academicActionId || undefined,
+            decisionDate: new Date(),
+            reason: student.reason || undefined,
+          },
+        },
       }))
 
       await sqlTransaction(queries)
 
+      queryClient.invalidateQueries({
+        queryKey: ["zenstack", "StudentAcademicDecision"],
+      })
+      queryClient.invalidateQueries({
+        queryKey: ["/api/student/export-json-list-student-academic-action"],
+      })
+
       message.success(`Đã duyệt thành công cho ${selectedStudents.length} sinh viên`)
       setSelectedStudents([])
       setSelectedRowKeys([])
-      refetch()
     } catch (error) {
       console.error("Lỗi khi duyệt quyết định:", error)
       message.error("Có lỗi xảy ra khi duyệt quyết định")
@@ -706,11 +693,14 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
                   },
                 },
               ]}
-              data={studentData}
+              data={filteredStudentData}
               pagination={{
                 current: currentPage,
                 pageSize: numberOfPages,
-                total: studentData.length,
+                total: filteredStudentData.reduce(
+                  (acc: number, course: any) => acc + (course.students?.length || 0),
+                  0
+                ),
                 onChange: (page, pageSize) => {
                   if (numberOfPages === pageSize) {
                     setCurrentPage(page)

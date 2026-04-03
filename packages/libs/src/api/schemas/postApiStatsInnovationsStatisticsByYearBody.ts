@@ -6,5 +6,5 @@
  */
 
 export type PostApiStatsInnovationsStatisticsByYearBody = {
-    preview?: boolean
-}
+  preview?: boolean;
+};

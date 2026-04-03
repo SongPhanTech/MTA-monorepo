@@ -23,6 +23,7 @@ import { prisma } from ".."
 import { UploadExcelModel } from "../dto/upload-excel.dto"
 import { evaluateCondition } from "../services/student-result.service"
 import type { StudentDataContext } from "../types/student-context"
+import { criteriaFieldLabels, criteriaOperatorLabels } from "@workspace/libs/constants"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -87,7 +88,11 @@ app.openapi(graduationApplicationInit, async (c) => {
     },
   })
 
-  await prisma.studentGraduationApplication.createMany({
+  if (students.length === 0) {
+    return c.json({ message: "Không tìm thấy sinh viên chưa tốt nghiệp" }, 400)
+  }
+
+  const count = await prisma.studentGraduationApplication.createMany({
     data: students.map((s) => {
       return {
         studentId: s.id,
@@ -97,7 +102,7 @@ app.openapi(graduationApplicationInit, async (c) => {
     skipDuplicates: true,
   })
 
-  return c.json({ message: `Đã tạo ${students.length} đơn xét tốt nghiệp` }, 200)
+  return c.json({ message: `Đã tạo ${count} đơn xét tốt nghiệp` }, 200)
 })
 
 const GraduationCheckResult = z
@@ -297,28 +302,39 @@ app.openapi(graduationCheck, async (c) => {
       where: {
         studentId: application.studentId,
         deletedAt: null,
-        OR: [
-          { examPostponed: true },
-          { examBanned: true },
-          { suspended: true },
-          { repeated: true },
-        ],
+        OR: [{ examBanned: true }, { suspended: true }, { finalScore: { lt: scoreToPass } }],
       },
       include: { subjectVersion: true },
     })
 
+    const subjectScores = await prisma.studentSubjectScore.findMany({
+      where: {
+        studentId: application.studentId,
+        deletedAt: null,
+        examBanned: false,
+        suspended: false,
+        subjectVersionId: {
+          in: subjectScoresWithIssues.map((s) => s.subjectVersionId),
+        },
+      },
+      include: { subjectVersion: true },
+    })
+
+    let totalDebtCredit = 0
     for (const score of subjectScoresWithIssues) {
-      if (score.examPostponed && score.examPostponedReason) {
-        reasons.push(`Môn ${score.subjectVersion.name}: ${score.examPostponedReason}`)
+      totalDebtCredit += score.subjectVersion.credit
+
+      const passedScore = subjectScores.find((s) => s.subjectVersionId === score.subjectVersionId)
+      if (passedScore?.finalScore && passedScore.finalScore.toNumber() >= scoreToPass) {
+        continue
       }
+
       if (score.examBanned && score.examBannedReason) {
         reasons.push(`Môn ${score.subjectVersion.name}: ${score.examBannedReason}`)
       }
+
       if (score.suspended && score.suspendedReason) {
         reasons.push(`Môn ${score.subjectVersion.name}: ${score.suspendedReason}`)
-      }
-      if (score.repeated && score.repeatedReason) {
-        reasons.push(`Môn ${score.subjectVersion.name}: ${score.repeatedReason}`)
       }
     }
 
@@ -560,18 +576,6 @@ app.openapi(graduationCheck, async (c) => {
       }
     }
 
-    let totalDebtCredit = 0
-    for (const subject of curriculumSubjects) {
-      // Bỏ qua môn không tính vào điểm tích luỹ
-      if (!subject.useForFinalScore) continue
-      // Bỏ qua môn đã đạt trực tiếp
-      if (subjectScoresMap.has(subject.subjectId)) continue
-      // Bỏ qua môn đã được xử lý bởi nhóm tương đương
-      if (processedSubjects.has(subject.subjectId)) continue
-
-      totalDebtCredit += subject.subject.credit
-    }
-
     // Kiểm tra & lọc tín chỉ tự chọn
     // Chỉ xét các môn tự chọn trong CTĐT, loại những môn đã được equivalency xử lý
     const electiveSubjects = curriculumSubjects.filter(
@@ -657,7 +661,16 @@ app.openapi(graduationCheck, async (c) => {
     // Kiểm tra tổng tín chỉ tích luỹ
     if (curriculumVersion.requiredCredits && totalPassCredit < curriculumVersion.requiredCredits) {
       reasons.push(
-        `Chưa đạt số tín chỉ (${totalPassCredit} < ${curriculumVersion.requiredCredits})`
+        `Chưa đạt số tín chỉ bắt buộc (${totalPassCredit} < ${curriculumVersion.requiredCredits})`
+      )
+    }
+
+    if (
+      curriculumVersion.electiveCredits &&
+      accumulatedElectiveCredits < curriculumVersion.electiveCredits
+    ) {
+      reasons.push(
+        `Chưa đạt số tín chỉ tự chọn (${accumulatedElectiveCredits} < ${curriculumVersion.electiveCredits})`
       )
     }
 
@@ -791,12 +804,17 @@ app.openapi(graduationCheck, async (c) => {
         const rankDowngrade = sortedRankLevels[rankIdx + 1] || null
 
         if (downgrade) {
+          const reason = downgrade.conditions
+            .map((rule) => {
+              return `${criteriaFieldLabels[rule.field]} ${criteriaOperatorLabels[rule.operator]} ${rule.value}`
+            })
+            .join("\n")
           results.push({
             applicationId: application.id,
             graduation: !!rankDowngrade,
             gpa: CUMULATIVE_GPA,
             rank: rankDowngrade || null,
-            reason: "",
+            reason,
             trainingMajor: curriculumVersion.curriculum.trainingMajor,
             diplomaType: curriculumVersion.diplomaType,
             downgraded: {

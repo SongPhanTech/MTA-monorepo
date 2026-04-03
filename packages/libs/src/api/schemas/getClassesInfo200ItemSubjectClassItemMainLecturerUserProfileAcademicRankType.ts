@@ -9,8 +9,8 @@
  * @nullable
  */
 export type GetClassesInfo200ItemSubjectClassItemMainLecturerUserProfileAcademicRankType = {
-    /** @nullable */
-    sMa?: string | null
-    /** @nullable */
-    sTen?: string | null
-} | null
+  /** @nullable */
+  sMa?: string | null;
+  /** @nullable */
+  sTen?: string | null;
+} | null;

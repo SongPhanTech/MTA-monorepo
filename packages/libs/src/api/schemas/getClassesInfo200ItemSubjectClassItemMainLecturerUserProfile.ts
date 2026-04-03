@@ -4,17 +4,17 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetClassesInfo200ItemSubjectClassItemMainLecturerUserProfileLevel } from './getClassesInfo200ItemSubjectClassItemMainLecturerUserProfileLevel'
-import type { GetClassesInfo200ItemSubjectClassItemMainLecturerUserProfileAcademicRankType } from './getClassesInfo200ItemSubjectClassItemMainLecturerUserProfileAcademicRankType'
-import type { GetClassesInfo200ItemSubjectClassItemMainLecturerUserProfileAcademicDegreeType } from './getClassesInfo200ItemSubjectClassItemMainLecturerUserProfileAcademicDegreeType'
+import type { GetClassesInfo200ItemSubjectClassItemMainLecturerUserProfileLevel } from './getClassesInfo200ItemSubjectClassItemMainLecturerUserProfileLevel';
+import type { GetClassesInfo200ItemSubjectClassItemMainLecturerUserProfileAcademicRankType } from './getClassesInfo200ItemSubjectClassItemMainLecturerUserProfileAcademicRankType';
+import type { GetClassesInfo200ItemSubjectClassItemMainLecturerUserProfileAcademicDegreeType } from './getClassesInfo200ItemSubjectClassItemMainLecturerUserProfileAcademicDegreeType';
 
 export type GetClassesInfo200ItemSubjectClassItemMainLecturerUserProfile = {
-    /** @nullable */
-    fullname?: string | null
-    /** @nullable */
-    level?: GetClassesInfo200ItemSubjectClassItemMainLecturerUserProfileLevel
-    /** @nullable */
-    academicRankType?: GetClassesInfo200ItemSubjectClassItemMainLecturerUserProfileAcademicRankType
-    /** @nullable */
-    academicDegreeType?: GetClassesInfo200ItemSubjectClassItemMainLecturerUserProfileAcademicDegreeType
-}
+  /** @nullable */
+  fullname?: string | null;
+  /** @nullable */
+  level?: GetClassesInfo200ItemSubjectClassItemMainLecturerUserProfileLevel;
+  /** @nullable */
+  academicRankType?: GetClassesInfo200ItemSubjectClassItemMainLecturerUserProfileAcademicRankType;
+  /** @nullable */
+  academicDegreeType?: GetClassesInfo200ItemSubjectClassItemMainLecturerUserProfileAcademicDegreeType;
+};

@@ -16,7 +16,7 @@ import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
 import { Col, Form, Input, InputNumber, message, Radio, Select } from "antd"
 import dayjs from "dayjs"
 import "dayjs/locale/vi"
-import { useEffect } from "react"
+import { useEffect, useMemo } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
 export type PutClassRegisterSession = ClassRegisterSession & {
@@ -89,9 +89,10 @@ const PutClassRegisterSession = () => {
     },
   })
 
-  const tableData = trainingCourses
-    .flatMap((e) => e.academicRankingConvert)
-    .uniqueByKey("classification")
+  const tableData = useMemo(
+    () => trainingCourses.flatMap((e) => e.academicRankingConvert).uniqueByKey("classification"),
+    [trainingCourses]
+  )
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <>
   useEffect(() => {
@@ -122,7 +123,7 @@ const PutClassRegisterSession = () => {
           ),
         },
       })
-    } else {
+    } else if (tableData.length > 0) {
       form.setFieldsValue({
         active: true,
         tuitionPerCredit: 350000,
@@ -148,13 +149,15 @@ const PutClassRegisterSession = () => {
         },
       })
     }
-  }, [initialValue])
+  }, [initialValue, tableData])
 
   const { mutateAsync: createClassRegisterSession } = useCreateClassRegisterSession()
   const { mutateAsync: updateClassRegisterSession } = useUpdateClassRegisterSession()
   const { mutateAsync: deleteManyClassRegisterSessionCredit } =
     useDeleteManyClassRegisterSessionCredit()
   async function onOk(output?: PutClassRegisterSession) {
+    console.log("output: ", output)
+
     if (!output) return
     try {
       showSpinner()
@@ -341,7 +344,7 @@ const PutClassRegisterSession = () => {
               render: (_, record) => (
                 <FormItem
                   form={form}
-                  required
+                  label="Tín chỉ tối thiểu"
                   name={[
                     "creditLimit",
                     getClassificationKey(
@@ -366,7 +369,7 @@ const PutClassRegisterSession = () => {
               render: (_, record) => (
                 <FormItem
                   form={form}
-                  required
+                  label="Tín chỉ tối đa"
                   name={[
                     "creditLimit",
                     getClassificationKey(

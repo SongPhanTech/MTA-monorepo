@@ -4,13 +4,13 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { ReadExcelColumns200ColumnsItemSampleData1 } from './readExcelColumns200ColumnsItemSampleData1'
-import type { ReadExcelColumns200ColumnsItemSampleData2 } from './readExcelColumns200ColumnsItemSampleData2'
+import type { ReadExcelColumns200ColumnsItemSampleData1 } from './readExcelColumns200ColumnsItemSampleData1';
+import type { ReadExcelColumns200ColumnsItemSampleData2 } from './readExcelColumns200ColumnsItemSampleData2';
 
 export type ReadExcelColumns200ColumnsItem = {
-    name: string
-    /** @nullable */
-    sampleData1?: ReadExcelColumns200ColumnsItemSampleData1
-    /** @nullable */
-    sampleData2?: ReadExcelColumns200ColumnsItemSampleData2
-}
+  name: string;
+  /** @nullable */
+  sampleData1?: ReadExcelColumns200ColumnsItemSampleData1;
+  /** @nullable */
+  sampleData2?: ReadExcelColumns200ColumnsItemSampleData2;
+};

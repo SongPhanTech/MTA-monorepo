@@ -6,5 +6,5 @@
  */
 
 export type CheckExportTableBySql200 = {
-    message: string
-}
+  message: string;
+};

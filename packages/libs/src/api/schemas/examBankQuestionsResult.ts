@@ -4,13 +4,13 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { ExamBankQuestionsResultQuestionsItem } from './examBankQuestionsResultQuestionsItem'
-import type { ExamBankQuestionsResultListQuestionChoiceItem } from './examBankQuestionsResultListQuestionChoiceItem'
-import type { ExamBankQuestionsResultListQuestionEssayItem } from './examBankQuestionsResultListQuestionEssayItem'
+import type { ExamBankQuestionsResultQuestionsItem } from './examBankQuestionsResultQuestionsItem';
+import type { ExamBankQuestionsResultListQuestionChoiceItem } from './examBankQuestionsResultListQuestionChoiceItem';
+import type { ExamBankQuestionsResultListQuestionEssayItem } from './examBankQuestionsResultListQuestionEssayItem';
 
 export interface ExamBankQuestionsResult {
-    isGroup: boolean
-    questions?: ExamBankQuestionsResultQuestionsItem[]
-    listQuestionChoice?: ExamBankQuestionsResultListQuestionChoiceItem[]
-    listQuestionEssay?: ExamBankQuestionsResultListQuestionEssayItem[]
+  isGroup: boolean;
+  questions?: ExamBankQuestionsResultQuestionsItem[];
+  listQuestionChoice?: ExamBankQuestionsResultListQuestionChoiceItem[];
+  listQuestionEssay?: ExamBankQuestionsResultListQuestionEssayItem[];
 }

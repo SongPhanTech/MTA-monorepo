@@ -8,4 +8,4 @@
 /**
  * @nullable
  */
-export type ExcelTemplateBodyPayloadItemData = unknown | null
+export type ExcelTemplateBodyPayloadItemData = unknown | null;

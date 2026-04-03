@@ -50,47 +50,47 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { UnitInfoOldData } from './unitInfoOldData'
+import type { UnitInfoOldData } from './unitInfoOldData';
 
 export interface UnitInfo {
-    /** @nullable */
-    sNguoiTao?: string | null
-    /** @nullable */
-    sNguoiSua?: string | null
-    /** @nullable */
-    dNgayTao?: string | null
-    /** @nullable */
-    dNgaySua?: string | null
-    /** @nullable */
-    sThietBiTao?: string | null
-    /** @nullable */
-    sThietBiSua?: string | null
-    /** @nullable */
-    RowStatus?: number | null
-    /** @nullable */
-    RowIndex?: number | null
-    /** @nullable */
-    OldData?: UnitInfoOldData
-    Id?: string
-    /** @nullable */
-    sTenDayDu?: string | null
-    /** @nullable */
-    sTenGiaoDich?: string | null
-    /** @nullable */
-    sMaDonVi?: string | null
-    /** @nullable */
-    sMaSoThue?: string | null
-    dNgayThanhLap?: string
-    /** @nullable */
-    sPathLogo?: string | null
-    /** @nullable */
-    sDiaChi?: string | null
-    /** @nullable */
-    sEmail?: string | null
-    /** @nullable */
-    sWebsite?: string | null
-    /** @nullable */
-    sFax?: string | null
-    /** @nullable */
-    sDienThoai?: string | null
+  /** @nullable */
+  sNguoiTao?: string | null;
+  /** @nullable */
+  sNguoiSua?: string | null;
+  /** @nullable */
+  dNgayTao?: string | null;
+  /** @nullable */
+  dNgaySua?: string | null;
+  /** @nullable */
+  sThietBiTao?: string | null;
+  /** @nullable */
+  sThietBiSua?: string | null;
+  /** @nullable */
+  RowStatus?: number | null;
+  /** @nullable */
+  RowIndex?: number | null;
+  /** @nullable */
+  OldData?: UnitInfoOldData;
+  Id?: string;
+  /** @nullable */
+  sTenDayDu?: string | null;
+  /** @nullable */
+  sTenGiaoDich?: string | null;
+  /** @nullable */
+  sMaDonVi?: string | null;
+  /** @nullable */
+  sMaSoThue?: string | null;
+  dNgayThanhLap?: string;
+  /** @nullable */
+  sPathLogo?: string | null;
+  /** @nullable */
+  sDiaChi?: string | null;
+  /** @nullable */
+  sEmail?: string | null;
+  /** @nullable */
+  sWebsite?: string | null;
+  /** @nullable */
+  sFax?: string | null;
+  /** @nullable */
+  sDienThoai?: string | null;
 }

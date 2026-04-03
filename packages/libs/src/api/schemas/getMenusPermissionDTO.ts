@@ -50,18 +50,18 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { GetUngDungPermissionByUserDTO } from './getUngDungPermissionByUserDTO'
-import type { GetMenusPermissionByUserAndAppDTO } from './getMenusPermissionByUserAndAppDTO'
+import type { GetUngDungPermissionByUserDTO } from './getUngDungPermissionByUserDTO';
+import type { GetMenusPermissionByUserAndAppDTO } from './getMenusPermissionByUserAndAppDTO';
 
 export interface GetMenusPermissionDTO {
-    /**
-     * Danh sách ứng dụng mà user có quyền
-     * @nullable
-     */
-    Uds?: GetUngDungPermissionByUserDTO[] | null
-    /**
-     * Danh sách menu nghiệp vụ user có quyền
-     * @nullable
-     */
-    Menus?: GetMenusPermissionByUserAndAppDTO[] | null
+  /**
+   * Danh sách ứng dụng mà user có quyền
+   * @nullable
+   */
+  Uds?: GetUngDungPermissionByUserDTO[] | null;
+  /**
+   * Danh sách menu nghiệp vụ user có quyền
+   * @nullable
+   */
+  Menus?: GetMenusPermissionByUserAndAppDTO[] | null;
 }

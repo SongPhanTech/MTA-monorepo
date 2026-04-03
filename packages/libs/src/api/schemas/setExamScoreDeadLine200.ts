@@ -6,5 +6,5 @@
  */
 
 export type SetExamScoreDeadLine200 = {
-    message: string
-}
+  message: string;
+};

@@ -7,7 +7,7 @@ import { useExamTypeOptions } from "@hooks/examType"
 import { cn, formatDate } from "@lib/utils"
 import { diemPhongThiStore, kythiStore } from "@pages/quan-ly-diem/nhap-diem-theo-phach"
 import { useStore } from "@tanstack/react-store"
-import type { ExamList, Prisma, SubjectClass } from "@workspace/db/client"
+import { $Enums, type ExamList, type Prisma, type SubjectClass } from "@workspace/db/client"
 import { useCountExam, useFindManyExam } from "@workspace/db/hooks"
 import { useAbility } from "@workspace/permissions/hooks"
 import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
@@ -167,7 +167,20 @@ export default function KyThi({ setActiveKey }: { setActiveKey: (key: string) =>
                 type: "input",
                 align: "center",
                 render: (_, record) => (
-                  <p className="text-left">{record?.subjectVersion?.name || ""}</p>
+                  <div className="flex flex-row items-start">
+                    <p>
+                      {record.subjectClass?.[0]?.type === $Enums.SubjectClassType.RETAKE ? (
+                        <Tag color={"blue"} className="p-0 px-1">
+                          Học lại
+                        </Tag>
+                      ) : record.subjectClass?.[0]?.type === $Enums.SubjectClassType.REEXAM ? (
+                        <Tag color={"yellow"} className="p-0 px-1">
+                          Thi lại
+                        </Tag>
+                      ) : null}
+                    </p>
+                    <p className="text-left">{record?.subjectVersion?.name || ""}</p>
+                  </div>
                 ),
               },
               {

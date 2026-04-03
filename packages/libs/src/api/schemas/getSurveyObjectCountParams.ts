@@ -4,17 +4,17 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetSurveyObjectCountIsStudent } from './getSurveyObjectCountIsStudent'
+import type { GetSurveyObjectCountIsStudent } from './getSurveyObjectCountIsStudent';
 
 export type GetSurveyObjectCountParams = {
-    id: string
-    fullname?: string
-    organizationId?: string[]
-    lecturerCode?: string
-    staffCode?: string
-    studentCode?: string
-    fixedClassIds?: string[]
-    trainingCourseIds?: string[]
-    taken?: boolean
-    isStudent?: GetSurveyObjectCountIsStudent
-}
+id: string;
+fullname?: string;
+organizationId?: string[];
+lecturerCode?: string;
+staffCode?: string;
+studentCode?: string;
+fixedClassIds?: string[];
+trainingCourseIds?: string[];
+taken?: boolean;
+isStudent?: GetSurveyObjectCountIsStudent;
+};

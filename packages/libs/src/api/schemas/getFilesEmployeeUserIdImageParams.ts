@@ -71,11 +71,11 @@ API này cho phép các ứng dụng truy cập từ client hoặc server thông
  */
 
 export type GetFilesEmployeeUserIdImageParams = {
-    appCode?: string
-    tenantCode?: string
-    w?: number
-    h?: number
-    quanlity?: number
-    version?: string
-    fullName?: string
-}
+appCode?: string;
+tenantCode?: string;
+w?: number;
+h?: number;
+quanlity?: number;
+version?: string;
+fullName?: string;
+};

@@ -6,5 +6,5 @@
  */
 
 export type GraduationSessionDecision404 = {
-    message: string
-}
+  message: string;
+};

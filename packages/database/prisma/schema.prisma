@@ -1910,6 +1910,7 @@ model DM_DonVi {
   sThietBiTao          String?
   sThietBiSua          String?
   sCode                String?
+  sTKPUCode            String?
   sTenVietTat          String?
   sParentId            String?            @db.Uuid()
   sTruongDonVi         String?            @db.Uuid()
@@ -4909,8 +4910,8 @@ model ExpertProfile {
   bankName                     String?
   projectExpert                Boolean                @default(true)
   thesisExpert                 Boolean                @default(true)
-  eligiblePresident            Boolean
-  eligibleSecretary            Boolean
+  eligiblePresident            Boolean                @default(false)
+  eligibleSecretary            Boolean                @default(false)
   supervisedTheses             ThesisProject[]        @relation("SupervisorToThesis")
   coSupervisedTheses           ThesisProject[]        @relation("CoSupervisorToThesis")
   thirdSupervisedTheses        ThesisProject[]        @relation("ThirdSupervisorToThesis")

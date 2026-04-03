@@ -6,5 +6,5 @@
  */
 
 export type OpenSubjectClassRetakeStudentsResponseFixedClassTrainingCourse = {
-    name: string
-}
+  name: string;
+};

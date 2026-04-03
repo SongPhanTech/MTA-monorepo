@@ -52,5 +52,5 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  */
 
 export type GetDMTinhNewsIdParams = {
-    cols?: string
-}
+cols?: string;
+};

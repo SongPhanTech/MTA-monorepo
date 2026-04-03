@@ -6,5 +6,5 @@
  */
 
 export type SessionRealmAccess = {
-    roles: string[]
-}
+  roles: string[];
+};

@@ -4,14 +4,14 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { TrainingObjectTypeId } from './trainingObjectTypeId'
-import type { TrainingCourseId } from './trainingCourseId'
-import type { FixedClassId } from './fixedClassId'
-import type { CertificateId } from './certificateId'
+import type { TrainingObjectTypeId } from './trainingObjectTypeId';
+import type { TrainingCourseId } from './trainingCourseId';
+import type { FixedClassId } from './fixedClassId';
+import type { CertificateId } from './certificateId';
 
 export type ExportArchivedCertificateExcelParams = {
-    trainingObjectTypeId: TrainingObjectTypeId
-    trainingCourseId?: TrainingCourseId & unknown
-    fixedClassId?: FixedClassId
-    certificateId?: CertificateId
-}
+trainingObjectTypeId: TrainingObjectTypeId;
+trainingCourseId?: TrainingCourseId & unknown;
+fixedClassId?: FixedClassId;
+certificateId?: CertificateId;
+};

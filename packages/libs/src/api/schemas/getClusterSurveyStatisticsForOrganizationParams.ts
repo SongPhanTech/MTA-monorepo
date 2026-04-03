@@ -6,5 +6,5 @@
  */
 
 export type GetClusterSurveyStatisticsForOrganizationParams = {
-    organizationId: string
-}
+organizationId: string;
+};

@@ -4,9 +4,9 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetDatabasesDbType } from './getDatabasesDbType'
+import type { GetDatabasesDbType } from './getDatabasesDbType';
 
 export type GetDatabasesParams = {
-    url: string
-    dbType?: GetDatabasesDbType
-}
+url: string;
+dbType?: GetDatabasesDbType;
+};

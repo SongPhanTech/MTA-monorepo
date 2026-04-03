@@ -6,7 +6,7 @@
  */
 
 export type ImportInternshipBody = {
-    file: Blob
-    /** @nullable */
-    timeout?: number | null
-}
+  file: Blob;
+  /** @nullable */
+  timeout?: number | null;
+};

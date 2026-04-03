@@ -4,34 +4,34 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetClassRegisterSession200ItemSemester } from './getClassRegisterSession200ItemSemester'
-import type { GetClassRegisterSession200ItemTrainingCoursesItem } from './getClassRegisterSession200ItemTrainingCoursesItem'
-import type { GetClassRegisterSession200ItemCurriculumVersionsItem } from './getClassRegisterSession200ItemCurriculumVersionsItem'
-import type { GetClassRegisterSession200ItemCreditLimitItem } from './getClassRegisterSession200ItemCreditLimitItem'
+import type { GetClassRegisterSession200ItemSemester } from './getClassRegisterSession200ItemSemester';
+import type { GetClassRegisterSession200ItemTrainingCoursesItem } from './getClassRegisterSession200ItemTrainingCoursesItem';
+import type { GetClassRegisterSession200ItemCurriculumVersionsItem } from './getClassRegisterSession200ItemCurriculumVersionsItem';
+import type { GetClassRegisterSession200ItemCreditLimitItem } from './getClassRegisterSession200ItemCreditLimitItem';
 
 export type GetClassRegisterSession200Item = {
-    id: string
-    /** @nullable */
-    code?: string | null
-    active?: boolean
-    /** @nullable */
-    description?: string | null
-    /** @nullable */
-    deletedAt?: string | null
-    /** @nullable */
-    createdAt?: string | null
-    /** @nullable */
-    updatedAt?: string | null
-    /** @nullable */
-    createdBy?: string | null
-    name: string
-    /** @nullable */
-    startDate: string | null
-    /** @nullable */
-    endDate: string | null
-    tuitionPerCredit?: number
-    semester: GetClassRegisterSession200ItemSemester
-    trainingCourses: GetClassRegisterSession200ItemTrainingCoursesItem[]
-    curriculumVersions: GetClassRegisterSession200ItemCurriculumVersionsItem[]
-    creditLimit: GetClassRegisterSession200ItemCreditLimitItem[]
-}
+  id: string;
+  /** @nullable */
+  code?: string | null;
+  active?: boolean;
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  deletedAt?: string | null;
+  /** @nullable */
+  createdAt?: string | null;
+  /** @nullable */
+  updatedAt?: string | null;
+  /** @nullable */
+  createdBy?: string | null;
+  name: string;
+  /** @nullable */
+  startDate: string | null;
+  /** @nullable */
+  endDate: string | null;
+  tuitionPerCredit?: number;
+  semester: GetClassRegisterSession200ItemSemester;
+  trainingCourses: GetClassRegisterSession200ItemTrainingCoursesItem[];
+  curriculumVersions: GetClassRegisterSession200ItemCurriculumVersionsItem[];
+  creditLimit: GetClassRegisterSession200ItemCreditLimitItem[];
+};

@@ -4,9 +4,9 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetClusterSurveyInfoDepartment200Data } from './getClusterSurveyInfoDepartment200Data'
+import type { GetClusterSurveyInfoDepartment200Data } from './getClusterSurveyInfoDepartment200Data';
 
 export type GetClusterSurveyInfoDepartment200 = {
-    /** @nullable */
-    data?: GetClusterSurveyInfoDepartment200Data
-}
+  /** @nullable */
+  data?: GetClusterSurveyInfoDepartment200Data;
+};

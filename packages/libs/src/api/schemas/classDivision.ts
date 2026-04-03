@@ -6,5 +6,5 @@
  */
 
 export interface ClassDivision {
-    file: Blob
+  file: Blob;
 }

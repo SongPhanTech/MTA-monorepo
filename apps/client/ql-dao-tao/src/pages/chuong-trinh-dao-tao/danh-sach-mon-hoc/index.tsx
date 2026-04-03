@@ -10,7 +10,7 @@ import { useExamTypeOptions } from "@hooks/examType"
 import useSpinner from "@hooks/spinner"
 import DefaultLayout from "@layouts/default-layout"
 import { emptyObjectIf } from "@workspace/constant"
-import type { ExamType } from "@workspace/db/client"
+import type { ExamType, Prisma } from "@workspace/db/client"
 import {
   useCountSubject,
   useCreateSubjectVersionHistory,
@@ -78,8 +78,9 @@ export default function SubjectList() {
     }
   }
 
-  const subjectVersionWhere = useMemo(() => {
+  const subjectVersionWhere: Prisma.SubjectVersionWhereInput = useMemo(() => {
     return {
+      trainingObjectTypeId,
       ...(filters.name && {
         name: { contains: filters.name, mode: "insensitive" as const },
       }),
@@ -98,7 +99,7 @@ export default function SubjectList() {
             : { none: {} },
         }),
     }
-  }, [filters.name, filters.code, filters.examType, filters.isTeaching])
+  }, [filters.name, filters.code, filters.examType, filters.isTeaching, trainingObjectTypeId])
 
   const where = useMemo(() => {
     return {

@@ -8,12 +8,11 @@
 /**
  * @nullable
  */
-export type GetPublicSurveysV2ResultDataItemSurveyTopicType =
-    | (typeof GetPublicSurveysV2ResultDataItemSurveyTopicType)[keyof typeof GetPublicSurveysV2ResultDataItemSurveyTopicType]
-    | null
+export type GetPublicSurveysV2ResultDataItemSurveyTopicType = typeof GetPublicSurveysV2ResultDataItemSurveyTopicType[keyof typeof GetPublicSurveysV2ResultDataItemSurveyTopicType] | null;
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetPublicSurveysV2ResultDataItemSurveyTopicType = {
-    SINGLE: 'SINGLE',
-    CLUSTER: 'CLUSTER',
-} as const
+  SINGLE: 'SINGLE',
+  CLUSTER: 'CLUSTER',
+} as const;
