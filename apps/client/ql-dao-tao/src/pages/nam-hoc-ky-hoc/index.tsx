@@ -251,7 +251,7 @@ function YearAndSemester() {
 
           <Col span={12}>
             <Flex justify="end" gap={10}>
-              {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG, "THEM") && (
+              {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_NAM_HOC_KY_HOC, "THEM") && (
                 <>
                   <Button onClick={handleModal} className="border-primary text-primary">
                     <BookPlus />
