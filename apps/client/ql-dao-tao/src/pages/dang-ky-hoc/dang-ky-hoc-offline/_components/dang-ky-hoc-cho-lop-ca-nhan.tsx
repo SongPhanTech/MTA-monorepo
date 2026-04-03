@@ -77,6 +77,7 @@ export default function DangKyHocChoCaNhan() {
       fixedClassId: filters.fixedClassId,
       fixedClass: {
         trainingCourseId: filters.trainingCourseId,
+        trainingCourse: { trainingObjectTypeId },
       },
       active: true,
       status: "ENROLLED",
