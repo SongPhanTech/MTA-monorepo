@@ -6,5 +6,5 @@
  */
 
 export type ClassUnregister404 = {
-    message: string
-}
+  message: string;
+};

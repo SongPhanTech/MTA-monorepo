@@ -54,6 +54,7 @@ const PutTrainingCourseModal = () => {
   const isGeneralInfoLocked = Form.useWatch("isGeneralInfoLocked", form)
   const isRegulationLocked = Form.useWatch("isRegulationLocked", form)
   const isScoreConfigLocked = Form.useWatch("isScoreConfigLocked", form)
+  const isRetakeExam = Form.useWatch("isRetakeExam", form)
   const scoreToPass = Form.useWatch("scoreToPass", form)
   const {
     isOpen,
@@ -795,9 +796,14 @@ const PutTrainingCourseModal = () => {
       <Row gutter={[10, 10]} className="px-6">
         <Col span={24} className="flex items-center justify-between text-base font-semibold mb-1 ">
           <span className="underline-offset-2 underline">Thông tin điểm</span>
-          <Form.Item name="isScoreConfigLocked" valuePropName="checked" className="mb-0">
-            <Switch checkedChildren="Đã khoá" unCheckedChildren="Cho phép sửa" />
-          </Form.Item>
+          <div className="flex items-center gap-3">
+            <Form.Item name="isScoreConfigLocked" valuePropName="checked" className="mb-0">
+              <Switch checkedChildren="Đã khoá" unCheckedChildren="Cho phép sửa" />
+            </Form.Item>
+            <Form.Item name="isRetakeExam" valuePropName="checked" className="mb-0">
+              <Switch checkedChildren="Cho phép thi lại" unCheckedChildren="Không cho thi lại" />
+            </Form.Item>
+          </div>
         </Col>
         {!id && (
           <Col span={8}>
@@ -1178,48 +1184,6 @@ const PutTrainingCourseModal = () => {
           </FormItem>
         </Col>
         <Col span={8}>
-          <FormItem form={form} name="maxReExamScore" label="Điểm học phần tối đa khi thi lại">
-            <InputNumber
-              min={0}
-              type="number"
-              placeholder="Nhập điểm tối đa khi thi lại"
-              className="w-full"
-              readOnly={isScoreConfigLocked}
-            />
-          </FormItem>
-        </Col>
-        <Col span={8}>
-          <FormItem
-            form={form}
-            name="reduceReExamScore"
-            label={
-              <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                Trừ điểm khi thi lại
-                <Tooltip
-                  placement="topLeft"
-                  title={
-                    <span>
-                      Điểm học phần sẽ bị hạ [x] điểm.
-                      <br />
-                      Cận dưới=Điểm học phần tối thiểu để qua môn
-                    </span>
-                  }
-                >
-                  <BadgeHelpIcon size={16} style={{ margin: "0 0 -1px" }} />
-                </Tooltip>
-              </div>
-            }
-          >
-            <InputNumber
-              min={0}
-              type="number"
-              placeholder="Nhập điểm trừ khi thi lại"
-              className="w-full"
-              readOnly={isScoreConfigLocked}
-            />
-          </FormItem>
-        </Col>
-        <Col span={8}>
           <FormItem
             form={form}
             name="scoreToRetain"
@@ -1263,6 +1227,52 @@ const PutTrainingCourseModal = () => {
             />
           </FormItem>
         </Col>
+        {isRetakeExam && (
+          <>
+            <Col span={8}>
+              <FormItem form={form} name="maxReExamScore" label="Điểm học phần tối đa khi thi lại">
+                <InputNumber
+                  min={0}
+                  type="number"
+                  placeholder="Nhập điểm tối đa khi thi lại"
+                  className="w-full"
+                  readOnly={isScoreConfigLocked}
+                />
+              </FormItem>
+            </Col>
+            <Col span={8}>
+              <FormItem
+                form={form}
+                name="reduceReExamScore"
+                label={
+                  <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                    Trừ điểm khi thi lại
+                    <Tooltip
+                      placement="topLeft"
+                      title={
+                        <span>
+                          Điểm học phần sẽ bị hạ [x] điểm.
+                          <br />
+                          Cận dưới=Điểm học phần tối thiểu để qua môn
+                        </span>
+                      }
+                    >
+                      <BadgeHelpIcon size={16} style={{ margin: "0 0 -1px" }} />
+                    </Tooltip>
+                  </div>
+                }
+              >
+                <InputNumber
+                  min={0}
+                  type="number"
+                  placeholder="Nhập điểm trừ khi thi lại"
+                  className="w-full"
+                  readOnly={isScoreConfigLocked}
+                />
+              </FormItem>
+            </Col>
+          </>
+        )}
       </Row>
 
       <Col span={24} className="px-6">

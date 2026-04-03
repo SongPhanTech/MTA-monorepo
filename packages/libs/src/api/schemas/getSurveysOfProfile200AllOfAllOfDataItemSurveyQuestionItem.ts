@@ -4,23 +4,23 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetSurveysOfProfile200AllOfAllOfDataItemSurveyQuestionItemType } from './getSurveysOfProfile200AllOfAllOfDataItemSurveyQuestionItemType'
+import type { GetSurveysOfProfile200AllOfAllOfDataItemSurveyQuestionItemType } from './getSurveysOfProfile200AllOfAllOfDataItemSurveyQuestionItemType';
 
 export type GetSurveysOfProfile200AllOfAllOfDataItemSurveyQuestionItem = {
-    id: string
-    /** @nullable */
-    code?: string | null
-    active?: boolean
-    /** @nullable */
-    description?: string | null
-    /** @nullable */
-    deletedAt?: string | null
-    /** @nullable */
-    createdAt?: string | null
-    /** @nullable */
-    updatedAt?: string | null
-    /** @nullable */
-    createdBy?: string | null
-    name: string
-    type: GetSurveysOfProfile200AllOfAllOfDataItemSurveyQuestionItemType
-}
+  id: string;
+  /** @nullable */
+  code?: string | null;
+  active?: boolean;
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  deletedAt?: string | null;
+  /** @nullable */
+  createdAt?: string | null;
+  /** @nullable */
+  updatedAt?: string | null;
+  /** @nullable */
+  createdBy?: string | null;
+  name: string;
+  type: GetSurveysOfProfile200AllOfAllOfDataItemSurveyQuestionItemType;
+};

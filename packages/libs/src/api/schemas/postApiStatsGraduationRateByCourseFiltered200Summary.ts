@@ -5,4 +5,4 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type PostApiStatsGraduationRateByCourseFiltered200Summary = { [key: string]: unknown | null }
+export type PostApiStatsGraduationRateByCourseFiltered200Summary = {[key: string]: unknown | null};

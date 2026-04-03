@@ -6,5 +6,5 @@
  */
 
 export type ExportArchivedCertificateExcel404 = {
-    message: string
-}
+  message: string;
+};

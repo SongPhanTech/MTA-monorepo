@@ -2,7 +2,7 @@ import { queryClient } from "@api/index"
 import FormItem from "@components/commons/form-item"
 import PutFormModal from "@components/commons/put-modal"
 import useSpinner from "@hooks/spinner"
-import { $Enums, type SubjectVersion, type TrainingBlockSubject } from "@workspace/db/client"
+import { $Enums, Prisma, type TrainingBlockSubject } from "@workspace/db/client"
 import {
   useCreateManyTrainingBlockSubject,
   useFindManyDM_DonVi,
@@ -27,6 +27,12 @@ export type PutTrainingBlockSubject = TrainingBlockSubject & {
   conditional?: boolean
 }
 dayjs.locale("vi")
+
+type SubjectVersion = Prisma.SubjectVersionGetPayload<{
+  include: {
+    managementOrganization: true
+  }
+}>
 
 type TrainingBlockOnCurriculumVersionInput = {
   trainingBlockOnCurriculumVersionId: string
@@ -113,6 +119,9 @@ const PutTrainingBlockSubject = () => {
           }
         : {}),
       trainingObjectTypeId,
+    },
+    include: {
+      managementOrganization: true,
     },
   })
 
@@ -204,7 +213,15 @@ const PutTrainingBlockSubject = () => {
   }
 
   const subjectVersionOptions = subjectVersionData.map((item: SubjectVersion) => ({
-    label: [item?.code, item?.name, item?.period].filter(Boolean).join(" - "),
+    label: [
+      item?.code,
+      item?.name,
+      item?.credit + "TC",
+      item?.period + "T",
+      item?.managementOrganization?.sMa,
+    ]
+      .filter(Boolean)
+      .join(" - "),
     value: item.id,
     searchText: `${item.code} ${item.name}`,
   }))
@@ -293,7 +310,7 @@ const PutTrainingBlockSubject = () => {
           <Select placeholder="Chọn loại môn học" options={subjectRequirementTypeOptions} />
         </FormItem>
       </Col>
-      <Col span={24}>
+      <Col span={12}>
         <FormItem
           form={form}
           name="conditional"
@@ -305,7 +322,7 @@ const PutTrainingBlockSubject = () => {
           <Checkbox />
         </FormItem>
       </Col>
-      <Col span={24}>
+      <Col span={12}>
         <FormItem
           form={form}
           name="graduation"

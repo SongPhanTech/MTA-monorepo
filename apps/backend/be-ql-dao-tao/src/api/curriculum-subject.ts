@@ -182,7 +182,7 @@ app.openapi(importCurriculumVersion, async (c) => {
     (acc, s) => {
       const credit = Number(s.credit) || 0
 
-      if (s.type === $Enums.SubjectRequirementType.Mandatory) {
+      if (s.type === $Enums.SubjectRequirementType.Mandatory && s.useForFinalScore) {
         acc.totalMandatoryCredits += credit
       } else if (s.type === $Enums.SubjectRequirementType.Optional) {
         acc.totalElectiveCredits += credit

@@ -6,5 +6,5 @@
  */
 
 export type GetClassRegisterSession200ItemTrainingCoursesItem = {
-    id: string
-}
+  id: string;
+};

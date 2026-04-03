@@ -6,5 +6,5 @@
  */
 
 export type ExportStudentSemesterResult404 = {
-    message: string
-}
+  message: string;
+};

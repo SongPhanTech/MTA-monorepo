@@ -6,5 +6,5 @@
  */
 
 export type ExportStudentProfilesBody = {
-    trainingCourseId: string
-}
+  trainingCourseId: string;
+};

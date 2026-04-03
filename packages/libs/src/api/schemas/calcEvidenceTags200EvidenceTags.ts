@@ -5,4 +5,4 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type CalcEvidenceTags200EvidenceTags = { [key: string]: string }
+export type CalcEvidenceTags200EvidenceTags = {[key: string]: string};

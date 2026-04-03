@@ -136,12 +136,7 @@ const PutAcademicActionCondition = () => {
         </FormItem>
       </Col>
       <Col span={8}>
-        <FormItem
-          form={form}
-          name="yearCondition"
-          label="Áp dụng cho sinh viên năm thứ..."
-          required
-        >
+        <FormItem form={form} name="yearCondition" label="Áp dụng cho sinh viên năm thứ...">
           <InputNumber
             min={0}
             type="number"

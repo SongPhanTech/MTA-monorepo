@@ -4,19 +4,19 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { AccessRequests200ItemPayload } from './accessRequests200ItemPayload'
+import type { AccessRequests200ItemPayload } from './accessRequests200ItemPayload';
 
 export type AccessRequests200Item = {
-    tag: string
-    flow: string
-    time: number
-    verb: string
-    apiTo: string
-    level: string
-    headers: string[]
-    /** @nullable */
-    payload?: AccessRequests200ItemPayload
-    service: string
-    statusCode: number
-    correlationId: string
-}
+  tag: string;
+  flow: string;
+  time: number;
+  verb: string;
+  apiTo: string;
+  level: string;
+  headers: string[];
+  /** @nullable */
+  payload?: AccessRequests200ItemPayload;
+  service: string;
+  statusCode: number;
+  correlationId: string;
+};

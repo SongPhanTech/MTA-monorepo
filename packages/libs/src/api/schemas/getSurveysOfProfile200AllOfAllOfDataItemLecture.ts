@@ -4,33 +4,33 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetSurveysOfProfile200AllOfAllOfDataItemLectureOrganization } from './getSurveysOfProfile200AllOfAllOfDataItemLectureOrganization'
-import type { GetSurveysOfProfile200AllOfAllOfDataItemLectureUserProfile } from './getSurveysOfProfile200AllOfAllOfDataItemLectureUserProfile'
+import type { GetSurveysOfProfile200AllOfAllOfDataItemLectureOrganization } from './getSurveysOfProfile200AllOfAllOfDataItemLectureOrganization';
+import type { GetSurveysOfProfile200AllOfAllOfDataItemLectureUserProfile } from './getSurveysOfProfile200AllOfAllOfDataItemLectureUserProfile';
 
 /**
  * @nullable
  */
 export type GetSurveysOfProfile200AllOfAllOfDataItemLecture = {
-    id: string
-    /** @nullable */
-    code?: string | null
-    active?: boolean
-    /** @nullable */
-    description?: string | null
-    /** @nullable */
-    deletedAt?: string | null
-    /** @nullable */
-    createdAt?: string | null
-    /** @nullable */
-    updatedAt?: string | null
-    /** @nullable */
-    createdBy?: string | null
-    /** @nullable */
-    from?: string | null
-    /** @nullable */
-    lectureID?: string | null
-    /** @nullable */
-    serviceDate?: string | null
-    organization: GetSurveysOfProfile200AllOfAllOfDataItemLectureOrganization
-    userProfile: GetSurveysOfProfile200AllOfAllOfDataItemLectureUserProfile
-} | null
+  id: string;
+  /** @nullable */
+  code?: string | null;
+  active?: boolean;
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  deletedAt?: string | null;
+  /** @nullable */
+  createdAt?: string | null;
+  /** @nullable */
+  updatedAt?: string | null;
+  /** @nullable */
+  createdBy?: string | null;
+  /** @nullable */
+  from?: string | null;
+  /** @nullable */
+  lectureID?: string | null;
+  /** @nullable */
+  serviceDate?: string | null;
+  organization: GetSurveysOfProfile200AllOfAllOfDataItemLectureOrganization;
+  userProfile: GetSurveysOfProfile200AllOfAllOfDataItemLectureUserProfile;
+} | null;

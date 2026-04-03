@@ -7327,6 +7327,7 @@ export namespace Prisma {
         sThietBiTao: 'sThietBiTao',
         sThietBiSua: 'sThietBiSua',
         sCode: 'sCode',
+        sTKPUCode: 'sTKPUCode',
         sTenVietTat: 'sTenVietTat',
         sParentId: 'sParentId',
         sTruongDonVi: 'sTruongDonVi',
@@ -9207,6 +9208,7 @@ export namespace Prisma {
         type: 'type',
         isLock: 'isLock',
         editProject: 'editProject',
+        researchTopicAssociated: 'researchTopicAssociated',
         firstCheckProgress: 'firstCheckProgress',
         secondCheckProgress: 'secondCheckProgress',
         isEligibleForDefense: 'isEligibleForDefense',
@@ -11496,6 +11498,7 @@ export namespace Prisma {
         sThietBiTao: 'sThietBiTao',
         sThietBiSua: 'sThietBiSua',
         sCode: 'sCode',
+        sTKPUCode: 'sTKPUCode',
         sTenVietTat: 'sTenVietTat',
         sParentId: 'sParentId',
         sTruongDonVi: 'sTruongDonVi',
@@ -12569,6 +12572,7 @@ export namespace Prisma {
         language: 'language',
         type: 'type',
         editProject: 'editProject',
+        researchTopicAssociated: 'researchTopicAssociated',
         primarySupervisorId: 'primarySupervisorId',
         secondarySupervisorId: 'secondarySupervisorId',
         thirdSupervisorId: 'thirdSupervisorId',
@@ -33934,6 +33938,7 @@ export namespace Prisma {
         readonly sThietBiTao: FieldRef<"DM_DonVi", 'String'>;
         readonly sThietBiSua: FieldRef<"DM_DonVi", 'String'>;
         readonly sCode: FieldRef<"DM_DonVi", 'String'>;
+        readonly sTKPUCode: FieldRef<"DM_DonVi", 'String'>;
         readonly sTenVietTat: FieldRef<"DM_DonVi", 'String'>;
         readonly sParentId: FieldRef<"DM_DonVi", 'String'>;
         readonly sTruongDonVi: FieldRef<"DM_DonVi", 'String'>;
@@ -74657,6 +74662,7 @@ export namespace Prisma {
         readonly type: FieldRef<"ThesisProject", 'String'>;
         readonly isLock: FieldRef<"ThesisProject", 'Boolean'>;
         readonly editProject: FieldRef<"ThesisProject", 'String'>;
+        readonly researchTopicAssociated: FieldRef<"ThesisProject", 'String'>;
         readonly firstCheckProgress: FieldRef<"ThesisProject", 'Int'>;
         readonly secondCheckProgress: FieldRef<"ThesisProject", 'Int'>;
         readonly isEligibleForDefense: FieldRef<"ThesisProject", 'Boolean'>;
@@ -186569,6 +186575,7 @@ export namespace Prisma {
         sThietBiTao: string | null
         sThietBiSua: string | null
         sCode: string | null
+        sTKPUCode: string | null
         sTenVietTat: string | null
         sParentId: string | null
         sTruongDonVi: string | null
@@ -186595,6 +186602,7 @@ export namespace Prisma {
         sThietBiTao: string | null
         sThietBiSua: string | null
         sCode: string | null
+        sTKPUCode: string | null
         sTenVietTat: string | null
         sParentId: string | null
         sTruongDonVi: string | null
@@ -186621,6 +186629,7 @@ export namespace Prisma {
         sThietBiTao: number
         sThietBiSua: number
         sCode: number
+        sTKPUCode: number
         sTenVietTat: number
         sParentId: number
         sTruongDonVi: number
@@ -186662,6 +186671,7 @@ export namespace Prisma {
         sThietBiTao?: true
         sThietBiSua?: true
         sCode?: true
+        sTKPUCode?: true
         sTenVietTat?: true
         sParentId?: true
         sTruongDonVi?: true
@@ -186688,6 +186698,7 @@ export namespace Prisma {
         sThietBiTao?: true
         sThietBiSua?: true
         sCode?: true
+        sTKPUCode?: true
         sTenVietTat?: true
         sParentId?: true
         sTruongDonVi?: true
@@ -186714,6 +186725,7 @@ export namespace Prisma {
         sThietBiTao?: true
         sThietBiSua?: true
         sCode?: true
+        sTKPUCode?: true
         sTenVietTat?: true
         sParentId?: true
         sTruongDonVi?: true
@@ -186821,6 +186833,7 @@ export namespace Prisma {
         sThietBiTao: string | null
         sThietBiSua: string | null
         sCode: string | null
+        sTKPUCode: string | null
         sTenVietTat: string | null
         sParentId: string | null
         sTruongDonVi: string | null
@@ -186864,6 +186877,7 @@ export namespace Prisma {
         sThietBiTao?: boolean
         sThietBiSua?: boolean
         sCode?: boolean
+        sTKPUCode?: boolean
         sTenVietTat?: boolean
         sParentId?: boolean
         sTruongDonVi?: boolean
@@ -186906,6 +186920,7 @@ export namespace Prisma {
         sThietBiTao?: boolean
         sThietBiSua?: boolean
         sCode?: boolean
+        sTKPUCode?: boolean
         sTenVietTat?: boolean
         sParentId?: boolean
         sTruongDonVi?: boolean
@@ -186932,6 +186947,7 @@ export namespace Prisma {
         sThietBiTao?: boolean
         sThietBiSua?: boolean
         sCode?: boolean
+        sTKPUCode?: boolean
         sTenVietTat?: boolean
         sParentId?: boolean
         sTruongDonVi?: boolean
@@ -186958,6 +186974,7 @@ export namespace Prisma {
         sThietBiTao?: boolean
         sThietBiSua?: boolean
         sCode?: boolean
+        sTKPUCode?: boolean
         sTenVietTat?: boolean
         sParentId?: boolean
         sTruongDonVi?: boolean
@@ -186967,7 +186984,7 @@ export namespace Prisma {
         iCapDonVi?: boolean
         iLoaiDonVi?: boolean
     };
-    export type DM_DonViOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"Id" | "sMa" | "sTen" | "sGhiChu" | "iSTT" | "bActive" | "bDeleted" | "bSystem" | "iDictionaryKey" | "dNgayTao" | "dNgaySua" | "sNguoiTao" | "sNguoiSua" | "sThietBiTao" | "sThietBiSua" | "sCode" | "sTenVietTat" | "sParentId" | "sTruongDonVi" | "sChucNangNhiemVu" | "sDiaChi" | "iNhomDonVi" | "iCapDonVi" | "iLoaiDonVi", ExtArgs["result"]["dM_DonVi"]>;
+    export type DM_DonViOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"Id" | "sMa" | "sTen" | "sGhiChu" | "iSTT" | "bActive" | "bDeleted" | "bSystem" | "iDictionaryKey" | "dNgayTao" | "dNgaySua" | "sNguoiTao" | "sNguoiSua" | "sThietBiTao" | "sThietBiSua" | "sCode" | "sTKPUCode" | "sTenVietTat" | "sParentId" | "sTruongDonVi" | "sChucNangNhiemVu" | "sDiaChi" | "iNhomDonVi" | "iCapDonVi" | "iLoaiDonVi", ExtArgs["result"]["dM_DonVi"]>;
     export type DM_DonViInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         lecturers?: boolean | DM_DonVi$lecturersArgs<ExtArgs>
         lecturerHistory?: boolean | DM_DonVi$lecturerHistoryArgs<ExtArgs>
@@ -187024,6 +187041,7 @@ export namespace Prisma {
             sThietBiTao: string | null
             sThietBiSua: string | null
             sCode: string | null
+            sTKPUCode: string | null
             sTenVietTat: string | null
             sParentId: string | null
             sTruongDonVi: string | null
@@ -273569,6 +273587,7 @@ export namespace Prisma {
         type: string | null
         isLock: boolean | null
         editProject: string | null
+        researchTopicAssociated: string | null
         firstCheckProgress: number | null
         secondCheckProgress: number | null
         isEligibleForDefense: boolean | null
@@ -273627,6 +273646,7 @@ export namespace Prisma {
         type: string | null
         isLock: boolean | null
         editProject: string | null
+        researchTopicAssociated: string | null
         firstCheckProgress: number | null
         secondCheckProgress: number | null
         isEligibleForDefense: boolean | null
@@ -273685,6 +273705,7 @@ export namespace Prisma {
         type: number
         isLock: number
         editProject: number
+        researchTopicAssociated: number
         firstCheckProgress: number
         secondCheckProgress: number
         isEligibleForDefense: number
@@ -273754,6 +273775,7 @@ export namespace Prisma {
         type?: true
         isLock?: true
         editProject?: true
+        researchTopicAssociated?: true
         firstCheckProgress?: true
         secondCheckProgress?: true
         isEligibleForDefense?: true
@@ -273812,6 +273834,7 @@ export namespace Prisma {
         type?: true
         isLock?: true
         editProject?: true
+        researchTopicAssociated?: true
         firstCheckProgress?: true
         secondCheckProgress?: true
         isEligibleForDefense?: true
@@ -273870,6 +273893,7 @@ export namespace Prisma {
         type?: true
         isLock?: true
         editProject?: true
+        researchTopicAssociated?: true
         firstCheckProgress?: true
         secondCheckProgress?: true
         isEligibleForDefense?: true
@@ -274009,6 +274033,7 @@ export namespace Prisma {
         type: string | null
         isLock: boolean
         editProject: string | null
+        researchTopicAssociated: string | null
         firstCheckProgress: number | null
         secondCheckProgress: number | null
         isEligibleForDefense: boolean
@@ -274084,6 +274109,7 @@ export namespace Prisma {
         type?: boolean
         isLock?: boolean
         editProject?: boolean
+        researchTopicAssociated?: boolean
         firstCheckProgress?: boolean
         secondCheckProgress?: boolean
         isEligibleForDefense?: boolean
@@ -274160,6 +274186,7 @@ export namespace Prisma {
         type?: boolean
         isLock?: boolean
         editProject?: boolean
+        researchTopicAssociated?: boolean
         firstCheckProgress?: boolean
         secondCheckProgress?: boolean
         isEligibleForDefense?: boolean
@@ -274231,6 +274258,7 @@ export namespace Prisma {
         type?: boolean
         isLock?: boolean
         editProject?: boolean
+        researchTopicAssociated?: boolean
         firstCheckProgress?: boolean
         secondCheckProgress?: boolean
         isEligibleForDefense?: boolean
@@ -274302,6 +274330,7 @@ export namespace Prisma {
         type?: boolean
         isLock?: boolean
         editProject?: boolean
+        researchTopicAssociated?: boolean
         firstCheckProgress?: boolean
         secondCheckProgress?: boolean
         isEligibleForDefense?: boolean
@@ -274336,7 +274365,7 @@ export namespace Prisma {
         projectStart?: boolean
         projectEnd?: boolean
     };
-    export type ThesisProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "title" | "titleEN" | "summary" | "objectives" | "scope" | "methodology" | "expectedResults" | "requirements" | "technologies" | "thesisType" | "status" | "language" | "type" | "isLock" | "editProject" | "firstCheckProgress" | "secondCheckProgress" | "isEligibleForDefense" | "primarySupervisorId" | "secondarySupervisorId" | "thirdSupervisorId" | "isProductProject" | "isGroupProject" | "isLanguage" | "externalUnit" | "subjectClassId" | "thesisSessionId" | "supervisorName" | "supervisorId" | "supervisorPaymentId" | "coSupervisorName" | "coSupervisorId" | "coSupervisorPaymentId" | "CHUTICH" | "THUKY" | "PHANBIEN1" | "PHANBIEN2" | "UYVIEN3" | "organizationId" | "maxStudents" | "councilId" | "roomId" | "defenseDate" | "defenseSessionId" | "registrationStart" | "registrationEnd" | "projectStart" | "projectEnd", ExtArgs["result"]["thesisProject"]>;
+    export type ThesisProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "title" | "titleEN" | "summary" | "objectives" | "scope" | "methodology" | "expectedResults" | "requirements" | "technologies" | "thesisType" | "status" | "language" | "type" | "isLock" | "editProject" | "researchTopicAssociated" | "firstCheckProgress" | "secondCheckProgress" | "isEligibleForDefense" | "primarySupervisorId" | "secondarySupervisorId" | "thirdSupervisorId" | "isProductProject" | "isGroupProject" | "isLanguage" | "externalUnit" | "subjectClassId" | "thesisSessionId" | "supervisorName" | "supervisorId" | "supervisorPaymentId" | "coSupervisorName" | "coSupervisorId" | "coSupervisorPaymentId" | "CHUTICH" | "THUKY" | "PHANBIEN1" | "PHANBIEN2" | "UYVIEN3" | "organizationId" | "maxStudents" | "councilId" | "roomId" | "defenseDate" | "defenseSessionId" | "registrationStart" | "registrationEnd" | "projectStart" | "projectEnd", ExtArgs["result"]["thesisProject"]>;
     export type ThesisProjectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         primarySupervisor?: boolean | ThesisProject$primarySupervisorArgs<ExtArgs>
         secondarySupervisor?: boolean | ThesisProject$secondarySupervisorArgs<ExtArgs>
@@ -274447,6 +274476,7 @@ export namespace Prisma {
             type: string | null
             isLock: boolean
             editProject: string | null
+            researchTopicAssociated: string | null
             firstCheckProgress: number | null
             secondCheckProgress: number | null
             isEligibleForDefense: boolean
@@ -277365,7 +277395,7 @@ export namespace Prisma {
         /**
          * The data needed to create a ExpertProfile.
          */
-        data: XOR<ExpertProfileCreateInput, ExpertProfileUncheckedCreateInput>
+        data?: XOR<ExpertProfileCreateInput, ExpertProfileUncheckedCreateInput>
     };
     /**
      * ExpertProfile createMany
@@ -365626,6 +365656,7 @@ export namespace Prisma {
         sThietBiTao?: StringNullableFilter<"DM_DonVi"> | string | null
         sThietBiSua?: StringNullableFilter<"DM_DonVi"> | string | null
         sCode?: StringNullableFilter<"DM_DonVi"> | string | null
+        sTKPUCode?: StringNullableFilter<"DM_DonVi"> | string | null
         sTenVietTat?: StringNullableFilter<"DM_DonVi"> | string | null
         sParentId?: UuidNullableFilter<"DM_DonVi"> | string | null
         sTruongDonVi?: UuidNullableFilter<"DM_DonVi"> | string | null
@@ -365667,6 +365698,7 @@ export namespace Prisma {
         sThietBiTao?: SortOrderInput | SortOrder
         sThietBiSua?: SortOrderInput | SortOrder
         sCode?: SortOrderInput | SortOrder
+        sTKPUCode?: SortOrderInput | SortOrder
         sTenVietTat?: SortOrderInput | SortOrder
         sParentId?: SortOrderInput | SortOrder
         sTruongDonVi?: SortOrderInput | SortOrder
@@ -365712,6 +365744,7 @@ export namespace Prisma {
         sThietBiTao?: StringNullableFilter<"DM_DonVi"> | string | null
         sThietBiSua?: StringNullableFilter<"DM_DonVi"> | string | null
         sCode?: StringNullableFilter<"DM_DonVi"> | string | null
+        sTKPUCode?: StringNullableFilter<"DM_DonVi"> | string | null
         sTenVietTat?: StringNullableFilter<"DM_DonVi"> | string | null
         sParentId?: UuidNullableFilter<"DM_DonVi"> | string | null
         sTruongDonVi?: UuidNullableFilter<"DM_DonVi"> | string | null
@@ -365753,6 +365786,7 @@ export namespace Prisma {
         sThietBiTao?: SortOrderInput | SortOrder
         sThietBiSua?: SortOrderInput | SortOrder
         sCode?: SortOrderInput | SortOrder
+        sTKPUCode?: SortOrderInput | SortOrder
         sTenVietTat?: SortOrderInput | SortOrder
         sParentId?: SortOrderInput | SortOrder
         sTruongDonVi?: SortOrderInput | SortOrder
@@ -365787,6 +365821,7 @@ export namespace Prisma {
         sThietBiTao?: StringNullableWithAggregatesFilter<"DM_DonVi"> | string | null
         sThietBiSua?: StringNullableWithAggregatesFilter<"DM_DonVi"> | string | null
         sCode?: StringNullableWithAggregatesFilter<"DM_DonVi"> | string | null
+        sTKPUCode?: StringNullableWithAggregatesFilter<"DM_DonVi"> | string | null
         sTenVietTat?: StringNullableWithAggregatesFilter<"DM_DonVi"> | string | null
         sParentId?: UuidNullableWithAggregatesFilter<"DM_DonVi"> | string | null
         sTruongDonVi?: UuidNullableWithAggregatesFilter<"DM_DonVi"> | string | null
@@ -377884,6 +377919,7 @@ export namespace Prisma {
         type?: StringNullableFilter<"ThesisProject"> | string | null
         isLock?: BoolFilter<"ThesisProject"> | boolean
         editProject?: StringNullableFilter<"ThesisProject"> | string | null
+        researchTopicAssociated?: StringNullableFilter<"ThesisProject"> | string | null
         firstCheckProgress?: IntNullableFilter<"ThesisProject"> | number | null
         secondCheckProgress?: IntNullableFilter<"ThesisProject"> | number | null
         isEligibleForDefense?: BoolFilter<"ThesisProject"> | boolean
@@ -377959,6 +377995,7 @@ export namespace Prisma {
         type?: SortOrderInput | SortOrder
         isLock?: SortOrder
         editProject?: SortOrderInput | SortOrder
+        researchTopicAssociated?: SortOrderInput | SortOrder
         firstCheckProgress?: SortOrderInput | SortOrder
         secondCheckProgress?: SortOrderInput | SortOrder
         isEligibleForDefense?: SortOrder
@@ -378038,6 +378075,7 @@ export namespace Prisma {
         type?: StringNullableFilter<"ThesisProject"> | string | null
         isLock?: BoolFilter<"ThesisProject"> | boolean
         editProject?: StringNullableFilter<"ThesisProject"> | string | null
+        researchTopicAssociated?: StringNullableFilter<"ThesisProject"> | string | null
         firstCheckProgress?: IntNullableFilter<"ThesisProject"> | number | null
         secondCheckProgress?: IntNullableFilter<"ThesisProject"> | number | null
         isEligibleForDefense?: BoolFilter<"ThesisProject"> | boolean
@@ -378113,6 +378151,7 @@ export namespace Prisma {
         type?: SortOrderInput | SortOrder
         isLock?: SortOrder
         editProject?: SortOrderInput | SortOrder
+        researchTopicAssociated?: SortOrderInput | SortOrder
         firstCheckProgress?: SortOrderInput | SortOrder
         secondCheckProgress?: SortOrderInput | SortOrder
         isEligibleForDefense?: SortOrder
@@ -378179,6 +378218,7 @@ export namespace Prisma {
         type?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
         isLock?: BoolWithAggregatesFilter<"ThesisProject"> | boolean
         editProject?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
+        researchTopicAssociated?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
         firstCheckProgress?: IntNullableWithAggregatesFilter<"ThesisProject"> | number | null
         secondCheckProgress?: IntNullableWithAggregatesFilter<"ThesisProject"> | number | null
         isEligibleForDefense?: BoolWithAggregatesFilter<"ThesisProject"> | boolean
@@ -395307,6 +395347,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -395348,6 +395389,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -395389,6 +395431,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -395430,6 +395473,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -395471,6 +395515,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -395497,6 +395542,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -395523,6 +395569,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -409355,6 +409402,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -409417,6 +409465,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -409479,6 +409528,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -409541,6 +409591,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -409603,6 +409654,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -409661,6 +409713,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -409706,6 +409759,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -409990,8 +410044,8 @@ export namespace Prisma {
         bankName?: string | null
         projectExpert?: boolean
         thesisExpert?: boolean
-        eligiblePresident: boolean
-        eligibleSecretary: boolean
+        eligiblePresident?: boolean
+        eligibleSecretary?: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
         major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
@@ -410028,8 +410082,8 @@ export namespace Prisma {
         bankName?: string | null
         projectExpert?: boolean
         thesisExpert?: boolean
-        eligiblePresident: boolean
-        eligibleSecretary: boolean
+        eligiblePresident?: boolean
+        eligibleSecretary?: boolean
         major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
@@ -410139,8 +410193,8 @@ export namespace Prisma {
         bankName?: string | null
         projectExpert?: boolean
         thesisExpert?: boolean
-        eligiblePresident: boolean
-        eligibleSecretary: boolean
+        eligiblePresident?: boolean
+        eligibleSecretary?: boolean
     };
     export type ExpertProfileUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -425768,6 +425822,7 @@ export namespace Prisma {
         sThietBiTao?: SortOrder
         sThietBiSua?: SortOrder
         sCode?: SortOrder
+        sTKPUCode?: SortOrder
         sTenVietTat?: SortOrder
         sParentId?: SortOrder
         sTruongDonVi?: SortOrder
@@ -425801,6 +425856,7 @@ export namespace Prisma {
         sThietBiTao?: SortOrder
         sThietBiSua?: SortOrder
         sCode?: SortOrder
+        sTKPUCode?: SortOrder
         sTenVietTat?: SortOrder
         sParentId?: SortOrder
         sTruongDonVi?: SortOrder
@@ -425827,6 +425883,7 @@ export namespace Prisma {
         sThietBiTao?: SortOrder
         sThietBiSua?: SortOrder
         sCode?: SortOrder
+        sTKPUCode?: SortOrder
         sTenVietTat?: SortOrder
         sParentId?: SortOrder
         sTruongDonVi?: SortOrder
@@ -434276,6 +434333,7 @@ export namespace Prisma {
         type?: SortOrder
         isLock?: SortOrder
         editProject?: SortOrder
+        researchTopicAssociated?: SortOrder
         firstCheckProgress?: SortOrder
         secondCheckProgress?: SortOrder
         isEligibleForDefense?: SortOrder
@@ -434339,6 +434397,7 @@ export namespace Prisma {
         type?: SortOrder
         isLock?: SortOrder
         editProject?: SortOrder
+        researchTopicAssociated?: SortOrder
         firstCheckProgress?: SortOrder
         secondCheckProgress?: SortOrder
         isEligibleForDefense?: SortOrder
@@ -434397,6 +434456,7 @@ export namespace Prisma {
         type?: SortOrder
         isLock?: SortOrder
         editProject?: SortOrder
+        researchTopicAssociated?: SortOrder
         firstCheckProgress?: SortOrder
         secondCheckProgress?: SortOrder
         isEligibleForDefense?: SortOrder
@@ -505586,6 +505646,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -505647,6 +505708,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -506157,6 +506219,7 @@ export namespace Prisma {
         type?: StringNullableFilter<"ThesisProject"> | string | null
         isLock?: BoolFilter<"ThesisProject"> | boolean
         editProject?: StringNullableFilter<"ThesisProject"> | string | null
+        researchTopicAssociated?: StringNullableFilter<"ThesisProject"> | string | null
         firstCheckProgress?: IntNullableFilter<"ThesisProject"> | number | null
         secondCheckProgress?: IntNullableFilter<"ThesisProject"> | number | null
         isEligibleForDefense?: BoolFilter<"ThesisProject"> | boolean
@@ -519623,8 +519686,8 @@ export namespace Prisma {
         bankName?: string | null
         projectExpert?: boolean
         thesisExpert?: boolean
-        eligiblePresident: boolean
-        eligibleSecretary: boolean
+        eligiblePresident?: boolean
+        eligibleSecretary?: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
         major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
@@ -519660,8 +519723,8 @@ export namespace Prisma {
         bankName?: string | null
         projectExpert?: boolean
         thesisExpert?: boolean
-        eligiblePresident: boolean
-        eligibleSecretary: boolean
+        eligiblePresident?: boolean
+        eligibleSecretary?: boolean
         major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
@@ -519699,8 +519762,8 @@ export namespace Prisma {
         bankName?: string | null
         projectExpert?: boolean
         thesisExpert?: boolean
-        eligiblePresident: boolean
-        eligibleSecretary: boolean
+        eligiblePresident?: boolean
+        eligibleSecretary?: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
         major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
@@ -519736,8 +519799,8 @@ export namespace Prisma {
         bankName?: string | null
         projectExpert?: boolean
         thesisExpert?: boolean
-        eligiblePresident: boolean
-        eligibleSecretary: boolean
+        eligiblePresident?: boolean
+        eligibleSecretary?: boolean
         major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
@@ -519775,8 +519838,8 @@ export namespace Prisma {
         bankName?: string | null
         projectExpert?: boolean
         thesisExpert?: boolean
-        eligiblePresident: boolean
-        eligibleSecretary: boolean
+        eligiblePresident?: boolean
+        eligibleSecretary?: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
         major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
@@ -519812,8 +519875,8 @@ export namespace Prisma {
         bankName?: string | null
         projectExpert?: boolean
         thesisExpert?: boolean
-        eligiblePresident: boolean
-        eligibleSecretary: boolean
+        eligiblePresident?: boolean
+        eligibleSecretary?: boolean
         major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
@@ -520263,8 +520326,8 @@ export namespace Prisma {
         bankName?: string | null
         projectExpert?: boolean
         thesisExpert?: boolean
-        eligiblePresident: boolean
-        eligibleSecretary: boolean
+        eligiblePresident?: boolean
+        eligibleSecretary?: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
         major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
@@ -520300,8 +520363,8 @@ export namespace Prisma {
         bankName?: string | null
         projectExpert?: boolean
         thesisExpert?: boolean
-        eligiblePresident: boolean
-        eligibleSecretary: boolean
+        eligiblePresident?: boolean
+        eligibleSecretary?: boolean
         major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
@@ -520339,8 +520402,8 @@ export namespace Prisma {
         bankName?: string | null
         projectExpert?: boolean
         thesisExpert?: boolean
-        eligiblePresident: boolean
-        eligibleSecretary: boolean
+        eligiblePresident?: boolean
+        eligibleSecretary?: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
         major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
@@ -520376,8 +520439,8 @@ export namespace Prisma {
         bankName?: string | null
         projectExpert?: boolean
         thesisExpert?: boolean
-        eligiblePresident: boolean
-        eligibleSecretary: boolean
+        eligiblePresident?: boolean
+        eligibleSecretary?: boolean
         major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
@@ -526857,6 +526920,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -526897,6 +526961,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -528015,6 +528080,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -528055,6 +528121,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -528410,6 +528477,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -528450,6 +528518,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -528799,6 +528868,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -528839,6 +528909,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -530485,6 +530556,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -530525,6 +530597,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -530756,6 +530829,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -530796,6 +530870,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -531034,6 +531109,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -531074,6 +531150,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -532303,6 +532380,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -532343,6 +532421,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -536365,6 +536444,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -536426,6 +536506,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -536493,8 +536574,8 @@ export namespace Prisma {
         bankName?: string | null
         projectExpert?: boolean
         thesisExpert?: boolean
-        eligiblePresident: boolean
-        eligibleSecretary: boolean
+        eligiblePresident?: boolean
+        eligibleSecretary?: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
         major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
@@ -536530,8 +536611,8 @@ export namespace Prisma {
         bankName?: string | null
         projectExpert?: boolean
         thesisExpert?: boolean
-        eligiblePresident: boolean
-        eligibleSecretary: boolean
+        eligiblePresident?: boolean
+        eligibleSecretary?: boolean
         major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
@@ -545049,6 +545130,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -545110,6 +545192,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -545382,6 +545465,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -545422,6 +545506,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -545689,6 +545774,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -545729,6 +545815,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -546043,6 +546130,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -546083,6 +546171,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -546127,6 +546216,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -546167,6 +546257,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -546211,6 +546302,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -546251,6 +546343,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -546468,8 +546561,8 @@ export namespace Prisma {
         bankName?: string | null
         projectExpert?: boolean
         thesisExpert?: boolean
-        eligiblePresident: boolean
-        eligibleSecretary: boolean
+        eligiblePresident?: boolean
+        eligibleSecretary?: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
@@ -546505,8 +546598,8 @@ export namespace Prisma {
         bankName?: string | null
         projectExpert?: boolean
         thesisExpert?: boolean
-        eligiblePresident: boolean
-        eligibleSecretary: boolean
+        eligiblePresident?: boolean
+        eligibleSecretary?: boolean
         supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
         thirdSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutThirdSupervisorInput
@@ -546688,6 +546781,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -546728,6 +546822,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -546777,6 +546872,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -546817,6 +546913,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -546866,6 +546963,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -546906,6 +547004,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -560656,6 +560755,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -560696,6 +560796,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -561467,8 +561568,8 @@ export namespace Prisma {
         bankName?: string | null
         projectExpert?: boolean
         thesisExpert?: boolean
-        eligiblePresident: boolean
-        eligibleSecretary: boolean
+        eligiblePresident?: boolean
+        eligibleSecretary?: boolean
         major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
@@ -561503,8 +561604,8 @@ export namespace Prisma {
         bankName?: string | null
         projectExpert?: boolean
         thesisExpert?: boolean
-        eligiblePresident: boolean
-        eligibleSecretary: boolean
+        eligiblePresident?: boolean
+        eligibleSecretary?: boolean
         major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
@@ -561907,6 +562008,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -561968,6 +562070,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -562037,6 +562140,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -562098,6 +562202,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -562524,6 +562629,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -562564,6 +562670,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -563344,6 +563451,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -563384,6 +563492,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -563820,6 +563929,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -563860,6 +563970,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -564007,6 +564118,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -564047,6 +564159,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -564223,6 +564336,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -564263,6 +564377,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -565078,6 +565193,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -565139,6 +565255,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -565561,8 +565678,8 @@ export namespace Prisma {
         bankName?: string | null
         projectExpert?: boolean
         thesisExpert?: boolean
-        eligiblePresident: boolean
-        eligibleSecretary: boolean
+        eligiblePresident?: boolean
+        eligibleSecretary?: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
         major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
@@ -565598,8 +565715,8 @@ export namespace Prisma {
         bankName?: string | null
         projectExpert?: boolean
         thesisExpert?: boolean
-        eligiblePresident: boolean
-        eligibleSecretary: boolean
+        eligiblePresident?: boolean
+        eligibleSecretary?: boolean
         major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
@@ -565805,8 +565922,8 @@ export namespace Prisma {
         bankName?: string | null
         projectExpert?: boolean
         thesisExpert?: boolean
-        eligiblePresident: boolean
-        eligibleSecretary: boolean
+        eligiblePresident?: boolean
+        eligibleSecretary?: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
         major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
         coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
@@ -565842,8 +565959,8 @@ export namespace Prisma {
         bankName?: string | null
         projectExpert?: boolean
         thesisExpert?: boolean
-        eligiblePresident: boolean
-        eligibleSecretary: boolean
+        eligiblePresident?: boolean
+        eligibleSecretary?: boolean
         major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
         coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
         thirdSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutThirdSupervisorInput
@@ -565915,8 +566032,8 @@ export namespace Prisma {
         bankName?: string | null
         projectExpert?: boolean
         thesisExpert?: boolean
-        eligiblePresident: boolean
-        eligibleSecretary: boolean
+        eligiblePresident?: boolean
+        eligibleSecretary?: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
         major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
@@ -565952,8 +566069,8 @@ export namespace Prisma {
         bankName?: string | null
         projectExpert?: boolean
         thesisExpert?: boolean
-        eligiblePresident: boolean
-        eligibleSecretary: boolean
+        eligiblePresident?: boolean
+        eligibleSecretary?: boolean
         major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
         thirdSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutThirdSupervisorInput
@@ -566020,6 +566137,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -566060,6 +566178,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -567028,6 +567147,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -567068,6 +567188,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -567356,6 +567477,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -567417,6 +567539,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -567731,6 +567854,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -567792,6 +567916,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -568214,6 +568339,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -568275,6 +568401,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -568580,6 +568707,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -568641,6 +568769,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -568710,6 +568839,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -568771,6 +568901,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -568840,6 +568971,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -568901,6 +569033,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -569707,6 +569840,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -569768,6 +569902,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -569855,6 +569990,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -569916,6 +570052,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -570092,6 +570229,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -570153,6 +570291,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -570365,8 +570504,8 @@ export namespace Prisma {
         bankName?: string | null
         projectExpert?: boolean
         thesisExpert?: boolean
-        eligiblePresident: boolean
-        eligibleSecretary: boolean
+        eligiblePresident?: boolean
+        eligibleSecretary?: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
         major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
@@ -570402,8 +570541,8 @@ export namespace Prisma {
         bankName?: string | null
         projectExpert?: boolean
         thesisExpert?: boolean
-        eligiblePresident: boolean
-        eligibleSecretary: boolean
+        eligiblePresident?: boolean
+        eligibleSecretary?: boolean
         major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
@@ -570691,6 +570830,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -570752,6 +570892,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -570906,6 +571047,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -570967,6 +571109,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -571041,6 +571184,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -571102,6 +571246,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -571256,6 +571401,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -571317,6 +571463,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -571460,6 +571607,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -571521,6 +571669,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -571590,6 +571739,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -571651,6 +571801,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -576389,6 +576540,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -576429,6 +576581,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -577040,6 +577193,7 @@ export namespace Prisma {
         sThietBiTao?: StringNullableFilter<"DM_DonVi"> | string | null
         sThietBiSua?: StringNullableFilter<"DM_DonVi"> | string | null
         sCode?: StringNullableFilter<"DM_DonVi"> | string | null
+        sTKPUCode?: StringNullableFilter<"DM_DonVi"> | string | null
         sTenVietTat?: StringNullableFilter<"DM_DonVi"> | string | null
         sParentId?: UuidNullableFilter<"DM_DonVi"> | string | null
         sTruongDonVi?: UuidNullableFilter<"DM_DonVi"> | string | null
@@ -585694,6 +585848,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -585734,6 +585889,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -586260,6 +586416,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -586300,6 +586457,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -586769,6 +586927,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -586809,6 +586968,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         sCode?: string | null
+        sTKPUCode?: string | null
         sTenVietTat?: string | null
         sParentId?: string | null
         sTruongDonVi?: string | null
@@ -587273,6 +587433,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -587313,6 +587474,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -612951,6 +613113,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -613880,6 +614043,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -613941,6 +614105,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -614002,6 +614167,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -637504,6 +637670,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -637917,6 +638084,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -637978,6 +638146,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -638039,6 +638208,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -642121,6 +642291,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -642525,6 +642696,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -642586,6 +642758,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -642647,6 +642820,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -648391,8 +648565,8 @@ export namespace Prisma {
         bankName?: string | null
         projectExpert?: boolean
         thesisExpert?: boolean
-        eligiblePresident: boolean
-        eligibleSecretary: boolean
+        eligiblePresident?: boolean
+        eligibleSecretary?: boolean
     };
     export type SurveyCreateManyLectureInput = {
         id?: string
@@ -648516,6 +648690,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -648573,6 +648748,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -650047,6 +650223,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -650108,6 +650285,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -650169,6 +650347,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -650226,6 +650405,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -650287,6 +650467,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -650348,6 +650529,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -650477,6 +650659,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -650534,6 +650717,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -650595,6 +650779,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -650656,6 +650841,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -650845,6 +651031,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -650902,6 +651089,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -650963,6 +651151,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -651024,6 +651213,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -651081,6 +651271,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -651138,6 +651329,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -651195,6 +651387,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -651425,6 +651618,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -651486,6 +651680,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -651547,6 +651742,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -651604,6 +651800,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -651665,6 +651862,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -651726,6 +651924,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -651783,6 +651982,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -651844,6 +652044,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -651905,6 +652106,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -652575,6 +652777,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -652644,6 +652847,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -652705,6 +652909,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -652766,6 +652971,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -653151,6 +653357,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -653208,6 +653415,7 @@ export namespace Prisma {
         type?: string | null
         isLock?: boolean
         editProject?: string | null
+        researchTopicAssociated?: string | null
         firstCheckProgress?: number | null
         secondCheckProgress?: number | null
         isEligibleForDefense?: boolean
@@ -653265,6 +653473,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -653326,6 +653535,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -653387,6 +653597,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -653444,6 +653655,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -653505,6 +653717,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -653566,6 +653779,7 @@ export namespace Prisma {
         type?: NullableStringFieldUpdateOperationsInput | string | null
         isLock?: BoolFieldUpdateOperationsInput | boolean
         editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
         firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
         isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
@@ -654779,6 +654993,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -654819,6 +655034,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
@@ -654859,6 +655075,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
         sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
         sParentId?: NullableStringFieldUpdateOperationsInput | string | null
         sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null

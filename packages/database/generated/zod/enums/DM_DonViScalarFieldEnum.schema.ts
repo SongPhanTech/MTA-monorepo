@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const DM_DonViScalarFieldEnumSchema = z.enum(["Id", "sMa", "sTen", "sGhiChu", "iSTT", "bActive", "bDeleted", "bSystem", "iDictionaryKey", "dNgayTao", "dNgaySua", "sNguoiTao", "sNguoiSua", "sThietBiTao", "sThietBiSua", "sCode", "sTenVietTat", "sParentId", "sTruongDonVi", "sChucNangNhiemVu", "sDiaChi", "iNhomDonVi", "iCapDonVi", "iLoaiDonVi"])
+export const DM_DonViScalarFieldEnumSchema = z.enum(["Id", "sMa", "sTen", "sGhiChu", "iSTT", "bActive", "bDeleted", "bSystem", "iDictionaryKey", "dNgayTao", "dNgaySua", "sNguoiTao", "sNguoiSua", "sThietBiTao", "sThietBiSua", "sCode", "sTKPUCode", "sTenVietTat", "sParentId", "sTruongDonVi", "sChucNangNhiemVu", "sDiaChi", "iNhomDonVi", "iCapDonVi", "iLoaiDonVi"])

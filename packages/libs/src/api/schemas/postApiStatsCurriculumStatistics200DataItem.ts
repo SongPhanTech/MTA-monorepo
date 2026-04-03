@@ -6,6 +6,6 @@
  */
 
 export type PostApiStatsCurriculumStatistics200DataItem = {
-    activeCurricula: number
-    activeCurriculumVersions: number
-}
+  activeCurricula: number;
+  activeCurriculumVersions: number;
+};

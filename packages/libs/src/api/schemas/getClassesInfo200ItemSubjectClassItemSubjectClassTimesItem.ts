@@ -6,7 +6,7 @@
  */
 
 export type GetClassesInfo200ItemSubjectClassItemSubjectClassTimesItem = {
-    dayOfWeek?: number
-    startPeriod?: number
-    endPeriod?: number
-}
+  dayOfWeek?: number;
+  startPeriod?: number;
+  endPeriod?: number;
+};

@@ -52,21 +52,21 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  */
 
 export interface PublicApiPagingRequestDto {
-    /**
-     * danh sách các trường phục vụ việc sắp xếp, danh sách cách nhau bởi dấu phẩy. Ví dụ sắp xếp cán bộ, nhân viên theo thứ tự tăng dần của mã,tên, ngày sửa gần nhất Sort="sMa ASC,sTen ASC,dNgaySua DESC"
-     * @nullable
-     */
-    Sort?: string | null
-    /** Số dòng cần bỏ qua khi truy vấn dữ liệu. Ví dụ: skip = 5, sẽ bỏ qua 5 dòng đầu tiên trong bảng dữ liệu. */
-    Skip?: number
-    /** Số dòng cần lấy khi truy vấn dữ liệu. Ví dụ: skip = 10, take = 5, sẽ bỏ qua 10 dòng đầu tiên và lấy 5 dòng tiếp theo trong bảng dữ liệu. */
-    Take?: number
-    /**
-     * Danh sách column. Ví dụ: "sMa,sTen". Nếu không có thì sẽ lấy tất cả các trường
-     * @nullable
-     */
-    Columns?: string | null
-    /**
+  /**
+   * danh sách các trường phục vụ việc sắp xếp, danh sách cách nhau bởi dấu phẩy. Ví dụ sắp xếp cán bộ, nhân viên theo thứ tự tăng dần của mã,tên, ngày sửa gần nhất Sort="sMa ASC,sTen ASC,dNgaySua DESC"
+   * @nullable
+   */
+  Sort?: string | null;
+  /** Số dòng cần bỏ qua khi truy vấn dữ liệu. Ví dụ: skip = 5, sẽ bỏ qua 5 dòng đầu tiên trong bảng dữ liệu. */
+  Skip?: number;
+  /** Số dòng cần lấy khi truy vấn dữ liệu. Ví dụ: skip = 10, take = 5, sẽ bỏ qua 10 dòng đầu tiên và lấy 5 dòng tiếp theo trong bảng dữ liệu. */
+  Take?: number;
+  /**
+   * Danh sách column. Ví dụ: "sMa,sTen". Nếu không có thì sẽ lấy tất cả các trường
+   * @nullable
+   */
+  Columns?: string | null;
+  /**
    * Lọc dữ liệu theo điều kiện.
 
 Viết theo dạng 1 list các object. Ví dụ:  "[{\"field\":\"sMa\",\"operator\":\"=\",\"value\":\"NV001\"},{\"field\":\"sTen\",\"operator\":\"LIKE\",\"value\":\"Nguyễn Văn A\"}]".
@@ -79,12 +79,12 @@ Mỗi object trong list sẽ có các trường:
 5. dataType: Kiểu dữ liệu của giá trị, bao gồm "STRING", "DATETIME", "NUMBER", "BOOL". Nếu không có thì sẽ tự động xác định kiểu dữ liệu là "STRING".
    * @nullable
    */
-    Filter?: string | null
-    /**
-     * Filter để kiểm tra xem bảng dữ liệu có rỗng hay không. DÙng tương tự như Filter
-     * @nullable
-     */
-    EmptyFilter?: string | null
-    /** Gets or sets a value indicating whether the total should be calculated. */
-    IsGetTotal?: boolean
+  Filter?: string | null;
+  /**
+   * Filter để kiểm tra xem bảng dữ liệu có rỗng hay không. DÙng tương tự như Filter
+   * @nullable
+   */
+  EmptyFilter?: string | null;
+  /** Gets or sets a value indicating whether the total should be calculated. */
+  IsGetTotal?: boolean;
 }

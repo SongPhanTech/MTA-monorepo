@@ -4,9 +4,9 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetPublicSurveysV2ResultDataItem } from './getPublicSurveysV2ResultDataItem'
+import type { GetPublicSurveysV2ResultDataItem } from './getPublicSurveysV2ResultDataItem';
 
 export interface GetPublicSurveysV2Result {
-    data: GetPublicSurveysV2ResultDataItem[]
-    total: number
+  data: GetPublicSurveysV2ResultDataItem[];
+  total: number;
 }

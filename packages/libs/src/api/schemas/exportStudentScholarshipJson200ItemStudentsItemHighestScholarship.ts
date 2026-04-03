@@ -9,26 +9,26 @@
  * Học bổng cao nhất của sinh viên
  */
 export type ExportStudentScholarshipJson200ItemStudentsItemHighestScholarship = {
-    id: string
-    /** @nullable */
-    code?: string | null
-    active?: boolean
-    /** @nullable */
-    description?: string | null
-    /** @nullable */
-    deletedAt?: string | null
-    /** @nullable */
-    createdAt?: string | null
-    /** @nullable */
-    updatedAt?: string | null
-    /** @nullable */
-    createdBy?: string | null
-    name: string
-    rankOrder: number
-    baseAmount?: unknown
-    multiplier?: number
-    /** @nullable */
-    effectiveFrom?: string | null
-    /** @nullable */
-    effectiveTo?: string | null
-}
+  id: string;
+  /** @nullable */
+  code?: string | null;
+  active?: boolean;
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  deletedAt?: string | null;
+  /** @nullable */
+  createdAt?: string | null;
+  /** @nullable */
+  updatedAt?: string | null;
+  /** @nullable */
+  createdBy?: string | null;
+  name: string;
+  rankOrder: number;
+  baseAmount?: unknown;
+  multiplier?: number;
+  /** @nullable */
+  effectiveFrom?: string | null;
+  /** @nullable */
+  effectiveTo?: string | null;
+};

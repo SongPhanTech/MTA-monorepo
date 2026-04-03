@@ -4,42 +4,42 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetClusterSurveyStatisticsForOrganization200SurveyTopic } from './getClusterSurveyStatisticsForOrganization200SurveyTopic'
-import type { GetClusterSurveyStatisticsForOrganization200SurveyObjectTypeItem } from './getClusterSurveyStatisticsForOrganization200SurveyObjectTypeItem'
-import type { GetClusterSurveyStatisticsForOrganization200LecturersItem } from './getClusterSurveyStatisticsForOrganization200LecturersItem'
-import type { GetClusterSurveyStatisticsForOrganization200SurveyChoiceItem } from './getClusterSurveyStatisticsForOrganization200SurveyChoiceItem'
-import type { GetClusterSurveyStatisticsForOrganization200SurveyQuestionItem } from './getClusterSurveyStatisticsForOrganization200SurveyQuestionItem'
-import type { GetClusterSurveyStatisticsForOrganization200SurveysItem } from './getClusterSurveyStatisticsForOrganization200SurveysItem'
-import type { GetClusterSurveyStatisticsForOrganization200Data } from './getClusterSurveyStatisticsForOrganization200Data'
+import type { GetClusterSurveyStatisticsForOrganization200SurveyTopic } from './getClusterSurveyStatisticsForOrganization200SurveyTopic';
+import type { GetClusterSurveyStatisticsForOrganization200SurveyObjectTypeItem } from './getClusterSurveyStatisticsForOrganization200SurveyObjectTypeItem';
+import type { GetClusterSurveyStatisticsForOrganization200LecturersItem } from './getClusterSurveyStatisticsForOrganization200LecturersItem';
+import type { GetClusterSurveyStatisticsForOrganization200SurveyChoiceItem } from './getClusterSurveyStatisticsForOrganization200SurveyChoiceItem';
+import type { GetClusterSurveyStatisticsForOrganization200SurveyQuestionItem } from './getClusterSurveyStatisticsForOrganization200SurveyQuestionItem';
+import type { GetClusterSurveyStatisticsForOrganization200SurveysItem } from './getClusterSurveyStatisticsForOrganization200SurveysItem';
+import type { GetClusterSurveyStatisticsForOrganization200Data } from './getClusterSurveyStatisticsForOrganization200Data';
 
 export type GetClusterSurveyStatisticsForOrganization200 = {
-    id: string
-    /** @nullable */
-    code?: string | null
-    active?: boolean
-    /** @nullable */
-    description?: string | null
-    /** @nullable */
-    deletedAt?: string | null
-    /** @nullable */
-    createdAt?: string | null
-    /** @nullable */
-    updatedAt?: string | null
-    /** @nullable */
-    createdBy?: string | null
-    name: string
-    /** @nullable */
-    startDate: string | null
-    /** @nullable */
-    endDate?: string | null
-    isPublic?: boolean
-    anonymous?: boolean
-    surveyTopicId: string
-    surveyTopic?: GetClusterSurveyStatisticsForOrganization200SurveyTopic
-    surveyObjectType?: GetClusterSurveyStatisticsForOrganization200SurveyObjectTypeItem[]
-    lecturers?: GetClusterSurveyStatisticsForOrganization200LecturersItem[]
-    surveyChoice?: GetClusterSurveyStatisticsForOrganization200SurveyChoiceItem[]
-    surveyQuestion?: GetClusterSurveyStatisticsForOrganization200SurveyQuestionItem[]
-    surveys?: GetClusterSurveyStatisticsForOrganization200SurveysItem[]
-    data: GetClusterSurveyStatisticsForOrganization200Data
-}
+  id: string;
+  /** @nullable */
+  code?: string | null;
+  active?: boolean;
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  deletedAt?: string | null;
+  /** @nullable */
+  createdAt?: string | null;
+  /** @nullable */
+  updatedAt?: string | null;
+  /** @nullable */
+  createdBy?: string | null;
+  name: string;
+  /** @nullable */
+  startDate: string | null;
+  /** @nullable */
+  endDate?: string | null;
+  isPublic?: boolean;
+  anonymous?: boolean;
+  surveyTopicId: string;
+  surveyTopic?: GetClusterSurveyStatisticsForOrganization200SurveyTopic;
+  surveyObjectType?: GetClusterSurveyStatisticsForOrganization200SurveyObjectTypeItem[];
+  lecturers?: GetClusterSurveyStatisticsForOrganization200LecturersItem[];
+  surveyChoice?: GetClusterSurveyStatisticsForOrganization200SurveyChoiceItem[];
+  surveyQuestion?: GetClusterSurveyStatisticsForOrganization200SurveyQuestionItem[];
+  surveys?: GetClusterSurveyStatisticsForOrganization200SurveysItem[];
+  data: GetClusterSurveyStatisticsForOrganization200Data;
+};

@@ -361,7 +361,12 @@ export default function UserProfilePageLecture() {
                 dataIndex: "organization",
                 align: "center",
                 width: 200,
-                render: (value) => value?.sTen,
+                render: (_, record) => {
+                  if (record.organization) {
+                    return `${record.organization.sMa}-${record.organization.sTen}`
+                  }
+                },
+
                 type: "tree_select",
                 options: treeData,
               },

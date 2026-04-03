@@ -6,5 +6,5 @@
  */
 
 export type SessionResourceAccessBroker = {
-    roles: string[]
-}
+  roles: string[];
+};

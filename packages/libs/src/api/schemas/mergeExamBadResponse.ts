@@ -6,5 +6,5 @@
  */
 
 export interface MergeExamBadResponse {
-    message: string
+  message: string;
 }

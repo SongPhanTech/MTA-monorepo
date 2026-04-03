@@ -4,30 +4,29 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersionCurriculumTrainingMajorTrainingField } from './listOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersionCurriculumTrainingMajorTrainingField'
+import type { ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersionCurriculumTrainingMajorTrainingField } from './listOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersionCurriculumTrainingMajorTrainingField';
 
-export type ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersionCurriculumTrainingMajor =
-    {
-        id: string
-        /** @nullable */
-        code?: string | null
-        active?: boolean
-        /** @nullable */
-        description?: string | null
-        /** @nullable */
-        deletedAt?: string | null
-        /** @nullable */
-        createdAt?: string | null
-        /** @nullable */
-        updatedAt?: string | null
-        /** @nullable */
-        createdBy?: string | null
-        name: string
-        /** @nullable */
-        englishName?: string | null
-        summary: string
-        numberCreditsMajor?: number
-        numberCreditsRequired?: number
-        numberCreditsElective?: number
-        trainingField: ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersionCurriculumTrainingMajorTrainingField
-    }
+export type ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersionCurriculumTrainingMajor = {
+  id: string;
+  /** @nullable */
+  code?: string | null;
+  active?: boolean;
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  deletedAt?: string | null;
+  /** @nullable */
+  createdAt?: string | null;
+  /** @nullable */
+  updatedAt?: string | null;
+  /** @nullable */
+  createdBy?: string | null;
+  name: string;
+  /** @nullable */
+  englishName?: string | null;
+  summary: string;
+  numberCreditsMajor?: number;
+  numberCreditsRequired?: number;
+  numberCreditsElective?: number;
+  trainingField: ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersionCurriculumTrainingMajorTrainingField;
+};

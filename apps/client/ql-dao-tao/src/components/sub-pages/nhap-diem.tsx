@@ -859,6 +859,7 @@ export default function NhapDiem({
               selectedSubjectClass={selectedSubjectClassId}
               dataTable={dataTable}
               type={score}
+              role={role}
             />
           )}
           {score !== "THI" &&

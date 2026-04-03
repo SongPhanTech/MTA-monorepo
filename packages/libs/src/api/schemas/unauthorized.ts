@@ -6,5 +6,5 @@
  */
 
 export interface Unauthorized {
-    error: string
+  error: string;
 }

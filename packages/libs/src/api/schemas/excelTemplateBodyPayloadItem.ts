@@ -4,11 +4,11 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { ExcelTemplateBodyPayloadItemData } from './excelTemplateBodyPayloadItemData'
+import type { ExcelTemplateBodyPayloadItemData } from './excelTemplateBodyPayloadItemData';
 
 export type ExcelTemplateBodyPayloadItem = {
-    /** @nullable */
-    data?: ExcelTemplateBodyPayloadItemData
-    /** Danh sách các ô cần gộp trong sheet, định dạng giống như A1:B2 */
-    mergeCells?: string[]
-}
+  /** @nullable */
+  data?: ExcelTemplateBodyPayloadItemData;
+  /** Danh sách các ô cần gộp trong sheet, định dạng giống như A1:B2 */
+  mergeCells?: string[];
+};

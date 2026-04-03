@@ -6,7 +6,7 @@
  */
 
 export type GetClusterSurveyInfoParams = {
-    organizationId: string
-    semesterId: string
-    trainingObjectTypeId: string
-}
+organizationId: string;
+semesterId: string;
+trainingObjectTypeId: string;
+};

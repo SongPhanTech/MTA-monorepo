@@ -8,18 +8,16 @@
 /**
  * @nullable
  */
-export type ExportStudentAcademicActionJson200ItemStudentsItemStudentSemesterResultStudentTrainingType =
-    | (typeof ExportStudentAcademicActionJson200ItemStudentsItemStudentSemesterResultStudentTrainingType)[keyof typeof ExportStudentAcademicActionJson200ItemStudentsItemStudentSemesterResultStudentTrainingType]
-    | null
+export type ExportStudentAcademicActionJson200ItemStudentsItemStudentSemesterResultStudentTrainingType = typeof ExportStudentAcademicActionJson200ItemStudentsItemStudentSemesterResultStudentTrainingType[keyof typeof ExportStudentAcademicActionJson200ItemStudentsItemStudentSemesterResultStudentTrainingType] | null;
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const ExportStudentAcademicActionJson200ItemStudentsItemStudentSemesterResultStudentTrainingType =
-    {
-        EXCELLENT: 'EXCELLENT',
-        GOOD: 'GOOD',
-        FAIR: 'FAIR',
-        MEDIUM: 'MEDIUM',
-        AVERAGE: 'AVERAGE',
-        POOR: 'POOR',
-        VERY_POOR: 'VERY_POOR',
-    } as const
+export const ExportStudentAcademicActionJson200ItemStudentsItemStudentSemesterResultStudentTrainingType = {
+  EXCELLENT: 'EXCELLENT',
+  GOOD: 'GOOD',
+  FAIR: 'FAIR',
+  MEDIUM: 'MEDIUM',
+  AVERAGE: 'AVERAGE',
+  POOR: 'POOR',
+  VERY_POOR: 'VERY_POOR',
+} as const;

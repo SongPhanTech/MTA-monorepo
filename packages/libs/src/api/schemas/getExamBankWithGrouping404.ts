@@ -6,5 +6,5 @@
  */
 
 export type GetExamBankWithGrouping404 = {
-    message: string
-}
+  message: string;
+};

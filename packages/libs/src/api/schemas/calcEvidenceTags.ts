@@ -4,8 +4,8 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { CalcEvidenceTagsId } from './calcEvidenceTagsId'
+import type { CalcEvidenceTagsId } from './calcEvidenceTagsId';
 
 export interface CalcEvidenceTags {
-    id: CalcEvidenceTagsId
+  id: CalcEvidenceTagsId;
 }

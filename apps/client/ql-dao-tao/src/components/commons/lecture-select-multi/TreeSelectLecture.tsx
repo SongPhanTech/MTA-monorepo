@@ -1,10 +1,11 @@
 import { useFindManyDM_DonVi, useFindManyLecturer } from "@workspace/db/hooks"
 import { formatLecturerName } from "@workspace/libs"
-import { message, TreeSelect as TreeSelectAnt, type TreeSelectProps } from "antd"
+import { message, TreeSelect as TreeSelectAnt, type TreeSelectProps, Switch, Divider } from "antd"
 import { UserIcon } from "lucide-react"
 import type React from "react"
-import { useEffect, useMemo } from "react"
+import { useEffect, useMemo, useState } from "react"
 import type { TreeNodeType } from "@/utils/convertOrganizationToTree"
+import { whereOrganization } from "@workspace/libs/constants"
 
 // Hàm tạo cây đơn vị và giảng viên
 function buildOrgAndLectureTree(
@@ -51,13 +52,15 @@ const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
   organizationId,
   ...rest
 }) => {
+  const [isSelectAllOrgs, setIsSelectAllOrgs] = useState(false)
+
   // Lấy danh sách Organization (Khoa và Bộ môn)
   const {
     data: organizations = [],
     isLoading: organizationsLoading,
     error: organizationsError,
   } = useFindManyDM_DonVi({
-    where: {},
+    where: whereOrganization,
     orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
   })
 
@@ -107,9 +110,16 @@ const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
           },
           organizationId: lec.organizationId,
         })),
-      organizationId ?? null
+      isSelectAllOrgs ? null : (organizationId ?? null)
     )
-  }, [organizations, lecturers, organizationId, rest.ignoreOrgIds, rest.ignoreLectureIds])
+  }, [
+    organizations,
+    lecturers,
+    organizationId,
+    rest.ignoreOrgIds,
+    rest.ignoreLectureIds,
+    isSelectAllOrgs,
+  ])
 
   // Xử lý lỗi
   useEffect(() => {
@@ -138,6 +148,16 @@ const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
       showCheckedStrategy="SHOW_CHILD"
       placeholder="Chọn giảng viên"
       loading={organizationsLoading || lecturersLoading}
+      dropdownRender={(menu) => (
+        <>
+          <div className="flex items-center justify-between px-3 py-2">
+            <span className="text-sm font-medium">Hiển thị giảng viên toàn học viện</span>
+            <Switch size="small" checked={isSelectAllOrgs} onChange={setIsSelectAllOrgs} />
+          </div>
+          <Divider style={{ margin: 0 }} />
+          {menu}
+        </>
+      )}
       {...rest}
     />
   )

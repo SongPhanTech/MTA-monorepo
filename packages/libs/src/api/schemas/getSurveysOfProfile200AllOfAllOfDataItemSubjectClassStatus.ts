@@ -5,11 +5,11 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassStatus =
-    (typeof GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassStatus)[keyof typeof GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassStatus]
+export type GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassStatus = typeof GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassStatus[keyof typeof GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassStatus];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassStatus = {
-    DRAFT: 'DRAFT',
-    OFFICIAL: 'OFFICIAL',
-} as const
+  DRAFT: 'DRAFT',
+  OFFICIAL: 'OFFICIAL',
+} as const;

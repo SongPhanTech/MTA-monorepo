@@ -55,16 +55,16 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  * Dân tộc
  */
 export interface PublicApiGetAllDMDanTocDTO {
-    /** Id dân tộc */
-    Id?: string
-    /**
-     * Mã
-     * @nullable
-     */
-    sMa?: string | null
-    /**
-     * Tên dân tộc
-     * @nullable
-     */
-    sTen?: string | null
+  /** Id dân tộc */
+  Id?: string;
+  /**
+   * Mã
+   * @nullable
+   */
+  sMa?: string | null;
+  /**
+   * Tên dân tộc
+   * @nullable
+   */
+  sTen?: string | null;
 }

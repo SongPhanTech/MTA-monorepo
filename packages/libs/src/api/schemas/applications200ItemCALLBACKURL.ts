@@ -8,4 +8,4 @@
 /**
  * @nullable
  */
-export type Applications200ItemCALLBACKURL = unknown | null
+export type Applications200ItemCALLBACKURL = unknown | null;

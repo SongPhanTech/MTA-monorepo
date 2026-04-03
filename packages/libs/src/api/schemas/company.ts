@@ -50,24 +50,24 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { BaseEntity } from './baseEntity'
+import type { BaseEntity } from './baseEntity';
 
 export type Company = BaseEntity & {
-    Id?: string
-    /** @nullable */
-    TenantCode?: string | null
-    /** @nullable */
-    TenantName?: string | null
-    /** @nullable */
-    Taxcode?: string | null
-    /** @nullable */
-    Server?: string | null
-    /** @nullable */
-    Database?: string | null
-    /** @nullable */
-    Uid?: string | null
-    /** @nullable */
-    Pwd?: string | null
-    Port?: number
-    iConnectDbType?: number
-}
+  Id?: string;
+  /** @nullable */
+  TenantCode?: string | null;
+  /** @nullable */
+  TenantName?: string | null;
+  /** @nullable */
+  Taxcode?: string | null;
+  /** @nullable */
+  Server?: string | null;
+  /** @nullable */
+  Database?: string | null;
+  /** @nullable */
+  Uid?: string | null;
+  /** @nullable */
+  Pwd?: string | null;
+  Port?: number;
+  iConnectDbType?: number;
+};

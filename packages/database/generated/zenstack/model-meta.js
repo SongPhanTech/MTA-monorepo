@@ -5960,6 +5960,10 @@ const metadata = {
                     name: "sCode",
                     type: "String",
                     isOptional: true,
+                }, sTKPUCode: {
+                    name: "sTKPUCode",
+                    type: "String",
+                    isOptional: true,
                 }, sTenVietTat: {
                     name: "sTenVietTat",
                     type: "String",
@@ -18263,6 +18267,10 @@ const metadata = {
                     type: "String",
                     isOptional: true,
                     attributes: [{ "name": "@db.Text", "args": [] }],
+                }, researchTopicAssociated: {
+                    name: "researchTopicAssociated",
+                    type: "String",
+                    isOptional: true,
                 }, firstCheckProgress: {
                     name: "firstCheckProgress",
                     type: "Int",
@@ -18902,9 +18910,11 @@ const metadata = {
                 }, eligiblePresident: {
                     name: "eligiblePresident",
                     type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, eligibleSecretary: {
                     name: "eligibleSecretary",
                     type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, supervisedTheses: {
                     name: "supervisedTheses",
                     type: "ThesisProject",

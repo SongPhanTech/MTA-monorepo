@@ -69,9 +69,9 @@ API này cho phép các ứng dụng truy cập từ client hoặc server thông
 4. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { AddNewRequestDtoCustomParam } from './addNewRequestDtoCustomParam'
+import type { AddNewRequestDtoCustomParam } from './addNewRequestDtoCustomParam';
 
 export interface AddNewRequestDto {
-    /** @nullable */
-    CustomParam?: AddNewRequestDtoCustomParam
+  /** @nullable */
+  CustomParam?: AddNewRequestDtoCustomParam;
 }

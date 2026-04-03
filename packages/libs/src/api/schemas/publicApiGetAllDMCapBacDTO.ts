@@ -55,16 +55,16 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  * DTO cho Cấp bậc
  */
 export interface PublicApiGetAllDMCapBacDTO {
-    /** Id của Cấp bậc */
-    Id?: string
-    /**
-     * Mã của Cấp bậc
-     * @nullable
-     */
-    sMa?: string | null
-    /**
-     * Tên của Cấp bậc
-     * @nullable
-     */
-    sTen?: string | null
+  /** Id của Cấp bậc */
+  Id?: string;
+  /**
+   * Mã của Cấp bậc
+   * @nullable
+   */
+  sMa?: string | null;
+  /**
+   * Tên của Cấp bậc
+   * @nullable
+   */
+  sTen?: string | null;
 }

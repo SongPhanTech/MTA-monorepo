@@ -4,63 +4,63 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassSchedule } from './getSurveysOfProfile200AllOfAllOfDataItemSubjectClassSchedule'
-import type { GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassType } from './getSurveysOfProfile200AllOfAllOfDataItemSubjectClassType'
-import type { GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassStatus } from './getSurveysOfProfile200AllOfAllOfDataItemSubjectClassStatus'
-import type { GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassExamType } from './getSurveysOfProfile200AllOfAllOfDataItemSubjectClassExamType'
+import type { GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassSchedule } from './getSurveysOfProfile200AllOfAllOfDataItemSubjectClassSchedule';
+import type { GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassType } from './getSurveysOfProfile200AllOfAllOfDataItemSubjectClassType';
+import type { GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassStatus } from './getSurveysOfProfile200AllOfAllOfDataItemSubjectClassStatus';
+import type { GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassExamType } from './getSurveysOfProfile200AllOfAllOfDataItemSubjectClassExamType';
 
 /**
  * @nullable
  */
 export type GetSurveysOfProfile200AllOfAllOfDataItemSubjectClass = {
-    id: string
-    active?: boolean
-    /** @nullable */
-    description?: string | null
-    /** @nullable */
-    deletedAt?: string | null
-    /** @nullable */
-    createdAt?: string | null
-    /** @nullable */
-    updatedAt?: string | null
-    /** @nullable */
-    createdBy?: string | null
-    code: string
-    name: string
-    /** @nullable */
-    startDate?: string | null
-    /** @nullable */
-    endDate?: string | null
-    /** @nullable */
-    schedule?: GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassSchedule
-    maxStudent: number
-    type: GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassType
-    status: GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassStatus
-    cancelled?: boolean
-    /** @nullable */
-    lecturerAssignmentDeadline?: string | null
-    /** @nullable */
-    sendLecturerAssignmentAt?: string | null
-    /** @nullable */
-    submitLecturerAssignmentAt?: string | null
-    /** @nullable */
-    approveLecturerAssignmentAt?: string | null
-    /** @nullable */
-    examDate?: string | null
-    /** @nullable */
-    examType?: GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassExamType
-    /** @nullable */
-    scoreDeadLineStart?: string | null
-    /** @nullable */
-    scoreDeadline?: string | null
-    /** @nullable */
-    examScoreDeadline?: string | null
-    enteredScore?: boolean
-    enteredExamScore?: boolean
-    /** @nullable */
-    issuedScoreAt?: string | null
-    isLockScore?: boolean
-    isLockExamScore?: boolean
-    scoreSubmitted?: boolean
-    scoreChecked?: boolean
-} | null
+  id: string;
+  active?: boolean;
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  deletedAt?: string | null;
+  /** @nullable */
+  createdAt?: string | null;
+  /** @nullable */
+  updatedAt?: string | null;
+  /** @nullable */
+  createdBy?: string | null;
+  code: string;
+  name: string;
+  /** @nullable */
+  startDate?: string | null;
+  /** @nullable */
+  endDate?: string | null;
+  /** @nullable */
+  schedule?: GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassSchedule;
+  maxStudent: number;
+  type: GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassType;
+  status: GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassStatus;
+  cancelled?: boolean;
+  /** @nullable */
+  lecturerAssignmentDeadline?: string | null;
+  /** @nullable */
+  sendLecturerAssignmentAt?: string | null;
+  /** @nullable */
+  submitLecturerAssignmentAt?: string | null;
+  /** @nullable */
+  approveLecturerAssignmentAt?: string | null;
+  /** @nullable */
+  examDate?: string | null;
+  /** @nullable */
+  examType?: GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassExamType;
+  /** @nullable */
+  scoreDeadLineStart?: string | null;
+  /** @nullable */
+  scoreDeadline?: string | null;
+  /** @nullable */
+  examScoreDeadline?: string | null;
+  enteredScore?: boolean;
+  enteredExamScore?: boolean;
+  /** @nullable */
+  issuedScoreAt?: string | null;
+  isLockScore?: boolean;
+  isLockExamScore?: boolean;
+  scoreSubmitted?: boolean;
+  scoreChecked?: boolean;
+} | null;

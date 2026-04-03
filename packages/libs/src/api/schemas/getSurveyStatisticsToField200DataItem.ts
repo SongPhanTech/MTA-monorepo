@@ -8,4 +8,4 @@
 /**
  * @nullable
  */
-export type GetSurveyStatisticsToField200DataItem = unknown | null
+export type GetSurveyStatisticsToField200DataItem = unknown | null;

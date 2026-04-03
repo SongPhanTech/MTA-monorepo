@@ -87,6 +87,12 @@ export async function exportStudentSemesterResult({
     },
   })
 
+  const formatGpa = (val: any) => {
+    const num = typeof val?.toNumber === "function" ? val.toNumber() : val
+    if (num === null || num === undefined || isNaN(num)) return ""
+    return num.toFixed(2).replace(".", ",")
+  }
+
   const data = studentSemesterResults.map((result, idx) => {
     const student = result.student
     const userProfile = student.userProfile
@@ -103,13 +109,13 @@ export async function exportStudentSemesterResult({
       // StudentSemesterResult Data
       studyYear: result.studyYear,
       semesterIndexInCourse: result.semesterIndexInCourse,
-      gpaBase4: result.gpaBase4?.toNumber(),
-      cumulativeGpaBase4: result.cumulativeGpaBase4?.toNumber(),
-      gpaBase10: result.gpaBase10?.toNumber(),
-      cumulativeGpaBase10: result.cumulativeGpaBase10?.toNumber(),
-      conductScore: result.conductScore,
+      gpaBase4: formatGpa(result.gpaBase4),
+      cumulativeGpaBase4: formatGpa(result.cumulativeGpaBase4),
+      gpaBase10: formatGpa(result.gpaBase10),
+      cumulativeGpaBase10: formatGpa(result.cumulativeGpaBase10),
+      conductScore: formatGpa(result.conductScore),
       studentTrainingType: result.studentTrainingType,
-      lowestFinalScore: result.lowestFinalScore,
+      lowestFinalScore: formatGpa(result.lowestFinalScore),
       totalCredits: result.totalCredits,
       registeredCredits: result.registeredCredits,
       retakingCredits: result.retakingCredits,
@@ -243,12 +249,6 @@ export async function exportStudentYearResult({
     },
   })
 
-  const formatGpa = (val: any) => {
-    const num = typeof val?.toNumber === "function" ? val.toNumber() : val
-    if (num === null || num === undefined || isNaN(num)) return ""
-    return num.toFixed(2).replace(".", ",")
-  }
-
   const data = studentYearResults.map((result, idx) => {
     const student = result.student
     const userProfile = student.userProfile
@@ -263,14 +263,14 @@ export async function exportStudentYearResult({
       trainingCourse: student.fixedClass?.trainingCourse?.name,
       // StudentYearResult Data
       studyYear: result.studyYear,
-      gpaBase4: formatGpa(result.gpaBase4),
-      cumulativeGpaBase4: formatGpa(result.cumulativeGpaBase4),
-      gpaBase10: formatGpa(result.gpaBase10),
-      cumulativeGpaBase10: formatGpa(result.cumulativeGpaBase10),
-      conductScore: formatGpa(result.conductScore),
+      gpaBase4: result.gpaBase4,
+      cumulativeGpaBase4: result.cumulativeGpaBase4,
+      gpaBase10: result.gpaBase10,
+      cumulativeGpaBase10: result.cumulativeGpaBase10,
+      conductScore: result.conductScore,
       studentTrainingType: result.studentTrainingType,
       rank: result.rank?.classification,
-      lowestFinalScore: formatGpa(result.lowestFinalScore),
+      lowestFinalScore: result.lowestFinalScore,
       totalCredits: result.totalCredits,
       retakingCredits: result.retakingCredits,
       reExamCredits: result.reExamCredits,
