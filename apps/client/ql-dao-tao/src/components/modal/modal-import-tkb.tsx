@@ -7,6 +7,7 @@ import { SUBJECT_CLASS_SCHEDULE_TYPE } from "@constants/constants"
 import { useExamTypeOptions } from "@hooks/examType"
 import useSpinner from "@hooks/spinner"
 import type { $Enums, Prisma, SubjectClassSchedule, SubjectClassTime } from "@workspace/db/client"
+import { customTrainingFetch } from "@workspace/libs/api/custom-instance"
 import { useImportPhanCongGiangDay } from "@workspace/libs/api/training"
 import { getMinioUrl } from "@workspace/libs/utils"
 import { dayjs, useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
@@ -97,6 +98,7 @@ const ModalNhapTKB = () => {
     }[]) || []
   const { isOpen, onClose, input } = useDisclosure<{
     type: $Enums.SubjectClassType
+    trainingCourseId?: string
   }>({
     tag: "ModalNhapTKB",
     onClose: form.resetFields,
@@ -154,6 +156,43 @@ const ModalNhapTKB = () => {
   }
 
   const { mutateAsync: ImportPhanCongGiangDay } = useImportPhanCongGiangDay()
+
+  const handleExportTKB = async () => {
+    if (!semesterId || !trainingObjectTypeId) {
+      message.warning("Vui lòng chọn đầy đủ học kỳ và đối tượng đào tạo")
+      return
+    }
+    try {
+      showSpinner()
+      const res = await customTrainingFetch<{ status: number; data: Blob }>(
+        "/api/thoi-khoa-bieu/export-thoi-khoa-bieu",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            semesterId,
+            trainingObjectTypeId,
+            type: input?.type,
+            trainingCourseId: input?.trainingCourseId,
+          }),
+        }
+      )
+      if (res.status === 200 && res.data) {
+        const url = URL.createObjectURL(res.data)
+        const a = document.createElement("a")
+        a.href = url
+        a.download = "MAU2.DanSu-template.xlsx"
+        a.click()
+        URL.revokeObjectURL(url)
+      } else {
+        message.error("Xuất dữ liệu thất bại")
+      }
+    } catch {
+      message.error("Có lỗi xảy ra khi xuất dữ liệu")
+    } finally {
+      hideSpinner()
+    }
+  }
 
   const handleSubmit = async (output?: FilterProps) => {
     if (!trainingObjectTypeId) {
@@ -284,7 +323,7 @@ const ModalNhapTKB = () => {
           học phần theo kế hoạch này
         </p>
       </Col>
-      <Col span={24}>
+      <Col span={24} className="flex gap-2">
         <Button
           onClick={() => {
             const fileType = form.getFieldValue("fileType")
@@ -297,6 +336,11 @@ const ModalNhapTKB = () => {
         >
           Tải mẫu file Excel
         </Button>
+        {fileType === "TKB_THEO_LOP_HOC_PHAN" && (
+          <Button type="primary" onClick={handleExportTKB}>
+            Xuất dữ liệu TKB
+          </Button>
+        )}
       </Col>
       {errorData.length > 0 && (
         <Col span={24}>
