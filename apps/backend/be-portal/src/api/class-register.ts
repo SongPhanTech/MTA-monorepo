@@ -474,6 +474,41 @@ app.openapi(classRegister, async (c) => {
   // TODO: check subjectVersionIds, prerequisiteSubjectIds, coRequisiteSubjectIds
 
   await prisma.$transaction(async (tx) => {
+    const creditLimits = await tx.classRegisterSessionCredit.findMany({
+      where: { classRegisterSessionId: sessionId },
+    })
+
+    if (creditLimits.length > 0) {
+      const currentScores = await tx.studentSubjectScore.findMany({
+        where: {
+          studentId,
+          subjectClass: { semesterId: registerSession.semesterId },
+        },
+        include: { subjectVersion: { select: { credit: true } } },
+      })
+
+      const currentTotalCredit = currentScores.reduce(
+        (acc, curr) => acc + (curr.subjectVersion?.credit ?? 0),
+        0
+      )
+
+      const newClasses = await tx.subjectClass.findMany({
+        where: { id: { in: subjectClassIds } },
+        include: { subject: { select: { credit: true } } },
+      })
+
+      const newTotalCredit =
+        currentTotalCredit + newClasses.reduce((acc, curr) => acc + (curr.subject?.credit ?? 0), 0)
+
+      for (const limit of creditLimits) {
+        if (limit.minCredit && newTotalCredit < limit.minCredit) {
+          throw new Error(`Số tín chỉ tối thiểu là ${limit.minCredit}`)
+        }
+        if (limit.maxCredit && newTotalCredit > limit.maxCredit) {
+          throw new Error(`Số tín chỉ tối đa là ${limit.maxCredit}`)
+        }
+      }
+    }
     await tx.classRegisterLogs.createMany({
       data: subjectClassIds.map((subjectClassId) => ({
         classRegisterSessionId: sessionId,
