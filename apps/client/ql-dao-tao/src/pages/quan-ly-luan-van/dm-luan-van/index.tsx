@@ -1176,7 +1176,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 dataIndex: "title",
                 render: (_, record) => {
                
-                  if (editingRowKeys.includes(record?.id) && role === "P7") {
+                  if (editingRowKeys.includes(record?.id)) {
                     const currentValue =
                       editingValues[record?.id]?.title !== undefined
                         ? editingValues[record?.id]?.title
@@ -1208,8 +1208,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 width: 350,
                 dataIndex: "researchTopicAssociated",
                 render: (_, record) => {
-                  const status = record?.thesisRegistrations?.[0]?.thesisProject?.status || ""
-                  if (editingRowKeys.includes(record?.id) && role === "P7") {
+                 
+                  if (editingRowKeys.includes(record?.id)) {
                     const currentValue =
                       editingValues[record?.id]?.researchTopicAssociated !== undefined
                         ? editingValues[record?.id]?.researchTopicAssociated

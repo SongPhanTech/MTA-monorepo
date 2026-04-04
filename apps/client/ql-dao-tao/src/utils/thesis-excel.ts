@@ -848,19 +848,35 @@ export const exportSaoQDHDLV = async ({
           cells: [{ value: null, colSpan: 18, border: false }],
         }
         return {
-          sheet: `${student.userProfile?.code}`,
+          // sheet: `${student.userProfile?.code}`,
           data: data,
-          tableStartCell: { row: 40, col: 1 },
-          rows: [gapRow],
+          // tableStartCell: { row: 40, col: 1 },
+          // rows: [gapRow],
         }
       })
-    await exportFromTemplate({
-      templateUrl: getMinioUrl("mta/template/BanSaoQDHuongDanLuanVan.xlsx"),
-      sheets: allSheetOptions?.filter((item) => item !== null) ?? [],
+    // await exportFromTemplate({
+    //   templateUrl: getMinioUrl("mta/template/BanSaoQDHuongDanLuanVan.xlsx"),
+    //   sheets: allSheetOptions?.filter((item) => item !== null) ?? [],
+    //   fileName: "BanSaoQDHuongDanLuanVan",
+    //   mergeSheetsToOne: true,
+    //   sheetName: "BanSaoQDHuongDanLuanVan",
+    // })
+    const payload: ExcelTemplateBody = {
+      head: { data: null },
+      tail: { data: null },
       fileName: "BanSaoQDHuongDanLuanVan",
-      mergeSheetsToOne: true,
-      sheetName: "BanSaoQDHuongDanLuanVan",
-    })
+      path: "BanSaoQDHuongDanLuanVan.xlsx",
+      payload: allSheetOptions?.filter((item) => item !== null) ?? [],
+      showGridLines: true,
+      wrapText: true,
+    }
+    const response = await excelTemplate(payload)
+    if (response.status !== 200) {
+      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+      return
+    }
+    const blob = response.data
+    downloadFile(blob, "BanSaoQDHuongDanLuanVan.xlsx")
     message.success("Xuất file thành công")
   } catch (error) {
     message.error("Vui lòng kiểm tra lại dữ liệu")
