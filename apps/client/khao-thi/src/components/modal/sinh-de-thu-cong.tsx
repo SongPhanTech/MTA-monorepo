@@ -22,6 +22,7 @@ import { DndProvider, useDrag, useDrop } from "react-dnd"
 import { HTML5Backend } from "react-dnd-html5-backend"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import { store } from "@/pages/thiet-lap-de-thi/danh-sach-de"
+import { examTypeOptions } from "@workspace/libs/constants"
 
 type PutMaTranDeInputType = ExamBank & {
   questions: string[]
@@ -376,16 +377,10 @@ const SinhDeThuCongModal = () => {
             <Col span={24}>
               <FormItem form={form} name="examType" label="Hình thức thi" required>
                 <Select
-                  options={[
-                    {
-                      label: "Thi viết",
-                      value: "OfflineWritten",
-                    },
-                    {
-                      label: "Thi vấn đáp",
-                      value: "Oral",
-                    },
-                  ]}
+                  options={examTypeOptions.map((opt) => ({
+                    label: opt.label,
+                    value: opt.value,
+                  }))}
                   placeholder="Chọn hình thức thi"
                 />
               </FormItem>

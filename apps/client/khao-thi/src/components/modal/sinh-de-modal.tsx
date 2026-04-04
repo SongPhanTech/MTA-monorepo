@@ -12,8 +12,9 @@ import {
   useFindUniqueExam,
 } from "@workspace/db/hooks"
 import { automaticTopicGeneration } from "@workspace/libs/api/exam"
-import { Checkbox, Col, Form, Input, InputNumber, message, Row } from "antd"
+import { Button, Checkbox, Col, Form, Input, InputNumber, message, Row } from "antd"
 import dayjs from "dayjs"
+import { examTypeOptions } from "@workspace/libs/constants"
 import { useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
@@ -155,16 +156,10 @@ const SinhDeModal = () => {
           <Col span={12}>
             <FormItem form={form} name="examType" label="Hình thức thi" required>
               <Select
-                options={[
-                  {
-                    label: "Thi viết",
-                    value: "OfflineWritten",
-                  },
-                  {
-                    label: "Thi vấn đáp",
-                    value: "Oral",
-                  },
-                ]}
+                options={examTypeOptions.map((opt) => ({
+                  label: opt.label,
+                  value: opt.value,
+                }))}
                 placeholder="Chọn hình thức thi"
               />
             </FormItem>

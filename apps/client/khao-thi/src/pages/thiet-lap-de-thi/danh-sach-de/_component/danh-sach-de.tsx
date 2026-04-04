@@ -5,13 +5,19 @@ import DownloadIcon from "@components/icons/download"
 import EditIcon from "@components/icons/edit"
 import PrintIcon from "@components/icons/print"
 import { formatDate } from "@lib/utils"
+import {
+  useCountExamBank,
+  useFindManyExamBank,
+  useUpdateExamBank,
+  useFindUniqueExam,
+} from "@workspace/db/hooks"
 import { useStore } from "@tanstack/react-store"
-import { useCountExamBank, useFindManyExamBank, useUpdateExamBank } from "@workspace/db/hooks"
 import { Button, Flex, Input, message, Row, Select, Space } from "antd"
 import dayjs from "dayjs"
 import { useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import { store } from "../index"
+import { examTypeOptions } from "@workspace/libs/constants"
 
 export default function ExamListPage() {
   const { onOpen: onOpenExamList } = useDisclosure<{
@@ -47,6 +53,31 @@ export default function ExamListPage() {
   const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([])
   const selectedExamId = useStore(store, (state) => state.selectedExamId)
   const subjectVersionId = useStore(store, (state) => state.subjectVersionId)
+
+  const { data: dataExam } = useFindUniqueExam(
+    {
+      where: { id: selectedExamId },
+      include: {
+        subjectVersion: true,
+        subjectClass: {
+          include: {
+            _count: {
+              select: {
+                subjectClassStudent: true,
+              },
+            },
+          },
+        },
+        examRooms: {
+          include: {
+            examList: true,
+          },
+        },
+      },
+    },
+    { enabled: !!selectedExamId }
+  )
+
   const where = useMemo(() => {
     const examFilter: any = {}
     if (filters.examRoom) {
@@ -117,15 +148,22 @@ export default function ExamListPage() {
           },
         }),
       ...(filters.examType && {
-        examType: {
-          in: filters.examType,
+        exam: {
+          ...examFilter,
+          subjectVersion: {
+            examType: {
+              in: filters.examType,
+            },
+          },
         },
       }),
       ...(filters?.examDay?.length === 2
         ? {
-            examDay: {
-              gte: dayjs(filters.examDay?.[0], "DD/MM/YYYY").toDate(),
-              lte: dayjs(filters.examDay?.[1], "DD/MM/YYYY").toDate(),
+            subjectClass: {
+              examDate: {
+                gte: dayjs(filters.examDay?.[0], "DD/MM/YYYY").toDate(),
+                lte: dayjs(filters.examDay?.[1], "DD/MM/YYYY").toDate(),
+              },
             },
           }
         : {}),
@@ -176,6 +214,7 @@ export default function ExamListPage() {
           select: {
             id: true,
             name: true,
+            examDate: true,
           },
         },
         exam: {
@@ -186,6 +225,7 @@ export default function ExamListPage() {
                 id: true,
                 name: true,
                 code: true,
+                examType: true,
               },
             },
             examRooms: {
@@ -307,15 +347,11 @@ export default function ExamListPage() {
 
   const totalStudents = useMemo(() => {
     let total = 0
-
-    exams.forEach((item) => {
-      item?.exam?.examRooms?.forEach((er) => {
-        total += er?.examList?.length ?? 0
-      })
+    dataExam?.subjectClass?.forEach((sc: any) => {
+      total += sc?._count?.subjectClassStudent || 0
     })
-
     return total
-  }, [exams])
+  }, [dataExam])
 
   async function handleDelete(id: string) {
     try {
@@ -424,19 +460,34 @@ export default function ExamListPage() {
           disabled
           placeholder="Môn thi"
           style={{ width: 280 }}
-          options={subjectVersionOptions}
-          value={filters.subjectVersionId ?? exams[0]?.exam?.subjectVersion?.id}
+          options={
+            subjectVersionOptions.length > 0
+              ? subjectVersionOptions
+              : dataExam?.subjectVersion
+                ? [
+                    {
+                      value: dataExam.subjectVersion.id,
+                      label: `${dataExam.subjectVersion.code ?? ""} - ${dataExam.subjectVersion.name}`,
+                    },
+                  ]
+                : []
+          }
+          value={
+            filters.subjectVersionId ??
+            exams[0]?.exam?.subjectVersion?.id ??
+            dataExam?.subjectVersion?.id
+          }
           onChange={(value) => setFilters({ ...filters, subjectVersionId: value })}
         />
 
-        <Select
+        {/* <Select
           allowClear
           placeholder="Phòng thi"
           style={{ width: 200 }}
           options={examRoomOptions}
           value={filters.examRoom ?? examRoomOptions[0]?.value}
           onChange={(examRoom) => setFilters((prev: typeof filters) => ({ ...prev, examRoom }))}
-        />
+        /> */}
 
         <div
           style={{
@@ -532,23 +583,14 @@ export default function ExamListPage() {
             dataIndex: "examType",
             width: 130,
             type: "select",
-            options: [
-              {
-                label: "Thi viết",
-                value: "OfflineWritten",
-              },
-              {
-                label: "Thi vấn đáp",
-                value: "Oral",
-              },
-            ],
+            options: examTypeOptions.map((opt) => ({
+              label: opt.label,
+              value: opt.value,
+            })),
             align: "center" as const,
             render: (__, record) => {
-              return record?.examType
-                ? record?.examType === "OfflineWritten"
-                  ? "Thi viết"
-                  : "Thi vấn đáp"
-                : ""
+              const examType = record?.exam?.subjectVersion?.examType
+              return examTypeOptions.find((opt) => opt.value === examType)?.label || ""
             },
           },
           {
@@ -558,7 +600,9 @@ export default function ExamListPage() {
             type: "date",
             align: "center" as const,
             render: (_, record) => {
-              return record?.examDay ? formatDate(record?.examDay) : ""
+              return record?.subjectClass?.examDate
+                ? formatDate(record?.subjectClass?.examDate)
+                : ""
             },
           },
           {
