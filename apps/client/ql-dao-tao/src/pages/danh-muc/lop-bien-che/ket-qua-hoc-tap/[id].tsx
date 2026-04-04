@@ -681,6 +681,14 @@ export default function StudentScoreClassPage() {
                   }))}
                 />
                 <Button
+                  type={subjectClassTypeFilter === undefined ? "primary" : "default"}
+                  onClick={() => {
+                    setSubjectClassTypeFilter(undefined)
+                  }}
+                >
+                  Tất cả
+                </Button>
+                <Button
                   type={
                     subjectClassTypeFilter === $Enums.SubjectClassType.RETAKE
                       ? "primary"
@@ -776,7 +784,7 @@ export default function StudentScoreClassPage() {
                   width: 200,
                   render: (value: string, record: any) => {
                     return (
-                      <div className="flex flex-row items-center">
+                      <div className="flex flex-row items-center text-left">
                         <p>
                           {record?.type === $Enums.SubjectClassType.RETAKE ? (
                             <Tag color={"blue"} className="p-0 px-1">
