@@ -821,6 +821,7 @@ export const exportSaoQDHDLV = async ({
         // }
         const coSupervisor = student?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.name
         const data = {
+          soQD: student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.defenseDecisionNumber || "",
           ngayQD: ngayQD,
           thangQD: thangQD,
           namQD: namQD,
@@ -843,6 +844,7 @@ export const exportSaoQDHDLV = async ({
           ngay: ngayQD,
           thang: thangQD,
           nam: namQD,
+          data: [],
         }
         const gapRow: TableRow = {
           cells: [{ value: null, colSpan: 18, border: false }],
