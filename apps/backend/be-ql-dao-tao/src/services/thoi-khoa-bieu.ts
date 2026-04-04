@@ -90,6 +90,9 @@ export async function exportThoiKhoaBieu({
           name: true,
         },
       },
+      subjectClassTimes: {
+        take: 1,
+      },
     },
     orderBy: [{ subject: { code: "asc" } }, { code: "asc" }],
   })
@@ -101,20 +104,23 @@ export async function exportThoiKhoaBieu({
   const data = Object.entries(groupedBySubject).flatMap(([_, classes = []]) => {
     subjectIndex++
 
-    return classes.map((sc) => ({
-      no: subjectIndex,
-      subjectCode: sc.subject.codeTkb || sc.subject.code,
-      subjectName: sc.subject.name,
-      credit: sc.subject.credit,
-      classCode: sc.code,
-      lecturers: [sc.mainLecturer?.userProfile?.fullname, sc.extraLecturer?.userProfile?.fullname]
-        .filter(Boolean)
-        .join("; "),
-      weekday: "",
-      period: "",
-      room: sc.room?.name || "",
-      maxStudent: sc.maxStudent,
-    }))
+    return classes.map((sc) => {
+      const classTime = sc.subjectClassTimes[0]
+      return {
+        no: subjectIndex,
+        subjectCode: sc.subject.codeTkb || sc.subject.code,
+        subjectName: sc.subject.name,
+        credit: sc.subject.credit,
+        classCode: sc.code,
+        lecturers: [sc.mainLecturer?.userProfile?.fullname, sc.extraLecturer?.userProfile?.fullname]
+          .filter(Boolean)
+          .join("; "),
+        weekday: classTime?.dayOfWeek || "",
+        period: classTime ? `${classTime.startPeriod} - ${classTime.endPeriod}` : "",
+        room: sc.room?.name || "",
+        maxStudent: sc.maxStudent,
+      }
+    })
   })
 
   const buffer = await getTemplateBuffer(prisma, "MAU2_DanSu_template.xlsx")

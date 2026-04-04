@@ -8,51 +8,65 @@ const prismaNew = new PrismaClient({
   datasourceUrl: "postgres://admin:123456654321@113.192.17.90:5432/mta",
 })
 
-const curriculum = await prismaNew.curriculumVersion.findMany({
-  include: {
+const ss = await prismaNew.subjectVersion.findMany({
+  where: {
     trainingBlocks: {
-      include: {
-        subjects: {
-          include: { subject: true },
-        },
-      },
+      none: {},
     },
   },
 })
 
-for (const item of curriculum) {
-  const requiredCredits = item.trainingBlocks.reduce((acc, block) => {
-    return (
-      acc +
-      block.subjects.reduce((acc2, subject) => {
-        if (subject.type === "Mandatory" && subject.useForFinalScore) {
-          return acc2 + subject.subject.credit
-        }
-        return acc2
-      }, 0)
-    )
-  }, 0)
+console.log(
+  ss.length,
+  ss.map((s) => s.code)
+)
 
-  const electiveCredits = item.trainingBlocks.reduce((acc, block) => {
-    return (
-      acc +
-      block.subjects.reduce((acc2, subject) => {
-        if (subject.type === "Optional" && subject.useForFinalScore) {
-          return acc2 + subject.subject.credit
-        }
-        return acc2
-      }, 0)
-    )
-  }, 0)
 
-  await prismaNew.curriculumVersion.update({
-    where: { id: item.id },
-    data: {
-      requiredCredits,
-      electiveCredits,
-    },
-  })
-}
+// const curriculum = await prismaNew.curriculumVersion.findMany({
+//   include: {
+//     trainingBlocks: {
+//       include: {
+//         subjects: {
+//           include: { subject: true },
+//         },
+//       },
+//     },
+//   },
+// })
+
+// for (const item of curriculum) {
+//   const requiredCredits = item.trainingBlocks.reduce((acc, block) => {
+//     return (
+//       acc +
+//       block.subjects.reduce((acc2, subject) => {
+//         if (subject.type === "Mandatory" && subject.useForFinalScore) {
+//           return acc2 + subject.subject.credit
+//         }
+//         return acc2
+//       }, 0)
+//     )
+//   }, 0)
+
+//   const electiveCredits = item.trainingBlocks.reduce((acc, block) => {
+//     return (
+//       acc +
+//       block.subjects.reduce((acc2, subject) => {
+//         if (subject.type === "Optional" && subject.useForFinalScore) {
+//           return acc2 + subject.subject.credit
+//         }
+//         return acc2
+//       }, 0)
+//     )
+//   }, 0)
+
+//   await prismaNew.curriculumVersion.update({
+//     where: { id: item.id },
+//     data: {
+//       requiredCredits,
+//       electiveCredits,
+//     },
+//   })
+// }
 
 // const docsC = await prismaOld.documentClassification.findMany()
 
