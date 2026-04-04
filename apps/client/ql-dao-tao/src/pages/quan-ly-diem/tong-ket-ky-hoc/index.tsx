@@ -51,7 +51,7 @@ export default function TongKetKyHoc() {
           },
           {
             key: "4",
-            label: "Xét cảnh cáo học đường",
+            label: "Cảnh cáo học đường",
             children: <XetCanhCaoHocDuong semesterId={semesterId} />,
           },
           // {

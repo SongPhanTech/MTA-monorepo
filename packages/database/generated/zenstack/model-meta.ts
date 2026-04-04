@@ -11969,7 +11969,6 @@ const metadata: ModelMeta = {
                 }, examType: {
                     name: "examType",
                     type: "ExamType",
-                    isOptional: true,
                 }, exam: {
                     name: "exam",
                     type: "Exam",

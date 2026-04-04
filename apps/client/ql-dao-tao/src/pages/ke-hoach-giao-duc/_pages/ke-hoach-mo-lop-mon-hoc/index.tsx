@@ -27,6 +27,7 @@ type OpenSubjectClassForm = {
       code: string | null
       maxStudent: number
       isEdit?: boolean
+      examType: $Enums.ExamType
     }
   >
   // SubjectVersionId -> SubjectClassId
@@ -173,6 +174,7 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
               cur.subjectClass?.[0]?.maxStudent ??
               cur.trainingBlocks?.[0]?.planTrainingSubjects?.[0]?.studentCount,
             isEdit: false,
+            examType: cur.examType,
           }
           return acc
         },
@@ -331,6 +333,7 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                                           id: true
                                           code: true
                                           name: true
+                                          examType: true
                                         }
                                       }
                                     }
@@ -386,6 +389,7 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                                       subjectId,
                                       code: `${subjectCode} ${String(existingCount + idx + 1)}`,
                                       name: subjectName,
+                                      examType: subjectVersions?.[subjectId]?.examType,
                                       maxStudent: subjectVersions?.[subjectId]?.maxStudent || 0,
                                     },
                                   },
@@ -416,6 +420,7 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                                         subjectId: e?.trainingBlockSubject?.subject?.id,
                                         code: `${e?.trainingBlockSubject?.subject?.code} ${String(idx + 1)}`,
                                         name: e?.trainingBlockSubject?.subject?.name,
+                                        examType: e?.trainingBlockSubject?.subject?.examType,
                                         maxStudent:
                                           subjectVersions?.[
                                             e?.trainingBlockSubject?.subject?.id ?? ""
@@ -520,6 +525,7 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                                   code: `${v.code} ${String(existingCount + idx + 1)}`,
                                   name: v.name,
                                   maxStudent: v.maxStudent || 0,
+                                  examType: v.examType,
                                 },
                               },
                             }))

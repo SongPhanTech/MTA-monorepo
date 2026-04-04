@@ -182,7 +182,7 @@ const PutDisciplinaryWarning = () => {
       onFinish={onOk}
       onCancel={onClose}
       maskClosable={true}
-      title={input?.id ? "Chỉnh sửa xét cảnh cáo học đường" : "Thêm mới xét cảnh cáo học đường"}
+      title={input?.id ? "Chỉnh sửa cảnh cáo học đường" : "Thêm mới cảnh cáo học đường"}
     >
       <Col span={12}>
         <FormItem form={form} name="trainingCourseId" label="Khoá học">
