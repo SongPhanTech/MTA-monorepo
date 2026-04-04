@@ -41,13 +41,16 @@ import {
   Tooltip,
 } from "antd"
 import locale from "antd/es/date-picker/locale/vi_VN"
-import dayjs, { type Dayjs } from "dayjs"
+import dayjs from "dayjs"
+import { type Dayjs } from "dayjs"
 import _ from "lodash"
 import { CalendarPlus, Search } from "lucide-react"
 import { useRouter } from "next/router"
 import type React from "react"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
+import { diemLopMonHocStore } from "../ql-diem-lop-mon-hoc"
+import { sqlTransaction } from "@workspace/libs/api/model";
 
 type TimeScore = {
   time: [Dayjs, Dayjs]
@@ -79,6 +82,9 @@ export default function ClassSubject() {
   const [form] = Form.useForm<TimeScore>()
   const [formExam] = Form.useForm<TimeScoreExam>()
   const [formHoldAnExam] = Form.useForm<HoldAnExam>()
+  const [changedExamDates, setChangedExamDates] = useState<
+  Record<string, string | null>
+>({})
   const [filters, setFilters] = useState<FilterProps>({
     searchText: "",
     code: "",
@@ -431,6 +437,29 @@ export default function ClassSubject() {
       hideSpinner()
     }
   }
+  const handleUpdateExamDates = async () => {
+    try {
+      showSpinner()
+      const transactions = Object.entries(changedExamDates).map(([id, examDate]) => ({
+        model: "SubjectClass" as const,
+        operation: "updateMany" as const,
+        data: {
+          where: { id },
+          data: { examDate: examDate ? dayjs(examDate).toISOString() : null },
+        },
+      }))
+
+      await sqlTransaction(transactions)
+      message.success("Cập nhật ngày thi thành công")
+      setChangedExamDates({})
+      debouncedRefetch()
+    } catch (e) {
+      console.error(e)
+      message.error("Có lỗi xảy ra")
+    } finally {
+      hideSpinner()
+    }
+  }
 
   const rowSelection = {
     selectedRowKeys,
@@ -492,6 +521,17 @@ export default function ClassSubject() {
                   "XEM_TAT_CA"
                 ) && (
                   <>
+                    {Object.keys(changedExamDates).length > 0 && (
+                      <Button
+                        type="primary"
+                        onClick={handleUpdateExamDates}
+                        className="bg-orange-500 hover:!bg-orange-400"
+                      >
+                        Lưu kế hoạch
+                      </Button>
+                    )}
+                    {selectedRowKeys.length > 0 && <p>(Đang chọn {selectedRowKeys.length} lớp)</p>}
+
                     {selectedRowKeys.length > 0 && <p>(Đang chọn {selectedRowKeys.length} lớp)</p>}
                     <Popover
                       content={
@@ -792,7 +832,42 @@ export default function ClassSubject() {
                 width: 120,
                 align: "center",
                 type: "date",
-                render: (record: string) => (record ? dayjs(record).format("DD/MM/YYYY") : ""),
+                // render: (record: string) => (record ? dayjs(record).format("DD/MM/YYYY") : ""),
+                render: (_, record) => {
+                  if (!canReadAll) {
+                    return record.examDate ? dayjs(record.examDate).format("DD/MM/YYYY") : ""
+                  }
+
+                  const isExpired =
+                    record?.examScoreDeadline && dayjs().isAfter(dayjs(record.examScoreDeadline))
+
+                  return (
+                    <DatePicker
+                      allowClear
+                      format="DD/MM/YYYY"
+                      value={
+                        changedExamDates[record.id] !== undefined
+                          ? changedExamDates[record.id]
+                            ? dayjs(changedExamDates[record.id])
+                            : null
+                          : record.examDate
+                            ? dayjs(record.examDate)
+                            : undefined
+                      }
+                      className={cn("w-full px-1", isExpired && "border-red-500")}
+                      status={isExpired ? "error" : ""}
+                      onChange={(value) => {
+                        diemLopMonHocStore.setState({
+                          selectedSubjectClassId: record.id,
+                        })
+                        setChangedExamDates((prev) => ({
+                          ...prev,
+                          [record.id]: value ? value.toISOString() : null,
+                        }))
+                      }}
+                    />
+                  )
+                },
               },
               {
                 title: "Hạn NĐT",
