@@ -738,6 +738,7 @@ export default function PhanCongGiangDay({
 
   const { onOpen: onOpenModalNhapTKB } = useDisclosure<{
     type?: $Enums.SubjectClassType
+    trainingCourseId?: string
   }>({
     tag: "ModalNhapTKB",
   })
@@ -1555,7 +1556,9 @@ export default function PhanCongGiangDay({
                       <Button
                         type="primary"
                         className="bg-yellow-500 text-black"
-                        onClick={() => onOpenModalNhapTKB({ type })}
+                        onClick={() =>
+                          onOpenModalNhapTKB({ type, trainingCourseId: trainingCourseId })
+                        }
                       >
                         4. Nhập từ TKB
                       </Button>
@@ -1776,7 +1779,12 @@ export default function PhanCongGiangDay({
                   dataIndex: "mainLecturer",
                   render: (__, record) =>
                     !subjectClassForm?.[record.id]?.cancelled &&
-                    (role === "P2_KHCT" || !khoaBoMon || !record?.submitLecturerAssignmentAt) ? (
+                    (role === "P2_KHCT"
+                        ? true
+                        : !khoaBoMon
+                          ? true
+                          : !record?.submitLecturerAssignmentAt && !record?.approveLecturerAssignmentAt
+                      ) ? (
                       <FormItem form={form} name={["subjectClass", record.id, "lecturerId"]}>
                         <LectureTreeSelect
                           placeholder="Chọn giảng viên"
@@ -1807,7 +1815,12 @@ export default function PhanCongGiangDay({
                   width: 200,
                   render: (__, record) =>
                     !subjectClassForm?.[record.id]?.cancelled &&
-                    (role === "P2_KHCT" || !khoaBoMon || !record?.submitLecturerAssignmentAt) ? (
+                    (role === "P2_KHCT"
+                        ? true
+                        : !khoaBoMon
+                          ? true
+                          : !record?.submitLecturerAssignmentAt && !record?.approveLecturerAssignmentAt
+                      ) ? (
                       <FormItem form={form} name={["subjectClass", record.id, "extraLecturerId"]}>
                         <LectureTreeSelect
                           placeholder="Chọn giảng viên"
@@ -1836,7 +1849,12 @@ export default function PhanCongGiangDay({
                   width: 200,
                   render: (__, record) =>
                     !subjectClassForm?.[record.id]?.cancelled &&
-                    (role === "P2_KHCT" || !khoaBoMon || !record?.submitLecturerAssignmentAt) ? (
+                    (role === "P2_KHCT"
+                        ? true
+                        : !khoaBoMon
+                          ? true
+                          : !record?.submitLecturerAssignmentAt && !record?.approveLecturerAssignmentAt
+                      ) ? (
                       <FormItem
                         form={form}
                         name={["subjectClass", record.id, "enterGradeLecturerId"]}

@@ -676,9 +676,18 @@ app.openapi(importStudent, async (c) => {
     )
   }
 
+  const uniqueCurriculumMajorCombos = Array.from(
+    new Map(
+      data.students.map((s) => [
+        `${s.curriculum}-${s.trainingMajor}`,
+        { curriculum: s.curriculum, trainingMajor: s.trainingMajor },
+      ])
+    ).values()
+  )
+
   const conflicts = await prisma.fixedClass.findMany({
     where: {
-      OR: data.students.map((s) => ({
+      OR: uniqueCurriculumMajorCombos.map((s) => ({
         curriculumVersion: {
           name: s.curriculum,
           trainingObjectTypeId: trainingObjectType.id,
@@ -875,163 +884,193 @@ app.openapi(importStudent, async (c) => {
 
   const fixedClassMap = new Map(fixedClass.map(({ code, id }) => [code, id]))
 
-  for (const student of data.students) {
-    const cvName = student.curriculum?.trim()
-    const cvId = curriculumVersionMap.get(cvName)
-
-    const studentData: Prisma.StudentCreateInput = {
-      code: student.code,
-      entryScore: Number.parseFloat(student.entryScore ?? "") || null,
-      fixedClass: { connect: { id: fixedClassMap.get(student.fixedClassCode) } },
-      curriculumVersion: cvId ? { connect: { id: cvId } } : undefined,
-      userProfile: {},
-      department: student.department,
-      departmentAddress: student.departmentAddress,
-      careerYear: Number.parseInt(student.careerYear ?? "0", 10),
-      universitySchool: student.universitySchool,
-      universityTrainingType: student.universityTrainingType,
-      universityGraduationYear: Number.parseInt(student.universityGraduationYear ?? "0", 10),
-      universityMajor: student.universityMajor,
-      universityRank: student.universityRank,
-      basic: student.basic ? Number.parseFloat(student.basic) : null,
-      facility: student.facility ? Number.parseFloat(student.facility) : null,
-      foreignLanguage: student.foreignLanguage,
-      priorityReason: student.priorityReason,
-      description: student.description,
+  const chunkArray = <T>(array: T[], size: number): T[][] => {
+    const result: T[][] = []
+    for (let i = 0; i < array.length; i += size) {
+      result.push(array.slice(i, i + size))
     }
+    return result
+  }
 
-    const profileData: Prisma.UserProfileUncheckedCreateWithoutEducationAndTrainingInput = {
-      ...splitFullName(student.fullname),
-      code: student.idCardNumber,
-      fullname: student.fullname,
-      email: `${student.idCardNumber}@gmail.com`,
-      bLaGiangVien: false,
-      bLaHocVien: true,
-      dateOfBirth: student.dateOfBirth,
-      idCardNumber: student.idCardNumber,
-      genderId: student.gender ? genderMap.get(student.gender) : null,
-      ethnicityId: ethnicityMap.get(student.ethnicity ?? "") || null,
-      nationalityId: nationalityMap.get(student.nationality ?? "") || null,
-      newProvinceHometownId: provinceMap.get(student.provinceHometown ?? "") || null,
-      phoneNumber: student.phoneNumber,
-      officerNumber: student.officerNumber,
-      rankId: rankMap.get(student.rank ?? "") || null,
-      positionCPVId: positionMap.get(student.position ?? "") || null,
-    }
+  const chunks = chunkArray(data.students, 50)
 
-    const existingProfile = existingProfileMap.get(student.idCardNumber)
-    const existing = existingStudentMap.get(student.code)
+  for (const chunk of chunks) {
+    const results = await Promise.all(
+      chunk.map(async (student) => {
+        const cvName = student.curriculum?.trim()
+        const cvId = curriculumVersionMap.get(cvName)
 
-    const createStudentFn = async (id?: string) => {
-      const st = await prisma.student.create({
-        data: {
-          ...studentData,
-          userProfile: {
-            connectOrCreate: {
-              where: id ? { id } : { idCardNumber: student.idCardNumber },
-              create: { id, ...profileData },
-            },
-          },
-        },
-      })
-      await prisma.userProfile.update({
-        where: { id: st.userProfileId },
-        data: profileData,
-      })
-
-      if (student.department) {
-        await prisma.quaTrinhCongTac.create({
-          data: {
-            userProfileId: st.userProfileId,
-            donVi: student.department,
-            diaChi: student.departmentAddress,
-            chucVuId: positionMap.get(student.position ?? ""),
-          },
-        })
-      }
-
-      if (student.universitySchool && student.universityMajor) {
-        await prisma.quaTrinhHocTap.create({
-          data: {
-            userProfileId: st.userProfileId,
-            tenTruongId: dmTruong.get(student.universitySchool) as string,
-            nganhHocId: dmNganh.get(student.universityMajor) as string,
-            chuyenNganhId: dmChuyenNganh.get(student.universityMajor) as string,
-          },
-        })
-      }
-    }
-
-    if (existingProfile) {
-      const res = await putDMNhanViens(
-        {
-          Id: existingProfile.id,
-          sMa: existingProfile.code || crypto.randomUUID(),
-          bLaHocVien: true,
-          bLaTaiKhoan: true,
-          dNgaySinh: student.dateOfBirth ? new Date(student.dateOfBirth)?.toISOString() : null,
-          sCCCD: student.idCardNumber,
-          sHoVaDem: profileData.lastName,
-          sTen: profileData.firstName,
-          sTenDayDu: student.fullname,
-          sSDTDiDong: student.phoneNumber ?? "",
-          //! TODO: fix this
-          sEmail: `${student.idCardNumber}@gmail.com`,
-          sDM_GioiTinhId: student.gender ? genderMap.get(student.gender) : null,
-        },
-        {
-          headers: {
-            "x-clientid": process.env.KEYCLOAK_CLIENT_ID_LMS || "",
-            "x-clientsecret": process.env.KEYCLOAK_CLIENT_SECRET_LMS || "",
-          },
+        const studentData: Prisma.StudentCreateInput = {
+          code: student.code,
+          entryScore: Number.parseFloat(student.entryScore ?? "") || null,
+          fixedClass: { connect: { id: fixedClassMap.get(student.fixedClassCode) } },
+          curriculumVersion: cvId ? { connect: { id: cvId } } : undefined,
+          userProfile: {},
+          department: student.department,
+          departmentAddress: student.departmentAddress,
+          careerYear: Number.parseInt(student.careerYear ?? "0", 10),
+          universitySchool: student.universitySchool,
+          universityTrainingType: student.universityTrainingType,
+          universityGraduationYear: Number.parseInt(student.universityGraduationYear ?? "0", 10),
+          universityMajor: student.universityMajor,
+          universityRank: student.universityRank,
+          basic: student.basic ? Number.parseFloat(student.basic) : null,
+          facility: student.facility ? Number.parseFloat(student.facility) : null,
+          foreignLanguage: student.foreignLanguage,
+          priorityReason: student.priorityReason,
+          description: student.description,
         }
-      )
 
-      if (existing) {
-        if (res.status === 200) {
-          await prisma.student.update({
-            where: { id: existing.id },
+        const profileData: Prisma.UserProfileUncheckedCreateWithoutEducationAndTrainingInput = {
+          ...splitFullName(student.fullname),
+          code: student.idCardNumber,
+          fullname: student.fullname,
+          email: `${student.idCardNumber}@gmail.com`,
+          bLaGiangVien: false,
+          bLaHocVien: true,
+          dateOfBirth: student.dateOfBirth,
+          idCardNumber: student.idCardNumber,
+          genderId: student.gender ? genderMap.get(student.gender) : null,
+          ethnicityId: ethnicityMap.get(student.ethnicity ?? "") || null,
+          nationalityId: nationalityMap.get(student.nationality ?? "") || null,
+          newProvinceHometownId: provinceMap.get(student.provinceHometown ?? "") || null,
+          phoneNumber: student.phoneNumber,
+          officerNumber: student.officerNumber,
+          rankId: rankMap.get(student.rank ?? "") || null,
+          positionCPVId: positionMap.get(student.position ?? "") || null,
+        }
+
+        const existingProfile = existingProfileMap.get(student.idCardNumber)
+        const existing = existingStudentMap.get(student.code)
+
+        const createStudentFn = async (id?: string) => {
+          const st = await prisma.student.create({
             data: {
               ...studentData,
-              userProfile: { update: profileData },
+              userProfile: {
+                connectOrCreate: {
+                  where: id ? { id } : { idCardNumber: student.idCardNumber },
+                  create: { id, ...profileData },
+                },
+              },
             },
           })
-        } else {
-          const extra = res.data?.extra as unknown as ErrorExtra | undefined
-          return c.json({ message: extra?.message || [extra?.code, extra?.data].join(" ") }, 400)
-        }
-      } else {
-        await createStudentFn()
-      }
-    } else {
-      const res = await postDMNhanViens(
-        {
-          sMa: student.idCardNumber,
-          bLaHocVien: true,
-          bLaTaiKhoan: true,
-          dNgaySinh: student.dateOfBirth ? new Date(student.dateOfBirth)?.toISOString() : null,
-          sCCCD: student.idCardNumber,
-          sHoVaDem: profileData.lastName,
-          sTen: profileData.firstName,
-          sTenDayDu: student.fullname,
-          sSDTDiDong: student.phoneNumber ?? "",
-          sEmail: `${student.idCardNumber}@gmail.com`,
-          sDM_GioiTinhId: student.gender ? genderMap.get(student.gender) : null,
-        },
-        {
-          headers: {
-            "x-clientid": process.env.KEYCLOAK_CLIENT_ID_LMS || "",
-            "x-clientsecret": process.env.KEYCLOAK_CLIENT_SECRET_LMS || "",
-          },
-        }
-      )
 
-      if (res.status === 200) {
-        await createStudentFn(res.data as string)
-      } else {
-        const extra = res.data?.extra as ErrorExtra | undefined
-        return c.json({ message: extra?.message || [extra?.code, extra?.data].join(" ") }, 400)
-      }
+          if (student.department) {
+            await prisma.quaTrinhCongTac.create({
+              data: {
+                userProfileId: st.userProfileId,
+                donVi: student.department,
+                diaChi: student.departmentAddress,
+                chucVuId: positionMap.get(student.position ?? ""),
+              },
+            })
+          }
+
+          if (student.universitySchool && student.universityMajor) {
+            await prisma.quaTrinhHocTap.create({
+              data: {
+                userProfileId: st.userProfileId,
+                tenTruongId: dmTruong.get(student.universitySchool) as string,
+                nganhHocId: dmNganh.get(student.universityMajor) as string,
+                chuyenNganhId: dmChuyenNganh.get(student.universityMajor) as string,
+              },
+            })
+          }
+        }
+
+        if (existingProfile) {
+          const res = await putDMNhanViens(
+            {
+              Id: existingProfile.id,
+              sMa: existingProfile.code || crypto.randomUUID(),
+              bLaHocVien: true,
+              bLaTaiKhoan: true,
+              dNgaySinh: student.dateOfBirth ? new Date(student.dateOfBirth)?.toISOString() : null,
+              sCCCD: student.idCardNumber,
+              sHoVaDem: profileData.lastName,
+              sTen: profileData.firstName,
+              sTenDayDu: student.fullname,
+              sSDTDiDong: student.phoneNumber ?? "",
+              //! TODO: fix this
+              sEmail: `${student.idCardNumber}@gmail.com`,
+              sDM_GioiTinhId: student.gender ? genderMap.get(student.gender) : null,
+            },
+            {
+              headers: {
+                "x-clientid": process.env.KEYCLOAK_CLIENT_ID_LMS || "",
+                "x-clientsecret": process.env.KEYCLOAK_CLIENT_SECRET_LMS || "",
+              },
+            }
+          )
+
+          await prisma.userProfile.update({
+            where: { id: existingProfile.id },
+            data: profileData,
+          })
+
+          if (existing) {
+            if (res.status === 200) {
+              await prisma.student.update({
+                where: { id: existing.id },
+                data: {
+                  ...studentData,
+                  userProfile: { update: profileData },
+                },
+              })
+            } else {
+              const extra = res.data?.extra as unknown as ErrorExtra | undefined
+              return {
+                error: true,
+                message: extra?.message || [extra?.code, extra?.data].join(" "),
+              }
+            }
+          } else {
+            await createStudentFn()
+          }
+        } else {
+          const res = await postDMNhanViens(
+            {
+              sMa: student.idCardNumber,
+              bLaHocVien: true,
+              bLaTaiKhoan: true,
+              dNgaySinh: student.dateOfBirth ? new Date(student.dateOfBirth)?.toISOString() : null,
+              sCCCD: student.idCardNumber,
+              sHoVaDem: profileData.lastName,
+              sTen: profileData.firstName,
+              sTenDayDu: student.fullname,
+              sSDTDiDong: student.phoneNumber ?? "",
+              sEmail: `${student.idCardNumber}@gmail.com`,
+              sDM_GioiTinhId: student.gender ? genderMap.get(student.gender) : null,
+            },
+            {
+              headers: {
+                "x-clientid": process.env.KEYCLOAK_CLIENT_ID_LMS || "",
+                "x-clientsecret": process.env.KEYCLOAK_CLIENT_SECRET_LMS || "",
+              },
+            }
+          )
+
+          if (res.status === 200) {
+            await prisma.userProfile.upsert({
+              where: { id: res.data as string },
+              update: profileData,
+              create: { id: res.data as string, ...profileData },
+            })
+            await createStudentFn(res.data as string)
+          } else {
+            const extra = res.data?.extra as ErrorExtra | undefined
+            return { error: true, message: extra?.message || [extra?.code, extra?.data].join(" ") }
+          }
+        }
+
+        return { error: false, message: "" }
+      })
+    )
+
+    const firstError = results.find((r) => r.error)
+    if (firstError) {
+      return c.json({ message: firstError.message }, 400)
     }
   }
   //     },

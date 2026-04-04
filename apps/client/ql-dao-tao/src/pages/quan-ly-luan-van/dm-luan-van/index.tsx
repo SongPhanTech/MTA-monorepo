@@ -134,7 +134,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
   )
   const { data: expertProfileData } = useFindManyExpertProfile({
     where: {
-      thesisExpert: true,      
+      thesisExpert: true,
     },
     include: {
       lecturer: {
@@ -396,12 +396,13 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               },
             }
           : { disconnect: true },
-        thesisSession: thesisSessionId ? {
-            connect: {
-              id: thesisSessionId,
-            },
-          }
-        : { disconnect: true },
+        thesisSession: thesisSessionId
+          ? {
+              connect: {
+                id: thesisSessionId,
+              },
+            }
+          : { disconnect: true },
         thesisType: ThesisType.THESIS,
         librarySubmission: {
           create: {
@@ -475,10 +476,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
         const newCo = rowData.coSupervisor ?? ""
         const oldSup = orig.supervisor?.id ?? ""
         const oldCo = orig.coSupervisor?.id ?? ""
-        if (
-          (newSup !== oldSup || newCo !== oldCo) &&
-          !isWithinGvhdSupervisorEditWindow()
-        ) {
+        if ((newSup !== oldSup || newCo !== oldCo) && !isWithinGvhdSupervisorEditWindow()) {
           message.error(
             "Đã quá hạn nhập GVHD. Chỉ được thay đổi giáo viên hướng dẫn khi còn trong hạn (theo ngày hạn nhập đề tài của đợt xét)."
           )
@@ -633,7 +631,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     setEditingValues(initialEditingValues)
   }
   // hàm xử lý lấy ra danh sách button
-  const [selectedPrintTemplateId, setSelectedPrintTemplateId] = useState<string | undefined>(undefined)
+  const [selectedPrintTemplateId, setSelectedPrintTemplateId] = useState<string | undefined>(
+    undefined
+  )
   const buttonList = [
     {
       id: 1,
@@ -861,8 +861,12 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       message.warning("Vui lòng chọn đợt xét trước khi gán ngày.")
       return
     }
-    const topicEntryDeadline = form.getFieldValue("topicEntryDeadline") as ReturnType<typeof dayjs> | undefined
-    const councilDeadline = form.getFieldValue("councilDeadline") as ReturnType<typeof dayjs> | undefined
+    const topicEntryDeadline = form.getFieldValue("topicEntryDeadline") as
+      | ReturnType<typeof dayjs>
+      | undefined
+    const councilDeadline = form.getFieldValue("councilDeadline") as
+      | ReturnType<typeof dayjs>
+      | undefined
     showSpinner()
     try {
       await updateThesisSession({
@@ -982,7 +986,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       </Button>
                     </Popconfirm>
 
-                    {editingRowKeys.length > 0  ? (
+                    {editingRowKeys.length > 0 ? (
                       <>
                         <Button
                           type="default"
@@ -1042,7 +1046,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       disabled: item.disabled,
                     }))}
                     value={selectedPrintTemplateId}
-                    onChange={(value) => setSelectedPrintTemplateId(value ? String(value) : undefined)}
+                    onChange={(value) =>
+                      setSelectedPrintTemplateId(value ? String(value) : undefined)
+                    }
                   />
                   <Button
                     type="primary"
@@ -1183,9 +1189,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                         : record?.thesisRegistrations?.[0]?.thesisProject?.title || ""
 
                     return (
-                      <div
-                        onClick={(e) => e.stopPropagation()} 
-                      >
+                      <div onClick={(e) => e.stopPropagation()}>
                         <TextArea
                           rows={3}
                           value={currentValue}
@@ -1213,12 +1217,11 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     const currentValue =
                       editingValues[record?.id]?.researchTopicAssociated !== undefined
                         ? editingValues[record?.id]?.researchTopicAssociated
-                        : record?.thesisRegistrations?.[0]?.thesisProject?.researchTopicAssociated || ""
+                        : record?.thesisRegistrations?.[0]?.thesisProject
+                            ?.researchTopicAssociated || ""
 
                     return (
-                      <div
-                        onClick={(e) => e.stopPropagation()} 
-                      >
+                      <div onClick={(e) => e.stopPropagation()}>
                         <TextArea
                           rows={2}
                           value={currentValue}
@@ -1231,7 +1234,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   }
                   return (
                     <p className="line-clamp-2">
-                      {record?.thesisRegistrations?.[0]?.thesisProject?.researchTopicAssociated || ""}
+                      {record?.thesisRegistrations?.[0]?.thesisProject?.researchTopicAssociated ||
+                        ""}
                     </p>
                   )
                 },
@@ -1241,7 +1245,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 width: 100,
                 dataIndex: "language",
                 render: (_, record) => {
-                  if (editingRowKeys.includes(record?.id) ) {
+                  if (editingRowKeys.includes(record?.id)) {
                     const currentValue =
                       editingValues[record?.id]?.language !== undefined
                         ? editingValues[record?.id]?.language
@@ -1263,7 +1267,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 width: 130,
                 dataIndex: "type",
                 render: (_, record) => {
-                  if (editingRowKeys.includes(record?.id) ) {
+                  if (editingRowKeys.includes(record?.id)) {
                     const currentValue =
                       editingValues[record?.id]?.type !== undefined
                         ? editingValues[record?.id]?.type
@@ -1292,8 +1296,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 render: (_, record) => {
                   const canEditGvhd =
                     // role === "Khoa" &&
-                    editingRowKeys.includes(record?.id) &&
-                    isWithinGvhdSupervisorEditWindow()
+                    editingRowKeys.includes(record?.id) && isWithinGvhdSupervisorEditWindow()
                   if (canEditGvhd) {
                     const currentValue =
                       editingValues[record?.id]?.supervisor !== undefined
@@ -1306,27 +1309,32 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           className="w-full"
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
-                          options={expertProfileData?.map(
-                            (item) => {
-                              const academicRank = item.lecturer?.userProfile?.academicRankType?.sTen || item.academicRank || ""
-                              const academicDegree = item.lecturer?.userProfile?.academicDegreeType?.sTen || item.academicDegree || ""
-                              const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
-                              const expertName = item.lecturer?.userProfile?.fullname || item.name || ""
-                              const hasLecturer = item.lecturer != null
-                              return {
-                                label: (
-                                  <span
-                                    title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
-                                    className={hasLecturer ? "text-green-600" : "text-red-600"}
-                                    style={{ color: hasLecturer ? "#16a34a" : "#dc2626" }}
-                                  >
-                                    {`${academicRankAndDegree} ${expertName}`.trim()}
-                                  </span>
-                                ),
-                                value: item.id,
-                              }
+                          options={expertProfileData?.map((item) => {
+                            const academicRank =
+                              item.lecturer?.userProfile?.academicRankType?.sTen ||
+                              item.academicRank ||
+                              ""
+                            const academicDegree =
+                              item.lecturer?.userProfile?.academicDegreeType?.sTen ||
+                              item.academicDegree ||
+                              ""
+                            const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
+                            const expertName =
+                              item.lecturer?.userProfile?.fullname || item.name || ""
+                            const hasLecturer = item.lecturer != null
+                            return {
+                              label: (
+                                <span
+                                  title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
+                                  className={hasLecturer ? "text-green-600" : "text-red-600"}
+                                  style={{ color: hasLecturer ? "#16a34a" : "#dc2626" }}
+                                >
+                                  {`${academicRankAndDegree} ${expertName}`.trim()}
+                                </span>
+                              ),
+                              value: item.id,
                             }
-                          )}
+                          })}
                           value={currentValue || undefined}
                           onChange={(value) => handleEditChange(record?.id, "supervisor", value)}
                         />
@@ -1345,10 +1353,16 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       </span>
                     )
                   }
-                  const academicRank = record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.lecturer?.userProfile?.academicRankType?.sTen 
-                  || record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.academicRank || ""
-                  const academicDegree = record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.lecturer?.userProfile?.academicDegreeType?.sTen 
-                  || record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.academicDegree || ""
+                  const academicRank =
+                    record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.lecturer
+                      ?.userProfile?.academicRankType?.sTen ||
+                    record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.academicRank ||
+                    ""
+                  const academicDegree =
+                    record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.lecturer
+                      ?.userProfile?.academicDegreeType?.sTen ||
+                    record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.academicDegree ||
+                    ""
                   const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
                   return `${academicRankAndDegree} ${record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.name || ""}`
                 },
@@ -1360,8 +1374,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 render: (_, record) => {
                   const canEditGvhd =
                     // role === "Khoa" &&
-                    editingRowKeys.includes(record?.id) &&
-                    isWithinGvhdSupervisorEditWindow()
+                    editingRowKeys.includes(record?.id) && isWithinGvhdSupervisorEditWindow()
                   if (canEditGvhd) {
                     const currentValue =
                       editingValues[record?.id]?.coSupervisor !== undefined
@@ -1374,27 +1387,32 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
                           className="w-full"
-                          options={expertProfileData?.map(
-                            (item) => {
-                              const academicRank = item.lecturer?.userProfile?.academicRankType?.sTen || item.academicRank || ""
-                              const academicDegree = item.lecturer?.userProfile?.academicDegreeType?.sTen || item.academicDegree || ""
-                              const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
-                              const expertName = item.lecturer?.userProfile?.fullname || item.name || ""
-                              const hasLecturer = item.lecturer != null
-                              return {
-                                label: (
-                                  <span
-                                    title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
-                                    className={hasLecturer ? "text-green-600" : "text-red-600"}
-                                    style={{ color: hasLecturer ? "#16a34a" : "#dc2626" }}
-                                  >
-                                    {`${academicRankAndDegree} ${expertName}`.trim()}
-                                  </span>
-                                ),
-                                value: item.id,
-                              }
+                          options={expertProfileData?.map((item) => {
+                            const academicRank =
+                              item.lecturer?.userProfile?.academicRankType?.sTen ||
+                              item.academicRank ||
+                              ""
+                            const academicDegree =
+                              item.lecturer?.userProfile?.academicDegreeType?.sTen ||
+                              item.academicDegree ||
+                              ""
+                            const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
+                            const expertName =
+                              item.lecturer?.userProfile?.fullname || item.name || ""
+                            const hasLecturer = item.lecturer != null
+                            return {
+                              label: (
+                                <span
+                                  title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
+                                  className={hasLecturer ? "text-green-600" : "text-red-600"}
+                                  style={{ color: hasLecturer ? "#16a34a" : "#dc2626" }}
+                                >
+                                  {`${academicRankAndDegree} ${expertName}`.trim()}
+                                </span>
+                              ),
+                              value: item.id,
                             }
-                          )}
+                          })}
                           value={currentValue || undefined}
                           onChange={(value) => handleEditChange(record?.id, "coSupervisor", value)}
                         />
@@ -1413,13 +1431,18 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       </span>
                     )
                   }
-                  const academicRank = record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.lecturer?.userProfile?.academicRankType?.sTen 
-                  || record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.academicRank || ""
-                  const academicDegree = record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.lecturer?.userProfile?.academicDegreeType?.sTen 
-                  || record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.academicDegree || ""
+                  const academicRank =
+                    record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.lecturer
+                      ?.userProfile?.academicRankType?.sTen ||
+                    record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.academicRank ||
+                    ""
+                  const academicDegree =
+                    record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.lecturer
+                      ?.userProfile?.academicDegreeType?.sTen ||
+                    record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.academicDegree ||
+                    ""
                   const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
                   return `${academicRankAndDegree} ${record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.name || ""}`
-                  
                 },
               },
               {
@@ -1442,27 +1465,33 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           className="w-full"
                           options={expertProfileData
                             ?.filter((item) => item.eligiblePresident === true)
-                            .map(
-                              (item) => {
-                                const academicRank = item.lecturer?.userProfile?.academicRankType?.sTen || item.academicRank || ""
-                                const academicDegree = item.lecturer?.userProfile?.academicDegreeType?.sTen || item.academicDegree || ""
-                                const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
-                                const expertName = item.lecturer?.userProfile?.fullname || item.name || ""
-                                const hasLecturer = item.lecturer != null
-                                return {
-                                  label: (
-                                    <span
-                                      title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
-                                      className={hasLecturer ? "text-green-600" : "text-red-600"}
-                                      style={{ color: hasLecturer ? "#16a34a" : "#dc2626" }}
-                                    >
-                                      {`${academicRankAndDegree} ${expertName}`.trim()}
-                                    </span>
-                                  ),
-                                  value: item.id,
-                                }
+                            .map((item) => {
+                              const academicRank =
+                                item.lecturer?.userProfile?.academicRankType?.sTen ||
+                                item.academicRank ||
+                                ""
+                              const academicDegree =
+                                item.lecturer?.userProfile?.academicDegreeType?.sTen ||
+                                item.academicDegree ||
+                                ""
+                              const academicRankAndDegree =
+                                `${academicRank} ${academicDegree}`.trim()
+                              const expertName =
+                                item.lecturer?.userProfile?.fullname || item.name || ""
+                              const hasLecturer = item.lecturer != null
+                              return {
+                                label: (
+                                  <span
+                                    title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
+                                    className={hasLecturer ? "text-green-600" : "text-red-600"}
+                                    style={{ color: hasLecturer ? "#16a34a" : "#dc2626" }}
+                                  >
+                                    {`${academicRankAndDegree} ${expertName}`.trim()}
+                                  </span>
+                                ),
+                                value: item.id,
                               }
-                            )}
+                            })}
                           value={currentValue || ""}
                           onChange={(value) =>
                             handleEditChange(record?.id, "councilChairman", value)
@@ -1471,22 +1500,28 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       </div>
                     )
                   }
-                  const academicRank = record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                    (member: any) => member.role === CouncilRole.CHAIRMAN
-                  )?.expert?.lecturer?.userProfile?.academicRankType?.sTen 
-                  || record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                    (member: any) => member.role === CouncilRole.CHAIRMAN
-                  )?.expert?.academicRank || ""
-                  const academicDegree = record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                    (member: any) => member.role === CouncilRole.CHAIRMAN
-                  )?.expert?.lecturer?.userProfile?.academicDegreeType?.sTen 
-                  || record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                    (member: any) => member.role === CouncilRole.CHAIRMAN
-                  )?.expert?.academicDegree || ""
+                  const academicRank =
+                    record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                      (member: any) => member.role === CouncilRole.CHAIRMAN
+                    )?.expert?.lecturer?.userProfile?.academicRankType?.sTen ||
+                    record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                      (member: any) => member.role === CouncilRole.CHAIRMAN
+                    )?.expert?.academicRank ||
+                    ""
+                  const academicDegree =
+                    record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                      (member: any) => member.role === CouncilRole.CHAIRMAN
+                    )?.expert?.lecturer?.userProfile?.academicDegreeType?.sTen ||
+                    record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                      (member: any) => member.role === CouncilRole.CHAIRMAN
+                    )?.expert?.academicDegree ||
+                    ""
                   const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
-                  return `${academicRankAndDegree} ${record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                    (member: any) => member.role === CouncilRole.CHAIRMAN
-                  )?.expert?.name || ""}`
+                  return `${academicRankAndDegree} ${
+                    record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                      (member: any) => member.role === CouncilRole.CHAIRMAN
+                    )?.expert?.name || ""
+                  }`
                 },
               },
               {
@@ -1509,27 +1544,33 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownStyle={{ minWidth: 200 }}
                           options={expertProfileData
                             ?.filter((item) => item.eligibleSecretary === true)
-                            .map(
-                              (item) => {
-                                const academicRank = item.lecturer?.userProfile?.academicRankType?.sTen || item.academicRank || ""
-                                const academicDegree = item.lecturer?.userProfile?.academicDegreeType?.sTen || item.academicDegree || ""
-                                const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
-                                const expertName = item.lecturer?.userProfile?.fullname || item.name || ""
-                                const hasLecturer = item.lecturer != null
-                                return {
-                                  label: (
-                                    <span
-                                      title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
-                                      className={hasLecturer ? "text-green-600" : "text-red-600"}
-                                      style={{ color: hasLecturer ? "#16a34a" : "#dc2626" }}
-                                    >
-                                      {`${academicRankAndDegree} ${expertName}`.trim()}
-                                    </span>
-                                  ),
-                                  value: item.id,
-                                }
+                            .map((item) => {
+                              const academicRank =
+                                item.lecturer?.userProfile?.academicRankType?.sTen ||
+                                item.academicRank ||
+                                ""
+                              const academicDegree =
+                                item.lecturer?.userProfile?.academicDegreeType?.sTen ||
+                                item.academicDegree ||
+                                ""
+                              const academicRankAndDegree =
+                                `${academicRank} ${academicDegree}`.trim()
+                              const expertName =
+                                item.lecturer?.userProfile?.fullname || item.name || ""
+                              const hasLecturer = item.lecturer != null
+                              return {
+                                label: (
+                                  <span
+                                    title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
+                                    className={hasLecturer ? "text-green-600" : "text-red-600"}
+                                    style={{ color: hasLecturer ? "#16a34a" : "#dc2626" }}
+                                  >
+                                    {`${academicRankAndDegree} ${expertName}`.trim()}
+                                  </span>
+                                ),
+                                value: item.id,
                               }
-                            )}
+                            })}
                           value={currentValue || ""}
                           onChange={(value) =>
                             handleEditChange(record?.id, "councilSecretary", value)
@@ -1538,22 +1579,28 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       </div>
                     )
                   }
-                  const academicRank = record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                    (member: any) => member.role === CouncilRole.SECRETARY
-                  )?.expert?.lecturer?.userProfile?.academicRankType?.sTen 
-                  || record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                    (member: any) => member.role === CouncilRole.SECRETARY
-                  )?.expert?.academicRank || ""
-                  const academicDegree = record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                    (member: any) => member.role === CouncilRole.SECRETARY
-                  )?.expert?.lecturer?.userProfile?.academicDegreeType?.sTen 
-                  || record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                    (member: any) => member.role === CouncilRole.SECRETARY
-                  )?.expert?.academicDegree || ""
+                  const academicRank =
+                    record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                      (member: any) => member.role === CouncilRole.SECRETARY
+                    )?.expert?.lecturer?.userProfile?.academicRankType?.sTen ||
+                    record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                      (member: any) => member.role === CouncilRole.SECRETARY
+                    )?.expert?.academicRank ||
+                    ""
+                  const academicDegree =
+                    record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                      (member: any) => member.role === CouncilRole.SECRETARY
+                    )?.expert?.lecturer?.userProfile?.academicDegreeType?.sTen ||
+                    record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                      (member: any) => member.role === CouncilRole.SECRETARY
+                    )?.expert?.academicDegree ||
+                    ""
                   const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
-                  return `${academicRankAndDegree} ${record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                    (member: any) => member.role === CouncilRole.SECRETARY
-                  )?.expert?.name || ""}`
+                  return `${academicRankAndDegree} ${
+                    record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                      (member: any) => member.role === CouncilRole.SECRETARY
+                    )?.expert?.name || ""
+                  }`
                 },
               },
               {
@@ -1607,22 +1654,28 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       </div>
                     )
                   }
-                  const academicRank = record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                    (member: any) => member.role === CouncilRole.REVIEWER_1
-                  )?.expert?.lecturer?.userProfile?.academicRankType?.sTen 
-                  || record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                    (member: any) => member.role === CouncilRole.REVIEWER_1
-                  )?.expert?.academicRank || ""
-                  const academicDegree = record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                    (member: any) => member.role === CouncilRole.REVIEWER_1
-                  )?.expert?.lecturer?.userProfile?.academicDegreeType?.sTen 
-                  || record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                    (member: any) => member.role === CouncilRole.REVIEWER_1
-                  )?.expert?.academicDegree || ""
+                  const academicRank =
+                    record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                      (member: any) => member.role === CouncilRole.REVIEWER_1
+                    )?.expert?.lecturer?.userProfile?.academicRankType?.sTen ||
+                    record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                      (member: any) => member.role === CouncilRole.REVIEWER_1
+                    )?.expert?.academicRank ||
+                    ""
+                  const academicDegree =
+                    record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                      (member: any) => member.role === CouncilRole.REVIEWER_1
+                    )?.expert?.lecturer?.userProfile?.academicDegreeType?.sTen ||
+                    record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                      (member: any) => member.role === CouncilRole.REVIEWER_1
+                    )?.expert?.academicDegree ||
+                    ""
                   const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
-                  return `${academicRankAndDegree} ${record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                    (member: any) => member.role === CouncilRole.REVIEWER_1
-                  )?.expert?.name || ""}`
+                  return `${academicRankAndDegree} ${
+                    record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                      (member: any) => member.role === CouncilRole.REVIEWER_1
+                    )?.expert?.name || ""
+                  }`
                 },
               },
               {
@@ -1643,56 +1696,67 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           className="w-full"
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
-                          options={expertProfileData?.map(
-                            (item) => {
-                              const academicRank = item.lecturer?.userProfile?.academicRankType?.sTen || item.academicRank || ""
-                              const academicDegree = item.lecturer?.userProfile?.academicDegreeType?.sTen || item.academicDegree || ""
-                              const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
-                              const expertName = item.lecturer?.userProfile?.fullname || item.name || ""
-                              const hasLecturer = item.lecturer != null
-                              return {
-                                label: (
-                                  <span
-                                    title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
-                                    className={hasLecturer ? "text-green-600" : "text-red-600"}
-                                    style={{ color: hasLecturer ? "#16a34a" : "#dc2626" }}
-                                  >
-                                    {`${academicRankAndDegree} ${expertName}`.trim()}
-                                  </span>
-                                ),
-                                value: item.id,
-                              }
+                          options={expertProfileData?.map((item) => {
+                            const academicRank =
+                              item.lecturer?.userProfile?.academicRankType?.sTen ||
+                              item.academicRank ||
+                              ""
+                            const academicDegree =
+                              item.lecturer?.userProfile?.academicDegreeType?.sTen ||
+                              item.academicDegree ||
+                              ""
+                            const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
+                            const expertName =
+                              item.lecturer?.userProfile?.fullname || item.name || ""
+                            const hasLecturer = item.lecturer != null
+                            return {
+                              label: (
+                                <span
+                                  title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
+                                  className={hasLecturer ? "text-green-600" : "text-red-600"}
+                                  style={{ color: hasLecturer ? "#16a34a" : "#dc2626" }}
+                                >
+                                  {`${academicRankAndDegree} ${expertName}`.trim()}
+                                </span>
+                              ),
+                              value: item.id,
                             }
-                          )}
+                          })}
                           value={currentValue || ""}
                           onChange={(value) => handleEditChange(record?.id, "reviewer2", value)}
                         />
                       </div>
                     )
                   }
-                  const academicRank = record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                    (member: any) => member.role === CouncilRole.REVIEWER_2
-                  )?.expert?.lecturer?.userProfile?.academicRankType?.sTen 
-                  || record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                    (member: any) => member.role === CouncilRole.REVIEWER_2
-                  )?.expert?.academicRank || ""
-                  const academicDegree = record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                    (member: any) => member.role === CouncilRole.REVIEWER_2
-                  )?.expert?.lecturer?.userProfile?.academicDegreeType?.sTen 
-                  || record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                    (member: any) => member.role === CouncilRole.REVIEWER_2
-                  )?.expert?.academicDegree || ""
+                  const academicRank =
+                    record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                      (member: any) => member.role === CouncilRole.REVIEWER_2
+                    )?.expert?.lecturer?.userProfile?.academicRankType?.sTen ||
+                    record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                      (member: any) => member.role === CouncilRole.REVIEWER_2
+                    )?.expert?.academicRank ||
+                    ""
+                  const academicDegree =
+                    record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                      (member: any) => member.role === CouncilRole.REVIEWER_2
+                    )?.expert?.lecturer?.userProfile?.academicDegreeType?.sTen ||
+                    record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                      (member: any) => member.role === CouncilRole.REVIEWER_2
+                    )?.expert?.academicDegree ||
+                    ""
                   const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
-                  return `${academicRankAndDegree} ${record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                    (member: any) => member.role === CouncilRole.REVIEWER_2
-                  )?.expert?.name || ""}`
+                  return `${academicRankAndDegree} ${
+                    record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                      (member: any) => member.role === CouncilRole.REVIEWER_2
+                    )?.expert?.name || ""
+                  }`
                 },
               },
               {
                 title: "Ủy viên",
                 width: 150,
                 dataIndex: "councilMember",
-                render: (_, record) => {                
+                render: (_, record) => {
                   if (editingRowKeys.includes(record?.id)) {
                     const currentValue =
                       editingValues[record?.id]?.councilMember !== undefined
@@ -1706,57 +1770,67 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           className="w-full"
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
-                          options={expertProfileData?.map(
-                            (item) => {
-                              const academicRank = item.lecturer?.userProfile?.academicRankType?.sTen || item.academicRank || ""
-                              const academicDegree = item.lecturer?.userProfile?.academicDegreeType?.sTen || item.academicDegree || ""
-                              const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
-                              const expertName = item.lecturer?.userProfile?.fullname || item.name || ""
-                              const hasLecturer = item.lecturer != null
-                              return {
-                                label: (
-                                  <span
-                                    title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
-                                    className={hasLecturer ? "text-green-600" : "text-red-600"}
-                                    style={{ color: hasLecturer ? "#16a34a" : "#dc2626" }}
-                                  >
-                                    {`${academicRankAndDegree} ${expertName}`.trim()}
-                                  </span>
-                                ),
-                                value: item.id,
-                              }
+                          options={expertProfileData?.map((item) => {
+                            const academicRank =
+                              item.lecturer?.userProfile?.academicRankType?.sTen ||
+                              item.academicRank ||
+                              ""
+                            const academicDegree =
+                              item.lecturer?.userProfile?.academicDegreeType?.sTen ||
+                              item.academicDegree ||
+                              ""
+                            const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
+                            const expertName =
+                              item.lecturer?.userProfile?.fullname || item.name || ""
+                            const hasLecturer = item.lecturer != null
+                            return {
+                              label: (
+                                <span
+                                  title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
+                                  className={hasLecturer ? "text-green-600" : "text-red-600"}
+                                  style={{ color: hasLecturer ? "#16a34a" : "#dc2626" }}
+                                >
+                                  {`${academicRankAndDegree} ${expertName}`.trim()}
+                                </span>
+                              ),
+                              value: item.id,
                             }
-                          )}
+                          })}
                           value={currentValue || ""}
                           onChange={(value) => handleEditChange(record?.id, "councilMember", value)}
                         />
                       </div>
                     )
                   }
-                  const academicRank = record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                    (member: any) => member.role === CouncilRole.MEMBER
-                  )?.expert?.lecturer?.userProfile?.academicRankType?.sTen 
-                  || record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                    (member: any) => member.role === CouncilRole.MEMBER
-                  )?.expert?.academicRank || ""
-                  const academicDegree = record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                    (member: any) => member.role === CouncilRole.MEMBER
-                  )?.expert?.lecturer?.userProfile?.academicDegreeType?.sTen 
-                  || record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                    (member: any) => member.role === CouncilRole.MEMBER
-                  )?.expert?.academicDegree || ""
+                  const academicRank =
+                    record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                      (member: any) => member.role === CouncilRole.MEMBER
+                    )?.expert?.lecturer?.userProfile?.academicRankType?.sTen ||
+                    record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                      (member: any) => member.role === CouncilRole.MEMBER
+                    )?.expert?.academicRank ||
+                    ""
+                  const academicDegree =
+                    record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                      (member: any) => member.role === CouncilRole.MEMBER
+                    )?.expert?.lecturer?.userProfile?.academicDegreeType?.sTen ||
+                    record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                      (member: any) => member.role === CouncilRole.MEMBER
+                    )?.expert?.academicDegree ||
+                    ""
                   const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
-                  return `${academicRankAndDegree} ${record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                    (member: any) => member.role === CouncilRole.MEMBER
-                  )?.expert?.name || ""}`
-                  
+                  return `${academicRankAndDegree} ${
+                    record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                      (member: any) => member.role === CouncilRole.MEMBER
+                    )?.expert?.name || ""
+                  }`
                 },
               },
               {
                 title: "Phòng bảo vệ",
                 width: 150,
                 dataIndex: "room",
-                render: (text: string, record: any) => {                  
+                render: (text: string, record: any) => {
                   if (editingRowKeys.includes(record?.id)) {
                     const currentValue =
                       editingValues[record?.id]?.room !== undefined
@@ -1787,7 +1861,6 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 width: 150,
                 dataIndex: "defenseDate",
                 render: (_, record) => {
-               
                   if (editingRowKeys.includes(record?.id)) {
                     const currentValue =
                       editingValues[record?.id]?.defenseDate !== undefined
@@ -1885,8 +1958,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   )
                 },
               },
-            
-              
+
               {
                 title: "Trạng thái",
                 width: 100,
@@ -1938,7 +2010,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           className="flex items-center gap-2"
                           onClick={(e) => e.stopPropagation()}
                         >
-                          { status === ThesisProjectStatus.APPROVED_BY_DEPT ? (
+                          {status === ThesisProjectStatus.APPROVED_BY_DEPT ? (
                             <ApproveIcon
                               title="Phê duyệt"
                               className="text-lg font-bold text-green-700"
