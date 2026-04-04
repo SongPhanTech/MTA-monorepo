@@ -10,8 +10,6 @@ import type { GetClassesInfo200ItemSubjectClassItem } from './getClassesInfo200I
 
 export type GetClassesInfo200Item = {
   id: string;
-  /** @nullable */
-  code?: string | null;
   active?: boolean;
   /** @nullable */
   description?: string | null;
@@ -23,6 +21,7 @@ export type GetClassesInfo200Item = {
   updatedAt?: string | null;
   /** @nullable */
   createdBy?: string | null;
+  code: string;
   isLocked?: boolean;
   name: string;
   /** @nullable */

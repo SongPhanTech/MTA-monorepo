@@ -6,7 +6,6 @@
  */
 
 export type GetClassesInfo200ItemSubjectClassItemPrerequisiteSubjectItem = {
-  /** @nullable */
-  code?: string | null;
+  code: string;
   name: string;
 };

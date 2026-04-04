@@ -87,6 +87,8 @@ import type {
   ExportStudentYearResultBody,
   ExportSubjectClassScore404,
   ExportSubjectClassScoreParams,
+  ExportThoiKhoaBieu404,
+  ExportThoiKhoaBieuBody,
   FixedClassStudentCount400,
   FixedClassStudentCountParams,
   GenExamListCode400,
@@ -13375,6 +13377,114 @@ export const useExportStudentYearResult = <TError = ExportStudentYearResult404, 
   TContext
 > => {
   const mutationOptions = getExportStudentYearResultMutationOptions(options)
+
+  return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * Xuất thời khóa biểu ra file Excel theo học kỳ
+ * @summary Export Thời Khóa Biểu
+ */
+export type exportThoiKhoaBieuResponse200 = {
+  data: Blob
+  status: 200
+}
+
+export type exportThoiKhoaBieuResponse404 = {
+  data: ExportThoiKhoaBieu404
+  status: 404
+}
+
+export type exportThoiKhoaBieuResponseSuccess = exportThoiKhoaBieuResponse200 & {
+  headers: Headers
+}
+export type exportThoiKhoaBieuResponseError = exportThoiKhoaBieuResponse404 & {
+  headers: Headers
+}
+
+export type exportThoiKhoaBieuResponse =
+  | exportThoiKhoaBieuResponseSuccess
+  | exportThoiKhoaBieuResponseError
+
+export const getExportThoiKhoaBieuUrl = () => {
+  return `/api/thoi-khoa-bieu/export-thoi-khoa-bieu`
+}
+
+export const exportThoiKhoaBieu = async (
+  exportThoiKhoaBieuBody: ExportThoiKhoaBieuBody,
+  options?: RequestInit
+): Promise<exportThoiKhoaBieuResponse> => {
+  return customTrainingFetch<exportThoiKhoaBieuResponse>(getExportThoiKhoaBieuUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(exportThoiKhoaBieuBody),
+  })
+}
+
+export const getExportThoiKhoaBieuMutationOptions = <
+  TError = ExportThoiKhoaBieu404,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof exportThoiKhoaBieu>>,
+    TError,
+    { data: ExportThoiKhoaBieuBody },
+    TContext
+  >
+  request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof exportThoiKhoaBieu>>,
+  TError,
+  { data: ExportThoiKhoaBieuBody },
+  TContext
+> => {
+  const mutationKey = ["exportThoiKhoaBieu"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof exportThoiKhoaBieu>>,
+    { data: ExportThoiKhoaBieuBody }
+  > = (props) => {
+    const { data } = props ?? {}
+
+    return exportThoiKhoaBieu(data, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type ExportThoiKhoaBieuMutationResult = NonNullable<
+  Awaited<ReturnType<typeof exportThoiKhoaBieu>>
+>
+export type ExportThoiKhoaBieuMutationBody = ExportThoiKhoaBieuBody
+export type ExportThoiKhoaBieuMutationError = ExportThoiKhoaBieu404
+
+/**
+ * @summary Export Thời Khóa Biểu
+ */
+export const useExportThoiKhoaBieu = <TError = ExportThoiKhoaBieu404, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof exportThoiKhoaBieu>>,
+      TError,
+      { data: ExportThoiKhoaBieuBody },
+      TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof exportThoiKhoaBieu>>,
+  TError,
+  { data: ExportThoiKhoaBieuBody },
+  TContext
+> => {
+  const mutationOptions = getExportThoiKhoaBieuMutationOptions(options)
 
   return useMutation(mutationOptions, queryClient)
 }

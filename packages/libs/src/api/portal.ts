@@ -357,8 +357,8 @@ export function useGetClassRegisterSession<
 }
 
 /**
- * Lấy thống tin lớp học
- * @summary Lấy thống tin lớp học
+ * Lấy thông tin lớp học
+ * @summary Lấy thông tin lớp học
  */
 export type getClassesInfoResponse200 = {
   data: GetClassesInfo200Item[]
@@ -494,7 +494,7 @@ export function useGetClassesInfo<
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
- * @summary Lấy thống tin lớp học
+ * @summary Lấy thông tin lớp học
  */
 
 export function useGetClassesInfo<
