@@ -336,12 +336,12 @@ const DiemTrungBinhKyHoc = () => {
                 ),
               },
 
-              {
-                title: "Năm học thứ...",
-                dataIndex: ["studentYearResult", "0", "studyYear"],
-                width: 100,
-                align: "center",
-              },
+              // {
+              //   title: "Năm học thứ...",
+              //   dataIndex: ["studentYearResult", "0", "studyYear"],
+              //   width: 100,
+              //   align: "center",
+              // },
               {
                 title: "Hệ số xét học bổng",
                 dataIndex: ["studentYearResult", "0", "baseScore"],

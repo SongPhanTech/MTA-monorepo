@@ -798,11 +798,18 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                 align: "center",
                 width: 350,
                 render: (_, record) => {
+                  const totalStudents =
+                    record.subjectClass?.reduce(
+                      (total: number, sc: any) => total + (sc._count?.subjectClassStudent || 0),
+                      0
+                    ) ?? 0
+
                   return (
                     <>
                       <Form.Item className="m-0" hidden name={["list", record.id, "isChanged"]} />
                       <Form.Item className="m-0" name={["list", record.id, "rooms"]}>
                         <RoomSelector
+                          totalStudents={totalStudents}
                           disabled={record?.examRooms?.some((er: { examList: ExamList[] }) =>
                             er.examList?.some((el) => el.lockExamCode)
                           )}
