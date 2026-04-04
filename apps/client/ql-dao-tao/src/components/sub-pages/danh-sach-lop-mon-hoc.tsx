@@ -612,8 +612,7 @@ export default function DanhSachLopMonHoc({
                   width: 120,
                   align: "center",
                   type: "date",
-                  render: (record: string) =>
-                      record ? dayjs(record).format('DD/MM/YYYY') : '',
+                  render: (record: string) => (record ? dayjs(record).format("DD/MM/YYYY") : ""),
                   // render: (_, record) => {
                   //   const canEdit = canUpdate || role === "P2/P7"
 

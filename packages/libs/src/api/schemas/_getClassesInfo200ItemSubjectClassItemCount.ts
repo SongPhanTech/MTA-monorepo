@@ -6,5 +6,5 @@
  */
 
 export type _GetClassesInfo200ItemSubjectClassItemCount = {
-  studentClassStudent: number;
+  subjectClassStudent: number;
 };

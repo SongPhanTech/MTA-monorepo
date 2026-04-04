@@ -50,7 +50,7 @@ import type React from "react"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import { diemLopMonHocStore } from "../ql-diem-lop-mon-hoc"
-import { sqlTransaction } from "@workspace/libs/api/model";
+import { sqlTransaction } from "@workspace/libs/api/model"
 
 type TimeScore = {
   time: [Dayjs, Dayjs]
@@ -82,9 +82,7 @@ export default function ClassSubject() {
   const [form] = Form.useForm<TimeScore>()
   const [formExam] = Form.useForm<TimeScoreExam>()
   const [formHoldAnExam] = Form.useForm<HoldAnExam>()
-  const [changedExamDates, setChangedExamDates] = useState<
-  Record<string, string | null>
->({})
+  const [changedExamDates, setChangedExamDates] = useState<Record<string, string | null>>({})
   const [filters, setFilters] = useState<FilterProps>({
     searchText: "",
     code: "",
