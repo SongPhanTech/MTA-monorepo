@@ -119,7 +119,7 @@ const GetClassesInfoResponseSchema = z.array(
           .nullish(),
         credit: z.number().optional(),
         _count: z.object({
-          subjectStudentScore: z.number(),
+          subjectClassStudent: z.number(),
         }),
         classRegisterLogs: z.array(
           z.object({
