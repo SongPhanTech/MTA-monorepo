@@ -202,7 +202,7 @@ export default function KeQuaDangKyHocLopQuanLy({ hocLai = false }: { hocLai?: b
       <Col span={8}>
         <Row gutter={[8, 8]}>
           <Col span={8}>
-            <Form.Item name="searchText">
+            <Form.Item name="searchText" className="m-0">
               <Input
                 id="search"
                 placeholder="Nhập tên lớp..."
@@ -299,6 +299,11 @@ export default function KeQuaDangKyHocLopQuanLy({ hocLai = false }: { hocLai?: b
         />
       </Col>
       <Col span={16}>
+        <Row gutter={[8, 8]}>
+          <Col span={8}>
+            <h3 className="text-lg m-0.5">Danh sách kết quả đăng ký lớp môn học</h3>
+          </Col>
+        </Row>
         <Table
           rowKey="id"
           data={subjectClassData}
