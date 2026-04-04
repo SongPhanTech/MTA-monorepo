@@ -1586,7 +1586,10 @@ const checkEligible = <T extends number | string>(
     }
   })()
   if ((criteria === true && !invert) || (criteria === false && invert)) {
-    student.lyDoXepLoai = `${student.lyDoXepLoai}\n ${criteriaFieldLabels[fieldValue]}(${studentValue}) ${invert ? "*không* " : ""}${criteriaOperatorLabels[operator]} ${criteriaValue}`
+    const newReason = ` ${criteriaFieldLabels[fieldValue]}(${studentValue}) ${invert ? "*không* " : ""}${criteriaOperatorLabels[operator]} ${criteriaValue}`
+    if (!student.lyDoXepLoai.includes(newReason)) {
+      student.lyDoXepLoai = `${student.lyDoXepLoai}\n${newReason}`
+    }
   }
   return invert ? !criteria : criteria
 }
@@ -2197,9 +2200,11 @@ export const resultCourseStudentScholarship = async (
         ...filteredResult
       } = studentSemesterResult as any
 
+      console.log("studentSemesterResult", studentSemesterResult)
+
       const result = StudentScholarshipResult.parse({
         id: studentSemesterResult.studentId,
-        code: studentSemesterResult.student.userProfile?.code,
+        code: studentSemesterResult.student?.code,
         studentSemesterResult: filteredResult,
         userProfile: await prisma.userProfile.findUnique({
           where: { id: studentSemesterResult.student.userProfileId },
