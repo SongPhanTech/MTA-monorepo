@@ -1,8 +1,10 @@
+import { DownloadOutlined } from "@ant-design/icons"
 import Select from "@components/commons/select"
 import Table from "@components/commons/table"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import type { FilterProps } from "@constants/type"
 import { useExamTypeOptions } from "@hooks/examType"
+import useSpinner from "@hooks/spinner"
 import { cn } from "@lib/utils"
 import {
   type DiemLopMonHocProps,
@@ -38,6 +40,8 @@ import _ from "lodash"
 import { Search } from "lucide-react"
 import { type Key, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
+import { saveAs } from "file-saver"
+import { exportSubjectClassListExcel } from "@workspace/libs/api/training"
 
 export default function DanhSachLopMonHoc({
   role = "GV",
@@ -45,6 +49,7 @@ export default function DanhSachLopMonHoc({
   score,
 }: DiemLopMonHocProps) {
   const { can } = useAbility()
+  const { showSpinner, hideSpinner } = useSpinner()
   const [currentPage, setCurrentPage] = useState(1)
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
   const [form] = Form.useForm()
@@ -346,6 +351,59 @@ export default function DanhSachLopMonHoc({
       message.error("Lỗi khi lưu")
     }
   }
+
+  const handleExportSubjectClassExcel = async () => {
+    if (!trainingObjectTypeId || !semesterId) {
+      message.warning("Vui lòng chọn đối tượng đào tạo và học kỳ")
+      return
+    }
+
+    const extractExportErrorMessage = (error: any) => {
+      const status = error?.response?.status
+      const rawMessage = error?.response?.data?.message || error?.response?.data?.error
+
+      const detailedMessage = Array.isArray(rawMessage)
+        ? rawMessage.join(", ")
+        : rawMessage || error?.message
+
+      if (status && detailedMessage) {
+        return `Xuất Excel thất bại: ${detailedMessage}`
+      }
+
+      if (status) {
+        return `Xuất Excel thất bại`
+      }
+
+      if (detailedMessage) {
+        return `Xuất Excel thất bại: ${detailedMessage}`
+      }
+
+      return "Đã xảy ra lỗi khi xuất Excel, vui lòng thử lại"
+    }
+
+    try {
+      showSpinner()
+      const res = await exportSubjectClassListExcel({
+        trainingObjectTypeId,
+        semesterId,
+        fixedClassId: filters.fixedClassId || undefined,
+        searchText: filters.searchText || undefined,
+      })
+      if (res.status === 200) {
+        saveAs(res.data, "Danh_sach_lop_mon_hoc.xlsx")
+        message.success("Xuất Excel thành công")
+      } else {
+        const error: any = new Error()
+        error.response = { status: res.status, data: res.data }
+        message.error(extractExportErrorMessage(error))
+      }
+    } catch (error: any) {
+      message.error(extractExportErrorMessage(error))
+    } finally {
+      hideSpinner()
+    }
+  }
+
   return (
     <div>
       <Row gutter={[0, 0]}>
@@ -391,6 +449,15 @@ export default function DanhSachLopMonHoc({
                   </Form.Item>
                 </Col>
               </Flex>
+            </Col>
+            <Col span={12} className="flex justify-end">
+              <Button
+                icon={<DownloadOutlined />}
+                onClick={handleExportSubjectClassExcel}
+                type="primary"
+              >
+                Xuất Excel
+              </Button>
             </Col>
           </Row>
         </Col>
