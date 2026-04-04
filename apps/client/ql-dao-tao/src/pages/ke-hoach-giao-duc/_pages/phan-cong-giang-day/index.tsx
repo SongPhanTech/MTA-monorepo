@@ -1779,7 +1779,12 @@ export default function PhanCongGiangDay({
                   dataIndex: "mainLecturer",
                   render: (__, record) =>
                     !subjectClassForm?.[record.id]?.cancelled &&
-                    (role === "P2_KHCT" || !khoaBoMon || !record?.submitLecturerAssignmentAt) ? (
+                    (role === "P2_KHCT"
+                        ? true
+                        : !khoaBoMon
+                          ? true
+                          : !record?.submitLecturerAssignmentAt && !record?.approveLecturerAssignmentAt
+                      ) ? (
                       <FormItem form={form} name={["subjectClass", record.id, "lecturerId"]}>
                         <LectureTreeSelect
                           placeholder="Chọn giảng viên"
@@ -1810,7 +1815,12 @@ export default function PhanCongGiangDay({
                   width: 200,
                   render: (__, record) =>
                     !subjectClassForm?.[record.id]?.cancelled &&
-                    (role === "P2_KHCT" || !khoaBoMon || !record?.submitLecturerAssignmentAt) ? (
+                    (role === "P2_KHCT"
+                        ? true
+                        : !khoaBoMon
+                          ? true
+                          : !record?.submitLecturerAssignmentAt && !record?.approveLecturerAssignmentAt
+                      ) ? (
                       <FormItem form={form} name={["subjectClass", record.id, "extraLecturerId"]}>
                         <LectureTreeSelect
                           placeholder="Chọn giảng viên"
@@ -1839,7 +1849,12 @@ export default function PhanCongGiangDay({
                   width: 200,
                   render: (__, record) =>
                     !subjectClassForm?.[record.id]?.cancelled &&
-                    (role === "P2_KHCT" || !khoaBoMon || !record?.submitLecturerAssignmentAt) ? (
+                    (role === "P2_KHCT"
+                        ? true
+                        : !khoaBoMon
+                          ? true
+                          : !record?.submitLecturerAssignmentAt && !record?.approveLecturerAssignmentAt
+                      ) ? (
                       <FormItem
                         form={form}
                         name={["subjectClass", record.id, "enterGradeLecturerId"]}

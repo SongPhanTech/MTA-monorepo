@@ -100,44 +100,49 @@ export default function CaNhanThiLai() {
     }
   )
 
-  const { data: studentList = [] } = useFindManyStudent({
-    where: {
-      deletedAt: null,
-      subjectClassStudent: {
-        some: {
-          subjectClassId,
+  const { data: studentList = [] } = useFindManyStudent(
+    {
+      where: {
+        deletedAt: null,
+        subjectClassStudent: {
+          some: {
+            subjectClassId,
+          },
         },
+        ...(filters.searchText && {
+          userProfile: {
+            fullname: { contains: filters.searchText, mode: "insensitive" },
+          },
+        }),
+        ...((filters.trainingCourseId || filters.fixedClassId) && {
+          fixedClass: {
+            ...(filters.trainingCourseId && {
+              trainingCourseId: {
+                equals: filters.trainingCourseId,
+              },
+            }),
+            ...(filters.fixedClassId && {
+              id: {
+                equals: filters.fixedClassId,
+              },
+            }),
+          },
+        }),
       },
-      ...(filters.searchText && {
-        userProfile: {
-          fullname: { contains: filters.searchText, mode: "insensitive" },
-        },
-      }),
-      ...((filters.trainingCourseId || filters.fixedClassId) && {
+      include: {
         fixedClass: {
-          ...(filters.trainingCourseId && {
-            trainingCourseId: {
-              equals: filters.trainingCourseId,
-            },
-          }),
-          ...(filters.fixedClassId && {
-            id: {
-              equals: filters.fixedClassId,
-            },
-          }),
+          include: {
+            trainingCourse: true,
+          },
         },
-      }),
-    },
-    include: {
-      fixedClass: {
-        include: {
-          trainingCourse: true,
-        },
+        subjectClassStudent: true,
+        userProfile: true,
       },
-      subjectClassStudent: true,
-      userProfile: true,
     },
-  })
+    {
+      enabled: !!subjectClassId,
+    }
+  )
 
   // queryKey /api/subject-class/open-subject-class-reexam
 
@@ -340,7 +345,7 @@ export default function CaNhanThiLai() {
         refetch()
       }
     } catch (error) {
-      message.error("Có lỗi xảy ra khi hóa đăng ký thi lại!")
+      message.error("Có lỗi xảy ra khi huỷ đăng ký thi lại!")
     }
   }
   return (
@@ -401,7 +406,7 @@ export default function CaNhanThiLai() {
       </Col>
       <Col span={2} className="text-right">
         <Button type="primary" className="h-[32px] px-4" onClick={handleSaveStudentClass}>
-          Đăng ký
+          Lưu
         </Button>
       </Col>
       <Col span={24}>
