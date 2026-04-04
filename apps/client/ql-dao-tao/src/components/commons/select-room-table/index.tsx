@@ -8,6 +8,7 @@ interface RoomSelectorProps {
   onChange?: (value: Array<{ roomId: string; quantity?: number }>) => void
   rooms: Array<{ id: string; capacity: number; name: string }>
   disabled?: boolean
+  totalStudents?: number
 }
 
 interface RoomTableData {
@@ -18,7 +19,13 @@ interface RoomTableData {
   isSelected: boolean
 }
 
-const RoomSelector = ({ value = [], onChange, rooms, disabled }: RoomSelectorProps) => {
+const RoomSelector = ({
+  value = [],
+  onChange,
+  rooms,
+  disabled,
+  totalStudents = 0,
+}: RoomSelectorProps) => {
   const [visible, setVisible] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -28,7 +35,11 @@ const RoomSelector = ({ value = [], onChange, rooms, disabled }: RoomSelectorPro
     const newValue = value.map((v) => (v.roomId === roomId ? { roomId, quantity } : v))
     onChange?.(newValue)
   }
-
+  const getQuantityForNewRoom = (roomCapacity: number, currentValue: typeof value) => {
+    const usedQuantity = currentValue.reduce((sum, v) => sum + (v.quantity ?? 0), 0)
+    const remaining = Math.max(0, totalStudents - usedQuantity)
+    return Math.min(remaining, roomCapacity)
+  }
   const handleDeselect = (roomId: string) => {
     const newValue = value.filter((v) => v.roomId !== roomId)
     onChange?.(newValue)
@@ -59,10 +70,17 @@ const RoomSelector = ({ value = [], onChange, rooms, disabled }: RoomSelectorPro
     onChange: (selectedRowKeys: React.Key[]) => {
       const newValue = selectedRowKeys.map((roomId) => {
         const existing = value.find((v) => v.roomId === roomId)
+        if (existing) return existing
+
         const room = rooms.find((r) => r.id === roomId)
+        const currentSelected = selectedRowKeys
+          .filter((id) => id !== roomId)
+          .map((id) => value.find((v) => v.roomId === id))
+          .filter(Boolean) as typeof value
+
         return {
           roomId: roomId as string,
-          quantity: existing?.quantity || room?.capacity || 0,
+          quantity: getQuantityForNewRoom(room?.capacity ?? 0, currentSelected),
         }
       })
       onChange?.(newValue)
@@ -97,7 +115,7 @@ const RoomSelector = ({ value = [], onChange, rooms, disabled }: RoomSelectorPro
                     ...value,
                     {
                       roomId: record.id,
-                      quantity: record.capacity,
+                      quantity: getQuantityForNewRoom(record.capacity, value),
                     },
                   ]
             )
