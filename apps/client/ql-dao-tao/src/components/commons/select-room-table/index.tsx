@@ -1,6 +1,6 @@
 import Table from "@components/commons/table"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
-import { Col, Input, Popover, Row, Select } from "antd"
+import { Input, Popover, Select } from "antd"
 import { useMemo, useState } from "react"
 
 interface RoomSelectorProps {
@@ -191,33 +191,25 @@ const RoomSelector = ({
       onOpenChange={setVisible}
       placement="bottomLeft"
     >
-      <Row>
-        <Col span={20}>
-          <Select
-            disabled={disabled}
-            mode="multiple"
-            variant="underlined"
-            value={value.map((v) => v.roomId)}
-            options={rooms.map((room) => ({
-              label: `${room.name}-${room.capacity}`,
-              value: room.id,
-            }))}
-            onClick={(e) => {
-              e.stopPropagation()
-              setVisible(true)
-            }}
-            placeholder="Chọn phòng thi"
-            maxTagCount="responsive"
-            open={false}
-            onDeselect={handleDeselect}
-          />
-        </Col>
-        <Col span={4} className="flex items-center pl-1">
-          {value.length > 0 && (
-            <span>: {value.reduce((acc, v) => acc + (v.quantity ?? 0), 0)}</span>
-          )}
-        </Col>
-      </Row>
+      <Select
+        disabled={disabled}
+        mode="multiple"
+        variant="underlined"
+        className="w-full"
+        value={value.map((v) => v.roomId)}
+        options={rooms.map((room) => ({
+          label: `${room.name}-${room.capacity}`,
+          value: room.id,
+        }))}
+        onClick={(e) => {
+          e.stopPropagation()
+          setVisible(true)
+        }}
+        placeholder="Chọn phòng thi"
+        maxTagCount="responsive"
+        open={false}
+        onDeselect={handleDeselect}
+      />
     </Popover>
   )
 }

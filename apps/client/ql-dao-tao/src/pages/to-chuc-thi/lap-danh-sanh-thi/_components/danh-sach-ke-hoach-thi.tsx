@@ -825,6 +825,16 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                 },
               },
               {
+                title: "Tổng SL",
+                align: "center",
+                width: 60,
+                render: (_, record) => {
+                  const rooms = listChanges?.[record.id]?.rooms
+                  if (!rooms || rooms.length === 0) return null
+                  return rooms.reduce((acc: number, v: { quantity?: number }) => acc + (v.quantity ?? 0), 0)
+                },
+              },
+              {
                 title: "Số ca thi",
                 align: "center",
                 width: 60,

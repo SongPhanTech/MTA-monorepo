@@ -1899,7 +1899,11 @@ export default function PhanCongGiangDay({
                   dataIndex: "examType",
                   render: (__, record) => (
                     // khoaBoMon ? (
-                    <FormItem form={form} name={["subjectClass", record.id, "examType"]}>
+                    <FormItem
+                      form={form}
+                      name={["subjectClass", record.id, "examType"]}
+                      initialValue={getExamTypeLabel(record.examType)}
+                    >
                       <Select
                         dropdownStyle={{
                           width: 250,
@@ -1917,11 +1921,6 @@ export default function PhanCongGiangDay({
                       />
                     </FormItem>
                   ),
-                  // ) : (
-                  //     !!record.submitLecturerAssignmentAt &&
-                  //     record.examType &&
-                  //     getExamTypeLabel(record.examType)
-                  // ),
                 },
                 {
                   title: "Khu vực",
