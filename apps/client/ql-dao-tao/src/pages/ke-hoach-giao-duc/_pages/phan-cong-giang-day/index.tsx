@@ -241,6 +241,7 @@ export default function PhanCongGiangDay({
           : {}),
         deletedAt: null,
         active: true,
+        status: "OFFICIAL",
         trainingObjectTypeId,
         ...(khoaBoMon
           ? {
@@ -1178,7 +1179,7 @@ export default function PhanCongGiangDay({
                           type="primary"
                           className="bg-red-500"
                           disabled={Object.values(subjectClassForm).some(
-                            (sc) => !sc.trainingLocationId,
+                            (sc) => !sc.trainingLocationId
                           )}
                         >
                           1.Báo dạy
