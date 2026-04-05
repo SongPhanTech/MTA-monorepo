@@ -1,5 +1,5 @@
 import { CloseOutlined } from "@ant-design/icons"
-import type { Student, StudentSubjectScore } from "@workspace/db"
+import type { StudentSubjectScore } from "@workspace/db"
 import { Button, Modal, message, Space, Table, Tag } from "antd"
 import { useState } from "react"
 import * as XLSX from "xlsx"
@@ -19,7 +19,7 @@ interface ImportScoreModalProps {
   visible: boolean
   onCancel: () => void
   onConfirm: (data: ImportScoreData[]) => void
-  existingStudents: (StudentSubjectScore & { student: Student })[]
+  existingStudents: (StudentSubjectScore & { student: { code: string | null } })[]
 }
 
 const ImportScoreModal = ({
