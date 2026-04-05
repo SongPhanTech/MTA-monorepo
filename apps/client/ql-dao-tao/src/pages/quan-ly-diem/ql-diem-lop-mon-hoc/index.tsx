@@ -39,12 +39,6 @@ export default function QuanLyDiemLopMonHoc({
 }: DiemLopMonHocProps) {
   const [form] = Form.useForm<SubmitFormType>()
   const [activeKey, setActiveKey] = useState("1")
-  const [shouldLoadData, setShouldLoadData] = useState(false)
-
-  const handleTabChange = useCallback((key: string) => {
-    setActiveKey(key)
-    if (key !== "1") setShouldLoadData(true)
-  }, [])
   const { data: userSession } = useSession()
   const { selectedSubjectClassId } = useStore(diemLopMonHocStore)
   const { data } = useFindUniqueSubjectClass(
@@ -165,7 +159,7 @@ export default function QuanLyDiemLopMonHoc({
       {
         label: "Danh sách lớp môn học",
         key: "1",
-        children: <DanhSachLopMonHoc role={role} setActiveKey={handleTabChange} score={score} />,
+        children: <DanhSachLopMonHoc role={role} setActiveKey={setActiveKey} score={score} />,
       },
     ]
 
@@ -176,7 +170,7 @@ export default function QuanLyDiemLopMonHoc({
           {
             label: "Nhập điểm quá trình",
             key: "2",
-            children: <NhapDiem role={role} loadData={shouldLoadData} score={"TX/ĐK"} />,
+            children: <NhapDiem role={role} loadData={activeKey !== "1"} score={"TX/ĐK"} />,
             disabled: !data,
           },
         ]
@@ -188,7 +182,7 @@ export default function QuanLyDiemLopMonHoc({
           {
             label: "Nhập điểm thi",
             key: "3",
-            children: <NhapDiem role={role} score="THI" loadData={shouldLoadData} />,
+            children: <NhapDiem role={role} score="THI" loadData={activeKey !== "1"} />,
             disabled: !data,
           },
         ]
@@ -201,13 +195,13 @@ export default function QuanLyDiemLopMonHoc({
         {
           label: "Điểm",
           key: "4",
-          children: <NhapDiem role={role} loadData={shouldLoadData} />,
+          children: <NhapDiem role={role} loadData={activeKey !== "1"} />,
           disabled: !data,
         },
       ]
     }
     return baseMenu
-  }, [data, role, score, shouldLoadData])
+  }, [data, role, score, activeKey])
 
   const reasonDate = useCallback(() => {
     if (score === "TX/ĐK" && (data?.scoreDeadLineStart || data?.scoreDeadline)) {
@@ -411,7 +405,7 @@ export default function QuanLyDiemLopMonHoc({
         <Tabs
           className="-mt-3"
           activeKey={activeKey}
-          onChange={handleTabChange}
+          onChange={(key) => setActiveKey(key)}
           destroyOnHidden={true}
           items={items}
         />

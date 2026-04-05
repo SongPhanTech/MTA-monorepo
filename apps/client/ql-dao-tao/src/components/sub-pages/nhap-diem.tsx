@@ -1,10 +1,10 @@
 import { queryClient } from "@api/index"
 import ImportScoreModal, { type ImportScoreData } from "@components/commons/print/nhap-diem-tu-file"
 import ExportScoreTemplate from "@components/commons/print/xuat-mau-nhap-diem"
+import ScoreInputCell from "@components/commons/score-input"
 import Table from "@components/commons/table"
-import type { DataTable } from "@components/modal/modal-in-phieu-diem"
 import { examBanReason, examPostponeReason, examSuspendedReason } from "@constants/constants"
-import type { FilterProps } from "@constants/type"
+import { FilterTable, RowDisplayData, SubjectClassScoreForm } from "@constants/nhap-diem.type"
 import { scoreConvert } from "@hooks/scoreConverter"
 import useSpinner from "@hooks/spinner"
 import { validateExamScore, validateScore } from "@lib/utils"
@@ -14,7 +14,7 @@ import {
 } from "@pages/quan-ly-diem/ql-diem-lop-mon-hoc"
 import { useStore } from "@tanstack/react-store"
 import { useSession } from "@workspace/auth/react"
-import { $Enums, type StudentSubjectScore } from "@workspace/db/client"
+import { $Enums } from "@workspace/db/client"
 import {
   useFindManyStudentSubjectScore,
   useFindUniqueSubjectClass,
@@ -37,7 +37,6 @@ import {
   Flex,
   Form,
   Input,
-  InputNumber,
   Modal,
   message,
   Row,
@@ -47,56 +46,10 @@ import {
 import dayjs from "dayjs"
 import type Decimal from "decimal.js"
 import _ from "lodash"
-import { FileUp, History, Printer, Save } from "lucide-react"
+import { FileUp, Printer, Save } from "lucide-react"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
-type FilterTable = FilterProps & {
-  fullname?: string
-  fixedClassCode?: string
-  attendanceScore?: "asc" | "desc"
-  midtermScore?: "asc" | "desc"
-  examScore?: "asc" | "desc"
-}
-type RowDisplayData = {
-  attendanceScore?: number | null
-  midtermScore?: number | null
-  examScore?: number | null
-  description?: string | null
-  examBanned?: boolean | null
-  examBannedReason?: string | null
-  examPostponed?: boolean | null
-  examPostponedReason?: string | null
-  scoreToTakeExam?: number | null
-  suspended?: boolean | null
-  suspendedReason?: string | null
-  finalScore?: Decimal | null
-  finalScoreBase4?: number | string | null
-  letter?: string | null
-  isChanged?: boolean
-}
-type SubjectClassScoreForm = {
-  list: Record<
-    string,
-    {
-      attendanceScore?: number | null
-      midtermScore?: number | null
-      examScore?: number | null
-      description?: string | null
-      examBanned?: boolean | null
-      examBannedReason?: string | null
-      examPostponed?: boolean | null
-      examPostponedReason?: string | null
-      scoreToTakeExam?: number | null
-      suspended?: boolean | null
-      suspendedReason?: string | null
-      finalScore?: Decimal | null
-      finalScoreBase4?: number | string | null
-      letter?: string | null
-      isChanged?: boolean
-    }
-  >
-}
 export default function NhapDiem({
   role,
   score,
@@ -108,11 +61,25 @@ export default function NhapDiem({
   const { showSpinner, hideSpinner } = useSpinner()
   const [form] = Form.useForm<SubjectClassScoreForm>()
   const [rowData, setRowData] = useState<Record<string, RowDisplayData>>({})
+  const rowDataRef = useRef(rowData)
+  rowDataRef.current = rowData
   const { selectedSubjectClassId } = useStore(diemLopMonHocStore)
   const { data: session } = useSession()
   const profileId = session?.sDM_NhanVienId
   const [activeCell, setActiveCell] = useState<string | null>(null)
   const skipNextBlurRef = useRef(false)
+  const pendingRowUpdatesRef = useRef<Record<string, RowDisplayData>>({})
+  const debouncedFlushRowUpdates = useCallback(
+    _.debounce(() => {
+      setRowData((prev) => {
+        const pending = pendingRowUpdatesRef.current
+        if (Object.keys(pending).length === 0) return prev
+        pendingRowUpdatesRef.current = {}
+        return { ...prev, ...pending }
+      })
+    }, 150),
+    []
+  )
   const [importModalVisible, setImportModalVisible] = useState(false)
   const [filterTable, setFilterTable] = useState<FilterTable>({
     fullname: "",
@@ -649,46 +616,61 @@ export default function NhapDiem({
 
   const activateCell = useCallback(
     (id: string, field: keyof RowDisplayData) => {
-      form.setFieldValue(["list", id, field], rowData[id]?.[field])
+      form.setFieldValue(["list", id, field], rowDataRef.current[id]?.[field])
       setActiveCell(`${id}|${field}`)
     },
-    [form, rowData]
+    [form]
   )
 
-  const handleScoreInputKeyDown = (
-    e: React.KeyboardEvent<HTMLInputElement>,
-    recordId: string,
-    type: "cc" | "tx" | "thi",
-    dataTable: Partial<StudentSubjectScore>[]
-  ) => {
-    const fieldOrder: ("cc" | "tx" | "thi")[] = ["cc", "tx", "thi"]
-    const currentRowIndex = dataTable.findIndex((item) => item.id === recordId)
-
-    if (e.key === "ArrowUp" || e.key === "ArrowDown") {
-      e.preventDefault()
-      e.stopPropagation()
-      const direction = e.key === "ArrowDown" ? 1 : -1
-      const targetRow = dataTable[currentRowIndex + direction]
-      if (targetRow) {
-        skipNextBlurRef.current = true
-        activateCell(targetRow.id!, fieldTypeToName[type])
-      }
+  const handleCellBlur = useCallback(() => {
+    if (skipNextBlurRef.current) {
+      skipNextBlurRef.current = false
+      return
     }
+    setActiveCell(null)
+  }, [])
 
-    if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
-      e.preventDefault()
-      e.stopPropagation()
-      const currentColIndex = fieldOrder.indexOf(type)
-      const direction = e.key === "ArrowRight" ? 1 : -1
-      const targetColIndex = currentColIndex + direction
-      if (targetColIndex >= 0 && targetColIndex < fieldOrder.length) {
-        const nextType = fieldOrder[targetColIndex]
-        skipNextBlurRef.current = true
-        activateCell(recordId, fieldTypeToName[nextType])
+  const dataTableRef = useRef(dataTable)
+  dataTableRef.current = dataTable
+
+  const handleScoreCellKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>, recordId: string, type: "cc" | "tx" | "thi") => {
+      const fieldOrder: ("cc" | "tx" | "thi")[] = ["cc", "tx", "thi"]
+      const dt = dataTableRef.current
+      const currentRowIndex = dt.findIndex((item) => item.id === recordId)
+
+      if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+        e.preventDefault()
+        e.stopPropagation()
+        const direction = e.key === "ArrowDown" ? 1 : -1
+        const targetRow = dt[currentRowIndex + direction]
+        if (targetRow) {
+          skipNextBlurRef.current = true
+          activateCell(targetRow.id!, fieldTypeToName[type])
+        }
       }
-    }
-    onlyNumberPress(e)
-  }
+
+      if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+        e.preventDefault()
+        e.stopPropagation()
+        const currentColIndex = fieldOrder.indexOf(type)
+        const direction = e.key === "ArrowRight" ? 1 : -1
+        const targetColIndex = currentColIndex + direction
+        if (targetColIndex >= 0 && targetColIndex < fieldOrder.length) {
+          const nextType = fieldOrder[targetColIndex]
+          skipNextBlurRef.current = true
+          activateCell(recordId, fieldTypeToName[nextType])
+        }
+      }
+      onlyNumberPress(e)
+    },
+    [activateCell]
+  )
+
+  const handleScoreDetailOpen = useCallback(
+    (id: string) => openScoreDetail({ id }),
+    [openScoreDetail]
+  )
 
   const disabledForm: boolean = useMemo(() => {
     if (score === "TX/ĐK") {
@@ -725,12 +707,6 @@ export default function NhapDiem({
     tag: "XemTaiLieu",
   })
 
-  const { onOpen: openStudentSubjectScore } = useDisclosure<{
-    dataTable: DataTable[]
-    type: number // 1: Khoá và in phiếu điểm, 0: In phiếu điểm nháp
-  }>({
-    tag: "ModalPrintStudentSubjectScore",
-  })
   const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
 
   const lockExam = async (subjectClassId?: string) => {
@@ -1069,20 +1045,19 @@ export default function NhapDiem({
               const letter = scoreConvertResult?.letter
               const newFinalScore = changed.examBanned ? 0 : finalScore
 
-              setRowData((prev) => ({
-                ...prev,
-                [changedId]: {
-                  ...prev[changedId],
-                  ...changed,
-                  examBanned: isExamBanned,
-                  isChanged: !fastIsEqual(prev[changedId], { ...prev[changedId], ...changed }),
-                  attendanceScore,
-                  midtermScore,
-                  finalScore: newFinalScore as unknown as Decimal,
-                  finalScoreBase4,
-                  letter,
-                },
-              }))
+              const currentRow = pendingRowUpdatesRef.current[changedId] ?? rowData[changedId] ?? {}
+              pendingRowUpdatesRef.current[changedId] = {
+                ...currentRow,
+                ...changed,
+                examBanned: isExamBanned,
+                isChanged: !fastIsEqual(currentRow, { ...currentRow, ...changed }),
+                attendanceScore,
+                midtermScore,
+                finalScore: newFinalScore as unknown as Decimal,
+                finalScoreBase4,
+                letter,
+              }
+              debouncedFlushRowUpdates()
             }
           }}
         >
@@ -1175,67 +1150,31 @@ export default function NhapDiem({
                 dataIndex: "attendanceScore",
                 width: 100,
                 align: "center",
-                // type: 'order',
                 render: (_, record) => {
                   const readOnly = role !== "GV" || score === "THI" || disabledForm
-                  const isActive = activeCell === `${record.id}|attendanceScore`
-                  const displayValue = rowData[record.id]?.attendanceScore ?? ""
                   return (
-                    <div className="flex items-center">
-                      {isActive && !readOnly ? (
-                        <Form.Item
-                          className="w-full m-0"
-                          name={["list", record.id, "attendanceScore"]}
-                          rules={[
-                            {
-                              validator: (_, value) =>
-                                validateScore(
-                                  value,
-                                  dataDetailSubjectClass?.subject.onePoint || false
-                                ),
-                            },
-                          ]}
-                        >
-                          <InputNumber
-                            autoFocus
-                            variant="outlined"
-                            id={`score-cc-${record.id}`}
-                            style={{ width: "100%" }}
-                            step={0.5}
-                            controls={false}
-                            onKeyDown={(e) =>
-                              handleScoreInputKeyDown(e, record.id, "cc", dataTable)
-                            }
-                            onBlur={() => {
-                              if (skipNextBlurRef.current) {
-                                skipNextBlurRef.current = false
-                                return
-                              }
-                              setActiveCell(null)
-                            }}
-                          />
-                        </Form.Item>
-                      ) : (
-                        <div
-                          tabIndex={readOnly ? -1 : 0}
-                          id={`score-cc-${record.id}`}
-                          className={`w-full min-h-[22px] px-1 text-center ${!readOnly ? "cursor-pointer hover:bg-blue-50 rounded" : ""}`}
-                          onClick={() => !readOnly && activateCell(record.id, "attendanceScore")}
-                          onFocus={() => !readOnly && activateCell(record.id, "attendanceScore")}
-                        >
-                          {displayValue}
-                        </div>
-                      )}
-                      <span
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          openScoreDetail({ id: record.id })
-                        }}
-                        className="ml-1 cursor-pointer hover:scale-110"
-                      >
-                        <History size={14} />
-                      </span>
-                    </div>
+                    <ScoreInputCell
+                      recordId={record.id}
+                      field="attendanceScore"
+                      fieldType="cc"
+                      isActive={activeCell === `${record.id}|attendanceScore`}
+                      displayValue={rowData[record.id]?.attendanceScore ?? ""}
+                      readOnly={readOnly}
+                      step={0.5}
+                      formFieldName={["list", record.id, "attendanceScore"]}
+                      inputId={`score-cc-${record.id}`}
+                      validateRule={{
+                        validator: (_: unknown, value: unknown) =>
+                          validateScore(
+                            value as number,
+                            dataDetailSubjectClass?.subject.onePoint || false
+                          ),
+                      }}
+                      onActivate={activateCell}
+                      onBlur={handleCellBlur}
+                      onKeyDown={handleScoreCellKeyDown}
+                      onScoreDetailClick={handleScoreDetailOpen}
+                    />
                   )
                 },
               },
@@ -1245,67 +1184,31 @@ export default function NhapDiem({
                 dataIndex: "midtermScore",
                 width: 100,
                 align: "center",
-                // type: 'order',
                 render: (_, record) => {
                   const readOnly = role !== "GV" || score === "THI" || disabledForm
-                  const isActive = activeCell === `${record.id}|midtermScore`
-                  const displayValue = rowData[record.id]?.midtermScore ?? ""
                   return (
-                    <div className="flex items-center">
-                      {isActive && !readOnly ? (
-                        <Form.Item
-                          className="w-full mb-0"
-                          name={["list", record.id, "midtermScore"]}
-                          rules={[
-                            {
-                              validator: (_, value) =>
-                                validateScore(
-                                  value,
-                                  dataDetailSubjectClass?.subject.onePoint || false
-                                ),
-                            },
-                          ]}
-                        >
-                          <InputNumber
-                            autoFocus
-                            variant="outlined"
-                            id={`score-tx-${record.id}`}
-                            style={{ width: "100%" }}
-                            step={0.5}
-                            controls={false}
-                            onKeyDown={(e) =>
-                              handleScoreInputKeyDown(e, record.id, "tx", dataTable)
-                            }
-                            onBlur={() => {
-                              if (skipNextBlurRef.current) {
-                                skipNextBlurRef.current = false
-                                return
-                              }
-                              setActiveCell(null)
-                            }}
-                          />
-                        </Form.Item>
-                      ) : (
-                        <div
-                          tabIndex={readOnly ? -1 : 0}
-                          id={`score-tx-${record.id}`}
-                          className={`w-full min-h-[22px] px-1 text-center ${!readOnly ? "cursor-pointer hover:bg-blue-50 rounded" : ""}`}
-                          onClick={() => !readOnly && activateCell(record.id, "midtermScore")}
-                          onFocus={() => !readOnly && activateCell(record.id, "midtermScore")}
-                        >
-                          {displayValue}
-                        </div>
-                      )}
-                      <span
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          openScoreDetail({ id: record.id })
-                        }}
-                        className="ml-1 cursor-pointer hover:scale-110"
-                      >
-                        <History size={14} />
-                      </span>
-                    </div>
+                    <ScoreInputCell
+                      recordId={record.id}
+                      field="midtermScore"
+                      fieldType="tx"
+                      isActive={activeCell === `${record.id}|midtermScore`}
+                      displayValue={rowData[record.id]?.midtermScore ?? ""}
+                      readOnly={readOnly}
+                      step={0.5}
+                      formFieldName={["list", record.id, "midtermScore"]}
+                      inputId={`score-tx-${record.id}`}
+                      validateRule={{
+                        validator: (_: unknown, value: unknown) =>
+                          validateScore(
+                            value as number,
+                            dataDetailSubjectClass?.subject.onePoint || false
+                          ),
+                      }}
+                      onActivate={activateCell}
+                      onBlur={handleCellBlur}
+                      onKeyDown={handleScoreCellKeyDown}
+                      onScoreDetailClick={handleScoreDetailOpen}
+                    />
                   )
                 },
               },
@@ -1325,58 +1228,25 @@ export default function NhapDiem({
                   if (role !== "GV" || score === "TX/ĐK" || !!examBanned || isMissingScore) {
                     return examScore ?? ""
                   }
-
-                  const isActive = activeCell === `${id}|examScore`
-                  const displayValue = rowData[id]?.examScore ?? ""
                   return (
-                    <div className="flex items-center">
-                      {isActive && !disabledForm ? (
-                        <Form.Item
-                          className="w-full m-0"
-                          name={["list", id, "examScore"]}
-                          rules={[
-                            {
-                              validator: (_, value) => validateExamScore(value),
-                            },
-                          ]}
-                        >
-                          <InputNumber
-                            autoFocus
-                            variant="outlined"
-                            id={`score-thi-${id}`}
-                            style={{ width: "100%" }}
-                            controls={false}
-                            onKeyDown={(e) => handleScoreInputKeyDown(e, id, "thi", dataTable)}
-                            onBlur={() => {
-                              if (skipNextBlurRef.current) {
-                                skipNextBlurRef.current = false
-                                return
-                              }
-                              setActiveCell(null)
-                            }}
-                          />
-                        </Form.Item>
-                      ) : (
-                        <div
-                          tabIndex={disabledForm ? -1 : 0}
-                          id={`score-thi-${id}`}
-                          className={`w-full min-h-[22px] px-1 text-center ${!disabledForm ? "cursor-pointer hover:bg-blue-50 rounded" : ""}`}
-                          onClick={() => !disabledForm && activateCell(id, "examScore")}
-                          onFocus={() => !disabledForm && activateCell(id, "examScore")}
-                        >
-                          {displayValue}
-                        </div>
-                      )}
-                      <span
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          openScoreDetail({ id })
-                        }}
-                        className="ml-1 cursor-pointer hover:scale-110"
-                      >
-                        <History size={14} />
-                      </span>
-                    </div>
+                    <ScoreInputCell
+                      recordId={id}
+                      field="examScore"
+                      fieldType="thi"
+                      isActive={activeCell === `${id}|examScore`}
+                      displayValue={rowData[id]?.examScore ?? ""}
+                      readOnly={disabledForm}
+                      formFieldName={["list", id, "examScore"]}
+                      inputId={`score-thi-${id}`}
+                      validateRule={{
+                        validator: (_: unknown, value: unknown) =>
+                          validateExamScore(value as number),
+                      }}
+                      onActivate={activateCell}
+                      onBlur={handleCellBlur}
+                      onKeyDown={handleScoreCellKeyDown}
+                      onScoreDetailClick={handleScoreDetailOpen}
+                    />
                   )
                 },
               },
@@ -1481,8 +1351,7 @@ export default function NhapDiem({
                   <Checkbox
                     checked={!!rowData[record.id]?.examPostponed}
                     disabled={
-                      (dataDetailSubjectClass?.examType === "OfflineWritten" &&
-                        role !== "P13") ||
+                      (dataDetailSubjectClass?.examType === "OfflineWritten" && role !== "P13") ||
                       score === "TX/ĐK" ||
                       disabledForm
                     }
@@ -1552,8 +1421,7 @@ export default function NhapDiem({
                   <Checkbox
                     checked={!!rowData[record.id]?.suspended}
                     disabled={
-                      (dataDetailSubjectClass?.examType === "OfflineWritten" &&
-                        role !== "P13") ||
+                      (dataDetailSubjectClass?.examType === "OfflineWritten" && role !== "P13") ||
                       score === "TX/ĐK" ||
                       disabledForm
                     }
