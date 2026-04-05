@@ -1167,9 +1167,23 @@ export default function PhanCongGiangDay({
                       trigger="click"
                       placement="bottomRight"
                     >
-                      <Button type="primary" className="bg-red-500">
-                        1.Báo dạy
-                      </Button>
+                      <Tooltip
+                        title={
+                          Object.values(subjectClassForm).some((sc) => !sc.trainingLocationId)
+                            ? "Vui lòng nhập khu vực đào tạo cho tất cả lớp môn học trước khi báo dạy"
+                            : undefined
+                        }
+                      >
+                        <Button
+                          type="primary"
+                          className="bg-red-500"
+                          disabled={Object.values(subjectClassForm).some(
+                            (sc) => !sc.trainingLocationId,
+                          )}
+                        >
+                          1.Báo dạy
+                        </Button>
+                      </Tooltip>
                     </Popover>
                   )}
                   {!khoaBoMon &&
