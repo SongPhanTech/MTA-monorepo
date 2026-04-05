@@ -162,6 +162,11 @@ app.openapi(certificateScore, async (c) => {
       })),
       skipDuplicates: true,
     })
+
+    await tx.archivedCertificate.updateMany({
+      where: { id: { in: archivedCertificateIds } },
+      data: { status: $Enums.ArchivedCertificateStatus.APPROVED },
+    })
   })
 
   return c.json({ success: true, message: "Success" }, 200)
