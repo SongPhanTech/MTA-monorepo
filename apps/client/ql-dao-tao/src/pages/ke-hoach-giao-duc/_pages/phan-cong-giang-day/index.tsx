@@ -222,14 +222,10 @@ export default function PhanCongGiangDay({
                 },
               }
             : {},
-        ...(trainingCourseId && type === "NORMAL"
-          ? {
-              OR: [
-                { fixedClasses: { some: { trainingCourseId } } },
-                { fixedClasses: { none: {} } },
-              ],
-            }
-          : {}),
+        fixedClasses:
+          trainingCourseId && type === "NORMAL"
+            ? { some: { trainingCourseId } }
+            : { some: {} },
         ...(fixedClassId
           ? {
               fixedClasses: {
@@ -241,7 +237,6 @@ export default function PhanCongGiangDay({
           : {}),
         deletedAt: null,
         active: true,
-        status: "OFFICIAL",
         trainingObjectTypeId,
         ...(khoaBoMon
           ? {
