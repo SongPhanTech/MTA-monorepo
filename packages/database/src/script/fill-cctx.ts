@@ -10,7 +10,7 @@ const subjectClassIds = await prisma.subjectClass.findMany({
     subject: { onePoint: false },
     fixedClasses: {
       some: {
-        trainingCourseId: "cmnd6x0e50000p701s2v6hpfn",
+        trainingCourseId: "cmnfopsiz002sp101f3r243hh",
       },
     },
   },
@@ -90,7 +90,7 @@ const classes = await prisma.subjectClass.findMany({
     examType: { not: "OfflineWritten" },
     fixedClasses: {
       some: {
-        trainingCourseId: "cmnd6x0e50000p701s2v6hpfn",
+        trainingCourseId: "cmnfopsiz002sp101f3r243hh",
       },
     },
   },

@@ -288,7 +288,21 @@ const DanhSachMonDangKy = ({
                 const isMaxed =
                   (record?.maxStudent || 0) <= (record?._count?.subjectClassStudent || 0)
                 const isRegisteredBool = (record?.classRegisterLogs?.length || 0) > 0
-                const isDisabled = isMaxed || isRegisteredBool || isPendingClassRegister
+                const totalRegisteredCredit =
+                  registeredClasses?.reduce(
+                    (acc: number, curr: GetClassesInfo200ItemSubjectClassItem) =>
+                      acc + (curr?.credit || 0),
+                    0
+                  ) ?? 0
+
+                const isOverMaxCredit = creditLimit.some(
+                  (limit) =>
+                    limit?.maxCredit != null &&
+                    totalRegisteredCredit + (record?.credit ?? 0) > limit.maxCredit
+                )
+                const isDisabled =
+                  isMaxed || isRegisteredBool || isPendingClassRegister || isOverMaxCredit
+
                 return (
                   <Button
                     disabled={isDisabled}

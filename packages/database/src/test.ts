@@ -8,51 +8,137 @@ const prismaNew = new PrismaClient({
   datasourceUrl: "postgres://admin:123456654321@113.192.17.90:5432/mta",
 })
 
-const curriculum = await prismaNew.curriculumVersion.findMany({
-  include: {
-    trainingBlocks: {
-      include: {
-        subjects: {
-          include: { subject: true },
-        },
+await prismaNew.examPaper.deleteMany({
+  where: {
+    studentSubjectScore: {
+      subjectClass: {
+        trainingObjectTypeId: "01",
+        semesterId: "cmmvor6bi0001mp01mgfapxwk",
       },
     },
   },
 })
 
-for (const item of curriculum) {
-  const requiredCredits = item.trainingBlocks.reduce((acc, block) => {
-    return (
-      acc +
-      block.subjects.reduce((acc2, subject) => {
-        if (subject.type === "Mandatory" && subject.useForFinalScore) {
-          return acc2 + subject.subject.credit
-        }
-        return acc2
-      }, 0)
-    )
-  }, 0)
-
-  const electiveCredits = item.trainingBlocks.reduce((acc, block) => {
-    return (
-      acc +
-      block.subjects.reduce((acc2, subject) => {
-        if (subject.type === "Optional" && subject.useForFinalScore) {
-          return acc2 + subject.subject.credit
-        }
-        return acc2
-      }, 0)
-    )
-  }, 0)
-
-  await prismaNew.curriculumVersion.update({
-    where: { id: item.id },
-    data: {
-      requiredCredits,
-      electiveCredits,
+await prismaNew.planTrainingSubject.deleteMany({
+  where: {
+    planTraining: {
+      trainingObjectTypeId: "01",
+      semesterId: "cmmvor6bi0001mp01mgfapxwk",
     },
-  })
-}
+  },
+})
+
+await prismaNew.planTraining.deleteMany({
+  where: {
+    trainingObjectTypeId: "01",
+    semesterId: "cmmvor6bi0001mp01mgfapxwk",
+  },
+})
+
+await prismaNew.studentSubjectScoreHistory.deleteMany({
+  where: {
+    studentSubjectScore: {
+      subjectClass: {
+        trainingObjectTypeId: "01",
+        semesterId: "cmmvor6bi0001mp01mgfapxwk",
+      },
+    },
+  },
+})
+
+const students = await prismaNew.studentSubjectScore.deleteMany({
+  where: {
+    subjectClass: {
+      trainingObjectTypeId: "01",
+      semesterId: "cmmvor6bi0001mp01mgfapxwk",
+    },
+  },
+})
+
+console.log({ students })
+
+const classRegisterLogs = await prismaNew.classRegisterLogs.deleteMany({
+  where: {
+    subjectClass: {
+      trainingObjectTypeId: "01",
+      semesterId: "cmmvor6bi0001mp01mgfapxwk",
+    },
+  },
+})
+
+const subjectClassTimes = await prismaNew.subjectClassTime.deleteMany({
+  where: {
+    subjectClass: {
+      trainingObjectTypeId: "01",
+      semesterId: "cmmvor6bi0001mp01mgfapxwk",
+    },
+  },
+})
+
+console.log({ subjectClassTimes })
+
+const classes = await prismaNew.subjectClass.deleteMany({
+  where: {
+    trainingObjectTypeId: "01",
+    semesterId: "cmmvor6bi0001mp01mgfapxwk",
+  },
+})
+
+console.log({ classes })
+
+// const ss = await prismaNew.subjectVersion.findMany({
+//   where: {
+//     trainingBlocks: {
+//       none: {},
+//     },
+//   },
+// })
+
+// const curriculum = await prismaNew.curriculumVersion.findMany({
+//   include: {
+//     trainingBlocks: {
+//       include: {
+//         subjects: {
+//           include: { subject: true },
+//         },
+//       },
+//     },
+//   },
+// })
+
+// for (const item of curriculum) {
+//   const requiredCredits = item.trainingBlocks.reduce((acc, block) => {
+//     return (
+//       acc +
+//       block.subjects.reduce((acc2, subject) => {
+//         if (subject.type === "Mandatory" && subject.useForFinalScore) {
+//           return acc2 + subject.subject.credit
+//         }
+//         return acc2
+//       }, 0)
+//     )
+//   }, 0)
+
+//   const electiveCredits = item.trainingBlocks.reduce((acc, block) => {
+//     return (
+//       acc +
+//       block.subjects.reduce((acc2, subject) => {
+//         if (subject.type === "Optional" && subject.useForFinalScore) {
+//           return acc2 + subject.subject.credit
+//         }
+//         return acc2
+//       }, 0)
+//     )
+//   }, 0)
+
+//   await prismaNew.curriculumVersion.update({
+//     where: { id: item.id },
+//     data: {
+//       requiredCredits,
+//       electiveCredits,
+//     },
+//   })
+// }
 
 // const docsC = await prismaOld.documentClassification.findMany()
 

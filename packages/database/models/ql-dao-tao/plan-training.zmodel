@@ -986,7 +986,7 @@ model SubjectClass extends BaseNoCode {
   examDate                    DateTime? // ngày thi
 
   // hình thức thi copy từ phiên bản môn học; hình thức thi của lớp có thể thay đổi giữa kỳ học
-  examType                    ExamType?
+  examType                    ExamType
 
   exam                        Exam?                    @relation(fields: [examId], references: [id])
   examId                      String?

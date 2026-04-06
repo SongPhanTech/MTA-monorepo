@@ -1,10 +1,10 @@
 import { queryClient } from "@api/index"
 import ImportScoreModal, { type ImportScoreData } from "@components/commons/print/nhap-diem-tu-file"
 import ExportScoreTemplate from "@components/commons/print/xuat-mau-nhap-diem"
+import ScoreInputCell from "@components/commons/score-input"
 import Table from "@components/commons/table"
-import type { DataTable } from "@components/modal/modal-in-phieu-diem"
 import { examBanReason, examPostponeReason, examSuspendedReason } from "@constants/constants"
-import type { FilterProps } from "@constants/type"
+import { FilterTable, RowDisplayData, SubjectClassScoreForm } from "@constants/nhap-diem.type"
 import { scoreConvert } from "@hooks/scoreConverter"
 import useSpinner from "@hooks/spinner"
 import { validateExamScore, validateScore } from "@lib/utils"
@@ -14,7 +14,7 @@ import {
 } from "@pages/quan-ly-diem/ql-diem-lop-mon-hoc"
 import { useStore } from "@tanstack/react-store"
 import { useSession } from "@workspace/auth/react"
-import { $Enums, type StudentSubjectScore } from "@workspace/db/client"
+import { $Enums } from "@workspace/db/client"
 import {
   useFindManyStudentSubjectScore,
   useFindUniqueSubjectClass,
@@ -37,7 +37,6 @@ import {
   Flex,
   Form,
   Input,
-  InputNumber,
   Modal,
   message,
   Row,
@@ -47,39 +46,10 @@ import {
 import dayjs from "dayjs"
 import type Decimal from "decimal.js"
 import _ from "lodash"
-import { FileUp, History, Printer, Save } from "lucide-react"
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { FileUp, Printer, Save } from "lucide-react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
-type FilterTable = FilterProps & {
-  fullname?: string
-  fixedClassCode?: string
-  attendanceScore?: "asc" | "desc"
-  midtermScore?: "asc" | "desc"
-  examScore?: "asc" | "desc"
-}
-type SubjectClassScoreForm = {
-  list: Record<
-    string,
-    {
-      attendanceScore?: number | null
-      midtermScore?: number | null
-      examScore?: number | null
-      description?: string | null
-      examBanned?: boolean | null
-      examBannedReason?: string | null
-      examPostponed?: boolean | null
-      examPostponedReason?: string | null
-      scoreToTakeExam?: number | null
-      suspended?: boolean | null
-      suspendedReason?: string | null
-      finalScore?: Decimal | null
-      finalScoreBase4?: number | string | null
-      letter?: string | null
-      isChanged?: boolean
-    }
-  >
-}
 export default function NhapDiem({
   role,
   score,
@@ -90,11 +60,26 @@ export default function NhapDiem({
   const { can } = useAbility()
   const { showSpinner, hideSpinner } = useSpinner()
   const [form] = Form.useForm<SubjectClassScoreForm>()
-  const listForm = Form.useWatch("list", form) || {}
+  const [rowData, setRowData] = useState<Record<string, RowDisplayData>>({})
+  const rowDataRef = useRef(rowData)
+  rowDataRef.current = rowData
   const { selectedSubjectClassId } = useStore(diemLopMonHocStore)
-
   const { data: session } = useSession()
   const profileId = session?.sDM_NhanVienId
+  const [activeCell, setActiveCell] = useState<string | null>(null)
+  const skipNextBlurRef = useRef(false)
+  const pendingRowUpdatesRef = useRef<Record<string, RowDisplayData>>({})
+  const debouncedFlushRowUpdates = useCallback(
+    _.debounce(() => {
+      setRowData((prev) => {
+        const pending = pendingRowUpdatesRef.current
+        if (Object.keys(pending).length === 0) return prev
+        pendingRowUpdatesRef.current = {}
+        return { ...prev, ...pending }
+      })
+    }, 150),
+    []
+  )
   const [importModalVisible, setImportModalVisible] = useState(false)
   const [filterTable, setFilterTable] = useState<FilterTable>({
     fullname: "",
@@ -165,12 +150,31 @@ export default function NhapDiem({
       },
       include: {
         student: {
-          include: {
-            userProfile: true,
+          select: {
+            id: true,
+            code: true,
+            userProfile: {
+              select: {
+                fullname: true,
+                lastName: true,
+                firstName: true,
+                dateOfBirth: true,
+              },
+            },
             fixedClass: {
-              include: {
+              select: {
+                code: true,
+                name: true,
                 trainingCourse: {
-                  include: {
+                  select: {
+                    coef_1: true,
+                    coef_2: true,
+                    coef_3: true,
+                    scoreToTakeExam: true,
+                    scoreToPass: true,
+                    maxReExamScore: true,
+                    reduceReExamScore: true,
+                    examScoreToPass: true,
                     scoreConverts: true,
                   },
                 },
@@ -179,26 +183,27 @@ export default function NhapDiem({
           },
         },
         subjectClass: {
-          include: {
-            subject: true,
+          select: {
+            type: true,
             semester: {
-              include: {
-                schoolYear: true,
+              select: {
+                name: true,
+                schoolYear: { select: { name: true } },
               },
             },
             mainLecturer: {
-              include: {
-                userProfile: true,
+              select: {
+                userProfile: { select: { fullname: true } },
               },
             },
             extraLecturer: {
-              include: {
-                userProfile: true,
+              select: {
+                userProfile: { select: { fullname: true } },
               },
             },
             enterGradeLecturer: {
-              include: {
-                userProfile: true,
+              select: {
+                userProfile: { select: { fullname: true } },
               },
             },
           },
@@ -257,7 +262,7 @@ export default function NhapDiem({
   const enteredScore = useMemo(
     () =>
       dataTable.every(({ id, attendanceScore, midtermScore }) => {
-        const f = listForm?.[id]
+        const f = rowData?.[id]
         return (
           (attendanceScore !== undefined &&
             attendanceScore !== null &&
@@ -271,19 +276,19 @@ export default function NhapDiem({
           (f?.attendanceScore && f?.midtermScore)
         )
       }),
-    [dataTable, listForm]
+    [dataTable, rowData]
   )
   const enteredExamScore = useMemo(
     () =>
       dataTable.every(({ id }) => {
-        const f = listForm?.[id]
+        const f = rowData?.[id]
         return (
           (f?.examBanned && f?.examBannedReason) ||
           (f?.examPostponed && f?.examPostponedReason) ||
           f?.examScore
         )
       }),
-    [dataTable, listForm]
+    [dataTable, rowData]
   )
 
   const handleSave = async () => {
@@ -291,7 +296,7 @@ export default function NhapDiem({
       message.error("Không tìm thấy thông tin môn học")
       return
     }
-    for (const [_, value] of Object.entries(listForm)) {
+    for (const value of Object.values(rowData)) {
       try {
         await validateScore(value.attendanceScore, dataDetailSubjectClass?.subject.onePoint)
         await validateScore(value.midtermScore, dataDetailSubjectClass?.subject.onePoint)
@@ -333,10 +338,8 @@ export default function NhapDiem({
     try {
       showSpinner()
 
-      const listChange = Object.entries(listForm)
-        .map(([key, value]) => {
-          return { id: key, ...value }
-        })
+      const listChange = Object.entries(rowData)
+        .map(([key, value]) => ({ id: key, ...value }))
         .filter((e) => e.isChanged)
 
       const listSqlTransaction: SqlTransactionBodyItem[] = []
@@ -416,10 +419,10 @@ export default function NhapDiem({
   const handleImportConfirm = (importedData: ImportScoreData[]) => {
     const changedData = Object.fromEntries(
       importedData.map((item) => {
-        const scoreToTakeExam = listForm[item.id]?.scoreToTakeExam
+        const scoreToTakeExam = rowData[item.id]?.scoreToTakeExam
         // TODO: fix not work if directly uncheck exam banned
         const isExamBanned =
-          !!listForm[item.id]?.examBannedReason ||
+          !!rowData[item.id]?.examBannedReason ||
           (item.attendanceScore !== null &&
             scoreToTakeExam !== null &&
             scoreToTakeExam !== undefined &&
@@ -497,9 +500,9 @@ export default function NhapDiem({
           item.id,
           {
             isChanged:
-              listForm[item.id].attendanceScore !== item.attendanceScore ||
-              listForm[item.id].midtermScore !== item.midtermScore ||
-              listForm[item.id].examScore !== item.examScore,
+              rowData[item.id]?.attendanceScore !== item.attendanceScore ||
+              rowData[item.id]?.midtermScore !== item.midtermScore ||
+              rowData[item.id]?.examScore !== item.examScore,
             finalScore: isExamBanned ? 0 : finalScore,
             finalScoreBase4,
             letter,
@@ -510,7 +513,7 @@ export default function NhapDiem({
       })
     )
 
-    form.setFieldsValue({ list: { ...listForm, ...changedData } })
+    setRowData((prev) => ({ ...prev, ...(changedData as Record<string, RowDisplayData>) }))
     showSpinner()
     try {
       message.success("Nhập điểm từ file thành công!")
@@ -551,7 +554,6 @@ export default function NhapDiem({
             },
           },
         },
-        subjectClassStudent: true,
         semester: {
           select: {
             name: true,
@@ -606,46 +608,69 @@ export default function NhapDiem({
     }
   }
 
-  const handleScoreInputKeyDown = (
-    e: React.KeyboardEvent<HTMLInputElement>,
-    recordId: string,
-    type: "cc" | "tx" | "thi",
-    dataTable: Partial<StudentSubjectScore>[]
-  ) => {
-    const fieldOrder: ("cc" | "tx" | "thi")[] = ["cc", "tx", "thi"]
-    const currentRowIndex = dataTable.findIndex((item) => item.id === recordId)
-
-    if (e.key === "ArrowUp" || e.key === "ArrowDown") {
-      e.preventDefault()
-      e.stopPropagation()
-      const direction = e.key === "ArrowDown" ? 1 : -1
-      const targetRow = dataTable[currentRowIndex + direction]
-      if (targetRow) {
-        const nextInputId = `score-${type}-${targetRow.id}`
-        const nextInput = document.getElementById(nextInputId)
-        if (nextInput) {
-          ;(nextInput as HTMLElement).focus()
-        }
-      }
-    }
-
-    if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
-      e.preventDefault()
-      e.stopPropagation()
-      const currentColIndex = fieldOrder.indexOf(type)
-      const direction = e.key === "ArrowRight" ? 1 : -1
-      const targetColIndex = currentColIndex + direction
-      if (targetColIndex >= 0 && targetColIndex < fieldOrder.length) {
-        const nextType = fieldOrder[targetColIndex]
-        const nextInputId = `score-${nextType}-${recordId}`
-        const nextInput = document.getElementById(nextInputId)
-        if (nextInput) {
-          ;(nextInput as HTMLElement).focus()
-        }
-      }
-    }
-    onlyNumberPress(e)
+  const fieldTypeToName: Record<"cc" | "tx" | "thi", keyof RowDisplayData> = {
+    cc: "attendanceScore",
+    tx: "midtermScore",
+    thi: "examScore",
   }
+
+  const activateCell = useCallback(
+    (id: string, field: keyof RowDisplayData) => {
+      form.setFieldValue(["list", id, field], rowDataRef.current[id]?.[field])
+      setActiveCell(`${id}|${field}`)
+    },
+    [form]
+  )
+
+  const handleCellBlur = useCallback(() => {
+    if (skipNextBlurRef.current) {
+      skipNextBlurRef.current = false
+      return
+    }
+    setActiveCell(null)
+  }, [])
+
+  const dataTableRef = useRef(dataTable)
+  dataTableRef.current = dataTable
+
+  const handleScoreCellKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>, recordId: string, type: "cc" | "tx" | "thi") => {
+      const fieldOrder: ("cc" | "tx" | "thi")[] = ["cc", "tx", "thi"]
+      const dt = dataTableRef.current
+      const currentRowIndex = dt.findIndex((item) => item.id === recordId)
+
+      if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+        e.preventDefault()
+        e.stopPropagation()
+        const direction = e.key === "ArrowDown" ? 1 : -1
+        const targetRow = dt[currentRowIndex + direction]
+        if (targetRow) {
+          skipNextBlurRef.current = true
+          activateCell(targetRow.id!, fieldTypeToName[type])
+        }
+      }
+
+      if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+        e.preventDefault()
+        e.stopPropagation()
+        const currentColIndex = fieldOrder.indexOf(type)
+        const direction = e.key === "ArrowRight" ? 1 : -1
+        const targetColIndex = currentColIndex + direction
+        if (targetColIndex >= 0 && targetColIndex < fieldOrder.length) {
+          const nextType = fieldOrder[targetColIndex]
+          skipNextBlurRef.current = true
+          activateCell(recordId, fieldTypeToName[nextType])
+        }
+      }
+      onlyNumberPress(e)
+    },
+    [activateCell]
+  )
+
+  const handleScoreDetailOpen = useCallback(
+    (id: string) => openScoreDetail({ id }),
+    [openScoreDetail]
+  )
 
   const disabledForm: boolean = useMemo(() => {
     if (score === "TX/ĐK") {
@@ -682,12 +707,6 @@ export default function NhapDiem({
     tag: "XemTaiLieu",
   })
 
-  const { onOpen: openStudentSubjectScore } = useDisclosure<{
-    dataTable: DataTable[]
-    type: number // 1: Khoá và in phiếu điểm, 0: In phiếu điểm nháp
-  }>({
-    tag: "ModalPrintStudentSubjectScore",
-  })
   const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
 
   const lockExam = async (subjectClassId?: string) => {
@@ -746,46 +765,40 @@ export default function NhapDiem({
       },
     })
   }
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <form>
+
   useEffect(() => {
-    if (dataTable) {
-      form.setFieldsValue({
-        list: dataTable.reduce(
-          (acc, cur) => {
-            if (!acc) {
-              return {}
-            }
-            const scoreConvertResult =
-              cur.finalScore !== null && cur.finalScore !== undefined
-                ? scoreConvert(
-                    Number(cur.finalScore),
-                    cur.student?.fixedClass?.trainingCourse?.scoreConverts || []
-                  )
-                : null
-            acc[cur.id] = {
-              attendanceScore: cur.attendanceScore,
-              midtermScore: cur.midtermScore,
-              examScore: cur.examScore,
-              description: cur.description,
-              examBanned: cur.examBanned,
-              examBannedReason: cur.examBannedReason,
-              examPostponed: cur.examPostponed,
-              examPostponedReason: cur.examPostponedReason,
-              scoreToTakeExam: cur.student?.fixedClass?.trainingCourse?.scoreToTakeExam,
-              finalScore: cur.finalScore,
-              finalScoreBase4: scoreConvertResult?.base4,
-              letter: scoreConvertResult?.letter,
-              suspended: cur.suspended,
-              suspendedReason: cur.suspendedReason,
-              isChanged: false,
-            }
-            return acc
-          },
-          {} as SubjectClassScoreForm["list"]
-        ),
-      })
+    if (dataTable.length > 0) {
+      form.resetFields()
+      const newRowData: Record<string, RowDisplayData> = {}
+      for (const cur of dataTable) {
+        const scoreConvertResult =
+          cur.finalScore != null
+            ? scoreConvert(
+                Number(cur.finalScore),
+                cur.student?.fixedClass?.trainingCourse?.scoreConverts || []
+              )
+            : null
+        newRowData[cur.id] = {
+          attendanceScore: cur.attendanceScore,
+          midtermScore: cur.midtermScore,
+          examScore: cur.examScore,
+          description: cur.description,
+          examBanned: cur.examBanned,
+          examBannedReason: cur.examBannedReason,
+          examPostponed: cur.examPostponed,
+          examPostponedReason: cur.examPostponedReason,
+          scoreToTakeExam: cur.student?.fixedClass?.trainingCourse?.scoreToTakeExam,
+          finalScore: cur.finalScore,
+          finalScoreBase4: scoreConvertResult?.base4,
+          letter: scoreConvertResult?.letter,
+          suspended: cur.suspended,
+          suspendedReason: cur.suspendedReason,
+          isChanged: false,
+        }
+      }
+      setRowData(newRowData)
     }
-  }, [dataTable])
+  }, [dataTable.length])
 
   if (!selectedSubjectClassId) {
     return (
@@ -961,26 +974,26 @@ export default function NhapDiem({
           onValuesChange={(changedValues) => {
             const changedId = Object.keys(changedValues.list || {})?.[0]
             if (changedId) {
+              const cur = rowData[changedId] ?? {}
+              const changed = changedValues.list[changedId] ?? {}
+
               const examScore: number | null =
-                changedValues.list[changedId]?.examScore !== undefined
-                  ? changedValues.list[changedId]?.examScore
-                  : (listForm[changedId].examScore ?? null)
+                changed.examScore !== undefined ? changed.examScore : (cur.examScore ?? null)
               const attendanceScore: number | null = dataDetailSubjectClass?.subject.onePoint
                 ? examScore
-                : changedValues.list[changedId]?.attendanceScore !== undefined
-                  ? changedValues.list[changedId]?.attendanceScore
-                  : (listForm[changedId].attendanceScore ?? null)
+                : changed.attendanceScore !== undefined
+                  ? changed.attendanceScore
+                  : (cur.attendanceScore ?? null)
               const midtermScore: number | null = dataDetailSubjectClass?.subject.onePoint
                 ? examScore
-                : changedValues.list[changedId]?.midtermScore !== undefined
-                  ? changedValues.list[changedId]?.midtermScore
-                  : (listForm[changedId].midtermScore ?? null)
+                : changed.midtermScore !== undefined
+                  ? changed.midtermScore
+                  : (cur.midtermScore ?? null)
 
-              const scoreToTakeExam = listForm[changedId]?.scoreToTakeExam ?? null
-              // TODO: fix not work if directly uncheck exam banned
+              const scoreToTakeExam = cur.scoreToTakeExam ?? null
               const isExamBanned =
-                !!changedValues.list[changedId]?.examBannedReason ||
-                !!listForm[changedId]?.examBannedReason ||
+                !!changed.examBannedReason ||
+                !!cur.examBannedReason ||
                 (attendanceScore !== null &&
                   scoreToTakeExam !== null &&
                   attendanceScore < scoreToTakeExam) ||
@@ -1010,22 +1023,18 @@ export default function NhapDiem({
                   awards:
                     dataForCalc?.awards?.map?.((a) => ({
                       status: a.status,
-                      archivedAward: {
-                        bonusScore: a.archivedAward.bonusScore ?? 0,
-                      },
+                      archivedAward: { bonusScore: a.archivedAward.bonusScore ?? 0 },
                     })) || [],
                   certificates:
                     dataForCalc?.certificates?.map?.((c) => ({
-                      archivedCertificate: {
-                        finalScore: c.archivedCertificate.finalScore ?? 0,
-                      },
+                      archivedCertificate: { finalScore: c.archivedCertificate.finalScore ?? 0 },
                     })) || [],
                 },
                 dataForCalc.subjectClass?.type || "NORMAL"
               )?.toNumber()
 
               const scoreConvertResult =
-                finalScore !== null && finalScore !== undefined
+                finalScore != null
                   ? scoreConvert(
                       finalScore,
                       dataForCalc?.student?.fixedClass?.trainingCourse?.scoreConverts || []
@@ -1034,31 +1043,24 @@ export default function NhapDiem({
 
               const finalScoreBase4 = scoreConvertResult?.base4
               const letter = scoreConvertResult?.letter
+              const newFinalScore = changed.examBanned ? 0 : finalScore
 
-              form.setFieldsValue({
-                list: {
-                  ...listForm,
-                  ...changedValues.list,
-                  [changedId]: {
-                    ...listForm[changedId],
-                    examBanned: isExamBanned,
-                    ...changedValues.list[changedId],
-                    isChanged: !fastIsEqual(listForm[changedId], {
-                      ...listForm[changedId],
-                      ...changedValues.list[changedId],
-                    }),
-                    attendanceScore,
-                    midtermScore,
-                    finalScore: changedValues.list[changedId]?.examBanned ? 0 : finalScore,
-                    finalScoreBase4,
-                    letter,
-                  },
-                },
-              })
+              const currentRow = pendingRowUpdatesRef.current[changedId] ?? rowData[changedId] ?? {}
+              pendingRowUpdatesRef.current[changedId] = {
+                ...currentRow,
+                ...changed,
+                examBanned: isExamBanned,
+                isChanged: !fastIsEqual(currentRow, { ...currentRow, ...changed }),
+                attendanceScore,
+                midtermScore,
+                finalScore: newFinalScore as unknown as Decimal,
+                finalScoreBase4,
+                letter,
+              }
+              debouncedFlushRowUpdates()
             }
           }}
         >
-          <Form.Item className="w-full m-0" name={"list"} hidden />
           <Table
             rowKey="id"
             className="m-0"
@@ -1066,13 +1068,13 @@ export default function NhapDiem({
             setFilters={setFilterTable}
             onRow={(record) => ({
               className: cn(
-                !!listForm?.[record.id]?.isChanged &&
-                  !listForm?.[record.id]?.examBanned &&
-                  !listForm?.[record.id]?.examPostponed &&
+                !!rowData?.[record.id]?.isChanged &&
+                  !rowData?.[record.id]?.examBanned &&
+                  !rowData?.[record.id]?.examPostponed &&
                   "bg-yellow-50",
 
-                !!listForm?.[record.id]?.examPostponed && "!bg-yellow-100",
-                !!listForm?.[record.id]?.examBanned && "!bg-red-100"
+                !!rowData?.[record.id]?.examPostponed && "!bg-yellow-100",
+                !!rowData?.[record.id]?.examBanned && "!bg-red-100"
               ),
             })}
             scrollable
@@ -1148,48 +1150,31 @@ export default function NhapDiem({
                 dataIndex: "attendanceScore",
                 width: 100,
                 align: "center",
-                // type: 'order',
                 render: (_, record) => {
-                  // if (role !== 'GV' || score === 'THI') {
-                  //     return record.attendanceScore ?? ''
-                  // }
                   const readOnly = role !== "GV" || score === "THI" || disabledForm
                   return (
-                    <div className="flex items-center">
-                      <Form.Item
-                        className="w-full m-0"
-                        name={["list", record.id, "attendanceScore"]}
-                        rules={[
-                          {
-                            validator: (_, value) =>
-                              validateScore(
-                                value,
-                                dataDetailSubjectClass?.subject.onePoint || false
-                              ),
-                          },
-                        ]}
-                      >
-                        <InputNumber
-                          readOnly={readOnly}
-                          variant={readOnly ? "underlined" : "outlined"}
-                          id={`score-cc-${record.id}`}
-                          style={{ width: "100%" }}
-                          step={0.5}
-                          controls={false}
-                          onKeyDown={(e) => handleScoreInputKeyDown(e, record.id, "cc", dataTable)}
-                        />
-                      </Form.Item>
-
-                      <span
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          openScoreDetail({ id: record.id })
-                        }}
-                        className="ml-1 cursor-pointer hover:scale-110"
-                      >
-                        <History size={14} />
-                      </span>
-                    </div>
+                    <ScoreInputCell
+                      recordId={record.id}
+                      field="attendanceScore"
+                      fieldType="cc"
+                      isActive={activeCell === `${record.id}|attendanceScore`}
+                      displayValue={rowData[record.id]?.attendanceScore ?? ""}
+                      readOnly={readOnly}
+                      step={0.5}
+                      formFieldName={["list", record.id, "attendanceScore"]}
+                      inputId={`score-cc-${record.id}`}
+                      validateRule={{
+                        validator: (_: unknown, value: unknown) =>
+                          validateScore(
+                            value as number,
+                            dataDetailSubjectClass?.subject.onePoint || false
+                          ),
+                      }}
+                      onActivate={activateCell}
+                      onBlur={handleCellBlur}
+                      onKeyDown={handleScoreCellKeyDown}
+                      onScoreDetailClick={handleScoreDetailOpen}
+                    />
                   )
                 },
               },
@@ -1199,48 +1184,31 @@ export default function NhapDiem({
                 dataIndex: "midtermScore",
                 width: 100,
                 align: "center",
-                // type: 'order',
                 render: (_, record) => {
-                  // if (role !== 'GV' || score === 'THI') {
-                  //     return record.midtermScore ?? ''
-                  // }
                   const readOnly = role !== "GV" || score === "THI" || disabledForm
                   return (
-                    <div className="flex items-center">
-                      <Form.Item
-                        className="w-full mb-0"
-                        name={["list", record.id, "midtermScore"]}
-                        rules={[
-                          {
-                            validator: (_, value) =>
-                              validateScore(
-                                value,
-                                dataDetailSubjectClass?.subject.onePoint || false
-                              ),
-                          },
-                        ]}
-                      >
-                        <InputNumber
-                          readOnly={readOnly}
-                          variant={readOnly ? "underlined" : "outlined"}
-                          id={`score-tx-${record.id}`}
-                          style={{ width: "100%" }}
-                          step={0.5}
-                          controls={false}
-                          onKeyDown={(e) => handleScoreInputKeyDown(e, record.id, "tx", dataTable)}
-                        />
-                      </Form.Item>
-
-                      <span
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          openScoreDetail({ id: record.id })
-                        }}
-                        className="ml-1 cursor-pointer hover:scale-110"
-                      >
-                        <History size={14} />
-                      </span>
-                    </div>
+                    <ScoreInputCell
+                      recordId={record.id}
+                      field="midtermScore"
+                      fieldType="tx"
+                      isActive={activeCell === `${record.id}|midtermScore`}
+                      displayValue={rowData[record.id]?.midtermScore ?? ""}
+                      readOnly={readOnly}
+                      step={0.5}
+                      formFieldName={["list", record.id, "midtermScore"]}
+                      inputId={`score-tx-${record.id}`}
+                      validateRule={{
+                        validator: (_: unknown, value: unknown) =>
+                          validateScore(
+                            value as number,
+                            dataDetailSubjectClass?.subject.onePoint || false
+                          ),
+                      }}
+                      onActivate={activateCell}
+                      onBlur={handleCellBlur}
+                      onKeyDown={handleScoreCellKeyDown}
+                      onScoreDetailClick={handleScoreDetailOpen}
+                    />
                   )
                 },
               },
@@ -1260,39 +1228,25 @@ export default function NhapDiem({
                   if (role !== "GV" || score === "TX/ĐK" || !!examBanned || isMissingScore) {
                     return examScore ?? ""
                   }
-
                   return (
-                    <div className="flex items-center">
-                      <Form.Item
-                        className="w-full m-0"
-                        name={["list", id, "examScore"]}
-                        rules={[
-                          {
-                            validator: (_, value) => validateExamScore(value),
-                          },
-                        ]}
-                      >
-                        <InputNumber
-                          disabled={disabledForm}
-                          readOnly={disabledForm}
-                          variant={disabledForm ? "underlined" : "outlined"}
-                          id={`score-thi-${id}`}
-                          style={{ width: "100%" }}
-                          controls={false}
-                          onKeyDown={(e) => handleScoreInputKeyDown(e, id, "thi", dataTable)}
-                        />
-                      </Form.Item>
-
-                      <span
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          openScoreDetail({ id })
-                        }}
-                        className="ml-1 cursor-pointer hover:scale-110"
-                      >
-                        <History size={14} />
-                      </span>
-                    </div>
+                    <ScoreInputCell
+                      recordId={id}
+                      field="examScore"
+                      fieldType="thi"
+                      isActive={activeCell === `${id}|examScore`}
+                      displayValue={rowData[id]?.examScore ?? ""}
+                      readOnly={disabledForm}
+                      formFieldName={["list", id, "examScore"]}
+                      inputId={`score-thi-${id}`}
+                      validateRule={{
+                        validator: (_: unknown, value: unknown) =>
+                          validateExamScore(value as number),
+                      }}
+                      onActivate={activateCell}
+                      onBlur={handleCellBlur}
+                      onKeyDown={handleScoreCellKeyDown}
+                      onScoreDetailClick={handleScoreDetailOpen}
+                    />
                   )
                 },
               },
@@ -1300,119 +1254,91 @@ export default function NhapDiem({
                 title: "Điểm HP",
                 width: 65,
                 align: "center",
-                render: (_, { id }) => {
-                  return (
-                    <Form.Item className="w-full m-0" name={["list", id, "finalScore"]}>
-                      <Input
-                        className="text-center"
-                        readOnly
-                        variant="borderless"
-                        id={`score-hp-${id}`}
-                        style={{ width: "100%" }}
-                      />
-                    </Form.Item>
-                  )
-                },
+                render: (_, { id }) => (
+                  <span className="text-center block">
+                    {rowData[id]?.finalScore != null ? String(rowData[id].finalScore) : ""}
+                  </span>
+                ),
               },
               {
                 title: "Điểm hệ 4",
                 align: "center",
                 width: 70,
-                render: (_, { id }) => {
-                  return (
-                    <Form.Item className="w-full m-0" name={["list", id, "finalScoreBase4"]}>
-                      <Input
-                        className="text-center text-blue-500"
-                        readOnly
-                        variant="borderless"
-                        id={`score-hp4-${id}`}
-                        style={{ width: "100%" }}
-                      />
-                    </Form.Item>
-                  )
-                },
+                render: (_, { id }) => (
+                  <span className="text-center text-blue-500 block">
+                    {rowData[id]?.finalScoreBase4 ?? ""}
+                  </span>
+                ),
               },
               {
                 title: "Điểm chữ",
                 align: "center",
                 width: 70,
-                render: (_, { id }) => {
-                  return (
-                    <Form.Item className="w-full m-0" name={["list", id, "letter"]}>
-                      <Input
-                        className="text-center text-yellow-600"
-                        readOnly
-                        variant="borderless"
-                        id={`letter-${id}`}
-                        style={{ width: "100%" }}
-                      />
-                    </Form.Item>
-                  )
-                },
+                render: (_, { id }) => (
+                  <span className="text-center text-yellow-600 block">
+                    {rowData[id]?.letter ?? ""}
+                  </span>
+                ),
               },
               {
                 title: "Cấm thi",
                 dataIndex: "examBanned",
                 width: 65,
                 align: "center",
-                render: (_, record) => {
-                  return (
-                    <Form.Item
-                      className="w-full mb-0"
-                      name={["list", record.id, "examBanned"]}
-                      label=""
-                      valuePropName="checked"
-                    >
-                      <Checkbox
-                        disabled={score === "THI" || disabledForm}
-                        onChange={(e) => {
-                          if (!e.target.checked) {
-                            form.setFieldValue(["list", record.id, "examBannedReason"], undefined)
-                          }
-                        }}
-                      />
-                    </Form.Item>
-                  )
-                },
+                render: (_, record) => (
+                  <Checkbox
+                    checked={!!rowData[record.id]?.examBanned}
+                    disabled={score === "THI" || disabledForm}
+                    onChange={(e) => {
+                      setRowData((prev) => ({
+                        ...prev,
+                        [record.id]: {
+                          ...prev[record.id],
+                          examBanned: e.target.checked,
+                          examBannedReason: e.target.checked
+                            ? prev[record.id]?.examBannedReason
+                            : undefined,
+                          isChanged: true,
+                        },
+                      }))
+                    }}
+                  />
+                ),
               },
               {
                 title: "Lý do cấm thi",
                 dataIndex: "examBannedReason",
                 width: 150,
                 render: (_, record) => {
-                  const examBanned = listForm[record.id]?.examBanned
+                  const examBanned = rowData[record.id]?.examBanned
+                  const value = rowData[record.id]?.examBannedReason ?? undefined
+                  const onChange = (val: string) =>
+                    setRowData((prev) => ({
+                      ...prev,
+                      [record.id]: { ...prev[record.id], examBannedReason: val, isChanged: true },
+                    }))
+                  if (disabledForm) {
+                    return (
+                      <Input.TextArea
+                        value={value}
+                        readOnly
+                        autoSize
+                        variant="underlined"
+                        className="bg-transparent"
+                      />
+                    )
+                  }
                   return (
-                    <Form.Item
-                      name={["list", record.id, "examBannedReason"]}
-                      style={{ margin: 0 }}
-                      required={!!examBanned}
+                    <AutoComplete
+                      value={value}
+                      onChange={onChange}
+                      placeholder="Nhập lý do cấm thi"
+                      options={examBanReason.map((s) => ({ label: s, value: s }))}
+                      styles={{ popup: { root: { width: "fit" } } }}
+                      disabled={!examBanned}
                     >
-                      {disabledForm ? (
-                        <Input.TextArea
-                          readOnly
-                          autoSize
-                          variant="underlined"
-                          className="bg-transparent"
-                        />
-                      ) : (
-                        <AutoComplete
-                          placeholder="Nhập lý do cấm thi"
-                          options={examBanReason.map((s) => ({
-                            label: s,
-                            value: s,
-                          }))}
-                          styles={{ popup: { root: { width: "fit" } } }}
-                          disabled={!examBanned}
-                        >
-                          <Input.TextArea
-                            readOnly
-                            autoSize
-                            variant="underlined"
-                            className="bg-transparent"
-                          />
-                        </AutoComplete>
-                      )}
-                    </Form.Item>
+                      <Input.TextArea autoSize variant="underlined" className="bg-transparent" />
+                    </AutoComplete>
                   )
                 },
               },
@@ -1421,69 +1347,68 @@ export default function NhapDiem({
                 dataIndex: "examPostponed",
                 width: 65,
                 align: "center",
-                render: (_, record) => {
-                  return (
-                    <Form.Item
-                      className="w-full mb-0"
-                      name={["list", record.id, "examPostponed"]}
-                      label=""
-                      valuePropName="checked"
-                    >
-                      <Checkbox
-                        disabled={
-                          (dataDetailSubjectClass?.examType === "OfflineWritten" &&
-                            role !== "P13") ||
-                          score === "TX/ĐK" ||
-                          disabledForm
-                        }
-                        onChange={(e) => {
-                          if (!e.target.checked) {
-                            form.setFieldValue(["list", record.id, "examPostponed"], undefined)
-                          }
-                        }}
-                      />
-                    </Form.Item>
-                  )
-                },
+                render: (_, record) => (
+                  <Checkbox
+                    checked={!!rowData[record.id]?.examPostponed}
+                    disabled={
+                      (dataDetailSubjectClass?.examType === "OfflineWritten" && role !== "P13") ||
+                      score === "TX/ĐK" ||
+                      disabledForm
+                    }
+                    onChange={(e) => {
+                      setRowData((prev) => ({
+                        ...prev,
+                        [record.id]: {
+                          ...prev[record.id],
+                          examPostponed: e.target.checked,
+                          examPostponedReason: e.target.checked
+                            ? prev[record.id]?.examPostponedReason
+                            : undefined,
+                          isChanged: true,
+                        },
+                      }))
+                    }}
+                  />
+                ),
               },
               {
                 title: "Lý do hoãn thi",
                 dataIndex: "examPostponedReason",
                 width: 200,
                 render: (_, record) => {
-                  const examPostponed = listForm[record.id]?.examPostponed
+                  const examPostponed = rowData[record.id]?.examPostponed
+                  const value = rowData[record.id]?.examPostponedReason ?? undefined
+                  const onChange = (val: string) =>
+                    setRowData((prev) => ({
+                      ...prev,
+                      [record.id]: {
+                        ...prev[record.id],
+                        examPostponedReason: val,
+                        isChanged: true,
+                      },
+                    }))
+                  if (disabledForm) {
+                    return (
+                      <Input.TextArea
+                        value={value}
+                        readOnly
+                        autoSize
+                        variant="underlined"
+                        className="bg-transparent"
+                      />
+                    )
+                  }
                   return (
-                    <Form.Item
-                      name={["list", record.id, "examPostponedReason"]}
-                      style={{ margin: 0 }}
-                      required={!!examPostponed}
+                    <AutoComplete
+                      value={value}
+                      onChange={onChange}
+                      placeholder="Nhập lý do hoãn thi"
+                      options={examPostponeReason.map((s) => ({ label: s, value: s }))}
+                      styles={{ popup: { root: { width: "fit" } } }}
+                      disabled={!examPostponed}
                     >
-                      {disabledForm ? (
-                        <Input.TextArea
-                          readOnly
-                          autoSize
-                          variant="underlined"
-                          className="bg-transparent"
-                        />
-                      ) : (
-                        <AutoComplete
-                          placeholder="Nhập lý do hoãn thi"
-                          options={examPostponeReason.map((s) => ({
-                            label: s,
-                            value: s,
-                          }))}
-                          styles={{ popup: { root: { width: "fit" } } }}
-                          disabled={!examPostponed}
-                        >
-                          <Input.TextArea
-                            readOnly
-                            autoSize
-                            variant="underlined"
-                            className="bg-transparent"
-                          />
-                        </AutoComplete>
-                      )}
-                    </Form.Item>
+                      <Input.TextArea autoSize variant="underlined" className="bg-transparent" />
+                    </AutoComplete>
                   )
                 },
               },
@@ -1492,71 +1417,64 @@ export default function NhapDiem({
                 dataIndex: "suspended",
                 width: 65,
                 align: "center",
-                render: (_, record) => {
-                  return (
-                    <Form.Item
-                      className="w-full mb-0"
-                      name={["list", record.id, "suspended"]}
-                      label=""
-                      valuePropName="checked"
-                    >
-                      <Checkbox
-                        disabled={
-                          (dataDetailSubjectClass?.examType === "OfflineWritten" &&
-                            role !== "P13") ||
-                          score === "TX/ĐK" ||
-                          disabledForm
-                        }
-                        onChange={(e) => {
-                          if (!e.target.checked) {
-                            form.setFieldValue(["list", record.id, "suspendedReason"], undefined)
-                          }
-                        }}
-                      />
-                    </Form.Item>
-                  )
-                },
+                render: (_, record) => (
+                  <Checkbox
+                    checked={!!rowData[record.id]?.suspended}
+                    disabled={
+                      (dataDetailSubjectClass?.examType === "OfflineWritten" && role !== "P13") ||
+                      score === "TX/ĐK" ||
+                      disabledForm
+                    }
+                    onChange={(e) => {
+                      setRowData((prev) => ({
+                        ...prev,
+                        [record.id]: {
+                          ...prev[record.id],
+                          suspended: e.target.checked,
+                          suspendedReason: e.target.checked
+                            ? prev[record.id]?.suspendedReason
+                            : undefined,
+                          isChanged: true,
+                        },
+                      }))
+                    }}
+                  />
+                ),
               },
               {
                 title: "Lý do đình chỉ",
                 dataIndex: "suspendedReason",
                 width: 140,
                 render: (_, record) => {
-                  const suspended = listForm[record.id]?.suspended
+                  const suspended = rowData[record.id]?.suspended
+                  const value = rowData[record.id]?.suspendedReason ?? undefined
+                  const onChange = (val: string) =>
+                    setRowData((prev) => ({
+                      ...prev,
+                      [record.id]: { ...prev[record.id], suspendedReason: val, isChanged: true },
+                    }))
+                  if (disabledForm) {
+                    return (
+                      <Input.TextArea
+                        value={value}
+                        readOnly
+                        autoSize
+                        variant="underlined"
+                        className="bg-transparent"
+                      />
+                    )
+                  }
                   return (
-                    <Form.Item
-                      name={["list", record.id, "suspendedReason"]}
-                      style={{ margin: 0 }}
-                      required={!!suspended}
+                    <AutoComplete
+                      value={value}
+                      onChange={onChange}
+                      placeholder="Nhập lý do đình chỉ"
+                      options={examSuspendedReason.map((s) => ({ label: s, value: s }))}
+                      styles={{ popup: { root: { width: "fit" } } }}
+                      disabled={!suspended}
                     >
-                      {disabledForm ? (
-                        <Input.TextArea
-                          readOnly
-                          autoSize
-                          variant="underlined"
-                          className="bg-transparent"
-                        />
-                      ) : (
-                        <AutoComplete
-                          placeholder="Nhập lý do hoãn thi"
-                          options={examSuspendedReason.map((s) => ({
-                            label: s,
-                            value: s,
-                          }))}
-                          styles={{
-                            popup: { root: { width: "fit" } },
-                          }}
-                          disabled={!suspended}
-                        >
-                          <Input.TextArea
-                            readOnly
-                            autoSize
-                            variant="underlined"
-                            className="bg-transparent"
-                          />
-                        </AutoComplete>
-                      )}
-                    </Form.Item>
+                      <Input.TextArea autoSize variant="underlined" className="bg-transparent" />
+                    </AutoComplete>
                   )
                 },
               },
@@ -1565,21 +1483,26 @@ export default function NhapDiem({
                 dataIndex: "description",
                 width: 150,
                 align: "center",
-                render: (_, record) => {
-                  return (
-                    <Form.Item className="w-full mb-0" name={[record.id, "description"]} label="">
-                      <Input
-                        readOnly={disabledForm}
-                        variant={disabledForm ? "borderless" : "underlined"}
-                        placeholder="Nhập ghi chú"
-                        style={{
-                          width: "100%",
-                        }}
-                        className="bg-transparent"
-                      />
-                    </Form.Item>
-                  )
-                },
+                render: (_, record) => (
+                  <Input
+                    value={rowData[record.id]?.description ?? undefined}
+                    readOnly={disabledForm}
+                    variant={disabledForm ? "borderless" : "underlined"}
+                    placeholder="Nhập ghi chú"
+                    style={{ width: "100%" }}
+                    className="bg-transparent"
+                    onChange={(e) =>
+                      setRowData((prev) => ({
+                        ...prev,
+                        [record.id]: {
+                          ...prev[record.id],
+                          description: e.target.value,
+                          isChanged: true,
+                        },
+                      }))
+                    }
+                  />
+                ),
               },
             ]}
             data={dataTable}

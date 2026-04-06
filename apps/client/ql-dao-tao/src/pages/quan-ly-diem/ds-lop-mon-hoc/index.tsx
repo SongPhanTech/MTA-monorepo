@@ -2,6 +2,7 @@ import DatePicker from "@components/commons/date-picker"
 import FormItem from "@components/commons/form-item"
 import Select from "@components/commons/select"
 import Table from "@components/commons/table"
+import { DownloadOutlined } from "@ant-design/icons"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import type { FilterProps } from "@constants/type"
 import { useExamTypeOptions } from "@hooks/examType"
@@ -50,7 +51,9 @@ import type React from "react"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import { diemLopMonHocStore } from "../ql-diem-lop-mon-hoc"
-import { sqlTransaction } from "@workspace/libs/api/model";
+import { sqlTransaction } from "@workspace/libs/api/model"
+import { saveAs } from "file-saver"
+import { exportSubjectClassListExcel } from "@workspace/libs/api/training"
 
 type TimeScore = {
   time: [Dayjs, Dayjs]
@@ -82,9 +85,7 @@ export default function ClassSubject() {
   const [form] = Form.useForm<TimeScore>()
   const [formExam] = Form.useForm<TimeScoreExam>()
   const [formHoldAnExam] = Form.useForm<HoldAnExam>()
-  const [changedExamDates, setChangedExamDates] = useState<
-  Record<string, string | null>
->({})
+  const [changedExamDates, setChangedExamDates] = useState<Record<string, string | null>>({})
   const [filters, setFilters] = useState<FilterProps>({
     searchText: "",
     code: "",
@@ -461,6 +462,58 @@ export default function ClassSubject() {
     }
   }
 
+  const handleExportSubjectClassExcel = async () => {
+    if (!trainingObjectTypeId || !semesterId) {
+      message.warning("Vui lòng chọn đối tượng đào tạo và học kỳ")
+      return
+    }
+
+    const extractExportErrorMessage = (error: any) => {
+      const status = error?.response?.status
+      const rawMessage = error?.response?.data?.message || error?.response?.data?.error
+
+      const detailedMessage = Array.isArray(rawMessage)
+        ? rawMessage.join(", ")
+        : rawMessage || error?.message
+
+      if (status && detailedMessage) {
+        return `Xuất Excel thất bại: ${detailedMessage}`
+      }
+
+      if (status) {
+        return `Xuất Excel thất bại`
+      }
+
+      if (detailedMessage) {
+        return `Xuất Excel thất bại: ${detailedMessage}`
+      }
+
+      return "Đã xảy ra lỗi khi xuất Excel, vui lòng thử lại"
+    }
+
+    try {
+      showSpinner()
+      const res = await exportSubjectClassListExcel({
+        trainingObjectTypeId,
+        semesterId,
+        fixedClassId: filters.fixedClassId || undefined,
+        searchText: filters.searchText || undefined,
+      })
+      if (res.status === 200) {
+        saveAs(res.data, "Danh_sach_lop_mon_hoc.xlsx")
+        message.success("Xuất Excel thành công")
+      } else {
+        const error: any = new Error()
+        error.response = { status: res.status, data: res.data }
+        message.error(extractExportErrorMessage(error))
+      }
+    } catch (error: any) {
+      message.error(extractExportErrorMessage(error))
+    } finally {
+      hideSpinner()
+    }
+  }
+
   const rowSelection = {
     selectedRowKeys,
     onChange: (newSelectedRowKeys: React.Key[]) => {
@@ -514,7 +567,7 @@ export default function ClassSubject() {
                 </Col>
               </Flex>
             </Col>
-            <Col span={6}>
+            <Col span={12}>
               <Flex justify="end" align="center" gap={4}>
                 {can(
                   QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DS_LOP_MON_HOC,
@@ -532,7 +585,14 @@ export default function ClassSubject() {
                     )}
                     {selectedRowKeys.length > 0 && <p>(Đang chọn {selectedRowKeys.length} lớp)</p>}
 
-                    {selectedRowKeys.length > 0 && <p>(Đang chọn {selectedRowKeys.length} lớp)</p>}
+                    <Button
+                      icon={<DownloadOutlined />}
+                      onClick={handleExportSubjectClassExcel}
+                      type="primary"
+                    >
+                      Xuất Excel
+                    </Button>
+                    {/* {selectedRowKeys.length > 0 && <p>(Đang chọn {selectedRowKeys.length} lớp)</p>} */}
                     <Popover
                       content={
                         <Form

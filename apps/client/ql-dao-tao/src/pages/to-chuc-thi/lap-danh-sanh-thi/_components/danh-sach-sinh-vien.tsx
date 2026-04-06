@@ -201,13 +201,13 @@ export default function DanhSachSinhVien() {
       lockExamSessions: true,
       examRooms: {
         include: {
-          examList: true,
-        },
-        orderBy: {
-          room: {
-            name: "asc",
+          examList: {
+            orderBy: {
+              start: "asc",
+            },
           },
         },
+        orderBy: { createdAt: "asc" },
       },
     },
   })
@@ -384,6 +384,23 @@ export default function DanhSachSinhVien() {
                         },
                       },
                     },
+                    select: {
+                      id: true,
+                      examBanned: true,
+                      examPostponed: true,
+                      attendanceScore: true,
+                      midtermScore: true,
+                      student: {
+                        select: {
+                          userProfile: {
+                            select: {
+                              firstName: true,
+                              lastName: true,
+                            },
+                          },
+                        },
+                      },
+                    },
                   },
                   subject: {
                     select: {
@@ -394,13 +411,13 @@ export default function DanhSachSinhVien() {
               },
               examRooms: {
                 include: {
-                  examList: true,
-                },
-                orderBy: {
-                  room: {
-                    name: "asc",
+                  examList: {
+                    orderBy: {
+                      start: "asc",
+                    },
                   },
                 },
+                orderBy: { createdAt: "asc" },
               },
             },
           },
@@ -413,7 +430,25 @@ export default function DanhSachSinhVien() {
         select: {
           subjectClass: {
             select: {
-              subjectClassStudent: true
+              subjectClassStudent: {
+                select: {
+                  id: true
+                  examBanned: true
+                  examPostponed: true
+                  attendanceScore: true
+                  midtermScore: true
+                  student: {
+                    select: {
+                      userProfile: {
+                        select: {
+                          firstName: true
+                          lastName: true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
               subject: {
                 select: {
                   onePoint: true
@@ -467,7 +502,11 @@ export default function DanhSachSinhVien() {
           studentSubjectScores: [] as StudentSubjectScore[],
         }))
       )
-
+      filteredStudentSubjectScores.sort((a, b) => {
+        const nameA = a.student?.userProfile?.firstName ?? ""
+        const nameB = b.student?.userProfile?.firstName ?? ""
+        return nameA.localeCompare(nameB, "vi")
+      })
       let idx = 0
       loop: for (const el of allExamLists) {
         for (let i = 0; i < el.capacity; i++) {

@@ -64,33 +64,6 @@ export default function QuanLyDiemLopMonHoc({
             managementOrganization: true,
           },
         },
-        subjectClassStudent: {
-          include: {
-            student: {
-              include: {
-                userProfile: true,
-                fixedClass: {
-                  include: {
-                    trainingCourse: true,
-                  },
-                },
-              },
-            },
-          },
-        },
-        subjectClassHistory: {
-          include: {
-            updatedBy: {
-              select: {
-                id: true,
-                fullname: true,
-              },
-            },
-          },
-          orderBy: {
-            createdAt: "desc",
-          },
-        },
       },
     },
     {
@@ -208,7 +181,7 @@ export default function QuanLyDiemLopMonHoc({
           ...baseMenu,
           {
             label: "Nhập điểm thi",
-            key: "2",
+            key: "3",
             children: <NhapDiem role={role} score="THI" loadData={activeKey !== "1"} />,
             disabled: !data,
           },
@@ -221,7 +194,7 @@ export default function QuanLyDiemLopMonHoc({
         ...baseMenu,
         {
           label: "Điểm",
-          key: "2",
+          key: "4",
           children: <NhapDiem role={role} loadData={activeKey !== "1"} />,
           disabled: !data,
         },
@@ -433,6 +406,7 @@ export default function QuanLyDiemLopMonHoc({
           className="-mt-3"
           activeKey={activeKey}
           onChange={(key) => setActiveKey(key)}
+          destroyOnHidden={true}
           items={items}
         />
       </Col>

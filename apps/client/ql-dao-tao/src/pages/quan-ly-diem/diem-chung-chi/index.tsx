@@ -311,7 +311,7 @@ export default function ArchivedCertificate() {
       if (selectedRowKeys?.length > 0) {
         // Các row đã chọn chính là ArchivedCertificate, lọc những cái PENDING
         const certificateIds = (selectedRowKeys as string[]).filter((certId) => {
-          const cert = dataTable.find((c: any) => c.id === certId)
+          const cert = dataTable.find((c) => c.id === certId)
           return cert?.status === "PENDING"
         })
 
@@ -807,7 +807,7 @@ export default function ArchivedCertificate() {
                       }}
                       className="text-sm text-green-700 cursor-pointer"
                     />
-                    <Tooltip title="Phiên điểm môn học">
+                    {/* <Tooltip title="Phiên điểm môn học">
                       <GraduationCap
                         onClick={() => {
                           onOpenPhienDiemKyHoc({
@@ -817,7 +817,7 @@ export default function ArchivedCertificate() {
                         }}
                         className="text-sm"
                       />
-                    </Tooltip>
+                    </Tooltip> */}
                   </Row>
                 )
               },

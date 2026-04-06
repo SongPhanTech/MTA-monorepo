@@ -103,9 +103,9 @@ export default function StudentScoreClassPage() {
         item.subjectClasses.forEach((subjectClass) => {
           subjectClass.subjectClassStudent.forEach((subjectClassStudent) => {
             monhoc.push({
-              TenMonhoc: subjectClassStudent.subjectVersion.name,
-              MaMH: subjectClassStudent.subjectVersion.code?.slice(0, 2) ?? "",
-              soTC: subjectClassStudent.subjectVersion.credit,
+              TenMonhoc: subjectClass.subject.name,
+              MaMH: subjectClass.subject.code?.slice(0, 2) ?? "",
+              soTC: subjectClass.subject.credit,
               diemhe10:
                 subjectClassStudent?.manualFinalScore ||
                 subjectClassStudent?.finalScore?.toNumber() ||
@@ -541,7 +541,6 @@ export default function StudentScoreClassPage() {
           subjectClassStudent: {
             where: subjectScoreWhere,
             include: {
-              subjectVersion: true,
               certificates: {
                 include: { archivedCertificate: true },
               },
@@ -551,6 +550,9 @@ export default function StudentScoreClassPage() {
             },
           },
         },
+      },
+      studentSemesterResult: {
+        where: { studentId },
       },
       trainingCoursesStart: {
         where: {
@@ -569,29 +571,12 @@ export default function StudentScoreClassPage() {
 
   const { convertScore } = useScoreConverter(student?.fixedClass?.trainingCourse.scoreConverts)
 
-  // Lấy kết quả học tập theo kỳ
-  const { data: semesterResults = [] } = useFindManyStudentSemesterResult(
-    {
-      where: { studentId },
-      include: { rank: true },
-    },
-    { enabled: !!studentId }
-  )
-
-  const semesterResultMap = useMemo(() => {
-    const map: Record<string, (typeof semesterResults)[number]> = {}
-    for (const result of semesterResults) {
-      map[result.semesterId] = result
-    }
-    return map
-  }, [semesterResults])
-
   // Transform data: thêm summary row vào cuối mỗi học kỳ
   const dataWithSummary = useMemo(() => {
     return data
       .filter((s) => !semesterId || semesterId === s.id)
-      .map((semester: any) => {
-        const result = semesterResultMap[semester.id]
+      .map((semester) => {
+        const result = semester.studentSemesterResult[0]
         if (!result) return semester
         return {
           ...semester,
@@ -606,7 +591,7 @@ export default function StudentScoreClassPage() {
           ],
         }
       })
-  }, [data, semesterId, semesterResultMap])
+  }, [data, semesterId])
 
   return (
     <DefaultLayout
@@ -695,6 +680,14 @@ export default function StudentScoreClassPage() {
                     value: s.id,
                   }))}
                 />
+                <Button
+                  type={subjectClassTypeFilter === undefined ? "primary" : "default"}
+                  onClick={() => {
+                    setSubjectClassTypeFilter(undefined)
+                  }}
+                >
+                  Tất cả
+                </Button>
                 <Button
                   type={
                     subjectClassTypeFilter === $Enums.SubjectClassType.RETAKE
@@ -791,7 +784,7 @@ export default function StudentScoreClassPage() {
                   width: 200,
                   render: (value: string, record: any) => {
                     return (
-                      <div className="flex flex-row items-center">
+                      <div className="flex flex-row items-center text-left">
                         <p>
                           {record?.type === $Enums.SubjectClassType.RETAKE ? (
                             <Tag color={"blue"} className="p-0 px-1">
@@ -814,7 +807,7 @@ export default function StudentScoreClassPage() {
                   dataIndex: "attendanceScoreCmp",
                   type: "cmp",
                   width: 100,
-                  render: (_, record: any) => {
+                  render: (_, record) => {
                     if (record.$isSummary) return null
                     return record?.subjectClassStudent?.[0]?.attendanceScore
                   },
@@ -893,9 +886,8 @@ export default function StudentScoreClassPage() {
                   dataIndex: "creditCmp",
                   type: "cmp",
                   width: 100,
-                  render: (_, record: any) => {
-                    // if (record.$isSummary) return <b>{record.semesterResult.registeredCredits}</b>
-                    return record?.subjectClassStudent?.[0]?.subjectVersion.credit
+                  render: (_, record) => {
+                    return record?.subject?.credit
                   },
                 },
                 {
@@ -904,10 +896,7 @@ export default function StudentScoreClassPage() {
                   dataIndex: "finalScoreCmp",
                   type: "cmp",
                   width: 100,
-                  render: (_, record: any) => {
-                    // if (record.$isSummary) {
-                    //     return <b>{Number(record.semesterResult.gpaBase10)}</b>
-                    // }
+                  render: (_, record) => {
                     const subjectClassStudent = record?.subjectClassStudent?.[0]
                     return (
                       subjectClassStudent?.manualFinalScore ??
@@ -921,10 +910,7 @@ export default function StudentScoreClassPage() {
                   align: "center",
                   dataIndex: "finalScore4",
                   width: 100,
-                  render: (_, record: any) => {
-                    // if (record.$isSummary) {
-                    //     return <b>{Number(record.semesterResult.gpaBase4)}</b>
-                    // }
+                  render: (_, record) => {
                     const subjectClassStudent = record?.subjectClassStudent?.[0]
                     const score =
                       subjectClassStudent?.manualFinalScore ||
@@ -956,7 +942,7 @@ export default function StudentScoreClassPage() {
                   title: "Kết quả",
                   align: "center",
                   width: 100,
-                  render: (_: any, record: any) => {
+                  render: (_: any, record) => {
                     // if (record.$isSummary) {
                     //     return (
                     //         <b>
@@ -966,10 +952,11 @@ export default function StudentScoreClassPage() {
                     // }
                     const subjectClassStudent = record.subjectClassStudent?.[0]
                     const score =
-                      subjectClassStudent?.manualFinalScore ?? subjectClassStudent?.finalScore
+                      subjectClassStudent?.manualFinalScore ??
+                      subjectClassStudent?.finalScore?.toNumber()
 
                     if (score === undefined || score === null) return null
-                    const result = convertScore(score.toNumber())
+                    const result = convertScore(score)
 
                     return (
                       <div className="flex items-center justify-center">
@@ -987,13 +974,14 @@ export default function StudentScoreClassPage() {
                   align: "center",
                   dataIndex: ["subjectClassStudent", "0", "description"],
                   width: 200,
-                  render: (value: string, record: any) => {
+                  render: (value: string, record) => {
                     if (record.$isSummary) {
                       const r = record.semesterResult
                       return (
                         <span className="font-semibold text-xs">
-                          TL hệ 10: {Number(r.cumulativeGpaBase10)} | TL hệ 4:{" "}
-                          {Number(r.cumulativeGpaBase4)}
+                          TBHK: {r.gpaBase10?.toFixed(2)} | TBTL10:{" "}
+                          {r.cumulativeGpaBase10?.toFixed(2)} | TBTL4:{" "}
+                          {r.cumulativeGpaBase4?.toFixed(2)}
                         </span>
                       )
                     }

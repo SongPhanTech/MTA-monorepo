@@ -222,14 +222,10 @@ export default function PhanCongGiangDay({
                 },
               }
             : {},
-        ...(trainingCourseId && type === "NORMAL"
-          ? {
-              OR: [
-                { fixedClasses: { some: { trainingCourseId } } },
-                { fixedClasses: { none: {} } },
-              ],
-            }
-          : {}),
+        fixedClasses:
+          trainingCourseId && type === "NORMAL"
+            ? { some: { trainingCourseId } }
+            : { some: {} },
         ...(fixedClassId
           ? {
               fixedClasses: {
@@ -1167,9 +1163,23 @@ export default function PhanCongGiangDay({
                       trigger="click"
                       placement="bottomRight"
                     >
-                      <Button type="primary" className="bg-red-500">
-                        1.Báo dạy
-                      </Button>
+                      <Tooltip
+                        title={
+                          Object.values(subjectClassForm).some((sc) => !sc.trainingLocationId)
+                            ? "Vui lòng nhập khu vực đào tạo cho tất cả lớp môn học trước khi báo dạy"
+                            : undefined
+                        }
+                      >
+                        <Button
+                          type="primary"
+                          className="bg-red-500"
+                          disabled={Object.values(subjectClassForm).some(
+                            (sc) => !sc.trainingLocationId
+                          )}
+                        >
+                          1.Báo dạy
+                        </Button>
+                      </Tooltip>
                     </Popover>
                   )}
                   {!khoaBoMon &&
@@ -1780,11 +1790,11 @@ export default function PhanCongGiangDay({
                   render: (__, record) =>
                     !subjectClassForm?.[record.id]?.cancelled &&
                     (role === "P2_KHCT"
+                      ? true
+                      : !khoaBoMon
                         ? true
-                        : !khoaBoMon
-                          ? true
-                          : !record?.submitLecturerAssignmentAt && !record?.approveLecturerAssignmentAt
-                      ) ? (
+                        : !record?.submitLecturerAssignmentAt &&
+                          !record?.approveLecturerAssignmentAt) ? (
                       <FormItem form={form} name={["subjectClass", record.id, "lecturerId"]}>
                         <LectureTreeSelect
                           placeholder="Chọn giảng viên"
@@ -1816,11 +1826,11 @@ export default function PhanCongGiangDay({
                   render: (__, record) =>
                     !subjectClassForm?.[record.id]?.cancelled &&
                     (role === "P2_KHCT"
+                      ? true
+                      : !khoaBoMon
                         ? true
-                        : !khoaBoMon
-                          ? true
-                          : !record?.submitLecturerAssignmentAt && !record?.approveLecturerAssignmentAt
-                      ) ? (
+                        : !record?.submitLecturerAssignmentAt &&
+                          !record?.approveLecturerAssignmentAt) ? (
                       <FormItem form={form} name={["subjectClass", record.id, "extraLecturerId"]}>
                         <LectureTreeSelect
                           placeholder="Chọn giảng viên"
@@ -1850,11 +1860,11 @@ export default function PhanCongGiangDay({
                   render: (__, record) =>
                     !subjectClassForm?.[record.id]?.cancelled &&
                     (role === "P2_KHCT"
+                      ? true
+                      : !khoaBoMon
                         ? true
-                        : !khoaBoMon
-                          ? true
-                          : !record?.submitLecturerAssignmentAt && !record?.approveLecturerAssignmentAt
-                      ) ? (
+                        : !record?.submitLecturerAssignmentAt &&
+                          !record?.approveLecturerAssignmentAt) ? (
                       <FormItem
                         form={form}
                         name={["subjectClass", record.id, "enterGradeLecturerId"]}
@@ -1884,7 +1894,11 @@ export default function PhanCongGiangDay({
                   dataIndex: "examType",
                   render: (__, record) => (
                     // khoaBoMon ? (
-                    <FormItem form={form} name={["subjectClass", record.id, "examType"]}>
+                    <FormItem
+                      form={form}
+                      name={["subjectClass", record.id, "examType"]}
+                      initialValue={getExamTypeLabel(record.examType)}
+                    >
                       <Select
                         dropdownStyle={{
                           width: 250,
@@ -1902,11 +1916,6 @@ export default function PhanCongGiangDay({
                       />
                     </FormItem>
                   ),
-                  // ) : (
-                  //     !!record.submitLecturerAssignmentAt &&
-                  //     record.examType &&
-                  //     getExamTypeLabel(record.examType)
-                  // ),
                 },
                 {
                   title: "Khu vực",

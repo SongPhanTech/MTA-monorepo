@@ -1910,6 +1910,7 @@ model DM_DonVi {
   sThietBiTao          String?
   sThietBiSua          String?
   sCode                String?
+  /// mã TKBU
   sTKPUCode            String?
   sTenVietTat          String?
   sParentId            String?            @db.Uuid()
@@ -3356,7 +3357,7 @@ model SubjectClass {
   submitLecturerAssignmentAt  DateTime?
   approveLecturerAssignmentAt DateTime?
   examDate                    DateTime?
-  examType                    ExamType?
+  examType                    ExamType
   exam                        Exam?                    @relation(fields: [examId], references: [id])
   examId                      String?
   /// ngày bắt đầu nhập điểm TX/ĐK

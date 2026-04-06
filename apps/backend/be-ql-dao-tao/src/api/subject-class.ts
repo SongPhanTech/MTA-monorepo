@@ -500,6 +500,52 @@ const exportSubjectClassScore = createRoute({
   },
 })
 
+const exportSubjectClassListExcel = createRoute({
+  operationId: "exportSubjectClassListExcel",
+  path: "/export-subject-class-list-excel",
+  method: "get",
+  tags: ["SubjectClass"],
+  summary: "Xuất Excel danh sách lớp môn học",
+  request: {
+    query: z.object({
+      trainingObjectTypeId: z.string().openapi("trainingObjectTypeId", {
+        description: "ID loại đối tượng đào tạo",
+      }),
+      semesterId: z
+        .string()
+        .openapi("semesterId", { description: "ID học kỳ" }),
+      fixedClassId: z
+        .string()
+        .optional()
+        .openapi("fixedClassId", { description: "ID lớp quản lý" }),
+      searchText: z
+        .string()
+        .optional()
+        .openapi("searchText", { description: "Từ khoá tìm kiếm" }),
+    }),
+  },
+  responses: {
+    200: {
+      description: "Xuất danh sách lớp môn học thành công",
+      content: {
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+          schema: z.any().openapi({ type: "string", format: "binary" }),
+        },
+      },
+    },
+    404: {
+      description: "Không tìm thấy dữ liệu",
+      content: {
+        "application/json": {
+          schema: z.object({
+            message: z.string(),
+          }),
+        },
+      },
+    },
+  },
+})
+
 app.openapi(openSubjectClass, async (c) => {
   const {
     semesterId,
@@ -1611,6 +1657,175 @@ app.openapi(uploadExcelImportScore, async (c) => {
   console.log(`Total records updated: ${totalUpdated}`)
 
   return c.json({ data: updateResults, count: totalUpdated }, 200)
+})
+
+app.openapi(exportSubjectClassListExcel, async (c) => {
+  const { trainingObjectTypeId, semesterId, fixedClassId, searchText } =
+    c.req.valid("query")
+
+  try {
+    const subjectClasses = await prisma.subjectClass.findMany({
+      where: {
+        trainingObjectTypeId,
+        semesterId,
+        ...(searchText
+          ? {
+              OR: [
+                {
+                  name: {
+                    contains: searchText,
+                    mode: "insensitive",
+                  },
+                },
+                {
+                  code: {
+                    contains: searchText,
+                    mode: "insensitive",
+                  },
+                },
+              ],
+            }
+          : {}),
+        ...(fixedClassId
+          ? {
+              fixedClasses: {
+                some: {
+                  id: fixedClassId,
+                },
+              },
+            }
+          : {}),
+        deletedAt: null,
+        cancelled: false,
+        active: true,
+        status: "OFFICIAL",
+      },
+      include: {
+        subject: {
+          include: {
+            managementOrganization: true,
+          },
+        },
+        exam: {
+          select: {
+            id: true,
+            lockExamSessions: true,
+            examRooms: {
+              select: {
+                id: true,
+                room: {
+                  select: {
+                    name: true,
+                  },
+                },
+                examList: {
+                  select: {
+                    id: true,
+                    lockExamCode: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+        mainLecturer: {
+          include: {
+            userProfile: true,
+          },
+        },
+        extraLecturer: {
+          include: {
+            userProfile: true,
+          },
+        },
+        enterGradeLecturer: {
+          include: {
+            userProfile: true,
+          },
+        },
+        fixedClasses: {
+          select: {
+            code: true,
+          },
+        },
+        _count: {
+          select: {
+            subjectClassStudent: true,
+          },
+        },
+      },
+      orderBy: {
+        code: "asc",
+      },
+    });
+
+    if (!subjectClasses.length) {
+      throw new Error("Không có dữ liệu lớp môn học để xuất")
+    }
+
+    const templateFileName = "DS_LOP_MON_HOC.xlsx";
+    const res = await fetch(getMinioUrl(`/mta/template/${templateFileName}`))
+    if (!res.ok) {
+      throw new Error("Không lấy được file mẫu xuất Excel")
+    }
+
+    const templateBuffer = await res.arrayBuffer()
+    const template = new XlsxTemplate(Buffer.from(templateBuffer))
+
+    const data = subjectClasses.map((item, idx) => ({
+      no: idx + 1,
+      code: item.code || "",
+      name: item.subject?.name || "",
+      examType:
+        examTypeOptions.find((et) => et.value === item.subject?.examType)
+          ?.label || "", // hình thức thi
+      status: item.enteredExamScore
+        ? "Đã nhập điểm thi"
+        : item.enteredScore
+          ? "Đã nhập điểm TX,ĐK"
+          : "Chưa nhập điểm", // trạng thái nhập điểm
+      onePoint: item.subject?.onePoint ? "1" : "", // môn 1 đầu điểm
+      deadLineStart: item.scoreDeadLineStart
+        ? dayjs(item.scoreDeadLineStart).format("DD/MM/YYYY")
+        : "", // ngày NĐQT
+      deadLine: item.scoreDeadline
+        ? dayjs(item.scoreDeadline).format("DD/MM/YYYY")
+        : "", // hạn NĐQT
+      examDate: item.examDate ? dayjs(item.examDate).format("DD/MM/YYYY") : "",
+      examScoreDeadline: item.examScoreDeadline
+        ? dayjs(item.examScoreDeadline).format("DD/MM/YYYY")
+        : "", // hạn nhập điểm thi
+      mainLecturer: item.mainLecturer?.userProfile?.fullname || "",
+      secondLecturer: item.extraLecturer?.userProfile?.fullname || "",
+      enterGradeLecturer: item.enterGradeLecturer?.userProfile?.fullname || "",
+      managementOrganization: item.subject?.managementOrganization?.sMa || "", // đơn vị quản lý
+      isLockScore: item.isLockScore ? "1" : "", // khóa ĐQT
+      lockExamSessions: item.exam?.lockExamSessions ? "1" : "", // khóa DS thi
+      lockExamCode: item.exam?.examRooms?.[0]?.examList?.[0]?.lockExamCode
+        ? "1"
+        : "", // khóa phách
+      isLockExamScore: item.isLockExamScore ? "1" : "", // p13 đã khóa
+      scoreSubmitted: item.scoreSubmitted ? "1" : "", // p13 đã nhận phiếu điểm
+      scoreChecked: item.scoreChecked ? "1" : "", // p2/p7 đã kiểm tra
+    }));
+
+    template.substitute(1, { data })
+
+    const result = await template.generate({ type: "arraybuffer" })
+    const fileName = "Danh_sach_lop_mon_hoc.xlsx"
+    const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
+
+    return c.body(result, 200, {
+      "Content-Type":
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "Content-Disposition": disposition,
+    });
+  } catch (error: any) {
+    return c.json(
+      { message: error?.message || "Đã xảy ra lỗi khi xuất Excel" },
+      404,
+    );
+  }
 })
 
 app.openapi(exportSubjectClassScore, async (c) => {

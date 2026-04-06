@@ -804,11 +804,11 @@ app.openapi(graduationCheck, async (c) => {
         const rankDowngrade = sortedRankLevels[rankIdx + 1] || null
 
         if (downgrade) {
-          const reason = downgrade.conditions
+          const reason = `Bị hạ bậc: ${downgrade.conditions
             .map((rule) => {
               return `${criteriaFieldLabels[rule.field]} ${criteriaOperatorLabels[rule.operator]} ${rule.value}`
             })
-            .join("\n")
+            .join("\n")}`
           results.push({
             applicationId: application.id,
             graduation: !!rankDowngrade,
