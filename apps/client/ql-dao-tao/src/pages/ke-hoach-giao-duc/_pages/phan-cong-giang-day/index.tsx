@@ -1274,6 +1274,7 @@ export default function PhanCongGiangDay({
                                   },
                                   room: {
                                     select: {
+                                      code: true,
                                       name: true,
                                     },
                                   },
@@ -1352,6 +1353,7 @@ export default function PhanCongGiangDay({
                               }
                             }>
                             room: {
+                              code: string
                               name: string
                             }
                             trainingLocation: {
@@ -1524,7 +1526,9 @@ export default function PhanCongGiangDay({
                                             value: item.extraLecturer?.userProfile?.fullname || "",
                                           },
                                           {
-                                            value: item.room ? item.room.name : "",
+                                            value: item.room
+                                              ? item.room.code || item.room.name
+                                              : "",
                                           },
                                           {
                                             value: item.examType
