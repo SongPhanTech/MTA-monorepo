@@ -407,6 +407,7 @@ const importFileGiaoVienCoGioGiay = async (
               startDate: subjectClass.ngayBatDau ?? existSubjectClass.startDate,
               endDate: subjectClass.ngayKetThuc ?? existSubjectClass.endDate,
               examDate: subjectClass.ngayThi ?? existSubjectClass.examDate,
+              roomId: subjectClass?.phongHoc ?? existSubjectClass.roomId,
               fixedClasses: {
                 set: subjectClass.lopNienChe.map((e) => ({
                   id: e,
