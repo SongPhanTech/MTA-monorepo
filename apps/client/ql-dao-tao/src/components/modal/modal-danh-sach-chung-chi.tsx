@@ -289,7 +289,6 @@ const ModalDanhSachChungChi = () => {
           {
             title: "Trạng thái",
             dataIndex: "status",
-            fixed: "right",
             width: 150,
             align: "center",
             render: (status: $Enums.ArchivedCertificateStatus) => {
