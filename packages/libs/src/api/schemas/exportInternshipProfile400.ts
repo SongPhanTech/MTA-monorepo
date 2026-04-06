@@ -6,5 +6,5 @@
  */
 
 export type ExportInternshipProfile400 = {
-    message: string
-}
+  message: string;
+};

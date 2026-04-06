@@ -4,26 +4,26 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { TrainingCourseId } from './trainingCourseId'
-import type { TrainingMajorId } from './trainingMajorId'
-import type { Search } from './search'
-import type { TrainingObjectTypeId } from './trainingObjectTypeId'
-import type { SemesterId } from './semesterId'
-import type { ViewAll } from './viewAll'
+import type { TrainingCourseId } from './trainingCourseId';
+import type { TrainingMajorId } from './trainingMajorId';
+import type { Search } from './search';
+import type { TrainingObjectTypeId } from './trainingObjectTypeId';
+import type { SemesterId } from './semesterId';
+import type { ViewAll } from './viewAll';
 
 export type OpenSubjectClassRetakeParams = {
-    /**
-     * @nullable
-     */
-    page?: number | null
-    /**
-     * @nullable
-     */
-    limit?: number | null
-    trainingCourseId: TrainingCourseId
-    trainingMajorId?: TrainingMajorId
-    search?: Search
-    trainingObjectTypeId: TrainingObjectTypeId
-    semesterId: SemesterId
-    viewAll?: ViewAll
-}
+/**
+ * @nullable
+ */
+page?: number | null;
+/**
+ * @nullable
+ */
+limit?: number | null;
+trainingCourseId: TrainingCourseId;
+trainingMajorId?: TrainingMajorId;
+search?: Search;
+trainingObjectTypeId: TrainingObjectTypeId;
+semesterId: SemesterId;
+viewAll?: ViewAll;
+};

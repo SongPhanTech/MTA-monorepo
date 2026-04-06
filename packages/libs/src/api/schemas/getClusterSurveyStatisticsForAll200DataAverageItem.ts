@@ -6,6 +6,6 @@
  */
 
 export type GetClusterSurveyStatisticsForAll200DataAverageItem = {
-    totalRate: number
-    average: number
-}
+  totalRate: number;
+  average: number;
+};

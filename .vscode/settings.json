@@ -1,9 +1,11 @@
 {
     "editor.defaultFormatter": "oxc.oxc-vscode",
     "editor.formatOnSave": false,
+    "editor.formatOnSaveMode": "file",
+    "oxc.enable.oxlint": false,
     "editor.codeActionsOnSave": {
         "source.format.oxc": "explicit",
-        "source.fixAll.oxc": "explicit" 
+        "source.fixAll.oxc": "explicit"
     },
     "cSpell.words": [
         "blankrows",
@@ -29,19 +31,16 @@
     "[go]": {
         "editor.defaultFormatter": "golang.go"
     },
-    "[typescriptreact]": {
-        "editor.defaultFormatter": "biomejs.biome"
-    },
     "[sql]": {
         "editor.defaultFormatter": "inferrinizzard.prettier-sql-vscode"
     },
     "[jsonc]": {
-        "editor.defaultFormatter": "vscode.json-language-features"
+        "editor.defaultFormatter": "oxc.oxc-vscode"
     },
     "[caddyfile]": {
         "editor.defaultFormatter": "matthewpi.caddyfile-support"
     },
     "[typescript]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    }
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
 }

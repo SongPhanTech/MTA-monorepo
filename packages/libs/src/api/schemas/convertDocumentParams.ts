@@ -6,8 +6,8 @@
  */
 
 export type ConvertDocumentParams = {
-    url: string
-    fileType: string
-    outputtype: string
-    title?: string
-}
+url: string;
+fileType: string;
+outputtype: string;
+title?: string;
+};

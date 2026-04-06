@@ -55,34 +55,34 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  * Xã, phường
  */
 export interface PublicApiGetAllDMXaPhuongDTO {
-    Id?: string
-    /**
-     * Mã
-     * @nullable
-     */
-    sMa?: string | null
-    /**
-     * Tên
-     * @nullable
-     */
-    sTen?: string | null
-    /** @nullable */
-    sDM_TinhId?: string | null
-    /** @nullable */
-    sDM_QuanHuyenId?: string | null
-    /**
-     * Quận, huyện
-     * @nullable
-     */
-    sTenQuanHuyen?: string | null
-    /**
-     * Tỉnh
-     * @nullable
-     */
-    sTenTinh?: string | null
-    /**
-     * Quốc gia
-     * @nullable
-     */
-    sTenQuocGia?: string | null
+  Id?: string;
+  /**
+   * Mã
+   * @nullable
+   */
+  sMa?: string | null;
+  /**
+   * Tên
+   * @nullable
+   */
+  sTen?: string | null;
+  /** @nullable */
+  sDM_TinhId?: string | null;
+  /** @nullable */
+  sDM_QuanHuyenId?: string | null;
+  /**
+   * Quận, huyện
+   * @nullable
+   */
+  sTenQuanHuyen?: string | null;
+  /**
+   * Tỉnh
+   * @nullable
+   */
+  sTenTinh?: string | null;
+  /**
+   * Quốc gia
+   * @nullable
+   */
+  sTenQuocGia?: string | null;
 }

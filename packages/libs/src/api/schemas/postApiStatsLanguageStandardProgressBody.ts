@@ -6,5 +6,5 @@
  */
 
 export type PostApiStatsLanguageStandardProgressBody = {
-    preview?: boolean
-}
+  preview?: boolean;
+};

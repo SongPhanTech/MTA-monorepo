@@ -1,10 +1,11 @@
 import { useFindManyDM_DonVi, useFindManyLecturer } from "@workspace/db/hooks"
 import { formatLecturerName } from "@workspace/libs"
-import { message, TreeSelect as TreeSelectAnt, type TreeSelectProps } from "antd"
+import { message, TreeSelect as TreeSelectAnt, type TreeSelectProps, Switch, Divider } from "antd"
 import { UserIcon } from "lucide-react"
 import type React from "react"
-import { useEffect, useMemo } from "react"
+import { useEffect, useMemo, useState } from "react"
 import type { TreeNodeType } from "@/utils/convertOrganizationToTree"
+import { whereOrganization } from "@workspace/libs/constants"
 
 // Hàm tạo cây đơn vị và giảng viên
 function buildOrgAndLectureTree(
@@ -51,13 +52,15 @@ const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
   organizationId,
   ...rest
 }) => {
+  const [isSelectAllOrgs, setIsSelectAllOrgs] = useState(false)
+
   // Lấy danh sách Organization (Khoa và Bộ môn)
   const {
     data: organizations = [],
     isLoading: organizationsLoading,
     error: organizationsError,
   } = useFindManyDM_DonVi({
-    where: {},
+    where: whereOrganization,
     orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
   })
 
@@ -90,26 +93,50 @@ const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
   const treeData: TreeNodeType[] = useMemo(() => {
     if (!organizations.length) return []
 
+    const mappedOrgs = organizations
+      .filter((org) => (rest.ignoreOrgIds ? !rest.ignoreOrgIds.includes(org.Id) : true))
+      .map((org) => ({
+        id: org.Id,
+        name: org.sTen,
+        parentId: org.sParentId,
+      }))
+
+    const mappedLecturers = lecturers
+      .filter((lec) => (rest.ignoreLectureIds ? !rest.ignoreLectureIds.includes(lec.id) : true))
+      .map((lec) => ({
+        id: lec.id,
+        userProfile: {
+          fullName: formatLecturerName(lec),
+        },
+        organizationId: lec.organizationId,
+      }))
+
     return buildOrgAndLectureTree(
-      organizations
-        .filter((org) => (rest.ignoreOrgIds ? !rest.ignoreOrgIds.includes(org.Id) : true))
-        .map((org) => ({
-          id: org.Id,
-          name: org.sTen,
-          parentId: org.sParentId,
-        })),
-      lecturers
-        .filter((lec) => (rest.ignoreLectureIds ? !rest.ignoreLectureIds.includes(lec.id) : true))
-        .map((lec) => ({
-          id: lec.id,
-          userProfile: {
-            fullName: formatLecturerName(lec),
-          },
-          organizationId: lec.organizationId,
-        })),
-      organizationId ?? null
+      mappedOrgs,
+      mappedLecturers,
+      isSelectAllOrgs ? null : (organizationId ?? null)
     )
-  }, [organizations, lecturers, organizationId, rest.ignoreOrgIds, rest.ignoreLectureIds])
+  }, [
+    organizations,
+    lecturers,
+    organizationId,
+    rest.ignoreOrgIds,
+    rest.ignoreLectureIds,
+    isSelectAllOrgs,
+  ])
+
+  // Nếu giá trị đang được chọn thuộc GV từ đơn vị khác, tự động bật "toàn học viện"
+  useEffect(() => {
+    const selectedValue = rest.value as string | undefined
+    if (selectedValue && !isSelectAllOrgs && organizationId && lecturers.length > 0) {
+      const isInCurrentOrg = lecturers.some(
+        (l) => l.id === selectedValue && l.organizationId === organizationId
+      )
+      if (!isInCurrentOrg) {
+        setIsSelectAllOrgs(true)
+      }
+    }
+  }, [rest.value, lecturers, organizationId, isSelectAllOrgs])
 
   // Xử lý lỗi
   useEffect(() => {
@@ -138,6 +165,16 @@ const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
       showCheckedStrategy="SHOW_CHILD"
       placeholder="Chọn giảng viên"
       loading={organizationsLoading || lecturersLoading}
+      dropdownRender={(menu) => (
+        <>
+          <div className="flex items-center justify-between px-3 py-2">
+            <span className="text-sm font-medium">Hiển thị giảng viên toàn học viện</span>
+            <Switch size="small" checked={isSelectAllOrgs} onChange={setIsSelectAllOrgs} />
+          </div>
+          <Divider style={{ margin: 0 }} />
+          {menu}
+        </>
+      )}
       {...rest}
     />
   )

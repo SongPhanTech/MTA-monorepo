@@ -93,6 +93,14 @@ const DanhSachMonDangKy = ({
     byCurriculum: byCurriculum === 1 ? "true" : "false",
     isRegistered: "false",
   })
+
+  const registeredClasses =
+    classesInfo?.status === 200
+      ? classesInfo.data
+          ?.flatMap((e) => e?.subjectClass)
+          ?.filter((sc) => (sc?.classRegisterLogs?.length || 0) > 0)
+      : []
+
   const { mutateAsync: classRegisterMutate, isPending: isPendingClassRegister } = useMutation({
     mutationFn: async (subjectClassIds: string[]) => {
       const res = await classRegister({
@@ -107,17 +115,15 @@ const DanhSachMonDangKy = ({
 
       return res
     },
-
     onSuccess: () => {
       refetchClassesInfo()
-      refetchClassesRegisteredInfo()
       message.success("Đăng ký thành công")
     },
-
     onError: (error: any) => {
       message.error(error?.message || "Đăng ký thất bại")
     },
   })
+
   const { mutateAsync: unregisterMutate, isPending: isUnregistering } = useMutation({
     mutationFn: async (subjectClassId: string) => {
       const res = await classUnregister({
@@ -134,17 +140,10 @@ const DanhSachMonDangKy = ({
     onSuccess: () => {
       message.success("Huỷ đăng ký thành công")
       refetchClassesInfo()
-      refetchClassesRegisteredInfo()
     },
     onError: (error: any) => {
       message.error(error?.message || "Huỷ đăng ký thất bại")
     },
-  })
-  const { data: classesRegisteredInfo, refetch: refetchClassesRegisteredInfo } = useGetClassesInfo({
-    sessionId,
-    curriculumVersionId,
-    byCurriculum: "false",
-    isRegistered: "true",
   })
 
   const handleClassRegister = (subjectClassIds: string[]) => {
@@ -254,7 +253,7 @@ const DanhSachMonDangKy = ({
               align: "center",
               width: 80,
               render: (_, record) =>
-                `${record?.subjectClassStudent?.length || 0}/${record?.maxStudent}`,
+                `${record?._count?.subjectClassStudent || 0}/${record?.maxStudent}`,
             },
             {
               title: "Thời khoá biểu",
@@ -287,9 +286,23 @@ const DanhSachMonDangKy = ({
               fixed: "right",
               render: (_, record) => {
                 const isMaxed =
-                  (record?.maxStudent || 0) <= (record?.subjectClassStudent?.length || 0)
-                const isRegisteredBool = record?.subjectClassStudent?.length > 0
-                const isDisabled = isMaxed || isRegisteredBool || isPendingClassRegister
+                  (record?.maxStudent || 0) <= (record?._count?.subjectClassStudent || 0)
+                const isRegisteredBool = (record?.classRegisterLogs?.length || 0) > 0
+                const totalRegisteredCredit =
+                  registeredClasses?.reduce(
+                    (acc: number, curr: GetClassesInfo200ItemSubjectClassItem) =>
+                      acc + (curr?.credit || 0),
+                    0
+                  ) ?? 0
+
+                const isOverMaxCredit = creditLimit.some(
+                  (limit) =>
+                    limit?.maxCredit != null &&
+                    totalRegisteredCredit + (record?.credit ?? 0) > limit.maxCredit
+                )
+                const isDisabled =
+                  isMaxed || isRegisteredBool || isPendingClassRegister || isOverMaxCredit
+
                 return (
                   <Button
                     disabled={isDisabled}
@@ -313,10 +326,7 @@ const DanhSachMonDangKy = ({
           onRow={(record) => {
             const r = record as unknown as GetClassesInfo200ItemSubjectClassItem
             return {
-              className:
-                r?.classRegisterLogs?.map?.((e) => e?.student?.userProfileId).length > 0
-                  ? "bg-green-200"
-                  : "",
+              className: (r?.classRegisterLogs?.length || 0) > 0 ? "bg-green-200" : "",
             }
           }}
           headerTitleKey={(record) => [record?.code, record?.name].filter(Boolean).join(" - ")}
@@ -327,26 +337,28 @@ const DanhSachMonDangKy = ({
 
       <div className="flex gap-2 items-center">
         <b className="text-lg">Danh sách môn học đã đăng ký</b>
-        {classesRegisteredInfo?.status === 200 && (
+        {classesInfo?.status === 200 && (
           <p>
-            Bạn đã đăng ký{" "}
-            <b>{classesRegisteredInfo?.data?.flatMap?.((e) => e?.subjectClass)?.length || 0}</b> học
-            phần,{" "}
+            Bạn đã đăng ký <b>{registeredClasses?.length || 0}</b> học phần,{" "}
             <b>
-              {classesRegisteredInfo?.data
-                ?.flatMap?.((e) => e?.subjectClass)
-                .reduce((acc, curr) => acc + (curr?.credit || 0), 0)}
+              {registeredClasses?.reduce(
+                (acc: number, curr: GetClassesInfo200ItemSubjectClassItem) =>
+                  acc + (curr?.credit || 0),
+                0
+              )}
             </b>{" "}
             tín chỉ, học phí{" "}
             {(
-              classesRegisteredInfo?.data
-                ?.flatMap?.((e) => e?.subjectClass)
-                .reduce((acc, curr) => acc + (curr?.credit || 0), 0) * (tuitionPerCredit || 0)
+              (registeredClasses?.reduce(
+                (acc: number, curr: GetClassesInfo200ItemSubjectClassItem) =>
+                  acc + (curr?.credit || 0),
+                0
+              ) ?? 0) * (tuitionPerCredit || 0)
             ).formatVND()}
           </p>
         )}
       </div>
-      {classesRegisteredInfo?.status === 200 && (
+      {classesInfo?.status === 200 && (
         <Table
           columns={[
             {
@@ -454,7 +466,7 @@ const DanhSachMonDangKy = ({
           scroll={{
             x: "max-content",
           }}
-          data={classesRegisteredInfo?.data?.flatMap((e) => e?.subjectClass)}
+          data={registeredClasses}
         />
       )}
     </div>

@@ -13,7 +13,8 @@ import {
 } from "@workspace/db/hooks"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION } from "@workspace/router"
-import { Button, Col, Flex, message, Row } from "antd"
+import { CheckCircleFilled } from "@ant-design/icons"
+import { Button, Col, Flex, message, Row, Tooltip } from "antd"
 import { BookPlus } from "lucide-react"
 import type React from "react"
 import { useMemo, useState } from "react"
@@ -218,7 +219,7 @@ export default function ExpertProfile() {
               {
                 title: "Học hàm",
                 dataIndex: "academicRank",
-                width: 150,
+                width: 100,
                 align: "center",
                 type: "input",
                 render: (__, record) =>
@@ -227,7 +228,7 @@ export default function ExpertProfile() {
               {
                 title: "Hàm vị",
                 dataIndex: "academicDegree",
-                width: 150,
+                width: 100,
                 align: "center",
                 type: "input",
                 render: (__, record) =>
@@ -260,6 +261,23 @@ export default function ExpertProfile() {
                 width: 150,
                 align: "center",
                 type: "input",
+              },
+              {
+                title: "Trong học viện",
+                width: 120,
+                align: "center",
+                type: "input",
+                render: (__, record) => {
+                  const hasUserProfile = Boolean(record.lecturer?.userProfile)
+                  if (!hasUserProfile) return null
+                  return (
+                    <Flex justify="center" align="center">
+                      <Tooltip title="Người trong học viện">
+                        <CheckCircleFilled style={{ color: "#16a34a", fontSize: 18 }} />
+                      </Tooltip>
+                    </Flex>
+                  )
+                },
               },
               {
                 title: "Thao tác",

@@ -19,7 +19,6 @@ import dayjs from "dayjs"
 import "dayjs/locale/vi"
 import DatePicker from "@components/commons/date-picker"
 import Table from "@components/commons/table"
-import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import type { FilterProps } from "@constants/type"
 import DefaultLayout from "@layouts/default-layout"
 import { ROUTER_PATH } from "@workspace/router"
@@ -44,7 +43,6 @@ export default function SettingClass() {
   const [selectedDefenseSessionIds, setSelectedDefenseSessionIds] = useState<string[]>([])
   const [leftData, setLeftData] = useState<ExpertProfile[]>([])
   const [rightData, setRightData] = useState<ExpertProfile[]>([])
-  const [currentPage, setCurrentPage] = useState(1)
   const [filters, setFilters] = useState<FilterProps>({
     code: undefined,
     name: undefined,
@@ -443,7 +441,7 @@ export default function SettingClass() {
       const cand = shuffle(poolFiltered).slice(0, 3)
       // feasibility: after removing these candidates + director + secretary + usedInBatch,
       // ensure enough eligible directors & secretaries remain for remainingCommitteesInBatch
-      const usedIds = new Set<number>([...usedInBatch])
+      const usedIds = new Set<number>(usedInBatch)
       ;[director, secretary, ...cand].forEach((p) => {
         usedIds.add(p.id)
       })
@@ -643,10 +641,10 @@ export default function SettingClass() {
         </Col>
         <Form form={form}>
           <Col span={12}>
-            <FormItem form={form} name="defenseSessionIds" label="Danh sách ca bảo vệ">
+            <FormItem form={form} name="defenseSessionIds" label="Thời gian bảo vệ">
               <Select
                 mode="multiple"
-                placeholder="Chọn danh sách ca bảo vệ"
+                placeholder="Chọn thời gian bảo vệ"
                 options={defenseSession?.map((item) => ({
                   label: `${item.startTime ? dayjs(item.startTime).format("HH:mm") : ""}`,
                   value: item.id,
@@ -713,7 +711,6 @@ export default function SettingClass() {
               filters={filters}
               setFilters={(value) => {
                 setFilters(value)
-                setCurrentPage(1)
               }}
               rowSelection={{
                 selectedRowKeys: selectedLeftKeys,
@@ -725,8 +722,7 @@ export default function SettingClass() {
                   width: 60,
                   align: "center",
                   fixed: "left",
-                  render: (_, __, index: number) =>
-                    index + 1 + (currentPage - 1) * numberOfPages,
+                  render: (_, __, index: number) => index + 1,
                 },
                 {
                   title: "Tên chuyên gia",
@@ -821,8 +817,7 @@ export default function SettingClass() {
                   width: 60,
                   align: "center",
                   fixed: "left",
-                  render: (_, __, index: number) =>
-                    index + 1 + (currentPage - 1) * numberOfPages,
+                  render: (_, __, index: number) => index + 1,
                 },
                 {
                   title: "Tên chuyên gia",

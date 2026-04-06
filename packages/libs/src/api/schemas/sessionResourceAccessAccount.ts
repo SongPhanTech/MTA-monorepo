@@ -6,5 +6,5 @@
  */
 
 export type SessionResourceAccessAccount = {
-    roles: string[]
-}
+  roles: string[];
+};

@@ -5,6 +5,6 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GetSurveyStatisticsToFeild404 = {
-    message: string
-}
+export type ExportSubjectClassListExcel404 = {
+  message: string;
+};

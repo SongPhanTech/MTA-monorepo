@@ -5,7 +5,6 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GetClusterSurveyStatistics200DataAverageItem = {
-    totalRate: number
-    average: number
-}
+export type ExportThoiKhoaBieu404 = {
+  message: string;
+};

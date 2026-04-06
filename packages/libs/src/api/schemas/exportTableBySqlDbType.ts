@@ -5,11 +5,11 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type ExportTableBySqlDbType =
-    (typeof ExportTableBySqlDbType)[keyof typeof ExportTableBySqlDbType]
+export type ExportTableBySqlDbType = typeof ExportTableBySqlDbType[keyof typeof ExportTableBySqlDbType];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ExportTableBySqlDbType = {
-    mysql: 'mysql',
-    mssql: 'mssql',
-} as const
+  mysql: 'mysql',
+  mssql: 'mssql',
+} as const;

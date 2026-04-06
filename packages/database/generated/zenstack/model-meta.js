@@ -5960,6 +5960,10 @@ const metadata = {
                     name: "sCode",
                     type: "String",
                     isOptional: true,
+                }, sTKPUCode: {
+                    name: "sTKPUCode",
+                    type: "String",
+                    isOptional: true,
                 }, sTenVietTat: {
                     name: "sTenVietTat",
                     type: "String",
@@ -8774,6 +8778,21 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'coSupervisor',
+                }, thirdSupervisor: {
+                    name: "thirdSupervisor",
+                    type: "ExpertProfile",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ThirdSupervisorToResearchTopic" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'thirdSupervisorResearchTopic',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "thirdSupervisorId" },
+                }, thirdSupervisorId: {
+                    name: "thirdSupervisorId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'thirdSupervisor',
                 }, reportDate: {
                     name: "reportDate",
                     type: "DateTime",
@@ -9812,6 +9831,10 @@ const metadata = {
                     name: "maxTrainingTime",
                     type: "Float",
                     isOptional: true,
+                }, isRetakeExam: {
+                    name: "isRetakeExam",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, admissionQuota: {
                     name: "admissionQuota",
                     type: "Int",
@@ -11943,7 +11966,6 @@ const metadata = {
                 }, examType: {
                     name: "examType",
                     type: "ExamType",
-                    isOptional: true,
                 }, exam: {
                     name: "exam",
                     type: "Exam",
@@ -18109,6 +18131,14 @@ const metadata = {
                     name: "chief",
                     type: "String",
                     isOptional: true,
+                }, topicEntryDeadline: {
+                    name: "topicEntryDeadline",
+                    type: "DateTime",
+                    isOptional: true,
+                }, councilDeadline: {
+                    name: "councilDeadline",
+                    type: "DateTime",
+                    isOptional: true,
                 }, thesisProject: {
                     name: "thesisProject",
                     type: "ThesisProject",
@@ -18236,6 +18266,10 @@ const metadata = {
                     type: "String",
                     isOptional: true,
                     attributes: [{ "name": "@db.Text", "args": [] }],
+                }, researchTopicAssociated: {
+                    name: "researchTopicAssociated",
+                    type: "String",
+                    isOptional: true,
                 }, firstCheckProgress: {
                     name: "firstCheckProgress",
                     type: "Int",
@@ -18278,6 +18312,37 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'secondarySupervisor',
+                }, thirdSupervisor: {
+                    name: "thirdSupervisor",
+                    type: "ExpertProfile",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ThirdSupervisorToThesis" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'thirdSupervisedTheses',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "thirdSupervisorId" },
+                }, thirdSupervisorId: {
+                    name: "thirdSupervisorId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'thirdSupervisor',
+                }, isProductProject: {
+                    name: "isProductProject",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, isGroupProject: {
+                    name: "isGroupProject",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, isLanguage: {
+                    name: "isLanguage",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, externalUnit: {
+                    name: "externalUnit",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, subjectClass: {
                     name: "subjectClass",
                     type: "SubjectClass",
@@ -18844,9 +18909,11 @@ const metadata = {
                 }, eligiblePresident: {
                     name: "eligiblePresident",
                     type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, eligibleSecretary: {
                     name: "eligibleSecretary",
                     type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, supervisedTheses: {
                     name: "supervisedTheses",
                     type: "ThesisProject",
@@ -18861,6 +18928,13 @@ const metadata = {
                     isArray: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "CoSupervisorToThesis" }] }],
                     backLink: 'coSupervisor',
+                }, thirdSupervisedTheses: {
+                    name: "thirdSupervisedTheses",
+                    type: "ThesisProject",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ThirdSupervisorToThesis" }] }],
+                    backLink: 'thirdSupervisor',
                 }, supervisorResearchTopic: {
                     name: "supervisorResearchTopic",
                     type: "StudentResearchTopic",
@@ -18875,6 +18949,13 @@ const metadata = {
                     isArray: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "CoSupervisorToResearchTopic" }] }],
                     backLink: 'coSupervisor',
+                }, thirdSupervisorResearchTopic: {
+                    name: "thirdSupervisorResearchTopic",
+                    type: "StudentResearchTopic",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ThirdSupervisorToResearchTopic" }] }],
+                    backLink: 'thirdSupervisor',
                 }, supervisorInternship: {
                     name: "supervisorInternship",
                     type: "StudentInternship",

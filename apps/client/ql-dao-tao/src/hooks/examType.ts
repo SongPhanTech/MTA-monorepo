@@ -7,18 +7,27 @@ export type ExamTypeOption = {
 }
 
 export enum ExamTypeExportPCGD {
-  ORAL = "VD",
+  ORAL = "VĐ",
+  OfflineWritten = "TV",
+  Practice = "TH",
+  OnlineWritten = "TT",
 }
 
 export const useExamTypeOptions = () => {
+  const exportPCGDMap: Partial<Record<ExamType, ExamTypeExportPCGD>> = {
+    [ExamType.Oral]: ExamTypeExportPCGD.ORAL,
+    [ExamType.OfflineWritten]: ExamTypeExportPCGD.OfflineWritten,
+    [ExamType.Practice]: ExamTypeExportPCGD.Practice,
+    [ExamType.OnlineWritten]: ExamTypeExportPCGD.OnlineWritten,
+  }
+
   const getExamTypeLabel = (
     value: ExamType | null | undefined,
     options?: { exportPCGD?: boolean }
   ): string => {
-    if (options?.exportPCGD && value === ExamType.Oral) return ExamTypeExportPCGD.ORAL
+    if (options?.exportPCGD && value && exportPCGDMap[value]) return exportPCGDMap[value]!
 
-    const examTypeLabel = examTypeOptions.find((opt) => opt.value === value)?.label || ""
-    return examTypeLabel
+    return examTypeOptions.find((opt) => opt.value === value)?.label ?? ""
   }
 
   return {

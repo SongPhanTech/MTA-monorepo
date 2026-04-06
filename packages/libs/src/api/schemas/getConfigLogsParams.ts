@@ -6,5 +6,5 @@
  */
 
 export type GetConfigLogsParams = {
-    apiId: string
-}
+apiId: string;
+};

@@ -55,15 +55,15 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  * Phân cấp chất lượng TTB
  */
 export interface PublicApiGetAllDMPhanCapChatLuongTTBDTO {
-    Id?: string
-    /**
-     * Mã
-     * @nullable
-     */
-    sMa?: string | null
-    /**
-     * Tên
-     * @nullable
-     */
-    sTen?: string | null
+  Id?: string;
+  /**
+   * Mã
+   * @nullable
+   */
+  sMa?: string | null;
+  /**
+   * Tên
+   * @nullable
+   */
+  sTen?: string | null;
 }

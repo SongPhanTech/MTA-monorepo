@@ -55,10 +55,10 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  * Trình độ tin học
  */
 export interface PublicApiGetAllDMTrinhDoTinHocDTO {
-    Id?: string
-    /**
-     * Tên
-     * @nullable
-     */
-    sTen?: string | null
+  Id?: string;
+  /**
+   * Tên
+   * @nullable
+   */
+  sTen?: string | null;
 }

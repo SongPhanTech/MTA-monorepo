@@ -197,7 +197,13 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
       finalRanking: true,
       student: {
         include: {
-          userProfile: true,
+          userProfile: {
+            include: {
+              gender: true,
+              ethnicity: true,
+              newProvinceHometown: true,
+            },
+          },
           curriculumVersion: {
             include: {
               diplomaType: true,
@@ -698,13 +704,14 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                 dataIndex: ["student", "userProfile", "gender"],
                 align: "center",
                 width: 60,
-                render: (_, record) => record?.userProfile?.gender?.sTen,
+                render: (_, record) => record?.student?.userProfile?.gender?.sTen,
               },
               {
                 title: "Nơi sinh",
                 dataIndex: ["student", "userProfile", "placeOfBirth"],
                 width: 100,
                 align: "center",
+                render: (_, record) => record?.student?.userProfile?.newProvinceHometown?.sTen,
               },
               {
                 title: "Dân tộc",

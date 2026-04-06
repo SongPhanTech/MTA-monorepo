@@ -302,7 +302,7 @@ export default function MonTrongCTDT() {
       if (res.status !== 200) {
         throw new Error("Có lỗi xảy ra khi lưu đăng ký học!")
       }
-      message.success("Lưu đăng ký học cải thiện thành công!")
+      message.success("Lưu đăng ký học thành công!")
       queryClient.invalidateQueries({ queryKey: ["zenstack", "StudentSubjectScore"] })
       queryClient.invalidateQueries({ queryKey: ["zenstack", "SubjectClass"] })
     } catch (error: any) {
@@ -392,8 +392,9 @@ export default function MonTrongCTDT() {
           }}
           rowSelection={{
             selectedRowKeys: selectedSubjectClassRowKeys,
-            onChange: (selectedRowKeys) => {
+            onChange: (selectedRowKeys, selectedRows) => {
               setSelectedSubjectClassRowKeys(selectedRowKeys)
+              setSubjectVersionIds(selectedRows.map((row) => row.subject.id))
             },
             getCheckboxProps: (record) => ({
               disabled:

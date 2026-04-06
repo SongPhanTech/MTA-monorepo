@@ -27,8 +27,8 @@ const baseSchema = z.object({
     bankName: z.string().nullish(),
     projectExpert: z.boolean().default(true),
     thesisExpert: z.boolean().default(true),
-    eligiblePresident: z.boolean(),
-    eligibleSecretary: z.boolean(),
+    eligiblePresident: z.boolean().default(false),
+    eligibleSecretary: z.boolean().default(false),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -62,8 +62,10 @@ const relationSchema = z.object({
     major: z.array(z.unknown()).optional(),
     supervisedTheses: z.array(z.unknown()).optional(),
     coSupervisedTheses: z.array(z.unknown()).optional(),
+    thirdSupervisedTheses: z.array(z.unknown()).optional(),
     supervisorResearchTopic: z.array(z.unknown()).optional(),
     coSupervisorResearchTopic: z.array(z.unknown()).optional(),
+    thirdSupervisorResearchTopic: z.array(z.unknown()).optional(),
     supervisorInternship: z.array(z.unknown()).optional(),
     coSupervisorInternship: z.array(z.unknown()).optional(),
     subjectClass: z.array(z.unknown()).optional(),
@@ -129,7 +131,7 @@ export const ExpertProfilePrismaUpdateSchema = z.object({
  * `ExpertProfile` schema for create operations excluding foreign keys and relations.
  */
 export const ExpertProfileCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, projectExpert: true, thesisExpert: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, projectExpert: true, thesisExpert: true, eligiblePresident: true, eligibleSecretary: true
 });
 
 

@@ -49,6 +49,9 @@ export default function DangKyHocChoCaNhan() {
     where: {
       active: true,
       trainingCourseId: filters.trainingCourseId,
+      trainingCourse: {
+        trainingObjectTypeId,
+      },
     },
   })
 
@@ -77,6 +80,7 @@ export default function DangKyHocChoCaNhan() {
       fixedClassId: filters.fixedClassId,
       fixedClass: {
         trainingCourseId: filters.trainingCourseId,
+        trainingCourse: { trainingObjectTypeId },
       },
       active: true,
       status: "ENROLLED",

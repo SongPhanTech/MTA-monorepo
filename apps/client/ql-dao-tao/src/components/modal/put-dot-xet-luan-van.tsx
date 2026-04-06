@@ -18,10 +18,14 @@ import Select from "@components/commons/select"
 import { useFindManyTrainingObjectTypePermission } from "@workspace/ui"
 import { useEffect, useState } from "react"
 export type PutThesisSession = ThesisSession
+type PutThesisSessionForm = PutThesisSession & {
+  decisionMakerRole?: "PGĐ" | "GĐ"
+  decisionMakerName?: string
+}
 dayjs.locale("vi")
 
 const PutThesisSession = () => {
-  const [form] = Form.useForm<PutThesisSession>()
+  const [form] = Form.useForm<PutThesisSessionForm>()
   const {
     isOpen,
     onClose,
@@ -37,12 +41,17 @@ const PutThesisSession = () => {
 
   useEffect(() => {
     if (thesisSession) {
+      const decisionMaker = thesisSession.decisionMaker?.trim() ?? ""
+      const [firstToken, ...rest] = decisionMaker.split(" ")
+      const decisionMakerRole = firstToken === "PGĐ" || firstToken === "GĐ" ? firstToken : undefined
+      const decisionMakerName = decisionMakerRole ? rest.join(" ").trim() : decisionMaker
       form.setFieldsValue({
         ...thesisSession,
         trainingCourseId: thesisSession.trainingCourseId,
         trainingObjectTypeId: thesisSession.trainingObjectTypeId,
         decisionNumber: thesisSession.decisionNumber,
-        decisionMaker: thesisSession.decisionMaker,
+        decisionMakerRole,
+        decisionMakerName,
         defenseDecisionNumber: thesisSession.defenseDecisionNumber,
         defenseDecisionMaker: thesisSession.defenseDecisionMaker,
         chief: thesisSession.chief,
@@ -55,7 +64,10 @@ const PutThesisSession = () => {
       })
       setTrainingObjectId(thesisSession.trainingObjectTypeId)
     } else {
-      form.setFieldsValue({})
+      form.setFieldsValue({
+        decisionMakerRole: undefined,
+        decisionMakerName: undefined,
+      })
     }
   }, [thesisSession, form])
 
@@ -75,18 +87,22 @@ const PutThesisSession = () => {
   )
   const { mutateAsync: createThesisSession } = useCreateThesisSession()
   const { mutateAsync: updateThesisSession } = useUpdateThesisSession()
-  async function onOk(output?: PutThesisSession) {
+  async function onOk(output?: PutThesisSessionForm) {
     if (!output) return
 
     try {
       showSpinner()
+      const decisionMaker = [output.decisionMakerRole, output.decisionMakerName]
+        .filter(Boolean)
+        .join(" ")
+        .trim()
       const payload = {
         name: output.name.trim(),
         startDate: output.startDate ? dayjs(output.startDate).toDate() : new Date(),
         trainingObjectTypeId: output.trainingObjectTypeId,
         trainingCourseId: output.trainingCourseId,
         decisionNumber: output.decisionNumber,
-        decisionMaker: output.decisionMaker,
+        decisionMaker,
         decisionDate: output.decisionDate ? dayjs(output.decisionDate).toDate() : new Date(),
         defenseDecisionNumber: output.defenseDecisionNumber,
         defenseDecisionMaker: output.defenseDecisionMaker,
@@ -166,51 +182,77 @@ const PutThesisSession = () => {
         </FormItem>
       </Col>
       <Col span={12}>
-        <FormItem form={form} name="decisionNumber" label="Số QĐĐT" required>
-          <Input placeholder="Nhập số QĐĐT" />
+        <FormItem form={form} name="decisionNumber" label="Số quyết định giao đề tài">
+          <Input placeholder="Nhập số quyết định giao đề tài" />
         </FormItem>
       </Col>
       <Col span={12}>
-        <FormItem form={form} name="decisionMaker" label="Người ký QĐĐT" required>
-          <Input placeholder="Nhập người ký QĐĐT" />
-        </FormItem>
+        <Form.Item label="Người ký quyết định giao đề tài" className="mb-0">
+          <div className="flex gap-2">
+            <Form.Item name="decisionMakerRole" noStyle>
+              <Select
+                className="w-24"
+                placeholder="PGĐ/GĐ"
+                options={[
+                  { label: "PGĐ", value: "PGĐ" },
+                  { label: "GĐ", value: "GĐ" },
+                ]}
+              />
+            </Form.Item>
+            <Form.Item name="decisionMakerName" noStyle>
+              <Input placeholder="Nhập tên người ký quyết định giao đề tài" />
+            </Form.Item>
+          </div>
+        </Form.Item>
       </Col>
       <Col span={12}>
-        <FormItem form={form} name="decisionDate" label="Ngày QĐĐT" required>
+        <FormItem form={form} name="decisionDate" label="Ngày quyết định giao đề tài">
           <DatePicker
             format={{
               format: "DD/MM/YYYY",
               type: "mask",
             }}
             className="w-full"
-            placeholder="Chọn ngày QĐĐT"
+            placeholder="Chọn ngày quyết định giao đề tài"
           />
         </FormItem>
       </Col>
       <Col span={12}>
-        <FormItem form={form} name="defenseDecisionNumber" label="Số QĐBVLV" required>
-          <Input placeholder="Nhập số QĐBVLV" />
+        <FormItem
+          form={form}
+          name="defenseDecisionNumber"
+          label="Số quyết định thành lập hội đồng bảo vệ luận văn đề án"
+        >
+          <Input placeholder="Nhập số quyết định thành lập hội đồng bảo vệ luận văn đề án" />
         </FormItem>
       </Col>
       <Col span={12}>
-        <FormItem form={form} name="defenseDecisionMaker" label="Người ký QĐBVLV" required>
-          <Input placeholder="Nhập người ký QĐBVLV" />
+        <FormItem
+          form={form}
+          name="defenseDecisionMaker"
+          label="Người ký quyết định thành lập hội đồng bảo vệ luận văn đề án"
+        >
+          <Input placeholder="Nhập người ký quyết định thành lập hội đồng bảo vệ luận văn đề án" />
         </FormItem>
       </Col>
       <Col span={12}>
-        <FormItem form={form} name="defenseDecisionDate" label="Ngày QĐBVLV" required>
+        <FormItem
+          form={form}
+          name="defenseDecisionDate"
+          label="Ngày quyết định thành lập hội đồng bảo vệ luận văn đề án"
+        >
           <DatePicker
             format={{
               format: "DD/MM/YYYY",
               type: "mask",
             }}
             className="w-full"
-            placeholder="Chọn ngày QĐBVLV"
+            placeholder="Chọn ngày quyết định thành lập hội đồng bảo vệ luận văn đề án"
           />
         </FormItem>
       </Col>
       <Col span={12}>
-        <FormItem form={form} name="chief" label="Thủ trưởng" required>
+        <FormItem form={form} name="chief" label="Thủ trưởng">
           <Input placeholder="Nhập thủ trưởng" />
         </FormItem>
       </Col>

@@ -2,6 +2,7 @@ import DatePicker from "@components/commons/date-picker"
 import FormItem from "@components/commons/form-item"
 import Select from "@components/commons/select"
 import Table from "@components/commons/table"
+import { DownloadOutlined } from "@ant-design/icons"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import type { FilterProps } from "@constants/type"
 import { useExamTypeOptions } from "@hooks/examType"
@@ -41,13 +42,18 @@ import {
   Tooltip,
 } from "antd"
 import locale from "antd/es/date-picker/locale/vi_VN"
-import dayjs, { type Dayjs } from "dayjs"
+import dayjs from "dayjs"
+import { type Dayjs } from "dayjs"
 import _ from "lodash"
 import { CalendarPlus, Search } from "lucide-react"
 import { useRouter } from "next/router"
 import type React from "react"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
+import { diemLopMonHocStore } from "../ql-diem-lop-mon-hoc"
+import { sqlTransaction } from "@workspace/libs/api/model"
+import { saveAs } from "file-saver"
+import { exportSubjectClassListExcel } from "@workspace/libs/api/training"
 
 type TimeScore = {
   time: [Dayjs, Dayjs]
@@ -79,6 +85,7 @@ export default function ClassSubject() {
   const [form] = Form.useForm<TimeScore>()
   const [formExam] = Form.useForm<TimeScoreExam>()
   const [formHoldAnExam] = Form.useForm<HoldAnExam>()
+  const [changedExamDates, setChangedExamDates] = useState<Record<string, string | null>>({})
   const [filters, setFilters] = useState<FilterProps>({
     searchText: "",
     code: "",
@@ -431,6 +438,81 @@ export default function ClassSubject() {
       hideSpinner()
     }
   }
+  const handleUpdateExamDates = async () => {
+    try {
+      showSpinner()
+      const transactions = Object.entries(changedExamDates).map(([id, examDate]) => ({
+        model: "SubjectClass" as const,
+        operation: "updateMany" as const,
+        data: {
+          where: { id },
+          data: { examDate: examDate ? dayjs(examDate).toISOString() : null },
+        },
+      }))
+
+      await sqlTransaction(transactions)
+      message.success("Cập nhật ngày thi thành công")
+      setChangedExamDates({})
+      debouncedRefetch()
+    } catch (e) {
+      console.error(e)
+      message.error("Có lỗi xảy ra")
+    } finally {
+      hideSpinner()
+    }
+  }
+
+  const handleExportSubjectClassExcel = async () => {
+    if (!trainingObjectTypeId || !semesterId) {
+      message.warning("Vui lòng chọn đối tượng đào tạo và học kỳ")
+      return
+    }
+
+    const extractExportErrorMessage = (error: any) => {
+      const status = error?.response?.status
+      const rawMessage = error?.response?.data?.message || error?.response?.data?.error
+
+      const detailedMessage = Array.isArray(rawMessage)
+        ? rawMessage.join(", ")
+        : rawMessage || error?.message
+
+      if (status && detailedMessage) {
+        return `Xuất Excel thất bại: ${detailedMessage}`
+      }
+
+      if (status) {
+        return `Xuất Excel thất bại`
+      }
+
+      if (detailedMessage) {
+        return `Xuất Excel thất bại: ${detailedMessage}`
+      }
+
+      return "Đã xảy ra lỗi khi xuất Excel, vui lòng thử lại"
+    }
+
+    try {
+      showSpinner()
+      const res = await exportSubjectClassListExcel({
+        trainingObjectTypeId,
+        semesterId,
+        fixedClassId: filters.fixedClassId || undefined,
+        searchText: filters.searchText || undefined,
+      })
+      if (res.status === 200) {
+        saveAs(res.data, "Danh_sach_lop_mon_hoc.xlsx")
+        message.success("Xuất Excel thành công")
+      } else {
+        const error: any = new Error()
+        error.response = { status: res.status, data: res.data }
+        message.error(extractExportErrorMessage(error))
+      }
+    } catch (error: any) {
+      message.error(extractExportErrorMessage(error))
+    } finally {
+      hideSpinner()
+    }
+  }
 
   const rowSelection = {
     selectedRowKeys,
@@ -485,14 +567,32 @@ export default function ClassSubject() {
                 </Col>
               </Flex>
             </Col>
-            <Col span={6}>
+            <Col span={12}>
               <Flex justify="end" align="center" gap={4}>
                 {can(
                   QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DS_LOP_MON_HOC,
                   "XEM_TAT_CA"
                 ) && (
                   <>
+                    {Object.keys(changedExamDates).length > 0 && (
+                      <Button
+                        type="primary"
+                        onClick={handleUpdateExamDates}
+                        className="bg-orange-500 hover:!bg-orange-400"
+                      >
+                        Lưu kế hoạch
+                      </Button>
+                    )}
                     {selectedRowKeys.length > 0 && <p>(Đang chọn {selectedRowKeys.length} lớp)</p>}
+
+                    <Button
+                      icon={<DownloadOutlined />}
+                      onClick={handleExportSubjectClassExcel}
+                      type="primary"
+                    >
+                      Xuất Excel
+                    </Button>
+                    {/* {selectedRowKeys.length > 0 && <p>(Đang chọn {selectedRowKeys.length} lớp)</p>} */}
                     <Popover
                       content={
                         <Form
@@ -792,7 +892,42 @@ export default function ClassSubject() {
                 width: 120,
                 align: "center",
                 type: "date",
-                render: (record: string) => (record ? dayjs(record).format("DD/MM/YYYY") : ""),
+                // render: (record: string) => (record ? dayjs(record).format("DD/MM/YYYY") : ""),
+                render: (_, record) => {
+                  if (!canReadAll) {
+                    return record.examDate ? dayjs(record.examDate).format("DD/MM/YYYY") : ""
+                  }
+
+                  const isExpired =
+                    record?.examScoreDeadline && dayjs().isAfter(dayjs(record.examScoreDeadline))
+
+                  return (
+                    <DatePicker
+                      allowClear
+                      format="DD/MM/YYYY"
+                      value={
+                        changedExamDates[record.id] !== undefined
+                          ? changedExamDates[record.id]
+                            ? dayjs(changedExamDates[record.id])
+                            : null
+                          : record.examDate
+                            ? dayjs(record.examDate)
+                            : undefined
+                      }
+                      className={cn("w-full px-1", isExpired && "border-red-500")}
+                      status={isExpired ? "error" : ""}
+                      onChange={(value) => {
+                        diemLopMonHocStore.setState({
+                          selectedSubjectClassId: record.id,
+                        })
+                        setChangedExamDates((prev) => ({
+                          ...prev,
+                          [record.id]: value ? value.toISOString() : null,
+                        }))
+                      }}
+                    />
+                  )
+                },
               },
               {
                 title: "Hạn NĐT",

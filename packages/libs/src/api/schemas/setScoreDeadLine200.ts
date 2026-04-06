@@ -6,5 +6,5 @@
  */
 
 export type SetScoreDeadLine200 = {
-    message: string
-}
+  message: string;
+};

@@ -6,5 +6,5 @@
  */
 
 export type CalcEvidenceTags404 = {
-    message: string
-}
+  message: string;
+};

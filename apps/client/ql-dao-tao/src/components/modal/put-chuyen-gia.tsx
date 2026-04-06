@@ -304,18 +304,20 @@ const PutExpertProfile = () => {
           </FormItem>
         </Col>
       )}
-      <Col span={24} className="flex flex-row">
-        <Col span={12}>
-          <FormItem form={form} name="eligiblePresident" valuePropName="checked">
-            <Checkbox>Có thể là Chủ tịch hội đồng</Checkbox>
-          </FormItem>
+      {isInternal && (
+        <Col span={24} className="flex flex-row">
+          <Col span={12}>
+            <FormItem form={form} name="eligiblePresident" valuePropName="checked">
+              <Checkbox>Có thể là Chủ tịch hội đồng</Checkbox>
+            </FormItem>
+          </Col>
+          <Col span={12}>
+            <FormItem form={form} name="eligibleSecretary" valuePropName="checked">
+              <Checkbox>Có thể là Thư ký hội đồng</Checkbox>
+            </FormItem>
+          </Col>
         </Col>
-        <Col span={12}>
-          <FormItem form={form} name="eligibleSecretary" valuePropName="checked">
-            <Checkbox>Có thể là Thư ký hội đồng</Checkbox>
-          </FormItem>
-        </Col>
-      </Col>
+      )}
     </PutFormModal>
   )
 }

@@ -227,10 +227,16 @@ model StudentResearchTopic extends Base {
   coSupervisor          ExpertProfile?      @relation("CoSupervisorToResearchTopic", fields: [coSupervisorId], references: [id])
   coSupervisorId        String?
 
+  /// GVHD 3
+  thirdSupervisor ExpertProfile? @relation("ThirdSupervisorToResearchTopic", fields: [thirdSupervisorId], references: [id])
+	thirdSupervisorId String?
+
   /// ngày báo cáo
   reportDate            DateTime?
 
   @@schema("ql-dao-tao")
+
+	
 }
 
 model StudentInternship extends Base {
@@ -445,6 +451,9 @@ model TrainingCourse extends Base {
   endYear                    Int?
   academicYear               String?
   maxTrainingTime            Float?
+
+  // Khoá này có được thi lại không
+  isRetakeExam               Boolean                    @default(false)
 
   /// Chỉ tiêu tuyển sinh
   admissionQuota             Int?
@@ -779,9 +788,8 @@ model SubjectVersion extends BaseNoCode {
   examFramework            ExamFramework[]
   scoreLinkSubjectVersion  ScoreLinkSubjectVersion[]
 
-
   @@unique([trainingObjectTypeId, name, credit, period, managementOrganizationId])
-  @@unique([trainingObjectTypeId, codeTkb])
+  // @@unique([trainingObjectTypeId, codeTkb])
   @@index([name, trainingObjectTypeId])
   @@index([subjectId])
   @@schema("ql-dao-tao")
@@ -978,7 +986,7 @@ model SubjectClass extends BaseNoCode {
   examDate                    DateTime? // ngày thi
 
   // hình thức thi copy từ phiên bản môn học; hình thức thi của lớp có thể thay đổi giữa kỳ học
-  examType                    ExamType?
+  examType                    ExamType
 
   exam                        Exam?                    @relation(fields: [examId], references: [id])
   examId                      String?
@@ -996,7 +1004,7 @@ model SubjectClass extends BaseNoCode {
   // khi xuất phiếu điểm cuối cùng
   issuedScoreAt               DateTime? // ngày xuất phiếu điểm
 
-  // khoá khi xuất phiếu điểm, lên DS thi. (P13 có thể mở khoá)
+  // khoá khi xuất phiếu điểm, lên DS thi. (P2/P7 có thể mở khoá)
   /// khoá điểm TX/ĐK
   isLockScore                 Boolean                  @default(false)
   // khoá khi xuất phiếu điểm. (P13 có thể mở khoá)

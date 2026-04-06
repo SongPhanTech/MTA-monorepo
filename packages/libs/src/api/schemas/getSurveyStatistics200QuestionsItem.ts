@@ -4,10 +4,10 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetSurveyStatistics200QuestionsItemAnswersItem } from './getSurveyStatistics200QuestionsItemAnswersItem'
+import type { GetSurveyStatistics200QuestionsItemAnswersItem } from './getSurveyStatistics200QuestionsItemAnswersItem';
 
 export type GetSurveyStatistics200QuestionsItem = {
-    id: string
-    name: string
-    answers: GetSurveyStatistics200QuestionsItemAnswersItem[]
-}
+  id: string;
+  name: string;
+  answers: GetSurveyStatistics200QuestionsItemAnswersItem[];
+};

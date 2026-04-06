@@ -8,4 +8,4 @@
 /**
  * @nullable
  */
-export type SqlTransaction200Item = unknown | null
+export type SqlTransaction200Item = unknown | null;

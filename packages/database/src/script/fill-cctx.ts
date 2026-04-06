@@ -8,9 +8,9 @@ const subjectClassIds = await prisma.subjectClass.findMany({
   where: {
     examType: "OfflineWritten",
     subject: { onePoint: false },
-    semester: {
-      startDate: {
-        gte: new Date(2035, 1, 1),
+    fixedClasses: {
+      some: {
+        trainingCourseId: "cmnfopsiz002sp101f3r243hh",
       },
     },
   },
@@ -25,6 +25,8 @@ const whereCondition = {
   attendanceScore: null,
   midtermScore: null,
   examScore: null,
+  examBanned: false,
+  examPostponed: false,
 }
 
 const count = await prisma.studentSubjectScore.count({
@@ -86,9 +88,9 @@ const classes = await prisma.subjectClass.findMany({
   },
   where: {
     examType: { not: "OfflineWritten" },
-    semester: {
-      startDate: {
-        gte: new Date(2035, 1, 1),
+    fixedClasses: {
+      some: {
+        trainingCourseId: "cmnfopsiz002sp101f3r243hh",
       },
     },
   },
@@ -100,6 +102,8 @@ const scoresKhac = await prisma.studentSubjectScore.findMany({
   where: {
     subjectClassId: { in: classes.map((c) => c.id) },
     finalScore: null,
+    examBanned: false,
+    examPostponed: false,
   },
   select: {
     id: true,

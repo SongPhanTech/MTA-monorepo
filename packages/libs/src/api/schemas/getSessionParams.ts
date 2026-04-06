@@ -6,5 +6,5 @@
  */
 
 export type GetSessionParams = {
-    appCode: string
-}
+appCode: string;
+};

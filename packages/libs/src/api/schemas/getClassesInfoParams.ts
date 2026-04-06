@@ -6,11 +6,11 @@
  */
 
 export type GetClassesInfoParams = {
-    /**
-     * ID đợt đăng ký lớp học
-     */
-    sessionId: string
-    curriculumVersionId: string
-    byCurriculum?: string
-    isRegistered?: string
-}
+/**
+ * ID đợt đăng ký lớp học
+ */
+sessionId: string;
+curriculumVersionId: string;
+byCurriculum?: string;
+isRegistered?: string;
+};

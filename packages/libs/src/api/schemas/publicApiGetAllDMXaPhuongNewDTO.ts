@@ -55,22 +55,22 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  * Xã, phường mới
  */
 export interface PublicApiGetAllDMXaPhuongNewDTO {
-    Id?: string
-    /**
-     * Mã
-     * @nullable
-     */
-    sMa?: string | null
-    /**
-     * Tên
-     * @nullable
-     */
-    sTen?: string | null
-    /** @nullable */
-    sDM_TinhId_New?: string | null
-    /**
-     * Tỉnh
-     * @nullable
-     */
-    sTenTinh?: string | null
+  Id?: string;
+  /**
+   * Mã
+   * @nullable
+   */
+  sMa?: string | null;
+  /**
+   * Tên
+   * @nullable
+   */
+  sTen?: string | null;
+  /** @nullable */
+  sDM_TinhId_New?: string | null;
+  /**
+   * Tỉnh
+   * @nullable
+   */
+  sTenTinh?: string | null;
 }

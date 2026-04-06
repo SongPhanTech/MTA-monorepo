@@ -4,12 +4,12 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { PostApiStatsExamBankUpdateBodyThoiGian } from './postApiStatsExamBankUpdateBodyThoiGian'
+import type { PostApiStatsExamBankUpdateBodyThoiGian } from './postApiStatsExamBankUpdateBodyThoiGian';
 
 export type PostApiStatsExamBankUpdateBody = {
-    preview?: boolean
-    khoa?: string
-    vien?: string
-    boMon?: string
-    thoiGian?: PostApiStatsExamBankUpdateBodyThoiGian
-}
+  preview?: boolean;
+  khoa?: string;
+  vien?: string;
+  boMon?: string;
+  thoiGian?: PostApiStatsExamBankUpdateBodyThoiGian;
+};

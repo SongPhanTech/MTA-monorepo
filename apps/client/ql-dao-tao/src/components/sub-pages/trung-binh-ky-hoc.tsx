@@ -353,7 +353,7 @@ const DiemTrungBinhKyHoc = () => {
                     : "-",
               },
               {
-                title: "Tích lỹ hệ 4",
+                title: "Tích luỹ hệ 4",
                 dataIndex: ["studentSemesterResult", "0", "cumulativeGpaBase4"],
                 width: 90,
                 align: "center",
@@ -373,7 +373,7 @@ const DiemTrungBinhKyHoc = () => {
                     : "-",
               },
               {
-                title: "Tích lỹ hệ 10",
+                title: "Tích luỹ hệ 10",
                 dataIndex: ["studentSemesterResult", "0", "cumulativeGpaBase10"],
                 width: 90,
                 align: "center",

@@ -2064,6 +2064,8 @@ model DM_DonVi {
   sThietBiTao          String?
   sThietBiSua          String?
   sCode                String?
+  /// mã TKBU
+  sTKPUCode            String?
   sTenVietTat          String?
   sParentId            String?            @db.Uuid()
   sTruongDonVi         String?            @db.Uuid()
@@ -2856,6 +2858,9 @@ model StudentResearchTopic {
   /// GVHD 2
   coSupervisor          ExpertProfile?      @relation("CoSupervisorToResearchTopic", fields: [coSupervisorId], references: [id])
   coSupervisorId        String?
+  /// GVHD 3
+  thirdSupervisor       ExpertProfile?      @relation("ThirdSupervisorToResearchTopic", fields: [thirdSupervisorId], references: [id])
+  thirdSupervisorId     String?
   /// ngày báo cáo
   reportDate            DateTime?
 
@@ -3144,6 +3149,7 @@ model TrainingCourse {
   endYear                    Int?
   academicYear               String?
   maxTrainingTime            Float?
+  isRetakeExam               Boolean                    @default(false)
   /// Chỉ tiêu tuyển sinh
   admissionQuota             Int?
   /// Số lượng trúng tuyển
@@ -3678,7 +3684,7 @@ model SubjectClass {
   submitLecturerAssignmentAt  DateTime?
   approveLecturerAssignmentAt DateTime?
   examDate                    DateTime?
-  examType                    ExamType?
+  examType                    ExamType
   exam                        Exam?                    @relation(fields: [examId], references: [id])
   examId                      String?
   /// ngày bắt đầu nhập điểm TX/ĐK
@@ -5224,6 +5230,10 @@ model ThesisSession {
   defenseDecisionDate   DateTime?
   /// Thủ trưởng
   chief                 String?
+  /// Hạn nhập đề tài
+  topicEntryDeadline    DateTime?
+  /// Hạn nhập hội đồng
+  councilDeadline       DateTime?
   thesisProject         ThesisProject[]
 
   @@schema("ql-dao-tao")
@@ -5233,79 +5243,86 @@ model ThesisSession {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model ThesisProject {
-  id                    String                      @id() @default(cuid())
-  code                  String?                     @unique()
-  active                Boolean                     @default(true)
-  description           String?                     @db.Text()
-  deletedAt             DateTime?
-  createdAt             DateTime                    @default(now())
-  updatedAt             DateTime                    @default(now()) @updatedAt()
-  createdBy             String?                     @default("") @db.Uuid()
-  title                 String?
-  titleEN               String?
-  summary               String?                     @db.Text()
-  objectives            String?                     @db.Text()
-  scope                 String?                     @db.Text()
-  methodology           String?                     @db.Text()
-  expectedResults       String?                     @db.Text()
-  requirements          String?                     @db.Text()
-  technologies          String?                     @db.Text()
-  thesisType            ThesisType                  @default(PROJECT)
-  status                ThesisProjectStatus         @default(PROPOSED)
-  language              String?                     @db.Text()
-  type                  String?                     @db.Text()
-  isLock                Boolean                     @default(false)
-  editProject           String?                     @db.Text()
-  firstCheckProgress    Int?
-  secondCheckProgress   Int?
-  isEligibleForDefense  Boolean                     @default(true)
-  primarySupervisor     Lecturer?                   @relation("PrimarySupervisorToThesis", fields: [primarySupervisorId], references: [id])
-  primarySupervisorId   String?
-  secondarySupervisor   Lecturer?                   @relation("SecondarySupervisorToThesis", fields: [secondarySupervisorId], references: [id])
-  secondarySupervisorId String?
-  subjectClass          SubjectClass?               @relation(fields: [subjectClassId], references: [id])
-  subjectClassId        String?
-  thesisSession         ThesisSession?              @relation(fields: [thesisSessionId], references: [id])
-  thesisSessionId       String?
-  supervisorName        String?
+  id                      String                      @id() @default(cuid())
+  code                    String?                     @unique()
+  active                  Boolean                     @default(true)
+  description             String?                     @db.Text()
+  deletedAt               DateTime?
+  createdAt               DateTime                    @default(now())
+  updatedAt               DateTime                    @default(now()) @updatedAt()
+  createdBy               String?                     @default("") @db.Uuid()
+  title                   String?
+  titleEN                 String?
+  summary                 String?                     @db.Text()
+  objectives              String?                     @db.Text()
+  scope                   String?                     @db.Text()
+  methodology             String?                     @db.Text()
+  expectedResults         String?                     @db.Text()
+  requirements            String?                     @db.Text()
+  technologies            String?                     @db.Text()
+  thesisType              ThesisType                  @default(PROJECT)
+  status                  ThesisProjectStatus         @default(PROPOSED)
+  language                String?                     @db.Text()
+  type                    String?                     @db.Text()
+  isLock                  Boolean                     @default(false)
+  editProject             String?                     @db.Text()
+  researchTopicAssociated String?
+  firstCheckProgress      Int?
+  secondCheckProgress     Int?
+  isEligibleForDefense    Boolean                     @default(true)
+  primarySupervisor       Lecturer?                   @relation("PrimarySupervisorToThesis", fields: [primarySupervisorId], references: [id])
+  primarySupervisorId     String?
+  secondarySupervisor     Lecturer?                   @relation("SecondarySupervisorToThesis", fields: [secondarySupervisorId], references: [id])
+  secondarySupervisorId   String?
+  thirdSupervisor         ExpertProfile?              @relation("ThirdSupervisorToThesis", fields: [thirdSupervisorId], references: [id])
+  thirdSupervisorId       String?
+  isProductProject        Boolean                     @default(false)
+  isGroupProject          Boolean                     @default(false)
+  isLanguage              Boolean                     @default(false)
+  externalUnit            Boolean                     @default(false)
+  subjectClass            SubjectClass?               @relation(fields: [subjectClassId], references: [id])
+  subjectClassId          String?
+  thesisSession           ThesisSession?              @relation(fields: [thesisSessionId], references: [id])
+  thesisSessionId         String?
+  supervisorName          String?
   /// Chuyên gia hướng dẫn
-  supervisor            ExpertProfile?              @relation("SupervisorToThesis", fields: [supervisorId], references: [id])
-  supervisorId          String?
-  supervisorPayment     SupervisorPaymentRecord?    @relation("SupervisorToSupervisorPayment", fields: [supervisorPaymentId], references: [id])
-  supervisorPaymentId   String?
-  coSupervisorName      String?
+  supervisor              ExpertProfile?              @relation("SupervisorToThesis", fields: [supervisorId], references: [id])
+  supervisorId            String?
+  supervisorPayment       SupervisorPaymentRecord?    @relation("SupervisorToSupervisorPayment", fields: [supervisorPaymentId], references: [id])
+  supervisorPaymentId     String?
+  coSupervisorName        String?
   /// Chuyên gia hướng dẫn bảo vệ phụ
-  coSupervisor          ExpertProfile?              @relation("CoSupervisorToThesis", fields: [coSupervisorId], references: [id])
-  coSupervisorId        String?
-  coSupervisorPayment   SupervisorPaymentRecord?    @relation("CoSupervisorToSupervisorPayment", fields: [coSupervisorPaymentId], references: [id])
-  coSupervisorPaymentId String?
-  CHUTICH               String?
-  THUKY                 String?
-  PHANBIEN1             String?
-  PHANBIEN2             String?
-  UYVIEN3               String?
+  coSupervisor            ExpertProfile?              @relation("CoSupervisorToThesis", fields: [coSupervisorId], references: [id])
+  coSupervisorId          String?
+  coSupervisorPayment     SupervisorPaymentRecord?    @relation("CoSupervisorToSupervisorPayment", fields: [coSupervisorPaymentId], references: [id])
+  coSupervisorPaymentId   String?
+  CHUTICH                 String?
+  THUKY                   String?
+  PHANBIEN1               String?
+  PHANBIEN2               String?
+  UYVIEN3                 String?
   /// Đơn vị quản lý
-  organization          DM_DonVi?                   @relation(fields: [organizationId], references: [Id])
-  organizationId        String?                     @db.Uuid()
-  maxStudents           Int?
+  organization            DM_DonVi?                   @relation(fields: [organizationId], references: [Id])
+  organizationId          String?                     @db.Uuid()
+  maxStudents             Int?
   /// Hội đồng đánh giá
-  council               Council?                    @relation(fields: [councilId], references: [id])
-  councilId             String?
+  council                 Council?                    @relation(fields: [councilId], references: [id])
+  councilId               String?
   /// phòng bảo vệ
-  room                  Room?                       @relation(fields: [roomId], references: [id])
-  roomId                String?
+  room                    Room?                       @relation(fields: [roomId], references: [id])
+  roomId                  String?
   /// Ngày bảo vệ
-  defenseDate           DateTime?
-  defenseSession        DefenseSession?             @relation(fields: [defenseSessionId], references: [id])
-  defenseSessionId      String?
-  registrationStart     DateTime?
-  registrationEnd       DateTime?
-  projectStart          DateTime?
-  projectEnd            DateTime?
-  defenseRecord         DefenseRecord?
-  librarySubmission     LibrarySubmission?
-  decisions             Decision[]
-  registrations         StudentThesisRegistration[]
+  defenseDate             DateTime?
+  defenseSession          DefenseSession?             @relation(fields: [defenseSessionId], references: [id])
+  defenseSessionId        String?
+  registrationStart       DateTime?
+  registrationEnd         DateTime?
+  projectStart            DateTime?
+  projectEnd              DateTime?
+  defenseRecord           DefenseRecord?
+  librarySubmission       LibrarySubmission?
+  decisions               Decision[]
+  registrations           StudentThesisRegistration[]
 
   @@schema("ql-dao-tao")
 }
@@ -5367,41 +5384,43 @@ model StudentThesisRegistration {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model ExpertProfile {
-  id                        String                 @id() @default(cuid())
-  code                      String?                @unique()
-  active                    Boolean                @default(true)
-  description               String?                @db.Text()
-  deletedAt                 DateTime?
-  createdAt                 DateTime               @default(now())
-  updatedAt                 DateTime               @default(now()) @updatedAt()
-  createdBy                 String?                @default("") @db.Uuid()
-  lecturer                  Lecturer?              @relation(fields: [lecturerId], references: [id])
-  lecturerId                String?                @unique()
-  name                      String?
-  academicRank              String?
-  academicDegree            String?
-  organization              String?
-  position                  String?
-  specialization            String?
-  major                     TrainingMajor[]
-  workplace                 String?
-  phone                     String?
+  id                           String                 @id() @default(cuid())
+  code                         String?                @unique()
+  active                       Boolean                @default(true)
+  description                  String?                @db.Text()
+  deletedAt                    DateTime?
+  createdAt                    DateTime               @default(now())
+  updatedAt                    DateTime               @default(now()) @updatedAt()
+  createdBy                    String?                @default("") @db.Uuid()
+  lecturer                     Lecturer?              @relation(fields: [lecturerId], references: [id])
+  lecturerId                   String?                @unique()
+  name                         String?
+  academicRank                 String?
+  academicDegree               String?
+  organization                 String?
+  position                     String?
+  specialization               String?
+  major                        TrainingMajor[]
+  workplace                    String?
+  phone                        String?
   /// @email
-  email                     String?
-  bankAccountNumber         String?
-  bankName                  String?
-  projectExpert             Boolean                @default(true)
-  thesisExpert              Boolean                @default(true)
-  eligiblePresident         Boolean
-  eligibleSecretary         Boolean
-  supervisedTheses          ThesisProject[]        @relation("SupervisorToThesis")
-  coSupervisedTheses        ThesisProject[]        @relation("CoSupervisorToThesis")
-  supervisorResearchTopic   StudentResearchTopic[] @relation("SupervisorToResearchTopic")
-  coSupervisorResearchTopic StudentResearchTopic[] @relation("CoSupervisorToResearchTopic")
-  supervisorInternship      StudentInternship[]    @relation("SupervisorToInternship")
-  coSupervisorInternship    StudentInternship[]    @relation("CoSupervisorToInternship")
-  subjectClass              SubjectClass[]
-  councilMemberships        CouncilMember[]
+  email                        String?
+  bankAccountNumber            String?
+  bankName                     String?
+  projectExpert                Boolean                @default(true)
+  thesisExpert                 Boolean                @default(true)
+  eligiblePresident            Boolean                @default(false)
+  eligibleSecretary            Boolean                @default(false)
+  supervisedTheses             ThesisProject[]        @relation("SupervisorToThesis")
+  coSupervisedTheses           ThesisProject[]        @relation("CoSupervisorToThesis")
+  thirdSupervisedTheses        ThesisProject[]        @relation("ThirdSupervisorToThesis")
+  supervisorResearchTopic      StudentResearchTopic[] @relation("SupervisorToResearchTopic")
+  coSupervisorResearchTopic    StudentResearchTopic[] @relation("CoSupervisorToResearchTopic")
+  thirdSupervisorResearchTopic StudentResearchTopic[] @relation("ThirdSupervisorToResearchTopic")
+  supervisorInternship         StudentInternship[]    @relation("SupervisorToInternship")
+  coSupervisorInternship       StudentInternship[]    @relation("CoSupervisorToInternship")
+  subjectClass                 SubjectClass[]
+  councilMemberships           CouncilMember[]
 
   @@schema("ql-dao-tao")
 }

@@ -6,5 +6,5 @@
  */
 
 export type PostApiStatsStudentDistributionByTrainingLevelBody = {
-    preview?: boolean
-}
+  preview?: boolean;
+};

@@ -24,6 +24,8 @@ const baseSchema = z.object({
     defenseDecisionMaker: z.string().nullish(),
     defenseDecisionDate: z.coerce.date().nullish(),
     chief: z.string().nullish(),
+    topicEntryDeadline: z.coerce.date().nullish(),
+    councilDeadline: z.coerce.date().nullish(),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -45,6 +47,8 @@ const baseSchemaWithoutDefaults = z.object({
     defenseDecisionMaker: z.string().nullish(),
     defenseDecisionDate: z.coerce.date().nullish(),
     chief: z.string().nullish(),
+    topicEntryDeadline: z.coerce.date().nullish(),
+    councilDeadline: z.coerce.date().nullish(),
 }
 ).strict();
 const relationSchema = z.object({
@@ -100,7 +104,9 @@ export const ThesisSessionPrismaUpdateSchema = z.object({
     defenseDecisionNumber: z.string().nullish(),
     defenseDecisionMaker: z.string().nullish(),
     defenseDecisionDate: z.coerce.date().nullish(),
-    chief: z.string().nullish()
+    chief: z.string().nullish(),
+    topicEntryDeadline: z.coerce.date().nullish(),
+    councilDeadline: z.coerce.date().nullish()
 }).partial().passthrough();
 
 

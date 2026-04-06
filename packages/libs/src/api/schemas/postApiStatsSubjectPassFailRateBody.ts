@@ -6,5 +6,5 @@
  */
 
 export type PostApiStatsSubjectPassFailRateBody = {
-    preview?: boolean
-}
+  preview?: boolean;
+};

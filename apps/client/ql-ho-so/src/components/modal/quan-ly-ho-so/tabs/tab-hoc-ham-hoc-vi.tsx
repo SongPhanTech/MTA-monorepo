@@ -28,7 +28,7 @@ export default function HocHamHocViTab({
 }) {
   const [openCollapse, setOpenCollapse] = useState<string | null>(null)
   const [currentPage, _setCurrentPage] = useState(1)
-  const [_numberOfPages, _setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+  const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
 
   const { onOpen } = useDisclosure<Partial<HocVi>>({
     tag: "PutHocViModal",
@@ -143,7 +143,7 @@ export default function HocHamHocViTab({
                 width: 60,
                 align: "center",
                 fixed: "left",
-                render: (_, __, index) => index + 1 + (currentPage - 1) * _numberOfPages,
+                render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,
               },
               {
                 title: "Học vị",
@@ -230,7 +230,7 @@ export default function HocHamHocViTab({
                 width: 60,
                 align: "center",
                 fixed: "left",
-                render: (_, __, index) => index + 1 + (currentPage - 1) * _numberOfPages,
+                render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,
               },
               {
                 title: "Chức danh chuyên môn",

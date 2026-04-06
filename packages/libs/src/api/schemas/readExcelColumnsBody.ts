@@ -6,5 +6,5 @@
  */
 
 export type ReadExcelColumnsBody = {
-    file: Blob
-}
+  file: Blob;
+};

@@ -222,15 +222,8 @@ export default function PhanCongGiangDay({
                 },
               }
             : {},
-        ...(trainingCourseId && type === "NORMAL"
-          ? {
-              fixedClasses: {
-                some: {
-                  trainingCourseId,
-                },
-              },
-            }
-          : {}),
+        fixedClasses:
+          trainingCourseId && type === "NORMAL" ? { some: { trainingCourseId } } : { some: {} },
         ...(fixedClassId
           ? {
               fixedClasses: {
@@ -739,6 +732,7 @@ export default function PhanCongGiangDay({
 
   const { onOpen: onOpenModalNhapTKB } = useDisclosure<{
     type?: $Enums.SubjectClassType
+    trainingCourseId?: string
   }>({
     tag: "ModalNhapTKB",
   })
@@ -908,13 +902,7 @@ export default function PhanCongGiangDay({
                                       not: null,
                                     },
                                     trainingObjectTypeId,
-                                    lecturerId: {
-                                      not: null,
-                                    },
-                                    extraLecturerId: {
-                                      not: null,
-                                    },
-
+                                    lecturerId: { not: null },
                                     cancelled: false,
                                     active: true,
                                     deletedAt: null,
@@ -993,9 +981,6 @@ export default function PhanCongGiangDay({
                                     },
                                     where: {
                                       lecturerId: {
-                                        not: null,
-                                      },
-                                      extraLecturerId: {
                                         not: null,
                                       },
                                       lecturerAssignmentDeadline: { not: null },
@@ -1170,9 +1155,23 @@ export default function PhanCongGiangDay({
                       trigger="click"
                       placement="bottomRight"
                     >
-                      <Button type="primary" className="bg-red-500">
-                        1.Báo dạy
-                      </Button>
+                      <Tooltip
+                        title={
+                          Object.values(subjectClassForm).some((sc) => !sc.trainingLocationId)
+                            ? "Vui lòng nhập khu vực đào tạo cho tất cả lớp môn học trước khi báo dạy"
+                            : undefined
+                        }
+                      >
+                        <Button
+                          type="primary"
+                          className="bg-red-500"
+                          disabled={Object.values(subjectClassForm).some(
+                            (sc) => !sc.trainingLocationId
+                          )}
+                        >
+                          1.Báo dạy
+                        </Button>
+                      </Tooltip>
                     </Popover>
                   )}
                   {!khoaBoMon &&
@@ -1230,6 +1229,7 @@ export default function PhanCongGiangDay({
                                   subject: {
                                     select: {
                                       code: true,
+                                      codeTkb: true,
                                       name: true,
                                       credit: true,
                                       period: true,
@@ -1239,6 +1239,7 @@ export default function PhanCongGiangDay({
                                             select: {
                                               sTen: true,
                                               sMa: true,
+                                              sTKPUCode: true,
                                               sParentId: true,
                                             },
                                           },
@@ -1309,6 +1310,7 @@ export default function PhanCongGiangDay({
                                 },
                                 select: {
                                   sMa: true,
+                                  sTKPUCode: true,
                                   Id: true,
                                   sTen: true,
                                   sParentId: true,
@@ -1327,13 +1329,15 @@ export default function PhanCongGiangDay({
                             mainLecturer: any
                             subject: {
                               code: string
+                              codeTkb: string | null
                               name: string
                               credit: number
                               period: number
                               subject: {
                                 managementOrganization: {
                                   sTen: string
-                                  sMa: string
+                                  sMa: string | null
+                                  sTKPUCode: string | null
                                   sParentId: any
                                 }
                               }
@@ -1363,7 +1367,8 @@ export default function PhanCongGiangDay({
                           }
 
                           const orgPayload = res.data[2] as Array<{
-                            sMa: string
+                            sMa: string | null
+                            sTKPUCode: string | null
                             Id: string
                             sTen: string
                             sParentId: string
@@ -1463,7 +1468,7 @@ export default function PhanCongGiangDay({
                                             align: "center",
                                           },
                                           {
-                                            value: item.subject?.code,
+                                            value: item.subject?.codeTkb || item.subject?.code,
                                             rowSpan,
                                           },
                                           {
@@ -1533,7 +1538,7 @@ export default function PhanCongGiangDay({
                                     })
                                   }
                                 ),
-                                sheet: `BM_${sMa}`,
+                                sheet: `BM_${boMon?.sTKPUCode || boMon?.sMa}`,
                               }
                             }),
                           })
@@ -1553,7 +1558,9 @@ export default function PhanCongGiangDay({
                       <Button
                         type="primary"
                         className="bg-yellow-500 text-black"
-                        onClick={() => onOpenModalNhapTKB({ type })}
+                        onClick={() =>
+                          onOpenModalNhapTKB({ type, trainingCourseId: trainingCourseId })
+                        }
                       >
                         4. Nhập từ TKB
                       </Button>
@@ -1632,7 +1639,6 @@ export default function PhanCongGiangDay({
                 getCheckboxProps(record) {
                   let disabledRecord =
                     !subjectClassForm?.[record.id]?.lecturerId ||
-                    !subjectClassForm?.[record.id]?.extraLecturerId ||
                     !subjectClassForm?.[record.id]?.enterGradeLecturerId ||
                     !!record.cancelled ||
                     !!record.approveLecturerAssignmentAt ||
@@ -1655,7 +1661,6 @@ export default function PhanCongGiangDay({
                   className: cn(
                     !!recordSubjectClass?.submitLecturerAssignmentAt && "bg-yellow-200",
                     (!subjectClassForm?.[record.id]?.lecturerId ||
-                      !subjectClassForm?.[record.id]?.extraLecturerId ||
                       !subjectClassForm?.[record.id]?.enterGradeLecturerId) &&
                       "bg-slate-200",
                     !!recordSubjectClass?.approveLecturerAssignmentAt && "bg-green-200",
@@ -1776,9 +1781,12 @@ export default function PhanCongGiangDay({
                   dataIndex: "mainLecturer",
                   render: (__, record) =>
                     !subjectClassForm?.[record.id]?.cancelled &&
-                    (role === "P2_KHCT" ||
-                      (!record?.approveLecturerAssignmentAt &&
-                        (!khoaBoMon || !record?.submitLecturerAssignmentAt))) ? (
+                    (role === "P2_KHCT"
+                      ? true
+                      : !khoaBoMon
+                        ? true
+                        : !record?.submitLecturerAssignmentAt &&
+                          !record?.approveLecturerAssignmentAt) ? (
                       <FormItem form={form} name={["subjectClass", record.id, "lecturerId"]}>
                         <LectureTreeSelect
                           placeholder="Chọn giảng viên"
@@ -1809,9 +1817,12 @@ export default function PhanCongGiangDay({
                   width: 200,
                   render: (__, record) =>
                     !subjectClassForm?.[record.id]?.cancelled &&
-                    (role === "P2_KHCT" ||
-                      (!record?.approveLecturerAssignmentAt &&
-                        (!khoaBoMon || !record?.submitLecturerAssignmentAt))) ? (
+                    (role === "P2_KHCT"
+                      ? true
+                      : !khoaBoMon
+                        ? true
+                        : !record?.submitLecturerAssignmentAt &&
+                          !record?.approveLecturerAssignmentAt) ? (
                       <FormItem form={form} name={["subjectClass", record.id, "extraLecturerId"]}>
                         <LectureTreeSelect
                           placeholder="Chọn giảng viên"
@@ -1840,9 +1851,12 @@ export default function PhanCongGiangDay({
                   width: 200,
                   render: (__, record) =>
                     !subjectClassForm?.[record.id]?.cancelled &&
-                    (role === "P2_KHCT" ||
-                      (!record?.approveLecturerAssignmentAt &&
-                        (!khoaBoMon || !record?.submitLecturerAssignmentAt))) ? (
+                    (role === "P2_KHCT"
+                      ? true
+                      : !khoaBoMon
+                        ? true
+                        : !record?.submitLecturerAssignmentAt &&
+                          !record?.approveLecturerAssignmentAt) ? (
                       <FormItem
                         form={form}
                         name={["subjectClass", record.id, "enterGradeLecturerId"]}
@@ -1872,7 +1886,11 @@ export default function PhanCongGiangDay({
                   dataIndex: "examType",
                   render: (__, record) => (
                     // khoaBoMon ? (
-                    <FormItem form={form} name={["subjectClass", record.id, "examType"]}>
+                    <FormItem
+                      form={form}
+                      name={["subjectClass", record.id, "examType"]}
+                      initialValue={getExamTypeLabel(record.examType)}
+                    >
                       <Select
                         dropdownStyle={{
                           width: 250,
@@ -1890,11 +1908,6 @@ export default function PhanCongGiangDay({
                       />
                     </FormItem>
                   ),
-                  // ) : (
-                  //     !!record.submitLecturerAssignmentAt &&
-                  //     record.examType &&
-                  //     getExamTypeLabel(record.examType)
-                  // ),
                 },
                 {
                   title: "Khu vực",

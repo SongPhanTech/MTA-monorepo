@@ -201,13 +201,13 @@ export default function DanhSachSinhVien() {
       lockExamSessions: true,
       examRooms: {
         include: {
-          examList: true,
-        },
-        orderBy: {
-          room: {
-            name: "asc",
+          examList: {
+            orderBy: {
+              start: "asc",
+            },
           },
         },
+        orderBy: { createdAt: "asc" },
       },
     },
   })
@@ -384,6 +384,23 @@ export default function DanhSachSinhVien() {
                         },
                       },
                     },
+                    select: {
+                      id: true,
+                      examBanned: true,
+                      examPostponed: true,
+                      attendanceScore: true,
+                      midtermScore: true,
+                      student: {
+                        select: {
+                          userProfile: {
+                            select: {
+                              firstName: true,
+                              lastName: true,
+                            },
+                          },
+                        },
+                      },
+                    },
                   },
                   subject: {
                     select: {
@@ -394,13 +411,13 @@ export default function DanhSachSinhVien() {
               },
               examRooms: {
                 include: {
-                  examList: true,
-                },
-                orderBy: {
-                  room: {
-                    name: "asc",
+                  examList: {
+                    orderBy: {
+                      start: "asc",
+                    },
                   },
                 },
+                orderBy: { createdAt: "asc" },
               },
             },
           },
@@ -413,7 +430,25 @@ export default function DanhSachSinhVien() {
         select: {
           subjectClass: {
             select: {
-              subjectClassStudent: true
+              subjectClassStudent: {
+                select: {
+                  id: true
+                  examBanned: true
+                  examPostponed: true
+                  attendanceScore: true
+                  midtermScore: true
+                  student: {
+                    select: {
+                      userProfile: {
+                        select: {
+                          firstName: true
+                          lastName: true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
               subject: {
                 select: {
                   onePoint: true
@@ -467,7 +502,11 @@ export default function DanhSachSinhVien() {
           studentSubjectScores: [] as StudentSubjectScore[],
         }))
       )
-
+      filteredStudentSubjectScores.sort((a, b) => {
+        const nameA = a.student?.userProfile?.firstName ?? ""
+        const nameB = b.student?.userProfile?.firstName ?? ""
+        return nameA.localeCompare(nameB, "vi")
+      })
       let idx = 0
       loop: for (const el of allExamLists) {
         for (let i = 0; i < el.capacity; i++) {
@@ -622,24 +661,15 @@ export default function DanhSachSinhVien() {
     try {
       showSpinner()
       const values = form.getFieldsValue()
-      const valueListObject = Object.entries(values.list).map(([key, value_]) => {
-        return {
-          id: key,
-          ...value_,
-        }
-      })
-
-      const filteredValues = valueListObject.filter(
-        (item) => item.examPostponed || item.examPostponedReason
-      )
-
-      const updateTransactions: SqlTransactionBodyItem[] = filteredValues.map((i) => ({
+      const valueListObject = Object.entries(values.list).map(([key, value_]) => ({
+        id: key,
+        ...value_,
+      }))
+      const updateTransactions: SqlTransactionBodyItem[] = valueListObject.map((i) => ({
         model: "StudentSubjectScore",
         operation: "update",
         data: {
-          where: {
-            id: i.id,
-          },
+          where: { id: i.id },
           data: {
             examPostponed: i.examPostponed ?? false,
             examPostponedReason: i.examPostponed ? i.examPostponedReason || null : null,
@@ -650,10 +680,13 @@ export default function DanhSachSinhVien() {
       const res = await sqlTransaction(updateTransactions)
 
       if (res.status === 200) {
+        queryClient.invalidateQueries({
+          queryKey: ["zenstack", "StudentSubjectScore"],
+        })
+        queryClient.invalidateQueries({ queryKey: ["zenstack", "ExamPaper"] })
+        queryClient.invalidateQueries({ queryKey: ["zenstack", "ExamList"] })
         message.success("Cập nhật thành công")
       }
-
-      console.log(valueListObject)
     } catch (error: any) {
       message.error(error.message || "Có lỗi xảy ra, vui lòng thử lại sau!")
     } finally {
@@ -786,6 +819,7 @@ export default function DanhSachSinhVien() {
       <Col span={24}>
         <Form form={form}>
           <TableCollapse
+            resetIndexPerGroup
             rowKey="id"
             id="danh-sach-sinh-vien"
             headerTitleKey={(record) =>

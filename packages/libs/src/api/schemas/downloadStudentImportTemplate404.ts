@@ -6,5 +6,5 @@
  */
 
 export type DownloadStudentImportTemplate404 = {
-    message: string
-}
+  message: string;
+};

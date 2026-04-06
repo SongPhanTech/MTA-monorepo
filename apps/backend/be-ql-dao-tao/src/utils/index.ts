@@ -1,4 +1,4 @@
-import type { $Enums, PrismaClient } from "@workspace/db"
+import { $Enums, type PrismaClient } from "@workspace/db"
 import { HTTPException } from "hono/http-exception"
 
 export function parseDate(input?: number | string | Date): Date | null {
@@ -484,44 +484,63 @@ export const buildSubjectMapOrThrow = async (
   subjects: SubjectData[],
   createNewSubject = false
 ) => {
-  const subjectSet = new Set<string>(subjects.map((s) => JSON.stringify(s)))
-  const uniqueSubject = Array.from(subjectSet).map((s) => JSON.parse(s) as SubjectData)
+  // const subjectSet = new Set<string>(subjects.map((s) => JSON.stringify(s)))
+  // const uniqueSubject = Array.from(subjectSet).map((s) => JSON.parse(s) as SubjectData)
 
   const orgMap = await buildOrgCodeMapOrThrow(
     prisma,
     subjects.map((s) => s.organizationCode || null)
   )
 
+  const subjectsWithCode = subjects.filter((s): s is SubjectData & { code: string } =>
+    Boolean(s.code)
+  )
   const existingCode = await prisma.subjectVersion.findMany({
     where: {
-      code: { in: subjects.map((s) => s.code).filter((c): c is string => Boolean(c)) },
+      OR: subjectsWithCode.map((s) => ({
+        code: s.code,
+      })),
     },
   })
 
-  const codeConflicts = uniqueSubject.filter((s) => {
-    if (!s.code) return false
-    const existing = existingCode.find((e) => e.code === s.code)
-    if (!existing) return false
-    return (
-      existing.trainingObjectTypeId !== s.trainingObjectTypeId ||
-      existing.name !== s.name ||
-      existing.credit !== s.credit ||
-      existing.period !== s.period ||
-      existing.managementOrganizationId !== orgMap.get(s.organizationCode || null)
-    )
-  })
+  const codeConflicts = subjects
+    .map((s) => {
+      if (!s.code) return null
+      const existing = existingCode.find((e) => e.code === s.code)
+      if (!existing) return null
+
+      const diffs: string[] = []
+      // if (existing.name !== s.name) {
+      //   console.log(existing.name, s.name)
+
+      //   diffs.push("tên học phần")
+      // }
+      if (existing.credit !== s.credit) diffs.push("số tín chỉ")
+      if (existing.period !== s.period) diffs.push("số tiết")
+      if (existing.managementOrganizationId !== orgMap.get(s.organizationCode || null)) {
+        diffs.push("đơn vị quản lý")
+      }
+
+      if (diffs.length > 0) {
+        return { code: s.code, diffs }
+      }
+      return null
+    })
+    .filter((s): s is { code: string; diffs: string[] } => s !== null)
 
   if (codeConflicts.length > 0) {
+    const conflictMessages = Array.from(
+      new Map(codeConflicts.map((c) => [c.code, `${c.code} (${c.diffs.join(", ")})`])).values()
+    )
+
     throw new HTTPException(400, {
-      message: `Mã học phần đã tồn tại với thông tin khác: ${Array.from(
-        new Set(codeConflicts.map((s) => s.code))
-      ).join(", ")}`,
+      message: `Mã học phần đã tồn tại với thông tin khác: ${conflictMessages.join("; ")}`,
     })
   }
 
   const existingCombination = await prisma.subjectVersion.findMany({
     where: {
-      OR: uniqueSubject.map((s) => ({
+      OR: subjects.map((s) => ({
         trainingObjectTypeId: s.trainingObjectTypeId,
         name: s.name,
         credit: s.credit,
@@ -531,7 +550,7 @@ export const buildSubjectMapOrThrow = async (
     },
   })
 
-  const combinationConflicts = uniqueSubject.filter((s) => {
+  const combinationConflicts = subjects.filter((s) => {
     const existing = existingCombination.find(
       (e) =>
         e.trainingObjectTypeId === s.trainingObjectTypeId &&
@@ -555,7 +574,7 @@ export const buildSubjectMapOrThrow = async (
 
   const existing = await prisma.subjectVersion.findMany({
     where: {
-      OR: uniqueSubject.map((s) => ({
+      OR: subjects.map((s) => ({
         name: s.name,
         trainingObjectTypeId: s.trainingObjectTypeId,
         ...(s.code ? { code: s.code } : {}),
@@ -579,9 +598,7 @@ export const buildSubjectMapOrThrow = async (
     select: { id: true, code: true },
   })
 
-  const missing = uniqueSubject.filter(
-    ({ code }) => !existing.some((version) => version.code === code)
-  )
+  const missing = subjects.filter(({ code }) => !existing.some((version) => version.code === code))
 
   if (missing.length && createNewSubject) {
     const newSubjects = await prisma.$transaction(async (tx) => {
@@ -607,7 +624,7 @@ export const buildSubjectMapOrThrow = async (
           credit: subject.credit,
           code: subject.code,
           codeTkb: subject.code,
-          examType: subject.examType,
+          examType: subject.examType || $Enums.ExamType.Oral,
           type: subject.type,
           onePoint: subject.onePoint,
           period: subject.period,

@@ -18,7 +18,7 @@ import {
   useUpdateArchivedCertificate,
 } from "@workspace/db/hooks"
 import { useTrainingObjectTypeStore } from "@workspace/ui"
-import { Button, Col, Form, Input, InputNumber, message, Typography } from "antd"
+import { Button, Col, Form, Input, InputNumber, Switch, message, Typography } from "antd"
 import dayjs from "dayjs"
 import "dayjs/locale/vi"
 import { useCallback, useEffect, useMemo, useState } from "react"
@@ -42,6 +42,10 @@ export type PutArchivedCertificate = {
     {
       certificateId: string
       score?: number
+      listeningScore?: number
+      speakingScore?: number
+      readingScore?: number
+      writingScore?: number
       issuedBy: string
       decisionNumber?: string
       issuedDate?: dayjs.Dayjs
@@ -57,6 +61,7 @@ const { Title } = Typography
 const PutCertificateArchivedModal = () => {
   const [documentFiles, setDocumentFiles] = useState<DocumentFile[]>([])
   const [selectedStudents, setSelectedStudents] = useState<SelectedStudentRow[]>([])
+  const [showLanguageScoreColumns, setShowLanguageScoreColumns] = useState(true)
   const [rowCounter, setRowCounter] = useState(0)
   const [form] = Form.useForm<PutArchivedCertificate>()
   const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
@@ -246,6 +251,10 @@ const PutCertificateArchivedModal = () => {
               certificateId: studentDataForRow.certificateId,
               finalScore: 0,
               score: studentDataForRow.score || 0,
+              listeningScore: studentDataForRow.listeningScore || null,
+              speakingScore: studentDataForRow.speakingScore || null,
+              readingScore: studentDataForRow.readingScore || null,
+              writingScore: studentDataForRow.writingScore || null,
               issuedBy: studentDataForRow.issuedBy || "",
               decisionNumber: studentDataForRow.decisionNumber || null,
               issuedDate: studentDataForRow.issuedDate?.toDate() as Date,
@@ -354,6 +363,14 @@ const PutCertificateArchivedModal = () => {
             <Title level={5} className="m-0">
               Học viên, sinh viên
             </Title>
+            <div className="flex items-center gap-2">
+              <span className="text-sm">Điểm ngoại ngữ</span>
+              <Switch
+                checked={showLanguageScoreColumns}
+                onChange={setShowLanguageScoreColumns}
+                size="small"
+              />
+            </div>
           </div>
 
           {/* Input chọn sinh viên */}
@@ -398,6 +415,7 @@ const PutCertificateArchivedModal = () => {
                 {
                   title: "Họ và tên",
                   align: "left",
+                  width: 200,
                   render: (_, record) => record.fullname,
                 },
                 {
@@ -467,6 +485,70 @@ const PutCertificateArchivedModal = () => {
                     )
                   },
                 },
+                ...((showLanguageScoreColumns
+                  ? [
+                      {
+                        title: "Nghe",
+                        width: 100,
+                        align: "center",
+                        render: (_: any, record: any) => (
+                          <FormItem form={form} name={["student", record.rowId, "listeningScore"]}>
+                            <InputNumber
+                              min={0}
+                              variant="underlined"
+                              className="w-full"
+                              placeholder="Điểm nghe"
+                            />
+                          </FormItem>
+                        ),
+                      },
+                      {
+                        title: "Nói",
+                        width: 100,
+                        align: "center",
+                        render: (_: any, record: any) => (
+                          <FormItem form={form} name={["student", record.rowId, "speakingScore"]}>
+                            <InputNumber
+                              min={0}
+                              variant="underlined"
+                              className="w-full"
+                              placeholder="Điểm nói"
+                            />
+                          </FormItem>
+                        ),
+                      },
+                      {
+                        title: "Đọc",
+                        width: 100,
+                        align: "center",
+                        render: (_: any, record: any) => (
+                          <FormItem form={form} name={["student", record.rowId, "readingScore"]}>
+                            <InputNumber
+                              min={0}
+                              variant="underlined"
+                              className="w-full"
+                              placeholder="Điểm đọc"
+                            />
+                          </FormItem>
+                        ),
+                      },
+                      {
+                        title: "Viết",
+                        width: 100,
+                        align: "center",
+                        render: (_: any, record: any) => (
+                          <FormItem form={form} name={["student", record.rowId, "writingScore"]}>
+                            <InputNumber
+                              min={0}
+                              variant="underlined"
+                              className="w-full"
+                              placeholder="Điểm viết"
+                            />
+                          </FormItem>
+                        ),
+                      },
+                    ]
+                  : []) as any[]),
                 {
                   title: "Nơi cấp",
                   width: 150,

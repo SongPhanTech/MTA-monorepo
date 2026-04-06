@@ -6,6 +6,6 @@
  */
 
 /**
- * @nullable
+ * Từ khoá tìm kiếm
  */
-export type GetClusterSurveyInfo200Data = unknown | null
+export type SearchText = string;

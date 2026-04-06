@@ -10,7 +10,7 @@ import { useExamTypeOptions } from "@hooks/examType"
 import useSpinner from "@hooks/spinner"
 import { formatDate } from "@lib/utils"
 import { useStore } from "@tanstack/react-store"
-import type { ExamList, SubjectClass } from "@workspace/db/client"
+import { $Enums, type ExamList, type SubjectClass } from "@workspace/db/client"
 import { useCountExam, useFindManyExam, useFindManyRoom } from "@workspace/db/hooks"
 import { sqlTransaction } from "@workspace/libs/api/model"
 import { useCreateExams, useMergeExam, useUnmergeExam } from "@workspace/libs/api/training"
@@ -29,6 +29,7 @@ import {
   Popover,
   Row,
   Switch,
+  Tag,
 } from "antd"
 import type { TableRowSelection } from "antd/lib/table/interface"
 import _ from "lodash"
@@ -644,7 +645,18 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                 render: (_, record) => {
                   const name = record.subjectClass?.[0]?.subject?.name || ""
                   return (
-                    <div className="text-left">
+                    <div className="text-left flex flex-row items-center">
+                      <p>
+                        {record.subjectClass?.[0]?.type === $Enums.SubjectClassType.RETAKE ? (
+                          <Tag color={"blue"} className="p-0 px-1">
+                            Học lại
+                          </Tag>
+                        ) : record.subjectClass?.[0]?.type === $Enums.SubjectClassType.REEXAM ? (
+                          <Tag color={"yellow"} className="p-0 px-1">
+                            Thi lại
+                          </Tag>
+                        ) : null}
+                      </p>
                       <HighlightText
                         text={`${name} (${record.subjectClass?.[0]?.subject?.credit || ""})`}
                         searchText={filters.searchText}
@@ -786,11 +798,18 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                 align: "center",
                 width: 350,
                 render: (_, record) => {
+                  const totalStudents =
+                    record.subjectClass?.reduce(
+                      (total: number, sc: any) => total + (sc._count?.subjectClassStudent || 0),
+                      0
+                    ) ?? 0
+
                   return (
                     <>
                       <Form.Item className="m-0" hidden name={["list", record.id, "isChanged"]} />
                       <Form.Item className="m-0" name={["list", record.id, "rooms"]}>
                         <RoomSelector
+                          totalStudents={totalStudents}
                           disabled={record?.examRooms?.some((er: { examList: ExamList[] }) =>
                             er.examList?.some((el) => el.lockExamCode)
                           )}
@@ -803,6 +822,16 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                       </Form.Item>
                     </>
                   )
+                },
+              },
+              {
+                title: "Tổng SL",
+                align: "center",
+                width: 60,
+                render: (_, record) => {
+                  const rooms = listChanges?.[record.id]?.rooms
+                  if (!rooms || rooms.length === 0) return null
+                  return rooms.reduce((acc: number, v: { quantity?: number }) => acc + (v.quantity ?? 0), 0)
                 },
               },
               {

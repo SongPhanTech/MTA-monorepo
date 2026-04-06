@@ -11,6 +11,7 @@ import {
   mergeAttributes,
   useEditor,
 } from "@tiptap/react"
+import Link from "@tiptap/extension-link"
 import StarterKit from "@tiptap/starter-kit"
 import { useEffect, useRef } from "react"
 import "./index.css"
@@ -29,6 +30,8 @@ import TableHeader from "@tiptap/extension-table-header"
 import TableRow from "@tiptap/extension-table-row"
 import { CustomTextStyle } from "./CustomTextStyle"
 import { CustomParagraph } from "./CustomParagraph"
+import { CustomFontSize } from "./CustomFontSize"
+import { CustomFontFamily } from "./CustomFontFamily"
 
 type TextEditorProps = {
   value?: string
@@ -57,17 +60,26 @@ export function RichTextEditor({
     immediatelyRender: false,
     editable,
     extensions: [
-      StarterKit.configure({ paragraph: false }),
+      // StarterKit.configure({ paragraph: false }),
+      StarterKit,
       CustomParagraph,
       Underline,
+      Link.configure({
+        openOnClick: false,
+        HTMLAttributes: {
+          class: "text-blue-500 underline cursor-pointer",
+        },
+      }),
       TextAlign.configure({
         types: ["heading", "paragraph", "textStyle", "image"],
       }),
       Highlight,
       CustomTextStyle,
+      CustomFontSize,
+      CustomFontFamily,
       Color.configure({ types: ["textStyle"] }),
       Image.configure({
-        inline: true,
+        inline: false,
         allowBase64: false,
         HTMLAttributes: {
           class: "mx-auto my-2",
@@ -430,7 +442,7 @@ export function RichTextEditor({
   useEffect(() => {
     if (!editor) return
     if (!value && defaultTable) return
-    if (value !== editor.getHTML()) {
+    if (value !== editor.getHTML() && !editor.isFocused) {
       editor.commands.setContent(value || "", false)
     }
   }, [value, editor, defaultTable])

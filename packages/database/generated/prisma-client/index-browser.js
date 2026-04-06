@@ -1089,6 +1089,7 @@ exports.Prisma.DM_DonViScalarFieldEnum = {
   sThietBiTao: 'sThietBiTao',
   sThietBiSua: 'sThietBiSua',
   sCode: 'sCode',
+  sTKPUCode: 'sTKPUCode',
   sTenVietTat: 'sTenVietTat',
   sParentId: 'sParentId',
   sTruongDonVi: 'sTruongDonVi',
@@ -1608,6 +1609,7 @@ exports.Prisma.StudentResearchTopicScalarFieldEnum = {
   mainContent: 'mainContent',
   supervisorId: 'supervisorId',
   coSupervisorId: 'coSupervisorId',
+  thirdSupervisorId: 'thirdSupervisorId',
   reportDate: 'reportDate'
 };
 
@@ -1775,6 +1777,7 @@ exports.Prisma.TrainingCourseScalarFieldEnum = {
   endYear: 'endYear',
   academicYear: 'academicYear',
   maxTrainingTime: 'maxTrainingTime',
+  isRetakeExam: 'isRetakeExam',
   admissionQuota: 'admissionQuota',
   admittedStudent: 'admittedStudent',
   enrolledStudent: 'enrolledStudent',
@@ -3042,7 +3045,9 @@ exports.Prisma.ThesisSessionScalarFieldEnum = {
   defenseDecisionNumber: 'defenseDecisionNumber',
   defenseDecisionMaker: 'defenseDecisionMaker',
   defenseDecisionDate: 'defenseDecisionDate',
-  chief: 'chief'
+  chief: 'chief',
+  topicEntryDeadline: 'topicEntryDeadline',
+  councilDeadline: 'councilDeadline'
 };
 
 exports.Prisma.ThesisProjectScalarFieldEnum = {
@@ -3069,11 +3074,17 @@ exports.Prisma.ThesisProjectScalarFieldEnum = {
   type: 'type',
   isLock: 'isLock',
   editProject: 'editProject',
+  researchTopicAssociated: 'researchTopicAssociated',
   firstCheckProgress: 'firstCheckProgress',
   secondCheckProgress: 'secondCheckProgress',
   isEligibleForDefense: 'isEligibleForDefense',
   primarySupervisorId: 'primarySupervisorId',
   secondarySupervisorId: 'secondarySupervisorId',
+  thirdSupervisorId: 'thirdSupervisorId',
+  isProductProject: 'isProductProject',
+  isGroupProject: 'isGroupProject',
+  isLanguage: 'isLanguage',
+  externalUnit: 'externalUnit',
   subjectClassId: 'subjectClassId',
   thesisSessionId: 'thesisSessionId',
   supervisorName: 'supervisorName',
@@ -5524,6 +5535,7 @@ exports.Prisma.DM_DonViOrderByRelevanceFieldEnum = {
   sThietBiTao: 'sThietBiTao',
   sThietBiSua: 'sThietBiSua',
   sCode: 'sCode',
+  sTKPUCode: 'sTKPUCode',
   sTenVietTat: 'sTenVietTat',
   sParentId: 'sParentId',
   sTruongDonVi: 'sTruongDonVi',
@@ -5840,7 +5852,8 @@ exports.Prisma.StudentResearchTopicOrderByRelevanceFieldEnum = {
   name: 'name',
   mainContent: 'mainContent',
   supervisorId: 'supervisorId',
-  coSupervisorId: 'coSupervisorId'
+  coSupervisorId: 'coSupervisorId',
+  thirdSupervisorId: 'thirdSupervisorId'
 };
 
 exports.Prisma.StudentInternshipOrderByRelevanceFieldEnum = {
@@ -6700,8 +6713,10 @@ exports.Prisma.ThesisProjectOrderByRelevanceFieldEnum = {
   language: 'language',
   type: 'type',
   editProject: 'editProject',
+  researchTopicAssociated: 'researchTopicAssociated',
   primarySupervisorId: 'primarySupervisorId',
   secondarySupervisorId: 'secondarySupervisorId',
+  thirdSupervisorId: 'thirdSupervisorId',
   subjectClassId: 'subjectClassId',
   thesisSessionId: 'thesisSessionId',
   supervisorName: 'supervisorName',

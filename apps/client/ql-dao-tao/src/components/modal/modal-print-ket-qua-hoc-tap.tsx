@@ -295,22 +295,29 @@ const ModalPrintToKQHT = () => {
                 const regularSubjects: any[] = []
                 const graduationSubjects: any[] = []
 
-                subjectScoreData?.trainingBlocks.forEach((block) => {
-                  block.subjects
-                    // ?.filter((subjectItem) => subjectItem.print === true)
-                    ?.forEach((subjectItem, index: number) => {
-                      if (subjectItem.graduation) {
-                        graduationSubjects.push({
-                          subjectItem,
-                          index,
-                        })
-                      } else {
-                        regularSubjects.push({
-                          subjectItem,
-                          index,
-                        })
-                      }
+                const sortedSubjects = (subjectScoreData?.trainingBlocks ?? [])
+                  .flatMap((block) => block.subjects ?? [])
+                  .sort((a, b) => {
+                    const semesterA = a.semester ?? Number.MAX_SAFE_INTEGER
+                    const semesterB = b.semester ?? Number.MAX_SAFE_INTEGER
+                    if (semesterA !== semesterB) {
+                      return semesterA - semesterB
+                    }
+                    return (a.subject?.name ?? "").localeCompare(b.subject?.name ?? "", "vi")
+                  })
+
+                sortedSubjects.forEach((subjectItem, index: number) => {
+                  if (subjectItem.graduation) {
+                    graduationSubjects.push({
+                      subjectItem,
+                      index,
                     })
+                  } else {
+                    regularSubjects.push({
+                      subjectItem,
+                      index,
+                    })
+                  }
                 })
 
                 // Render các môn thường trước

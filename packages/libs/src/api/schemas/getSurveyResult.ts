@@ -4,40 +4,40 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetSurveyResultSurveyQuestionItem } from './getSurveyResultSurveyQuestionItem'
-import type { GetSurveyResultSurveyChoiceItem } from './getSurveyResultSurveyChoiceItem'
-import type { GetSurveyResultLectureInfo } from './getSurveyResultLectureInfo'
-import type { GetSurveyResultSubjectClass } from './getSurveyResultSubjectClass'
-import type { GetSurveyResultSemester } from './getSurveyResultSemester'
+import type { GetSurveyResultSurveyQuestionItem } from './getSurveyResultSurveyQuestionItem';
+import type { GetSurveyResultSurveyChoiceItem } from './getSurveyResultSurveyChoiceItem';
+import type { GetSurveyResultLectureInfo } from './getSurveyResultLectureInfo';
+import type { GetSurveyResultSubjectClass } from './getSurveyResultSubjectClass';
+import type { GetSurveyResultSemester } from './getSurveyResultSemester';
 
 export interface GetSurveyResult {
-    id: string
-    /** @nullable */
-    code?: string | null
-    active?: boolean
-    /** @nullable */
-    description?: string | null
-    /** @nullable */
-    deletedAt?: string | null
-    /** @nullable */
-    createdAt?: string | null
-    /** @nullable */
-    updatedAt?: string | null
-    /** @nullable */
-    createdBy?: string | null
-    name: string
-    /** @nullable */
-    startDate: string | null
-    /** @nullable */
-    endDate?: string | null
-    isPublic?: boolean
-    anonymous?: boolean
-    surveyQuestion: GetSurveyResultSurveyQuestionItem[]
-    surveyChoice: GetSurveyResultSurveyChoiceItem[]
-    /** @nullable */
-    lectureInfo: GetSurveyResultLectureInfo
-    /** @nullable */
-    subjectClass: GetSurveyResultSubjectClass
-    /** @nullable */
-    semester: GetSurveyResultSemester
+  id: string;
+  /** @nullable */
+  code?: string | null;
+  active?: boolean;
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  deletedAt?: string | null;
+  /** @nullable */
+  createdAt?: string | null;
+  /** @nullable */
+  updatedAt?: string | null;
+  /** @nullable */
+  createdBy?: string | null;
+  name: string;
+  /** @nullable */
+  startDate: string | null;
+  /** @nullable */
+  endDate?: string | null;
+  isPublic?: boolean;
+  anonymous?: boolean;
+  surveyQuestion: GetSurveyResultSurveyQuestionItem[];
+  surveyChoice: GetSurveyResultSurveyChoiceItem[];
+  /** @nullable */
+  lectureInfo: GetSurveyResultLectureInfo;
+  /** @nullable */
+  subjectClass: GetSurveyResultSubjectClass;
+  /** @nullable */
+  semester: GetSurveyResultSemester;
 }

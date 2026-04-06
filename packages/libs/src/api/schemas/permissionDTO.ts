@@ -52,11 +52,11 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  */
 
 export interface PermissionDTO {
-    /**
-     * Mã chức năng
-     * @nullable
-     */
-    sFormName?: string | null
-    /** Tổng quyền theo bitwise */
-    lPermission?: number
+  /**
+   * Mã chức năng
+   * @nullable
+   */
+  sFormName?: string | null;
+  /** Tổng quyền theo bitwise */
+  lPermission?: number;
 }

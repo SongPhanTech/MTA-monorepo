@@ -50,6 +50,7 @@ type TableProps<T, ChildKey extends keyof T> = {
   childrenFieldName: ChildKey
   onRowDoubleClick?: (record: T) => void
   defaultExpandAll?: boolean
+  resetIndexPerGroup?: boolean
 } & Omit<
   TableAntdProps,
   "columns" | "data" | "pagination" | "headerTitleKey" | "onRow" | "childrenFieldName" | "number"
@@ -82,6 +83,7 @@ const TableCollapse = <
   defaultExpandAll,
   filters,
   setFilters,
+  resetIndexPerGroup = false,
   ...rest
 }: TableProps<T, ChildKey>) => {
   const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([])
@@ -176,6 +178,18 @@ const TableCollapse = <
   }, [dataWithKey, childrenFieldName])
 
   const restColumns = useMemo(() => {
+    const indexMap = new Map<string, number>()
+    if (resetIndexPerGroup) {
+      dataWithKey.forEach((parent) => {
+        const children = parent[childrenFieldName] as any[]
+        if (Array.isArray(children)) {
+          children.forEach((child, index) => {
+            indexMap.set(child.key, index + 1)
+          })
+        }
+      })
+    }
+
     const baseColumns = [
       {
         title: "TT",
@@ -184,8 +198,11 @@ const TableCollapse = <
         render: (_: any, record: T) => {
           if (record.$type !== "child") return ""
 
-          // @ts-expect-error
-          const order = allChildren.findIndex((item) => item.key === record.key)
+          if (resetIndexPerGroup) {
+            return indexMap.get(record.key as string) ?? ""
+          }
+
+          const order = allChildren.findIndex((item: any) => item.key === record.key)
           return order >= 0
             ? order +
                 1 +
@@ -230,7 +247,7 @@ const TableCollapse = <
         return text
       },
     }))
-  }, [columns, allChildren, currentPage, pagination, headerColumn])
+  }, [columns, allChildren, currentPage, pagination, headerColumn, resetIndexPerGroup, dataWithKey])
 
   return (
     <>

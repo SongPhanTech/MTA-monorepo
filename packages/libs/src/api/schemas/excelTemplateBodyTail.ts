@@ -4,9 +4,9 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { ExcelTemplateBodyTailData } from './excelTemplateBodyTailData'
+import type { ExcelTemplateBodyTailData } from './excelTemplateBodyTailData';
 
 export type ExcelTemplateBodyTail = {
-    /** @nullable */
-    data?: ExcelTemplateBodyTailData
-}
+  /** @nullable */
+  data?: ExcelTemplateBodyTailData;
+};

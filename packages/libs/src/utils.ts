@@ -480,7 +480,7 @@ export const calcFinalScore = (
 
   // 4.5 Check reexam score
   if (subjectClassType === SubjectClassType.REEXAM) {
-    if (finalScore <= coef.scoreToPass + coef.reduceReExamScore) {
+    if (finalScore >= coef.scoreToPass && finalScore <= coef.scoreToPass + coef.reduceReExamScore) {
       finalScore = coef.scoreToPass
     } else {
       finalScore = Math.min(finalScore - coef.reduceReExamScore, coef.maxReExamScore)

@@ -3,8 +3,7 @@ import DanhMucLuanVan, { type DanhMucLuanVanProps } from "../dm-luan-van"
 
 export default function PostgraduateProjectKhoa() {
   const data: DanhMucLuanVanProps = {
-    isManage: true,
-    role: "P2",
+    role: "Khoa",
   }
   return <DanhMucLuanVan {...data} />
 }

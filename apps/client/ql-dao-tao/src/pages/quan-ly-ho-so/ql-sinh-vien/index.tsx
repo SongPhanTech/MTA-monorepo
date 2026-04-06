@@ -288,7 +288,26 @@ export default function UserProfilePageDs() {
       },
       curriculumVersionParallel: true,
     },
-    orderBy: [{ userProfile: { firstName: "asc" } }, { userProfile: { lastName: "asc" } }],
+    orderBy: [
+      {
+        fixedClass: {
+          trainingCourse: {
+            semesterStart: { startDate: "desc" },
+          },
+        },
+      },
+      {
+        curriculumVersion: {
+          curriculum: {
+            trainingMajor: {
+              name: "asc",
+            },
+          },
+        },
+      },
+      { userProfile: { firstName: "asc" } },
+      { userProfile: { lastName: "asc" } },
+    ],
     take: numberOfPages,
     skip: (currentPage - 1) * numberOfPages,
   })

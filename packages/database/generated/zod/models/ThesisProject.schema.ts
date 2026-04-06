@@ -32,9 +32,14 @@ const baseSchema = z.object({
     type: z.string().nullish(),
     isLock: z.boolean().default(false),
     editProject: z.string().nullish(),
+    researchTopicAssociated: z.string().nullish(),
     firstCheckProgress: z.number().nullish(),
     secondCheckProgress: z.number().nullish(),
     isEligibleForDefense: z.boolean().default(true),
+    isProductProject: z.boolean().default(false),
+    isGroupProject: z.boolean().default(false),
+    isLanguage: z.boolean().default(false),
+    externalUnit: z.boolean().default(false),
     supervisorName: z.string().nullish(),
     coSupervisorName: z.string().nullish(),
     CHUTICH: z.string().nullish(),
@@ -74,9 +79,14 @@ const baseSchemaWithoutDefaults = z.object({
     type: z.string().nullish(),
     isLock: z.boolean(),
     editProject: z.string().nullish(),
+    researchTopicAssociated: z.string().nullish(),
     firstCheckProgress: z.number().nullish(),
     secondCheckProgress: z.number().nullish(),
     isEligibleForDefense: z.boolean(),
+    isProductProject: z.boolean(),
+    isGroupProject: z.boolean(),
+    isLanguage: z.boolean(),
+    externalUnit: z.boolean(),
     supervisorName: z.string().nullish(),
     coSupervisorName: z.string().nullish(),
     CHUTICH: z.string().nullish(),
@@ -95,6 +105,7 @@ const baseSchemaWithoutDefaults = z.object({
 const relationSchema = z.object({
     primarySupervisor: z.record(z.string(), z.unknown()).optional(),
     secondarySupervisor: z.record(z.string(), z.unknown()).optional(),
+    thirdSupervisor: z.record(z.string(), z.unknown()).optional(),
     subjectClass: z.record(z.string(), z.unknown()).optional(),
     thesisSession: z.record(z.string(), z.unknown()).optional(),
     supervisor: z.record(z.string(), z.unknown()).optional(),
@@ -114,6 +125,7 @@ const relationSchema = z.object({
 const fkSchema = z.object({
     primarySupervisorId: z.string().nullish(),
     secondarySupervisorId: z.string().nullish(),
+    thirdSupervisorId: z.string().nullish(),
     subjectClassId: z.string().nullish(),
     thesisSessionId: z.string().nullish(),
     supervisorId: z.string().nullish(),
@@ -174,9 +186,14 @@ export const ThesisProjectPrismaUpdateSchema = z.object({
     type: z.string().nullish(),
     isLock: z.boolean(),
     editProject: z.string().nullish(),
+    researchTopicAssociated: z.string().nullish(),
     firstCheckProgress: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
     secondCheckProgress: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
     isEligibleForDefense: z.boolean(),
+    isProductProject: z.boolean(),
+    isGroupProject: z.boolean(),
+    isLanguage: z.boolean(),
+    externalUnit: z.boolean(),
     supervisorName: z.string().nullish(),
     coSupervisorName: z.string().nullish(),
     CHUTICH: z.string().nullish(),
@@ -197,7 +214,7 @@ export const ThesisProjectPrismaUpdateSchema = z.object({
  * `ThesisProject` schema for create operations excluding foreign keys and relations.
  */
 export const ThesisProjectCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, thesisType: true, status: true, isLock: true, isEligibleForDefense: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, thesisType: true, status: true, isLock: true, isEligibleForDefense: true, isProductProject: true, isGroupProject: true, isLanguage: true, externalUnit: true
 });
 
 

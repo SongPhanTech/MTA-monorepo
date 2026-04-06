@@ -70,6 +70,7 @@ export default function SettingCouncil() {
   const [leftData, setLeftData] = useState<ExpertProfile[]>([])
   const [rightData, setRightData] = useState<ExpertProfile[]>([])
   const [currentPage, setCurrentPage] = useState(1)
+  const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
   const [filters, setFilters] = useState<FilterProps>({
     code: undefined,
     name: undefined,
@@ -347,7 +348,7 @@ export default function SettingCouncil() {
         ),
       },
       {
-        title: "Ca bảo vệ",
+        title: "Thời gian bảo vệ",
         key: "session",
         width: 100,
         render: (_: any, record: any) => {
@@ -456,12 +457,12 @@ export default function SettingCouncil() {
           <div className="flex items-start gap-x-4">
             <Form.Item
               name="defenseSessionIds"
-              label={<span className="font-semibold">Ca bảo vệ</span>}
+              label={<span className="font-semibold">thời gian bảo vệ</span>}
               className="mb-0 flex-1"
             >
               <Select
                 mode="multiple"
-                placeholder="Chọn ca bảo vệ"
+                placeholder="Chọn thời gian bảo vệ"
                 options={defenseSession?.map((item) => ({
                   label: item.startTime ? dayjs(item.startTime).format("HH:mm") : "",
                   value: item.id,
@@ -566,8 +567,7 @@ export default function SettingCouncil() {
                   width: 60,
                   align: "center",
                   fixed: "left",
-                  render: (_, __, index: number) =>
-                    index + 1 + (currentPage - 1) * numberOfPages,
+                  render: (_, __, index: number) => index + 1 + (currentPage - 1) * numberOfPages,
                 },
                 {
                   title: "Tên chuyên gia",
@@ -667,8 +667,7 @@ export default function SettingCouncil() {
                   width: 60,
                   align: "center",
                   fixed: "left",
-                  render: (_, __, index: number) =>
-                    index + 1 + (currentPage - 1) * numberOfPages,
+                  render: (_, __, index: number) => index + 1 + (currentPage - 1) * numberOfPages,
                 },
                 {
                   title: "Tên chuyên gia",

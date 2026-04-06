@@ -4,10 +4,10 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { CalcEvidenceTags200EvidenceTags } from './calcEvidenceTags200EvidenceTags'
-import type { CalcEvidenceTags200ResultItem } from './calcEvidenceTags200ResultItem'
+import type { CalcEvidenceTags200EvidenceTags } from './calcEvidenceTags200EvidenceTags';
+import type { CalcEvidenceTags200ResultItem } from './calcEvidenceTags200ResultItem';
 
 export type CalcEvidenceTags200 = {
-    evidenceTags: CalcEvidenceTags200EvidenceTags
-    result: CalcEvidenceTags200ResultItem[]
-}
+  evidenceTags: CalcEvidenceTags200EvidenceTags;
+  result: CalcEvidenceTags200ResultItem[];
+};

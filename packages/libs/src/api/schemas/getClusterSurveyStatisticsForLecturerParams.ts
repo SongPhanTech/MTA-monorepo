@@ -6,6 +6,6 @@
  */
 
 export type GetClusterSurveyStatisticsForLecturerParams = {
-    organizations?: string[]
-    lectureId: string
-}
+organizations?: string[];
+lectureId: string;
+};

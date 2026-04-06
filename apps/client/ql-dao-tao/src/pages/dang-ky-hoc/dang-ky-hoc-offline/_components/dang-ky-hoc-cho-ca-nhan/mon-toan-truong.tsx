@@ -370,8 +370,9 @@ export default function MonToanTruong() {
           }}
           rowSelection={{
             selectedRowKeys: selectedSubjectClassRowKeys,
-            onChange: (selectedRowKeys) => {
+            onChange: (selectedRowKeys, selectedRows) => {
               setSelectedSubjectClassRowKeys(selectedRowKeys)
+              setSubjectVersionIds(selectedRows.map((row) => row.subject.id))
             },
             getCheckboxProps: (record) => ({
               disabled:

@@ -11,14 +11,15 @@ import type { $Enums, Prisma, SubjectClassTime } from "@workspace/db/client"
 import {
   useCountSubjectClass,
   useFindFirstSemester,
+  useFindManySemester,
   useFindManySubjectClass,
   useFindUniqueUserProfile,
 } from "@workspace/db/hooks"
 import { dayjs } from "@workspace/ui"
-import { Col, Row } from "antd"
+import { Col, Row, Select } from "antd"
 import _ from "lodash"
 import type React from "react"
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
 export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType }) {
@@ -26,6 +27,7 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
   const id = me?.sDM_NhanVienId || ""
   const [currentPage, setCurrentPage] = useState(1)
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+  const [selectedSemesterId, setSelectedSemesterId] = useState<string | undefined>(undefined)
   const [filters, setFilters] = useState<FilterProps>({
     code: "",
     name: "",
@@ -39,31 +41,64 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
   })
 
   const toDay = dayjs().startOf("day")
+  // const { data: currentSemester } = useFindFirstSemester({
+  //   where: {
+  //     schoolYear: {
+  //       startDate: { lte: toDay.toDate() },
+  //       endDate: { gte: toDay.toDate() },
+  //     },
+  //     startDate: { lte: toDay.toDate() },
+  //     endDate: { gte: toDay.toDate() },
+  //   },
+  //   select: {
+  //     id: true,
+  //     name: true,
+  //     schoolYear: { select: { name: true } },
+  //   },
+  // })
 
-  const { data: currentSemester } = useFindFirstSemester({
-    where: {
-      schoolYear: {
-        startDate: { lte: toDay.toDate() },
-        endDate: { gte: toDay.toDate() },
-      },
-      startDate: { lte: toDay.toDate() },
-      endDate: { gte: toDay.toDate() },
-    },
-    select: {
-      id: true,
-      name: true,
-      schoolYear: {
-        select: {
-          name: true,
-        },
-      },
-    },
-  })
-  const { data: userProfile } = useFindUniqueUserProfile(
+  const { data: allSemesters = [] } = useFindManySemester(
     {
       where: {
-        id,
+        //startDate: { lte: toDay.toDate() },
+        subjectClasses: {
+          some: {
+            deletedAt: null,
+            active: true,
+            status: "OFFICIAL",
+
+            subjectClassStudent: {
+              some: {
+                student: { userProfileId: id },
+              },
+            },
+            ...(type ? { type } : {}),
+          },
+        },
       },
+      select: {
+        id: true,
+        name: true,
+        schoolYear: { select: { name: true } },
+      },
+      orderBy: [{ schoolYear: { startDate: "desc" } }, { startDate: "desc" }],
+    },
+    {
+      enabled: !!id,
+    }
+  )
+
+  useEffect(() => {
+    if (allSemesters?.[0]?.id && !selectedSemesterId) {
+      setSelectedSemesterId(allSemesters[0].id)
+    }
+  }, [allSemesters?.[0]?.id])
+
+  const displaySemester = allSemesters.find((s) => s.id === selectedSemesterId)
+
+  const { data: userProfile } = useFindUniqueUserProfile(
+    {
+      where: { id },
       select: {
         educationAndTraining: {
           select: {
@@ -71,9 +106,7 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
             fixedClass: {
               select: {
                 trainingCourse: {
-                  select: {
-                    trainingObjectTypeId: true,
-                  },
+                  select: { trainingObjectTypeId: true },
                 },
               },
             },
@@ -81,67 +114,41 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
         },
       },
     },
-    {
-      enabled: !!id,
-    }
+    { enabled: !!id }
   )
-  const semesterId = currentSemester?.id
+
+  const semesterId = selectedSemesterId
   const trainingObjectTypeId =
     userProfile?.educationAndTraining?.[0]?.fixedClass?.trainingCourse?.trainingObjectTypeId
-  // const { id: semesterId } = useSemesterStore()
+
   const { options, getExamTypeLabel } = useExamTypeOptions()
-  // const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+
   const where = useMemo(
     () =>
       ({
-        ...(filters.name
-          ? {
-              name: { contains: filters.name, mode: "insensitive" as const },
-            }
-          : {}),
-        ...(filters.code
-          ? {
-              code: { contains: filters.code, mode: "insensitive" as const },
-            }
-          : {}),
-
-        ...(filters.examType
-          ? {
-              examType: {
-                in: filters.examType,
-              },
-            }
-          : {}),
+        ...(filters.name ? { name: { contains: filters.name, mode: "insensitive" as const } } : {}),
+        ...(filters.code ? { code: { contains: filters.code, mode: "insensitive" as const } } : {}),
+        ...(filters.examType ? { examType: { in: filters.examType } } : {}),
         ...(filters.lecturerId?.length === 1
-          ? {
-              ...(filters.lecturerId[0] ? { lecturerId: { not: null } } : { lecturerId: null }),
-            }
+          ? filters.lecturerId[0]
+            ? { lecturerId: { not: null } }
+            : { lecturerId: null }
           : {}),
         ...(filters.mainLecturer
           ? {
               mainLecturer: {
-                userProfile: filters.mainLecturer
-                  ? {
-                      fullname: {
-                        contains: filters.mainLecturer,
-                        mode: "insensitive" as const,
-                      },
-                    }
-                  : {},
+                userProfile: {
+                  fullname: { contains: filters.mainLecturer, mode: "insensitive" as const },
+                },
               },
             }
           : {}),
         ...(filters.extraLecturer
           ? {
               extraLecturer: {
-                userProfile: filters.extraLecturer
-                  ? {
-                      fullname: {
-                        contains: filters.extraLecturer,
-                        mode: "insensitive" as const,
-                      },
-                    }
-                  : {},
+                userProfile: {
+                  fullname: { contains: filters.extraLecturer, mode: "insensitive" as const },
+                },
               },
             }
           : {}),
@@ -150,10 +157,7 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
               room: {
                 building: {
                   trainingLocation: {
-                    name: {
-                      contains: filters.room,
-                      mode: "insensitive" as const,
-                    },
+                    name: { contains: filters.room, mode: "insensitive" as const },
                   },
                 },
               },
@@ -163,13 +167,7 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
         active: true,
         status: "OFFICIAL",
         trainingObjectTypeId,
-        subjectClassStudent: {
-          some: {
-            student: {
-              userProfileId: id,
-            },
-          },
-        },
+        subjectClassStudent: { some: { student: { userProfileId: id } } },
         semesterId,
         type: type,
       }) satisfies Prisma.SubjectClassWhereInput,
@@ -178,31 +176,13 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
 
   const { data: subjectClasses = [], refetch } = useFindManySubjectClass(
     {
-      where: {
-        ...where,
-      },
+      where,
       include: {
         semester: true,
-        mainLecturer: {
-          include: {
-            userProfile: true,
-          },
-        },
-        subject: {
-          include: {
-            managementOrganization: true,
-          },
-        },
-        extraLecturer: {
-          include: {
-            userProfile: true,
-          },
-        },
-        enterGradeLecturer: {
-          include: {
-            userProfile: true,
-          },
-        },
+        mainLecturer: { include: { userProfile: true } },
+        subject: { include: { managementOrganization: true } },
+        extraLecturer: { include: { userProfile: true } },
+        enterGradeLecturer: { include: { userProfile: true } },
         room: true,
         trainingLocation: true,
         subjectClassStudent: true,
@@ -213,11 +193,7 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
             _count: {
               select: {
                 students: {
-                  where: {
-                    deletedAt: null,
-                    active: true,
-                    status: "ENROLLED",
-                  },
+                  where: { deletedAt: null, active: true, status: "ENROLLED" },
                 },
               },
             },
@@ -225,27 +201,12 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
         },
       },
       orderBy: [
+        ...emptyObjectIf([{ maxStudent: filters.maxStudent }], !!filters.maxStudent),
         ...emptyObjectIf(
-          [
-            {
-              maxStudent: filters.maxStudent,
-            },
-          ],
-          !!filters.maxStudent
-        ),
-        ...emptyObjectIf(
-          [
-            {
-              subjectClassStudent: {
-                _count: filters.subjectClassStudent,
-              },
-            },
-          ],
+          [{ subjectClassStudent: { _count: filters.subjectClassStudent } }],
           !!filters.subjectClassStudent
         ),
-        {
-          code: "asc",
-        },
+        { code: "asc" },
       ],
       take: numberOfPages,
       skip: (currentPage - 1) * numberOfPages,
@@ -256,16 +217,10 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
     }
   )
 
-  const { data: count } = useCountSubjectClass({
-    where: {
-      ...where,
-    },
-  })
+  const { data: count } = useCountSubjectClass({ where })
 
   const debouncedRefetch = useCallback(
-    _.debounce(() => {
-      refetch()
-    }, 500),
+    _.debounce(() => refetch(), 500),
     []
   )
 
@@ -277,21 +232,39 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
     })
   }
 
-  const { onOpen: onOpenEditSubjectClass } = useDisclosure<{
-    id: string
-    mode: "edit" | "view"
-  }>({
+  const { onOpen: onOpenEditSubjectClass } = useDisclosure<{ id: string; mode: "edit" | "view" }>({
     tag: "PutOneSubjectClassModal",
   })
+
+  const handleSemesterChange = (value: string) => {
+    setSelectedSemesterId(value)
+    setCurrentPage(1)
+  }
 
   return (
     <div>
       <Row gutter={[8, 8]}>
         <Col span={24}>
           <h2 className="m-0 text-center text-2xl font-bold">
-            Thời khoá biểu {currentSemester?.name}
+            Thời khoá biểu{" "}
+            {displaySemester ? `${displaySemester.name} - ${displaySemester.schoolYear?.name}` : ""}
           </h2>
         </Col>
+
+        <Col span={24} md={8} lg={6}>
+          <Select
+            style={{ width: "100%" }}
+            placeholder="Chọn học kỳ"
+            value={selectedSemesterId}
+            onChange={handleSemesterChange}
+            options={allSemesters.map((s) => ({
+              label: `${s.name} - ${s.schoolYear?.name}`,
+              value: s.id,
+            }))}
+            allowClear={false}
+          />
+        </Col>
+
         <Col span={24}>
           <Table
             rowKey="id"
@@ -319,36 +292,6 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
                   </p>
                 ),
               },
-              // {
-              //     title: 'Kíp',
-              //     align: 'center',
-              //     type: 'select',
-              //     width: 60,
-              //     options: Object.entries(SUBJECT_CLASS_SCHEDULE_TYPE).map(
-              //         ([key, value_]) => {
-              //             return {
-              //                 label: value_,
-              //                 value: key,
-              //             }
-              //         }
-              //     ),
-              //     render: (_, record) =>
-              //         SUBJECT_CLASS_SCHEDULE_TYPE[
-              //             record.schedule as keyof typeof SUBJECT_CLASS_SCHEDULE_TYPE
-              //         ],
-              // },
-              // {
-              //     title: 'Lớp QL',
-              //     align: 'center',
-              //     width: 100,
-              //     render: (_, record) => (
-              //         <p>
-              //             {record?.fixedClasses
-              //                 ?.map((e: FixedClass) => e.code)
-              //                 .join(', ') || '-'}
-              //         </p>
-              //     ),
-              // },
               {
                 title: "Số SV",
                 width: 80,
@@ -382,10 +325,7 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
                 width: 150,
                 type: "select",
                 options: options,
-                render: (__, record) => {
-                  const examType = getExamTypeLabel(record?.examType)
-                  return <div>{examType}</div>
-                },
+                render: (__, record) => <div>{getExamTypeLabel(record?.examType)}</div>,
               },
               {
                 title: "Khu vực",
@@ -405,18 +345,15 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
                 title: "Thời khoá biểu",
                 width: 120,
                 align: "center",
-                render: (_, record) => {
-                  return record.subjectClassTimes
+                render: (_, record) =>
+                  record.subjectClassTimes
                     ?.uniqueByKey?.("dayOfWeek")
-                    ?.map?.((tkb: SubjectClassTime) => {
-                      return (
-                        <p>
-                          {tkb.dayOfWeek === 8 ? "CN" : `T${tkb.dayOfWeek}`} - {tkb.startPeriod} -{" "}
-                          {tkb.endPeriod}
-                        </p>
-                      )
-                    })
-                },
+                    ?.map?.((tkb: SubjectClassTime) => (
+                      <p key={tkb.dayOfWeek}>
+                        {tkb.dayOfWeek === 8 ? "CN" : `T${tkb.dayOfWeek}`} - {tkb.startPeriod} -{" "}
+                        {tkb.endPeriod}
+                      </p>
+                    )),
               },
               {
                 title: "Ngày thi",
@@ -431,19 +368,14 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
                 render: (_, record) => (
                   <div className="flex items-center justify-center">
                     <ViewIcon
-                      onClick={() => {
-                        onOpenEditSubjectClass({
-                          id: record.id,
-                          mode: "view",
-                        })
-                      }}
+                      onClick={() => onOpenEditSubjectClass({ id: record.id, mode: "view" })}
                     />
                   </div>
                 ),
               },
             ]}
             data={subjectClasses}
-            maxHeight={"calc(100vh - 200px)"}
+            maxHeight={"calc(100vh - 250px)"}
             pagination={{
               current: currentPage,
               pageSize: numberOfPages,
@@ -460,19 +392,6 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
           />
         </Col>
       </Row>
-      <style>
-        {`
-                .readonly-checkbox.ant-checkbox-wrapper-disabled {
-                    opacity: 1;
-                    pointer-events: none; /* không click được */
-                    }
-
-                .readonly-checkbox .ant-checkbox-disabled .ant-checkbox-inner {
-                background-color: #fff;
-                border-color: #d9d9d9;
-                }
-                `}
-      </style>
     </div>
   )
 }

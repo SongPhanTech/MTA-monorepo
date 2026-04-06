@@ -8,15 +8,14 @@
 /**
  * @nullable
  */
-export type GetPublicSurveysV2ResultDataItemSemesterSemesterType =
-    | (typeof GetPublicSurveysV2ResultDataItemSemesterSemesterType)[keyof typeof GetPublicSurveysV2ResultDataItemSemesterSemesterType]
-    | null
+export type GetPublicSurveysV2ResultDataItemSemesterSemesterType = typeof GetPublicSurveysV2ResultDataItemSemesterSemesterType[keyof typeof GetPublicSurveysV2ResultDataItemSemesterSemesterType] | null;
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetPublicSurveysV2ResultDataItemSemesterSemesterType = {
-    FIRST: 'FIRST',
-    FIRST_SUPPLEMENTARY: 'FIRST_SUPPLEMENTARY',
-    SECOND: 'SECOND',
-    SECOND_SUPPLEMENTARY: 'SECOND_SUPPLEMENTARY',
-    SUMMER: 'SUMMER',
-} as const
+  FIRST: 'FIRST',
+  FIRST_SUPPLEMENTARY: 'FIRST_SUPPLEMENTARY',
+  SECOND: 'SECOND',
+  SECOND_SUPPLEMENTARY: 'SECOND_SUPPLEMENTARY',
+  SUMMER: 'SUMMER',
+} as const;

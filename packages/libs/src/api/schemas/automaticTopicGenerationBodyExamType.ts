@@ -8,16 +8,15 @@
 /**
  * @nullable
  */
-export type AutomaticTopicGenerationBodyExamType =
-    | (typeof AutomaticTopicGenerationBodyExamType)[keyof typeof AutomaticTopicGenerationBodyExamType]
-    | null
+export type AutomaticTopicGenerationBodyExamType = typeof AutomaticTopicGenerationBodyExamType[keyof typeof AutomaticTopicGenerationBodyExamType] | null;
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const AutomaticTopicGenerationBodyExamType = {
-    OfflineWritten: 'OfflineWritten',
-    OnlineWritten: 'OnlineWritten',
-    Oral: 'Oral',
-    Practice: 'Practice',
-    Project: 'Project',
-    Other: 'Other',
-} as const
+  OfflineWritten: 'OfflineWritten',
+  OnlineWritten: 'OnlineWritten',
+  Oral: 'Oral',
+  Practice: 'Practice',
+  Project: 'Project',
+  Other: 'Other',
+} as const;

@@ -6,5 +6,5 @@
  */
 
 export type PostApiStatsAverageGpaByTrainingMajorBody = {
-    preview?: boolean
-}
+  preview?: boolean;
+};

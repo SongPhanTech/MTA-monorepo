@@ -5,11 +5,11 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type ListOfundefinedAllOfDataItemEducationAndTrainingItemTrainingCourseBaseScore =
-    (typeof ListOfundefinedAllOfDataItemEducationAndTrainingItemTrainingCourseBaseScore)[keyof typeof ListOfundefinedAllOfDataItemEducationAndTrainingItemTrainingCourseBaseScore]
+export type ListOfundefinedAllOfDataItemEducationAndTrainingItemTrainingCourseBaseScore = typeof ListOfundefinedAllOfDataItemEducationAndTrainingItemTrainingCourseBaseScore[keyof typeof ListOfundefinedAllOfDataItemEducationAndTrainingItemTrainingCourseBaseScore];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ListOfundefinedAllOfDataItemEducationAndTrainingItemTrainingCourseBaseScore = {
-    Base10: 'Base10',
-    Base4: 'Base4',
-} as const
+  Base10: 'Base10',
+  Base4: 'Base4',
+} as const;

@@ -71,5 +71,5 @@ API này cho phép các ứng dụng truy cập từ client hoặc server thông
  */
 
 export type PostFilesSingleStorageTypeBody = {
-    file?: Blob
-}
+  file?: Blob;
+};

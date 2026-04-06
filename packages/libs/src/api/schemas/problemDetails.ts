@@ -52,15 +52,15 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  */
 
 export interface ProblemDetails {
-    /** @nullable */
-    type?: string | null
-    /** @nullable */
-    title?: string | null
-    /** @nullable */
-    status?: number | null
-    /** @nullable */
-    detail?: string | null
-    /** @nullable */
-    instance?: string | null
-    [key: string]: unknown
+  /** @nullable */
+  type?: string | null;
+  /** @nullable */
+  title?: string | null;
+  /** @nullable */
+  status?: number | null;
+  /** @nullable */
+  detail?: string | null;
+  /** @nullable */
+  instance?: string | null;
+  [key: string]: unknown;
 }

@@ -95,7 +95,7 @@ export default function DangKyHoc() {
               <Tabs.TabPane className="m-0 p-0" tab={"Môn toàn trường"} key={"mon-toan-truong"}>
                 <MonToanTruong />
               </Tabs.TabPane>
-              <Tabs.TabPane className="m-0 p-0" tab={"Môn trong CTDT"} key={"mon-trong-ctdt"}>
+              <Tabs.TabPane className="m-0 p-0" tab={"Môn trong CTĐT"} key={"mon-trong-ctdt"}>
                 <MonTrongCTDT />
               </Tabs.TabPane>
               <Tabs.TabPane className="m-0 p-0" tab={"Môn tương đương"} key={"mon-tuong-duong"}>

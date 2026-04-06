@@ -1,8 +1,10 @@
+import { DownloadOutlined } from "@ant-design/icons"
 import Select from "@components/commons/select"
 import Table from "@components/commons/table"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import type { FilterProps } from "@constants/type"
 import { useExamTypeOptions } from "@hooks/examType"
+import useSpinner from "@hooks/spinner"
 import { cn } from "@lib/utils"
 import {
   type DiemLopMonHocProps,
@@ -14,30 +16,19 @@ import {
   useCountSubjectClass,
   useFindManyFixedClass,
   useFindManySubjectClass,
-  useUpdateManySubjectClass,
 } from "@workspace/db/hooks"
 import { sqlTransaction } from "@workspace/libs/api/model"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION } from "@workspace/router"
 import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
-import {
-  Button,
-  Checkbox,
-  Col,
-  DatePicker,
-  Flex,
-  Form,
-  Input,
-  message,
-  Row,
-  Tag,
-  Tooltip,
-} from "antd"
+import { Button, Checkbox, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from "antd"
 import dayjs from "dayjs"
 import _ from "lodash"
 import { Search } from "lucide-react"
 import { type Key, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
+import { saveAs } from "file-saver"
+import { exportSubjectClassListExcel } from "@workspace/libs/api/training"
 
 export default function DanhSachLopMonHoc({
   role = "GV",
@@ -45,6 +36,7 @@ export default function DanhSachLopMonHoc({
   score,
 }: DiemLopMonHocProps) {
   const { can } = useAbility()
+  const { showSpinner, hideSpinner } = useSpinner()
   const [currentPage, setCurrentPage] = useState(1)
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
   const [form] = Form.useForm()
@@ -92,7 +84,6 @@ export default function DanhSachLopMonHoc({
   }
 
   const canReadAll = can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DS_LOP_MON_HOC, "XEM_TAT_CA")
-  const canUpdate = can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DS_LOP_MON_HOC, "DUYET")
   const { selectedSubjectClassId } = useStore(diemLopMonHocStore)
 
   const profileId = window?.contextData?.userId
@@ -120,7 +111,7 @@ export default function DanhSachLopMonHoc({
       enabled: !!trainingObjectTypeId || !!semesterId,
     }
   )
-  const { mutateAsync: updateManySubjectClass } = useUpdateManySubjectClass()
+
   const where = useMemo(() => {
     return {
       ...(semesterId ? { semesterId } : {}),
@@ -275,11 +266,6 @@ export default function DanhSachLopMonHoc({
       enterGradeLecturer: {
         include: { userProfile: true },
       },
-      subjectClassStudent: {
-        include: {
-          student: { include: { userProfile: true } },
-        },
-      },
       _count: {
         select: { subjectClassStudent: true },
       },
@@ -304,12 +290,62 @@ export default function DanhSachLopMonHoc({
         subjectClass: mapData,
       })
     }
-  }, [dataTable])
+  }, [dataTable, form])
   const debouncedRefetch = useCallback(
     _.debounce(() => {
       refetch()
     }, 500),
     []
+  )
+
+  const rowSelection = useMemo(
+    () => ({
+      type: "radio" as const,
+      selectedRowKeys: [selectedSubjectClassId as Key],
+      onChange: (selectedRowKeys: Key[], selectedRows: any[]) => {
+        if (
+          selectedRows[0]?.subject?.examType === "OfflineWritten" &&
+          role !== "P13" &&
+          score === "THI"
+        ) {
+          message.error("Lớp thi viết không được nhập điểm trực tiếp")
+          return
+        }
+        diemLopMonHocStore.setState({
+          selectedSubjectClassId: selectedRowKeys?.[0] as string,
+        })
+      },
+      columnWidth: 35,
+    }),
+    [selectedSubjectClassId, role, score]
+  )
+
+  const onRow = useCallback(
+    (record: any) => ({
+      onClick: () => {
+        if (record?.subject?.examType === "OfflineWritten" && role !== "P13" && score === "THI") {
+          message.error("Lớp thi viết không được nhập điểm trực tiếp")
+          return
+        }
+        diemLopMonHocStore.setState({ selectedSubjectClassId: record.id })
+      },
+      onDoubleClick: () => {
+        if (record?.subject?.examType === "OfflineWritten" && role !== "P13" && score === "THI") {
+          message.error("Lớp thi viết không được nhập điểm trực tiếp")
+          return
+        }
+        setActiveKey?.("2")
+      },
+      className: cn(
+        record?.subject?.examType === "OfflineWritten" ? "text-red-500" : "",
+        dayjs()?.isAfter(record?.scoreDeadline) && !record?.enteredScore
+          ? "bg-yellow-200"
+          : dayjs().isAfter(record?.examScoreDeadline) && !record?.enteredExamScore
+            ? "bg-yellow-100"
+            : ""
+      ),
+    }),
+    [role, score, setActiveKey]
   )
 
   const { data: count } = useCountSubjectClass({ where })
@@ -346,6 +382,59 @@ export default function DanhSachLopMonHoc({
       message.error("Lỗi khi lưu")
     }
   }
+
+  const handleExportSubjectClassExcel = async () => {
+    if (!trainingObjectTypeId || !semesterId) {
+      message.warning("Vui lòng chọn đối tượng đào tạo và học kỳ")
+      return
+    }
+
+    const extractExportErrorMessage = (error: any) => {
+      const status = error?.response?.status
+      const rawMessage = error?.response?.data?.message || error?.response?.data?.error
+
+      const detailedMessage = Array.isArray(rawMessage)
+        ? rawMessage.join(", ")
+        : rawMessage || error?.message
+
+      if (status && detailedMessage) {
+        return `Xuất Excel thất bại: ${detailedMessage}`
+      }
+
+      if (status) {
+        return `Xuất Excel thất bại`
+      }
+
+      if (detailedMessage) {
+        return `Xuất Excel thất bại: ${detailedMessage}`
+      }
+
+      return "Đã xảy ra lỗi khi xuất Excel, vui lòng thử lại"
+    }
+
+    try {
+      showSpinner()
+      const res = await exportSubjectClassListExcel({
+        trainingObjectTypeId,
+        semesterId,
+        fixedClassId: filters.fixedClassId || undefined,
+        searchText: filters.searchText || undefined,
+      })
+      if (res.status === 200) {
+        saveAs(res.data, "Danh_sach_lop_mon_hoc.xlsx")
+        message.success("Xuất Excel thành công")
+      } else {
+        const error: any = new Error()
+        error.response = { status: res.status, data: res.data }
+        message.error(extractExportErrorMessage(error))
+      }
+    } catch (error: any) {
+      message.error(extractExportErrorMessage(error))
+    } finally {
+      hideSpinner()
+    }
+  }
+
   return (
     <div>
       <Row gutter={[0, 0]}>
@@ -392,6 +481,15 @@ export default function DanhSachLopMonHoc({
                 </Col>
               </Flex>
             </Col>
+            <Col span={12} className="flex justify-end">
+              <Button
+                icon={<DownloadOutlined />}
+                onClick={handleExportSubjectClassExcel}
+                type="primary"
+              >
+                Xuất Excel
+              </Button>
+            </Col>
           </Row>
         </Col>
 
@@ -409,49 +507,8 @@ export default function DanhSachLopMonHoc({
               setFilters={setFilters}
               rowKey="id"
               id="training-category"
-              rowSelection={{
-                type: "radio",
-                selectedRowKeys: [selectedSubjectClassId as Key],
-                onChange: (selectedRowKeys, selectedRows, info) => {
-                  if (selectedRows[0]?.subject?.examType === "OfflineWritten" && score === "THI") {
-                    message.error("Lớp thi viết không được nhập điểm trực tiếp")
-                    return
-                  }
-                  diemLopMonHocStore.setState({
-                    selectedSubjectClassId: selectedRowKeys?.[0] as string,
-                  })
-                },
-                columnWidth: 35,
-              }}
-              onRow={(record) => {
-                return {
-                  onClick: () => {
-                    if (record?.subject?.examType === "OfflineWritten" && score === "THI") {
-                      message.error("Lớp thi viết không được nhập điểm trực tiếp")
-                      return
-                    }
-                    diemLopMonHocStore.setState({
-                      selectedSubjectClassId: record.id,
-                    })
-                  },
-                  onDoubleClick: () => {
-                    if (record?.subject?.examType === "OfflineWritten" && score === "THI") {
-                      message.error("Lớp thi viết không được nhập điểm trực tiếp")
-                      return
-                    }
-                    setActiveKey?.("2")
-                  },
-                  className: cn(
-                    record?.subject?.examType === "OfflineWritten" ? "text-red-500" : "",
-                    dayjs()?.isAfter(record?.scoreDeadline) && !record?.enteredScore
-                      ? "bg-yellow-200"
-                      : dayjs().isAfter(record?.examScoreDeadline) && !record?.enteredExamScore
-                        ? "bg-yellow-100"
-                        : ""
-                    // selectedSubjectClassId === record.id ? 'bg-orange-200' : ''
-                  ),
-                }
-              }}
+              rowSelection={rowSelection}
+              onRow={onRow}
               columns={[
                 {
                   title: "STT",
@@ -562,9 +619,7 @@ export default function DanhSachLopMonHoc({
                   align: "center",
                   type: "date",
                   render: (_, record) => (
-                    <div
-                    // className={`${dayjs().isBefore(record?.scoreDeadline) ? '' : 'text-red-500'}`}
-                    >
+                    <div>
                       {record.scoreDeadline ? dayjs(record.scoreDeadline).format("DD/MM/YYYY") : ""}
                     </div>
                   ),
@@ -600,35 +655,7 @@ export default function DanhSachLopMonHoc({
                   width: 120,
                   align: "center",
                   type: "date",
-                  // render: (record: string) =>
-                  //     record ? dayjs(record).format('DD/MM/YYYY') : '',
-                  render: (_, record) => {
-                    const canEdit = canUpdate || role === "P2/P7"
-
-                    if (!canEdit) {
-                      return record.examDate ? dayjs(record.examDate).format("DD/MM/YYYY") : ""
-                    }
-
-                    const isExpired =
-                      record?.examScoreDeadline && dayjs().isAfter(dayjs(record.examScoreDeadline))
-
-                    return (
-                      <Form.Item name={["subjectClass", record.id, "examDate"]} className="m-0">
-                        <DatePicker
-                          allowClear
-                          format="DD/MM/YYYY"
-                          className={cn("w-full px-1", isExpired && "border-red-500")}
-                          status={isExpired ? "error" : ""}
-                          onChange={() => {
-                            diemLopMonHocStore.setState({
-                              selectedSubjectClassId: record.id,
-                            })
-                            setIsDirty(true)
-                          }}
-                        />
-                      </Form.Item>
-                    )
-                  },
+                  render: (record: string) => (record ? dayjs(record).format("DD/MM/YYYY") : ""),
                 },
                 {
                   title: "Hạn NĐT",
@@ -637,9 +664,7 @@ export default function DanhSachLopMonHoc({
                   type: "date",
                   render: (record) => {
                     return (
-                      <div
-                      // className={`${dayjs().isBefore(record?.examScoreDeadline) ? '' : 'text-red-500'}`}
-                      >
+                      <div>
                         {record.examScoreDeadline
                           ? dayjs(record.examScoreDeadline).format("DD/MM/YYYY")
                           : ""}

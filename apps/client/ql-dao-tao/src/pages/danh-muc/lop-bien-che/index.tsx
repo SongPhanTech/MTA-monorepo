@@ -32,6 +32,7 @@ import { useRouter } from "next/router"
 import type React from "react"
 import { useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
+import { useFixedClassTypeOptions } from "@hooks/fixedClassType"
 export default function FixedClassPage() {
   const { can, canSome } = useAbility()
   const [currentPage, setCurrentPage] = useState(1)
@@ -50,7 +51,7 @@ export default function FixedClassPage() {
   })
   const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
   const [loading, setLoading] = useState(false)
-
+  const { getFixedClassTypeLabel } = useFixedClassTypeOptions()
   const canReadAll = can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_LOP_BIEN_CHE, "XEM_TAT_CA")
 
   const { data: session } = useSession()
@@ -360,6 +361,14 @@ export default function FixedClassPage() {
                 align: "center",
                 width: 60,
                 render: (_, record) => record._count.students,
+              },
+              {
+                title: "Loại lớp",
+                align: "center",
+                width: 150,
+                dataIndex: "classType",
+                type: "input",
+                render: (_, record) => getFixedClassTypeLabel(record.classType),
               },
               {
                 title: "Đơn vị quản lý",

@@ -100,44 +100,49 @@ export default function CaNhanThiLai() {
     }
   )
 
-  const { data: studentList = [] } = useFindManyStudent({
-    where: {
-      deletedAt: null,
-      subjectClassStudent: {
-        some: {
-          subjectClassId,
+  const { data: studentList = [] } = useFindManyStudent(
+    {
+      where: {
+        deletedAt: null,
+        subjectClassStudent: {
+          some: {
+            subjectClassId,
+          },
         },
+        ...(filters.searchText && {
+          userProfile: {
+            fullname: { contains: filters.searchText, mode: "insensitive" },
+          },
+        }),
+        ...((filters.trainingCourseId || filters.fixedClassId) && {
+          fixedClass: {
+            ...(filters.trainingCourseId && {
+              trainingCourseId: {
+                equals: filters.trainingCourseId,
+              },
+            }),
+            ...(filters.fixedClassId && {
+              id: {
+                equals: filters.fixedClassId,
+              },
+            }),
+          },
+        }),
       },
-      ...(filters.searchText && {
-        userProfile: {
-          fullname: { contains: filters.searchText, mode: "insensitive" },
-        },
-      }),
-      ...((filters.trainingCourseId || filters.fixedClassId) && {
+      include: {
         fixedClass: {
-          ...(filters.trainingCourseId && {
-            trainingCourseId: {
-              equals: filters.trainingCourseId,
-            },
-          }),
-          ...(filters.fixedClassId && {
-            id: {
-              equals: filters.fixedClassId,
-            },
-          }),
+          include: {
+            trainingCourse: true,
+          },
         },
-      }),
-    },
-    include: {
-      fixedClass: {
-        include: {
-          trainingCourse: true,
-        },
+        subjectClassStudent: true,
+        userProfile: true,
       },
-      subjectClassStudent: true,
-      userProfile: true,
     },
-  })
+    {
+      enabled: !!subjectClassId,
+    }
+  )
 
   // queryKey /api/subject-class/open-subject-class-reexam
 
@@ -327,209 +332,194 @@ export default function CaNhanThiLai() {
     }))
   }
 
-	const handleCancel = async (id: string) => {
-		if (!id) return;
-		try {
-			let res = await deleteStudentSubjectScore({
-				where: {
-					id: id,
-				},
-			});
-			if (res) {
-				message.success("Huỷ đăng ký thi lại thành công");
-				refetch();
-			}
-		} catch (error) {
-			message.error("Có lỗi xảy ra khi hóa đăng ký thi lại!");
-		}
-	};
-	return (
-		<Row gutter={[4, 0]}>
-			<Col span={6}>
-				<Form.Item className="mb-1" name="searchText">
-					<Input
-						id="search"
-						placeholder="Tìm kiếm HV/SV..."
-						onChange={(e) => handleFilterChange("searchText", e.target.value)}
-						style={{ height: 32 }}
-						prefix={
-							<Search
-								size={15}
-								style={{
-									color: "rgba(0, 0, 0, 0.25)",
-								}}
-							/>
-						}
-						allowClear
-					/>
-				</Form.Item>
-			</Col>
-			<Col span={8}>
-				<Select
-					placeholder="Chọn khoá"
-					className="w-full"
-					options={trainingCourseData.map((i) => ({
-						value: i.id,
-						label: i.name,
-					}))}
-					allowClear
-					showSearch
-					filterOption={(input, option) =>
-						(option?.label ?? "").toLowerCase().includes(input.toLowerCase())
-					}
-					onChange={(value) => handleFilterChange("trainingCourseId", value)}
-				/>
-			</Col>
-			<Col span={8}>
-				<Select
-					placeholder="Chọn lớp"
-					className="w-full"
-					dropdownStyle={{
-						width: "400px",
-					}}
-					allowClear
-					showSearch
-					filterOption={(input, option) =>
-						(option?.label ?? "").toLowerCase().includes(input.toLowerCase())
-					}
-					options={fixedClassData.map((i) => ({
-						value: i.id,
-						label: `${i.code} - ${i.name}`,
-					}))}
-					onChange={(value) => handleFilterChange("fixedClassId", value)}
-				/>
-			</Col>
-			<Col span={2} className="text-right">
-				<Button
-					type="primary"
-					className="h-[32px] px-4"
-					onClick={handleSaveStudentClass}
-				>
-					Đăng ký
-				</Button>
-			</Col>
-			<Col span={24}>
-				<Table
-					rowKey="id"
-					className="mt-0"
-					data={data}
-					onRow={(record) => ({
-						onClick: () => {
-							const isSelected = studentIds.includes(record.id);
-							if (isSelected) {
-								handleRowSelection(
-									studentIds.filter((key) => key !== record.id),
-								);
-							} else {
-								handleRowSelection([...studentIds, record.id]);
-							}
-						},
-						style: { cursor: "pointer" },
-						columnWidth: 35,
-					})}
-					rowSelection={{
-						selectedRowKeys: studentIds,
-						onChange: (selectedRowKeys) => {
-							handleRowSelection(selectedRowKeys as string[]);
-						},
-						type: "checkbox",
-						columnWidth: 35,
-					}}
-					columns={[
-						{
-							title: "TT",
-							width: 35,
-							align: "center",
-							render: (_, __, index) =>
-								index + 1 + (currentPage - 1) * numberOfPages,
-						},
-						{
-							title: "Mã",
-							dataIndex: "code",
-							align: "center",
-							width: 100,
-						},
-						{
-							title: "Tên",
-							align: "center",
-							width: 150,
-							render: (_, record) => (
-								<p className="text-left">{record?.userProfile?.fullname}</p>
-							),
-						},
-						{
-							title: "Lớp",
-							align: "center",
-							width: 150,
-							render: (_, record) => <p>{record?.fixedClass?.code}</p>,
-						},
-						{
-							title: "Khoá",
-							align: "center",
-							width: 80,
-							render: (_, record) => (
-								<p>{record?.fixedClass?.trainingCourse?.name}</p>
-							),
-						},
-						{
-							title: "Điểm",
-							align: "center",
-							width: 50,
-							render: (_, record: any) => record?.diem_cuoi ?? "-",
-						},
-						{
-							title: "Hoãn thi",
-							align: "center",
-							dataIndex: "hoan_thi",
-							width: 80,
-							render: (value) => <Checkbox checked={value} />,
-						},
-						{
-							title: "Lý do",
-							align: "center",
-							width: 80,
-							render: (_, record: any) => {
-								return record?.ly_do_hoan_thi || "";
-							},
-						},
-						{
-							title: "Thao tác",
-							align: "center",
-							width: 50,
-							render: (_, record: any) => {
-								return (
-									<Flex justify="center">
-										<Tooltip title={"Huỷ đăng ký"} placement="top">
-											<CircleX
-												size={16}
-												className="text-red-600 cursor-pointer"
-												onClick={() =>
-													handleCancel(
-														record?.subjectClassStudent?.[0]?.id || "",
-													)
-												}
-											/>
-										</Tooltip>
-									</Flex>
-								);
-							},
-						},
-					]}
-					pagination={{
-						current: currentPage,
-						pageSize: numberOfPages,
-						total: countData,
-						onChange: (page, pageSize) => {
-							if (numberOfPages === pageSize) {
-								setCurrentPage(page);
-							} else {
-								setCurrentPage(1);
-								setNumberOfPages(pageSize);
-							}
-						},
-					}}
-				/>
-			</Col>
-		</Row>
-	);
+  const handleCancel = async (id: string) => {
+    if (!id) return
+    try {
+      let res = await deleteStudentSubjectScore({
+        where: {
+          id: id,
+        },
+      })
+      if (res) {
+        message.success("Huỷ đăng ký thi lại thành công")
+        refetch()
+      }
+    } catch (error) {
+      message.error("Có lỗi xảy ra khi huỷ đăng ký thi lại!")
+    }
+  }
+  return (
+    <Row gutter={[4, 0]}>
+      <Col span={6}>
+        <Form.Item className="mb-1" name="searchText">
+          <Input
+            id="search"
+            placeholder="Tìm kiếm HV/SV..."
+            onChange={(e) => handleFilterChange("searchText", e.target.value)}
+            style={{ height: 32 }}
+            prefix={
+              <Search
+                size={15}
+                style={{
+                  color: "rgba(0, 0, 0, 0.25)",
+                }}
+              />
+            }
+            allowClear
+          />
+        </Form.Item>
+      </Col>
+      <Col span={8}>
+        <Select
+          placeholder="Chọn khoá"
+          className="w-full"
+          options={trainingCourseData.map((i) => ({
+            value: i.id,
+            label: i.name,
+          }))}
+          allowClear
+          showSearch
+          filterOption={(input, option) =>
+            (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+          }
+          onChange={(value) => handleFilterChange("trainingCourseId", value)}
+        />
+      </Col>
+      <Col span={8}>
+        <Select
+          placeholder="Chọn lớp"
+          className="w-full"
+          dropdownStyle={{
+            width: "400px",
+          }}
+          allowClear
+          showSearch
+          filterOption={(input, option) =>
+            (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+          }
+          options={fixedClassData.map((i) => ({
+            value: i.id,
+            label: `${i.code} - ${i.name}`,
+          }))}
+          onChange={(value) => handleFilterChange("fixedClassId", value)}
+        />
+      </Col>
+      <Col span={2} className="text-right">
+        <Button type="primary" className="h-[32px] px-4" onClick={handleSaveStudentClass}>
+          Lưu
+        </Button>
+      </Col>
+      <Col span={24}>
+        <Table
+          rowKey="id"
+          className="mt-0"
+          data={data}
+          onRow={(record) => ({
+            onClick: () => {
+              const isSelected = studentIds.includes(record.id)
+              if (isSelected) {
+                handleRowSelection(studentIds.filter((key) => key !== record.id))
+              } else {
+                handleRowSelection([...studentIds, record.id])
+              }
+            },
+            style: { cursor: "pointer" },
+            columnWidth: 35,
+          })}
+          rowSelection={{
+            selectedRowKeys: studentIds,
+            onChange: (selectedRowKeys) => {
+              handleRowSelection(selectedRowKeys as string[])
+            },
+            type: "checkbox",
+            columnWidth: 35,
+          }}
+          columns={[
+            {
+              title: "TT",
+              width: 35,
+              align: "center",
+              render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,
+            },
+            {
+              title: "Mã",
+              dataIndex: "code",
+              align: "center",
+              width: 100,
+            },
+            {
+              title: "Tên",
+              align: "center",
+              width: 150,
+              render: (_, record) => <p className="text-left">{record?.userProfile?.fullname}</p>,
+            },
+            {
+              title: "Lớp",
+              align: "center",
+              width: 150,
+              render: (_, record) => <p>{record?.fixedClass?.code}</p>,
+            },
+            {
+              title: "Khoá",
+              align: "center",
+              width: 80,
+              render: (_, record) => <p>{record?.fixedClass?.trainingCourse?.name}</p>,
+            },
+            {
+              title: "Điểm",
+              align: "center",
+              width: 50,
+              render: (_, record: any) => record?.diem_cuoi ?? "-",
+            },
+            {
+              title: "Hoãn thi",
+              align: "center",
+              dataIndex: "hoan_thi",
+              width: 80,
+              render: (value) => <Checkbox checked={value} />,
+            },
+            {
+              title: "Lý do",
+              align: "center",
+              width: 80,
+              render: (_, record: any) => {
+                return record?.ly_do_hoan_thi || ""
+              },
+            },
+            {
+              title: "Thao tác",
+              align: "center",
+              width: 50,
+              render: (_, record: any) => {
+                return (
+                  <Flex justify="center">
+                    <Tooltip title={"Huỷ đăng ký"} placement="top">
+                      <CircleX
+                        size={16}
+                        className="text-red-600 cursor-pointer"
+                        onClick={() => handleCancel(record?.subjectClassStudent?.[0]?.id || "")}
+                      />
+                    </Tooltip>
+                  </Flex>
+                )
+              },
+            },
+          ]}
+          pagination={{
+            current: currentPage,
+            pageSize: numberOfPages,
+            total: countData,
+            onChange: (page, pageSize) => {
+              if (numberOfPages === pageSize) {
+                setCurrentPage(page)
+              } else {
+                setCurrentPage(1)
+                setNumberOfPages(pageSize)
+              }
+            },
+          }}
+        />
+      </Col>
+    </Row>
+  )
 }

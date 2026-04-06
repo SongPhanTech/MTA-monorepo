@@ -4,31 +4,31 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetLectureSurveyStatistics200DataItemAverageItemClusterSurvey } from './getLectureSurveyStatistics200DataItemAverageItemClusterSurvey'
-import type { GetLectureSurveyStatistics200DataItemAverageItemSurveyItem } from './getLectureSurveyStatistics200DataItemAverageItemSurveyItem'
-import type { GetLectureSurveyStatistics200DataItemAverageItemSurveyResponsesItem } from './getLectureSurveyStatistics200DataItemAverageItemSurveyResponsesItem'
+import type { GetLectureSurveyStatistics200DataItemAverageItemClusterSurvey } from './getLectureSurveyStatistics200DataItemAverageItemClusterSurvey';
+import type { GetLectureSurveyStatistics200DataItemAverageItemSurveyItem } from './getLectureSurveyStatistics200DataItemAverageItemSurveyItem';
+import type { GetLectureSurveyStatistics200DataItemAverageItemSurveyResponsesItem } from './getLectureSurveyStatistics200DataItemAverageItemSurveyResponsesItem';
 
 export type GetLectureSurveyStatistics200DataItemAverageItem = {
-    id: string
-    /** @nullable */
-    code?: string | null
-    active?: boolean
-    /** @nullable */
-    description?: string | null
-    /** @nullable */
-    deletedAt?: string | null
-    /** @nullable */
-    createdAt?: string | null
-    /** @nullable */
-    updatedAt?: string | null
-    /** @nullable */
-    createdBy?: string | null
-    answer: string
-    requireExplanation: boolean
-    /** @nullable */
-    clusterSurveyId?: string | null
-    clusterSurvey?: GetLectureSurveyStatistics200DataItemAverageItemClusterSurvey
-    survey?: GetLectureSurveyStatistics200DataItemAverageItemSurveyItem[]
-    surveyResponses?: GetLectureSurveyStatistics200DataItemAverageItemSurveyResponsesItem[]
-    totalCount: number
-}
+  id: string;
+  /** @nullable */
+  code?: string | null;
+  active?: boolean;
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  deletedAt?: string | null;
+  /** @nullable */
+  createdAt?: string | null;
+  /** @nullable */
+  updatedAt?: string | null;
+  /** @nullable */
+  createdBy?: string | null;
+  answer: string;
+  requireExplanation: boolean;
+  /** @nullable */
+  clusterSurveyId?: string | null;
+  clusterSurvey?: GetLectureSurveyStatistics200DataItemAverageItemClusterSurvey;
+  survey?: GetLectureSurveyStatistics200DataItemAverageItemSurveyItem[];
+  surveyResponses?: GetLectureSurveyStatistics200DataItemAverageItemSurveyResponsesItem[];
+  totalCount: number;
+};

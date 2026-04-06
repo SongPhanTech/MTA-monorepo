@@ -6,5 +6,5 @@
  */
 
 export type GenExamListCode400 = {
-    message: string
-}
+  message: string;
+};

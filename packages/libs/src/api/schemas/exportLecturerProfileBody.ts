@@ -6,6 +6,6 @@
  */
 
 export type ExportLecturerProfileBody = {
-    /** @nullable */
-    lecturerIds?: string[] | null
-}
+  /** @nullable */
+  lecturerIds?: string[] | null;
+};

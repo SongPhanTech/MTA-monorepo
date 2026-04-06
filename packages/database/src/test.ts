@@ -1,163 +1,265 @@
 import { PrismaClient } from "../generated/prisma-client"
 
-const prisma = new PrismaClient()
+// const prismaOld = new PrismaClient({
+//   datasourceUrl: "postgres://admin:123456654321@113.192.17.90:5432/mta_31_03_2026",
+// })
 
-// Seed TemplateFile
-await prisma.templateFile.createMany({
-  skipDuplicates: true,
-  data: [
-    {
-      id: "550e8408-e29b-41d4-a716-446655440000",
-      name: "File nhập thông tin học viên mới",
-      code: "IMPORT_USERPROFILE",
-      path: "https://minio.swantech.vn/mta/template/fileNhapMauThongTinHocVien.xlsx",
-      fileType: "UPLOAD",
-      extensions: "xlsx",
-      numberField: 0,
-    },
-    {
-      id: "550e8408-e29b-41d4-a716-446655440001",
-      name: "File cập nhập thông tin người dùng",
-      code: "UPDATE_USERPROFILE",
-      path: "https://minio.swantech.vn/mta/template/fileCapNhatThongTin.xlsx",
-      fileType: "UPLOAD",
-      extensions: "xlsx",
-      numberField: 0,
-    },
-    {
-      id: "550e8408-e29b-41d4-a716-446655440002",
-      name: "File tạo lớp biên chế",
-      code: "IMPORT_FIXCLASS",
-      path: "https://minio.swantech.vn/mta/template/fileDanhSachLopBienChe.xlsx",
-      fileType: "UPLOAD",
-      extensions: "xlsx",
-      numberField: 0,
-    },
-    {
-      id: "550e8408-e29b-41d4-a716-446655440003",
-      name: "File xếp lớp",
-      code: "CLASS_DEVISION",
-      createdAt: new Date("2025-04-03T12:58:43.507Z"),
-      updatedAt: new Date("2025-04-03T12:58:40.507Z"),
-      path: "https://minio.swantech.vn/mta/template/fileXepLopHocVien.xlsx",
-      fileType: "UPLOAD",
-      extensions: "xlsx",
-      numberField: 0,
-    },
-    {
-      id: "550e8408-e29b-41d4-a716-446655440004",
-      name: "File danh sách học viên lớp",
-      code: "LIST_STUDENT_FIXCLASS",
-      path: "https://minio.swantech.vn/mta/template/DanhSachHocVienLop.docx",
-      fileType: "DOWNLOAD",
-      extensions: "docx",
-      numberField: 0,
-    },
-    {
-      id: "550e8408-e29b-41d4-a716-446655440005",
-      name: "Báo cáo khảo sát",
-      code: "SURVEY_RP",
-      path: "https://minio.swantech.vn/mta/template/BaoCaoKhaoSat.docx",
-      fileType: "DOWNLOAD",
-      extensions: "docx",
-      numberField: 0,
-    },
-    {
-      id: "550e8408-e29b-41d4-a716-446655440006",
-      name: "Báo cáo khảo sát đơn vị",
-      code: "SURVEY_RP_DONVI",
-      path: "https://minio.swantech.vn/mta/template/BaoCaoKhaoSat_DonVi.docx",
-      fileType: "DOWNLOAD",
-      extensions: "docx",
-      numberField: 0,
-    },
-    {
-      name: "Danh sách báo dạy",
-      code: "LECTURE_PCGD",
-      path: "https://minio.swantech.vn/mta/template/DanhSachBaoDay.xlsx",
-      fileType: "DOWNLOAD",
-      extensions: "docx",
-      numberField: 0,
-    },
-    {
-      name: "Thống kê nợ môn",
-      code: "THONG_KE_NO",
-      path: "https://minio.swantech.vn/mta/template/thong_ke_no.xlsx",
-      fileType: "DOWNLOAD",
-      extensions: "xlsx",
-      numberField: 0,
-    },
-    {
-      name: "Thống kê quân số học viên theo khoá",
-      code: "THONG_KE_QUAN_SO_HOC_VIEN_THEO_KHOA",
-      path: "https://minio.swantech.vn/mta/template/quan_so_hoc_vien_theo_khoa.xlsx",
-      fileType: "DOWNLOAD",
-      extensions: "xlsx",
-      numberField: 0,
-    },
-    {
-      name: "Thống kê khảo sát đơn",
-      code: "THONG_KE_KHAO_SAT_DON",
-      path: "https://minio.swantech.vn/mta/template/thong_ke_khao_sat_don.xlsx",
-      fileType: "DOWNLOAD",
-      extensions: "xlsx",
-      numberField: 0,
-    },
-    {
-      name: "Thống kê khảo sát cụm",
-      code: "THONG_KE_KHAO_SAT_CUM",
-      path: "https://minio.swantech.vn/mta/template/thong_ke_khao_sat_cum.xlsx",
-      fileType: "DOWNLOAD",
-      extensions: "xlsx",
-      numberField: 0,
-    },
-    {
-      name: "Danh sách giảng viên",
-      code: "DANH_SACH_GV",
-      path: "https://minio.swantech.vn/mta/template/danh_sach_GV.xlsx",
-      fileType: "DOWNLOAD",
-      extensions: "xlsx",
-      numberField: 0,
-    },
-    {
-      name: "Danh sách giảng viên",
-      code: "DANH_SACH_TOT_NGHIEP",
-      path: "https://minio.swantech.vn/mta/template/DANH_SACH_TOT_NGHIEP.xlsx",
-      fileType: "DOWNLOAD",
-      extensions: "xlsx",
-      numberField: 0,
-    },
-    {
-      name: "Kết quả xác minh văn bằng",
-      code: "XAC_MINH_VAN_BANG",
-      path: "https://minio.swantech.vn/mta/template/XAC_MINH_VAN_BANG.xlsx",
-      fileType: "DOWNLOAD",
-      extensions: "xlsx",
-      numberField: 0,
-    },
-    {
-      name: "slide tốt nghiệp",
-      code: "SLIDE_TN",
-      path: "https://minio.swantech.vn/mta/template/slide_TN.pptx",
-      fileType: "DOWNLOAD",
-      extensions: "xlsx",
-      numberField: 0,
-    },
-    {
-      name: "Danh sách sinh viên",
-      code: "DANH_SACH_SV",
-      path: "https://minio.swantech.vn/mta/template/DANH_SACH_SV.xlsx",
-      fileType: "DOWNLOAD",
-      extensions: "xlsx",
-      numberField: 0,
-    },
-    {
-      name: "Thống kê điểm thưởng",
-      code: "THONG_KE_DIEM_THUONG",
-      path: "https://minio.swantech.vn/mta/template/THONG_KE_DIEM_THUONG.xlsx",
-      fileType: "DOWNLOAD",
-      extensions: "xlsx",
-      numberField: 0,
-    },
-  ],
+const prismaNew = new PrismaClient({
+  datasourceUrl: "postgres://admin:123456654321@113.192.17.90:5432/mta",
 })
+
+await prismaNew.examPaper.deleteMany({
+  where: {
+    studentSubjectScore: {
+      subjectClass: {
+        trainingObjectTypeId: "01",
+        semesterId: "cmmkjb6ql00rcmy01xh70sn8r",
+      },
+    },
+  },
+})
+
+await prismaNew.planTrainingSubject.deleteMany({
+  where: {
+    planTraining: {
+      trainingObjectTypeId: "01",
+      semesterId: "cmmkjb6ql00rcmy01xh70sn8r",
+    },
+  },
+})
+
+await prismaNew.planTraining.deleteMany({
+  where: {
+    trainingObjectTypeId: "01",
+    semesterId: "cmmkjb6ql00rcmy01xh70sn8r",
+  },
+})
+
+await prismaNew.studentSubjectScoreHistory.deleteMany({
+  where: {
+    studentSubjectScore: {
+      subjectClass: {
+        trainingObjectTypeId: "01",
+        semesterId: "cmmkjb6ql00rcmy01xh70sn8r",
+      },
+    },
+  },
+})
+
+const students = await prismaNew.studentSubjectScore.deleteMany({
+  where: {
+    subjectClass: {
+      trainingObjectTypeId: "01",
+      semesterId: "cmmkjb6ql00rcmy01xh70sn8r",
+    },
+  },
+})
+
+console.log({ students })
+
+const classRegisterLogs = await prismaNew.classRegisterLogs.deleteMany({
+  where: {
+    subjectClass: {
+      trainingObjectTypeId: "01",
+      semesterId: "cmmkjb6ql00rcmy01xh70sn8r",
+    },
+  },
+})
+
+const subjectClassTimes = await prismaNew.subjectClassTime.deleteMany({
+  where: {
+    subjectClass: {
+      trainingObjectTypeId: "01",
+      semesterId: "cmmkjb6ql00rcmy01xh70sn8r",
+    },
+  },
+})
+
+console.log({ subjectClassTimes })
+
+const classes = await prismaNew.subjectClass.deleteMany({
+  where: {
+    trainingObjectTypeId: "01",
+    semesterId: "cmmkjb6ql00rcmy01xh70sn8r",
+  },
+})
+
+console.log({ classes })
+
+// const ss = await prismaNew.subjectVersion.findMany({
+//   where: {
+//     trainingBlocks: {
+//       none: {},
+//     },
+//   },
+// })
+
+// const curriculum = await prismaNew.curriculumVersion.findMany({
+//   include: {
+//     trainingBlocks: {
+//       include: {
+//         subjects: {
+//           include: { subject: true },
+//         },
+//       },
+//     },
+//   },
+// })
+
+// for (const item of curriculum) {
+//   const requiredCredits = item.trainingBlocks.reduce((acc, block) => {
+//     return (
+//       acc +
+//       block.subjects.reduce((acc2, subject) => {
+//         if (subject.type === "Mandatory" && subject.useForFinalScore) {
+//           return acc2 + subject.subject.credit
+//         }
+//         return acc2
+//       }, 0)
+//     )
+//   }, 0)
+
+//   const electiveCredits = item.trainingBlocks.reduce((acc, block) => {
+//     return (
+//       acc +
+//       block.subjects.reduce((acc2, subject) => {
+//         if (subject.type === "Optional" && subject.useForFinalScore) {
+//           return acc2 + subject.subject.credit
+//         }
+//         return acc2
+//       }, 0)
+//     )
+//   }, 0)
+
+//   await prismaNew.curriculumVersion.update({
+//     where: { id: item.id },
+//     data: {
+//       requiredCredits,
+//       electiveCredits,
+//     },
+//   })
+// }
+
+// const docsC = await prismaOld.documentClassification.findMany()
+
+// await prismaNew.documentClassification.createMany({
+//   data: docsC.map((item) => ({
+//     ...item,
+//     createdBy: "df692945-a305-402c-a5af-6179ca44896d",
+//   })),
+//   skipDuplicates: true,
+// })
+
+// const docs = await prismaOld.document.findMany()
+
+// await prismaNew.document.createMany({
+//   data: docs.map(({ uploadedById, ...item }) => ({
+//     ...item,
+//     uploadedById: "df692945-a305-402c-a5af-6179ca44896d",
+//   })),
+//   skipDuplicates: true,
+// })
+
+// const topics = await prismaOld.topic.findMany()
+
+// await prismaNew.topic.createMany({
+//   data: topics,
+//   skipDuplicates: true,
+// })
+
+// const DocumentTopic = await prismaOld.documentTopic.findMany()
+
+// await prismaNew.documentTopic.createMany({
+//   data: DocumentTopic,
+//   skipDuplicates: true,
+// })
+
+// const trainingField = await prismaOld.trainingField.findMany({
+//   where: {
+//     trainingObjectTypes: {
+//       some: {
+//         trainingObjectTypeId: "05",
+//       },
+//     },
+//   },
+// })
+
+// const trainingFieldOnTrainingObjectType =
+//   await prismaOld.trainingFieldOnTrainingObjectType.findMany({
+//     where: {
+//       trainingFieldId: {
+//         in: trainingField.map((item) => item.id),
+//       },
+//     },
+//   })
+
+// await prismaNew.trainingField.createMany({
+//   data: trainingField,
+//   skipDuplicates: true
+// })
+
+// await prismaNew.trainingFieldOnTrainingObjectType.createMany({
+//   data: trainingFieldOnTrainingObjectType,
+//   skipDuplicates: true,
+// })
+
+// const trainingMajor = await prismaOld.trainingMajor.findMany({
+//   where: {
+//     trainingFieldId: {
+//       in: trainingField.map((item) => item.id),
+//     },
+//   },
+//   include: {
+//     organization: true,
+//   },
+// })
+
+// const org = await prismaNew.dM_DonVi.findMany({
+//   where: {
+//     sTen: {
+//       in: trainingMajor.map((item) => item.organization?.sTen || ""),
+//     },
+//   },
+// })
+
+// const orgMap = new Map(org.map((item) => [item.sTen, item.Id]))
+// console.log(orgMap)
+
+// await prismaNew.trainingMajor.createMany({
+//   data: trainingMajor.map(({ organization, ...item }) => ({
+//     ...item,
+//     organizationId: orgMap.get(organization?.sTen || "") || "d87525ce-56c9-4af8-a070-df0fac592231",
+//   })),
+//   skipDuplicates: true,
+// })
+
+// const trainingMajorOnTrainingObjectType =
+//   await prismaOld.trainingMajorOnTrainingObjectType.findMany({
+//     where: {
+//       trainingMajorId: {
+//         in: trainingMajor.map((item) => item.id),
+//       },
+//     },
+//   })
+
+// await prismaNew.trainingMajorOnTrainingObjectType.createMany({
+//   data: trainingMajorOnTrainingObjectType,
+//   skipDuplicates: true,
+// })
+
+// const yearIds = await prismaNew.schoolYear.findMany()
+
+// const semesters = await prismaOld.semester.findMany({
+//   where: {
+//     schoolYearId: {
+//       in: yearIds.map((item) => item.id),
+//     },
+//   },
+// })
+
+// await prismaNew.semester.createMany({
+//   data: semesters,
+//   skipDuplicates: true,
+// })
+
+console.log("Done")

@@ -6,5 +6,5 @@
  */
 
 export type AutomaticTopicGeneration404 = {
-    message: string
-}
+  message: string;
+};

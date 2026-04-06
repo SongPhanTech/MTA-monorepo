@@ -98,23 +98,16 @@ const importFileGiaoVienCoGioGiay = async (
 
   for (const row of rowData) {
     // Xử lý từng dòng dữ liệu ở đây
-    const [
-      idx,
-      maGV,
-      tenGV,
-      maMon,
-      tenMon,
-      maLopNienChe,
-      tenLopNienChe,
-      ,
-      maPhongHoc,
-      tenPhong,
-      ,
-      ,
-      ,
-      ,
-      hocChung,
-    ] = row
+    const idx = row[0]
+    const maGV = row[1]
+    const tenGV = row[2]
+    const maMon = row[3]
+    const tenMon = row[4]
+    const maLopNienChe = row[5]
+    const tenLopNienChe = row[6]
+    const maPhongHoc = row[8]
+    const tenPhong = row[9]
+    const hocChung = row[14]
     if (tenGV && maGV) {
       tenGV
         .split(",")
@@ -414,6 +407,7 @@ const importFileGiaoVienCoGioGiay = async (
               startDate: subjectClass.ngayBatDau ?? existSubjectClass.startDate,
               endDate: subjectClass.ngayKetThuc ?? existSubjectClass.endDate,
               examDate: subjectClass.ngayThi ?? existSubjectClass.examDate,
+              roomId: subjectClass?.phongHoc ?? existSubjectClass.roomId,
               fixedClasses: {
                 set: subjectClass.lopNienChe.map((e) => ({
                   id: e,
@@ -911,6 +905,9 @@ const importFileTKBTheoLopHocPhan = async (
               startDate: ngayBatDau ?? existSubjectClass.startDate,
               endDate: ngayKetThuc ?? existSubjectClass.endDate,
               roomId: subjectClass?.phongHoc ?? existSubjectClass.roomId,
+              status: "OFFICIAL",
+              cancelled: false,
+              approveLecturerAssignmentAt: new Date(),
               subjectClassTimes:
                 thuTrongTuan && String(thuTrongTuan).trim()
                   ? {
@@ -1006,6 +1003,8 @@ const importFileTKBTheoLopHocPhan = async (
               subjectId: subjectClass.monHoc,
               roomId: subjectClass.phongHoc,
               trainingObjectTypeId,
+              status: "OFFICIAL",
+              approveLecturerAssignmentAt: new Date(),
               subjectClassTimes:
                 thuTrongTuan && String(thuTrongTuan).trim()
                   ? {

@@ -6,13 +6,13 @@
  */
 
 export type CountRequestsParams = {
-    service: string
-    /**
-     * @nullable
-     */
-    from?: string | null
-    /**
-     * @nullable
-     */
-    to?: string | null
-}
+service: string;
+/**
+ * @nullable
+ */
+from?: string | null;
+/**
+ * @nullable
+ */
+to?: string | null;
+};

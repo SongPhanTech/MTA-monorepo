@@ -6,5 +6,5 @@
  */
 
 export type ApplicationsParams = {
-    search?: string
-}
+search?: string;
+};

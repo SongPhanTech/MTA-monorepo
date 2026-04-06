@@ -71,5 +71,5 @@ API này cho phép các ứng dụng truy cập từ client hoặc server thông
  */
 
 export type DeleteFilesDeleteSingleStorageTypeFileNameParams = {
-    appCode?: string
-}
+appCode?: string;
+};
