@@ -499,6 +499,7 @@ export default function NhapDiem({
         return [
           item.id,
           {
+            ...rowData[item.id],
             isChanged:
               rowData[item.id]?.attendanceScore !== item.attendanceScore ||
               rowData[item.id]?.midtermScore !== item.midtermScore ||
