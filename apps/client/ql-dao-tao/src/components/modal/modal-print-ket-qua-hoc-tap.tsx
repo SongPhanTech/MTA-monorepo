@@ -66,6 +66,14 @@ const ModalPrintToKQHT = () => {
                       where: {
                         studentId: input?.dataStudent?.id,
                       },
+                      include: {
+                        graduationSupplementaryScore: {
+                          select: {
+                            id: true,
+                            sessionId: true,
+                          },
+                        },
+                      },
                     },
                   },
                 },
@@ -179,6 +187,10 @@ const ModalPrintToKQHT = () => {
     const validSubjects = subjectScoreData.trainingBlocks
       .flatMap((block) => block.subjects)
       .filter((subjectItem) => subjectItem.useForFinalScore === true)
+      .filter(
+        (subjectItem) =>
+          !subjectItem.subject.studentSubjectScore?.[0]?.graduationSupplementaryScore?.length
+      )
 
     let totalWeightedScore = 0
     let totalCredits = 0
@@ -297,6 +309,12 @@ const ModalPrintToKQHT = () => {
 
                 const sortedSubjects = (subjectScoreData?.trainingBlocks ?? [])
                   .flatMap((block) => block.subjects ?? [])
+                  .filter((subjectItem) => subjectItem.useForFinalScore === true)
+                  .filter(
+                    (subjectItem) =>
+                      !subjectItem.subject.studentSubjectScore?.[0]?.graduationSupplementaryScore
+                        ?.length
+                  )
                   .sort((a, b) => {
                     const semesterA = a.semester ?? Number.MAX_SAFE_INTEGER
                     const semesterB = b.semester ?? Number.MAX_SAFE_INTEGER
@@ -423,7 +441,9 @@ const ModalPrintToKQHT = () => {
                     .filter(
                       (subjectItem) =>
                         // subjectItem.print === true &&
-                        subjectItem.useForFinalScore === true
+                        subjectItem.useForFinalScore === true &&
+                        !subjectItem.subject.studentSubjectScore?.[0]?.graduationSupplementaryScore
+                          ?.length
                     )
                     ?.reduce(
                       (sum: number, subjectItem) => sum + (subjectItem.subject?.credit || 0),
