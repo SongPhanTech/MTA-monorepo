@@ -1,5 +1,5 @@
 import DefaultLayout from "@layouts/default-layout"
-import { useFindManyDM_DonVi, useUpdateQuestionBank } from "@workspace/db/hooks"
+import { useFindManyDM_DonVi, useDeleteQuestionBank } from "@workspace/db/hooks"
 import { useTrainingObjectTypeStore } from "@workspace/ui"
 import { Button, Col, Flex, Input, message, Row, Space } from "antd"
 import { BookOpen, BookPlus, Building2, Database, FileText } from "lucide-react"
@@ -52,14 +52,13 @@ export default function QuestionBank() {
     tag: "PutQuestionBank",
   })
 
-  const { mutateAsync: updateQuestionBank } = useUpdateQuestionBank()
+  const { mutateAsync: deleteQuestionBank } = useDeleteQuestionBank()
 
   const handleDeleteQuestionBank = useCallback(
     async (id: string) => {
       try {
-        await updateQuestionBank({
+        await deleteQuestionBank({
           where: { id },
-          data: { deletedAt: new Date() },
         })
         message.success("Xóa thành công")
         setSelectedQuestionBankId(null)
@@ -71,7 +70,7 @@ export default function QuestionBank() {
         message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
       }
     },
-    [updateQuestionBank]
+    [deleteQuestionBank]
   )
 
   return (
