@@ -381,7 +381,6 @@ const SinhDeThuCongModal = () => {
                 name="examType"
                 label="Hình thức thi"
                 required
-                key={`examType-${dataExam?.id || "new"}`}
                 initialValue={!input?.id ? dataExam?.subjectVersion?.examType : undefined}
               >
                 <Select
