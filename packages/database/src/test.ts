@@ -13,7 +13,7 @@ await prismaNew.examPaper.deleteMany({
     studentSubjectScore: {
       subjectClass: {
         trainingObjectTypeId: "01",
-        semesterId: "cmmvor6bi0001mp01mgfapxwk",
+        semesterId: "cmmkjb6ql00rcmy01xh70sn8r",
       },
     },
   },
@@ -23,7 +23,7 @@ await prismaNew.planTrainingSubject.deleteMany({
   where: {
     planTraining: {
       trainingObjectTypeId: "01",
-      semesterId: "cmmvor6bi0001mp01mgfapxwk",
+      semesterId: "cmmkjb6ql00rcmy01xh70sn8r",
     },
   },
 })
@@ -31,7 +31,7 @@ await prismaNew.planTrainingSubject.deleteMany({
 await prismaNew.planTraining.deleteMany({
   where: {
     trainingObjectTypeId: "01",
-    semesterId: "cmmvor6bi0001mp01mgfapxwk",
+    semesterId: "cmmkjb6ql00rcmy01xh70sn8r",
   },
 })
 
@@ -40,7 +40,7 @@ await prismaNew.studentSubjectScoreHistory.deleteMany({
     studentSubjectScore: {
       subjectClass: {
         trainingObjectTypeId: "01",
-        semesterId: "cmmvor6bi0001mp01mgfapxwk",
+        semesterId: "cmmkjb6ql00rcmy01xh70sn8r",
       },
     },
   },
@@ -50,7 +50,7 @@ const students = await prismaNew.studentSubjectScore.deleteMany({
   where: {
     subjectClass: {
       trainingObjectTypeId: "01",
-      semesterId: "cmmvor6bi0001mp01mgfapxwk",
+      semesterId: "cmmkjb6ql00rcmy01xh70sn8r",
     },
   },
 })
@@ -61,7 +61,7 @@ const classRegisterLogs = await prismaNew.classRegisterLogs.deleteMany({
   where: {
     subjectClass: {
       trainingObjectTypeId: "01",
-      semesterId: "cmmvor6bi0001mp01mgfapxwk",
+      semesterId: "cmmkjb6ql00rcmy01xh70sn8r",
     },
   },
 })
@@ -70,7 +70,7 @@ const subjectClassTimes = await prismaNew.subjectClassTime.deleteMany({
   where: {
     subjectClass: {
       trainingObjectTypeId: "01",
-      semesterId: "cmmvor6bi0001mp01mgfapxwk",
+      semesterId: "cmmkjb6ql00rcmy01xh70sn8r",
     },
   },
 })
@@ -80,7 +80,7 @@ console.log({ subjectClassTimes })
 const classes = await prismaNew.subjectClass.deleteMany({
   where: {
     trainingObjectTypeId: "01",
-    semesterId: "cmmvor6bi0001mp01mgfapxwk",
+    semesterId: "cmmkjb6ql00rcmy01xh70sn8r",
   },
 })
 

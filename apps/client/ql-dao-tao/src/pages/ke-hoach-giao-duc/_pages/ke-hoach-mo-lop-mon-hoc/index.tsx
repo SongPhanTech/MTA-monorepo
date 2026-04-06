@@ -136,6 +136,9 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
           code: true,
           maxStudent: true,
           _count: { select: { subjectClassStudent: true } },
+          mainLecturer: {
+            select: { id: true },
+          },
         },
       },
       subject: {
@@ -483,7 +486,7 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                           const subjectVersion = subjects?.find((s) => s.id === subjectId)
                           const protectedCount =
                             subjectVersion?.subjectClass?.filter(
-                              (sc: any) => (sc?._count?.subjectClassStudent ?? 0) > 0
+                              (sc) => (sc?._count?.subjectClassStudent ?? 0) > 0 || sc.mainLecturer
                             ).length ?? 0
                           acc[subjectId] = protectedCount
                           return acc

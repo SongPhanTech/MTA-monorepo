@@ -223,9 +223,7 @@ export default function PhanCongGiangDay({
               }
             : {},
         fixedClasses:
-          trainingCourseId && type === "NORMAL"
-            ? { some: { trainingCourseId } }
-            : { some: {} },
+          trainingCourseId && type === "NORMAL" ? { some: { trainingCourseId } } : { some: {} },
         ...(fixedClassId
           ? {
               fixedClasses: {
@@ -904,13 +902,7 @@ export default function PhanCongGiangDay({
                                       not: null,
                                     },
                                     trainingObjectTypeId,
-                                    lecturerId: {
-                                      not: null,
-                                    },
-                                    extraLecturerId: {
-                                      not: null,
-                                    },
-
+                                    lecturerId: { not: null },
                                     cancelled: false,
                                     active: true,
                                     deletedAt: null,
