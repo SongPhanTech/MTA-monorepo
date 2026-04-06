@@ -1,4 +1,5 @@
 import type { Editor } from "@tiptap/react"
+import { useEditorState } from "@tiptap/react"
 import { generatePresignedUrl } from "@workspace/libs/api/model"
 import { getRuntimeEnv } from "@workspace/libs/utils"
 import {
@@ -57,7 +58,7 @@ const FONT_SIZES = [
   "48px",
   "72px",
 ]
-import "katex/dist/katex.min.css"
+// import "katex/dist/katex.min.css"
 import {
   Columns,
   Merge,
@@ -117,6 +118,14 @@ export default function TextEditorMenuBar({
   id?: string
   editable?: boolean
 }) {
+  const editorState = useEditorState({
+    editor,
+    selector: (ctx) => ({
+      currentFontFamily: ctx.editor?.getAttributes("textStyle")?.fontFamily || null,
+      currentFontSize: ctx.editor?.getAttributes("textStyle")?.fontSize || null,
+    }),
+  })
+
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [mathModalVisible, setMathModalVisible] = useState(false)
   const [mathInput, setMathInput] = useState("")
@@ -625,7 +634,7 @@ export default function TextEditorMenuBar({
             style={{ width: 130 }}
             placeholder="Font"
             options={FONT_FAMILIES.map((font) => ({ label: font, value: font }))}
-            value={editor.getAttributes("textStyle")?.fontFamily || null}
+            value={editorState?.currentFontFamily}
             onChange={(val) => {
               if (val) editor.chain().focus().setFontFamily(val).run()
               else editor.chain().focus().unsetFontFamily().run()
@@ -637,7 +646,7 @@ export default function TextEditorMenuBar({
             style={{ width: 70 }}
             placeholder="Size"
             options={FONT_SIZES.map((size) => ({ label: size.replace("px", ""), value: size }))}
-            value={editor.getAttributes("textStyle")?.fontSize || null}
+            value={editorState?.currentFontSize}
             onChange={(val) => {
               if (val) editor.chain().focus().setFontSize(val).run()
               else editor.chain().focus().unsetFontSize().run()
