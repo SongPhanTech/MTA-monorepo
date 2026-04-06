@@ -474,10 +474,11 @@ const WordImportModal: React.FC = () => {
           const difficult = mapDifficultFromText(difficultText)
 
           if (!type || !difficult) {
+            const typeVal = typeText.trim().replace(/\n/g, "↵") || "(trống)"
+            const difficultVal = difficultText.trim().replace(/\n/g, "↵") || "(trống)"
             errors.push({
               rowIndex: i,
-              message:
-                "Thiếu hoặc sai mã Loại câu hỏi/Độ khó (TL, TN, TNM, DK, SX | NB, TH, VD, VDC)",
+              message: `Sai mã — Loại: "${typeVal}", Độ khó: "${difficultVal}" (hợp lệ: TL, TN, TNM, DK, SX | NB, TH, VD, VDC)`,
             })
             continue
           }
@@ -909,10 +910,10 @@ const WordImportModal: React.FC = () => {
       open={isOpen}
       width="90vw"
       onCancel={onClose}
-      style={{ top: storageType === "khung" ? 8 : 40 }}
+      style={{ top: storageType === "khung" ? 8 : 20 }}
       styles={{
         body: {
-          height: questions.length === 0 ? "auto" : storageType === "khung" ? "80vh" : "70vh",
+          height: questions.length === 0 ? "auto" : storageType === "khung" ? "88vh" : "82vh",
           overflow: "hidden",
         },
       }}
@@ -1046,13 +1047,13 @@ const WordImportModal: React.FC = () => {
             rowSelection={rowSelection}
             scroll={{
               x: "100%",
-              y: importErrors.length > 0 ? "calc(60vh - 100px)" : "calc(60vh - 130px)",
+              y: importErrors.length > 0 ? "calc(50vh - 100px)" : "calc(68vh - 130px)",
             }}
             sticky={{
               offsetHeader: 0,
             }}
             style={{
-              maxHeight: "50vh",
+              maxHeight: "60vh",
             }}
             pagination={{
               position: ["bottomRight"],

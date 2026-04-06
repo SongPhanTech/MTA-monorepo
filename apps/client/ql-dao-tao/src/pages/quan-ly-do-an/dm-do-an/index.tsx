@@ -15,7 +15,7 @@ import {
   ThesisProjectStatus,
   ThesisType,
 } from "@workspace/db"
-import { $Enums } from "@workspace/db/client"
+import { $Enums, Prisma } from "@workspace/db/client"
 import {
   useCountThesisProject,
   useFindFirstLecturer,
@@ -380,23 +380,23 @@ export default function DanhMucDoAn() {
         }
 
         if (originalRecord?.registrations) {
-          for (const reg of originalRecord.registrations) {
-            if (reg.studentSubjectScoreId) {
-              transactions.push({
-                model: "StudentSubjectScore" as const,
-                operation: "update" as const,
-                data: {
-                  where: { id: reg.studentSubjectScoreId },
-                  data: {
-                    attendanceScore: finalScore,
-                    midtermScore: finalScore,
-                    examScore: finalScore,
-                    finalScore: finalScore,
-                  },
-                },
-              })
-            }
-          }
+          // for (const reg of originalRecord.registrations) {
+          //   if (reg.studentSubjectScoreId) {
+          //     transactions.push({
+          //       model: "StudentSubjectScore" as const,
+          //       operation: "update" as const,
+          //       data: {
+          //         where: { id: reg.studentSubjectScoreId },
+          //         data: {
+          //           attendanceScore: finalScore,
+          //           midtermScore: finalScore,
+          //           examScore: finalScore,
+          //           finalScore: finalScore,
+          //         },
+          //       },
+          //     })
+          //   }
+          // }
         }
 
         const expertRolesMapping = [
@@ -420,7 +420,7 @@ export default function DanhMucDoAn() {
             }
           })
 
-        const updateData: any = {
+        const updateData: Prisma.ThesisProjectUpdateInput = {
           title: values.title || "",
           status: values.status || $Enums.ThesisProjectStatus.PROPOSED,
           defenseDate: values.defenseDate ? dayjs(values.defenseDate).toDate() : null,

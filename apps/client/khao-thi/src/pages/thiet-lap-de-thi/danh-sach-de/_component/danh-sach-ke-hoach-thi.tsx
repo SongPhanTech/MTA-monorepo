@@ -10,15 +10,7 @@ import dayjs from "dayjs"
 import { useCallback, useMemo, useState } from "react"
 import { store } from "../index"
 import DatePicker from "@components/commons/date-picker"
-
-const EXAM_TYPE_LABEL: Record<string, string> = {
-  OfflineWritten: "Thi viết (offline)",
-  OnlineWritten: "Thi viết (online)",
-  Oral: "Thi vấn đáp",
-  Practice: "Thi thực hành",
-  Project: "Thi đồ án",
-  Other: "Khác",
-}
+import { examTypeOptions } from "@workspace/libs/constants"
 export default function DanhSachKeHoachThi() {
   const { id: semesterId } = useSemesterStore()
   const selectedExamId = useStore(store, (state) => state.selectedExamId)
@@ -67,9 +59,9 @@ export default function DanhSachKeHoachThi() {
       const end = new Date(d)
       end.setHours(23, 59, 59, 999)
 
-      result.examBank = {
+      result.subjectClass = {
         some: {
-          examDay: {
+          examDate: {
             gte: start,
             lt: end,
           },
@@ -77,16 +69,18 @@ export default function DanhSachKeHoachThi() {
       }
     }
 
+    let validExamTypes: string[] = []
     if (filters.examType && filters.examType.length > 0) {
-      result.examBank = {
-        ...result.examBank,
-        some: {
-          ...result.examBank?.some,
-          examType: {
-            in: filters.examType,
-          },
-        },
-      }
+      validExamTypes = filters.examType
+    } else {
+      validExamTypes = ["OfflineWritten", "OnlineWritten", "Oral", "Other"]
+    }
+
+    result.subjectVersion = {
+      ...result.subjectVersion,
+      examType: {
+        in: validExamTypes,
+      },
     }
 
     if (filters.examRoom) {
@@ -162,6 +156,12 @@ export default function DanhSachKeHoachThi() {
             name: true,
             id: true,
             code: true,
+            examDate: true,
+            _count: {
+              select: {
+                subjectClassStudent: true,
+              },
+            },
           },
         },
       },
@@ -334,8 +334,8 @@ export default function DanhSachKeHoachThi() {
               width: 50,
               render: (_, record) => {
                 let total = 0
-                record?.examRooms?.forEach((item: any) => {
-                  total += item?.examList?.length
+                record?.subjectClass?.forEach((sc: SubjectClass & { _count?: { subjectClassStudent: number } }) => {
+                  total += sc?._count?.subjectClassStudent || 0
                 })
                 return total
               },
@@ -460,23 +460,27 @@ export default function DanhSachKeHoachThi() {
               type: "date",
               dataIndex: "examDay",
               render: (_, record) => {
-                if (!record?.examBank?.length) return ""
+                if (!record?.subjectClass?.length) return ""
 
                 const today = new Date()
                 today.setHours(0, 0, 0, 0)
 
-                const examDays = record.examBank
-                  .map((e: any) => e.examDay)
+                const examDays = record.subjectClass
+                  .map((e: any) => e.examDate)
                   .filter(Boolean)
                   .map((d: any) => new Date(d))
                   .sort((a: Date, b: Date) => a.getTime() - b.getTime())
 
                 if (!examDays.length) return ""
 
+                const uniqueExamDays = Array.from(
+                  new Set(examDays.map((d: Date) => d.getTime()))
+                ).map((time: any) => new Date(time))
+
                 return (
                   <HtmlTruncate>
                     <ul className="list-disc pl-4">
-                      {examDays.map((day: Date, index: number) => {
+                      {uniqueExamDays.map((day: Date, index: number) => {
                         const isExpired = day < today
                         return (
                           <li
@@ -525,13 +529,13 @@ export default function DanhSachKeHoachThi() {
               width: 100,
               dataIndex: "examType",
               type: "select",
-              options: Object.entries(EXAM_TYPE_LABEL).map(([value, label]) => ({
-                label,
-                value,
+              options: examTypeOptions.map((opt) => ({
+                label: opt.label,
+                value: opt.value,
               })),
               render: (_, record) => {
-                const examType = record?.examBank?.[0]?.examType
-                return EXAM_TYPE_LABEL[examType] || ""
+                const examType = record?.subjectVersion?.examType
+                return examTypeOptions.find((opt) => opt.value === examType)?.label || ""
               },
             },
             {

@@ -81,7 +81,9 @@ const PutArchivedAwardModal = () => {
                 ...(fixedClassId ? { id: fixedClassId } : {}),
               },
             }
-          : {}),
+          : {
+              fixedClass: { trainingCourse: { trainingObjectTypeId } },
+            }),
       },
       include: {
         userProfile: true,

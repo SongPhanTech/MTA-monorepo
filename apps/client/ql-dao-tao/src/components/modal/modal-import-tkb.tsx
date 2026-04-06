@@ -4,7 +4,6 @@ import FormItem from "@components/commons/form-item"
 import PutFormModal from "@components/commons/put-modal"
 import Table from "@components/commons/table"
 import { SUBJECT_CLASS_SCHEDULE_TYPE } from "@constants/constants"
-import { useExamTypeOptions } from "@hooks/examType"
 import useSpinner from "@hooks/spinner"
 import type { $Enums, Prisma, SubjectClassSchedule, SubjectClassTime } from "@workspace/db/client"
 import { customTrainingFetch } from "@workspace/libs/api/custom-instance"
@@ -107,7 +106,6 @@ const ModalNhapTKB = () => {
   const { type } = input || {}
 
   const { showSpinner, hideSpinner } = useSpinner()
-  const { options, getExamTypeLabel } = useExamTypeOptions()
   const [file, setFile] = useState<File | null>(null)
   const [fileName, setFileName] = useState<string>("")
   const [errorPagination, setErrorPagination] = useState({ current: 1, pageSize: 10 })
@@ -474,7 +472,7 @@ const ModalNhapTKB = () => {
                 dataIndex: "roomId",
                 align: "center",
                 width: 200,
-                render: (_, record) => <div>{record.room?.name || "-"}</div>,
+                render: (_, record) => <div>{record.room?.name || ""}</div>,
               },
               {
                 title: "Ngày thi",

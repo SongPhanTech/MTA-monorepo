@@ -4,6 +4,7 @@ import Table from "@components/commons/table"
 import { useArchivedCertificateStatusOptions } from "@hooks/paymentStatus"
 import useSpinner from "@hooks/spinner"
 import { formatDate } from "@lib/utils"
+import { $Enums, ArchivedCertificate } from "@workspace/db/client"
 import { useUpdateArchivedCertificate } from "@workspace/db/hooks"
 import { useAbility } from "@workspace/permissions/hooks"
 // import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
@@ -79,12 +80,8 @@ const ModalDanhSachChungChi = () => {
     try {
       showSpinner()
       await updateArchivedCertificate({
-        where: {
-          id,
-        },
-        data: {
-          status: "CANCEL",
-        },
+        where: { id },
+        data: { status: "CANCEL" },
       })
       message.success("Xóa chứng chỉ thành công")
       onClose()
@@ -224,19 +221,22 @@ const ModalDanhSachChungChi = () => {
             render: (__, cert) => cert?.certificate?.name || "",
           },
           {
-            title: "Điểm TX",
+            title: "Điểm chứng chỉ",
             dataIndex: "score",
             align: "center",
             width: 100,
-            render: (score: number, cert: any) => renderEditableNumber(score, cert, "score"),
+            render: (score: number, cert: ArchivedCertificate) =>
+              cert.status === "APPROVED" ? score : renderEditableNumber(score, cert, "score"),
           },
           {
             title: "Điểm quy đổi",
             dataIndex: "finalScore",
             align: "center",
             width: 140,
-            render: (finalScore: number, cert: any) =>
-              renderEditableNumber(finalScore, cert, "finalScore"),
+            render: (finalScore: number, cert: ArchivedCertificate) =>
+              cert.status === "APPROVED"
+                ? finalScore
+                : renderEditableNumber(finalScore, cert, "finalScore"),
           },
           ...((showLanguageScoreColumns
             ? [
@@ -275,21 +275,23 @@ const ModalDanhSachChungChi = () => {
             dataIndex: "issuedDate",
             align: "center",
             width: 150,
-            render: (date: string, cert: any) => renderEditableDate(date, cert, "issuedDate"),
+            render: (date: string, cert: ArchivedCertificate) =>
+              cert.status === "APPROVED" ? date : renderEditableDate(date, cert, "issuedDate"),
           },
           {
             title: "Ngày hết hạn",
             dataIndex: "expiredDate",
             align: "center",
             width: 150,
-            render: (date: string, cert: any) => renderEditableDate(date, cert, "expiredDate"),
+            render: (date: string, cert: ArchivedCertificate) =>
+              cert.status === "APPROVED" ? date : renderEditableDate(date, cert, "expiredDate"),
           },
           {
             title: "Trạng thái",
             dataIndex: "status",
             width: 150,
             align: "center",
-            render: (status) => {
+            render: (status: $Enums.ArchivedCertificateStatus) => {
               const label = getArchivedCertificateStatusStatusLabel(status)
               const color = getArchivedCertificateStatusColor(status)
               return <Tag color={color}>{label}</Tag>
