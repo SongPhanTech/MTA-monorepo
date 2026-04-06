@@ -692,12 +692,7 @@ export const exportHosobvlv = async ({
       const data = {
         tenhocvien: student.userProfile?.fullname || "",
         type:
-          student.thesisRegistrations?.[0]?.thesisProject?.description
-            ?.split("-")[1]
-            .trim()
-            .split(":")[1]
-            .trim()
-            .toLowerCase() || "",
+          student.thesisRegistrations?.[0]?.thesisProject?.type,
         khoa: student?.fixedClass?.trainingCourse?.name || "",
         chuyennganh: student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "",
         nganh:
@@ -766,12 +761,7 @@ export const exportGiayMoiHdlv = async ({
         chuyennganh: student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "",
         tendetai: student?.thesisRegistrations?.[0]?.thesisProject?.title || "",
         type:
-          student?.thesisRegistrations?.[0]?.thesisProject?.description
-            ?.split("-")[1]
-            .trim()
-            .split(":")[1]
-            .trim()
-            .toLowerCase() || "",
+          student?.thesisRegistrations?.[0]?.thesisProject?.type,
       }
       const gapRow: TableRow = {
         cells: [{ value: null, colSpan: 18, border: false }],
@@ -816,53 +806,40 @@ export const exportSaoQDHDLV = async ({
       ?.filter((s) => s?.thesisRegistrations?.[0]?.thesisProject)
       .map((student) => {
         const supervisor = student?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.name
-        // if (!supervisor) {
-        //     return null
-        // }
+        if (!supervisor) {
+            return null
+        }
         const coSupervisor = student?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.name
+        const type = student?.thesisRegistrations?.[0]?.thesisProject?.type
+        const nganh =student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name || ""
+        const chuyennganh =student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || ""
+        const detai = student?.thesisRegistrations?.[0]?.thesisProject?.title || ""
+        const hoten = student?.userProfile?.fullname || ""
+        const canbohuongdan1 = supervisor ? `1. ${supervisor}` : ""
+        const canbohuongdan2 = coSupervisor ? `2. ${coSupervisor}` : ""
+        const khoaquanli = student?.thesisRegistrations?.[0]?.thesisProject?.organization?.sTen || ""
+        const dieu1 = `Giao đề tài ${type} tốt nghiệp và cán hộ hướng dẫn ngành ${nganh} (${chuyennganh}) về đề tài "${detai}".\n
+        Học viên thực hiện: ${hoten}. \n
+        Cán bộ hướng dẫn: ${canbohuongdan1} \n
+         ${canbohuongdan2}`
+         const dieu2 = `${khoaquanli} tổ chức triển khai cho cán bộ hướng dẫn và học viên thực hiện theo quy định.`
         const data = {
           soQD: student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.defenseDecisionNumber || "",
           ngayQD: ngayQD,
           thangQD: thangQD,
           namQD: namQD,
-          type:
-            student?.thesisRegistrations?.[0]?.thesisProject?.description
-              ?.split("-")[1]
-              .trim()
-              .split(":")[1] || "",
           khoa: student?.fixedClass?.trainingCourse?.name || "",
-          chuyennganh:
-            student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "",
-          nganh:
-            student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField
-              ?.name || "",
-          detai: student?.thesisRegistrations?.[0]?.thesisProject?.title || "",
-          hoten: student?.userProfile?.fullname,
-          canbohuongdan1: supervisor ? `1. ${supervisor}` : "",
-          canbohuongdan2: coSupervisor ? `2. ${coSupervisor}` : "",
-          khoaquanli: student?.thesisRegistrations?.[0]?.thesisProject?.organization?.sTen || "",
+          dieu1: dieu1,
+          dieu2: dieu2,
           ngay: ngayQD,
           thang: thangQD,
           nam: namQD,
           data: [],
         }
-        const gapRow: TableRow = {
-          cells: [{ value: null, colSpan: 18, border: false }],
-        }
         return {
-          // sheet: `${student.userProfile?.code}`,
           data: data,
-          // tableStartCell: { row: 40, col: 1 },
-          // rows: [gapRow],
         }
       })
-    // await exportFromTemplate({
-    //   templateUrl: getMinioUrl("mta/template/BanSaoQDHuongDanLuanVan.xlsx"),
-    //   sheets: allSheetOptions?.filter((item) => item !== null) ?? [],
-    //   fileName: "BanSaoQDHuongDanLuanVan",
-    //   mergeSheetsToOne: true,
-    //   sheetName: "BanSaoQDHuongDanLuanVan",
-    // })
     const payload: ExcelTemplateBody = {
       head: { data: null },
       tail: { data: null },
