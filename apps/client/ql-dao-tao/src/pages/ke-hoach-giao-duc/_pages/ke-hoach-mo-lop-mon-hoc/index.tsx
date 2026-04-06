@@ -290,6 +290,7 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                                               id: true,
                                               code: true,
                                               name: true,
+                                              examType: true,
                                             },
                                           },
                                         },
