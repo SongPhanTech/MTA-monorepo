@@ -43,6 +43,7 @@ const SinhDeModal = () => {
       where: { id: selectedExamId },
       include: {
         subjectClass: true,
+        subjectVersion: true,
       },
     },
     {
@@ -154,12 +155,26 @@ const SinhDeModal = () => {
             </FormItem>
           </Col>
           <Col span={12}>
-            <FormItem form={form} name="examType" label="Hình thức thi" required>
+            <FormItem
+              form={form}
+              name="examType"
+              label="Hình thức thi"
+              required
+              key={`examType-${dataExam?.id || "new"}`}
+              initialValue={!input?.id ? dataExam?.subjectVersion?.examType : undefined}
+            >
               <Select
-                options={examTypeOptions.map((opt) => ({
-                  label: opt.label,
-                  value: opt.value,
-                }))}
+                options={examTypeOptions
+                  .filter(
+                    (opt) =>
+                      opt.value === "OfflineWritten" ||
+                      opt.value === "Oral" ||
+                      opt.value === "OnlineWritten"
+                  )
+                  .map((opt) => ({
+                    label: opt.label,
+                    value: opt.value,
+                  }))}
                 placeholder="Chọn hình thức thi"
               />
             </FormItem>
@@ -214,7 +229,14 @@ const SinhDeModal = () => {
             </FormItem>
           </Col>
           <Col span={12}>
-            <FormItem form={form} name="subjectClassId" label="Dùng cho lớp" required>
+            <FormItem
+              form={form}
+              name="subjectClassId"
+              label="Dùng cho lớp"
+              required
+              key={`subjectClassId-${dataExam?.id || "new"}`}
+              initialValue={!input?.id ? dataExam?.subjectClass?.[0]?.id : undefined}
+            >
               <Select options={dataOption} placeholder="Chọn lớp môn học" />
             </FormItem>
           </Col>
