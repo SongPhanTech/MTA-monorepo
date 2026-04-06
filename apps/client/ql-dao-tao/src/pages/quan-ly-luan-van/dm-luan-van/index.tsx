@@ -203,15 +203,31 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
           thesisProject: {
             include: {
               council: {
-                include: { members: { include: { expert: true } } },
+                include: { members: { include: { expert: { include: { lecturer: { include: { userProfile: {include: { academicRankType: true, academicDegreeType: true } } } } } } } } },
               },
               thesisSession: true,
               defenseSession: true,
               defenseRecord: true,
               room: true,
               organization: true,
-              supervisor: true,
-              coSupervisor: true,
+              supervisor: {
+                include: {
+                  lecturer: {
+                    include: {
+                      userProfile: {include: { academicRankType: true, academicDegreeType: true } },
+                    },
+                  },
+                },
+              },
+              coSupervisor: {
+                include: {
+                  lecturer: {
+                    include: {
+                      userProfile: {include: { academicRankType: true, academicDegreeType: true } },
+                    },
+                  },
+                },
+              },
             },
           },
         },
@@ -1181,7 +1197,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 width: 350,
                 dataIndex: "title",
                 render: (_, record) => {
-                  if (editingRowKeys.includes(record?.id) && role === "P7") {
+               
+                  if (editingRowKeys.includes(record?.id)) {
                     const currentValue =
                       editingValues[record?.id]?.title !== undefined
                         ? editingValues[record?.id]?.title
@@ -1211,8 +1228,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 width: 350,
                 dataIndex: "researchTopicAssociated",
                 render: (_, record) => {
-                  const status = record?.thesisRegistrations?.[0]?.thesisProject?.status || ""
-                  if (editingRowKeys.includes(record?.id) && role === "P7") {
+                 
+                  if (editingRowKeys.includes(record?.id)) {
                     const currentValue =
                       editingValues[record?.id]?.researchTopicAssociated !== undefined
                         ? editingValues[record?.id]?.researchTopicAssociated
@@ -1309,6 +1326,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
                           options={expertProfileData?.map((item) => {
+                            console.log('item',item)
                             const academicRank =
                               item.lecturer?.userProfile?.academicRankType?.sTen ||
                               item.academicRank ||
@@ -1346,12 +1364,14 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     !isWithinGvhdSupervisorEditWindow()
                   ) {
                     return (
-                      <span className="text-neutral-500">
-                        {record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.name || "—"}
-                        <span className="block text-xs"> (Hết hạn nhập GVHD)</span>
+                      <span className="text-neutral-500" title="Hết hạn nhập GVHD" > 
+                        {record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.name
+                        || record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.lecturer?.userProfile?.fullname
+                        || "—"}
                       </span>
                     )
                   }
+                  console.log(record?.thesisRegistrations?.[0]?.thesisProject?.supervisor)
                   const academicRank =
                     record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.lecturer
                       ?.userProfile?.academicRankType?.sTen ||
@@ -1363,7 +1383,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.academicDegree ||
                     ""
                   const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
-                  return `${academicRankAndDegree} ${record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.name || ""}`
+                  return `${academicRankAndDegree} ${record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.name||
+                    record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.lecturer?.userProfile?.fullname
+                    || ""}`
                 },
               },
               {
@@ -1441,7 +1463,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.academicDegree ||
                     ""
                   const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
-                  return `${academicRankAndDegree} ${record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.name || ""}`
+                  return `${academicRankAndDegree} ${record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.name 
+                    || record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.lecturer?.userProfile?.fullname
+                    || ""}`
                 },
               },
               {
