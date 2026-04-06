@@ -12,6 +12,7 @@ import {
   Modal,
   message,
   Row,
+  Select,
   Tooltip,
   Typography,
 } from "antd"
@@ -32,7 +33,30 @@ import {
   RiMoneyDollarBoxLine,
   RiMoneyDollarCircleLine,
   RiStrikethrough,
+  RiLinksLine,
 } from "react-icons/ri"
+
+const FONT_FAMILIES = ["Arial", "Times New Roman", "Tahoma", "Verdana", "Courier New", "Helvetica"]
+
+const FONT_SIZES = [
+  "8px",
+  "9px",
+  "10px",
+  "11px",
+  "12px",
+  "13px",
+  "14px",
+  "16px",
+  "18px",
+  "20px",
+  "22px",
+  "24px",
+  "26px",
+  "28px",
+  "36px",
+  "48px",
+  "72px",
+]
 import "katex/dist/katex.min.css"
 import {
   Columns,
@@ -353,14 +377,15 @@ export default function TextEditorMenuBar({
             icon: <RiItalic className="size-5" />,
             onClick: () => editor.chain().focus().toggleItalic().run(),
             isActive: editor.isActive("italic"),
-            disabled: !editor.can().chain().focus().toggleItalic().run(),
+            // disabled: !editor.can().chain().focus().toggleItalic().run(),
+            disabled: !editor.can().chain().focus().toggleItalic(),
           },
           {
             id: "RiStrikethrough",
             icon: <RiStrikethrough className="size-5" />,
             onClick: () => editor.chain().focus().toggleStrike().run(),
             isActive: editor.isActive("strike"),
-            disabled: !editor.can().chain().focus().toggleStrike().run(),
+            disabled: !editor.can().chain().focus().toggleStrike(),
           },
         ],
         //   [
@@ -385,21 +410,21 @@ export default function TextEditorMenuBar({
             icon: <RiAlignLeft className="size-5" />,
             onClick: () => editor.chain().focus().setTextAlign("left").run(),
             isActive: editor.isActive({ textAlign: "left" }),
-            disabled: !editor.can().chain().focus().unsetTextAlign().run(),
+            disabled: !editor.can().chain().focus().setTextAlign("left"),
           },
           {
             id: "RiAlignJustify",
             icon: <RiAlignJustify className="size-5" />,
             onClick: () => editor.chain().focus().setTextAlign("center").run(),
             isActive: editor.isActive({ textAlign: "center" }),
-            disabled: !editor.can().chain().focus().unsetTextAlign().run(),
+            disabled: !editor.can().chain().focus().unsetTextAlign(),
           },
           {
             id: "RiAlignRight",
             icon: <RiAlignRight className="size-5" />,
             onClick: () => editor.chain().focus().setTextAlign("right").run(),
             isActive: editor.isActive({ textAlign: "right" }),
-            disabled: !editor.can().chain().focus().unsetTextAlign().run(),
+            disabled: !editor.can().chain().focus().unsetTextAlign(),
           },
         ],
         [
@@ -409,8 +434,7 @@ export default function TextEditorMenuBar({
             onClick: () => editor.chain().focus().toggleBulletList().run(),
             isActive: editor.isActive("bulletList"),
             disabled:
-              !editor.isActive("bulletList") &&
-              !editor.can().chain().focus().toggleBulletList().run(),
+              !editor.isActive("bulletList") && !editor.can().chain().focus().toggleBulletList(),
           },
           {
             id: "RiListOrdered2",
@@ -418,8 +442,7 @@ export default function TextEditorMenuBar({
             onClick: () => editor.chain().focus().toggleOrderedList().run(),
             isActive: editor.isActive("orderedList"),
             disabled:
-              !editor.isActive("orderedList") &&
-              !editor.can().chain().focus().toggleOrderedList().run(),
+              !editor.isActive("orderedList") && !editor.can().chain().focus().toggleOrderedList(),
           },
           {
             id: "RiImage2Line",
@@ -438,6 +461,23 @@ export default function TextEditorMenuBar({
             onClick: () => fileInputRef.current?.click(),
             isActive: false,
             disabled: false,
+          },
+          {
+            id: "link",
+            icon: <RiLinksLine className="size-5" />,
+            onClick: () => {
+              const previousUrl = editor.getAttributes("link").href
+              const url = window.prompt("Nhập đường dẫn liên kết:", previousUrl)
+              if (url === null) return
+              if (url === "") {
+                editor.chain().focus().extendMarkRange("link").unsetLink().run()
+                return
+              }
+              editor.chain().focus().extendMarkRange("link").setLink({ href: url }).run()
+            },
+            isActive: editor.isActive("link"),
+            disabled: false,
+            description: "Chèn liên kết",
           },
         ],
         [
@@ -487,7 +527,7 @@ export default function TextEditorMenuBar({
             icon: <Columns className="size-5" />,
             onClick: () => editor.chain().focus().addColumnBefore().run(),
             isActive: false,
-            disabled: !editor.can().chain().focus().addColumnBefore().run(),
+            disabled: !editor.can().chain().focus().addColumnBefore(),
             description: "Thêm cột trước",
           },
           {
@@ -495,7 +535,7 @@ export default function TextEditorMenuBar({
             icon: <Plus className="size-5" />,
             onClick: () => editor.chain().focus().addColumnAfter().run(),
             isActive: false,
-            disabled: !editor.can().chain().focus().addColumnAfter().run(),
+            disabled: !editor.can().chain().focus().addColumnAfter(),
             description: "Thêm cột sau",
           },
           {
@@ -503,7 +543,7 @@ export default function TextEditorMenuBar({
             icon: <Trash2 className="size-5" />,
             onClick: () => editor.chain().focus().deleteColumn().run(),
             isActive: false,
-            disabled: !editor.can().chain().focus().deleteColumn().run(),
+            disabled: !editor.can().chain().focus().deleteColumn(),
             description: "Xóa cột",
           },
           {
@@ -511,7 +551,7 @@ export default function TextEditorMenuBar({
             icon: <Rows className="size-5" />,
             onClick: () => editor.chain().focus().addRowBefore().run(),
             isActive: false,
-            disabled: !editor.can().chain().focus().addRowBefore().run(),
+            disabled: !editor.can().chain().focus().addRowBefore(),
             description: "Thêm hàng trước",
           },
           {
@@ -519,7 +559,7 @@ export default function TextEditorMenuBar({
             icon: <Plus className="size-5" />,
             onClick: () => editor.chain().focus().addRowAfter().run(),
             isActive: false,
-            disabled: !editor.can().chain().focus().addRowAfter().run(),
+            disabled: !editor.can().chain().focus().addRowAfter(),
             description: "Thêm hàng sau",
           },
           {
@@ -527,7 +567,7 @@ export default function TextEditorMenuBar({
             icon: <Trash2 className="size-5" />,
             onClick: () => editor.chain().focus().deleteRow().run(),
             isActive: false,
-            disabled: !editor.can().chain().focus().deleteRow().run(),
+            disabled: !editor.can().chain().focus().deleteRow(),
             description: "Xóa hàng",
           },
           {
@@ -535,7 +575,7 @@ export default function TextEditorMenuBar({
             icon: <Merge className="size-5" />,
             onClick: () => editor.chain().focus().mergeCells().run(),
             isActive: false,
-            disabled: !editor.can().chain().focus().mergeCells().run(),
+            disabled: !editor.can().chain().focus().mergeCells(),
             description: "Gộp ô",
           },
           {
@@ -543,7 +583,7 @@ export default function TextEditorMenuBar({
             icon: <Split className="size-5" />,
             onClick: () => editor.chain().focus().splitCell().run(),
             isActive: false,
-            disabled: !editor.can().chain().focus().splitCell().run(),
+            disabled: !editor.can().chain().focus().splitCell(),
             description: "Tách ô",
           },
           {
@@ -551,7 +591,7 @@ export default function TextEditorMenuBar({
             icon: <TableProperties className="size-5" />,
             onClick: () => editor.chain().focus().deleteTable().run(),
             isActive: false,
-            disabled: !editor.can().chain().focus().deleteTable().run(),
+            disabled: !editor.can().chain().focus().deleteTable(),
             description: "Xóa bảng",
           },
           {
@@ -578,7 +618,34 @@ export default function TextEditorMenuBar({
 
   return (
     <>
-      <div className="flex items-center space-x-2 bg-[#FAFAFA] rounded-t-md flex-wrap">
+      <div className="flex items-center space-x-2 bg-[#FAFAFA] rounded-t-md flex-wrap p-1">
+        <div className="flex items-center space-x-2 px-1">
+          <Select
+            size="small"
+            style={{ width: 130 }}
+            placeholder="Font"
+            options={FONT_FAMILIES.map((font) => ({ label: font, value: font }))}
+            value={editor.getAttributes("textStyle")?.fontFamily || null}
+            onChange={(val) => {
+              if (val) editor.chain().focus().setFontFamily(val).run()
+              else editor.chain().focus().unsetFontFamily().run()
+            }}
+            allowClear
+          />
+          <Select
+            size="small"
+            style={{ width: 70 }}
+            placeholder="Size"
+            options={FONT_SIZES.map((size) => ({ label: size.replace("px", ""), value: size }))}
+            value={editor.getAttributes("textStyle")?.fontSize || null}
+            onChange={(val) => {
+              if (val) editor.chain().focus().setFontSize(val).run()
+              else editor.chain().focus().unsetFontSize().run()
+            }}
+            allowClear
+          />
+          <div className="w-px bg-gray-300 h-6 mx-2" />
+        </div>
         {groupedButtons.map((group, index) => (
           <div
             key={`group-${group.map((btn) => btn.id).join("-")}`}

@@ -7,7 +7,7 @@
 		"build": "cross-env NODE_OPTIONS='--max_old_space_size=8096' next build",
 		"start": "next start",
 		"format": "oxfmt",
-        "check": "oxlint && oxfmt --check",
+		"check": "oxlint && oxfmt --check",
 		"generate": "patch-package"
 	},
 	"dependencies": {
@@ -20,9 +20,11 @@
 		"@t3-oss/env-nextjs": "catalog:",
 		"@tanstack/react-query": "catalog:",
 		"@tanstack/react-store": "catalog:",
+		"@tiptap/core": "^3.10.5",
 		"@tiptap/extension-color": "catalog:",
 		"@tiptap/extension-highlight": "catalog:",
 		"@tiptap/extension-image": "catalog:",
+		"@tiptap/extension-link": "^3.10.5",
 		"@tiptap/extension-mathematics": "catalog:",
 		"@tiptap/extension-mention": "catalog:",
 		"@tiptap/extension-table": "catalog:",
