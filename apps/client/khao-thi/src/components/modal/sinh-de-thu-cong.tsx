@@ -419,7 +419,6 @@ const SinhDeThuCongModal = () => {
                 form={form}
                 name="subjectClassId"
                 label="Dùng cho lớp"
-                key={`subjectClassId-${dataExam?.id || "new"}`}
                 initialValue={!input?.id ? dataExam?.subjectClass?.[0]?.id : undefined}
               >
                 <Select options={dataOption} placeholder="Chọn lớp môn học" />
