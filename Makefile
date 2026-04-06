@@ -101,8 +101,10 @@ save-docker-images:
 	@mkdir -p docker-images
 	@for pkg in $(BE_PKGS); do \
 		echo "Saving $$pkg..."; \
-		$(DOCKER) save $(REGISTRY)/$(IMG_PREFIX)$$pkg:$(DEV_TAG) | gzip > docker-images/$(IMG_PREFIX)$$pkg.tar.gz; \
-	done
+		($(DOCKER) save $(REGISTRY)/$(IMG_PREFIX)$$pkg:$(DEV_TAG) | gzip > docker-images/$(IMG_PREFIX)$$pkg.tar.gz) & \
+	done; \
+	wait; \
+	echo "All images saved."
 
 package-cdn:
 	@rm -rf cdn cdn.zip
