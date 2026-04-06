@@ -363,15 +363,6 @@ const SinhDeThuCongModal = () => {
     }
   }, [input?.subjectVersionId, form.setFieldValue])
 
-  useEffect(() => {
-    if (dataExam && !input?.id) {
-      form.setFieldsValue({
-        examType: (dataExam as any).subjectVersion?.examType,
-        subjectClassId: dataExam.subjectClass?.[0]?.id || undefined,
-      })
-    }
-  }, [dataExam, input?.id, form])
-
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   const steps: StepItem[] = useMemo(() => {
     return [
@@ -385,7 +376,14 @@ const SinhDeThuCongModal = () => {
               </FormItem>
             </Col>
             <Col span={24}>
-              <FormItem form={form} name="examType" label="Hình thức thi" required>
+              <FormItem
+                form={form}
+                name="examType"
+                label="Hình thức thi"
+                required
+                key={`examType-${dataExam?.id || "new"}`}
+                initialValue={!input?.id ? dataExam?.subjectVersion?.examType : undefined}
+              >
                 <Select
                   options={examTypeOptions
                     .filter(
@@ -418,7 +416,13 @@ const SinhDeThuCongModal = () => {
               </FormItem>
             </Col>
             <Col span={24}>
-              <FormItem form={form} name="subjectClassId" label="Dùng cho lớp">
+              <FormItem
+                form={form}
+                name="subjectClassId"
+                label="Dùng cho lớp"
+                key={`subjectClassId-${dataExam?.id || "new"}`}
+                initialValue={!input?.id ? dataExam?.subjectClass?.[0]?.id : undefined}
+              >
                 <Select options={dataOption} placeholder="Chọn lớp môn học" />
               </FormItem>
             </Col>
