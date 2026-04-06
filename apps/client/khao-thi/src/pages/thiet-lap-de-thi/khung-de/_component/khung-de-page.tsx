@@ -64,22 +64,24 @@ export default function KhungDeList() {
     tag: "XemTaiLieu",
   })
 
+  const queryWhere: Prisma.ExamFrameworkWhereInput = {
+    active: true,
+    ...(semesterId ? { semesterId } : {}),
+    ...(filters.name
+      ? {
+          name: {
+            contains: filters.name,
+          },
+        }
+      : {}),
+    ...(filters.subjectVersionIdString
+      ? { subjectVersionIdString: filters.subjectVersionIdString }
+      : {}),
+    ...(trainingObjectTypeId ? { subjectVersion: { trainingObjectTypeId } } : {}),
+  }
+
   const { data: examFrameworkList = [] } = useFindManyExamFramework({
-    where: {
-      active: true,
-      ...(semesterId ? { semesterId } : {}),
-      ...(filters.name
-        ? {
-            name: {
-              contains: filters.name,
-            },
-          }
-        : {}),
-      ...(filters.subjectVersionIdString
-        ? { subjectVersionIdString: filters.subjectVersionIdString }
-        : {}),
-      ...(trainingObjectTypeId ? { subjectVersion: { trainingObjectTypeId } } : {}),
-    },
+    where: queryWhere,
     include: {
       subjectVersion: true,
       examMatrixs: {
@@ -98,27 +100,7 @@ export default function KhungDeList() {
   })
 
   const { data: totalExamFramework } = useCountExamFramework({
-    where: {
-      deletedAt: null,
-      ...(filters.name
-        ? {
-            OR: [
-              {
-                ...(filters.name
-                  ? {
-                      name: {
-                        contains: filters.name,
-                      },
-                    }
-                  : {}),
-                ...(filters.subjectVersionIdString
-                  ? { subjectVersionIdString: filters.subjectVersionIdString }
-                  : {}),
-              },
-            ],
-          }
-        : {}),
-    },
+    where: queryWhere,
   })
 
   const deleteExamFramework = useUpdateExamFramework({

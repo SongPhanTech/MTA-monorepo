@@ -123,7 +123,6 @@ const ModalImportCDR = () => {
         defval: null,
         header: 0,
       })
-      .slice(3) // Bỏ qua 3 dòng mẫu (row 2, 3, 4), chỉ lấy từ row 5 trở đi
 
     if (!rows.length) {
       message.error("File Excel không có dữ liệu")
