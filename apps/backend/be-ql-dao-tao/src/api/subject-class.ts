@@ -511,17 +511,12 @@ const exportSubjectClassListExcel = createRoute({
       trainingObjectTypeId: z.string().openapi("trainingObjectTypeId", {
         description: "ID loại đối tượng đào tạo",
       }),
-      semesterId: z
-        .string()
-        .openapi("semesterId", { description: "ID học kỳ" }),
+      semesterId: z.string().openapi("semesterId", { description: "ID học kỳ" }),
       fixedClassId: z
         .string()
         .optional()
         .openapi("fixedClassId", { description: "ID lớp quản lý" }),
-      searchText: z
-        .string()
-        .optional()
-        .openapi("searchText", { description: "Từ khoá tìm kiếm" }),
+      searchText: z.string().optional().openapi("searchText", { description: "Từ khoá tìm kiếm" }),
     }),
   },
   responses: {
@@ -1660,8 +1655,7 @@ app.openapi(uploadExcelImportScore, async (c) => {
 })
 
 app.openapi(exportSubjectClassListExcel, async (c) => {
-  const { trainingObjectTypeId, semesterId, fixedClassId, searchText } =
-    c.req.valid("query")
+  const { trainingObjectTypeId, semesterId, fixedClassId, searchText } = c.req.valid("query")
 
   try {
     const subjectClasses = await prisma.subjectClass.findMany({
@@ -1757,13 +1751,13 @@ app.openapi(exportSubjectClassListExcel, async (c) => {
       orderBy: {
         code: "asc",
       },
-    });
+    })
 
     if (!subjectClasses.length) {
       throw new Error("Không có dữ liệu lớp môn học để xuất")
     }
 
-    const templateFileName = "DS_LOP_MON_HOC.xlsx";
+    const templateFileName = "DS_LOP_MON_HOC.xlsx"
     const res = await fetch(getMinioUrl(`/mta/template/${templateFileName}`))
     if (!res.ok) {
       throw new Error("Không lấy được file mẫu xuất Excel")
@@ -1776,9 +1770,7 @@ app.openapi(exportSubjectClassListExcel, async (c) => {
       no: idx + 1,
       code: item.code || "",
       name: item.subject?.name || "",
-      examType:
-        examTypeOptions.find((et) => et.value === item.subject?.examType)
-          ?.label || "", // hình thức thi
+      examType: examTypeOptions.find((et) => et.value === item.subject?.examType)?.label || "", // hình thức thi
       status: item.enteredExamScore
         ? "Đã nhập điểm thi"
         : item.enteredScore
@@ -1788,9 +1780,7 @@ app.openapi(exportSubjectClassListExcel, async (c) => {
       deadLineStart: item.scoreDeadLineStart
         ? dayjs(item.scoreDeadLineStart).format("DD/MM/YYYY")
         : "", // ngày NĐQT
-      deadLine: item.scoreDeadline
-        ? dayjs(item.scoreDeadline).format("DD/MM/YYYY")
-        : "", // hạn NĐQT
+      deadLine: item.scoreDeadline ? dayjs(item.scoreDeadline).format("DD/MM/YYYY") : "", // hạn NĐQT
       examDate: item.examDate ? dayjs(item.examDate).format("DD/MM/YYYY") : "",
       examScoreDeadline: item.examScoreDeadline
         ? dayjs(item.examScoreDeadline).format("DD/MM/YYYY")
@@ -1801,13 +1791,11 @@ app.openapi(exportSubjectClassListExcel, async (c) => {
       managementOrganization: item.subject?.managementOrganization?.sMa || "", // đơn vị quản lý
       isLockScore: item.isLockScore ? "1" : "", // khóa ĐQT
       lockExamSessions: item.exam?.lockExamSessions ? "1" : "", // khóa DS thi
-      lockExamCode: item.exam?.examRooms?.[0]?.examList?.[0]?.lockExamCode
-        ? "1"
-        : "", // khóa phách
+      lockExamCode: item.exam?.examRooms?.[0]?.examList?.[0]?.lockExamCode ? "1" : "", // khóa phách
       isLockExamScore: item.isLockExamScore ? "1" : "", // p13 đã khóa
       scoreSubmitted: item.scoreSubmitted ? "1" : "", // p13 đã nhận phiếu điểm
       scoreChecked: item.scoreChecked ? "1" : "", // p2/p7 đã kiểm tra
-    }));
+    }))
 
     template.substitute(1, { data })
 
@@ -1816,15 +1804,11 @@ app.openapi(exportSubjectClassListExcel, async (c) => {
     const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 
     return c.body(result, 200, {
-      "Content-Type":
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       "Content-Disposition": disposition,
-    });
+    })
   } catch (error: any) {
-    return c.json(
-      { message: error?.message || "Đã xảy ra lỗi khi xuất Excel" },
-      404,
-    );
+    return c.json({ message: error?.message || "Đã xảy ra lỗi khi xuất Excel" }, 404)
   }
 })
 

@@ -203,7 +203,23 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
           thesisProject: {
             include: {
               council: {
-                include: { members: { include: { expert: { include: { lecturer: { include: { userProfile: {include: { academicRankType: true, academicDegreeType: true } } } } } } } } },
+                include: {
+                  members: {
+                    include: {
+                      expert: {
+                        include: {
+                          lecturer: {
+                            include: {
+                              userProfile: {
+                                include: { academicRankType: true, academicDegreeType: true },
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
               },
               thesisSession: true,
               defenseSession: true,
@@ -214,7 +230,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 include: {
                   lecturer: {
                     include: {
-                      userProfile: {include: { academicRankType: true, academicDegreeType: true } },
+                      userProfile: {
+                        include: { academicRankType: true, academicDegreeType: true },
+                      },
                     },
                   },
                 },
@@ -223,7 +241,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 include: {
                   lecturer: {
                     include: {
-                      userProfile: {include: { academicRankType: true, academicDegreeType: true } },
+                      userProfile: {
+                        include: { academicRankType: true, academicDegreeType: true },
+                      },
                     },
                   },
                 },
@@ -1197,7 +1217,6 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 width: 350,
                 dataIndex: "title",
                 render: (_, record) => {
-               
                   if (editingRowKeys.includes(record?.id)) {
                     const currentValue =
                       editingValues[record?.id]?.title !== undefined
@@ -1228,7 +1247,6 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 width: 350,
                 dataIndex: "researchTopicAssociated",
                 render: (_, record) => {
-                 
                   if (editingRowKeys.includes(record?.id)) {
                     const currentValue =
                       editingValues[record?.id]?.researchTopicAssociated !== undefined
@@ -1326,7 +1344,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
                           options={expertProfileData?.map((item) => {
-                            console.log('item',item)
+                            console.log("item", item)
                             const academicRank =
                               item.lecturer?.userProfile?.academicRankType?.sTen ||
                               item.academicRank ||
@@ -1364,10 +1382,11 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     !isWithinGvhdSupervisorEditWindow()
                   ) {
                     return (
-                      <span className="text-neutral-500" title="Hết hạn nhập GVHD" > 
-                        {record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.name
-                        || record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.lecturer?.userProfile?.fullname
-                        || "—"}
+                      <span className="text-neutral-500" title="Hết hạn nhập GVHD">
+                        {record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.name ||
+                          record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.lecturer
+                            ?.userProfile?.fullname ||
+                          "—"}
                       </span>
                     )
                   }
@@ -1383,9 +1402,12 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.academicDegree ||
                     ""
                   const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
-                  return `${academicRankAndDegree} ${record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.name||
-                    record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.lecturer?.userProfile?.fullname
-                    || ""}`
+                  return `${academicRankAndDegree} ${
+                    record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.name ||
+                    record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.lecturer
+                      ?.userProfile?.fullname ||
+                    ""
+                  }`
                 },
               },
               {
@@ -1463,9 +1485,12 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.academicDegree ||
                     ""
                   const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
-                  return `${academicRankAndDegree} ${record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.name 
-                    || record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.lecturer?.userProfile?.fullname
-                    || ""}`
+                  return `${academicRankAndDegree} ${
+                    record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.name ||
+                    record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.lecturer
+                      ?.userProfile?.fullname ||
+                    ""
+                  }`
                 },
               },
               {

@@ -1,18 +1,5 @@
-// @ts-nocheck
+import { FontFamilyOptions } from "@constants/types/tiptap"
 import { Extension } from "@tiptap/react"
-
-export interface FontFamilyOptions {
-  types: string[]
-}
-
-declare module "@tiptap/core" {
-  interface Commands<ReturnType> {
-    fontFamily: {
-      setFontFamily: (fontFamily: string) => ReturnType
-      unsetFontFamily: () => ReturnType
-    }
-  }
-}
 
 export const CustomFontFamily = Extension.create<FontFamilyOptions>({
   name: "fontFamily",

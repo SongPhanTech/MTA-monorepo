@@ -1,5 +1,5 @@
 import DefaultLayout from "@layouts/default-layout"
-import { useFindManyDM_DonVi, useDeleteQuestionBank } from "@workspace/db/hooks"
+import { useFindManyDM_DonVi } from "@workspace/db/hooks"
 import { useTrainingObjectTypeStore } from "@workspace/ui"
 import { Button, Col, Flex, Input, message, Row, Space } from "antd"
 import { BookOpen, BookPlus, Building2, Database, FileText } from "lucide-react"
@@ -7,6 +7,8 @@ import { type Key, useCallback, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import QuestionBankTree from "./_component/question-bank-tree"
 import QuestionList from "./_component/question-list"
+import { sqlTransaction } from "@workspace/libs/api/model"
+import { queryClient } from "@api/index"
 
 export type PutQuestionBankInput = {
   id?: string
@@ -52,26 +54,50 @@ export default function QuestionBank() {
     tag: "PutQuestionBank",
   })
 
-  const { mutateAsync: deleteQuestionBank } = useDeleteQuestionBank()
+  const handleDeleteQuestionBank = async (id: string) => {
+    try {
+      const res = await sqlTransaction([
+        {
+          model: "Question",
+          operation: "deleteMany",
+          data: {
+            where: {
+              questionBankId: id,
+            },
+          },
+        },
+        {
+          model: "QuestionBank",
+          operation: "delete",
+          data: {
+            where: {
+              id: id,
+            },
+          },
+        },
+      ])
 
-  const handleDeleteQuestionBank = useCallback(
-    async (id: string) => {
-      try {
-        await deleteQuestionBank({
-          where: { id },
-        })
-        message.success("Xóa thành công")
-        setSelectedQuestionBankId(null)
-      } catch (error: any) {
-        if (error?.info?.message) {
-          message.error(error?.info?.message)
-          return
-        }
+      if (res.status !== 200) {
         message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+        return
       }
-    },
-    [deleteQuestionBank]
-  )
+
+      message.success("Xóa thành công")
+      setSelectedQuestionBankId(null)
+      queryClient.invalidateQueries({
+        queryKey: ["zenstack", "QuestionBank"],
+      })
+      queryClient.invalidateQueries({
+        queryKey: ["zenstack", "DM_DonVi"],
+      })
+    } catch (error: any) {
+      if (error?.info?.message) {
+        message.error(error?.info?.message)
+        return
+      }
+      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+    }
+  }
 
   return (
     <div>

@@ -831,7 +831,10 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                 render: (_, record) => {
                   const rooms = listChanges?.[record.id]?.rooms
                   if (!rooms || rooms.length === 0) return null
-                  return rooms.reduce((acc: number, v: { quantity?: number }) => acc + (v.quantity ?? 0), 0)
+                  return rooms.reduce(
+                    (acc: number, v: { quantity?: number }) => acc + (v.quantity ?? 0),
+                    0
+                  )
                 },
               },
               {

@@ -1,18 +1,5 @@
-// @ts-nocheck
+import { FontSizeOptions } from "@constants/types/tiptap"
 import { Extension } from "@tiptap/react"
-
-export interface FontSizeOptions {
-  types: string[]
-}
-
-declare module "@tiptap/core" {
-  interface Commands<ReturnType> {
-    fontSize: {
-      setFontSize: (fontSize: string) => ReturnType
-      unsetFontSize: () => ReturnType
-    }
-  }
-}
 
 export const CustomFontSize = Extension.create<FontSizeOptions>({
   name: "fontSize",

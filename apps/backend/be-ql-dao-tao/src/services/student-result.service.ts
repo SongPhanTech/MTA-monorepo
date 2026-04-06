@@ -1563,7 +1563,7 @@ export const listStudentResultInfo = async (
           diemTrungBinhNam4: yearResult?.gpaBase4.toNumber() || 0,
           diemTrungBinhNam10: yearResult?.gpaBase10.toNumber() || 0,
           noTinChiTrongNam: yearResult?.failedCredits || 0,
-          
+
           soTinChiTichLuy: semesterResult?.accumulatedCredits || 0,
           soTinChiYeuCau: semesterResult?.totalCreditsByCurriculum || 0,
           soTinChiMoTrongKy: semesterResult?.totalCredits || 0,
