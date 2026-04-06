@@ -347,7 +347,7 @@ export default function ExamListPage() {
 
   const totalStudents = useMemo(() => {
     let total = 0
-    dataExam?.subjectClass?.forEach((sc: any) => {
+    dataExam?.subjectClass?.forEach((sc) => {
       total += sc?._count?.subjectClassStudent || 0
     })
     return total

@@ -160,7 +160,6 @@ const SinhDeModal = () => {
               name="examType"
               label="Hình thức thi"
               required
-              key={`examType-${dataExam?.id || "new"}`}
               initialValue={!input?.id ? dataExam?.subjectVersion?.examType : undefined}
             >
               <Select
@@ -234,7 +233,6 @@ const SinhDeModal = () => {
               name="subjectClassId"
               label="Dùng cho lớp"
               required
-              key={`subjectClassId-${dataExam?.id || "new"}`}
               initialValue={!input?.id ? dataExam?.subjectClass?.[0]?.id : undefined}
             >
               <Select options={dataOption} placeholder="Chọn lớp môn học" />
