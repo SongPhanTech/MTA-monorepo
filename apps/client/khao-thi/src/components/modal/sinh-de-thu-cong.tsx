@@ -117,6 +117,7 @@ const SinhDeThuCongModal = () => {
       where: { id: selectedExamId },
       include: {
         subjectClass: true,
+        subjectVersion: true,
       },
     },
     {
@@ -362,6 +363,15 @@ const SinhDeThuCongModal = () => {
     }
   }, [input?.subjectVersionId, form.setFieldValue])
 
+  useEffect(() => {
+    if (dataExam && !input?.id) {
+      form.setFieldsValue({
+        examType: (dataExam as any).subjectVersion?.examType,
+        subjectClassId: dataExam.subjectClass?.[0]?.id || undefined,
+      })
+    }
+  }, [dataExam, input?.id, form])
+
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   const steps: StepItem[] = useMemo(() => {
     return [
@@ -377,10 +387,17 @@ const SinhDeThuCongModal = () => {
             <Col span={24}>
               <FormItem form={form} name="examType" label="Hình thức thi" required>
                 <Select
-                  options={examTypeOptions.map((opt) => ({
-                    label: opt.label,
-                    value: opt.value,
-                  }))}
+                  options={examTypeOptions
+                    .filter(
+                      (opt) =>
+                        opt.value === "OfflineWritten" ||
+                        opt.value === "Oral" ||
+                        opt.value === "OnlineWritten"
+                    )
+                    .map((opt) => ({
+                      label: opt.label,
+                      value: opt.value,
+                    }))}
                   placeholder="Chọn hình thức thi"
                 />
               </FormItem>
