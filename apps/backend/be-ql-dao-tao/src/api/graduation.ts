@@ -675,18 +675,18 @@ app.openapi(graduationCheck, async (c) => {
     }
 
     const cumulativeBase10 = totalPassCredit
-      ? totalScoreBase10.div(totalPassCredit)
+      ? totalScoreBase10.div(totalPassCredit).toDecimalPlaces(2, Decimal.ROUND_HALF_UP)
       : new Decimal(0)
-    const cumulativeBase4 = totalPassCredit ? totalScoreBase4.div(totalPassCredit) : new Decimal(0)
+    const cumulativeBase4 = totalPassCredit
+      ? totalScoreBase4.div(totalPassCredit).toDecimalPlaces(2, Decimal.ROUND_HALF_UP)
+      : new Decimal(0)
 
     const rankLevels = student.fixedClass?.trainingCourse.academicRankingConvert
     if (!rankLevels?.length) {
       reasons.push("Không có hạng xếp loại")
     }
 
-    const CUMULATIVE_GPA = (baseScore === "Base10" ? cumulativeBase10 : cumulativeBase4)
-      .toDecimalPlaces(2, Decimal.ROUND_HALF_UP)
-      .toNumber()
+    const CUMULATIVE_GPA = (baseScore === "Base10" ? cumulativeBase10 : cumulativeBase4).toNumber()
 
     const semesterRegisteredCredits = student.studentSemesterResult[0]?.passedCredits || 0
     const semesterFailedCredits = student.studentSemesterResult[0]?.failedCredits || 0
@@ -756,9 +756,7 @@ app.openapi(graduationCheck, async (c) => {
     }
 
     // Xếp loại tốt nghiệp
-    const sortedRankLevels = [...student.fixedClass.trainingCourse.academicRankingConvert].sort(
-      (a, b) => a.rankOrder - b.rankOrder
-    )
+    const sortedRankLevels = student.fixedClass.trainingCourse.academicRankingConvert
 
     for (const [rankIdx, rank] of sortedRankLevels.entries()) {
       const eligibilityResults = await Promise.all(

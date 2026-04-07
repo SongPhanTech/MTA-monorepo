@@ -120,6 +120,11 @@ const PutArchivedAwardModal = () => {
           select: { semester: { select: { code: true } } },
         },
       },
+      orderBy: {
+        subjectVersion: {
+          name: "asc",
+        },
+      },
     },
     { enabled: !!studentId }
   )
