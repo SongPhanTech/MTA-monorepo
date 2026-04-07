@@ -8,7 +8,7 @@ const { Title, Text, Paragraph } = Typography
 const questionTypes = [
   { code: "TL", label: "Câu hỏi tự luận" },
   { code: "TN", label: "Trắc nghiệm một lựa chọn" },
-  { code: "TNM", label: "Trắc nghiệm nhiều lựa chọn" },
+  { code: "TNN", label: "Trắc nghiệm nhiều lựa chọn" },
   { code: "DK", label: "Câu hỏi điền khuyết" },
   { code: "SX", label: "Câu hỏi sắp xếp thứ tự" },
 ]
@@ -81,7 +81,7 @@ const exampleData = [
     key: "3",
     question: "Chọn các số nguyên tố:\nA. 2\nB. 3\nC. 4\nD. 5",
     answer: "A. 2\nB. 3\nD. 5",
-    type: "TNM",
+    type: "TNN",
     difficult: "TH",
     point: "1 đ",
   },
