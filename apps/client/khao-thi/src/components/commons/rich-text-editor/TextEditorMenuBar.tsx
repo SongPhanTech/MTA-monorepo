@@ -435,8 +435,6 @@ export default function TextEditorMenuBar({
             isActive: editor.isActive({ textAlign: "right" }),
             disabled: !editor.can().chain().focus().unsetTextAlign(),
           },
-        ],
-        [
           {
             id: "IoListOutline",
             icon: <IoListOutline className="size-5" />,
@@ -445,6 +443,8 @@ export default function TextEditorMenuBar({
             disabled:
               !editor.isActive("bulletList") && !editor.can().chain().focus().toggleBulletList(),
           },
+        ],
+        [
           {
             id: "RiListOrdered2",
             icon: <RiListOrdered2 className="size-5" />,
@@ -579,6 +579,8 @@ export default function TextEditorMenuBar({
             disabled: !editor.can().chain().focus().deleteRow(),
             description: "Xóa hàng",
           },
+        ],
+        [ 
           {
             id: "mergeCells",
             icon: <Merge className="size-5" />,
@@ -657,7 +659,10 @@ export default function TextEditorMenuBar({
         <div className="w-[1px] bg-gray-300 h-5 mx-1 shrink-0" />
 
         {groupedButtons.map((group, index) => (
-          <div key={`group-${index}`} className="contents">
+          <div
+            key={`group-${group.map((btn) => btn.id).join("-")}`}
+            className="flex items-center space-x-2"
+          >
             {group.map(({ icon, onClick, isActive, disabled, description }, btnIndex) => {
               const uniqueKey = `${icon || "button"}-${btnIndex}`
               return (
