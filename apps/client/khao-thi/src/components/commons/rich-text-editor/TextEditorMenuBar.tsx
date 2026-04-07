@@ -627,39 +627,37 @@ export default function TextEditorMenuBar({
 
   return (
     <>
-      <div className="flex items-center space-x-2 bg-[#FAFAFA] rounded-t-md flex-wrap p-1">
-        <div className="flex items-center space-x-2 px-1">
-          <Select
-            size="small"
-            style={{ width: 130 }}
-            placeholder="Font"
-            options={FONT_FAMILIES.map((font) => ({ label: font, value: font }))}
-            value={editorState?.currentFontFamily}
-            onChange={(val) => {
-              if (val) editor.chain().focus().setFontFamily(val).run()
-              else editor.chain().focus().unsetFontFamily().run()
-            }}
-            allowClear
-          />
-          <Select
-            size="small"
-            style={{ width: 70 }}
-            placeholder="Size"
-            options={FONT_SIZES.map((size) => ({ label: size.replace("px", ""), value: size }))}
-            value={editorState?.currentFontSize}
-            onChange={(val) => {
-              if (val) editor.chain().focus().setFontSize(val).run()
-              else editor.chain().focus().unsetFontSize().run()
-            }}
-            allowClear
-          />
-          <div className="w-px bg-gray-300 h-6 mx-2" />
-        </div>
+      <div className="flex flex-wrap items-center gap-x-0.5 gap-y-1.5 bg-gray-50 border border-gray-200 border-b-0 rounded-t-lg p-2 shadow-sm">
+        <Select
+          size="small"
+          style={{ width: 130 }}
+          placeholder="Font"
+          options={FONT_FAMILIES.map((font) => ({ label: font, value: font }))}
+          value={editorState?.currentFontFamily}
+          onChange={(val) => {
+            if (val) editor.chain().focus().setFontFamily(val).run()
+            else editor.chain().focus().unsetFontFamily().run()
+          }}
+          allowClear
+          className="ml-1 mr-0.5 shrink-0"
+        />
+        <Select
+          size="small"
+          style={{ width: 70 }}
+          placeholder="Size"
+          options={FONT_SIZES.map((size) => ({ label: size.replace("px", ""), value: size }))}
+          value={editorState?.currentFontSize}
+          onChange={(val) => {
+            if (val) editor.chain().focus().setFontSize(val).run()
+            else editor.chain().focus().unsetFontSize().run()
+          }}
+          allowClear
+          className="shrink-0"
+        />
+        <div className="w-[1px] bg-gray-300 h-5 mx-1 shrink-0" />
+
         {groupedButtons.map((group, index) => (
-          <div
-            key={`group-${group.map((btn) => btn.id).join("-")}`}
-            className="flex items-center space-x-2"
-          >
+          <div key={`group-${index}`} className="contents">
             {group.map(({ icon, onClick, isActive, disabled, description }, btnIndex) => {
               const uniqueKey = `${icon || "button"}-${btnIndex}`
               return (
@@ -674,7 +672,9 @@ export default function TextEditorMenuBar({
                 </Button>
               )
             })}
-            {index < groupedButtons.length - 1 && <div className="w-px bg-gray-300 h-6 mx-2" />}
+            {index < groupedButtons.length - 1 && (
+              <div className="w-[1px] bg-gray-300 h-5 mx-1 shrink-0" />
+            )}
           </div>
         ))}
       </div>

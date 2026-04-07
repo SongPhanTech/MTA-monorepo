@@ -760,7 +760,7 @@ const WordImportModal: React.FC = () => {
         q.answer
           ?.split(/[\n;]/)
           .map((line: string) => {
-            const match = line.match(/(\d+)\s*[:=]\s*(.+)/)
+            const match = line.match(/^\s*[([\{]?(\d+)[)\]\}\.\:\=\-]*\s*(.+)$/)
             if (!match) return null
             return {
               order: Number(match[1]),
