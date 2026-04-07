@@ -246,7 +246,7 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
       <Row gutter={[8, 8]}>
         <Col span={24}>
           <h2 className="m-0 text-center text-2xl font-bold">
-            Thời khoá biểu{" "}
+            Lịch thi{" "}
             {displaySemester ? `${displaySemester.name} - ${displaySemester.schoolYear?.name}` : ""}
           </h2>
         </Col>

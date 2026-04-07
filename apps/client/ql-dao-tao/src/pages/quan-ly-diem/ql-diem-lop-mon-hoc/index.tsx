@@ -354,7 +354,7 @@ export default function QuanLyDiemLopMonHoc({
                 valuePropName="checked"
               >
                 <Checkbox disabled={role !== "P13" || !selectedSubjectClassId}>
-                  P13 đã khoá
+                  P13 đã khoá sửa điểm
                 </Checkbox>
               </FormItem>
             </div>
