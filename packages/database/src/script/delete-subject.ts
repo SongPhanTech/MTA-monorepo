@@ -39,7 +39,7 @@ await prisma.subjectClass.deleteMany({
   },
 })
 
-await prisma.subjectVersion.deleteMany({
+const c = await prisma.subjectVersion.deleteMany({
   where: {
     // deletedAt: {
     //     not: null,
@@ -58,6 +58,7 @@ await prisma.subjectVersion.deleteMany({
     },
   },
 })
+console.log("c", c)
 
 await prisma.subject.deleteMany({
   where: {

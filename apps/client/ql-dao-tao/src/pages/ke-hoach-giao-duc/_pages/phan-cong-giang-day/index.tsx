@@ -223,9 +223,7 @@ export default function PhanCongGiangDay({
               }
             : {},
         fixedClasses:
-          trainingCourseId && type === "NORMAL"
-            ? { some: { trainingCourseId } }
-            : { some: {} },
+          trainingCourseId && type === "NORMAL" ? { some: { trainingCourseId } } : { some: {} },
         ...(fixedClassId
           ? {
               fixedClasses: {
@@ -904,13 +902,7 @@ export default function PhanCongGiangDay({
                                       not: null,
                                     },
                                     trainingObjectTypeId,
-                                    lecturerId: {
-                                      not: null,
-                                    },
-                                    extraLecturerId: {
-                                      not: null,
-                                    },
-
+                                    lecturerId: { not: null },
                                     cancelled: false,
                                     active: true,
                                     deletedAt: null,
@@ -1282,6 +1274,7 @@ export default function PhanCongGiangDay({
                                   },
                                   room: {
                                     select: {
+                                      code: true,
                                       name: true,
                                     },
                                   },
@@ -1360,6 +1353,7 @@ export default function PhanCongGiangDay({
                               }
                             }>
                             room: {
+                              code: string
                               name: string
                             }
                             trainingLocation: {
@@ -1532,7 +1526,9 @@ export default function PhanCongGiangDay({
                                             value: item.extraLecturer?.userProfile?.fullname || "",
                                           },
                                           {
-                                            value: item.room ? item.room.name : "",
+                                            value: item.room
+                                              ? item.room.code || item.room.name
+                                              : "",
                                           },
                                           {
                                             value: item.examType

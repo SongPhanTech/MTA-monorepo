@@ -22,6 +22,7 @@ import { DndProvider, useDrag, useDrop } from "react-dnd"
 import { HTML5Backend } from "react-dnd-html5-backend"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import { store } from "@/pages/thiet-lap-de-thi/danh-sach-de"
+import { examTypeOptions } from "@workspace/libs/constants"
 
 type PutMaTranDeInputType = ExamBank & {
   questions: string[]
@@ -116,6 +117,7 @@ const SinhDeThuCongModal = () => {
       where: { id: selectedExamId },
       include: {
         subjectClass: true,
+        subjectVersion: true,
       },
     },
     {
@@ -374,18 +376,25 @@ const SinhDeThuCongModal = () => {
               </FormItem>
             </Col>
             <Col span={24}>
-              <FormItem form={form} name="examType" label="Hình thức thi" required>
+              <FormItem
+                form={form}
+                name="examType"
+                label="Hình thức thi"
+                required
+                initialValue={!input?.id ? dataExam?.subjectVersion?.examType : undefined}
+              >
                 <Select
-                  options={[
-                    {
-                      label: "Thi viết",
-                      value: "OfflineWritten",
-                    },
-                    {
-                      label: "Thi vấn đáp",
-                      value: "Oral",
-                    },
-                  ]}
+                  options={examTypeOptions
+                    .filter(
+                      (opt) =>
+                        opt.value === "OfflineWritten" ||
+                        opt.value === "Oral" ||
+                        opt.value === "OnlineWritten"
+                    )
+                    .map((opt) => ({
+                      label: opt.label,
+                      value: opt.value,
+                    }))}
                   placeholder="Chọn hình thức thi"
                 />
               </FormItem>
@@ -406,7 +415,12 @@ const SinhDeThuCongModal = () => {
               </FormItem>
             </Col>
             <Col span={24}>
-              <FormItem form={form} name="subjectClassId" label="Dùng cho lớp">
+              <FormItem
+                form={form}
+                name="subjectClassId"
+                label="Dùng cho lớp"
+                initialValue={!input?.id ? dataExam?.subjectClass?.[0]?.id : undefined}
+              >
                 <Select options={dataOption} placeholder="Chọn lớp môn học" />
               </FormItem>
             </Col>

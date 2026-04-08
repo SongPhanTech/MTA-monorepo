@@ -93,23 +93,27 @@ const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
   const treeData: TreeNodeType[] = useMemo(() => {
     if (!organizations.length) return []
 
+    const mappedOrgs = organizations
+      .filter((org) => (rest.ignoreOrgIds ? !rest.ignoreOrgIds.includes(org.Id) : true))
+      .map((org) => ({
+        id: org.Id,
+        name: org.sTen,
+        parentId: org.sParentId,
+      }))
+
+    const mappedLecturers = lecturers
+      .filter((lec) => (rest.ignoreLectureIds ? !rest.ignoreLectureIds.includes(lec.id) : true))
+      .map((lec) => ({
+        id: lec.id,
+        userProfile: {
+          fullName: formatLecturerName(lec),
+        },
+        organizationId: lec.organizationId,
+      }))
+
     return buildOrgAndLectureTree(
-      organizations
-        .filter((org) => (rest.ignoreOrgIds ? !rest.ignoreOrgIds.includes(org.Id) : true))
-        .map((org) => ({
-          id: org.Id,
-          name: org.sTen,
-          parentId: org.sParentId,
-        })),
-      lecturers
-        .filter((lec) => (rest.ignoreLectureIds ? !rest.ignoreLectureIds.includes(lec.id) : true))
-        .map((lec) => ({
-          id: lec.id,
-          userProfile: {
-            fullName: formatLecturerName(lec),
-          },
-          organizationId: lec.organizationId,
-        })),
+      mappedOrgs,
+      mappedLecturers,
       isSelectAllOrgs ? null : (organizationId ?? null)
     )
   }, [
@@ -120,6 +124,19 @@ const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
     rest.ignoreLectureIds,
     isSelectAllOrgs,
   ])
+
+  // Nếu giá trị đang được chọn thuộc GV từ đơn vị khác, tự động bật "toàn học viện"
+  useEffect(() => {
+    const selectedValue = rest.value as string | undefined
+    if (selectedValue && !isSelectAllOrgs && organizationId && lecturers.length > 0) {
+      const isInCurrentOrg = lecturers.some(
+        (l) => l.id === selectedValue && l.organizationId === organizationId
+      )
+      if (!isInCurrentOrg) {
+        setIsSelectAllOrgs(true)
+      }
+    }
+  }, [rest.value, lecturers, organizationId, isSelectAllOrgs])
 
   // Xử lý lỗi
   useEffect(() => {

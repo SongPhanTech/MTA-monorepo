@@ -761,6 +761,7 @@ export default function ArchivedCertificate() {
             {
               title: "Trạng thái",
               align: "center",
+              fixed: "right",
               width: 120,
               render: (__, record) => {
                 const statusMap: Record<string, { text: string; color: string }> = {

@@ -786,7 +786,7 @@ export const calculateStudentSemesterResult = async (
           student.id,
           student.curriculumVersionId || student.fixedClass?.curriculumVersionId || "",
           trainingCourseId,
-          hocKyDauVao?.endDate || new Date()
+          hocKyDauVao?.startDate || new Date()
         )
 
         if (!thongTinTichLuy) {
@@ -1563,7 +1563,7 @@ export const listStudentResultInfo = async (
           diemTrungBinhNam4: yearResult?.gpaBase4.toNumber() || 0,
           diemTrungBinhNam10: yearResult?.gpaBase10.toNumber() || 0,
           noTinChiTrongNam: yearResult?.failedCredits || 0,
-          
+
           soTinChiTichLuy: semesterResult?.accumulatedCredits || 0,
           soTinChiYeuCau: semesterResult?.totalCreditsByCurriculum || 0,
           soTinChiMoTrongKy: semesterResult?.totalCredits || 0,

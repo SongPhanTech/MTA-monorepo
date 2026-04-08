@@ -118,12 +118,10 @@ const ModalImportCDR = () => {
     const buffer = await file.arrayBuffer()
     const workbook = XLSX.read(buffer)
     const sheet = workbook.Sheets[workbook.SheetNames[0]]
-    const rows: any[] = XLSX.utils
-      .sheet_to_json(sheet, {
-        defval: null,
-        header: 0,
-      })
-      .slice(3) // Bỏ qua 3 dòng mẫu (row 2, 3, 4), chỉ lấy từ row 5 trở đi
+    const rows: any[] = XLSX.utils.sheet_to_json(sheet, {
+      defval: null,
+      header: 0,
+    })
 
     if (!rows.length) {
       message.error("File Excel không có dữ liệu")

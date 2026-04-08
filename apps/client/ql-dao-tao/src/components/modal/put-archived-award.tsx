@@ -81,7 +81,9 @@ const PutArchivedAwardModal = () => {
                 ...(fixedClassId ? { id: fixedClassId } : {}),
               },
             }
-          : {}),
+          : {
+              fixedClass: { trainingCourse: { trainingObjectTypeId } },
+            }),
       },
       include: {
         userProfile: true,
@@ -116,6 +118,11 @@ const PutArchivedAwardModal = () => {
         subjectVersion: { select: { name: true, subjectId: true } },
         subjectClass: {
           select: { semester: { select: { code: true } } },
+        },
+      },
+      orderBy: {
+        subjectVersion: {
+          name: "asc",
         },
       },
     },

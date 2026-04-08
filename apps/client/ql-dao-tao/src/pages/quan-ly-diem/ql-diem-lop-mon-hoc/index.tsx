@@ -181,7 +181,7 @@ export default function QuanLyDiemLopMonHoc({
           ...baseMenu,
           {
             label: "Nhập điểm thi",
-            key: "3",
+            key: "2",
             children: <NhapDiem role={role} score="THI" loadData={activeKey !== "1"} />,
             disabled: !data,
           },
@@ -194,7 +194,7 @@ export default function QuanLyDiemLopMonHoc({
         ...baseMenu,
         {
           label: "Điểm",
-          key: "4",
+          key: "2",
           children: <NhapDiem role={role} loadData={activeKey !== "1"} />,
           disabled: !data,
         },

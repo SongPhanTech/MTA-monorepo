@@ -9,6 +9,7 @@ import EditIcon from "@components/icons/edit"
 import { LEVEL_COLUMNS, QUESTION_TYPE_LABELS, QUESTION_TYPE_OPTIONS } from "@constants/constants"
 import type { QuestionType } from "@workspace/db/client"
 import {
+  useDeleteQuestion,
   useFindManyKnowledgeBlock,
   useFindManyQuestion,
   useFindUniqueQuestionBank,
@@ -127,24 +128,20 @@ export default function QuestionList({ questionBankId }: QuestionListProps) {
         fillInBlankSlots: true,
         orderingItems: true,
       },
-      orderBy: [{ createdAt: "desc" }],
     },
     queryOptions
   )
 
-  const { mutateAsync: updateQuestion } = useUpdateQuestion()
+  const { mutateAsync: deleteQuestion } = useDeleteQuestion()
   async function handleDeleteQuestion(id: string) {
     try {
-      await updateQuestion({
+      await deleteQuestion({
         where: { id },
-        data: { deletedAt: new Date() },
       })
+
+      message.success("Xóa câu hỏi thành công")
     } catch (error: any) {
-      if (error?.info?.message) {
-        message.error(error?.info?.message)
-        return
-      }
-      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+      return message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
     }
   }
 
@@ -153,13 +150,10 @@ export default function QuestionList({ questionBankId }: QuestionListProps) {
       const res = await sqlTransaction([
         {
           model: "Question",
-          operation: "updateMany",
+          operation: "deleteMany",
           data: {
             where: {
               id: { in: selectedRowKeys },
-            },
-            data: {
-              deletedAt: new Date(),
             },
           },
         },
