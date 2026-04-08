@@ -1,14 +1,28 @@
 import Table from "@components/commons/table"
 // import DeleteIcon from '@components/icons/delete'
 // import EditIcon from '@components/icons/edit'
+import { CloseOutlined, PaperClipOutlined, UploadOutlined } from "@ant-design/icons"
 import { useArchivedCertificateStatusOptions } from "@hooks/paymentStatus"
 import useSpinner from "@hooks/spinner"
-import { formatDate } from "@lib/utils"
+import { formatDate, formatDateVN } from "@lib/utils"
 import { $Enums, ArchivedCertificate } from "@workspace/db/client"
 import { useUpdateArchivedCertificate } from "@workspace/db/hooks"
-import { useAbility } from "@workspace/permissions/hooks"
+import { generatePresignedUrl } from "@workspace/libs/api/model"
+import { getMinioUrl } from "@workspace/libs/utils"
 // import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import { Button, DatePicker, Flex, InputNumber, Modal, Switch, Tag, message } from "antd"
+import {
+  Button,
+  DatePicker,
+  Flex,
+  InputNumber,
+  Modal,
+  Switch,
+  Tag,
+  Tooltip,
+  Upload,
+  message,
+} from "antd"
+import axios from "axios"
 import dayjs from "dayjs"
 import { useEffect, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
@@ -33,6 +47,14 @@ type DraftValue = {
 
 type DraftValues = Record<string, DraftValue>
 
+type DocFileItem = {
+  id?: string
+  name: string
+  path: string
+  size: bigint
+  mimeType?: string
+}
+
 const initializeDrafts = (certificates: any[]): DraftValues =>
   certificates.reduce(
     (acc, cert) => ({
@@ -52,21 +74,13 @@ const initializeDrafts = (certificates: any[]): DraftValues =>
   )
 
 const ModalDanhSachChungChi = () => {
-  const { can, canSome } = useAbility()
   const { showSpinner, hideSpinner } = useSpinner()
 
-  const {
-    archivedCertificateStatusOptions,
-    getArchivedCertificateStatusStatusLabel,
-    getArchivedCertificateStatusColor,
-  } = useArchivedCertificateStatusOptions()
+  const { getArchivedCertificateStatusStatusLabel, getArchivedCertificateStatusColor } =
+    useArchivedCertificateStatusOptions()
 
   const { isOpen, onClose, input } = useDisclosure<StudentCertificatesInput>({
     tag: "ModalDanhSachChungChi",
-  })
-
-  const { onOpen: onOpenEdit } = useDisclosure<string>({
-    tag: "PutCertificateArchivedModal",
   })
 
   const { mutateAsync: updateArchivedCertificate } = useUpdateArchivedCertificate()
@@ -75,38 +89,75 @@ const ModalDanhSachChungChi = () => {
   const [displayCertificates, setDisplayCertificates] = useState<any[]>([])
   const [editingCertId, setEditingCertId] = useState<string | null>(null)
   const [draftValues, setDraftValues] = useState<DraftValues>({})
+  const [draftDocFiles, setDraftDocFiles] = useState<Record<string, DocFileItem[]>>({})
+  const [uploadingCertId, setUploadingCertId] = useState<string | null>(null)
 
-  async function handleDelete(id: string) {
-    try {
-      showSpinner()
-      await updateArchivedCertificate({
-        where: { id },
-        data: { status: "CANCEL" },
-      })
-      message.success("Xóa chứng chỉ thành công")
-      onClose()
-    } catch (error: any) {
-      if (error?.info?.message) {
-        message.error(error?.info?.message)
-        return
-      }
-      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
-    } finally {
-      hideSpinner()
-    }
-  }
+  const { onOpen: onOpenPreview } = useDisclosure<{
+    uri: string
+    name?: string
+    mimeType?: string
+  }>({
+    tag: "XemTaiLieu",
+  })
 
   const certificates = input?.certificates || []
+
+  console.log(111, displayCertificates)
 
   useEffect(() => {
     setDisplayCertificates(certificates)
     setDraftValues(initializeDrafts(certificates))
+    setDraftDocFiles(
+      certificates.reduce(
+        (acc: Record<string, DocFileItem[]>, cert: any) => ({
+          ...acc,
+          [cert.id]: (cert.documentFiles || []).map((f: any) => ({
+            id: f.id,
+            name: f.name,
+            path: f.path,
+            size: f.size ? BigInt(f.size) : BigInt(0),
+            mimeType: f.mimeType || "",
+          })),
+        }),
+        {}
+      )
+    )
     if (input?.isEditMode && certificates?.length) {
       setEditingCertId(input.certificates[0].id)
     } else {
       setEditingCertId(null)
     }
   }, [certificates, input?.isEditMode])
+
+  const handleUploadFile = async (certId: string, file: File) => {
+    try {
+      setUploadingCertId(certId)
+      const extension = file.name.split(".").pop() || ""
+      const res = await generatePresignedUrl({ path: "tai-lieu-ctdt", extension })
+      await axios.put(res.data.url, file)
+      const newFile: DocFileItem = {
+        name: file.name,
+        path: res.data.fileName,
+        size: BigInt(file.size || 0),
+        mimeType: file.type,
+      }
+      setDraftDocFiles((prev) => ({
+        ...prev,
+        [certId]: [...(prev[certId] || []), newFile],
+      }))
+    } catch {
+      message.error(`Không thể upload ${file.name}`)
+    } finally {
+      setUploadingCertId(null)
+    }
+  }
+
+  const handleRemoveDocFile = (certId: string, index: number) => {
+    setDraftDocFiles((prev) => ({
+      ...prev,
+      [certId]: (prev[certId] || []).filter((_, i) => i !== index),
+    }))
+  }
 
   const handleChangeDraft = (certId: string, key: keyof DraftValue, value: any) => {
     setDraftValues((prev) => ({
@@ -135,9 +186,29 @@ const ModalDanhSachChungChi = () => {
         expiredDate: draft.expiredDate ? draft.expiredDate.toDate() : null,
       }
 
+      const files = draftDocFiles[certId] || []
+      const originalFiles: any[] =
+        displayCertificates.find((c) => c.id === certId)?.documentFiles || []
+      const keptIds = files.filter((f) => !!f.id).map((f) => f.id!)
+      const disconnectIds = originalFiles
+        .filter((f: any) => !keptIds.includes(f.id))
+        .map((f: any) => ({ id: f.id }))
+      const newFiles = files.filter((f) => !f.id)
+
       await updateArchivedCertificate({
         where: { id: certId },
-        data: saveData,
+        data: {
+          ...saveData,
+          documentFiles: {
+            disconnect: disconnectIds,
+            create: newFiles.map((f) => ({
+              name: f.name,
+              path: f.path,
+              size: f.size,
+              mimeType: f.mimeType,
+            })),
+          },
+        } as any,
       })
 
       setDisplayCertificates((prev) =>
@@ -276,7 +347,9 @@ const ModalDanhSachChungChi = () => {
             align: "center",
             width: 150,
             render: (date: string, cert: ArchivedCertificate) =>
-              cert.status === "APPROVED" ? date : renderEditableDate(date, cert, "issuedDate"),
+              cert.status === "APPROVED"
+                ? formatDateVN(date)
+                : renderEditableDate(date, cert, "issuedDate"),
           },
           {
             title: "Ngày hết hạn",
@@ -284,7 +357,71 @@ const ModalDanhSachChungChi = () => {
             align: "center",
             width: 150,
             render: (date: string, cert: ArchivedCertificate) =>
-              cert.status === "APPROVED" ? date : renderEditableDate(date, cert, "expiredDate"),
+              cert.status === "APPROVED"
+                ? formatDateVN(date)
+                : renderEditableDate(date, cert, "expiredDate"),
+          },
+          {
+            title: "Minh chứng",
+            align: "center",
+            width: 200,
+            render: (_: any, cert: any) => {
+              const files: DocFileItem[] = draftDocFiles[cert.id] || []
+              const isEditing = editingCertId === cert.id
+              return (
+                <div className="flex flex-col gap-1 items-start">
+                  {files.map((file, idx) => (
+                    <div key={`${file.path}-${idx}`} className="flex items-center gap-1 max-w-full">
+                      <PaperClipOutlined className="text-gray-500 flex-shrink-0" />
+                      <Tooltip title={file.name}>
+                        <span
+                          className="cursor-pointer text-blue-600 hover:underline text-xs truncate max-w-[120px]"
+                          onClick={() =>
+                            onOpenPreview({
+                              uri: getMinioUrl(file.path),
+                              name: file.name,
+                              mimeType: file.mimeType,
+                            })
+                          }
+                        >
+                          {file.name}
+                        </span>
+                      </Tooltip>
+                      {isEditing && (
+                        <CloseOutlined
+                          className="cursor-pointer text-red-500 text-[10px] flex-shrink-0"
+                          onClick={() => handleRemoveDocFile(cert.id, idx)}
+                        />
+                      )}
+                    </div>
+                  ))}
+                  {isEditing && (
+                    <Upload
+                      multiple
+                      accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xls,.xlsx"
+                      beforeUpload={(file: File) => {
+                        if (file.size / 1024 / 1024 > 50) {
+                          message.error(`${file.name} vượt quá 50MB`)
+                          return Upload.LIST_IGNORE
+                        }
+                        handleUploadFile(cert.id, file)
+                        return false
+                      }}
+                      showUploadList={false}
+                    >
+                      <Button
+                        type="default"
+                        icon={<UploadOutlined />}
+                        size="small"
+                        loading={uploadingCertId === cert.id}
+                      >
+                        Tải lên
+                      </Button>
+                    </Upload>
+                  )}
+                </div>
+              )
+            },
           },
           {
             title: "Trạng thái",

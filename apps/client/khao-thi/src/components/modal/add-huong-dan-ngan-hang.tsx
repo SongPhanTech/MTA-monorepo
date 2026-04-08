@@ -8,7 +8,7 @@ const { Title, Text, Paragraph } = Typography
 const questionTypes = [
   { code: "TL", label: "Câu hỏi tự luận" },
   { code: "TN", label: "Trắc nghiệm một lựa chọn" },
-  { code: "TNM", label: "Trắc nghiệm nhiều lựa chọn" },
+  { code: "TNN", label: "Trắc nghiệm nhiều lựa chọn" },
   { code: "DK", label: "Câu hỏi điền khuyết" },
   { code: "SX", label: "Câu hỏi sắp xếp thứ tự" },
 ]
@@ -25,6 +25,9 @@ const exampleColumns = [
     title: "Câu hỏi",
     dataIndex: "question",
     width: 180,
+    render: (text: string) => (
+      <span style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{text}</span>
+    ),
   },
   {
     title: "Đáp án",
@@ -59,10 +62,56 @@ const exampleData = [
     key: "1",
     question: "Trình bày khái niệm thế giới quan.",
     answer:
-      "Thế giới quan là hệ thống những quan điểm, quan niệm chung nhất của con người về thế giới, về vị trí của con người trong thế giới đó và về mối quan hệ giữa con người với thế giới. Thế giới quan định hướng cho hoạt động nhận thức và thực tiễn của con người.",
+      "Thế giới quan là hệ thống những quan điểm, quan niệm chung nhất của con người về thế giới...",
     type: "TL",
     difficult: "NB",
     point: "8,5 đ",
+  },
+
+  {
+    key: "2",
+    question: "Thủ đô của Việt Nam là gì?\nA. Hà Nội\nB. TP.HCM\nC. Đà Nẵng\nD. Huế",
+    answer: "A. Hà Nội",
+    type: "TN",
+    difficult: "NB",
+    point: "1 đ",
+  },
+
+  {
+    key: "3",
+    question: "Chọn các số nguyên tố:\nA. 2\nB. 3\nC. 4\nD. 5",
+    answer: "A. 2\nB. 3\nD. 5",
+    type: "TNN",
+    difficult: "TH",
+    point: "1 đ",
+  },
+
+  {
+    key: "4",
+    question: "Việt Nam có thủ đô là __.",
+    answer: "1. Hà Nội",
+    type: "DK",
+    difficult: "NB",
+    point: "1 đ",
+  },
+
+  {
+    key: "5",
+    question: "__ là thủ đô của __.",
+    answer: "1. Hà Nội\n2. Việt Nam",
+    type: "DK",
+    difficult: "TH",
+    point: "2 đ",
+  },
+
+  {
+    key: "6",
+    question:
+      "Sắp xếp quá trình phản ánh của ý thức theo đúng thứ tự?\nA. Hành động thực tiễn\nB. Nhận thức (ý thức)\nC. Thế giới vật chất",
+    answer: "C → B → A",
+    type: "SX",
+    difficult: "VDC",
+    point: "1 đ",
   },
 ]
 

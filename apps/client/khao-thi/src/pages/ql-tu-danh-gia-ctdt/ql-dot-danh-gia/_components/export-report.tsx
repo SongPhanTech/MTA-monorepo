@@ -489,7 +489,9 @@ export default function ExportReport({ id }: { id: string }) {
             ],
           })
         )
-        overviewChildren.push(...(await htmlToParagraphs(data?.overviewProblem || "")))
+        overviewChildren.push(
+          ...(await htmlToParagraphs(processHtmlContent(data?.overviewProblem || "", evidenceTags)))
+        )
 
         // 2. Tổng quan chung
         overviewChildren.push(
@@ -507,7 +509,9 @@ export default function ExportReport({ id }: { id: string }) {
             ],
           })
         )
-        overviewChildren.push(...(await htmlToParagraphs(data?.overviewGeneral || "")))
+        overviewChildren.push(
+          ...(await htmlToParagraphs(processHtmlContent(data?.overviewProblem || "", evidenceTags)))
+        )
 
         // 3. Kết quả rà soát việc đáp ứng quy định về chuẩn chương trình đào tạo
         overviewChildren.push(
@@ -525,7 +529,9 @@ export default function ExportReport({ id }: { id: string }) {
             ],
           })
         )
-        overviewChildren.push(...(await htmlToParagraphs(data?.overviewResults || "")))
+        overviewChildren.push(
+          ...(await htmlToParagraphs(processHtmlContent(data?.overviewResults || "", evidenceTags)))
+        )
 
         const listMembers = await Promise.all([
           {
@@ -751,7 +757,9 @@ export default function ExportReport({ id }: { id: string }) {
             ],
           })
         )
-        conclusionChildren.push(...(await htmlToParagraphs(data?.conclude || "")))
+        conclusionChildren.push(
+          ...(await htmlToParagraphs(processHtmlContent(data?.conclude || "", evidenceTags)))
+        )
 
         const doc = new Document({
           features: {

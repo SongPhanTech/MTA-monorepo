@@ -146,7 +146,7 @@ const PutAcademicRanking = () => {
         </FormItem>
       </Col>
       <Col span={12}>
-        <FormItem form={form} name="graduated" label="Qua môn" required>
+        <FormItem form={form} name="graduated" label="Đạt" required>
           <Radio.Group>
             <Radio value={true}>Có</Radio>
             <Radio value={false}>Không</Radio>
@@ -290,11 +290,11 @@ const PutAcademicRanking = () => {
           />
         </FormItem>
       </Col>
-      <Col span={12}>
+      {/* <Col span={12}>
         <FormItem form={form} name="active" label="Kích hoạt" valuePropName="checked">
           <Switch defaultValue={true} />
         </FormItem>
-      </Col>
+      </Col> */}
       <Col span={24}>
         <FormItem form={form} name="description" label="Mô tả">
           <Input.TextArea placeholder="Nhập mô tả" />
