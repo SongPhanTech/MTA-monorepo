@@ -114,17 +114,7 @@ const ModalPrintToKQHT = () => {
     graduationBaseScore
   )
 
-  const finalGpa = subjectScoreData?.students?.[0]?.graduationDecision?.finalGpa
-  const gpaScore =
-    typeof finalGpa === "number"
-      ? finalGpa
-      : typeof finalGpa === "string"
-        ? Number(finalGpa) || 0
-        : finalGpa && typeof finalGpa === "object" && "toNumber" in finalGpa
-          ? Number.isFinite((finalGpa as { toNumber: () => number }).toNumber())
-            ? (finalGpa as { toNumber: () => number }).toNumber()
-            : 0
-          : 0
+  const gpaScore = subjectScoreData?.students?.[0]?.graduationDecision?.finalGpa
 
   const handlePrint = useReactToPrint({
     contentRef: printRef,
