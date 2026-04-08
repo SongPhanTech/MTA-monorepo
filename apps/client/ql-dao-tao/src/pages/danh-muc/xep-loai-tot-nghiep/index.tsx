@@ -226,21 +226,25 @@ export default function GraduationRankingPage() {
                 title: "Điểm hệ 10 từ",
                 dataIndex: "base10Min",
                 align: "center",
+                width: 120,
               },
               {
                 title: "Điểm hệ 10 đến",
                 dataIndex: "base10Max",
                 align: "center",
+                width: 120,
               },
               {
                 title: "Điểm hệ 4 từ",
                 dataIndex: "base4Min",
                 align: "center",
+                width: 120,
               },
               {
                 title: "Điểm hệ 4 đến",
                 dataIndex: "base4Max",
                 align: "center",
+                width: 120,
               },
               {
                 title: "Xếp loại",
@@ -248,16 +252,22 @@ export default function GraduationRankingPage() {
                 width: 120,
               },
               {
-                title: "Trạng thái",
-                align: "center",
-                render: (record) => {
-                  return !record?.active ? (
-                    <Tag color="error">Không áp dụng</Tag>
-                  ) : (
-                    <Tag color="success">Đang áp dụng</Tag>
-                  )
-                },
+                title: "Hạng xếp loại",
+                dataIndex: "ranking",
+                width: 120,
               },
+              // {
+              //   title: "Trạng thái",
+              //   align: "center",
+              //   width: 120,
+              //   render: (record) => {
+              //     return !record?.active ? (
+              //       <Tag color="error">Không áp dụng</Tag>
+              //     ) : (
+              //       <Tag color="success">Đang áp dụng</Tag>
+              //     )
+              //   },
+              // },
               {
                 title: "Thao tác",
                 width: 100,

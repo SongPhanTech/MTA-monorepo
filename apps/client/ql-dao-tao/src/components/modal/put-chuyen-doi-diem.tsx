@@ -196,11 +196,11 @@ const PutConvertScore = () => {
           </Radio.Group>
         </FormItem>
       </Col>
-      <Col span={4}>
+      {/* <Col span={4}>
         <FormItem form={form} name="active" label="Kích hoạt" valuePropName="checked">
           <Switch defaultValue={true} />
         </FormItem>
-      </Col>
+      </Col> */}
       <Col span={24}>
         <FormItem form={form} name="description" label="Mô tả">
           <Input.TextArea placeholder="Nhập mô tả" />
