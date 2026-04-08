@@ -184,7 +184,6 @@ export default function NhapDiem({
         },
         subjectClass: {
           select: {
-            code: true,
             type: true,
             semester: {
               select: {
