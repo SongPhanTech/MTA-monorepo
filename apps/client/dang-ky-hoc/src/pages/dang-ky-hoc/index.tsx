@@ -1,6 +1,6 @@
 import Loading from "@components/commons/loading"
+import ThoiKhoaBieuDangKy from "@components/commons/registration-schedule"
 import Select from "@components/commons/select"
-import Table from "@components/commons/table"
 import TableCollapse from "@components/commons/tableCollapse"
 import DefaultLayout from "@layouts/default-layout"
 import { cn } from "@lib/utils"
@@ -8,16 +8,14 @@ import { useMutation } from "@tanstack/react-query"
 import { $Enums } from "@workspace/db"
 import {
   classRegister,
-  classUnregister,
   useGetClassesInfo,
   useGetClassRegisterSession,
 } from "@workspace/libs/api/portal"
 import type { GetClassesInfo200ItemSubjectClassItem } from "@workspace/libs/api/schemas/getClassesInfo200ItemSubjectClassItem"
-import type { GetClassesInfo200ItemSubjectClassItemSubjectClassTimesItem } from "@workspace/libs/api/schemas/getClassesInfo200ItemSubjectClassItemSubjectClassTimesItem"
 import type { GetClassRegisterSession200ItemCreditLimitItem } from "@workspace/libs/api/schemas/getClassRegisterSession200ItemCreditLimitItem"
 import { Button, Checkbox, message, Popconfirm, Tabs } from "antd"
 import dayjs from "dayjs"
-import { CircleXIcon, LogOutIcon } from "lucide-react"
+import { LogOutIcon } from "lucide-react"
 import { useState } from "react"
 
 dayjs.locale("vi")
@@ -140,28 +138,6 @@ const DanhSachMonDangKy = ({
     },
   })
 
-  const { mutateAsync: unregisterMutate, isPending: isUnregistering } = useMutation({
-    mutationFn: async (subjectClassId: string) => {
-      const res = await classUnregister({
-        sessionId,
-        curriculumVersionId,
-        subjectClassIds: [subjectClassId],
-      })
-
-      if (res.status !== 200) {
-        throw new Error(res.data?.message || "Huỷ đăng ký thất bại")
-      }
-      return res
-    },
-    onSuccess: () => {
-      message.success("Huỷ đăng ký thành công")
-      refetchClassesInfo()
-    },
-    onError: (error: any) => {
-      message.error(error?.message || "Huỷ đăng ký thất bại")
-    },
-  })
-
   const handleClassRegister = (subjectClassIds: string[]) => {
     classRegisterMutate(subjectClassIds)
   }
@@ -241,115 +217,12 @@ const DanhSachMonDangKy = ({
         )}
       </div>
       {classesInfo?.status === 200 && (
-        <Table
-          columns={[
-            {
-              title: "STT",
-              width: 60,
-              fixed: "left",
-              render: (_, __, index) => index + 1,
-            },
-            {
-              title: "Mã học phần",
-              dataIndex: "code",
-              align: "center",
-              width: 120,
-            },
-            {
-              title: "Tên học phần",
-              dataIndex: "name",
-            },
-            {
-              title: "Số TC",
-              dataIndex: "credit",
-              align: "center",
-              width: 60,
-            },
-            {
-              title: "Bắt buộc",
-              align: "center",
-              width: 80,
-              render: (_, record) => (
-                <Checkbox
-                  checked={record?.type === $Enums.SubjectRequirementType.Mandatory}
-                  disabled
-                />
-              ),
-            },
-            {
-              title: "Giảng viên",
-              render: (_, record) =>
-                [
-                  record.mainLecturer?.userProfile?.fullname,
-                  record.extraLecturer?.userProfile?.fullname,
-                ]
-                  .filter(Boolean)
-                  .join(", "),
-            },
-            {
-              title: "Phòng học",
-              align: "center",
-              width: 150,
-              render: (_, record) => record?.room?.name,
-            },
-            {
-              title: "Số lượng",
-              align: "center",
-              width: 80,
-              render: (_, record) =>
-                `${record?._count?.subjectClassStudent || 0}/${record?.maxStudent}`,
-            },
-            {
-              title: "Học phí",
-              align: "center",
-              width: 120,
-              render: (_, record) =>
-                tuitionPerCredit
-                  ? `${((record?.credit || 0) * tuitionPerCredit).formatVND()}`
-                  : "-",
-            },
-            {
-              title: "Thời khoá biểu",
-              width: 150,
-              align: "center",
-              render: (_, record) => {
-                return record?.subjectClassTimes
-                  ?.uniqueByKey?.("dayOfWeek")
-                  ?.map?.((tkb: GetClassesInfo200ItemSubjectClassItemSubjectClassTimesItem) => {
-                    return (
-                      <p>
-                        {tkb?.dayOfWeek === 8 ? "CN" : `T${tkb?.dayOfWeek}`} - {tkb?.startPeriod} -{" "}
-                        {tkb?.endPeriod}
-                      </p>
-                    )
-                  })
-              },
-            },
-            {
-              title: "Thao tác",
-              align: "center",
-              width: 120,
-              fixed: "right",
-              render: (_, record) => (
-                <Popconfirm
-                  title="Bạn có chắc chắn muốn huỷ đăng ký học phần này?"
-                  okText="Huỷ"
-                  cancelText="Đóng"
-                  disabled={isUnregistering}
-                  onConfirm={() => unregisterMutate(record?.id)}
-                  className="text-red-500 flex justify-center items-center gap-2 cursor-pointer"
-                >
-                  <CircleXIcon />
-                  Huỷ
-                </Popconfirm>
-              ),
-            },
-          ]}
-          scroll={{
-            x: "max-content",
-          }}
-          data={registeredClasses}
-          className="mb-2"
+        <ThoiKhoaBieuDangKy
+          registeredClasses={registeredClasses}
+          tuitionPerCredit={tuitionPerCredit}
+          sessionId={sessionId}
+          curriculumVersionId={curriculumVersionId}
+          onUnregisterSuccess={refetchClassesInfo}
         />
       )}
 
@@ -466,21 +339,25 @@ const DanhSachMonDangKy = ({
                   siblingAlreadyRegistered
 
                 return (
-                  <Button
+                  <Popconfirm
+                    title={`Xác nhận đăng ký học phần ?`}
+                    okText="Đăng ký"
+                    cancelText="Đóng"
                     disabled={isDisabled}
-                    type="text"
-                    onClick={() => {
-                      const subjectClassIds = [record?.id]
-                      handleClassRegister(subjectClassIds)
-                    }}
-                    className={cn(
-                      "text-primary flex justify-center items-center gap-2 cursor-pointer",
-                      isDisabled ? "opacity-50 cursor-not-allowed" : ""
-                    )}
+                    onConfirm={() => handleClassRegister([record?.id])}
                   >
-                    <LogOutIcon />
-                    Đăng ký
-                  </Button>
+                    <Button
+                      disabled={isDisabled}
+                      type="text"
+                      className={cn(
+                        "text-primary flex justify-center items-center gap-2 cursor-pointer",
+                        isDisabled ? "opacity-50 cursor-not-allowed" : ""
+                      )}
+                    >
+                      <LogOutIcon />
+                      Đăng ký
+                    </Button>
+                  </Popconfirm>
                 )
               },
             },
