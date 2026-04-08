@@ -5,6 +5,7 @@ import useSpinner from "@hooks/spinner"
 import { type GraduationSession, GraduationSessionStatus } from "@workspace/db/client"
 import {
   useCreateGraduationSession,
+  useFindManyOutputStandard,
   useFindUniqueGraduationSession,
   useUpdateGraduationSession,
 } from "@workspace/db/hooks"
@@ -17,7 +18,9 @@ import Select from "@components/commons/select"
 import { useGraduationSessionStatusOptions } from "@hooks/graduationSessionStatus"
 import { useFindManyTrainingObjectTypePermission, useTrainingObjectTypeStore } from "@workspace/ui"
 import { useEffect } from "react"
-export type PutGraduationSession = GraduationSession
+export type PutGraduationSession = GraduationSession & {
+  outputStandardIds?: string[]
+}
 dayjs.locale("vi")
 
 const PutGraduationSession = () => {
@@ -38,9 +41,24 @@ const PutGraduationSession = () => {
   const { showSpinner, hideSpinner } = useSpinner()
 
   const { data: graduationSession } = useFindUniqueGraduationSession(
-    { where: { id } },
+    {
+      where: { id },
+      include: {
+        outputStandard: true,
+      },
+    },
     { enabled: !!id }
   )
+
+  const { data: outputStandards = [] } = useFindManyOutputStandard({
+    where: {
+      deletedAt: null,
+      active: true,
+    },
+    orderBy: {
+      name: "asc",
+    },
+  })
 
   useEffect(() => {
     if (graduationSession) {
@@ -55,11 +73,13 @@ const PutGraduationSession = () => {
         applicationEnd: graduationSession.applicationEnd
           ? dayjs(graduationSession.applicationEnd)
           : undefined,
+        outputStandardIds: graduationSession.outputStandard?.map((item) => item.id) || [],
       })
     } else {
       form.setFieldsValue({
         status: GraduationSessionStatus.IN_REVIEW,
         trainingObjectTypeId: selectedTrainingObjectTypeId,
+        outputStandardIds: [],
       })
     }
   }, [graduationSession, form, selectedTrainingObjectTypeId])
@@ -73,6 +93,7 @@ const PutGraduationSession = () => {
 
     try {
       showSpinner()
+      const outputStandardIds = output.outputStandardIds ?? []
       const payload = {
         name: output.name.trim(),
         sessionDate: output.sessionDate,
@@ -84,13 +105,27 @@ const PutGraduationSession = () => {
 
       if (id) {
         await updateGraduationSession({
-          data: payload,
+          data: {
+            ...payload,
+            outputStandard: {
+              set: outputStandardIds.map((outputStandardId) => ({
+                id: outputStandardId,
+              })),
+            },
+          },
           where: { id },
         })
         message.success("Cập nhật thành công")
       } else {
         await createGraduationSession({
-          data: payload,
+          data: {
+            ...payload,
+            outputStandard: {
+              connect: outputStandardIds.map((outputStandardId) => ({
+                id: outputStandardId,
+              })),
+            },
+          },
         })
         message.success("Thêm mới thành công")
       }
@@ -203,6 +238,19 @@ const PutGraduationSession = () => {
             }))}
             allowClear
             defaultValue={GraduationSessionStatus.PLANNING}
+          />
+        </FormItem>
+      </Col>
+      <Col span={12}>
+        <FormItem form={form} name="outputStandardIds" label="Chuẩn đầu ra" required>
+          <Select
+            placeholder="Chọn chuẩn đầu ra"
+            options={outputStandards.map((item) => ({
+              label: item.name,
+              value: item.id,
+            }))}
+            mode="multiple"
+            allowClear
           />
         </FormItem>
       </Col>
