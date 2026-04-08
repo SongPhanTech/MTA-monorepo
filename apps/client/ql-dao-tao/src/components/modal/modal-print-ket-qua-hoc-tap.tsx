@@ -451,7 +451,7 @@ const ModalPrintToKQHT = () => {
               <span className="font-bold">{gpaScore.toFixed(2)}</span>
             </div>
             <div className="flex">
-              <div className="min-w-32">Xếp hạng:</div>
+              <div className="min-w-32">Xếp loại:</div>
               <span className="font-bold">{convertAcademicRanking(gpaScore)?.classification}</span>
             </div>
           </div>
