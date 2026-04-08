@@ -7,6 +7,7 @@ import Select from "@components/commons/select"
 import TableCollapse from "@components/commons/tableCollapse"
 import DeleteIcon from "@components/icons/delete"
 import EditIcon from "@components/icons/edit"
+import { CopyOutlined } from "@ant-design/icons"
 import { DEFAULT_PAGINATE_SIZE, SUBJECT_CLASS_SCHEDULE_TYPE } from "@constants/constants"
 import type { FilterProps } from "@constants/type"
 import { useExamTypeOptions } from "@hooks/examType"
@@ -52,6 +53,7 @@ import {
   Switch,
   Tooltip,
   TreeSelect,
+  Modal,
 } from "antd"
 import type { Dayjs } from "dayjs"
 import _ from "lodash"
@@ -88,6 +90,12 @@ type XepKhuVucForm = {
 
 type FilterStatus = "YEU_CAU_PCGD" | "LMH_DA_HUY" | "CHO_DUYET_PCGD" | "DA_DUYET_PCGD"
 
+type CopyFields = {
+  lecturerId: boolean
+  extraLecturerId: boolean
+  enterGradeLecturerId: boolean
+}
+
 export default function PhanCongGiangDay({
   type,
   khoaBoMon = false,
@@ -116,6 +124,13 @@ export default function PhanCongGiangDay({
   })
 
   const [filterStatus, setFilterStatus] = useState<FilterStatus>()
+
+  const [copySourceId, setCopySourceId] = useState<string | null>(null)
+  const [copyFields, setCopyFields] = useState<CopyFields>({
+    lecturerId: true,
+    extraLecturerId: true,
+    enterGradeLecturerId: true,
+  })
 
   const [form] = Form.useForm<TeachingAssignmentForm>()
 
@@ -438,7 +453,6 @@ export default function PhanCongGiangDay({
               in: orgIds,
             },
         ...whereOrganization,
-        // sParentId: !khoaBoMon ? undefined : orgId,
       },
     },
     {
@@ -530,6 +544,86 @@ export default function PhanCongGiangDay({
   }
 
   const { mutateAsync: updateManySubjectClass } = useUpdateManySubjectClass()
+
+  function handleCopyApply() {
+    if (!copySourceId || selectedRowKeys.length === 0) return
+
+    const sourceData = subjectClassForm[copySourceId]
+    if (!sourceData) {
+      message.warning("Không tìm thấy dữ liệu dòng nguồn")
+      return
+    }
+    const overwriteRows = selectedRowKeys.filter((destId) => {
+      const id = destId as string
+      if (id === copySourceId || subjectClassForm[id]?.cancelled) return false
+      const dest = subjectClassForm[id]
+      if (!dest) return false
+      return (
+        (copyFields.lecturerId && !!dest.lecturerId) ||
+        (copyFields.extraLecturerId && !!dest.extraLecturerId) ||
+        (copyFields.enterGradeLecturerId && !!dest.enterGradeLecturerId)
+      )
+    })
+
+    if (overwriteRows.length > 0) {
+      const overwriteCodes = overwriteRows
+        .map(
+          (id) => dataWithRowSpan.flatMap((e) => e.children).find((c) => c.id === id)?.code || id
+        )
+        .join(", ")
+
+      Modal.confirm({
+        title: "Xác nhận áp dụng phân công",
+        content: (
+          <span>
+            Lớp : <b>{overwriteCodes}</b> đã được phân công giảng viên
+            <br />
+            Bạn có chắc chắn muốn tiếp tục?
+          </span>
+        ),
+        okText: "Thay thế",
+        okButtonProps: { type: "primary" },
+        cancelText: "Hủy",
+        onOk: () => applyCopy(),
+      })
+      return
+    }
+
+    applyCopy()
+  }
+
+  function applyCopy() {
+    const sourceData = subjectClassForm[copySourceId!]
+    const updated = { ...subjectClassForm }
+
+    selectedRowKeys.forEach((destId) => {
+      const id = destId as string
+      if (id === copySourceId || updated[id]?.cancelled) return
+
+      updated[id] = {
+        ...updated[id],
+        ...(copyFields.lecturerId ? { lecturerId: sourceData.lecturerId } : {}),
+        ...(copyFields.extraLecturerId ? { extraLecturerId: sourceData.extraLecturerId } : {}),
+        ...(copyFields.enterGradeLecturerId
+          ? { enterGradeLecturerId: sourceData.enterGradeLecturerId }
+          : {}),
+        isEdit: true,
+      }
+    })
+
+    form.setFieldValue("subjectClass", updated)
+
+    const appliedCount = selectedRowKeys.filter((id) => id !== copySourceId).length
+    message.success(`Đã copy phân công GV vào ${appliedCount} lớp. Nhấn "Lưu" để ghi vào hệ thống.`)
+
+    setCopySourceId(null)
+    setCopyFields({ lecturerId: true, extraLecturerId: true, enterGradeLecturerId: true })
+  }
+  function handleCopyCancel() {
+    setCopySourceId(null)
+    setCopyFields({ lecturerId: true, extraLecturerId: true, enterGradeLecturerId: true })
+    setSelectedRowKeys([])
+  }
 
   const p2GuiBaoDay = async (values: BaoDayForm) => {
     try {
@@ -810,6 +904,13 @@ export default function PhanCongGiangDay({
       resetForm()
     }
   }, [resetForm])
+
+  const canTriggerCopy = (recordId: string) => {
+    const sc = subjectClassForm[recordId]
+    if (!sc) return false
+    if (sc.cancelled) return false
+    return !!sc.lecturerId
+  }
 
   return (
     <div>
@@ -1433,7 +1534,6 @@ export default function PhanCongGiangDay({
                               )
 
                               const boMon = orgPayload.find((e) => e.sMa === sMa)
-
                               const khoa = orgPayload.find((e) => e.Id === boMon?.sParentId)
 
                               const itemBySubjectCode = Object.groupBy(
@@ -1449,12 +1549,8 @@ export default function PhanCongGiangDay({
                                 data: {
                                   khoa: khoa?.sTen || "",
                                   bo_mon: boMon?.sTen || "",
-                                  ngay_gui: `Ngày ${ngayGui.format("DD")} tháng ${ngayGui.format("MM")} năm ${ngayGui.format(
-                                    "YYYY"
-                                  )}`,
-                                  ngay_nhan: `Ngày ${ngayNhan.format("DD")} tháng ${ngayNhan.format("MM")} năm ${ngayNhan.format(
-                                    "YYYY"
-                                  )}`,
+                                  ngay_gui: `Ngày ${ngayGui.format("DD")} tháng ${ngayGui.format("MM")} năm ${ngayGui.format("YYYY")}`,
+                                  ngay_nhan: `Ngày ${ngayNhan.format("DD")} tháng ${ngayNhan.format("MM")} năm ${ngayNhan.format("YYYY")}`,
                                   hoc_ky: hocKy,
                                   nam_hoc: namHoc,
                                 },
@@ -1464,39 +1560,20 @@ export default function PhanCongGiangDay({
                                       const rowSpan = index === 0 ? subjectItems.length : 1
                                       return {
                                         cells: [
-                                          {
-                                            value: idxOfSubject + 1,
-                                            rowSpan,
-                                            align: "center",
-                                          },
+                                          { value: idxOfSubject + 1, rowSpan, align: "center" },
                                           {
                                             value: item.subject?.codeTkb || item.subject?.code,
                                             rowSpan,
                                           },
+                                          { value: item.subject?.name, rowSpan },
+                                          { value: item.subject?.credit, rowSpan, align: "right" },
                                           {
-                                            value: item.subject?.name,
-                                            rowSpan,
-                                          },
-                                          {
-                                            value: item.subject?.credit,
+                                            value: Math.floor(item.subject.period / 15),
                                             rowSpan,
                                             align: "right",
                                           },
-                                          {
-                                            value: Math.floor(item.subject.period / 15), // dvht
-                                            rowSpan,
-                                            align: "right",
-                                          },
-                                          {
-                                            value: item.subject.period, //
-                                            rowSpan,
-                                            align: "right",
-                                          },
-                                          {
-                                            value: subjectItems.length, //
-                                            rowSpan,
-                                            align: "right",
-                                          },
+                                          { value: item.subject.period, rowSpan, align: "right" },
+                                          { value: subjectItems.length, rowSpan, align: "right" },
                                           {
                                             value: item.schedule
                                               ? SUBJECT_CLASS_SCHEDULE_TYPE[
@@ -1516,12 +1593,8 @@ export default function PhanCongGiangDay({
                                               .map((fc) => fc?.code)
                                               .join(", "),
                                           },
-                                          {
-                                            value: item.trainingLocation?.name ?? "",
-                                          },
-                                          {
-                                            value: item.mainLecturer?.userProfile?.fullname || "",
-                                          },
+                                          { value: item.trainingLocation?.name ?? "" },
+                                          { value: item.mainLecturer?.userProfile?.fullname || "" },
                                           {
                                             value: item.extraLecturer?.userProfile?.fullname || "",
                                           },
@@ -1572,6 +1645,66 @@ export default function PhanCongGiangDay({
                 </Flex>
               </Col>
             </Flex>
+            {copySourceId && (
+              <Flex
+                align="center"
+                gap={8}
+                className="px-2 py-2 bg-green-50 border border-green-200 rounded mt-1"
+                style={{ flexWrap: "wrap" }}
+              >
+                <span style={{ fontSize: 13, color: "#27500A", fontWeight: 500 }}>
+                  Copy PCGV từ:{" "}
+                  <span style={{ color: "#185FA5" }}>
+                    {dataWithRowSpan.flatMap((e) => e.children).find((c) => c.id === copySourceId)
+                      ?.code || copySourceId}
+                  </span>
+                </span>
+                <Divider type="vertical" />
+                <span style={{ fontSize: 12, color: "#5F5E5A" }}>Thông tin :</span>
+                <Checkbox
+                  checked={copyFields.lecturerId}
+                  onChange={(e) => setCopyFields((p) => ({ ...p, lecturerId: e.target.checked }))}
+                >
+                  GV 1
+                </Checkbox>
+                <Checkbox
+                  checked={copyFields.extraLecturerId}
+                  onChange={(e) =>
+                    setCopyFields((p) => ({ ...p, extraLecturerId: e.target.checked }))
+                  }
+                >
+                  GV 2
+                </Checkbox>
+                <Checkbox
+                  checked={copyFields.enterGradeLecturerId}
+                  onChange={(e) =>
+                    setCopyFields((p) => ({ ...p, enterGradeLecturerId: e.target.checked }))
+                  }
+                >
+                  GV nhập điểm
+                </Checkbox>
+                <Divider type="vertical" />
+                <span style={{ fontSize: 12, color: "#5F5E5A" }}>
+                  {selectedRowKeys.length > 0
+                    ? `Đã chọn ${selectedRowKeys.length} dòng đích`
+                    : "Chọn lớp cần áp dụng"}
+                </span>
+                <Button size="small" onClick={handleCopyCancel}>
+                  Hủy
+                </Button>
+                <Button
+                  size="small"
+                  type="primary"
+                  disabled={
+                    selectedRowKeys.length === 0 || !Object.values(copyFields).some(Boolean)
+                  }
+                  onClick={handleCopyApply}
+                >
+                  Áp dụng {selectedRowKeys.length > 0 ? `(${selectedRowKeys.length} dòng)` : ""}
+                </Button>
+              </Flex>
+            )}
+
             <Divider className="m-0" />
           </Affix>
         </Col>
@@ -1651,6 +1784,12 @@ export default function PhanCongGiangDay({
                   if (khoaBoMon) {
                     disabledRecord = disabledRecord || !!record.submitLecturerAssignmentAt
                   }
+                  if (copySourceId) {
+                    const isSelf = record.id === copySourceId
+                    const isCancelled = !!subjectClassForm?.[record.id]?.cancelled
+                    const isParent = record?.$type === "parent"
+                    disabledRecord = isSelf || isCancelled || isParent
+                  }
 
                   return {
                     disabled: disabledRecord,
@@ -1670,7 +1809,8 @@ export default function PhanCongGiangDay({
                     !!recordSubjectClass?.approveLecturerAssignmentAt && "bg-green-200",
                     subjectClassForm?.[record.id]?.isEdit && "bg-yellow-100",
                     subjectClassForm?.[record.id]?.cancelled && "bg-red-200",
-                    (record as any)?.$type === "parent" && "bg-white"
+                    (record as any)?.$type === "parent" && "bg-white",
+                    record.id === copySourceId && "bg-blue-100 border-l-2 border-blue-400"
                   ),
                 }
               }}
@@ -1736,14 +1876,11 @@ export default function PhanCongGiangDay({
                 {
                   title: "Kíp",
                   align: "center",
-                  // type: 'select',
                   width: 60,
-                  options: Object.entries(SUBJECT_CLASS_SCHEDULE_TYPE).map(([key, value_]) => {
-                    return {
-                      label: value_,
-                      value: key,
-                    }
-                  }),
+                  options: Object.entries(SUBJECT_CLASS_SCHEDULE_TYPE).map(([key, value_]) => ({
+                    label: value_,
+                    value: key,
+                  })),
                   render: (_, record) =>
                     SUBJECT_CLASS_SCHEDULE_TYPE[
                       record.schedule as keyof typeof SUBJECT_CLASS_SCHEDULE_TYPE
@@ -1889,16 +2026,13 @@ export default function PhanCongGiangDay({
                   options: options,
                   dataIndex: "examType",
                   render: (__, record) => (
-                    // khoaBoMon ? (
                     <FormItem
                       form={form}
                       name={["subjectClass", record.id, "examType"]}
                       initialValue={getExamTypeLabel(record.examType)}
                     >
                       <Select
-                        dropdownStyle={{
-                          width: 250,
-                        }}
+                        dropdownStyle={{ width: 250 }}
                         options={options}
                         disabled={
                           subjectClassForm?.[record.id]?.cancelled ||
@@ -1939,10 +2073,7 @@ export default function PhanCongGiangDay({
                               .toLowerCase()
                               .includes(input.toLowerCase())
                           }
-                          dropdownStyle={{
-                            width: 400,
-                            maxHeight: 400,
-                          }}
+                          dropdownStyle={{ width: 400, maxHeight: 400 }}
                         />
                       </FormItem>
                     ) : record.trainingLocation ? (
@@ -1998,111 +2129,76 @@ export default function PhanCongGiangDay({
                         multiple={false}
                         treeExpandAction="click"
                         showCheckedStrategy="SHOW_CHILD"
-                        dropdownStyle={{
-                          width: 400,
-                          maxHeight: 400,
-                        }}
+                        dropdownStyle={{ width: 400, maxHeight: 400 }}
                       />
                     </FormItem>
                   ),
                 },
-
-                // {
-                //     title: 'Ngày thi',
-                //     align: 'center',
-                //     width: 100,
-                //     render: (value) => (value ? formatDate(value) : ''),
-                // },
-
-                // {
-                //     title: 'Hạn nhập điểm TX/ĐK',
-                //     width: 200,
-                //     align: 'center',
-                //     render: (value) => (value ? formatDate(value) : ''),
-                // },
-                // {
-                //     title: 'Hạn nhập điểm thi',
-                //     width: 170,
-                //     align: 'center',
-                //     render: (value) => (value ? formatDate(value) : ''),
-                // },
-
-                // {
-                //     title: 'Thời khoá biểu',
-                //     width: 150,
-                //     align: 'center',
-                //     render: (subjectClassTimes: SubjectClassTime[]) => {
-                //         return subjectClassTimes?.map?.((tkb: SubjectClassTime) => {
-                //             return (
-                //                 <p>
-                //                     {tkb.dayOfWeek === 8 ? 'CN' : `T${tkb.dayOfWeek}`} -{' '}
-                //                     {tkb.startPeriod} - {tkb.endPeriod}
-                //                 </p>
-                //             )
-                //         })
-                //     },
-                // },
-                // {
-                //     title: 'Số SV tối đa',
-                //     width: 150,
-                //     align: 'center',
-                //     type: 'order',
-                //     distinctFilters: ['credit', 'subjectClassStudent'],
-                // },
                 {
                   title: <Tooltip title="Đơn vị phụ trách">ĐVPT</Tooltip>,
                   width: 80,
                   align: "center",
-                  // type: 'tree_select',
-                  // options: treeData,
-                  // dataIndex: 'managementOrganizationId',
                   render: (_, record) =>
                     record?.subject?.subject?.managementOrganization?.sMa || "",
                 },
-                // {
-                //     title: 'Điểm bằng nhau',
-                //     width: 150,
-                //     align: 'center',
-                //     render: (value) => (
-                //         <Checkbox checked={value.subjectEquivalentType} disabled />
-                //     ),
-                // },
                 ...(canXemTatCa && !khoaBoMon
                   ? [
                       {
                         title: "Thao tác",
-                        width: 80,
+                        width: 100,
                         align: "center" as const,
                         render: (_: any, record: SubjectClass) => {
-                          if (record.cancelled) {
-                            return null
-                          }
+                          if (record.cancelled) return null
                           const id = record?.id
+                          if (!id) return ""
 
-                          if (id) {
-                            return (
-                              <Row className="justify-center gap-2">
-                                {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC, "SUA") && (
-                                  <EditIcon
-                                    onClick={onOpenEditSubjectClass.bind(null, {
-                                      id,
-                                      mode: "edit",
-                                    })}
-                                    className="text-sm text-blue-700 cursor-pointer"
-                                  />
-                                )}
-                                {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC, "XOA") && (
-                                  <DeleteIcon
-                                    popConfirm={{
-                                      onConfirm: () => handleDelete(id),
-                                    }}
-                                    disabled={record?.status !== $Enums.SubjectClassStatus.DRAFT}
-                                  />
-                                )}
-                              </Row>
-                            )
-                          }
-                          return ""
+                          return (
+                            <Row className="justify-center gap-2">
+                              <Tooltip
+                                title={
+                                  canTriggerCopy(id)
+                                    ? copySourceId === id
+                                      ? "Đang chọn làm nguồn copy — nhấn để bỏ"
+                                      : "Copy PCGV"
+                                    : "Dòng này chưa có GV 1"
+                                }
+                              >
+                                <CopyOutlined
+                                  onClick={() => {
+                                    if (!canTriggerCopy(id)) return
+                                    if (copySourceId === id) {
+                                      handleCopyCancel()
+                                    } else {
+                                      setCopySourceId(id)
+                                      setSelectedRowKeys([])
+                                    }
+                                  }}
+                                  className={cn(
+                                    "text-sm cursor-pointer",
+                                    !canTriggerCopy(id) && "text-gray-300 cursor-not-allowed",
+                                    copySourceId === id ? "text-blue-600" : "text-gray-600"
+                                  )}
+                                />
+                              </Tooltip>
+                              {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC, "SUA") && (
+                                <EditIcon
+                                  onClick={onOpenEditSubjectClass.bind(null, {
+                                    id,
+                                    mode: "edit",
+                                  })}
+                                  className="text-sm text-blue-700 cursor-pointer"
+                                />
+                              )}
+                              {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC, "XOA") && (
+                                <DeleteIcon
+                                  popConfirm={{
+                                    onConfirm: () => handleDelete(id),
+                                  }}
+                                  disabled={record?.status !== $Enums.SubjectClassStatus.DRAFT}
+                                />
+                              )}
+                            </Row>
+                          )
                         },
                       },
                     ]
@@ -2130,16 +2226,15 @@ export default function PhanCongGiangDay({
       </Row>
       <style>
         {`
-                .readonly-checkbox.ant-checkbox-wrapper-disabled {
-                    opacity: 1;
-                    pointer-events: none; /* không click được */
-                    }
-
-                .readonly-checkbox .ant-checkbox-disabled .ant-checkbox-inner {
-                background-color: #fff;
-                border-color: #d9d9d9;
-                }
-                `}
+          .readonly-checkbox.ant-checkbox-wrapper-disabled {
+            opacity: 1;
+            pointer-events: none;
+          }
+          .readonly-checkbox .ant-checkbox-disabled .ant-checkbox-inner {
+            background-color: #fff;
+            border-color: #d9d9d9;
+          }
+        `}
       </style>
     </div>
   )
