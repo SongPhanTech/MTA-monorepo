@@ -5,7 +5,7 @@ import { useFindUniqueCurriculumVersion } from "@workspace/db/hooks"
 import { useAcademicRankingConverter } from "@workspace/libs/hook/academicRankingConvert"
 import { Button, Input, Modal } from "antd"
 import dayjs from "dayjs"
-import { useEffect, useRef, useState } from "react"
+import { useRef, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import { useReactToPrint } from "react-to-print"
 
@@ -20,7 +20,6 @@ const ModalPrintToKQHT = () => {
   const formattedDate = `..., ngày ${dayjs().format("DD")} tháng ${dayjs().format("MM")} năm ${dayjs().format("YYYY")}`
   const printRef = useRef<HTMLDivElement>(null)
   const [signerName, setSignerName] = useState("Đại tá, TS Nguyễn Trọng Lưu")
-  const [gpaScore, setGpaScore] = useState(0)
 
   const { isOpen, onClose, input } = useDisclosure<ModalPrintToKQHTInput>({
     tag: "ModalPrintToKQHT",
@@ -36,6 +35,15 @@ const ModalPrintToKQHT = () => {
         trainingTime: true,
         trainingLevel: true,
         trainingType: true,
+        students: {
+          where: { id: input?.dataStudent?.id },
+          select: {
+            id: true,
+            graduationDecision: {
+              select: { finalGpa: true },
+            },
+          },
+        },
 
         curriculum: {
           include: {
@@ -105,6 +113,19 @@ const ModalPrintToKQHT = () => {
     graduationRankingData,
     graduationBaseScore
   )
+
+  const finalGpa = subjectScoreData?.students?.[0]?.graduationDecision?.finalGpa
+  const gpaScore =
+    typeof finalGpa === "number"
+      ? finalGpa
+      : typeof finalGpa === "string"
+        ? Number(finalGpa) || 0
+        : finalGpa && typeof finalGpa === "object" && "toNumber" in finalGpa
+          ? Number.isFinite((finalGpa as { toNumber: () => number }).toNumber())
+            ? (finalGpa as { toNumber: () => number }).toNumber()
+            : 0
+          : 0
+
   const handlePrint = useReactToPrint({
     contentRef: printRef,
     pageStyle: `
@@ -181,38 +202,6 @@ const ModalPrintToKQHT = () => {
     },
   ]
 
-  useEffect(() => {
-    if (!subjectScoreData) return
-
-    const validSubjects = subjectScoreData.trainingBlocks
-      .flatMap((block) => block.subjects)
-      .filter((subjectItem) => subjectItem.useForFinalScore === true)
-      .filter(
-        (subjectItem) =>
-          !subjectItem.subject.studentSubjectScore?.[0]?.graduationSupplementaryScore?.length
-      )
-
-    let totalWeightedScore = 0
-    let totalCredits = 0
-
-    validSubjects.forEach((subjectItem: any) => {
-      const subject = subjectItem.subject
-      const score = subject.studentSubjectScore?.[0]
-      const credits = subject.credit || 0
-
-      if (score) {
-        const score10 = score.manualFinalScore || score.finalScore || 0
-        const scoreToUse =
-          graduationBaseScore === "Base4" ? convertScore(score10).base4 || 0 : score10
-
-        totalWeightedScore += scoreToUse * credits
-        totalCredits += credits
-      }
-    })
-
-    const gpa = totalCredits > 0 ? totalWeightedScore / totalCredits : 0
-    setGpaScore(Number(gpa.toFixed(2)))
-  }, [subjectScoreData, graduationBaseScore])
   return (
     <Modal
       open={isOpen}
